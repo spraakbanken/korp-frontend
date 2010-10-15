@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="querytable.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      loadCorpora();
+      resetQuery();
+      $("#query_form").attr("action", settings.cgi_script);
+      });
+    </script>
+    <title>Alternativt sökformulär</title>
+  </head>
+  
+  <body>
+    <form id="query_form" method="GET"  onsubmit="submitForm()" target="_blank">
+      <input type="hidden" name="callback" value="CQP"/>
+      <input type="hidden" name="corpus" id="corpus"/>
+      <input type="hidden" name="cqp" id="cqp"/>
+
+      <table class="query_header"><tr>
+        <td>
+          <strong>Korpus:</strong> 
+          <select id="select_corpus" onchange="didSelectCorpus()"></select>
+        </td><td>
+         <em>Visa sökträffar:</em> 
+         från <input type="text" name="start" size="2" value="0"/> 
+         till <input type="text" name="end" size="2" value="20"/> 
+        </td><td>
+         <em>Kontext:</em>
+        <select name="context" id="context_select"></select>
+        </td><td>
+         <em>Visa:</em>
+         <span id="attributes"></span>
+         <span id="automatic_attributes"></span>
+       </td>
+      </tr></table>
+
+      <div id="simple_query">
+        <div id="query_table"></div>
+        <div class="buttons_row">
+          <span id="buttons_row"></span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="submit" value="  Sök  "/>
+        </div>
+      </div>
+
+      <div class="query_footer">
+        <p>
+          <input type="checkbox" id="full_query" onchange="toggleFullQuery()"/>
+          Fullständig CQP-fråga:
+          <input type="text" id="corpus_id"/>
+        </p>
+        <textarea id="cqp_string"></textarea>
+      </div>
+    </form>
+ </body>
+</html>

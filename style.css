@@ -1,0 +1,26 @@
+
+/* table { border: 1px solid } */
+/* td { border: 1px dotted } */
+/* .query_row { background-color: yellow } */
+
+/* table { border: 1px solid } */
+/* td, div { border: 1px dotted } */
+
+#corpus_id { font-family: monospace }
+#cqp_string { font-family: monospace; width: 100% }
+
+.query_header, .query_footer { background-color: lightgreen; padding: 5px 15px; width: 100% }
+
+.image_button { vertical-align: middle }
+.image_button:hover { cursor: pointer }
+
+.line_above { border-style: dotted; border-width: 1px 0px 0px 0px }
+.indent { padding-left: 20px }
+
+.buttons_row { border-style: dotted; border-width: 1px 0px }
+
+div { padding: 10px 0px }
+td { margin: 0px  }
+table { margin: 0px 10px; padding: 0px 5px }
+.query_token { background-color: lightblue; display: inline-table; vertical-align: top; padding: 5px  }
+
