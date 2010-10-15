@@ -27,6 +27,16 @@ function didSelectCorpus() {
             corpus.attributes[attr] + " "
         ).appendTo($("#attributes"));
     }
+    //change event for toggle token attributes
+    $('[name=show]').change(function (){
+ 			var class = $(this).val();
+ 	
+ 			if($('input[value='+class+']').is(':checked')){
+ 				$('.'+class).css('display', 'inline');
+ 			}else{
+ 				$('.'+class).css('display', 'none');
+ 			}	
+    });
 
     $("#context_select").children().remove();
     for (var cxt in corpus.context) {
@@ -198,7 +208,7 @@ function setSelectWidth(select) {
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
         .appendTo("body")
         .append(new Option(text));
-    $(select).width(dummy_select.width());
+    $(select).width(dummy_select.width()+25);
     dummy_select.remove();
 }
 
