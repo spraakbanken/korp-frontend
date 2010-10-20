@@ -87,12 +87,12 @@ function toggleFullQuery() {
 }
 
 function mkInsertButton() {
-    return $('<img/>', {src: "plus.png"})
+    return $('<img/>', {src: "img/plus.png"})
         .addClass("image_button");
 }
 
 function mkRemoveButton() {
-    return $('<img/>', {src: "minus.png"})
+    return $('<img/>', {src: "img/minus.png"})
         .addClass("image_button");
 }
 

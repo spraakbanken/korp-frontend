@@ -3,6 +3,9 @@
 
 .query_header, .query_footer { background-color: lightblue; padding: 1px 15px; margin:0px; width:80%;}
 
+
+.logo{float:right;}
+
 .query_footer {display:none;}
 
 .results_settings{ margin:0px;width:83%;}

@@ -75,4 +75,3 @@ settings.operators = {
 settings.first_operators = {
     find: "Leta efter"
 };
-
