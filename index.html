@@ -1,103 +1,108 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 	<head>  
-	 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	 <link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
-	 <link rel="stylesheet" type="text/css" href="style.css">
-	 <link rel="stylesheet" type="text/css" href="pagination.css">
-	 
-	 <title>Korp</title>
-	 
-	 <script type="text/javascript" src="jquery.js"></script>
-	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
-	
-	 <script type="text/javascript" src="lib/jquery.pagination.js"></script>
-	 <script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
-	 
-	 <script type="text/javascript" src="translations/swe.js"></script>
-	 <script type="text/javascript" src="config.js"></script>
-	 
-	 <script type="text/javascript" src="querytable.js"></script>
-	 <script type="text/javascript" src="request.js"></script>
-	 
-	 <script type="text/javascript">
-		$(document).ready(function(){
-			loadCorpora();
-			resetQuery();
-			$("#query_form").attr("action", settings.cgi_script);
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="pagination.css">
+		
+		<title>Korp</title>
+		
+		<script type="text/javascript" src="jquery.js"></script>
+		
+		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
+		
+		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
+		
+		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
+		
+		
+		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
+		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
+		
+		<script type="text/javascript" src="translations/swe.js"></script>
+		<script type="text/javascript" src="config.js"></script>
+		
+		<script type="text/javascript" src="querytable.js"></script>
+		<script type="text/javascript" src="request.js"></script>
+		 
+		<script type="text/javascript">
+			$(document).ready(function(){
+				loadCorpora();
+				resetQuery();
+				$("#query_form").attr("action", settings.cgi_script);
+				
+				$('#num_hits').tooltip('Number of hits');
 			
-			$('#num_hits').tooltip('Number of hits');
-		});
-	 </script>
-  	</head>
+				//$("#tabs").tabs();
+			});
+		</script>
+	</head>
   	<body>
-  	<div id="content">
-  	<div class="logo">
-  		<img src="img/korp_s.png" alt="korp" />
-  	</div>
-    <form action="/cgi-bin/glossa/new/cqp.cgi" id="query_form" method="GET" onsubmit="submitForm()" target="_blank">
-      <input name="command" value="query" type="hidden">
-      <input name="corpus" id="corpus" type="hidden">
-      <input name="cqp" id="cqp" type="hidden">
-
-      <table class="query_header"><tbody><tr>
-        <td>
-          <strong>Korpus:</strong> 
-          <select id="select_corpus" onchange="didSelectCorpus()">
-          </select>
-        </td>
-        <td>
-         
-         <img src="img/query.png" id="full_query" onClick="toggleFullQuery()" />
-        </td>        
-      </tr></tbody></table>
-
-      <div id="simple_query">
-        <div id="query_table"><div class="query_row line_above"><img style="display: none;" class="image_button remove_row" src="img/minus.png"><select style="width: 71px;" disabled="disabled" class="select_operation"><option selected="selected" value="find">Leta efter</option></select><select disabled="disabled" class="select_language"><option selected="selected" value="SUC2">svenska</option></select><table class="query_token" cellpadding="0" cellspacing="0"><tbody><tr class="query_arg"><td><select style="width: 59px;" class="arg_type"><optgroup label="ord"><option selected="selected" value="word">ordet är</option><option value="notword">ordet är inte</option><option value="beginswith">börjar med</option><option value="endswith">slutar med</option><option value="regexp">reguljärt uttryck</option></optgroup><optgroup label="ordklass"><option value="pos">ordklassen är</option><option value="msd">ordklassen börjar med</option></optgroup><optgroup label="intervall"><option value="max">upp till</option><option value="min">minst</option></optgroup></select><input class="arg_value" type="text"></td><td><img style="visibility: hidden;" class="image_button remove_arg" src="img/minus.png"><img class="image_button insert_arg" src="img/plus.png"></td></tr></tbody></table><img class="image_button insert_token" src="img/plus.png"></div></div>
-        <div class="buttons_row">
-          <span id="buttons_row"><img style="visibility: hidden;" class="image_button remove_row" src="img/minus.png"><img class="image_button insert_row" src="img/plus.png"></span>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <input value="  Sök  " type="button" onclick="submitFormToServer()">
-        </div>
-      </div>
-
-      <div class="query_footer">
-        <p class="cqp_toggle">
-          <input id="full_query" onchange="toggleFullQuery()" type="checkbox">
-          Fullständig CQP-fråga:
-          <input value="SUC2" disabled="disabled" id="corpus_id" type="text">
-        </p>
-        <textarea disabled="disabled" rows="2" id="cqp_string">[(word = "")]</textarea>
-      </div>
-
-
-    </form>
-    <hr/>
-   
-    <a name="results" />
-    <div id="results-wraper">
-      <table class="results_settings"><tbody><tr>
-        <td>
-         <label for="num_hits">Träffar per sida: </label> 
-         <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
-        </td>
-        <td>
-         <label for="context">Kontext:</label> 
-        	<select name="context" id="context_select" onchange="submitFormToServer()"><option selected="selected" value="1 sentence">1 mening</option><option value="5 words">5 ord</option><option value="10 words">10 ord</option></select>
-        </td>
-        <td>
-         <em>Visa:</em>
-         <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>
-         <span id="automatic_attributes"></span>
-       </td>
-      </tr></tbody></table>  
-		 <div id="pager-wraper">
-		 	<span>Antal resultat: </span><span id="num-result"></span>
-		 	<div class="pagination" id="Pagination"></div>
-		 </div>
-		 <div id="results">
-		 </div>
-    </div>
-	</div>
+		<div id="content">
+			<div class="logo">
+				<img src="img/korp_s.png" alt="korp" />
+			</div>	
+			<form action="/cgi-bin/glossa/new/cqp.cgi" id="query_form" method="GET" onsubmit="submitForm()" target="_blank">
+				<input name="command" value="query" type="hidden">
+				<input name="corpus" id="corpus" type="hidden">
+				<input name="cqp" id="cqp" type="hidden">
+	
+					<div id="simple">
+		   				<table class="query_header"><tbody><tr>
+							<td>
+								<strong>Korpus:</strong> 
+								<select id="select_corpus" onchange="didSelectCorpus()">
+								</select>
+							</td>       
+						</tr></tbody></table>
+						<div id="simple_query">
+							<div id="query_table"><div class="query_row line_above"><img style="display: none;" class="image_button remove_row" src="img/minus.png"><select style="width: 71px;" disabled="disabled" class="select_operation"><option selected="selected" value="find">Leta efter</option></select><select disabled="disabled" class="select_language"><option selected="selected" value="SUC2">svenska</option></select><table class="query_token" cellpadding="0" cellspacing="0"><tbody><tr class="query_arg"><td><select style="width: 59px;" class="arg_type"><optgroup label="ord"><option selected="selected" value="word">ordet är</option><option value="notword">ordet är inte</option><option value="beginswith">börjar med</option><option value="endswith">slutar med</option><option value="regexp">reguljärt uttryck</option></optgroup><optgroup label="ordklass"><option value="pos">ordklassen är</option><option value="msd">ordklassen börjar med</option></optgroup><optgroup label="intervall"><option value="max">upp till</option><option value="min">minst</option></optgroup></select><input class="arg_value" type="text"></td><td><img style="visibility: hidden;" class="image_button remove_arg" src="img/minus.png"><img class="image_button insert_arg" src="img/plus.png"></td></tr></tbody></table><img class="image_button insert_token" src="img/plus.png"></div></div>
+							<div class="buttons_row">
+								<span id="buttons_row"><img style="visibility: hidden;" class="image_button remove_row" src="img/minus.png"><img class="image_button insert_row" src="img/plus.png"></span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<input value="  Sök  " type="button" onclick="submitFormToServer()">
+							</div>
+						</div>
+					</div>
+					<div id="advanced">
+						<div class="query_footer">
+							<p class="cqp_toggle">
+								<input id="full_query" onchange="toggleFullQuery()" type="checkbox">
+								Fullständig CQP-fråga:
+								<input value="SUC2"  id="corpus_id" type="text">
+							</p>
+							<textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
+						</div>
+		   			</div>
+	  		</form>
+			
+			<div id="results-wraper">
+				<a name="results"></a>
+				<table class="results_settings"><tbody><tr>
+				  <td>
+				   <label for="num_hits">Träffar per sida: </label> 
+				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
+				  </td>
+				  <td>
+				   <label for="context">Kontext:</label> 
+				  	<select name="context" id="context_select" onchange="submitFormToServer()"><option selected="selected" value="1 sentence">1 mening</option><option value="5 words">5 ord</option><option value="10 words">10 ord</option></select>
+				  </td>
+				  <td>
+				   <em>Visa:</em>
+				   <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>
+				   <span id="automatic_attributes"></span>
+				 </td>
+				</tr></tbody></table>  
+				<div id="pager-wraper">
+					<span>Antal resultat: </span><span id="num-result"></span>
+					<div class="pagination" id="Pagination"></div>
+				</div>
+				<div id="results">
+				</div>
+			</div>
+		</div>
 	</body>
  </html>

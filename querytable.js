@@ -29,12 +29,12 @@ function didSelectCorpus() {
     }
     //change event for toggle token attributes
     $('[name=show]').change(function (){
- 			var class = $(this).val();
+ 			var token_class = $(this).val();
  	
- 			if($('input[value='+class+']').is(':checked')){
- 				$('.'+class).css('display', 'inline');
+ 			if($('input[value='+token_class +']').is(':checked')){
+ 				$('.'+token_class ).css('display', 'inline');
  			}else{
- 				$('.'+class).css('display', 'none');
+ 				$('.'+token_class ).css('display', 'none');
  			}	
     });
 
@@ -61,9 +61,11 @@ function getCorpus() {
 
 function loadCorpora() {
     for (var val in settings.corpora) {
-        $('<option/>').val(val).text(settings.corpora[val].title)
-            .appendTo($("#select_corpus"));
-    };
+    	$('#select_corpus').append(
+    	        $('<option></option>').val(val).html(settings.corpora[val].title)
+    	 );
+    	 
+    };    
 }
 
 function resetQuery() {

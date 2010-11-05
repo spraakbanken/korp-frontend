@@ -1,3 +1,4 @@
+body{font-size:1em;}
 #corpus_id { font-family: monospace }
 #cqp_string { font-family: monospace; width: 100% }
 
@@ -6,7 +7,7 @@
 
 .logo{float:right;}
 
-.query_footer {display:none;}
+
 
 .results_settings{ margin:0px;width:83%;}
 
@@ -20,7 +21,7 @@
 
 .buttons_row { border-style: dotted; border-width: 1px 0px }
 
-div { padding: 10px 0px }
+div { padding: 10px 0px } 
 td { margin: 0px  }
 table { margin: 0px 10px; padding: 0px 5px }
 .query_token { background-color: lightblue; display: inline-table; vertical-align: top; padding: 5px  }
@@ -45,7 +46,6 @@ table { margin: 0px 10px; padding: 0px 5px }
 
 #pager-wraper{
 	clear: both;
-
 }
 
 .result_table td {white-space: nowrap;}
@@ -81,4 +81,20 @@ table { margin: 0px 10px; padding: 0px 5px }
 	font-size:xx-small; vertical-align:bottom;
 	
 }
+
+.sentence img{
+	border-width: 0px;
+}
+
+.token_hover{
+	color:red;	
+}
+
+/* Attributes color */
+.msd{color:#999;} 
+.lemma{color:#009;} 
+.lex{color:#990;}
+.lexem{color:#CCF;}
+.sentence_n{color:#FF6};
+
 

@@ -6,7 +6,7 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                         attributes: {msd: "ordklass", lemma: "lemma", sentence_n: "mening"}
+                         attributes: {msd: "ordklass", lemma: "lemma", sentence_n: "mening", sentence: "mening"}
                         };
 
 settings.corpora.storsuc = {title: "SUC-romaner",
@@ -34,7 +34,8 @@ settings.corpora.minisalt = {title: "Mini-SALT",
                             };
 
 
-settings.cgi_script = "/cgi-bin/glossa/new/cqp.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/glossa/new/cqp.cgi";
+
 
 settings.arg_groups = {
     "ord": {

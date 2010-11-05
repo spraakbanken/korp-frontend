@@ -12,3 +12,4 @@ language.prev = 'Tidigare';
 
 language.find = 'Leta efter';
 
+language.get_sentence = 'Hämta kontext';

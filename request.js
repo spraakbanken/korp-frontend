@@ -66,20 +66,21 @@ function submitFormToServer(){
 
 function buildPager(number_of_hits){
 	var items_per_page = $("#num_hits").val();
-	// First Parameter: number of items
-	// Second Parameter: options object
-	//alert('hits: '+num_result+' items per page: '+items_per_page);
-	$("#Pagination").pagination(number_of_hits, {
-		items_per_page:items_per_page, 
-		callback:handlePaginationClick,
-		next_text: language.next,
-		prev_text: language.prev,
-		link_to:"#",
-		num_edge_entries:2,
-		ellipse_text: '..'
-	});
+	
+	if(number_of_hits > items_per_page){
+		$("#Pagination").pagination(number_of_hits, {
+			items_per_page:items_per_page, 
+			callback:handlePaginationClick,
+			next_text: language.next,
+			prev_text: language.prev,
+			link_to:"#",
+			num_edge_entries:2,
+			ellipse_text: '..'
+		});
+	}else{
+		$("#Pagination").html('');
+	}
 }
-
 
 function corpus_results(data){
 	
@@ -95,6 +96,8 @@ function corpus_results(data){
 	
 	$.each(data.kwic, function(i,item){
 		output += '<tr>';
+		if(corpus.attributes.sentence != null)
+			output += '<td class="sentence"><a href="#"><img src="img/sentence.png" /></a></td>';
 		
 		/*Left */
 		output += '<td class="left">';
@@ -140,9 +143,7 @@ function corpus_results(data){
 			})			
 			output +='</span>';
 		}
-		output += '</td>';			
-		
-		output += '</tr>';
+		output += '</td></tr>';
 	});
 	
 	output += '</tbody></table>';
@@ -157,7 +158,27 @@ function corpus_results(data){
 	
 	
 	$('.result_table tr:even').addClass('alt'); 
+	
+	$('.token').hover(
+			function(){
+				console.log('in '+$(this).html());
+				$(this).addClass('token_hover'); 
+			}, 
+			function(){
+				console.log('out '+$(this).html());
+				$(this).removeClass('token_hover');
+			});
 }
+
+function tooltipIn(object){
+	//<span class='token'><span class='word'><span></span></span>
+	console.log('in'+$(object).html());
+}
+
+function tooltipOut(object){
+	console.log('out');
+}
+
 
 function renderToken(token){
 	var output = '<span class="token"><span class="attr word">'+token.word+'</span><span class="attr pos">'+token.word+'</span><span class="attr lemma">'+tokens.lemma+'</span></span> ';
