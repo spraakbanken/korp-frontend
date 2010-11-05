@@ -34,7 +34,7 @@ settings.corpora.minisalt = {title: "Mini-SALT",
                             };
 
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/glossa/new/cqp.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
 
 settings.arg_groups = {
