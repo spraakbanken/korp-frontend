@@ -86,6 +86,7 @@ function corpus_results(data){
 	
 	var corpus = settings.corpora[getCorpus()];
 	
+	//if this is the first result-set
 	if(num_result == 0){
 		buildPager(data.hits);
 	}

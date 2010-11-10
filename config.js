@@ -1,4 +1,9 @@
 
+/* lemma => grundform, base form
+ * lexem =>lemgram, lemgram
+ * 
+ */
+
 var settings = {}
 
 settings.corpora = {};
@@ -6,35 +11,48 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                         attributes: {msd: "ordklass", lemma: "lemma", sentence_n: "mening", sentence: "mening"}
+                         attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: "mening", sentence: "mening"}
                         };
 
 settings.corpora.storsuc = {title: "SUC-romaner",
                             languages: {STORSUC: "svenska"},
                             context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem", sentence_n: "mening"}
+                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, sentence_n: "mening"}
                            };
 
 settings.corpora.saltnld = {title: "SALT-NLD",
                             languages: {SALTNLD_SWE: "svenska", SALTNLD_NLD: "nederländska"},
                              context: {"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem", link_n: "länk"}
+                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
                            };
 
 settings.corpora.minisuc = {title: "Mini-SUC",
                             languages: {MINISUC: "svenska"},
                             context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem", sentence_n: "mening"}
+                            attributes: {msd: "ordklass", lemma: language.base_form, lex: "lexem", sentence_n: "mening"}
                            };
 
 settings.corpora.minisalt = {title: "Mini-SALT",
                              languages: {MINISALT_SWE: "svenska", MINISALT_NLD: "nederländska"},
                              context: {"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"},
-                             attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem", link_n: "länk"}
+                             attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
                             };
 
 
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
+
+
+settings.arg_types = {
+	    "word": String,
+	    "notword": String,
+	    "beginswith": String,
+	    "endswith": String,
+	    "regexp": RegExp,
+	    "pos": {"AB":"adverb", "DL":"determinerare", },
+	    "msd": String,
+	    "max": Number,
+	    "min": Number,
+	}
 
 
 settings.arg_groups = {
