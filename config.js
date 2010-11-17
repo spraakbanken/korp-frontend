@@ -11,13 +11,13 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                         attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: "mening", sentence: "mening"}
+                         attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: language.sentence, sentence: language.sentence}
                         };
 
 settings.corpora.storsuc = {title: "SUC-romaner",
                             languages: {STORSUC: "svenska"},
                             context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, sentence_n: "mening"}
+                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, sentence_n: language.sentence}
                            };
 
 settings.corpora.saltnld = {title: "SALT-NLD",
@@ -29,7 +29,7 @@ settings.corpora.saltnld = {title: "SALT-NLD",
 settings.corpora.minisuc = {title: "Mini-SUC",
                             languages: {MINISUC: "svenska"},
                             context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: language.base_form, lex: "lexem", sentence_n: "mening"}
+                            attributes: {msd: "ordklass", lemma: language.base_form, lex: "lexem", sentence_n: language.sentence}
                            };
 
 settings.corpora.minisalt = {title: "Mini-SALT",
