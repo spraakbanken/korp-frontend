@@ -1,0 +1,43 @@
+Skapa tab för fullformssökning
+	Ny tabb endast ett textfält (ett ord)
+	användaren skriver in ett ord:
+	hämta ut lemgram från http://spraakbanken.gu.se/ws/saldo-ws/fl/json/blomma   (l)
+	filtrera bort alla som innehåller ..xxm. (där x är valfria tecken)
+	användaren väljer lemgram (l)
+	om lemgram finns: 
+		gör sökningen med cqp: (t.ex.) [lex = "(blomma..nn.1.*)"]
+	om lemgram ej finns:
+		plocka ut p och gf från samma 'post' som l anropa http://spraakbanken.gu.se/ws/saldo-ws/gen/json/nn_1u_flicka/blomma
+		där p är "nn_1u_flicka" och gf är "blomma"
+		plocka ut form där msd ej är c, ci eller cm
+		skapa cqp i korp med listan: [word="blomma"] | [word="blommas"]
+	
+	alternativ för 'relaxed search' (utökad sökning) under lemgram-sökning:
+		[lex = "(blomma..nn.1.*)|(.*\|blomma..nn.1.*)"]
+	
+sökning relaterade ord
+	skapa webtjänst i drupal:
+	http://spraakbanken.gu.se/sblex/md1/[lemgram eller fullform]/blomma..1
+		slå upp md1 http://spraakbanken.gu.se/ws/saldo-ws/md1/json/blomma..1
+		
+		om lemgram:
+			slå mot lex: http://demo.spraakdata.gu.se/ws/lexikon/?saldo=ruderatväxt..1&saldo=bockblad..1&lexikon=saldo
+			plocka ut <lem> där pos ej slutar på: xc, h och m
+			returnera array med lemgram:
+		om fullform:
+			slå mot lex: http://demo.spraakdata.gu.se/ws/lexikon/?saldo=ruderatväxt..1&saldo=bockblad..1&lexikon=saldom	
+			plocka ut <LexicalEntry> där pos ej slutar på: xc, h och m
+				plocka ut form där <param> ej är ci, cm och c
+				spara wf i mängd
+			returnera mängd
+	
+	steg 1:
+	välj saldo id (betydelse)(id) från http://spraakbanken.gu.se/ws/saldo-ws/fl/json/blomma
+
+	steg 2:		
+	om lemgram är med i korpusen:		
+		anropa http://spraakbanken.gu.se/sblex/md1/lemgram/blomma..1
+		skapa cqp i korp med listan: [lex = "(blomma..nn.1.*)"] | [lex = "(maskros..nn.1.*)"] ...
+	om lemgram saknas i korpusen:
+		anropa http://spraakbanken.gu.se/sblex/md1/fullform/blomma..1
+		skapa cqp i korp med listan: [word="blomma"] | [word="blomman"] ...
