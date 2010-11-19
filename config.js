@@ -26,17 +26,12 @@ settings.corpora.saltnld = {title: "SALT-NLD",
                             attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
                            };
 
-settings.corpora.minisuc = {title: "Mini-SUC",
-                            languages: {MINISUC: "svenska"},
-                            context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: language.base_form, lex: "lexem", sentence_n: language.sentence}
-                           };
-
-settings.corpora.minisalt = {title: "Mini-SALT",
-                             languages: {MINISALT_SWE: "svenska", MINISALT_NLD: "nederländska"},
-                             context: {"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"},
-                             attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
-                            };
+settings.corpora.konkplus = {title: "Konkplus: svenska tidningstexter",
+						        languages: {KONKPLUS: "svenska"},
+						        context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
+						        attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem",
+						                     genre: "genre", corpus: "delkorpus", sentence_n: "mening"}
+						       };
 
 
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
