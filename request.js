@@ -5,7 +5,7 @@ function handlePaginationClick(new_page_index, pagination_container) {
 	if(new_page_index != current_page){
 		var items_per_page = parseInt($("#num_hits").val());
 		
-		var cqp 		= $("#cqp_string").val();
+		var cqp 	= $("#cqp_string").val();
 		var corpus 	= $("#corpus_id").val();
 		
 		var start 	= new_page_index*items_per_page;

@@ -1,3 +1,83 @@
+2010-11-04
+* Den stora förändringen är att jag har fått lite skäll av Elisabet (på ett vänligt sätt) för att det saknas viktig funktionalitet. Detta tror jag är rätt så prioriterat, för att få användare som testar Korp.
+
+En vanlig lingvist eller student behöver hjälp med svårare argument såsom "ordklass" (det gäller alltså klassen "query_arg"). Beroende på argumentets typ bör det finnas olika sätt att mata in värdet.
+
+- om användaren väljer "ordet är", "ordet börjar med" m.m., så ska det vara en vanligt inmatningsruta
+- men om anv. väljer "ordklassen är" så finns det ett begränsat antal värden och de bör presenteras som en <select>-lista
+
+Följande bör alltså ändras i querytable.js:
+
+- insertArg: arg_value kan vara en generell tom <span>, med nåt passande id; sedan kan insertArg anropa didSelectArgType för att ändra arg_value
+- didSelectArgType: beroende på det nya värdet på select ska arg_value ovan fyllas med en passande input-typ
+
+I config.js bör det finnas beskrivning av de olika argumenten. Ungefär såhär kanske:
+
+settings.arg_types = {
+    "word": String,
+    "notword": String,
+    "beginswith": String,
+    "endswith": String,
+    "regexp": RegExp,
+    "pos": {"AB":"adverb", "DL":"determinerare", ...},
+    "msd": String,
+    "max": Number,
+    "min": Number,
+}
+
+Här har jag använt String, RegExp och Number: alla tre ska bli <input type=text>, men man kan ju använda dem till att lägga till validering. Speciellt för Number.
+
+didSelectArgType kan innehålla något såhär ungefär:
+
+switch (argtype.constructor) {
+case Number:
+case String:
+case RegExp:
+    argvalue = $("<input type='text'/>").addClass("arg_value");
+    break;
+case Object:
+    argvalue = $("<select/>").addClass("arg_value");
+    for (var val in settings.arg_types[argtype]) {
+        argvalue.append($('<option/>').val(val).text(settings.arg_types[argtype][val]);
+    }
+}
+
+
+Förstår du hur jag tänker? Hinner du fixa detta inom de närmaste veckorna så vore det himla käckt. Här är förresten den fullständiga listan med pos-taggar:
+
+parts_of_speech = {
+    "AB": "adverb",
+    "DL": "interpunktion",
+    "DT": "determinnerare",
+    "HA": "frågande/relativt adverb",
+    "HD": "frågande/relativ determinerare",
+    "HP": "frågande/relativt pronomen",
+    "HS": "frågande/relativt possesivt pronomen",
+    "IE": "infinitivmärke",
+    "IN": "interjektion",
+    "JJ": "adjektiv",
+    "KN": "konjunktion",
+    "NN": "substantiv",
+    "PC": "particip",
+    "PL": "partikel",
+    "PM": "egennamn",
+    "PN": "pronomen",
+    "PP": "preposition",
+    "PS": "possesivt pronomen",
+    "RG": "grundtal",
+    "RO": "ordningstal",
+    "SN": "subjunktion",
+    "UO": "utländskt ord",
+    "VB": "verb"
+}
+
+settings.arg_types = {
+    ...
+    "pos": parts_of_speech,
+    ...
+}
+
+
 Skapa tab för fullformssökning
 	Ny tabb endast ett textfält (ett ord)
 	användaren skriver in ett ord:
