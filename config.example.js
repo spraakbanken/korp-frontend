@@ -11,7 +11,6 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                         pos{},
                          attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: language.sentence, sentence: language.sentence}
                         };
 
