@@ -30,16 +30,16 @@ Här har jag använt String, RegExp och Number: alla tre ska bli <input type=tex
 didSelectArgType kan innehålla något såhär ungefär:
 
 switch (argtype.constructor) {
-case Number:
-case String:
-case RegExp:
-    argvalue = $("<input type='text'/>").addClass("arg_value");
-    break;
-case Object:
-    argvalue = $("<select/>").addClass("arg_value");
-    for (var val in settings.arg_types[argtype]) {
-        argvalue.append($('<option/>').val(val).text(settings.arg_types[argtype][val]);
-    }
+	case Number:
+	case String:
+	case RegExp:
+	    argvalue = $("<input type='text'/>").addClass("arg_value");
+	    break;
+	case Object:
+	    argvalue = $("<select/>").addClass("arg_value");
+	    for (var val in settings.arg_types[argtype]) {
+	        argvalue.append($('<option/>').val(val).text(settings.arg_types[argtype][val]);
+	    }
 }
 
 
