@@ -2,6 +2,21 @@ body{font-size:1em;}
 #corpus_id { font-family: monospace }
 #cqp_string { font-family: monospace; width: 100% }
 
+
+#header{
+	padding-top: 0px;
+	
+	
+}
+#header p{
+	margin: 0px;
+	border-style:dotted;
+	border-width:1px;	
+	text-align:center;
+}
+
+
+
 .query_header, .query_footer { background-color: lightblue; padding: 1px 15px; margin:0px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
 
 .logo{float:right;}

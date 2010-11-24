@@ -11,8 +11,11 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
+                         pos{},
                          attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: language.sentence, sentence: language.sentence}
                         };
+
+
 
 settings.corpora.storsuc = {title: "SUC-romaner",
                             languages: {STORSUC: "svenska"},
@@ -33,9 +36,7 @@ settings.corpora.konkplus = {title: "Konkplus: svenska tidningstexter",
 						                     genre: "genre", corpus: "delkorpus", sentence_n: "mening"}
 						       };
 
-
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
-
 
 settings.arg_types = {
 	    "word": String,
@@ -43,7 +44,30 @@ settings.arg_types = {
 	    "beginswith": String,
 	    "endswith": String,
 	    "regexp": RegExp,
-	    "pos": {"AB":"adverb", "DL":"determinerare", },
+	    "pos": {"AB":"adverb", 
+				"DL":"determinerare",
+			    "DL": "interpunktion",
+			    "DT": "determinerare",
+			    "HA": "frågande/relativt adverb",
+			    "HD": "frågande/relativ determinerare",
+			    "HP": "frågande/relativt pronomen",
+			    "HS": "frågande/relativt possesivt pronomen",
+			    "IE": "infinitivmärke",
+			    "IN": "interjektion",
+			    "JJ": "adjektiv",
+			    "KN": "konjunktion",
+			    "NN": "substantiv",
+			    "PC": "particip",
+			    "PL": "partikel",
+			    "PM": "egennamn",
+			    "PN": "pronomen",
+			    "PP": "preposition",
+			    "PS": "possessivt pronomen",
+			    "RG": "grundtal",
+			    "RO": "ordningstal",
+			    "SN": "subjunktion",
+			    "UO": "utländskt ord",
+			    "VB": "verb"},
 	    "msd": String,
 	    "max": Number,
 	    "min": Number,

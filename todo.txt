@@ -1,3 +1,7 @@
+*ordklasser:
+	https://svn.spraakdata.gu.se/sb-arkiv/pub/lexikon/saldo_tagset.xml
+	rendera med ankare #name (spom en ren tabell utan <body>)
+
 2010-11-04
 * Den stora förändringen är att jag har fått lite skäll av Elisabet (på ett vänligt sätt) för att det saknas viktig funktionalitet. Detta tror jag är rätt så prioriterat, för att få användare som testar Korp.
 
@@ -48,7 +52,7 @@ Förstår du hur jag tänker? Hinner du fixa detta inom de närmaste veckorna s�
 parts_of_speech = {
     "AB": "adverb",
     "DL": "interpunktion",
-    "DT": "determinnerare",
+    "DT": "determinerare",
     "HA": "frågande/relativt adverb",
     "HD": "frågande/relativ determinerare",
     "HP": "frågande/relativt pronomen",
@@ -63,7 +67,7 @@ parts_of_speech = {
     "PM": "egennamn",
     "PN": "pronomen",
     "PP": "preposition",
-    "PS": "possesivt pronomen",
+    "PS": "possessivt pronomen",
     "RG": "grundtal",
     "RO": "ordningstal",
     "SN": "subjunktion",
