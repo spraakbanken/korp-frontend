@@ -11,7 +11,7 @@ settings.corpora = {};
 settings.corpora.suc2 = {title: "SUC 2.0",
                          languages: {SUC2: "svenska"},
                          context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                         attributes: {msd: "ordklass", lemma: language.base_form, sentence_n: language.sentence, sentence: language.sentence}
+                         attributes: {msd: "MSD", lemma: language.base_form, sentence_n: language.sentence, sentence: language.sentence}
                         };
 
 
@@ -19,19 +19,19 @@ settings.corpora.suc2 = {title: "SUC 2.0",
 settings.corpora.storsuc = {title: "SUC-romaner",
                             languages: {STORSUC: "svenska"},
                             context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, sentence_n: language.sentence}
+                            attributes: {msd: "MSD", lemma: language.base_form, lex: language.lemgram, sentence_n: language.sentence}
                            };
 
 settings.corpora.saltnld = {title: "SALT-NLD",
                             languages: {SALTNLD_SWE: "svenska", SALTNLD_NLD: "nederländska"},
                              context: {"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"},
-                            attributes: {msd: "ordklass", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
+                            attributes: {msd: "MSD", lemma: language.base_form, lex: language.lemgram, link_n: language.link}
                            };
 
 settings.corpora.konkplus = {title: "Konkplus: svenska tidningstexter",
 						        languages: {KONKPLUS: "svenska"},
 						        context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
-						        attributes: {msd: "ordklass", lemma: "lemma", lex: "lexem",
+						        attributes: {msd: "MSD", lemma: language.base_form, lex: language.lemgram,
 						                     genre: "genre", corpus: "delkorpus", sentence_n: "mening"}
 						       };
 
