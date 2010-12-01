@@ -16,8 +16,7 @@ body{font-size:1em;}
 }
 
 
-
-.query_header, .query_footer { background-color: lightblue; padding: 1px 15px; margin:0px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
+.query_header, .query_footer { background-color: lightblue; padding: 1px 15px; margin:5px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
 
 .logo{float:right;}
 
@@ -35,7 +34,7 @@ body{font-size:1em;}
 
 .buttons_row { border-style: dotted; border-width: 1px 0px }
 
-div { padding: 10px 0px } 
+/* div { padding: 10px 0px }  */
 td { margin: 0px  }
 table { margin: 0px 10px; padding: 0px 5px }
 .query_token { background-color: lightblue; display: inline-table; vertical-align: top; padding: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
@@ -109,6 +108,79 @@ table { margin: 0px 10px; padding: 0px 5px }
 .lemma{color:#009;} 
 .lex{color:#990;}
 .lexem{color:#CCF;}
-.sentence_n{color:#FF6};
+.sentence_n{color:#FF6;}
+
+
+/* -------------------------------------------------------------------------
+ * Navigation - tabs
+ * ---------------------------------------------------------------------- */
+
+
+/* tabs */
+.anchors {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 5px;
+	background: #ffffff;  
+	margin-bottom: 0px;
+}
+
+.anchors ul{
+    list-style: none;
+	margin-bottom: 0px;
+}
+
+.anchors:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+.anchors li {
+    float: left;
+    list-style: none;
+    
+    margin: 0 1px 0 0;
+}
+.anchors a {
+    display: block;
+    position: relative;
+    top: 1px;
+    border: 1px solid #eaeaea;
+    border-bottom: 0;
+    z-index: 2;
+    padding: 2px 9px 1px;
+    color: #000;
+    text-decoration: none;
+}
+.anchors .on a {
+    padding-bottom: 2px;
+    font-weight: bold;
+	border: 1px solid #000000;
+	background: #eaeaea;  
+	border-bottom:none;
+}
+.anchors a:focus, .anchors a:active {
+    outline: none; /* @ Firefox 1.5, remove ugly dotted border */
+}
+.anchors .on a, .anchors a:hover, .anchors a:focus, .anchors a:active,
+.anchor {
+    background: #ffffff;    
+}
+
+
+.anchors .on a:link, .anchors .on a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
+    cursor: text;
+}
+.anchors a:hover, .anchors a:focus, .anchors a:active {
+    cursor: pointer;
+}
+.anchor {
+    padding: 10px;
+	background: #ffffff; 
+	border-top: 1px solid #000000;
+	
+}
+
+
 
 
