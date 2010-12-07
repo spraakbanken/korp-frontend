@@ -6,13 +6,27 @@ body{font-size:1em;}
 #header{
 	padding-top: 0px;
 	
-	
+	float:left;	
+	clear:right;
 }
+
+#content{
+	float:left;
+	clear:both;
+	width:100%;
+}
+
 #header p{
 	margin: 0px;
+	margin-left:10px;
 	border-style:dotted;
 	border-width:1px;	
 	text-align:center;
+	float:left;
+}
+
+#header img{
+	float:left;	
 }
 
 
