@@ -73,7 +73,7 @@ function resetQuery() {
     insertRowButtons();
     didSelectCorpus();
     insertRow();
-    toggleFullQuery();
+    //toggleFullQuery();
 }
 
 function clearQuery() {
@@ -82,10 +82,12 @@ function clearQuery() {
 }
 
 function toggleFullQuery() {
-    var full_query = $("#full_query").is(":checked");
+    /*
+	var full_query = $("#full_query").is(":checked");
     $("#cqp_string").attr("disabled", !full_query);
     $("#corpus_id").attr("disabled", !full_query);
     $("#simple_query").toggle(!full_query);
+    */
 }
 
 function mkInsertButton() {
