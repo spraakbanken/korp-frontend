@@ -23,7 +23,7 @@
 		
 		<script type="text/javascript" src="translations/swe.js"></script>
 		<script type="text/javascript" src="config.js"></script>
-		<script type="text/javascript" src="config.example.js"></script>
+		
 		
 		<script type="text/javascript" src="querytable.js"></script>
 		<script type="text/javascript" src="request.js"></script>
@@ -63,7 +63,7 @@
 				<div id="tabs-container">
 					<ul class="anchors">
 						<li class="on"><a href="#korp-simple">Enkel</a></li>
-						<li><a href="#korp-advanced">Avancerad</a></li>
+						<li class="advanced"><a href="#korp-advanced">Avancerad</a></li>
 					</ul>
 					<div id="korp-simple" class="anchor">					
 						<div id="simple">
@@ -107,10 +107,12 @@
 				   <label for="num_hits">Träffar per sida: </label> 
 				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
 				  </td>
+				  <!-- 
 				  <td>
 				   <label for="context">Kontext:</label> 
 				  	<select name="context" id="context_select" onchange="submitFormToServer()"><option selected="selected" value="1 sentence">1 mening</option><option value="5 words">5 ord</option><option value="10 words">10 ord</option></select>
 				  </td>
+				   -->
 				  <td>
 				   <em>Visa:</em>
 				   <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>

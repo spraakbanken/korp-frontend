@@ -10,17 +10,15 @@ function handlePaginationClick(new_page_index, pagination_container) {
 		
 		var start 	= new_page_index*items_per_page;
 		var end 		= (start + items_per_page);
-		
-		var context = $("#context_select option:selected").val();
-		
-		makeRequest(cqp, corpus, start, end, context);
+				
+		makeRequest(cqp, corpus, start, end);
 		current_page = new_page_index;
 	}
     
    return false;
 }
 
-function makeRequest(cqp, corpus, start, end, context){
+function makeRequest(cqp, corpus, start, end){
 	$('#results').html(language.loading);
 	
 	var selected_corpus = settings.corpora[getCorpus()];
@@ -32,7 +30,7 @@ function makeRequest(cqp, corpus, start, end, context){
 					cqp:cqp,
 					start:start,
 					end:end,
-					context:context,
+					context:'1 sentence',
 					show:[],
 				};
 
@@ -55,11 +53,9 @@ function submitFormToServer(){
 	var corpus 	= $("#corpus_id").val();
 	
 	var start 	= 0;
-	var end 		= $("#num_hits").val()-1;
-	
-	var context = $("#context_select option:selected").val();
-	
-	makeRequest(cqp, corpus, start, end, context);
+	var end 	= $("#num_hits").val()-1;
+		
+	makeRequest(cqp, corpus, start, end);
 	
 	$('#results-wraper').css('display', 'block');	
 }
@@ -102,7 +98,11 @@ function corpus_results(data){
 		
 		/*Left */
 		output += '<td class="left">';
-		for (var i = 0; i < item.match.start; i++) { 
+		
+		var from = 0;
+		if(item.match.start > 12)
+			from = item.match.start-12;
+		for (var i = from; i < item.match.start; i++) { 
 			output +='<span class="token">';
 			output +='<span class="word">'+item.tokens[i].word+'</span> ';
 			
@@ -132,8 +132,13 @@ function corpus_results(data){
 		
 		/*Right */
 		var len=item.tokens.length;
+
+		var to = len;
+		if((len-item.match.end) > 12)
+			to = item.match.end+15;
+		
 		output += '<td class="right">';
-		for (var i = item.match.end; i < len; i++) { 
+		for (var i = item.match.end; i < to; i++) { 
 			output +='<span class="token">';
 			output +='<span class="word">'+item.tokens[i].word+'</span> ';
 			
@@ -157,7 +162,6 @@ function corpus_results(data){
 		}
 	})		
 	
-	
 	$('.result_table tr:even').addClass('alt'); 
 	
 	$('.token').hover(
@@ -168,7 +172,8 @@ function corpus_results(data){
 			function(){
 				console.log('out '+$(this).html());
 				$(this).removeClass('token_hover');
-			});
+			}
+	);
 }
 
 function tooltipIn(object){
@@ -187,7 +192,7 @@ function renderToken(token){
 }
 
 /*******************
- * Read arugments
+ * Read args
  */
 $(document).ready(function(){
 	//var vars = $.getUrlVars();

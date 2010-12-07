@@ -30,7 +30,7 @@ body{font-size:1em;}
 }
 
 
-.query_header, .query_footer { background-color: lightblue; padding: 1px 15px; margin:5px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
+.query_header, .query_footer { background-color: #e1e1e1; padding: 1px 15px; margin:5px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
 
 .logo{float:right;}
 
@@ -51,7 +51,7 @@ body{font-size:1em;}
 /* div { padding: 10px 0px }  */
 td { margin: 0px  }
 table { margin: 0px 10px; padding: 0px 5px }
-.query_token { background-color: lightblue; display: inline-table; vertical-align: top; padding: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
+.query_token { background-color: #e1e1e1; display: inline-table; vertical-align: top; padding: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
 
 .cqp_toggle{
 	margin-top: 5px; margin-bottom: 5px;	
