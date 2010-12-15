@@ -135,7 +135,7 @@ function corpus_results(data){
 
 		var to = len;
 		if((len-item.match.end) > 12)
-			to = item.match.end+15;
+			to = item.match.end+12;
 		
 		output += '<td class="right">';
 		for (var i = item.match.end; i < to; i++) { 
@@ -160,7 +160,7 @@ function corpus_results(data){
 		if($('input[value='+key+']').is(':checked')){
 			$('.'+key).css('display', 'inline');
 		}
-	})		
+	})	
 	
 	$('.result_table tr:even').addClass('alt'); 
 	

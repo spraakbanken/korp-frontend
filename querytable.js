@@ -35,7 +35,7 @@ function didSelectCorpus() {
  				$('.'+token_class ).css('display', 'inline');
  			}else{
  				$('.'+token_class ).css('display', 'none');
- 			}	
+ 			}
     });
 
     $("#context_select").children().remove();

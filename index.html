@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML>
 <html>
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -39,6 +39,8 @@
 			
 				//$("#tabs").tabs();
 				$.tabs("tabs-container");
+				$.tabs("result-container");
+				
 			});
 		</script>
 	</head>
@@ -50,11 +52,6 @@
   			</p>
   		</div>
 		<div id="content">
-			<!-- 
-			<div class="logo">
-				<img src="img/korp_s.png" alt="korp" />
-			</div>
-			 -->	
 			<form action="/cgi-bin/korp/korp.cgi" id="query_form" method="GET" onsubmit="submitForm()" target="_blank">
 				<input name="command" value="query" type="hidden">
 				<input name="corpus" id="corpus" type="hidden">
@@ -123,9 +120,13 @@
 					<span>Antal resultat: </span><span id="num-result"></span>
 					<div class="pagination" id="Pagination"></div>
 				</div>
-				<div id="results_sentence">
-				</div>
-				<div id="results">
+				<div id="result-container">
+					<ul class="anchors">
+						<li class="on"><a href="#results">Tabell</a></li>
+						<li><a href="#results-sentence">Mening</a></li>
+					</ul>
+					<div id="results" class="anchor"></div>				
+					<div id="results-sentence" class="anchor"></div>
 				</div>
 			</div>
 		</div>

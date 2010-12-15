@@ -92,7 +92,7 @@ table { margin: 0px 10px; padding: 0px 5px }
 }
 
 .extra{
-	color:#cdc9c9;
+	color:#e1e1e1;
 }
 
 .alt{
@@ -115,6 +115,10 @@ table { margin: 0px 10px; padding: 0px 5px }
 
 .token_hover{
 	color:red;	
+}
+
+#result-container{
+	clear:both;	
 }
 
 /* Attributes color */
@@ -191,8 +195,7 @@ table { margin: 0px 10px; padding: 0px 5px }
 .anchor {
     padding: 10px;
 	background: #ffffff; 
-	border-top: 1px solid #000000;
-	
+	border-top: 1px solid #000000;	
 }
 
 
