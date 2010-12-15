@@ -205,6 +205,30 @@ function removeArg(arg) {
     didToggleToken(row);
 }
 
+function initSearch(){
+	$('input[type=text]').keypress(function(event) { 
+		if (event.keyCode == '13') { 
+			event.preventDefault(); 
+			updateCQP();
+			submitFormToServer();
+		}
+	});
+
+	
+	var corpus = $.getUrlVar('corpus');
+	if(corpus.length != 0){
+		$("#select_corpus").val(corpus);
+		didSelectCorpus();
+	}
+	
+	var word = $.getUrlVar('word');
+	if(word.length != 0){
+		$('input[type=text]').val(word);
+		updateCQP();
+		submitFormToServer();
+	}
+}
+
 //////////////////////////////////////////////////////////////////////
 
 function setSelectWidth(select) {

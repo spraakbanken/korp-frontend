@@ -198,6 +198,7 @@ $(document).ready(function(){
 	//var vars = $.getUrlVars();
 	//alert(vars['word']);
 	//$('.arg_value').value(vars['word']);
+
 });
 
 // Read a page's GET URL variables and return them as an associative array.
