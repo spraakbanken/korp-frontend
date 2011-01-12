@@ -198,11 +198,12 @@ table { margin: 0px 10px; padding: 0px 5px }
 	border-top: 1px solid #000000;	
 }
 
-#json-link, #json-link img{
-	float:right;
-	border:0px;
+#json-link{
+	float:right;	
 	display:none;
 }
+
+#json-link img{ border:0px;}
 
 
 

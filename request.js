@@ -49,8 +49,9 @@ function makeRequest(cqp, corpus, start, end){
 
 function setJsonLink(data){
 	var url = settings.cgi_script+'?'+jQuery.param(data);
+	url = url.replace('[]','');
 	$('#json-link').attr('href', url);
-	$('#json-link').attr('style', 'display:bock;');
+	$('#json-link').css('display', 'inline');
 }
 
 function submitFormToServer(){
