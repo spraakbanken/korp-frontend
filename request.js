@@ -43,6 +43,13 @@ function makeRequest(cqp, corpus, start, end){
 				data:data,
 				traditional:true,
 				success: corpus_results});
+	
+	setJsonLink(data);
+}
+
+function setJsonLink(data){
+	var url = settings.cgi_script+'?'+jQuery.param(data);
+	$('#json-link').attr('href', url);
 }
 
 function submitFormToServer(){
