@@ -48,7 +48,8 @@ function makeRequest(cqp, corpus, start, end){
 }
 
 function setJsonLink(data){
-	$.ajaxSetup({ traditional: true }); //fix the problem with show[]=...
+	$.ajaxSetup({ traditional: true });
+	var url = settings.cgi_script+'?'+jQuery.param(data);
 	$('#json-link').attr('href', url);
 	$('#json-link').css('display', 'inline');
 }
