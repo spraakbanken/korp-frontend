@@ -216,7 +216,7 @@ function initSearch(){
 
 	
 	var corpus = $.getUrlVar('corpus');
-	if(corpus.length != 0){
+	if (corpus && corpus.length != 0){
 		$("#select_corpus").val(corpus);
 		didSelectCorpus();
 	}
