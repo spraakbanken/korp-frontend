@@ -16,6 +16,6 @@ language.get_sentence = 'Hämta kontext';
 
 language.link = 'länk';
 
-language.base_form = 'Grundform';
-language.lemgram   = 'Lemgram';
-language.sentence  = 'Mening';
+language.base_form = 'grundform';
+language.lemgram   = 'lemgram';
+language.sentence  = 'mening';
