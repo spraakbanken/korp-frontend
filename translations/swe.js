@@ -16,6 +16,10 @@ language.get_sentence = 'Hämta kontext';
 
 language.link = 'länk';
 
+language.text  = 'text';
+language.saldo  = 'saldo-id';
+language.pos  = 'ordklass';
 language.base_form = 'grundform';
 language.lemgram   = 'lemgram';
 language.sentence  = 'mening';
+language.paragraph  = 'stycke';
