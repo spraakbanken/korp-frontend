@@ -75,7 +75,10 @@ table { margin: 0px 10px; padding: 0px 5px }
 	clear: both;
 }
 
-.result_table td {white-space: nowrap;}
+.result_table td {
+	white-space: nowrap;
+	font-family: "Courier New", Courier, monospace;
+}
 
 .left{
 	text-align:right;
