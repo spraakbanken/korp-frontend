@@ -121,8 +121,8 @@ function corpus_results(data){
 			output += '<td class="sentence"><a href="#"><img src="img/sentence.png" /></a></td>';
 		
 		if(item.structs != null){
-			$.each(item.structs, function(key,val){
-				output += '<td>'+val+'</td>';
+			$.each(corpus.struct_attributes, function(key,val){
+				output += '<td>'+item.structs[key]+'</td>';
 			});			
 		}
 		
