@@ -26,3 +26,6 @@ language.dephead  = 'dephead';
 language.deprel  = 'deprel';
 language.sentence  = 'mening';
 language.paragraph  = 'stycke';
+
+language.year  = 'år';
+language.party  = 'parti';
