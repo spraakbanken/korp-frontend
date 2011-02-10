@@ -32,11 +32,16 @@ function makeRequest(cqp, corpus, start, end){
 					end:end,
 					context:'1 sentence',
 					show:[],
+					show_struct:[],  
 				};
 
 	$.each(selected_corpus.attributes, function(key,val){
 		data.show.push(key);
 	})	
+	
+	$.each(selected_corpus.struct_attributes, function(key,val){
+		data.show_struct.push(key);
+	})		
 
 	$.ajax({ url: settings.cgi_script+'?callback=?', 
 				dataType: "jsonp", 
@@ -99,11 +104,27 @@ function corpus_results(data){
 	num_result = data.hits;
 	
 	var output = '<table class="result_table"><tbody>';
+
+	output += '<thead><tr>';
+	if(corpus.struct_attributes != null){
+		output += '<th>&nbsp;</th>';
+		$.each(corpus.struct_attributes, function(key,val){
+			output += '<th>'+val+'</th>';
+		});
+	}
+	
+	output += '</tr></thead>';
 	
 	$.each(data.kwic, function(i,item){
 		output += '<tr>';
 		if(corpus.attributes.sentence != null)
 			output += '<td class="sentence"><a href="#"><img src="img/sentence.png" /></a></td>';
+		
+		if(item.structs != null){
+			$.each(item.structs, function(key,val){
+				output += '<td>'+val+'</td>';
+			});			
+		}
 		
 		/*Left */
 		output += '<td class="left">';
@@ -200,15 +221,6 @@ function renderToken(token){
 	return output;
 }
 
-/*******************
- * Read args
- */
-$(document).ready(function(){
-	//var vars = $.getUrlVars();
-	//alert(vars['word']);
-	//$('.arg_value').value(vars['word']);
-
-});
 
 // Read a page's GET URL variables and return them as an associative array.
 $.extend({
