@@ -37,11 +37,14 @@ function makeRequest(cqp, corpus, start, end){
 
 	$.each(selected_corpus.attributes, function(key,val){
 		data.show.push(key);
-	})	
+	});
 	
-	$.each(selected_corpus.struct_attributes, function(key,val){
-		data.show_struct.push(key);
-	})		
+
+	if (selected_corpus.struct_attributes) {
+		$.each(selected_corpus.struct_attributes, function(key,val){
+			data.show_struct.push(key);
+		});
+	}
 
 	$.ajax({ url: settings.cgi_script+'?callback=?', 
 				dataType: "jsonp", 
