@@ -34,6 +34,7 @@
 		<script type="text/javascript" src="querytable.js"></script>
 		<script type="text/javascript" src="request.js"></script>
 		<script type="text/javascript" src="tabs.js"></script>
+		<script type="text/javascript" src="sidebar.js"></script>
 		 
 		<script type="text/javascript">
 			$(function(){
@@ -175,26 +176,34 @@
 				</div>
 				<div id="tooltip-container"></div>
 			</div>
-			<a id="json-link" href="#"><img src="img/json.png" /></a>
+			<div id="sidebar" >	
+				<a id="json-link" href="#"><img src="img/json.png" /></a>
+				
+				<div id="selected_word">
+				</div>
+				
+			</div>
+			
 		</div>
 		
-		
+	
+	
 		
 	<script id="sentanceTmpl" type="text/x-jquery-tmpl">
 		<tr>
 		  	<td id="left" class="left">
-			{{each left.list}}
-				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{each left}}
+				<span name="${$item.rowIndex + "-" + $index}" class="word">${word}</span>
 			{{/each}}
 		  	</td>
 		  	<td id="match" class="match">
-			{{each match.list}}
-				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{each match}}
+				<span name="${$item.rowIndex + "-" + ($data.left.length + $index)}" class="word">${word}</span>
 			{{/each}}
 		  	</td>
 		  	<td id="right" class="right">
-			{{each right.list}}
-				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{each right}}
+				<span name="${$item.rowIndex + "-" + ($data.left.length + $data.match.length + $index)}" class="word">${word}</span>
 			{{/each}}
 		  	</td>
 	  </tr>

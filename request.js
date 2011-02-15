@@ -98,12 +98,12 @@ function selectLeft(sentance) {
 	if(sentance.match.start > 12)
 		from = sentance.match.start-12;
 	
-	return {"from" : from, "list" : sentance.tokens.slice(from, sentance.match.start)};
+	return sentance.tokens.slice(from, sentance.match.start);
 }
 
 function selectMatch(sentance) {
 	var from = sentance.match.start;
-	return {"from" : from, "list" : sentance.tokens.slice(from, sentance.match.end)};
+	return sentance.tokens.slice(from, sentance.match.end);
 }
 
 function selectRight(sentance) {
@@ -114,7 +114,7 @@ function selectRight(sentance) {
 	if((len-sentance.match.end) > 12)
 		to = sentance.match.end+12;
 	
-	return {"from" : from, "list" : sentance.tokens.slice(sentance.match.end, to)};
+	return sentance.tokens.slice(sentance.match.end, to);
 }
 
 function corpus_results(data) {
@@ -135,7 +135,7 @@ function corpus_results(data) {
 	    		"right" : selectRight(sentance)
 	    };
 	    
-		$( "#sentanceTmpl" ).tmpl( splitObj).appendTo( "#results-table" );
+		$( "#sentanceTmpl" ).tmpl( splitObj, {rowIndex : i}).appendTo( "#results-table" );
 		
 		$('.result_table tr:even').addClass('alt');
 		$('.word').hover(
@@ -147,7 +147,15 @@ function corpus_results(data) {
 				//console.log('out '+$(this).html());
 				$(this).removeClass('token_hover');
 			}
-		);
+		).click(
+				function() {
+					if($(this).hasClass("token_selected"))
+						$(this).removeClass("token_selected");
+					else
+						$(this).addClass("token_selected");
+						
+				}
+				)
 	});
 }
 
