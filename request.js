@@ -93,32 +93,38 @@ function buildPager(number_of_hits){
 	}
 }
 
-function selectLeft(sentance) {
-	var from = 0;
-	if(sentance.match.start > 12)
-		from = sentance.match.start-12;
-	
-	return sentance.tokens.slice(from, sentance.match.start);
+function selectLeft(sentence, offset) {
+	return sentence.tokens.slice(offset, sentence.match.start);
 }
 
-function selectMatch(sentance) {
-	var from = sentance.match.start;
-	return sentance.tokens.slice(from, sentance.match.end);
+function selectMatch(sentence) {
+	var from = sentence.match.start;
+	return sentence.tokens.slice(from, sentence.match.end);
 }
 
-function selectRight(sentance) {
-	var from = sentance.match.end;
-	var len=sentance.tokens.length;
+function selectRight(sentence) {
+	var from = sentence.match.end;
+	var len=sentence.tokens.length;
 
 	var to = len;
-	if((len-sentance.match.end) > 12)
-		to = sentance.match.end+12;
+	if((len-sentence.match.end) > 12)
+		to = sentence.match.end+12;
 	
-	return sentance.tokens.slice(sentance.match.end, to);
+	return sentence.tokens.slice(sentence.match.end, to);
 }
 
 function corpus_results(data) {
+	var effectSpeed = 200;
 	$('#results').find("p").remove();
+	if($.trim($("#results-table").html()).length) {
+		$("#results").slideUp(effectSpeed, function() {
+			$("#results-table").empty();
+			corpus_results(data);
+		});
+	}
+	else {
+		$("#results").hide();
+	}
 	var corpus = settings.corpora[getCorpus()];
 	
 	//if this is the first result-set
@@ -127,36 +133,42 @@ function corpus_results(data) {
 	}
 	$('#num-result').html(data.hits);
 	num_result = data.hits;
-
-	$.each(data.kwic, function(i,sentance){
+	
+	
+	$.each(data.kwic, function(i,sentence){
+		var offset = 0; 
+		if(sentence.match.start > 12)
+			offset = sentence.match.start-12;
 	    var splitObj = {
-	    		"left" : selectLeft(sentance),
-	    		"match" : selectMatch(sentance),
-	    		"right" : selectRight(sentance)
+	    		"left" : selectLeft(sentence, offset),
+	    		"match" : selectMatch(sentence),
+	    		"right" : selectRight(sentence)
 	    };
 	    
-		$( "#sentanceTmpl" ).tmpl( splitObj, {rowIndex : i}).appendTo( "#results-table" );
+		$( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i})
+				.appendTo( "#results-table" )
+				.find(".word").hover(
+						function(){
+							$(this).addClass('token_hover'); 
+						}, 
+						function(){
+							$(this).removeClass('token_hover');
+						}
+				).click(
+						function(event) {
+							event.stopPropagation();
+							SelectionManager.select($(this));
+							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
+							var data = sentence.tokens[offset + clickedWord];
+							updateSidebar(sentence.structs, data);
+						}
+				);
 		
 		$('.result_table tr:even').addClass('alt');
-		$('.word').hover(
-			function(){
-				//console.log('in '+$(this).html());
-				$(this).addClass('token_hover'); 
-			}, 
-			function(){
-				//console.log('out '+$(this).html());
-				$(this).removeClass('token_hover');
-			}
-		).click(
-				function() {
-					if($(this).hasClass("token_selected"))
-						$(this).removeClass("token_selected");
-					else
-						$(this).addClass("token_selected");
-						
-				}
-				)
 	});
+//	make the first matched word selected by default.
+	$(".match").children().first().trigger("click");
+	$("#results").slideDown(effectSpeed);
 }
 
 

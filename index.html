@@ -35,6 +35,7 @@
 		<script type="text/javascript" src="request.js"></script>
 		<script type="text/javascript" src="tabs.js"></script>
 		<script type="text/javascript" src="sidebar.js"></script>
+		<script type="text/javascript" src="util.js"></script>
 		 
 		<script type="text/javascript">
 			$(function(){
@@ -49,7 +50,9 @@
 				$.tabs("result-container");
 
 				initSearch();
-				
+				$("#result-container").click(function(){
+					SelectionManager.deselect();
+				});
 			});
 		</script>
 	</head>
@@ -153,11 +156,11 @@
 				  	<select name="context" id="context_select" onchange="submitFormToServer()"><option selected="selected" value="1 sentence">1 mening</option><option value="5 words">5 ord</option><option value="10 words">10 ord</option></select>
 				  </td>
 				   -->
-				  <td>
-				   <em>Visa:</em>
-				   <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>
-				   <span id="automatic_attributes"></span>
-				 </td>
+<!--				  <td>-->
+<!--				   <em>Visa:</em>-->
+<!--				   <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>-->
+<!--				   <span id="automatic_attributes"></span>-->
+<!--				 </td>-->
 				</tr></tbody></table>  
 				<div id="pager-wraper">
 					<span>Antal resultat: </span><span id="num-result"></span>
@@ -179,8 +182,17 @@
 			<div id="sidebar" >	
 				<a id="json-link" href="#"><img src="img/json.png" /></a>
 				
-				<div id="selected_word">
-				</div>
+<!--					${console.log($item, $data)};-->
+				<script id="sidebarTmpl" type="text/x-jquery-tmpl">
+					<p>${$data} : ${$item.word[$data]}</p>
+				</script>
+				
+				<h4>Meningsattribut</h4>
+				<div id="selected_sentence"></div>
+				
+				<h4>Ordattribut</h4>
+				<div id="selected_word"></div>
+				
 				
 			</div>
 			
@@ -189,19 +201,19 @@
 	
 	
 		
-	<script id="sentanceTmpl" type="text/x-jquery-tmpl">
+	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr>
-		  	<td id="left" class="left">
+		  	<td class="left">
 			{{each left}}
 				<span name="${$item.rowIndex + "-" + $index}" class="word">${word}</span>
 			{{/each}}
 		  	</td>
-		  	<td id="match" class="match">
+		  	<td class="match">
 			{{each match}}
 				<span name="${$item.rowIndex + "-" + ($data.left.length + $index)}" class="word">${word}</span>
 			{{/each}}
 		  	</td>
-		  	<td id="right" class="right">
+		  	<td class="right">
 			{{each right}}
 				<span name="${$item.rowIndex + "-" + ($data.left.length + $data.match.length + $index)}" class="word">${word}</span>
 			{{/each}}
