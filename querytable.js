@@ -222,7 +222,7 @@ function initSearch(){
 	}
 	
 	var word = $.getUrlVar('word');
-	if(word.length != 0){
+	if(word && word.length != 0){
 		$('input[type=text]').val(decodeURIComponent(word));
 		updateCQP();
 		submitFormToServer();

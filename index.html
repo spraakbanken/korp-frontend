@@ -19,12 +19,13 @@
 		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
 		
 		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
+		<script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
 		
 		<script type="text/javascript" src="translations/translation-swe.js"></script>
 		<script type="text/javascript" src="translations/translation-eng.js"></script>
 		
-		<script type="text/javascript">$.localise('mypackage');</script>
+		<!--<script type="text/javascript">$.localise('mypackage');</script>-->
 		
 		<script type="text/javascript" src="translations/swe.js"></script>
 		<script type="text/javascript" src="config.js"></script>
@@ -35,7 +36,7 @@
 		<script type="text/javascript" src="tabs.js"></script>
 		 
 		<script type="text/javascript">
-			$(document).ready(function(){
+			$(function(){
 				loadCorpora();
 				resetQuery();
 				$("#query_form").attr("action", settings.cgi_script);
@@ -47,6 +48,7 @@
 				$.tabs("result-container");
 
 				initSearch();
+				
 			});
 		</script>
 	</head>
@@ -77,15 +79,49 @@
 									</select>
 								</td>       
 							</tr></tbody></table>
-							<div id="simple_query">
-								<div id="query_table"><div class="query_row line_above"><img style="display: none;" class="image_button remove_row" src="img/minus.png"><select style="width: 71px;" disabled="disabled" class="select_operation"><option selected="selected" value="find">Leta efter</option></select><select disabled="disabled" class="select_language"><option selected="selected" value="SUC2">svenska</option></select><table class="query_token" cellpadding="0" cellspacing="0"><tbody><tr class="query_arg"><td><select style="width: 59px;" class="arg_type"><optgroup label="ord"><option selected="selected" value="word">ordet är</option><option value="notword">ordet är inte</option><option value="beginswith">börjar med</option><option value="endswith">slutar med</option><option value="regexp">reguljärt uttryck</option></optgroup><optgroup label="ordklass"><option value="pos">ordklassen är</option><option value="msd">ordklassen börjar med</option></optgroup><optgroup label="intervall"><option value="max">upp till</option><option value="min">minst</option></optgroup></select><input class="arg_value" type="text"></td><td><img style="visibility: hidden;" class="image_button remove_arg" src="img/minus.png"><img class="image_button insert_arg" src="img/plus.png"></td></tr></tbody></table><img class="image_button insert_token" src="img/plus.png"></div></div>
-								<div class="buttons_row">
-									<span id="buttons_row"><img style="visibility: hidden;" class="image_button remove_row" src="img/minus.png"><img class="image_button insert_row" src="img/plus.png"></span>
-									&nbsp;&nbsp;&nbsp;&nbsp;
-									
-								</div>
-							</div>
-						</div>
+					<div id="simple_query">
+					<div id="query_table">
+					<div class="query_row line_above"><img style="display: none;"
+						class="image_button remove_row" src="img/minus.png"><select
+						style="width: 71px;" disabled="disabled" class="select_operation">
+						<option selected="selected" value="find">Leta efter</option>
+					</select><select disabled="disabled" class="select_language">
+						<option selected="selected" value="SUC2">svenska</option>
+					</select>
+					<table class="query_token" cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr class="query_arg">
+								<td><select style="width: 59px;" class="arg_type">
+									<optgroup label="ord">
+										<option selected="selected" value="word">ordet är</option>
+										<option value="notword">ordet är inte</option>
+										<option value="beginswith">börjar med</option>
+										<option value="endswith">slutar med</option>
+										<option value="regexp">reguljärt uttryck</option>
+									</optgroup>
+									<optgroup label="ordklass">
+										<option value="pos">ordklassen är</option>
+										<option value="msd">ordklassen börjar med</option>
+									</optgroup>
+									<optgroup label="intervall">
+										<option value="max">upp till</option>
+										<option value="min">minst</option>
+									</optgroup>
+								</select><input id="query_input" class="arg_value" type="text" /></td>
+								<td><img style="visibility: hidden;"
+									class="image_button remove_arg" src="img/minus.png"><img
+									class="image_button insert_arg" src="img/plus.png"></td>
+							</tr>
+						</tbody>
+					</table>
+					<img class="image_button insert_token" src="img/plus.png"></div>
+					</div>
+					<div class="buttons_row"><span id="buttons_row"><img
+						style="visibility: hidden;" class="image_button remove_row"
+						src="img/minus.png"><img class="image_button insert_row"
+						src="img/plus.png"></span> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+					</div>
+					</div>
 					</div>
 					<div id="korp-advanced" class="anchor">
 						<div id="advanced">
@@ -131,7 +167,10 @@
 						<li class="on"><a href="#results">Tabell</a></li>
 						<li><a href="#results-sentence">Mening</a></li>
 					</ul>
-					<div id="results" class="anchor"></div>				
+					<div id="results" class="anchor">
+						<table id="results-table" class="result_table">
+						</table>
+					</div>
 					<div id="results-sentence" class="anchor"></div>
 				</div>
 				<div id="tooltip-container"></div>
@@ -139,5 +178,27 @@
 			<a id="json-link" href="#"><img src="img/json.png" /></a>
 		</div>
 		
+		
+		
+	<script id="sentanceTmpl" type="text/x-jquery-tmpl">
+		<tr>
+		  	<td id="left" class="left">
+			{{each left.list}}
+				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{/each}}
+		  	</td>
+		  	<td id="match" class="match">
+			{{each match.list}}
+				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{/each}}
+		  	</td>
+		  	<td id="right" class="right">
+			{{each right.list}}
+				<span name="${$item.data.left.from + "-" + $index}" class="word">${word}</span>
+			{{/each}}
+		  	</td>
+	  </tr>
+	</script>
+	
 	</body>
  </html>

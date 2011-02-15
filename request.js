@@ -19,8 +19,6 @@ function handlePaginationClick(new_page_index, pagination_container) {
 }
 
 function makeRequest(cqp, corpus, start, end){
-	$('#results').html(language.loading);
-	
 	var selected_corpus = settings.corpora[getCorpus()];
 	var attributes = ['msd','lemma'];
 
@@ -32,7 +30,7 @@ function makeRequest(cqp, corpus, start, end){
 					end:end,
 					context:'1 sentence',
 					show:[],
-					show_struct:[],  
+					show_struct:[]  
 				};
 
 	$.each(selected_corpus.attributes, function(key,val){
@@ -64,7 +62,7 @@ function setJsonLink(data){
 
 function submitFormToServer(){
 	num_result = 0;
-	$('#results').html(language.loading);
+	$('#results').append("<p/>").find("p").html(language.loading);
 	
 	var cqp 	= $("#cqp_string").val();
 	var corpus 	= $("#corpus_id").val();
@@ -95,7 +93,65 @@ function buildPager(number_of_hits){
 	}
 }
 
-function corpus_results(data){
+function selectLeft(sentance) {
+	var from = 0;
+	if(sentance.match.start > 12)
+		from = sentance.match.start-12;
+	
+	return {"from" : from, "list" : sentance.tokens.slice(from, sentance.match.start)};
+}
+
+function selectMatch(sentance) {
+	var from = sentance.match.start;
+	return {"from" : from, "list" : sentance.tokens.slice(from, sentance.match.end)};
+}
+
+function selectRight(sentance) {
+	var from = sentance.match.end;
+	var len=sentance.tokens.length;
+
+	var to = len;
+	if((len-sentance.match.end) > 12)
+		to = sentance.match.end+12;
+	
+	return {"from" : from, "list" : sentance.tokens.slice(sentance.match.end, to)};
+}
+
+function corpus_results(data) {
+	$('#results').find("p").remove();
+	var corpus = settings.corpora[getCorpus()];
+	
+	//if this is the first result-set
+	if(num_result == 0){
+		buildPager(data.hits);
+	}
+	$('#num-result').html(data.hits);
+	num_result = data.hits;
+
+	$.each(data.kwic, function(i,sentance){
+	    var splitObj = {
+	    		"left" : selectLeft(sentance),
+	    		"match" : selectMatch(sentance),
+	    		"right" : selectRight(sentance)
+	    };
+	    
+		$( "#sentanceTmpl" ).tmpl( splitObj).appendTo( "#results-table" );
+		
+		$('.result_table tr:even').addClass('alt');
+		$('.word').hover(
+			function(){
+				//console.log('in '+$(this).html());
+				$(this).addClass('token_hover'); 
+			}, 
+			function(){
+				//console.log('out '+$(this).html());
+				$(this).removeClass('token_hover');
+			}
+		);
+	});
+}
+
+function corpus_results_old(data){
 	
 	var corpus = settings.corpora[getCorpus()];
 	
@@ -143,7 +199,7 @@ function corpus_results(data){
 				if(item.tokens[i][key] != null){
 					output +='<span class="attr '+key+'">'+item.tokens[i][key]+'</span> ';
 				}
-			})			
+			});			
 			output +='</span>';
 		}
 		output += '</td>';
@@ -158,7 +214,7 @@ function corpus_results(data){
 				if(item.tokens[i][key] != null){
 					output +='<span class="attr '+key+'">'+item.tokens[i][key]+'</span> ';
 				}
-			})			
+			});			
 			output +='</span>';
 		}
 		output += '</td>';
@@ -179,7 +235,7 @@ function corpus_results(data){
 				if(item.tokens[i][key] != null){
 					output +='<span class="attr '+key+'">'+item.tokens[i][key]+'</span> ';
 				}
-			})			
+			});			
 			output +='</span>';
 		}
 		output += '</td></tr>';
