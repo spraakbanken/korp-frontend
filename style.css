@@ -78,7 +78,7 @@ table { margin: 0px 10px; padding: 0px 5px }
 
 .result_table td {
 	white-space: nowrap;
-	font-family: "Courier New", Courier, monospace;
+	#font-family: "Courier New", Courier, monospace;
 }
 
 .left{
@@ -121,8 +121,13 @@ table { margin: 0px 10px; padding: 0px 5px }
 	color:red;	
 }
 .token_selected {
-    background-color: silver; 
-    border-radius: 15px;
+    color: #fff;
+    background-color: #666; 
+    border-radius: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-left : -3px;
+    margin-right: -3px;
 }
 
 #result-container{
@@ -230,3 +235,10 @@ table { margin: 0px 10px; padding: 0px 5px }
     
 }
 
+#sidebar div {
+    margin-bottom: 10px;
+}
+
+#sidebar p {
+    margin: 0 0 0 0;
+}
