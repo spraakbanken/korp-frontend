@@ -19,29 +19,29 @@ function submitForm() {
 function didSelectCorpus() {
     var corpus = settings.corpora[getCorpus()];
 
-    $("#attributes").children().remove();
-    for (var attr in corpus.attributes) {
-        $("<span/>").addClass("show_attribute").append(
-            $("<input type='checkbox' name='show'/>").val(attr)
-        ).append(
-            corpus.attributes[attr] + " "
-        ).appendTo($("#attributes"));
-    }
+//    $("#attributes").children().remove();
+//    for (var attr in corpus.attributes) {
+//        $("<span/>").addClass("show_attribute").append(
+//            $("<input type='checkbox' name='show'/>").val(attr)
+//        ).append(
+//            corpus.attributes[attr] + " "
+//        ).appendTo($("#attributes"));
+//    }
     //change event for toggle token attributes
-    $('[name=show]').change(function (){
- 			var token_class = $(this).val();
- 	
- 			if($('input[value='+token_class +']').is(':checked')){
- 				$('.'+token_class ).css('display', 'inline');
- 			}else{
- 				$('.'+token_class ).css('display', 'none');
- 			}
-    });
-
-    $("#context_select").children().remove();
-    for (var cxt in corpus.context) {
-        $("#context_select").append(new Option(corpus.context[cxt], cxt));
-    }
+//    $('[name=show]').change(function (){
+// 			var token_class = $(this).val();
+// 	
+// 			if($('input[value='+token_class +']').is(':checked')){
+// 				$('.'+token_class ).css('display', 'inline');
+// 			}else{
+// 				$('.'+token_class ).css('display', 'none');
+// 			}
+//    });
+//
+//    $("#context_select").children().remove();
+//    for (var cxt in corpus.context) {
+//        $("#context_select").append(new Option(corpus.context[cxt], cxt));
+//    }
 
     var selects = $(".select_language");
     selects.children().remove();

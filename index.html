@@ -21,13 +21,12 @@
 		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
 		<script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
-		
-		<script type="text/javascript" src="translations/translation-swe.js"></script>
-		<script type="text/javascript" src="translations/translation-eng.js"></script>
-		
-		<!--<script type="text/javascript">$.localise('mypackage');</script>-->
-		
-		<script type="text/javascript" src="translations/swe.js"></script>
+		<script type="text/javascript" src="lib/jquery.dump.js"></script>
+		<script type="text/javascript" src="lib/jquery.localize.js"></script>
+		<script>
+			$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations"});
+			console.log($.dump($.localize.data.locale));
+		</script>
 		<script type="text/javascript" src="config.js"></script>
 		
 		
@@ -53,6 +52,8 @@
 				$("#result-container").click(function(){
 					SelectionManager.deselect();
 				});
+				
+				$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations"});
 			});
 		</script>
 	</head>
@@ -60,7 +61,7 @@
   		<div id="header">
   			<img src="img/korp_s.png" />
   			<p>
-  				Korp är under utveckling, du bör för närvarande använda <a href="http://demosb.spraakdata.gu.se/glossa/html/">Glossa</a>
+  				<span rel="localize[disclaimer]">Korp är under utveckling, du bör för närvarande använda</span> <a href="http://demosb.spraakdata.gu.se/glossa/html/">Glossa</a>
   			</p>
   		</div>
 		<div id="content">
@@ -71,14 +72,14 @@
 				
 				<div id="tabs-container">
 					<ul class="anchors">
-						<li class="on"><a href="#korp-simple">Enkel</a></li>
-						<li class="advanced"><a href="#korp-advanced">Avancerad</a></li>
+						<li class="on"><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+						<li class="advanced"><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
 					</ul>
 					<div id="korp-simple" class="anchor">					
 						<div id="simple">
 			   				<table class="query_header"><tbody><tr>
 								<td>
-									<strong>Korpus:</strong> 
+									<strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
 									<select id="select_corpus" onchange="didSelectCorpus()">
 									</select>
 								</td>       
@@ -139,7 +140,7 @@
 							</div>
 			   			</div>
 			   		</div>
-			   		<input value="  Sök  " type="button" onclick="submitFormToServer()">
+			   		<input value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
 		   		</div>
 	  		</form>
 			
@@ -147,7 +148,7 @@
 				<a name="results"></a>
 				<table class="results_settings"><tbody><tr>
 				  <td>
-				   <label for="num_hits">Träffar per sida: </label> 
+				   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
 				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
 				  </td>
 				  <!-- 
@@ -163,7 +164,7 @@
 <!--				 </td>-->
 				</tr></tbody></table>  
 				<div id="pager-wraper">
-					<span>Antal resultat: </span><span id="num-result"></span>
+					<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
 					<div class="pagination" id="Pagination"></div>
 				</div>
 				<div id="result-container">
@@ -182,15 +183,14 @@
 			<div id="sidebar" >	
 				<a id="json-link" href="#"><img src="img/json.png" /></a>
 				
-<!--					${console.log($item, $data)};-->
 				<script id="sidebarTmpl" type="text/x-jquery-tmpl">
-					<p>${$data} : ${$item.word[$data]}</p>
+					<p><span rel="localize[${$data}]">${getLocaleString($data)}</span> : ${$item.word[$data]}</p>
 				</script>
 				
-				<h4>Meningsattribut</h4>
+				<h4 rel="localize[sentence_attr]"></h4>
 				<div id="selected_sentence"></div>
 				
-				<h4>Ordattribut</h4>
+				<h4 rel="localize[word_attr]"></h4>
 				<div id="selected_word"></div>
 				
 				
@@ -198,8 +198,6 @@
 			
 		</div>
 		
-	
-	
 		
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr>

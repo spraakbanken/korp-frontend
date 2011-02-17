@@ -18,3 +18,11 @@ SelectionManager.deselect = function() {
 	SelectionManager.selected.removeClass("token_selected");
 	SelectionManager.selected = null;
 };
+
+function getLocaleString(key) {
+	if(!$.localize.data) {
+		$.error("Locale string cannot be found because no data file has been read.");
+		return null;
+	}
+	return $.localize.data.locale[key];
+}

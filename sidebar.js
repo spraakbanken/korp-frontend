@@ -9,8 +9,10 @@ function updateSidebar(sentenceData, wordData) {
 	$("#selected_sentence").empty();
 	$("#sidebarTmpl").tmpl(displayList, {word : wordData}).appendTo("#selected_word");
 	
-	$.each(sentenceData, function(k, v){
-		$("#selected_sentence").append("<p>" + k + ": " + v + "</p>");
-	});
+	if(sentenceData) {
+		$.each(sentenceData, function(k, v){
+			$("#selected_sentence").append("<p>" + k + ": " + v + "</p>");
+		});
+	}
 }
 

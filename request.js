@@ -62,7 +62,7 @@ function setJsonLink(data){
 
 function submitFormToServer(){
 	num_result = 0;
-	$('#results').append("<p/>").find("p").html(language.loading);
+	$('#results').append("<p alt='localize[loading]'/>").find("p");
 	
 	var cqp 	= $("#cqp_string").val();
 	var corpus 	= $("#corpus_id").val();
@@ -82,12 +82,15 @@ function buildPager(number_of_hits){
 		$("#Pagination").pagination(number_of_hits, {
 			items_per_page:items_per_page, 
 			callback:handlePaginationClick,
-			next_text: language.next,
-			prev_text: language.prev,
+			next_text: getLocaleString("next"),
+			prev_text: getLocaleString("prev"),
 			link_to:"#",
 			num_edge_entries:2,
 			ellipse_text: '..'
 		});
+		$(".next").attr("rel", "localize[next]");
+		$(".prev").attr("rel", "localize[prev]");
+		
 	}else{
 		$("#Pagination").html('');
 	}
