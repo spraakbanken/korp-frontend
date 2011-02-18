@@ -5,9 +5,7 @@ body{font-size:0.8em;}
 
 #header{
 	padding-top: 0px;
-	
-	float:left;	
-	clear:right;
+	width : 100%;
 }
 
 #content{
@@ -16,19 +14,27 @@ body{font-size:0.8em;}
 	width:100%;
 }
 
+#header p, img {
+	float : left;
+}
+
 #header p{
 	margin: 0px;
 	margin-left:10px;
-	border-style:dotted;
-	border-width:1px;	
-	text-align:center;
-	float:left;
+/*	border-style:dotted;*/
+/*	border-width:1px;	*/
+/*	text-align:center;*/
 }
 
-#header img{
-	float:left;	
+.flag_selected {
+	border : 2px solid #dde9ff;
+	margin-top : -2px;
 }
-
+#flags  {
+	float : right;
+	margin-left : 30px;
+	margin-top : -2px;
+}
 
 .query_header, .query_footer { background-color: #e1e1e1; padding: 1px 15px; margin:5px; width:80%;-moz-border-radius: 5px;-webkit-border-radius: 5px;-khtml-border-radius: 5px;}
 

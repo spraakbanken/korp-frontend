@@ -1,6 +1,7 @@
 {
 	"disclaimer" : "Korp är under utveckling, du bör för närvarande använda",
 	"corpus" : "Korpus",
+	"cqp_query" : "Fullständig CQP-fråga",
 	"max" : "upp till",
 	"min" : "minst",
 	"and" : "och",

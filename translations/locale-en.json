@@ -1,6 +1,7 @@
 {
 	"disclaimer" : "Korp is currently early beta, a more mature alternative is",
 	"corpus" : "Corpus",
+	"cqp_query" : "CQP query",
 	"max" : "upp till",
 	"min" : "minst",
 	"and" : "och",

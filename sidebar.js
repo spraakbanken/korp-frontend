@@ -1,7 +1,4 @@
 
-function initSidebar() {
-//	$("sidebar").
-}
 
 function updateSidebar(sentenceData, wordData) {
 	var displayList = ["word", "sentence", "pos", "lemma", "saldo", "deprel", "lex", "msd", "ref", "dephead"];
