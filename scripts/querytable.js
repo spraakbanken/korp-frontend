@@ -1,6 +1,7 @@
 
 function submitForm() {
-    var corpus = $("#corpus_id").val();
+    var corpus = getCorpus();
+	
     var cqp = $("#cqp_string").val();
     cqp = cqp.replace(/\n/g, " ");
     $("#corpus").val(corpus);
@@ -14,6 +15,14 @@ function submitForm() {
             );
         }
     }
+}
+
+function onSimpleChange() {
+	var valArray = $("#simple_text").val().split(" ");
+	var cqp = $.map(valArray, function(item, i){
+		return '[(word = "' + item + '")]';
+	});
+	$("#cqp_string").val(cqp.join(" "));
 }
 
 function didSelectCorpus() {
@@ -56,12 +65,16 @@ function didSelectCorpus() {
 }
 
 function getCorpus() {
-    return $("#select_corpus").val();
+	return $("#tabs-container").children("div:visible").find("select").val();
 }
+
+//function getCorpusIdByLanguage(langObj) {
+//	return 
+//}
 
 function loadCorpora() {
     for (var val in settings.corpora) {
-    	$('#select_corpus').append(
+    	$('.select_corpus').append(
     	        $('<option></option>').val(val).html(settings.corpora[val].title)
     	 );
     	 

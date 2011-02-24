@@ -6,7 +6,7 @@ function handlePaginationClick(new_page_index, pagination_container) {
 		var items_per_page = parseInt($("#num_hits").val());
 		
 		var cqp 	= $("#cqp_string").val();
-		var corpus 	= $("#corpus_id").val();
+		var corpus 	= getCorpus().toUpperCase();
 		
 		var start 	= new_page_index*items_per_page;
 		var end 		= (start + items_per_page);
@@ -48,7 +48,9 @@ function makeRequest(cqp, corpus, start, end){
 				dataType: "jsonp", 
 				data:data,
 				traditional:true,
-				success: corpus_results});
+				success: corpus_results,
+				error : fetch_error
+	});
 	
 	setJsonLink(data);
 }
@@ -65,7 +67,7 @@ function submitFormToServer(){
 	$('#results').append("<p alt='localize[loading]'/>").find("p");
 	
 	var cqp 	= $("#cqp_string").val();
-	var corpus 	= $("#corpus_id").val();
+	var corpus 	= getCorpus().toUpperCase();
 	
 	var start 	= 0;
 	var end 	= $("#num_hits").val()-1;
@@ -116,7 +118,16 @@ function selectRight(sentence) {
 	return sentence.tokens.slice(sentence.match.end, to);
 }
 
+function fetch_error() {
+	console.log("json fetch error");
+}
+
 function corpus_results(data) {
+//	TODO: add error handling.
+	if(data.ERROR) {
+		$.error("json fetch error: " + $.dump(data.ERROR));
+		return;
+	}
 	var effectSpeed = 200;
 	$('#results').find("p").remove();
 	if($.trim($("#results-table").html()).length) {
@@ -165,7 +176,6 @@ function corpus_results(data) {
 							util.SelectionManager.select($(this));
 							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
 							var data = sentence.tokens[offset + clickedWord];
-							console.log("clicked", sentence.structs, data);
 							updateSidebar(sentence.structs, data);
 							
 						}

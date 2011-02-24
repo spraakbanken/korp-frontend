@@ -57,16 +57,21 @@
 				<input name="cqp" id="cqp" type="hidden">
 				
 				<div id="tabs-container">
-					<ul class="anchors">
+					<ul>
 						<li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+						<li ><a href="#korp-extended" rel="localize[extended]">Detaljerad</a></li>
 						<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
 					</ul>
-					<div id="korp-simple" class="anchor">					
+					<div id="korp-simple">
+						<span rel="localize[_]">Sök efter</span><input id="simple_text" type="text" onchange="onSimpleChange()" /> i 
+						<select class="select_corpus" onchange="didSelectCorpus()"></select>
+					</div>
+					<div id="korp-extended">					
 						<div id="simple">
 			   				<table class="query_header"><tbody><tr>
 								<td>
 									<strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
-									<select id="select_corpus" onchange="didSelectCorpus()"></select>
+									<select class="select_corpus" onchange="didSelectCorpus()"></select>
 								</td>       
 							</tr></tbody></table>
 					<div id="simple_query">
@@ -120,7 +125,7 @@
 									Fullständig CQP-fråga
 									<!-- <input id="full_query" onchange="toggleFullQuery()" type="checkbox">  -->
 								</span>:
-								<input value="SUC2"  id="corpus_id" type="text">
+								<select class="select_corpus" onchange="didSelectCorpus()"></select>
 								<textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
 							</div>
 			   			</div>
@@ -157,11 +162,11 @@
 						<li class="on"><a href="#results">Tabell</a></li>
 						<li><a href="#results-sentence">Mening</a></li>
 					</ul>
-					<div id="results" class="anchor">
+					<div id="results">
 						<table id="results-table" class="result_table">
 						</table>
 					</div>
-					<div id="results-sentence" class="anchor"></div>
+					<div id="results-sentence"></div>
 				</div>
 				<div id="tooltip-container"></div>
 			</div>
