@@ -128,10 +128,10 @@ function corpus_results(data) {
 		$.error("json fetch error: " + $.dump(data.ERROR));
 		return;
 	}
-	var effectSpeed = 200;
+	var effectSpeed = 100;
 	$('#results').find("p").remove();
 	if($.trim($("#results-table").html()).length) {
-		$("#results").slideUp(effectSpeed, function() {
+		$("#results").fadeOut(effectSpeed, function() {
 			$("#results-table").empty();
 			corpus_results(data);
 		});
@@ -185,7 +185,7 @@ function corpus_results(data) {
 	});
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
-	$("#results").slideDown(effectSpeed);
+	$("#results").fadeIn(effectSpeed);
 }
 
 
