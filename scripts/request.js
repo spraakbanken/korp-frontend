@@ -82,8 +82,8 @@ function buildPager(number_of_hits){
 		$("#Pagination").pagination(number_of_hits, {
 			items_per_page:items_per_page, 
 			callback:handlePaginationClick,
-			next_text: getLocaleString("next"),
-			prev_text: getLocaleString("prev"),
+			next_text: util.getLocaleString("next"),
+			prev_text: util.getLocaleString("prev"),
 			link_to:"#",
 			num_edge_entries:2,
 			ellipse_text: '..'
@@ -128,6 +128,8 @@ function corpus_results(data) {
 	else {
 		$("#results").hide();
 	}
+	$("#sidebar:hidden").show("slide", {direction : "right"}, 400);
+	
 	var corpus = settings.corpora[getCorpus()];
 	
 	//if this is the first result-set
@@ -160,17 +162,19 @@ function corpus_results(data) {
 				).click(
 						function(event) {
 							event.stopPropagation();
-							SelectionManager.select($(this));
+							util.SelectionManager.select($(this));
 							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
 							var data = sentence.tokens[offset + clickedWord];
+							console.log("clicked", sentence.structs, data);
 							updateSidebar(sentence.structs, data);
+							
 						}
 				);
 		
 		$('.result_table tr:even').addClass('alt');
 	});
 //	make the first matched word selected by default.
-	$(".match").children().first().trigger("click");
+	$(".match").children().first().click();
 	$("#results").slideDown(effectSpeed);
 }
 

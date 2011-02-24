@@ -2,21 +2,23 @@
 <html>
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="pagination.css">
 		
 		<title>Korp</title>
 		
-		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="scripts/jquery.js"></script>
 		
-		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.effects.slide.js"></script>
 		
 		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
 		<script type="text/javascript" src="lib/jquery.tmpl.js"></script>
@@ -29,49 +31,23 @@
 		</script>
 		<script type="text/javascript" src="config.js"></script>
 		
-		
-		<script type="text/javascript" src="querytable.js"></script>
-		<script type="text/javascript" src="request.js"></script>
-		<script type="text/javascript" src="tabs.js"></script>
-		<script type="text/javascript" src="sidebar.js"></script>
-		<script type="text/javascript" src="util.js"></script>
+		<script type="text/javascript" src="scripts/main.js"></script>
+		<script type="text/javascript" src="scripts/querytable.js"></script>
+		<script type="text/javascript" src="scripts/request.js"></script>
+<!--		<script type="text/javascript" src="scripts/tabs.js"></script>-->
+		<script type="text/javascript" src="scripts/sidebar.js"></script>
 		 
-		<script type="text/javascript">
-			$(function(){
-				loadCorpora();
-				resetQuery();
-				$("#query_form").attr("action", settings.cgi_script);
-				
-				$('#num_hits').tooltip('Number of hits');
-			
-				//$("#tabs").tabs();
-				$.tabs("tabs-container");
-				$.tabs("result-container");
-
-				initSearch();
-				$("#result-container").click(function(){
-					SelectionManager.deselect();
-				});
-				
-				$("#flags").children().click(function(){
-					$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $(this).attr("alt")});
-					$("#flags").children().removeClass("flag_selected");
-					$(this).addClass("flag_selected");
-				});
-				$("[alt=" + $.defaultLanguage.split("-")[0] + "]").click();
-				
-			});
-		</script>
 	</head>
   	<body>
   		<div id="header">
   			<img src="img/korp_s.png" />
-  			<p>
-  				<span rel="localize[disclaimer]">Korp är under utveckling, du bör för närvarande använda</span> <a href="http://demosb.spraakdata.gu.se/glossa/html/">Glossa</a>
-  			</p>
-  			<div id="flags" class=".flag_selected">
-  				<img alt="se" src="img/flag-se.png">
-  				<img alt="en" src="img/flag-en.png">
+  			<h1>Korp</h1>
+<!--  			<p>-->
+<!--  				<span rel="localize[disclaimer]">Korp är under utveckling, du bör för närvarande använda</span> <a href="http://demosb.spraakdata.gu.se/glossa/html/">Glossa</a>-->
+<!--  			</p>-->
+  			<div id="flags">
+  				<img alt="sv" src="img/flag-se.png" class="flag">
+  				<img alt="en" src="img/flag-en.png" class="flag">
   			</div>
   		</div>
 		<div id="content">
@@ -82,16 +58,15 @@
 				
 				<div id="tabs-container">
 					<ul class="anchors">
-						<li class="on"><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
-						<li class="advanced"><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
+						<li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+						<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
 					</ul>
 					<div id="korp-simple" class="anchor">					
 						<div id="simple">
 			   				<table class="query_header"><tbody><tr>
 								<td>
 									<strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
-									<select id="select_corpus" onchange="didSelectCorpus()">
-									</select>
+									<select id="select_corpus" onchange="didSelectCorpus()"></select>
 								</td>       
 							</tr></tbody></table>
 					<div id="simple_query">
@@ -138,7 +113,7 @@
 					</div>
 					</div>
 					</div>
-					<div id="korp-advanced" class="anchor">
+					<div id="korp-advanced">
 						<div id="advanced">
 							<div class="query_footer">
 								<span class="cqp_toggle" rel="localize[cqp_query]">
@@ -156,7 +131,7 @@
 			
 			<div id="results-wraper">
 				<a name="results"></a>
-				<table class="results_settings"><tbody><tr>
+				<table><tbody><tr>
 				  <td>
 				   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
 				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
@@ -178,7 +153,7 @@
 					<div class="pagination" id="Pagination"></div>
 				</div>
 				<div id="result-container">
-					<ul class="anchors">
+					<ul >
 						<li class="on"><a href="#results">Tabell</a></li>
 						<li><a href="#results-sentence">Mening</a></li>
 					</ul>
@@ -194,7 +169,7 @@
 				<a id="json-link" href="#"><img src="img/json.png" /></a>
 				
 				<script id="sidebarTmpl" type="text/x-jquery-tmpl">
-					<p><span rel="localize[${$data}]">${getLocaleString($data)}</span> : ${$item.word[$data]}</p>
+					<p><span rel="localize[${$data}]">${util.getLocaleString($data)}</span> : ${$item.word[$data]}</p>
 				</script>
 				
 				<h4 rel="localize[sentence_attr]"></h4>
