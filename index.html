@@ -46,121 +46,99 @@
 <!--  			<p>-->
 <!--  				<span rel="localize[disclaimer]">Korp är under utveckling, du bör för närvarande använda</span> <a href="http://demosb.spraakdata.gu.se/glossa/html/">Glossa</a>-->
 <!--  			</p>-->
-  			<div id="flags">
-  				<img alt="sv" src="img/flag-se.png" class="flag">
-  				<img alt="en" src="img/flag-en.png" class="flag">
-  			</div>
+  			<ul id="languages">
+  				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
+  				<li rel="localize[english]" data-lang="en">Engelska</li>
+  			</ul>
   		</div>
 		<div id="content">
-			<form action="/cgi-bin/korp/korp.cgi" id="query_form" method="GET" onsubmit="submitForm()" target="_blank">
-				<input name="command" value="query" type="hidden">
-				<input name="corpus" id="corpus" type="hidden">
-				<input name="cqp" id="cqp" type="hidden">
-				
-				<div id="tabs-container">
-					<ul>
-						<li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
-						<li ><a href="#korp-extended" rel="localize[extended]">Detaljerad</a></li>
-						<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
-					</ul>
-					<div id="korp-simple">
-						<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>  
-						<select class="select_corpus" onchange="didSelectCorpus()"></select>
-					</div>
-					<div id="korp-extended">					
-						<div id="simple">
-			   				<table class="query_header"><tbody><tr>
-								<td>
-									<strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
-									<select class="select_corpus" onchange="didSelectCorpus()"></select>
-								</td>       
-							</tr></tbody></table>
-					<div id="simple_query">
-					<div id="query_table">
-					<div class="query_row line_above"><img style="display: none;"
-						class="image_button remove_row" src="img/minus.png"><select
-						style="width: 71px;" disabled="disabled" class="select_operation">
-						<option selected="selected" value="find">Leta efter</option>
-					</select><select disabled="disabled" class="select_language">
-						<option selected="selected" value="SUC2">svenska</option>
-					</select>
-					<table class="query_token" cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr class="query_arg">
-								<td><select style="width: 59px;" class="arg_type">
-									<optgroup label="ord">
-										<option selected="selected" value="word">ordet är</option>
-										<option value="notword">ordet är inte</option>
-										<option value="beginswith">börjar med</option>
-										<option value="endswith">slutar med</option>
-										<option value="regexp">reguljärt uttryck</option>
-									</optgroup>
-									<optgroup label="ordklass">
-										<option value="pos">ordklassen är</option>
-										<option value="msd">ordklassen börjar med</option>
-									</optgroup>
-									<optgroup label="intervall">
-										<option value="max">upp till</option>
-										<option value="min">minst</option>
-									</optgroup>
-								</select><input id="query_input" class="arg_value" type="text" /></td>
-								<td><img style="visibility: hidden;"
-									class="image_button remove_arg" src="img/minus.png"><img
-									class="image_button insert_arg" src="img/plus.png"></td>
-							</tr>
-						</tbody>
-					</table>
-					<img class="image_button insert_token" src="img/plus.png"></div>
-					</div>
-					<div class="buttons_row"><span id="buttons_row"><img
-						style="visibility: hidden;" class="image_button remove_row"
-						src="img/minus.png"><img class="image_button insert_row"
-						src="img/plus.png"></span> &nbsp;&nbsp;&nbsp;&nbsp;</div>
-					</div>
-					</div>
-					</div>
-					<div id="korp-advanced">
-						<div id="advanced">
-							<div class="query_footer">
-								<span class="cqp_toggle" rel="localize[cqp_query]">
-									Fullständig CQP-fråga
-									<!-- <input id="full_query" onchange="toggleFullQuery()" type="checkbox">  -->
-								</span>:
+			<input name="command" value="query" type="hidden">
+			<input name="corpus" id="corpus" type="hidden">
+			<input name="cqp" id="cqp" type="hidden">
+			
+			<div id="tabs-container">
+				<ul>
+					<li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+					<li ><a href="#korp-extended" rel="localize[detailed]">Detaljerad</a></li>
+					<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
+				</ul>
+				<div id="korp-simple">
+					<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>  
+					<select class="select_corpus" onchange="didSelectCorpus()"></select>
+				</div>
+				<div id="korp-extended">					
+					<div id="simple">
+		   				<table class="query_header"><tbody><tr>
+							<td>
+								<strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
 								<select class="select_corpus" onchange="didSelectCorpus()"></select>
-								<textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
-							</div>
-			   			</div>
-			   		</div>
-			   		<input id="sendBtn" value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
+							</td>       
+						</tr></tbody></table>
+				<div id="simple_query">
+				<div id="query_table">
+				<div class="query_row line_above">
+				<img style="display: none;" class="image_button remove_row" src="img/minus.png">
+					<!--  container for language selector -->
+				<table class="query_token" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr class="query_arg">
+							<td><select style="width: 59px;" class="arg_type">
+								<optgroup label="ord">
+									<option selected="selected" value="word">ordet är</option>
+									<option value="notword">ordet är inte</option>
+									<option value="beginswith">börjar med</option>
+									<option value="endswith">slutar med</option>
+									<option value="regexp">reguljärt uttryck</option>
+								</optgroup>
+								<optgroup label="ordklass">
+									<option value="pos">ordklassen är</option>
+									<option value="msd">ordklassen börjar med</option>
+								</optgroup>
+								<optgroup label="intervall">
+									<option value="max">upp till</option>
+									<option value="min">minst</option>
+								</optgroup>
+							</select><input id="query_input" class="arg_value" type="text" /></td>
+							<td><img style="visibility: hidden;"
+								class="image_button remove_arg" src="img/minus.png"><img
+								class="image_button insert_arg" src="img/plus.png"></td>
+						</tr>
+					</tbody>
+				</table>
+				<img class="image_button insert_token" src="img/plus.png"></div>
+				</div>
+				<div class="buttons_row"><span id="buttons_row"><img
+					style="visibility: hidden;" class="image_button remove_row"
+					src="img/minus.png"><img class="image_button insert_row"
+					src="img/plus.png"></span> &nbsp;&nbsp;&nbsp;&nbsp;</div>
+				</div>
+				</div>
+				</div>
+				<div id="korp-advanced">
+					<div id="advanced">
+						<div class="query_footer">
+							<span class="cqp_toggle" rel="localize[cqp_query]">
+								Fullständig CQP-fråga
+							</span>:
+							<select class="select_corpus" onchange="didSelectCorpus()"></select>
+							<textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
+						</div>
+		   			</div>
 		   		</div>
-	  		</form>
+		   		<input id="sendBtn" value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
+	   		</div>
 			
 			<div id="results-wraper">
 				<a name="results"></a>
-				<table><tbody><tr>
-				  <td>
 				   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
 				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
-				  </td>
-				  <!-- 
-				  <td>
-				   <label for="context">Kontext:</label> 
-				  	<select name="context" id="context_select" onchange="submitFormToServer()"><option selected="selected" value="1 sentence">1 mening</option><option value="5 words">5 ord</option><option value="10 words">10 ord</option></select>
-				  </td>
-				   -->
-<!--				  <td>-->
-<!--				   <em>Visa:</em>-->
-<!--				   <span id="attributes"><span class="show_attribute"><input value="msd" name="show" type="checkbox" onchange="submitFormToServer()">ordklass </span><span class="show_attribute"><input value="lemma" name="show" type="checkbox">lemma </span><span class="show_attribute"><input value="sentence_n" name="show" type="checkbox">mening </span></span>-->
-<!--				   <span id="automatic_attributes"></span>-->
-<!--				 </td>-->
-				</tr></tbody></table>  
 				<div id="pager-wraper">
 					<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
 					<div class="pagination" id="Pagination"></div>
 				</div>
 				<div id="result-container">
 					<ul >
-						<li class="on"><a href="#results">Tabell</a></li>
+						<li class="on"><a href="#results">KWIC</a></li>
 						<li><a href="#results-sentence">Mening</a></li>
 					</ul>
 					<div id="results">
@@ -174,10 +152,6 @@
 			<div id="sidebar" >	
 				<a id="json-link" href="#"><img src="img/json.png" /></a>
 				
-				<script id="sidebarTmpl" type="text/x-jquery-tmpl">
-					<p><span rel="localize[${$data}]">${util.getLocaleString($data)}</span> : ${$item.word[$data]}</p>
-				</script>
-				
 				<h4 rel="localize[sentence_attr]"></h4>
 				<div id="selected_sentence"></div>
 				
@@ -190,6 +164,9 @@
 		</div>
 		
 		
+	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
+		<p><span rel="localize[${$data}]">${util.getLocaleString($data)}</span> : ${$item.word[$data]}</p>
+	</script>
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr>
 		  	<td class="left">

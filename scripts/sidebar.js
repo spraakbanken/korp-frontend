@@ -1,13 +1,14 @@
 
 
 function updateSidebar(sentenceData, wordData) {
+	$.log("updateSidebar");
 	var displayList = ["word", "sentence", "pos", "lemma", "saldo", "deprel", "lex", "msd", "ref", "dephead"];
 	$("#selected_word").empty();
 	$("#selected_sentence").empty();
 	if($("#sidebarTmpl").length > 0)
 		$("#sidebarTmpl").tmpl(displayList, {word : wordData}).appendTo("#selected_word");
-//	else
-//		$.error("sidebartemplate broken");
+	else
+		$.log("sidebartemplate broken");
 	
 	if(sentenceData) {
 		$.each(sentenceData, function(k, v){

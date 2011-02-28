@@ -223,7 +223,6 @@ function initSearch(){
 	$('#tabs-container').keypress(function(event) {
 		if (event.keyCode == '13') {
 			
-			$.log("keyCode", event.keyCode);
 			event.preventDefault();
 			if($("#korp-extended:visible").length)
 				updateCQP();

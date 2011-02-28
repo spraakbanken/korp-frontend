@@ -1,5 +1,7 @@
 {
 	"disclaimer" : "Korp is currently early beta, a more mature alternative is",
+	"swedish" : "Swedish",
+	"english" : "English",
 	"corpus" : "Corpus",
 	"search_for" : "Search for",
 	"in_corpus" : "in corpus",
@@ -9,7 +11,7 @@
 	"and" : "och",
 	"or" : "eller",
 	"simple" : "Simple",
-	"detailed" : "Detailed",
+	"detailed" : "Extended",
 	"advanced" : "Advanced",
 	"loading" : "Searching...",
 	"search" : "Search",

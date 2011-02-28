@@ -177,7 +177,6 @@ function corpus_results(data) {
 							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
 							var data = sentence.tokens[offset + clickedWord];
 							updateSidebar(sentence.structs, data);
-							
 						}
 				);
 		
@@ -186,6 +185,7 @@ function corpus_results(data) {
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);
+	$.log("len", $("#sidebarTmpl").length)
 }
 
 

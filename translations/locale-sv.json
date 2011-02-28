@@ -1,5 +1,7 @@
 {
 	"disclaimer" : "Korp är under utveckling, du bör för närvarande använda",
+	"swedish" : "Svenska",
+	"english" : "Engelska",
 	"corpus" : "Korpus",
 	"search_for" : "Sök efter",
 	"in_corpus" : "i korpus",

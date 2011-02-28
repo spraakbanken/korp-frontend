@@ -13,15 +13,14 @@ $(function(){
 		util.SelectionManager.deselect();
 	});
 //	setup language
-	$("#flags").children().click(function(){
-		$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $(this).attr("alt")});
-		$("#flags").children().removeClass("flag_selected");
-		$(this).addClass("flag_selected");
+	$("#languages").children().click(function(){
+		$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $(this).data("lang")});
+		$("#languages").children().removeClass("lang_selected");
+		$(this).addClass("lang_selected");
 	});
-	$("[alt=" + $.defaultLanguage.split("-")[0] + "]").click();
+	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 	
 //	move out sidebar
-//	$("#sidebar").css("margin-right", "-" + $("#sidebar").css("width"));
 	$("#sidebar").hide();
 	
 	
