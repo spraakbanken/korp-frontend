@@ -219,10 +219,14 @@ function removeArg(arg) {
 }
 
 function initSearch(){
-	$('input[type=text]').keypress(function(event) { 
-		if (event.keyCode == '13') { 
-			event.preventDefault(); 
-			updateCQP();
+
+	$('#tabs-container').keypress(function(event) {
+		if (event.keyCode == '13') {
+			
+			$.log("keyCode", event.keyCode);
+			event.preventDefault();
+			if($("#korp-extended:visible").length)
+				updateCQP();
 			submitFormToServer();
 		}
 	});

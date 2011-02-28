@@ -119,7 +119,7 @@ function selectRight(sentence) {
 }
 
 function fetch_error() {
-	console.log("json fetch error");
+	$.log("json fetch error");
 }
 
 function corpus_results(data) {
@@ -196,11 +196,11 @@ function renderSentence(tokens){
 
 function tooltipIn(object){
 	//<span class='token'><span class='word'><span></span></span>
-	console.log('in'+$(object).html());
+	$.log('in'+$(object).html());
 }
 
 function tooltipOut(object){
-	console.log('out');
+	$.log('out');
 }
 
 function renderToken(token){

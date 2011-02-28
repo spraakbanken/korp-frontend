@@ -20,6 +20,7 @@
 		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.slide.js"></script>
 		
+		<script type="text/javascript" src="lib/jquery.jLog.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
 		<script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
@@ -63,7 +64,7 @@
 						<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
 					</ul>
 					<div id="korp-simple">
-						<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onchange="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>  
+						<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>  
 						<select class="select_corpus" onchange="didSelectCorpus()"></select>
 					</div>
 					<div id="korp-extended">					
@@ -130,7 +131,7 @@
 							</div>
 			   			</div>
 			   		</div>
-			   		<input value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
+			   		<input id="sendBtn" value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
 		   		</div>
 	  		</form>
 			

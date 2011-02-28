@@ -5,9 +5,6 @@ $(function(){
 	
 	$('#num_hits').tooltip('Number of hits');
 
-//	$.tabs("tabs-container");
-//	$.tabs("result-container");
-	
 	$("#tabs-container").tabs();
 	$("#result-container").tabs();
 
