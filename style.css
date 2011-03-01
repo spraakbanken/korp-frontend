@@ -6,7 +6,10 @@
 body {
 	font-size: 0.8em;
 }
-/*Korp */
+#content div  {
+	margin-bottom: 15px;
+}
+/*Korp header text */
 h1 { 
 	font-family: LindenHill;	
 	#text-transform : uppercase;
@@ -16,7 +19,7 @@ h1 {
 }
 
 #corpus_id {
-	font-family: monospace
+	font-family: monospace;
 }
 
 #cqp_string {
@@ -64,6 +67,10 @@ h1 {
 	cursor: pointer;	
 }
 
+.select_operation .select_language {
+	visibility: hidden;
+}
+
 .query_header,.query_footer {
 	background-color: #e1e1e1;
 	padding: 1px 15px;
@@ -105,7 +112,8 @@ h1 {
 }
 
 .insert_token {
-	margin-top: 11px;
+	margin-top: 10px;
+	float: none;
 }
 
 .line_above {

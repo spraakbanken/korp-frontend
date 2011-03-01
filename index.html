@@ -74,45 +74,46 @@
 								<select class="select_corpus" onchange="didSelectCorpus()"></select>
 							</td>       
 						</tr></tbody></table>
-				<div id="simple_query">
-				<div id="query_table">
-				<div class="query_row line_above">
-				<img style="display: none;" class="image_button remove_row" src="img/minus.png">
-					<!--  container for language selector -->
-				<table class="query_token" cellpadding="0" cellspacing="0">
-					<tbody>
-						<tr class="query_arg">
-							<td><select style="width: 59px;" class="arg_type">
-								<optgroup label="ord">
-									<option selected="selected" value="word">ordet är</option>
-									<option value="notword">ordet är inte</option>
-									<option value="beginswith">börjar med</option>
-									<option value="endswith">slutar med</option>
-									<option value="regexp">reguljärt uttryck</option>
-								</optgroup>
-								<optgroup label="ordklass">
-									<option value="pos">ordklassen är</option>
-									<option value="msd">ordklassen börjar med</option>
-								</optgroup>
-								<optgroup label="intervall">
-									<option value="max">upp till</option>
-									<option value="min">minst</option>
-								</optgroup>
-							</select><input id="query_input" class="arg_value" type="text" /></td>
-							<td><img style="visibility: hidden;"
-								class="image_button remove_arg" src="img/minus.png"><img
-								class="image_button insert_arg" src="img/plus.png"></td>
-						</tr>
-					</tbody>
-				</table>
-				<img class="image_button insert_token" src="img/plus.png"></div>
-				</div>
-				<div class="buttons_row"><span id="buttons_row"><img
-					style="visibility: hidden;" class="image_button remove_row"
-					src="img/minus.png"><img class="image_button insert_row"
-					src="img/plus.png"></span> &nbsp;&nbsp;&nbsp;&nbsp;</div>
-				</div>
-				</div>
+						<div id="simple_query">
+							<div id="query_table">
+							<div class="query_row line_above">
+							<img style="display: none;" class="image_button remove_row" src="img/minus.png">
+								<!--  container for language selector -->
+							<table class="query_token" cellpadding="0" cellspacing="0">
+								<tbody>
+									<tr class="query_arg">
+										<td><select style="width: 59px;" class="arg_type">
+											<optgroup label="ord">
+												<option selected="selected" value="word">ordet är</option>
+												<option value="notword">ordet är inte</option>
+												<option value="beginswith">börjar med</option>
+												<option value="endswith">slutar med</option>
+												<option value="regexp">reguljärt uttryck</option>
+											</optgroup>
+											<optgroup label="ordklass">
+												<option value="pos">ordklassen är</option>
+												<option value="msd">ordklassen börjar med</option>
+											</optgroup>
+											<optgroup label="intervall">
+												<option value="max">upp till</option>
+												<option value="min">minst</option>
+											</optgroup>
+										</select><input id="query_input" class="arg_value" type="text" /></td>
+										<td><img style="visibility: hidden;"
+											class="image_button remove_arg" src="img/minus.png"><img
+											class="image_button insert_arg" src="img/plus.png"></td>
+									</tr>
+								</tbody>
+							</table>
+							<img class="image_button insert_token" src="img/plus.png"></div>
+							</div>
+							<div class="buttons_row"><span id="buttons_row"><img
+								style="visibility: hidden;" class="image_button remove_row"
+								src="img/minus.png"><img class="image_button insert_row"
+								src="img/plus.png"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+							</div>
+						</div>
+					</div>
 				</div>
 				<div id="korp-advanced">
 					<div id="advanced">
@@ -125,7 +126,7 @@
 						</div>
 		   			</div>
 		   		</div>
-		   		<input id="sendBtn" value="  Sök  " type="button" onclick="submitFormToServer()" rel="localize[search]"/>
+		   		<input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
 	   		</div>
 			
 			<div id="results-wraper">
@@ -142,8 +143,7 @@
 						<li><a href="#results-sentence">Mening</a></li>
 					</ul>
 					<div id="results">
-						<table id="results-table" class="result_table">
-						</table>
+						<table id="results-table" class="result_table"></table>
 					</div>
 					<div id="results-sentence"></div>
 				</div>

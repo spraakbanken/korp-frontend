@@ -48,8 +48,7 @@ function makeRequest(cqp, corpus, start, end){
 				dataType: "jsonp", 
 				data:data,
 				traditional:true,
-				success: corpus_results,
-				error : fetch_error
+				success: corpus_results
 	});
 	
 	setJsonLink(data);
@@ -62,8 +61,25 @@ function setJsonLink(data){
 	$('#json-link').css('display', 'inline');
 }
 
+function onSubmit(evt) {
+	var currentVisible = $("#tabs-container > div:visible");
+	$.log("onSubmit", currentVisible, currentVisible.attr("id"))
+	switch(currentVisible.attr("id")) {
+	case "korp-simple":
+		onSimpleChange();
+		break;
+	case "korp-extended":
+		updateCQP();
+		break;
+//	case "korp-advanced":
+//		break;
+	}
+	submitFormToServer();
+}
+
 function submitFormToServer(){
 	num_result = 0;
+//	TODO: loading text broken
 	$('#results').append("<p alt='localize[loading]'/>").find("p");
 	
 	var cqp 	= $("#cqp_string").val();
@@ -118,12 +134,8 @@ function selectRight(sentence) {
 	return sentence.tokens.slice(sentence.match.end, to);
 }
 
-function fetch_error() {
-	$.log("json fetch error");
-}
 
 function corpus_results(data) {
-//	TODO: add error handling.
 	if(data.ERROR) {
 		$.error("json fetch error: " + $.dump(data.ERROR));
 		return;
@@ -185,7 +197,6 @@ function corpus_results(data) {
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);
-	$.log("len", $("#sidebarTmpl").length)
 }
 
 

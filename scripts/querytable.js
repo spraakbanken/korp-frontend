@@ -150,9 +150,12 @@ function insertRow() {
     select_language.attr("disabled", select_language.children().length <= 1);
 
     row.append(remove_row_button, select_operation, select_language, insert_token_button);
-
+    
     insert_token_button.click();
     select_operation.change();
+//    TODO: hidden for now.
+    select_operation.hide();
+    select_language.hide();
     didToggleRow();
 }
 
@@ -224,9 +227,10 @@ function initSearch(){
 		if (event.keyCode == '13') {
 			
 			event.preventDefault();
-			if($("#korp-extended:visible").length)
-				updateCQP();
-			submitFormToServer();
+//			if($("#korp-extended:visible").length)
+//				updateCQP();
+//			submitFormToServer();
+			$("#sendBtn").click();
 		}
 	});
 
