@@ -8,6 +8,13 @@ var settings = {}
 
 settings.corpora = {};
 
+//added for search in all corpora
+settings.corpora.all = {title: "-Alla korpusar-",
+        languages: {all: "svenska"},
+        context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
+        attributes: {}
+       };
+
 settings.corpora.vivill = {title: "Svenska partiprogram och valmanifest 1887-2010",
         languages: {VIVILL: "svenska"},
         context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
@@ -32,14 +39,14 @@ settings.corpora.storsuc = {title: "SUC-romaner",
                         dephead: language.dephead, deprel: language.deprel, wid: "ord",
                         sentence: language.sentence, paragraph: language.paragraph, text: language.text}
           };
-
+/*
 settings.corpora.saltnld = {title: "SALT-NLD",
            languages: {SALTNLD_SWE: "svenska", SALTNLD_NLD: "nederländska"},
             context: {"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"},
            attributes: {pos: language.pos, msd: language.msd, lemma: language.base_form, lex: language.lemgram, saldo: language.saldo,
                         link: language.link, text: language.text}
           };
-
+*/
 settings.corpora.konkplus = {title: "Konkplus: svenska tidningstexter",
 		        languages: {KONKPLUS: "svenska"},
 		        context: {"1 sentence": "1 mening", "5 words": "5 ord", "10 words": "10 ord"},
@@ -69,6 +76,8 @@ settings.corpora.snp7879 = {title: "SNP 78-79 (Riksdagens snabbprotokoll)",
 		        			 dephead: language.dephead, deprel: language.deprel, wid: "ord",
 		                     sentence: language.sentence, text: language.text}
 		       };
+
+
 
 
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
