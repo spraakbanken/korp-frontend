@@ -22,7 +22,22 @@ function makeRequest(cqp, corpus, start, end){
 	var selected_corpus = settings.corpora[getCorpus()];
 	var attributes = ['msd','lemma'];
 
-	var data = {
+	var data = {} 
+	
+	if(corpus == 'ALL'){
+		
+		data =	{
+				command:'query',
+				corpus:getAllCorpora(),
+				cqp:cqp,
+				start:start,
+				end:end,
+				context:'1 sentence',
+				show:[],
+				show_struct:[]  
+			};		
+	}else{
+			data =	{
 					command:'query',
 					corpus:corpus,
 					cqp:cqp,
@@ -32,6 +47,7 @@ function makeRequest(cqp, corpus, start, end){
 					show:[],
 					show_struct:[]  
 				};
+	}
 
 	$.each(selected_corpus.attributes, function(key,val){
 		data.show.push(key);
