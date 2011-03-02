@@ -55,6 +55,7 @@ function didSelectCorpus() {
     var selects = $(".select_language");
     selects.children().remove();
     var nr_langs = 0;
+    
     for (var lang in corpus.languages) {
         selects.append(new Option(corpus.languages[lang], lang));
         nr_langs++;
@@ -73,13 +74,26 @@ function getCorpus() {
 //}
 
 function loadCorpora() {
-    for (var val in settings.corpora) {
+	for (var val in settings.corpora) {
     	$('.select_corpus').append(
-    	        $('<option></option>').val(val).html(settings.corpora[val].title)
+    	        $('<option></option>').val(val).html(settings.corpora[val].title) 
     	 );
-    	 
-    };    
+    	
+    	//gets all the unique attributes to the all-corpora settings
+    	settings.corpora.all.attributes = jQuery.extend(settings.corpora.all.attributes, settings.corpora[val].attributes);
+    };
+    
 }
+
+function getAllCorpora(){
+	var res = [];
+	$.each(settings.corpora, function(key,val){
+		if(key != 'all')
+			res.push(key.toUpperCase());
+	});
+	return res;
+}
+
 
 function resetQuery() {
     clearQuery();
