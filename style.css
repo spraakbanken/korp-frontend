@@ -6,7 +6,7 @@
 body {
 	font-size: 0.8em;
 }
-#content div  {
+#content > div  {
 	margin-bottom: 15px;
 }
 /*Korp header text */
@@ -108,7 +108,7 @@ h1 {
 }
 
 .image_button:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 .insert_token {
@@ -165,17 +165,17 @@ table {
 
 #results-wraper {
 	display: none;
-	width: 80%;
-	float: left;
 }
 
 #pager-wraper {
 	clear: both;
 }
+#pager-wraper > div {
+	margin-bottom : 30px;	
+}
 
 .result_table td {
-	white-space: nowrap; #
-	font-family: "Courier New", Courier, monospace;
+	white-space: nowrap; 
 }
 
 .left {
@@ -218,6 +218,10 @@ table {
 	color: red;
 }
 
+.word {
+	cursor: pointer;	
+}
+
 .token_selected {
 	color: #fff;
 	background-color: #666;
@@ -236,6 +240,7 @@ table {
 #json-link {
 	float: right;
 	display: none;
+	margin-top: -13px;
 }
 
 #json-link img {
@@ -246,16 +251,22 @@ table {
 	display: none;
 }
 
+#left-column {
+	position : absolute;
+	left : 8px;
+	right : 270px;
+}
+
 #sidebar {
 	position: absolute;
 	right: 0px;
 	width: 250px;
-	height: 500px;
 	background-color: #fff;
 	border-style: solid;
 	border-width: thin;
-	border-color: #000;
-	padding: 5px 5px 5px 5px;
+	border-color: #333;
+	border-right-color:#fff;
+	padding: 5px 0px 5px 5px;
 }
 
 #sidebar div {

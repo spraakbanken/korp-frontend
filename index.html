@@ -132,35 +132,36 @@
 			<div id="results-wraper">
 				<a name="results"></a>
 				   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-				   <input name="num_hits" id="num_hits" size="3" value="10" type="number"> 
+				   <input name="num_hits" id="num_hits" size="3" value="25" type="number"> 
 				<div id="pager-wraper">
 					<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
 					<div class="pagination" id="Pagination"></div>
 				</div>
-				<div id="result-container">
-					<ul >
-						<li class="on"><a href="#results">KWIC</a></li>
-						<li><a href="#results-sentence">Mening</a></li>
-					</ul>
-					<div id="results">
-						<table id="results-table" class="result_table"></table>
+				<div id="columns" >
+					<div id="left-column" >
+						<div id="result-container">
+							<ul >
+								<li class="on"><a href="#results">KWIC</a></li>
+								<li style="display:none;"><a href="#results-sentence">Mening</a></li>
+							</ul>
+							<div id="results">
+								<table id="results-table" class="result_table"></table>
+							</div>
+							<div id="results-sentence"></div>
+						</div>
+						<div id="tooltip-container"></div>
+						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="results-sentence"></div>
+					<div id="sidebar" >	
+						
+						<h4 rel="localize[sentence_attr]"></h4>
+						<div id="selected_sentence"></div>
+						
+						<h4 rel="localize[word_attr]"></h4>
+						<div id="selected_word"></div>
+					</div>
 				</div>
-				<div id="tooltip-container"></div>
 			</div>
-			<div id="sidebar" >	
-				<a id="json-link" href="#"><img src="img/json.png" /></a>
-				
-				<h4 rel="localize[sentence_attr]"></h4>
-				<div id="selected_sentence"></div>
-				
-				<h4 rel="localize[word_attr]"></h4>
-				<div id="selected_word"></div>
-				
-				
-			</div>
-			
 		</div>
 		
 		

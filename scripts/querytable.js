@@ -62,7 +62,9 @@ function didSelectCorpus() {
     }
     selects.attr("disabled", nr_langs <= 1);
 
-    updateCQP();
+//    $(".select_corpus").val(corpus);
+    
+//    updateCQP();
 }
 
 function getCorpus() {
