@@ -261,6 +261,20 @@ function initSearch(){
 		updateCQP();
 		submitFormToServer();
 	}
+	
+	var saldo = $.getUrlVar('saldo');
+	if (saldo && saldo.length != 0){
+		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
+		$('a[href="#korp-advanced"]').trigger('click');
+		submitFormToServer();
+	}
+	
+	var cqp = $.getUrlVar('cqp');
+	if (cqp && cqp.length != 0){
+		$("#cqp_string").val(cqp);
+		$('a[href="#korp-advanced"]').trigger('click');
+		submitFormToServer();
+	}		
 }
 
 //////////////////////////////////////////////////////////////////////
