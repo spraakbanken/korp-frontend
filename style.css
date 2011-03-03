@@ -240,7 +240,7 @@ table {
 #json-link {
 	float: right;
 	display: none;
-	margin-top: -13px;
+	#margin-top: -13px;
 }
 
 #json-link img {
