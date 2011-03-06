@@ -3,6 +3,7 @@
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
+		<link type="text/css" href="lib/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" />
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="pagination.css">
@@ -14,7 +15,10 @@
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.position.js"></script>
 		
+		
+		<script type="text/javascript" src="lib/ui/jquery.ui.autocomplete.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
@@ -37,6 +41,9 @@
 		<script type="text/javascript" src="scripts/request.js"></script>
 <!--		<script type="text/javascript" src="scripts/tabs.js"></script>-->
 		<script type="text/javascript" src="scripts/sidebar.js"></script>
+		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
+		
+		
 		 
 	</head>
   	<body>
@@ -63,8 +70,10 @@
 					<li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
 				</ul>
 				<div id="korp-simple">
-					<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>  
-					<select class="select_corpus" onchange="didSelectCorpus()"></select>
+					<div class="ui-widget">
+						<span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> <span rel="localize[in_corpus]">i</span>
+						<select class="select_corpus" onchange="didSelectCorpus()"></select>
+					</div>  
 				</div>
 				<div id="korp-extended">					
 					<div id="simple">
@@ -143,21 +152,23 @@
 							<ul >
 								<li class="on"><a href="#results">KWIC</a></li>
 								<li style="display:none;"><a href="#results-sentence">Mening</a></li>
+								<li ><a href="#results-lemgram">Ordbild</a></li>
 							</ul>
 							<div id="results">
 								<table id="results-table" class="result_table"></table>
 							</div>
 							<div id="results-sentence"></div>
+							<div id="results-lemgram">
+								<table id="lemgram-results-table"></table>
+							</div>
 						</div>
 						<div id="tooltip-container"></div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
 					<div id="sidebar" >	
 						
-						<h4 rel="localize[sentence_attr]"></h4>
 						<div id="selected_sentence"></div>
 						
-						<h4 rel="localize[word_attr]"></h4>
 						<div id="selected_word"></div>
 					</div>
 				</div>
@@ -166,7 +177,13 @@
 		
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
-		<p><span rel="localize[${$data}]">${util.getLocaleString($data)}</span> : ${$item.word[$data]}</p>
+		
+		<h4 rel="localize[${$item.header}_attr]"></h4>
+		{{each $data}}
+		<tr>
+     	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : ${$value}</p>
+	    </tr>
+		{{/each}}
 	</script>
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr>
@@ -186,6 +203,14 @@
 			{{/each}}
 		  	</td>
 	  </tr>
+	</script>
+	
+	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
+		<tr>
+		{{each $data}}
+			 <td>${$value}</td> 
+		{{/each}}
+	    </tr>
 	</script>
 	
 	</body>

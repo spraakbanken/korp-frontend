@@ -150,6 +150,44 @@ function selectRight(sentence) {
 	return sentence.tokens.slice(sentence.match.end, to);
 }
 
+function lemgramResult(lemgram, data) {
+	$("#lemgram-results-table").empty();
+	
+	
+//	"_" represents the actual word in the order
+	var order = {
+		vb : "SS,_,IO,OO,OA,RA,TA".split(","),
+		nn : "AT,_,ET".split(","),
+		av :"AT,_".split(",")
+	};
+
+	var wordClass = lemgram.split(".")[2].slice(0, 2);
+	
+//	var relMapping = {};
+	var sortedList = data.sort(function(first, second) {
+		return first.freq - second.freq;
+//		var firstIndex = order[wordClass].indexOf(first.rel);
+//		return toIndex - order[wordClass].indexOf(second.rel);
+//		if(toIndex == -1)
+//			$.error("getting rel index failed");
+//		if(!sortedList[toIndex]) sortedList[toIndex] = [];
+//		sortedList[toIndex] = item; 
+//		if(!relMapping[item.rel]) relMapping[item.rel] = [];
+//		relMapping[item.rel].push(item); 
+//		$.each(item, function(k,v) {
+//		});
+	});
+	var toIndex = order[wordClass].indexOf("_");
+	sortedList.splice(toIndex, 0, util.lemgramToString(lemgram).split(" ")[0]);
+//	sortedList[toIndex] = util.lemgramToString(lemgram).split(" ")[0];
+	$.dump(sortedList);
+	
+	$("#lemgramRowTmpl").tmpl(sortedList).appendTo("#lemgram-results-table");
+	$('#results-wraper').css('display', 'block');
+	$("a [href=#results-lemgram]").click();
+//	TODO: probably shouldn't hardcode value 2... but there it is
+	$("#result-container").tabs( "select" , 2);
+}
 
 function corpus_results(data) {
 	if(data.ERROR) {

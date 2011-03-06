@@ -39,6 +39,8 @@
 	"party" : "parti",
 	"sentence_attr" : "Meningsattribut",
 	"word_attr" : "Ordattribut",
+	"text_year" : "år",
+	"text_party" : "parti",
 	"AB":"adverb", 
 	"DL":"determinerare",
     "DL": "interpunktion",

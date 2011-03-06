@@ -13,3 +13,4 @@ def check_key(key, fromLang):
 for fName, json_set in mapping.items():
     for json_key in json_set:
         check_key(json_key, fName)
+print "Ok."

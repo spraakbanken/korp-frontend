@@ -71,9 +71,6 @@ function getCorpus() {
 	return $("#tabs-container").children("div:visible").find("select").val();
 }
 
-//function getCorpusIdByLanguage(langObj) {
-//	return 
-//}
 
 function loadCorpora() {
 	for (var val in settings.corpora) {
