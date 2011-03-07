@@ -3,7 +3,6 @@
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
-		<link type="text/css" href="lib/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" />
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="pagination.css">
@@ -16,9 +15,13 @@
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.position.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.mouse.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.draggable.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.resizable.js"></script>
 		
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.autocomplete.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.dialog.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
@@ -29,6 +32,7 @@
 		<script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
 		<script type="text/javascript" src="lib/jquery.dump.js"></script>
+		<script type="text/javascript" src="lib/jquery.format.js"></script>
 		<script type="text/javascript" src="lib/jquery.localize.js"></script>
 		<script>
 			$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations"});
@@ -159,7 +163,6 @@
 							</div>
 							<div id="results-sentence"></div>
 							<div id="results-lemgram">
-								<table id="lemgram-results-table"></table>
 							</div>
 						</div>
 						<div id="tooltip-container"></div>
@@ -205,12 +208,29 @@
 	  </tr>
 	</script>
 	
+	
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
-		<tr>
-		{{each $data}}
-			 <td>${$value}</td> 
-		{{/each}}
-	    </tr>
+		<div id="table_${$data[0].rel}">
+		<h2>${$data[0].rel}</h2>
+		<table>
+			<tr>
+			{{each $data[0]}}
+				 <th>${$index}</th> 
+			{{/each}}
+			</tr>
+			{{each $data}}
+			<tr data-sources="${$data[0].sources}">
+				{{each(key, val) $value}}
+				  {{if key != "sources"}}
+				   <td>${$.grep(val.toString().split("|"), Boolean)}</td>
+				  {{else}}
+					   <td><div data-sentence_id="${val}" data-corpus="${$value.corpus}" ></div></td>
+				  {{/if}}
+			    {{/each}}
+		    </tr>
+			{{/each}}
+		</table>
+		</div>
 	</script>
 	
 	</body>

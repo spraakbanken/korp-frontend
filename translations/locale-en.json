@@ -64,7 +64,19 @@
 	"RO": "ordningstal",
 	"SN": "subjunktion",
 	"UO": "utländskt ord",
-	"VB": "verb"
-	
-	
+	"VB": "verb",
+		
+	"nn" : "noun", 
+	"av" : "adjective", 
+	"vb" : "verb", 
+	"pm" : "proper noun", 
+	"ab" : "adverb", 
+	"in" : "interjection", 
+	"pp" : "preposition", 
+	"nl" : "numeral", 
+	"pn" : "pronoun", 
+	"sn" : "subjunction", 
+	"kn" : "conjunction", 
+	"al" : "article", 
+	"ie" : "infinitive particle"
 }

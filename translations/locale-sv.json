@@ -64,5 +64,20 @@
     "RO": "ordningstal",
     "SN": "subjunktion",
     "UO": "utländskt ord",
-    "VB": "verb"
+    "VB": "verb",
+    
+	"nn" : "substantiv", 
+	"av" : "adjektiv", 
+	"vb" : "verb", 
+	"pm" : "egennamn", 
+	"ab" : "adverb", 
+	"in" : "interjektion", 
+	"pp" : "preposition", 
+	"nl" : "numeral", 
+	"pn" : "pronomen", 
+	"sn" : "subjunktion", 
+	"kn" : "konjunktion", 
+	"al" : "artikel", 
+	"ie" : "infinitivmärke"
+    
 }

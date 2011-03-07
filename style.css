@@ -98,6 +98,16 @@ h1 {
 	text-decoration: none;
 }
 
+
+.ui-autocomplete-tall {
+	max-height: 300px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+}
+
 .results_settings {
 	margin: 0px;
 	width: 83%;
@@ -235,6 +245,11 @@ table {
 
 #result-container {
 	clear: both;
+}
+
+.lemgram_result td {
+	padding-left : 10px;
+	padding-right : 10px;
 }
 
 #json-link {
