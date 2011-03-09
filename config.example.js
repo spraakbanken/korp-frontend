@@ -114,7 +114,7 @@ settings.arg_types = {
 			    "VB"],
 	    "msd": String,
 	    "max": Number,
-	    "min": Number,
+	    "min": Number
 	}
 
 
