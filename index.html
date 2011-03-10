@@ -6,6 +6,7 @@
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="pagination.css">
+		<link  href="http://fonts.googleapis.com/css?family=OFL+Sorts+Mill+Goudy+TT:regular,italic" rel="stylesheet" type="text/css" >
 		
 		<title>Korp</title>
 		
@@ -19,13 +20,13 @@
 		<script type="text/javascript" src="lib/ui/jquery.ui.draggable.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.resizable.js"></script>
 		
-		
 		<script type="text/javascript" src="lib/ui/jquery.ui.autocomplete.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.dialog.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.slide.js"></script>
+		<script type="text/javascript" src="lib/jquery.ui.preloader.min.js"></script>
 		
 		<script type="text/javascript" src="lib/jquery.jLog.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.pagination.js"></script>
@@ -37,6 +38,8 @@
 		<script>
 			$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations"});
 			var language = $.localize.data.locale;
+			if(!language)
+				$.error("Localization failed");
 		</script>
 		<script type="text/javascript" src="config.js"></script>
 		
@@ -143,13 +146,6 @@
 	   		</div>
 			
 			<div id="results-wraper">
-				<a name="results"></a>
-				   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-				   <input name="num_hits" id="num_hits" size="3" value="25" type="number"> 
-				<div id="pager-wraper">
-					<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
-					<div class="pagination" id="Pagination"></div>
-				</div>
 				<div id="columns" >
 					<div id="left-column" >
 						<div id="result-container">
@@ -159,6 +155,13 @@
 								<li ><a href="#results-lemgram">Ordbild</a></li>
 							</ul>
 							<div id="results">
+								<a name="results"></a>
+								   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+								   <input name="num_hits" id="num_hits" size="3" value="25" type="number"> 
+								<div id="pager-wraper">
+									<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
+									<div class="pagination" id="Pagination"></div>
+								</div>
 								<table id="results-table" class="result_table"></table>
 							</div>
 							<div id="results-sentence"></div>
@@ -184,7 +187,12 @@
 		<h4 rel="localize[${$item.header}_attr]"></h4>
 		{{each $data}}
 		<tr>
+			{{if $index == "lex" && $value != "|"}}
+     	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : <span id="sidebar_lex">${$value}</span></p>
+			{{else}}
      	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : ${$value}</p>
+
+			{{/if}}
 	    </tr>
 		{{/each}}
 	</script>
@@ -208,26 +216,29 @@
 	  </tr>
 	</script>
 	
+	<!-- TODO: nedan är antalet tabellrader att visa hårdkodat, det kan behöva flyttas! -->
 	
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
 		<div id="table_${$data[0].rel}">
-		<h2>${$data[0].rel}</h2>
+		<h3 rel="localize[${$data[0].rel}]"></h3>
 		<table>
 			<tr>
-			{{each $data[0]}}
-				 <th>${$index}</th> 
+			{{each $item.attrOrder}}
+				 <th rel="localize[${$value}]">${$value}</th> 
 			{{/each}}
 			</tr>
 			{{each $data}}
-			<tr data-sources="${$data[0].sources}">
-				{{each(key, val) $value}}
-				  {{if key != "sources"}}
-				   <td>${$.grep(val.toString().split("|"), Boolean)}</td>
+			{{if $index < 15}}
+			<tr>
+				{{each(j, key) $item.attrOrder}}
+				  {{if key == "sources"}}
+					   <td><div data-head="${$value.head}" data-dep="${$value.dep}" data-rel="${$value.rel}" data-corpus="${$value.corpus}" ></div></td>
 				  {{else}}
-					   <td><div data-sentence_id="${val}" data-corpus="${$value.corpus}" ></div></td>
+					   <td>${$.grep($value[key].toString().split("|"), Boolean)}</td>
 				  {{/if}}
 			    {{/each}}
 		    </tr>
+			{{/if}}
 			{{/each}}
 		</table>
 		</div>

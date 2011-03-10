@@ -14,6 +14,8 @@
 	"detailed" : "Extended",
 	"advanced" : "Advanced",
 	"loading" : "Searching...",
+	"autocomplete_header" : "is a word form in",
+	"no_lemgram_results" : "No examples found.",
 	"search" : "Search",
 	"hits_per_page" : "Hits per page",
 	"num_results" : "Number of results",
@@ -78,5 +80,19 @@
 	"sn" : "subjunction", 
 	"kn" : "conjunction", 
 	"al" : "article", 
-	"ie" : "infinitive particle"
+	"ie" : "infinitive particle",
+	
+	"SS" : "Subject",
+	"IO" : "Object",
+	"OO" : "Object",
+	"OA" : "Object",
+	"RA" : "Object",
+	"TA" : "Object",
+	"AT" : "Object",
+	"ET" : "Object",
+	
+	"dep" : "Depentent",
+	"sources" : "Examples",
+	"head" : "Head",
+	"freq" : "Frequency"
 }

@@ -4,6 +4,7 @@
 }
 
 body {
+	font-family : sans-serif;
 	font-size: 0.8em;
 }
 #content > div  {
@@ -11,11 +12,20 @@ body {
 }
 /*Korp header text */
 h1 { 
-	font-family: LindenHill;	
-	#text-transform : uppercase;
-	font-variant : small-caps;
-	font-size : 80px;
-	margin : -19px 0 0 10px;
+	
+/*	font-family: LindenHill;	*/
+/*	#text-transform : uppercase;*/
+/*	font-variant : small-caps;*/
+/*	font-size : 80px;*/
+/*	margin : -19px 0 0 10px;*/
+	
+	font-family: 'OFL Sorts Mill Goudy TT', serif;
+	font-size: 81px;
+	text-shadow: 4px 4px 4px #BBB;
+	text-transform: uppercase;
+	letter-spacing: 21px;
+	font-weight: normal;
+	margin: -25px 0 -18px 30px;
 }
 
 #corpus_id {
@@ -44,6 +54,7 @@ h1 {
 	float: left;
 	#margin-top : 16px;
 }
+
 
 #header p {
 	margin: 0px;
@@ -100,12 +111,21 @@ h1 {
 
 
 .ui-autocomplete-tall {
-	max-height: 300px;
+	max-height: 335px;
 	overflow-y: auto;
 	/* prevent horizontal scrollbar */
 	overflow-x: hidden;
 	/* add padding to account for vertical scrollbar */
 	padding-right: 20px;
+}
+
+.ui-preloader {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background: url(img/preloader.gif) no-repeat 0 0;
+	overflow: hidden;
+	background-size : 18px 18px;
 }
 
 .results_settings {
@@ -175,6 +195,13 @@ table {
 
 #results-wraper {
 	display: none;
+}
+
+#results-lemgram {
+	overflow:auto
+}
+#results-lemgram > div {
+	float : left;
 }
 
 #pager-wraper {
@@ -290,4 +317,10 @@ table {
 
 #sidebar p {
 	margin: 0 0 0 0;
+}
+
+#sidebar_lex ul{
+	margin-top : 0;
+	margin-bottom : 8px;
+	padding-left : 20px;	
 }

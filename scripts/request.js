@@ -151,8 +151,6 @@ function selectRight(sentence) {
 }
 
 function lemgramResult(lemgram, data) {
-	$("#results-lemgram").empty();
-	
 	
 //	"_" represents the actual word in the order
 	var order = {
@@ -167,8 +165,10 @@ function lemgramResult(lemgram, data) {
 	var sortedList = [];
 	$.each(data, function(index, item) {
 		var toIndex = order[wordClass].indexOf(item.rel);
-		if(toIndex == -1)
-			$.error("getting rel index failed");
+		if(toIndex == -1) {
+			$.log("getting rel index failed for " + item.rel);
+			return;
+		}
 		if(!sortedList[toIndex]) sortedList[toIndex] = [];
 		sortedList[toIndex].push(item); 
 	});
@@ -186,60 +186,72 @@ function lemgramResult(lemgram, data) {
 	sortedList = $.grep ( sortedList, function(item, index){
 		return Boolean(item);
 	});
-	
-//	var attrOrder = ["head", ""];
-	
-	$("#lemgramRowTmpl").tmpl(sortedList).appendTo("#results-lemgram")
+	var attrOrder = ["head", "dep"];
+	if(wordClass in ["vb", "nn"]) {
+		attrOrder = ["head", "freq", "sources"];
+	}
+	else { // wordclass == at
+		attrOrder = ["dep", "freq", "sources"];
+	}
+	$("<h2>").text(util.lemgramToString(lemgram)).appendTo("#results-lemgram")
+	$("#lemgramRowTmpl").tmpl(sortedList, {"attrOrder" : attrOrder, lemgram : lemgram}).appendTo("#results-lemgram")
 	.addClass("lemgram_result")
 	.find("div").addClass("ui-icon ui-icon-document")
 	.css("cursor", "pointer")
 	.click(function() {
 		$("#dialog").remove();
 		var $target = $(this);
-		var idArray = $target.data("sentence_id").split(",");
-		var cqp_string = $.map(idArray, function(item) {
-			return $.format('<sentence_id="%s"> []* </sentence_id>', item); 
-		}).join("|");
-		$.log("cpq", cqp_string);
-			
-		$.ajax({ url: settings.cgi_script, 
+		
+		$.log("clicked data", $target.data());
+		
+		$.ajax({ url : settings.cgi_script, 
 			dataType: "jsonp", 
 			data:{
-				command:'query',
-				corpus:$(this).data("corpus"),
-				cqp:cqp_string,
-				context:'1 sentence',
-				start : 0,
-				end : 0
+				command:'relations_sentences',
+				corpus:$target.data("corpus"),
+				rel : $target.data("rel"),
+				dep : $target.data("dep"),
+				head : $target.data("head")
 			},
 			traditional:true,
 			success: function(data) {
 				$.log("success", data);
-				var $dialogDiv = $("#results-lemgram").append("<div id='dialog' title='Results'></div>").find("#dialog");
+				if(data.ERROR) {
+					$.error($.dump(data));
+					return;
+				}
 				
 				var pElems = $.map(data.kwic, function(sentence) {
-					return $.format("<p>%s</p>", $.map(sentence.tokens, function(token) {
+					return $.format("<li>%s</li>", $.map(sentence.tokens, function(token) {
 						return token.word;
 					}).join(" "));
 				}).join("\n");
 				
-				$dialogDiv.html(pElems);
-				$dialogDiv.dialog({
+				$("<div id='dialog' title='Results'></div>").appendTo("#results-lemgram").append("<ol />")
+				.dialog({
 					width : 500,
 					height : 300
-				}).find("p:odd").css("color", 0x999999);
+				})
+				.find("ol").html(pElems);
 			}
 		});
-	});
+	})
+	util.localize();
 	$('#results-wraper').css('display', 'block');
-	$("a [href=#results-lemgram]").click();
-//	TODO: probably shouldn't hardcode value 2... but there it is
-	$("#result-container").tabs( "select" , 2);
 }
 
 function corpus_results(data) {
 	if(data.ERROR) {
 		$.error("json fetch error: " + $.dump(data.ERROR));
+		return;
+	} 
+	if(!num_result) {
+		buildPager(data.hits);
+	}
+	num_result = data.hits;
+	$('#num-result').html(data.hits);
+	if(!num_result) {
+		$.log("no kwic results");
 		return;
 	}
 	var effectSpeed = 100;
@@ -257,12 +269,6 @@ function corpus_results(data) {
 	
 	var corpus = settings.corpora[getCorpus()];
 	
-	//if this is the first result-set
-	if(num_result == 0){
-		buildPager(data.hits);
-	}
-	$('#num-result').html(data.hits);
-	num_result = data.hits;
 	
 	
 	$.each(data.kwic, function(i,sentence){

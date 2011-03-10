@@ -18,39 +18,22 @@ function submitForm() {
 }
 
 function onSimpleChange() {
-	var valArray = $("#simple_text").val().split(" ");
-	var cqp = $.map(valArray, function(item, i){
-		return '[(word = "' + item + '")]';
-	});
-	$("#cqp_string").val(cqp.join(" "));
+	var val;
+	var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
+	if(lemgram) { // if the input is a lemgram, do semantic search.
+		val = $.format('[(lex contains "%s")]', lemgram);
+	} else {
+		var valArray = $("#simple_text").val().split(" ");
+		var cqp = $.map(valArray, function(item, i){
+			return '[(word = "' + item + '")]';
+		});
+		val = cqp.join(" ");
+	}
+	$("#cqp_string").val(val);
 }
 
 function didSelectCorpus() {
     var corpus = settings.corpora[getCorpus()];
-
-//    $("#attributes").children().remove();
-//    for (var attr in corpus.attributes) {
-//        $("<span/>").addClass("show_attribute").append(
-//            $("<input type='checkbox' name='show'/>").val(attr)
-//        ).append(
-//            corpus.attributes[attr] + " "
-//        ).appendTo($("#attributes"));
-//    }
-    //change event for toggle token attributes
-//    $('[name=show]').change(function (){
-// 			var token_class = $(this).val();
-// 	
-// 			if($('input[value='+token_class +']').is(':checked')){
-// 				$('.'+token_class ).css('display', 'inline');
-// 			}else{
-// 				$('.'+token_class ).css('display', 'none');
-// 			}
-//    });
-//
-//    $("#context_select").children().remove();
-//    for (var cxt in corpus.context) {
-//        $("#context_select").append(new Option(corpus.context[cxt], cxt));
-//    }
 
     var selects = $(".select_language");
     selects.children().remove();
@@ -62,9 +45,6 @@ function didSelectCorpus() {
     }
     selects.attr("disabled", nr_langs <= 1);
 
-//    $(".select_corpus").val(corpus);
-    
-//    updateCQP();
 }
 
 function getCorpus() {
@@ -243,6 +223,9 @@ function initSearch(){
 //			if($("#korp-extended:visible").length)
 //				updateCQP();
 //			submitFormToServer();
+			if ( $("#simple_text").is(":visible" )) {
+				$("#simple_text").autocomplete("close");
+			}
 			$("#sendBtn").click();
 		}
 	});

@@ -14,6 +14,8 @@
 	"detailed" : "Utökad",
 	"advanced" : "Avancerad",
 	"loading" : "Hämtar...",
+	"autocomplete_header" : "är en ordform i",
+	"no_lemgram_results" : "Hittade inga förekomster.",
 	"search" : "   Sök   ",
 	"hits_per_page" : "Träffar per sida",
 	"num_results" : "Antal resultat",
@@ -78,6 +80,20 @@
 	"sn" : "subjunktion", 
 	"kn" : "konjunktion", 
 	"al" : "artikel", 
-	"ie" : "infinitivmärke"
+	"ie" : "infinitivmärke",
+	
+	"SS" : "Subject",
+	"IO" : "Object",
+	"OO" : "Object",
+	"OA" : "Object",
+	"RA" : "Object",
+	"TA" : "Object",
+	"AT" : "Object",
+	"ET" : "Object",
+	
+	"dep" : "Depentent",
+	"sources" : "Exempel",
+	"head" : "Head",
+	"freq" : "Frequency"
     
 }
