@@ -63,7 +63,6 @@ function makeRequest(cqp, corpus, start, end){
 	$.ajax({ url: settings.cgi_script, 
 				dataType: "jsonp", 
 				data:data,
-				traditional:true,
 				success: corpus_results
 	});
 	
@@ -71,7 +70,7 @@ function makeRequest(cqp, corpus, start, end){
 }
 
 function setJsonLink(data){
-	$.ajaxSetup({ traditional: true });
+	
 	var url = settings.cgi_script+'?'+jQuery.param(data);
 	$('#json-link').attr('href', url);
 	$('#json-link').css('display', 'inline');
@@ -106,7 +105,6 @@ function submitFormToServer(){
 		
 	makeRequest(cqp, corpus, start, end);
 	
-	$('#results-wraper').css('display', 'block');	
 }
 
 function buildPager(number_of_hits){
@@ -160,7 +158,7 @@ function lemgramResult(lemgram, data) {
 	};
 
 	var wordClass = lemgram.split(".")[2].slice(0, 2);
-	
+	$.log("wordClass", lemgram, wordClass);
 	var relMapping = {};
 	var sortedList = [];
 	$.each(data, function(index, item) {
@@ -181,22 +179,22 @@ function lemgramResult(lemgram, data) {
 			});
 		}
 	});
-//	var toIndex = order[wordClass].indexOf("_");
-//	sortedList.splice(toIndex, 0, {"word" : util.lemgramToString(lemgram).split(" ")[0]});
+	var toIndex = order[wordClass].indexOf("_");
+	sortedList.splice(toIndex, 0, {"word" : util.lemgramToString(lemgram).split(" ")[0]});
 	sortedList = $.grep ( sortedList, function(item, index){
 		return Boolean(item);
 	});
-	var attrOrder = ["head", "dep"];
-	if(wordClass in ["vb", "nn"]) {
-		attrOrder = ["head", "freq", "sources"];
+	var showAttr;
+	if($.inArray(wordClass, ["vb", "nn"]) != -1) {
+		showAttr = "head";
 	}
-	else { // wordclass == at
-		attrOrder = ["dep", "freq", "sources"];
+	else { // wordclass == av
+		showAttr = "dep";
 	}
-	$("<h2>").text(util.lemgramToString(lemgram)).appendTo("#results-lemgram")
-	$("#lemgramRowTmpl").tmpl(sortedList, {"attrOrder" : attrOrder, lemgram : lemgram}).appendTo("#results-lemgram")
+	$.log("showAttr", showAttr);
+	$("#lemgramRowTmpl").tmpl(sortedList, {"showAttr" : showAttr, lemgram : lemgram, wordClass : wordClass}).appendTo("#results-lemgram")
 	.addClass("lemgram_result")
-	.find("div").addClass("ui-icon ui-icon-document")
+	.find("#example_link").addClass("ui-icon ui-icon-document")
 	.css("cursor", "pointer")
 	.click(function() {
 		$("#dialog").remove();
@@ -213,7 +211,6 @@ function lemgramResult(lemgram, data) {
 				dep : $target.data("dep"),
 				head : $target.data("head")
 			},
-			traditional:true,
 			success: function(data) {
 				$.log("success", data);
 				if(data.ERROR) {
@@ -229,13 +226,17 @@ function lemgramResult(lemgram, data) {
 				
 				$("<div id='dialog' title='Results'></div>").appendTo("#results-lemgram").append("<ol />")
 				.dialog({
-					width : 500,
-					height : 300
+					width : 600,
+					height : 500
 				})
 				.find("ol").html(pElems);
 			}
 		});
-	})
+	});
+	
+	$("#display_word").parent().vAlign();
+//	TODO: filter out the first 15 list items here.
+//	$(".lemgram_result li : lt(15)").remove()
 	util.localize();
 	$('#results-wraper').css('display', 'block');
 }
@@ -265,7 +266,8 @@ function corpus_results(data) {
 	else {
 		$("#results").hide();
 	}
-	$("#sidebar:hidden").show("slide", {direction : "right"}, 400);
+//	$("#sidebar:hidden").show("slide", {direction : "right"}, 400);
+	showSidebar();
 	
 	var corpus = settings.corpora[getCorpus()];
 	
@@ -302,6 +304,7 @@ function corpus_results(data) {
 		
 		$('.result_table tr:even').addClass('alt');
 	});
+	$('#results-wraper').show();
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);

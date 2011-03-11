@@ -10,7 +10,7 @@
 		
 		<title>Korp</title>
 		
-		<script type="text/javascript" src="scripts/jquery.js"></script>
+		<script type="text/javascript" src="lib/jquery.js"></script>
 		
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
@@ -149,17 +149,20 @@
 				<div id="columns" >
 					<div id="left-column" >
 						<div id="result-container">
-							<ul >
+							<ul>
 								<li class="on"><a href="#results">KWIC</a></li>
 								<li style="display:none;"><a href="#results-sentence">Mening</a></li>
 								<li ><a href="#results-lemgram">Ordbild</a></li>
 							</ul>
 							<div id="results">
 								<a name="results"></a>
-								   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-								   <input name="num_hits" id="num_hits" size="3" value="25" type="number"> 
+									<div id="result_controls">
+									   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+									   <input name="num_hits" id="num_hits" size="3" value="25" type="number"></div> 
+									   <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
+									   <div style="clear : both; float : none;" ></div>
+								   </div>
 								<div id="pager-wraper">
-									<span rel="localize[num_results]">Antal resultat</span>:<span id="num-result"></span>
 									<div class="pagination" id="Pagination"></div>
 								</div>
 								<table id="results-table" class="result_table"></table>
@@ -217,30 +220,27 @@
 	</script>
 	
 	<!-- TODO: nedan är antalet tabellrader att visa hårdkodat, det kan behöva flyttas! -->
-	
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
-		<div id="table_${$data[0].rel}">
-		<h3 rel="localize[${$data[0].rel}]"></h3>
+		<div>
+		{{if word}}
+			<h3 id="display_word">${word}</h3>
+		{{else}}
 		<table>
-			<tr>
-			{{each $item.attrOrder}}
-				 <th rel="localize[${$value}]">${$value}</th> 
-			{{/each}}
-			</tr>
 			{{each $data}}
-			{{if $index < 15}}
+			
+			${$.log($item.showAttr, $value.head, $value.dep, $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0])}
+
+
+			{{if ($item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0])}}
 			<tr>
-				{{each(j, key) $item.attrOrder}}
-				  {{if key == "sources"}}
-					   <td><div data-head="${$value.head}" data-dep="${$value.dep}" data-rel="${$value.rel}" data-corpus="${$value.corpus}" ></div></td>
-				  {{else}}
-					   <td>${$.grep($value[key].toString().split("|"), Boolean)}</td>
-				  {{/if}}
-			    {{/each}}
+				<td>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
+				<td>${$value.freq}</td>
+				<td id="example_link" data-head="${$value.head}" data-dep="${$value.dep}" data-rel="${$value.rel}" data-corpus="${$value.corpus}" ></td>
 		    </tr>
 			{{/if}}
 			{{/each}}
 		</table>
+		{{/if}}
 		</div>
 	</script>
 	

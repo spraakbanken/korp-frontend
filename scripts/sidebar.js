@@ -23,15 +23,30 @@ function sidebarSaldoFormat() {
 	var $lex = $("#sidebar_lex"); 
 	var idArray = $.grep($lex.text().split("|"), Boolean);
 	$.log("idArray", idArray);
-	var pElems = $.map(idArray, function(item) {
-		return $.format("<li><a href='javascript:void(0);'>%s</a></li>", item);
-	}).join("");
 	
-	$lex.html($.format("<ul>%s</ul>", pElems))
+	$lex.html($.arrayToHTMLList(idArray))
 	.find("li")
+	.wrap("<a href='javascript:void(0)' />")
 	.css("list-style", "none")
 	.click(function() {
 		$("#cqp_string").val($.format('[(lex contains "%s")]', $(this).text()));
 		submitFormToServer();
 	});
+}
+
+function hideSidebar() {
+	var speed = 400;
+	$("#sidebar").hide("slide", {direction : "right"}, speed);
+	$("#left-column").animate({
+		right : 8
+	}, speed);
+	
+}
+function showSidebar() {
+	var speed = 400;
+	$("#sidebar").show("slide", {direction : "right"}, speed);
+	$("#left-column").animate({
+		right : 270
+	}, speed);
+	
 }
