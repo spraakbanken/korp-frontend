@@ -262,7 +262,7 @@ function initSearch(){
 //////////////////////////////////////////////////////////////////////
 
 function setSelectWidth(select) {
-	//abbort if browser is ie7 or older
+	//abort if browser is ie7 or older
 	if($.browser.msie && parseInt($.browser.version, 10) <= 7){return 0;}
 	var text = $(select).find(":selected").text();
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
