@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="lib/jquery.js"></script>
 		
 		
-		<script type="text/javascript" src="lib/ui/jquery.ui.core.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.core.js" ></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.position.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.mouse.js"></script>
@@ -65,6 +65,7 @@
   				<li rel="localize[english]" data-lang="en">Engelska</li>
   			</ul>
   		</div>
+  		
 		<div id="content">
 			<input name="command" value="query" type="hidden">
 			<input name="corpus" id="corpus" type="hidden">
@@ -95,7 +96,7 @@
 							<div class="query_row line_above">
 							<img style="display: none;" class="image_button remove_row" src="img/minus.png">
 								<!--  container for language selector -->
-							<table class="query_token" cellpadding="0" cellspacing="0">
+							<table class="query_token">
 								<tbody>
 									<tr class="query_arg">
 										<td><select style="width: 59px;" class="arg_type">
@@ -165,7 +166,9 @@
 								<div id="pager-wraper">
 									<div class="pagination" id="Pagination"></div>
 								</div>
-								<table id="results-table" class="result_table"></table>
+								<div id="table_scrollarea">
+									<table id="results-table" class="result_table"></table>
+								</div>
 							</div>
 							<div id="results-sentence"></div>
 							<div id="results-lemgram">
@@ -228,14 +231,15 @@
 		<table>
 			{{each $data}}
 			
-			${$.log($item.showAttr, $value.head, $value.dep, $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0])}
-
-
 			{{if ($item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0])}}
 			<tr>
 				<td>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
 				<td>${$value.freq}</td>
-				<td id="example_link" data-head="${$value.head}" data-dep="${$value.dep}" data-rel="${$value.rel}" data-corpus="${$value.corpus}" ></td>
+				<td id="example_link" 
+					data-head="${$value[$item.wordClass != "av" ? "head" : "dep"]}" 
+					data-dep="${$value[$item.wordClass != "av" ? "dep" : "head"]}" 
+					data-rel="${$value.rel}" 
+					data-corpus="${$value.corpus.join(",")}" ></td>
 		    </tr>
 			{{/if}}
 			{{/each}}

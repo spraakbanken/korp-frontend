@@ -22,7 +22,7 @@ function makeRequest(cqp, corpus, start, end){
 	var selected_corpus = settings.corpora[getCorpus()];
 	var attributes = ['msd','lemma'];
 
-	var data = {} 
+	var data = {};
 	
 	if(corpus == 'ALL'){
 		
@@ -78,7 +78,6 @@ function setJsonLink(data){
 
 function onSubmit(evt) {
 	var currentVisible = $("#tabs-container > div:visible");
-	$.log("onSubmit", currentVisible, currentVisible.attr("id"))
 	switch(currentVisible.attr("id")) {
 	case "korp-simple":
 		onSimpleChange();
@@ -95,7 +94,7 @@ function onSubmit(evt) {
 function submitFormToServer(){
 	num_result = 0;
 //	TODO: loading text broken
-	$('#results').append("<p alt='localize[loading]'/>").find("p");
+//	$('#results').append("<p alt='localize[loading]'/>").find("p");
 	
 	var cqp 	= $("#cqp_string").val();
 	var corpus 	= getCorpus().toUpperCase();
@@ -154,7 +153,7 @@ function lemgramResult(lemgram, data) {
 	var order = {
 		vb : "SS,_,IO,OO,OA,RA,TA".split(","),
 		nn : "AT,_,ET".split(","),
-		av :"AT,_".split(",")
+		av :"_,AT".split(",")
 	};
 
 	var wordClass = lemgram.split(".")[2].slice(0, 2);
@@ -202,14 +201,44 @@ function lemgramResult(lemgram, data) {
 		
 		$.log("clicked data", $target.data());
 		
-		$.ajax({ url : settings.cgi_script, 
+		var tmpl = '((a:[(%(dep)s) & (deprel = "%(rel)s")] []* [(%(lemgram)s) & (ref = a.dephead)])' + 
+			'| (b:[(%(lemgram)s)] []* [(%(dep)s) & (deprel = "%(rel)s") & (dephead = b.ref)]))';
+		var lemgram_query = $.format('lex contains "%s"', $target.data("head")); 
+		var dep_query = $.format('lex contains "%s"', $target.data("dep")); 
+//		var alt_rel;
+		if(!util.isLemgramId($target.data("head"))) {
+			lemgram_query = $.format('word=""', $target.data("head").split("_")[0]);
+//			alt_rel = lemgram.split("_")[1].toLowerCase();
+		}
+		else if(!util.isLemgramId($target.data("dep"))) {
+			dep_query = $.format('word=""', $target.data("dep").split("_")[0]);
+		}
+		
+		
+		
+		var cqp = $.format(tmpl, {
+			lemgram : lemgram_query, 
+			dep : dep_query,  
+			rel : $target.data("rel")
+//			rel : alt_rel || $target.data("rel")
+			});
+//		var cqp = $.format(tmpl, {
+//			lemgram : $.format('%s"%s"', [util.isLemgramId(lemgram) ? "lex contains " : "word=", lemgram]), 
+//			dep : $.format('%s"%s"', [util.isLemgramId($target.data("dep")) ? "lex contains " : "word=", $target.data("dep")]),  
+//			rel : alt_rel || $target.data("rel")
+//		});
+		$.ajax({ url : settings.cgi_script + "?" + $.map($target.data("corpus").split(","), function(item) {return "corpus="+item}).join("&"), 
 			dataType: "jsonp", 
 			data:{
-				command:'relations_sentences',
-				corpus:$target.data("corpus"),
-				rel : $target.data("rel"),
-				dep : $target.data("dep"),
-				head : $target.data("head")
+				command:'query',
+				cqp:cqp,
+				start:0,
+				end:999,
+				context:'1 sentence',
+				within : "sentence"
+//				rel : $target.data("rel"),
+//				dep : $target.data("dep"),
+//				head : $target.data("head"),
 			},
 			success: function(data) {
 				$.log("success", data);
@@ -219,8 +248,13 @@ function lemgramResult(lemgram, data) {
 				}
 				
 				var pElems = $.map(data.kwic, function(sentence) {
-					return $.format("<li>%s</li>", $.map(sentence.tokens, function(token) {
-						return token.word;
+					return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
+						var prefix = postfix = "";
+						if(sentence.match.start == i)
+							prefix = "<b>";
+						else if(sentence.match.end == (i+1))
+							postfix = "</b>";
+						return prefix + token.word + postfix;
 					}).join(" "));
 				}).join("\n");
 				
@@ -235,10 +269,9 @@ function lemgramResult(lemgram, data) {
 	});
 	
 	$("#display_word").parent().vAlign();
-//	TODO: filter out the first 15 list items here.
-//	$(".lemgram_result li : lt(15)").remove()
+	$(".lemgram_result").find("tr:gt(15)").remove();
 	util.localize();
-	$('#results-wraper').css('display', 'block');
+	$('#results-wraper').show();
 }
 
 function corpus_results(data) {
@@ -256,18 +289,22 @@ function corpus_results(data) {
 		return;
 	}
 	var effectSpeed = 100;
-	$('#results').find("p").remove();
+//	$('#results').find("p").remove();
+	$.log("if", $.trim($("#results-table").html()).length, $("#results-table").children.length);
 	if($.trim($("#results-table").html()).length) {
+		$.log("corpus_results again");
 		$("#results").fadeOut(effectSpeed, function() {
 			$("#results-table").empty();
 			corpus_results(data);
 		});
+		return;
 	}
 	else {
 		$("#results").hide();
 	}
-//	$("#sidebar:hidden").show("slide", {direction : "right"}, 400);
-	showSidebar();
+	if($("#sidebar").css("right") == "0px")
+		showSidebar();
+	$.log("corpus_results");
 	
 	var corpus = settings.corpora[getCorpus()];
 	
@@ -308,6 +345,9 @@ function corpus_results(data) {
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);
+	
+	var left = $("#table_scrollarea").scrollLeft(1000).scrollLeft(); 
+	$("#table_scrollarea").scrollLeft(left/2);
 }
 
 

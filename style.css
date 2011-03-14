@@ -189,10 +189,10 @@ table {
 
 /* results*/
 #results {
-	overflow: auto;
-	clear: both;
-	overflow-y: hidden;
-	-ms-overflow-y: hidden;
+/* 	overflow: auto; */
+/* 	clear: both; */
+/* 	overflow-y: hidden; */
+/* 	-ms-overflow-y: hidden; */
 }
 
 #Pagination {
@@ -223,9 +223,21 @@ table {
 	float : left;
 }
 
+#table_scrollarea {
+	
+	overflow: auto; 
+	clear: both;
+	overflow-y: hidden;
+	-ms-overflow-y: hidden;
+	
+}
+
 #results-table {
 	padding-left : 0;
 	margin-left : 0;
+/* 	max-width : 900px; */
+	
+	
 }
 
 #display_word {
@@ -359,3 +371,8 @@ table {
 	margin : 10px 0;
 	font-size: 12px;
 }
+#dialog ol > li {
+	padding : 5px 0;
+	line-height : 18px;	
+}
+

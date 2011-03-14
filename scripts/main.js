@@ -2,15 +2,11 @@ $(function(){
 	$.ajaxSetup({ traditional: true });
 	loadCorpora();
 	resetQuery();
-	$("#query_form").attr("action", settings.cgi_script);
 	
-	$('#num_hits').tooltip('Number of hits');
-
 	$("#tabs-container").tabs();
 	$("#result-container").tabs({
 		show : function() {
 //			this code is here because the tab must be visible to compute the alignment.
-			
 			if($("#result-container").tabs("option", "selected")) {
 				$("#display_word").parent().vAlign();
 				hideSidebar();
@@ -33,7 +29,8 @@ $(function(){
 	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 	
 //	move out sidebar
-	$("#sidebar").hide();
+//	$("#sidebar").hide();
+	hideSidebar();
 	var $autoComplete = $("#simple_text").autocomplete({
 		source: function( request, response ) {
 			$.ajax({
@@ -178,4 +175,8 @@ util.lemgramToString = function(lemgram) {
 	var type = lemgram.split(".")[2].slice(0, 2);
 	return concept + " (" + $.localize.data.locale[type] + ")";
 };
+
+util.isLemgramId = function(lemgram) {
+	return lemgram.search(/\w+\.\.\w+\.\d/) != -1;
+}
 

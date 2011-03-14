@@ -43,6 +43,8 @@ function hideSidebar() {
 	
 }
 function showSidebar() {
+	$.log("showSidebar", $("#sidebar").css("right"));
+//	if($("#sidebar").css("right") == "270px") return;
 	var speed = 400;
 	$("#sidebar").show("slide", {direction : "right"}, speed);
 	$("#left-column").animate({
