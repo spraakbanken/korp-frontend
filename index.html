@@ -196,8 +196,7 @@
 			{{if $index == "lex" && $value != "|"}}
      	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : <span id="sidebar_lex">${$value}</span></p>
 			{{else}}
-     	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : ${$value}</p>
-
+     	 	 <p><span rel="localize[${$index}]">${$item.attrGetter($index)}</span> : ${$value}</p>
 			{{/if}}
 	    </tr>
 		{{/each}}
@@ -222,7 +221,6 @@
 	  </tr>
 	</script>
 	
-	<!-- TODO: nedan är antalet tabellrader att visa hårdkodat, det kan behöva flyttas! -->
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
 		<div>
 		{{if word}}
@@ -236,10 +234,14 @@
 				<td>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
 				<td>${$value.freq}</td>
 				<td id="example_link" 
-					data-head="${$value[$item.wordClass != "av" ? "head" : "dep"]}" 
-					data-dep="${$value[$item.wordClass != "av" ? "dep" : "head"]}" 
+					data-head="${$value['head']}" 
+					data-dep="${$value['dep']}" 
 					data-rel="${$value.rel}" 
-					data-corpus="${$value.corpus.join(",")}" ></td>
+					data-corpus="${$value.corpus.join(",")}"
+					{{if !util.isLemgramId($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}}
+					class="alt_form"
+					{{/if}}
+					></td>
 		    </tr>
 			{{/if}}
 			{{/each}}

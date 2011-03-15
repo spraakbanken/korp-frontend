@@ -190,8 +190,9 @@ function lemgramResult(lemgram, data) {
 	else { // wordclass == av
 		showAttr = "dep";
 	}
-	$.log("showAttr", showAttr);
-	$("#lemgramRowTmpl").tmpl(sortedList, {"showAttr" : showAttr, lemgram : lemgram, wordClass : wordClass}).appendTo("#results-lemgram")
+	$.log("islemgram", lemgram, util.isLemgramId(lemgram), util.isLemgramId(lemgram) ? "" : "ui-state-disabled");
+	$("#lemgramRowTmpl").tmpl(sortedList, {"showAttr" : showAttr, lemgram : lemgram, wordClass : wordClass})
+	.appendTo("#results-lemgram")
 	.addClass("lemgram_result")
 	.find("#example_link").addClass("ui-icon ui-icon-document")
 	.css("cursor", "pointer")
@@ -204,29 +205,20 @@ function lemgramResult(lemgram, data) {
 		var tmpl = '((a:[(%(dep)s) & (deprel = "%(rel)s")] []* [(%(lemgram)s) & (ref = a.dephead)])' + 
 			'| (b:[(%(lemgram)s)] []* [(%(dep)s) & (deprel = "%(rel)s") & (dephead = b.ref)]))';
 		var lemgram_query = $.format('lex contains "%s"', $target.data("head")); 
-		var dep_query = $.format('lex contains "%s"', $target.data("dep")); 
-//		var alt_rel;
+		var dep_query = $.format('lex contains "%s"', $target.data("dep"));
+		
 		if(!util.isLemgramId($target.data("head"))) {
-			lemgram_query = $.format('word=""', $target.data("head").split("_")[0]);
-//			alt_rel = lemgram.split("_")[1].toLowerCase();
+			lemgram_query = $.format('word="%s" & pos = "%s"', $target.data("head").split("_"));
 		}
 		else if(!util.isLemgramId($target.data("dep"))) {
-			dep_query = $.format('word=""', $target.data("dep").split("_")[0]);
+			dep_query = $.format('word="%s" & pos = "%s"', $target.data("dep").split("_"));
 		}
-		
-		
 		
 		var cqp = $.format(tmpl, {
 			lemgram : lemgram_query, 
 			dep : dep_query,  
 			rel : $target.data("rel")
-//			rel : alt_rel || $target.data("rel")
 			});
-//		var cqp = $.format(tmpl, {
-//			lemgram : $.format('%s"%s"', [util.isLemgramId(lemgram) ? "lex contains " : "word=", lemgram]), 
-//			dep : $.format('%s"%s"', [util.isLemgramId($target.data("dep")) ? "lex contains " : "word=", $target.data("dep")]),  
-//			rel : alt_rel || $target.data("rel")
-//		});
 		$.ajax({ url : settings.cgi_script + "?" + $.map($target.data("corpus").split(","), function(item) {return "corpus="+item}).join("&"), 
 			dataType: "jsonp", 
 			data:{
@@ -236,9 +228,6 @@ function lemgramResult(lemgram, data) {
 				end:999,
 				context:'1 sentence',
 				within : "sentence"
-//				rel : $target.data("rel"),
-//				dep : $target.data("dep"),
-//				head : $target.data("head"),
 			},
 			success: function(data) {
 				$.log("success", data);
@@ -255,7 +244,7 @@ function lemgramResult(lemgram, data) {
 						else if(sentence.match.end == (i+1))
 							postfix = "</b>";
 						return prefix + token.word + postfix;
-					}).join(" "));
+					}).join(" ").replace(/\s([\.,])/g, "$1"));
 				}).join("\n");
 				
 				$("<div id='dialog' title='Results'></div>").appendTo("#results-lemgram").append("<ol />")
@@ -268,8 +257,8 @@ function lemgramResult(lemgram, data) {
 		});
 	});
 	
-	$("#display_word").parent().vAlign();
 	$(".lemgram_result").find("tr:gt(15)").remove();
+	$("#display_word").parent().vAlign();
 	util.localize();
 	$('#results-wraper').show();
 }
@@ -335,7 +324,7 @@ function corpus_results(data) {
 							util.SelectionManager.select($(this));
 							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
 							var data = sentence.tokens[offset + clickedWord];
-							updateSidebar(sentence.structs, data);
+							updateSidebar(sentence.structs, data, sentence.corpus);
 						}
 				);
 		

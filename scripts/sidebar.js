@@ -1,18 +1,24 @@
 
 
-function updateSidebar(sentenceData, wordData) {
+function updateSidebar(sentenceData, wordData, corpus) {
 	$.log("updateSidebar");
 	$("#selected_word").empty();
 	$("#selected_sentence").empty();
+	
+	
 	if($("#sidebarTmpl").length > 0)
-		$("#sidebarTmpl").tmpl([wordData], {"header" : "word"}).appendTo("#selected_word");
+		$("#sidebarTmpl").tmpl([wordData], {"header" : "word", "attrGetter" : function(attr) {
+			return settings.corpora[corpus.toLowerCase()].attributes[attr];
+		}}).appendTo("#selected_word");
 	else
-		$.log("sidebartemplate broken");
+		$.error("sidebartemplate broken");
 	
 	if(sentenceData) {
-		$("#sidebarTmpl").tmpl([sentenceData], {"header" : "sentence"}).appendTo("#selected_sentence");
+		$("#sidebarTmpl").tmpl([sentenceData], {"header" : "sentence", attrGetter : function(attr) {
+			return settings.corpora[corpus.toLowerCase()].struct_attributes[attr];
+		}}).appendTo("#selected_sentence");
 	}
-	
+	$("<p />").html("corpus : " + corpus).appendTo("#selected_word");
 	sidebarSaldoFormat();
 	
 	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
@@ -30,7 +36,7 @@ function sidebarSaldoFormat() {
 	.css("list-style", "none")
 	.click(function() {
 		$("#cqp_string").val($.format('[(lex contains "%s")]', $(this).text()));
-		submitFormToServer();
+		selectLemgram($(this).text());
 	});
 }
 

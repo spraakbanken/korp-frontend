@@ -167,16 +167,22 @@ util.getLocaleString = function(key) {
 
 util.localize = function() {
 	$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $("#languages .lang_selected").data("lang")});
-}
+};
 
 util.lemgramToString = function(lemgram) {
-	if(lemgram.search(/\w+\.\.\w+\.\d/) == -1) return lemgram;
-	var concept = lemgram.split(".")[0].replace(/_/g, " ");
-	var type = lemgram.split(".")[2].slice(0, 2);
-	return concept + " (" + $.localize.data.locale[type] + ")";
+	if(util.isLemgramId(lemgram)) {
+		var concept = lemgram.split(".")[0].replace(/_/g, " ");
+		var type = lemgram.split(".")[2].slice(0, 2);
+		return concept + " (" + $.localize.data.locale[type] + ")";
+	}
+	else { // missing from saldo, and have the form word_NN instead.
+		var concept = lemgram.split("_")[0];
+		var type = lemgram.split("_")[1];
+		return concept + " (" + $.localize.data.locale[type] + ")";
+	}
 };
 
 util.isLemgramId = function(lemgram) {
-	return lemgram.search(/\w+\.\.\w+\.\d/) != -1;
-}
+	return lemgram.search(/\.\.\w+\.\d/) != -1;
+};
 
