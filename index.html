@@ -177,7 +177,7 @@
 						<div id="tooltip-container"></div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="sidebar" >	
+					<div id="sidebar" class="ui-corner-all" >	
 						
 						<div id="selected_sentence"></div>
 						
@@ -193,10 +193,10 @@
 		<h4 rel="localize[${$item.header}_attr]"></h4>
 		{{each $data}}
 		<tr>
-			{{if $index == "lex" && $value != "|"}}
-     	 	 <p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span> : <span id="sidebar_lex">${$value}</span></p>
+			{{if ($index == "lex" || $index == "saldo") && $value != "|"}}
+			<p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span>: <span id="sidebar_${$index}">${$value}</span></p>
 			{{else}}
-     	 	 <p><span rel="localize[${$index}]">${$item.attrGetter($index)}</span> : ${$value}</p>
+			<p><span rel="localize[${$index}]">${$item.attrGetter($index)}</span>: ${$value}</p>
 			{{/if}}
 	    </tr>
 		{{/each}}
@@ -229,7 +229,7 @@
 		<table>
 			{{each $data}}
 			
-			{{if ($item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0])}}
+			{{if $item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0]}}
 			<tr>
 				<td>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
 				<td>${$value.freq}</td>
@@ -249,6 +249,5 @@
 		{{/if}}
 		</div>
 	</script>
-	
 	</body>
  </html>

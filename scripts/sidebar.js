@@ -27,17 +27,34 @@ function updateSidebar(sentenceData, wordData, corpus) {
 function sidebarSaldoFormat() {
 	
 	var $lex = $("#sidebar_lex"); 
-	var idArray = $.grep($lex.text().split("|"), Boolean);
+	var $saldo = $("#sidebar_saldo"); 
+	var idArray = $.grep($lex.text().split("|"), Boolean).sort();
+	var saldoidArray = $.grep($saldo.text().split("|"), Boolean).sort();
 	$.log("idArray", idArray);
+	var labelArray = util.lemgramArraytoString(idArray);
+	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
+		var infixIndex = "";
+		if(appendIndex)
+			infixIndex = $.format("<sup>%s</sup>", saldoId.slice(-1));
+		return $.format("%s%s", [saldoId.split(".")[0], infixIndex]);
+	});
 	
-	$lex.html($.arrayToHTMLList(idArray))
+	$lex.html($.arrayToHTMLList(labelArray))
 	.find("li")
 	.wrap("<a href='javascript:void(0)' />")
-	.css("list-style", "none")
 	.click(function() {
-		$("#cqp_string").val($.format('[(lex contains "%s")]', $(this).text()));
+		var i = $.inArray($(this).text(), labelArray);
+		
+		$("#cqp_string").val($.format('[(lex contains "%s")]', idArray[i]));
 		selectLemgram($(this).text());
 	});
+	$saldo.html($.arrayToHTMLList(saldolabelArray))
+	.find("li")
+	.each(function(i, item){
+		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", saldoidArray[i]));
+	});
+	
+	
 }
 
 function hideSidebar() {
@@ -54,7 +71,7 @@ function showSidebar() {
 	var speed = 400;
 	$("#sidebar").show("slide", {direction : "right"}, speed);
 	$("#left-column").animate({
-		right : 270
+		right : 273
 	}, speed);
 	
 }

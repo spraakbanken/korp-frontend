@@ -8,18 +8,10 @@
 		return $($.format("<%s/>", listType)).append(lis);
 	};
 	
-	$.objToArray = function(obj, shallow) {
+	$.objToArray = function(obj) {
 		var output = [];
 		$.each(obj, function(k, v) {
-			//		  if(!shallow && $.isPlainObject(v))
-			//			  output.push([k, $.objToArray(v, shallow)]);
-			//		  else if(!shallow && $.isArray(v))
-			//			  output.push([k, $.map(v, function(i, item) {
-			//				  return $.objToArray(item, shallow);
-			//			  })]);
-			//		  else
 			output.push([ k, v ]);
-
 		});
 		return output;
 	};
@@ -42,3 +34,44 @@
 		});
 	};
 })(jQuery);
+
+/*
+ * jQuery UI Autocomplete HTML Extension
+ *
+ * Copyright 2010, Scott González (http://scottgonzalez.com)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ *
+ * http://github.com/scottgonzalez/jquery-ui-extensions
+ */
+(function( $ ) {
+
+var proto = $.ui.autocomplete.prototype,
+	initSource = proto._initSource;
+
+function filter( array, term ) {
+	var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
+	return $.grep( array, function(value) {
+		return matcher.test( $( "<div>" ).html( value.label || value.value || value ).text() );
+	});
+}
+
+$.extend( proto, {
+	_initSource: function() {
+		if ( this.options.html && $.isArray(this.options.source) ) {
+			this.source = function( request, response ) {
+				response( filter( this.options.source, request.term ) );
+			};
+		} else {
+			initSource.call( this );
+		}
+	},
+
+	_renderItem: function( ul, item) {
+		return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( $( "<a></a>" )[ this.options.html ? "html" : "text" ]( item.label ) )
+			.appendTo( ul );
+	}
+});
+
+})( jQuery );

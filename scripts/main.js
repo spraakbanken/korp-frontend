@@ -1,5 +1,16 @@
 $(function(){
-	$.ajaxSetup({ traditional: true });
+	$.ajaxSetup({ 
+		traditional: true,
+		beforeSend : function() {
+			$.log("send")
+//			$("*").css("cursor", "progress");
+		},
+		complete : function() {
+			$.log("complete")
+//			$("*").css("cursor", "auto");
+		}
+		
+		});
 	loadCorpora();
 	resetQuery();
 	
@@ -32,6 +43,7 @@ $(function(){
 //	$("#sidebar").hide();
 	hideSidebar();
 	var $autoComplete = $("#simple_text").autocomplete({
+		html : true,
 		source: function( request, response ) {
 			$.ajax({
 				url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + request.term,
@@ -41,9 +53,10 @@ $(function(){
 						return first.length - second.length ;
 					});
 					$.log("success", lemArray);
+					var labelArray = util.lemgramArraytoString(lemArray);
 					var listItems = $.map(lemArray, function(item, i) {
 						return {
-							label : util.lemgramToString(item),
+							label : labelArray[i],
 							value : item,
 							input : request.term
 						};
@@ -107,6 +120,7 @@ $(function(){
 //	lemgramResult("f\u00f6rs\u00f6rja..vb.1", dummyData.relations);
 //	
 //	$("#result-container").tabs("select", 2);
+	$("#simple_text")[0].focus();
 });
 
 function selectLemgram(lemgram) {
@@ -169,17 +183,33 @@ util.localize = function() {
 	$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $("#languages .lang_selected").data("lang")});
 };
 
-util.lemgramToString = function(lemgram) {
+util.lemgramToString = function(lemgram, appendIndex) {
 	if(util.isLemgramId(lemgram)) {
+		var infixIndex = "";
+		if(appendIndex)
+			infixIndex = $.format("<sup>%s</sup>", lemgram.split(".").slice(-1));
 		var concept = lemgram.split(".")[0].replace(/_/g, " ");
 		var type = lemgram.split(".")[2].slice(0, 2);
-		return concept + " (" + $.localize.data.locale[type] + ")";
+		return $.format("%s%s (%s)", [concept, infixIndex, $.localize.data.locale[type]]);
 	}
 	else { // missing from saldo, and have the form word_NN instead.
 		var concept = lemgram.split("_")[0];
 		var type = lemgram.split("_")[1];
 		return concept + " (" + $.localize.data.locale[type] + ")";
 	}
+};
+
+util.lemgramArraytoString = function(lemgramArray, labelFunction) {
+	labelFunction = labelFunction || util.lemgramToString;
+	var tempArray = $.map(lemgramArray, function(lemgram){
+		return lemgram.slice(0,-1);
+	});
+	return $.map(lemgramArray, function(lemgram) {
+		var isAmbigous = $.grep(tempArray, function(tempLemgram) {
+			return tempLemgram == lemgram.slice(0, -1);
+		}).length > 1;
+		return labelFunction(lemgram, isAmbigous);
+	});
 };
 
 util.isLemgramId = function(lemgram) {

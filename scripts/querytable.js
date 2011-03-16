@@ -18,6 +18,7 @@ function submitForm() {
 }
 
 function onSimpleChange() {
+	$.log("onSimpleChange");
 	var val;
 	var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
 	if(lemgram) { // if the input is a lemgram, do semantic search.
@@ -319,6 +320,7 @@ function regescape(s) {
 }
 
 function updateCQP() {
+	
     var query = "";
     var nr_lines = 2;
     var main_corpus_lang = "";
@@ -343,7 +345,8 @@ function updateCQP() {
         }
         query += cqpRow(this);
     });
-    $("#cqp_string").text(query).attr("rows", nr_lines);
+    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
+    $("#cqp_string").val(query).attr("rows", nr_lines);
     $("#corpus_id").val(main_corpus_lang);
 }
 

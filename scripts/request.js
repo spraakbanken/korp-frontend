@@ -78,6 +78,7 @@ function setJsonLink(data){
 
 function onSubmit(evt) {
 	var currentVisible = $("#tabs-container > div:visible");
+	$.log("onSubmit", currentVisible)
 	switch(currentVisible.attr("id")) {
 	case "korp-simple":
 		onSimpleChange();
@@ -161,7 +162,7 @@ function lemgramResult(lemgram, data) {
 	var relMapping = {};
 	var sortedList = [];
 	$.each(data, function(index, item) {
-		var toIndex = order[wordClass].indexOf(item.rel);
+		var toIndex = $.inArray(item.rel, order[wordClass]);
 		if(toIndex == -1) {
 			$.log("getting rel index failed for " + item.rel);
 			return;
@@ -178,20 +179,13 @@ function lemgramResult(lemgram, data) {
 			});
 		}
 	});
-	var toIndex = order[wordClass].indexOf("_");
+	var toIndex = $.inArray("_", order[wordClass]);
 	sortedList.splice(toIndex, 0, {"word" : util.lemgramToString(lemgram).split(" ")[0]});
 	sortedList = $.grep ( sortedList, function(item, index){
 		return Boolean(item);
 	});
-	var showAttr;
-	if($.inArray(wordClass, ["vb", "nn"]) != -1) {
-		showAttr = "head";
-	}
-	else { // wordclass == av
-		showAttr = "dep";
-	}
-	$.log("islemgram", lemgram, util.isLemgramId(lemgram), util.isLemgramId(lemgram) ? "" : "ui-state-disabled");
-	$("#lemgramRowTmpl").tmpl(sortedList, {"showAttr" : showAttr, lemgram : lemgram, wordClass : wordClass})
+	
+	$("#lemgramRowTmpl").tmpl(sortedList, {lemgram : lemgram, wordClass : wordClass})
 	.appendTo("#results-lemgram")
 	.addClass("lemgram_result")
 	.find("#example_link").addClass("ui-icon ui-icon-document")
