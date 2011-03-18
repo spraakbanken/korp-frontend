@@ -4,9 +4,41 @@
 }
 
 body {
-	font-family : Verdana,sans-serif;
-	font-size: 0.8em;
+	font-family : Helvetica, Arial, Verdana, sans-serif;
+	font-size: 13px;
 }
+
+.ui-widget {
+	font-family : inherit; 
+}
+
+a {
+	text-decoration: none;
+}
+a:link {color:navy;}      /* unvisited link */
+a:visited {color:purple;}  /* visited link */
+a:hover {color:red;}  /* mouse over link */
+
+.color_blue {
+	background-color : #D0D7F0;
+}
+.color_purple {
+	background-color : #F7D1E4;
+}
+.color_green {
+	background-color : #EDFCD5;
+}
+.color_yellow {
+	background-color : #FFF3D8;
+}
+.color_azure {
+	background-color : #CAEEE8;
+}
+.color_red {
+	background-color : #FFDDD8;
+}
+
+
 #content > div  {
 	margin-bottom: 8px;
 }
@@ -66,17 +98,18 @@ h1 {
 
 
 .lang_selected {
-	color : navy;	
+	color : black;	
 }
 
 #languages {
 	float: right;
 	margin-left: 30px;
 	list-style: none;
+	color : navy;
 }
 #languages li {
-	cursor: pointer;
-	margin : 0 0;	
+	margin : 0 0;
+	cursor : pointer;
 }
 
 .select_operation .select_language {
@@ -100,6 +133,22 @@ h1 {
 
 #tabs-container {
 	margin-top: -20px;
+}
+
+#korp-simple > div {
+	float : left;
+}
+
+#similar_lemgrams {
+	width: 40%;
+	margin-left : 15px;
+	
+}
+
+#similar_lemgrams a {
+	padding-right : 5px;
+	float : left;
+	font-size : 12px;
 }
 
 .ui-tabs .ui-tabs-nav li a {
@@ -220,9 +269,28 @@ table {
 #results-lemgram {
 	overflow:auto
 }
-#results-lemgram > div {
-	float : left;
+#lemgram_help {
+	float : none;
+	margin-left : 35px;
+	margin-top : 10px;
+	margin-bottom : 20px;
 }
+#lemgram_help > span {
+	padding : 10px 10px;
+}
+.lemgram_result {
+	float : left;
+	padding-top : 4px;
+	padding-bottom : 5px;
+	padding-left : 5px;
+	padding-right : 2px;
+}
+
+.lemgram_result table{
+	padding : 0 0;
+	margin : 0 0;
+}
+
 
 #table_scrollarea {
 	
@@ -266,6 +334,7 @@ table {
 .match {
 	font-weight: bold;
 	vertical-align: text-top;
+	text-align : center;
 }
 
 .right {
@@ -351,8 +420,7 @@ table {
 	border-color: #999;
 	#border-right-color:#fff;
 	padding: 5px 0px 5px 5px;
-	#border-top-right-radius: 0px;
-	#border-bottom-right-radius: 0px;
+	border-radius : 4px;
 	margin-right : 8px;
 	margin-left : 8px;
 }
@@ -380,4 +448,5 @@ table {
 	padding : 5px 0;
 	line-height : 18px;	
 }
+
 

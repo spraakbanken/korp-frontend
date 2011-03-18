@@ -34,7 +34,7 @@ function sidebarSaldoFormat() {
 	var labelArray = util.lemgramArraytoString(idArray);
 	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
 		var infixIndex = "";
-		if(appendIndex)
+		if(appendIndex != null && saldoId.slice(-1) != "1")
 			infixIndex = $.format("<sup>%s</sup>", saldoId.slice(-1));
 		return $.format("%s%s", [saldoId.split(".")[0], infixIndex]);
 	});
@@ -45,8 +45,7 @@ function sidebarSaldoFormat() {
 	.click(function() {
 		var i = $.inArray($(this).text(), labelArray);
 		
-		$("#cqp_string").val($.format('[(lex contains "%s")]', idArray[i]));
-		selectLemgram($(this).text());
+		simpleSearch.selectLemgram(idArray[i]);
 	});
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")

@@ -16,6 +16,7 @@
 	"loading" : "Hämtar...",
 	"autocomplete_header" : "är en ordform i",
 	"no_lemgram_results" : "Hittade inga förekomster.",
+	"similar_header" : "Relaterade ord",
 	"search" : "   Sök   ",
 	"hits_per_page" : "Träffar per sida",
 	"num_results" : "Antal resultat",
@@ -82,18 +83,27 @@
 	"al" : "artikel", 
 	"ie" : "infinitivmärke",
 	
-	"SS" : "Subject",
-	"IO" : "Object",
-	"OO" : "Object",
-	"OA" : "Object",
-	"RA" : "Object",
-	"TA" : "Object",
-	"AT" : "Object",
-	"ET" : "Object",
-	
 	"dep" : "Depentent",
 	"sources" : "Exempel",
 	"head" : "Head",
-	"freq" : "Frequency"
+	"freq" : "Frequency",
+	
+	"malt_AT" : "Nominal (adjectival) pre-modifier",
+	"malt_ET" : "Other nominal post-modifier",
+	"malt_IO" : "Indirect object",
+	"malt_OA" : "Object adverbial",
+	"malt_OO" : "Direct object",
+	"malt_RA" : "Place adverbial",
+	"malt_SS" : "Subject",
+	"malt_TA" : "Time adverbial",
+	
+	"tooltip_AT" : "Där vi beskriver funktionen hos AT",
+	"tooltip_ET" : "Där vi beskriver funktionen hos ET",
+	"tooltip_IO" : "Där vi beskriver funktionen hos IO",
+	"tooltip_OA" : "Där vi beskriver funktionen hos OA",
+	"tooltip_OO" : "Där vi beskriver funktionen hos OO",
+	"tooltip_RA" : "Där vi beskriver funktionen hos RA",
+	"tooltip_SS" : "Där vi beskriver funktionen hos SS",
+	"tooltip_TA" : "Där vi beskriver funktionen hos TA"
     
 }

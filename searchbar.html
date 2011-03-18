@@ -1,0 +1,127 @@
+            <input name="command" value="query" type="hidden"></input>
+            <input name="corpus" id="corpus" type="hidden"></input>
+            <input name="cqp" id="cqp" type="hidden"></input>
+            
+            <div id="tabs-container">
+            
+                <ul>
+                    <li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+                    <li ><a href="#korp-extended" rel="localize[detailed]">Detaljerad</a></li>
+                    <li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
+                </ul>
+                
+                <div id="korp-simple">
+                    <div class="ui-widget">
+                        <span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> 
+                        <div>
+	                        <span rel="localize[in_corpus]">i</span>
+	                        <select class="select_corpus" onchange="didSelectCorpus()"></select>
+                        </div>
+                    </div> 
+                    <div id="similar_lemgrams"></div>
+                    <div style="float : none; clear : both;"></div>
+                </div>
+                
+                <div id="korp-extended">                    
+                    <div id="simple">
+                        <table class="query_header"><tbody><tr>
+                            <td>
+                                <strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
+                                <select class="select_corpus" onchange="didSelectCorpus()"></select>
+                            </td>       
+                        </tr></tbody></table>
+                        <div id="simple_query">
+                            <div id="query_table">
+                            <div class="query_row line_above">
+                            <img style="display: none;" class="image_button remove_row" src="img/minus.png">
+                                <!--  container for language selector -->
+                            <table class="query_token">
+                                <tbody>
+                                    <tr class="query_arg">
+                                        <td><select style="width: 59px;" class="arg_type">
+                                            <optgroup label="ord">
+                                                <option selected="selected" value="word">ordet är</option>
+                                                <option value="notword">ordet är inte</option>
+                                                <option value="beginswith">börjar med</option>
+                                                <option value="endswith">slutar med</option>
+                                                <option value="regexp">reguljärt uttryck</option>
+                                            </optgroup>
+                                            <optgroup label="ordklass">
+                                                <option value="pos">ordklassen är</option>
+                                                <option value="msd">ordklassen börjar med</option>
+                                            </optgroup>
+                                            <optgroup label="intervall">
+                                                <option value="max">upp till</option>
+                                                <option value="min">minst</option>
+                                            </optgroup>
+                                        </select><input id="query_input" class="arg_value" type="text" /></td>
+                                        <td><img style="visibility: hidden;"
+                                            class="image_button remove_arg" src="img/minus.png"><img
+                                            class="image_button insert_arg" src="img/plus.png"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <img class="image_button insert_token" src="img/plus.png"></div>
+                            </div>
+                            <div class="buttons_row"><span id="buttons_row"><img
+                                style="visibility: hidden;" class="image_button remove_row"
+                                src="img/minus.png"><img class="image_button insert_row"
+                                src="img/plus.png"></span> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="korp-advanced">
+                    <div id="advanced">
+                        <div class="query_footer">
+                            <span class="cqp_toggle" rel="localize[cqp_query]">
+                                Fullständig CQP-fråga
+                            </span>:
+                            <select class="select_corpus" onchange="didSelectCorpus()"></select>
+                            <textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
+                        </div>
+                    </div>
+                </div>
+                <input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
+            </div>
+            
+            <div id="results-wraper">
+                <div id="columns" >
+                    <div id="left-column" >
+                        <div id="result-container">
+                            <ul>
+                                <li class="on"><a href="#results">KWIC</a></li>
+                                <li style="display:none;"><a href="#results-sentence">Mening</a></li>
+                                <li ><a href="#results-lemgram">Ordbild</a></li>
+                            </ul>
+                            <div id="results">
+                                <a name="results"></a>
+                                    <div id="result_controls">
+                                       <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+                                       <input name="num_hits" id="num_hits" size="3" value="25" type="number"></div> 
+                                       <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
+                                       <div style="clear : both; float : none;" ></div>
+                                   </div>
+                                <div id="pager-wraper">
+                                    <div class="pagination" id="Pagination"></div>
+                                </div>
+                                <div id="table_scrollarea">
+                                    <table id="results-table" class="result_table"></table>
+                                </div>
+                            </div>
+                            <div id="results-sentence"></div>
+                            <div id="results-lemgram">
+                            </div>
+                        </div>
+                        <div id="tooltip-container"></div>
+                        <a id="json-link" href="#"><img src="img/json.png" /></a>
+                    </div>
+                    <div id="sidebar" > 
+                        
+                        <div id="selected_sentence"></div>
+                        
+                        <div id="selected_word"></div>
+                    </div>
+                </div>
+            </div>

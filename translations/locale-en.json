@@ -16,6 +16,7 @@
 	"loading" : "Searching...",
 	"autocomplete_header" : "is a word form in",
 	"no_lemgram_results" : "No examples found.",
+	"similar_header" : "Similar concepts",
 	"search" : "Search",
 	"hits_per_page" : "Hits per page",
 	"num_results" : "Results",
@@ -82,17 +83,27 @@
 	"al" : "article", 
 	"ie" : "infinitive particle",
 	
-	"SS" : "Subject",
-	"IO" : "Object",
-	"OO" : "Object",
-	"OA" : "Object",
-	"RA" : "Object",
-	"TA" : "Object",
-	"AT" : "Object",
-	"ET" : "Object",
 	
 	"dep" : "Depentent",
 	"sources" : "Examples",
 	"head" : "Head",
-	"freq" : "Frequency"
+	"freq" : "Frequency",
+
+	"malt_AT" : "Nominal (adjectival) pre-modifier",
+	"malt_ET" : "Other nominal post-modifier",
+	"malt_IO" : "Indirect object",
+	"malt_OA" : "Object adverbial",
+	"malt_OO" : "Direct object",
+	"malt_RA" : "Place adverbial",
+	"malt_SS" : "Subject",
+	"malt_TA" : "Time adverbial",
+
+	"tooltip_AT" : "Wherein which we explain the function of AT",
+	"tooltip_ET" : "Wherein which we explain the function of ET",
+	"tooltip_IO" : "Wherein which we explain the function of IO",
+	"tooltip_OA" : "Wherein which we explain the function of OA",
+	"tooltip_OO" : "Wherein which we explain the function of OO",
+	"tooltip_RA" : "Wherein which we explain the function of RA",
+	"tooltip_SS" : "Wherein which we explain the function of SS",
+	"tooltip_TA" : "Wherein which we explain the function of TA"
 }

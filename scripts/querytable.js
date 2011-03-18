@@ -18,7 +18,6 @@ function submitForm() {
 }
 
 function onSimpleChange() {
-	$.log("onSimpleChange");
 	var val;
 	var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
 	if(lemgram) { // if the input is a lemgram, do semantic search.
