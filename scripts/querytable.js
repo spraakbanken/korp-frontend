@@ -223,9 +223,7 @@ function initSearch(){
 //			if($("#korp-extended:visible").length)
 //				updateCQP();
 //			submitFormToServer();
-			if ( $("#simple_text").is(":visible" )) {
-				$("#simple_text").autocomplete("close");
-			}
+			$("#simple_text:visible").autocomplete("close");
 			$("#sendBtn").click();
 		}
 	});

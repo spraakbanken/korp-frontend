@@ -67,7 +67,7 @@ view.SimpleSearch = function() {
 			$("<select id='lemgram_select' />").appendTo("#korp-simple")
 			.html(optionElems.join(""))
 			.change(function(){
-				selectLemgram($(this).val());
+				self.selectLemgram($(this).val());
 			})
 			.val(selectedItem);
 			
@@ -77,7 +77,7 @@ view.SimpleSearch = function() {
 			event.preventDefault();
 		}
 	});
-//	this.selectLemgram("form..nn.1");
+//	this.selectLemgram("ge..vb.1");
 };
 
 view.SimpleSearch.prototype = {
@@ -86,6 +86,7 @@ view.SimpleSearch.prototype = {
 			var self = this;
 			var corpus = getCorpus() == "all" ? getAllCorpora() : getCorpus().toUpperCase();
 			$("#similar_lemgrams").empty();
+			$("#result-container").tabs("option", "disabled", []);
 			$.ajax({
 				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi",
 				dataType: "jsonp",
@@ -101,7 +102,7 @@ view.SimpleSearch.prototype = {
 						self.renderResults(lemgram, data.relations);
 					}
 					else {
-						$("#results-lemgram").append($.format("<p><i>%s</i></p>", util.getLocaleString("no_lemgram_results")));
+						$("#results-lemgram").append($.format("<p><i rel='no_lemgram_results'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
 					}
 				}
 			});
@@ -145,6 +146,13 @@ view.SimpleSearch.prototype = {
 						bodyHandler : function() {
 							return util.getLocaleString("tooltip_" + $(this).text());
 						}
+					})
+					.mouseenter(function(event) {
+						$.log("hover", $(this).index() );
+//						$.log("hover", $format(".lemgram_result:nth(%s)", $(this).index()) );
+						$(".lemgram_result." + $(this).attr("class")).fadeTo("fast", 0.5, function() {
+							$(this).fadeTo("fast", 1);
+						});
 					});
 					$(this).addClass(color);
 				}
@@ -251,7 +259,8 @@ view.SimpleSearch.prototype = {
 							}).join(" ").replace(/\s([\.,])/g, "$1"));
 						}).join("\n");
 						
-						$("<div id='dialog' title='Results'></div>").appendTo("#results-lemgram").append("<ol />")
+						$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
+						.appendTo("#results-lemgram").append("<ol />")
 						.dialog({
 							width : 600,
 							height : 500
@@ -263,7 +272,7 @@ view.SimpleSearch.prototype = {
 			
 			this.renderHeader();
 			util.localize();
-			this.centerLemgramLabel();
+//			this.centerLemgramLabel();
 			$('#results-wraper').show();
 		},
 		
@@ -271,5 +280,4 @@ view.SimpleSearch.prototype = {
 			$("#display_word").parent().css("margin-top", $(".lemgram_result").first().height()/2);
 		}
 		
-
 };

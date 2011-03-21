@@ -21,8 +21,8 @@ $(function(){
 		
 		$("#tabs-container").tabs();
 		$("#result-container").tabs({
+			disabled : [2],
 			show : function() {
-//			this code is here because the tab must be visible to compute the alignment.
 				if($("#result-container").tabs("option", "selected")) {
 					//simpleSearch.centerLemgramLabel();
 					hideSidebar();

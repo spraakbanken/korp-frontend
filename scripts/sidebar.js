@@ -46,11 +46,23 @@ function sidebarSaldoFormat() {
 		var i = $.inArray($(this).text(), labelArray);
 		
 		simpleSearch.selectLemgram(idArray[i]);
+	})
+	.hover(function(){
+		$("<span style='display : inline-block; margin-bottom : -3px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
+		
+	}, function() {
+		$(".ui-icon").remove();
 	});
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
 	.each(function(i, item){
 		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", saldoidArray[i]));
+	})
+	.hover(function(){
+		$("<span style='display : inline-block; margin-bottom : -3px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
+		
+	}, function() {
+		$(".ui-icon").remove();
 	});
 	
 	
@@ -65,8 +77,6 @@ function hideSidebar() {
 	
 }
 function showSidebar() {
-	$.log("showSidebar", $("#sidebar").css("right"));
-//	if($("#sidebar").css("right") == "270px") return;
 	var speed = 400;
 	$("#sidebar").show("slide", {direction : "right"}, speed);
 	$("#left-column").animate({

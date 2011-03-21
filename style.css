@@ -363,12 +363,12 @@ table {
 	border-width: 0px;
 }
 
-.token_hover {
-	color: red;
-}
-
 .word {
 	cursor: pointer;	
+}
+
+.word:hover {
+	color: red;
 }
 
 .token_selected {
@@ -385,11 +385,6 @@ table {
 #result-container {
 	clear: both;
 }
-
-/*.lemgram_result td {*/
-/*	padding-left : 10px;*/
-/*	padding-right : 10px;*/
-/*}*/
 
 #json-link {
 	float: right;
