@@ -375,7 +375,11 @@ table {
 	color: #fff;
 	background-color: #666;
 	border-radius: 10px;
-	moz-border-radius: 10px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 20px;
+
 	padding-left: 3px;
 	padding-right: 3px;
 	margin-left: -3px;
