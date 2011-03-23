@@ -244,8 +244,8 @@ function initSearch(){
 	
 	var saldo = $.getUrlVar('saldo');
 	if (saldo && saldo.length != 0){
-		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
-		$('a[href="#korp-advanced"]').trigger('click');
+		$("#cqp_string").val('[(saldo contains "'+decodeURIComponent(saldo)+'")]');
+		//$('a[href="#korp-advanced"]').trigger('click');
 		submitFormToServer();
 	}
 	
