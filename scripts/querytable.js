@@ -261,7 +261,7 @@ function initSearch(){
 
 function setSelectWidth(select) {
 	//abort if browser is ie7 or older
-	if($.browser.msie && parseInt($.browser.version, 10) <= 7){return 0;}
+	if($.browser.msie == true && parseInt($.browser.version, 10) <= 7){return 0;}
 	var text = $(select).find(":selected").text();
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
         .appendTo("body")
