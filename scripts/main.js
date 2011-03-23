@@ -117,3 +117,9 @@ util.isLemgramId = function(lemgram) {
 	return lemgram.search(/\.\.\w+\.\d/) != -1;
 };
 
+util.corpusArrayToQuery = function(corpusArray) {
+	return $.map(corpusArray, function(item) {
+		return "corpus="+item.toUpperCase();
+		}).join("&");
+};
+

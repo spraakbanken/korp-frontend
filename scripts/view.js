@@ -86,16 +86,16 @@ view.SimpleSearch.prototype = {
 		
 		selectLemgram : function(lemgram) {
 			var self = this;
-			var corpus = getCorpus() == "all" ? getAllCorpora() : getCorpus().toUpperCase();
+//			var corpus = getCorpus() == "all" ? getAllCorpora() : getCorpus().toUpperCase();
+			var corpus = getSelectedCorpora();
 			$("#similar_lemgrams").empty();
 			$("#similar_lemgrams").show();
 			$("#result-container").tabs("option", "disabled", []);
 			$.ajax({
-				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi",
+				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi?" + util.corpusArrayToQuery(corpus),
 				dataType: "jsonp",
 				data : {
 					command : "relations",
-					corpus : corpus,
 					lemgram : lemgram
 				},
 				success : function(data) {

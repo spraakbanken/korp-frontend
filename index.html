@@ -12,6 +12,7 @@
 		<title>Korp</title>
 		
 		<script type="text/javascript" src="lib/jquery.js"></script>
+		<script type="text/javascript" src="lib/raphael-min.js"></script>
 		
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js" ></script>
@@ -36,6 +37,7 @@
 		<script type="text/javascript" src="lib/jquery.dump.js"></script>
 		<script type="text/javascript" src="lib/jquery.format.js"></script>
 		<script type="text/javascript" src="lib/jquery.localize.js"></script>
+		<script type="text/javascript" src="lib/jquery.raphael.spinner.js"></script>
 		<script>
 			$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations"});
 			var language = $.localize.data.locale;
@@ -111,7 +113,7 @@
 			</div>
 		</div>
 		
-		<img id="preloader" src="img/preloader.gif" style="display : none;"></img>
+		<div id="preloader"></div>
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
