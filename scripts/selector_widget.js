@@ -14,15 +14,15 @@ var hp_corpusChooser = {
 			this._transform();
 			
 			// Make the popup disappear when the user clicks outside it
-			/*$(window).unbind('click.korpen2');
-			$(window).bind('click.korpen2', function(e) {
+			$(window).unbind('click.corpusselector');
+			$(window).bind('click.corpusselector', function(e) {
 				var disp = $(".popupchecks").css("display");
 				if(disp != "none" && e.target != self) {
 					$(".popupchecks").fadeOut('fast');
 					$(".hp_topframe").removeClass("ui-corner-top");
 					$(".hp_topframe").addClass("ui-corner-all");
 				}
-			});*/
+			});
 			
 			$('.buttonlink, ul#icons li').hover(
 				function() { $(this).addClass('ui-state-hover'); }, 
