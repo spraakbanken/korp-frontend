@@ -1,5 +1,5 @@
 
-function submitForm() {
+/*function submitForm() {
     var corpus = getCorpus();
 	
     var cqp = $("#cqp_string").val();
@@ -15,7 +15,7 @@ function submitForm() {
             );
         }
     }
-}
+} */
 
 function onSimpleChange() {
 	var val;
@@ -48,30 +48,51 @@ function didSelectCorpus() {
 }
 
 function getCorpus() {
-	return $("#tabs-container").children("div:visible").find("select").val();
+	//return $("#tabs-container").children("div:visible").find("select").val();
+	
+	/* DEN HÄR FUNKTIONEN BÖR TAS BORT OCH ERSÄTTAS HELT MED getSelectedCorpora, MEN
+	   DEN ANROPAS PÅ FLERA STÄLLEN AV KOD SOM ÄR TÄNKT ATT HANTERA PARALLELLKORPUSAR
+	   FÖR TILLFÄLLET RETURNERAS DEN FÖRSTA KORPUSEN FRÅN getSelectedCorpora */
+	   
+	return getSelectedCorpora()[0];
 }
 
 
 function loadCorpora() {
+	var outStr;
+	outStr = "<ul>";
 	for (var val in settings.corpora) {
-    	$('.select_corpus').append(
-    	        $('<option></option>').val(val).html(settings.corpora[val].title) 
-    	 );
-    	
+		/* TA BORT START */
+    	/* $('.select_corpus').append(
+    	        $('<option></option>').val(val).html(settings.corpora[val].title)
+    	 ); */
+    	/* TA BORT SLUT */
+    	 
+    	// SO FAR NON-HIERARCHICAL
+    	outStr += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
+   
     	//gets all the unique attributes to the all-corpora settings
-    	settings.corpora.all.attributes = jQuery.extend(settings.corpora.all.attributes, settings.corpora[val].attributes);
+    	//settings.corpora.all.attributes = jQuery.extend(settings.corpora.all.attributes, settings.corpora[val].attributes);
     };
+    outStr += "</ul>";
     
+    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, allSelectedString : 'All corpuses selected'});
 }
 
-function getAllCorpora(){
+/* Returns an array of all the selected corpora's IDs in uppercase */
+function getSelectedCorpora() {
+	var selectedOnes = corpusChooserInstance.corpusChooser("selectedItems");
+	return selectedOnes;
+}
+
+/* function getAllCorpora(){
 	var res = [];
 	$.each(settings.corpora, function(key,val){
 		if(key != 'all')
 			res.push(key.toUpperCase());
 	});
 	return res;
-}
+} */
 
 
 function resetQuery() {
@@ -223,7 +244,9 @@ function initSearch(){
 //			if($("#korp-extended:visible").length)
 //				updateCQP();
 //			submitFormToServer();
-			$("#simple_text:visible").autocomplete("close");
+			if ( $("#simple_text").is(":visible" )) {
+				$("#simple_text").autocomplete("close");
+			}
 			$("#sendBtn").click();
 		}
 	});
@@ -244,8 +267,8 @@ function initSearch(){
 	
 	var saldo = $.getUrlVar('saldo');
 	if (saldo && saldo.length != 0){
-		$("#cqp_string").val('[(saldo contains "'+decodeURIComponent(saldo)+'")]');
-		//$('a[href="#korp-advanced"]').trigger('click');
+		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
+		$('a[href="#korp-advanced"]').trigger('click');
 		submitFormToServer();
 	}
 	
@@ -268,7 +291,7 @@ function initSearch(){
 
 function setSelectWidth(select) {
 	//abort if browser is ie7 or older
-	if($.browser.msie == true && parseInt($.browser.version, 10) <= 7){return 0;}
+	if($.browser.msie && parseInt($.browser.version, 10) <= 7){return 0;}
 	var text = $(select).find(":selected").text();
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
         .appendTo("body")

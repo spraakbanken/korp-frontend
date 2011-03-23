@@ -13,10 +13,10 @@
                 <div id="korp-simple">
                     <div class="ui-widget">
                         <span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> 
-                        <div>
+                        <!--<div>
 	                        <span rel="localize[in_corpus]">i</span>
 	                        <select class="select_corpus" onchange="didSelectCorpus()"></select>
-                        </div>
+                        </div>-->
                     </div> 
                     <div id="similar_lemgrams"></div>
                     <div style="float : none; clear : both;"></div>
@@ -24,12 +24,12 @@
                 
                 <div id="korp-extended">                    
                     <div id="simple">
-                        <table class="query_header"><tbody><tr>
+                        <!--<table class="query_header"><tbody><tr>
                             <td>
                                 <strong rel="localize[corpus]">Korpus</strong><strong>:</strong> 
                                 <select class="select_corpus" onchange="didSelectCorpus()"></select>
                             </td>       
-                        </tr></tbody></table>
+                        </tr></tbody></table>-->
                         <div id="simple_query">
                             <div id="query_table">
                             <div class="query_row line_above">
@@ -78,7 +78,7 @@
                             <span class="cqp_toggle" rel="localize[cqp_query]">
                                 Fullständig CQP-fråga
                             </span>:
-                            <select class="select_corpus" onchange="didSelectCorpus()"></select>
+                            <!--<select class="select_corpus" onchange="didSelectCorpus()"></select>-->
                             <textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
                         </div>
                     </div>

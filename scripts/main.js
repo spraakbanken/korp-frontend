@@ -5,6 +5,8 @@ $(function(){
 	$.ajaxSetup({ 
 		traditional: true
 		});
+		
+		
 	$("#content").load("searchbar.html", function() {
 		$.log("content load");
 		loadCorpora();
