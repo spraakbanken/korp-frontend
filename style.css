@@ -19,6 +19,10 @@ a:link {color:navy;}      /* unvisited link */
 a:visited {color:purple;}  /* visited link */
 a:hover {color:red;}  /* mouse over link */
 
+ul {
+	list-style: none;
+}
+
 .color_blue {
 	background-color : #D0D7F0;
 }
@@ -140,11 +144,25 @@ h1 {
 }
 
 #similar_lemgrams {
-	width: 40%;
+	max-width: 40%;
 	margin-left : 15px;
-	
+	background-color : #EDF3FF;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	#padding-bottom : 10px;
+	padding : 8px;
 }
 
+#similar_lemgrams:empty {
+	padding : 0;	
+}
+
+#similar_lemgrams p {
+	margin-top : 2px;
+	margin-bottom : 5px;
+}
 #similar_lemgrams a {
 	padding-right : 5px;
 	float : left;
@@ -284,11 +302,19 @@ table {
 	padding-bottom : 5px;
 	padding-left : 5px;
 	padding-right : 2px;
+	border-color : white;
+	border-style : solid;
+	border-width : 1px;
 }
 
+.lemgram_highlight {
+	border-color : #666 !important;
+}
+
+
 .lemgram_result table{
-	padding : 0 0;
-	margin : 0 0;
+	padding : 0;
+	margin : 0;
 }
 
 
@@ -434,7 +460,7 @@ table {
 
 #sidebar ul{
 	margin-top : 0;
-	margin-bottom : 8px;
+	margin-bottom : 1px;
 	padding-left : 20px;
 	list-style : none;	
 }

@@ -2,6 +2,7 @@ var view = {};
 
 view.SimpleSearch = function() {
 	var self = this;
+	$("#similar_lemgrams").hide();
 	$("#simple_text").autocomplete({
 		html : true,
 		source: function( request, response ) {
@@ -62,7 +63,7 @@ view.SimpleSearch = function() {
 			var optionElems = $.map($( "#simple_text" ).data("dataArray"), function(item) {
 				return $.format("<option value='%(value)s'>%(label)s</option>", item);
 			});
-			
+			$.log("lemgram_select", $("#lemgram_select"))
 			$("#lemgram_select").remove();
 			$("<select id='lemgram_select' />").appendTo("#korp-simple")
 			.html(optionElems.join(""))
@@ -77,6 +78,7 @@ view.SimpleSearch = function() {
 			event.preventDefault();
 		}
 	});
+//	TODO: remove this debug
 //	this.selectLemgram("ge..vb.1");
 };
 
@@ -86,6 +88,7 @@ view.SimpleSearch.prototype = {
 			var self = this;
 			var corpus = getCorpus() == "all" ? getAllCorpora() : getCorpus().toUpperCase();
 			$("#similar_lemgrams").empty();
+			$("#similar_lemgrams").show();
 			$("#result-container").tabs("option", "disabled", []);
 			$.ajax({
 				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi",
@@ -148,13 +151,16 @@ view.SimpleSearch.prototype = {
 						}
 					})
 					.mouseenter(function(event) {
-						$.log("hover", $(this).index() );
-//						$.log("hover", $format(".lemgram_result:nth(%s)", $(this).index()) );
-						$(".lemgram_result." + $(this).attr("class")).fadeTo("fast", 0.5, function() {
-							$(this).fadeTo("fast", 1);
-						});
+//						$(".lemgram_result." + $(this).attr("class")).fadeTo("fast", 0.5, function() {
+//							$(this).fadeTo("fast", 1);
+//						});
+						$(".lemgram_result." + $(this).attr("class")).addClass("lemgram_highlight");
+					})
+					.mouseleave(function() {
+						$(".lemgram_result." + $(this).attr("class")).removeClass("lemgram_highlight");
 					});
-					$(this).addClass(color);
+					$(this).addClass(color)
+					.css("border-color", $(this).css("background-color"));
 				}
 				else {
 					$($.format("<span><b>%s</b></span>", $(this).data("word")))

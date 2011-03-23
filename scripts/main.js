@@ -3,16 +3,7 @@ var simpleSearch;
 
 $(function(){
 	$.ajaxSetup({ 
-		traditional: true,
-		beforeSend : function() {
-//			$.log("send")
-//			$("*").css("cursor", "progress");
-		},
-		complete : function() {
-//			$.log("complete")
-//			$("*").css("cursor", "auto");
-		}
-		
+		traditional: true
 		});
 	$("#content").load("searchbar.html", function() {
 		$.log("content load");
@@ -23,10 +14,10 @@ $(function(){
 		$("#result-container").tabs({
 			disabled : [2],
 			show : function() {
-				if($("#result-container").tabs("option", "selected")) {
+				if($("#result-container").tabs("option", "selected")) { // any other than the first tab is selected
 					//simpleSearch.centerLemgramLabel();
 					hideSidebar();
-				} else {
+				} else { // first tab selected
 					showSidebar();
 				}
 			} 
@@ -98,12 +89,12 @@ util.lemgramToString = function(lemgram, appendIndex) {
 		}
 		var concept = lemgram.split(".")[0].replace(/_/g, " ");
 		var type = lemgram.split(".")[2].slice(0, 2);
-		return $.format("%s%s (%s)", [concept, infixIndex, $.localize.data.locale[type]]);
+		return $.format("%s%s (%s)", [concept, infixIndex, util.getLocaleString(type)]);
 	}
 	else { // missing from saldo, and have the form word_NN instead.
 		var concept = lemgram.split("_")[0];
 		var type = lemgram.split("_")[1];
-		return concept + " (" + $.localize.data.locale[type] + ")";
+		return concept + " (" + util.getLocaleString(type) + ")";
 	}
 };
 

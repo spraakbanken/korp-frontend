@@ -49,7 +49,6 @@
 		<script type="text/javascript" src="scripts/main.js"></script>
 		<script type="text/javascript" src="scripts/querytable.js"></script>
 		<script type="text/javascript" src="scripts/request.js"></script>
-<!--		<script type="text/javascript" src="scripts/tabs.js"></script>-->
 		<script type="text/javascript" src="scripts/sidebar.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
 		
@@ -109,17 +108,25 @@
 			</div>
 		</div>
 		
+		<img id="preloader" src="img/preloader.gif" style="display : none;"></img>
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
 		<h4 rel="localize[${$item.header}_attr]"></h4>
-		{{each $data}}
+		{{each $item.corpusAttributes}}
 		<tr>
-			{{if ($index == "lex" || $index == "saldo") && $value != "|"}}
-			<p><span rel="localize[${$index}]">${util.getLocaleString($index)}</span>: <span id="sidebar_${$index}">${$value}</span></p>
+			<p><span>${$value.label}</span>:
+			{{if $value.dataset}}
+			 ${$value.dataset[$data[$index]]}
+			{{else $index == "lemma"}}
+			{{html $.arrayToHTMLList($.grep($data[$index].split("|"), Boolean)).outerHTML()}}
+			{{else $value.type == "set"}}
+			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else}}
-			<p><span rel="localize[${$index}]">${$item.attrGetter($index)}</span>: ${$value == "|" ? "" : $value}</p>
+			${$data[$index]}</p>
 			{{/if}}
+
+			</p>
 	    </tr>
 		{{/each}}
 	</script>
