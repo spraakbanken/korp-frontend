@@ -135,6 +135,10 @@ function onSubmit(evt) {
 
 function submitFormToServer(cqp){
 	num_result = 0;
+	$('#results-wraper:hidden').show();
+	$("#result-container li:first").spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3})
+	.find("svg").css("margin-left", -10);
+	
 //	TODO: loading text broken
 //	$('#results').append("<p alt='localize[loading]'/>").find("p");
 	
@@ -257,13 +261,14 @@ function corpus_results(data) {
 		
 		$('.result_table tr:even').addClass('alt');
 	});
-	$('#results-wraper').show();
+	
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);
 	
 	var left = $("#table_scrollarea").scrollLeft(1000).scrollLeft(); 
 	$("#table_scrollarea").scrollLeft(left/2);
+	$("svg").remove();
 }
 
 

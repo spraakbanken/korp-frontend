@@ -65,7 +65,7 @@ view.SimpleSearch = function() {
 			});
 			$.log("lemgram_select", $("#lemgram_select"))
 			$("#lemgram_select").remove();
-			$("<select id='lemgram_select' />").appendTo("#korp-simple")
+			$("<select id='lemgram_select' />").appendTo("#similar_lemgrams")
 			.html(optionElems.join(""))
 			.change(function(){
 				self.selectLemgram($(this).val());
@@ -122,7 +122,7 @@ view.SimpleSearch.prototype = {
 						self.selectLemgram($(this).data("lemgram"));
 					})
 					.appendTo("#similar_lemgrams");
-					$("#similar_lemgrams").prepend($.format("<p>%s</p>", util.getLocaleString("similar_header")));
+					$("#similar_lemgrams").prepend($.format("<div id='similar_header'><p>%s</p></div>", util.getLocaleString("similar_header")));
 					$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
 					
 				}

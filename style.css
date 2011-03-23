@@ -236,7 +236,7 @@ h1 {
 }
 
 #korp-simple > div {
-	float : left;
+	#float : left;
 }
 
 #similar_lemgrams {
@@ -255,10 +255,18 @@ h1 {
 	padding : 0;	
 }
 
+#similar_lemgrams p {
+	margin-top : 2px;	
+}
+
 #similar_lemgrams a {
 	padding-right : 5px;
 	float : left;
 	font-size : 12px;
+}
+
+#similar_header {
+		
 }
 
 .ui-tabs .ui-tabs-nav li a {
