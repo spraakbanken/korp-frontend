@@ -13,6 +13,7 @@
                 <div id="korp-simple">
                     <div class="ui-widget">
                         <span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" onkeyup="onSimpleChange()" /> 
+                        <input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
                         <!--<div>
 	                        <span rel="localize[in_corpus]">i</span>
 	                        <select class="select_corpus" onchange="didSelectCorpus()"></select>
@@ -70,6 +71,7 @@
                             </div>
                         </div>
                     </div>
+                    <input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
                 </div>
                 
                 <div id="korp-advanced">
@@ -81,9 +83,10 @@
                             <!--<select class="select_corpus" onchange="didSelectCorpus()"></select>-->
                             <textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
                         </div>
+                        <input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
                     </div>
                 </div>
-                <input id="sendBtn" value="  Sök  " type="button" onclick="onSubmit(event)" rel="localize[search]"/>
+                
             </div>
             
             <div id="results-wraper">
