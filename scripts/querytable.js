@@ -249,6 +249,13 @@ function initSearch(){
 		submitFormToServer();
 	}
 	
+	var lemgram = $.getUrlVar('lemgram');
+	if (lemgram && lemgram.length != 0){
+		$("#cqp_string").val('[(lex contains "'+decodeURIComponent(lemgram)+'")]');
+		//$('a[href="#korp-advanced"]').trigger('click');
+		submitFormToServer();
+	}
+	
 	var cqp = $.getUrlVar('cqp');
 	if (cqp && cqp.length != 0){
 		$("#cqp_string").val(cqp);
