@@ -69,7 +69,7 @@ var hp_corpusChooser = {
 			el.replaceWith(newHTML);
 			
 			//var popoffset = $(".scroll_checkboxes").position().top + $(".hp_topframe").css("height");
-			var popoffset = $(".scroll_checkboxes").position().top + 2;
+			var popoffset = $(".scroll_checkboxes").position().top + 54;
 			$(".popupchecks").css({"top": popoffset});
 			
 			// Save the strings in the options of the UI object in the grand parent JQuery object
