@@ -485,7 +485,9 @@ table {
 	color: #fff;
 	background-color: #666;
 	border-radius: 10px;
-	moz-border-radius: 10px;
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;	
 	padding-left: 3px;
 	padding-right: 3px;
 	margin-left: -3px;
