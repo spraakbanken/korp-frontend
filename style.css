@@ -42,23 +42,6 @@ a:hover {color:red;}  /* mouse over link */
 #content > div  {
 	margin-bottom: 8px;
 }
-/*Korp header text */
-h1 { 
-	
-/*	font-family: LindenHill;	*/
-/*	#text-transform : uppercase;*/
-/*	font-variant : small-caps;*/
-/*	font-size : 80px;*/
-/*	margin : -19px 0 0 10px;*/
-	
-	font-family: 'OFL Sorts Mill Goudy TT', serif;
-	font-size: 81px;
-	text-shadow: 4px 4px 4px #BBB;
-	text-transform: uppercase;
-	letter-spacing: 21px;
-	font-weight: normal;
-	margin: -25px 0 -18px 30px;
-}
 
 #corpus_id {
 	font-family: monospace;
@@ -73,6 +56,47 @@ h1 {
 	padding-top: 8px;
 	width: 100%;
 	margin-bottom: 15px;
+}
+
+#content {
+	float: left;
+	clear: both;
+	width: 100%;
+	padding : 10px 0 10px 0;
+}
+
+#header img {
+	float: left;
+	margin-top : -14px;
+}
+
+
+#header p {
+	margin: 0px;
+	margin-left: 10px;
+	/*	border-style:dotted;*/
+	/*	border-width:1px;	*/
+	/*	text-align:center;*/
+}
+
+
+.lang_selected {
+	color : black;	
+}
+
+#languages {
+	float: right;
+	margin-left: 30px;
+	list-style: none;
+	color : navy;
+}
+#languages li {
+	margin : 0 0;
+	cursor : pointer;
+}
+
+.select_operation .select_language {
+	visibility: hidden;
 }
 
 /* JONATAN */
@@ -175,46 +199,7 @@ h1 {
 
 /* SLUT JONATAN */
 
-#content {
-	float: left;
-	clear: both;
-	width: 100%;
-	padding : 10px 0 10px 0;
-}
 
-#header p,img,h1 {
-	float: left;
-	#margin-top : 16px;
-}
-
-
-#header p {
-	margin: 0px;
-	margin-left: 10px;
-	/*	border-style:dotted;*/
-	/*	border-width:1px;	*/
-	/*	text-align:center;*/
-}
-
-
-.lang_selected {
-	color : black;	
-}
-
-#languages {
-	float: right;
-	margin-left: 30px;
-	list-style: none;
-	color : navy;
-}
-#languages li {
-	margin : 0 0;
-	cursor : pointer;
-}
-
-.select_operation .select_language {
-	visibility: hidden;
-}
 
 .query_header,.query_footer {
 	background-color: #e1e1e1;
@@ -240,14 +225,13 @@ h1 {
 }
 
 #similar_lemgrams {
-	max-width: 40%;
-	margin-left : 15px;
+	max-width: 50%;
+	margin-top : 5px;
 	background-color : #EDF3FF;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
-	#padding-bottom : 10px;
 	padding : 8px;
 }
 
@@ -396,6 +380,24 @@ table {
 #lemgram_help > span {
 	padding : 10px 10px;
 }
+
+
+.ui-tabs .ui-tabs-nav li a {
+	padding-top : 0.4em !important;
+	padding-bottom : 0.4em !important;
+}
+
+.spinner {
+	display : inline-block;
+	margin : 3px 2px -2px -10px;
+}
+
+
+
+/* result tab */
+#result-container li:first {
+}
+
 .lemgram_result {
 	float : left;
 	padding-top : 4px;

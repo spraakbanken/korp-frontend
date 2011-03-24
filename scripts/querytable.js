@@ -17,21 +17,6 @@
     }
 } */
 
-function onSimpleChange() {
-	var val;
-	var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
-	if(lemgram) { // if the input is a lemgram, do semantic search.
-		val = $.format('[(lex contains "%s")]', lemgram);
-	} else {
-		var valArray = $("#simple_text").val().split(" ");
-		var cqp = $.map(valArray, function(item, i){
-			return '[(word = "' + item + '")]';
-		});
-		val = cqp.join(" ");
-	}
-	$("#cqp_string").val(val);
-}
-
 function didSelectCorpus() {
     var corpus = settings.corpora[getCorpus()];
 
@@ -76,7 +61,7 @@ function loadCorpora() {
     };
     outStr += "</ul>";
     
-    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, allSelectedString : 'All corpuses selected'});
+    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, allSelectedString : 'All corpora selected'});
 }
 
 /* Returns an array of all the selected corpora's IDs in uppercase */

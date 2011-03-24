@@ -19,35 +19,10 @@ function handlePaginationClick(new_page_index, pagination_container) {
 }
 
 function makeRequest(cqp, start, end) {
-	//var selected_corpus = settings.corpora[getCorpus()];
 	var attributes = ['msd','lemma'];
-
+	kwicResults.showPreloader();
 	var data = {};
 	
-	/*if(corpus == 'ALL'){
-		
-		data =	{
-				command:'query',
-				corpus:getAllCorpora(),
-				cqp:cqp,
-				start:start,
-				end:end,
-				context:'1 sentence',
-				show:[],
-				show_struct:[]  
-			};		
-	}else{
-			data =	{
-					command:'query',
-					corpus:corpus,
-					cqp:cqp,
-					start:start,
-					end:end,
-					context:'1 sentence',
-					show:[],
-					show_struct:[]  
-				};
-	}*/
 	
 	var selected_corpora_ids = getSelectedCorpora();
 	var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n)
@@ -87,19 +62,6 @@ function makeRequest(cqp, start, end) {
     
     }
 
-
-	/* $.each(selected_corpus.attributes, function(key,val){
-		data.show.push(key);
-	});
-	
-
-	if (selected_corpus.struct_attributes) {
-		$.each(selected_corpus.struct_attributes, function(key,val){
-			data.show_struct.push(key);
-		});
-	} */
-	
-	
 	$("#Pagination").data("cqp", cqp);
 	$.ajax({ url: settings.cgi_script, 
 				dataType: "jsonp", 
@@ -114,15 +76,21 @@ function setJsonLink(data){
 	
 	var url = settings.cgi_script+'?'+jQuery.param(data);
 	$('#json-link').attr('href', url);
-	$('#json-link').css('display', 'inline');
+	$('#json-link').show();
 }
 
 function onSubmit(evt) {
 	var currentVisible = $("#tabs-container > div:visible");
-	$.log("onSubmit", currentVisible);
+	
 	switch(currentVisible.attr("id")) {
 	case "korp-simple":
-		onSimpleChange();
+		$.log("simple", simpleSearch);
+		simpleSearch.onSimpleChange();
+		// clear the simple search from previous lemgram search result widgets
+		$("#result-container").tabs("option", "disabled", [2]);
+		$("#lemgram_select").remove();
+		$("#similar_lemgrams").empty();
+		
 		break;
 	case "korp-extended":
 		updateCQP();
@@ -136,8 +104,7 @@ function onSubmit(evt) {
 function submitFormToServer(cqp){
 	num_result = 0;
 	$('#results-wraper:hidden').show();
-	$("#result-container li:first").spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3})
-	.find("svg").css("margin-left", -10);
+	
 	
 //	TODO: loading text broken
 //	$('#results').append("<p alt='localize[loading]'/>").find("p");
@@ -186,17 +153,19 @@ function selectRight(sentence) {
 	var len=sentence.tokens.length;
 
 	var to = len;
-	if((len-sentence.match.end) > 12)
-		to = sentence.match.end+12;
+//	if((len-sentence.match.end) > 12)
+//		to = sentence.match.end+12;
 	
 	return sentence.tokens.slice(sentence.match.end, to);
 }
 
 
-
 function corpus_results(data) {
 	if(data.ERROR) {
 		$.error("json fetch error: " + $.dump(data.ERROR));
+		$("#results-table").empty();
+		$("#Pagination").empty();
+		kwicResults.hidePreloader();
 		return;
 	} 
 	if(!num_result) {
@@ -204,15 +173,20 @@ function corpus_results(data) {
 	}
 	num_result = data.hits;
 	$('#num-result').html(data.hits);
-	if(!num_result) {
+	if(!data.hits) {
+
 		$.log("no kwic results");
+		$("#results-table").empty();
+		$("#Pagination").empty();
+		kwicResults.hidePreloader();
 		return;
-	}
+	}				
+
+
 	var effectSpeed = 100;
 //	$('#results').find("p").remove();
 	$.log("if", $.trim($("#results-table").html()).length, $("#results-table").children.length);
 	if($.trim($("#results-table").html()).length) {
-		$.log("corpus_results again");
 		$("#results").fadeOut(effectSpeed, function() {
 			$("#results-table").empty();
 			corpus_results(data);
@@ -232,8 +206,8 @@ function corpus_results(data) {
 	
 	$.each(data.kwic, function(i,sentence){
 		var offset = 0; 
-		if(sentence.match.start > 12)
-			offset = sentence.match.start-12;
+//		if(sentence.match.start > 12)
+//			offset = sentence.match.start-12;
 	    var splitObj = {
 	    		"left" : selectLeft(sentence, offset),
 	    		"match" : selectMatch(sentence),
@@ -242,14 +216,8 @@ function corpus_results(data) {
 	    
 		$( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i})
 				.appendTo( "#results-table" )
-				.find(".word").hover(
-						function(){
-							$(this).addClass('token_hover'); 
-						}, 
-						function(){
-							$(this).removeClass('token_hover');
-						}
-				).click(
+				.find(".word")
+				.click(
 						function(event) {
 							event.stopPropagation();
 							util.SelectionManager.select($(this));
@@ -261,55 +229,12 @@ function corpus_results(data) {
 		
 		$('.result_table tr:even').addClass('alt');
 	});
-	
 //	make the first matched word selected by default.
 	$(".match").children().first().click();
 	$("#results").fadeIn(effectSpeed);
 	
-	var left = $("#table_scrollarea").scrollLeft(1000).scrollLeft(); 
-	$("#table_scrollarea").scrollLeft(left/2);
-	$("svg").remove();
+	kwicResults.centerScrollbar();
+	
+	kwicResults.hidePreloader();
 }
-
-
-function tooltipIn(object){
-	//<span class='token'><span class='word'><span></span></span>
-	$.log('in'+$(object).html());
-}
-
-function tooltipOut(object){
-	$.log('out');
-}
-
-function renderToken(token){
-	var output = '<span class="token"><span class="attr word">'+token.word+'</span><span class="attr pos">'+token.word+'</span><span class="attr lemma">'+tokens.lemma+'</span></span> ';
-	return output;
-}
-
-// Read a page's GET URL variables and return them as an associative array.
-$.extend({
-  getUrlVars: function(){
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++){
-      hash = hashes[i].split('=');
-      vars.push(hash[0]);
-      vars[hash[0]] = hash[1];
-    }
-    return vars;
-  },
-  getUrlVar: function(name){
-    return $.getUrlVars()[name];
-  }
-});
-
-$.extend({URLEncode:function(c){var o='';var x=0;c=c.toString();var r=/(^[a-zA-Z0-9_.]*)/;
-  while(x<c.length){var m=r.exec(c.substr(x));
-    if(m!=null && m.length>1 && m[1]!=''){o+=m[1];x+=m[1].length;
-    }else{if(c[x]==' ')o+='+';else{var d=c.charCodeAt(x);var h=d.toString(16);
-    o+='%'+(h.length<2?'0':'')+h.toUpperCase();}x++;}}return o;},
-URLDecode:function(s){var o=s;var binVal,t;var r=/(%[^%]{2})/;
-  while((m=r.exec(o))!=null && m.length>1 && m[1]!=''){b=parseInt(m[1].substr(1),16);
-  t=String.fromCharCode(b);o=o.replace(m[1],t);}return o;}
-});
 

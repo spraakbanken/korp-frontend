@@ -1,5 +1,7 @@
 var lemgramProxy;
 var simpleSearch;
+var kwicResults;
+var lemgramResults;
 
 $(function(){
 	$.ajaxSetup({ 
@@ -7,8 +9,13 @@ $(function(){
 		});
 		
 		
-	$("#content").load("searchbar.html", function() {
+	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");
+		lemgramProxy = new model.LemgramProxy();
+		simpleSearch = new view.SimpleSearch();
+		kwicResults = new view.KWICResults();
+		lemgramResults = new view.LemgramResults();
+		
 		loadCorpora();
 		resetQuery();
 		
@@ -21,6 +28,7 @@ $(function(){
 					hideSidebar();
 				} else { // first tab selected
 					showSidebar();
+					kwicResults.centerScrollbar();
 				}
 			} 
 		});
@@ -40,8 +48,6 @@ $(function(){
 //	move out sidebar
 //	$("#sidebar").hide();
 		hideSidebar();
-		lemgramProxy = new model.LemgramProxy();
-		simplesearch = new view.SimpleSearch();
 		
 		$("#simple_text")[0].focus();
 	});

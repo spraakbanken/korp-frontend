@@ -60,8 +60,7 @@
 	</head>
   	<body>
   		<div id="header">
-  			<img src="img/korp_s.png" />
-  			<h1>Korp</h1>
+  			<img src="img/korplogo.png" />
   			<ul id="languages">
   				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
   				<li rel="localize[english]" data-lang="en">Engelska</li>
@@ -70,47 +69,50 @@
 		
   		<div id="corpusbox"></div>
   		
-		<div id="content"></div>
+		<div id="content">
 	   		
+	   		<div id="searchbar" ></div>
 			
-		<div id="results-wraper">
-			<div id="columns" >
-				<div id="left-column" >
-					<div id="result-container">
-						<ul>
-							<li class="on"><a href="#results">KWIC</a></li>
-							<li style="display:none;"><a href="#results-sentence">Mening</a></li>
-							<li ><a href="#results-lemgram">Ordbild</a></li>
-						</ul>
-						<div id="results">
-							<a name="results"></a>
-								<div id="result_controls">
-								   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-								   <input name="num_hits" id="num_hits" size="3" value="25" type="number"></div> 
-								   <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
-								   <div style="clear : both; float : none;" ></div>
-							   </div>
-							<div id="pager-wraper">
-								<div class="pagination" id="Pagination"></div>
+			<div id="results-wraper">
+				<div id="columns" >
+					<div id="left-column" >
+						<div id="result-container">
+							<ul>
+								<li class="on"><a href="#results">KWIC</a></li>
+								<li style="display:none;"><a href="#results-sentence">Mening</a></li>
+								<li ><a href="#results-lemgram" >Ordbild</a></li><!-- class="ui-icon ui-icon-script" -->
+							</ul>
+							<div id="results">
+								<a name="results"></a>
+									<div id="result_controls">
+									   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+									   <input name="num_hits" id="num_hits" size="3" value="25" type="number"></div> 
+									   <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
+									   <div style="clear : both; float : none;" ></div>
+								   </div>
+								<div id="pager-wraper">
+									<div class="pagination" id="Pagination"></div>
+								</div>
+								<div id="table_scrollarea">
+									<table id="results-table" class="result_table"></table>
+								</div>
 							</div>
-							<div id="table_scrollarea">
-								<table id="results-table" class="result_table"></table>
-							</div>
+							<div id="results-sentence"></div>
+							<div id="results-lemgram"></div>
 						</div>
-						<div id="results-sentence"></div>
-						<div id="results-lemgram"></div>
+						<div id="tooltip-container"></div>
+						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="tooltip-container"></div>
-					<a id="json-link" href="#"><img src="img/json.png" /></a>
+					<div id="sidebar" class="ui-corner-all" >	
+						
+						<div id="selected_sentence"></div>
+						
+						<div id="selected_word"></div>
+					</div>
+					<div style="clear : both; float : none;"></div>
 				</div>
-				<div id="sidebar" class="ui-corner-all" >	
-					
-					<div id="selected_sentence"></div>
-					
-					<div id="selected_word"></div>
-				</div>
-				<div style="clear : both; float : none;"></div>
 			</div>
+		
 		</div>
 		
 		<div id="preloader" style="position: absolute;z-index: 9999;"></div>
@@ -120,6 +122,7 @@
 		<h4 rel="localize[${$item.header}_attr]"></h4>
 		{{each $item.corpusAttributes}}
 		<tr>
+			${$.log("label", $value, $value.label)}
 			<p><span>${$value.label}</span>:
 			{{if $value.dataset}}
 			 ${$value.dataset[$data[$index]]}

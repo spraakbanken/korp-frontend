@@ -5,7 +5,7 @@ var hp_corpusChooser = {
 		allSelectedString : 'All corpora selected',
 		noneSelectedString : 'No corpus selected',
 		selectedString : ' selected',
-		selectedMultipleString: ' corpuses selected',
+		selectedMultipleString: ' corpora selected',
 		buttonSelectAll : 'Select all',
 		buttonSelectNone : 'Select none'
 	},

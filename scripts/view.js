@@ -1,7 +1,12 @@
 var view = {};
 
+//**************
+// Search view objects
+//**************
+
 view.SimpleSearch = function() {
 	var self = this;
+	$("#simple_text").keyup(this.onSimpleChange);
 	$("#similar_lemgrams").hide();
 	$("#simple_text").autocomplete({
 		html : true,
@@ -57,20 +62,8 @@ view.SimpleSearch = function() {
 			var selectedItem = ui.item.value;
 			$.log( selectedItem, ui.item.value, ui, event);
 			
+			self.renderSimilarHeader(selectedItem);
 			self.selectLemgram(selectedItem);
-			
-//				first, build a dropdown list of the results
-			var optionElems = $.map($( "#simple_text" ).data("dataArray"), function(item) {
-				return $.format("<option value='%(value)s'>%(label)s</option>", item);
-			});
-			$.log("lemgram_select", $("#lemgram_select"))
-			$("#lemgram_select").remove();
-			$("<select id='lemgram_select' />").appendTo("#similar_lemgrams")
-			.html(optionElems.join(""))
-			.change(function(){
-				self.selectLemgram($(this).val());
-			})
-			.val(selectedItem);
 			
 			
 		},
@@ -86,9 +79,8 @@ view.SimpleSearch.prototype = {
 		
 		selectLemgram : function(lemgram) {
 			var self = this;
-//			var corpus = getCorpus() == "all" ? getAllCorpora() : getCorpus().toUpperCase();
 			var corpus = getSelectedCorpora();
-			$("#similar_lemgrams").empty();
+			$("#similar_lemgrams a").remove();
 			$("#similar_lemgrams").show();
 			$("#result-container").tabs("option", "disabled", []);
 			$.ajax({
@@ -102,7 +94,7 @@ view.SimpleSearch.prototype = {
 					$.log("success", data);
 					$("#results-lemgram").empty();
 					if(data.relations){
-						self.renderResults(lemgram, data.relations);
+						lemgramResults.renderResults(lemgram, data.relations);
 					}
 					else {
 						$("#results-lemgram").append($.format("<p><i rel='no_lemgram_results'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
@@ -122,7 +114,6 @@ view.SimpleSearch.prototype = {
 						self.selectLemgram($(this).data("lemgram"));
 					})
 					.appendTo("#similar_lemgrams");
-					$("#similar_lemgrams").prepend($.format("<div id='similar_header'><p>%s</p></div>", util.getLocaleString("similar_header")));
 					$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
 					
 				}
@@ -133,7 +124,80 @@ view.SimpleSearch.prototype = {
 			$("#simple_text").val("");
 		},
 		
-		renderHeader : function() {
+		renderSimilarHeader : function(selectedItem) {
+			var self = this;
+			var optionElems = $.map($( "#simple_text" ).data("dataArray"), function(item) {
+				return $.format("<option value='%(value)s'>%(label)s</option>", item);
+			});
+			$("#similar_header").empty();
+			$("<p/>").html(util.getLocaleString("similar_header"))
+			.css("float", "left")
+			.appendTo("#similar_header");
+			
+			$("<select id='lemgram_select' />").appendTo("#similar_header")
+			.css("float", "right")
+			.html(optionElems.join(""))
+			.change(function(){
+				self.renderSimilarHeader($(this).val());
+				self.selectLemgram($(this).val());
+			})
+			.val(selectedItem);
+			$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
+		},
+		
+		onSimpleChange : function() {
+			var val;
+			var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
+			if(lemgram) { // if the input is a lemgram, do semantic search.
+				val = $.format('[(lex contains "%s")]', lemgram);
+			} else {
+				var valArray = $("#simple_text").val().split(" ");
+				var cqp = $.map(valArray, function(item, i){
+					return '[(word = "' + item + '")]';
+				});
+				val = cqp.join(" ");
+			}
+			$("#cqp_string").val(val);
+		},
+		
+		centerLemgramLabel : function() {
+			$("#display_word").parent().css("margin-top", $(".lemgram_result").first().height()/2);
+		}
+		
+};
+
+//************
+// Result view objects
+//************
+
+
+view.KWICResults = function() {
+};
+
+view.KWICResults.prototype = {
+	
+	centerScrollbar : function() {
+		if(!$(".match").first().length) return;
+		var matchLeft = $(".match").first().position().left;
+		$("#table_scrollarea").scrollLeft(matchLeft - $("#table_scrollarea").innerWidth() / 2);
+	},
+		
+	showPreloader : function() {
+		$("<div class='spinner' />").appendTo("#result-container li:first")
+		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+	},
+	hidePreloader : function() {
+		$(".spinner").remove();
+	}
+
+};
+
+view.LemgramResults = function() {
+};
+
+view.LemgramResults.prototype = {
+		
+		renderHeader : function(wordClass) {
 			$.log("renderHeader", $("#results-lemgram"));
 			var colorArray = ["color_blue", "color_purple", "color_green", "color_yellow", "color_azure", "color_red"];
 			var $parent = $("<div id='lemgram_help' />").prependTo("#results-lemgram");
@@ -141,7 +205,7 @@ view.SimpleSearch.prototype = {
 			$(".lemgram_result").each(function(i) {
 				if($(this).data("rel")) {
 					var color = colorArray.shift();
-					$($.format("<span>%s</span>", $(this).data("rel")))
+					$($.format("<span>%s</span>", wordClass == "av" ? util.getLocaleString("head") : $(this).data("rel")))
 					.addClass(color)
 					.appendTo($parent)
 					.tooltip({
@@ -151,9 +215,6 @@ view.SimpleSearch.prototype = {
 						}
 					})
 					.mouseenter(function(event) {
-//						$(".lemgram_result." + $(this).attr("class")).fadeTo("fast", 0.5, function() {
-//							$(this).fadeTo("fast", 1);
-//						});
 						$(".lemgram_result." + $(this).attr("class")).addClass("lemgram_highlight");
 					})
 					.mouseleave(function() {
@@ -262,7 +323,7 @@ view.SimpleSearch.prototype = {
 								else if(sentence.match.end == (i+1))
 									postfix = "</b>";
 								return prefix + token.word + postfix;
-							}).join(" ").replace(/\s([\.,])/g, "$1"));
+							}).join(" ").replace(/\s([\.,\:])/g, "$1"));
 						}).join("\n");
 						
 						$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
@@ -276,14 +337,21 @@ view.SimpleSearch.prototype = {
 				});
 			});
 			
-			this.renderHeader();
+			this.renderHeader(wordClass);
 			util.localize();
 //			this.centerLemgramLabel();
 			$('#results-wraper').show();
 		},
 		
-		centerLemgramLabel : function() {
-			$("#display_word").parent().css("margin-top", $(".lemgram_result").first().height()/2);
+		
+		showPreloader : function() {
+			$("<div class='spinner' />").appendTo("#result-container li:last")
+			.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+		},
+		hidePreloader : function() {
+			$("#spinner").remove();
 		}
 		
 };
+
+
