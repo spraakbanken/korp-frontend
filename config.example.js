@@ -93,14 +93,14 @@ var context = {
 };
 
 // added for search in all corpora
-settings.corpora.all = {
-	title : "- Alla korpusar -",
-	languages : {
-		all : "svenska"
-	},
-	context : context.defaultStruct,
-	attributes : {}
-};
+//settings.corpora.all = {
+//	title : "- Alla korpusar -",
+//	languages : {
+//		all : "svenska"
+//	},
+//	context : context.defaultStruct,
+//	attributes : {}
+//};
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
@@ -145,9 +145,9 @@ settings.corpora.suc2 = {
 		deprel : attrs.deprel,
 		ref : attrs.ref,
 		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		paragraph : attrs.paragraph,
-		text : attrs.text
+		suffix : attrs.suffix
+		//paragraph : attrs.paragraph,
+		//text : attrs.text
 	},
 	struct_attributes : {
 		sentence_n : {label : language.sentence},
@@ -314,8 +314,8 @@ settings.corpora.vivill = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : language.year},
-		text_party : {label : language.party},
+		text_year : {label : language.year, includeInKWIC : true},
+		text_party : {label : language.party, includeInKWIC : true},
 		text_type : {label : language.type}
 	}
 };
@@ -452,10 +452,10 @@ settings.inner_args = {
 
 settings.outer_args = {
 	min : function(query, values) {
-		query.min = Math.min(values)
+		query.min = Math.min(values);
 	},
 	max : function(query, values) {
-		query.max = Math.max(values)
+		query.max = Math.max(values);
 	}
 };
 
