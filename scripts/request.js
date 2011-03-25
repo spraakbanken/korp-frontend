@@ -19,10 +19,7 @@ function handlePaginationClick(new_page_index, pagination_container) {
 }
 
 function makeRequest(cqp, start, end) {
-	var attributes = ['msd','lemma'];
 	kwicResults.showPreloader();
-	var data = {};
-	
 	
 	var selected_corpora_ids = getSelectedCorpora();
 	var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n)
@@ -30,7 +27,7 @@ function makeRequest(cqp, start, end) {
 			return(n.toUpperCase());
     });
 	
-	data = {
+	var data = {
 				command:'query',
 				corpus:selected_uppercased_corpora_ids,
 				cqp:cqp,
@@ -50,16 +47,17 @@ function makeRequest(cqp, start, end) {
     
     for (sel in selected_corpora) {
 	    $.each(selected_corpora[sel].attributes, function(key,val){
-			data.show.push(key);
+	    	if($.inArray(key, data.show) == -1)
+	    		data.show.push(key);
 		});
 		
 	
 		if (selected_corpora[sel].struct_attributes) {
 			$.each(selected_corpora[sel].struct_attributes, function(key,val){
-				data.show_struct.push(key);
+				if($.inArray(key, data.show_struct) == -1)
+					data.show_struct.push(key);
 			});
 		}
-    
     }
 
 	$("#Pagination").data("cqp", cqp);
@@ -234,7 +232,6 @@ function corpus_results(data) {
 	$("#results").fadeIn(effectSpeed);
 	
 	kwicResults.centerScrollbar();
-	
 	kwicResults.hidePreloader();
 }
 

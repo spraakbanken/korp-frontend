@@ -69,8 +69,10 @@ var hp_corpusChooser = {
 			el.replaceWith(newHTML);
 			
 			//var popoffset = $(".scroll_checkboxes").position().top + $(".hp_topframe").css("height");
-			var popoffset = $(".scroll_checkboxes").position().top + 54;
-			$(".popupchecks").css({"top": popoffset});
+			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
+			$(".popupchecks").css({"top": popoffset-4});
+			// ie7 hack
+			$(".popupchecks").css({"left": $(".scroll_checkboxes").position().left});
 			
 			// Save the strings in the options of the UI object in the grand parent JQuery object
 			$(".scroll_checkboxes").data('allSelectedString',this.options.allSelectedString);

@@ -132,7 +132,7 @@ a:hover {color:red;}  /* mouse over link */
 	z-index: 9999;
 	height: 324px;
 	width: 382px;
-	top: 124px;
+	#top: 124px;
 	border-color: #CCCCCC;
 	border-style: solid;
 	border-width: 1px;

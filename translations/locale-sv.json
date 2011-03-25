@@ -18,6 +18,7 @@
 	"autocomplete_header" : "är en ordform i",
 	"no_lemgram_results" : "Hittade inga förekomster.",
 	"similar_header" : "Relaterade ord",
+	"show_wordclass" : "Visa ordklass",
 	"search" : "   Sök   ",
 	"hits_per_page" : "Träffar per sida",
 	"num_results" : "Antal resultat",

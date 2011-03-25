@@ -122,7 +122,6 @@
 		<h4 rel="localize[${$item.header}_attr]"></h4>
 		{{each $item.corpusAttributes}}
 		<tr>
-			${$.log("label", $value, $value.label)}
 			<p><span>${$value.label}</span>:
 			{{if $value.dataset}}
 			 ${$value.dataset[$data[$index]]}
@@ -170,7 +169,8 @@
 			
 			{{if $item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0]}}
 			<tr>
-				<td>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
+				<td data-lemgram="${$.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0]}" 
+					>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
 				<td>${$value.freq}</td>
 				<td id="example_link" 
 					data-head="${$value['head']}" 
