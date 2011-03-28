@@ -11,7 +11,9 @@ model.LemgramProxy.prototype = {
 		}
 };
 
-model.KWICProxy = function(){};
+model.KWICProxy = function(){
+	this.prevRequest = null;
+};
 
 model.KWICProxy.prototype = {
 	makeRequest : function(cqp, start, end) {
@@ -57,12 +59,18 @@ model.KWICProxy.prototype = {
 	    }
 
 		$("#Pagination").data("cqp", cqp);
+		this.prevRequest = data;
 		$.ajax({ url: settings.cgi_script, 
 					data:data,
+					beforeSend : function(jqxhr, settings) {
+						this.prevRequest = settings;
+						if($("#results").is(":visible"))
+							setJsonLink(settings);
+					},
 					success: $.proxy(kwicResults.renderTable, kwicResults)
 		});
 		
-		setJsonLink(data);
+		
 	}
 		
 };

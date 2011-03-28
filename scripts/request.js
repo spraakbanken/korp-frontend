@@ -19,10 +19,9 @@ function handlePaginationClick(new_page_index, pagination_container) {
 
 
 
-function setJsonLink(data){
-	
-	var url = settings.cgi_script+'?'+jQuery.param(data);
-	$('#json-link').attr('href', url);
+function setJsonLink(settings){
+	if(settings == null) return;
+	$('#json-link').attr('href', settings.url);
 	$('#json-link').show();
 }
 

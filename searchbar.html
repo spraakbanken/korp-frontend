@@ -43,19 +43,19 @@
                                     <tr class="query_arg">
                                         <td><select style="width: 115px;" class="arg_type">
                                             <optgroup label="ord">
-                                                <option selected="selected" value="word">ordet är</option>
-                                                <option value="notword">ordet är inte</option>
-                                                <option value="beginswith">börjar med</option>
-                                                <option value="endswith">slutar med</option>
-                                                <option value="regexp">reguljärt uttryck</option>
+                                                <option rel="localize[word_is]" selected="selected" value="word">ordet är</option>
+                                                <option rel="localize[word_is_not]" value="notword">ordet är inte</option>
+                                                <option rel="localize[word_beginswith]" value="beginswith">börjar med</option>
+                                                <option rel="localize[word_endswith]" value="endswith">slutar med</option>
+                                                <option rel="localize[matches_regexp]" value="regexp">reguljärt uttryck</option>
                                             </optgroup>
                                             <optgroup label="ordklass">
-                                                <option value="pos">ordklassen är</option>
-                                                <option value="msd">ordklassen börjar med</option>
+                                                <option rel="localize[wordclass_is]" value="pos">ordklassen är</option>
+                                                <option rel="localize[wordclass_starts]" value="msd">ordklassen börjar med</option>
                                             </optgroup>
                                             <optgroup label="intervall">
-                                                <option value="max">upp till</option>
-                                                <option value="min">minst</option>
+                                                <option rel="localize[max]" value="max">upp till</option>
+                                                <option rel="localize[min]" value="min">minst</option>
                                             </optgroup>
                                         </select><input id="query_input" class="arg_value" type="text" /></td>
                                         <td><img style="visibility: hidden;"

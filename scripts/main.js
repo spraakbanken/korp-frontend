@@ -18,8 +18,9 @@ $(function(){
 			if ( $("#simple_text").is(":visible" )) {
 				$("#simple_text").autocomplete("close");
 			}
-			if($("#ui-active-menuitem").length )
+			if(!$("#ui-active-menuitem").length )
 				$("#sendBtn").click();
+				
 		}
 	});
 	
@@ -41,9 +42,13 @@ $(function(){
 			show : function() {
 				if($("#result-container").tabs("option", "selected")) { // any other than the first tab is selected
 					hideSidebar();
-				} else { // first tab selected
-					showSidebar();
+					setJsonLink(simpleSearch.prevLemgramRequest);
+				}
+				else { // first tab selected
 					kwicResults.centerScrollbar();
+					showSidebar();
+					setJsonLink(kwicProxy.prevRequest);
+					
 				}
 			} 
 		});

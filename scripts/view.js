@@ -89,6 +89,8 @@ view.SimpleSearch.prototype = {
 				beforeSend : function(jqXHR, settings) {
 					$.log("before relations send", settings);
 					self.prevLemgramRequest = settings;
+					if($("#results-lemgram").is(":visible"))
+						setJsonLink(settings);
 				},
 				success : function(data) {
 					$.log("relations success", data);
@@ -97,7 +99,7 @@ view.SimpleSearch.prototype = {
 						lemgramResults.renderResults(lemgram, data.relations);
 					}
 					else {
-						$("#results-lemgram").append($.format("<p><i rel='no_lemgram_results'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
+						lemgramResults.showNoResults();
 					}
 				}	
 			});
@@ -161,7 +163,8 @@ view.SimpleSearch.prototype = {
 				val = cqp.join(" ");
 			}
 			$("#cqp_string").val(val);
-		}
+		} 
+		
 };
 
 //************
@@ -170,12 +173,7 @@ view.SimpleSearch.prototype = {
 
 
 view.KWICResults = function() {
-	
-	
-	
 	if($.browser.mozilla) {
-	
-	
 		var $select = $('<select name="num_hits" id="num_hits"></div>');
 		$("#num_hits").replaceWith($select);
 		
@@ -218,7 +216,6 @@ view.KWICResults.prototype = {
 
 
 		var effectSpeed = 100;
-//			$('#results').find("p").remove();
 		if($.trim($("#results-table").html()).length) {
 			$("#results").fadeOut(effectSpeed, function() {
 				$("#results-table").empty();
@@ -267,10 +264,12 @@ view.KWICResults.prototype = {
 	},
 		
 	centerScrollbar : function() {
+		$.log("centerScrollbar", $("#sidebar:visible").outerWidth());
 		if(!$(".match").first().length) return;
+		$("#table_scrollarea").scrollLeft(0);
 		var matchLeft = $(".match").first().position().left;
-		var sidebarWidth = $("#sidebar:visible").outerWidth() || 0;
-		$("#table_scrollarea").scrollLeft(matchLeft - ($("#table_scrollarea").innerWidth() - sidebarWidth ) / 2);
+		var sidebarWidth = $("#sidebar").outerWidth() || 0;
+		$("#table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
 		
 	showPreloader : function() {
@@ -343,8 +342,13 @@ view.LemgramResults.prototype = {
 				nn : "AT,_,ET".split(","),
 				av :"_,AT".split(",")
 			};
-
 			var wordClass = lemgram.split(".")[2].slice(0, 2);
+			
+			if(order[wordClass] == null) {
+				lemgramResults.showNoResults();
+				return;
+			}
+			
 			$.log("wordClass", lemgram, wordClass);
 			var relMapping = {};
 			var sortedList = [];
@@ -459,6 +463,11 @@ view.LemgramResults.prototype = {
 					.find("ol").html(pElems);
 				}
 			});
+		},
+		
+		showNoResults : function() {
+			$("#results-lemgram")
+			.append($.format("<p><i rel='localize[no_lemgram_results]'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
 		},
 		
 		hideWordclass : function() {
