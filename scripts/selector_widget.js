@@ -1,13 +1,7 @@
 var hp_corpusChooser = {
 	
 	options: {
-		template : '',
-		allSelectedString : 'All corpora selected',
-		noneSelectedString : 'No corpus selected',
-		selectedString : ' selected',
-		selectedMultipleString: ' corpora selected',
-		buttonSelectAll : 'Select all',
-		buttonSelectNone : 'Select none'
+		template : ''
 	},
 	
 	_create: function() {
@@ -34,7 +28,6 @@ var hp_corpusChooser = {
 	isSelected: function(id) {
 		// Test if a given id is selected
 		var cb = $("#"+id);
-		//var cb = item.find("checkbox");
 		return cb.hasClass("checked");
 	},
 	selectedItems: function() {
@@ -43,10 +36,8 @@ var hp_corpusChooser = {
 		var allboxes = $(".boxdiv label .checked");
 		allboxes.each(function(){
 			var idstring = $(this).attr('id');
-			//alert(idstring);
 			IDArray.push(idstring.slice(9));
 		});
-		//alert(allboxes.length);
 		return IDArray;
 	},
 	_transform: function() {	
@@ -58,27 +49,22 @@ var hp_corpusChooser = {
 				body = el.html();
 			}
 			var newHTML = '<div class="scroll_checkboxes">';
-			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left; padding-top:2px"><span id="hp_corpora_title">' + this.options.allSelectedString + '</span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
+			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left; padding-top:2px"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
 			
 			newHTML += '<div class="popupchecks ui-corner-bottom">'
 			
-			newHTML += '<p style="text-align:right; margin-top:10px; margin-right:8px"><a href="#" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> ' + this.options.buttonSelectAll + '</a> <a href="#" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> ' + this.options.buttonSelectNone + '</a></p>';
+			newHTML += '<p style="text-align:right; margin-top:10px; margin-right:8px"><a href="#" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="#" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
 			
 			newHTML += recursive_transform(body,0);
 			newHTML += '</div>';
+			
 			el.replaceWith(newHTML);
 			
-			//var popoffset = $(".scroll_checkboxes").position().top + $(".hp_topframe").css("height");
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
 			$(".popupchecks").css({"top": popoffset-4});
 			// ie7 hack
 			$(".popupchecks").css({"left": $(".scroll_checkboxes").position().left});
 			
-			// Save the strings in the options of the UI object in the grand parent JQuery object
-			$(".scroll_checkboxes").data('allSelectedString',this.options.allSelectedString);
-			$(".scroll_checkboxes").data('noneSelectedString',this.options.noneSelectedString);
-			$(".scroll_checkboxes").data('selectedString',this.options.selectedString);
-			$(".scroll_checkboxes").data('selectedMultipleString',this.options.selectedMultipleString);
 			
 			$(".scroll_checkboxes").unbind("mousedown");
 			$(".scroll_checkboxes").mousedown(function(e) {
@@ -144,32 +130,13 @@ var hp_corpusChooser = {
 		 			$(this).parent().addClass('extended');
 		 			$(this).siblings('div').fadeToggle("fast");
 		 			$(this).attr({src : "img/extended.png"});
-		 			//$(this).siblings('img').attr({src : "img/folderopen.png"});
 		 		} else {
 		 			$(this).parent().removeClass('extended');
 		 			$(this).parent().addClass('collapsed');
 		 			$(this).siblings('div').fadeToggle("fast");
 		 			$(this).attr({src : "img/collapsed.png"});
-		 			//$(this).siblings('.extright').attr({src : "img/folder.png"});
 		 		}
 			});
-			
-			/*$(".extright").unbind("click");
-		 	$(".extright").click(function() {
-		 		if($(this).parent().attr('class') == "tree collapsed") {
-		 			$(this).parent().removeClass('collapsed');
-		 			$(this).parent().addClass('extended');
-		 			$(this).siblings('div').fadeToggle("fast");
-		 			$(this).siblings('.ext').attr({src : "img/extended.png"});
-		 			//$(this).attr({src : "img/folderopen.png"});
-		 		} else {
-		 			$(this).parent().removeClass('extended');
-		 			$(this).parent().addClass('collapsed');
-		 			$(this).siblings('div').fadeToggle("fast");
-		 			$(this).siblings('.ext').attr({src : "img/collapsed.png"});
-		 			//$(this).attr({src : "img/folder.png"});
-		 		}
-			});*/
 			
 			$(".boxlabel").unbind("click"); // "folders"
 			$(".boxlabel").click(function() {
@@ -233,24 +200,29 @@ var hp_corpusChooser = {
 		/* Update header */
 		function countSelected() {
 			var header_text = "";
+			var header_text_2 = "";
 			var checked_checkboxes = $(".hplabel .checked");
 			var num_checked_checkboxes = checked_checkboxes.length;
 			var num_unchecked_checkboxes = $(".hplabel .unchecked").length;
 			var num_checkboxes = $(".hplabel .checkbox").length;
 			if (num_unchecked_checkboxes == num_checkboxes) {
-				header_text = $('.scroll_checkboxes').data('noneSelectedString');
+				header_text_2 = 'corpselector_noneselected';
 			} else if (num_checked_checkboxes == num_checkboxes) {
-				header_text = $('.scroll_checkboxes').data('allSelectedString');
+				header_text_2 = 'corpselector_allselected';
 			} else if (num_checked_checkboxes == 1) {
 				var currentCorpusName = checked_checkboxes.parent().parent().attr('title');
 				if (currentCorpusName.length > 37) { // Ellipsis
 					currentCorpusName = $.trim(currentCorpusName.substr(0,37)) + "...";
 				}
-				header_text = currentCorpusName + $('.scroll_checkboxes').data('selectedString');
+				header_text = currentCorpusName;
+				header_text_2 = "corpselector_selectedone";
 			} else {
-				header_text = num_checked_checkboxes + $('.scroll_checkboxes').data('selectedMultipleString');
+				header_text = num_checked_checkboxes;
+				header_text_2 = "corpselector_selectedmultiple";
 			}
-			$("#hp_corpora_title").text(header_text);
+			$("#hp_corpora_title1").text(header_text);
+			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
+			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
 		}
 		
 		function updateState(element) {
@@ -290,7 +262,7 @@ var hp_corpusChooser = {
 						item_id = "";
 					if(item_id != "")
 						item_id = "hpcorpus_" + item_id;
-					//alert(item_id);
+
 					if(theHTML.indexOf("<li") != -1 || theHTML.indexOf("<LI") != -1 ) {
 						var cssattrib = "";
 						leftattrib = 30*Math.min(1,levelindent);
@@ -305,10 +277,10 @@ var hp_corpusChooser = {
 					} else {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
-							outStr += '<div title="' + theHTML + '" class="boxdiv" style="width:' + (330-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
+							outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (330-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
-								outStr += '<div title="' + theHTML + '" class="boxdiv" style="width:330px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
+								outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:330px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
 							}
 						}
 					}

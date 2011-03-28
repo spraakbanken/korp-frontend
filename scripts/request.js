@@ -6,7 +6,6 @@ function handlePaginationClick(new_page_index, pagination_container) {
 		var items_per_page = parseInt($("#num_hits").val());
 		
 		var cqp 	= $("#Pagination").data("cqp");
-		//var corpus 	= getCorpus().toUpperCase();
 		
 		var start = new_page_index*items_per_page;
 		var end = (start + items_per_page);

@@ -119,5 +119,12 @@
 	"tooltip_OO" : "Direct object",
 	"tooltip_RA" : "Place adverbial",
 	"tooltip_SS" : "Subject",
-	"tooltip_TA" : "Time adverbial"
+	"tooltip_TA" : "Time adverbial",
+	
+	"corpselector_allselected" : "All corpora selected",
+	"corpselector_noneselected" : "No corpus selected",
+	"corpselector_selectedone" : " selected",
+	"corpselector_selectedmultiple" : " corpuses selected",
+	"corpselector_buttonselectall" : "Select all",
+	"corpselector_buttonselectnone" : "Select none"
 }

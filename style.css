@@ -19,10 +19,6 @@ a:link {color:navy;}      /* unvisited link */
 a:visited {color:purple;}  /* visited link */
 a:hover {color:red;}  /* mouse over link */
 
-sup {
-	line-height : 0;
-}
-
 .color_blue {
 	background-color : #D0D7F0;
 }
@@ -105,7 +101,7 @@ sup {
 
 /* JONATAN */
 .ext {
-	margin-right: 4px;
+	margin-right: 0px;
 }
 
 .scroll_checkboxes {
@@ -134,7 +130,7 @@ sup {
 
 .popupchecks {
 	z-index: 9999;
-	height: 324px;
+	max-height:600px;
 	width: 382px;
 	#top: 124px;
 	border-color: #CCCCCC;
@@ -145,6 +141,7 @@ sup {
 	padding-top: 4px;
 	margin-top: 0px;
 	padding-left: 4px;
+	padding-bottom: 8px;
 	display: none;
 }
 
@@ -165,12 +162,12 @@ sup {
 	margin-top: 1px;
 	margin-bottom: -3px;
 	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-bottom: 1px;
 }
 
 .boxdiv {
 	margin-top: 2px;
-	background-color: #F3F3F3;
+	background-color: #F6F6F6;
 	position: relative;
 	padding-top: 3px;
 	padding-bottom: 1px;
@@ -193,7 +190,7 @@ sup {
 }
 
 .boxlabel > span {
-	background: #E1E1F1;
+	background: #FFFFFF;
 }
 
 .checkbox {

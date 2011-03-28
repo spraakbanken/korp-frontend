@@ -118,6 +118,13 @@
 	"tooltip_OO" : "Direct object",
 	"tooltip_RA" : "Place adverbial",
 	"tooltip_SS" : "Subject",
-	"tooltip_TA" : "Time adverbial"
+	"tooltip_TA" : "Time adverbial",
+	
+	"corpselector_allselected" : "Alla korpusar valda",
+	"corpselector_noneselected" : "Ingen vald korpus",
+	"corpselector_selectedone" : " vald",
+	"corpselector_selectedmultiple" : " korpusar valda",
+	"corpselector_buttonselectall" : "Markera alla",
+	"corpselector_buttonselectnone" : "Avmarkera"
     
 }
