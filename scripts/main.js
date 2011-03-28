@@ -5,13 +5,29 @@ var lemgramResults;
 
 $(function(){
 	$.ajaxSetup({ 
+		dataType: "jsonp",
 		traditional: true
-		});
-		
+	});
+	
+	
+	$('body').keypress(function(event) {
+		if (event.keyCode == 13) {
+			
+			event.preventDefault();
+			
+			if ( $("#simple_text").is(":visible" )) {
+				$("#simple_text").autocomplete("close");
+			}
+			if($("#ui-active-menuitem").length )
+				$("#sendBtn").click();
+		}
+	});
+	
 		
 	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");
 		lemgramProxy = new model.LemgramProxy();
+		kwicProxy = new model.KWICProxy();
 		simpleSearch = new view.SimpleSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
@@ -24,7 +40,6 @@ $(function(){
 			disabled : [2],
 			show : function() {
 				if($("#result-container").tabs("option", "selected")) { // any other than the first tab is selected
-					//simpleSearch.centerLemgramLabel();
 					hideSidebar();
 				} else { // first tab selected
 					showSidebar();
@@ -33,7 +48,6 @@ $(function(){
 			} 
 		});
 		
-		initSearch();
 		$("#result-container").click(function(){
 			util.SelectionManager.deselect();
 		});
@@ -46,14 +60,48 @@ $(function(){
 		$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 		
 //	move out sidebar
-//	$("#sidebar").hide();
 		hideSidebar();
 		
 		$("#simple_text")[0].focus();
+		parseQuery();
 	});
 });
 
+function parseQuery(){
 
+	var corpus = $.getUrlVar('corpus');
+	if (corpus && corpus.length != 0){
+		$("#select_corpus").val(corpus);
+		didSelectCorpus();
+	}
+	
+	var word = $.getUrlVar('word');
+	if(word && word.length != 0){
+		$('input[type=text]').val(decodeURIComponent(word));
+		updateCQP();
+		submitFormToServer();
+	}
+	
+	var saldo = $.getUrlVar('saldo');
+	if (saldo && saldo.length != 0){
+		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
+		$('a[href="#korp-advanced"]').trigger('click');
+		submitFormToServer();
+	}
+	
+	var lemgram = $.getUrlVar('lemgram');
+	if (lemgram && lemgram.length != 0){
+		simpleSearch.renderSimilarHeader(lemgram);
+		simpleSearch.selectLemgram(lemgram);
+	}
+	
+	var cqp = $.getUrlVar('cqp');
+	if (cqp && cqp.length != 0){
+		$("#cqp_string").val(cqp);
+		$('a[href="#korp-advanced"]').trigger('click');
+		submitFormToServer();
+	}		
+}
 
 var util = {};
 // <!-- SelectionManager
@@ -90,20 +138,21 @@ util.localize = function() {
 };
 
 util.lemgramToString = function(lemgram, appendIndex) {
+	var infixIndex = "";
 	if(util.isLemgramId(lemgram)) {
-		var infixIndex = "";
 		if(appendIndex != null && lemgram.slice(-1) != "1") {
 			infixIndex = $.format("<sup>%s</sup>", lemgram.slice(-1));
 		}
 		var concept = lemgram.split(".")[0].replace(/_/g, " ");
 		var type = lemgram.split(".")[2].slice(0, 2);
-		return $.format("%s%s (%s)", [concept, infixIndex, util.getLocaleString(type)]);
 	}
 	else { // missing from saldo, and have the form word_NN instead.
 		var concept = lemgram.split("_")[0];
 		var type = lemgram.split("_")[1];
-		return concept + " (" + util.getLocaleString(type) + ")";
+//		concept + " (" + util.getLocaleString(type) + ")";
 	}
+	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", 
+			[concept, infixIndex, type, util.getLocaleString(type)]);
 };
 
 util.lemgramArraytoString = function(lemgramArray, labelFunction) {
@@ -121,11 +170,5 @@ util.lemgramArraytoString = function(lemgramArray, labelFunction) {
 
 util.isLemgramId = function(lemgram) {
 	return lemgram.search(/\.\.\w+\.\d/) != -1;
-};
-
-util.corpusArrayToQuery = function(corpusArray) {
-	return $.map(corpusArray, function(item) {
-		return "corpus="+item.toUpperCase();
-		}).join("&");
 };
 

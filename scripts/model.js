@@ -9,7 +9,60 @@ model.LemgramProxy.prototype = {
 			submitFormToServer(cqp);
 			return cqp;
 		}
+};
 
+model.KWICProxy = function(){};
+
+model.KWICProxy.prototype = {
+	makeRequest : function(cqp, start, end) {
+		kwicResults.showPreloader();
 		
+		var selected_corpora_ids = getSelectedCorpora();
+		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n)
+	   	{ 
+			return(n.toUpperCase());
+	    });
+		
+		var data = {
+					command:'query',
+					corpus:selected_uppercased_corpora_ids,
+					cqp:cqp,
+					start:start,
+					end:end,
+					context:'1 sentence',
+					show:[],
+					show_struct:[]  
+				};
+		
+
+		var selected_corpora = $.map(selected_corpora_ids, function(n)
+	   	{ 
+			return(settings.corpora[n]);
+	    });
+	    
+	    
+	    for (sel in selected_corpora) {
+		    $.each(selected_corpora[sel].attributes, function(key,val){
+		    	if($.inArray(key, data.show) == -1)
+		    		data.show.push(key);
+			});
+			
+		
+			if (selected_corpora[sel].struct_attributes) {
+				$.each(selected_corpora[sel].struct_attributes, function(key,val){
+					if($.inArray(key, data.show_struct) == -1)
+						data.show_struct.push(key);
+				});
+			}
+	    }
+
+		$("#Pagination").data("cqp", cqp);
+		$.ajax({ url: settings.cgi_script, 
+					data:data,
+					success: $.proxy(kwicResults.renderTable, kwicResults)
+		});
+		
+		setJsonLink(data);
+	}
 		
 };

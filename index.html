@@ -7,7 +7,6 @@
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link rel="stylesheet" type="text/css" href="pagination.css">
-		<link  href="http://fonts.googleapis.com/css?family=OFL+Sorts+Mill+Goudy+TT:regular,italic" rel="stylesheet" type="text/css" >
 		
 		<title>Korp</title>
 		
@@ -86,7 +85,7 @@
 								<a name="results"></a>
 									<div id="result_controls">
 									   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-									   <input name="num_hits" id="num_hits" size="3" value="25" type="number"></div> 
+									   <input name="num_hits" id="num_hits" size="3" value="25" type="number" step="5" ></div> 
 									   <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
 									   <div style="clear : both; float : none;" ></div>
 								   </div>
@@ -114,8 +113,6 @@
 			</div>
 		
 		</div>
-		
-		<div id="preloader" style="position: absolute;z-index: 9999;"></div>
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
@@ -169,8 +166,7 @@
 			
 			{{if $item.lemgram == $.grep($value[($item.wordClass != "av" ? "head" : "dep")].toString().split("|"), Boolean)[0]}}
 			<tr>
-				<td data-lemgram="${$.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0]}" 
-					>${util.lemgramToString($.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0])}</td>
+				<td data-lemgram="${$.grep($value[($item.wordClass != "av" ? "dep" : "head")].toString().split("|"), Boolean)[0]}"></td> 
 				<td>${$value.freq}</td>
 				<td id="example_link" 
 					data-head="${$value['head']}" 
