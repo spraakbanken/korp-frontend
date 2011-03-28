@@ -92,15 +92,6 @@ var context = {
 	}
 };
 
-// added for search in all corpora
-//settings.corpora.all = {
-//	title : "- Alla korpusar -",
-//	languages : {
-//		all : "svenska"
-//	},
-//	context : context.defaultStruct,
-//	attributes : {}
-//};
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
@@ -112,8 +103,8 @@ settings.corpora.gp2009 = {
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
-		baseform : attrs.baseform,
-		lemgram : attrs.lemgram,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
 		saldo : attrs.saldo,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
@@ -146,8 +137,6 @@ settings.corpora.suc2 = {
 		ref : attrs.ref,
 		prefix : attrs.prefix,
 		suffix : attrs.suffix
-		//paragraph : attrs.paragraph,
-		//text : attrs.text
 	},
 	struct_attributes : {
 		sentence_n : {label : language.sentence},
@@ -388,6 +377,8 @@ settings.corpora.drama = {
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref
