@@ -60,6 +60,8 @@ var hp_corpusChooser = {
 			
 			el.replaceWith(newHTML);
 			
+			countSelected();
+			
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
 			$(".popupchecks").css({"top": popoffset-4});
 			// ie7 hack
@@ -208,6 +210,7 @@ var hp_corpusChooser = {
 			if (num_unchecked_checkboxes == num_checkboxes) {
 				header_text_2 = 'corpselector_noneselected';
 			} else if (num_checked_checkboxes == num_checkboxes) {
+				header_text = num_checked_checkboxes;
 				header_text_2 = 'corpselector_allselected';
 			} else if (num_checked_checkboxes == 1) {
 				var currentCorpusName = checked_checkboxes.parent().parent().attr('title');

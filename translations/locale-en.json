@@ -129,10 +129,10 @@
 	"tooltip_SS" : "Subject",
 	"tooltip_TA" : "Time adverbial",
 	
-	"corpselector_allselected" : "All corpora selected",
+	"corpselector_allselected" : " corpora selected (all)",
 	"corpselector_noneselected" : "No corpus selected",
 	"corpselector_selectedone" : " selected",
-	"corpselector_selectedmultiple" : " corpuses selected",
+	"corpselector_selectedmultiple" : " corpora selected",
 	"corpselector_buttonselectall" : "Select all",
 	"corpselector_buttonselectnone" : "Select none"
 }

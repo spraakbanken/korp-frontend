@@ -128,7 +128,7 @@
 	"tooltip_SS" : "Subject",
 	"tooltip_TA" : "Time adverbial",
 	
-	"corpselector_allselected" : "Alla korpusar valda",
+	"corpselector_allselected" : " korpusar valda (alla)",
 	"corpselector_noneselected" : "Ingen vald korpus",
 	"corpselector_selectedone" : " vald",
 	"corpselector_selectedmultiple" : " korpusar valda",
