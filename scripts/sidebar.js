@@ -35,7 +35,7 @@ function sidebarSaldoFormat() {
 			.wrap("<a href='javascript:void(0)' />")
 			.click(function() {
 				var i = $(this).index();
-				$.log("sidebar click", $(this).index())
+				$.log("sidebar click", $(this).index());
 				simpleSearch.selectLemgram(idArray[i]);
 			})
 			.hover(function(){
@@ -53,8 +53,8 @@ function sidebarSaldoFormat() {
 	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
 		var infixIndex = "";
 		if(appendIndex != null && saldoId.slice(-1) != "1")
-			infixIndex = $.format("<sup>%s</sup>", saldoId.slice(-1));
-		return $.format("%s%s", [saldoId.split(".")[0], infixIndex]);
+			infixIndex = $.format("<sup>%s</sup>", saldoId.match(/(.*?)\.\.(\d\d?)$/)[2]);
+		return $.format("%s%s", [saldoId.match(/(.*?)\.\.(\d\d?)$/)[1], infixIndex]);
 	});
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
@@ -65,7 +65,7 @@ function sidebarSaldoFormat() {
 		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
 		
 	}, function() {
-		$(".ui-icon").remove();
+		$(this).find(".ui-icon").remove();
 	});
 	
 	

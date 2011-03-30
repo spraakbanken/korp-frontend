@@ -12,6 +12,10 @@ body {
 	font-family : inherit; 
 }
 
+sup {
+	line-height : 0px;	
+}
+
 a {
 	text-decoration: none;
 }
@@ -561,7 +565,7 @@ table {
 
 #sidebar ul{
 	margin-top : 0;
-	margin-bottom : 8px;
+	margin-bottom : 2px;
 	padding-left : 20px;
 	list-style : none;
 	line-height: 16px;	

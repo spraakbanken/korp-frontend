@@ -150,13 +150,13 @@ util.lemgramToString = function(lemgram, appendIndex) {
 		if(appendIndex != null && lemgram.slice(-1) != "1") {
 			infixIndex = $.format("<sup>%s</sup>", lemgram.slice(-1));
 		}
-		var concept = lemgram.split(".")[0].replace(/_/g, " ");
-		var type = lemgram.split(".")[2].slice(0, 2);
+		var match = util.splitLemgram(lemgram);
+		var concept = match[0].replace(/_/g, " ");
+		var type = match[1].slice(0, 2);
 	}
 	else { // missing from saldo, and have the form word_NN instead.
 		var concept = lemgram.split("_")[0];
 		var type = lemgram.split("_")[1];
-//		concept + " (" + util.getLocaleString(type) + ")";
 	}
 	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", 
 			[concept, infixIndex, type, util.getLocaleString(type)]);
@@ -175,7 +175,15 @@ util.lemgramArraytoString = function(lemgramArray, labelFunction) {
 	});
 };
 
+util.lemgramRegexp = /\.\.\w+\.\d\d?$/;
 util.isLemgramId = function(lemgram) {
-	return lemgram.search(/\.\.\w+\.\d/) != -1;
+	return lemgram.search(util.lemgramRegexp) != -1;
+};
+util.splitLemgram = function(lemgram) {
+	if(!util.isLemgramId(lemgram)) {
+		$.error("Input to util.wordFromLemgram is not a lemgram: " + lemgram);
+		return;
+	}
+	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)$/).slice(1);
 };
 

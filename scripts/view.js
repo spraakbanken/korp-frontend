@@ -19,8 +19,10 @@ view.SimpleSearch = function() {
 				success : function(lemArray) {
 					$.log("autocomplete success");
 					lemArray.sort(function(first, second){
-						if(first.split(".")[0] == second.split(".")[0])
-							return parseInt(first.slice(-1)) - parseInt(second.slice(-1)); 
+						var match1 = util.splitLemgram(first);
+						var match2 = util.splitLemgram(second);
+						if(match1[0] == match2[0])
+							return parseInt(match1[2]) - parseInt(match2[2]); 
 						return first.length - second.length;
 					});
 					
@@ -110,14 +112,14 @@ view.SimpleSearch.prototype = {
 					$.log("related words success", data);
 					
 					$($.map(data, function(item, i){
-						return $.format("<a href='javascript:void(0)' data-lemgram='%s'>%s</a>", [item, item.split(".")[0]]);
+						var match = util.splitLemgram(item);
+						return $.format("<a href='javascript:void(0)' data-lemgram='%s'>%s</a>", [item, match[0]]);
 					}).join(" "))
 					.click(function() {
 						self.selectLemgram($(this).data("lemgram"));
 					})
 					.appendTo("#similar_lemgrams");
 					$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
-					
 				}
 			});
 
@@ -368,7 +370,7 @@ view.LemgramResults.prototype = {
 				nn : "AT,_,ET".split(","),
 				av :"_,AT".split(",")
 			};
-			var wordClass = lemgram.split(".")[2].slice(0, 2);
+			var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
 			
 			if(order[wordClass] == null) {
 				lemgramResults.showNoResults();
