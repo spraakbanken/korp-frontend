@@ -11,7 +11,7 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	else
 		$.error("sidebartemplate broken");
 	
-	if(sentenceData) {
+	if(settings.corpora[corpus.toLowerCase()].struct_attributes) {
 		$("#sidebarTmpl").tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : settings.corpora[corpus.toLowerCase()].struct_attributes}).appendTo("#selected_sentence");
 	}
 	$("<p />").html("corpus : " + corpus).appendTo("#selected_word");
