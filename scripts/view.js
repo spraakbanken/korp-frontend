@@ -6,8 +6,10 @@ var view = {};
 
 view.SimpleSearch = function() {
 	this.prevLemgramRequest = null;
+	this._enabled = true;
 	var self = this;
-	$("#simple_text").keyup(this.onSimpleChange);
+	$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
+	this.onSimpleChange();
 	$("#similar_lemgrams").hide();
 	$("#simple_text").autocomplete({
 		html : true,
@@ -60,9 +62,8 @@ view.SimpleSearch = function() {
 		select: function( event, ui ) {
 			event.preventDefault();
 			var selectedItem = ui.item.value;
-			$.log( selectedItem, ui.item.value, ui, event);
+			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
 			
-			self.renderSimilarHeader(selectedItem);
 			self.selectLemgram(selectedItem);
 		},
 		focus : function(event) {
@@ -76,8 +77,8 @@ view.SimpleSearch.prototype = {
 		selectLemgram : function(lemgram) {
 			var self = this;
 			var corpus = getSelectedCorpora();
-			$("#similar_lemgrams a").remove();
 			$("#similar_lemgrams").show();
+			this.renderSimilarHeader(lemgram);
 			$("#result-container").tabs("option", "disabled", []);
 			$.ajax({
 				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi",
@@ -128,32 +129,34 @@ view.SimpleSearch.prototype = {
 		renderSimilarHeader : function(selectedItem) {
 			$.log("renderSimilarHeader");
 			var self = this;
-			$("#similar_header").empty();
+			$("#similar_lemgrams").empty().append("<div id='similar_header' />");
 			$("<p rel='localize[similar_header]' />").html(util.getLocaleString("similar_header"))
 			.css("float", "left")
 			.appendTo("#similar_header");
 			
-			
-			if($( "#simple_text" ).data("dataArray")) {
+			var data = $( "#simple_text" ).data("dataArray");
+			if(data != null && data.length ) {
 				var optionElems = $.map($( "#simple_text" ).data("dataArray"), function(item) {
 					return $.format("<option value='%(value)s'>%(label)s</option>", item);
 				});
+//				if(optionElems.length) {
+//					
+//				}
 				$("<select id='lemgram_select' />").appendTo("#similar_header")
 				.css("float", "right")
 				.html(optionElems.join(""))
 				.change(function(){
-					self.renderSimilarHeader($(this).val());
 					self.selectLemgram($(this).val());
 				})
 				.val(selectedItem);
+				$( "#simple_text" ).data("dataArray", null);
 			}
 			$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
 		},
 		
 		onSimpleChange : function() {
 			var val;
-			var lemgram = $("#simple_text").val().match(/\w+\.\.\w+\.\d/);
-			if(lemgram) { // if the input is a lemgram, do semantic search.
+			if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
 				val = $.format('[(lex contains "%s")]', lemgram);
 			} else {
 				var valArray = $("#simple_text").val().split(" ");
@@ -163,7 +166,30 @@ view.SimpleSearch.prototype = {
 				val = cqp.join(" ");
 			}
 			$("#cqp_string").val(val);
-		} 
+			if($("#simple_text").val() != "") {
+				this.enable();
+			} else {
+				this.disable();
+			}
+			
+		},
+		
+		resetView : function() {
+			$("#similar_lemgrams").empty();
+		},
+		
+		isEnabled : function() {
+			return this._enabled;
+		},
+		
+		enable : function() {
+			this._enabled = true;
+			$("#sendBtn").attr("disabled", "");
+		},
+		disable : function() {
+			this._enabled = false;
+			$("#sendBtn").attr("disabled", "disabled");
+		}
 		
 };
 
@@ -226,8 +252,9 @@ view.KWICResults.prototype = {
 		else {
 			$("#results").hide();
 		}
-		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected"))
+		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
 			showSidebar();
+		}
 		$.log("corpus_results");
 		
 		$.each(data.kwic, function(i,sentence){
@@ -264,7 +291,6 @@ view.KWICResults.prototype = {
 	},
 		
 	centerScrollbar : function() {
-		$.log("centerScrollbar", $("#sidebar:visible").outerWidth());
 		if(!$(".match").first().length) return;
 		$("#table_scrollarea").scrollLeft(0);
 		var matchLeft = $(".match").first().position().left;
@@ -387,6 +413,8 @@ view.LemgramResults.prototype = {
 				var $siblings = $(this).parent().siblings().find("td:first-child");
 				
 				var siblingLemgrams = $.map($siblings, function(item) {
+					if($(item).data("lemgram") == "f.n...aba.1" )
+						$.log("lemgram",$(item).data("lemgram"), $(item).tmplItem())
 					return $(item).data("lemgram").slice(0, -1);
 				});
 				var hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) != -1;

@@ -10,16 +10,18 @@ $(function(){
 	});
 	
 	
-	$('body').keypress(function(event) {
-		if (event.keyCode == 13) {
-			
-			event.preventDefault();
+//	$('body').keydown(function(event) {
+	$('body').bind("keydown.autocomplete", function(event) {
+		if (event.keyCode == $.ui.keyCode.ENTER) {
+			if(!simpleSearch.isEnabled()) return;
 			
 			if ( $("#simple_text").is(":visible" )) {
 				$("#simple_text").autocomplete("close");
 			}
-			if(!$("#ui-active-menuitem").length )
-				$("#sendBtn").click();
+			$("#sendBtn").click();
+//			if(!$("#ui-active-menuitem").length ) {
+//				$.log("enter pressed: submit ");
+//			}
 				
 		}
 	});

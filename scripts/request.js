@@ -32,9 +32,9 @@ function onSubmit(evt) {
 	case "korp-simple":
 		simpleSearch.onSimpleChange();
 		// clear the simple search from previous lemgram search result widgets
+		$("#result-container").tabs("select", 0);
 		$("#result-container").tabs("option", "disabled", [2]);
-		$("#lemgram_select").remove();
-		$("#similar_lemgrams").empty();
+		simpleSearch.resetView();
 		
 		break;
 	case "korp-extended":

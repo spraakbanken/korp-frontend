@@ -7,8 +7,14 @@ var attrs = {};
 var sattrs = {};
 
 var settings = {};
-
 settings.corpora = {};
+
+/*
+ * ATTRIBUTES
+ */
+
+var attrs = {};  // positional attributes
+var sattrs = {}; // structural attributes
 
 attrs.pos = {
 	label : language.pos,
@@ -86,12 +92,32 @@ var within = {
 		"sentence" : language.sentence
 	}
 };
+
 var context = {
 	"defaultStruct" : {
 		"1 sentence" : language.oneSentence
 	}
 };
 
+/*
+ * FOLDERS
+ */
+ 
+settings.corporafolders = {};
+
+settings.corporafolders.novels = {
+    title : "Skönlitteratur",
+    contents : ["romi", "romii", "storsuc"]
+};
+
+settings.corporafolders.newspapertexts = {
+    title : "Tidningstexter",
+    contents : ["gp2009", "konkplus"]
+};
+
+/*
+ * CORPORA
+ */
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
@@ -275,10 +301,6 @@ settings.corpora.snp7879 = {
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref
-	},
-	struct_attributes : {
-		sentence_n : {label : language.sentence},
-		text_id : {label : language.text}
 	}
 };
 
@@ -385,6 +407,10 @@ settings.corpora.drama = {
 	}
 };
 
+/*
+ * MISC
+ */
+
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
 settings.arg_types = {
@@ -401,19 +427,19 @@ settings.arg_types = {
 
 settings.arg_groups = {
 	"ord" : {
-		word : "ordet är",
-		notword : "ordet är inte",
-		beginswith : "börjar med",
-		endswith : "slutar med",
-		regexp : "reguljärt uttryck"
+		word : language.word_is,
+		notword : language.word_is_not,
+		beginswith : language.word_beginswith,
+		endswith : language.word_endswith,
+		regexp : language.matches_regexp
 	},
 	"ordklass" : {
-		pos : "ordklassen är",
-		msd : "ordklassen börjar med"
+		pos : language.wordclass_is,
+		msd : language.wordclass_starts
 	},
 	"intervall" : {
-		max : "upp till",
-		min : "minst"
+		max : language.max,
+		min : language.min
 	}
 };
 

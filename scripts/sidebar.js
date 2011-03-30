@@ -34,7 +34,8 @@ function sidebarSaldoFormat() {
 			.find("li")
 			.wrap("<a href='javascript:void(0)' />")
 			.click(function() {
-				var i = $.inArray($(this).text(), labelArray);
+				var i = $(this).index();
+				$.log("sidebar click", $(this).index())
 				simpleSearch.selectLemgram(idArray[i]);
 			})
 			.hover(function(){

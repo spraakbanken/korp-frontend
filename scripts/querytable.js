@@ -254,57 +254,6 @@ function removeArg(arg) {
     didToggleToken(row);
 }
 
-function initSearch(){
-
-	$('#tabs-container').keypress(function(event) {
-		if (event.keyCode == '13') {
-			
-			event.preventDefault();
-//			if($("#korp-extended:visible").length)
-//				updateCQP();
-//			submitFormToServer();
-			if ( $("#simple_text").is(":visible" )) {
-				$("#simple_text").autocomplete("close");
-			}
-			$("#sendBtn").click();
-		}
-	});
-
-	
-	var corpus = $.getUrlVar('corpus');
-	if (corpus && corpus.length != 0){
-		$("#select_corpus").val(corpus);
-		didSelectCorpus();
-	}
-	
-	var word = $.getUrlVar('word');
-	if(word && word.length != 0){
-		$('input[type=text]').val(decodeURIComponent(word));
-		updateCQP();
-		submitFormToServer();
-	}
-	
-	var saldo = $.getUrlVar('saldo');
-	if (saldo && saldo.length != 0){
-		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
-		$('a[href="#korp-advanced"]').trigger('click');
-		submitFormToServer();
-	}
-	
-	var lemgram = $.getUrlVar('lemgram');
-	if (lemgram && lemgram.length != 0){
-		$("#cqp_string").val('[(lex contains "'+decodeURIComponent(lemgram)+'")]');
-		//$('a[href="#korp-advanced"]').trigger('click');
-		submitFormToServer();
-	}
-	
-	var cqp = $.getUrlVar('cqp');
-	if (cqp && cqp.length != 0){
-		$("#cqp_string").val(cqp);
-		$('a[href="#korp-advanced"]').trigger('click');
-		submitFormToServer();
-	}		
-}
 
 //////////////////////////////////////////////////////////////////////
 
