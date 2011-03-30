@@ -469,18 +469,22 @@ view.LemgramResults.prototype = {
 					if(data.ERROR) {
 						$.error($.dump(data));
 						return;
+					} else if(data.hits == 0) {
+						$.log("An error has occurred: no results from example, query : " + cqp);
+						var pElems = $("<i>An error occurred while fetching examples.</i>");
+					} else {
+						var pElems = $.map(data.kwic, function(sentence) {
+							return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
+								var prefix = postfix = "";
+								if(sentence.match.start == i)
+									prefix = "<b>";
+								else if(sentence.match.end == (i+1))
+									postfix = "</b>";
+								return prefix + token.word + postfix;
+							}).join(" ").replace(/\s([\.,\:])/g, "$1"));
+						}).join("\n");
 					}
 					
-					var pElems = $.map(data.kwic, function(sentence) {
-						return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
-							var prefix = postfix = "";
-							if(sentence.match.start == i)
-								prefix = "<b>";
-							else if(sentence.match.end == (i+1))
-								postfix = "</b>";
-							return prefix + token.word + postfix;
-						}).join(" ").replace(/\s([\.,\:])/g, "$1"));
-					}).join("\n");
 					
 					$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
 					.appendTo("#results-lemgram").append("<ol />")
