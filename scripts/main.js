@@ -10,20 +10,21 @@ $(function(){
 	});
 	
 	
-//	$('body').keydown(function(event) {
 	$('body').bind("keydown.autocomplete", function(event) {
-		if (event.keyCode == $.ui.keyCode.ENTER) {
+		var keyCode = $.ui.keyCode;
+		switch(event.keyCode) {
+		case keyCode.ENTER:
 			if(!simpleSearch.isEnabled()) return;
 			
 			if ( $("#simple_text").is(":visible" )) {
 				$("#simple_text").autocomplete("close");
 			}
 			$("#sendBtn").click();
-//			if(!$("#ui-active-menuitem").length ) {
-//				$.log("enter pressed: submit ");
-//			}
-				
+			
+			break;
+		
 		}
+		
 	});
 	
 		

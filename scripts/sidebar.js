@@ -14,7 +14,7 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	if(settings.corpora[corpus.toLowerCase()].struct_attributes) {
 		$("#sidebarTmpl").tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : settings.corpora[corpus.toLowerCase()].struct_attributes}).appendTo("#selected_sentence");
 	}
-	$("<p />").html("corpus : " + corpus).appendTo("#selected_word");
+	$("<p />").html("corpus : " + settings.corpora[corpus.toLowerCase()].title).appendTo("#selected_word");
 	sidebarSaldoFormat();
 	
 	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();

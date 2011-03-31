@@ -306,7 +306,25 @@ view.KWICResults.prototype = {
 	},
 	hidePreloader : function() {
 		$(".spinner").remove();
+	},
+	
+	getCurrentRow : function() {
+		return $(".token_selected").closest("tr").find(".word")
+	},
+	
+	selectNext : function() {
+		var i = this.getCurrentRow().index($(".token_selected").get(0));
+		var next = this.getCurrentRow().get(i+1);
+		if(next == null) return;
+		util.SelectionManager.select($(next));
+	},
+	selectPrev : function() {
+		var i = this.getCurrentRow().index($(".token_selected").get(0));
+		if(i == 0) return;
+		var prev = this.getCurrentRow().get(i-1);
+		util.SelectionManager.select($(prev));
 	}
+	
 
 };
 
