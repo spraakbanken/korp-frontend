@@ -176,7 +176,7 @@ util.lemgramArraytoString = function(lemgramArray, labelFunction) {
 	});
 };
 
-util.lemgramRegexp = /\.\.\w+\.\d\d?$/;
+util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/;
 util.isLemgramId = function(lemgram) {
 	return lemgram.search(util.lemgramRegexp) != -1;
 };
@@ -185,6 +185,6 @@ util.splitLemgram = function(lemgram) {
 		$.error("Input to util.wordFromLemgram is not a lemgram: " + lemgram);
 		return;
 	}
-	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)$/).slice(1);
+	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(1);
 };
 

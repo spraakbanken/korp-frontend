@@ -1,20 +1,25 @@
 
 
 function updateSidebar(sentenceData, wordData, corpus) {
-	$.log("updateSidebar");
 	$("#selected_word").empty();
 	$("#selected_sentence").empty();
-	
+	var corpusObj = settings.corpora[corpus.toLowerCase()];
 	
 	if($("#sidebarTmpl").length > 0)
-		$("#sidebarTmpl").tmpl([wordData], {"header" : "word", "corpusAttributes" : settings.corpora[corpus.toLowerCase()].attributes}).appendTo("#selected_word");
+		$("#sidebarTmpl")
+		.tmpl([wordData], {"header" : "word", "corpusAttributes" : corpusObj.attributes})
+		.appendTo("#selected_word");
 	else
 		$.error("sidebartemplate broken");
 	
-	if(settings.corpora[corpus.toLowerCase()].struct_attributes) {
-		$("#sidebarTmpl").tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : settings.corpora[corpus.toLowerCase()].struct_attributes}).appendTo("#selected_sentence");
+	if(corpusObj.struct_attributes) {
+		$("#sidebarTmpl")
+		.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
+		.appendTo("#selected_sentence");
 	}
-	$("<p />").html("corpus : " + settings.corpora[corpus.toLowerCase()].title).appendTo("#selected_word");
+	$("<div />").html(
+			$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
+			.prependTo("#selected_sentence");
 	sidebarSaldoFormat();
 	
 	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
@@ -47,14 +52,14 @@ function sidebarSaldoFormat() {
 		}
 		
 	});
-	
 	var $saldo = $("#sidebar_saldo"); 
 	var saldoidArray = $.grep($saldo.text().split("|"), Boolean).sort();
 	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
+		var match = saldoId.match(/(.*?)\.\.(\d\d?)(\:\d+)?$/);
 		var infixIndex = "";
-		if(appendIndex != null && saldoId.slice(-1) != "1")
-			infixIndex = $.format("<sup>%s</sup>", saldoId.match(/(.*?)\.\.(\d\d?)$/)[2]);
-		return $.format("%s%s", [saldoId.match(/(.*?)\.\.(\d\d?)$/)[1], infixIndex]);
+		if(appendIndex != null && match[2] != "1")
+			infixIndex = $.format("<sup>%s</sup>", match[2]);
+		return $.format("%s%s", [match[1], infixIndex]);
 	});
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
