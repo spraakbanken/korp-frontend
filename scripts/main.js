@@ -148,10 +148,10 @@ util.localize = function() {
 util.lemgramToString = function(lemgram, appendIndex) {
 	var infixIndex = "";
 	if(util.isLemgramId(lemgram)) {
-		if(appendIndex != null && lemgram.slice(-1) != "1") {
-			infixIndex = $.format("<sup>%s</sup>", lemgram.slice(-1));
-		}
 		var match = util.splitLemgram(lemgram);
+		if(appendIndex != null && match[2] != "1") {
+			infixIndex = $.format("<sup>%s</sup>", match[2]);
+		}
 		var concept = match[0].replace(/_/g, " ");
 		var type = match[1].slice(0, 2);
 	}
@@ -166,11 +166,11 @@ util.lemgramToString = function(lemgram, appendIndex) {
 util.lemgramArraytoString = function(lemgramArray, labelFunction) {
 	labelFunction = labelFunction || util.lemgramToString;
 	var tempArray = $.map(lemgramArray, function(lemgram){
-		return lemgram.slice(0,-1);
+		return labelFunction(lemgram, false);
 	});
 	return $.map(lemgramArray, function(lemgram) {
 		var isAmbigous = $.grep(tempArray, function(tempLemgram) {
-			return tempLemgram == lemgram.slice(0, -1);
+			return tempLemgram == labelFunction(lemgram, false);
 		}).length > 1;
 		return labelFunction(lemgram, isAmbigous);
 	});
@@ -182,7 +182,7 @@ util.isLemgramId = function(lemgram) {
 };
 util.splitLemgram = function(lemgram) {
 	if(!util.isLemgramId(lemgram)) {
-		$.error("Input to util.wordFromLemgram is not a lemgram: " + lemgram);
+		throw new Error("Input to util.splitLemgram is not a lemgram: " + lemgram);
 		return;
 	}
 	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(1);

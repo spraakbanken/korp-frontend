@@ -39,9 +39,10 @@ function sidebarSaldoFormat() {
 			.find("li")
 			.wrap("<a href='javascript:void(0)' />")
 			.click(function() {
-				var i = $(this).index();
-				$.log("sidebar click", $(this).index());
-				simpleSearch.selectLemgram(idArray[i]);
+				var split = util.splitLemgram(idArray[$(this).parent().index()]);
+				var id = split[0] + ".." + split[1] + "." + split[2];
+				$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
+				simpleSearch.selectLemgram(id);
 			})
 			.hover(function(){
 				$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
@@ -52,10 +53,11 @@ function sidebarSaldoFormat() {
 		}
 		
 	});
+	var saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/;
 	var $saldo = $("#sidebar_saldo"); 
 	var saldoidArray = $.grep($saldo.text().split("|"), Boolean).sort();
 	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
-		var match = saldoId.match(/(.*?)\.\.(\d\d?)(\:\d+)?$/);
+		var match = saldoId.match(saldoRegExp);
 		var infixIndex = "";
 		if(appendIndex != null && match[2] != "1")
 			infixIndex = $.format("<sup>%s</sup>", match[2]);
@@ -64,7 +66,8 @@ function sidebarSaldoFormat() {
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
 	.each(function(i, item){
-		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", saldoidArray[i]));
+		var id = saldoidArray[i].match(saldoRegExp).slice(1,3).join("..");
+		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", id));
 	})
 	.hover(function(){
 		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
