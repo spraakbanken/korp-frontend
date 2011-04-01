@@ -138,7 +138,10 @@ util.getLocaleString = function(key) {
 		$.error("Locale string cannot be found because no data file has been read.");
 		return;
 	}
-	return $.localize.data.locale[key];
+	var output = $.localize.data.locale[key];
+	if(output == null)
+		$.error("Could not find translation key " + key);
+	return output;
 };
 
 util.localize = function() {

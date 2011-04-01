@@ -71,7 +71,6 @@ function sidebarSaldoFormat() {
 	})
 	.hover(function(){
 		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
-		
 	}, function() {
 		$(this).find(".ui-icon").remove();
 	});

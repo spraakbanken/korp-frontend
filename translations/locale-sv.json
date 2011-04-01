@@ -105,6 +105,9 @@
 	"al" : "artikel", 
 	"ie" : "infinitivmärke",
 	
+	"mx" : "flerordsprefix",	  
+	"sx" : "prefix",
+	
 	"dep" : "Depentent",
 	"sources" : "Exempel",
 	"head" : "Head",

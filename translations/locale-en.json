@@ -105,6 +105,9 @@
 	"al" : "article", 
 	"ie" : "infinitive particle",
 	
+	"mx" : "flerordsprefix",	  
+	"sx" : "prefix",	  					
+	
 	
 	"dep" : "Depentent",
 	"sources" : "Examples",
