@@ -169,6 +169,10 @@ a:hover {color:red;}  /* mouse over link */
 	padding-bottom: 1px;
 }
 
+.collapsed {
+	margin-bottom: 0px;
+}
+
 .boxdiv {
 	margin-top: 2px;
 	background-color: #F6F6F6;
