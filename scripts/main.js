@@ -2,7 +2,20 @@ var lemgramProxy;
 var simpleSearch;
 var kwicResults;
 var lemgramResults;
+var t; // deleted in controller.js
 
+//pre-init
+(function() {
+	t = new Date().getTime();
+	$.sm("korp_statemachine.xml");
+//	$.sm("scripts/_generatedStatechart.js");
+	
+	
+	
+})();
+
+
+// onDOMReady
 $(function(){
 	$.ajaxSetup({ 
 		dataType: "jsonp",
@@ -27,8 +40,6 @@ $(function(){
 		
 	});
 
-	$.sm("korp_statemachine.xml");
-		
 	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");
 		lemgramProxy = new model.LemgramProxy();
@@ -36,7 +47,6 @@ $(function(){
 		simpleSearch = new view.SimpleSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
-		
 		
 		loadCorpora();
 		resetQuery();
