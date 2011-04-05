@@ -11,6 +11,11 @@ view.SimpleSearch = function() {
 	$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
 	this.onSimpleChange();
 	$("#similar_lemgrams").hide();
+	
+	$("#korp-simple").click(function() {
+		$("#simple_text").autocomplete("close");
+	});
+	
 	$("#simple_text").autocomplete({
 		html : true,
 		source: function( request, response ) {
@@ -309,7 +314,7 @@ view.KWICResults.prototype = {
 	},
 	
 	getCurrentRow : function() {
-		return $(".token_selected").closest("tr").find(".word")
+		return $(".token_selected").closest("tr").find(".word");
 	},
 	
 	selectNext : function() {
