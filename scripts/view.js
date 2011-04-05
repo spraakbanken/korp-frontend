@@ -433,8 +433,6 @@ view.LemgramResults.prototype = {
 				var $siblings = $(this).parent().siblings().find("td:first-child");
 				
 				var siblingLemgrams = $.map($siblings, function(item) {
-					if($(item).data("lemgram") == "f.n...aba.1" )
-						$.log("lemgram",$(item).data("lemgram"), $(item).tmplItem())
 					return $(item).data("lemgram").slice(0, -1);
 				});
 				var hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) != -1;
@@ -473,7 +471,7 @@ view.LemgramResults.prototype = {
 				dep : dep_query,  
 				rel : $target.data("rel")
 				});
-			$.ajax({ url : settings.cgi_script, // + "?" + $.map($target.data("corpus").split(","), function(item) {return "corpus="+item;}).join("&") 
+			$.ajax({ url : settings.cgi_script, 
 				data:{
 					command:'query',
 					cqp:cqp,
@@ -524,7 +522,7 @@ view.LemgramResults.prototype = {
 		
 		hideWordclass : function() {
 			$("#results-lemgram td:first-child").each(function() {
-				$(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")))
+				$(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")));
 			});
 		},
 		

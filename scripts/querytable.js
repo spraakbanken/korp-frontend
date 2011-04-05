@@ -1,22 +1,4 @@
 
-/*function submitForm() {
-    var corpus = getCorpus();
-	
-    var cqp = $("#cqp_string").val();
-    cqp = cqp.replace(/\n/g, " ");
-    $("#corpus").val(corpus);
-    $("#cqp").val(cqp);
-
-    var languages = settings.corpora[getCorpus()].languages;
-    for (var lng in languages) {
-        if (cqp.indexOf(":" + lng + " ") >= 0) {
-            $("#automatic_attributes").append(
-                $("<input type='hidden' name='show'/>").val(lng.toLowerCase())
-            );
-        }
-    }
-} */
-
 function didSelectCorpus() {
     var corpus = settings.corpora[getCorpus()];
 

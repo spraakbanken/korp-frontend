@@ -26,7 +26,8 @@ $(function(){
 		}
 		
 	});
-	
+
+	$.sm("korp_statemachine.xml");
 		
 	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");
@@ -35,6 +36,7 @@ $(function(){
 		simpleSearch = new view.SimpleSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
+		
 		
 		loadCorpora();
 		resetQuery();

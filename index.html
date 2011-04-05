@@ -13,6 +13,9 @@
 		<script type="text/javascript" src="lib/jquery.js"></script>
 		<script type="text/javascript" src="lib/raphael-min.js"></script>
 		
+		<script type="text/javascript" src="lib/scxml/require.js"></script>
+		<script type="text/javascript" src="lib/scxml/require/xml.js"></script>
+		<script type="text/javascript" src="lib/scxml/require/text.js"></script>
 		
 		<script type="text/javascript" src="lib/ui/jquery.ui.core.js" ></script>
 		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
@@ -45,9 +48,9 @@
 		</script>
 		<script type="text/javascript" src="config.js"></script>
 		
-		
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
 		
+		<script type="text/javascript" src="scripts/controller.js"></script>
 		<script type="text/javascript" src="scripts/view.js"></script>
 		<script type="text/javascript" src="scripts/model.js"></script>
 		<script type="text/javascript" src="scripts/main.js"></script>
@@ -55,7 +58,13 @@
 		<script type="text/javascript" src="scripts/request.js"></script>
 		<script type="text/javascript" src="scripts/sidebar.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
-		 
+		
+		
+		<script>
+		
+		
+		</script>
+		
 	</head>
   	<body>
   		<div id="header">
@@ -111,7 +120,14 @@
 					<div style="clear : both; float : none;"></div>
 				</div>
 			</div>
-		
+			<div id="fullpage" ></div>
+			<script>
+// 	 			var R = Raphael("fullpage");
+// 	 			R.text(400, 300, "hello")
+// 	 			$("text").css("font-size", "400px")
+			
+	 			//$("svg").hide("fade");
+	 			</script>
 		</div>
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">

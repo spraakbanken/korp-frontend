@@ -1,0 +1,21 @@
+<scxml verion="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
+    profile="ecmascript" initial="s1" >
+    
+    <datamodel>
+        <data id="my_slot" expr="1234" />
+    
+    </datamodel>
+    
+    <state id="s1">
+        <transition target="s2" />
+    </state>
+    
+    <state id="s2">
+        <onentry>
+            <log label="hello" expr="'expr'" />
+            <script>
+                console.log("log");
+            </script>
+        </onentry>
+    </state>
+</scxml>
