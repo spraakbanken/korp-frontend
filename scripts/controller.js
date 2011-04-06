@@ -22,7 +22,7 @@
 		this.compileAndRun = function(scxmlSrc) {
 			require(
 					{
-						"baseUrl":"/korp/"
+						"baseUrl":"./"
 					},
 					["lib/scxml/SCXMLCompiler",
 					 "xml!" + scxmlSrc],
