@@ -1,4 +1,4 @@
-<scxml verion="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
+<scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
     profile="ecmascript" initial="s1" >
     
     <datamodel>
