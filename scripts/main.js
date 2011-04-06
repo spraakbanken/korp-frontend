@@ -91,6 +91,8 @@ function parseQuery(){
 
 	var corpus = $.getUrlVar('corpus');
 	if (corpus && corpus.length != 0){
+		var corp_array = corpus.split(',');
+		corpusChooserInstance.corpusChooser("selectItems",corp_array);
 		$("#select_corpus").val(corpus);
 		didSelectCorpus();
 	}
