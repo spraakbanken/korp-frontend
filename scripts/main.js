@@ -7,7 +7,7 @@ var t; // deleted in controller.js
 //pre-init
 (function() {
 	t = new Date().getTime();
-	$.sm("korp_statemachine.xml");
+	
 //	$.sm("scripts/_generatedStatechart.js");
 	
 	
@@ -21,7 +21,7 @@ $(function(){
 		dataType: "jsonp",
 		traditional: true
 	});
-	
+	$.sm("korp_statemachine.xml");
 	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;
