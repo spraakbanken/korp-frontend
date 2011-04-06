@@ -62,6 +62,7 @@ var hp_corpusChooser = {
 		 		});
 			}
 		});
+		this.countSelected();
 	},
 	updateState: function (element) {
 			// element is a div!
@@ -102,7 +103,33 @@ var hp_corpusChooser = {
  				obj.attr({src : "img/unchecked.png"});
  			}
  	},
-	
+	countSelected: function () { /* Update header */
+			var header_text = "";
+			var header_text_2 = "";
+			var checked_checkboxes = $(".hplabel .checked");
+			var num_checked_checkboxes = checked_checkboxes.length;
+			var num_unchecked_checkboxes = $(".hplabel .unchecked").length;
+			var num_checkboxes = $(".hplabel .checkbox").length;
+			if (num_unchecked_checkboxes == num_checkboxes) {
+				header_text_2 = 'corpselector_noneselected';
+			} else if (num_checked_checkboxes == num_checkboxes) {
+				header_text = num_checked_checkboxes;
+				header_text_2 = 'corpselector_allselected';
+			} else if (num_checked_checkboxes == 1) {
+				var currentCorpusName = checked_checkboxes.parent().parent().attr('title');
+				if (currentCorpusName.length > 37) { // Ellipsis
+					currentCorpusName = $.trim(currentCorpusName.substr(0,37)) + "...";
+				}
+				header_text = currentCorpusName;
+				header_text_2 = "corpselector_selectedone";
+			} else {
+				header_text = num_checked_checkboxes;
+				header_text_2 = "corpselector_selectedmultiple";
+			}
+			$("#hp_corpora_title1").text(header_text);
+			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
+			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
+	},
 	_transform: function() {	
 			var el = this.element;
 			hp_this = this;
@@ -124,7 +151,7 @@ var hp_corpusChooser = {
 			
 			el.replaceWith(newHTML);
 			
-			countSelected();
+			hp_this.countSelected();
 			
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
 			$(".popupchecks").css({"top": popoffset-4});
@@ -171,7 +198,7 @@ var hp_corpusChooser = {
 					});
 					
 				});
-				countSelected();
+				hp_this.countSelected();
 			});
 			
 			/* SELECT NONE BUTTON */
@@ -186,7 +213,7 @@ var hp_corpusChooser = {
 					});
 					
 				});
-				countSelected();
+				hp_this.countSelected();
 			});
 			
 		 	$(".ext").unbind("click");
@@ -226,7 +253,7 @@ var hp_corpusChooser = {
 		 		ancestors.each(function(){
 		 			hp_this.updateState($(this));
 		 		});
-		 		countSelected();
+		 		hp_this.countSelected();
  			});
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
@@ -243,42 +270,8 @@ var hp_corpusChooser = {
 		 		ancestors.each(function(){
 		 			hp_this.updateState($(this));
 		 		});
-		 		countSelected();
+		 		hp_this.countSelected();
  			});
- 			
-
-		
-		/* Update header */
-		function countSelected() {
-			var header_text = "";
-			var header_text_2 = "";
-			var checked_checkboxes = $(".hplabel .checked");
-			var num_checked_checkboxes = checked_checkboxes.length;
-			var num_unchecked_checkboxes = $(".hplabel .unchecked").length;
-			var num_checkboxes = $(".hplabel .checkbox").length;
-			if (num_unchecked_checkboxes == num_checkboxes) {
-				header_text_2 = 'corpselector_noneselected';
-			} else if (num_checked_checkboxes == num_checkboxes) {
-				header_text = num_checked_checkboxes;
-				header_text_2 = 'corpselector_allselected';
-			} else if (num_checked_checkboxes == 1) {
-				var currentCorpusName = checked_checkboxes.parent().parent().attr('title');
-				if (currentCorpusName.length > 37) { // Ellipsis
-					currentCorpusName = $.trim(currentCorpusName.substr(0,37)) + "...";
-				}
-				header_text = currentCorpusName;
-				header_text_2 = "corpselector_selectedone";
-			} else {
-				header_text = num_checked_checkboxes;
-				header_text_2 = "corpselector_selectedmultiple";
-			}
-			$("#hp_corpora_title1").text(header_text);
-			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
-			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-		}
-		
-
-		
 		
 		function recursive_transform(einHTML, levelindent) {
 			var outStr = "";
