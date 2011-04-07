@@ -37,44 +37,42 @@
 	$.fn.outerHTML = function() {
 		return $(this).clone().wrap('<div></div>').parent().html();
 	};
-	
+
 	$.fn.svgpreloader = function() {
-		
-		$(this).each(function() {
-			var r = Raphael(this, 20, 20),
-			sectorsCount = 12,
-			color = "#000",
-			width = 15,
-			r1 = 2,
-			r2 = 4,
-			cx = 10,
-			cy = 10,
-			
-			sectors = [],
-			opacity = [],
-			beta = 2 * Math.PI / sectorsCount,
-			
-			pathParams = {stroke: color, "stroke-width": width, "stroke-linecap": "round"};
-			for (var i = 0; i < sectorsCount; i++) {
-				var alpha = beta * i - Math.PI / 2,
-				cos = Math.cos(alpha),
-				sin = Math.sin(alpha);
-				opacity[i] = 1 / sectorsCount * i;
-				sectors[i] = r.path(pathParams)//.attr("stroke", Raphael.getColor())
-				.moveTo(cx + r1 * cos, cy + r1 * sin)
-				.lineTo(cx + r2 * cos, cy + r2 * sin);
-			}
-			(function ticker() {
-				opacity.unshift(opacity.pop());
-				for (var i = 0; i < sectorsCount; i++) {
-					sectors[i].attr("opacity", opacity[i]);
-				}
-				r.safari();
-				setTimeout(ticker, 1000 / sectorsCount);
-			})();
-		});
+
+		$(this)
+				.each(
+						function() {
+							var r = Raphael(this, 20, 20), sectorsCount = 12, color = "#000", width = 15, r1 = 2, r2 = 4, cx = 10, cy = 10,
+
+							sectors = [], opacity = [], beta = 2 * Math.PI
+									/ sectorsCount,
+
+							pathParams = {
+								stroke : color,
+								"stroke-width" : width,
+								"stroke-linecap" : "round"
+							};
+							for ( var i = 0; i < sectorsCount; i++) {
+								var alpha = beta * i - Math.PI / 2, cos = Math
+										.cos(alpha), sin = Math.sin(alpha);
+								opacity[i] = 1 / sectorsCount * i;
+								sectors[i] = r.path(pathParams)// .attr("stroke",
+																// Raphael.getColor())
+								.moveTo(cx + r1 * cos, cy + r1 * sin).lineTo(
+										cx + r2 * cos, cy + r2 * sin);
+							}
+							(function ticker() {
+								opacity.unshift(opacity.pop());
+								for ( var i = 0; i < sectorsCount; i++) {
+									sectors[i].attr("opacity", opacity[i]);
+								}
+								r.safari();
+								setTimeout(ticker, 1000 / sectorsCount);
+							})();
+						});
 	};
-	
+
 })(jQuery);
 
 /*
@@ -121,9 +119,8 @@
 $.extend({
 	getUrlVars : function() {
 		var vars = [], hash;
-		var href = window.location.href.split("#")[0]; 
-		var hashes = href.slice(
-				href.indexOf('?') + 1).split('&');
+		var href = window.location.href.split("#")[0];
+		var hashes = href.slice(href.indexOf('?') + 1).split('&');
 		for ( var i = 0; i < hashes.length; i++) {
 			hash = hashes[i].split('=');
 			vars.push(hash[0]);
@@ -173,60 +170,49 @@ $.extend({
 	}
 });
 
-
 /**
- * jQuery xml plugin
- * Converts XML node(s) to string 
- *
- * Copyright (c) 2009 Radim Svoboda
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
- *
- * @author 	Radim Svoboda, user Zzzzzz
+ * jQuery xml plugin Converts XML node(s) to string
+ * 
+ * Copyright (c) 2009 Radim Svoboda Dual licensed under the MIT
+ * (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * @author Radim Svoboda, user Zzzzzz
  * @version 1.0.0
  */
- 
-   
+
 /**
- * Converts XML node(s) to string using web-browser features.
- * Similar to .html() with HTML nodes 
- * This method is READ-ONLY.
- *  
- * @param all set to TRUE (1,"all",etc.) process all elements,
- * otherwise process content of the first matched element 
- *  
- * @return string obtained from XML node(s)  
- */         
+ * Converts XML node(s) to string using web-browser features. Similar to .html()
+ * with HTML nodes This method is READ-ONLY.
+ * 
+ * @param all
+ *            set to TRUE (1,"all",etc.) process all elements, otherwise process
+ *            content of the first matched element
+ * 
+ * @return string obtained from XML node(s)
+ */
 jQuery.fn.xml = function(all) {
-      
-  //result to return
-  var s = "";
-  
-   //Anything to process ?
-   if( this.length )
-  
-    //"object" with nodes to convert to string  
-   (
-      ( ( typeof all != 'undefined' ) && all ) ?
-      //all the nodes 
-      this 
-      :
-      //content of the first matched element 
-      jQuery(this[0]).contents()
-    )
-   //convert node(s) to string  
-   .each(function(){
-    s += window.ActiveXObject ?//==  IE browser ?
-       //for IE
-	     this.xml
-	     :
-	     //for other browsers
-	     (new XMLSerializer()).serializeToString(this)
-	     ;
-  }); 
-    
-    
-  return	s;		
-  
-  };
-                     
+
+	// result to return
+	var s = "";
+
+	// Anything to process ?
+	if (this.length)
+
+		// "object" with nodes to convert to string
+		(((typeof all != 'undefined') && all) ?
+		// all the nodes
+		this :
+		// content of the first matched element
+		jQuery(this[0]).contents())
+		// convert node(s) to string
+		.each(function() {
+			s += window.ActiveXObject ? // == IE browser ?
+			// for IE
+			this.xml :
+			// for other browsers
+			(new XMLSerializer()).serializeToString(this);
+		});
+
+	return s;
+
+};

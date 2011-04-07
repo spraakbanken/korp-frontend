@@ -4,50 +4,56 @@
 		var self = this;
 		
 		this.init = function() {
-			
-			var docXHR = $.ajax({
-				  url: "scripts/_generatedStatechart.js",
-				  dataType : "text"
-				});
-			
-			$.log("append iframe");
-			$("<iframe />").attr("src", src + "?" + new Date().getTime())
-			.hide()
-			.load(function() {
-				$.log("load", $(this));
-				var remoteDoc = $(this).get(0).contentWindow.document; 
-				var lastModif = new Date(remoteDoc.lastModified);
+			$.log("init", this.fetchScript);
+			$.when(this.fetchScript(), this.fetchXML())
+			.then(function(xhrArgArray, xmlEvent) {
+				// cookie
+				var cookieObj = JSON.parse($.jStorage.get("compiled_scxml"));
+				var cookieLastMod;
+				if(cookieObj != null)
+					cookieLastMod = new Date(cookieObj.time);
 				
+				// precompiled javascript file: '_generatedStatechart.js'
+				var scriptMod = new Date(xhrArgArray[2].getResponseHeader("Last-Modified"));
+				
+				// xml file.
+				var remoteDoc = xmlEvent.target.contentWindow.document; 
+				var lastModif = new Date(remoteDoc.lastModified);
 				var xmlstr = $(remoteDoc.firstChild).xml(true);
 				
-				$.when(docXHR, {doc : xmlstr, date : lastModif})
-				.then(function(xhr_args, scxml_doc) {
-					var scriptMod = new Date(xhr_args[2].getResponseHeader("Last-Modified"));
-					$.log(scriptMod, scxml_doc.date, scriptMod >= scxml_doc.date)
-					if(scriptMod >= scxml_doc.date) {
-						$.log("scxml: running precompiled");
-						self.run(xhr_args[0]);
-					} else {
-						$.log("scxml: recompiling");
-						self.compileAndRun(scxml_doc.doc);
-					}
-					
-				});
-			}).appendTo("body");
+				$.log(scriptMod, lastModif, scriptMod >= lastModif);
+				
+				if(cookieLastMod > scriptMod) {
+					$.log("scxml: running cookie data");
+					self.run(cookieObj.data);
+				} else if(scriptMod >= lastModif) {
+					$.log("scxml: running precompiled");
+					self.run(xhrArgArray[0]);
+				} else {
+					$.log("scxml: recompiling");
+					self.compileAndRun(xmlstr);
+				}
+				
+			}, function() {
+				$.error("loading of either scxml script file or xml file failed");
+			});
+		};
+		
+		this.fetchXML = function() {
+			var deferred = $.Deferred();
+			$("<iframe />").attr("src", src + "?" + new Date().getTime())
+			.appendTo("body")
+			.hide()
+			.load(deferred.resolve);
 			
-//			var ext = src.split(".").slice(-1);
-//			if(ext == "xml" ) {
-//				this.compileAndRun(src);
-//			} else if(ext == "js") {
-//				require([src], function() {
-//					$.log("scxml fetch time", new Date().getTime() - t );
-//					self.compiledStatechartInstance = new StatechartExecutionContext();
-//					self.run();
-//				});
-//			} else {
-//				$.error("malformed url in StateMachine contructor: " + src);
-//			}
-			
+			return deferred.promise();
+		};
+		
+		this.fetchScript = function() {
+			return $.ajax({
+				  url: "scripts/_generatedStatechart.js",
+				  dataType : "text"
+			});
 		};
 		
 		this.compileAndRun = function(scxmlSrc) {
@@ -79,10 +85,12 @@
 								var transformedJs = scArr[0];
 								
 								//eval
-//								console.log(transformedJs);
+//								$.log(transformedJs);
+								$.log(transformedJs.length);
+								$.jStorage.set("compiled_scxml", JSON.stringify({data : transformedJs, time : new Date()}));
+//								$.log(JSON.stringify({data : transformedJs, time : new Date()}));
 								
-								
-								$.log("statechart compiled and started");
+								$.log("statechart compiled and started: ");
 								$.log("compile time", new Date().getTime() - t );
 								delete t;
 								self.run(transformedJs);
@@ -94,14 +102,8 @@
 		};
 		
 		this.run = function(scxmlScript) {
-//			$.log("run", StatechartExecutionContext)
-//			var compiledStatechartConstructor = StatechartExecutionContext;
-//			self.compiledStatechartInstance = new compiledStatechartConstructor();
-			
 			eval(scxmlScript);
 			self.compiledStatechartInstance = new StatechartExecutionContext();
-			
-			//initialize
 			self.compiledStatechartInstance.initialize();
 		};
 		
