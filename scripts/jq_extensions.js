@@ -58,7 +58,7 @@
 										.cos(alpha), sin = Math.sin(alpha);
 								opacity[i] = 1 / sectorsCount * i;
 								sectors[i] = r.path(pathParams)// .attr("stroke",
-																// Raphael.getColor())
+								// Raphael.getColor())
 								.moveTo(cx + r1 * cos, cy + r1 * sin).lineTo(
 										cx + r2 * cos, cy + r2 * sin);
 							}
@@ -216,3 +216,13 @@ jQuery.fn.xml = function(all) {
 	return s;
 
 };
+
+jQuery.reduce = function(array, fn) {
+	var acc;
+	var build = function(i, x) {
+		acc = i === 0 ? x : fn(acc, x);
+	};
+	$.each(array, build);
+	return acc;
+};
+

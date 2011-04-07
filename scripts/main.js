@@ -2,18 +2,6 @@ var lemgramProxy;
 var simpleSearch;
 var kwicResults;
 var lemgramResults;
-var t; // deleted in controller.js
-
-//pre-init
-(function() {
-	t = new Date().getTime();
-	
-//	$.sm("scripts/_generatedStatechart.js");
-	
-	
-	
-})();
-
 
 // onDOMReady
 $(function(){
