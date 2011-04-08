@@ -28,7 +28,9 @@ function updateSidebar(sentenceData, wordData, corpus) {
 function sidebarSaldoFormat() {
 	
 	$("#sidebar_lex, #sidebar_prefix, #sidebar_suffix").each(function() {
-		var idArray = $.grep($(this).text().split("|"), Boolean).sort();
+		var idArray = $.grep($(this).text().split("|"), function(itm) {
+			return itm && itm.length;  
+		}).sort();
 		if(!idArray.length) {
 			$(this).html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
 		} else {
