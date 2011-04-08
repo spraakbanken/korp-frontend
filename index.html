@@ -138,7 +138,7 @@
 			{{if $value.dataset}}
 			 ${$value.dataset[$data[$index]]}
 			{{else $index == "lemma"}}
-			{{html $.arrayToHTMLList($.grep($data[$index].split("|"), Boolean)).outerHTML()}}
+			{{html $.arrayToHTMLList($.grep($data[$index].split("|"), function(itm) {return itm && itm.length})).outerHTML()}}
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else}}

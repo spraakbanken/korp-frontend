@@ -31,33 +31,35 @@ function sidebarSaldoFormat() {
 		var idArray = $.grep($(this).text().split("|"), function(itm) {
 			return itm && itm.length;  
 		}).sort();
-		if(!idArray.length) {
-			$(this).html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
-		} else {
+//		if(!idArray.length) {
+//			$(this).html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
+//		} else {
 			
-			var labelArray = util.lemgramArraytoString(idArray);
-			$(this)
-			.html($.arrayToHTMLList(labelArray))
-			.find("li")
-			.wrap("<a href='javascript:void(0)' />")
-			.click(function() {
-				var split = util.splitLemgram(idArray[$(this).parent().index()]);
-				var id = split[0] + ".." + split[1] + "." + split[2];
-				$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
-				simpleSearch.selectLemgram(id);
-			})
-			.hover(function(){
-				$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
-				
-			}, function() {
-				$(".ui-icon").remove();
-			});
-		}
+		var labelArray = util.lemgramArraytoString(idArray);
+		$(this)
+		.html($.arrayToHTMLList(labelArray))
+		.find("li")
+		.wrap("<a href='javascript:void(0)' />")
+		.click(function() {
+			var split = util.splitLemgram(idArray[$(this).parent().index()]);
+			var id = split[0] + ".." + split[1] + "." + split[2];
+			$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
+			simpleSearch.selectLemgram(id);
+		})
+		.hover(function(){
+			$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
+			
+		}, function() {
+			$(".ui-icon").remove();
+		});
+//		}
 		
 	});
 	var saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/;
 	var $saldo = $("#sidebar_saldo"); 
-	var saldoidArray = $.grep($saldo.text().split("|"), Boolean).sort();
+	var saldoidArray = $.grep($saldo.text().split("|"), function(itm) {
+		return itm && itm.length;  
+	}).sort();
 	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
 		var match = saldoId.match(saldoRegExp);
 		var infixIndex = "";
@@ -65,6 +67,9 @@ function sidebarSaldoFormat() {
 			infixIndex = $.format("<sup>%s</sup>", match[2]);
 		return $.format("%s%s", [match[1], infixIndex]);
 	});
+//	if(!saldoidArray.length) {
+//		$saldo.html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
+//	} else {
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
 	.each(function(i, item){
@@ -76,6 +81,7 @@ function sidebarSaldoFormat() {
 	}, function() {
 		$(this).find(".ui-icon").remove();
 	});
+//	}
 	
 	
 }

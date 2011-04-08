@@ -2,6 +2,7 @@ var lemgramProxy;
 var simpleSearch;
 var kwicResults;
 var lemgramResults;
+var kwicProxy;
 
 // onDOMReady
 $(function(){
@@ -9,7 +10,7 @@ $(function(){
 		dataType: "jsonp",
 		traditional: true
 	});
-	$.sm("korp_statemachine.xml");
+//	$.sm("korp_statemachine.xml");
 	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;
@@ -143,6 +144,7 @@ util.getLocaleString = function(key) {
 	var output = $.localize.data.locale[key];
 	if(output == null)
 		$.error("Could not find translation key " + key);
+//		$.error("Could not find translation key " + key);
 	return output;
 };
 

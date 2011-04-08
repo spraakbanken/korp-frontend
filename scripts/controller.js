@@ -1,13 +1,13 @@
 (function($) {
 
-	$.sm = function(src) {
+	$.sm = function(src, readyCallback) {
 		$.sm = this;
 		var self = this;
 		this.compiledDoc;
 		
 		this.init = function() {
 			$.when(this.fetchScript(), this.fetchXML())
-			.then(function(xhrArgArray, xmlEvent) {
+			.then(function(xhrArgArray, xmlArgArray) {
 				// cookie
 				var storedObj = JSON.parse($.jStorage.get("compiled_scxml"));
 				var cookieLastMod;
@@ -18,9 +18,7 @@
 				var scriptMod = new Date(xhrArgArray[2].getResponseHeader("Last-Modified"));
 				
 				// xml file.
-				var remoteDoc = xmlEvent.target.contentWindow.document; 
-				var xmlMod = new Date(remoteDoc.lastModified);
-				var xmlstr = $(remoteDoc.firstChild).xml(true);
+				var xmlMod = new Date(xmlArgArray[2].getResponseHeader("Last-Modified"));
 				
 				$.log(cookieLastMod, scriptMod, xmlMod);
 				
@@ -39,7 +37,7 @@
 					break;
 				case xmlMod:
 					$.log("scxml: recompiling");
-					self.compileAndRun(xmlstr);
+					self.compileAndRun(xmlArgArray[0]);
 					break;
 				}
 				
@@ -49,13 +47,10 @@
 		};
 		
 		this.fetchXML = function() {
-			var deferred = $.Deferred();
-			$("<iframe />").attr("src", src + "?" + new Date().getTime())
-			.appendTo("body")
-			.hide()
-			.load(deferred.resolve);
-			
-			return deferred.promise();
+			return $.ajax({
+				  url: "korp_statemachine.xml",
+				  dataType : "text"
+			});
 		};
 		
 		this.fetchScript = function() {
@@ -111,6 +106,7 @@
 			eval(scxmlScript);
 			self.compiledStatechartInstance = new StatechartExecutionContext();
 			self.compiledStatechartInstance.initialize();
+			readyCallback();
 		};
 		
 		this.send = function(event, data) {

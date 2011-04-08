@@ -5,7 +5,10 @@
 		var lis = $.map(array, function(item) {
 			return $.format("<li>%s</li>", item);
 		}).join("\n");
-		return $($.format("<%s/>", listType)).append(lis);
+		if(lis.length)
+			return $($.format("<%s/>", listType)).append(lis);
+		else 
+			return $($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
 	};
 
 	$.objToArray = function(obj) {

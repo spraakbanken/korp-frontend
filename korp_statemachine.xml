@@ -1,21 +1,31 @@
 <scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
-    profile="ecmascript" initial="s1" >
+    profile="ecmascript" initial="init" >
     
     <datamodel>
-        <data id="my_slot" expr="1234" />
+        <data id="lemgramProxy"/>
+        <data id="simpleSearch"/>
+        <data id="kwicResults"/>
+        <data id="lemgramResults"/>
     
     </datamodel>
     
-    <state id="s1">
-        <transition target="s2" />
+    <state id="init">
+        <transition target="main">
+<!--             <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/> -->
+<!--             <assign location="kwicProxy"      expr="new model.KWICProxy()"/> -->
+<!--             <assign location="simpleSearch"   expr="new view.SimpleSearch()"/> -->
+<!--             <assign location="kwicResults"    expr="new view.KWICResults()"/> -->
+<!--             <assign location="lemgramResults" expr="new view.LemgramResults()"/> -->
+            
+        </transition>
     </state>
     
-    <state id="s2">
+    <state id="main">
         <onentry>
-            <log label="hello" expr="'expr'" />
-            <script>
-                console.log("log");
-            </script>
+            <log label="entered main" />
         </onentry>
+        
+        
+        
     </state> 
 </scxml> 
