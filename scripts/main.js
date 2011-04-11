@@ -1,5 +1,6 @@
 var lemgramProxy;
 var simpleSearch;
+var extendedSearch;
 var kwicResults;
 var lemgramResults;
 var kwicProxy;
@@ -10,10 +11,11 @@ $(function(){
 		dataType: "jsonp",
 		traditional: true
 	});
-	$.sm("korp_statemachine.xml", function() {
-		// post-initialize code here.
-		sm.start();
-	});
+	
+//	$.sm("korp_statemachine.xml", function() {
+//		// post-initialize code here.
+//		sm.start();
+//	});
 	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;
@@ -34,14 +36,15 @@ $(function(){
 
 	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");
+		loadCorpora();
+		resetQuery();
 		lemgramProxy = new model.LemgramProxy();
 		kwicProxy = new model.KWICProxy();
 		simpleSearch = new view.SimpleSearch();
+		extendedSearch = new view.ExtendedSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
 		
-		loadCorpora();
-		resetQuery();
 		
 		$("#tabs-container").tabs();
 		$("#result-container").tabs({

@@ -197,7 +197,7 @@ function insertArg(token) {
     var row = $("<tr/>").addClass("query_arg").appendTo(token);
 
     var arg_select = $("<select/>").addClass("arg_type")
-        .change(function(){didSelectArgtype(this)});
+        .change(didSelectArgtype);
     for (var lbl in settings.arg_groups) {
         var group = settings.arg_groups[lbl];
         var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
@@ -206,7 +206,7 @@ function insertArg(token) {
         }
     }
     setSelectWidth(arg_select);
-
+    
     var arg_value = $("<input type='text'/>").addClass("arg_value")
         .change(function(){didChangeArgvalue()});
 
@@ -227,7 +227,7 @@ function insertArg(token) {
 
 function removeArg(arg) {
     arg = $(arg).closest(".query_arg");
-    var row = arg.closest(".query_row")
+    var row = arg.closest(".query_row");
     if (arg.siblings().length >= 1) {
         arg.remove();
     } else {
@@ -259,7 +259,7 @@ function didToggleRow() {
 }
 
 function didToggleToken(row) {
-    var args = $(row).closest(".query_row").find(".query_arg")
+    var args = $(row).closest(".query_row").find(".query_arg");
     var visibility = args.length > 1 ? "visible" : "hidden";
     args.first().find(".remove_arg").css("visibility", visibility);
     updateCQP();
@@ -280,8 +280,11 @@ function didSelectLanguage(select) {
     updateCQP();
 }
 
-function didSelectArgtype(select) {
-    setSelectWidth(select);
+function didSelectArgtype() {
+	
+	
+	
+    setSelectWidth(this);
     updateCQP();
 }
 

@@ -103,6 +103,7 @@
 		
 		this.run = function(scxmlScript) {
 			this.compiledDoc = scxmlScript;
+			$.log("scxmlScript", scxmlScript);
 			eval(scxmlScript);
 			self.compiledStatechartInstance = new StatechartExecutionContext();
 			self.compiledStatechartInstance.initialize();
