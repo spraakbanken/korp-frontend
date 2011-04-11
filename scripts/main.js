@@ -10,7 +10,10 @@ $(function(){
 		dataType: "jsonp",
 		traditional: true
 	});
-//	$.sm("korp_statemachine.xml");
+	$.sm("korp_statemachine.xml", function() {
+		// post-initialize code here.
+		sm.start();
+	});
 	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;

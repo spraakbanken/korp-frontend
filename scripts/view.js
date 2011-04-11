@@ -12,9 +12,13 @@ view.SimpleSearch = function() {
 	this.onSimpleChange();
 	$("#similar_lemgrams").hide();
 	
-	$("#korp-simple").click(function() {
-		$("#simple_text").autocomplete("close");
-	});
+//	$("#korp-simple").click(function() {
+//		$("#simple_text").autocomplete("close");
+//	});
+	
+//	$("#simple_text").blur(function() {
+//		$("#simple_text").autocomplete("close");
+//	});
 	
 	$("#simple_text").autocomplete({
 		html : true,

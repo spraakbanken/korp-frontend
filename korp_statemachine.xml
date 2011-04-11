@@ -20,11 +20,31 @@
         </transition>
     </state>
     
-    <state id="main">
+    <state id="main" initial="p">
         <onentry>
             <log label="entered main" />
         </onentry>
         
+        <parallel id="p">
+            <state id="search">
+                
+                <state id=""
+                
+            </state>
+            <state id="results">
+            
+                <state id="results_hidden">
+                    
+                </state>
+                
+                <state id="results_visible">
+                
+                </state>
+            
+            </state>
+            
+        
+        </parallel>
         
         
     </state> 
