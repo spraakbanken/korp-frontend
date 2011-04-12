@@ -193,36 +193,85 @@ function insertToken(button) {
 }
 
 function insertArg(token) {
-    token = $(token).closest(".query_token").children("tbody")
+	$.log("insertArg");
+    var token = $(token).closest(".query_token").children("tbody");
     var row = $("<tr/>").addClass("query_arg").appendTo(token);
 
-    var arg_select = $("<select/>").addClass("arg_type")
-        .change(didSelectArgtype);
-    for (var lbl in settings.arg_groups) {
-        var group = settings.arg_groups[lbl];
-        var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
-        for (var val in group) {
-            optgroup.append($('<option/>').val(val).text(group[val]));
-        }
-    }
-    setSelectWidth(arg_select);
+    var arg_select = makeSelect();
     
     var arg_value = $("<input type='text'/>").addClass("arg_value")
-        .change(function(){didChangeArgvalue()});
-
+        .change(function(){didChangeArgvalue();});
+    
     var remove = mkRemoveButton().addClass("remove_arg")
-        .click(function(){removeArg(this)});
+        .click(function(){removeArg(this);});
 
     var insert = mkInsertButton().addClass("insert_arg")
-        .click(function(){insertArg(this)})
+        .click(function(){insertArg(this);});
 
     row.append(
         $("<td/>").append(arg_select, arg_value)
-    ).append(
-        $("<td/>").append(remove, insert)
     );
-
+//    .append(
+//        $("<td/>").append(remove, insert)
+//    );
+//    .append()
+//    $("<td/>")
+    
+    
+    var wrapper = $("<div style='display:inline-block;'/>");
+    arg_select.wrap(wrapper)
+    .after(
+    		$("<div rel='localize[and]'>and</div>").append(insert)
+	);	
+    		
+	arg_value.css("vertical-align", "top");
+//    wrapper.append(remove, insert);
+    
+    
     didToggleToken(row);
+}
+
+function makeSelect() {
+	var arg_select = $("<select/>").addClass("arg_type")
+    .change(didSelectArgtype);
+
+	var groups = $.extend({}, settings.arg_groups, {
+		"word attributes" : getCurrentAttributes(),
+		"sentence attributes" : getStructAttrs()
+		});
+	
+	for (var lbl in groups) {
+	    var group = groups[lbl];
+	    if($.isEmptyObject(group)) {
+	    	continue;
+	    }
+	    var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
+	    for (var val in group) {
+	    	var label = group[val].label || group[val] || "";
+	    	
+	    	$('<option/>').val(val).text(label).appendTo(optgroup)
+	    	.data("dataProvider", group[val]);
+	    	
+	    }
+	}
+	setSelectWidth(arg_select);
+	
+	return arg_select;
+}
+
+function refreshSelects() {
+	$(".arg_type").each(function() {
+		var i = $(this).find(":selected").index();
+		var before = $(this).find(":selected").val();
+		var newSelect = makeSelect();
+		newSelect.get(0).selectedIndex = i;
+		$(this).replaceWith(newSelect);
+		setSelectWidth(this);
+		if(before != newSelect.val()) {
+			newSelect.get(0).selectedIndex = 0;
+			newSelect.trigger("change");
+		}
+	});
 }
 
 function removeArg(arg) {
@@ -246,7 +295,8 @@ function setSelectWidth(select) {
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
         .appendTo("body")
         .append(new Option(text));
-    $(select).width(dummy_select.width()+25);
+    $.log("width", dummy_select.width());
+    $(select).width((dummy_select.width() + 10) *1.8);
     dummy_select.remove();
 	
 }
@@ -268,8 +318,8 @@ function didToggleToken(row) {
 function didSelectOperation(select) {
     var is_include = $(select).val() == "include";
     $(select).closest(".query_row")
-        .toggleClass("indent", is_include)
-        .toggleClass("line_above", ! is_include);
+        .toggleClass("indent", is_include);
+//        .toggleClass("line_above", ! is_include);
     $(select).siblings(".select_language").toggle(! is_include);
     setSelectWidth(select);
     updateCQP();
@@ -281,8 +331,32 @@ function didSelectLanguage(select) {
 }
 
 function didSelectArgtype() {
+	// change input widget
+	$(this).next().remove();
 	
+	var data = $(this).find(":selected").data("dataProvider");
+	var arg_value;
+	switch(data.displayType) {
+	case "select":
+		arg_value = $("<select />");
+		$.each(data.dataset, function(key, value) {
+			$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(value).appendTo(arg_value);
+		});
+		arg_value.change(function() {setSelectWidth(arg_value);});
+		setSelectWidth(arg_value);
+		break;
+	case "autocomplete":
+		break;
+	case "date":
+		break;
+	default:
+		arg_value = $("<input type='text'/>");
+		break;
+	} 
 	
+	arg_value.addClass("arg_value")
+    .change(didChangeArgvalue);
+	$(this).after(arg_value);
 	
     setSelectWidth(this);
     updateCQP();
@@ -296,7 +370,7 @@ function didChangeArgvalue(input) {
 //////////////////////////////////////////////////////////////////////
 
 function regescape(s) {
-    return s.replace(/[\.|\?|\+|\*|\|\'|\"]/g, "\\$&")
+    return s.replace(/[\.|\?|\+|\*|\|\'|\"]/g, "\\$&");
 }
 
 function updateCQP() {
@@ -344,20 +418,36 @@ function cqpToken(token) {
     var args = {};
     $(token).find(".query_arg").each(function(){
         var type = $(this).find(".arg_type").val();
+        var data = $(this).find(".arg_type :selected").data("dataProvider");
         var value = $(this).find(".arg_value").val();
-        if (! args[type]) { args[type] = [] }
-        args[type].push(value);
+        if (!args[type]) { 
+        	args[type] = []; 
+    	}
+        $.log("data", $(this).find(".arg_type :selected"), data);
+        args[type].push({data : data, value : value});
+        			 
     });
-
-    for (type in settings.inner_args) {
-        var inner_query = [];
-        for (i in args[type]) {
-            inner_query.push(settings.inner_args[type](args[type][i]))
-        }
-        if (inner_query.length) {
-            query.token.push("(" + inner_query.join(" | ") + ")")
-        }
-    }
+    
+    
+    $.each(args, function(type, valueArray) {
+    	var inner_query = [];
+    	$.each(valueArray, function(i, obj) {
+    		
+    		function defaultArgsFunc(s) {
+    			var operator = obj.data.type == "set" ? "contains" : "=";
+    			var prefix = obj.data.isStructAttr != null ? "_." : "";
+    			
+				return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
+			};
+    		
+    		var argFunc = settings.inner_args[type] || defaultArgsFunc; 
+    		inner_query.push(argFunc(obj.value));
+    	});
+    	if (inner_query.length) {
+    		query.token.push("(" + inner_query.join(" | ") + ")");
+    	}
+    	
+    });
 
     for (type in settings.outer_args) {
         if (args[type]) {
@@ -370,4 +460,37 @@ function cqpToken(token) {
         query_string += "{" + (query.min || 0) + "," + query.max + "}";
     }
     return query_string;
+}
+
+
+
+function mapSelectedCorpora(f) {
+	return $.map(getSelectedCorpora(), function(item) {
+		return f(settings.corpora[item]);
+	});
+}
+// takes an array of mapping objs and returns their intersection
+function mapping_intersection(mappingArray) {
+	return $.reduce(mappingArray, function(a,b) {
+		var output = {};
+		$.each(a, function(key, value) {
+			if(b[key] != null)
+				output[key] = value;
+		});
+		return output;
+	});
+}
+
+function getCurrentAttributes() {
+	return mapping_intersection(mapSelectedCorpora(function(corpus) {
+		return corpus.attributes;
+	}));
+}
+function getStructAttrs() {
+	return mapping_intersection(mapSelectedCorpora(function(corpus) {
+		$.each(corpus.struct_attributes, function(key, value) {
+			value["isStructAttr"] = true; 
+		});
+		return corpus.struct_attributes;
+	}));
 }

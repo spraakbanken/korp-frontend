@@ -199,15 +199,12 @@ view.SimpleSearch.prototype = {
 
 
 view.ExtendedSearch = function() {
-	var attrs = {};
-	$.each(getSelectedCorpora(), function(i, item) {
-		$.extend(attrs, settings.corpora[item].attributes);
-	});
+	
 //	$("query_arg")
 //	$("<select />");
-//	$.each(attrs, function(key, value) {
-//		
-//	});
+	$.each(attrs, function(key, value) {
+		$.log(key, value);
+	});
 	
 };
 

@@ -34,41 +34,30 @@
                         </tr></tbody></table>-->
                         <div id="simple_query">
                             <div id="query_table">
-                            <div class="query_row line_above">
+                            <div class="query_row">
                             <img style="display: none;" class="image_button remove_row" src="img/minus.png">
                                 <!--  container for language selector -->
                             <table class="query_token">
                                 <tbody>
                                     <tr class="query_arg">
-                                        <td><select style="width: 115px;" class="arg_type">
-<!--                                             <optgroup label="ord"> -->
-<!--                                                 <option rel="localize[word_is]" selected="selected" value="word">ordet är</option> -->
-<!--                                                 <option rel="localize[word_is_not]" value="notword">ordet är inte</option> -->
-<!--                                                 <option rel="localize[word_beginswith]" value="beginswith">börjar med</option> -->
-<!--                                                 <option rel="localize[word_endswith]" value="endswith">slutar med</option> -->
-<!--                                                 <option rel="localize[matches_regexp]" value="regexp">reguljärt uttryck</option> -->
-<!--                                             </optgroup> -->
-<!--                                             <optgroup label="ordklass"> -->
-<!--                                                 <option rel="localize[wordclass_is]" value="pos">ordklassen är</option> -->
-<!--                                                 <option rel="localize[wordclass_starts]" value="msd">ordklassen börjar med</option> -->
-<!--                                             </optgroup> -->
-<!--                                             <optgroup label="intervall"> -->
-<!--                                                 <option rel="localize[max]" value="max">upp till</option> -->
-<!--                                                 <option rel="localize[min]" value="min">minst</option> -->
-<!--                                             </optgroup> -->
-                                        </select><input id="query_input" class="arg_value" type="text" /></td>
-                                        <td><img style="visibility: hidden;"
-                                            class="image_button remove_arg" src="img/minus.png"><img
-                                            class="image_button insert_arg" src="img/plus.png"></td>
+                                        <td>
+	                                        <select style="width: 115px;" class="arg_type"></select>
+	                                        <input id="query_input" class="arg_value" type="text"></input>
+                                        </td>
+                                        <td>
+                                        	<img style="visibility: hidden;" class="image_button remove_arg" src="img/minus.png">
+<!--                                             <img class="image_button insert_arg" src="img/plus.png"> -->
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <img class="image_button insert_token" src="img/plus.png"></div>
                             </div>
-                            <div class="buttons_row"><span id="buttons_row"><img
-                                style="visibility: hidden;" class="image_button remove_row"
-                                src="img/minus.png"><img class="image_button insert_row"
-                                src="img/plus.png"></span> 
+                            <div class="buttons_row" style="display : none;">
+                            	<span id="buttons_row">
+	                            	<img style="visibility: hidden;" class="image_button remove_row" src="img/minus.png">
+	                            	<img class="image_button insert_row" src="img/plus.png">
+                            	</span> 
                             </div>
                         </div>
                     </div>
