@@ -129,11 +129,6 @@ var hp_corpusChooser = {
 			$("#hp_corpora_title1").text(header_text);
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-			
-			// Fire callback "change":
-			var callback = this.options.change;
-			if ($.isFunction(callback)) callback(this.selectedItems());
-
 	},
 	_transform: function() {	
 			var el = this.element;
@@ -204,6 +199,9 @@ var hp_corpusChooser = {
 					
 				});
 				hp_this.countSelected();
+				// Fire callback "change":
+				var callback = hp_this.options.change;
+				if ($.isFunction(callback)) callback(hp_this.selectedItems());
 			});
 			
 			/* SELECT NONE BUTTON */
@@ -219,6 +217,9 @@ var hp_corpusChooser = {
 					
 				});
 				hp_this.countSelected();
+				// Fire callback "change":
+				var callback = hp_this.options.change;
+				if ($.isFunction(callback)) callback(hp_this.selectedItems());
 			});
 			
 		 	$(".ext").unbind("click");
@@ -259,6 +260,9 @@ var hp_corpusChooser = {
 		 			hp_this.updateState($(this));
 		 		});
 		 		hp_this.countSelected();
+		 		// Fire callback "change":
+				var callback = hp_this.options.change;
+				if ($.isFunction(callback)) callback(hp_this.selectedItems());
  			});
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
@@ -276,6 +280,9 @@ var hp_corpusChooser = {
 		 			hp_this.updateState($(this));
 		 		});
 		 		hp_this.countSelected();
+				// Fire callback "change":
+				var callback = hp_this.options.change;
+				if ($.isFunction(callback)) callback(hp_this.selectedItems());
  			});
 		
 		function recursive_transform(einHTML, levelindent) {
