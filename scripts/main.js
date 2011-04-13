@@ -120,6 +120,65 @@ function parseQuery(){
 	}		
 }
 
+
+function loadCorporaFolderRecursive(first_level, folder) {
+	var outHTML;
+	if (first_level) 
+		outHTML = '<ul>';
+	else {
+		if(!folder["contents"] || folder["contents"].length == 0) {
+			return "";
+		}
+		outHTML = '<ul title="' + folder.title + '">';
+	}
+	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
+		// Folders
+		for (var fol in folder) {
+			if (fol != "contents" && fol != "title")
+				outHTML += '<li>' + loadCorporaFolderRecursive(false, folder[fol]) + "</li>";
+		}
+		// Corpora
+		if (folder["contents"] && folder["contents"].length > 0) {
+			for (var corpid in folder["contents"]) {
+				outHTML += '<li id="' + folder.contents[corpid] + '">' + settings.corpora[folder.contents[corpid]]["title"] + '</li>';
+				added_corpora_ids.push(folder.contents[corpid]);
+			}
+		}
+	}
+	
+	if(first_level) {
+		// Add all corpora which have not been added to a corpus
+		searchloop: for (var val in settings.corpora) {
+			for (var usedid in added_corpora_ids) {
+				if (added_corpora_ids[usedid] == val) {
+					continue searchloop;
+				}
+			}
+			// Add it anyway:
+			outHTML += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
+		}
+	}
+	
+	outHTML += "</ul>";
+	return outHTML;
+}
+
+/* Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget */
+function loadCorpora() {
+	added_corpora_ids = [];
+	outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
+	/*var outStr;
+	outStr = "<ul>";
+	for (var val in settings.corpora) {
+    	outStr += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
+    };
+    outStr += "</ul>";*/
+    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
+    	refreshSelects();
+    }});
+}
+
+
 var util = {};
 // <!-- SelectionManager
 util.SelectionManager = function() {

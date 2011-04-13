@@ -103,6 +103,51 @@ a:hover {color:red;}  /* mouse over link */
 	visibility: hidden;
 }
 
+.image_button {
+	padding : 0 8px;
+	background-repeat: no-repeat;
+}
+
+.insert_arg, .insert_token {
+	background-image: url(img/plus.png);
+}
+.remove_arg {
+	background-image: url(img/minus.png);
+	position: relative;
+	top : 15px;
+}
+
+.insert_arg {
+	margin-top : 5px;	
+}
+
+
+.insert_token {
+	position: relative;
+	top : 29px;
+}
+
+.arg_type {
+	#margin-top : 2px;	
+	width : 220px !important;
+	display : inline-block;
+}
+
+.arg_value {
+	display : block;
+	width : 220px !important;
+}
+
+.btn-icon {
+	display : inline-block;
+	cursor : pointer;
+	position : relative;
+	right : -4px;
+    top : -5px;
+}
+
+	
+
 /* JONATAN */
 .ext {
 	margin-right: 0px;
@@ -295,18 +340,10 @@ a:hover {color:red;}  /* mouse over link */
 	width: 83%;
 }
 
-.image_button {
-	vertical-align: middle
-}
-
 .image_button:hover {
 	cursor: pointer;
 }
 
-.insert_token {
-	margin-top: 10px;
-	float: none;
-}
 
 .line_above {
 	border-style: dotted;

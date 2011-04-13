@@ -25,60 +25,6 @@ function getCorpus() {
 }
 
 
-function loadCorporaFolderRecursive(first_level, folder) {
-	var outHTML;
-	if (first_level) 
-		outHTML = '<ul>';
-	else {
-		if(!folder["contents"] || folder["contents"].length == 0) {
-			return "";
-		}
-		outHTML = '<ul title="' + folder.title + '">';
-	}
-	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
-		// Folders
-		for (var fol in folder) {
-			if (fol != "contents" && fol != "title")
-				outHTML += '<li>' + loadCorporaFolderRecursive(false, folder[fol]) + "</li>";
-		}
-		// Corpora
-		if (folder["contents"] && folder["contents"].length > 0) {
-			for (var corpid in folder["contents"]) {
-				outHTML += '<li id="' + folder.contents[corpid] + '">' + settings.corpora[folder.contents[corpid]]["title"] + '</li>';
-				added_corpora_ids.push(folder.contents[corpid]);
-			}
-		}
-	}
-	
-	if(first_level) {
-		// Add all corpora which have not been added to a corpus
-		searchloop: for (var val in settings.corpora) {
-			for (var usedid in added_corpora_ids) {
-				if (added_corpora_ids[usedid] == val) {
-					continue searchloop;
-				}
-			}
-			// Add it anyway:
-			outHTML += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
-		}
-	}
-	
-	outHTML += "</ul>";
-	return outHTML;
-}
-
-/* Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget */
-function loadCorpora() {
-	added_corpora_ids = [];
-	outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
-	/*var outStr;
-	outStr = "<ul>";
-	for (var val in settings.corpora) {
-    	outStr += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
-    };
-    outStr += "</ul>";*/
-    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, allSelectedString : 'All corpora selected'});
-}
 
 /* Returns an array of all the selected corpora's IDs in uppercase */
 function getSelectedCorpora() {
@@ -98,7 +44,7 @@ function getSelectedCorpora() {
 
 function resetQuery() {
     clearQuery();
-    insertRowButtons();
+//    insertRowButtons();
     didSelectCorpus();
     insertRow();
     //toggleFullQuery();
@@ -119,24 +65,24 @@ function toggleFullQuery() {
 }
 
 function mkInsertButton() {
-    return $('<img/>', {src: "img/plus.png"})
+    return $('<span/>')
         .addClass("image_button");
 }
 
 function mkRemoveButton() {
-    return $('<img/>', {src: "img/minus.png"})
+    return $('<span/>')
         .addClass("image_button");
 }
 
-function insertRowButtons() {
-    $("#buttons_row").append(
-        mkRemoveButton().addClass("remove_row")
-            .click(function(){removeRow()})
-    ).append(
-        mkInsertButton().addClass("insert_row")
-            .click(function(){insertRow()})
-    );
-}
+//function insertRowButtons() {
+//    $("#buttons_row").append(
+//        mkRemoveButton().addClass("remove_row")
+//            .click(function(){removeRow();})
+//    ).append(
+//        mkInsertButton().addClass("insert_row")
+//            .click(function(){insertRow();})
+//    );
+//}
 
 function insertRow() {
     var row = $('<div/>').addClass("query_row")
@@ -194,33 +140,56 @@ function insertToken(button) {
 
 function insertArg(token) {
 	$.log("insertArg");
+	
     var token = $(token).closest(".query_token").children("tbody");
     var row = $("<tr/>").addClass("query_arg").appendTo(token);
-
+    
     var arg_select = makeSelect();
     
     var arg_value = $("<input type='text'/>").addClass("arg_value")
         .change(function(){didChangeArgvalue();});
     
     var remove = mkRemoveButton().addClass("remove_arg")
-        .click(function(){removeArg(this);});
+        .click(function(){
+        	if(row.is(":last-child"))
+        		row.prev().find(".insert_arg").show();
+        	removeArg(this);
+    	});
 
     var insert = mkInsertButton().addClass("insert_arg")
-        .click(function(){insertArg(this);});
-
+    .click(function() {
+    	insertArg(this);
+    	$(this).hide();
+    });
+    
+    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
+    .click(function() {
+    	$(this).closest("table").remove();
+    	updateCQP();
+    });
+    
+    
+    var leftCol = $("<div />").append(remove).css("display", "inline-block");
+    var rightCol = $("<div />").append(arg_select, arg_value)
+    .css("display", "inline-block")
+    .css("margin-left", 5);
+    
+    var wrapper = $("<div />").append($("<span rel='localize[and]'>and</span>"), insert);
+    
     row.append(
-        $("<td/>").append(arg_select, arg_value)
+        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
+//        $("<td/>").append(arg_select, closeBtn, arg_value, wrapper)
     );
     
-    var wrapper = $("<div style='display:inline-block;'/>");
-    arg_select.wrap(wrapper)
-    .after(
-		$("<div rel='localize[and]'>and</div>").append(insert)
-	);	
+    if(row.is(":first-child")) {
+//    	leftCol.hide();
+    	remove.css("visibility", "hidden");
+    }
     
-	arg_value.css("vertical-align", "top");
-//    wrapper.append(remove, insert);
-    
+	$.log("isFirstRow", row.is(":first-child"))
+	if(!row.is(":first-child") || $(".query_token").length == 1) {
+		closeBtn.hide();
+	}
     
     didToggleToken(row);
 }
@@ -305,7 +274,7 @@ function didToggleRow() {
 function didToggleToken(row) {
     var args = $(row).closest(".query_row").find(".query_arg");
     var visibility = args.length > 1 ? "visible" : "hidden";
-    args.first().find(".remove_arg").css("visibility", visibility);
+//    args.first().find(".remove_arg").css("visibility", visibility);
     updateCQP();
 }
 
@@ -326,7 +295,8 @@ function didSelectLanguage(select) {
 
 function didSelectArgtype() {
 	// change input widget
-	$(this).next().remove();
+	$(this).siblings(".arg_value").remove();
+	
 	
 	var data = $(this).find(":selected").data("dataProvider");
 	var arg_value;
