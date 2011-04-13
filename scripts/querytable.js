@@ -1,4 +1,4 @@
-
+	
 function didSelectCorpus() {
     var corpus = settings.corpora[getCorpus()];
 
@@ -211,19 +211,13 @@ function insertArg(token) {
     row.append(
         $("<td/>").append(arg_select, arg_value)
     );
-//    .append(
-//        $("<td/>").append(remove, insert)
-//    );
-//    .append()
-//    $("<td/>")
-    
     
     var wrapper = $("<div style='display:inline-block;'/>");
     arg_select.wrap(wrapper)
     .after(
-    		$("<div rel='localize[and]'>and</div>").append(insert)
+		$("<div rel='localize[and]'>and</div>").append(insert)
 	);	
-    		
+    
 	arg_value.css("vertical-align", "top");
 //    wrapper.append(remove, insert);
     
