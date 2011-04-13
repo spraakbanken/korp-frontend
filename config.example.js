@@ -165,8 +165,6 @@ settings.corpora.suc2 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		sentence_n : {label : language.sentence},
-		paragraph_n : {label : language.paragraph},
 		text_id : {label : language.text}
 	}
 };
@@ -191,8 +189,6 @@ settings.corpora.storsuc = {
 		deprel : attrs.deprel
 	},
 	struct_attributes : {
-		sentence_n : {label : language.sentence},
-		paragraph_n : {label : language.paragraph},
 		text_id : {label : language.text}
 	}
 };
@@ -223,7 +219,6 @@ settings.corpora.konkplus = {
 	},
 	struct_attributes : {
 		text_genre : {label : language.genre},
-		sentence_n : {label : language.sentence},
 		text_id : {label : language.text}
 	}
 };
@@ -248,8 +243,6 @@ settings.corpora.parole = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		sentence_n : {label : language.sentence},
-		paragraph_n : {label : language.paragraph},
 		text_id : {label : language.text}
 	}
 };
@@ -277,8 +270,7 @@ settings.corpora.lt = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		sentence_n : {label : language.sentence},
-		article_id : {label : language.aricle},
+		article_id : {label : language.article},
 		text_id : {label : language.text}
 	}
 };
@@ -301,7 +293,8 @@ settings.corpora.snp7879 = {
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref
-	}
+	}, 
+	struct_attributes : {}
 };
 
 settings.corpora.vivill = {
@@ -353,9 +346,7 @@ settings.corpora.romi = {
 	},
 	struct_attributes : {
 		text_author : {label : language.author},
-		text_title : {label : language.title},
-		sentence_n : {label : language.sentence},
-		paragraph_n : {label : language.paragraph}
+		text_title : {label : language.title}
 	}
 };
 
@@ -380,9 +371,7 @@ settings.corpora.romii = {
 	},
 	struct_attributes : {
 		text_author : {label : language.author},
-		text_title : {label : language.titel},
-		sentence_n : {label : language.sentence},
-		paragraph_n : {label : language.paragraph}
+		text_title : {label : language.title}
 	}
 };
 
@@ -404,14 +393,15 @@ settings.corpora.drama = {
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref
-	}
+	},
+	struct_attributes : {}
 };
 
 /*
  * MISC
  */
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
 
 settings.arg_types = {
 	"word" : String,
@@ -433,38 +423,40 @@ settings.arg_groups = {
 		endswith : language.word_endswith,
 		regexp : language.matches_regexp
 	},
-	"ordklass" : {
-		pos : language.wordclass_is,
-		msd : language.wordclass_starts
-	},
+//	"ordklass" : {
+//		pos : language.wordclass_is,
+//		msd : language.wordclass_starts
+//	},
 	"intervall" : {
 		max : language.max,
 		min : language.min
 	}
 };
 
+
 settings.inner_args = {
 	word : function(s) {
-		return 'word = "' + regescape(s) + '"'
+		return 'word = "' + regescape(s) + '"';
 	},
 	notword : function(s) {
-		return 'word != "' + regescape(s) + '"'
+		return 'word != "' + regescape(s) + '"';
 	},
 	beginswith : function(s) {
-		return 'word = "' + regescape(s) + '.*"'
+		return 'word = "' + regescape(s) + '.*"';
 	},
 	endswith : function(s) {
-		return 'word = ".*' + regescape(s) + '"'
+		return 'word = ".*' + regescape(s) + '"';
 	},
 	regexp : function(s) {
-		return 'word = "' + s + '"'
+		return 'word = "' + s + '"';
 	},
 	pos : function(s) {
-		return 'pos = "' + regescape(s) + '"'
+		return 'pos = "' + regescape(s) + '"';
 	},
 	msd : function(s) {
-		return 'msd = "' + regescape(s) + '.*"'
+		return 'msd = "' + regescape(s) + '.*"';
 	}
+	
 };
 
 settings.outer_args = {
