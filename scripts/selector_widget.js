@@ -129,6 +129,11 @@ var hp_corpusChooser = {
 			$("#hp_corpora_title1").text(header_text);
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
+			
+			// Fire callback "change":
+			var callback = this.options.change;
+			if ($.isFunction(callback)) callback(this.selectedItems());
+
 	},
 	_transform: function() {	
 			var el = this.element;
