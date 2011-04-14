@@ -18,6 +18,8 @@
 	"wordclass_is" : "word class is",
 	"wordclass_starts" : "word class begins with",
 	
+	"any" : "any word",
+	
 	"simple" : "Simple",
 	"detailed" : "Extended",
 	"advanced" : "Advanced",

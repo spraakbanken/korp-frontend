@@ -67,7 +67,10 @@ model.KWICProxy.prototype = {
 						if($("#results").is(":visible"))
 							setJsonLink(settings);
 					},
-					success: $.proxy(kwicResults.renderTable, kwicResults)
+					success: $.proxy(kwicResults.renderTable, kwicResults),
+					error : function(jqXHR, textStatus, errorThrown) {
+						$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
+					}
 		});
 		
 		

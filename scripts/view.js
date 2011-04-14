@@ -199,13 +199,12 @@ view.SimpleSearch.prototype = {
 
 
 view.ExtendedSearch = function() {
-	
-//	$("query_arg")
-//	$("<select />");
-	$.each(attrs, function(key, value) {
-		$.log(key, value);
+	$("#korp-extended").keyup(function(event) {
+		if(event.keyCode == "13") {
+			$("#sendBtn").click();
+		}
+		return false;
 	});
-	
 };
 
 view.ExtendedSearch.prototype = {
@@ -218,7 +217,7 @@ view.ExtendedSearch.prototype = {
 
 
 view.KWICResults = function() {
-	if($.browser.mozilla) {
+	if(!Modernizr.inputtypes.number) {
 		var $select = $('<select name="num_hits" id="num_hits"></div>');
 		$("#num_hits").replaceWith($select);
 		

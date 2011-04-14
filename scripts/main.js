@@ -33,6 +33,8 @@ $(function(){
 		}
 		
 	});
+	
+	
 
 	$("#searchbar").load("searchbar.html", function() {
 		$.log("content load");

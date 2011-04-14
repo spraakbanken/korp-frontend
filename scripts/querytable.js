@@ -65,12 +65,12 @@ function toggleFullQuery() {
 }
 
 function mkInsertButton() {
-    return $('<span/>')
+    return $('<img src="img/plus.png"/>')
         .addClass("image_button");
 }
 
 function mkRemoveButton() {
-    return $('<span/>')
+    return $('<img src="img/minus.png">')
         .addClass("image_button");
 }
 
@@ -93,7 +93,7 @@ function insertRow() {
 
     var insert_token_button = mkInsertButton().addClass("insert_token")
         .click(function(){insertToken(this)});
-
+    
     var operators = row.siblings().length ? settings.operators : settings.first_operators;
     var select_operation = $('<select/>').addClass("select_operation")
         .change(function(){didSelectOperation(this)});
@@ -111,6 +111,7 @@ function insertRow() {
     select_language.attr("disabled", select_language.children().length <= 1);
 
     row.append(remove_row_button, select_operation, select_language, insert_token_button);
+    
     
     insert_token_button.click();
     select_operation.change();
@@ -147,7 +148,9 @@ function insertArg(token) {
     var arg_select = makeSelect();
     
     var arg_value = $("<input type='text'/>").addClass("arg_value")
-        .change(function(){didChangeArgvalue();});
+    .change(function(){didChangeArgvalue();})
+//    TODO: might want this.
+//    .attr("placeholder", $.format("[%s]", util.getLocaleString("any")));
     
     var remove = mkRemoveButton().addClass("remove_arg")
         .click(function(){
@@ -166,29 +169,47 @@ function insertArg(token) {
     .click(function() {
     	$(this).closest("table").remove();
     	updateCQP();
+    	
+    	if($(".query_token").length == 1) {
+    		$(".query_token .btn-icon:first").css("visibility", "hidden");
+    	} else {
+    		$(".query_token .btn-icon:first").css("visibility", "visible");
+    	}
     });
     
     
-    var leftCol = $("<div />").append(remove).css("display", "inline-block");
+    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
     var rightCol = $("<div />").append(arg_select, arg_value)
     .css("display", "inline-block")
     .css("margin-left", 5);
+    
+    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
+    	// let's patch it up! (maybe I shouldn't have used inline-block)
+    	leftCol.add(rightCol).css("display", "inline");
+    	rightCol.find("input").css("float", "right");
+    	closeBtn.css("right", "-235").css("top", "-55");
+    }
     
     var wrapper = $("<div />").append($("<span rel='localize[and]'>and</span>"), insert);
     
     row.append(
         $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
-//        $("<td/>").append(arg_select, closeBtn, arg_value, wrapper)
     );
     
     if(row.is(":first-child")) {
-//    	leftCol.hide();
     	remove.css("visibility", "hidden");
     }
     
 	$.log("isFirstRow", row.is(":first-child"))
-	if(!row.is(":first-child") || $(".query_token").length == 1) {
-		closeBtn.hide();
+	if(!row.is(":first-child") ) {
+		closeBtn.css("visibility", "hidden");
+	}
+	
+	if($(".query_token").length == 1) {
+		closeBtn.css("visibility", "hidden");
+	}
+	else {
+		$(".query_token .btn-icon:first").css("visibility", "visible");
 	}
     
     didToggleToken(row);
@@ -258,7 +279,6 @@ function setSelectWidth(select) {
     var dummy_select = $("<select/>", {position: "absolute", display: "none"})
         .appendTo("body")
         .append(new Option(text));
-    $.log("width", dummy_select.width());
     $(select).width((dummy_select.width() + 10) *1.8);
     dummy_select.remove();
 	
@@ -295,6 +315,7 @@ function didSelectLanguage(select) {
 
 function didSelectArgtype() {
 	// change input widget
+	var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
 	$(this).siblings(".arg_value").remove();
 	
 	
@@ -321,6 +342,7 @@ function didSelectArgtype() {
 	arg_value.addClass("arg_value")
     .change(didChangeArgvalue);
 	$(this).after(arg_value);
+	arg_value.val(oldVal);
 	
     setSelectWidth(this);
     updateCQP();
@@ -387,7 +409,6 @@ function cqpToken(token) {
         if (!args[type]) { 
         	args[type] = []; 
     	}
-        $.log("data", $(this).find(".arg_type :selected"), data);
         args[type].push({data : data, value : value});
         			 
     });

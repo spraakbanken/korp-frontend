@@ -103,22 +103,33 @@ a:hover {color:red;}  /* mouse over link */
 	visibility: hidden;
 }
 
+.query_table {
+	overflow : auto;	
+}
+
+.query_row {
+}
+.query_row table {
+	margin-bottom : 15px;
+}
+
 .image_button {
-	padding : 0 8px;
-	background-repeat: no-repeat;
+/* 	padding : 0 8px; */
+/* 	background-repeat: no-repeat; */
 }
 
 .insert_arg, .insert_token {
-	background-image: url(img/plus.png);
+/* 	background-image: url(img/plus.png); */
 }
 .remove_arg {
-	background-image: url(img/minus.png);
+/* 	background-image: url(img/minus.png); */
 	position: relative;
 	top : 15px;
 }
 
 .insert_arg {
-	margin-top : 5px;	
+	margin-top : 5px;
+	vertical-align: bottom;
 }
 
 
@@ -128,7 +139,7 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 .arg_type {
-	#margin-top : 2px;	
+/* 	margin-top : 2px;	 */
 	width : 220px !important;
 	display : inline-block;
 }
@@ -139,7 +150,9 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 .btn-icon {
+	vertical-align : top;
 	display : inline-block;
+/* 	*display : inline; */
 	cursor : pointer;
 	position : relative;
 	right : -4px;
@@ -181,7 +194,7 @@ a:hover {color:red;}  /* mouse over link */
 	z-index: 9999;
 	max-height:600px;
 	width: 382px;
-	#top: 124px;
+/* 	#top: 124px; */
 	border-color: #CCCCCC;
 	border-style: solid;
 	border-width: 1px;
@@ -197,7 +210,7 @@ a:hover {color:red;}  /* mouse over link */
 .hp_topframe {
 	height: 18px;
 	width: 353px;
-	text-align: center
+	text-align: center;
 	padding-top: 10px;
 }
 
@@ -275,7 +288,7 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 #korp-simple > div {
-	#float : left;
+/* 	#float : left; */
 }
 
 #similar_lemgrams {
@@ -373,11 +386,13 @@ table {
 .query_token {
 	background-color: #e1e1e1;
 	display: inline-table;
+	*display : inline;
 	vertical-align: top;
 	padding: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
+	border : 1px solid #000; 
 }
 
 .cqp_toggle {
@@ -562,7 +577,7 @@ table {
 #json-link {
 	float: right;
 	display: none;
-	#margin-top: -13px;
+/* 	#margin-top: -13px; */
 }
 
 #json-link img {
@@ -586,7 +601,7 @@ table {
 	border-style: solid;
 	border-width: 1px;
 	border-color: #999;
-	#border-right-color:#fff;
+/* 	#border-right-color:#fff; */
 	padding: 5px 0px 5px 5px;
 	border-radius : 4px;
 	-moz-border-radius: 4px;
