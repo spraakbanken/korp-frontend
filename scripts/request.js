@@ -33,7 +33,7 @@ function onSubmit(evt) {
 		simpleSearch.onSimpleChange();
 		// clear the simple search from previous lemgram search result widgets
 		$("#result-container").tabs("select", 0);
-		$("#result-container").tabs("option", "disabled", [2]);
+		$("#result-container").tabs("option", "disabled", [2, 3]);
 		simpleSearch.resetView();
 		
 		break;

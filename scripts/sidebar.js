@@ -87,6 +87,7 @@ function sidebarSaldoFormat() {
 }
 
 function hideSidebar() {
+	if($("#sidebar").css("right") == 273) return;
 	var speed = 400;
 	$("#sidebar").hide("slide", {direction : "right"}, speed);
 	$("#left-column").animate({

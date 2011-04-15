@@ -125,6 +125,7 @@ view.SimpleSearch.prototype = {
 			}
 		});
 
+		statsProxy.makeRequest(lemgram);
 		var cqp = lemgramProxy.lemgramSearch(lemgram);
 		$("#cqp_string").val(cqp);
 		$("#simple_text").val("");
@@ -532,15 +533,81 @@ view.LemgramResults.prototype = {
 };
 
 view.StatResults = function() {
+	
+	this.dummyData = {
+			"VIVILL" : {
+				"ges" : 789,
+				"ger" : 887,
+				"given" : 17,
+				"giva" : 22,
+				"givna" : 13,
+				"ge-" : 1,
+				"giv" : 1,
+				"givit" : 22,
+				"gavs" : 5,
+				"ge" : 942,
+				"givas" : 17,
+				"getts" : 4,
+				"gav" : 24,
+				"givet" : 9,
+				"gett" : 31,
+				"givits" : 5,
+				"gives" : 2
+			},
+			"ROMII" : {
+				"ges" : 46,
+				"ger" : 835,
+				"given" : 30,
+				"giva" : 51,
+				"getts" : 1,
+				"givna" : 32,
+				"giv" : 26,
+				"givits" : 9,
+				"gav" : 1641,
+				"give" : 12,
+				"givas" : 4,
+				"givs" : 2,
+				"ge" : 1617,
+				"g\u00e5ve" : 4,
+				"giver" : 14,
+				"gavs" : 57,
+				"givet" : 84,
+				"gett" : 351,
+				"givande" : 9,
+				"givit" : 226,
+				"gives" : 3
+			},
+			"time" : 0.35788893699645996
+		};
+		
+	
 };
 
 view.StatResults.prototype = {
 	
-	renderTable : function() {
+	renderTable : function(data) {
+		
+		$("#results-stats").empty();
+		
+		var wordArray = [];
+		var corpusArray = [];
+		
+		$.each(data, function(corpus, obj) {
+			if(corpus == "time") return;
+			corpusArray.push(corpus);
+			$.each(obj, function(word, freq) {
+				if($.inArray(word, wordArray) == -1)
+					wordArray.push(word);
+			});
+		});
 		
 		
+		$("#results-wraper").show();
+//		
+		$("#statTableTmpl").tmpl(data, {wordArray : wordArray, corpusArray : corpusArray})
+		.appendTo("#results-stats");
 		
-		$("#results-stats")
+		$("#results-stats").append($("<div />").css("clear", "both"));
 	},
 		
 	showPreloader : function() {

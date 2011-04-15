@@ -3,7 +3,9 @@ var simpleSearch;
 var extendedSearch;
 var kwicResults;
 var lemgramResults;
+var statsResults;
 var kwicProxy;
+var StatsProxy;
 
 // onDOMReady
 $(function(){
@@ -42,15 +44,17 @@ $(function(){
 		resetQuery();
 		lemgramProxy = new model.LemgramProxy();
 		kwicProxy = new model.KWICProxy();
+		statsProxy = new model.StatsProxy();
 		simpleSearch = new view.SimpleSearch();
 		extendedSearch = new view.ExtendedSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
+		statsResult = new view.StatResults();
 		
 		
 		$("#tabs-container").tabs();
 		$("#result-container").tabs({
-			disabled : [2],
+			disabled : [2, 3],
 			show : function() {
 				if($("#result-container").tabs("option", "selected")) { // any other than the first tab is selected
 					hideSidebar();

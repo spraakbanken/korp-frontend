@@ -8,6 +8,10 @@ body {
 	font-size: 13px;
 }
 
+ul, ol {
+	list-style: none;	
+}
+
 .ui-widget {
 	font-family : inherit; 
 }
@@ -637,4 +641,27 @@ table {
 	line-height : 18px;	
 }
 
+#results-stats table {
+	border-width: 1px;
+	border-collapse: collapse;
+	border-color: gray;
+	background-color: white;
+	border-spacing : 0;
+	
+}
+
+#results-stats th, #results-stats td {
+	border-width: 1px;
+	padding: 2px 4px;
+	border-style: solid;
+	border-spacing : 0;
+	border-color: rgb(204, 204, 204);
+	background-color: white;
+	text-align: right;
+}
+
+.word_column {
+	text-align : left;
+		
+}
 

@@ -75,11 +75,27 @@ model.KWICProxy.prototype = {
 	}
 };
 
-model.StatProxy = function() {
+model.StatsProxy = function() {
 };
 
-model.StatProxy.prototype = {
-	makeRequest : function() {
+model.StatsProxy.prototype = {
+	makeRequest : function(lemgram) {
+//		http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi?command=lemgramstats&lemgram=ge..vb.1&corpus=VIVILL,ROMII
 		
+		var selected_corpora_ids = getSelectedCorpora();
+		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
+			return n.toUpperCase();
+	    });
+		
+		$.ajax({ 
+			url: settings.cgi_script,
+			data : {
+				command : "lemgramstats",
+				lemgram : lemgram,
+				corpus : selected_uppercased_corpora_ids
+			},
+			success: $.proxy(statsResult.renderTable, statsResult)  
+		
+		});
 	}
 };

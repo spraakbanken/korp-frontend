@@ -87,7 +87,7 @@
 								<li class="on"><a href="#results">KWIC</a></li>
 								<li style="display:none;"><a href="#results-sentence">Mening</a></li>
 								<li><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a></li><!-- class="ui-icon ui-icon-script" -->
-<!-- 								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a></li> -->
+								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a></li>
 							</ul>
 							<div id="results">
 								<a name="results"></a>
@@ -106,7 +106,7 @@
 							</div>
 							<div id="results-sentence"></div>
 							<div id="results-lemgram"></div>
-<!-- 							<div id="results-stats"></div> -->
+							<div id="results-stats"></div>
 						</div>
 						<div id="tooltip-container"></div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
@@ -191,6 +191,28 @@
 		</table>
 		{{/if}}
 		</div>
+	</script>
+	
+	<script id="statTableTmpl" type="text/x-jquery-tmpl">
+		
+		<table>
+		<tr><th></th>
+		
+		{{each $item.corpusArray}}
+			{{if $value != "time"}}
+			<th>${$value}</th>
+			{{/if}}
+		{{/each}}
+		
+		{{each(i, word) $item.wordArray}}
+		<tr><td class="word_column">${word}</td>
+			{{each(j, corpus) $item.corpusArray}}
+			<td>${$data[corpus][word]}</td>
+			{{/each}}
+		</tr>
+		{{/each}}
+		
+		</table>
 	</script>
 	</body>
  </html>
