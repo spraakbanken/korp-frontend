@@ -208,7 +208,7 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 .hp_topframe {
-	height: 18px;
+	height: 16px;
 	width: 353px;
 	text-align: center;
 	padding-top: 10px;
@@ -392,6 +392,7 @@ table {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
+	border-radius: 5px;
 	border : 1px solid #000; 
 }
 

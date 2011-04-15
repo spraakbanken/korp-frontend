@@ -140,7 +140,7 @@ var hp_corpusChooser = {
 				body = el.html();
 			}
 			var newHTML = '<div class="scroll_checkboxes">';
-			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left; padding-top:2px"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
+			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
 			
 			newHTML += '<div class="popupchecks ui-corner-bottom">';
 			

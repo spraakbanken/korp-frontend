@@ -531,4 +531,22 @@ view.LemgramResults.prototype = {
 		
 };
 
+view.StatResults = function() {
+};
+
+view.StatResults.prototype = {
+	
+	renderTable : function() {
+		
+		
+		
+		$("#results-stats")
+	},
+		
+	showPreloader : function() {
+	},
+	hidePreloader : function() {
+	}
+};
+
 

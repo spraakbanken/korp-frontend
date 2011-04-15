@@ -231,14 +231,17 @@ function makeSelect() {
 	    }
 	    var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
 	    for (var val in group) {
-	    	var label = group[val].label || group[val] || "";
+	    	if(group[val].displayType == "hidden")
+	    		continue;
+	    	var labelKey = group[val].label || group[val];
 	    	
-	    	$('<option/>').val(val).text(label).appendTo(optgroup)
+	    	$('<option/>',{rel : $.format("localize[%s]", labelKey)})
+	    	.val(val).text(util.getLocaleString(labelKey) || "")
+	    	.appendTo(optgroup)
 	    	.data("dataProvider", group[val]);
 	    	
 	    }
 	}
-	setSelectWidth(arg_select);
 	
 	return arg_select;
 }
@@ -250,7 +253,6 @@ function refreshSelects() {
 		var newSelect = makeSelect();
 		newSelect.get(0).selectedIndex = i;
 		$(this).replaceWith(newSelect);
-		setSelectWidth(this);
 		if(before != newSelect.val()) {
 			newSelect.get(0).selectedIndex = 0;
 			newSelect.trigger("change");
@@ -271,7 +273,7 @@ function removeArg(arg) {
 
 
 //////////////////////////////////////////////////////////////////////
-
+/*
 function setSelectWidth(select) {
 	//abort if browser is ie7 or older
 	if($.browser.msie && parseInt($.browser.version, 10) <= 7){return 0;}
@@ -283,6 +285,7 @@ function setSelectWidth(select) {
     dummy_select.remove();
 	
 }
+*/
 
 function didToggleRow() {
     var visibility = $(".query_row").length > 1 ? "visible" : "hidden";
@@ -304,12 +307,10 @@ function didSelectOperation(select) {
         .toggleClass("indent", is_include);
 //        .toggleClass("line_above", ! is_include);
     $(select).siblings(".select_language").toggle(! is_include);
-    setSelectWidth(select);
     updateCQP();
 }
 
 function didSelectLanguage(select) {
-    setSelectWidth(select);
     updateCQP();
 }
 
@@ -325,10 +326,8 @@ function didSelectArgtype() {
 	case "select":
 		arg_value = $("<select />");
 		$.each(data.dataset, function(key, value) {
-			$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(value).appendTo(arg_value);
+			$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
 		});
-		arg_value.change(function() {setSelectWidth(arg_value);});
-		setSelectWidth(arg_value);
 		break;
 	case "autocomplete":
 		break;
@@ -344,7 +343,6 @@ function didSelectArgtype() {
 	$(this).after(arg_value);
 	arg_value.val(oldVal);
 	
-    setSelectWidth(this);
     updateCQP();
 }
 

@@ -209,8 +209,8 @@ util.getLocaleString = function(key) {
 		return;
 	}
 	var output = $.localize.data.locale[key];
-	if(output == null)
-		$.error("Could not find translation key " + key);
+	if(output == null && key != null)
+		return key;
 //		$.error("Could not find translation key " + key);
 	return output;
 };

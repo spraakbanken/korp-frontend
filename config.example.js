@@ -2,9 +2,6 @@
  * lexem => lemgram, lemgram
  * 
  */
-var attrs = {};
-// structural attributes
-var sattrs = {};
 
 var settings = {};
 settings.corpora = {};
@@ -17,73 +14,72 @@ var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes
 
 attrs.pos = {
-	label : language.pos,
+	label : "pos",
 	displayType : "select",
 	dataset : {
-		"AB" : language.AB,
-		"DL" : language.DL,
-		"DL" : language.DL,
-		"DT" : language.DT,
-		"HA" : language.HA,
-		"HD" : language.HD,
-		"HP" : language.HP,
-		"HS" : language.HS,
-		"IE" : language.IE,
-		"IN" : language.IN,
-		"JJ" : language.JJ,
-		"KN" : language.KN,
-		"NN" : language.NN,
-		"PC" : language.PC,
-		"PL" : language.PL,
-		"PM" : language.PM,
-		"PN" : language.PN,
-		"PP" : language.PP,
-		"PS" : language.PS,
-		"RG" : language.RG,
-		"RO" : language.RO,
-		"SN" : language.SN,
-		"UO" : language.UO,
-		"VB" : language.VB
+		"AB" : "AB",
+		"DL" : "DL",
+		"DL" : "DL",
+		"DT" : "DT",
+		"HA" : "HA",
+		"HD" : "HD",
+		"HP" : "HP",
+		"HS" : "HS",
+		"IE" : "IE",
+		"IN" : "IN",
+		"JJ" : "JJ",
+		"KN" : "KN",
+		"NN" : "NN",
+		"PC" : "PC",
+		"PL" : "PL",
+		"PM" : "PM",
+		"PN" : "PN",
+		"PP" : "PP",
+		"PS" : "PS",
+		"RG" : "RG",
+		"RO" : "RO",
+		"SN" : "SN",
+		"UO" : "UO",
+		"VB" : "VB"
 	}
 };
 attrs.msd = {
-	label : language.msd
+	label : "msd"
 };
 attrs.baseform = {
-	label : language.baseform,
+	label : "baseform",
 	type : "set"
 };
 attrs.lemgram = {
-	label : language.lemgram,
+	label : "lemgram",
 	type : "set"
 };
 attrs.saldo = {
-	label : language.saldo,
+	label : "saldo",
 	type : "set"
 };
 attrs.dephead = {
-	label : language.dephead
+	label : "dephead"
 };
 attrs.deprel = {
-	label : language.deprel
-};
-attrs.rel = {
-	label : language.rel
+	label : "deprel",
+	displayType : "hidden"
 };
 attrs.prefix = {
-	label : language.prefix,
+	label : "prefix",
 	type : "set"
 };
 attrs.suffix = {
-	label : language.suffix,
+	label : "suffix",
 	type : "set"
 };
 attrs.ref = {
-	label : language.ref
+	label : "ref",
+	displayType : "hidden"
 };
 
 sattrs.date = {
-	label : language.date,
+	label : "date",
 	displayType : "date"
 };
 
@@ -106,13 +102,13 @@ var context = {
 settings.corporafolders = {};
 
 settings.corporafolders.novels = {
-    title : "Skönlitteratur",
-    contents : ["romi", "romii", "storsuc"]
+	title : "Skönlitteratur",
+	contents : ["romi", "romii", "storsuc"]
 };
 
 settings.corporafolders.newspapertexts = {
-    title : "Tidningstexter",
-    contents : ["gp2009", "konkplus"]
+	title : "Tidningstexter",
+	contents : ["gp2009", "konkplus"]
 };
 
 /*
@@ -140,8 +136,8 @@ settings.corpora.gp2009 = {
 	},
 	struct_attributes : {
 		article_date : sattrs.date,
-		article_author : {label : language.author},
-		article_section : {label : language.section}
+		article_author : {label : "author"},
+		article_section : {label : "section"}
 	}
 };
 
@@ -165,7 +161,7 @@ settings.corpora.suc2 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_id : {label : language.text}
+		text_id : {label : "text"}
 	}
 };
 
@@ -189,7 +185,7 @@ settings.corpora.storsuc = {
 		deprel : attrs.deprel
 	},
 	struct_attributes : {
-		text_id : {label : language.text}
+		text_id : {label : "text"}
 	}
 };
 /*
@@ -218,8 +214,8 @@ settings.corpora.konkplus = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_genre : {label : language.genre},
-		text_id : {label : language.text}
+		text_genre : {label : "genre"},
+		text_id : {label : "text"}
 	}
 };
 
@@ -243,7 +239,7 @@ settings.corpora.parole = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_id : {label : language.text}
+		text_id : {label : "text"}
 	}
 };
 
@@ -261,7 +257,7 @@ settings.corpora.lt = {
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
 		entity : {
-			label : language.entity
+			label : "entity"
 		},
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
@@ -270,8 +266,8 @@ settings.corpora.lt = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_id : {label : language.article},
-		text_id : {label : language.text}
+		article_id : {label : "article"},
+		text_id : {label : "text"}
 	}
 };
 
@@ -318,9 +314,99 @@ settings.corpora.vivill = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : language.year, includeInKWIC : true},
-		text_party : {label : language.party, includeInKWIC : true},
-		text_type : {label : language.type}
+		text_year : {label : "year", includeInKWIC : true, displayType : "select",
+					dataset : {
+								"1887" : "1887",
+								"1902" : "1902",
+								"1904" : "1904",
+								"1905" : "1905",
+								"1908" : "1908",
+								"1911" : "1911",
+								"1912" : "1912",
+								"1914a|1914b" : "1914",
+								"1917" : "1917",
+								"1919" : "1919",
+								"1920" : "1920",
+								"1921" : "1921",
+								"1924" : "1924",
+								"1928" : "1928",
+								"1932" : "1932",
+								"1933" : "1933",
+								"1934" : "1934",
+								"1936" : "1936",
+								"1940" : "1940",
+								"1944" : "1944",
+								"1946" : "1946",
+								"1948" : "1948",
+								"1951" : "1951",
+								"1952" : "1952",
+								"1953" : "1953",
+								"1956" : "1956",
+								"1958" : "1958",
+								"1959" : "1959",
+								"1960" : "1960",
+								"1961" : "1961",
+								"1962" : "1962",
+								"1964" : "1964",
+								"1967" : "1967",
+								"1968" : "1968",
+								"1969" : "1969",
+								"1970" : "1970",
+								"1972" : "1972",
+								"1973" : "1973",
+								"1975" : "1975",
+								"1976" : "1976",
+								"1979" : "1979",
+								"1981" : "1981",
+								"1982" : "1982",
+								"1984" : "1984",
+								"1985" : "1985",
+								"1987" : "1987",
+								"1988" : "1988",
+								"1990" : "1990",
+								"1991" : "1991",
+								"1993" : "1993",
+								"1994" : "1994",
+								"1997" : "1997",
+								"1998" : "1998",
+								"1999" : "1999",
+								"2000" : "2000",
+								"2001" : "2001",
+								"2002" : "2002",
+								"2005" : "2005",
+								"2006" : "2006",
+								"2010" : "2010"
+					}},
+		text_party : {
+			label : "party", 
+			includeInKWIC : true,
+			displayType : "select",
+			dataset: {
+				"all" : "Alliansen",
+				"c" : "Centerpartiet",
+				"rg" : "De rödgröna",
+				"fi" : "Feministiskt initiativ",
+				"fp" : "Folkpartiet liberalerna",
+				"jr" : "Jordbrukarnas riksförbund",
+				"kd" : "Kristdemokraterna",
+				"la" : "Lantmannapartiet",
+				"labp" : "Lantmanna- och borgarepartiet",
+				"lisp" : "Liberala samlingspartiet",
+				"mp" : "Miljöpartiet de gröna",
+				"m" : "Moderata samlingspartiet",
+				"npf" : "Nationella framstegspartiet",
+				"nyd" : "Ny demokrati",
+				"pp" : "Piratpartiet",
+				"sd" : "Sverigedemokraterna",
+				"k_h" : "Sveriges kommunistiska parti, Höglundarna", 
+				"k_k" : "Sverges kommunistiska parti, Kilbommarna", 
+				"svp" : "Sverges socialdemokratiska vänsterparti", 
+				"lp" : "Sveriges liberala parti",
+				"s" : "Sveriges socialdemokratiska arbetareparti", 
+				"v" : "Vänsterpartiet"
+				}
+			},
+		text_type : {label : "type"}
 	}
 };
 
@@ -345,8 +431,8 @@ settings.corpora.romi = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_author : {label : language.author},
-		text_title : {label : language.title}
+		text_author : {label : "author"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -370,8 +456,8 @@ settings.corpora.romii = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_author : {label : language.author},
-		text_title : {label : language.title}
+		text_author : {label : "author"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -401,7 +487,7 @@ settings.corpora.drama = {
  * MISC
  */
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
 settings.arg_types = {
 	"word" : String,
@@ -414,22 +500,22 @@ settings.arg_types = {
 	"max" : Number,
 	"min" : Number
 };
-
+// values here represent translation keys.
 settings.arg_groups = {
 	"ord" : {
-		word : language.word_is,
-		notword : language.word_is_not,
-		beginswith : language.word_beginswith,
-		endswith : language.word_endswith,
-		regexp : language.matches_regexp
+		word : "word_is",
+		notword : "word_is_not",
+		beginswith : "word_beginswith",
+		endswith : "word_endswith",
+		regexp : "matches_regexp"
 	},
 //	"ordklass" : {
 //		pos : language.wordclass_is,
 //		msd : language.wordclass_starts
 //	},
 	"intervall" : {
-		max : language.max,
-		min : language.min
+		max : "max",
+		min : "min"
 	}
 };
 

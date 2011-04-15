@@ -68,6 +68,9 @@
 	"article" : "artikel",
 	"type" : "typ",
 	"oneSentence" : "en mening",
+	
+	"statistics" : "Statistik",
+	
 	"AB":"adverb", 
 	"DL":"determinerare",
     "DL": "interpunktion",

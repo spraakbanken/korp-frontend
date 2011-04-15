@@ -72,8 +72,14 @@ model.KWICProxy.prototype = {
 						$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
 					}
 		});
-		
+	}
+};
+
+model.StatProxy = function() {
+};
+
+model.StatProxy.prototype = {
+	makeRequest : function() {
 		
 	}
-		
 };
