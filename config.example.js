@@ -59,11 +59,11 @@ attrs.saldo = {
 	type : "set"
 };
 attrs.dephead = {
-	label : "dephead"
+	label : "dephead",
+	displayType : "hidden"
 };
 attrs.deprel = {
-	label : "deprel",
-	displayType : "hidden"
+	label : "deprel"
 };
 attrs.prefix = {
 	label : "prefix",

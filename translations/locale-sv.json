@@ -47,7 +47,7 @@
 	"baseform" : "grundform",
 	"lemgram" : "lemgram",
 	"dephead" : "dephead",
-	"deprel" : "deprel",
+	"deprel" : "dependensrelation",
 	"sentence" : "mening",
 	"paragraph" : "stycke",
 	"prefix" : "förled",

@@ -47,7 +47,7 @@
 	"baseform" : "baseform",
 	"lemgram" : "lemgram",
 	"dephead" : "dephead",
-	"deprel" : "deprel",
+	"deprel" : "dependency relation",
 	"sentence" : "sentence",
 	"paragraph" : "paragraph",
 	"prefix" : "initial part",
