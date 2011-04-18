@@ -411,19 +411,26 @@ function cqpToken(token) {
         			 
     });
     
+    function defaultArgsFunc(s) {
+    	var operator = obj.data.type == "set" ? "contains" : "=";
+    	var prefix = obj.data.isStructAttr != null ? "_." : "";
+    	
+    	return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
+    };
     
     $.each(args, function(type, valueArray) {
     	var inner_query = [];
+    	
+    	if(settings.outer_args[type] != null) {
+    		settings.outer_args[type](query, $.map(args[type], function(item) {
+            	return item.value;
+            }));
+    		return;
+    	} 
+    	
+    	
     	$.each(valueArray, function(i, obj) {
-    		
-    		function defaultArgsFunc(s) {
-    			var operator = obj.data.type == "set" ? "contains" : "=";
-    			var prefix = obj.data.isStructAttr != null ? "_." : "";
-    			
-				return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
-			};
-    		
-    		var argFunc = settings.inner_args[type] || defaultArgsFunc; 
+    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
     		inner_query.push(argFunc(obj.value));
     	});
     	if (inner_query.length) {
@@ -432,11 +439,6 @@ function cqpToken(token) {
     	
     });
 
-    for (type in settings.outer_args) {
-        if (args[type]) {
-            settings.outer_args[type](query, args[type]);
-        }
-    }
 
     var query_string = "[" + query.token.join(" & ") + "]";
     if (query.min | query.max) {
