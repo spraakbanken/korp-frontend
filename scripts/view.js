@@ -73,6 +73,9 @@ view.SimpleSearch = function() {
 		focus : function(event) {
 			event.preventDefault();
 		}
+	})
+	.blur(function() {
+		$(this).autocomplete("close");
 	});
 };
 
