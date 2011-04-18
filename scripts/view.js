@@ -323,7 +323,7 @@ view.KWICResults.prototype = {
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
 	},
 	hidePreloader : function() {
-		$(".spinner").remove();
+		$("#result-container li:first .spinner").remove();
 	},
 	
 	getCurrentRow : function() {
@@ -464,6 +464,7 @@ view.LemgramResults.prototype = {
 			this.renderHeader(wordClass);
 			$('#results-wraper').show();
 			util.localize();
+			this.hidePreloader();
 		},
 		
 		onClickExample : function(event) {
@@ -515,6 +516,7 @@ view.LemgramResults.prototype = {
 		},
 		
 		showNoResults : function() {
+			this.showPreloader();
 			$("#results-lemgram")
 			.append($.format("<p><i rel='localize[no_lemgram_results]'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
 		},
@@ -526,11 +528,13 @@ view.LemgramResults.prototype = {
 		},
 		
 		showPreloader : function() {
-			$("<div class='spinner' />").appendTo("#result-container li:last")
+			$.log("showPreloader");
+			$("<div class='spinner' />").appendTo("#result-container li:nth-child(3)")
 			.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
 		},
 		hidePreloader : function() {
-			$(".spinner").remove();
+			$.log("hidePreloader");
+			$("#result-container li:nth-child(3) .spinner").remove();
 		}
 		
 };
@@ -611,11 +615,15 @@ view.StatResults.prototype = {
 		.appendTo("#results-stats");
 		
 		$("#results-stats").append($("<div />").css("clear", "both"));
+		statsResult.hidePreloader();
 	},
 		
 	showPreloader : function() {
+		$("<div class='spinner' />").appendTo("#result-container li:nth-child(4)")
+		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
 	},
 	hidePreloader : function() {
+		$("#result-container li:nth-child(4) .spinner").remove();
 	}
 };
 

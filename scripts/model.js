@@ -5,6 +5,7 @@ model.LemgramProxy = function(){};
 model.LemgramProxy.prototype = {
 		
 		lemgramSearch : function(lemgram) {
+			lemgramResults.showPreloader();
 			var cqp = $.format('[(lex contains "%s")]', lemgram);
 			submitFormToServer(cqp);
 			return cqp;
@@ -81,7 +82,7 @@ model.StatsProxy = function() {
 model.StatsProxy.prototype = {
 	makeRequest : function(lemgram) {
 //		http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi?command=lemgramstats&lemgram=ge..vb.1&corpus=VIVILL,ROMII
-		
+		statsResult.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
