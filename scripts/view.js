@@ -69,13 +69,7 @@ view.SimpleSearch = function() {
 			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
 			
 			self.selectLemgram(selectedItem);
-		},
-		focus : function(event) {
-			event.preventDefault();
 		}
-	})
-	.blur(function() {
-		$(this).autocomplete("close");
 	});
 };
 

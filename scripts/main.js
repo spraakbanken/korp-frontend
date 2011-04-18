@@ -31,11 +31,8 @@ $(function(){
 			$("#sendBtn").click();
 			
 			break;
-		
 		}
-		
 	});
-	
 	
 
 	$("#searchbar").load("searchbar.html", function() {
@@ -51,8 +48,12 @@ $(function(){
 		lemgramResults = new view.LemgramResults();
 		statsResult = new view.StatResults();
 		
+		$("#tabs-container").tabs({
+			show : function() {
+				$("#simple_text").autocomplete("close");
+			}
+		});
 		
-		$("#tabs-container").tabs();
 		$("#result-container").tabs({
 			disabled : [2, 3],
 			show : function() {
@@ -85,6 +86,11 @@ $(function(){
 		
 		$("#simple_text")[0].focus();
 		parseQuery();
+		
+		$(document).click(function() {
+			$("#simple_text").autocomplete("close");
+		});
+		
 	});
 });
 
