@@ -411,12 +411,6 @@ function cqpToken(token) {
         			 
     });
     
-    function defaultArgsFunc(s) {
-    	var operator = obj.data.type == "set" ? "contains" : "=";
-    	var prefix = obj.data.isStructAttr != null ? "_." : "";
-    	
-    	return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
-    };
     
     $.each(args, function(type, valueArray) {
     	var inner_query = [];
@@ -430,6 +424,12 @@ function cqpToken(token) {
     	
     	
     	$.each(valueArray, function(i, obj) {
+    		function defaultArgsFunc(s) {
+    			var operator = obj.data.type == "set" ? "contains" : "=";
+    			var prefix = obj.data.isStructAttr != null ? "_." : "";
+    			
+    			return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
+    		};
     		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
     		inner_query.push(argFunc(obj.value));
     	});
