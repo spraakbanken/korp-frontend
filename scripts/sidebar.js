@@ -12,7 +12,7 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	else
 		$.error("sidebartemplate broken");
 	
-	if(corpusObj.struct_attributes) {
+	if(!$.isEmptyObject(corpusObj.struct_attributes)) {
 		$("#sidebarTmpl")
 		.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
 		.appendTo("#selected_sentence");
