@@ -63,12 +63,18 @@ view.SimpleSearch = function() {
 			}).preloader("show");
 		},
 		minLength: 1,
+//		change : function() {
+//			$.log("change");
+//		},
 		select: function( event, ui ) {
 			event.preventDefault();
 			var selectedItem = ui.item.value;
 			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
 			
 			self.selectLemgram(selectedItem);
+		},
+		focus : function() {
+			return false;
 		}
 	});
 };
@@ -157,9 +163,10 @@ view.SimpleSearch.prototype = {
 	},
 	
 	onSimpleChange : function() {
+		$.log("onSimpleChange");
 		var val;
 		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
-			val = $.format('[(lex contains "%s")]', lemgram);
+			val = $.format('[(lex contains "%s")]', $("#simple_text").val());
 		} else {
 			var valArray = $("#simple_text").val().split(" ");
 			var cqp = $.map(valArray, function(item, i){
@@ -173,7 +180,6 @@ view.SimpleSearch.prototype = {
 		} else {
 			this.disable();
 		}
-		
 	},
 	
 	resetView : function() {
