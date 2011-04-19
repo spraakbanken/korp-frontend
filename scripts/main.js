@@ -23,7 +23,7 @@ $(function(){
 		var keyCode = $.ui.keyCode;
 		switch(event.keyCode) {
 		case keyCode.ENTER:
-			if(!simpleSearch.isEnabled()) return;
+			if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
 			
 			if ( $("#simple_text").is(":visible" )) {
 				$("#simple_text").autocomplete("close");

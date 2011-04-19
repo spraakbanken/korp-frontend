@@ -34,7 +34,7 @@ function onSubmit(evt) {
 	
 	switch(currentVisible.attr("id")) {
 	case "korp-simple":
-		simpleSearch.resetView();
+//		simpleSearch.resetView();
 		
 		break;
 	case "korp-extended":

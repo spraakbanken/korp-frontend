@@ -186,10 +186,13 @@ view.SimpleSearch.prototype = {
 		$("#similar_lemgrams").empty();
 	},
 	
+	isVisible : function() {
+		return $("#korp-simple").is(":visible");
+	},
+	
 	isEnabled : function() {
 		return this._enabled;
 	},
-	
 	enable : function() {
 		this._enabled = true;
 		$("#sendBtn").attr("disabled", "");
