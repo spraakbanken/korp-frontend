@@ -519,7 +519,7 @@ view.LemgramResults.prototype = {
 		},
 		
 		showNoResults : function() {
-			this.showPreloader();
+			this.hidePreloader();
 			$("#results-lemgram")
 			.append($.format("<p><i rel='localize[no_lemgram_results]'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
 		},
