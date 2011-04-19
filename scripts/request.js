@@ -28,19 +28,16 @@ function setJsonLink(settings){
 function onSubmit(evt) {
 	var currentVisible = $("#tabs-container > div:visible");
 	
+	$("#result-container").tabs("select", 0);
+	$("#result-container").tabs("option", "disabled", [2, 3]);
+	simpleSearch.resetView();
+	
 	switch(currentVisible.attr("id")) {
 	case "korp-simple":
-		simpleSearch.onSimpleChange();
-		// clear the simple search from previous lemgram search result widgets
-		$("#result-container").tabs("select", 0);
-		$("#result-container").tabs("option", "disabled", [2, 3]);
 		simpleSearch.resetView();
 		
 		break;
 	case "korp-extended":
-		$("#result-container").tabs("select", 0);
-		$("#result-container").tabs("option", "disabled", [2, 3]);
-		simpleSearch.resetView();
 		updateCQP();
 		break;
 //	case "korp-advanced":
