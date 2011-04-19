@@ -528,66 +528,16 @@ view.LemgramResults.prototype = {
 		},
 		
 		showPreloader : function() {
-			$.log("showPreloader");
 			$("<div class='spinner' />").appendTo("#result-container li:nth-child(3)")
 			.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
 		},
 		hidePreloader : function() {
-			$.log("hidePreloader");
 			$("#result-container li:nth-child(3) .spinner").remove();
 		}
 		
 };
 
 view.StatResults = function() {
-	
-	this.dummyData = {
-			"VIVILL" : {
-				"ges" : 789,
-				"ger" : 887,
-				"given" : 17,
-				"giva" : 22,
-				"givna" : 13,
-				"ge-" : 1,
-				"giv" : 1,
-				"givit" : 22,
-				"gavs" : 5,
-				"ge" : 942,
-				"givas" : 17,
-				"getts" : 4,
-				"gav" : 24,
-				"givet" : 9,
-				"gett" : 31,
-				"givits" : 5,
-				"gives" : 2
-			},
-			"ROMII" : {
-				"ges" : 46,
-				"ger" : 835,
-				"given" : 30,
-				"giva" : 51,
-				"getts" : 1,
-				"givna" : 32,
-				"giv" : 26,
-				"givits" : 9,
-				"gav" : 1641,
-				"give" : 12,
-				"givas" : 4,
-				"givs" : 2,
-				"ge" : 1617,
-				"g\u00e5ve" : 4,
-				"giver" : 14,
-				"gavs" : 57,
-				"givet" : 84,
-				"gett" : 351,
-				"givande" : 9,
-				"givit" : 226,
-				"gives" : 3
-			},
-			"time" : 0.35788893699645996
-		};
-		
-	
 };
 
 view.StatResults.prototype = {
@@ -610,14 +560,20 @@ view.StatResults.prototype = {
 		
 		
 		$("#results-wraper").show();
-//		
 		$("#statTableTmpl").tmpl(data, {wordArray : wordArray, corpusArray : corpusArray})
 		.appendTo("#results-stats");
 		
 		$("#results-stats").append($("<div />").css("clear", "both"));
 		statsResult.hidePreloader();
 	},
-		
+	
+	showError : function() {
+		this.hidePreloader();
+		$("<p rel='localize[error_occurred]>")
+		.text(util.getLocaleString("error_occurred"))
+		.appendTo("#results-stats");
+	},
+	
 	showPreloader : function() {
 		$("<div class='spinner' />").appendTo("#result-container li:nth-child(4)")
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});

@@ -95,8 +95,17 @@ model.StatsProxy.prototype = {
 				lemgram : lemgram,
 				corpus : selected_uppercased_corpora_ids
 			},
-			success: $.proxy(statsResult.renderTable, statsResult)  
+			success: function(data) {
+				if(data.ERROR != null) {
+					$.error("gettings stats failed with error", $.dump(data.ERROR));
+					statsResult.showError();
+					return;
+				}
+				statsResult.renderTable(data);
+			}
 		
 		});
+		
+		
 	}
 };

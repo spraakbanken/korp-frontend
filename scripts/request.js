@@ -38,6 +38,9 @@ function onSubmit(evt) {
 		
 		break;
 	case "korp-extended":
+		$("#result-container").tabs("select", 0);
+		$("#result-container").tabs("option", "disabled", [2, 3]);
+		simpleSearch.resetView();
 		updateCQP();
 		break;
 //	case "korp-advanced":

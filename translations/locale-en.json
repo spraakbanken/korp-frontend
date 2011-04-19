@@ -19,6 +19,7 @@
 	"wordclass_starts" : "word class begins with",
 	
 	"any" : "any word",
+	"error_occurred" : "An error occurred",
 	
 	"simple" : "Simple",
 	"detailed" : "Extended",
