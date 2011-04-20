@@ -211,6 +211,10 @@ a:hover {color:red;}  /* mouse over link */
 	display: none;
 }
 
+.numberOfChildren {
+	color: #888888;	
+}
+
 .hp_topframe {
 	height: 16px;
 	width: 353px;
