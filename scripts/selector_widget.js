@@ -155,6 +155,11 @@ var hp_corpusChooser = {
 			el.replaceWith(newHTML);
 			
 			hp_this.countSelected();
+			// Update the number of children for all folders:
+			$(".tree").each(function() {
+				var noItems = $(this).find(".hplabel .checked").length;
+				$(this).children("label").children(".numberOfChildren").text("(" + noItems + ")");
+			});
 			
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
 			$(".popupchecks").css({"top": popoffset-4});
@@ -308,7 +313,7 @@ var hp_corpusChooser = {
 							cssattrib = "; display:none";
 						}
 						var foldertitle = $(this).children('ul').attr('title');
-						outStr += '<div title="' + foldertitle + '" style="left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + '</span></label>';
+						outStr += '<div title="' + foldertitle + '" style="left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 						
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
