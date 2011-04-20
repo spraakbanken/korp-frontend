@@ -63,6 +63,9 @@ var hp_corpusChooser = {
 			}
 		});
 		this.countSelected();
+		// Fire callback "change":
+		var callback = hp_this.options.change;
+		if ($.isFunction(callback)) callback(hp_this.selectedItems());
 	},
 	updateState: function (element) {
 			// element is a div!
