@@ -108,12 +108,272 @@ settings.corporafolders.novels = {
 
 settings.corporafolders.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["gp2009", "konkplus"]
+	contents : ["dn1987", "fof"]
+};
+
+settings.corporafolders.newspapertexts.gp = {
+	title : "GP",
+	contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2d"]
+};
+
+settings.corporafolders.newspapertexts.press = {
+	title : "Press",
+	contents : ["press65", "press76", "press95", "press96", "press97", "press98"]
 };
 
 /*
  * CORPORA
  */
+
+settings.corpora.dn1987 = {
+	title : "DN 1987",
+	languages : {
+		DN1987 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp1994 = {
+	title : "GP 1994",
+	languages : {
+		GP1994 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_section : {label : "section"}
+	}
+};
+
+settings.corpora.gp2001 = {
+	title : "GP 2001",
+	languages : {
+		GP2001 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2002 = {
+	title : "GP 2002",
+	languages : {
+		GP2002 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2003 = {
+	title : "GP 2003",
+	languages : {
+		GP2003 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2004 = {
+	title : "GP 2004",
+	languages : {
+		GP2004 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2005 = {
+	title : "GP 2005",
+	languages : {
+		GP2005 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2006 = {
+	title : "GP 2006",
+	languages : {
+		GP2006 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2007 = {
+	title : "GP 2007",
+	languages : {
+		GP2007 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.gp2008 = {
+	title : "GP 2008",
+	languages : {
+		GP2008 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : sattrs.date,
+		article_sectionshort : {label : "section"}
+	}
+};
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
@@ -138,6 +398,210 @@ settings.corpora.gp2009 = {
 		article_date : sattrs.date,
 		article_author : {label : "author"},
 		article_section : {label : "section"}
+	}
+};
+
+settings.corpora.gp2d = {
+	title : "GP - Två dagar",
+	languages : {
+		GP2D : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.fof = {
+	title : "Forskning och framsteg",
+	languages : {
+		FOF : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_issue : {label : "nr."}
+	}
+};
+
+settings.corpora.press65 = {
+	title : "Press 65",
+	languages : {
+		PRESS65 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : {label : "date"},
+		article_publisher : {label : "publisher"},
+		article_topic : {label : "topic"},
+		article_genre : {label : "genre"}
+	}
+};
+
+settings.corpora.press76 = {
+	title : "Press 76",
+	languages : {
+		PRESS76 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_year : {label : "year"},
+		article_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.press95 = {
+	title : "Press 95",
+	languages : {
+		PRESS95 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : {label : "date"},
+		article_publisher : {label : "publisher"},
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.press96 = {
+	title : "Press 96",
+	languages : {
+		PRESS96 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : {label : "date"},
+		article_publisher : {label : "publisher"},
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.press97 = {
+	title : "Press 97",
+	languages : {
+		PRESS97 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : {label : "date"},
+		article_publisher : {label : "publisher"},
+		article_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.press98 = {
+	title : "Press 98",
+	languages : {
+		PRESS98 : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		article_date : {label : "date"},
+		article_publisher : {label : "publisher"},
+		article_sectionshort : {label : "section"}
 	}
 };
 
@@ -196,6 +660,7 @@ settings.corpora.storsuc = {
  * lex: attrs.lemgram, saldo: attrs.saldo, dephead: attrs.dephead, deprel:
  * attrs.deprel, ref: attrs.ref, link: attrs.link, text: attrs.text} };
  */
+/*
 settings.corpora.konkplus = {
 	title : "Konkplus: svenska tidningstexter",
 	languages : {
@@ -218,7 +683,7 @@ settings.corpora.konkplus = {
 		text_id : {label : "text"}
 	}
 };
-
+*/
 settings.corpora.parole = {
 	title : "PAROLE",
 	languages : {
