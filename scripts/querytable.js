@@ -6,10 +6,10 @@ function didSelectCorpus() {
     selects.children().remove();
     var nr_langs = 0;
     
-    for (var lang in corpus.languages) {
-        selects.append(new Option(corpus.languages[lang], lang));
-        nr_langs++;
-    }
+    $.each(corpus.languages, function(lang) {
+    	selects.append(new Option(corpus.languages[lang], lang));
+    	nr_langs++;
+    });
     selects.attr("disabled", nr_langs <= 1);
 
 }
@@ -97,17 +97,17 @@ function insertRow() {
     var operators = row.siblings().length ? settings.operators : settings.first_operators;
     var select_operation = $('<select/>').addClass("select_operation")
         .change(function(){didSelectOperation(this)});
-    for (oper in operators) {
-        select_operation.append(new Option(operators[oper], oper));
-    }
+	$.each(operators, function(oper) {
+		select_operation.append(new Option(operators[oper], oper));
+	});
     select_operation.attr("disabled", select_operation.children().length <= 1);
 
     var select_language = $('<select/>').addClass("select_language")
         .change(function(){didSelectLanguage(this)});
     var languages = settings.corpora[getCorpus()].languages;
-    for (var lang in languages) {
-        select_language.append(new Option(languages[lang], lang));
-    }
+    $.each(languages, function(lang) {
+    	select_language.append(new Option(languages[lang], lang));
+    }); 
     select_language.attr("disabled", select_language.children().length <= 1);
 
     row.append(remove_row_button, select_operation, select_language, insert_token_button);
@@ -224,24 +224,23 @@ function makeSelect() {
 		"sentence attributes" : getStructAttrs()
 		});
 	
-	for (var lbl in groups) {
-	    var group = groups[lbl];
-	    if($.isEmptyObject(group)) {
-	    	continue;
-	    }
-	    var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
-	    for (var val in group) {
-	    	if(group[val].displayType == "hidden")
-	    		continue;
-	    	var labelKey = group[val].label || group[val];
-	    	
-	    	$('<option/>',{rel : $.format("localize[%s]", labelKey)})
-	    	.val(val).text(util.getLocaleString(labelKey) || "")
-	    	.appendTo(optgroup)
-	    	.data("dataProvider", group[val]);
-	    	
-	    }
-	}
+	$.each(groups, function(lbl, group) {
+		if($.isEmptyObject(group)) {
+			return;
+		}
+		var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
+		$.each(group, function(key, val) {
+			if(val.displayType == "hidden")
+				return;
+			var labelKey = val.label || val;
+			
+			$('<option/>',{rel : $.format("localize[%s]", labelKey)})
+			.val(key).text(util.getLocaleString(labelKey) || "")
+			.appendTo(optgroup)
+			.data("dataProvider", val);
+		});
+		
+	});
 	
 	return arg_select;
 }

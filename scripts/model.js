@@ -27,37 +27,37 @@ model.KWICProxy.prototype = {
 	    });
 		
 		var data = {
-					command:'query',
-					corpus:selected_uppercased_corpora_ids,
-					cqp:cqp,
-					start:start,
-					end:end,
-					context:'1 sentence',
-					show:[],
-					show_struct:[]  
-				};
+			command:'query',
+			corpus:selected_uppercased_corpora_ids,
+			cqp:cqp,
+			start:start,
+			end:end,
+			context:'1 sentence',
+			show:[],
+			show_struct:[]  
+		};
 		
 
-		var selected_corpora = $.map(selected_corpora_ids, function(n)
-	   	{ 
+		var selected_corpora = $.map(selected_corpora_ids, function(n) {
 			return(settings.corpora[n]);
 	    });
 	    
 	    
-	    for (sel in selected_corpora) {
-		    $.each(selected_corpora[sel].attributes, function(key,val){
-		    	if($.inArray(key, data.show) == -1)
-		    		data.show.push(key);
+		$.each(selected_corpora, function(_, corpus) {
+			$.each(corpus.attributes, function(key,val){
+				if($.inArray(key, data.show) == -1)
+					data.show.push(key);
 			});
 			
-		
-			if (selected_corpora[sel].struct_attributes) {
-				$.each(selected_corpora[sel].struct_attributes, function(key,val){
+			
+			if (corpus.struct_attributes != null) {
+				$.each(corpus.struct_attributes, function(key,val){
 					if($.inArray(key, data.show_struct) == -1)
 						data.show_struct.push(key);
 				});
 			}
-	    }
+			
+		});
 
 		$("#Pagination").data("cqp", cqp);
 		this.prevRequest = data;

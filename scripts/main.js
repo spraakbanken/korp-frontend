@@ -145,16 +145,17 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	}
 	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
 		// Folders
-		for (var fol in folder) {
+		$.each(folder, function(fol, folVal) {
 			if (fol != "contents" && fol != "title")
-				outHTML += '<li>' + loadCorporaFolderRecursive(false, folder[fol]) + "</li>";
-		}
+				outHTML += '<li>' + loadCorporaFolderRecursive(false, folVal) + "</li>";
+		});
 		// Corpora
 		if (folder["contents"] && folder["contents"].length > 0) {
-			for (var corpid in folder["contents"]) {
-				outHTML += '<li id="' + folder.contents[corpid] + '">' + settings.corpora[folder.contents[corpid]]["title"] + '</li>';
-				added_corpora_ids.push(folder.contents[corpid]);
-			}
+			$.each(folder.contents, function(key, value) {
+				outHTML += '<li id="' + value + '">' + settings.corpora[value]["title"] + '</li>';
+				added_corpora_ids.push(value);
+				
+			});
 		}
 	}
 	
