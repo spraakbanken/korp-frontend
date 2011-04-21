@@ -1,22 +1,22 @@
 var model = {};
 
-model.LemgramProxy = function(){};
-
-model.LemgramProxy.prototype = {
+var LemgramProxy = {
 		
-		lemgramSearch : function(lemgram) {
-			lemgramResults.showPreloader();
-			var cqp = $.format('[(lex contains "%s")]', lemgram);
-			submitFormToServer(cqp);
-			return cqp;
-		}
+	initialize : function() {
+	},
+		
+	lemgramSearch : function(lemgram) {
+		lemgramResults.showPreloader();
+		var cqp = $.format('[(lex contains "%s")]', lemgram);
+		submitFormToServer(cqp);
+		return cqp;
+	}
 };
 
-model.KWICProxy = function(){
-	this.prevRequest = null;
-};
-
-model.KWICProxy.prototype = {
+var KWICProxy = {
+	initialize : function() {
+		this.prevRequest = null;
+	},
 	makeRequest : function(cqp, start, end) {
 		kwicResults.showPreloader();
 		
@@ -36,12 +36,10 @@ model.KWICProxy.prototype = {
 			show:[],
 			show_struct:[]  
 		};
-		
 
 		var selected_corpora = $.map(selected_corpora_ids, function(n) {
 			return(settings.corpora[n]);
 	    });
-	    
 	    
 		$.each(selected_corpora, function(_, corpus) {
 			$.each(corpus.attributes, function(key,val){
@@ -49,40 +47,39 @@ model.KWICProxy.prototype = {
 					data.show.push(key);
 			});
 			
-			
 			if (corpus.struct_attributes != null) {
 				$.each(corpus.struct_attributes, function(key,val){
 					if($.inArray(key, data.show_struct) == -1)
 						data.show_struct.push(key);
 				});
 			}
-			
 		});
 
 		$("#Pagination").data("cqp", cqp);
 		this.prevRequest = data;
-		$.ajax({ url: settings.cgi_script, 
-					data:data,
-					beforeSend : function(jqxhr, settings) {
-						this.prevRequest = settings;
-						if($("#results").is(":visible"))
-							setJsonLink(settings);
-					},
-					success: $.proxy(kwicResults.renderTable, kwicResults),
-					error : function(jqXHR, textStatus, errorThrown) {
-						$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
-					}
+		$.ajax({ 
+			url: settings.cgi_script, 
+			data:data,
+			beforeSend : function(jqxhr, settings) {
+				this.prevRequest = settings;
+				if($("#results").is(":visible"))
+					setJsonLink(settings);
+			},
+			success: $.proxy(kwicResults.renderTable, kwicResults),
+			error : function(jqXHR, textStatus, errorThrown) {
+				$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
+			}
 		});
 	}
 };
 
-model.StatsProxy = function() {
-};
 
-model.StatsProxy.prototype = {
+var StatsProxy = {
+	initialize : function() {
+		
+	},
 	makeRequest : function(lemgram) {
-//		http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi?command=lemgramstats&lemgram=ge..vb.1&corpus=VIVILL,ROMII
-		statsResult.showPreloader();
+		statsResults.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
@@ -98,14 +95,20 @@ model.StatsProxy.prototype = {
 			success: function(data) {
 				if(data.ERROR != null) {
 					$.error("gettings stats failed with error", $.dump(data.ERROR));
-					statsResult.showError();
+					statsResults.showError();
 					return;
 				}
-				statsResult.renderTable(data);
+				statsResults.renderTable(data);
 			}
 		
 		});
-		
-		
 	}
 };
+
+model.LemgramProxy = new Class(LemgramProxy);
+model.KWICProxy = new Class(KWICProxy);
+model.StatsProxy = new Class(StatsProxy);
+
+delete KWICProxy;
+delete LemgramProxy;
+delete StatsProxy;

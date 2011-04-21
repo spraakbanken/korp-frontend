@@ -46,7 +46,7 @@ $(function(){
 		extendedSearch = new view.ExtendedSearch();
 		kwicResults = new view.KWICResults();
 		lemgramResults = new view.LemgramResults();
-		statsResult = new view.StatResults();
+		statsResults = new view.StatsResults();
 		
 		$("#tabs-container").tabs({
 			show : function() {
