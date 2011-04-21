@@ -1,6 +1,7 @@
 (function($) {
 
 	$.sm = function(src, readyCallback) {
+		this.src = src;
 		$.sm = this;
 		var self = this;
 		this.compiledDoc;
@@ -48,7 +49,7 @@
 		
 		this.fetchXML = function() {
 			return $.ajax({
-				  url: "korp_statemachine.xml",
+				  url: this.src,
 				  dataType : "text"
 			});
 		};
