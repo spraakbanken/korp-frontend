@@ -1,22 +1,32 @@
 <scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
     profile="ecmascript" initial="init" >
     
-    <datamodel>
-        <data id="lemgramProxy"/>
-        <data id="simpleSearch"/>
-        <data id="kwicResults"/>
-        <data id="lemgramResults"/>
+    <script>
+        
+    </script>
     
-    </datamodel>
+<!--     <datamodel> -->
+<!--         <data id="kwicProxy"/> -->
+<!--         <data id="lemgramProxy"/> -->
+<!--         <data id="statsProxy"/> -->
+<!--         <data id="simpleSearch"/> -->
+<!--         <data id="kwicResults"/> -->
+<!--         <data id="lemgramResults"/> -->
+<!--         <data id="statsResults"/> -->
+    
+<!--     </datamodel> -->
     
     <state id="init">
         <transition target="main">
-<!--             <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/> -->
-<!--             <assign location="kwicProxy"      expr="new model.KWICProxy()"/> -->
-<!--             <assign location="simpleSearch"   expr="new view.SimpleSearch()"/> -->
-<!--             <assign location="kwicResults"    expr="new view.KWICResults()"/> -->
-<!--             <assign location="lemgramResults" expr="new view.LemgramResults()"/> -->
+            <assign location="extendedSearch" expr="new view.ExtendedSearch()"/>
+            <assign location="simpleSearch"   expr="new view.SimpleSearch()"/>
+            <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first')"/>
+            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
+            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(4)')"/>
             
+            <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
+            <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
+            <assign location="statsProxy"     expr="new model.StatsProxy()"/>
         </transition>
     </state>
     
@@ -25,26 +35,88 @@
             <log label="entered main" />
         </onentry>
         
-        <parallel id="p">
-            <state id="search">
+        <parallel id="p" initial="search results sidebar">
+        
+            <state id="search" initial="simple extended advanced">
+                <transition event="submit" target="search" />
                 
-                
-            </state>
-            <state id="results">
-            
-                <state id="results_hidden">
+                <transition event="searchtab.simple" target="simple" /> 
+                <transition event="searchtab.extended" target="extended" /> 
+                <transition event="searchtab.advanced" target="advanced" /> 
+                    
+                <state id="simple">
+                    <onexit>
+                        <script>
+                            $("#simple_text").autocomplete("close");
+                        </script>
+                    </onexit>
+                </state>
+                <state id="extended">
                     
                 </state>
+                <state id="advanced">
                 
-                <state id="results_visible">
+                </state>
                 
+            </state>
+            
+            <state id="results" initial="results_hidden">
+            
+                <state id="results_hidden">
+                    <onentry>
+                    
+                    </onentry>
+                    <onexit>
+                        // show results
+                    </onexit>
+                </state>
+                
+                <state id="results_visible" initial="results_kwic">
+                    
+                    <transition event="resultstab.kwic" target="results_kwic" /> 
+                    <transition event="resultstab.lemgram" target="results_lemgram" /> 
+                    <transition event="resultstab.stats" target="results_stats" />
+                    
+                    <state id="results_kwic">
+                        <onentry>
+                            <script>
+                                showSidebar();
+                                kwicResults.centerScrollbar();
+                                setJsonLink(kwicProxy.prevRequest);
+                            </script>
+                        </onentry>
+                        
+                        <onexit>
+                            <script>
+                                hideSidebar();
+                            </script>
+                        </onexit>
+                    </state>
+                    <state id="results_lemgram">
+                        <onentry>
+                            <script>
+                                setJsonLink(simpleSearch.prevLemgramRequest);
+                            </script>
+                        </onentry>
+                    </state>
+                    <state id="results_stats">
+                        <onentry>
+                            <script>
+                                // TODO: update to correct json link value.
+                                //setJsonLink(simpleSearch.prevLemgramRequest);
+                            </script>
+                        </onentry>
+                    </state>
+                    
                 </state>
             
             </state>
             
-        
+            <state id="sidebar" initial="sidebar_hidden">
+                <state id="sidebar_visible"></state>
+                <state id="sidebar_hidden"></state>
+            </state>
+            
         </parallel>
-        
-        
     </state> 
 </scxml> 

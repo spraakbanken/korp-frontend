@@ -30,15 +30,15 @@
 				switch($.reduce([cookieLastMod, scriptMod, xmlMod], max )) {
 				case cookieLastMod:
 					$.log("scxml: running stored data");
-					self.run(storedObj.data);
+					self.eval(storedObj.data);
 					break;
 				case scriptMod:
 					$.log("scxml: running precompiled");
-					self.run(xhrArgArray[0]);
+					self.eval(xhrArgArray[0]);
 					break;
 				case xmlMod:
 					$.log("scxml: recompiling");
-					self.compileAndRun(xmlArgArray[0]);
+					self.compileAndEval(xmlArgArray[0]);
 					break;
 				}
 				
@@ -61,7 +61,7 @@
 			});
 		};
 		
-		this.compileAndRun = function(scxmlSrc) {
+		this.compileAndEval = function(scxmlSrc) {
 			var t = new Date().getTime();
 			require(
 					{
@@ -94,7 +94,7 @@
 								$.log("statechart compiled and started: ");
 								$.log("compile time", new Date().getTime() - t );
 								delete t;
-								self.run(transformedJs);
+								self.eval(transformedJs);
 							},transform);
 						}
 					);
@@ -102,13 +102,17 @@
 			);
 		};
 		
-		this.run = function(scxmlScript) {
+		this.eval = function(scxmlScript) {
 			this.compiledDoc = scxmlScript;
-			$.log("scxmlScript", scxmlScript);
+//			$.log("scxmlScript", scxmlScript);
 			eval(scxmlScript);
 			self.compiledStatechartInstance = new StatechartExecutionContext();
-			self.compiledStatechartInstance.initialize();
+//			self.compiledStatechartInstance.initialize();
 			readyCallback();
+		};
+		
+		this.start = function() {
+			self.compiledStatechartInstance.initialize();
 		};
 		
 		this.send = function(event, data) {

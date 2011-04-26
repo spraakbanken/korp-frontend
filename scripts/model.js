@@ -62,7 +62,7 @@ var KWICProxy = {
 			data:data,
 			beforeSend : function(jqxhr, settings) {
 				this.prevRequest = settings;
-				if($("#results").is(":visible"))
+				if($("#results-kwic").is(":visible"))
 					setJsonLink(settings);
 			},
 			success: $.proxy(kwicResults.renderTable, kwicResults),

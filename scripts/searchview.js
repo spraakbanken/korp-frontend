@@ -4,6 +4,7 @@ var view = {};
 // Search view objects
 //**************
 
+
 var SimpleSearch = {
 	initialize : function() {
 		this.prevLemgramRequest = null;
@@ -162,6 +163,7 @@ var SimpleSearch = {
 	
 	onSimpleChange : function() {
 		var val;
+		$.log("onSimpleChange", $("#simple_text").val());
 		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
 			val = $.format('[(lex contains "%s")]', $("#simple_text").val());
 		} else {
@@ -210,7 +212,116 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
+	},
+	
+	didSelectArgtype : function() {
+		// change input widget
+		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
+		$(this).siblings(".arg_value").remove();
+		
+		var data = $(this).find(":selected").data("dataProvider");
+		var arg_value;
+		switch(data.displayType) {
+		case "select":
+			arg_value = $("<select />");
+			$.each(data.dataset, function(key, value) {
+				$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
+			});
+			break;
+		case "autocomplete":
+			break;
+		case "date":
+			break;
+		default:
+			arg_value = $("<input type='text'/>");
+			break;
+		} 
+		
+		arg_value.addClass("arg_value")
+	    .change(didChangeArgvalue);
+		$(this).after(arg_value);
+		arg_value.val(oldVal);
+		
+	    updateCQP();
+	},
+	
+	insertArg : function(token) {
+		$.log("insertArg");
+		var self = this;
+	    var token = $(token).closest(".query_token").children("tbody");
+	    var row = $("<tr/>").addClass("query_arg").appendTo(token);
+	    
+	    var arg_select = makeSelect();
+	    
+	    var arg_value = $("<input type='text'/>").addClass("arg_value")
+	    .change(function(){
+    		didChangeArgvalue();
+		});
+//	    TODO: might want this.
+//	    .attr("placeholder", $.format("[%s]", util.getLocaleString("any")));
+	    
+	    var remove = mkRemoveButton().addClass("remove_arg")
+	        .click(function(){
+	        	if(row.is(":last-child"))
+	        		row.prev().find(".insert_arg").show();
+	        	removeArg(this);
+	    	});
+
+	    var insert = mkInsertButton().addClass("insert_arg")
+	    .click(function() {
+	    	self.insertArg(this);
+	    	$(this).hide();
+	    });
+	    
+	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
+	    .click(function() {
+	    	$(this).closest("table").remove();
+	    	updateCQP();
+	    	
+	    	if($(".query_token").length == 1) {
+	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
+	    	} else {
+	    		$(".query_token .btn-icon:first").css("visibility", "visible");
+	    	}
+	    });
+	    
+	    
+	    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
+	    var rightCol = $("<div />").append(arg_select, arg_value)
+	    .css("display", "inline-block")
+	    .css("margin-left", 5);
+	    
+	    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
+	    	// let's patch it up! (maybe I shouldn't have used inline-block)
+	    	leftCol.add(rightCol).css("display", "inline");
+	    	rightCol.find("input").css("float", "right");
+	    	closeBtn.css("right", "-235").css("top", "-55");
+	    }
+	    
+	    var wrapper = $("<div />").append($("<span rel='localize[and]'>and</span>"), insert);
+	    
+	    row.append(
+	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
+	    );
+	    
+	    if(row.is(":first-child")) {
+	    	remove.css("visibility", "hidden");
+	    }
+	    
+		if(!row.is(":first-child") ) {
+			closeBtn.css("visibility", "hidden");
+		}
+		
+		if($(".query_token").length == 1) {
+			closeBtn.css("visibility", "hidden");
+		}
+		else {
+			$(".query_token .btn-icon:first").css("visibility", "visible");
+		}
+	    
+	    didToggleToken(row);
 	}
+
 };
 
 

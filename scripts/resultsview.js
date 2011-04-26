@@ -2,11 +2,27 @@
 // Result view objects
 //************
 
+var BaseResults = {
+	initialize : function(tabSelector, resultSelector) {
+		this.$tab = $(tabSelector);
+		this.$result = $(resultSelector);
+	},
+	showPreloader : function() {
+		$("<div class='spinner' />").appendTo(this.$tab)
+		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+	},
+	hidePreloader : function() {
+		this.$tab.find(".spinner").remove();
+	}
+};
 
+view.BaseResults = new Class(BaseResults);
+delete BaseResults;
 
 var KWICResults = {
-	
-	initialize : function() {
+	Extends : view.BaseResults,
+	initialize : function(tabSelector, resultSelector) {
+		this.parent(tabSelector, resultSelector);
 		if(!Modernizr.inputtypes.number) {
 			var $select = $('<select name="num_hits" id="num_hits"></div>');
 			$("#num_hits").replaceWith($select);
@@ -28,7 +44,7 @@ var KWICResults = {
 			$.error("json fetch error: " + $.dump(data.ERROR));
 			$("#results-table").empty();
 			$("#Pagination").empty();
-			kwicResults.hidePreloader();
+			this.hidePreloader();
 			return;
 		} 
 		if(!num_result) {
@@ -41,28 +57,28 @@ var KWICResults = {
 			$.log("no kwic results");
 			$("#results-table").empty();
 			$("#Pagination").empty();
-			kwicResults.hidePreloader();
+			this.hidePreloader();
 			return;
 		}				
 
 
 		var effectSpeed = 100;
 		if($.trim($("#results-table").html()).length) {
-			$("#results").fadeOut(effectSpeed, function() {
+			$("#results-kwic").fadeOut(effectSpeed, function() {
 				$("#results-table").empty();
 				self.renderTable(data);
 			});
 			return;
 		}
 		else {
-			$("#results").hide();
+			$("##results-kwic").hide();
 		}
 		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
 			showSidebar();
 		}
 		$.log("corpus_results");
 		
-		$.each(data.kwic, function(i,sentence){
+		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
 		    var splitObj = {
 		    		"left" : selectLeft(sentence, offset),
@@ -87,10 +103,10 @@ var KWICResults = {
 		});
 //			make the first matched word selected by default.
 		$(".match").children().first().click();
-		$("#results").fadeIn(effectSpeed);
+		$("#results-kwic").fadeIn(effectSpeed);
 		
-		kwicResults.centerScrollbar();
-		kwicResults.hidePreloader();
+		this.centerScrollbar();
+		this.hidePreloader();
 	},
 		
 	centerScrollbar : function() {
@@ -101,13 +117,13 @@ var KWICResults = {
 		$("#table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
 		
-	showPreloader : function() {
-		$("<div class='spinner' />").appendTo("#result-container li:first")
-		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-	},
-	hidePreloader : function() {
-		$("#result-container li:first .spinner").remove();
-	},
+//	showPreloader : function() {
+//		$("<div class='spinner' />").appendTo("#result-container li:first")
+//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+//	},
+//	hidePreloader : function() {
+//		$("#result-container li:first .spinner").remove();
+//	},
 	
 	getCurrentRow : function() {
 		return $(".token_selected").closest("tr").find(".word");
@@ -130,10 +146,9 @@ var KWICResults = {
 };
 
 var LemgramResults = {
-		
-	initialize : function() {
-		
-	},
+	Extends : view.BaseResults,
+//	initialize : function(tabSelector, resultSelector) {
+//	},
 	
 	renderHeader : function(wordClass) {
 		$.log("renderHeader", $("#results-lemgram"));
@@ -309,23 +324,23 @@ var LemgramResults = {
 		$("#results-lemgram td:first-child").each(function() {
 			$(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")));
 		});
-	},
-	
-	showPreloader : function() {
-		$("<div class='spinner' />").appendTo("#result-container li:nth-child(3)")
-		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-	},
-	hidePreloader : function() {
-		$("#result-container li:nth-child(3) .spinner").remove();
 	}
+	
+//	showPreloader : function() {
+//		$("<div class='spinner' />").appendTo("#result-container li:nth-child(3)")
+//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+//	},
+//	hidePreloader : function() {
+//		$("#result-container li:nth-child(3) .spinner").remove();
+//	}
 		
 };
 
 
 var StatsResults = {
-	
-	initialize : function() {
-	},
+	Extends : view.BaseResults,
+//	initialize : function(tabSelector, resultSelector) {
+//	},
 		
 	renderTable : function(data) {
 		
@@ -349,7 +364,7 @@ var StatsResults = {
 		.appendTo("#results-stats");
 		
 		$("#results-stats").append($("<div />").css("clear", "both"));
-		statsResults.hidePreloader();
+		this.hidePreloader();
 	},
 	
 	showError : function() {
@@ -357,17 +372,16 @@ var StatsResults = {
 		$("<p rel='localize[error_occurred]>")
 		.text(util.getLocaleString("error_occurred"))
 		.appendTo("#results-stats");
-	},
-	
-	showPreloader : function() {
-		$("<div class='spinner' />").appendTo("#result-container li:nth-child(4)")
-		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-	},
-	hidePreloader : function() {
-		$("#result-container li:nth-child(4) .spinner").remove();
 	}
+	
+//	showPreloader : function() {
+//		$("<div class='spinner' />").appendTo("#result-container li:nth-child(4)")
+//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
+//	},
+//	hidePreloader : function() {
+//		$("#result-container li:nth-child(4) .spinner").remove();
+//	}
 };
-
 
 view.KWICResults = new Class(KWICResults);
 view.LemgramResults = new Class(LemgramResults);

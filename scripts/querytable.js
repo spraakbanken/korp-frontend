@@ -86,24 +86,32 @@ function mkRemoveButton() {
 
 function insertRow() {
     var row = $('<div/>').addClass("query_row")
-        .appendTo($("#query_table"));
+    .appendTo($("#query_table"));
 
     var remove_row_button = mkRemoveButton().addClass("remove_row")
-        .click(function(){removeRow(this)});
+    .click(function(){
+    	removeRow(this);
+	});
 
     var insert_token_button = mkInsertButton().addClass("insert_token")
-        .click(function(){insertToken(this)});
+    .click(function(){
+    	insertToken(this);
+	});
     
     var operators = row.siblings().length ? settings.operators : settings.first_operators;
     var select_operation = $('<select/>').addClass("select_operation")
-        .change(function(){didSelectOperation(this)});
+    .change(function(){
+    	didSelectOperation(this);
+	});
 	$.each(operators, function(oper) {
 		select_operation.append(new Option(operators[oper], oper));
 	});
     select_operation.attr("disabled", select_operation.children().length <= 1);
 
     var select_language = $('<select/>').addClass("select_language")
-        .change(function(){didSelectLanguage(this)});
+    .change(function(){
+    	didSelectLanguage(this);
+	});
     var languages = settings.corpora[getCorpus()].languages;
     $.each(languages, function(lang) {
     	select_language.append(new Option(languages[lang], lang));
@@ -135,89 +143,15 @@ function insertToken(button) {
         .addClass("query_token")
         .attr({cellPadding: 0, cellSpacing: 0})
         .insertBefore($(button));
-    insertArg(token);
+    extendedSearch.insertArg(token);
     didToggleToken(button);
 }
 
-function insertArg(token) {
-	$.log("insertArg");
-	
-    var token = $(token).closest(".query_token").children("tbody");
-    var row = $("<tr/>").addClass("query_arg").appendTo(token);
-    
-    var arg_select = makeSelect();
-    
-    var arg_value = $("<input type='text'/>").addClass("arg_value")
-    .change(function(){didChangeArgvalue();})
-//    TODO: might want this.
-//    .attr("placeholder", $.format("[%s]", util.getLocaleString("any")));
-    
-    var remove = mkRemoveButton().addClass("remove_arg")
-        .click(function(){
-        	if(row.is(":last-child"))
-        		row.prev().find(".insert_arg").show();
-        	removeArg(this);
-    	});
 
-    var insert = mkInsertButton().addClass("insert_arg")
-    .click(function() {
-    	insertArg(this);
-    	$(this).hide();
-    });
-    
-    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
-    .click(function() {
-    	$(this).closest("table").remove();
-    	updateCQP();
-    	
-    	if($(".query_token").length == 1) {
-    		$(".query_token .btn-icon:first").css("visibility", "hidden");
-    	} else {
-    		$(".query_token .btn-icon:first").css("visibility", "visible");
-    	}
-    });
-    
-    
-    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
-    var rightCol = $("<div />").append(arg_select, arg_value)
-    .css("display", "inline-block")
-    .css("margin-left", 5);
-    
-    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
-    	// let's patch it up! (maybe I shouldn't have used inline-block)
-    	leftCol.add(rightCol).css("display", "inline");
-    	rightCol.find("input").css("float", "right");
-    	closeBtn.css("right", "-235").css("top", "-55");
-    }
-    
-    var wrapper = $("<div />").append($("<span rel='localize[and]'>and</span>"), insert);
-    
-    row.append(
-        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
-    );
-    
-    if(row.is(":first-child")) {
-    	remove.css("visibility", "hidden");
-    }
-    
-	$.log("isFirstRow", row.is(":first-child"))
-	if(!row.is(":first-child") ) {
-		closeBtn.css("visibility", "hidden");
-	}
-	
-	if($(".query_token").length == 1) {
-		closeBtn.css("visibility", "hidden");
-	}
-	else {
-		$(".query_token .btn-icon:first").css("visibility", "visible");
-	}
-    
-    didToggleToken(row);
-}
 
 function makeSelect() {
 	var arg_select = $("<select/>").addClass("arg_type")
-    .change(didSelectArgtype);
+    .change(extendedSearch.didSelectArgtype);
 
 	var groups = $.extend({}, settings.arg_groups, {
 		"word attributes" : getCurrentAttributes(),
@@ -270,22 +204,6 @@ function removeArg(arg) {
     didToggleToken(row);
 }
 
-
-//////////////////////////////////////////////////////////////////////
-/*
-function setSelectWidth(select) {
-	//abort if browser is ie7 or older
-	if($.browser.msie && parseInt($.browser.version, 10) <= 7){return 0;}
-	var text = $(select).find(":selected").text();
-    var dummy_select = $("<select/>", {position: "absolute", display: "none"})
-        .appendTo("body")
-        .append(new Option(text));
-    $(select).width((dummy_select.width() + 10) *1.8);
-    dummy_select.remove();
-	
-}
-*/
-
 function didToggleRow() {
     var visibility = $(".query_row").length > 1 ? "visible" : "hidden";
     $(".remove_row").first().hide();
@@ -310,38 +228,6 @@ function didSelectOperation(select) {
 }
 
 function didSelectLanguage(select) {
-    updateCQP();
-}
-
-function didSelectArgtype() {
-	// change input widget
-	var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
-	$(this).siblings(".arg_value").remove();
-	
-	
-	var data = $(this).find(":selected").data("dataProvider");
-	var arg_value;
-	switch(data.displayType) {
-	case "select":
-		arg_value = $("<select />");
-		$.each(data.dataset, function(key, value) {
-			$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
-		});
-		break;
-	case "autocomplete":
-		break;
-	case "date":
-		break;
-	default:
-		arg_value = $("<input type='text'/>");
-		break;
-	} 
-	
-	arg_value.addClass("arg_value")
-    .change(didChangeArgvalue);
-	$(this).after(arg_value);
-	arg_value.val(oldVal);
-	
     updateCQP();
 }
 
@@ -407,9 +293,7 @@ function cqpToken(token) {
         	args[type] = []; 
     	}
         args[type].push({data : data, value : value});
-        			 
     });
-    
     
     $.each(args, function(type, valueArray) {
     	var inner_query = [];
@@ -420,8 +304,6 @@ function cqpToken(token) {
             }));
     		return;
     	} 
-    	
-    	
     	$.each(valueArray, function(i, obj) {
     		function defaultArgsFunc(s) {
     			var operator = obj.data.type == "set" ? "contains" : "=";
@@ -437,7 +319,6 @@ function cqpToken(token) {
     	}
     	
     });
-
 
     var query_string = "[" + query.token.join(" & ") + "]";
     if (query.min | query.max) {

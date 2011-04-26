@@ -1,11 +1,3 @@
-var lemgramProxy;
-var simpleSearch;
-var extendedSearch;
-var kwicResults;
-var lemgramResults;
-var statsResults;
-var kwicProxy;
-var StatsProxy;
 
 // onDOMReady
 $(function(){
@@ -14,10 +6,7 @@ $(function(){
 		traditional: true
 	});
 	
-//	$.sm("korp_statemachine.xml", function() {
-//		// post-initialize code here.
-//		sm.start();
-//	});
+	
 	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;
@@ -33,40 +22,36 @@ $(function(){
 			break;
 		}
 	});
+	var deferred_sm = $.Deferred(function( dfd ){
+		$.sm("korp_statemachine.xml", dfd.resolve);
+	}).promise();
+	
+	var deferred_load = $.Deferred(function( dfd ){
+		$("#searchbar").load("searchbar.html", dfd.resolve);
+    }).promise();
 	
 
-	$("#searchbar").load("searchbar.html", function() {
-		$.log("content load");
+//	$("#searchbar").load("searchbar.html", function() {
+	$.when(deferred_load, deferred_sm).then(function() {
+		$.log("content load and sm init");
 		loadCorpora();
-		resetQuery();
-		lemgramProxy = new model.LemgramProxy();
-		kwicProxy = new model.KWICProxy();
-		statsProxy = new model.StatsProxy();
-		simpleSearch = new view.SimpleSearch();
-		extendedSearch = new view.ExtendedSearch();
-		kwicResults = new view.KWICResults();
-		lemgramResults = new view.LemgramResults();
-		statsResults = new view.StatsResults();
+		
+		$.sm.start();
 		
 		$("#tabs-container").tabs({
 			show : function() {
-				$("#simple_text").autocomplete("close");
+				var selected = $("#tabs-container").children("div:visible").attr("id").split("-")[1];
+				$.sm.send("searchtab." + selected);
 			}
 		});
 		
 		$("#result-container").tabs({
 			disabled : [2, 3],
 			show : function() {
-				if($("#result-container").tabs("option", "selected")) { // any other than the first tab is selected
-					hideSidebar();
-					setJsonLink(simpleSearch.prevLemgramRequest);
-				}
-				else { // first tab selected
-					kwicResults.centerScrollbar();
-					showSidebar();
-					setJsonLink(kwicProxy.prevRequest);
-					
-				}
+				var currentId = $("#result-container").children("div:visible").attr("id");
+				if(currentId == null) return;
+				var selected = currentId.split("-")[1];
+				$.sm.send("resultstab." + selected);
 			} 
 		});
 		
@@ -90,7 +75,7 @@ $(function(){
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		
+		resetQuery();
 	});
 });
 

@@ -13,9 +13,9 @@ function StatechartExecutionContext() {
         _sessionid: _sessionid
     };
     //variable declarations relating to data model
-    var my_slot = 1234;
+    var kwicProxy, lemgramProxy, statsProxy, simpleSearch, kwicResults, lemgramResults, statsResults;
     //send timeout id variables
-    var $default_Regexp_id40978183 = /^($default)/;
+    var $default_Regexp_idm427110640 = /^($default)/;
     //abstract state
     var AbstractState = new
     function() {
@@ -25,8 +25,8 @@ function StatechartExecutionContext() {
         this.$dispatchPrefixEvent = function() {};
     }
     //states
-    var scxml_id39478291 = (function() {
-        function scxml_id39478291Constructor() {
+    var scxml_idm414688816 = (function() {
+        function scxml_idm414688816Constructor() {
             this.parent = AbstractState;
             this.initial = null;
             this.depth = 0;
@@ -35,38 +35,38 @@ function StatechartExecutionContext() {
             this.isBasic =
             false;
             this.toString = function() {
-                return "scxml_id39478291"
+                return "scxml_idm414688816"
             }
             this.enterAction = function() {
-                console.log("entering scxml_id39478291");
-                for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                id42140328_iterator < id42140328_hoist;
-                id42140328_iterator++) {
-                    var listener = listeners[id42140328_iterator];
+                console.log("entering scxml_idm414688816");
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
                     //to
-                    listener.onEntry("scxml_id39478291");
+                    listener.onEntry("scxml_idm414688816");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting scxml_id39478291");
-                for (var id42140334_iterator = 0, id42140334_hoist = listeners.length;
-                id42140334_iterator < id42140334_hoist;
-                id42140334_iterator++) {
-                    var listener = listeners[id42140334_iterator];
+                console.log("exiting scxml_idm414688816");
+                for (var idm3056_iterator = 0, idm3056_hoist = listeners.length;
+                idm3056_iterator < idm3056_hoist;
+                idm3056_iterator++) {
+                    var listener = listeners[idm3056_iterator];
                     //from
-                    listener.onExit("scxml_id39478291");
+                    listener.onExit("scxml_idm414688816");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
                 return AbstractState.$dispatchPrefixEvent(e);
             }
         }
-        scxml_id39478291Constructor.prototype = AbstractState;
-        return new scxml_id39478291Constructor();
+        scxml_idm414688816Constructor.prototype = AbstractState;
+        return new scxml_idm414688816Constructor();
     })();
     var _initial = (function() {
         function _initialConstructor() {
-            this.parent = scxml_id39478291;
+            this.parent = scxml_idm414688816;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -74,7 +74,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id39478291
+                scxml_idm414688816
                 ];
             this.parent.initial = this; //init parent's pointer to initial state
             this.toString = function() {
@@ -82,20 +82,20 @@ function StatechartExecutionContext() {
             }
             this.enterAction = function() {
                 console.log("entering _initial");
-                for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                id42140328_iterator < id42140328_hoist;
-                id42140328_iterator++) {
-                    var listener = listeners[id42140328_iterator];
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
                     //to
                     listener.onEntry("_initial");
                 }
             }
             this.exitAction = function() {
                 console.log("exiting _initial");
-                for (var id42140342_iterator = 0, id42140342_hoist = listeners.length;
-                id42140342_iterator < id42140342_hoist;
-                id42140342_iterator++) {
-                    var listener = listeners[id42140342_iterator];
+                for (var idp103312_iterator = 0, idp103312_hoist = listeners.length;
+                idp103312_iterator < idp103312_hoist;
+                idp103312_iterator++) {
+                    var listener = listeners[idp103312_iterator];
                     //from
                     listener.onExit("_initial");
                 }
@@ -103,41 +103,40 @@ function StatechartExecutionContext() {
             this.$default = function() {
                 return {
                     preemptedBasicStates: {
-                        s1: true,
-                        s2: true
+                        init: true
                     },
                     action: function() {
                         hasTakenDefaultTransition = true;
                         //exit states
                         _initial.exitAction();
                         //transition action
-                        for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                        id42140328_iterator < id42140328_hoist;
-                        id42140328_iterator++) {
-                            var listener = listeners[id42140328_iterator];
+                        for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                        idp0_iterator < idp0_hoist;
+                        idp0_iterator++) {
+                            var listener = listeners[idp0_iterator];
                             //transition id
-                            listener.onTransition("", "s1", "_initial_$default_1");
+                            listener.onTransition("", "init", "_initial_$default_1");
                         }
                         //enter states
-                        s1.enterAction();
+                        init.enterAction();
                         //update configuration
                         currentConfiguration = [
-                            s1
+                            init
                             ];
                     }
                 }
-                return scxml_id39478291['$default']();
+                return scxml_idm414688816['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id39478291.$dispatchPrefixEvent(e);
+                return scxml_idm414688816.$dispatchPrefixEvent(e);
             }
         }
-        _initialConstructor.prototype = scxml_id39478291;
+        _initialConstructor.prototype = scxml_idm414688816;
         return new _initialConstructor();
     })();
-    var s1 = (function() {
-        function s1Constructor() {
-            this.parent = scxml_id39478291;
+    var init = (function() {
+        function initConstructor() {
+            this.parent = scxml_idm414688816;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -145,116 +144,278 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id39478291
+                scxml_idm414688816
                 ];
             this.toString = function() {
-                return "s1"
+                return "init"
             }
             this.enterAction = function() {
-                console.log("entering s1");
-                for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                id42140328_iterator < id42140328_hoist;
-                id42140328_iterator++) {
-                    var listener = listeners[id42140328_iterator];
+                console.log("entering init");
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
                     //to
-                    listener.onEntry("s1");
+                    listener.onEntry("init");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting s1");
-                for (var id42140408_iterator = 0, id42140408_hoist = listeners.length;
-                id42140408_iterator < id42140408_hoist;
-                id42140408_iterator++) {
-                    var listener = listeners[id42140408_iterator];
+                console.log("exiting init");
+                for (var idm5200_iterator = 0, idm5200_hoist = listeners.length;
+                idm5200_iterator < idm5200_hoist;
+                idm5200_iterator++) {
+                    var listener = listeners[idm5200_iterator];
                     //from
-                    listener.onExit("s1");
+                    listener.onExit("init");
                 }
             }
             this.$default = function() {
                 return {
                     preemptedBasicStates: {
-                        s1: true,
-                        s2: true
+                        init: true
                     },
                     action: function() {
                         hasTakenDefaultTransition = true;
                         //exit states
-                        s1.exitAction();
+                        init.exitAction();
                         //transition action
-                        for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                        id42140328_iterator < id42140328_hoist;
-                        id42140328_iterator++) {
-                            var listener = listeners[id42140328_iterator];
+                        simpleSearch = new view.SimpleSearch();
+                        kwicResults = new view.KWICResults('#result-container li:first');
+                        lemgramResults = new view.LemgramResults('#result-container li:nth-child(3)');
+                        statsResults = new view.StatsResults('#result-container li:nth-child(4)');
+                        kwicProxy = new model.KWICProxy();
+                        lemgramProxy = new model.LemgramProxy();
+                        statsProxy = new model.StatsProxy();
+                        for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                        idp0_iterator < idp0_hoist;
+                        idp0_iterator++) {
+                            var listener = listeners[idp0_iterator];
                             //transition id
-                            listener.onTransition("", "s2", "s1_$default_2");
+                            listener.onTransition("", "main_initial", "init_$default_2");
                         }
                         //enter states
-                        s2.enterAction();
+                        main.enterAction();
+                        main_initial.enterAction();
                         //update configuration
                         currentConfiguration = [
-                            s2
+                            main_initial
                             ];
                     }
                 }
-                return scxml_id39478291['$default']();
+                return scxml_idm414688816['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id39478291.$dispatchPrefixEvent(e);
+                return scxml_idm414688816.$dispatchPrefixEvent(e);
             }
         }
-        s1Constructor.prototype = scxml_id39478291;
-        return new s1Constructor();
+        initConstructor.prototype = scxml_idm414688816;
+        return new initConstructor();
     })();
-    var s2 = (function() {
-        function s2Constructor() {
-            this.parent = scxml_id39478291;
+    var main = (function() {
+        function mainConstructor() {
+            this.parent = scxml_idm414688816;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
             //these variables facilitate fast In predicate
             this.isBasic =
-            true;
-            this.ancestors = [
-                scxml_id39478291
-                ];
+            false;
             this.toString = function() {
-                return "s2"
+                return "main"
             }
             this.enterAction = function() {
-                console.log("entering s2");
-                console.log(' hello : ');
-                console.log('expr');
-                console.log("log");
-                for (var id42140328_iterator = 0, id42140328_hoist = listeners.length;
-                id42140328_iterator < id42140328_hoist;
-                id42140328_iterator++) {
-                    var listener = listeners[id42140328_iterator];
+                console.log("entering main");
+                console.log(' entered main : ');
+                console.log(' this : ');
+                console.log(this);
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
                     //to
-                    listener.onEntry("s2");
+                    listener.onEntry("main");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting s2");
-                for (var id42140467_iterator = 0, id42140467_hoist = listeners.length;
-                id42140467_iterator < id42140467_hoist;
-                id42140467_iterator++) {
-                    var listener = listeners[id42140467_iterator];
+                console.log("exiting main");
+                for (var idp109648_iterator = 0, idp109648_hoist = listeners.length;
+                idp109648_iterator < idp109648_hoist;
+                idp109648_iterator++) {
+                    var listener = listeners[idp109648_iterator];
                     //from
-                    listener.onExit("s2");
+                    listener.onExit("main");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id39478291.$dispatchPrefixEvent(e);
+                return scxml_idm414688816.$dispatchPrefixEvent(e);
             }
         }
-        s2Constructor.prototype = scxml_id39478291;
-        return new s2Constructor();
+        mainConstructor.prototype = scxml_idm414688816;
+        return new mainConstructor();
+    })();
+    var main_initial = (function() {
+        function main_initialConstructor() {
+            this.parent = main;
+            this.initial = null;
+            this.depth = 2;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_idm414688816
+                        ,
+                    main
+                ];
+            this.parent.initial = this; //init parent's pointer to initial state
+            this.toString = function() {
+                return "main_initial"
+            }
+            this.enterAction = function() {
+                console.log("entering main_initial");
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
+                    //to
+                    listener.onEntry("main_initial");
+                }
+            }
+            this.exitAction = function() {
+                console.log("exiting main_initial");
+                for (var idm135120_iterator = 0, idm135120_hoist = listeners.length;
+                idm135120_iterator < idm135120_hoist;
+                idm135120_iterator++) {
+                    var listener = listeners[idm135120_iterator];
+                    //from
+                    listener.onExit("main_initial");
+                }
+            }
+            this.$default = function() {
+                return {
+                    preemptedBasicStates: {},
+                    action: function() {
+                        hasTakenDefaultTransition = true;
+                        //exit states
+                        main_initial.exitAction();
+                        //transition action
+                        for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                        idp0_iterator < idp0_hoist;
+                        idp0_iterator++) {
+                            var listener = listeners[idp0_iterator];
+                            //transition id
+                            listener.onTransition("", "p_initial", "main_initial_$default_3");
+                        }
+                        //enter states
+                        p.enterAction();
+                        p_initial.enterAction();
+                        //update configuration
+                        currentConfiguration = [
+                            p_initial
+                            ];
+                    }
+                }
+                return main['$default']();
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                return main.$dispatchPrefixEvent(e);
+            }
+        }
+        main_initialConstructor.prototype = main;
+        return new main_initialConstructor();
+    })();
+    var p = (function() {
+        function pConstructor() {
+            this.parent = main;
+            this.initial = null;
+            this.depth = 2;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            false;
+            this.toString = function() {
+                return "p"
+            }
+            this.enterAction = function() {
+                console.log("entering p");
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
+                    //to
+                    listener.onEntry("p");
+                }
+            }
+            this.exitAction = function() {
+                console.log("exiting p");
+                for (var idp129968_iterator = 0, idp129968_hoist = listeners.length;
+                idp129968_iterator < idp129968_hoist;
+                idp129968_iterator++) {
+                    var listener = listeners[idp129968_iterator];
+                    //from
+                    listener.onExit("p");
+                }
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                return main.$dispatchPrefixEvent(e);
+            }
+        }
+        pConstructor.prototype = main;
+        return new pConstructor();
+    })();
+    var p_initial = (function() {
+        function p_initialConstructor() {
+            this.parent = p;
+            this.initial = null;
+            this.depth = 3;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_idm414688816
+                        ,
+                    main
+                        ,
+                    p
+                ];
+            this.parent.initial = this; //init parent's pointer to initial state
+            this.toString = function() {
+                return "p_initial"
+            }
+            this.enterAction = function() {
+                console.log("entering p_initial");
+                for (var idp0_iterator = 0, idp0_hoist = listeners.length;
+                idp0_iterator < idp0_hoist;
+                idp0_iterator++) {
+                    var listener = listeners[idp0_iterator];
+                    //to
+                    listener.onEntry("p_initial");
+                }
+            }
+            this.exitAction = function() {
+                console.log("exiting p_initial");
+                for (var idp130192_iterator = 0, idp130192_hoist = listeners.length;
+                idp130192_iterator < idp130192_hoist;
+                idp130192_iterator++) {
+                    var listener = listeners[idp130192_iterator];
+                    //from
+                    listener.onExit("p_initial");
+                }
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                return p.$dispatchPrefixEvent(e);
+            }
+        }
+        p_initialConstructor.prototype = p;
+        return new p_initialConstructor();
     })();
     //states enum for glass-box unit testing
     this._states = {
         _initial: _initial,
-        s1: s1,
-        s2: s2
+        init: init,
+        main_initial: main_initial,
+        p_initial: p_initial
     }
     //trigger methods for synchronous interaction
     this["$default"] = function(data) {
@@ -269,7 +430,7 @@ function StatechartExecutionContext() {
     //initialization script
     //initialization method
     this.initialize = function() {
-        currentConfiguration = [s1];
+        currentConfiguration = [init];
         runToCompletion();
         mainLoop();
     }
@@ -339,10 +500,10 @@ function StatechartExecutionContext() {
         }
         if (isEnumeratedEvent) {
             //e does not contain a dot, so dispatch as an enumerated event
-            for (var id42140328_iterator = 0, id42140328_hoist = currentConfiguration.length;
-            id42140328_iterator < id42140328_hoist;
-            id42140328_iterator++) {
-                var state = currentConfiguration[id42140328_iterator];
+            for (var idp0_iterator = 0, idp0_hoist = currentConfiguration.length;
+            idp0_iterator < idp0_hoist;
+            idp0_iterator++) {
+                var state = currentConfiguration[idp0_iterator];
                 //check to make sure he is not preempted
                 if (!(state in preemptedBasicStates)) {
                     //lookup the transition
@@ -355,10 +516,10 @@ function StatechartExecutionContext() {
             }
         } else {
             //e contains a dot, so dispatch as a prefix event
-            for (var id42140328_iterator = 0, id42140328_hoist = currentConfiguration.length;
-            id42140328_iterator < id42140328_hoist;
-            id42140328_iterator++) {
-                var state = currentConfiguration[id42140328_iterator];
+            for (var idp0_iterator = 0, idp0_hoist = currentConfiguration.length;
+            idp0_iterator < idp0_hoist;
+            idp0_iterator++) {
+                var state = currentConfiguration[idp0_iterator];
                 //check to make sure he is not preempted
                 if (!(state in preemptedBasicStates)) {
                     //lookup the transition
@@ -371,10 +532,10 @@ function StatechartExecutionContext() {
             }
         }
         //invoke selected transitions
-        for (var id42140328_iterator = 0, id42140328_hoist = enabledTransitions.length;
-        id42140328_iterator < id42140328_hoist;
-        id42140328_iterator++) {
-            var t = enabledTransitions[id42140328_iterator];
+        for (var idp0_iterator = 0, idp0_hoist = enabledTransitions.length;
+        idp0_iterator < idp0_hoist;
+        idp0_iterator++) {
+            var t = enabledTransitions[idp0_iterator];
             t();
         }
     }
@@ -415,10 +576,10 @@ function StatechartExecutionContext() {
             indexOf(currentConfiguration, state) != -1;
         } else {
             var toReturn = false;
-            for (var id42140328_iterator = 0, id42140328_hoist = currentConfiguration.length;
-            id42140328_iterator < id42140328_hoist;
-            id42140328_iterator++) {
-                var s = currentConfiguration[id42140328_iterator];
+            for (var idp0_iterator = 0, idp0_hoist = currentConfiguration.length;
+            idp0_iterator < idp0_hoist;
+            idp0_iterator++) {
+                var s = currentConfiguration[idp0_iterator];
                 if (
                 indexOf(s.ancestors, state) != -1) {
                     toReturn = true;
