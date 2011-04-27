@@ -51,6 +51,7 @@ $(function(){
 				var currentId = $("#result-container").children("div:visible").attr("id");
 				if(currentId == null) return;
 				var selected = currentId.split("-")[1];
+				$.log("tab", "resultstab." + selected)
 				$.sm.send("resultstab." + selected);
 			} 
 		});

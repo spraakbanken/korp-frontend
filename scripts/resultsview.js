@@ -6,7 +6,28 @@ var BaseResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.$tab = $(tabSelector);
 		this.$result = $(resultSelector);
+		this.index = this.$tab.index();
 	},
+	
+	renderResult : function(data) {
+		if(data.ERROR) {
+			this.resultError(data);
+			return;
+		}
+		
+        //$("#result-container").tabs("select", 0);
+        var disabled = $("#result-container").tabs("option", "disabled");
+        var newDisabled = $.grep(disabled, function(item) {
+        	return item != this.index;
+        });
+        $("#result-container").tabs("option", "disabled", newDisabled);
+	},
+	
+	resultError : function(data) {
+		$.error("json fetch error: " + $.dump(data.ERROR));
+		this.hidePreloader();
+	},
+	
 	showPreloader : function() {
 		$("<div class='spinner' />").appendTo(this.$tab)
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
@@ -23,6 +44,8 @@ var KWICResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
+		this.num_result = 0;
+		this.current_page = 0;
 		if(!Modernizr.inputtypes.number) {
 			var $select = $('<select name="num_hits" id="num_hits"></div>');
 			$("#num_hits").replaceWith($select);
@@ -37,20 +60,21 @@ var KWICResults = {
 			});
 		}
 	},
+	
+	resultError : function(data) {
+		this.parent(data);
+		$("#results-table").empty();
+		$("#Pagination").empty();
+	},
 		
-	renderTable : function(data) {
+	renderResult : function(data) {
+		this.parent(data);
 		var self = this;
-		if(data.ERROR) {
-			$.error("json fetch error: " + $.dump(data.ERROR));
-			$("#results-table").empty();
-			$("#Pagination").empty();
-			this.hidePreloader();
-			return;
-		} 
-		if(!num_result) {
-			buildPager(data.hits);
+		
+		if(!this.num_result) {
+			this.buildPager(data.hits);
 		}
-		num_result = data.hits;
+		this.num_result = data.hits;
 		$('#num-result').html(data.hits);
 		if(!data.hits) {
 
@@ -71,7 +95,7 @@ var KWICResults = {
 			return;
 		}
 		else {
-			$("##results-kwic").hide();
+			$("#results-kwic").hide();
 		}
 		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
 			showSidebar();
@@ -81,9 +105,9 @@ var KWICResults = {
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
 		    var splitObj = {
-		    		"left" : selectLeft(sentence, offset),
-		    		"match" : selectMatch(sentence),
-		    		"right" : selectRight(sentence)
+		    		"left" : self.selectLeft(sentence, offset),
+		    		"match" : self.selectMatch(sentence),
+		    		"right" : self.selectRight(sentence)
 		    };
 		    
 			$( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i})
@@ -108,6 +132,59 @@ var KWICResults = {
 		this.centerScrollbar();
 		this.hidePreloader();
 	},
+	
+	selectLeft : function(sentence, offset) {
+		return sentence.tokens.slice(offset, sentence.match.start);
+	},
+
+	selectMatch : function(sentence) {
+		var from = sentence.match.start;
+		return sentence.tokens.slice(from, sentence.match.end);
+	},
+
+	selectRight : function(sentence) {
+		var from = sentence.match.end;
+		var len=sentence.tokens.length;
+		var to = len;
+		
+		return sentence.tokens.slice(sentence.match.end, to);
+	},
+	
+	buildPager : function(number_of_hits){
+		var items_per_page = $("#num_hits").val();
+		if(number_of_hits > items_per_page){
+			$("#Pagination").pagination(number_of_hits, {
+				items_per_page:items_per_page, 
+				callback:this.handlePaginationClick,
+				next_text: util.getLocaleString("next"),
+				prev_text: util.getLocaleString("prev"),
+				link_to:"javascript:void(0)",
+				num_edge_entries:2,
+				ellipse_text: '..'
+			});
+			$(".next").attr("rel", "localize[next]");
+			$(".prev").attr("rel", "localize[prev]");
+			
+		}else{
+			$("#Pagination").html('');
+		}
+	},
+	
+	handlePaginationClick : function(new_page_index, pagination_container) {
+		if(new_page_index != this.current_page) {
+			var items_per_page = parseInt($("#num_hits").val());
+			
+			var cqp 	= $("#Pagination").data("cqp");
+			
+			var start = new_page_index*items_per_page;
+			var end = (start + items_per_page);
+			$.log("make request", cqp, start, end);		
+			kwicProxy.makeRequest(cqp, start, end);
+			this.current_page = new_page_index;
+		}
+	    
+	   return false;
+	},
 		
 	centerScrollbar : function() {
 		if(!$(".match").first().length) return;
@@ -117,13 +194,6 @@ var KWICResults = {
 		$("#table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
 		
-//	showPreloader : function() {
-//		$("<div class='spinner' />").appendTo("#result-container li:first")
-//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-//	},
-//	hidePreloader : function() {
-//		$("#result-container li:first .spinner").remove();
-//	},
 	
 	getCurrentRow : function() {
 		return $(".token_selected").closest("tr").find(".word");
@@ -148,7 +218,21 @@ var KWICResults = {
 var LemgramResults = {
 	Extends : view.BaseResults,
 //	initialize : function(tabSelector, resultSelector) {
+//		$.log("initialize", this.parent)
+//		this.parent.initialize(tabSelector, resultSelector);
 //	},
+	
+	renderResult : function(data, lemgram) {
+		this.parent(data);
+		$("#results-lemgram").empty();
+		if(data.relations){
+			this.renderTables(lemgram, data.relations);
+		}
+		else {
+			this.showNoResults();
+		}
+		
+	},
 	
 	renderHeader : function(wordClass) {
 		$.log("renderHeader", $("#results-lemgram"));
@@ -197,7 +281,7 @@ var LemgramResults = {
 		util.localize();
 	},
 	
-	renderResults : function (lemgram, data) {
+	renderTables : function (lemgram, data) {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
@@ -208,7 +292,7 @@ var LemgramResults = {
 		var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
 		
 		if(order[wordClass] == null) {
-			lemgramResults.showNoResults();
+			this.showNoResults();
 			return;
 		}
 		
@@ -261,7 +345,7 @@ var LemgramResults = {
 		$("#results-lemgram .wordclass_suffix").hide();
 			
 		this.renderHeader(wordClass);
-		$('#results-wraper').show();
+		//$('#results-wrapper').show();
 		util.localize();
 		this.hidePreloader();
 	},
@@ -326,14 +410,6 @@ var LemgramResults = {
 		});
 	}
 	
-//	showPreloader : function() {
-//		$("<div class='spinner' />").appendTo("#result-container li:nth-child(3)")
-//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-//	},
-//	hidePreloader : function() {
-//		$("#result-container li:nth-child(3) .spinner").remove();
-//	}
-		
 };
 
 
@@ -342,8 +418,8 @@ var StatsResults = {
 //	initialize : function(tabSelector, resultSelector) {
 //	},
 		
-	renderTable : function(data) {
-		
+	renderResult : function(data) {
+		this.parent(data);
 		$("#results-stats").empty();
 		
 		var wordArray = [];
@@ -359,7 +435,6 @@ var StatsResults = {
 		});
 		
 		
-		$("#results-wraper").show();
 		$("#statTableTmpl").tmpl(data, {wordArray : wordArray, corpusArray : corpusArray})
 		.appendTo("#results-stats");
 		
@@ -374,13 +449,6 @@ var StatsResults = {
 		.appendTo("#results-stats");
 	}
 	
-//	showPreloader : function() {
-//		$("<div class='spinner' />").appendTo("#result-container li:nth-child(4)")
-//		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-//	},
-//	hidePreloader : function() {
-//		$("#result-container li:nth-child(4) .spinner").remove();
-//	}
 };
 
 view.KWICResults = new Class(KWICResults);

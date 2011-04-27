@@ -84,7 +84,7 @@
 								backend:"state",
 								beautify:true,
 								verbose:false,
-								log:false,
+								log:true,
 								ie:true
 							}, function(scArr){
 								var transformedJs = scArr[0];
@@ -112,11 +112,15 @@
 		};
 		
 		this.start = function() {
-			self.compiledStatechartInstance.initialize();
+			this.compiledStatechartInstance.initialize();
 		};
 		
 		this.send = function(event, data) {
-			self.compiledStatechartInstance[event](data);
+			this.compiledStatechartInstance[event](data);
+		};
+		
+		this.getConfiguration = function() {
+			return this.compiledStatechartInstance.getCurrentConfiguration().toString();
 		};
 		
 		this.init();

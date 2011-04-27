@@ -24,6 +24,7 @@
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(4)')"/>
             
+            <assign location="searchProxy"      expr="new model.SearchProxy()"/>
             <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
             <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
             <assign location="statsProxy"     expr="new model.StatsProxy()"/>
@@ -35,40 +36,69 @@
             <log label="entered main" />
         </onentry>
         
-        <parallel id="p" initial="search results sidebar">
+        <parallel id="p" initial="search results sidebar logger">
         
-            <state id="search" initial="simple extended advanced">
-                <transition event="submit" target="search" />
+            <state id="search" initial="simple">
+                <state id="search_inner"> 
                 
-                <transition event="searchtab.simple" target="simple" /> 
-                <transition event="searchtab.extended" target="extended" /> 
-                <transition event="searchtab.advanced" target="advanced" /> 
-                    
-                <state id="simple">
-                    <onexit>
+                    <history id="search_history">
+                        <transition target="simple" />
+                    </history>
+                
+                    <transition event="submit.kwic" target="search_history">
                         <script>
-                            $("#simple_text").autocomplete("close");
+                            simpleSearch.resetView();
                         </script>
-                    </onexit>
-                </state>
-                <state id="extended">
+                    </transition>
                     
+                    <transition event="searchtab.simple" target="simple" /> 
+                    <transition event="searchtab.extended" target="extended" /> 
+                    <transition event="searchtab.advanced" target="advanced" /> 
+                        
+                    <state id="simple">
+                        
+                        <transition event="submit.lemgram" target="simple">
+                            
+                        </transition>
+                    
+                        <onexit>
+                            <script>
+                                $("#simple_text").autocomplete("close");
+                            </script>
+                        </onexit>
+                    </state>
+                    <state id="extended">
+                        <transition event="submit.kwic" target="search_history">
+                            <script>
+                                updateCQP();
+                                simpleSearch.resetView();
+                            </script>
+                        </transition>
+                    </state>
+                    <state id="advanced">
+                    
+                    </state>
                 </state>
-                <state id="advanced">
-                
-                </state>
-                
             </state>
             
             <state id="results" initial="results_hidden">
             
                 <state id="results_hidden">
                     <onentry>
-                    
+                        <script>
+                            $('#results-wrapper').hide();
+                        </script>
                     </onentry>
                     <onexit>
-                        // show results
+                        <script>
+                            $('#results-wrapper').show();
+                        </script>
                     </onexit>
+                    
+                    <transition event="submit" target="results_visible">
+                    
+                    </transition>
+                    
                 </state>
                 
                 <state id="results_visible" initial="results_kwic">
@@ -95,7 +125,7 @@
                     <state id="results_lemgram">
                         <onentry>
                             <script>
-                                setJsonLink(simpleSearch.prevLemgramRequest);
+                                setJsonLink(lemgramProxy.prevRequest);
                             </script>
                         </onentry>
                     </state>
@@ -103,7 +133,7 @@
                         <onentry>
                             <script>
                                 // TODO: update to correct json link value.
-                                //setJsonLink(simpleSearch.prevLemgramRequest);
+                                setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>
                     </state>
@@ -113,8 +143,20 @@
             </state>
             
             <state id="sidebar" initial="sidebar_hidden">
-                <state id="sidebar_visible"></state>
-                <state id="sidebar_hidden"></state>
+                <state id="sidebar_hidden">
+                    <transition event="sidebar.show" target="sidebar_visible" />
+                </state>
+                <state id="sidebar_visible">
+                    <transition event="sidebar.hide" target="sidebar_hidden" />
+                </state>
+            </state>
+            
+            <state id="logger" initial="l2">
+                <state id="l2">
+                    <transition event="*" target="l2">
+                        <log expr="'event found: ' + _event.name" />
+                    </transition>
+                </state>
             </state>
             
         </parallel>

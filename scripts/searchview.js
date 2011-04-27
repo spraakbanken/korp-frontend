@@ -7,7 +7,6 @@ var view = {};
 
 var SimpleSearch = {
 	initialize : function() {
-		this.prevLemgramRequest = null;
 		this._enabled = true;
 		var self = this;
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
@@ -83,72 +82,33 @@ var SimpleSearch = {
 	
 	selectLemgram : function(lemgram) {
 		var self = this;
-		var corpus = getSelectedCorpora();
-		$("#similar_lemgrams").show();
-		this.renderSimilarHeader(lemgram);
+		
+		$.sm.send("submit.lemgram", lemgram);
+		
+		
 		$("#result-container").tabs("option", "disabled", []);
-		$.ajax({
-			url: settings.cgi_script,
-			data : {
-				command : "relations",
-				lemgram : lemgram,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();}) 
-			},
-			beforeSend : function(jqXHR, settings) {
-				$.log("before relations send", settings);
-				self.prevLemgramRequest = settings;
-				if($("#results-lemgram").is(":visible"))
-					setJsonLink(settings);
-			},
-			success : function(data) {
-				$.log("relations success", data);
-				$("#results-lemgram").empty();
-				if(data.relations){
-					lemgramResults.renderResults(lemgram, data.relations);
-				}
-				else {
-					lemgramResults.showNoResults();
-				}
-			}	
-		});
-		$.ajax({
-			url: "http://spraakbanken.gu.se/ws/saldo-ws/rel/json/" + lemgram,
-			success : function(data) {
-				$.log("related words success", data);
-				
-				$($.map(data, function(item, i){
-					var match = util.splitLemgram(item);
-					return $.format("<a href='javascript:void(0)' data-lemgram='%s'>%s</a>", [item, match[0]]);
-				}).join(" "))
-				.click(function() {
-					self.selectLemgram($(this).data("lemgram"));
-				})
-				.appendTo("#similar_lemgrams");
-				$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
-			}
-		});
-	
+		lemgramProxy.relationsSearch(lemgram);
+		searchProxy.relatedWordSearch(lemgram);
+		
 		statsProxy.makeRequest(lemgram);
 		var cqp = lemgramProxy.lemgramSearch(lemgram);
 		$("#cqp_string").val(cqp);
 		$("#simple_text").val("");
 	},
-	renderSimilarHeader : function(selectedItem) {
+	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
 		var self = this;
+		
 		$("#similar_lemgrams").empty().append("<div id='similar_header' />");
 		$("<p rel='localize[similar_header]' />").html(util.getLocaleString("similar_header"))
 		.css("float", "left")
 		.appendTo("#similar_header");
 		
-		var data = $( "#simple_text" ).data("dataArray");
-		if(data != null && data.length ) {
-			var optionElems = $.map($( "#simple_text" ).data("dataArray"), function(item) {
+		var lemgrams = $( "#simple_text" ).data("dataArray");
+		if(lemgrams != null && lemgrams.length ) {
+			var optionElems = $.map(lemgrams, function(item) {
 				return $.format("<option value='%(value)s'>%(label)s</option>", item);
 			});
-//				if(optionElems.length) {
-//					
-//				}
 			$("<select id='lemgram_select' />").appendTo("#similar_header")
 			.css("float", "right")
 			.html(optionElems.join(""))
@@ -159,6 +119,19 @@ var SimpleSearch = {
 			$( "#simple_text" ).data("dataArray", null);
 		}
 		$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
+		
+		// wordlist
+		$($.map(data, function(item, i){
+			var match = util.splitLemgram(item);
+			return $.format("<a href='javascript:void(0)' data-lemgram='%s'>%s</a>", [item, match[0]]);
+		}).join(" "))
+		.click(function() {
+			simpleSearch.selectLemgram($(this).data("lemgram"));
+		})
+		.appendTo("#similar_lemgrams");
+		$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
+		
+		$("#similar_lemgrams").show();
 	},
 	
 	onSimpleChange : function() {
@@ -240,7 +213,8 @@ var ExtendedSearch = {
 		arg_value.addClass("arg_value")
 	    .change(didChangeArgvalue);
 		$(this).after(arg_value);
-		arg_value.val(oldVal);
+		if(oldVal != null && oldVal.length)
+			arg_value.val(oldVal);
 		
 	    updateCQP();
 	},

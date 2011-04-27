@@ -1,5 +1,21 @@
 var model = {};
 
+var SearchProxy = {
+	initialize : function() {
+		
+	},
+	
+	relatedWordSearch : function(lemgram) {
+		$.ajax({
+			url: "http://spraakbanken.gu.se/ws/saldo-ws/rel/json/" + lemgram,
+			success : function(data) {
+				$.log("related words success", data);
+				simpleSearch.renderSimilarHeader(lemgram, data);
+			}
+		});
+	}
+};
+
 var LemgramProxy = {
 		
 	initialize : function() {
@@ -10,6 +26,29 @@ var LemgramProxy = {
 		var cqp = $.format('[(lex contains "%s")]', lemgram);
 		submitFormToServer(cqp);
 		return cqp;
+	},
+	
+	relationsSearch : function(lemgram) {
+		var self = this;
+		var corpus = getSelectedCorpora();
+		$.ajax({
+			url: settings.cgi_script,
+			data : {
+				command : "relations",
+				lemgram : lemgram,
+				corpus : $.map(corpus, function(item){return item.toUpperCase();}) 
+			},
+			beforeSend : function(jqXHR, settings) {
+				$.log("before relations send", settings);
+				self.prevRequest = settings;
+				if($("#results-lemgram").is(":visible"))
+					setJsonLink(settings);
+			},
+			success : function(data) {
+				$.log("relations success", data);
+				lemgramResults.renderResult(data, lemgram);
+			}	
+		});
 	}
 };
 
@@ -62,10 +101,8 @@ var KWICProxy = {
 			data:data,
 			beforeSend : function(jqxhr, settings) {
 				this.prevRequest = settings;
-				if($("#results-kwic").is(":visible"))
-					setJsonLink(settings);
 			},
-			success: $.proxy(kwicResults.renderTable, kwicResults),
+			success: $.proxy(kwicResults.renderResult, kwicResults),
 			error : function(jqXHR, textStatus, errorThrown) {
 				$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
 			}
@@ -92,23 +129,28 @@ var StatsProxy = {
 				lemgram : lemgram,
 				corpus : selected_uppercased_corpora_ids
 			},
+			beforeSend : function(jqXHR, settings) {
+				this.prevRequest = settings;
+			},
 			success: function(data) {
 				if(data.ERROR != null) {
 					$.error("gettings stats failed with error", $.dump(data.ERROR));
 					statsResults.showError();
 					return;
 				}
-				statsResults.renderTable(data);
+				statsResults.renderResult(data);
 			}
 		
 		});
 	}
 };
 
+model.SearchProxy = new Class(SearchProxy);
 model.LemgramProxy = new Class(LemgramProxy);
 model.KWICProxy = new Class(KWICProxy);
 model.StatsProxy = new Class(StatsProxy);
 
+delete SearchProxy;
 delete KWICProxy;
 delete LemgramProxy;
 delete StatsProxy;
