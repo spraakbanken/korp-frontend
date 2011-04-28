@@ -90,7 +90,7 @@ var KWICResults = {
 		if($.trim($("#results-table").html()).length) {
 			$("#results-kwic").fadeOut(effectSpeed, function() {
 				$("#results-table").empty();
-				self.renderTable(data);
+				self.renderResult(data);
 			});
 			return;
 		}

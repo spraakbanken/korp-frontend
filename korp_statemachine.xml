@@ -2,7 +2,17 @@
     profile="ecmascript" initial="init" >
     
     <script>
-        
+        function lemgramSearch(lemgram) {
+            $.log("lemgram", lemgram);
+            $("#result-container").tabs("option", "disabled", []);
+            lemgramProxy.relationsSearch(lemgram);
+            searchProxy.relatedWordSearch(lemgram);
+            
+            statsProxy.makeRequest(lemgram);
+            var cqp = lemgramProxy.lemgramSearch(lemgram);
+            $("#cqp_string").val(cqp);
+            $("#simple_text").val("");
+        }
     </script>
     
 <!--     <datamodel> -->
@@ -18,13 +28,14 @@
     
     <state id="init">
         <transition target="main">
-            <assign location="extendedSearch" expr="new view.ExtendedSearch()"/>
             <assign location="simpleSearch"   expr="new view.SimpleSearch()"/>
+            <assign location="extendedSearch" expr="new view.ExtendedSearch()"/>
+            <assign location="advancedSearch" expr="new view.AdvancedSearch()"/>
             <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first')"/>
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(4)')"/>
             
-            <assign location="searchProxy"      expr="new model.SearchProxy()"/>
+            <assign location="searchProxy"    expr="new model.SearchProxy()"/>
             <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
             <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
             <assign location="statsProxy"     expr="new model.StatsProxy()"/>
@@ -58,7 +69,9 @@
                     <state id="simple">
                         
                         <transition event="submit.lemgram" target="simple">
-                            
+                            <script>
+                                lemgramSearch(_event.data);
+                            </script>
                         </transition>
                     
                         <onexit>
@@ -70,7 +83,7 @@
                     <state id="extended">
                         <transition event="submit.kwic" target="search_history">
                             <script>
-                                updateCQP();
+                                advancedSearch.updateCQP();
                                 simpleSearch.resetView();
                             </script>
                         </transition>
@@ -112,7 +125,7 @@
                             <script>
                                 showSidebar();
                                 kwicResults.centerScrollbar();
-                                setJsonLink(kwicProxy.prevRequest);
+                                util.setJsonLink(kwicProxy.prevRequest);
                             </script>
                         </onentry>
                         
@@ -125,15 +138,14 @@
                     <state id="results_lemgram">
                         <onentry>
                             <script>
-                                setJsonLink(lemgramProxy.prevRequest);
+                                util.setJsonLink(lemgramProxy.prevRequest);
                             </script>
                         </onentry>
                     </state>
                     <state id="results_stats">
                         <onentry>
                             <script>
-                                // TODO: update to correct json link value.
-                                setJsonLink(statsProxy.prevRequest);
+                                util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>
                     </state>

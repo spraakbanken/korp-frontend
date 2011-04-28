@@ -16,47 +16,19 @@ var SearchProxy = {
 	}
 };
 
-var LemgramProxy = {
-		
-	initialize : function() {
-	},
-		
-	lemgramSearch : function(lemgram) {
-		lemgramResults.showPreloader();
-		var cqp = $.format('[(lex contains "%s")]', lemgram);
-		submitFormToServer(cqp);
-		return cqp;
-	},
-	
-	relationsSearch : function(lemgram) {
-		var self = this;
-		var corpus = getSelectedCorpora();
-		$.ajax({
-			url: settings.cgi_script,
-			data : {
-				command : "relations",
-				lemgram : lemgram,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();}) 
-			},
-			beforeSend : function(jqXHR, settings) {
-				$.log("before relations send", settings);
-				self.prevRequest = settings;
-				if($("#results-lemgram").is(":visible"))
-					setJsonLink(settings);
-			},
-			success : function(data) {
-				$.log("relations success", data);
-				lemgramResults.renderResult(data, lemgram);
-			}	
-		});
-	}
-};
-
 var KWICProxy = {
 	initialize : function() {
 		this.prevRequest = null;
 	},
-	makeRequest : function(cqp, start, end) {
+	makeRequest : function(cqp) {
+		var self = this;
+		kwicResults.num_result = 0;
+		cqp	= cqp || $("#cqp_string").val();
+		$.log("kwicProxy.makeRequest", cqp);
+		
+		var start 	= 0;
+		var end 	= $("#num_hits").val()-1;
+		
 		kwicResults.showPreloader();
 		
 		var selected_corpora_ids = getSelectedCorpora();
@@ -100,7 +72,7 @@ var KWICProxy = {
 			url: settings.cgi_script, 
 			data:data,
 			beforeSend : function(jqxhr, settings) {
-				this.prevRequest = settings;
+				self.prevRequest = settings;
 			},
 			success: $.proxy(kwicResults.renderResult, kwicResults),
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -110,12 +82,48 @@ var KWICProxy = {
 	}
 };
 
+var LemgramProxy = {
+		
+		initialize : function() {
+		},
+			
+		lemgramSearch : function(lemgram) {
+			lemgramResults.showPreloader();
+			var cqp = $.format('[(lex contains "%s")]', lemgram);
+			kwicProxy.makeRequest(cqp);
+			return cqp;
+		},
+		
+		relationsSearch : function(lemgram) {
+			var self = this;
+			var corpus = getSelectedCorpora();
+			$.ajax({
+				url: settings.cgi_script,
+				data : {
+					command : "relations",
+					lemgram : lemgram,
+					corpus : $.map(corpus, function(item){return item.toUpperCase();}) 
+				},
+				beforeSend : function(jqXHR, settings) {
+					$.log("before relations send", settings);
+					self.prevRequest = settings;
+					if($("#results-lemgram").is(":visible"))
+						setJsonLink(settings);
+				},
+				success : function(data) {
+					$.log("relations success", data);
+					lemgramResults.renderResult(data, lemgram);
+				}	
+			});
+		}
+	};
 
 var StatsProxy = {
 	initialize : function() {
-		
+		this.prevRequest = null;
 	},
 	makeRequest : function(lemgram) {
+		var self = this;
 		statsResults.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
@@ -130,7 +138,7 @@ var StatsProxy = {
 				corpus : selected_uppercased_corpora_ids
 			},
 			beforeSend : function(jqXHR, settings) {
-				this.prevRequest = settings;
+				self.prevRequest = settings;
 			},
 			success: function(data) {
 				if(data.ERROR != null) {

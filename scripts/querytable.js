@@ -208,14 +208,14 @@ function didToggleRow() {
     var visibility = $(".query_row").length > 1 ? "visible" : "hidden";
     $(".remove_row").first().hide();
     $("#buttons_row").find(".remove_row").last().css("visibility", visibility);
-    updateCQP();
+    advancedSearch.updateCQP();
 }
 
 function didToggleToken(row) {
     var args = $(row).closest(".query_row").find(".query_arg");
     var visibility = args.length > 1 ? "visible" : "hidden";
 //    args.first().find(".remove_arg").css("visibility", visibility);
-    updateCQP();
+    advancedSearch.updateCQP();
 }
 
 function didSelectOperation(select) {
@@ -224,15 +224,15 @@ function didSelectOperation(select) {
         .toggleClass("indent", is_include);
 //        .toggleClass("line_above", ! is_include);
     $(select).siblings(".select_language").toggle(! is_include);
-    updateCQP();
+    advancedSearch.updateCQP();
 }
 
 function didSelectLanguage(select) {
-    updateCQP();
+    advancedSearch.updateCQP();
 }
 
 function didChangeArgvalue(input) {
-    updateCQP();
+    advancedSearch.updateCQP();
 }
 
 
@@ -240,37 +240,6 @@ function didChangeArgvalue(input) {
 
 function regescape(s) {
     return s.replace(/[\.|\?|\+|\*|\|\'|\"]/g, "\\$&");
-}
-
-function updateCQP() {
-	
-    var query = "";
-    var nr_lines = 2;
-    var main_corpus_lang = "";
-    $(".query_row").each(function(){
-        var language = $(this).find(".select_language").val();
-        var corpus_lang = language.toUpperCase();
-        switch ($(this).find(".select_operation").val()) {
-        case "find":
-            main_corpus_lang = corpus_lang;
-            break;
-        case "include":
-            query += "  |  ";
-            break;
-        case "intersect":
-            query += "\n :" + corpus_lang + " ";
-            nr_lines++;
-            break;
-        case "exclude":
-            query += "\n :" + corpus_lang + " ! ";
-            nr_lines++;
-            break;
-        }
-        query += cqpRow(this);
-    });
-    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
-    $("#cqp_string").val(query).attr("rows", nr_lines);
-    $("#corpus_id").val(main_corpus_lang);
 }
 
 function cqpRow(row) {

@@ -10,7 +10,7 @@
 			$.when(this.fetchScript(), this.fetchXML())
 			.then(function(xhrArgArray, xmlArgArray) {
 				// cookie
-				var storedObj = JSON.parse($.jStorage.get("compiled_scxml"));
+				var storedObj = $.parseJSON($.jStorage.get("compiled_scxml"));
 				var cookieLastMod;
 				if(storedObj != null)
 					cookieLastMod = new Date(storedObj.time);
@@ -84,12 +84,12 @@
 								backend:"state",
 								beautify:true,
 								verbose:false,
-								log:true,
+								log:false,
 								ie:true
 							}, function(scArr){
 								var transformedJs = scArr[0];
 								
-								$.jStorage.set("compiled_scxml", JSON.stringify({data : transformedJs, time : new Date()}));
+								$.jStorage.set("compiled_scxml", $.toJSON({data : transformedJs, time : new Date()}));
 								
 								$.log("statechart compiled and started: ");
 								$.log("compile time", new Date().getTime() - t );
@@ -121,6 +121,14 @@
 		
 		this.getConfiguration = function() {
 			return this.compiledStatechartInstance.getCurrentConfiguration().toString();
+		};
+		
+		this.dump = function() {
+			$("body").empty();
+			
+			$("<textarea></textarea>").css({width : $(window).width(), height : $(window).height()})
+			.html(this.compiledDoc)
+			.appendTo("body");
 		};
 		
 		this.init();

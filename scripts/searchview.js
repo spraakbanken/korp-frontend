@@ -4,9 +4,24 @@ var view = {};
 // Search view objects
 //**************
 
+var BaseSearch = {
+	initialize : function(mainDiv) {
+		this.$main = $(mainDiv);
+		this.$main.find("input[type=submit]").click(this.onSubmit);
+	},
+
+	onSubmit : function(event) {
+		$.sm.send("submit.kwic");
+	}
+};
+
+view.BaseSearch = new Class(BaseSearch);
+delete BaseSearch;
 
 var SimpleSearch = {
-	initialize : function() {
+	Extends : view.BaseSearch,
+	initialize : function(mainDiv) {
+		this.parent(mainDiv);
 		this._enabled = true;
 		var self = this;
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
@@ -81,19 +96,7 @@ var SimpleSearch = {
 	},
 	
 	selectLemgram : function(lemgram) {
-		var self = this;
-		
 		$.sm.send("submit.lemgram", lemgram);
-		
-		
-		$("#result-container").tabs("option", "disabled", []);
-		lemgramProxy.relationsSearch(lemgram);
-		searchProxy.relatedWordSearch(lemgram);
-		
-		statsProxy.makeRequest(lemgram);
-		var cqp = lemgramProxy.lemgramSearch(lemgram);
-		$("#cqp_string").val(cqp);
-		$("#simple_text").val("");
 	},
 	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
@@ -178,10 +181,13 @@ var SimpleSearch = {
 
 
 var ExtendedSearch = {
-	initialize : function() {
+	Extends : view.BaseSearch,
+	initialize : function(mainDiv) {
+		this.parent(mainDiv);
 		$("#korp-extended").keyup(function(event) {
 			if(event.keyCode == "13") {
-				$("#sendBtn").click();
+				$.sm.send("submit.kwic");
+//				$("#sendBtn").click();
 			}
 			return false;
 		});
@@ -216,7 +222,7 @@ var ExtendedSearch = {
 		if(oldVal != null && oldVal.length)
 			arg_value.val(oldVal);
 		
-	    updateCQP();
+		advancedSearch.updateCQP();
 	},
 	
 	insertArg : function(token) {
@@ -250,7 +256,7 @@ var ExtendedSearch = {
 	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
 	    .click(function() {
 	    	$(this).closest("table").remove();
-	    	updateCQP();
+	    	advancedSearch.updateCQP();
 	    	
 	    	if($(".query_token").length == 1) {
 	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
@@ -298,8 +304,50 @@ var ExtendedSearch = {
 
 };
 
+var AdvancedSearch = {
+	Extends : view.BaseSearch,
+	initialize : function(mainDiv) {
+		this.parent(mainDiv);
+		
+	},
+	
+	updateCQP : function() {
+		
+	    var query = "";
+	    var nr_lines = 2;
+	    var main_corpus_lang = "";
+	    $(".query_row").each(function(){
+	        var language = $(this).find(".select_language").val();
+	        var corpus_lang = language.toUpperCase();
+	        switch ($(this).find(".select_operation").val()) {
+	        case "find":
+	            main_corpus_lang = corpus_lang;
+	            break;
+	        case "include":
+	            query += "  |  ";
+	            break;
+	        case "intersect":
+	            query += "\n :" + corpus_lang + " ";
+	            nr_lines++;
+	            break;
+	        case "exclude":
+	            query += "\n :" + corpus_lang + " ! ";
+	            nr_lines++;
+	            break;
+	        }
+	        query += cqpRow(this);
+	    });
+	    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
+	    $("#cqp_string").val(query).attr("rows", nr_lines);
+	    $("#corpus_id").val(main_corpus_lang);
+	}
 
-view.ExtendedSearch = new Class(ExtendedSearch);
+};
+
+
 view.SimpleSearch = new Class(SimpleSearch);
+view.ExtendedSearch = new Class(ExtendedSearch);
+view.AdvancedSearch = new Class(AdvancedSearch);
 delete SimpleSearch;
 delete ExtendedSearch;
+delete AdvancedSearch;

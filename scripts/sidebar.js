@@ -31,9 +31,6 @@ function sidebarSaldoFormat() {
 		var idArray = $.grep($(this).text().split("|"), function(itm) {
 			return itm && itm.length;  
 		}).sort();
-//		if(!idArray.length) {
-//			$(this).html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
-//		} else {
 			
 		var labelArray = util.lemgramArraytoString(idArray);
 		$(this)
