@@ -123,7 +123,7 @@
 			return this.compiledStatechartInstance.getCurrentConfiguration().toString();
 		};
 		
-		this.dump = function() {
+		this._dump = function() {
 			$("body").empty();
 			
 			$("<textarea></textarea>").css({width : $(window).width(), height : $(window).height()})

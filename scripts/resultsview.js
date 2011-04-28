@@ -171,15 +171,17 @@ var KWICResults = {
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container) {
+		$.log("handlePaginationClick ", kwicProxy.prevRequest);
 		if(new_page_index != this.current_page) {
 			var items_per_page = parseInt($("#num_hits").val());
 			
+//			var cqp 	= kwicProxy.prevRequest.cqp;
 			var cqp 	= $("#Pagination").data("cqp");
 			
 			var start = new_page_index*items_per_page;
 			var end = (start + items_per_page);
 			$.log("make request", cqp, start, end);		
-			kwicProxy.makeRequest(cqp, start, end);
+			kwicProxy.makeRequest(cqp, start, end, kwicProxy.queryData);
 			this.current_page = new_page_index;
 		}
 	    

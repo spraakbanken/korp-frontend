@@ -19,15 +19,16 @@ var SearchProxy = {
 var KWICProxy = {
 	initialize : function() {
 		this.prevRequest = null;
+		this.queryData = null;
 	},
-	makeRequest : function(cqp) {
+	makeRequest : function(cqp, start, end, queryData) {
 		var self = this;
 		kwicResults.num_result = 0;
 		cqp	= cqp || $("#cqp_string").val();
 		$.log("kwicProxy.makeRequest", cqp);
 		
-		var start 	= 0;
-		var end 	= $("#num_hits").val()-1;
+		start = start || 0;
+		end = end || $("#num_hits").val()-1;
 		
 		kwicResults.showPreloader();
 		
@@ -47,6 +48,9 @@ var KWICProxy = {
 			show:[],
 			show_struct:[]  
 		};
+		if(queryData != null) {
+			data.querydata = queryData;
+		}
 
 		var selected_corpora = $.map(selected_corpora_ids, function(n) {
 			return(settings.corpora[n]);
@@ -74,7 +78,11 @@ var KWICProxy = {
 			beforeSend : function(jqxhr, settings) {
 				self.prevRequest = settings;
 			},
-			success: $.proxy(kwicResults.renderResult, kwicResults),
+			success: function(data) {
+				$.log("kwic result", data);
+				self.queryData = data.querydata; 
+				kwicResults.renderResult(data);
+			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
 			}

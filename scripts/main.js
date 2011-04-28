@@ -6,8 +6,6 @@ $(function(){
 		traditional: true
 	});
 	
-	
-	
 	$('body').bind("keydown.autocomplete", function(event) {
 		var keyCode = $.ui.keyCode;
 		switch(event.keyCode) {
@@ -40,23 +38,43 @@ $(function(){
 		loadCorpora();
 		
 		$.sm.start();
-		
-		$("#tabs-container").tabs({
+		var tab_a_selector = 'ul.ui-tabs-nav a';
+
+		$("#search-tab").tabs({
+			event : "change",
 			show : function() {
-				var selected = $("#tabs-container").children("div:visible").attr("id").split("-")[1];
+				var selected = $("#search-tab").children("div:visible").attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
 		});
-		
 		$("#result-container").tabs({
+			event : "change",
 			disabled : [2, 3],
 			show : function() {
 				var currentId = $("#result-container").children("div:visible").attr("id");
 				if(currentId == null) return;
 				var selected = currentId.split("-")[1];
-				$.log("tab", "resultstab." + selected)
 				$.sm.send("resultstab." + selected);
 			} 
+		});
+		
+		var tabs = $(".ui-tabs");
+		tabs.find( tab_a_selector ).click(function() {
+			var state = {},
+			id = $(this).closest( '.ui-tabs' ).attr( 'id' ),
+			// Get the index of this tab.
+			idx = $(this).parent().prevAll().length;
+			
+			// Set the state!
+			state[ id ] = idx;
+			$.bbq.pushState( state );
+		});
+		
+		$(window).bind( 'hashchange', function(e) {
+			tabs.each(function() {
+				var idx = e.getState( this.id, true ) || 0;
+				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
+			});
 		});
 		
 		$("#result-container").click(function(){
@@ -74,11 +92,13 @@ $(function(){
 		hideSidebar();
 		
 		$("#simple_text")[0].focus();
-		util.parseQuery();
+//		util.parseQuery();
 		
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
 		resetQuery();
+		
+		$(window).trigger("hashchange");
 	});
 });
