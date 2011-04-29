@@ -83,9 +83,6 @@ util.splitLemgram = function(lemgram) {
 	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(1);
 };
 
-
-
-
 util.setJsonLink = function(settings){
 	if(settings == null) {
 		$.log("failed to update json link");
@@ -182,13 +179,10 @@ function loadCorporaFolderRecursive(first_level, folder) {
 function loadCorpora() {
 	added_corpora_ids = [];
 	outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
-	/*var outStr;
-	outStr = "<ul>";
-	for (var val in settings.corpora) {
-    	outStr += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
-    };
-    outStr += "</ul>";*/
-    corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
-    	refreshSelects();
+    
+	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
+		$.log("corpus changed", corpora);
+		$.bbq.pushState({"corpus" : corpora.join(",")});
+    	extendedSearch.refreshSelects();
     }});
 }

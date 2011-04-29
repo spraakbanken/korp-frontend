@@ -6,23 +6,6 @@ $(function(){
 		traditional: true
 	});
 	
-	$('body').bind("keydown.autocomplete", function(event) {
-		var keyCode = $.ui.keyCode;
-		switch(event.keyCode) {
-		case keyCode.ENTER:
-			
-			
-			if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
-			
-			if ( $("#simple_text").is(":visible" )) {
-				$("#simple_text").autocomplete("close");
-			}
-//			$("#sendBtn").click();
-			$.sm.send("submit.lemgram");
-			
-			break;
-		}
-	});
 	var deferred_sm = $.Deferred(function( dfd ){
 		$.sm("korp_statemachine.xml", dfd.resolve);
 	}).promise();
@@ -31,8 +14,7 @@ $(function(){
 		$("#searchbar").load("searchbar.html", dfd.resolve);
     }).promise();
 	
-
-//	$("#searchbar").load("searchbar.html", function() {
+	// this fires only when both have been loaded. 
 	$.when(deferred_load, deferred_sm).then(function() {
 		$.log("content load and sm init");
 		loadCorpora();
@@ -71,10 +53,50 @@ $(function(){
 		});
 		
 		$(window).bind( 'hashchange', function(e) {
+			$.log("hashchange", e);
+			var prevFragment = $.bbq.prevFragment || {};
 			tabs.each(function() {
 				var idx = e.getState( this.id, true ) || 0;
 				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
 			});
+			var page = e.getState("page", true) || 0;
+			kwicResults.setPage(page);
+			
+			var corpus = e.getState("corpus");
+			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
+				var corp_array = corpus.split(',');
+				corpusChooserInstance.corpusChooser("selectItems",corp_array);
+				$("#select_corpus").val(corpus);
+				didSelectCorpus();
+			}
+			function isValid(searchCommand) {
+				return searchCommand && searchCommand.length;
+			}
+			
+			var searches = ["word", "lemgram", "saldo", "cqp"];
+			
+			$.each(searches, function(i, item) {
+				var value = e.getState(item);
+				if(!isValid(value) || value == prevFragment[item]) return; 
+				switch(item) {
+				case "word":
+					$('input[type=text]').val(value);
+					$.sm.send("submit.kwic");
+					break;
+				case "lemgram":
+					$.sm.send("submit.lemgram", value);
+					break;
+				case "saldo":
+					extendedSearch.setOneToken("saldo", value);
+					$.sm.send("submit.kwic");
+					break;
+				case "cqp":
+					advancedSearch.setCQP(value);
+					$.sm.send("submit.kwic");
+					break;
+				}
+			});
+			$.bbq.prevFragment = $.deparam.fragment();
 		});
 		
 		$("#result-container").click(function(){

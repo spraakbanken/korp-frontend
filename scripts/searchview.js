@@ -5,9 +5,9 @@ var view = {};
 //**************
 
 var BaseSearch = {
-	initialize : function(mainDiv) {
-		this.$main = $(mainDiv);
-		this.$main.find("input[type=submit]").click(this.onSubmit);
+	initialize : function(mainDivId) {
+		this.$main = $(mainDivId);
+		this.$main.find(":submit").click(this.onSubmit);
 	},
 
 	onSubmit : function(event) {
@@ -20,8 +20,9 @@ delete BaseSearch;
 
 var SimpleSearch = {
 	Extends : view.BaseSearch,
-	initialize : function(mainDiv) {
-		this.parent(mainDiv);
+	initialize : function(mainDivId) {
+		this.parent(mainDivId);
+		
 		this._enabled = true;
 		var self = this;
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
@@ -93,10 +94,28 @@ var SimpleSearch = {
 				return false;
 			}
 		});
+		
+		
+		this.$main.bind("keydown.autocomplete", function(event) {
+			var keyCode = $.ui.keyCode;
+			switch(event.keyCode) {
+			case keyCode.ENTER:
+				
+				if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
+				
+				if ( $("#simple_text").is(":visible" )) {
+					$("#simple_text").autocomplete("close");	
+				}
+				$.log("keydown.autocomplete");
+				$.bbq.pushState({word : $("#simple_text").val()});
+				
+				break;
+			}
+		});
 	},
 	
 	selectLemgram : function(lemgram) {
-		$.sm.send("submit.lemgram", lemgram);
+		$.bbq.pushState({lemgram : lemgram});
 	},
 	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
@@ -182,8 +201,8 @@ var SimpleSearch = {
 
 var ExtendedSearch = {
 	Extends : view.BaseSearch,
-	initialize : function(mainDiv) {
-		this.parent(mainDiv);
+	initialize : function(mainDivId) {
+		this.parent(mainDivId);
 		$("#korp-extended").keyup(function(event) {
 			if(event.keyCode == "13") {
 				$.sm.send("submit.kwic");
@@ -191,6 +210,13 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
+	},
+	
+	setOneToken : function(key, val) {
+		$("#search-tab").find("a[href=#korp-extended]").click().end()
+		.find("select").val(key)
+		.next().val(val);
+		advancedSearch.updateCQP();
 	},
 	
 	didSelectArgtype : function() {
@@ -300,15 +326,31 @@ var ExtendedSearch = {
 		}
 	    
 	    didToggleToken(row);
+	},
+	
+	refreshSelects : function() {
+		$(".arg_type").each(function() {
+			var i = $(this).find(":selected").index();
+			var before = $(this).find(":selected").val();
+			var newSelect = makeSelect();
+			newSelect.get(0).selectedIndex = i;
+			$(this).replaceWith(newSelect);
+			if(before != newSelect.val()) {
+				newSelect.get(0).selectedIndex = 0;
+				newSelect.trigger("change");
+			}
+		});
 	}
-
 };
 
 var AdvancedSearch = {
 	Extends : view.BaseSearch,
-	initialize : function(mainDiv) {
-		this.parent(mainDiv);
-		
+	initialize : function(mainDivId) {
+		this.parent(mainDivId);
+	},
+	
+	setCQP : function(query) {
+		$("#cqp_string").val(query);
 	},
 	
 	updateCQP : function() {

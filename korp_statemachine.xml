@@ -4,7 +4,7 @@
     <script>
         function lemgramSearch(lemgram) {
             $.log("lemgram", lemgram);
-            $("#result-container").tabs("option", "disabled", []);
+            
             lemgramProxy.relationsSearch(lemgram);
             searchProxy.relatedWordSearch(lemgram);
             
@@ -28,9 +28,9 @@
     
     <state id="init">
         <transition target="main">
-            <assign location="simpleSearch"   expr="new view.SimpleSearch()"/>
-            <assign location="extendedSearch" expr="new view.ExtendedSearch()"/>
-            <assign location="advancedSearch" expr="new view.AdvancedSearch()"/>
+            <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
+            <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
+            <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
             <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first')"/>
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(4)')"/>
@@ -51,14 +51,21 @@
         
             <state id="search" initial="simple">
                 <state id="search_inner"> 
-                
+                    
                     <history id="search_history">
+<!--                         <onentry> -->
+<!--                             <script> -->
+<!--                                 if($("#result-container:visible").length) -->
+<!--                                     $("#result-container").tabs("option", "disabled", [2,3]); -->
+<!--                             </script> -->
+<!--                         </onentry> -->
                         <transition target="simple" />
                     </history>
                 
                     <transition event="submit.kwic" target="search_history">
                         <script>
                             simpleSearch.resetView();
+                            kwicProxy.makeRequest();
                         </script>
                     </transition>
                     
@@ -85,6 +92,13 @@
                             <script>
                                 advancedSearch.updateCQP();
                                 simpleSearch.resetView();
+                                kwicProxy.makeRequest();
+                            </script>
+                        </transition>
+                        <transition event="submit.lemgram" target="search_history">
+                            <script>
+                                extendedSearch.setOneToken("lex", _event.data);
+                                lemgramSearch(_event.data);
                             </script>
                         </transition>
                     </state>

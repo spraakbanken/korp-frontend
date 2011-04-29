@@ -179,19 +179,6 @@ function makeSelect() {
 	return arg_select;
 }
 
-function refreshSelects() {
-	$(".arg_type").each(function() {
-		var i = $(this).find(":selected").index();
-		var before = $(this).find(":selected").val();
-		var newSelect = makeSelect();
-		newSelect.get(0).selectedIndex = i;
-		$(this).replaceWith(newSelect);
-		if(before != newSelect.val()) {
-			newSelect.get(0).selectedIndex = 0;
-			newSelect.trigger("change");
-		}
-	});
-}
 
 function removeArg(arg) {
     arg = $(arg).closest(".query_arg");

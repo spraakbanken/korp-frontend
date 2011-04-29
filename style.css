@@ -418,7 +418,8 @@ table {
 }
 
 #Pagination {
-	margin-left : 2px;	
+	margin-left : 2px;
+	font-size : inherit;	
 }
 
 #result_controls {

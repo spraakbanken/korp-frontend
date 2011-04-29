@@ -210,6 +210,7 @@ var hp_corpusChooser = {
 				// Fire callback "change":
 				var callback = hp_this.options.change;
 				if ($.isFunction(callback)) callback(hp_this.selectedItems());
+				return false;
 			});
 			
 			/* SELECT NONE BUTTON */
@@ -228,6 +229,7 @@ var hp_corpusChooser = {
 				// Fire callback "change":
 				var callback = hp_this.options.change;
 				if ($.isFunction(callback)) callback(hp_this.selectedItems());
+				return false;
 			});
 			
 		 	$(".ext").unbind("click");

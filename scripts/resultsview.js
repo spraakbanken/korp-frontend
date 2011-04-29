@@ -14,11 +14,11 @@ var BaseResults = {
 			this.resultError(data);
 			return;
 		}
-		
+		var self = this;
         //$("#result-container").tabs("select", 0);
         var disabled = $("#result-container").tabs("option", "disabled");
         var newDisabled = $.grep(disabled, function(item) {
-        	return item != this.index;
+        	return item != self.$tab.index();
         });
         $("#result-container").tabs("option", "disabled", newDisabled);
 	},
@@ -154,13 +154,14 @@ var KWICResults = {
 		var items_per_page = $("#num_hits").val();
 		if(number_of_hits > items_per_page){
 			$("#Pagination").pagination(number_of_hits, {
-				items_per_page:items_per_page, 
-				callback:this.handlePaginationClick,
+				items_per_page : items_per_page, 
+				callback : $.proxy(this.handlePaginationClick, this),
 				next_text: util.getLocaleString("next"),
 				prev_text: util.getLocaleString("prev"),
-				link_to:"javascript:void(0)",
-				num_edge_entries:2,
-				ellipse_text: '..'
+				link_to : "javascript:void(0)",
+				num_edge_entries : 2,
+				ellipse_text: '..',
+				current_page : $.bbq.getState("page", true) || 0
 			});
 			$(".next").attr("rel", "localize[next]");
 			$(".prev").attr("rel", "localize[prev]");
@@ -183,9 +184,14 @@ var KWICResults = {
 			$.log("make request", cqp, start, end);		
 			kwicProxy.makeRequest(cqp, start, end, kwicProxy.queryData);
 			this.current_page = new_page_index;
+			$.bbq.pushState({"page" : this.current_page});
 		}
 	    
 	   return false;
+	},
+	
+	setPage : function(page) {
+		$("#Pagination").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {
