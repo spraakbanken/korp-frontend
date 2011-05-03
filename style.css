@@ -70,7 +70,7 @@ a:hover {color:red;}  /* mouse over link */
 	float: left;
 	clear: both;
 	width: 100%;
-	padding : 10px 0 10px 0;
+	padding-bottom : 10px;
 }
 
 #header img {
@@ -176,7 +176,7 @@ a:hover {color:red;}  /* mouse over link */
 	width: 400px;
 	height: 33px;
 	overflow: hidden;
-	margin-bottom: 20px;
+	margin-bottom: 8px;
 }
 
 .buttonlink {

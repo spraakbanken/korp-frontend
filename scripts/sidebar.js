@@ -4,7 +4,15 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	$("#selected_word").empty();
 	$("#selected_sentence").empty();
 	var corpusObj = settings.corpora[corpus.toLowerCase()];
+	$("<div />").html(
+			$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
+			.prependTo("#selected_sentence");
 	
+	if(!$.isEmptyObject(corpusObj.struct_attributes)) {
+		$("#sidebarTmpl")
+		.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
+		.appendTo("#selected_sentence");
+	}
 	if($("#sidebarTmpl").length > 0)
 		$("#sidebarTmpl")
 		.tmpl([wordData], {"header" : "word", "corpusAttributes" : corpusObj.attributes})
@@ -12,17 +20,9 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	else
 		$.error("sidebartemplate broken");
 	
-	if(!$.isEmptyObject(corpusObj.struct_attributes)) {
-		$("#sidebarTmpl")
-		.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
-		.appendTo("#selected_sentence");
-	}
-	$("<div />").html(
-			$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
-			.prependTo("#selected_sentence");
 	sidebarSaldoFormat();
 	
-	$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
+	//$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 }
 
 function sidebarSaldoFormat() {

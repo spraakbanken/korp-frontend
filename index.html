@@ -129,7 +129,7 @@
 		
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
-		<h4 rel="localize[${$item.header}_attr]"></h4>
+		<h4 rel="localize[${$item.header}_attr]">${util.getLocaleString($item.header + "_attr")}</h4>
 		{{each $item.corpusAttributes}}
 		<tr>
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:

@@ -7,11 +7,12 @@ var view = {};
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
-		this.$main.find(":submit").click(this.onSubmit);
+		this.$main.find(":submit").click($.proxy(this.onSubmit, this));
 	},
 
 	onSubmit : function(event) {
-		$.sm.send("submit.kwic");
+		//$.sm.send("submit.kwic");
+//		$.bbq.pushState()
 	}
 };
 
@@ -107,7 +108,7 @@ var SimpleSearch = {
 					$("#simple_text").autocomplete("close");	
 				}
 				$.log("keydown.autocomplete");
-				$.bbq.pushState({word : $("#simple_text").val()});
+				$.bbq.pushState({search: "word|" + $("#simple_text").val()});
 				
 				break;
 			}
@@ -115,7 +116,7 @@ var SimpleSearch = {
 	},
 	
 	selectLemgram : function(lemgram) {
-		$.bbq.pushState({lemgram : lemgram});
+		$.bbq.pushState({search : "lemgram|" + lemgram});
 	},
 	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
@@ -203,18 +204,40 @@ var ExtendedSearch = {
 	Extends : view.BaseSearch,
 	initialize : function(mainDivId) {
 		this.parent(mainDivId);
+		var self = this;
 		$("#korp-extended").keyup(function(event) {
 			if(event.keyCode == "13") {
-				$.sm.send("submit.kwic");
-//				$("#sendBtn").click();
+				self.onSubmit();
 			}
 			return false;
 		});
 	},
 	
+	onSubmit : function(event) {
+		
+		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
+			var query = advancedSearch.updateCQP();
+			$.bbq.pushState({search: "cqp|" + query});
+		} else {
+			var $select = this.$main.find("select.arg_type");
+			switch($select.val()) {
+			case "saldo":
+			case "lex":
+				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
+				$.bbq.pushState({search : searchType + "|" + $select.next().val()});
+				break;
+			default:
+				var query = advancedSearch.updateCQP();
+				$.bbq.pushState({search: "cqp|" + query});
+			}
+		}
+		
+		
+	},
+	
 	setOneToken : function(key, val) {
 		$("#search-tab").find("a[href=#korp-extended]").click().end()
-		.find("select").val(key)
+		.find("select:first").val(key)
 		.next().val(val);
 		advancedSearch.updateCQP();
 	},
@@ -382,6 +405,11 @@ var AdvancedSearch = {
 	    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
 	    $("#cqp_string").val(query).attr("rows", nr_lines);
 	    $("#corpus_id").val(main_corpus_lang);
+	    return query;
+	},
+	
+	onSubmit : function(event) {
+		$.bbq.pushState({search : "cqp|" + $("#cqp_string").val()});
 	}
 
 };

@@ -172,7 +172,6 @@ var KWICResults = {
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container) {
-		$.log("handlePaginationClick ", kwicProxy.prevRequest);
 		if(new_page_index != this.current_page) {
 			var items_per_page = parseInt($("#num_hits").val());
 			

@@ -31,7 +31,6 @@ $(function(){
 		});
 		$("#result-container").tabs({
 			event : "change",
-			disabled : [2, 3],
 			show : function() {
 				var currentId = $("#result-container").children("div:visible").attr("id");
 				if(currentId == null) return;
@@ -53,7 +52,6 @@ $(function(){
 		});
 		
 		$(window).bind( 'hashchange', function(e) {
-			$.log("hashchange", e);
 			var prevFragment = $.bbq.prevFragment || {};
 			tabs.each(function() {
 				var idx = e.getState( this.id, true ) || 0;
@@ -73,29 +71,39 @@ $(function(){
 				return searchCommand && searchCommand.length;
 			}
 			
-			var searches = ["word", "lemgram", "saldo", "cqp"];
+//			var searches = ["word", "lemgram", "saldo", "cqp"];
 			
-			$.each(searches, function(i, item) {
-				var value = e.getState(item);
-				if(!isValid(value) || value == prevFragment[item]) return; 
-				switch(item) {
-				case "word":
-					$('input[type=text]').val(value);
-					$.sm.send("submit.kwic");
-					break;
-				case "lemgram":
-					$.sm.send("submit.lemgram", value);
-					break;
-				case "saldo":
-					extendedSearch.setOneToken("saldo", value);
-					$.sm.send("submit.kwic");
-					break;
-				case "cqp":
-					advancedSearch.setCQP(value);
-					$.sm.send("submit.kwic");
-					break;
-				}
-			});
+//			$.each(searches, function(i, item) {
+			var search = e.getState("search");
+			if(search == null || search === prevFragment["search"]) {
+				$.bbq.prevFragment = $.deparam.fragment();
+				return;
+			}
+			
+			var type = search.split("|")[0];
+			var value = search.split("|")[1];
+			
+//			if(!isValid(value) || value == prevFragment[item]) return; 
+			switch(type) {
+			case "word":
+				//$('input[type=text]').val(value);
+				extendedSearch.setOneToken("word", value);
+				$.sm.send("submit.kwic");
+				break;
+			case "lemgram":
+				extendedSearch.setOneToken("lex", value);
+				$.sm.send("submit.lemgram", value);
+				break;
+			case "saldo":
+				extendedSearch.setOneToken("saldo", value);
+				$.sm.send("submit.kwic");
+				break;
+			case "cqp":
+				advancedSearch.setCQP(value);
+				$.sm.send("submit.kwic");
+				break;
+			}
+//			});
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
 		

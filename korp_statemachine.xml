@@ -3,7 +3,7 @@
     
     <script>
         function lemgramSearch(lemgram) {
-            $.log("lemgram", lemgram);
+            $.log("lemgramSearch", lemgram);
             
             lemgramProxy.relationsSearch(lemgram);
             searchProxy.relatedWordSearch(lemgram);
@@ -52,13 +52,14 @@
             <state id="search" initial="simple">
                 <state id="search_inner"> 
                     
+                    <onentry>
+                        <script>
+                            if($("#result-container").is(".ui-tabs")) 
+                                 $("#result-container").tabs("option", "disabled", [0,2,3]);
+                        </script>
+                    </onentry>
+                    
                     <history id="search_history">
-<!--                         <onentry> -->
-<!--                             <script> -->
-<!--                                 if($("#result-container:visible").length) -->
-<!--                                     $("#result-container").tabs("option", "disabled", [2,3]); -->
-<!--                             </script> -->
-<!--                         </onentry> -->
                         <transition target="simple" />
                     </history>
                 
