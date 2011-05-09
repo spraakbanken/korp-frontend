@@ -77,6 +77,12 @@ attrs.ref = {
 	label : "ref",
 	displayType : "hidden"
 };
+attrs.link = {
+	label : "sentence_link"
+};
+attrs.text = {
+		label : "text"
+};
 
 sattrs.date = {
 	label : "date",
@@ -103,12 +109,12 @@ settings.corporafolders = {};
 
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
-	contents : ["romi", "romii", "storsuc"]
+	contents : ["romi", "romii", "storsuc", "romg", "strindbergromaner"]
 };
 
 settings.corporafolders.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["dn1987", "fof"]
+	contents : ["dn1987", "fof", "ordat"]
 };
 
 settings.corporafolders.newspapertexts.gp = {
@@ -119,6 +125,11 @@ settings.corporafolders.newspapertexts.gp = {
 settings.corporafolders.newspapertexts.press = {
 	title : "Press",
 	contents : ["press65", "press76", "press95", "press96", "press97", "press98"]
+};
+
+settings.corporafolders.fisk = {
+	title : "Finlandssvenska texter",
+	contents : ["astranova"]
 };
 
 /*
@@ -425,6 +436,31 @@ settings.corpora.gp2d = {
 	}
 };
 
+settings.corpora.ordat = {
+	title : "ORDAT: Svenska dagbladets årsbok 1923 - 1958",
+	languages : {
+		ORDAT : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_volume : {label : "volym"}
+	}
+};
+
 settings.corpora.fof = {
 	title : "Forskning och framsteg",
 	languages : {
@@ -652,38 +688,34 @@ settings.corpora.storsuc = {
 		text_id : {label : "text"}
 	}
 };
-/*
- * settings.corpora.saltnld = {title: "SALT-NLD", languages: {SALTNLD_SWE:
- * "svenska", SALTNLD_NLD: "nederländska"}, context: {"1 link": "1 länk", "5
- * words": "5 ord", "10 words": "10 ord"}, within: {"link": "meningspar", "":
- * "allt"}, attributes: {pos: attrs.pos, msd: attrs.msd, lemma: attrs.baseform,
- * lex: attrs.lemgram, saldo: attrs.saldo, dephead: attrs.dephead, deprel:
- * attrs.deprel, ref: attrs.ref, link: attrs.link, text: attrs.text} };
- */
-/*
-settings.corpora.konkplus = {
-	title : "Konkplus: svenska tidningstexter",
-	languages : {
-		KONKPLUS : "svenska"
-	},
-	context : context.defaultStruct,
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_genre : {label : "genre"},
-		text_id : {label : "text"}
-	}
-};
-*/
+
+//settings.corpora.saltnld = {
+//	title: "SALT-NLD", 
+//	languages : { 
+//		SALTNLD_SWE: "svenska", 
+//		SALTNLD_NLD: "nederländska"
+//	}, 
+//	context: {
+//		"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"
+//	}, 
+//	within: {
+//		"link": "meningspar"
+//	}, 
+//	attributes: {
+//		pos: attrs.pos, 
+//		msd: attrs.msd, 
+//		lemma: attrs.baseform,
+//		lex: attrs.lemgram, 
+//		saldo: attrs.saldo, 
+//		dephead: attrs.dephead, 
+//		deprel: attrs.deprel, 
+//		ref: attrs.ref, 
+//		link: attrs.link, 
+//		text: attrs.text
+//	},
+//	struct_attributes : {}
+//};
+
 settings.corpora.parole = {
 	title : "PAROLE",
 	languages : {
@@ -926,6 +958,86 @@ settings.corpora.romii = {
 	}
 };
 
+settings.corpora.romg = {
+	title : "Äldre svenska romaner",
+	languages : {
+		ROMG : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_year : {label : "year"}
+	}
+};
+
+settings.corpora.strindbergromaner = {
+	title : "Strindbergs romaner och dramer",
+	languages : {
+		STRINDBERGROMANER : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_year : {label : "year"},
+		text_sv : {label : "verksnummer"}
+	}
+};
+
+settings.corpora.psalmboken = {
+	title : "Psalmboken (1937)",
+	languages : {
+		PSALMBOKEN : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"}
+	}
+};
+
 settings.corpora.drama = {
 	title : "Dramawebben (demo)",
 	languages : {
@@ -948,6 +1060,57 @@ settings.corpora.drama = {
 	struct_attributes : {}
 };
 
+settings.corpora.wikipedia = {
+	title : "Svenska Wikipedia",
+	languages : {
+		WIKIPEDIA : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_title : {label : "article"},
+		text_url : {label : "url", type : "url"}
+	}
+};
+
+settings.corpora.astranova = {
+	title : "Astra Nova 2008-2010",
+	languages : {
+		ASTRANOVA : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
 /*
  * MISC
  */
@@ -967,7 +1130,7 @@ settings.arg_types = {
 };
 // values here represent translation keys.
 settings.arg_groups = {
-	"ord" : {
+	"word" : {
 		word : "word_is",
 		notword : "word_is_not",
 		beginswith : "word_beginswith",
@@ -978,7 +1141,7 @@ settings.arg_groups = {
 //		pos : language.wordclass_is,
 //		msd : language.wordclass_starts
 //	},
-	"intervall" : {
+	"interval" : {
 		max : "max",
 		min : "min"
 	}
