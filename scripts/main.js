@@ -91,7 +91,6 @@ $(function(){
 				$.sm.send("submit.kwic");
 				break;
 			case "lemgram":
-				extendedSearch.setOneToken("lex", value);
 				$.sm.send("submit.lemgram", value);
 				break;
 			case "saldo":

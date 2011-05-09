@@ -8,11 +8,27 @@ var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
 		this.$main.find(":submit").click($.proxy(this.onSubmit, this));
+		this._enabled = true;
 	},
 
 	onSubmit : function(event) {
 		//$.sm.send("submit.kwic");
 //		$.bbq.pushState()
+	},
+	
+	isVisible : function() {
+		return this.$main.is(":visible");
+	},
+	isEnabled : function() {
+		return this._enabled;
+	},
+	enable : function() {
+		this._enabled = true;
+		this.$main.find("#sendBtn").attr("disabled", false);
+	},
+	disable : function() {
+		this._enabled = false;
+		this.$main.find("#sendBtn").attr("disabled", "disabled");
 	}
 };
 
@@ -24,7 +40,6 @@ var SimpleSearch = {
 	initialize : function(mainDivId) {
 		this.parent(mainDivId);
 		
-		this._enabled = true;
 		var self = this;
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
 		this.onSimpleChange();
@@ -99,20 +114,26 @@ var SimpleSearch = {
 		
 		this.$main.bind("keydown.autocomplete", function(event) {
 			var keyCode = $.ui.keyCode;
+			if(!self.isVisible()) return;
+				
 			switch(event.keyCode) {
 			case keyCode.ENTER:
+				self.onSubmit();
+//				if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
 				
-				if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
-				
-				if ( $("#simple_text").is(":visible" )) {
-					$("#simple_text").autocomplete("close");	
-				}
+//				if ( $("#simple_text").is(":visible" )) {
+//					$("#simple_text").autocomplete("close");	
+//				}
 				$.log("keydown.autocomplete");
-				$.bbq.pushState({search: "word|" + $("#simple_text").val()});
 				
 				break;
 			}
 		});
+	},
+	
+	onSubmit : function(event) {
+		advancedSearch.updateCQP();
+		$.bbq.pushState({search: "word|" + $("#simple_text").val()});
 	},
 	
 	selectLemgram : function(lemgram) {
@@ -179,23 +200,8 @@ var SimpleSearch = {
 	
 	resetView : function() {
 		$("#similar_lemgrams").empty();
-	},
-	
-	isVisible : function() {
-		return $("#korp-simple").is(":visible");
-	},
-	
-	isEnabled : function() {
-		return this._enabled;
-	},
-	enable : function() {
-		this._enabled = true;
-		$("#sendBtn").attr("disabled", "");
-	},
-	disable : function() {
-		this._enabled = false;
-		$("#sendBtn").attr("disabled", "disabled");
 	}
+	
 };
 
 
@@ -237,8 +243,8 @@ var ExtendedSearch = {
 	
 	setOneToken : function(key, val) {
 		$("#search-tab").find("a[href=#korp-extended]").click().end()
-		.find("select:first").val(key)
-		.next().val(val);
+		.find("select.arg_type:first").prop("value", key)
+		.next().prop("value", val);
 		advancedSearch.updateCQP();
 	},
 	

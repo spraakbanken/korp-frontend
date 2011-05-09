@@ -17,6 +17,7 @@
 	"matches_regexp" : "reguljärt uttryck",
 	"wordclass_is" : "ordklassen är",
 	"wordclass_starts" : "ordklassen börjar med",
+	"interval" : "intervall",
 	
 	"any" : "godtyckligt ord",
 	"error_occurred" : "Ett fel har inträffat.",

@@ -154,22 +154,22 @@ function makeSelect() {
     .change(extendedSearch.didSelectArgtype);
 
 	var groups = $.extend({}, settings.arg_groups, {
-		"word attributes" : getCurrentAttributes(),
-		"sentence attributes" : getStructAttrs()
+		"word_attr" : getCurrentAttributes(),
+		"sentence_attr" : getStructAttrs()
 		});
 	
 	$.each(groups, function(lbl, group) {
 		if($.isEmptyObject(group)) {
 			return;
 		}
-		var optgroup = $("<optgroup/>", {label: lbl}).appendTo(arg_select);
+		var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
 		$.each(group, function(key, val) {
 			if(val.displayType == "hidden")
 				return;
 			var labelKey = val.label || val;
 			
 			$('<option/>',{rel : $.format("localize[%s]", labelKey)})
-			.val(key).text(util.getLocaleString(labelKey) || "")
+			.attr("value", key).text(util.getLocaleString(labelKey) || "")
 			.appendTo(optgroup)
 			.data("dataProvider", val);
 		});

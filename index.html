@@ -139,6 +139,8 @@
 			{{html $.arrayToHTMLList($.grep(($data[$index] != null ? $data[$index].split("|") : []), function(itm) {return itm && itm.length})).outerHTML()}}
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
+			{{else $value.type == "url"}}
+			<a href="${$data[$index]}">${$data[$index].split("/").slice(-1)}</span>
 			{{else}}
 			${$data[$index]}</p>
 			{{/if}}

@@ -14,19 +14,19 @@ function StatechartExecutionContext() {
     };
     //variable declarations relating to data model
     //send timeout id variables
-    var $default_Regexp_id0x000000013b67fbd0 = /^($default)/,
-        submit_kwic_Regexp_id0x000000013c95e270 = /^(submit\.kwic)/,
-        searchtab_simple_Regexp_id0x0000000143e518f0 = /^(searchtab\.simple)/,
-        searchtab_extended_Regexp_id0x000000012c7aa8f0 = /^(searchtab\.extended)/,
-        searchtab_advanced_Regexp_id0x000000013c9c1500 = /^(searchtab\.advanced)/,
-        submit_lemgram_Regexp_id0x000000014b642c40 = /^(submit\.lemgram)/,
-        submit_Regexp_id0x000000013c8aa200 = /^(submit)/,
-        resultstab_kwic_Regexp_id0x000000014e058a00 = /^(resultstab\.kwic)/,
-        resultstab_lemgram_Regexp_id0x000000013c8ae0d0 = /^(resultstab\.lemgram)/,
-        resultstab_stats_Regexp_id0x000000015a977600 = /^(resultstab\.stats)/,
-        sidebar_show_Regexp_id0x000000013630cf00 = /^(sidebar\.show)/,
-        sidebar_hide_Regexp_id0x0000000142ebb8f0 = /^(sidebar\.hide)/,
-        star_Regexp_id0x0000000142e98ce0 = /.*/;
+    var $default_Regexp_id0xfffffffff1e65aa0 = /^($default)/,
+        submit_kwic_Regexp_id0xfffffffff1e65dd0 = /^(submit\.kwic)/,
+        searchtab_simple_Regexp_id0xfffffffff1e66950 = /^(searchtab\.simple)/,
+        searchtab_extended_Regexp_id0xfffffffff1e66c60 = /^(searchtab\.extended)/,
+        searchtab_advanced_Regexp_id0xfffffffff1e66f70 = /^(searchtab\.advanced)/,
+        submit_lemgram_Regexp_id0xfffffffff1e67280 = /^(submit\.lemgram)/,
+        submit_Regexp_id0xfffffffff1e68350 = /^(submit)/,
+        resultstab_kwic_Regexp_id0xfffffffff1e686a0 = /^(resultstab\.kwic)/,
+        resultstab_lemgram_Regexp_id0xfffffffff1e68920 = /^(resultstab\.lemgram)/,
+        resultstab_stats_Regexp_id0xfffffffff1e68cf0 = /^(resultstab\.stats)/,
+        sidebar_show_Regexp_id0xfffffffff1e69000 = /^(sidebar\.show)/,
+        sidebar_hide_Regexp_id0xfffffffff1e69590 = /^(sidebar\.hide)/,
+        star_Regexp_id0xfffffffff1e698a0 = /.*/;
     //abstract state
     var AbstractState = new
     function() {
@@ -37,8 +37,8 @@ function StatechartExecutionContext() {
         this.$dispatchPrefixEvent = function() {};
     }
     //states
-    var scxml_id0x000000013b3eb0c0 = (function() {
-        function scxml_id0x000000013b3eb0c0Constructor() {
+    var scxml_id0xfffffffff6d729b0 = (function() {
+        function scxml_id0xfffffffff6d729b0Constructor() {
             this.parent = AbstractState;
             this.initial = null;
             this.depth = 0;
@@ -47,38 +47,36 @@ function StatechartExecutionContext() {
             this.isBasic =
             false;
             this.toString = function() {
-                return "scxml_id0x000000013b3eb0c0"
+                return "scxml_id0xfffffffff6d729b0"
             }
             this.enterAction = function() {
-                console.log("entering scxml_id0x000000013b3eb0c0");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
-                    listener.onEntry("scxml_id0x000000013b3eb0c0");
+                    listener.onEntry("scxml_id0xfffffffff6d729b0");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting scxml_id0x000000013b3eb0c0");
-                for (var id0x00000001462d6a80_iterator = 0, id0x00000001462d6a80_hoist = listeners.length;
-                id0x00000001462d6a80_iterator < id0x00000001462d6a80_hoist;
-                id0x00000001462d6a80_iterator++) {
-                    var listener = listeners[id0x00000001462d6a80_iterator];
+                for (var id0xfffffffff1e84b00_iterator = 0, id0xfffffffff1e84b00_hoist = listeners.length;
+                id0xfffffffff1e84b00_iterator < id0xfffffffff1e84b00_hoist;
+                id0xfffffffff1e84b00_iterator++) {
+                    var listener = listeners[id0xfffffffff1e84b00_iterator];
                     //from
-                    listener.onExit("scxml_id0x000000013b3eb0c0");
+                    listener.onExit("scxml_id0xfffffffff6d729b0");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
                 return AbstractState.$dispatchPrefixEvent(e);
             }
         }
-        scxml_id0x000000013b3eb0c0Constructor.prototype = AbstractState;
-        return new scxml_id0x000000013b3eb0c0Constructor();
+        scxml_id0xfffffffff6d729b0Constructor.prototype = AbstractState;
+        return new scxml_id0xfffffffff6d729b0Constructor();
     })();
     var _initial = (function() {
         function _initialConstructor() {
-            this.parent = scxml_id0x000000013b3eb0c0;
+            this.parent = scxml_id0xfffffffff6d729b0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -86,28 +84,26 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                 ];
             this.parent.initial = this; //init parent's pointer to initial state
             this.toString = function() {
                 return "_initial"
             }
             this.enterAction = function() {
-                console.log("entering _initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting _initial");
-                for (var id0x0000000143ecfcb0_iterator = 0, id0x0000000143ecfcb0_hoist = listeners.length;
-                id0x0000000143ecfcb0_iterator < id0x0000000143ecfcb0_hoist;
-                id0x0000000143ecfcb0_iterator++) {
-                    var listener = listeners[id0x0000000143ecfcb0_iterator];
+                for (var id0xfffffffff1e99c20_iterator = 0, id0xfffffffff1e99c20_hoist = listeners.length;
+                id0xfffffffff1e99c20_iterator < id0xfffffffff1e99c20_hoist;
+                id0xfffffffff1e99c20_iterator++) {
+                    var listener = listeners[id0xfffffffff1e99c20_iterator];
                     //from
                     listener.onExit("_initial");
                 }
@@ -132,10 +128,10 @@ function StatechartExecutionContext() {
                         //exit states
                         _initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
                             listener.onTransition("", "init", "_initial_$default_1");
                         }
@@ -147,18 +143,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0x000000013b3eb0c0['$default']();
+                return scxml_id0xfffffffff6d729b0['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x000000013b3eb0c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
             }
         }
-        _initialConstructor.prototype = scxml_id0x000000013b3eb0c0;
+        _initialConstructor.prototype = scxml_id0xfffffffff6d729b0;
         return new _initialConstructor();
     })();
     var init = (function() {
         function initConstructor() {
-            this.parent = scxml_id0x000000013b3eb0c0;
+            this.parent = scxml_id0xfffffffff6d729b0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -166,27 +162,25 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                 ];
             this.toString = function() {
                 return "init"
             }
             this.enterAction = function() {
-                console.log("entering init");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("init");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting init");
-                for (var id0x0000000158fe6090_iterator = 0, id0x0000000158fe6090_hoist = listeners.length;
-                id0x0000000158fe6090_iterator < id0x0000000158fe6090_hoist;
-                id0x0000000158fe6090_iterator++) {
-                    var listener = listeners[id0x0000000158fe6090_iterator];
+                for (var id0xffffffffe6059870_iterator = 0, id0xffffffffe6059870_hoist = listeners.length;
+                id0xffffffffe6059870_iterator < id0xffffffffe6059870_hoist;
+                id0xffffffffe6059870_iterator++) {
+                    var listener = listeners[id0xffffffffe6059870_iterator];
                     //from
                     listener.onExit("init");
                 }
@@ -211,8 +205,9 @@ function StatechartExecutionContext() {
                         //exit states
                         init.exitAction();
                         //transition action
-                        extendedSearch = new view.ExtendedSearch();
-                        simpleSearch = new view.SimpleSearch();
+                        simpleSearch = new view.SimpleSearch('#korp-simple');
+                        extendedSearch = new view.ExtendedSearch('#korp-extended');
+                        advancedSearch = new view.AdvancedSearch('#korp-advanced');
                         kwicResults = new view.KWICResults('#result-container li:first');
                         lemgramResults = new view.LemgramResults('#result-container li:nth-child(3)');
                         statsResults = new view.StatsResults('#result-container li:nth-child(4)');
@@ -220,10 +215,10 @@ function StatechartExecutionContext() {
                         kwicProxy = new model.KWICProxy();
                         lemgramProxy = new model.LemgramProxy();
                         statsProxy = new model.StatsProxy();
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
                             listener.onTransition("", "main_initial", "init_$default_2");
                         }
@@ -236,18 +231,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0x000000013b3eb0c0['$default']();
+                return scxml_id0xfffffffff6d729b0['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x000000013b3eb0c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
             }
         }
-        initConstructor.prototype = scxml_id0x000000013b3eb0c0;
+        initConstructor.prototype = scxml_id0xfffffffff6d729b0;
         return new initConstructor();
     })();
     var main = (function() {
         function mainConstructor() {
-            this.parent = scxml_id0x000000013b3eb0c0;
+            this.parent = scxml_id0xfffffffff6d729b0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -258,31 +253,29 @@ function StatechartExecutionContext() {
                 return "main"
             }
             this.enterAction = function() {
-                console.log("entering main");
                 console.log(' entered main : ');
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("main");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting main");
-                for (var id0x00000001462cae00_iterator = 0, id0x00000001462cae00_hoist = listeners.length;
-                id0x00000001462cae00_iterator < id0x00000001462cae00_hoist;
-                id0x00000001462cae00_iterator++) {
-                    var listener = listeners[id0x00000001462cae00_iterator];
+                for (var id0xffffffffe604e2c0_iterator = 0, id0xffffffffe604e2c0_hoist = listeners.length;
+                id0xffffffffe604e2c0_iterator < id0xffffffffe604e2c0_hoist;
+                id0xffffffffe604e2c0_iterator++) {
+                    var listener = listeners[id0xffffffffe604e2c0_iterator];
                     //from
                     listener.onExit("main");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x000000013b3eb0c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
             }
         }
-        mainConstructor.prototype = scxml_id0x000000013b3eb0c0;
+        mainConstructor.prototype = scxml_id0xfffffffff6d729b0;
         return new mainConstructor();
     })();
     var main_initial = (function() {
@@ -295,7 +288,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                 ];
@@ -304,21 +297,19 @@ function StatechartExecutionContext() {
                 return "main_initial"
             }
             this.enterAction = function() {
-                console.log("entering main_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("main_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting main_initial");
-                for (var id0x00000001462cae70_iterator = 0, id0x00000001462cae70_hoist = listeners.length;
-                id0x00000001462cae70_iterator < id0x00000001462cae70_hoist;
-                id0x00000001462cae70_iterator++) {
-                    var listener = listeners[id0x00000001462cae70_iterator];
+                for (var id0xffffffffe604d700_iterator = 0, id0xffffffffe604d700_hoist = listeners.length;
+                id0xffffffffe604d700_iterator < id0xffffffffe604d700_hoist;
+                id0xffffffffe604d700_iterator++) {
+                    var listener = listeners[id0xffffffffe604d700_iterator];
                     //from
                     listener.onExit("main_initial");
                 }
@@ -342,10 +333,10 @@ function StatechartExecutionContext() {
                         //exit states
                         main_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
                             listener.onTransition("", "p_initial", "main_initial_$default_3");
                         }
@@ -380,21 +371,19 @@ function StatechartExecutionContext() {
                 return "p"
             }
             this.enterAction = function() {
-                console.log("entering p");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("p");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting p");
-                for (var id0x000000013c84bd80_iterator = 0, id0x000000013c84bd80_hoist = listeners.length;
-                id0x000000013c84bd80_iterator < id0x000000013c84bd80_hoist;
-                id0x000000013c84bd80_iterator++) {
-                    var listener = listeners[id0x000000013c84bd80_iterator];
+                for (var id0xffffffffe6046f80_iterator = 0, id0xffffffffe6046f80_hoist = listeners.length;
+                id0xffffffffe6046f80_iterator < id0xffffffffe6046f80_hoist;
+                id0xffffffffe6046f80_iterator++) {
+                    var listener = listeners[id0xffffffffe6046f80_iterator];
                     //from
                     listener.onExit("p");
                 }
@@ -416,7 +405,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -427,21 +416,19 @@ function StatechartExecutionContext() {
                 return "p_initial"
             }
             this.enterAction = function() {
-                console.log("entering p_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("p_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting p_initial");
-                for (var id0x000000013c84bdf0_iterator = 0, id0x000000013c84bdf0_hoist = listeners.length;
-                id0x000000013c84bdf0_iterator < id0x000000013c84bdf0_hoist;
-                id0x000000013c84bdf0_iterator++) {
-                    var listener = listeners[id0x000000013c84bdf0_iterator];
+                for (var id0xffffffffe6046320_iterator = 0, id0xffffffffe6046320_hoist = listeners.length;
+                id0xffffffffe6046320_iterator < id0xffffffffe6046320_hoist;
+                id0xffffffffe6046320_iterator++) {
+                    var listener = listeners[id0xffffffffe6046320_iterator];
                     //from
                     listener.onExit("p_initial");
                 }
@@ -465,10 +452,10 @@ function StatechartExecutionContext() {
                         //exit states
                         p_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
                             listener.onTransition("", "search_initial", "p_initial_$default_4");
                             listener.onTransition("", "results_initial", "p_initial_$default_5");
@@ -512,21 +499,19 @@ function StatechartExecutionContext() {
                 return "search"
             }
             this.enterAction = function() {
-                console.log("entering search");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("search");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting search");
-                for (var id0x0000000158f51c70_iterator = 0, id0x0000000158f51c70_hoist = listeners.length;
-                id0x0000000158f51c70_iterator < id0x0000000158f51c70_hoist;
-                id0x0000000158f51c70_iterator++) {
-                    var listener = listeners[id0x0000000158f51c70_iterator];
+                for (var id0xffffffffe603bff0_iterator = 0, id0xffffffffe603bff0_hoist = listeners.length;
+                id0xffffffffe603bff0_iterator < id0xffffffffe603bff0_hoist;
+                id0xffffffffe603bff0_iterator++) {
+                    var listener = listeners[id0xffffffffe603bff0_iterator];
                     //from
                     listener.onExit("search");
                 }
@@ -548,7 +533,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -561,21 +546,19 @@ function StatechartExecutionContext() {
                 return "search_initial"
             }
             this.enterAction = function() {
-                console.log("entering search_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("search_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting search_initial");
-                for (var id0x0000000156f9b180_iterator = 0, id0x0000000156f9b180_hoist = listeners.length;
-                id0x0000000156f9b180_iterator < id0x0000000156f9b180_hoist;
-                id0x0000000156f9b180_iterator++) {
-                    var listener = listeners[id0x0000000156f9b180_iterator];
+                for (var id0xffffffffe603c0e0_iterator = 0, id0xffffffffe603c0e0_hoist = listeners.length;
+                id0xffffffffe603c0e0_iterator < id0xffffffffe603c0e0_hoist;
+                id0xffffffffe603c0e0_iterator++) {
+                    var listener = listeners[id0xffffffffe603c0e0_iterator];
                     //from
                     listener.onExit("search_initial");
                 }
@@ -592,10 +575,10 @@ function StatechartExecutionContext() {
                         //exit states
                         search_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
                             listener.onTransition("", "simple", "search_initial_$default_8");
                         }
@@ -629,28 +612,27 @@ function StatechartExecutionContext() {
                 return "search_inner"
             }
             this.enterAction = function() {
-                console.log("entering search_inner");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                if ($("#result-container").is(".ui-tabs")) $("#result-container").tabs("option", "disabled", [0, 2, 3]);
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("search_inner");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting search_inner");
                 this.historyState.lastConfiguration = currentConfiguration.slice();
-                for (var id0x0000000143e7f120_iterator = 0, id0x0000000143e7f120_hoist = listeners.length;
-                id0x0000000143e7f120_iterator < id0x0000000143e7f120_hoist;
-                id0x0000000143e7f120_iterator++) {
-                    var listener = listeners[id0x0000000143e7f120_iterator];
+                for (var id0xffffffffe51e9200_iterator = 0, id0xffffffffe51e9200_hoist = listeners.length;
+                id0xffffffffe51e9200_iterator < id0xffffffffe51e9200_hoist;
+                id0xffffffffe51e9200_iterator++) {
+                    var listener = listeners[id0xffffffffe51e9200_iterator];
                     //from
                     listener.onExit("search_inner");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0x000000013c95e270)) {
+                if (e.match(submit_kwic_Regexp_id0xfffffffff1e65dd0)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -662,10 +644,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = search;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -676,18 +658,19 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
                             simpleSearch.resetView();
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            kwicProxy.makeRequest();
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("search_inner", "search_history", "search_inner_submit.kwic_10");
                             }
@@ -700,7 +683,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_simple_Regexp_id0x0000000143e518f0)) {
+                if (e.match(searchtab_simple_Regexp_id0xfffffffff1e66950)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -712,10 +695,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = search;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -726,17 +709,17 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("search_inner", "simple", "search_inner_searchtab.simple_11");
                             }
@@ -749,7 +732,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_extended_Regexp_id0x000000012c7aa8f0)) {
+                if (e.match(searchtab_extended_Regexp_id0xfffffffff1e66c60)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -761,10 +744,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = search;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -775,17 +758,17 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("search_inner", "extended", "search_inner_searchtab.extended_12");
                             }
@@ -798,7 +781,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_advanced_Regexp_id0x000000013c9c1500)) {
+                if (e.match(searchtab_advanced_Regexp_id0xfffffffff1e66f70)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -810,10 +793,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = search;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -824,17 +807,17 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("search_inner", "advanced", "search_inner_searchtab.advanced_13");
                             }
@@ -863,7 +846,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -878,21 +861,19 @@ function StatechartExecutionContext() {
                 return "search_history"
             }
             this.enterAction = function() {
-                console.log("entering search_history");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("search_history");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting search_history");
-                for (var id0x0000000143409bd0_iterator = 0, id0x0000000143409bd0_hoist = listeners.length;
-                id0x0000000143409bd0_iterator < id0x0000000143409bd0_hoist;
-                id0x0000000143409bd0_iterator++) {
-                    var listener = listeners[id0x0000000143409bd0_iterator];
+                for (var id0xffffffffdcb77360_iterator = 0, id0xffffffffdcb77360_hoist = listeners.length;
+                id0xffffffffdcb77360_iterator < id0xffffffffdcb77360_hoist;
+                id0xffffffffdcb77360_iterator++) {
+                    var listener = listeners[id0xffffffffdcb77360_iterator];
                     //from
                     listener.onExit("search_history");
                 }
@@ -908,21 +889,20 @@ function StatechartExecutionContext() {
                         },
                         action: function() {
                             //transition action
-                            console.log("return to last shallow configuration");
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var l = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var l = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 l.onTransition("", "simple", "search_history_$default_9");
                             }
                             var historyState = search_history;
                             var newConfiguration = [];
                             var historyStateParent = search_history.parent;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = search_history.lastConfiguration.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = search_history.lastConfiguration[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = search_history.lastConfiguration.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = search_history.lastConfiguration[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, historyStateParent) != -1) {
                                     var statesEntered = [state];
@@ -937,10 +917,10 @@ function StatechartExecutionContext() {
                                 }
                             }
                             var filteredConfiguration = [];
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = currentConfiguration.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = currentConfiguration[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = currentConfiguration.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = currentConfiguration[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, historyStateParent) == -1) {
                                     filteredConfiguration.push(state);
@@ -963,10 +943,10 @@ function StatechartExecutionContext() {
                             //exit states
                             search_history.exitAction();
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("", "simple", "search_history_$default_9");
                             }
@@ -997,7 +977,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1011,28 +991,26 @@ function StatechartExecutionContext() {
                 return "simple"
             }
             this.enterAction = function() {
-                console.log("entering simple");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("simple");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting simple");
                 $("#simple_text").autocomplete("close");
-                for (var id0x0000000141a7e2f0_iterator = 0, id0x0000000141a7e2f0_hoist = listeners.length;
-                id0x0000000141a7e2f0_iterator < id0x0000000141a7e2f0_hoist;
-                id0x0000000141a7e2f0_iterator++) {
-                    var listener = listeners[id0x0000000141a7e2f0_iterator];
+                for (var id0xffffffffe6077760_iterator = 0, id0xffffffffe6077760_hoist = listeners.length;
+                id0xffffffffe6077760_iterator < id0xffffffffe6077760_hoist;
+                id0xffffffffe6077760_iterator++) {
+                    var listener = listeners[id0xffffffffe6077760_iterator];
                     //from
                     listener.onExit("simple");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_lemgram_Regexp_id0x000000014b642c40)) {
+                if (e.match(submit_lemgram_Regexp_id0xfffffffff1e67280)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1043,10 +1021,11 @@ function StatechartExecutionContext() {
                             //exit states
                             simple.exitAction();
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            lemgramSearch(_event.data);
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("simple", "simple", "simple_submit.lemgram_14");
                             }
@@ -1074,7 +1053,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1088,27 +1067,25 @@ function StatechartExecutionContext() {
                 return "extended"
             }
             this.enterAction = function() {
-                console.log("entering extended");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("extended");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting extended");
-                for (var id0x000000013b3ddf30_iterator = 0, id0x000000013b3ddf30_hoist = listeners.length;
-                id0x000000013b3ddf30_iterator < id0x000000013b3ddf30_hoist;
-                id0x000000013b3ddf30_iterator++) {
-                    var listener = listeners[id0x000000013b3ddf30_iterator];
+                for (var id0xffffffffe6074990_iterator = 0, id0xffffffffe6074990_hoist = listeners.length;
+                id0xffffffffe6074990_iterator < id0xffffffffe6074990_hoist;
+                id0xffffffffe6074990_iterator++) {
+                    var listener = listeners[id0xffffffffe6074990_iterator];
                     //from
                     listener.onExit("extended");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0x000000013c95e270)) {
+                if (e.match(submit_kwic_Regexp_id0xfffffffff1e65dd0)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1119,14 +1096,43 @@ function StatechartExecutionContext() {
                             //exit states
                             extended.exitAction();
                             //transition action
-                            updateCQP();
+                            advancedSearch.updateCQP();
                             simpleSearch.resetView();
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            kwicProxy.makeRequest();
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
                                 listener.onTransition("extended", "search_history", "extended_submit.kwic_15");
+                            }
+                            //enter states
+                            search_history.enterAction();
+                            //update configuration
+                            currentConfiguration.splice(
+                            indexOf(currentConfiguration, extended), 1, search_history);
+                        }
+                    }
+                }
+                if (e.match(submit_lemgram_Regexp_id0xfffffffff1e67280)) {
+                    return {
+                        preemptedBasicStates: {
+                            simple: true,
+                            extended: true,
+                            advanced: true
+                        },
+                        action: function() {
+                            //exit states
+                            extended.exitAction();
+                            //transition action
+                            extendedSearch.setOneToken("lex", _event.data);
+                            lemgramSearch(_event.data);
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
+                                //transition id
+                                listener.onTransition("extended", "search_history", "extended_submit.lemgram_16");
                             }
                             //enter states
                             search_history.enterAction();
@@ -1152,7 +1158,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1166,21 +1172,19 @@ function StatechartExecutionContext() {
                 return "advanced"
             }
             this.enterAction = function() {
-                console.log("entering advanced");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("advanced");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting advanced");
-                for (var id0x0000000141a56a00_iterator = 0, id0x0000000141a56a00_hoist = listeners.length;
-                id0x0000000141a56a00_iterator < id0x0000000141a56a00_hoist;
-                id0x0000000141a56a00_iterator++) {
-                    var listener = listeners[id0x0000000141a56a00_iterator];
+                for (var id0xffffffffe6070130_iterator = 0, id0xffffffffe6070130_hoist = listeners.length;
+                id0xffffffffe6070130_iterator < id0xffffffffe6070130_hoist;
+                id0xffffffffe6070130_iterator++) {
+                    var listener = listeners[id0xffffffffe6070130_iterator];
                     //from
                     listener.onExit("advanced");
                 }
@@ -1205,21 +1209,19 @@ function StatechartExecutionContext() {
                 return "results"
             }
             this.enterAction = function() {
-                console.log("entering results");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results");
-                for (var id0x0000000147569690_iterator = 0, id0x0000000147569690_hoist = listeners.length;
-                id0x0000000147569690_iterator < id0x0000000147569690_hoist;
-                id0x0000000147569690_iterator++) {
-                    var listener = listeners[id0x0000000147569690_iterator];
+                for (var id0xffffffffe606f830_iterator = 0, id0xffffffffe606f830_hoist = listeners.length;
+                id0xffffffffe606f830_iterator < id0xffffffffe606f830_hoist;
+                id0xffffffffe606f830_iterator++) {
+                    var listener = listeners[id0xffffffffe606f830_iterator];
                     //from
                     listener.onExit("results");
                 }
@@ -1241,7 +1243,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1254,21 +1256,19 @@ function StatechartExecutionContext() {
                 return "results_initial"
             }
             this.enterAction = function() {
-                console.log("entering results_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_initial");
-                for (var id0x0000000147569700_iterator = 0, id0x0000000147569700_hoist = listeners.length;
-                id0x0000000147569700_iterator < id0x0000000147569700_hoist;
-                id0x0000000147569700_iterator++) {
-                    var listener = listeners[id0x0000000147569700_iterator];
+                for (var id0xffffffffe606f8a0_iterator = 0, id0xffffffffe606f8a0_hoist = listeners.length;
+                id0xffffffffe606f8a0_iterator < id0xffffffffe606f8a0_hoist;
+                id0xffffffffe606f8a0_iterator++) {
+                    var listener = listeners[id0xffffffffe606f8a0_iterator];
                     //from
                     listener.onExit("results_initial");
                 }
@@ -1286,12 +1286,12 @@ function StatechartExecutionContext() {
                         //exit states
                         results_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "results_hidden", "results_initial_$default_16");
+                            listener.onTransition("", "results_hidden", "results_initial_$default_17");
                         }
                         //enter states
                         results_hidden.enterAction();
@@ -1319,7 +1319,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1331,23 +1331,21 @@ function StatechartExecutionContext() {
                 return "results_hidden"
             }
             this.enterAction = function() {
-                console.log("entering results_hidden");
                 $('#results-wrapper').hide();
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_hidden");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_hidden");
                 $('#results-wrapper').show();
-                for (var id0x000000014345fd50_iterator = 0, id0x000000014345fd50_hoist = listeners.length;
-                id0x000000014345fd50_iterator < id0x000000014345fd50_hoist;
-                id0x000000014345fd50_iterator++) {
-                    var listener = listeners[id0x000000014345fd50_iterator];
+                for (var id0xffffffffe606b680_iterator = 0, id0xffffffffe606b680_hoist = listeners.length;
+                id0xffffffffe606b680_iterator < id0xffffffffe606b680_hoist;
+                id0xffffffffe606b680_iterator++) {
+                    var listener = listeners[id0xffffffffe606b680_iterator];
                     //from
                     listener.onExit("results_hidden");
                 }
@@ -1364,12 +1362,12 @@ function StatechartExecutionContext() {
                         //exit states
                         results_hidden.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "results_visible_initial", "results_hidden_submit_17");
+                            listener.onTransition("", "results_visible_initial", "results_hidden_submit_18");
                         }
                         //enter states
                         results_visible.enterAction();
@@ -1382,7 +1380,7 @@ function StatechartExecutionContext() {
                 return results['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_Regexp_id0x000000013c8aa200)) {
+                if (e.match(submit_Regexp_id0xfffffffff1e68350)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1394,12 +1392,12 @@ function StatechartExecutionContext() {
                             //exit states
                             results_hidden.exitAction();
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("results_hidden", "results_visible_initial", "results_hidden_submit_17");
+                                listener.onTransition("results_hidden", "results_visible_initial", "results_hidden_submit_18");
                             }
                             //enter states
                             results_visible.enterAction();
@@ -1429,27 +1427,25 @@ function StatechartExecutionContext() {
                 return "results_visible"
             }
             this.enterAction = function() {
-                console.log("entering results_visible");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_visible");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_visible");
-                for (var id0x0000000141a3ba70_iterator = 0, id0x0000000141a3ba70_hoist = listeners.length;
-                id0x0000000141a3ba70_iterator < id0x0000000141a3ba70_hoist;
-                id0x0000000141a3ba70_iterator++) {
-                    var listener = listeners[id0x0000000141a3ba70_iterator];
+                for (var id0xffffffffe6065b60_iterator = 0, id0xffffffffe6065b60_hoist = listeners.length;
+                id0xffffffffe6065b60_iterator < id0xffffffffe6065b60_hoist;
+                id0xffffffffe6065b60_iterator++) {
+                    var listener = listeners[id0xffffffffe6065b60_iterator];
                     //from
                     listener.onExit("results_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(resultstab_kwic_Regexp_id0x000000014e058a00)) {
+                if (e.match(resultstab_kwic_Regexp_id0xfffffffff1e686a0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1462,10 +1458,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = results;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -1476,19 +1472,19 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("results_visible", "results_kwic", "results_visible_resultstab.kwic_19");
+                                listener.onTransition("results_visible", "results_kwic", "results_visible_resultstab.kwic_20");
                             }
                             //enter states
                             results_visible.enterAction();
@@ -1499,7 +1495,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(resultstab_lemgram_Regexp_id0x000000013c8ae0d0)) {
+                if (e.match(resultstab_lemgram_Regexp_id0xfffffffff1e68920)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1512,10 +1508,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = results;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -1526,19 +1522,19 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("results_visible", "results_lemgram", "results_visible_resultstab.lemgram_20");
+                                listener.onTransition("results_visible", "results_lemgram", "results_visible_resultstab.lemgram_21");
                             }
                             //enter states
                             results_visible.enterAction();
@@ -1549,7 +1545,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(resultstab_stats_Regexp_id0x000000015a977600)) {
+                if (e.match(resultstab_stats_Regexp_id0xfffffffff1e68cf0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1562,10 +1558,10 @@ function StatechartExecutionContext() {
                             var statesExited = [];
                             var lca = results;
                             var nonBasicTriggerDispatcherExitBlockIteratorExpression = currentConfiguration;
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = nonBasicTriggerDispatcherExitBlockIteratorExpression.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = nonBasicTriggerDispatcherExitBlockIteratorExpression[id0x0000000000000000_iterator];
                                 if (
                                 indexOf(state.ancestors, lca) !== -1) {
                                     do {
@@ -1576,19 +1572,19 @@ function StatechartExecutionContext() {
                             //sort by depth
                             statesExited.sort(sortByDepthDeepToShallow);
                             //execute actions for each of these states
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = statesExited.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var state = statesExited[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = statesExited.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = statesExited[id0x0000000000000000_iterator];
                                 state.exitAction();
                             }
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("results_visible", "results_stats", "results_visible_resultstab.stats_21");
+                                listener.onTransition("results_visible", "results_stats", "results_visible_resultstab.stats_22");
                             }
                             //enter states
                             results_visible.enterAction();
@@ -1615,7 +1611,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1630,21 +1626,19 @@ function StatechartExecutionContext() {
                 return "results_visible_initial"
             }
             this.enterAction = function() {
-                console.log("entering results_visible_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_visible_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_visible_initial");
-                for (var id0x000000013b66fc00_iterator = 0, id0x000000013b66fc00_hoist = listeners.length;
-                id0x000000013b66fc00_iterator < id0x000000013b66fc00_hoist;
-                id0x000000013b66fc00_iterator++) {
-                    var listener = listeners[id0x000000013b66fc00_iterator];
+                for (var id0xffffffffe6065c10_iterator = 0, id0xffffffffe6065c10_hoist = listeners.length;
+                id0xffffffffe6065c10_iterator < id0xffffffffe6065c10_hoist;
+                id0xffffffffe6065c10_iterator++) {
+                    var listener = listeners[id0xffffffffe6065c10_iterator];
                     //from
                     listener.onExit("results_visible_initial");
                 }
@@ -1661,12 +1655,12 @@ function StatechartExecutionContext() {
                         //exit states
                         results_visible_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "results_kwic", "results_visible_initial_$default_18");
+                            listener.onTransition("", "results_kwic", "results_visible_initial_$default_19");
                         }
                         //enter states
                         results_kwic.enterAction();
@@ -1694,7 +1688,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1708,25 +1702,23 @@ function StatechartExecutionContext() {
                 return "results_kwic"
             }
             this.enterAction = function() {
-                console.log("entering results_kwic");
                 showSidebar();
                 kwicResults.centerScrollbar();
-                setJsonLink(kwicProxy.prevRequest);
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                util.setJsonLink(kwicProxy.prevRequest);
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_kwic");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_kwic");
                 hideSidebar();
-                for (var id0x00000001462c9b00_iterator = 0, id0x00000001462c9b00_hoist = listeners.length;
-                id0x00000001462c9b00_iterator < id0x00000001462c9b00_hoist;
-                id0x00000001462c9b00_iterator++) {
-                    var listener = listeners[id0x00000001462c9b00_iterator];
+                for (var id0xfffffffff02458a0_iterator = 0, id0xfffffffff02458a0_hoist = listeners.length;
+                id0xfffffffff02458a0_iterator < id0xfffffffff02458a0_hoist;
+                id0xfffffffff02458a0_iterator++) {
+                    var listener = listeners[id0xfffffffff02458a0_iterator];
                     //from
                     listener.onExit("results_kwic");
                 }
@@ -1748,7 +1740,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1762,22 +1754,20 @@ function StatechartExecutionContext() {
                 return "results_lemgram"
             }
             this.enterAction = function() {
-                console.log("entering results_lemgram");
-                setJsonLink(lemgramProxy.prevRequest);
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                util.setJsonLink(lemgramProxy.prevRequest);
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_lemgram");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_lemgram");
-                for (var id0x00000001339eac60_iterator = 0, id0x00000001339eac60_hoist = listeners.length;
-                id0x00000001339eac60_iterator < id0x00000001339eac60_hoist;
-                id0x00000001339eac60_iterator++) {
-                    var listener = listeners[id0x00000001339eac60_iterator];
+                for (var id0xfffffffff0230680_iterator = 0, id0xfffffffff0230680_hoist = listeners.length;
+                id0xfffffffff0230680_iterator < id0xfffffffff0230680_hoist;
+                id0xfffffffff0230680_iterator++) {
+                    var listener = listeners[id0xfffffffff0230680_iterator];
                     //from
                     listener.onExit("results_lemgram");
                 }
@@ -1799,7 +1789,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1813,23 +1803,20 @@ function StatechartExecutionContext() {
                 return "results_stats"
             }
             this.enterAction = function() {
-                console.log("entering results_stats");
-                // TODO: update to correct json link value.
-                setJsonLink(statsProxy.prevRequest);
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                util.setJsonLink(statsProxy.prevRequest);
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("results_stats");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting results_stats");
-                for (var id0x000000015bfccb40_iterator = 0, id0x000000015bfccb40_hoist = listeners.length;
-                id0x000000015bfccb40_iterator < id0x000000015bfccb40_hoist;
-                id0x000000015bfccb40_iterator++) {
-                    var listener = listeners[id0x000000015bfccb40_iterator];
+                for (var id0xffffffffdcb803d0_iterator = 0, id0xffffffffdcb803d0_hoist = listeners.length;
+                id0xffffffffdcb803d0_iterator < id0xffffffffdcb803d0_hoist;
+                id0xffffffffdcb803d0_iterator++) {
+                    var listener = listeners[id0xffffffffdcb803d0_iterator];
                     //from
                     listener.onExit("results_stats");
                 }
@@ -1854,21 +1841,19 @@ function StatechartExecutionContext() {
                 return "sidebar"
             }
             this.enterAction = function() {
-                console.log("entering sidebar");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("sidebar");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting sidebar");
-                for (var id0x000000013b37f320_iterator = 0, id0x000000013b37f320_hoist = listeners.length;
-                id0x000000013b37f320_iterator < id0x000000013b37f320_hoist;
-                id0x000000013b37f320_iterator++) {
-                    var listener = listeners[id0x000000013b37f320_iterator];
+                for (var id0xfffffffff0267270_iterator = 0, id0xfffffffff0267270_hoist = listeners.length;
+                id0xfffffffff0267270_iterator < id0xfffffffff0267270_hoist;
+                id0xfffffffff0267270_iterator++) {
+                    var listener = listeners[id0xfffffffff0267270_iterator];
                     //from
                     listener.onExit("sidebar");
                 }
@@ -1890,7 +1875,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1903,21 +1888,19 @@ function StatechartExecutionContext() {
                 return "sidebar_initial"
             }
             this.enterAction = function() {
-                console.log("entering sidebar_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("sidebar_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting sidebar_initial");
-                for (var id0x000000013b37f3d0_iterator = 0, id0x000000013b37f3d0_hoist = listeners.length;
-                id0x000000013b37f3d0_iterator < id0x000000013b37f3d0_hoist;
-                id0x000000013b37f3d0_iterator++) {
-                    var listener = listeners[id0x000000013b37f3d0_iterator];
+                for (var id0xfffffffff02672e0_iterator = 0, id0xfffffffff02672e0_hoist = listeners.length;
+                id0xfffffffff02672e0_iterator < id0xfffffffff02672e0_hoist;
+                id0xfffffffff02672e0_iterator++) {
+                    var listener = listeners[id0xfffffffff02672e0_iterator];
                     //from
                     listener.onExit("sidebar_initial");
                 }
@@ -1933,12 +1916,12 @@ function StatechartExecutionContext() {
                         //exit states
                         sidebar_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "sidebar_hidden", "sidebar_initial_$default_22");
+                            listener.onTransition("", "sidebar_hidden", "sidebar_initial_$default_23");
                         }
                         //enter states
                         sidebar_hidden.enterAction();
@@ -1966,7 +1949,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -1978,27 +1961,25 @@ function StatechartExecutionContext() {
                 return "sidebar_hidden"
             }
             this.enterAction = function() {
-                console.log("entering sidebar_hidden");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("sidebar_hidden");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting sidebar_hidden");
-                for (var id0x000000013c9ed0c0_iterator = 0, id0x000000013c9ed0c0_hoist = listeners.length;
-                id0x000000013c9ed0c0_iterator < id0x000000013c9ed0c0_hoist;
-                id0x000000013c9ed0c0_iterator++) {
-                    var listener = listeners[id0x000000013c9ed0c0_iterator];
+                for (var id0xffffffffe5244a20_iterator = 0, id0xffffffffe5244a20_hoist = listeners.length;
+                id0xffffffffe5244a20_iterator < id0xffffffffe5244a20_hoist;
+                id0xffffffffe5244a20_iterator++) {
+                    var listener = listeners[id0xffffffffe5244a20_iterator];
                     //from
                     listener.onExit("sidebar_hidden");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_show_Regexp_id0x000000013630cf00)) {
+                if (e.match(sidebar_show_Regexp_id0xfffffffff1e69000)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -2008,12 +1989,12 @@ function StatechartExecutionContext() {
                             //exit states
                             sidebar_hidden.exitAction();
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("sidebar_hidden", "sidebar_visible", "sidebar_hidden_sidebar.show_23");
+                                listener.onTransition("sidebar_hidden", "sidebar_visible", "sidebar_hidden_sidebar.show_24");
                             }
                             //enter states
                             sidebar_visible.enterAction();
@@ -2039,7 +2020,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -2051,27 +2032,25 @@ function StatechartExecutionContext() {
                 return "sidebar_visible"
             }
             this.enterAction = function() {
-                console.log("entering sidebar_visible");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("sidebar_visible");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting sidebar_visible");
-                for (var id0x0000000143ee0080_iterator = 0, id0x0000000143ee0080_hoist = listeners.length;
-                id0x0000000143ee0080_iterator < id0x0000000143ee0080_hoist;
-                id0x0000000143ee0080_iterator++) {
-                    var listener = listeners[id0x0000000143ee0080_iterator];
+                for (var id0xfffffffff026b920_iterator = 0, id0xfffffffff026b920_hoist = listeners.length;
+                id0xfffffffff026b920_iterator < id0xfffffffff026b920_hoist;
+                id0xfffffffff026b920_iterator++) {
+                    var listener = listeners[id0xfffffffff026b920_iterator];
                     //from
                     listener.onExit("sidebar_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_hide_Regexp_id0x0000000142ebb8f0)) {
+                if (e.match(sidebar_hide_Regexp_id0xfffffffff1e69590)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -2081,12 +2060,12 @@ function StatechartExecutionContext() {
                             //exit states
                             sidebar_visible.exitAction();
                             //transition action
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("sidebar_visible", "sidebar_hidden", "sidebar_visible_sidebar.hide_24");
+                                listener.onTransition("sidebar_visible", "sidebar_hidden", "sidebar_visible_sidebar.hide_25");
                             }
                             //enter states
                             sidebar_hidden.enterAction();
@@ -2115,21 +2094,19 @@ function StatechartExecutionContext() {
                 return "logger"
             }
             this.enterAction = function() {
-                console.log("entering logger");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("logger");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting logger");
-                for (var id0x000000013b67fef0_iterator = 0, id0x000000013b67fef0_hoist = listeners.length;
-                id0x000000013b67fef0_iterator < id0x000000013b67fef0_hoist;
-                id0x000000013b67fef0_iterator++) {
-                    var listener = listeners[id0x000000013b67fef0_iterator];
+                for (var id0xffffffffe51fb6b0_iterator = 0, id0xffffffffe51fb6b0_hoist = listeners.length;
+                id0xffffffffe51fb6b0_iterator < id0xffffffffe51fb6b0_hoist;
+                id0xffffffffe51fb6b0_iterator++) {
+                    var listener = listeners[id0xffffffffe51fb6b0_iterator];
                     //from
                     listener.onExit("logger");
                 }
@@ -2151,7 +2128,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -2164,21 +2141,19 @@ function StatechartExecutionContext() {
                 return "logger_initial"
             }
             this.enterAction = function() {
-                console.log("entering logger_initial");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("logger_initial");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting logger_initial");
-                for (var id0x000000013b67ff60_iterator = 0, id0x000000013b67ff60_hoist = listeners.length;
-                id0x000000013b67ff60_iterator < id0x000000013b67ff60_hoist;
-                id0x000000013b67ff60_iterator++) {
-                    var listener = listeners[id0x000000013b67ff60_iterator];
+                for (var id0xffffffffe51fb760_iterator = 0, id0xffffffffe51fb760_hoist = listeners.length;
+                id0xffffffffe51fb760_iterator < id0xffffffffe51fb760_hoist;
+                id0xffffffffe51fb760_iterator++) {
+                    var listener = listeners[id0xffffffffe51fb760_iterator];
                     //from
                     listener.onExit("logger_initial");
                 }
@@ -2193,12 +2168,12 @@ function StatechartExecutionContext() {
                         //exit states
                         logger_initial.exitAction();
                         //transition action
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "l2", "logger_initial_$default_25");
+                            listener.onTransition("", "l2", "logger_initial_$default_26");
                         }
                         //enter states
                         l2.enterAction();
@@ -2226,7 +2201,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x000000013b3eb0c0
+                scxml_id0xfffffffff6d729b0
                         ,
                     main
                         ,
@@ -2238,21 +2213,19 @@ function StatechartExecutionContext() {
                 return "l2"
             }
             this.enterAction = function() {
-                console.log("entering l2");
-                for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                id0x000000013a058a00_iterator++) {
-                    var listener = listeners[id0x000000013a058a00_iterator];
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
                     //to
                     listener.onEntry("l2");
                 }
             }
             this.exitAction = function() {
-                console.log("exiting l2");
-                for (var id0x0000000141ac4160_iterator = 0, id0x0000000141ac4160_hoist = listeners.length;
-                id0x0000000141ac4160_iterator < id0x0000000141ac4160_hoist;
-                id0x0000000141ac4160_iterator++) {
-                    var listener = listeners[id0x0000000141ac4160_iterator];
+                for (var id0xffffffffdcb482a0_iterator = 0, id0xffffffffdcb482a0_hoist = listeners.length;
+                id0xffffffffdcb482a0_iterator < id0xffffffffdcb482a0_hoist;
+                id0xffffffffdcb482a0_iterator++) {
+                    var listener = listeners[id0xffffffffdcb482a0_iterator];
                     //from
                     listener.onExit("l2");
                 }
@@ -2267,12 +2240,12 @@ function StatechartExecutionContext() {
                         l2.exitAction();
                         //transition action
                         console.log('event found: ' + _event.name);
-                        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                        id0x000000013a058a00_iterator++) {
-                            var listener = listeners[id0x000000013a058a00_iterator];
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "l2", "l2_*_26");
+                            listener.onTransition("", "l2", "l2_*_27");
                         }
                         //enter states
                         l2.enterAction();
@@ -2284,7 +2257,7 @@ function StatechartExecutionContext() {
                 return logger['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(star_Regexp_id0x0000000142e98ce0)) {
+                if (e.match(star_Regexp_id0xfffffffff1e698a0)) {
                     return {
                         preemptedBasicStates: {
                             l2: true
@@ -2294,12 +2267,12 @@ function StatechartExecutionContext() {
                             l2.exitAction();
                             //transition action
                             console.log('event found: ' + _event.name);
-                            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = listeners.length;
-                            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-                            id0x000000013a058a00_iterator++) {
-                                var listener = listeners[id0x000000013a058a00_iterator];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("l2", "l2", "l2_*_26");
+                                listener.onTransition("l2", "l2", "l2_*_27");
                             }
                             //enter states
                             l2.enterAction();
@@ -2448,6 +2421,16 @@ function StatechartExecutionContext() {
         }
     }
     //initialization script
+
+    function lemgramSearch(lemgram) {
+        $.log("lemgramSearch", lemgram);
+        lemgramProxy.relationsSearch(lemgram);
+        searchProxy.relatedWordSearch(lemgram);
+        statsProxy.makeRequest(lemgram);
+        var cqp = lemgramProxy.lemgramSearch(lemgram);
+        $("#cqp_string").val(cqp);
+        $("#simple_text").val("");
+    }
     //initialization method
     this.initialize = function() {
         currentConfiguration = [init];
@@ -2520,10 +2503,10 @@ function StatechartExecutionContext() {
         }
         if (isEnumeratedEvent) {
             //e does not contain a dot, so dispatch as an enumerated event
-            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = currentConfiguration.length;
-            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-            id0x000000013a058a00_iterator++) {
-                var state = currentConfiguration[id0x000000013a058a00_iterator];
+            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = currentConfiguration.length;
+            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+            id0x0000000000000000_iterator++) {
+                var state = currentConfiguration[id0x0000000000000000_iterator];
                 //check to make sure he is not preempted
                 if (!(state in preemptedBasicStates)) {
                     //lookup the transition
@@ -2536,10 +2519,10 @@ function StatechartExecutionContext() {
             }
         } else {
             //e contains a dot, so dispatch as a prefix event
-            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = currentConfiguration.length;
-            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-            id0x000000013a058a00_iterator++) {
-                var state = currentConfiguration[id0x000000013a058a00_iterator];
+            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = currentConfiguration.length;
+            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+            id0x0000000000000000_iterator++) {
+                var state = currentConfiguration[id0x0000000000000000_iterator];
                 //check to make sure he is not preempted
                 if (!(state in preemptedBasicStates)) {
                     //lookup the transition
@@ -2552,10 +2535,10 @@ function StatechartExecutionContext() {
             }
         }
         //invoke selected transitions
-        for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = enabledTransitions.length;
-        id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-        id0x000000013a058a00_iterator++) {
-            var t = enabledTransitions[id0x000000013a058a00_iterator];
+        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = enabledTransitions.length;
+        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+        id0x0000000000000000_iterator++) {
+            var t = enabledTransitions[id0x0000000000000000_iterator];
             t();
         }
     }
@@ -2596,10 +2579,10 @@ function StatechartExecutionContext() {
             indexOf(currentConfiguration, state) != -1;
         } else {
             var toReturn = false;
-            for (var id0x000000013a058a00_iterator = 0, id0x000000013a058a00_hoist = currentConfiguration.length;
-            id0x000000013a058a00_iterator < id0x000000013a058a00_hoist;
-            id0x000000013a058a00_iterator++) {
-                var s = currentConfiguration[id0x000000013a058a00_iterator];
+            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = currentConfiguration.length;
+            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+            id0x0000000000000000_iterator++) {
+                var s = currentConfiguration[id0x0000000000000000_iterator];
                 if (
                 indexOf(s.ancestors, state) != -1) {
                     toReturn = true;

@@ -17,6 +17,7 @@
 	"matches_regexp" : "regular expression",
 	"wordclass_is" : "word class is",
 	"wordclass_starts" : "word class begins with",
+	"interval" : "interval",
 	
 	"any" : "any word",
 	"error_occurred" : "An error occurred",

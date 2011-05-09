@@ -37,7 +37,16 @@ util.getLocaleString = function(key) {
 };
 
 util.localize = function() {
-	$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : $("#languages .lang_selected").data("lang")});
+	var lang = $("#languages .lang_selected").data("lang");
+	$("[rel^=localize]").localize("locale" ,{
+		pathPrefix : "translations", 
+		language : lang
+	});
+	
+	$("optgroup").each(function() {
+		$(this).prop("label", util.getLocaleString($(this).data("localeString")).toLowerCase());
+	});
+	
 };
 
 util.lemgramToString = function(lemgram, appendIndex) {
@@ -50,7 +59,7 @@ util.lemgramToString = function(lemgram, appendIndex) {
 		var concept = match[0].replace(/_/g, " ");
 		var type = match[1].slice(0, 2);
 	}
-	else { // missing from saldo, and have the form word_NN instead.
+	else { // missing from saldo, and has the form word_NN instead.
 		var concept = lemgram.split("_")[0];
 		var type = lemgram.split("_")[1];
 	}
@@ -93,43 +102,6 @@ util.setJsonLink = function(settings){
 };
 
 
-util.parseQuery = function(){
-
-	var corpus = $.getUrlVar('corpus');
-	if (corpus && corpus.length != 0){
-		var corp_array = corpus.split(',');
-		corpusChooserInstance.corpusChooser("selectItems",corp_array);
-		$("#select_corpus").val(corpus);
-		didSelectCorpus();
-	}
-	
-	var word = $.getUrlVar('word');
-	if(word && word.length != 0){
-		$('input[type=text]').val(decodeURIComponent(word));
-		advancedSearch.updateCQP();
-		kwicProxy.makeRequest();
-	}
-	
-	var saldo = $.getUrlVar('saldo');
-	if (saldo && saldo.length != 0){
-		$("#cqp_string").val('[(saldo contains "'+saldo+'")]');
-		$('a[href="#korp-advanced"]').trigger('click');
-		kwicProxy.makeRequest();
-	}
-	
-	var lemgram = $.getUrlVar('lemgram');
-	if (lemgram && lemgram.length != 0){
-		simpleSearch.renderSimilarHeader(lemgram);
-		simpleSearch.selectLemgram(lemgram);
-	}
-	
-	var cqp = $.getUrlVar('cqp');
-	if (cqp && cqp.length != 0){
-		$("#cqp_string").val(cqp);
-		$('a[href="#korp-advanced"]').trigger('click');
-		kwicProxy.makeRequest();
-	}		
-}
 
 
 function loadCorporaFolderRecursive(first_level, folder) {
