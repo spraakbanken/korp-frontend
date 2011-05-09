@@ -29,6 +29,7 @@
 	"loading" : "Searching...",
 	"autocomplete_header" : "is a word form in",
 	"no_lemgram_results" : "No examples found.",
+	"no_stats_results" : "The search generated no results.",
 	"similar_header" : "Related words",
 	"show_wordclass" : "Show word class",
 	"search" : "Search",

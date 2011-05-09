@@ -162,7 +162,7 @@ var hp_corpusChooser = {
 			});
 			
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
-			$(".popupchecks").css({"top": popoffset-4});
+			$(".popupchecks").css({"top": popoffset-1});
 			// ie7 hack
 			$(".popupchecks").css({"left": $(".scroll_checkboxes").position().left});
 			

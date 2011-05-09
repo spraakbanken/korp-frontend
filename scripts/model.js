@@ -115,8 +115,8 @@ var LemgramProxy = {
 				beforeSend : function(jqXHR, settings) {
 					$.log("before relations send", settings);
 					self.prevRequest = settings;
-					if($("#results-lemgram").is(":visible"))
-						setJsonLink(settings);
+//					if($("#results-lemgram").is(":visible"))
+//						util.setJsonLink(settings);
 				},
 				success : function(data) {
 					$.log("relations success", data);

@@ -1,10 +1,11 @@
 <scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
     profile="ecmascript" initial="init" >
     
-    <script>
+    <script><![CDATA[
         function lemgramSearch(lemgram) {
             $.log("lemgramSearch", lemgram);
-            
+            $("#simple_text").prop("placeholder", util.lemgramToString(lemgram).replace(/<.*?>/g, "") ).placeholder();
+            $("#simple_text")[0].blur();
             lemgramProxy.relationsSearch(lemgram);
             searchProxy.relatedWordSearch(lemgram);
             
@@ -13,7 +14,7 @@
             $("#cqp_string").val(cqp);
             $("#simple_text").val("");
         }
-    </script>
+    ]]></script>
     
 <!--     <datamodel> -->
 <!--         <data id="kwicProxy"/> -->

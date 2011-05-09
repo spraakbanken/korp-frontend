@@ -429,6 +429,11 @@ var StatsResults = {
 		this.parent(data);
 		$("#results-stats").empty();
 		
+		if(data.kwic == null) {
+			this.showNoResults();
+			return;
+		}
+		
 		var wordArray = [];
 		var corpusArray = [];
 		
@@ -451,8 +456,15 @@ var StatsResults = {
 	
 	showError : function() {
 		this.hidePreloader();
-		$("<p rel='localize[error_occurred]>")
+		$("<i rel='localize[error_occurred]>")
 		.text(util.getLocaleString("error_occurred"))
+		.appendTo("#results-stats");
+	},
+	
+	showNoResults : function() {
+		this.hidePreloader();
+		$("<i rel='localize[no_stats_results]' />")
+		.text(util.getLocaleString("no_stats_results"))
 		.appendTo("#results-stats");
 	}
 	

@@ -29,6 +29,7 @@
 	"loading" : "Hämtar...",
 	"autocomplete_header" : "är en ordform i",
 	"no_lemgram_results" : "Hittade inga förekomster.",
+	"no_stats_results" : "Sökningen gav inga träffar.",
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",
 	"search" : "   Sök   ",
