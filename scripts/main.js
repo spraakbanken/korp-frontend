@@ -53,12 +53,19 @@ $(function(){
 		
 		$(window).bind( 'hashchange', function(e) {
 			var prevFragment = $.bbq.prevFragment || {};
+			
+			function hasChanged(key) {
+				return prevFragment[key] != e.getState(key);
+			}
+			
 			tabs.each(function() {
 				var idx = e.getState( this.id, true ) || 0;
 				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
 			});
-			var page = e.getState("page", true) || 0;
-			kwicResults.setPage(page);
+			
+			var page = e.getState("page", true);
+			if(hasChanged("page") && !hasChanged("search"))
+				kwicResults.setPage(page);
 			
 			var corpus = e.getState("corpus");
 			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
@@ -80,6 +87,7 @@ $(function(){
 				return;
 			}
 			
+			
 			var type = search.split("|")[0];
 			var value = search.split("|")[1];
 			
@@ -87,22 +95,24 @@ $(function(){
 			switch(type) {
 			case "word":
 				//$('input[type=text]').val(value);
-				extendedSearch.setOneToken("word", value);
-				$.sm.send("submit.kwic");
+//				extendedSearch.setOneToken("word", value);
+				simpleSearch.setPlaceholder(value);
+				$.sm.send("submit.kwic", value);
 				break;
 			case "lemgram":
 				$.sm.send("submit.lemgram", value);
 				break;
 			case "saldo":
 				extendedSearch.setOneToken("saldo", value);
-				$.sm.send("submit.kwic");
+				$.sm.send("submit.kwic", value);
 				break;
 			case "cqp":
 				advancedSearch.setCQP(value);
-				$.sm.send("submit.kwic");
+				$.sm.send("submit.kwic", value);
 				break;
 			}
 //			});
+//			$.bbq.removeState("page");
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
 		

@@ -172,6 +172,7 @@ var KWICResults = {
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container) {
+		$.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page) {
 			var items_per_page = parseInt($("#num_hits").val());
 			
@@ -180,7 +181,7 @@ var KWICResults = {
 			
 			var start = new_page_index*items_per_page;
 			var end = (start + items_per_page);
-			$.log("make request", cqp, start, end);		
+			$.log("pagination request", cqp, start, end);		
 			kwicProxy.makeRequest(cqp, start, end, kwicProxy.queryData);
 			this.current_page = new_page_index;
 			$.bbq.pushState({"page" : this.current_page});

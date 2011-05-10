@@ -101,6 +101,9 @@ util.setJsonLink = function(settings){
 	$('#json-link').show();
 };
 
+util.searchHash = function(type, value) {
+	$.bbq.pushState({search: type + "|" + value, page : 0});
+};
 
 
 

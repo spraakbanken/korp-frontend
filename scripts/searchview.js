@@ -12,8 +12,6 @@ var BaseSearch = {
 	},
 
 	onSubmit : function(event) {
-		//$.sm.send("submit.kwic");
-//		$.bbq.pushState()
 	},
 	
 	isVisible : function() {
@@ -45,8 +43,16 @@ var SimpleSearch = {
 		this.onSimpleChange();
 		$("#similar_lemgrams").hide();
 		
-		
-		$("#simple_text").autocomplete({
+		$("#simple_text").preloader({
+			timeout: 500,
+			position: {
+				my: "right center",
+				at: "right center",
+				offset: "-1 2",
+				collision: "none"
+			}
+		})
+		.autocomplete({
 			html : true,
 			source: function( request, response ) {
 				$.ajax({
@@ -82,23 +88,15 @@ var SimpleSearch = {
 						
 						$("#simple_text").preloader("hide");
 					}
+					
+				}).complete(function(jqxhr, status) {
+					$.log("complete", jqxhr, status);
 				});
 			},
 			search: function() {
-				$("#simple_text").preloader({ 
-					timeout: 500,
-					position: {
-						my: "right center",
-						at: "right center",
-						offset: "-1 2",
-						collision: "none"
-					}
-				}).preloader("show");
+				$("#simple_text").preloader("show");
 			},
 			minLength: 1,
-	//		change : function() {
-	//			$.log("change");
-	//		},
 			select: function( event, ui ) {
 				event.preventDefault();
 				var selectedItem = ui.item.value;
@@ -119,13 +117,6 @@ var SimpleSearch = {
 			switch(event.keyCode) {
 			case keyCode.ENTER:
 				self.onSubmit();
-//				if(!simpleSearch.isVisible() || !simpleSearch.isEnabled()) return;
-				
-//				if ( $("#simple_text").is(":visible" )) {
-//					$("#simple_text").autocomplete("close");	
-//				}
-				$.log("keydown.autocomplete");
-				
 				break;
 			}
 		});
@@ -133,11 +124,11 @@ var SimpleSearch = {
 	
 	onSubmit : function(event) {
 		advancedSearch.updateCQP();
-		$.bbq.pushState({search: "word|" + $("#simple_text").val()});
+		util.searchHash("word", $("#simple_text").val());
 	},
 	
 	selectLemgram : function(lemgram) {
-		$.bbq.pushState({search : "lemgram|" + lemgram});
+		util.searchHash("lemgram", lemgram);
 	},
 	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
@@ -178,7 +169,13 @@ var SimpleSearch = {
 		$("#similar_lemgrams").show();
 	},
 	
-	onSimpleChange : function() {
+	onSimpleChange : function(event) {
+		if(event && event.keyCode == 27) { //escape
+			$.log("key", event.keyCode);
+//			$("#simple_text").preloader("hide");
+			return;
+		}
+		
 		var val;
 		$.log("onSimpleChange", $("#simple_text").val());
 		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
@@ -200,10 +197,22 @@ var SimpleSearch = {
 	
 	resetView : function() {
 		$("#similar_lemgrams").empty();
+		return this;
+	},
+	
+	setPlaceholder : function(str) {
+		$("#simple_text").prop("placeholder", str)
+		.placeholder();
+		return this;
+	},
+	
+	clear : function() {
+		$("#simple_text").prop("value", "")
+        .get(0).blur();
+		return this;
 	}
 	
 };
-
 
 
 var ExtendedSearch = {
@@ -223,22 +232,21 @@ var ExtendedSearch = {
 		
 		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
 			var query = advancedSearch.updateCQP();
-			$.bbq.pushState({search: "cqp|" + query});
+			util.searchHash("cqp", query);
 		} else {
 			var $select = this.$main.find("select.arg_type");
-			switch($select.val()) {
+			switch($select.prop("value")) {
 			case "saldo":
 			case "lex":
-				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
-				$.bbq.pushState({search : searchType + "|" + $select.next().val()});
+				var searchType = $select.prop("value") == "lex" ? "lemgram"  : $select.prop("value");
+				util.searchHash(searchType, $select.next().prop("value"));
 				break;
 			default:
 				var query = advancedSearch.updateCQP();
-				$.bbq.pushState({search: "cqp|" + query});
+			
+				util.searchHash("cqp", query);
 			}
 		}
-		
-		
 	},
 	
 	setOneToken : function(key, val) {
@@ -250,7 +258,7 @@ var ExtendedSearch = {
 	
 	didSelectArgtype : function() {
 		// change input widget
-		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
+		var oldVal = $(this).siblings(".arg_value:input[type=text]").prop("value") || "";
 		$(this).siblings(".arg_value").remove();
 		
 		var data = $(this).find(":selected").data("dataProvider");
@@ -259,7 +267,7 @@ var ExtendedSearch = {
 		case "select":
 			arg_value = $("<select />");
 			$.each(data.dataset, function(key, value) {
-				$("<option />", {val : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
+				$("<option />", {value : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
 			});
 			break;
 		case "autocomplete":
@@ -275,7 +283,7 @@ var ExtendedSearch = {
 	    .change(didChangeArgvalue);
 		$(this).after(arg_value);
 		if(oldVal != null && oldVal.length)
-			arg_value.val(oldVal);
+			arg_value.prop("value", oldVal);
 		
 		advancedSearch.updateCQP();
 	},
@@ -292,8 +300,6 @@ var ExtendedSearch = {
 	    .change(function(){
     		didChangeArgvalue();
 		});
-//	    TODO: might want this.
-//	    .attr("placeholder", $.format("[%s]", util.getLocaleString("any")));
 	    
 	    var remove = mkRemoveButton().addClass("remove_arg")
 	        .click(function(){
@@ -360,11 +366,11 @@ var ExtendedSearch = {
 	refreshSelects : function() {
 		$(".arg_type").each(function() {
 			var i = $(this).find(":selected").index();
-			var before = $(this).find(":selected").val();
+			var before = $(this).find(":selected").prop("value");
 			var newSelect = makeSelect();
 			newSelect.get(0).selectedIndex = i;
 			$(this).replaceWith(newSelect);
-			if(before != newSelect.val()) {
+			if(before != newSelect.prop("value")) {
 				newSelect.get(0).selectedIndex = 0;
 				newSelect.trigger("change");
 			}
@@ -388,24 +394,24 @@ var AdvancedSearch = {
 	    var nr_lines = 2;
 	    var main_corpus_lang = "";
 	    $(".query_row").each(function(){
-	        var language = $(this).find(".select_language").val();
-	        var corpus_lang = language.toUpperCase();
-	        switch ($(this).find(".select_operation").val()) {
-	        case "find":
-	            main_corpus_lang = corpus_lang;
-	            break;
-	        case "include":
-	            query += "  |  ";
-	            break;
-	        case "intersect":
-	            query += "\n :" + corpus_lang + " ";
-	            nr_lines++;
-	            break;
-	        case "exclude":
-	            query += "\n :" + corpus_lang + " ! ";
-	            nr_lines++;
-	            break;
-	        }
+//	        var language = $(this).find(".select_language").val();
+//	        var corpus_lang = language.toUpperCase();
+//	        switch ($(this).find(".select_operation").val()) {
+//	        case "find":
+//	            main_corpus_lang = corpus_lang;
+//	            break;
+//	        case "include":
+//	            query += "  |  ";
+//	            break;
+//	        case "intersect":
+//	            query += "\n :" + corpus_lang + " ";
+//	            nr_lines++;
+//	            break;
+//	        case "exclude":
+//	            query += "\n :" + corpus_lang + " ! ";
+//	            nr_lines++;
+//	            break;
+//	        }
 	        query += cqpRow(this);
 	    });
 	    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
@@ -415,7 +421,7 @@ var AdvancedSearch = {
 	},
 	
 	onSubmit : function(event) {
-		$.bbq.pushState({search : "cqp|" + $("#cqp_string").val()});
+		util.searchHash("cqp", $("#cqp_string").val());
 	}
 
 };

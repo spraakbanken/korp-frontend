@@ -141,7 +141,7 @@
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else $value.type == "url"}}
-			<a href="${$data[$index]}">${$data[$index].split("/").slice(-1)}</span>
+			<a href="${$data[$index]}" class="exturl">${decodeURI($data[$index].split("/").slice(-1))}</a>
 			{{else}}
 			${$data[$index]}</p>
 			{{/if}}

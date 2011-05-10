@@ -4,15 +4,15 @@
     <script><![CDATA[
         function lemgramSearch(lemgram) {
             $.log("lemgramSearch", lemgram);
-            $("#simple_text").prop("placeholder", util.lemgramToString(lemgram).replace(/<.*?>/g, "") ).placeholder();
-            $("#simple_text")[0].blur();
+            simpleSearch
+            .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""))
+            .clear();
             lemgramProxy.relationsSearch(lemgram);
             searchProxy.relatedWordSearch(lemgram);
             
             statsProxy.makeRequest(lemgram);
             var cqp = lemgramProxy.lemgramSearch(lemgram);
             $("#cqp_string").val(cqp);
-            $("#simple_text").val("");
         }
     ]]></script>
     
@@ -66,6 +66,7 @@
                 
                     <transition event="submit.kwic" target="search_history">
                         <script>
+                            simpleSearch.clear();
                             simpleSearch.resetView();
                             kwicProxy.makeRequest();
                         </script>

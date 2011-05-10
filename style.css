@@ -364,7 +364,7 @@ input:placeholder, textarea:placeholder {
 	position: absolute;
 	width: 20px;
 	height: 20px;
-	background: url(img/preloader.gif) no-repeat 0 0;
+/* 	background: url(img/preloader.gif) no-repeat 0 0; */
 	overflow: hidden;
 	background-size : 18px 18px;
 }

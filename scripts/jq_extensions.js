@@ -229,3 +229,14 @@ jQuery.reduce = function(array, fn) {
 	return acc;
 };
 
+jQuery.fn.hoverIcon = function(icon) {
+	this.hover(function(){
+		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon'/>")
+		.addClass(icon)
+		.appendTo($(this));
+		
+	}, function() {
+		$(".ui-icon").remove();
+	});
+	return this;
+};

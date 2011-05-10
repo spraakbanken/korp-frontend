@@ -11,6 +11,7 @@ function updateSidebar(sentenceData, wordData, corpus) {
 	if(!$.isEmptyObject(corpusObj.struct_attributes)) {
 		$("#sidebarTmpl")
 		.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
+//		.find(".exturl").hoverIcon("ui-icon-extlink")
 		.appendTo("#selected_sentence");
 	}
 	if($("#sidebarTmpl").length > 0)
@@ -21,7 +22,6 @@ function updateSidebar(sentenceData, wordData, corpus) {
 		$.error("sidebartemplate broken");
 	
 	sidebarSaldoFormat();
-	
 	//$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 }
 
@@ -43,12 +43,13 @@ function sidebarSaldoFormat() {
 			$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
 			simpleSearch.selectLemgram(id);
 		})
-		.hover(function(){
-			$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
-			
-		}, function() {
-			$(".ui-icon").remove();
-		});
+		.hoverIcon("ui-icon-search");
+//		.hover(function(){
+//			$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-search'/>").appendTo($(this));
+//			
+//		}, function() {
+//			$(".ui-icon").remove();
+//		});
 //		}
 		
 	});
@@ -73,11 +74,12 @@ function sidebarSaldoFormat() {
 		var id = saldoidArray[i].match(saldoRegExp).slice(1,3).join("..");
 		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", id));
 	})
-	.hover(function(){
-		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
-	}, function() {
-		$(this).find(".ui-icon").remove();
-	});
+	.hoverIcon("ui-icon-extlink");
+//	.hover(function(){
+//		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
+//	}, function() {
+//		$(this).find(".ui-icon").remove();
+//	});
 //	}
 	
 	

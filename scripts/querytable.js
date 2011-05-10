@@ -99,33 +99,34 @@ function insertRow() {
 	});
     
     var operators = row.siblings().length ? settings.operators : settings.first_operators;
-    var select_operation = $('<select/>').addClass("select_operation")
-    .change(function(){
-    	didSelectOperation(this);
-	});
-	$.each(operators, function(oper) {
-		select_operation.append(new Option(operators[oper], oper));
-	});
-    select_operation.attr("disabled", select_operation.children().length <= 1);
+//    var select_operation = $('<select/>').addClass("select_operation")
+//    .change(function(){
+//    	didSelectOperation(this);
+//	});
+//	$.each(operators, function(oper) {
+//		select_operation.append(new Option(operators[oper], oper));
+//	});
+//    select_operation.attr("disabled", select_operation.children().length <= 1);
 
-    var select_language = $('<select/>').addClass("select_language")
-    .change(function(){
-    	didSelectLanguage(this);
-	});
-    var languages = settings.corpora[getCorpus()].languages;
-    $.each(languages, function(lang) {
-    	select_language.append(new Option(languages[lang], lang));
-    }); 
-    select_language.attr("disabled", select_language.children().length <= 1);
+//    var select_language = $('<select/>').addClass("select_language")
+//    .change(function(){
+//    	didSelectLanguage(this);
+//	});
+//    var languages = settings.corpora[getCorpus()].languages;
+//    $.each(languages, function(lang) {
+//    	select_language.append(new Option(languages[lang], lang));
+//    }); 
+//    select_language.attr("disabled", select_language.children().length <= 1);
 
-    row.append(remove_row_button, select_operation, select_language, insert_token_button);
+//    row.append(remove_row_button, select_operation, select_language, insert_token_button);
+    row.append(remove_row_button, insert_token_button);
     
     
     insert_token_button.click();
-    select_operation.change();
+//    select_operation.change();
 //    TODO: hidden for now.
-    select_operation.hide();
-    select_language.hide();
+//    select_operation.hide();
+//    select_language.hide();
     didToggleRow();
 }
 
@@ -169,7 +170,7 @@ function makeSelect() {
 			var labelKey = val.label || val;
 			
 			$('<option/>',{rel : $.format("localize[%s]", labelKey)})
-			.attr("value", key).text(util.getLocaleString(labelKey) || "")
+			.prop("value", key).text(util.getLocaleString(labelKey) || "")
 			.appendTo(optgroup)
 			.data("dataProvider", val);
 		});
@@ -206,7 +207,7 @@ function didToggleToken(row) {
 }
 
 function didSelectOperation(select) {
-    var is_include = $(select).val() == "include";
+    var is_include = $(select).prop("value") == "include";
     $(select).closest(".query_row")
         .toggleClass("indent", is_include);
 //        .toggleClass("line_above", ! is_include);
@@ -214,9 +215,6 @@ function didSelectOperation(select) {
     advancedSearch.updateCQP();
 }
 
-function didSelectLanguage(select) {
-    advancedSearch.updateCQP();
-}
 
 function didChangeArgvalue(input) {
     advancedSearch.updateCQP();
@@ -242,9 +240,9 @@ function cqpToken(token) {
 
     var args = {};
     $(token).find(".query_arg").each(function(){
-        var type = $(this).find(".arg_type").val();
+        var type = $(this).find(".arg_type").prop("value");
         var data = $(this).find(".arg_type :selected").data("dataProvider");
-        var value = $(this).find(".arg_value").val();
+        var value = $(this).find(".arg_value").prop("value");
         if (!args[type]) { 
         	args[type] = []; 
     	}
