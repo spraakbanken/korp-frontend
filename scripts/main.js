@@ -74,13 +74,6 @@ $(function(){
 				$("#select_corpus").val(corpus);
 				didSelectCorpus();
 			}
-			function isValid(searchCommand) {
-				return searchCommand && searchCommand.length;
-			}
-			
-//			var searches = ["word", "lemgram", "saldo", "cqp"];
-			
-//			$.each(searches, function(i, item) {
 			var search = e.getState("search");
 			if(search == null || search === prevFragment["search"]) {
 				$.bbq.prevFragment = $.deparam.fragment();
@@ -91,11 +84,8 @@ $(function(){
 			var type = search.split("|")[0];
 			var value = search.split("|")[1];
 			
-//			if(!isValid(value) || value == prevFragment[item]) return; 
 			switch(type) {
 			case "word":
-				//$('input[type=text]').val(value);
-//				extendedSearch.setOneToken("word", value);
 				simpleSearch.setPlaceholder(value);
 				$.sm.send("submit.kwic", value);
 				break;
@@ -112,7 +102,6 @@ $(function(){
 				break;
 			}
 //			});
-//			$.bbq.removeState("page");
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
 		
