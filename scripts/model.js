@@ -85,6 +85,9 @@ var KWICProxy = {
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
+			},
+			complete : function(jqxhr, textStatus) {
+				$.log("kwic complete", textStatus);
 			}
 		});
 	}

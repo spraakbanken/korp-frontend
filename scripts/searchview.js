@@ -123,7 +123,6 @@ var SimpleSearch = {
 	},
 	
 	onSubmit : function(event) {
-		advancedSearch.updateCQP();
 		util.searchHash("word", $("#simple_text").val());
 	},
 	
@@ -209,6 +208,7 @@ var SimpleSearch = {
 	clear : function() {
 		$("#simple_text").prop("value", "")
         .get(0).blur();
+		this.disable();
 		return this;
 	}
 	
@@ -385,7 +385,7 @@ var AdvancedSearch = {
 	},
 	
 	setCQP : function(query) {
-		$("#cqp_string").val(query);
+		$("#cqp_string").prop("value", query);
 	},
 	
 	updateCQP : function() {
