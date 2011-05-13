@@ -170,7 +170,7 @@ function makeSelect() {
 			var labelKey = val.label || val;
 			
 			$('<option/>',{rel : $.format("localize[%s]", labelKey)})
-			.prop("value", key).text(util.getLocaleString(labelKey) || "")
+			.val(key).text(util.getLocaleString(labelKey) || "")
 			.appendTo(optgroup)
 			.data("dataProvider", val);
 		});
@@ -207,7 +207,7 @@ function didToggleToken(row) {
 }
 
 function didSelectOperation(select) {
-    var is_include = $(select).prop("value") == "include";
+    var is_include = $(select).val() == "include";
     $(select).closest(".query_row")
         .toggleClass("indent", is_include);
 //        .toggleClass("line_above", ! is_include);
@@ -240,9 +240,9 @@ function cqpToken(token) {
 
     var args = {};
     $(token).find(".query_arg").each(function(){
-        var type = $(this).find(".arg_type").prop("value");
+        var type = $(this).find(".arg_type").val();
         var data = $(this).find(".arg_type :selected").data("dataProvider");
-        var value = $(this).find(".arg_value").prop("value");
+        var value = $(this).find(".arg_value").val();
         if (!args[type]) { 
         	args[type] = []; 
     	}

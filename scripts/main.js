@@ -127,8 +127,27 @@ $(function(){
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
+		$(document).keypress(function(event) {
+		    switch(event.keyCode) {
+				case 38: //up
+					kwicResults.selectUp();
+					return false;
+				case 39: // right
+					kwicResults.selectNext();
+					break;
+				case 37: //left
+					kwicResults.selectPrev();
+					break;
+				case 40: // down
+					kwicResults.selectDown();
+					return false;
+		    }
+		    
+		});
+
 		resetQuery();
 		
 		$(window).trigger("hashchange");
+		
 	});
 });

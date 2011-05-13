@@ -46,6 +46,10 @@ a:hover {color:red;}  /* mouse over link */
 	background-color : #FFDDD8;
 }
 
+#aboutLink {
+	padding-top : 10px;	
+}
+
 /*match placeholder/watermark padding to border+padding for input element*/
 label.placeholder {
 	cursor: text;
@@ -71,6 +75,7 @@ input:placeholder, textarea:placeholder {
 #cqp_string {
 	font-family: monospace;
 	width: 100%
+	
 }
 
 #header {
@@ -293,7 +298,7 @@ input:placeholder, textarea:placeholder {
 	background-color: #e1e1e1;
 	padding: 1px 8px 8px 8px;
 	margin: 5px;
-	width: 80%;
+	width: 50%;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -653,6 +658,7 @@ table {
 #dialog ol {
 	margin : 10px 0;
 	font-size: 12px;
+	list-style : decimal;
 }
 #dialog ol > li {
 	padding : 5px 0;

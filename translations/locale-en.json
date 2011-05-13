@@ -1,7 +1,7 @@
 {
-	"disclaimer" : "Korp is currently early beta, a more mature alternative is",
 	"swedish" : "Svenska",
 	"english" : "English",
+	"about" : "About Korp",
 	"corpus" : "Corpus",
 	"search_for" : "Search for ",
 	"in_corpus" : "in corpus",

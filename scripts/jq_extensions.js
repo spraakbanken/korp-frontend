@@ -229,6 +229,18 @@ jQuery.reduce = function(array, fn) {
 	return acc;
 };
 
+jQuery.all = function(array) {
+	return jQuery.reduce (array, function(a1, a2) {
+		return Boolean(a1) && Boolean(a2);
+	});
+};
+
+jQuery.any = function(array) {
+	return jQuery.reduce (array, function(a1, a2) {
+		return Boolean(a1) || Boolean(a2);
+	});
+};
+
 jQuery.fn.hoverIcon = function(icon) {
 	this.hover(function(){
 		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon'/>")

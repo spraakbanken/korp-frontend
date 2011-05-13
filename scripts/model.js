@@ -40,7 +40,7 @@ var KWICProxy = {
 		
 		var data = {
 			command:'query',
-			corpus:selected_uppercased_corpora_ids,
+			corpus:selected_uppercased_corpora_ids.join(),
 			cqp:cqp,
 			start:start,
 			end:end,
@@ -71,6 +71,8 @@ var KWICProxy = {
 		});
 
 		$("#Pagination").data("cqp", cqp);
+		data.show = data.show.join();
+		data.show_struct = data.show_struct.join();
 		this.prevRequest = data;
 		$.ajax({ 
 			url: settings.cgi_script, 
@@ -89,6 +91,8 @@ var KWICProxy = {
 			complete : function(jqxhr, textStatus) {
 				$.log("kwic complete", textStatus);
 			}
+		}).fail(function() {
+			$.log("kwic failed.")
 		});
 	}
 };

@@ -211,13 +211,22 @@ var KWICResults = {
 		var i = this.getCurrentRow().index($(".token_selected").get(0));
 		var next = this.getCurrentRow().get(i+1);
 		if(next == null) return;
-		util.SelectionManager.select($(next));
+		$(next).click();
 	},
 	selectPrev : function() {
 		var i = this.getCurrentRow().index($(".token_selected").get(0));
 		if(i == 0) return;
 		var prev = this.getCurrentRow().get(i-1);
-		util.SelectionManager.select($(prev));
+		$(prev).click();
+	},
+	selectUp : function() {
+		var prevMatch = util.SelectionManager.selected.closest("tr").prev().find(".match > span");
+		prevMatch.click();
+	},
+	
+	selectDown : function() {
+		var nextMatch = util.SelectionManager.selected.closest("tr").next().find(".match  > span");
+		nextMatch.click();
 	}
 	
 
@@ -428,12 +437,9 @@ var StatsResults = {
 		
 	renderResult : function(data) {
 		this.parent(data);
+		$.log("statsdata result", data);
 		$("#results-stats").empty();
 		
-		if(data.kwic == null) {
-			this.showNoResults();
-			return;
-		}
 		
 		var wordArray = [];
 		var corpusArray = [];
@@ -447,6 +453,12 @@ var StatsResults = {
 			});
 		});
 		
+		if(!$.all($.map(data, function(item) {
+			return !$.isEmptyObject(item);
+		}))) {
+			this.showNoResults();
+			return;
+		}
 		
 		$("#statTableTmpl").tmpl(data, {wordArray : wordArray, corpusArray : corpusArray})
 		.appendTo("#results-stats");

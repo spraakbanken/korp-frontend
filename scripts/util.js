@@ -9,13 +9,13 @@ util.SelectionManager = function() {
 };
 
 util.SelectionManager.select = function(word) {
-	
+	if(word == null || !word.length) return;
 	if(this.selected) {
 		this.selected.removeClass("token_selected");
 	}
 		
 	this.selected = word;
-	word.addClass("token_selected");
+	return word.addClass("token_selected");
 };
 util.SelectionManager.deselect = function() {
 	if(!this.selected) return;
@@ -44,7 +44,7 @@ util.localize = function() {
 	});
 	
 	$("optgroup").each(function() {
-		$(this).prop("label", util.getLocaleString($(this).data("localeString")).toLowerCase());
+		$(this).attr("label", util.getLocaleString($(this).data("localeString")).toLowerCase());
 	});
 	
 };

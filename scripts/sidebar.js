@@ -14,9 +14,24 @@ function updateSidebar(sentenceData, wordData, corpus) {
 //		.find(".exturl").hoverIcon("ui-icon-extlink")
 		.appendTo("#selected_sentence");
 	}
+	
+
+	function parseLemma(attr) {
+		var seq = [];
+		if(attr != null) {
+			seq = $.map(attr.split("|"), function(item) {
+				return item.split(":")[0];
+			});
+		}
+		seq = $.grep(seq, function(itm) {
+			return itm && itm.length;
+		});
+		return $.arrayToHTMLList(seq).outerHTML();
+	}
+	
 	if($("#sidebarTmpl").length > 0)
 		$("#sidebarTmpl")
-		.tmpl([wordData], {"header" : "word", "corpusAttributes" : corpusObj.attributes})
+		.tmpl([wordData], {"header" : "word", "corpusAttributes" : corpusObj.attributes, parseLemma : parseLemma})
 		.appendTo("#selected_word");
 	else
 		$.error("sidebartemplate broken");

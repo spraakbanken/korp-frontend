@@ -76,7 +76,10 @@
   			<ul id="languages">
   				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
   				<li rel="localize[english]" data-lang="en">Engelska</li>
+<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
   			</ul>
+  			
+<!--   			<a href="javascript:">About Korp</a> -->
   		</div>
 		
   		<div id="corpusbox"></div>
@@ -137,7 +140,7 @@
 			{{if $value.dataset}}
 			 ${$value.dataset[$data[$index]]}
 			{{else $index == "lemma"}}
-			{{html $.arrayToHTMLList($.grep(($data[$index] != null ? $data[$index].split("|") : []), function(itm) {return itm && itm.length})).outerHTML()}}
+			{{html $item.parseLemma($data[$index])}} 
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else $value.type == "url"}}

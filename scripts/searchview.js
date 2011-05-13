@@ -200,13 +200,13 @@ var SimpleSearch = {
 	},
 	
 	setPlaceholder : function(str) {
-		$("#simple_text").prop("placeholder", str)
+		$("#simple_text").attr("placeholder", str)
 		.placeholder();
 		return this;
 	},
 	
 	clear : function() {
-		$("#simple_text").prop("value", "")
+		$("#simple_text").val("")
         .get(0).blur();
 		this.disable();
 		return this;
@@ -235,11 +235,11 @@ var ExtendedSearch = {
 			util.searchHash("cqp", query);
 		} else {
 			var $select = this.$main.find("select.arg_type");
-			switch($select.prop("value")) {
+			switch($select.val()) {
 			case "saldo":
 			case "lex":
-				var searchType = $select.prop("value") == "lex" ? "lemgram"  : $select.prop("value");
-				util.searchHash(searchType, $select.next().prop("value"));
+				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
+				util.searchHash(searchType, $select.next().val());
 				break;
 			default:
 				var query = advancedSearch.updateCQP();
@@ -251,14 +251,14 @@ var ExtendedSearch = {
 	
 	setOneToken : function(key, val) {
 		$("#search-tab").find("a[href=#korp-extended]").click().end()
-		.find("select.arg_type:first").prop("value", key)
-		.next().prop("value", val);
+		.find("select.arg_type:first").val(key)
+		.next().val(val);
 		advancedSearch.updateCQP();
 	},
 	
 	didSelectArgtype : function() {
 		// change input widget
-		var oldVal = $(this).siblings(".arg_value:input[type=text]").prop("value") || "";
+		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
 		$(this).siblings(".arg_value").remove();
 		
 		var data = $(this).find(":selected").data("dataProvider");
@@ -283,7 +283,7 @@ var ExtendedSearch = {
 	    .change(didChangeArgvalue);
 		$(this).after(arg_value);
 		if(oldVal != null && oldVal.length)
-			arg_value.prop("value", oldVal);
+			arg_value.val(oldVal);
 		
 		advancedSearch.updateCQP();
 	},
@@ -366,11 +366,11 @@ var ExtendedSearch = {
 	refreshSelects : function() {
 		$(".arg_type").each(function() {
 			var i = $(this).find(":selected").index();
-			var before = $(this).find(":selected").prop("value");
+			var before = $(this).find(":selected").val();
 			var newSelect = makeSelect();
 			newSelect.get(0).selectedIndex = i;
 			$(this).replaceWith(newSelect);
-			if(before != newSelect.prop("value")) {
+			if(before != newSelect.val()) {
 				newSelect.get(0).selectedIndex = 0;
 				newSelect.trigger("change");
 			}
@@ -385,7 +385,7 @@ var AdvancedSearch = {
 	},
 	
 	setCQP : function(query) {
-		$("#cqp_string").prop("value", query);
+		$("#cqp_string").val(query);
 	},
 	
 	updateCQP : function() {
