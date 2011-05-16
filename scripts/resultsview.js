@@ -101,7 +101,7 @@ var KWICResults = {
 			showSidebar();
 		}
 		$.log("corpus_results");
-		
+		$("#results-kwic").show();
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
 		    var splitObj = {
@@ -109,22 +109,34 @@ var KWICResults = {
 		    		"match" : self.selectMatch(sentence),
 		    		"right" : self.selectRight(sentence)
 		    };
-		    
-			$( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i})
+			var linkedDiv = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( "#results-table" )
 					.find(".word")
 					.click(function(event) {
 							event.stopPropagation();
 							util.SelectionManager.select($(this));
-							var clickedWord = parseInt($(this).attr("name").split("-")[1]);
-							var data = sentence.tokens[offset + clickedWord];
-							updateSidebar(sentence.structs, data, sentence.corpus);
+							var data = $(this).tmplItem().data;
+							var currentSentence = $(this).parent().is(".linked_sentence") ? sentence.aligned : sentence;   
+							
+							updateSidebar(currentSentence.structs, data, sentence.corpus);
 						}
 							
-					);
+					).end()
+					.find(".linked_sentence");
 			
+			if(linkedDiv != null) {
+				
+				var w = linkedDiv.width();
+				linkedDiv.width(0)
+				.css("left", w/2 * -1);
+			}
 			$('.result_table tr:even').addClass('alt');
+			
 		});
+		$.each([",", ".", ";", ":"], function(i, item) {
+			$($.format(".word:contains(%s)", item)).prev().html('');
+		});
+		$("#results-kwic").hide();
 //			make the first matched word selected by default.
 		$(".match").children().first().click();
 		$("#results-kwic").fadeIn(effectSpeed);
@@ -204,7 +216,12 @@ var KWICResults = {
 		
 	
 	getCurrentRow : function() {
-		return $(".token_selected").closest("tr").find(".word");
+		var tr = $(".token_selected").closest("tr");
+		if($(".token_selected").parent().is("td")) {
+			return tr.find("td > .word");
+		} else {
+			return tr.find("div > .word");
+		}
 	},
 	
 	selectNext : function() {
@@ -220,12 +237,12 @@ var KWICResults = {
 		$(prev).click();
 	},
 	selectUp : function() {
-		var prevMatch = util.SelectionManager.selected.closest("tr").prev().find(".match > span");
+		var prevMatch = util.SelectionManager.selected.closest("tr").prev().find(".match > span:first");
 		prevMatch.click();
 	},
 	
 	selectDown : function() {
-		var nextMatch = util.SelectionManager.selected.closest("tr").next().find(".match  > span");
+		var nextMatch = util.SelectionManager.selected.closest("tr").next().find(".match  > span:first");
 		nextMatch.click();
 	}
 	
@@ -453,7 +470,7 @@ var StatsResults = {
 			});
 		});
 		
-		if(!$.all($.map(data, function(item) {
+		if(!$.all($.map(data, function(item) { //if data only contains empty objects, display message
 			return !$.isEmptyObject(item);
 		}))) {
 			this.showNoResults();

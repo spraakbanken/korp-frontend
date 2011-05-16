@@ -69,6 +69,10 @@ var KWICProxy = {
 				});
 			}
 		});
+//		TODO: we should clean this up...
+		if($.inArray("saltnld_swe", selected_corpora_ids) != -1) {
+			data.show.push("saltnld_nld");
+		}
 
 		$("#Pagination").data("cqp", cqp);
 		data.show = data.show.join();
@@ -148,8 +152,10 @@ var StatsProxy = {
 		$.ajax({ 
 			url: settings.cgi_script,
 			data : {
-				command : "lemgramstats",
-				lemgram : lemgram,
+				command : "annotationstats",
+				annotation : "lex",
+				group : "word",
+				value : lemgram,
 				corpus : selected_uppercased_corpora_ids
 			},
 			beforeSend : function(jqXHR, settings) {

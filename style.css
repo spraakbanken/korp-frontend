@@ -518,6 +518,10 @@ table {
 	
 }
 
+#results-table td{
+	border-width : 0px;	
+}
+
 #display_word {
 /*	position: absolute;*/
 /*	top: 50%;*/
@@ -544,6 +548,7 @@ table {
 	font-weight: bold;
 	vertical-align: text-top;
 	text-align : center;
+	padding : 0 4px;
 }
 
 .right {
@@ -689,3 +694,10 @@ table {
 		
 }
 
+.linked_sentence {
+	overflow-x : visible;
+	font-weight: normal;
+	color : #999;
+	font-style: italic;
+	position : relative;	
+}

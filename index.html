@@ -110,7 +110,7 @@
 									<div class="pagination" id="Pagination"></div>
 								</div>
 								<div id="table_scrollarea">
-									<table id="results-table" class="result_table"></table>
+									<table id="results-table" class="result_table" cellspacing="0"></table>
 								</div>
 							</div>
 							<div id="results-sentence"></div>
@@ -156,21 +156,26 @@
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr>
 		  	<td class="left">
-			{{each left}}
-				<span name="${$item.rowIndex + "-" + $index}" class="word">${word}</span>
-			{{/each}}
+			{{tmpl(left) '#wordTmpl'}}
 		  	</td>
 		  	<td class="match">
-			{{each match}}
-				<span name="${$item.rowIndex + "-" + ($data.left.length + $index)}" class="word">${word}</span>
-			{{/each}}
+				{{tmpl(match) '#wordTmpl'}}
+			{{if $item.aligned != null}}
+				{{each(corpus, sentence) $item.aligned}}
+				<div id="linked_${corpus}" class="linked_sentence">
+				{{tmpl(sentence) '#wordTmpl'}}
+				</div>
+				{{/each}}
+			{{/if}}
 		  	</td>
 		  	<td class="right">
-			{{each right}}
-				<span name="${$item.rowIndex + "-" + ($data.left.length + $data.match.length + $index)}" class="word">${word}</span>
-			{{/each}}
+			{{tmpl(right) '#wordTmpl'}}
 		  	</td>
 	  </tr>
+	</script>
+	
+	<script id="wordTmpl" type="text/x-jquery-tmpl">
+		<span class="word">${word}</span><span class="word_gap"> </span>
 	</script>
 
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
