@@ -73,6 +73,7 @@ $(function(){
 				corpusChooserInstance.corpusChooser("selectItems",corp_array);
 				$("#select_corpus").val(corpus);
 				didSelectCorpus();
+				simpleSearch.enable();
 			}
 			var search = e.getState("search");
 			if(search == null || search === prevFragment["search"]) {

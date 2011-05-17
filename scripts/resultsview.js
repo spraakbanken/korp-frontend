@@ -54,10 +54,7 @@ var KWICResults = {
 				$("<option />").attr("value", item).text(item).appendTo($select);
 			});
 			$select.val(25)
-			.css("margin-right", 5)
-			.change(function() {
-				$.log("select", $(this).val());
-			});
+			.css("margin-right", 5);
 		}
 	},
 	
@@ -461,23 +458,23 @@ var StatsResults = {
 		var wordArray = [];
 		var corpusArray = [];
 		
-		$.each(data, function(corpus, obj) {
+		$.each(data["corpora"], function(corpus, obj) {
 			if(corpus == "time") return;
 			corpusArray.push(corpus);
-			$.each(obj, function(word, freq) {
+			$.each(obj["absolute"], function(word, freq) {
 				if($.inArray(word, wordArray) == -1)
 					wordArray.push(word);
 			});
 		});
 		
-		if(!$.all($.map(data, function(item) { //if data only contains empty objects, display message
+		if(!$.all($.map(data["corpora"], function(item) { //if data only contains empty objects, display message
 			return !$.isEmptyObject(item);
 		}))) {
 			this.showNoResults();
 			return;
 		}
 		
-		$("#statTableTmpl").tmpl(data, {wordArray : wordArray, corpusArray : corpusArray})
+		$("#statTableTmpl").tmpl(data["corpora"], {wordArray : wordArray, corpusArray : corpusArray})
 		.appendTo("#results-stats");
 		
 		$("#results-stats").append($("<div />").css("clear", "both"));
