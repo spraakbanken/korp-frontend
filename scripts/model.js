@@ -44,7 +44,11 @@ var KWICProxy = {
 			cqp:cqp,
 			start:start,
 			end:end,
-			context:'1 sentence',
+			defaultcontext: $.keys(settings.defaultContext)[0],
+			context : $.grep($.map(selected_corpora_ids, function(id) {
+				if(settings.corpora[id].context != null)
+					return id.toUpperCase() + ":" + $.keys(settings.corpora[id].context)[0];
+			}), Boolean).join(),
 			show:[],
 			show_struct:[]  
 		};

@@ -18,6 +18,14 @@
 		});
 		return output;
 	};
+	
+	$.keys = function(obj) {
+		var output = [];
+		$.each(obj, function(key, item) {
+			output.push(key);
+		});
+		return output;
+	};
 
 	$.objMap = function(obj, f) {
 		var output = {};
