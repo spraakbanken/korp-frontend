@@ -701,3 +701,7 @@ table {
 	font-style: italic;
 	position : relative;	
 }
+
+.linked_sentence td {
+	text-align : center;
+}	

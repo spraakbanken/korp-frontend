@@ -106,7 +106,7 @@ var KWICResults = {
 		    		"match" : self.selectMatch(sentence),
 		    		"right" : self.selectRight(sentence)
 		    };
-			var linkedDiv = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
+			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( "#results-table" )
 					.find(".word")
 					.click(function(event) {
@@ -118,19 +118,14 @@ var KWICResults = {
 							updateSidebar(currentSentence.structs, data, sentence.corpus);
 						}
 							
-					).end()
-					.find(".linked_sentence");
-			
-			if(linkedDiv != null) {
-				
-				var w = linkedDiv.width();
-				linkedDiv.width(0)
-				.css("left", w/2 * -1);
+					).end();
+					
+			if(i % 2 == 0) {
+				rows.addClass("alt");
 			}
-			$('.result_table tr:even').addClass('alt');
 			
 		});
-		$.each([",", ".", ";", ":"], function(i, item) {
+		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
 			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
 		$("#results-kwic").hide();
@@ -234,12 +229,12 @@ var KWICResults = {
 		$(prev).click();
 	},
 	selectUp : function() {
-		var prevMatch = util.SelectionManager.selected.closest("tr").prev().find(".match > span:first");
+		var prevMatch = util.SelectionManager.selected.closest("tr").prevAll(".sentence:first").find(".match span:first");
 		prevMatch.click();
 	},
 	
 	selectDown : function() {
-		var nextMatch = util.SelectionManager.selected.closest("tr").next().find(".match  > span:first");
+		var nextMatch = util.SelectionManager.selected.closest("tr").nextAll(".sentence:first").find(".match span:first");
 		nextMatch.click();
 	}
 	

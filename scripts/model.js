@@ -92,15 +92,7 @@ var KWICProxy = {
 				$.log("kwic result", data);
 				self.queryData = data.querydata; 
 				kwicResults.renderResult(data);
-			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				$.error("Ajax error when fetching KWIC", jqXHR, textStatus, errorThrown);
-			},
-			complete : function(jqxhr, textStatus) {
-				$.log("kwic complete", textStatus);
 			}
-		}).fail(function() {
-			$.log("kwic failed.")
 		});
 	}
 };

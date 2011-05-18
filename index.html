@@ -154,24 +154,26 @@
 		{{/each}}
 	</script>
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
-		<tr>
+		<tr class="sentence">
 		  	<td class="left">
 			{{tmpl(left) '#wordTmpl'}}
 		  	</td>
 		  	<td class="match">
 				{{tmpl(match) '#wordTmpl'}}
-			{{if $item.aligned != null}}
-				{{each(corpus, sentence) $item.aligned}}
-				<div id="linked_${corpus}" class="linked_sentence">
-				{{tmpl(sentence) '#wordTmpl'}}
-				</div>
-				{{/each}}
-			{{/if}}
 		  	</td>
 		  	<td class="right">
 			{{tmpl(right) '#wordTmpl'}}
 		  	</td>
-	  </tr>
+	    </tr>
+		{{if $item.aligned != null}}
+		<tr id="linked_${corpus}" class="linked_sentence">
+			<td colspan="3">
+				{{each(corpus, sentence) $item.aligned}}
+				{{tmpl(sentence) '#wordTmpl'}}
+				{{/each}}
+			</td>
+		</tr>
+		{{/if}}
 	</script>
 	
 	<script id="wordTmpl" type="text/x-jquery-tmpl">

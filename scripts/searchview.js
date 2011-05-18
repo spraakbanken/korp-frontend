@@ -10,8 +10,14 @@ var BaseSearch = {
 		this.$main.find(":submit").click($.proxy(this.onSubmit, this));
 		this._enabled = true;
 	},
-
+	
+	refreshSearch : function() {
+		$.bbq.removeState("search");
+		$(window).trigger("hashchange");
+	},
+	
 	onSubmit : function(event) {
+		this.refreshSearch();
 	},
 	
 	isVisible : function() {
@@ -123,10 +129,12 @@ var SimpleSearch = {
 	},
 	
 	onSubmit : function(event) {
+		this.parent(event);
 		util.searchHash("word", $("#simple_text").val());
 	},
 	
 	selectLemgram : function(lemgram) {
+		this.refreshSearch();
 		util.searchHash("lemgram", lemgram);
 	},
 	renderSimilarHeader : function(selectedItem, data) {
@@ -229,7 +237,7 @@ var ExtendedSearch = {
 	},
 	
 	onSubmit : function(event) {
-		
+		this.parent(event);
 		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
 			var query = advancedSearch.updateCQP();
 			util.searchHash("cqp", query);
@@ -421,6 +429,7 @@ var AdvancedSearch = {
 	},
 	
 	onSubmit : function(event) {
+		this.parent(event);
 		util.searchHash("cqp", $("#cqp_string").val());
 	}
 

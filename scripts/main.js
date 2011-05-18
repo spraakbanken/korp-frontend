@@ -89,7 +89,7 @@ $(function(){
 			case "word":
 				$("#simple_text").val(value);
 				simpleSearch.onSimpleChange();
-				simpleSearch.setPlaceholder(value).clear();
+				simpleSearch.setPlaceholder("");
 				$.sm.send("submit.kwic", value);
 				break;
 			case "lemgram":
