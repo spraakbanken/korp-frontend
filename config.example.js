@@ -1143,7 +1143,7 @@ settings.corpora.astranova = {
  * MISC
  */
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp3.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
 settings.arg_types = {
 	"word" : String,
