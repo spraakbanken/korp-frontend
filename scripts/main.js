@@ -35,6 +35,7 @@ $(function(){
 				var currentId = $("#result-container").children("div:visible").attr("id");
 				if(currentId == null) return;
 				var selected = currentId.split("-")[1];
+				$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
 				$.sm.send("resultstab." + selected);
 			} 
 		});

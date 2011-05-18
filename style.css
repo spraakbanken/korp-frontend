@@ -184,6 +184,10 @@ input:placeholder, textarea:placeholder {
 	
 
 /* JONATAN */
+.statisticWords {
+	border-style: hidden;
+}
+
 .ext {
 	margin-right: 0px;
 }
@@ -670,6 +674,10 @@ table {
 	line-height : 18px;	
 }
 
+#results-stats {
+	overflow-x: scroll;
+}
+
 #results-stats table {
 	border-width: 1px;
 	border-collapse: collapse;
@@ -687,6 +695,10 @@ table {
 	border-color: rgb(204, 204, 204);
 	background-color: white;
 	text-align: right;
+}
+
+span.absStat {
+	color: #999999;
 }
 
 .word_column {

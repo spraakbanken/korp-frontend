@@ -164,6 +164,7 @@ var StatsProxy = {
 					return;
 				}
 				statsResults.renderResult(data);
+				statsResults.savedData = data;
 			}
 		
 		});

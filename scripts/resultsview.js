@@ -439,25 +439,113 @@ var LemgramResults = {
 	
 };
 
+formatOutput = function(x) { // Use "," instead of "." if Swedish
+	return x.replace(".",",");
+}
+
+function newDataInPie(dataName, horizontalDiagram) {
+	var dataItems = new Array();
+	
+	var wordArray = [];
+	var corpusArray = [];
+	
+		
+	
+	
+	if (horizontalDiagram) { // hits/corpus
+		
+		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+			if(dataName == "SIGMA_ALL") {
+				// ∑ selected
+				var totfreq = 0;
+				$.each(obj["absolute"], function(wordform, freq) {
+					var numFreq = parseInt(freq);
+					if(numFreq)
+						totfreq += numFreq;
+				});
+				dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + totfreq, "shape_id":"sigma_all"});
+			} else {
+				// Individual wordform selected
+				
+				var freq = parseInt(obj["absolute"][dataName]);
+				if (freq) {
+					dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + freq, "shape_id":dataName});
+				} else {
+					dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
+				}
+			}
+		});
+		
+		$("#dialog").remove();
+		
+		var topheader;
+		if(dataName == "SIGMA_ALL")
+			topheader = "Träffar för lemgrammet";
+		else
+			topheader = "Träffar för <i>" + dataName + "</i>";
+		$($.format('<div id="dialog" title="' + topheader + '"></div>'))//util.getLocaleString("example_dialog_header")))
+							.appendTo("#results-lemgram").append('<div id="chartFrame" style="height:260px;"></div><p style="text-align:center">Träffar i absoluta tal.</p>')
+							.dialog({
+								width : 300,
+								height : 400
+							});
+		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
+		
+	} else { // hits/wordform
+		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+			if(corpus == "time") return;
+			corpusArray.push(corpus);
+			$.each(obj["relative"], function(word, freq) {
+				if($.inArray(word, wordArray) == -1)
+					wordArray.push(word);
+			});
+		});
+	
+		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+			if(corpus == dataName) {
+				//$.each(obj, function(word, freq) {
+				//	dataItems.push({"value":freq, "caption": word + ": " + freq, "shape_id" : word});
+				//});
+				$.each(wordArray, function(key, fvalue) {
+					var freq = obj["relative"][fvalue];
+					if (freq) {
+						dataItems.push({"value":parseFloat(obj["relative"][fvalue]), "caption" : fvalue, "shape_id" : fvalue});
+					} else {
+						dataItems.push({"value":0, "caption" : fvalue, "shape_id" : fvalue});
+					}
+				});
+				return false; // break it
+			}
+		});
+		
+		statsResults.selectedCorpus = dataName;
+		diagramInstance.pie_widget("newData", dataItems);
+		$(".statstable").css({"background-color":"white"});
+		$(".statstablecorpus__" + dataName).css({"background-color":"#EEEEEE"});
+	//diagramInstance = $('#circle_diagram').pie_widget({container_id: "circle_diagram", data_items: dataItems});
+	}
+}
+
 
 var StatsResults = {
 	Extends : view.BaseResults,
 //	initialize : function(tabSelector, resultSelector) {
 //	},
-		
+	
 	renderResult : function(data) {
 		this.parent(data);
-		$.log("statsdata result", data);
-		$("#results-stats").empty();
 		
+		$("#results-stats").children().empty();
 		
 		var wordArray = [];
 		var corpusArray = [];
 		
+		var absdata;
+		var reldata;
+		
 		$.each(data["corpora"], function(corpus, obj) {
-			if(corpus == "time") return;
 			corpusArray.push(corpus);
-			$.each(obj["absolute"], function(word, freq) {
+			$.each(obj["relative"], function(word, freq) {
 				if($.inArray(word, wordArray) == -1)
 					wordArray.push(word);
 			});
@@ -470,11 +558,207 @@ var StatsResults = {
 			return;
 		}
 		
-		$("#statTableTmpl").tmpl(data["corpora"], {wordArray : wordArray, corpusArray : corpusArray})
-		.appendTo("#results-stats");
+		//$("#results-wraper").show();
+		//$("#statTableTmpl").tmpl(data["corpora"], {wordArray : wordArray, corpusArray : corpusArray})
+		//.appendTo("#results-stats");
 		
-		$("#results-stats").append($("<div />").css("clear", "both"));
+		var totalForWordform = [];
+		var totalForWordformAbs = [];
+		$.each(wordArray, function(key, fvalue) {
+			totalForWordform.push(0);
+			totalForWordformAbs.push(0);
+		});
+		var totalForCorpus = [];
+		var totalForCorpusAbs = [];
+		$.each(corpusArray, function(key, fvalue) {
+			totalForCorpus.push(0);
+			totalForCorpusAbs.push(0);
+		});
+		
+		
+		var dataItems = new Array();
+		var dummy;
+		var firstIteration = true;
+		var bc = 0;
+		$.each(data["corpora"], function(corpus, obj) {
+			var c = 0;
+			$.each(wordArray, function(key, fvalue) {
+				
+				if(obj["relative"])
+					var rel_freq = obj["relative"][fvalue];
+				if(obj["absolute"])
+					var abs_freq = obj["absolute"][fvalue];
+				
+				if (rel_freq) {
+					totalForWordform[c] += parseFloat(rel_freq);
+					totalForWordformAbs[c] += abs_freq;
+					totalForCorpus[bc] += parseFloat(rel_freq);
+					totalForCorpusAbs[bc] += abs_freq;
+				}
+						
+				c++;
+			});
+
+			
+			if(firstIteration) // ändra sen så att "alla" blir default
+				dummy = corpus;
+			firstIteration = false;
+			bc++;
+		});
+		
+		this.selectedCorpus = dummy;
+		$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
+
+		// Make Left Stats Table --------------------------------------------------------- //
+		
+		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
+		$.each(wordArray, function(key, fvalue) {
+			leftHTML += '<tr style="height:26px"><td><a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a> '+ fvalue + '</td></tr>';
+		});
+		leftHTML += '<tr><td><a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a> ∑</td></tr></table>';
+		
+		function makeEllipsis(str) {
+			if(str.length > 18) {
+				return str.substr(0,14) + "...";
+			} else {
+				return str;
+			}
+		}
+		
+		$("#leftStatsTable").append(leftHTML);
+		
+		
+		// Make Right Stats Table -------------------------------------------------------- //
+		
+		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i>Samtliga</i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
+		$.each(corpusArray, function(key, fvalue) {
+			theHTML += '<th style="height:60px">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(/ /g,"&nbsp;") + '<br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
+		});
+		var c = 0;
+		var totalForAllWordforms = 0;
+		var totalForAllWordformsAbs = 0;
+		$.each(wordArray, function(key, fvalue) {
+			theHTML += '<tr style="height:26px; width:60px;">';
+			// First the value for ALL corpora
+			var relTotForWordform = data["total"]["relative"][fvalue];
+			var absTotForWordform = data["total"]["absolute"][fvalue];
+			theHTML += '<td id="totcorpus__' + fvalue + '" class="statstable statstable__all">' + formatOutput(relTotForWordform.toFixed(1)) + '&nbsp;<span class="absStat">(' + formatOutput(absTotForWordform.toString()) + ")</span></td>";
+			totalForAllWordforms += relTotForWordform;
+			totalForAllWordformsAbs += absTotForWordform;
+			//theHTML += '<td id="totcorpus_' + c + '" class="statstable">' + formatOutput(totalForWordform[c].toFixed(1)) + '&nbsp;<span class="absStat">(' + totalForWordformAbs[c] + ")</span></td>";
+			// Then for each corpus seperately
+			$.each(corpusArray, function(gkey, gvalue) {
+				var rel_hits = data["corpora"][gvalue]["relative"][fvalue];
+				var abs_hits = data["corpora"][gvalue]["absolute"][fvalue];
+				
+				if (rel_hits) {
+					rel_hits = parseFloat(rel_hits);
+					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'">' + formatOutput(rel_hits.toFixed(1)) + '&nbsp;<span class="absStat">(' + abs_hits + ')</span></td>';
+				} else {
+					theHTML += '<td class="statstable statstablecorpus__' + gvalue + '"></td>';
+				}
+			});
+			theHTML += '</tr>';
+			c++;
+		});
+		
+		//sum = function(o) { // Helper Method
+		//	for(var s = 0, i = o.length; i; s += o[--i]);
+		//	return s;
+		//};
+		
+		theHTML += '<tr><td>' + totalForAllWordforms.toFixed(1) + '&nbsp;<span class="absStat">(' + totalForAllWordformsAbs + ')</span></td>';
+		$.each(totalForCorpus, function(key, fvalue) {
+			theHTML += '<td>' + formatOutput(fvalue.toFixed(1)) + '&nbsp;<span class="absStat">(' + totalForCorpusAbs[key] + ')</span></td>';
+		});
+		theHTML += '</tr></table>';
+
+		$("#rightStatsTable").append(theHTML);
+
+		
+		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
+		
+		
+	
+		$(".statstable__all").css({"background-color":"#EEEEEE"});
+		
+		$(".statstable").tooltip({
+			delay : 80,
+			bodyHandler : function() {
+				if(!$(this).attr('id'))
+					return "relativ frekvens (per en miljon ord):<br/><b>0</b><br>absolut frekvens:<br/><b>0</b>";
+				var parts = $(this).attr('id').split("__");
+				if(parts.length == 3) {
+					var hoveredCorpus = parts[1];
+					var hoveredWord = parts[2];
+					var relFreq = statsResults.savedData["corpora"][hoveredCorpus]["relative"][hoveredWord];
+					if(!relFreq)
+						relFreq = 0;
+					var absFreq = statsResults.savedData["corpora"][hoveredCorpus]["absolute"][hoveredWord];
+					return "relativ frekvens (per en miljon ord):<br/><b>" + formatOutput(relFreq.toString()) +"</b><br/>absolut frekvens:<br/><b>" + absFreq + "</b>";
+				} else if (parts.length == 2) {
+					// Left total
+					return "relativ frekvens (per en miljon ord):<br/><b>" + statsResults.savedData["total"]["relative"][parts[1]] + "</b><br/>absolut frekvens:<br/><b>" + statsResults.savedData["total"]["absolute"][parts[1]] + "</b>";
+					//return "relativ frekvens (per en miljon ord):<br/><b>" + formatOutput(totalForWordform[parts[1]].toString()) + "</b><br/>absolut frekvens:<br/><b>" + totalForWordformAbs[parts[1]] + "</b>";
+				} else {
+					return "relativ frekvens (per en miljon ord):<br/><b>0</b><br>absolut frekvens:<br/><b>0</b>";
+				}
+			}
+		});
+
+
+
+		// Make Bar Diagram ------------------------------------------------------- //
+		$.each(totalForWordform, function(key, fvalue) {
+			dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
+		});
+		
+		
+		diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
+		
+		$(".corpusName").click(function() {
+			var parts = $(this).attr("id").split("__");
+			newDataInPie(parts[1],false);
+		});
+		
+		$(".corpusNameAll").click(function() {
+			newDataInPie("all",false);
+		});
+		
+		$(".wordsName").click(function() {
+			var parts = $(this).attr("id").split("__");
+			if(parts.length == 2)
+				newDataInPie(parts[1],true);
+			else { // The ∑ row
+				newDataInPie("SIGMA_ALL",true);
+			}
+		});
+		// ------------------------------------------------------------------------ //
+		
+		$(".statstable").hover(function() {
+			if(!$(this).attr('id'))
+					return;
+			var currItem = $(this).attr('id');
+			var parts = currItem.split("__");
+			if (parts[1] == statsResults.selectedCorpus) {
+				diagramInstance.pie_widget("highlightArc",parts[2]);
+			}
+		}, function() {
+			if(!$(this).attr('id'))
+					return;
+			var currItem = $(this).attr('id');
+			var parts = currItem.split("__");
+			if (parts[1] == statsResults.selectedCorpus) {
+				diagramInstance.pie_widget("deHighlightArc",parts[2]);
+			}
+		});
+		//$("#results-stats").append($("<div />").css("clear", "both"));
+		
+		
+		
 		this.hidePreloader();
+		
+		
 	},
 	
 	showError : function() {
