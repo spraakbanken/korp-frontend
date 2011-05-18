@@ -138,20 +138,41 @@
                     <transition event="resultstab.lemgram" target="results_lemgram" /> 
                     <transition event="resultstab.stats" target="results_stats" />
                     
-                    <state id="results_kwic">
+                    <state id="results_kwic" initial="selected_h">
                         <onentry>
                             <script>
-                                showSidebar();
                                 kwicResults.centerScrollbar();
                                 util.setJsonLink(kwicProxy.prevRequest);
                             </script>
                         </onentry>
                         
-                        <onexit>
-                            <script>
-                                hideSidebar();
-                            </script>
-                        </onexit>
+                        <history id="selected_h">
+                            <transition target="kwic_word_selected" />
+                        </history>
+                        
+                        <state id="kwic_word_selected">
+                            <onentry>
+                                <script>
+                                    showSidebar();
+                                </script>
+                            </onentry>
+                            <transition event="word.deselect" target="kwic_word_not_selected" />
+                            <onexit>
+                                <script>
+                                    hideSidebar();
+                                </script>
+                            </onexit>
+                        </state>
+                        
+                        <state id="kwic_word_not_selected">
+                            <transition event="word.select" target="kwic_word_selected" />
+                        </state>
+                        
+<!--                         <onexit> -->
+<!--                             <script> -->
+<!--                                 hideSidebar(); -->
+<!--                             </script> -->
+<!--                         </onexit> -->
                     </state>
                     <state id="results_lemgram">
                         <onentry>

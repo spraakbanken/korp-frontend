@@ -116,6 +116,7 @@ var KWICResults = {
 							var currentSentence = $(this).parent().is(".linked_sentence") ? sentence.aligned : sentence;   
 							
 							updateSidebar(currentSentence.structs, data, sentence.corpus);
+							$.sm.send("word.select");
 						}
 							
 					).end();

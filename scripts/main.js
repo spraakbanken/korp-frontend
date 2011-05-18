@@ -110,6 +110,7 @@ $(function(){
 		
 		$("#result-container").click(function(){
 			util.SelectionManager.deselect();
+			$.sm.send("word.deselect");
 		});
 //	setup language
 		$("#languages").children().click(function(){
