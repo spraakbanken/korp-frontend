@@ -613,9 +613,9 @@ var StatsResults = {
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px"><td><a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a> '+ fvalue + '</td></tr>';
+			leftHTML += '<tr style="height:26px"><td>'+ fvalue + ' <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr>';
 		});
-		leftHTML += '<tr><td><a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a> ∑</td></tr></table>';
+		leftHTML += '<tr><td>∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr></table>';
 		
 		function makeEllipsis(str) {
 			if(str.length > 18) {

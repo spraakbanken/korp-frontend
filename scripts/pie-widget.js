@@ -349,8 +349,8 @@ var pie_widget = {
 			item.attr({path: newpath});
 		} else if (this.options.diagram_type == 1) {
 			// Bar Chart
-			item.attr({stroke: "orange"});
-			item.attr({"stroke-width": 3});
+			/*item.attr({stroke: "orange"});
+			item.attr({"stroke-width": 3});*/
 		}
 	},
 	
@@ -360,35 +360,43 @@ var pie_widget = {
 			item.animate({path: n["origpath"]}, 400, "elastic");
 		} else if (this.options.diagram_type == 1) {
 			// Bar Chart
-			item.attr({stroke: "black"});
-			item.attr({"stroke-width": 0});
+			/*item.attr({stroke: "black"});
+			item.attr({"stroke-width": 0});*/
 		}
 	},
 	
 	highlightArc: function (itemID) {
 		for (var shape in this.shapes) {
 			var n = this.shapes[shape].node;
-			if(n["shape_id"] == itemID) {
-				// Highlight the arc
-				this._highlight(this.shapes[shape]);
-				return true;
+			if(n) {
+				if(n["shape_id"]) {
+					if(n["shape_id"] == itemID) {
+						// Highlight the arc
+						this._highlight(this.shapes[shape]);
+						return true;
+					}
+				}
 			}
 		}
 		// if not...take the "other" arc
-		this._highlight(this.shapes[shape.length]);
+		//this._highlight(this.shapes[shape.length]);
 	},
 	
 	deHighlightArc: function (itemID) {
 		for (var shape in this.shapes) {
 			var n = this.shapes[shape].node;
-			if(n["shape_id"] == itemID) {
-				// Highlight the arc
-				this._deHighlight(this.shapes[shape]);
-				return true;
+			if(n) {
+				if(n["shape_id"]) {
+					if(n["shape_id"] == itemID) {
+						// Highlight the arc
+						this._deHighlight(this.shapes[shape]);
+						return true;
+					}
+				}
 			}
 		}
 		// if not...take the "other" arc
-		this._deHighlight(this.shapes[shape.length]);
+		//this._deHighlight(this.shapes[shape.length]);
 	},
 	
 	eventArc: function(item) {
