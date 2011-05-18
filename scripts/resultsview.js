@@ -10,9 +10,10 @@ var BaseResults = {
 	},
 	
 	renderResult : function(data) {
+		$.log("data.error", data.ERROR);
 		if(data.ERROR) {
 			this.resultError(data);
-			return;
+			return false;
 		}
 		var self = this;
         //$("#result-container").tabs("select", 0);
@@ -24,7 +25,7 @@ var BaseResults = {
 	},
 	
 	resultError : function(data) {
-		$.error("json fetch error: " + $.dump(data.ERROR));
+		$.log("json fetch error: " + $.dump(data.ERROR));
 		this.hidePreloader();
 	},
 	
@@ -62,10 +63,14 @@ var KWICResults = {
 		this.parent(data);
 		$("#results-table").empty();
 		$("#Pagination").empty();
+		$("#results-table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
 	},
 		
 	renderResult : function(data) {
-		this.parent(data);
+		var resultError = this.parent(data);
+		if(resultError === false) {
+			return;
+		}
 		var self = this;
 		
 		if(!this.num_result) {
@@ -250,7 +255,10 @@ var LemgramResults = {
 //	},
 	
 	renderResult : function(data, lemgram) {
-		this.parent(data);
+		var resultError = this.parent(data);
+		if(resultError === false) {
+			return;
+		}
 		$("#results-lemgram").empty();
 		if(data.relations){
 			this.renderTables(lemgram, data.relations);
@@ -533,7 +541,10 @@ var StatsResults = {
 //	},
 	
 	renderResult : function(data) {
-		this.parent(data);
+		var resultError = this.parent(data);
+		if(resultError === false) {
+			return;
+		}
 		
 		$("#results-stats").children().empty();
 		
