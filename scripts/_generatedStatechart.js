@@ -14,19 +14,21 @@ function StatechartExecutionContext() {
     };
     //variable declarations relating to data model
     //send timeout id variables
-    var $default_Regexp_id0xfffffffff1e65aa0 = /^($default)/,
-        submit_kwic_Regexp_id0xfffffffff1e65dd0 = /^(submit\.kwic)/,
-        searchtab_simple_Regexp_id0xfffffffff1e66950 = /^(searchtab\.simple)/,
-        searchtab_extended_Regexp_id0xfffffffff1e66c60 = /^(searchtab\.extended)/,
-        searchtab_advanced_Regexp_id0xfffffffff1e66f70 = /^(searchtab\.advanced)/,
-        submit_lemgram_Regexp_id0xfffffffff1e67280 = /^(submit\.lemgram)/,
-        submit_Regexp_id0xfffffffff1e68350 = /^(submit)/,
-        resultstab_kwic_Regexp_id0xfffffffff1e686a0 = /^(resultstab\.kwic)/,
-        resultstab_lemgram_Regexp_id0xfffffffff1e68920 = /^(resultstab\.lemgram)/,
-        resultstab_stats_Regexp_id0xfffffffff1e68cf0 = /^(resultstab\.stats)/,
-        sidebar_show_Regexp_id0xfffffffff1e69000 = /^(sidebar\.show)/,
-        sidebar_hide_Regexp_id0xfffffffff1e69590 = /^(sidebar\.hide)/,
-        star_Regexp_id0xfffffffff1e698a0 = /.*/;
+    var $default_Regexp_id0x00000000290d8600 = /^($default)/,
+        submit_kwic_Regexp_id0x0000000029192540 = /^(submit\.kwic)/,
+        searchtab_simple_Regexp_id0x00000000291748d0 = /^(searchtab\.simple)/,
+        searchtab_extended_Regexp_id0x0000000029174be0 = /^(searchtab\.extended)/,
+        searchtab_advanced_Regexp_id0x000000002915f2d0 = /^(searchtab\.advanced)/,
+        submit_lemgram_Regexp_id0x0000000029102d50 = /^(submit\.lemgram)/,
+        submit_Regexp_id0x00000000290cfbb0 = /^(submit)/,
+        resultstab_kwic_Regexp_id0x00000000291761f0 = /^(resultstab\.kwic)/,
+        resultstab_lemgram_Regexp_id0x0000000029170e10 = /^(resultstab\.lemgram)/,
+        resultstab_stats_Regexp_id0x0000000029171090 = /^(resultstab\.stats)/,
+        word_deselect_Regexp_id0x00000000291620e0 = /^(word\.deselect)/,
+        word_select_Regexp_id0x000000002910fa80 = /^(word\.select)/,
+        sidebar_show_Regexp_id0x00000000290c09d0 = /^(sidebar\.show)/,
+        sidebar_hide_Regexp_id0x00000000291a1440 = /^(sidebar\.hide)/,
+        star_Regexp_id0x00000000291a03d0 = /.*/;
     //abstract state
     var AbstractState = new
     function() {
@@ -37,8 +39,8 @@ function StatechartExecutionContext() {
         this.$dispatchPrefixEvent = function() {};
     }
     //states
-    var scxml_id0xfffffffff6d729b0 = (function() {
-        function scxml_id0xfffffffff6d729b0Constructor() {
+    var scxml_id0x0000000027ec41c0 = (function() {
+        function scxml_id0x0000000027ec41c0Constructor() {
             this.parent = AbstractState;
             this.initial = null;
             this.depth = 0;
@@ -47,7 +49,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             false;
             this.toString = function() {
-                return "scxml_id0xfffffffff6d729b0"
+                return "scxml_id0x0000000027ec41c0"
             }
             this.enterAction = function() {
                 for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
@@ -55,28 +57,28 @@ function StatechartExecutionContext() {
                 id0x0000000000000000_iterator++) {
                     var listener = listeners[id0x0000000000000000_iterator];
                     //to
-                    listener.onEntry("scxml_id0xfffffffff6d729b0");
+                    listener.onEntry("scxml_id0x0000000027ec41c0");
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff1e84b00_iterator = 0, id0xfffffffff1e84b00_hoist = listeners.length;
-                id0xfffffffff1e84b00_iterator < id0xfffffffff1e84b00_hoist;
-                id0xfffffffff1e84b00_iterator++) {
-                    var listener = listeners[id0xfffffffff1e84b00_iterator];
+                for (var id0x0000000029181db0_iterator = 0, id0x0000000029181db0_hoist = listeners.length;
+                id0x0000000029181db0_iterator < id0x0000000029181db0_hoist;
+                id0x0000000029181db0_iterator++) {
+                    var listener = listeners[id0x0000000029181db0_iterator];
                     //from
-                    listener.onExit("scxml_id0xfffffffff6d729b0");
+                    listener.onExit("scxml_id0x0000000027ec41c0");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
                 return AbstractState.$dispatchPrefixEvent(e);
             }
         }
-        scxml_id0xfffffffff6d729b0Constructor.prototype = AbstractState;
-        return new scxml_id0xfffffffff6d729b0Constructor();
+        scxml_id0x0000000027ec41c0Constructor.prototype = AbstractState;
+        return new scxml_id0x0000000027ec41c0Constructor();
     })();
     var _initial = (function() {
         function _initialConstructor() {
-            this.parent = scxml_id0xfffffffff6d729b0;
+            this.parent = scxml_id0x0000000027ec41c0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -84,7 +86,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                 ];
             this.parent.initial = this; //init parent's pointer to initial state
             this.toString = function() {
@@ -100,10 +102,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff1e99c20_iterator = 0, id0xfffffffff1e99c20_hoist = listeners.length;
-                id0xfffffffff1e99c20_iterator < id0xfffffffff1e99c20_hoist;
-                id0xfffffffff1e99c20_iterator++) {
-                    var listener = listeners[id0xfffffffff1e99c20_iterator];
+                for (var id0x00000000291a54d0_iterator = 0, id0x00000000291a54d0_hoist = listeners.length;
+                id0x00000000291a54d0_iterator < id0x00000000291a54d0_hoist;
+                id0x00000000291a54d0_iterator++) {
+                    var listener = listeners[id0x00000000291a54d0_iterator];
                     //from
                     listener.onExit("_initial");
                 }
@@ -116,7 +118,8 @@ function StatechartExecutionContext() {
                         extended: true,
                         advanced: true,
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true,
                         sidebar_hidden: true,
@@ -143,18 +146,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0xfffffffff6d729b0['$default']();
+                return scxml_id0x0000000027ec41c0['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
+                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
             }
         }
-        _initialConstructor.prototype = scxml_id0xfffffffff6d729b0;
+        _initialConstructor.prototype = scxml_id0x0000000027ec41c0;
         return new _initialConstructor();
     })();
     var init = (function() {
         function initConstructor() {
-            this.parent = scxml_id0xfffffffff6d729b0;
+            this.parent = scxml_id0x0000000027ec41c0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -162,7 +165,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                 ];
             this.toString = function() {
                 return "init"
@@ -177,10 +180,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6059870_iterator = 0, id0xffffffffe6059870_hoist = listeners.length;
-                id0xffffffffe6059870_iterator < id0xffffffffe6059870_hoist;
-                id0xffffffffe6059870_iterator++) {
-                    var listener = listeners[id0xffffffffe6059870_iterator];
+                for (var id0x0000000029154240_iterator = 0, id0x0000000029154240_hoist = listeners.length;
+                id0x0000000029154240_iterator < id0x0000000029154240_hoist;
+                id0x0000000029154240_iterator++) {
+                    var listener = listeners[id0x0000000029154240_iterator];
                     //from
                     listener.onExit("init");
                 }
@@ -193,7 +196,8 @@ function StatechartExecutionContext() {
                         extended: true,
                         advanced: true,
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true,
                         sidebar_hidden: true,
@@ -231,18 +235,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0xfffffffff6d729b0['$default']();
+                return scxml_id0x0000000027ec41c0['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
+                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
             }
         }
-        initConstructor.prototype = scxml_id0xfffffffff6d729b0;
+        initConstructor.prototype = scxml_id0x0000000027ec41c0;
         return new initConstructor();
     })();
     var main = (function() {
         function mainConstructor() {
-            this.parent = scxml_id0xfffffffff6d729b0;
+            this.parent = scxml_id0x0000000027ec41c0;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -263,19 +267,19 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe604e2c0_iterator = 0, id0xffffffffe604e2c0_hoist = listeners.length;
-                id0xffffffffe604e2c0_iterator < id0xffffffffe604e2c0_hoist;
-                id0xffffffffe604e2c0_iterator++) {
-                    var listener = listeners[id0xffffffffe604e2c0_iterator];
+                for (var id0x000000002914e9e0_iterator = 0, id0x000000002914e9e0_hoist = listeners.length;
+                id0x000000002914e9e0_iterator < id0x000000002914e9e0_hoist;
+                id0x000000002914e9e0_iterator++) {
+                    var listener = listeners[id0x000000002914e9e0_iterator];
                     //from
                     listener.onExit("main");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0xfffffffff6d729b0.$dispatchPrefixEvent(e);
+                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
             }
         }
-        mainConstructor.prototype = scxml_id0xfffffffff6d729b0;
+        mainConstructor.prototype = scxml_id0x0000000027ec41c0;
         return new mainConstructor();
     })();
     var main_initial = (function() {
@@ -288,7 +292,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                 ];
@@ -306,10 +310,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe604d700_iterator = 0, id0xffffffffe604d700_hoist = listeners.length;
-                id0xffffffffe604d700_iterator < id0xffffffffe604d700_hoist;
-                id0xffffffffe604d700_iterator++) {
-                    var listener = listeners[id0xffffffffe604d700_iterator];
+                for (var id0x000000002914ea90_iterator = 0, id0x000000002914ea90_hoist = listeners.length;
+                id0x000000002914ea90_iterator < id0x000000002914ea90_hoist;
+                id0x000000002914ea90_iterator++) {
+                    var listener = listeners[id0x000000002914ea90_iterator];
                     //from
                     listener.onExit("main_initial");
                 }
@@ -321,7 +325,8 @@ function StatechartExecutionContext() {
                         extended: true,
                         advanced: true,
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true,
                         sidebar_hidden: true,
@@ -380,10 +385,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6046f80_iterator = 0, id0xffffffffe6046f80_hoist = listeners.length;
-                id0xffffffffe6046f80_iterator < id0xffffffffe6046f80_hoist;
-                id0xffffffffe6046f80_iterator++) {
-                    var listener = listeners[id0xffffffffe6046f80_iterator];
+                for (var id0x000000002914ad60_iterator = 0, id0x000000002914ad60_hoist = listeners.length;
+                id0x000000002914ad60_iterator < id0x000000002914ad60_hoist;
+                id0x000000002914ad60_iterator++) {
+                    var listener = listeners[id0x000000002914ad60_iterator];
                     //from
                     listener.onExit("p");
                 }
@@ -405,7 +410,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -425,10 +430,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6046320_iterator = 0, id0xffffffffe6046320_hoist = listeners.length;
-                id0xffffffffe6046320_iterator < id0xffffffffe6046320_hoist;
-                id0xffffffffe6046320_iterator++) {
-                    var listener = listeners[id0xffffffffe6046320_iterator];
+                for (var id0x000000002914ae10_iterator = 0, id0x000000002914ae10_hoist = listeners.length;
+                id0x000000002914ae10_iterator < id0x000000002914ae10_hoist;
+                id0x000000002914ae10_iterator++) {
+                    var listener = listeners[id0x000000002914ae10_iterator];
                     //from
                     listener.onExit("p_initial");
                 }
@@ -440,7 +445,8 @@ function StatechartExecutionContext() {
                         extended: true,
                         advanced: true,
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true,
                         sidebar_hidden: true,
@@ -508,10 +514,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe603bff0_iterator = 0, id0xffffffffe603bff0_hoist = listeners.length;
-                id0xffffffffe603bff0_iterator < id0xffffffffe603bff0_hoist;
-                id0xffffffffe603bff0_iterator++) {
-                    var listener = listeners[id0xffffffffe603bff0_iterator];
+                for (var id0x0000000029142850_iterator = 0, id0x0000000029142850_hoist = listeners.length;
+                id0x0000000029142850_iterator < id0x0000000029142850_hoist;
+                id0x0000000029142850_iterator++) {
+                    var listener = listeners[id0x0000000029142850_iterator];
                     //from
                     listener.onExit("search");
                 }
@@ -533,7 +539,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -555,10 +561,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe603c0e0_iterator = 0, id0xffffffffe603c0e0_hoist = listeners.length;
-                id0xffffffffe603c0e0_iterator < id0xffffffffe603c0e0_hoist;
-                id0xffffffffe603c0e0_iterator++) {
-                    var listener = listeners[id0xffffffffe603c0e0_iterator];
+                for (var id0x0000000029142980_iterator = 0, id0x0000000029142980_hoist = listeners.length;
+                id0x0000000029142980_iterator < id0x0000000029142980_hoist;
+                id0x0000000029142980_iterator++) {
+                    var listener = listeners[id0x0000000029142980_iterator];
                     //from
                     listener.onExit("search_initial");
                 }
@@ -623,16 +629,16 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 this.historyState.lastConfiguration = currentConfiguration.slice();
-                for (var id0xffffffffe51e9200_iterator = 0, id0xffffffffe51e9200_hoist = listeners.length;
-                id0xffffffffe51e9200_iterator < id0xffffffffe51e9200_hoist;
-                id0xffffffffe51e9200_iterator++) {
-                    var listener = listeners[id0xffffffffe51e9200_iterator];
+                for (var id0x000000002913f310_iterator = 0, id0x000000002913f310_hoist = listeners.length;
+                id0x000000002913f310_iterator < id0x000000002913f310_hoist;
+                id0x000000002913f310_iterator++) {
+                    var listener = listeners[id0x000000002913f310_iterator];
                     //from
                     listener.onExit("search_inner");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0xfffffffff1e65dd0)) {
+                if (e.match(submit_kwic_Regexp_id0x0000000029192540)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -665,6 +671,8 @@ function StatechartExecutionContext() {
                                 state.exitAction();
                             }
                             //transition action
+                            //simpleSearch.clear();
+                            $("#simple_text").get(0).blur();
                             simpleSearch.resetView();
                             kwicProxy.makeRequest();
                             for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
@@ -683,7 +691,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_simple_Regexp_id0xfffffffff1e66950)) {
+                if (e.match(searchtab_simple_Regexp_id0x00000000291748d0)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -732,7 +740,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_extended_Regexp_id0xfffffffff1e66c60)) {
+                if (e.match(searchtab_extended_Regexp_id0x0000000029174be0)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -781,7 +789,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_advanced_Regexp_id0xfffffffff1e66f70)) {
+                if (e.match(searchtab_advanced_Regexp_id0x000000002915f2d0)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -846,7 +854,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -870,10 +878,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffdcb77360_iterator = 0, id0xffffffffdcb77360_hoist = listeners.length;
-                id0xffffffffdcb77360_iterator < id0xffffffffdcb77360_hoist;
-                id0xffffffffdcb77360_iterator++) {
-                    var listener = listeners[id0xffffffffdcb77360_iterator];
+                for (var id0x000000002913fa10_iterator = 0, id0x000000002913fa10_hoist = listeners.length;
+                id0x000000002913fa10_iterator < id0x000000002913fa10_hoist;
+                id0x000000002913fa10_iterator++) {
+                    var listener = listeners[id0x000000002913fa10_iterator];
                     //from
                     listener.onExit("search_history");
                 }
@@ -977,7 +985,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1001,16 +1009,16 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 $("#simple_text").autocomplete("close");
-                for (var id0xffffffffe6077760_iterator = 0, id0xffffffffe6077760_hoist = listeners.length;
-                id0xffffffffe6077760_iterator < id0xffffffffe6077760_hoist;
-                id0xffffffffe6077760_iterator++) {
-                    var listener = listeners[id0xffffffffe6077760_iterator];
+                for (var id0x00000000291374d0_iterator = 0, id0x00000000291374d0_hoist = listeners.length;
+                id0x00000000291374d0_iterator < id0x00000000291374d0_hoist;
+                id0x00000000291374d0_iterator++) {
+                    var listener = listeners[id0x00000000291374d0_iterator];
                     //from
                     listener.onExit("simple");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_lemgram_Regexp_id0xfffffffff1e67280)) {
+                if (e.match(submit_lemgram_Regexp_id0x0000000029102d50)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1053,7 +1061,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1076,16 +1084,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6074990_iterator = 0, id0xffffffffe6074990_hoist = listeners.length;
-                id0xffffffffe6074990_iterator < id0xffffffffe6074990_hoist;
-                id0xffffffffe6074990_iterator++) {
-                    var listener = listeners[id0xffffffffe6074990_iterator];
+                for (var id0x0000000029138b40_iterator = 0, id0x0000000029138b40_hoist = listeners.length;
+                id0x0000000029138b40_iterator < id0x0000000029138b40_hoist;
+                id0x0000000029138b40_iterator++) {
+                    var listener = listeners[id0x0000000029138b40_iterator];
                     //from
                     listener.onExit("extended");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0xfffffffff1e65dd0)) {
+                if (e.match(submit_kwic_Regexp_id0x0000000029192540)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1114,7 +1122,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(submit_lemgram_Regexp_id0xfffffffff1e67280)) {
+                if (e.match(submit_lemgram_Regexp_id0x0000000029102d50)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1158,7 +1166,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1181,10 +1189,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6070130_iterator = 0, id0xffffffffe6070130_hoist = listeners.length;
-                id0xffffffffe6070130_iterator < id0xffffffffe6070130_hoist;
-                id0xffffffffe6070130_iterator++) {
-                    var listener = listeners[id0xffffffffe6070130_iterator];
+                for (var id0x000000002913ae80_iterator = 0, id0x000000002913ae80_hoist = listeners.length;
+                id0x000000002913ae80_iterator < id0x000000002913ae80_hoist;
+                id0x000000002913ae80_iterator++) {
+                    var listener = listeners[id0x000000002913ae80_iterator];
                     //from
                     listener.onExit("advanced");
                 }
@@ -1218,10 +1226,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe606f830_iterator = 0, id0xffffffffe606f830_hoist = listeners.length;
-                id0xffffffffe606f830_iterator < id0xffffffffe606f830_hoist;
-                id0xffffffffe606f830_iterator++) {
-                    var listener = listeners[id0xffffffffe606f830_iterator];
+                for (var id0x00000000291346f0_iterator = 0, id0x00000000291346f0_hoist = listeners.length;
+                id0x00000000291346f0_iterator < id0x00000000291346f0_hoist;
+                id0x00000000291346f0_iterator++) {
+                    var listener = listeners[id0x00000000291346f0_iterator];
                     //from
                     listener.onExit("results");
                 }
@@ -1243,7 +1251,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1265,10 +1273,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe606f8a0_iterator = 0, id0xffffffffe606f8a0_hoist = listeners.length;
-                id0xffffffffe606f8a0_iterator < id0xffffffffe606f8a0_hoist;
-                id0xffffffffe606f8a0_iterator++) {
-                    var listener = listeners[id0xffffffffe606f8a0_iterator];
+                for (var id0x0000000029134760_iterator = 0, id0x0000000029134760_hoist = listeners.length;
+                id0x0000000029134760_iterator < id0x0000000029134760_hoist;
+                id0x0000000029134760_iterator++) {
+                    var listener = listeners[id0x0000000029134760_iterator];
                     //from
                     listener.onExit("results_initial");
                 }
@@ -1277,7 +1285,8 @@ function StatechartExecutionContext() {
                 return {
                     preemptedBasicStates: {
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true
                     },
@@ -1319,7 +1328,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1342,10 +1351,10 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 $('#results-wrapper').show();
-                for (var id0xffffffffe606b680_iterator = 0, id0xffffffffe606b680_hoist = listeners.length;
-                id0xffffffffe606b680_iterator < id0xffffffffe606b680_hoist;
-                id0xffffffffe606b680_iterator++) {
-                    var listener = listeners[id0xffffffffe606b680_iterator];
+                for (var id0x00000000291325e0_iterator = 0, id0x00000000291325e0_hoist = listeners.length;
+                id0x00000000291325e0_iterator < id0x00000000291325e0_hoist;
+                id0x00000000291325e0_iterator++) {
+                    var listener = listeners[id0x00000000291325e0_iterator];
                     //from
                     listener.onExit("results_hidden");
                 }
@@ -1354,7 +1363,8 @@ function StatechartExecutionContext() {
                 return {
                     preemptedBasicStates: {
                         results_hidden: true,
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true
                     },
@@ -1380,11 +1390,12 @@ function StatechartExecutionContext() {
                 return results['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_Regexp_id0xfffffffff1e68350)) {
+                if (e.match(submit_Regexp_id0x00000000290cfbb0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
-                            results_kwic: true,
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true,
                             results_lemgram: true,
                             results_stats: true
                         },
@@ -1436,20 +1447,21 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6065b60_iterator = 0, id0xffffffffe6065b60_hoist = listeners.length;
-                id0xffffffffe6065b60_iterator < id0xffffffffe6065b60_hoist;
-                id0xffffffffe6065b60_iterator++) {
-                    var listener = listeners[id0xffffffffe6065b60_iterator];
+                for (var id0x000000002912e260_iterator = 0, id0x000000002912e260_hoist = listeners.length;
+                id0x000000002912e260_iterator < id0x000000002912e260_hoist;
+                id0x000000002912e260_iterator++) {
+                    var listener = listeners[id0x000000002912e260_iterator];
                     //from
                     listener.onExit("results_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(resultstab_kwic_Regexp_id0xfffffffff1e686a0)) {
+                if (e.match(resultstab_kwic_Regexp_id0x00000000291761f0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
-                            results_kwic: true,
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true,
                             results_lemgram: true,
                             results_stats: true
                         },
@@ -1484,22 +1496,24 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("results_visible", "results_kwic", "results_visible_resultstab.kwic_20");
+                                listener.onTransition("results_visible", "results_kwic_initial", "results_visible_resultstab.kwic_20");
                             }
                             //enter states
                             results_visible.enterAction();
                             results_kwic.enterAction();
+                            results_kwic_initial.enterAction();
                             //update configuration
                             currentConfiguration.splice(
-                            indexOf(currentConfiguration, statesExited[0]), 1, results_kwic);
+                            indexOf(currentConfiguration, statesExited[0]), 1, results_kwic_initial);
                         }
                     }
                 }
-                if (e.match(resultstab_lemgram_Regexp_id0xfffffffff1e68920)) {
+                if (e.match(resultstab_lemgram_Regexp_id0x0000000029170e10)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
-                            results_kwic: true,
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true,
                             results_lemgram: true,
                             results_stats: true
                         },
@@ -1545,11 +1559,12 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(resultstab_stats_Regexp_id0xfffffffff1e68cf0)) {
+                if (e.match(resultstab_stats_Regexp_id0x0000000029171090)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
-                            results_kwic: true,
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true,
                             results_lemgram: true,
                             results_stats: true
                         },
@@ -1611,7 +1626,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1635,10 +1650,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe6065c10_iterator = 0, id0xffffffffe6065c10_hoist = listeners.length;
-                id0xffffffffe6065c10_iterator < id0xffffffffe6065c10_hoist;
-                id0xffffffffe6065c10_iterator++) {
-                    var listener = listeners[id0xffffffffe6065c10_iterator];
+                for (var id0x000000002912e310_iterator = 0, id0x000000002912e310_hoist = listeners.length;
+                id0x000000002912e310_iterator < id0x000000002912e310_hoist;
+                id0x000000002912e310_iterator++) {
+                    var listener = listeners[id0x000000002912e310_iterator];
                     //from
                     listener.onExit("results_visible_initial");
                 }
@@ -1646,7 +1661,8 @@ function StatechartExecutionContext() {
             this.$default = function() {
                 return {
                     preemptedBasicStates: {
-                        results_kwic: true,
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true,
                         results_lemgram: true,
                         results_stats: true
                     },
@@ -1660,13 +1676,14 @@ function StatechartExecutionContext() {
                         id0x0000000000000000_iterator++) {
                             var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "results_kwic", "results_visible_initial_$default_19");
+                            listener.onTransition("", "results_kwic_initial", "results_visible_initial_$default_19");
                         }
                         //enter states
                         results_kwic.enterAction();
+                        results_kwic_initial.enterAction();
                         //update configuration
                         currentConfiguration.splice(
-                        indexOf(currentConfiguration, results_visible_initial), 1, results_kwic);
+                        indexOf(currentConfiguration, results_visible_initial), 1, results_kwic_initial);
                     }
                 }
                 return results_visible['$default']();
@@ -1686,23 +1703,11 @@ function StatechartExecutionContext() {
             this.historyState = null;
             //these variables facilitate fast In predicate
             this.isBasic =
-            true;
-            this.ancestors = [
-                scxml_id0xfffffffff6d729b0
-                        ,
-                    main
-                        ,
-                    p
-                        ,
-                    results
-                        ,
-                    results_visible
-                ];
+            false;
             this.toString = function() {
                 return "results_kwic"
             }
             this.enterAction = function() {
-                showSidebar();
                 kwicResults.centerScrollbar();
                 util.setJsonLink(kwicProxy.prevRequest);
                 for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
@@ -1714,11 +1719,11 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                hideSidebar();
-                for (var id0xfffffffff02458a0_iterator = 0, id0xfffffffff02458a0_hoist = listeners.length;
-                id0xfffffffff02458a0_iterator < id0xfffffffff02458a0_hoist;
-                id0xfffffffff02458a0_iterator++) {
-                    var listener = listeners[id0xfffffffff02458a0_iterator];
+                this.historyState.lastConfiguration = currentConfiguration.slice();
+                for (var id0x0000000029125ca0_iterator = 0, id0x0000000029125ca0_hoist = listeners.length;
+                id0x0000000029125ca0_iterator < id0x0000000029125ca0_hoist;
+                id0x0000000029125ca0_iterator++) {
+                    var listener = listeners[id0x0000000029125ca0_iterator];
                     //from
                     listener.onExit("results_kwic");
                 }
@@ -1730,6 +1735,367 @@ function StatechartExecutionContext() {
         results_kwicConstructor.prototype = results_visible;
         return new results_kwicConstructor();
     })();
+    var results_kwic_initial = (function() {
+        function results_kwic_initialConstructor() {
+            this.parent = results_kwic;
+            this.initial = null;
+            this.depth = 6;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_id0x0000000027ec41c0
+                        ,
+                    main
+                        ,
+                    p
+                        ,
+                    results
+                        ,
+                    results_visible
+                        ,
+                    results_kwic
+                ];
+            this.parent.initial = this; //init parent's pointer to initial state
+            this.toString = function() {
+                return "results_kwic_initial"
+            }
+            this.enterAction = function() {
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
+                    //to
+                    listener.onEntry("results_kwic_initial");
+                }
+            }
+            this.exitAction = function() {
+                for (var id0x000000002912e3c0_iterator = 0, id0x000000002912e3c0_hoist = listeners.length;
+                id0x000000002912e3c0_iterator < id0x000000002912e3c0_hoist;
+                id0x000000002912e3c0_iterator++) {
+                    var listener = listeners[id0x000000002912e3c0_iterator];
+                    //from
+                    listener.onExit("results_kwic_initial");
+                }
+            }
+            this.$default = function() {
+                return {
+                    preemptedBasicStates: {
+                        kwic_word_selected: true,
+                        kwic_word_not_selected: true
+                    },
+                    action: function() {
+                        hasTakenDefaultTransition = true;
+                        //exit states
+                        results_kwic_initial.exitAction();
+                        //transition action
+                        for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                        id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                        id0x0000000000000000_iterator++) {
+                            var listener = listeners[id0x0000000000000000_iterator];
+                            //transition id
+                            listener.onTransition("", "selected_h", "results_kwic_initial_$default_23");
+                        }
+                        //enter states
+                        selected_h.enterAction();
+                        //update configuration
+                        currentConfiguration.splice(
+                        indexOf(currentConfiguration, results_kwic_initial), 1, selected_h);
+                    }
+                }
+                return results_kwic['$default']();
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                return results_kwic.$dispatchPrefixEvent(e);
+            }
+        }
+        results_kwic_initialConstructor.prototype = results_kwic;
+        return new results_kwic_initialConstructor();
+    })();
+    var selected_h = (function() {
+        function selected_hConstructor() {
+            this.parent = results_kwic;
+            this.initial = null;
+            this.depth = 6;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_id0x0000000027ec41c0
+                        ,
+                    main
+                        ,
+                    p
+                        ,
+                    results
+                        ,
+                    results_visible
+                        ,
+                    results_kwic
+                ];
+            this.parent.historyState = this; //init parent's pointer to history state
+            this.toString = function() {
+                return "selected_h"
+            }
+            this.enterAction = function() {
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
+                    //to
+                    listener.onEntry("selected_h");
+                }
+            }
+            this.exitAction = function() {
+                for (var id0x000000002911fe80_iterator = 0, id0x000000002911fe80_hoist = listeners.length;
+                id0x000000002911fe80_iterator < id0x000000002911fe80_hoist;
+                id0x000000002911fe80_iterator++) {
+                    var listener = listeners[id0x000000002911fe80_iterator];
+                    //from
+                    listener.onExit("selected_h");
+                }
+            }
+            this.$default = function() {
+                //history state semantics
+                if (selected_h.lastConfiguration) {
+                    return {
+                        preemptedBasicStates: {
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true
+                        },
+                        action: function() {
+                            //transition action
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var l = listeners[id0x0000000000000000_iterator];
+                                //transition id
+                                l.onTransition("", "kwic_word_selected", "selected_h_$default_24");
+                            }
+                            var historyState = selected_h;
+                            var newConfiguration = [];
+                            var historyStateParent = selected_h.parent;
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = selected_h.lastConfiguration.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = selected_h.lastConfiguration[id0x0000000000000000_iterator];
+                                if (
+                                indexOf(state.ancestors, historyStateParent) != -1) {
+                                    var statesEntered = [state];
+                                    for (var parent = state.parent;
+                                    parent != null && parent != historyState.parent;
+                                    parent = parent.parent) {
+                                        statesEntered.push(parent);
+                                    }
+                                    var topState = statesEntered.pop();
+                                    topState.enterAction();
+                                    newConfiguration.push(topState.initial ? topState.initial : topState);
+                                }
+                            }
+                            var filteredConfiguration = [];
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = currentConfiguration.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var state = currentConfiguration[id0x0000000000000000_iterator];
+                                if (
+                                indexOf(state.ancestors, historyStateParent) == -1) {
+                                    filteredConfiguration.push(state);
+                                }
+                            }
+                            newConfiguration = newConfiguration.concat(filteredConfiguration)
+                            var historyTriggerDispatcherCurrentConfigurationAssignmentRHS = newConfiguration;
+                            currentConfiguration = historyTriggerDispatcherCurrentConfigurationAssignmentRHS;
+                        }
+                    }
+                } else {
+                    return {
+                        preemptedBasicStates: {
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true
+                        },
+                        action: function() {
+                            hasTakenDefaultTransition = true;
+                            //exit states
+                            selected_h.exitAction();
+                            //transition action
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
+                                //transition id
+                                listener.onTransition("", "kwic_word_selected", "selected_h_$default_24");
+                            }
+                            //enter states
+                            kwic_word_selected.enterAction();
+                            //update configuration
+                            currentConfiguration.splice(
+                            indexOf(currentConfiguration, selected_h), 1, kwic_word_selected);
+                        }
+                    }
+                }
+                return results_kwic['$default']();
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                return results_kwic.$dispatchPrefixEvent(e);
+            }
+        }
+        selected_hConstructor.prototype = results_kwic;
+        return new selected_hConstructor();
+    })();
+    var kwic_word_selected = (function() {
+        function kwic_word_selectedConstructor() {
+            this.parent = results_kwic;
+            this.initial = null;
+            this.depth = 6;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_id0x0000000027ec41c0
+                        ,
+                    main
+                        ,
+                    p
+                        ,
+                    results
+                        ,
+                    results_visible
+                        ,
+                    results_kwic
+                ];
+            this.toString = function() {
+                return "kwic_word_selected"
+            }
+            this.enterAction = function() {
+                showSidebar();
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
+                    //to
+                    listener.onEntry("kwic_word_selected");
+                }
+            }
+            this.exitAction = function() {
+                hideSidebar();
+                for (var id0x000000002911f9e0_iterator = 0, id0x000000002911f9e0_hoist = listeners.length;
+                id0x000000002911f9e0_iterator < id0x000000002911f9e0_hoist;
+                id0x000000002911f9e0_iterator++) {
+                    var listener = listeners[id0x000000002911f9e0_iterator];
+                    //from
+                    listener.onExit("kwic_word_selected");
+                }
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                if (e.match(word_deselect_Regexp_id0x00000000291620e0)) {
+                    return {
+                        preemptedBasicStates: {
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true
+                        },
+                        action: function() {
+                            //exit states
+                            kwic_word_selected.exitAction();
+                            //transition action
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
+                                //transition id
+                                listener.onTransition("kwic_word_selected", "kwic_word_not_selected", "kwic_word_selected_word.deselect_25");
+                            }
+                            //enter states
+                            kwic_word_not_selected.enterAction();
+                            //update configuration
+                            currentConfiguration.splice(
+                            indexOf(currentConfiguration, kwic_word_selected), 1, kwic_word_not_selected);
+                        }
+                    }
+                }
+                return results_kwic.$dispatchPrefixEvent(e);
+            }
+        }
+        kwic_word_selectedConstructor.prototype = results_kwic;
+        return new kwic_word_selectedConstructor();
+    })();
+    var kwic_word_not_selected = (function() {
+        function kwic_word_not_selectedConstructor() {
+            this.parent = results_kwic;
+            this.initial = null;
+            this.depth = 6;
+            this.historyState = null;
+            //these variables facilitate fast In predicate
+            this.isBasic =
+            true;
+            this.ancestors = [
+                scxml_id0x0000000027ec41c0
+                        ,
+                    main
+                        ,
+                    p
+                        ,
+                    results
+                        ,
+                    results_visible
+                        ,
+                    results_kwic
+                ];
+            this.toString = function() {
+                return "kwic_word_not_selected"
+            }
+            this.enterAction = function() {
+                for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                id0x0000000000000000_iterator++) {
+                    var listener = listeners[id0x0000000000000000_iterator];
+                    //to
+                    listener.onEntry("kwic_word_not_selected");
+                }
+            }
+            this.exitAction = function() {
+                for (var id0x000000002911d320_iterator = 0, id0x000000002911d320_hoist = listeners.length;
+                id0x000000002911d320_iterator < id0x000000002911d320_hoist;
+                id0x000000002911d320_iterator++) {
+                    var listener = listeners[id0x000000002911d320_iterator];
+                    //from
+                    listener.onExit("kwic_word_not_selected");
+                }
+            }
+            this.$dispatchPrefixEvent = function(e) {
+                if (e.match(word_select_Regexp_id0x000000002910fa80)) {
+                    return {
+                        preemptedBasicStates: {
+                            kwic_word_selected: true,
+                            kwic_word_not_selected: true
+                        },
+                        action: function() {
+                            //exit states
+                            kwic_word_not_selected.exitAction();
+                            //transition action
+                            for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
+                            id0x0000000000000000_iterator < id0x0000000000000000_hoist;
+                            id0x0000000000000000_iterator++) {
+                                var listener = listeners[id0x0000000000000000_iterator];
+                                //transition id
+                                listener.onTransition("kwic_word_not_selected", "kwic_word_selected", "kwic_word_not_selected_word.select_26");
+                            }
+                            //enter states
+                            kwic_word_selected.enterAction();
+                            //update configuration
+                            currentConfiguration.splice(
+                            indexOf(currentConfiguration, kwic_word_not_selected), 1, kwic_word_selected);
+                        }
+                    }
+                }
+                return results_kwic.$dispatchPrefixEvent(e);
+            }
+        }
+        kwic_word_not_selectedConstructor.prototype = results_kwic;
+        return new kwic_word_not_selectedConstructor();
+    })();
     var results_lemgram = (function() {
         function results_lemgramConstructor() {
             this.parent = results_visible;
@@ -1740,7 +2106,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1764,10 +2130,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff0230680_iterator = 0, id0xfffffffff0230680_hoist = listeners.length;
-                id0xfffffffff0230680_iterator < id0xfffffffff0230680_hoist;
-                id0xfffffffff0230680_iterator++) {
-                    var listener = listeners[id0xfffffffff0230680_iterator];
+                for (var id0x000000002911c870_iterator = 0, id0x000000002911c870_hoist = listeners.length;
+                id0x000000002911c870_iterator < id0x000000002911c870_hoist;
+                id0x000000002911c870_iterator++) {
+                    var listener = listeners[id0x000000002911c870_iterator];
                     //from
                     listener.onExit("results_lemgram");
                 }
@@ -1789,7 +2155,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1813,10 +2179,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffdcb803d0_iterator = 0, id0xffffffffdcb803d0_hoist = listeners.length;
-                id0xffffffffdcb803d0_iterator < id0xffffffffdcb803d0_hoist;
-                id0xffffffffdcb803d0_iterator++) {
-                    var listener = listeners[id0xffffffffdcb803d0_iterator];
+                for (var id0x0000000029119b40_iterator = 0, id0x0000000029119b40_hoist = listeners.length;
+                id0x0000000029119b40_iterator < id0x0000000029119b40_hoist;
+                id0x0000000029119b40_iterator++) {
+                    var listener = listeners[id0x0000000029119b40_iterator];
                     //from
                     listener.onExit("results_stats");
                 }
@@ -1850,10 +2216,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff0267270_iterator = 0, id0xfffffffff0267270_hoist = listeners.length;
-                id0xfffffffff0267270_iterator < id0xfffffffff0267270_hoist;
-                id0xfffffffff0267270_iterator++) {
-                    var listener = listeners[id0xfffffffff0267270_iterator];
+                for (var id0x000000002911a1f0_iterator = 0, id0x000000002911a1f0_hoist = listeners.length;
+                id0x000000002911a1f0_iterator < id0x000000002911a1f0_hoist;
+                id0x000000002911a1f0_iterator++) {
+                    var listener = listeners[id0x000000002911a1f0_iterator];
                     //from
                     listener.onExit("sidebar");
                 }
@@ -1875,7 +2241,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1897,10 +2263,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff02672e0_iterator = 0, id0xfffffffff02672e0_hoist = listeners.length;
-                id0xfffffffff02672e0_iterator < id0xfffffffff02672e0_hoist;
-                id0xfffffffff02672e0_iterator++) {
-                    var listener = listeners[id0xfffffffff02672e0_iterator];
+                for (var id0x000000002911a2a0_iterator = 0, id0x000000002911a2a0_hoist = listeners.length;
+                id0x000000002911a2a0_iterator < id0x000000002911a2a0_hoist;
+                id0x000000002911a2a0_iterator++) {
+                    var listener = listeners[id0x000000002911a2a0_iterator];
                     //from
                     listener.onExit("sidebar_initial");
                 }
@@ -1921,7 +2287,7 @@ function StatechartExecutionContext() {
                         id0x0000000000000000_iterator++) {
                             var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "sidebar_hidden", "sidebar_initial_$default_23");
+                            listener.onTransition("", "sidebar_hidden", "sidebar_initial_$default_27");
                         }
                         //enter states
                         sidebar_hidden.enterAction();
@@ -1949,7 +2315,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -1970,16 +2336,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe5244a20_iterator = 0, id0xffffffffe5244a20_hoist = listeners.length;
-                id0xffffffffe5244a20_iterator < id0xffffffffe5244a20_hoist;
-                id0xffffffffe5244a20_iterator++) {
-                    var listener = listeners[id0xffffffffe5244a20_iterator];
+                for (var id0x0000000029118ab0_iterator = 0, id0x0000000029118ab0_hoist = listeners.length;
+                id0x0000000029118ab0_iterator < id0x0000000029118ab0_hoist;
+                id0x0000000029118ab0_iterator++) {
+                    var listener = listeners[id0x0000000029118ab0_iterator];
                     //from
                     listener.onExit("sidebar_hidden");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_show_Regexp_id0xfffffffff1e69000)) {
+                if (e.match(sidebar_show_Regexp_id0x00000000290c09d0)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -1994,7 +2360,7 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("sidebar_hidden", "sidebar_visible", "sidebar_hidden_sidebar.show_24");
+                                listener.onTransition("sidebar_hidden", "sidebar_visible", "sidebar_hidden_sidebar.show_28");
                             }
                             //enter states
                             sidebar_visible.enterAction();
@@ -2020,7 +2386,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -2041,16 +2407,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xfffffffff026b920_iterator = 0, id0xfffffffff026b920_hoist = listeners.length;
-                id0xfffffffff026b920_iterator < id0xfffffffff026b920_hoist;
-                id0xfffffffff026b920_iterator++) {
-                    var listener = listeners[id0xfffffffff026b920_iterator];
+                for (var id0x00000000291169e0_iterator = 0, id0x00000000291169e0_hoist = listeners.length;
+                id0x00000000291169e0_iterator < id0x00000000291169e0_hoist;
+                id0x00000000291169e0_iterator++) {
+                    var listener = listeners[id0x00000000291169e0_iterator];
                     //from
                     listener.onExit("sidebar_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_hide_Regexp_id0xfffffffff1e69590)) {
+                if (e.match(sidebar_hide_Regexp_id0x00000000291a1440)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -2065,7 +2431,7 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("sidebar_visible", "sidebar_hidden", "sidebar_visible_sidebar.hide_25");
+                                listener.onTransition("sidebar_visible", "sidebar_hidden", "sidebar_visible_sidebar.hide_29");
                             }
                             //enter states
                             sidebar_hidden.enterAction();
@@ -2103,10 +2469,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe51fb6b0_iterator = 0, id0xffffffffe51fb6b0_hoist = listeners.length;
-                id0xffffffffe51fb6b0_iterator < id0xffffffffe51fb6b0_hoist;
-                id0xffffffffe51fb6b0_iterator++) {
-                    var listener = listeners[id0xffffffffe51fb6b0_iterator];
+                for (var id0x0000000029117900_iterator = 0, id0x0000000029117900_hoist = listeners.length;
+                id0x0000000029117900_iterator < id0x0000000029117900_hoist;
+                id0x0000000029117900_iterator++) {
+                    var listener = listeners[id0x0000000029117900_iterator];
                     //from
                     listener.onExit("logger");
                 }
@@ -2128,7 +2494,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -2150,10 +2516,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffe51fb760_iterator = 0, id0xffffffffe51fb760_hoist = listeners.length;
-                id0xffffffffe51fb760_iterator < id0xffffffffe51fb760_hoist;
-                id0xffffffffe51fb760_iterator++) {
-                    var listener = listeners[id0xffffffffe51fb760_iterator];
+                for (var id0x00000000291179b0_iterator = 0, id0x00000000291179b0_hoist = listeners.length;
+                id0x00000000291179b0_iterator < id0x00000000291179b0_hoist;
+                id0x00000000291179b0_iterator++) {
+                    var listener = listeners[id0x00000000291179b0_iterator];
                     //from
                     listener.onExit("logger_initial");
                 }
@@ -2173,7 +2539,7 @@ function StatechartExecutionContext() {
                         id0x0000000000000000_iterator++) {
                             var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "l2", "logger_initial_$default_26");
+                            listener.onTransition("", "l2", "logger_initial_$default_30");
                         }
                         //enter states
                         l2.enterAction();
@@ -2201,7 +2567,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0xfffffffff6d729b0
+                scxml_id0x0000000027ec41c0
                         ,
                     main
                         ,
@@ -2222,10 +2588,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0xffffffffdcb482a0_iterator = 0, id0xffffffffdcb482a0_hoist = listeners.length;
-                id0xffffffffdcb482a0_iterator < id0xffffffffdcb482a0_hoist;
-                id0xffffffffdcb482a0_iterator++) {
-                    var listener = listeners[id0xffffffffdcb482a0_iterator];
+                for (var id0x0000000029115340_iterator = 0, id0x0000000029115340_hoist = listeners.length;
+                id0x0000000029115340_iterator < id0x0000000029115340_hoist;
+                id0x0000000029115340_iterator++) {
+                    var listener = listeners[id0x0000000029115340_iterator];
                     //from
                     listener.onExit("l2");
                 }
@@ -2245,7 +2611,7 @@ function StatechartExecutionContext() {
                         id0x0000000000000000_iterator++) {
                             var listener = listeners[id0x0000000000000000_iterator];
                             //transition id
-                            listener.onTransition("", "l2", "l2_*_27");
+                            listener.onTransition("", "l2", "l2_*_31");
                         }
                         //enter states
                         l2.enterAction();
@@ -2257,7 +2623,7 @@ function StatechartExecutionContext() {
                 return logger['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(star_Regexp_id0xfffffffff1e698a0)) {
+                if (e.match(star_Regexp_id0x00000000291a03d0)) {
                     return {
                         preemptedBasicStates: {
                             l2: true
@@ -2272,7 +2638,7 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("l2", "l2", "l2_*_27");
+                                listener.onTransition("l2", "l2", "l2_*_31");
                             }
                             //enter states
                             l2.enterAction();
@@ -2302,7 +2668,10 @@ function StatechartExecutionContext() {
         results_initial: results_initial,
         results_hidden: results_hidden,
         results_visible_initial: results_visible_initial,
-        results_kwic: results_kwic,
+        results_kwic_initial: results_kwic_initial,
+        selected_h: selected_h,
+        kwic_word_selected: kwic_word_selected,
+        kwic_word_not_selected: kwic_word_not_selected,
         results_lemgram: results_lemgram,
         results_stats: results_stats,
         sidebar_initial: sidebar_initial,
@@ -2402,6 +2771,24 @@ function StatechartExecutionContext() {
             return undefined;
         }
     }
+    this["word.deselect"] = function(data) {
+        if (isInStableState && !destroyed) {
+            runToCompletion(
+            //TODO: conditionally wrap in quotes for enumerated pattern
+            "word.deselect", data, false)
+        } else {
+            return undefined;
+        }
+    }
+    this["word.select"] = function(data) {
+        if (isInStableState && !destroyed) {
+            runToCompletion(
+            //TODO: conditionally wrap in quotes for enumerated pattern
+            "word.select", data, false)
+        } else {
+            return undefined;
+        }
+    }
     this["sidebar.show"] = function(data) {
         if (isInStableState && !destroyed) {
             runToCompletion(
@@ -2424,12 +2811,12 @@ function StatechartExecutionContext() {
 
     function lemgramSearch(lemgram) {
         $.log("lemgramSearch", lemgram);
+        simpleSearch.setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, "")).clear();
         lemgramProxy.relationsSearch(lemgram);
         searchProxy.relatedWordSearch(lemgram);
         statsProxy.makeRequest(lemgram);
         var cqp = lemgramProxy.lemgramSearch(lemgram);
         $("#cqp_string").val(cqp);
-        $("#simple_text").val("");
     }
     //initialization method
     this.initialize = function() {

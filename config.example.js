@@ -5,6 +5,9 @@
 
 var settings = {};
 settings.corpora = {};
+settings.defaultContext = {
+	"1 sentence" : language.oneSentence
+};
 
 /*
  * ATTRIBUTES
@@ -96,8 +99,8 @@ var within = {
 };
 
 var context = {
-	"defaultStruct" : {
-		"1 sentence" : language.oneSentence
+	"defaultAligned" : {
+		"1 link" : "1 link"
 	}
 };
 
@@ -141,7 +144,6 @@ settings.corpora.dn1987 = {
 	languages : {
 		DN1987 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -166,7 +168,6 @@ settings.corpora.gp1994 = {
 	languages : {
 		GP1994 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -191,7 +192,6 @@ settings.corpora.gp2001 = {
 	languages : {
 		GP2001 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -216,7 +216,6 @@ settings.corpora.gp2002 = {
 	languages : {
 		GP2002 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -241,7 +240,6 @@ settings.corpora.gp2003 = {
 	languages : {
 		GP2003 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -266,7 +264,6 @@ settings.corpora.gp2004 = {
 	languages : {
 		GP2004 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -291,7 +288,6 @@ settings.corpora.gp2005 = {
 	languages : {
 		GP2005 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -316,7 +312,6 @@ settings.corpora.gp2006 = {
 	languages : {
 		GP2006 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -341,7 +336,6 @@ settings.corpora.gp2007 = {
 	languages : {
 		GP2007 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -366,7 +360,6 @@ settings.corpora.gp2008 = {
 	languages : {
 		GP2008 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -391,7 +384,6 @@ settings.corpora.gp2009 = {
 	languages : {
 		GP2009 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -417,7 +409,6 @@ settings.corpora.gp2d = {
 	languages : {
 		GP2D : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -441,7 +432,6 @@ settings.corpora.ordat = {
 	languages : {
 		ORDAT : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -466,7 +456,6 @@ settings.corpora.fof = {
 	languages : {
 		FOF : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -490,7 +479,6 @@ settings.corpora.press65 = {
 	languages : {
 		PRESS65 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -517,7 +505,6 @@ settings.corpora.press76 = {
 	languages : {
 		PRESS76 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -542,7 +529,6 @@ settings.corpora.press95 = {
 	languages : {
 		PRESS95 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -568,7 +554,6 @@ settings.corpora.press96 = {
 	languages : {
 		PRESS96 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -594,7 +579,6 @@ settings.corpora.press97 = {
 	languages : {
 		PRESS97 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -620,7 +604,6 @@ settings.corpora.press98 = {
 	languages : {
 		PRESS98 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -646,7 +629,6 @@ settings.corpora.suc2 = {
 	languages : {
 		SUC2 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -670,7 +652,6 @@ settings.corpora.storsuc = {
 	languages : {
 		STORSUC : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -690,38 +671,40 @@ settings.corpora.storsuc = {
 };
 
 //settings.corpora.saltnld = {
-//	title: "SALT-NLD", 
-//	languages : { 
-//		SALTNLD_SWE: "svenska", 
-//		SALTNLD_NLD: "nederländska"
-//	}, 
-//	context: {
-//		"1 link": "1 länk", "5 words": "5 ord", "10 words": "10 ord"
-//	}, 
-//	within: {
-//		"link": "meningspar"
-//	}, 
-//	attributes: {
-//		pos: attrs.pos, 
-//		msd: attrs.msd, 
-//		lemma: attrs.baseform,
-//		lex: attrs.lemgram, 
-//		saldo: attrs.saldo, 
-//		dephead: attrs.dephead, 
-//		deprel: attrs.deprel, 
-//		ref: attrs.ref, 
-//		link: attrs.link, 
-//		text: attrs.text
-//	},
-//	struct_attributes : {}
-//};
+settings.corpora.saltnld_swe = {
+	title: "SALT-NLD", 
+	languages : { 
+		SALTNLD_SWE: "svenska", 
+		SALTNLD_NLD: "nederländska"
+	}, 
+	context: context.defaultAligned, 
+	within: {
+		"link": "meningspar"
+	}, 
+	attributes: {
+		pos: attrs.pos, 
+		msd: attrs.msd, 
+		lemma: attrs.baseform,
+		lex: attrs.lemgram, 
+		saldo: attrs.saldo, 
+		dephead: attrs.dephead, 
+		deprel: attrs.deprel, 
+		ref: attrs.ref, 
+		link: attrs.link, 
+		text: attrs.text
+	},
+	struct_attributes : {
+//		text_origlang : {
+//			label : "original_language"
+//		}
+	}
+};
 
 settings.corpora.parole = {
 	title : "PAROLE",
 	languages : {
 		PAROLE : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -745,7 +728,6 @@ settings.corpora.lt = {
 	languages : {
 		LT : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -773,7 +755,6 @@ settings.corpora.snp7879 = {
 	languages : {
 		SNP7879 : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -795,7 +776,6 @@ settings.corpora.vivill = {
 	languages : {
 		VIVILL : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -912,7 +892,6 @@ settings.corpora.romi = {
 	languages : {
 		ROMI : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -938,7 +917,6 @@ settings.corpora.romii = {
 	languages : {
 		ROMII : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -963,7 +941,6 @@ settings.corpora.romg = {
 	languages : {
 		ROMG : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -990,7 +967,6 @@ settings.corpora.strindbergromaner = {
 	languages : {
 		STRINDBERGROMANER : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -1013,12 +989,67 @@ settings.corpora.strindbergromaner = {
 	}
 };
 
+settings.corpora.strindbergbrev = {
+	title : "Strindbergs brev",
+	languages : {
+		STRINDBERGBREV : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_recipient : {label : "mottagare"},
+		text_year : {label : "year"},
+		text_month : {label : "month"},
+		text_day : {label : "day"},
+		text_volume : {label : "volume"}
+	}
+};
+
+settings.corpora.sfs = {
+	title : "Svensk författningssamling 1978-1981",
+	languages : {
+		SFS : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_ref : {label : "referensnummer"},
+		text_year : {label : "year"}
+	}
+};
+
 settings.corpora.psalmboken = {
 	title : "Psalmboken (1937)",
 	languages : {
 		PSALMBOKEN : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -1043,7 +1074,6 @@ settings.corpora.drama = {
 	languages : {
 		DRAMA : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -1065,7 +1095,6 @@ settings.corpora.wikipedia = {
 	languages : {
 		WIKIPEDIA : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -1090,7 +1119,6 @@ settings.corpora.astranova = {
 	languages : {
 		ASTRANOVA : "svenska"
 	},
-	context : context.defaultStruct,
 	within : within.defaultStruct,
 	
 	attributes : {
@@ -1115,7 +1143,7 @@ settings.corpora.astranova = {
  * MISC
  */
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp3.cgi";
 
 settings.arg_types = {
 	"word" : String,

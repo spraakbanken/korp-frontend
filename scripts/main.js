@@ -35,7 +35,7 @@ $(function(){
 				var currentId = $("#result-container").children("div:visible").attr("id");
 				if(currentId == null) return;
 				var selected = currentId.split("-")[1];
-				$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
+				$("#rightStatsTable").css("max-width", $("#content").innerWidth() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 50));
 				$.sm.send("resultstab." + selected);
 			} 
 		});
@@ -130,17 +130,17 @@ $(function(){
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		$(document).keypress(function(event) {
-		    switch(event.keyCode) {
+		$(document).keyup(function(event) {
+		    switch(event.which) {
 				case 38: //up
 					kwicResults.selectUp();
 					return false;
 				case 39: // right
 					kwicResults.selectNext();
-					break;
+					return false;
 				case 37: //left
 					kwicResults.selectPrev();
-					break;
+					return false;
 				case 40: // down
 					kwicResults.selectDown();
 					return false;

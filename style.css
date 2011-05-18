@@ -20,6 +20,10 @@ sup {
 	line-height : 0px;	
 }
 
+image {
+	border : 0px;	
+}
+
 a {
 	text-decoration: none;
 }
@@ -675,7 +679,6 @@ table {
 }
 
 #results-stats {
-	overflow-x: scroll;
 }
 
 #results-stats table {
