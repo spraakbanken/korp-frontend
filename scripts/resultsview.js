@@ -10,7 +10,6 @@ var BaseResults = {
 	},
 	
 	renderResult : function(data) {
-		$.log("data.error", data.ERROR);
 		if(data.ERROR) {
 			this.resultError(data);
 			return false;
@@ -449,7 +448,7 @@ var LemgramResults = {
 
 formatOutput = function(x) { // Use "," instead of "." if Swedish
 	return x.replace(".",",");
-}
+};
 
 function newDataInPie(dataName, horizontalDiagram) {
 	var dataItems = new Array();

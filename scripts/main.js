@@ -1,3 +1,5 @@
+if(window.console == null) window.console = {"log" : $.noop};
+
 
 // onDOMReady
 $(function(){
