@@ -3,6 +3,8 @@ if(window.console == null) window.console = {"log" : $.noop};
 
 // onDOMReady
 $(function(){
+	$.revision = parseInt("$Rev$".split(" ")[1]);
+	$("#revision").text(revision);
 	$.ajaxSetup({ 
 		dataType: "jsonp",
 		traditional: true
