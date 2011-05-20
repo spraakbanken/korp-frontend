@@ -4,7 +4,7 @@ if(window.console == null) window.console = {"log" : $.noop};
 // onDOMReady
 $(function(){
 	$.revision = parseInt("$Rev$".split(" ")[1]);
-	$("#revision").text(revision);
+	$("#revision").text($.revision);
 	$.ajaxSetup({ 
 		dataType: "jsonp",
 		traditional: true
@@ -28,16 +28,16 @@ $(function(){
 
 		$("#search-tab").tabs({
 			event : "change",
-			show : function() {
-				var selected = $("#search-tab").children("div:visible").attr("id").split("-")[1];
+			show : function(event, ui) {
+				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
 		});
 		$("#result-container").tabs({
 			event : "change",
-			show : function() {
-				var currentId = $("#result-container").children("div:visible").attr("id");
-				if(currentId == null) return;
+			show : function(event, ui) {
+				var currentId = $(ui.panel).attr("id");
+//				if(currentId == null) return;
 				var selected = currentId.split("-")[1];
 				$("#rightStatsTable").css("max-width", $("#content").innerWidth() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 50));
 				$.sm.send("resultstab." + selected);
@@ -82,9 +82,17 @@ $(function(){
 			}
 			
 			if(e.getState("display") == "about") {
-				$.sm.send("about.open");
-			} else if(e.getState("display") != "about" && prevFragment["display"] != null) {
-				$.sm.send("about.close");
+				$("#about_content").dialog({
+					beforeClose : function() {
+						$.bbq.removeState("display");
+						return false;
+					}
+				}).css("opacity", 0);
+				$("#about_content").fadeTo(400,1);
+			} else  {
+				$("#about_content").closest(".ui-dialog").fadeTo(400, 0, function() {
+					$("#about_content").dialog("destroy");
+				});
 			}
 			
 			var search = e.getState("search");
@@ -140,7 +148,7 @@ $(function(){
 			$(this).addClass("lang_selected");
 			util.localize();
 		});
-		$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
+		$($.format("[data-lang=%s]", settings.defaultLanguage)).click();
 		
 		// move out sidebar
 		hideSidebar();
@@ -171,6 +179,7 @@ $(function(){
 		resetQuery();
 		
 		$(window).trigger("hashchange");
+		$("body").fadeTo(400, 1);
 		
 	});
 });

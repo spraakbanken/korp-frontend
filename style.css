@@ -12,6 +12,17 @@ ul, ol {
 	font-family : inherit; 
 }
 
+/* .ui-dialog .ui-resizable-se { */
+/*     bottom: -2px; */
+/*     height: 14px; */
+/*     right: 3px; */
+/*     width: 14px; */
+/* } */
+
+/* .ui-dialog { */
+/* 	padding-top : 8px;	 */
+/* } */
+
 sup {
 	line-height : 0px;	
 }
@@ -720,15 +731,7 @@ span.absStat {
 	text-align : center;
 }	
 
-#about_content {
-	background-color: #fff;
-	position : absolute;
-	right: 8px;
-	left:8px;
-	top : 79px;
-	bottom : 8px;
-	border : 1px solid #000;
-	
-	padding : 20px;
-	
+#about_content ul {
+	padding-left : 10px;
+	margin-top : 8px;
 }

@@ -72,7 +72,7 @@
 		
 		<script type="text/javascript" src="lib/jstorage.js"></script>
 	</head>
-  	<body>
+  	<body style="opacity : 0">
   		<div id="header">
   			<a href=""><img src="img/korplogo.png" /></a>
   			<div id="header_right">
@@ -141,12 +141,12 @@
 			</div>
 		</div>
 		
-		<div id="about_content" style="display : none;">
-			
+		<div id="about_content" title="Om Korp" style="display : none;">
 			<div id="about_header">
-				<h1>Korp</h1>beta revision $Rev$ 
+				<b>Korp version &#946; revision <span id="revision"></span></b>
+				 
 			</div>
-			<div id="about_body" title="Om Korp"> 
+			<div id="about_body" > 
 				<p>
 				Korp är Språkbanken i Göteborgs 
 				<a href="#corpus=wikipedia&page=0&search=lemgram|konkordans..nn.1" onclick="$.sm.send('about.close')">konkordansverktyg</a>. 
@@ -154,21 +154,26 @@
 				</p>
 				
 				<div>
-					<h2>
+					<b>
 						Projektledning
-					</h2>
+					</b>
 					<ul>
-						<li>Lars Borin</li>
-						<li>Markus Forsberg</li>
+						<li>
+						    <a href="http://språkbanken.gu.se/eng/personal/lars">Lars Borin</a></li>
+						<li>
+						    <a href="http://språkbanken.gu.se/eng/personal/markus">Markus Forsberg</a></li>
 					</ul>
-					<h2>
+					<b>
 						Utvecklare
-					</h2>
+					</b>
 					<ul>
-						<li>Johan Roxendal</li>
-						<li>Martin Hammarstedt</li>
-						<li>Jonatan Uppström</li>
-						<li>Olof Olsson</li>
+						<li><a href="http://språkbanken.gu.se/eng/personal/johanrox">Johan Roxendal</a></li>
+						<li>
+						    <a href="http://språkbanken.gu.se/eng/personal/martin">Martin Hammarstedt</a></li>
+						<li>
+						    <a href="http://språkbanken.gu.se/eng/personal/jonupp">Jonatan Uppström</a></li>
+						<li>
+						    <a href="http://språkbanken.gu.se/eng/personal/olof">Olof Olsson</a></li>
 					</ul>
 				</div>
 			</div>

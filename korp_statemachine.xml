@@ -28,7 +28,7 @@
 <!--     </datamodel> -->
     
     <state id="init">
-        <transition target="korp">
+        <transition target="main">
             <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
@@ -43,16 +43,10 @@
         </transition>
     </state>
     
-    <state id="korp" initial="main">
     <state id="main" initial="p">
-        <transition event="about.open" target="about" />
         <onentry>
             <log label="entered main" />
         </onentry>
-        
-        <history id="main_h" type="deep">
-            <transition target="p" />
-        </history>
         
         <parallel id="p" initial="search results sidebar logger">
         
@@ -76,6 +70,7 @@
                             $("#simple_text").get(0).blur();
                             simpleSearch.resetView();
                             kwicProxy.makeRequest();
+                            
                         </script>
                     </transition>
                     
@@ -153,7 +148,7 @@
                         </onentry>
                         
                         <history id="selected_h">
-                            <transition target="kwic_word_selected" />
+                            <transition target="kwic_word_not_selected" />
                         </history>
                         
                         <state id="kwic_word_selected">
@@ -217,21 +212,5 @@
             </state>
             
         </parallel>
-    </state>
-    
-    <state id="about">
-        <onentry>
-            <script>
-                $("#about_content").show("fade");
-            </script>
-        </onentry>
-        <transition event="about.close" target="main_h" />
-        
-        <onexit>
-            <script>
-                $("#about_content").hide("fade");
-            </script>
-        </onexit>
-    </state>
     </state> 
 </scxml> 

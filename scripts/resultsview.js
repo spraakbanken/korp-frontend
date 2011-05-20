@@ -98,9 +98,9 @@ var KWICResults = {
 		else {
 			$("#results-kwic").hide();
 		}
-		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
-			showSidebar();
-		}
+//		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
+//			showSidebar();
+//		}
 		$.log("corpus_results");
 		$("#results-kwic").show();
 		$.each(data.kwic, function(i,sentence) { 
@@ -397,6 +397,8 @@ var LemgramResults = {
 				rel : $target.data("rel"),
 				depextra : $target.data("depextra"),
 				corpus : $target.data("corpus").split(",")
+//				context : "1 sentence",
+//				defaultContext : "1 sentence"
 			},
 			success: function(data) {
 				$.log("example success", data);
