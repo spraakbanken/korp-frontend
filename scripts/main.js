@@ -78,12 +78,18 @@ $(function(){
 				didSelectCorpus();
 				simpleSearch.enable();
 			}
+			
+			if(e.getState("display") == "about") {
+				$.sm.send("about.open");
+			} else if(e.getState("display") != "about" && prevFragment["display"] != null) {
+				$.sm.send("about.close");
+			}
+			
 			var search = e.getState("search");
 			if(search == null || search === prevFragment["search"]) {
 				$.bbq.prevFragment = $.deparam.fragment();
 				return;
 			}
-			
 			
 			var type = search.split("|")[0];
 			var value = search.split("|")[1];
@@ -107,7 +113,8 @@ $(function(){
 				$.sm.send("submit.kwic", value);
 				break;
 			}
-//			});
+			
+			
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
 		
@@ -115,7 +122,17 @@ $(function(){
 			util.SelectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
-//	setup language
+		
+		//setup about link
+		$("#about").click(function() {
+			if($.bbq.getState("display") == null) {
+				$.bbq.pushState({display : "about"});
+			} else {
+				$.bbq.removeState("display");
+			}
+		});
+		
+		// setup language
 		$("#languages").children().click(function(){
 			$("#languages").children().removeClass("lang_selected");
 			$(this).addClass("lang_selected");
@@ -123,16 +140,15 @@ $(function(){
 		});
 		$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
 		
-//	move out sidebar
+		// move out sidebar
 		hideSidebar();
 		
 		$("#simple_text")[0].focus();
-//		util.parseQuery();
 		
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		$(document).keyup(function(event) {
+		$(document).keydown(function(event) {
 		    switch(event.which) {
 				case 38: //up
 					kwicResults.selectUp();
@@ -149,7 +165,7 @@ $(function(){
 		    }
 		    
 		});
-
+		
 		resetQuery();
 		
 		$(window).trigger("hashchange");

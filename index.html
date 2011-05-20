@@ -21,19 +21,19 @@
 		<script type="text/javascript" src="lib/scxml/require/xml.js"></script>
 		<script type="text/javascript" src="lib/scxml/require/text.js"></script>
 		
-		<script type="text/javascript" src="lib/ui/jquery.ui.core.js" ></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.widget.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.position.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.mouse.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.draggable.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.resizable.js"></script>
-		
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.core.min.js" ></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.widget.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.position.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.mouse.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.draggable.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.resizable.min.js"></script>
+
 		<script type="text/javascript" src="lib/ui/jquery.ui.autocomplete.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.dialog.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.ui.button.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.effects.core.js"></script>
-		<script type="text/javascript" src="lib/ui/jquery.effects.slide.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.dialog.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.tabs.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.ui.button.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.effects.core.min.js"></script>
+		<script type="text/javascript" src="lib/ui/minified/jquery.effects.slide.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.ui.preloader.min.js"></script>
 		
 		<script type="text/javascript" src="lib/jquery.json-2.2.min.js"></script>
@@ -52,6 +52,7 @@
 			var language = $.localize.data.locale;
 			if(!language)
 				$.error("Localization failed");
+			
 		</script>
 		<script type="text/javascript" src="config.js"></script>
 		
@@ -73,14 +74,15 @@
 	</head>
   	<body>
   		<div id="header">
-  			<a href="" onclick="location.hash=''"><img src="img/korplogo.png" /></a>
-  			<ul id="languages">
-  				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
-  				<li rel="localize[english]" data-lang="en">Engelska</li>
-<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
-  			</ul>
-  			
-<!--   			<a href="javascript:">About Korp</a> -->
+  			<a href=""><img src="img/korplogo.png" /></a>
+  			<div id="header_right">
+			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
+	  			<ul id="languages">
+	  				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
+	  				<li rel="localize[english]" data-lang="en">Engelska</li>
+	<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
+	  			</ul>
+  			</div>
   		</div>
 		
   		<div id="corpusbox"></div>
@@ -135,6 +137,40 @@
 						<div id="selected_word"></div>
 					</div>
 					<div style="clear : both; float : none;"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="about_content" style="display : none;">
+			
+			<div id="about_header">
+				<h1>Om Korp</h1>
+				
+			</div>
+			<div id="about_body">
+				<p>
+				Korp är Språkbanken i Göteborgs 
+				<a href="#corpus=wikipedia&page=0&search=lemgram|konkordans..nn.1" onclick="$.sm.send('about.close')">konkordansverktyg</a>. 
+				För mer information, kommentarer eller förslag, kontakta <a href="mailto:sb-info@svenska.gu.se">Språkbanken</a>.
+				</p>
+				
+				<div>
+					<h2>
+						Projektledning
+					</h2>
+					<ul>
+						<li>Lars Borin</li>
+						<li>Markus Forsberg</li>
+					</ul>
+					<h2>
+						Utvecklare
+					</h2>
+					<ul>
+						<li>Johan Roxendal</li>
+						<li>Martin Hammarstedt</li>
+						<li>Jonatan Uppström</li>
+						<li>Olof Olsson</li>
+					</ul>
 				</div>
 			</div>
 		</div>
