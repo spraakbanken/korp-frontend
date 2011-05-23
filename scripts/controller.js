@@ -82,7 +82,7 @@
 								inFiles:[scxmlSrc],
 								//debug:true,
 								backend:"state",
-								beautify:true,
+								beautify:false,
 								verbose:false,
 								log:false,
 								ie:true

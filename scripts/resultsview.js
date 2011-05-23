@@ -75,7 +75,7 @@ var KWICResults = {
 	},
 	
 	onKeydown : function(event) {
-		if(util.SelectionManager.hasSelected == null || $(":text, textarea").is(":focus")) return;
+		if(!util.SelectionManager.hasSelected() || $(":text, textarea").is(":focus")) return;
 	    switch(event.which) {
 			case 38: //up
 				kwicResults.selectUp();
