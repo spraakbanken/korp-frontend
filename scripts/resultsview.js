@@ -487,6 +487,7 @@ function newDataInPie(dataName, horizontalDiagram) {
 	var corpusArray = [];
 	
 		
+	statsResults["lastDataName"] = dataName;
 	
 	
 	if (horizontalDiagram) { // hits/corpus
@@ -521,12 +522,59 @@ function newDataInPie(dataName, horizontalDiagram) {
 		else
 			topheader = "Träffar för <i>" + dataName + "</i>";
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))//util.getLocaleString("example_dialog_header")))
-							.appendTo("#results-lemgram").append('<div id="chartFrame" style="height:260px;"></div><p style="text-align:center">Träffar i absoluta tal.</p>')
+							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)">Absoluta tal</a> | <a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)">Relativa tal</a></p><div id="chartFrame" style="height:260px;"></div><p id="hitsDescription" style="text-align:center">Träffar i absoluta tal.</p>')
 							.dialog({
 								width : 300,
 								height : 400
 							});
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
+		
+		$(".statsAbsRelNumbers").click(function() {
+			var typestring;
+			if ($(this).attr("id") == "statsAbsNumbers")
+				typestring = "absolute";
+			else
+				typestring = "relative";
+				
+			var dataItems = new Array();
+			var dataName = statsResults["lastDataName"];
+			
+			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+				if(dataName == "SIGMA_ALL") {
+					// ∑ selected
+					var totfreq = 0;
+					$.each(obj[typestring], function(wordform, freq) {
+						if (typestring == "absolute")
+							var numFreq = parseInt(freq);
+						else
+							var numFreq = parseFloat(freq);
+						if(numFreq)
+							totfreq += numFreq;
+					});
+					dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + totfreq, "shape_id":"sigma_all"});
+				} else {
+					// Individual wordform selected
+					
+					if(typestring == "absolute")
+						var freq = parseInt(obj[typestring][dataName]);
+					else
+						var freq = parseFloat(obj[typestring][dataName]);
+					if (freq) {
+						dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + freq, "shape_id":dataName});
+					} else {
+						dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
+					}
+				} 
+			});
+			stats2Instance.pie_widget("newData", dataItems);
+			
+			if(typestring == "absolute")
+				$("#hitsDescription").text("Träffar i absoluta tal.");
+			else
+				$("#hitsDescription").text("Träffar i relativa tal.");
+		});
+		
+		
 		
 	} else { // hits/wordform
 		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
@@ -597,6 +645,8 @@ var StatsResults = {
 			this.showNoResults();
 			return;
 		}
+		
+		this["savedWordArray"] = wordArray;
 		
 		//$("#results-wraper").show();
 		//$("#statTableTmpl").tmpl(data["corpora"], {wordArray : wordArray, corpusArray : corpusArray})
@@ -672,7 +722,7 @@ var StatsResults = {
 		
 		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i>Samtliga</i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(/ /g,"&nbsp;") + '<br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
+			theHTML += '<th style="height:60px"><span class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(/ /g,"&nbsp;") + '</span><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
 		});
 		var c = 0;
 		var totalForAllWordforms = 0;
@@ -716,7 +766,38 @@ var StatsResults = {
 		$("#rightStatsTable").append(theHTML);
 
 		
+		$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
+		
 		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
+		
+		
+		$(".export_csv").click(function() {
+			var datatype;
+			if ($(this).attr('id') == "export_csv_abs")
+				datatype = "absolute";
+			else
+				datatype = "relative";
+				
+			// Generate CSV from the data
+			var output = "corpus;";
+			$.each(statsResults.savedWordArray, function(key, aword) {
+				output += aword + ";";
+			});
+			output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
+			
+			$.each(statsResults.savedData["corpora"], function(key, acorpus) {
+				output += settings.corpora[key.toLowerCase()]["title"] + ";";
+				$.each(statsResults.savedWordArray, function(wkey, aword) {
+					var amount = acorpus[datatype][aword];
+					if(amount)
+						output += amount + ";";
+					else
+						output += "0;";
+				});
+				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
+			});
+			window.open( "data:text/csv;charset=utf-8," + escape(output));
+		});
 		
 		
 	
@@ -743,6 +824,14 @@ var StatsResults = {
 				} else {
 					return "relativ frekvens (per en miljon ord):<br/><b>0</b><br>absolut frekvens:<br/><b>0</b>";
 				}
+			}
+		});
+		
+		$(".corpusTitleHeader").tooltip({
+			delay : 80,
+			bodyHandler : function() {
+				//return "test";
+				return settings.corpora[$(this).attr('id').split("__")[1].toLowerCase()]["title"];
 			}
 		});
 
