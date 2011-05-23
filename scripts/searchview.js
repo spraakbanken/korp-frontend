@@ -39,6 +39,77 @@ var BaseSearch = {
 view.BaseSearch = new Class(BaseSearch);
 delete BaseSearch;
 
+$.fn.korp_autocomplete = function(selectCallback) {
+	var selector = $(this);
+	selector.preloader({
+		timeout: 500,
+		position: {
+			my: "right center",
+			at: "right center",
+			offset: "-1 2",
+			collision: "none"
+		}
+	})
+	.autocomplete({
+		html : true,
+		source: function( request, response ) {
+			
+			$.ajax({
+				url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + request.term,
+				success : function(lemArray) {
+					$.log("autocomplete success");
+					lemArray.sort(function(first, second){
+						var match1 = util.splitLemgram(first);
+						var match2 = util.splitLemgram(second);
+						if(match1[0] == match2[0])
+							return parseInt(match1[2]) - parseInt(match2[2]); 
+						return first.length - second.length;
+					});
+					
+					var labelArray = util.lemgramArraytoString(lemArray);
+					var listItems = $.map(lemArray, function(item, i) {
+						return {
+							label : labelArray[i],
+							value : item,
+							input : request.term
+						};
+					});
+					
+					selector.data("dataArray", listItems);
+					response(listItems);
+					if($( ".ui-autocomplete" ).height() > 300) {
+						$( ".ui-autocomplete" ).addClass("ui-autocomplete-tall");
+					}
+					$("#autocomplete_header").remove();	
+					$(".ui-autocomplete")
+					.prepend("<li id='autocomplete_header' rel='localize[autocomplete_header]'/>")
+					.find("li").first().text(util.getLocaleString("autocomplete_header")).css("font-weight", "bold").css("font-size", 10);
+					
+					selector.preloader("hide");
+				}
+				
+			}).complete(function(jqxhr, status) {
+				$.log("complete", jqxhr, status);
+			});
+		},
+		search: function() {
+			selector.preloader("show");
+		},
+		minLength: 1,
+		select: function( event, ui ) {
+			event.preventDefault();
+			var selectedItem = ui.item.value;
+			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
+			
+			$.proxy(selectCallback, selector)(selectedItem);
+		},
+		focus : function() {
+			return false;
+		}
+	});
+	return selector;
+};
+
 var SimpleSearch = {
 	Extends : view.BaseSearch,
 	initialize : function(mainDivId) {
@@ -49,74 +120,11 @@ var SimpleSearch = {
 		this.onSimpleChange();
 		$("#similar_lemgrams").hide();
 		
-		$("#simple_text").preloader({
-			timeout: 500,
-			position: {
-				my: "right center",
-				at: "right center",
-				offset: "-1 2",
-				collision: "none"
-			}
-		})
-		.autocomplete({
-			html : true,
-			source: function( request, response ) {
-				$.ajax({
-					url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + request.term,
-					success : function(lemArray) {
-						$.log("autocomplete success");
-						lemArray.sort(function(first, second){
-							var match1 = util.splitLemgram(first);
-							var match2 = util.splitLemgram(second);
-							if(match1[0] == match2[0])
-								return parseInt(match1[2]) - parseInt(match2[2]); 
-							return first.length - second.length;
-						});
-						
-						var labelArray = util.lemgramArraytoString(lemArray);
-						var listItems = $.map(lemArray, function(item, i) {
-							return {
-								label : labelArray[i],
-								value : item,
-								input : request.term
-							};
-						});
-						
-						$( "#simple_text" ).data("dataArray", listItems);
-						response(listItems);
-						if($( ".ui-autocomplete" ).height() > 300) {
-							$( ".ui-autocomplete" ).addClass("ui-autocomplete-tall");
-						}
-						$("#autocomplete_header").remove();	
-						$(".ui-autocomplete")
-						.prepend("<li id='autocomplete_header' rel='localize[autocomplete_header]'/>")
-						.find("li").first().text(util.getLocaleString("autocomplete_header")).css("font-weight", "bold").css("font-size", 10);
-						
-						$("#simple_text").preloader("hide");
-					}
-					
-				}).complete(function(jqxhr, status) {
-					$.log("complete", jqxhr, status);
-				});
-			},
-			search: function() {
-				$("#simple_text").preloader("show");
-			},
-			minLength: 1,
-			select: function( event, ui ) {
-				event.preventDefault();
-				var selectedItem = ui.item.value;
-				$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
-				
-				self.selectLemgram(selectedItem);
-			},
-			focus : function() {
-				return false;
-			}
-		});
+		$("#simple_text").korp_autocomplete($.proxy(this.selectLemgram, this));
 		
 		
-		this.$main.bind("keydown.autocomplete", function(event) {
+		$("#simple_text").bind("keydown.autocomplete", function(event) {
+			$.log("keydown.autocomplete");
 			var keyCode = $.ui.keyCode;
 			if(!self.isVisible()) return;
 				
@@ -269,11 +277,13 @@ var ExtendedSearch = {
 	},
 	
 	didSelectArgtype : function() {
+		var self = this;
 		// change input widget
 		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
 		$(this).siblings(".arg_value").remove();
 		
 		var data = $(this).find(":selected").data("dataProvider");
+		$.log("didSelectArgtype ", data);
 		var arg_value;
 		switch(data.displayType) {
 		case "select":
@@ -283,6 +293,22 @@ var ExtendedSearch = {
 			});
 			break;
 		case "autocomplete":
+			$.log("displayType autocomplete");
+			arg_value = $("<input type='text'/>").korp_autocomplete(function(lemgram) {
+				$.log("extended lemgram", lemgram, $(this));
+				$(this).attr("placeholder", util.lemgramToString(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
+			}).bind("keydown.autocomplete", function(event) {
+				$.log("keydown.autocomplete");
+				var keyCode = $.ui.keyCode;
+//				if(!self.isVisible()) return;
+					
+				switch(event.keyCode) {
+				case keyCode.ENTER:
+					return false;
+//					self.onSubmit();
+					break;
+				}
+			});
 			break;
 		case "date":
 			break;
