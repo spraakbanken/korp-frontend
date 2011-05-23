@@ -122,14 +122,11 @@ var KWICResults = {
 			});
 			return;
 		}
-		else {
-			$("#results-kwic").hide();
-		}
-//		if($("#sidebar").css("right") == "0px" && !$("#result-container").tabs("option", "selected")) {
-//			showSidebar();
+//		else {
+//			$("#results-kwic").css("opacity", 0);
 //		}
 		$.log("corpus_results");
-		$("#results-kwic").show();
+		//$("#results-kwic").show();
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
 		    var splitObj = {
@@ -163,7 +160,7 @@ var KWICResults = {
 //		$.each(["(", "{", "["], function(i, item) {
 //			$($.format(".word:contains(%s)", item)).next().html('');
 //		});
-		$("#results-kwic").hide();
+		//$("#results-kwic").hide();
 //			make the first matched word selected by default.
 		$(".match").children().first().click();
 		$("#results-kwic").fadeIn(effectSpeed);
@@ -192,6 +189,7 @@ var KWICResults = {
 	buildPager : function(number_of_hits){
 		var items_per_page = $("#num_hits").val();
 		if(number_of_hits > items_per_page){
+			$('#Pagination').unbind();
 			$("#Pagination").pagination(number_of_hits, {
 				items_per_page : items_per_page, 
 				callback : $.proxy(this.handlePaginationClick, this),

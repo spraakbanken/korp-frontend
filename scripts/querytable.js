@@ -244,10 +244,10 @@ function cqpToken(token) {
         var data = $(this).find(".arg_type :selected").data("dataProvider");
         var value = $(this).find(".arg_value").val();
         if(type == "word" && value == "") {
-        	$(this).find(".arg_value").attr("placeholder", util.getLocaleString("any")).placeholder();
+        	$(this).find(".arg_value").attr("placeholder", util.getLocaleString("any"));
         	return "[]";
         }
-        $(this).find(".arg_value").attr("placeholder", "").placeholder();
+        $(this).find(".arg_value").attr("placeholder", "");
         if (!args[type]) { 
         	args[type] = []; 
     	}

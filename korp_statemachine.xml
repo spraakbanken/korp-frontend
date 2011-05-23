@@ -93,6 +93,11 @@
                         </onexit>
                     </state>
                     <state id="extended">
+<!--                         <onentry> -->
+<!--                             <script> -->
+<!--                                 extendedSearch.onentry(); -->
+<!--                             </script> -->
+<!--                         </onentry> -->
                         <transition event="submit.kwic" target="search_history">
                             <script>
                                 advancedSearch.updateCQP();
@@ -127,9 +132,9 @@
                         </script>
                     </onexit>
                     
-                    <transition event="submit" target="results_visible">
-                    
-                    </transition>
+                    <transition event="submit" target="results_kwic" cond="($.bbq.getState('result-container', true) || 0) === 0" />
+                    <transition event="submit" target="results_lemgram" cond="($.bbq.getState('result-container', true)) === 2" />
+                    <transition event="submit" target="results_stats" cond="($.bbq.getState('result-container', true)) === 3" />
                     
                 </state>
                 
@@ -148,7 +153,7 @@
                         </onentry>
                         
                         <history id="selected_h">
-                            <transition target="kwic_word_not_selected" />
+                            <transition target="kwic_word_selected" />
                         </history>
                         
                         <state id="kwic_word_selected">

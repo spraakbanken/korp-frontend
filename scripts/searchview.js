@@ -237,6 +237,9 @@ var ExtendedSearch = {
 		
 	},
 	
+	onentry : function() {
+	},
+	
 	onSubmit : function(event) {
 		this.parent(event);
 		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
