@@ -14,21 +14,21 @@ function StatechartExecutionContext() {
     };
     //variable declarations relating to data model
     //send timeout id variables
-    var $default_Regexp_id0x00000000290d8600 = /^($default)/,
-        submit_kwic_Regexp_id0x0000000029192540 = /^(submit\.kwic)/,
-        searchtab_simple_Regexp_id0x00000000291748d0 = /^(searchtab\.simple)/,
-        searchtab_extended_Regexp_id0x0000000029174be0 = /^(searchtab\.extended)/,
-        searchtab_advanced_Regexp_id0x000000002915f2d0 = /^(searchtab\.advanced)/,
-        submit_lemgram_Regexp_id0x0000000029102d50 = /^(submit\.lemgram)/,
-        submit_Regexp_id0x00000000290cfbb0 = /^(submit)/,
-        resultstab_kwic_Regexp_id0x00000000291761f0 = /^(resultstab\.kwic)/,
-        resultstab_lemgram_Regexp_id0x0000000029170e10 = /^(resultstab\.lemgram)/,
-        resultstab_stats_Regexp_id0x0000000029171090 = /^(resultstab\.stats)/,
-        word_deselect_Regexp_id0x00000000291620e0 = /^(word\.deselect)/,
-        word_select_Regexp_id0x000000002910fa80 = /^(word\.select)/,
-        sidebar_show_Regexp_id0x00000000290c09d0 = /^(sidebar\.show)/,
-        sidebar_hide_Regexp_id0x00000000291a1440 = /^(sidebar\.hide)/,
-        star_Regexp_id0x00000000291a03d0 = /.*/;
+    var $default_Regexp_id0x00000000546436d0 = /^($default)/,
+        submit_kwic_Regexp_id0x0000000054643a00 = /^(submit\.kwic)/,
+        searchtab_simple_Regexp_id0x0000000054643d10 = /^(searchtab\.simple)/,
+        searchtab_extended_Regexp_id0x0000000054644020 = /^(searchtab\.extended)/,
+        searchtab_advanced_Regexp_id0x0000000054644330 = /^(searchtab\.advanced)/,
+        submit_lemgram_Regexp_id0x0000000054644640 = /^(submit\.lemgram)/,
+        submit_Regexp_id0x0000000054644950 = /^(submit)/,
+        resultstab_kwic_Regexp_id0x0000000054644ca0 = /^(resultstab\.kwic)/,
+        resultstab_lemgram_Regexp_id0x0000000054644fb0 = /^(resultstab\.lemgram)/,
+        resultstab_stats_Regexp_id0x00000000546452c0 = /^(resultstab\.stats)/,
+        word_deselect_Regexp_id0x00000000546455d0 = /^(word\.deselect)/,
+        word_select_Regexp_id0x00000000546458e0 = /^(word\.select)/,
+        sidebar_show_Regexp_id0x0000000054645bf0 = /^(sidebar\.show)/,
+        sidebar_hide_Regexp_id0x0000000054645f00 = /^(sidebar\.hide)/,
+        star_Regexp_id0x0000000054646210 = /.*/;
     //abstract state
     var AbstractState = new
     function() {
@@ -39,8 +39,8 @@ function StatechartExecutionContext() {
         this.$dispatchPrefixEvent = function() {};
     }
     //states
-    var scxml_id0x0000000027ec41c0 = (function() {
-        function scxml_id0x0000000027ec41c0Constructor() {
+    var scxml_id0xfffffffff5ab6a00 = (function() {
+        function scxml_id0xfffffffff5ab6a00Constructor() {
             this.parent = AbstractState;
             this.initial = null;
             this.depth = 0;
@@ -49,7 +49,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             false;
             this.toString = function() {
-                return "scxml_id0x0000000027ec41c0"
+                return "scxml_id0xfffffffff5ab6a00"
             }
             this.enterAction = function() {
                 for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
@@ -57,28 +57,28 @@ function StatechartExecutionContext() {
                 id0x0000000000000000_iterator++) {
                     var listener = listeners[id0x0000000000000000_iterator];
                     //to
-                    listener.onEntry("scxml_id0x0000000027ec41c0");
+                    listener.onEntry("scxml_id0xfffffffff5ab6a00");
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029181db0_iterator = 0, id0x0000000029181db0_hoist = listeners.length;
-                id0x0000000029181db0_iterator < id0x0000000029181db0_hoist;
-                id0x0000000029181db0_iterator++) {
-                    var listener = listeners[id0x0000000029181db0_iterator];
+                for (var id0x000000002e7bce20_iterator = 0, id0x000000002e7bce20_hoist = listeners.length;
+                id0x000000002e7bce20_iterator < id0x000000002e7bce20_hoist;
+                id0x000000002e7bce20_iterator++) {
+                    var listener = listeners[id0x000000002e7bce20_iterator];
                     //from
-                    listener.onExit("scxml_id0x0000000027ec41c0");
+                    listener.onExit("scxml_id0xfffffffff5ab6a00");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
                 return AbstractState.$dispatchPrefixEvent(e);
             }
         }
-        scxml_id0x0000000027ec41c0Constructor.prototype = AbstractState;
-        return new scxml_id0x0000000027ec41c0Constructor();
+        scxml_id0xfffffffff5ab6a00Constructor.prototype = AbstractState;
+        return new scxml_id0xfffffffff5ab6a00Constructor();
     })();
     var _initial = (function() {
         function _initialConstructor() {
-            this.parent = scxml_id0x0000000027ec41c0;
+            this.parent = scxml_id0xfffffffff5ab6a00;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -86,7 +86,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                 ];
             this.parent.initial = this; //init parent's pointer to initial state
             this.toString = function() {
@@ -102,10 +102,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x00000000291a54d0_iterator = 0, id0x00000000291a54d0_hoist = listeners.length;
-                id0x00000000291a54d0_iterator < id0x00000000291a54d0_hoist;
-                id0x00000000291a54d0_iterator++) {
-                    var listener = listeners[id0x00000000291a54d0_iterator];
+                for (var id0x000000002e7a75e0_iterator = 0, id0x000000002e7a75e0_hoist = listeners.length;
+                id0x000000002e7a75e0_iterator < id0x000000002e7a75e0_hoist;
+                id0x000000002e7a75e0_iterator++) {
+                    var listener = listeners[id0x000000002e7a75e0_iterator];
                     //from
                     listener.onExit("_initial");
                 }
@@ -146,18 +146,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0x0000000027ec41c0['$default']();
+                return scxml_id0xfffffffff5ab6a00['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff5ab6a00.$dispatchPrefixEvent(e);
             }
         }
-        _initialConstructor.prototype = scxml_id0x0000000027ec41c0;
+        _initialConstructor.prototype = scxml_id0xfffffffff5ab6a00;
         return new _initialConstructor();
     })();
     var init = (function() {
         function initConstructor() {
-            this.parent = scxml_id0x0000000027ec41c0;
+            this.parent = scxml_id0xfffffffff5ab6a00;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -165,7 +165,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                 ];
             this.toString = function() {
                 return "init"
@@ -180,10 +180,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029154240_iterator = 0, id0x0000000029154240_hoist = listeners.length;
-                id0x0000000029154240_iterator < id0x0000000029154240_hoist;
-                id0x0000000029154240_iterator++) {
-                    var listener = listeners[id0x0000000029154240_iterator];
+                for (var id0x000000002e7df9b0_iterator = 0, id0x000000002e7df9b0_hoist = listeners.length;
+                id0x000000002e7df9b0_iterator < id0x000000002e7df9b0_hoist;
+                id0x000000002e7df9b0_iterator++) {
+                    var listener = listeners[id0x000000002e7df9b0_iterator];
                     //from
                     listener.onExit("init");
                 }
@@ -235,18 +235,18 @@ function StatechartExecutionContext() {
                             ];
                     }
                 }
-                return scxml_id0x0000000027ec41c0['$default']();
+                return scxml_id0xfffffffff5ab6a00['$default']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff5ab6a00.$dispatchPrefixEvent(e);
             }
         }
-        initConstructor.prototype = scxml_id0x0000000027ec41c0;
+        initConstructor.prototype = scxml_id0xfffffffff5ab6a00;
         return new initConstructor();
     })();
     var main = (function() {
         function mainConstructor() {
-            this.parent = scxml_id0x0000000027ec41c0;
+            this.parent = scxml_id0xfffffffff5ab6a00;
             this.initial = null;
             this.depth = 1;
             this.historyState = null;
@@ -267,19 +267,19 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002914e9e0_iterator = 0, id0x000000002914e9e0_hoist = listeners.length;
-                id0x000000002914e9e0_iterator < id0x000000002914e9e0_hoist;
-                id0x000000002914e9e0_iterator++) {
-                    var listener = listeners[id0x000000002914e9e0_iterator];
+                for (var id0x000000002e7e60c0_iterator = 0, id0x000000002e7e60c0_hoist = listeners.length;
+                id0x000000002e7e60c0_iterator < id0x000000002e7e60c0_hoist;
+                id0x000000002e7e60c0_iterator++) {
+                    var listener = listeners[id0x000000002e7e60c0_iterator];
                     //from
                     listener.onExit("main");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                return scxml_id0x0000000027ec41c0.$dispatchPrefixEvent(e);
+                return scxml_id0xfffffffff5ab6a00.$dispatchPrefixEvent(e);
             }
         }
-        mainConstructor.prototype = scxml_id0x0000000027ec41c0;
+        mainConstructor.prototype = scxml_id0xfffffffff5ab6a00;
         return new mainConstructor();
     })();
     var main_initial = (function() {
@@ -292,7 +292,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                 ];
@@ -310,10 +310,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002914ea90_iterator = 0, id0x000000002914ea90_hoist = listeners.length;
-                id0x000000002914ea90_iterator < id0x000000002914ea90_hoist;
-                id0x000000002914ea90_iterator++) {
-                    var listener = listeners[id0x000000002914ea90_iterator];
+                for (var id0x000000002e7e6170_iterator = 0, id0x000000002e7e6170_hoist = listeners.length;
+                id0x000000002e7e6170_iterator < id0x000000002e7e6170_hoist;
+                id0x000000002e7e6170_iterator++) {
+                    var listener = listeners[id0x000000002e7e6170_iterator];
                     //from
                     listener.onExit("main_initial");
                 }
@@ -385,10 +385,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002914ad60_iterator = 0, id0x000000002914ad60_hoist = listeners.length;
-                id0x000000002914ad60_iterator < id0x000000002914ad60_hoist;
-                id0x000000002914ad60_iterator++) {
-                    var listener = listeners[id0x000000002914ad60_iterator];
+                for (var id0x000000002e7e9c50_iterator = 0, id0x000000002e7e9c50_hoist = listeners.length;
+                id0x000000002e7e9c50_iterator < id0x000000002e7e9c50_hoist;
+                id0x000000002e7e9c50_iterator++) {
+                    var listener = listeners[id0x000000002e7e9c50_iterator];
                     //from
                     listener.onExit("p");
                 }
@@ -410,7 +410,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -430,10 +430,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002914ae10_iterator = 0, id0x000000002914ae10_hoist = listeners.length;
-                id0x000000002914ae10_iterator < id0x000000002914ae10_hoist;
-                id0x000000002914ae10_iterator++) {
-                    var listener = listeners[id0x000000002914ae10_iterator];
+                for (var id0x000000002e7e9d00_iterator = 0, id0x000000002e7e9d00_hoist = listeners.length;
+                id0x000000002e7e9d00_iterator < id0x000000002e7e9d00_hoist;
+                id0x000000002e7e9d00_iterator++) {
+                    var listener = listeners[id0x000000002e7e9d00_iterator];
                     //from
                     listener.onExit("p_initial");
                 }
@@ -514,10 +514,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029142850_iterator = 0, id0x0000000029142850_hoist = listeners.length;
-                id0x0000000029142850_iterator < id0x0000000029142850_hoist;
-                id0x0000000029142850_iterator++) {
-                    var listener = listeners[id0x0000000029142850_iterator];
+                for (var id0x000000002e7ef690_iterator = 0, id0x000000002e7ef690_hoist = listeners.length;
+                id0x000000002e7ef690_iterator < id0x000000002e7ef690_hoist;
+                id0x000000002e7ef690_iterator++) {
+                    var listener = listeners[id0x000000002e7ef690_iterator];
                     //from
                     listener.onExit("search");
                 }
@@ -539,7 +539,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -561,10 +561,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029142980_iterator = 0, id0x0000000029142980_hoist = listeners.length;
-                id0x0000000029142980_iterator < id0x0000000029142980_hoist;
-                id0x0000000029142980_iterator++) {
-                    var listener = listeners[id0x0000000029142980_iterator];
+                for (var id0x000000002e7ef7c0_iterator = 0, id0x000000002e7ef7c0_hoist = listeners.length;
+                id0x000000002e7ef7c0_iterator < id0x000000002e7ef7c0_hoist;
+                id0x000000002e7ef7c0_iterator++) {
+                    var listener = listeners[id0x000000002e7ef7c0_iterator];
                     //from
                     listener.onExit("search_initial");
                 }
@@ -629,16 +629,16 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 this.historyState.lastConfiguration = currentConfiguration.slice();
-                for (var id0x000000002913f310_iterator = 0, id0x000000002913f310_hoist = listeners.length;
-                id0x000000002913f310_iterator < id0x000000002913f310_hoist;
-                id0x000000002913f310_iterator++) {
-                    var listener = listeners[id0x000000002913f310_iterator];
+                for (var id0x000000002e7f16e0_iterator = 0, id0x000000002e7f16e0_hoist = listeners.length;
+                id0x000000002e7f16e0_iterator < id0x000000002e7f16e0_hoist;
+                id0x000000002e7f16e0_iterator++) {
+                    var listener = listeners[id0x000000002e7f16e0_iterator];
                     //from
                     listener.onExit("search_inner");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0x0000000029192540)) {
+                if (e.match(submit_kwic_Regexp_id0x0000000054643a00)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -691,7 +691,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_simple_Regexp_id0x00000000291748d0)) {
+                if (e.match(searchtab_simple_Regexp_id0x0000000054643d10)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -740,7 +740,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_extended_Regexp_id0x0000000029174be0)) {
+                if (e.match(searchtab_extended_Regexp_id0x0000000054644020)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -789,7 +789,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(searchtab_advanced_Regexp_id0x000000002915f2d0)) {
+                if (e.match(searchtab_advanced_Regexp_id0x0000000054644330)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -854,7 +854,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -878,10 +878,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002913fa10_iterator = 0, id0x000000002913fa10_hoist = listeners.length;
-                id0x000000002913fa10_iterator < id0x000000002913fa10_hoist;
-                id0x000000002913fa10_iterator++) {
-                    var listener = listeners[id0x000000002913fa10_iterator];
+                for (var id0x000000002e7f1de0_iterator = 0, id0x000000002e7f1de0_hoist = listeners.length;
+                id0x000000002e7f1de0_iterator < id0x000000002e7f1de0_hoist;
+                id0x000000002e7f1de0_iterator++) {
+                    var listener = listeners[id0x000000002e7f1de0_iterator];
                     //from
                     listener.onExit("search_history");
                 }
@@ -985,7 +985,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1009,16 +1009,16 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 $("#simple_text").autocomplete("close");
-                for (var id0x00000000291374d0_iterator = 0, id0x00000000291374d0_hoist = listeners.length;
-                id0x00000000291374d0_iterator < id0x00000000291374d0_hoist;
-                id0x00000000291374d0_iterator++) {
-                    var listener = listeners[id0x00000000291374d0_iterator];
+                for (var id0x000000002e7f7bb0_iterator = 0, id0x000000002e7f7bb0_hoist = listeners.length;
+                id0x000000002e7f7bb0_iterator < id0x000000002e7f7bb0_hoist;
+                id0x000000002e7f7bb0_iterator++) {
+                    var listener = listeners[id0x000000002e7f7bb0_iterator];
                     //from
                     listener.onExit("simple");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_lemgram_Regexp_id0x0000000029102d50)) {
+                if (e.match(submit_lemgram_Regexp_id0x0000000054644640)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1061,7 +1061,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1084,16 +1084,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029138b40_iterator = 0, id0x0000000029138b40_hoist = listeners.length;
-                id0x0000000029138b40_iterator < id0x0000000029138b40_hoist;
-                id0x0000000029138b40_iterator++) {
-                    var listener = listeners[id0x0000000029138b40_iterator];
+                for (var id0x000000002e7f9320_iterator = 0, id0x000000002e7f9320_hoist = listeners.length;
+                id0x000000002e7f9320_iterator < id0x000000002e7f9320_hoist;
+                id0x000000002e7f9320_iterator++) {
+                    var listener = listeners[id0x000000002e7f9320_iterator];
                     //from
                     listener.onExit("extended");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_kwic_Regexp_id0x0000000029192540)) {
+                if (e.match(submit_kwic_Regexp_id0x0000000054643a00)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1122,7 +1122,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(submit_lemgram_Regexp_id0x0000000029102d50)) {
+                if (e.match(submit_lemgram_Regexp_id0x0000000054644640)) {
                     return {
                         preemptedBasicStates: {
                             simple: true,
@@ -1166,7 +1166,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1189,10 +1189,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002913ae80_iterator = 0, id0x000000002913ae80_hoist = listeners.length;
-                id0x000000002913ae80_iterator < id0x000000002913ae80_hoist;
-                id0x000000002913ae80_iterator++) {
-                    var listener = listeners[id0x000000002913ae80_iterator];
+                for (var id0x000000002e7fbae0_iterator = 0, id0x000000002e7fbae0_hoist = listeners.length;
+                id0x000000002e7fbae0_iterator < id0x000000002e7fbae0_hoist;
+                id0x000000002e7fbae0_iterator++) {
+                    var listener = listeners[id0x000000002e7fbae0_iterator];
                     //from
                     listener.onExit("advanced");
                 }
@@ -1226,10 +1226,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x00000000291346f0_iterator = 0, id0x00000000291346f0_hoist = listeners.length;
-                id0x00000000291346f0_iterator < id0x00000000291346f0_hoist;
-                id0x00000000291346f0_iterator++) {
-                    var listener = listeners[id0x00000000291346f0_iterator];
+                for (var id0x000000002e7fbfb0_iterator = 0, id0x000000002e7fbfb0_hoist = listeners.length;
+                id0x000000002e7fbfb0_iterator < id0x000000002e7fbfb0_hoist;
+                id0x000000002e7fbfb0_iterator++) {
+                    var listener = listeners[id0x000000002e7fbfb0_iterator];
                     //from
                     listener.onExit("results");
                 }
@@ -1251,7 +1251,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1273,10 +1273,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029134760_iterator = 0, id0x0000000029134760_hoist = listeners.length;
-                id0x0000000029134760_iterator < id0x0000000029134760_hoist;
-                id0x0000000029134760_iterator++) {
-                    var listener = listeners[id0x0000000029134760_iterator];
+                for (var id0x000000002e7fc020_iterator = 0, id0x000000002e7fc020_hoist = listeners.length;
+                id0x000000002e7fc020_iterator < id0x000000002e7fc020_hoist;
+                id0x000000002e7fc020_iterator++) {
+                    var listener = listeners[id0x000000002e7fc020_iterator];
                     //from
                     listener.onExit("results_initial");
                 }
@@ -1328,7 +1328,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1351,10 +1351,10 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 $('#results-wrapper').show();
-                for (var id0x00000000291325e0_iterator = 0, id0x00000000291325e0_hoist = listeners.length;
-                id0x00000000291325e0_iterator < id0x00000000291325e0_hoist;
-                id0x00000000291325e0_iterator++) {
-                    var listener = listeners[id0x00000000291325e0_iterator];
+                for (var id0x000000002e7fe130_iterator = 0, id0x000000002e7fe130_hoist = listeners.length;
+                id0x000000002e7fe130_iterator < id0x000000002e7fe130_hoist;
+                id0x000000002e7fe130_iterator++) {
+                    var listener = listeners[id0x000000002e7fe130_iterator];
                     //from
                     listener.onExit("results_hidden");
                 }
@@ -1390,7 +1390,7 @@ function StatechartExecutionContext() {
                 return results['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(submit_Regexp_id0x00000000290cfbb0)) {
+                if (e.match(submit_Regexp_id0x0000000054644950)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1447,16 +1447,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002912e260_iterator = 0, id0x000000002912e260_hoist = listeners.length;
-                id0x000000002912e260_iterator < id0x000000002912e260_hoist;
-                id0x000000002912e260_iterator++) {
-                    var listener = listeners[id0x000000002912e260_iterator];
+                for (var id0x000000002e800f50_iterator = 0, id0x000000002e800f50_hoist = listeners.length;
+                id0x000000002e800f50_iterator < id0x000000002e800f50_hoist;
+                id0x000000002e800f50_iterator++) {
+                    var listener = listeners[id0x000000002e800f50_iterator];
                     //from
                     listener.onExit("results_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(resultstab_kwic_Regexp_id0x00000000291761f0)) {
+                if (e.match(resultstab_kwic_Regexp_id0x0000000054644ca0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1508,7 +1508,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(resultstab_lemgram_Regexp_id0x0000000029170e10)) {
+                if (e.match(resultstab_lemgram_Regexp_id0x0000000054644fb0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1559,7 +1559,7 @@ function StatechartExecutionContext() {
                         }
                     }
                 }
-                if (e.match(resultstab_stats_Regexp_id0x0000000029171090)) {
+                if (e.match(resultstab_stats_Regexp_id0x00000000546452c0)) {
                     return {
                         preemptedBasicStates: {
                             results_hidden: true,
@@ -1626,7 +1626,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1650,10 +1650,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002912e310_iterator = 0, id0x000000002912e310_hoist = listeners.length;
-                id0x000000002912e310_iterator < id0x000000002912e310_hoist;
-                id0x000000002912e310_iterator++) {
-                    var listener = listeners[id0x000000002912e310_iterator];
+                for (var id0x000000002e801000_iterator = 0, id0x000000002e801000_hoist = listeners.length;
+                id0x000000002e801000_iterator < id0x000000002e801000_hoist;
+                id0x000000002e801000_iterator++) {
+                    var listener = listeners[id0x000000002e801000_iterator];
                     //from
                     listener.onExit("results_visible_initial");
                 }
@@ -1708,7 +1708,7 @@ function StatechartExecutionContext() {
                 return "results_kwic"
             }
             this.enterAction = function() {
-                kwicResults.centerScrollbar();
+                kwicResults.onentry();
                 util.setJsonLink(kwicProxy.prevRequest);
                 for (var id0x0000000000000000_iterator = 0, id0x0000000000000000_hoist = listeners.length;
                 id0x0000000000000000_iterator < id0x0000000000000000_hoist;
@@ -1720,10 +1720,11 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 this.historyState.lastConfiguration = currentConfiguration.slice();
-                for (var id0x0000000029125ca0_iterator = 0, id0x0000000029125ca0_hoist = listeners.length;
-                id0x0000000029125ca0_iterator < id0x0000000029125ca0_hoist;
-                id0x0000000029125ca0_iterator++) {
-                    var listener = listeners[id0x0000000029125ca0_iterator];
+                kwicResults.onexit();
+                for (var id0x000000002e806920_iterator = 0, id0x000000002e806920_hoist = listeners.length;
+                id0x000000002e806920_iterator < id0x000000002e806920_hoist;
+                id0x000000002e806920_iterator++) {
+                    var listener = listeners[id0x000000002e806920_iterator];
                     //from
                     listener.onExit("results_kwic");
                 }
@@ -1745,7 +1746,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1771,10 +1772,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002912e3c0_iterator = 0, id0x000000002912e3c0_hoist = listeners.length;
-                id0x000000002912e3c0_iterator < id0x000000002912e3c0_hoist;
-                id0x000000002912e3c0_iterator++) {
-                    var listener = listeners[id0x000000002912e3c0_iterator];
+                for (var id0x000000002e8010b0_iterator = 0, id0x000000002e8010b0_hoist = listeners.length;
+                id0x000000002e8010b0_iterator < id0x000000002e8010b0_hoist;
+                id0x000000002e8010b0_iterator++) {
+                    var listener = listeners[id0x000000002e8010b0_iterator];
                     //from
                     listener.onExit("results_kwic_initial");
                 }
@@ -1823,7 +1824,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1849,10 +1850,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002911fe80_iterator = 0, id0x000000002911fe80_hoist = listeners.length;
-                id0x000000002911fe80_iterator < id0x000000002911fe80_hoist;
-                id0x000000002911fe80_iterator++) {
-                    var listener = listeners[id0x000000002911fe80_iterator];
+                for (var id0x000000002e809b10_iterator = 0, id0x000000002e809b10_hoist = listeners.length;
+                id0x000000002e809b10_iterator < id0x000000002e809b10_hoist;
+                id0x000000002e809b10_iterator++) {
+                    var listener = listeners[id0x000000002e809b10_iterator];
                     //from
                     listener.onExit("selected_h");
                 }
@@ -1872,7 +1873,7 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var l = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                l.onTransition("", "kwic_word_selected", "selected_h_$default_24");
+                                l.onTransition("", "kwic_word_not_selected", "selected_h_$default_24");
                             }
                             var historyState = selected_h;
                             var newConfiguration = [];
@@ -1925,13 +1926,13 @@ function StatechartExecutionContext() {
                             id0x0000000000000000_iterator++) {
                                 var listener = listeners[id0x0000000000000000_iterator];
                                 //transition id
-                                listener.onTransition("", "kwic_word_selected", "selected_h_$default_24");
+                                listener.onTransition("", "kwic_word_not_selected", "selected_h_$default_24");
                             }
                             //enter states
-                            kwic_word_selected.enterAction();
+                            kwic_word_not_selected.enterAction();
                             //update configuration
                             currentConfiguration.splice(
-                            indexOf(currentConfiguration, selected_h), 1, kwic_word_selected);
+                            indexOf(currentConfiguration, selected_h), 1, kwic_word_not_selected);
                         }
                     }
                 }
@@ -1954,7 +1955,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -1981,16 +1982,16 @@ function StatechartExecutionContext() {
             }
             this.exitAction = function() {
                 hideSidebar();
-                for (var id0x000000002911f9e0_iterator = 0, id0x000000002911f9e0_hoist = listeners.length;
-                id0x000000002911f9e0_iterator < id0x000000002911f9e0_hoist;
-                id0x000000002911f9e0_iterator++) {
-                    var listener = listeners[id0x000000002911f9e0_iterator];
+                for (var id0x000000002e80b610_iterator = 0, id0x000000002e80b610_hoist = listeners.length;
+                id0x000000002e80b610_iterator < id0x000000002e80b610_hoist;
+                id0x000000002e80b610_iterator++) {
+                    var listener = listeners[id0x000000002e80b610_iterator];
                     //from
                     listener.onExit("kwic_word_selected");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(word_deselect_Regexp_id0x00000000291620e0)) {
+                if (e.match(word_deselect_Regexp_id0x00000000546455d0)) {
                     return {
                         preemptedBasicStates: {
                             kwic_word_selected: true,
@@ -2031,7 +2032,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2056,16 +2057,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002911d320_iterator = 0, id0x000000002911d320_hoist = listeners.length;
-                id0x000000002911d320_iterator < id0x000000002911d320_hoist;
-                id0x000000002911d320_iterator++) {
-                    var listener = listeners[id0x000000002911d320_iterator];
+                for (var id0x000000002e80cc40_iterator = 0, id0x000000002e80cc40_hoist = listeners.length;
+                id0x000000002e80cc40_iterator < id0x000000002e80cc40_hoist;
+                id0x000000002e80cc40_iterator++) {
+                    var listener = listeners[id0x000000002e80cc40_iterator];
                     //from
                     listener.onExit("kwic_word_not_selected");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(word_select_Regexp_id0x000000002910fa80)) {
+                if (e.match(word_select_Regexp_id0x00000000546458e0)) {
                     return {
                         preemptedBasicStates: {
                             kwic_word_selected: true,
@@ -2106,7 +2107,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2130,10 +2131,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002911c870_iterator = 0, id0x000000002911c870_hoist = listeners.length;
-                id0x000000002911c870_iterator < id0x000000002911c870_hoist;
-                id0x000000002911c870_iterator++) {
-                    var listener = listeners[id0x000000002911c870_iterator];
+                for (var id0x000000002e80e030_iterator = 0, id0x000000002e80e030_hoist = listeners.length;
+                id0x000000002e80e030_iterator < id0x000000002e80e030_hoist;
+                id0x000000002e80e030_iterator++) {
+                    var listener = listeners[id0x000000002e80e030_iterator];
                     //from
                     listener.onExit("results_lemgram");
                 }
@@ -2155,7 +2156,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2179,10 +2180,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029119b40_iterator = 0, id0x0000000029119b40_hoist = listeners.length;
-                id0x0000000029119b40_iterator < id0x0000000029119b40_hoist;
-                id0x0000000029119b40_iterator++) {
-                    var listener = listeners[id0x0000000029119b40_iterator];
+                for (var id0x000000002e80e570_iterator = 0, id0x000000002e80e570_hoist = listeners.length;
+                id0x000000002e80e570_iterator < id0x000000002e80e570_hoist;
+                id0x000000002e80e570_iterator++) {
+                    var listener = listeners[id0x000000002e80e570_iterator];
                     //from
                     listener.onExit("results_stats");
                 }
@@ -2216,10 +2217,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002911a1f0_iterator = 0, id0x000000002911a1f0_hoist = listeners.length;
-                id0x000000002911a1f0_iterator < id0x000000002911a1f0_hoist;
-                id0x000000002911a1f0_iterator++) {
-                    var listener = listeners[id0x000000002911a1f0_iterator];
+                for (var id0x000000002e80ec60_iterator = 0, id0x000000002e80ec60_hoist = listeners.length;
+                id0x000000002e80ec60_iterator < id0x000000002e80ec60_hoist;
+                id0x000000002e80ec60_iterator++) {
+                    var listener = listeners[id0x000000002e80ec60_iterator];
                     //from
                     listener.onExit("sidebar");
                 }
@@ -2241,7 +2242,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2263,10 +2264,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x000000002911a2a0_iterator = 0, id0x000000002911a2a0_hoist = listeners.length;
-                id0x000000002911a2a0_iterator < id0x000000002911a2a0_hoist;
-                id0x000000002911a2a0_iterator++) {
-                    var listener = listeners[id0x000000002911a2a0_iterator];
+                for (var id0x000000002e80ed10_iterator = 0, id0x000000002e80ed10_hoist = listeners.length;
+                id0x000000002e80ed10_iterator < id0x000000002e80ed10_hoist;
+                id0x000000002e80ed10_iterator++) {
+                    var listener = listeners[id0x000000002e80ed10_iterator];
                     //from
                     listener.onExit("sidebar_initial");
                 }
@@ -2315,7 +2316,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2336,16 +2337,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029118ab0_iterator = 0, id0x0000000029118ab0_hoist = listeners.length;
-                id0x0000000029118ab0_iterator < id0x0000000029118ab0_hoist;
-                id0x0000000029118ab0_iterator++) {
-                    var listener = listeners[id0x0000000029118ab0_iterator];
+                for (var id0x000000002e8106e0_iterator = 0, id0x000000002e8106e0_hoist = listeners.length;
+                id0x000000002e8106e0_iterator < id0x000000002e8106e0_hoist;
+                id0x000000002e8106e0_iterator++) {
+                    var listener = listeners[id0x000000002e8106e0_iterator];
                     //from
                     listener.onExit("sidebar_hidden");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_show_Regexp_id0x00000000290c09d0)) {
+                if (e.match(sidebar_show_Regexp_id0x0000000054645bf0)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -2386,7 +2387,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2407,16 +2408,16 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x00000000291169e0_iterator = 0, id0x00000000291169e0_hoist = listeners.length;
-                id0x00000000291169e0_iterator < id0x00000000291169e0_hoist;
-                id0x00000000291169e0_iterator++) {
-                    var listener = listeners[id0x00000000291169e0_iterator];
+                for (var id0x000000002e8115f0_iterator = 0, id0x000000002e8115f0_hoist = listeners.length;
+                id0x000000002e8115f0_iterator < id0x000000002e8115f0_hoist;
+                id0x000000002e8115f0_iterator++) {
+                    var listener = listeners[id0x000000002e8115f0_iterator];
                     //from
                     listener.onExit("sidebar_visible");
                 }
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(sidebar_hide_Regexp_id0x00000000291a1440)) {
+                if (e.match(sidebar_hide_Regexp_id0x0000000054645f00)) {
                     return {
                         preemptedBasicStates: {
                             sidebar_hidden: true,
@@ -2469,10 +2470,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029117900_iterator = 0, id0x0000000029117900_hoist = listeners.length;
-                id0x0000000029117900_iterator < id0x0000000029117900_hoist;
-                id0x0000000029117900_iterator++) {
-                    var listener = listeners[id0x0000000029117900_iterator];
+                for (var id0x000000002e812510_iterator = 0, id0x000000002e812510_hoist = listeners.length;
+                id0x000000002e812510_iterator < id0x000000002e812510_hoist;
+                id0x000000002e812510_iterator++) {
+                    var listener = listeners[id0x000000002e812510_iterator];
                     //from
                     listener.onExit("logger");
                 }
@@ -2494,7 +2495,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2516,10 +2517,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x00000000291179b0_iterator = 0, id0x00000000291179b0_hoist = listeners.length;
-                id0x00000000291179b0_iterator < id0x00000000291179b0_hoist;
-                id0x00000000291179b0_iterator++) {
-                    var listener = listeners[id0x00000000291179b0_iterator];
+                for (var id0x000000002e812720_iterator = 0, id0x000000002e812720_hoist = listeners.length;
+                id0x000000002e812720_iterator < id0x000000002e812720_hoist;
+                id0x000000002e812720_iterator++) {
+                    var listener = listeners[id0x000000002e812720_iterator];
                     //from
                     listener.onExit("logger_initial");
                 }
@@ -2567,7 +2568,7 @@ function StatechartExecutionContext() {
             this.isBasic =
             true;
             this.ancestors = [
-                scxml_id0x0000000027ec41c0
+                scxml_id0xfffffffff5ab6a00
                         ,
                     main
                         ,
@@ -2588,10 +2589,10 @@ function StatechartExecutionContext() {
                 }
             }
             this.exitAction = function() {
-                for (var id0x0000000029115340_iterator = 0, id0x0000000029115340_hoist = listeners.length;
-                id0x0000000029115340_iterator < id0x0000000029115340_hoist;
-                id0x0000000029115340_iterator++) {
-                    var listener = listeners[id0x0000000029115340_iterator];
+                for (var id0x000000002e8142e0_iterator = 0, id0x000000002e8142e0_hoist = listeners.length;
+                id0x000000002e8142e0_iterator < id0x000000002e8142e0_hoist;
+                id0x000000002e8142e0_iterator++) {
+                    var listener = listeners[id0x000000002e8142e0_iterator];
                     //from
                     listener.onExit("l2");
                 }
@@ -2623,7 +2624,7 @@ function StatechartExecutionContext() {
                 return logger['submit']();
             }
             this.$dispatchPrefixEvent = function(e) {
-                if (e.match(star_Regexp_id0x00000000291a03d0)) {
+                if (e.match(star_Regexp_id0x0000000054646210)) {
                     return {
                         preemptedBasicStates: {
                             l2: true
