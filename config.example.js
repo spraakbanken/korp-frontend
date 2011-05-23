@@ -9,6 +9,8 @@ settings.defaultContext = {
 	"1 sentence" : language.oneSentence
 };
 
+settings.defaultLanguage = "sv";
+
 /*
  * ATTRIBUTES
  */
