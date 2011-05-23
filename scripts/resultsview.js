@@ -64,6 +64,33 @@ var KWICResults = {
 		$("#Pagination").empty();
 		$("#results-table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
 	},
+	
+	onentry : function() {
+		this.centerScrollbar();
+		$(document).keydown(this.onKeydown);
+	},
+	
+	onexit : function() {
+		$(document).unbind("keydown", this.onKeydown);
+	},
+	
+	onKeydown : function(event) {
+		if(util.SelectionManager.hasSelected == null || $(":text, textarea").is(":focus")) return;
+	    switch(event.which) {
+			case 38: //up
+				kwicResults.selectUp();
+				return false;
+			case 39: // right
+				kwicResults.selectNext();
+				return false;
+			case 37: //left
+				kwicResults.selectPrev();
+				return false;
+			case 40: // down
+				kwicResults.selectDown();
+				return false;
+	    }
+	},
 		
 	renderResult : function(data) {
 		var resultError = this.parent(data);
@@ -133,6 +160,9 @@ var KWICResults = {
 		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
 			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
+//		$.each(["(", "{", "["], function(i, item) {
+//			$($.format(".word:contains(%s)", item)).next().html('');
+//		});
 		$("#results-kwic").hide();
 //			make the first matched word selected by default.
 		$(".match").children().first().click();

@@ -437,7 +437,12 @@ table {
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	border-radius: 5px;
-	border : 1px solid #000; 
+	border : 1px solid #000;
+	cursor : move; 
+}
+
+.query_token.ui-sortable-helper {
+	width : 275px !important;	
 }
 
 .cqp_toggle {

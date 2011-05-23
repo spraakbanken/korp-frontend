@@ -243,6 +243,11 @@ function cqpToken(token) {
         var type = $(this).find(".arg_type").val();
         var data = $(this).find(".arg_type :selected").data("dataProvider");
         var value = $(this).find(".arg_value").val();
+        if(type == "word" && value == "") {
+        	$(this).find(".arg_value").attr("placeholder", util.getLocaleString("any")).placeholder();
+        	return "[]";
+        }
+        $(this).find(".arg_value").attr("placeholder", "").placeholder();
         if (!args[type]) { 
         	args[type] = []; 
     	}

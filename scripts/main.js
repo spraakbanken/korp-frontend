@@ -158,23 +158,6 @@ $(function(){
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		$(document).keydown(function(event) {
-		    switch(event.which) {
-				case 38: //up
-					kwicResults.selectUp();
-					return false;
-				case 39: // right
-					kwicResults.selectNext();
-					return false;
-				case 37: //left
-					kwicResults.selectPrev();
-					return false;
-				case 40: // down
-					kwicResults.selectDown();
-					return false;
-		    }
-		    
-		});
 		
 		resetQuery();
 		

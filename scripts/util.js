@@ -22,6 +22,9 @@ util.SelectionManager.deselect = function() {
 	this.selected.removeClass("token_selected");
 	this.selected = null;
 };
+util.SelectionManager.hasSelected = function() {
+	return this.selected != null;
+};
 // SelectionManager -->
 
 util.getLocaleString = function(key) {

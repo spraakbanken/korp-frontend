@@ -119,6 +119,15 @@
 			this.compiledStatechartInstance[event](data);
 		};
 		
+		this.In = function(s) {
+			try {
+				return this.compiledStatechartInstance.$in(s);
+			}
+			catch(e) {
+				return false;
+			}
+		};
+		
 		this.getConfiguration = function() {
 			return this.compiledStatechartInstance.getCurrentConfiguration().toString();
 		};

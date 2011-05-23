@@ -142,7 +142,7 @@
                     <state id="results_kwic" initial="selected_h">
                         <onentry>
                             <script>
-                                kwicResults.centerScrollbar();
+                                kwicResults.onentry();
                                 util.setJsonLink(kwicProxy.prevRequest);
                             </script>
                         </onentry>
@@ -169,11 +169,11 @@
                             <transition event="word.select" target="kwic_word_selected" />
                         </state>
                         
-<!--                         <onexit> -->
-<!--                             <script> -->
-<!--                                 hideSidebar(); -->
-<!--                             </script> -->
-<!--                         </onexit> -->
+                        <onexit>
+                            <script>
+                                kwicResults.onexit();
+                            </script>
+                        </onexit>
                     </state>
                     <state id="results_lemgram">
                         <onentry>

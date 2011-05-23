@@ -234,6 +234,7 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
+		
 	},
 	
 	onSubmit : function(event) {
@@ -369,6 +370,10 @@ var ExtendedSearch = {
 		}
 	    
 	    didToggleToken(row);
+	    $(".query_row").sortable({
+	    	items : ".query_token"
+	    		
+	    });
 	},
 	
 	refreshSelects : function() {
