@@ -107,7 +107,7 @@
                         </transition>
                         <transition event="submit.lemgram" target="search_history">
                             <script>
-                                extendedSearch.setOneToken("lex", _event.data);
+                                //extendedSearch.setOneToken("lex", _event.data);
                                 lemgramSearch(_event.data);
                             </script>
                         </transition>

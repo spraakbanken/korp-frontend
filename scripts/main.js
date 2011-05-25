@@ -77,7 +77,6 @@ $(function(){
 				var corp_array = corpus.split(',');
 				corpusChooserInstance.corpusChooser("selectItems",corp_array);
 				$("#select_corpus").val(corpus);
-				didSelectCorpus();
 				simpleSearch.enable();
 			}
 			
@@ -158,8 +157,8 @@ $(function(){
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		
-		resetQuery();
+		extendedSearch.insertRow();
+//		resetQuery();
 		
 		$(window).trigger("hashchange");
 		$("body").fadeTo(400, 1);

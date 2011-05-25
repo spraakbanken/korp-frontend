@@ -1,67 +1,9 @@
 	
-function didSelectCorpus() {
-    var corpus = settings.corpora[getCorpus()];
-
-    var selects = $(".select_language");
-    selects.children().remove();
-    var nr_langs = 0;
-    
-    $.each(corpus.languages, function(lang) {
-    	selects.append(new Option(corpus.languages[lang], lang));
-    	nr_langs++;
-    });
-    selects.attr("disabled", nr_langs <= 1);
-
-}
-
-function getCorpus() {
-	//return $("#tabs-container").children("div:visible").find("select").val();
-	
-	/* DEN HÄR FUNKTIONEN BÖR TAS BORT OCH ERSÄTTAS HELT MED getSelectedCorpora, MEN
-	   DEN ANROPAS PÅ FLERA STÄLLEN AV KOD SOM ÄR TÄNKT ATT HANTERA PARALLELLKORPUSAR
-	   FÖR TILLFÄLLET RETURNERAS DEN FÖRSTA KORPUSEN FRÅN getSelectedCorpora */
-	   
-	return getSelectedCorpora()[0];
-}
-
-
 
 /* Returns an array of all the selected corpora's IDs in uppercase */
 function getSelectedCorpora() {
 	var selectedOnes = corpusChooserInstance.corpusChooser("selectedItems");
 	return selectedOnes;
-}
-
-/* function getAllCorpora(){
-	var res = [];
-	$.each(settings.corpora, function(key,val){
-		if(key != 'all')
-			res.push(key.toUpperCase());
-	});
-	return res;
-} */
-
-
-function resetQuery() {
-    clearQuery();
-//    insertRowButtons();
-    didSelectCorpus();
-    insertRow();
-    //toggleFullQuery();
-}
-
-function clearQuery() {
-    $("#query_table").children().remove();
-    $("#buttons_row").children().remove();
-}
-
-function toggleFullQuery() {
-    /*
-	var full_query = $("#full_query").is(":checked");
-    $("#cqp_string").attr("disabled", !full_query);
-    $("#corpus_id").attr("disabled", !full_query);
-    $("#simple_query").toggle(!full_query);
-    */
 }
 
 function mkInsertButton() {
@@ -72,62 +14,6 @@ function mkInsertButton() {
 function mkRemoveButton() {
     return $('<img src="img/minus.png">')
         .addClass("image_button");
-}
-
-//function insertRowButtons() {
-//    $("#buttons_row").append(
-//        mkRemoveButton().addClass("remove_row")
-//            .click(function(){removeRow();})
-//    ).append(
-//        mkInsertButton().addClass("insert_row")
-//            .click(function(){insertRow();})
-//    );
-//}
-
-function insertRow() {
-    var row = $('<div/>').addClass("query_row")
-    .appendTo($("#query_table"));
-
-    var remove_row_button = mkRemoveButton().addClass("remove_row")
-    .click(function(){
-    	removeRow(this);
-	});
-
-    var insert_token_button = mkInsertButton().addClass("insert_token")
-    .click(function(){
-    	insertToken(this);
-	});
-    
-    var operators = row.siblings().length ? settings.operators : settings.first_operators;
-//    var select_operation = $('<select/>').addClass("select_operation")
-//    .change(function(){
-//    	didSelectOperation(this);
-//	});
-//	$.each(operators, function(oper) {
-//		select_operation.append(new Option(operators[oper], oper));
-//	});
-//    select_operation.attr("disabled", select_operation.children().length <= 1);
-
-//    var select_language = $('<select/>').addClass("select_language")
-//    .change(function(){
-//    	didSelectLanguage(this);
-//	});
-//    var languages = settings.corpora[getCorpus()].languages;
-//    $.each(languages, function(lang) {
-//    	select_language.append(new Option(languages[lang], lang));
-//    }); 
-//    select_language.attr("disabled", select_language.children().length <= 1);
-
-//    row.append(remove_row_button, select_operation, select_language, insert_token_button);
-    row.append(remove_row_button, insert_token_button);
-    
-    
-    insert_token_button.click();
-//    select_operation.change();
-//    TODO: hidden for now.
-//    select_operation.hide();
-//    select_language.hide();
-    didToggleRow();
 }
 
 function removeRow(ref) {
@@ -147,8 +33,6 @@ function insertToken(button) {
     extendedSearch.insertArg(token);
     didToggleToken(button);
 }
-
-
 
 function makeSelect() {
 	var arg_select = $("<select/>").addClass("arg_type")
@@ -236,6 +120,7 @@ function cqpRow(row) {
 }
 
 function cqpToken(token) {
+	$.log("cqpToken");
     var query = {token: [], min: "", max: ""};
 
     var args = {};
@@ -247,11 +132,16 @@ function cqpToken(token) {
         	$(this).find(".arg_value").attr("placeholder", util.getLocaleString("any"));
         	return "[]";
         }
-        $(this).find(".arg_value").attr("placeholder", "");
+        
+        if(data.displayType == "autocomplete") {
+        	value = null;
+        }
+//        $(this).find(".arg_value").attr("placeholder", "");
         if (!args[type]) { 
         	args[type] = []; 
     	}
-        args[type].push({data : data, value : value});
+        $.log("arg_value data", $(this).find(".arg_value").data("value"), data.displayType);
+        args[type].push({data : data, value : value || $(this).find(".arg_value").data("value") || ""});
     });
     
     $.each(args, function(type, valueArray) {

@@ -38,6 +38,10 @@ a:link {color:navy;}      /* unvisited link */
 a:visited {color:purple;}  /* visited link */
 a:hover {color:red;}  /* mouse over link */
 
+.invalid_input{
+	border-color : red;
+}
+
 .color_blue {
 	background-color : #D0D7F0;
 }

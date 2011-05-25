@@ -242,7 +242,6 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
-		
 	},
 	
 	onentry : function() {
@@ -259,7 +258,7 @@ var ExtendedSearch = {
 			case "saldo":
 			case "lex":
 				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
-				util.searchHash(searchType, $select.next().val());
+				util.searchHash(searchType, $select.next().data("value"));
 				break;
 			default:
 				var query = advancedSearch.updateCQP();
@@ -274,6 +273,28 @@ var ExtendedSearch = {
 		.find("select.arg_type:first").val(key)
 		.next().val(val);
 		advancedSearch.updateCQP();
+	},
+	
+	insertRow : function() {
+	    var row = $('<div/>').addClass("query_row")
+	    .appendTo($("#query_table"));
+
+	    var remove_row_button = mkRemoveButton().addClass("remove_row")
+	    .click(function(){
+	    	removeRow(this);
+		});
+
+	    var insert_token_button = mkInsertButton().addClass("insert_token")
+	    .click(function(){
+	    	insertToken(this);
+		});
+	    
+	    var operators = row.siblings().length ? settings.operators : settings.first_operators;
+	    
+	    row.append(remove_row_button, insert_token_button);
+	    
+	    insert_token_button.click();
+	    didToggleRow();
 	},
 	
 	didSelectArgtype : function() {
@@ -296,9 +317,9 @@ var ExtendedSearch = {
 			$.log("displayType autocomplete");
 			arg_value = $("<input type='text'/>").korp_autocomplete(function(lemgram) {
 				$.log("extended lemgram", lemgram, $(this));
+				$(this).data("value", lemgram);
 				$(this).attr("placeholder", util.lemgramToString(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
 			}).bind("keydown.autocomplete", function(event) {
-				$.log("keydown.autocomplete");
 				var keyCode = $.ui.keyCode;
 //				if(!self.isVisible()) return;
 					
@@ -308,6 +329,24 @@ var ExtendedSearch = {
 //					self.onSubmit();
 					break;
 				}
+			}).change(function(event) {
+				$.log("value null");
+				$(this).attr("placeholder", null)
+				.data("value", null);
+			}).blur(function() {
+				var self = this;
+				setTimeout(function() {
+					$.log("blur");
+					//if($(this).autocomplete("widget").is(":visible")) return;
+					if(util.isLemgramId($(self).val()) || $(self).data("value") != null)
+						$(self).removeClass("invalid_input");
+					else {
+						$(self).addClass("invalid_input")
+						.attr("placeholder", null)
+						.data("value", null);
+					}
+					advancedSearch.updateCQP();
+				}, 100);
 			});
 			break;
 		case "date":
@@ -332,7 +371,7 @@ var ExtendedSearch = {
 	    var token = $(token).closest(".query_token").children("tbody");
 	    var row = $("<tr/>").addClass("query_arg").appendTo(token);
 	    
-	    var arg_select = makeSelect();
+	    var arg_select = this.makeSelect();
 	    
 	    var arg_value = $("<input type='text'/>").addClass("arg_value")
 	    .change(function(){
@@ -406,10 +445,11 @@ var ExtendedSearch = {
 	},
 	
 	refreshSelects : function() {
+		var self = this;
 		$(".arg_type").each(function() {
 			var i = $(this).find(":selected").index();
 			var before = $(this).find(":selected").val();
-			var newSelect = makeSelect();
+			var newSelect = self.makeSelect();
 			newSelect.get(0).selectedIndex = i;
 			$(this).replaceWith(newSelect);
 			if(before != newSelect.val()) {
@@ -417,6 +457,36 @@ var ExtendedSearch = {
 				newSelect.trigger("change");
 			}
 		});
+	},
+	
+	makeSelect : function() {
+		var arg_select = $("<select/>").addClass("arg_type")
+	    .change(extendedSearch.didSelectArgtype);
+
+		var groups = $.extend({}, settings.arg_groups, {
+			"word_attr" : getCurrentAttributes(),
+			"sentence_attr" : getStructAttrs()
+			});
+		
+		$.each(groups, function(lbl, group) {
+			if($.isEmptyObject(group)) {
+				return;
+			}
+			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
+			$.each(group, function(key, val) {
+				if(val.displayType == "hidden")
+					return;
+				var labelKey = val.label || val;
+				
+				$('<option/>',{rel : $.format("localize[%s]", labelKey)})
+				.val(key).text(util.getLocaleString(labelKey) || "")
+				.appendTo(optgroup)
+				.data("dataProvider", val);
+			});
+			
+		});
+		
+		return arg_select;
 	}
 };
 
