@@ -87,6 +87,7 @@ $(function(){
 						return false;
 					}
 				}).css("opacity", 0);
+				$("#ui-dialog-title-about_content").attr("rel", "localize[about]");
 				$("#about_content").fadeTo(400,1);
 			} else  {
 				$("#about_content").closest(".ui-dialog").fadeTo(400, 0, function() {

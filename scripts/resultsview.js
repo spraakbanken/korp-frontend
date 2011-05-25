@@ -29,6 +29,7 @@ var BaseResults = {
 	},
 	
 	showPreloader : function() {
+		this.hidePreloader();
 		$("<div class='spinner' />").appendTo(this.$tab)
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
 	},

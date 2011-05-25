@@ -478,10 +478,14 @@ var ExtendedSearch = {
 					return;
 				var labelKey = val.label || val;
 				
-				$('<option/>',{rel : $.format("localize[%s]", labelKey)})
+				var option = $('<option/>',{rel : $.format("localize[%s]", labelKey)})
 				.val(key).text(util.getLocaleString(labelKey) || "")
 				.appendTo(optgroup)
 				.data("dataProvider", val);
+				
+//				if(val.disabled === true) {
+//					option.attr("disabled", "disabled");
+//				}
 			});
 			
 		});
@@ -506,24 +510,6 @@ var AdvancedSearch = {
 	    var nr_lines = 2;
 	    var main_corpus_lang = "";
 	    $(".query_row").each(function(){
-//	        var language = $(this).find(".select_language").val();
-//	        var corpus_lang = language.toUpperCase();
-//	        switch ($(this).find(".select_operation").val()) {
-//	        case "find":
-//	            main_corpus_lang = corpus_lang;
-//	            break;
-//	        case "include":
-//	            query += "  |  ";
-//	            break;
-//	        case "intersect":
-//	            query += "\n :" + corpus_lang + " ";
-//	            nr_lines++;
-//	            break;
-//	        case "exclude":
-//	            query += "\n :" + corpus_lang + " ! ";
-//	            nr_lines++;
-//	            break;
-//	        }
 	        query += cqpRow(this);
 	    });
 	    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));

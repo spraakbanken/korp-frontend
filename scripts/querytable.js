@@ -34,37 +34,6 @@ function insertToken(button) {
     didToggleToken(button);
 }
 
-function makeSelect() {
-	var arg_select = $("<select/>").addClass("arg_type")
-    .change(extendedSearch.didSelectArgtype);
-
-	var groups = $.extend({}, settings.arg_groups, {
-		"word_attr" : getCurrentAttributes(),
-		"sentence_attr" : getStructAttrs()
-		});
-	
-	$.each(groups, function(lbl, group) {
-		if($.isEmptyObject(group)) {
-			return;
-		}
-		var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
-		$.each(group, function(key, val) {
-			if(val.displayType == "hidden")
-				return;
-			var labelKey = val.label || val;
-			
-			$('<option/>',{rel : $.format("localize[%s]", labelKey)})
-			.val(key).text(util.getLocaleString(labelKey) || "")
-			.appendTo(optgroup)
-			.data("dataProvider", val);
-		});
-		
-	});
-	
-	return arg_select;
-}
-
-
 function removeArg(arg) {
     arg = $(arg).closest(".query_arg");
     var row = arg.closest(".query_row");
@@ -176,8 +145,6 @@ function cqpToken(token) {
     return query_string;
 }
 
-
-
 function mapSelectedCorpora(f) {
 	return $.map(getSelectedCorpora(), function(item) {
 		return f(settings.corpora[item]);
@@ -195,16 +162,40 @@ function mapping_intersection(mappingArray) {
 	});
 }
 
+function mapping_union(mappingArray) {
+	return $.reduce(mappingArray, function(a, b) {
+		return $.extend({}, a, b);
+	}) || {};
+}
+
 function getCurrentAttributes() {
-	return mapping_intersection(mapSelectedCorpora(function(corpus) {
+	var attrs = mapSelectedCorpora(function(corpus) {
 		return corpus.attributes;
-	}));
+	});
+	
+	return invalidateAttrs(attrs);
+	
 }
 function getStructAttrs() {
-	return mapping_intersection(mapSelectedCorpora(function(corpus) {
+	var attrs = mapSelectedCorpora(function(corpus) {
 		$.each(corpus.struct_attributes, function(key, value) {
 			value["isStructAttr"] = true; 
 		});
 		return corpus.struct_attributes;
-	}));
+	});
+	
+	return invalidateAttrs(attrs);
+}
+
+function invalidateAttrs(attrs) {
+	var union = mapping_union(attrs);
+	var intersection = mapping_intersection(attrs);
+	$.each(union, function(key, value) {
+		if(intersection[key] == null) {
+			value["disabled"] = true;
+		} else {
+			delete value["disabled"];
+		}
+	});
+	return union;
 }
