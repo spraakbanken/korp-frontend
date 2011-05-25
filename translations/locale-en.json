@@ -145,5 +145,15 @@
 	"corpselector_selectedone" : " selected",
 	"corpselector_selectedmultiple" : " corpora selected",
 	"corpselector_buttonselectall" : "Select all",
-	"corpselector_buttonselectnone" : "Select none"
+	"corpselector_buttonselectnone" : "Select none",
+	
+	"statstable_allcorpora" : "All&nbsp;corpora",
+	"statstable_relfreq" : "relative frequency (per million words):",
+	"statstable_absfreq" : "absolute frequency:",
+	"statstable_absfigures" : "Absolute figures",
+	"statstable_relfigures" : "Relative figures",
+	"statstable_absfigures_hits" : "Hits, absolute figures",
+	"statstable_relfigures_hits" : "Hits, relative figures.",
+	"statstable_hitsheader" : "Hits for ",
+	"statstable_hitsheader_lemgram" : "Hits for the lemgram"
 }

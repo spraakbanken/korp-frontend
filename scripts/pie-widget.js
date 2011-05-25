@@ -34,6 +34,15 @@ var pie_widget = {
 		this.initDiagram(this.options.data_items, {"threshold":0.01}, newType);
 	},
 	
+	resizeDiagram: function(newDiameter) {
+		if(newDiameter >= 10) {
+			$(this.container_id).width(newDiameter + 60);
+			$(this.container_id).height(newDiameter + 60);
+			this.options.diameter = newDiameter;
+			this.newData(this.options.data_items, false);
+		}
+	},
+	
 	setBarWidth: function(newWidth) {
 		this.bar_width = newWidth;	
 	},

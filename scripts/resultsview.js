@@ -496,8 +496,8 @@ function newDataInPie(dataName, horizontalDiagram) {
 			if(dataName == "SIGMA_ALL") {
 				// ∑ selected
 				var totfreq = 0;
-				$.each(obj["absolute"], function(wordform, freq) {
-					var numFreq = parseInt(freq);
+				$.each(obj["relative"], function(wordform, freq) {
+					var numFreq = parseFloat(freq);
 					if(numFreq)
 						totfreq += numFreq;
 				});
@@ -505,7 +505,7 @@ function newDataInPie(dataName, horizontalDiagram) {
 			} else {
 				// Individual wordform selected
 				
-				var freq = parseInt(obj["absolute"][dataName]);
+				var freq = parseFloat(obj["relative"][dataName]);
 				if (freq) {
 					dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + freq, "shape_id":dataName});
 				} else {
@@ -517,15 +517,24 @@ function newDataInPie(dataName, horizontalDiagram) {
 		$("#dialog").remove();
 		
 		var topheader;
-		if(dataName == "SIGMA_ALL")
-			topheader = "Träffar för lemgrammet";
-		else
-			topheader = "Träffar för <i>" + dataName + "</i>";
+		var locstring;
+		if(dataName == "SIGMA_ALL") {
+			topheader = util.getLocaleString("statstable_hitsheader_lemgram");
+			locstring = "statstable_hitsheader_lemgram";
+		} else {
+			topheader = util.getLocaleString("statstable_hitsheader") + "<i>" + dataName + "</i>";
+			locstring = "statstable_hitsheader";
+		}
+		
+		var absString = util.getLocaleString("statstable_absfigures");
+		var relString = util.getLocaleString("statstable_relfigures");
+		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))//util.getLocaleString("example_dialog_header")))
-							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)">Absoluta tal</a> | <a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)">Relativa tal</a></p><div id="chartFrame" style="height:260px;"></div><p id="hitsDescription" style="text-align:center">Träffar i absoluta tal.</p>')
+							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:80%;"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 							.dialog({
 								width : 300,
-								height : 400
+								height : 400,
+								resize: function(){stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);}
 							});
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		
@@ -568,10 +577,13 @@ function newDataInPie(dataName, horizontalDiagram) {
 			});
 			stats2Instance.pie_widget("newData", dataItems);
 			
-			if(typestring == "absolute")
-				$("#hitsDescription").text("Träffar i absoluta tal.");
-			else
-				$("#hitsDescription").text("Träffar i relativa tal.");
+			if(typestring == "absolute") {
+				$("#hitsDescription").text(util.getLocaleString("statstable_absfigures_hits"));
+				$("#hitsDescription").attr({"rel" : "localize[statstable_absfigures_hits]"});
+			} else {
+				$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits"));
+				$("#hitsDescription").attr({"rel" : "localize[statstable_relfigures_hits]"});
+			}
 		});
 		
 		
@@ -720,7 +732,7 @@ var StatsResults = {
 		
 		// Make Right Stats Table -------------------------------------------------------- //
 		
-		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i>Samtliga</i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
+		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
 		$.each(corpusArray, function(key, fvalue) {
 			theHTML += '<th style="height:60px"><span class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(/ /g,"&nbsp;") + '</span><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
 		});
@@ -765,6 +777,8 @@ var StatsResults = {
 
 		$("#rightStatsTable").append(theHTML);
 
+	// $("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
+		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
 		$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
 		
@@ -806,8 +820,10 @@ var StatsResults = {
 		$(".statstable").tooltip({
 			delay : 80,
 			bodyHandler : function() {
+				var relString = util.getLocaleString("statstable_relfreq");
+				var absString = util.getLocaleString("statstable_absfreq");
 				if(!$(this).attr('id'))
-					return "relativ frekvens (per en miljon ord):<br/><b>0</b><br>absolut frekvens:<br/><b>0</b>";
+					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
 				var parts = $(this).attr('id').split("__");
 				if(parts.length == 3) {
 					var hoveredCorpus = parts[1];
@@ -816,13 +832,13 @@ var StatsResults = {
 					if(!relFreq)
 						relFreq = 0;
 					var absFreq = statsResults.savedData["corpora"][hoveredCorpus]["absolute"][hoveredWord];
-					return "relativ frekvens (per en miljon ord):<br/><b>" + formatOutput(relFreq.toString()) +"</b><br/>absolut frekvens:<br/><b>" + absFreq + "</b>";
+					return relString + "<br/><b>" + formatOutput(relFreq.toString()) +"</b><br/>" + absString + "<br/><b>" + absFreq + "</b>";
 				} else if (parts.length == 2) {
 					// Left total
-					return "relativ frekvens (per en miljon ord):<br/><b>" + statsResults.savedData["total"]["relative"][parts[1]] + "</b><br/>absolut frekvens:<br/><b>" + statsResults.savedData["total"]["absolute"][parts[1]] + "</b>";
+					return relString + "<br/><b>" + statsResults.savedData["total"]["relative"][parts[1]] + "</b><br/>" + absString + "<br/><b>" + statsResults.savedData["total"]["absolute"][parts[1]] + "</b>";
 					//return "relativ frekvens (per en miljon ord):<br/><b>" + formatOutput(totalForWordform[parts[1]].toString()) + "</b><br/>absolut frekvens:<br/><b>" + totalForWordformAbs[parts[1]] + "</b>";
 				} else {
-					return "relativ frekvens (per en miljon ord):<br/><b>0</b><br>absolut frekvens:<br/><b>0</b>";
+					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
 				}
 			}
 		});

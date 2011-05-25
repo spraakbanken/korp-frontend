@@ -144,6 +144,16 @@
 	"corpselector_selectedone" : " vald",
 	"corpselector_selectedmultiple" : " korpusar valda",
 	"corpselector_buttonselectall" : "Markera alla",
-	"corpselector_buttonselectnone" : "Avmarkera"
+	"corpselector_buttonselectnone" : "Avmarkera",
+	
+	"statstable_allcorpora" : "Samtliga",
+	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",
+	"statstable_absfreq" : "absolut frekvens:",
+	"statstable_absfigures" : "Absoluta tal",
+	"statstable_relfigures" : "Relativa tal",
+	"statstable_absfigures_hits" : "Träffar i absoluta tal.",
+	"statstable_relfigures_hits" : "Träffar i relativa tal.",
+	"statstable_hitsheader" : "Träffar för ",
+	"statstable_hitsheader_lemgram" : "Träffar för lemgrammet"
     
 }
