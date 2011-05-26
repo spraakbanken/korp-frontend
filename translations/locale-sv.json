@@ -22,6 +22,9 @@
 	"wordclass_starts" : "ordklassen börjar med",
 	"interval" : "intervall",
 	
+	
+	"none_selected" : "&lt;Ej vald&gt;",
+	
 	"any" : "vilket ord som helst",
 	"error_occurred" : "Ett fel har inträffat.",
 	

@@ -43,6 +43,19 @@ $(function(){
 				$.sm.send("resultstab." + selected);
 			} 
 		});
+		$("#result-container li.ui-state-disabled").live({
+			mouseover : function() {
+				nTimeout = setTimeout(function() {
+					$(this).css("position", "relative")
+					.css("z-index", 1100);
+					$("#lemgram_select").highlight();
+				}, 750);
+				
+			},
+			mouseout : function() {
+				clearTimeout(nTimeout);
+			}
+		});
 		
 		var tabs = $(".ui-tabs");
 		tabs.find( tab_a_selector ).click(function() {
@@ -109,6 +122,7 @@ $(function(){
 				$("#simple_text").val(value);
 				simpleSearch.onSimpleChange();
 				simpleSearch.setPlaceholder("");
+				simpleSearch.makeLemgramSelect();
 				$.sm.send("submit.kwic", value);
 				break;
 			case "lemgram":

@@ -4,6 +4,7 @@ var view = {};
 // Search view objects
 //**************
 
+
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
@@ -38,8 +39,7 @@ var BaseSearch = {
 
 view.BaseSearch = new Class(BaseSearch);
 delete BaseSearch;
-
-$.fn.korp_autocomplete = function(selectCallback) {
+$.fn.korp_autocomplete = function(selectItemCallback) {
 	var selector = $(this);
 	selector.preloader({
 		timeout: 500,
@@ -54,7 +54,7 @@ $.fn.korp_autocomplete = function(selectCallback) {
 		html : true,
 		source: function( request, response ) {
 			
-			$.ajax({
+			var promise = $.ajax({
 				url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + request.term,
 				success : function(lemArray) {
 					$.log("autocomplete success");
@@ -88,9 +88,9 @@ $.fn.korp_autocomplete = function(selectCallback) {
 					selector.preloader("hide");
 				}
 				
-			}).complete(function(jqxhr, status) {
-				$.log("complete", jqxhr, status);
 			});
+			
+			selector.data("promise", promise);
 		},
 		search: function() {
 			selector.preloader("show");
@@ -101,7 +101,10 @@ $.fn.korp_autocomplete = function(selectCallback) {
 			var selectedItem = ui.item.value;
 			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
 			
-			$.proxy(selectCallback, selector)(selectedItem);
+			$.proxy(selectItemCallback, selector)(selectedItem);
+		},
+		close : function(event) {
+			return false;
 		},
 		focus : function() {
 			return false;
@@ -120,19 +123,51 @@ var SimpleSearch = {
 		this.onSimpleChange();
 		$("#similar_lemgrams").hide();
 		
-		$("#simple_text").korp_autocomplete($.proxy(this.selectLemgram, this));
-		
-		
 		$("#simple_text").bind("keydown.autocomplete", function(event) {
-			$.log("keydown.autocomplete");
 			var keyCode = $.ui.keyCode;
-			if(!self.isVisible()) return;
+			if(!self.isVisible() || $("#ui-active-menuitem").length !== 0) return;
 				
 			switch(event.keyCode) {
 			case keyCode.ENTER:
 				self.onSubmit();
 				break;
 			}
+		})
+		.korp_autocomplete($.proxy(this.selectLemgram, this));
+		
+	},
+	
+	makeLemgramSelect : function() {
+		var self = this;
+		var promise = $("#simple_text").data("promise") 
+		|| 
+		$.ajax({
+			url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + $("#simple_text").val()
+		});
+		
+		$.when(promise).then(function(lemgramArray) {
+			lemgramArray = $.map(lemgramArray, function(item) {
+				return {label : util.lemgramToString(item), value : item};
+			});
+			
+			var select = self.buildLemgramSelect(lemgramArray)
+			.appendTo("#korp-simple")
+			.addClass("lemgram_select")
+			.prepend(
+				$("<option>", {rel : "localize[none_selected]"}).html(util.getLocaleString("none_selected"))
+			)
+			.bind("change", function() {
+				if(this.selectedIndex != 0) {
+					self.selectLemgram($(this).val());
+				}
+			});
+			
+			select.get(0).selectedIndex = 0;
+			
+			var label = $("<label />", {"for" : "lemgram_select"})
+			.html($.format("<i>%s</i> <span rel='localize[autocomplete_header]'>%s</span>", [$("#simple_text").val(), util.getLocaleString("autocomplete_header")]))
+			.css("margin-right", 8);
+			select.before( label );
 		});
 	},
 	
@@ -145,6 +180,15 @@ var SimpleSearch = {
 		this.refreshSearch();
 		util.searchHash("lemgram", lemgram);
 	},
+	
+	buildLemgramSelect : function(lemgrams, labelLocalKey) {
+		$("#lemgram_select").prev("label").andSelf().remove();
+		var optionElems = $.map(lemgrams, function(item) {
+			return $.format("<option value='%(value)s'>%(label)s</option>", item);
+		});
+		return $("<select id='lemgram_select' />").html(optionElems.join(""));
+	},
+	
 	renderSimilarHeader : function(selectedItem, data) {
 		$.log("renderSimilarHeader");
 		var self = this;
@@ -156,12 +200,8 @@ var SimpleSearch = {
 		
 		var lemgrams = $( "#simple_text" ).data("dataArray");
 		if(lemgrams != null && lemgrams.length ) {
-			var optionElems = $.map(lemgrams, function(item) {
-				return $.format("<option value='%(value)s'>%(label)s</option>", item);
-			});
-			$("<select id='lemgram_select' />").appendTo("#similar_header")
+			this.buildLemgramSelect(lemgrams).appendTo("#similar_header")
 			.css("float", "right")
-			.html(optionElems.join(""))
 			.change(function(){
 				self.selectLemgram($(this).val());
 			})
@@ -192,7 +232,6 @@ var SimpleSearch = {
 		}
 		
 		var val;
-		$.log("onSimpleChange", $("#simple_text").val());
 		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
 			val = $.format('[(lex contains "%s")]', $("#simple_text").val());
 		} else {
@@ -319,17 +358,9 @@ var ExtendedSearch = {
 				$.log("extended lemgram", lemgram, $(this));
 				$(this).data("value", lemgram);
 				$(this).attr("placeholder", util.lemgramToString(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
-			}).bind("keydown.autocomplete", function(event) {
-				var keyCode = $.ui.keyCode;
-//				if(!self.isVisible()) return;
-					
-				switch(event.keyCode) {
-				case keyCode.ENTER:
-					return false;
-//					self.onSubmit();
-					break;
-				}
-			}).change(function(event) {
+				$(this).val("");
+			})
+			.change(function(event) {
 				$.log("value null");
 				$(this).attr("placeholder", null)
 				.data("value", null);

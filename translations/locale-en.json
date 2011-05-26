@@ -22,6 +22,8 @@
 	"wordclass_starts" : "word class begins with",
 	"interval" : "interval",
 	
+	"none_selected" : "&lt;None selected&gt;",
+	
 	"any" : "any word",
 	"error_occurred" : "An error occurred",
 	

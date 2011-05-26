@@ -159,3 +159,39 @@ jQuery.fn.hoverIcon = function(icon) {
 	});
 	return this;
 };
+
+jQuery.fn.highlight = function() {
+	if($("#highlight:visible").length)
+		return this;
+	$("#highlight").remove();
+	var hl = $("<div id='highlight' />")
+	.css("position", "absolute")
+	.css("top", 0)
+	.css("bottom", 0)
+	.css("right", 0)
+	.css("left", 0)
+	.css("z-index", 1000)
+	.css("opacity", 0)
+	.css("background-color", "#000")
+	.appendTo("body")
+	.fadeTo(500, 0.3, function() {
+		$(this).fadeOut(500, function() {
+			$("._clone").remove();
+		});
+	});
+	var n = 0;
+	this.each(function(i, item) {
+		var pos = $(item).position();
+		$("<div />").append(
+			$(item).clone()
+		)
+		.css("position", "absolute")
+		.css("top", pos.top)
+		.css("left", pos.left)
+		.css("z-index", 1001 + n)
+		.addClass("_clone")
+		.appendTo($(item).parent());
+		n++;
+	});
+	return this;
+};
