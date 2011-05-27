@@ -76,7 +76,7 @@ var KWICResults = {
 	},
 	
 	onKeydown : function(event) {
-		if(!util.SelectionManager.hasSelected() || $(":text, textarea").is(":focus")) return;
+		if(!util.SelectionManager.hasSelected() || $("input[type=text], textarea").is(":focus")) return;
 	    switch(event.which) {
 			case 38: //up
 				kwicResults.selectUp();
@@ -139,16 +139,17 @@ var KWICResults = {
 					.appendTo( "#results-table" )
 					.find(".word")
 					.click(function(event) {
-							event.stopPropagation();
-							util.SelectionManager.select($(this));
-							var data = $(this).tmplItem().data;
-							var currentSentence = $(this).parent().is(".linked_sentence") ? sentence.aligned : sentence;   
-							
-							updateSidebar(currentSentence.structs, data, sentence.corpus);
-							$.sm.send("word.select");
-						}
-							
-					).end();
+						event.stopPropagation();
+						var word = $(this);
+						
+						var data = $(this).tmplItem().data;
+						var currentSentence = $(this).parent().is(".linked_sentence") ? sentence.aligned : sentence;  
+						var i = Number(data.dephead);
+						var aux = $(word.closest("tr").find(".word").get(i - 1));
+						util.SelectionManager.select(word, aux);
+						updateSidebar(currentSentence.structs, data, sentence.corpus);
+						$.sm.send("word.select");
+					}).end();
 					
 			if(i % 2 == 0) {
 				rows.addClass("alt");
@@ -158,11 +159,6 @@ var KWICResults = {
 		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
 			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
-//		$.each(["(", "{", "["], function(i, item) {
-//			$($.format(".word:contains(%s)", item)).next().html('');
-//		});
-		//$("#results-kwic").hide();
-//			make the first matched word selected by default.
 		$(".match").children().first().click();
 		$("#results-kwic").fadeIn(effectSpeed);
 		

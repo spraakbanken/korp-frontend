@@ -5,6 +5,14 @@ var view = {};
 //**************
 
 
+view.lemgramSort = function(first, second) {
+	var match1 = util.splitLemgram(first);
+	var match2 = util.splitLemgram(second);
+	if(match1[0] == match2[0])
+		return parseInt(match1[2]) - parseInt(match2[2]); 
+	return first.length - second.length;
+};
+
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
@@ -58,13 +66,7 @@ $.fn.korp_autocomplete = function(selectItemCallback) {
 				url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + request.term,
 				success : function(lemArray) {
 					$.log("autocomplete success");
-					lemArray.sort(function(first, second){
-						var match1 = util.splitLemgram(first);
-						var match2 = util.splitLemgram(second);
-						if(match1[0] == match2[0])
-							return parseInt(match1[2]) - parseInt(match2[2]); 
-						return first.length - second.length;
-					});
+					lemArray.sort(view.lemgramSort);
 					
 					var labelArray = util.lemgramArraytoString(lemArray);
 					var listItems = $.map(lemArray, function(item, i) {
@@ -137,6 +139,13 @@ var SimpleSearch = {
 		
 	},
 	
+	isSearchPrefix : function() {
+		return $("#prefixChk").is(":checked");
+	},
+	isSearchSuffix : function() {
+		return $("#suffixChk").is(":checked");
+	},
+	
 	makeLemgramSelect : function() {
 		var self = this;
 		var promise = $("#simple_text").data("promise") 
@@ -146,6 +155,8 @@ var SimpleSearch = {
 		});
 		
 		$.when(promise).then(function(lemgramArray) {
+			if(lemgramArray.length == 0) return;
+			lemgramArray.sort(view.lemgramSort);
 			lemgramArray = $.map(lemgramArray, function(item) {
 				return {label : util.lemgramToString(item), value : item};
 			});
@@ -221,7 +232,23 @@ var SimpleSearch = {
 		.appendTo("#similar_lemgrams");
 		$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
 		
-		$("#similar_lemgrams").show();
+		
+		$("#show_more").remove();
+		var div = $("#similar_lemgrams").css("opacity", 0).height("auto").show();
+		if(div.height() > 128) {
+			div.height(128).after(
+				$("<div id='show_more' />")
+				.html($.format("<a href='javascript:' rel='localize[show_more]'>Visa fler</a>", util.getLocaleString("show_more")))
+				//.css("right", (div.innerWidth() -) *-1)
+				.click(function() {
+					$(this).fadeOut("fast", function() {
+						$(this).remove();
+					});
+					$("#similar_lemgrams").height("auto");
+				})
+			);
+		}
+		div.fadeTo("fast", 1.0);
 	},
 	
 	onSimpleChange : function(event) {
@@ -234,7 +261,12 @@ var SimpleSearch = {
 		var val;
 		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
 			val = $.format('[(lex contains "%s")]', $("#simple_text").val());
-		} else {
+		} else if(this.isSearchPrefix() || this.isSearchSuffix()) {
+			var prefix = this.isSearchSuffix() ? ".*" : "";
+			var suffix = this.isSearchPrefix() ? ".*" : "";
+			val = $.format('[(word = "%s%s%s")]', [prefix, $("#simple_text").val(), suffix]) ;
+		}
+		else {
 			var valArray = $("#simple_text").val().split(" ");
 			var cqp = $.map(valArray, function(item, i){
 				return '[(word = "' + item + '")]';

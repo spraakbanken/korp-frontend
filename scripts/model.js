@@ -102,9 +102,16 @@ var LemgramProxy = {
 		initialize : function() {
 		},
 			
-		lemgramSearch : function(lemgram) {
+		buildAffixQuery : function(isValid, key, value) {
+			if(!isValid) return "";
+			return $.format('| (%s contains "%s")', [key, value]);
+		},
+		
+		lemgramSearch : function(lemgram, searchPrefix, searchSuffix) {
 			lemgramResults.showPreloader();
-			var cqp = $.format('[(lex contains "%s")]', lemgram);
+			
+			var cqp = $.format('[(lex contains "%s")%s%s]', 
+					[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
 			kwicProxy.makeRequest(cqp);
 			return cqp;
 		},

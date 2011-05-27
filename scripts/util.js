@@ -8,19 +8,24 @@ util.SelectionManager = function() {
 	$.error("SelectionManager is a static class, don't instantiate it.");
 };
 
-util.SelectionManager.select = function(word) {
+util.SelectionManager.select = function(word, aux) {
 	if(word == null || !word.length) return;
 	if(this.selected) {
-		this.selected.removeClass("token_selected");
+		this.selected.removeClass("word_selected token_selected");
+		this.aux.removeClass("word_selected aux_selected");
 	}
 		
 	this.selected = word;
-	return word.addClass("token_selected");
+	this.aux = aux;
+	aux.addClass("word_selected aux_selected");
+	return word.addClass("word_selected token_selected");
 };
 util.SelectionManager.deselect = function() {
 	if(!this.selected) return;
-	this.selected.removeClass("token_selected");
+	this.selected.removeClass("word_selected token_selected");
 	this.selected = null;
+	this.aux.removeClass("word_selected aux_selected");
+	this.aux = null;
 };
 util.SelectionManager.hasSelected = function() {
 	return this.selected != null;

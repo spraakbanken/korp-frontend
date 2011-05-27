@@ -7,8 +7,9 @@
 	"about_dev" : "Utvecklare", 
 	"corpus" : "Korpus",
 	"search_for" : "Sök efter ",
+	"show_more" : "Visa fler",
 	"in_corpus" : "i korpus",
-	"cqp_query" : "Fullständig CQP-fråga",
+	"cqp_query" : "Fullständig <a href='http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQPTutorial/html/'>CQP</a>-fråga",
 	"max" : "upp till",
 	"min" : "minst",
 	"and" : "och",
@@ -23,7 +24,7 @@
 	"interval" : "intervall",
 	
 	
-	"none_selected" : "&lt;Ej vald&gt;",
+	"none_selected" : "&lt;ej vald&gt;",
 	
 	"any" : "vilket ord som helst",
 	"error_occurred" : "Ett fel har inträffat.",
@@ -39,6 +40,7 @@
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",
 	"search" : "   Sök   ",
+	"and_include" : "och inkludera",
 	"hits_per_page" : "Träffar per sida",
 	"num_results" : "Antal resultat",
 	"next" : "Nästa",

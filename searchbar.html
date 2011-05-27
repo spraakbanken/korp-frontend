@@ -11,13 +11,19 @@
                     <div class="ui-widget">
                         <span rel="localize[search_for]">Sök efter</span><input id="simple_text" type="text" /> 
                         <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
+                        <span rel="localize[and_include]">och inkludera</span>
+                        <span>
+	                        <input id="prefixChk" type="checkbox" ><span rel="localize[prefix]">förled</span>
+	                        <input id="suffixChk" type="checkbox"><span rel="localize[suffix]">efterled</span>
+                        </span>
                         <!--<div>
 	                        <span rel="localize[in_corpus]">i</span>
 	                        <select class="select_corpus" onchange="didSelectCorpus()"></select>
                         </div>-->
                     </div> 
-                    <div id="similar_lemgrams"></div>
-                    
+                    <div id="similar_wrapper">
+                    	<div id="similar_lemgrams"></div>
+                    </div>
                     <div style="float : none; clear : both;"></div>
                 </div>
                 

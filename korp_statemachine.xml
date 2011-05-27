@@ -2,7 +2,7 @@
     profile="ecmascript" initial="init" >
     
     <script><![CDATA[
-        function lemgramSearch(lemgram) {
+        function lemgramSearch(lemgram, searchPrefix, searchSuffix) {
             $.log("lemgramSearch", lemgram);
             simpleSearch
             .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""))
@@ -11,7 +11,8 @@
             searchProxy.relatedWordSearch(lemgram);
             
             statsProxy.makeRequest(lemgram);
-            var cqp = lemgramProxy.lemgramSearch(lemgram);
+            
+            var cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
             $("#cqp_string").val(cqp);
         }
     ]]></script>
@@ -82,7 +83,7 @@
                         
                         <transition event="submit.lemgram" target="simple">
                             <script>
-                                lemgramSearch(_event.data);
+                                lemgramSearch(_event.data, simpleSearch.isSearchPrefix(), simpleSearch.isSearchSuffix());
                             </script>
                         </transition>
                     

@@ -57,7 +57,8 @@ attrs.baseform = {
 };
 attrs.lemgram = {
 	label : "lemgram",
-	type : "set"
+	type : "set",
+	displayType : "autocomplete"
 };
 attrs.saldo = {
 	label : "saldo",
@@ -72,11 +73,13 @@ attrs.deprel = {
 };
 attrs.prefix = {
 	label : "prefix",
-	type : "set"
+	type : "set",
+	displayType : "autocomplete"
 };
 attrs.suffix = {
 	label : "suffix",
-	type : "set"
+	type : "set",
+	displayType : "autocomplete"
 };
 attrs.ref = {
 	label : "ref",
@@ -86,7 +89,7 @@ attrs.link = {
 	label : "sentence_link"
 };
 attrs.text = {
-		label : "text"
+	label : "text"
 };
 
 sattrs.date = {

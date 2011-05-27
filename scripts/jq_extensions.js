@@ -166,16 +166,11 @@ jQuery.fn.highlight = function() {
 	$("#highlight").remove();
 	var hl = $("<div id='highlight' />")
 	.css("position", "absolute")
-	.css("top", 0)
-	.css("bottom", 0)
-	.css("right", 0)
-	.css("left", 0)
 	.css("z-index", 1000)
 	.css("opacity", 0)
-	.css("background-color", "#000")
 	.appendTo("body")
-	.fadeTo(500, 0.3, function() {
-		$(this).fadeOut(500, function() {
+	.fadeTo(400, 1, function() {
+		$(this).fadeOut(400, function() {
 			$("._clone").remove();
 		});
 	});
@@ -191,6 +186,13 @@ jQuery.fn.highlight = function() {
 		.css("z-index", 1001 + n)
 		.addClass("_clone")
 		.appendTo($(item).parent());
+		
+		var offset = 5;
+		hl.css("left", $(item).offset().left - offset)
+		.css("top", $(item).offset().top - offset)
+		.width($(this).outerWidth() + offset*2)
+		.height($(this).outerHeight() + offset*2);
+		
 		n++;
 	});
 	return this;

@@ -53,7 +53,8 @@ $(function(){
 				
 			},
 			mouseout : function() {
-				clearTimeout(nTimeout);
+				if(nTimeout)
+					clearTimeout(nTimeout);
 			}
 		});
 		
