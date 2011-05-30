@@ -160,20 +160,45 @@ jQuery.fn.hoverIcon = function(icon) {
 	return this;
 };
 
-jQuery.fn.highlight = function() {
+jQuery.fn.highlight = function(command) {
+	if(command == "abort") {
+		$("#highlight").data("abort", true);
+		return this;
+	}
+		
 	if($("#highlight:visible").length)
 		return this;
+	function show(what) {
+		what.fadeTo(700, 1, function() {
+			hide($(this));
+		});
+	}
+	
+	function hide(what) {
+		what.fadeTo(700, 0.3, function() {
+			if(!$(this).data("abort")) {
+				show($(this));
+			}
+			else {
+				$(this).removeData("abort");
+				$("._clone").remove();
+				$("#highlight").remove();
+			}
+		});
+	}
+	
 	$("#highlight").remove();
 	var hl = $("<div id='highlight' />")
 	.css("position", "absolute")
 	.css("z-index", 1000)
 	.css("opacity", 0)
-	.appendTo("body")
-	.fadeTo(400, 1, function() {
-		$(this).fadeOut(400, function() {
-			$("._clone").remove();
-		});
-	});
+	.appendTo("body");
+//	.fadeTo(400, 1, function() {
+//		$(this).fadeOut(400, function() {
+//			$("._clone").remove();
+//		});
+//	});
+	show(hl);
 	var n = 0;
 	this.each(function(i, item) {
 		var pos = $(item).position();
@@ -187,7 +212,7 @@ jQuery.fn.highlight = function() {
 		.addClass("_clone")
 		.appendTo($(item).parent());
 		
-		var offset = 5;
+		var offset = 6;
 		hl.css("left", $(item).offset().left - offset)
 		.css("top", $(item).offset().top - offset)
 		.width($(this).outerWidth() + offset*2)

@@ -2,6 +2,14 @@
 // Result view objects
 //************
 
+view.disableTab = function(index) {
+	if($("#result-container").tabs("option", "selected") == index) {
+		$.log("iscurrentselected")
+		$("#result-container li:first > a").trigger("change");
+	}
+	$("#result-container").tabs("disable", index);
+};
+
 var BaseResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.$tab = $(tabSelector);
@@ -159,6 +167,14 @@ var KWICResults = {
 		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
 			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
+		
+		function getStruct(sentence) {
+			
+		}
+		
+//		$("#attrlistTmpl").tmpl(data.kwic)
+//		.appendTo("#attrlist")
+		
 		$(".match").children().first().click();
 		$("#results-kwic").fadeIn(effectSpeed);
 		

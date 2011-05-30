@@ -34,8 +34,8 @@
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
             <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first')"/>
-            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
-            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(4)')"/>
+            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(2)')"/>
+            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(3)')"/>
             
             <assign location="searchProxy"    expr="new model.SearchProxy()"/>
             <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
@@ -56,8 +56,9 @@
                     
                     <onentry>
                         <script>
+                            $.log("disabling all result tabs");
                             if($("#result-container").is(".ui-tabs")) 
-                                 $("#result-container").tabs("option", "disabled", [0,2,3]);
+                                 $("#result-container").tabs("option", "disabled", [0,1,2]);
                         </script>
                     </onentry>
                     
@@ -67,11 +68,12 @@
                 
                     <transition event="submit.kwic" target="search_history">
                         <script>
+                            if(In("results_lemgram") || In("results_stats"))
+                                $("#result-container li:first > a").trigger("change");
                             //simpleSearch.clear();
                             $("#simple_text").get(0).blur();
                             simpleSearch.resetView();
                             kwicProxy.makeRequest();
-                            
                         </script>
                     </transition>
                     
@@ -134,8 +136,8 @@
                     </onexit>
                     
                     <transition event="submit" target="results_kwic" cond="($.bbq.getState('result-container', true) || 0) === 0" />
-                    <transition event="submit" target="results_lemgram" cond="($.bbq.getState('result-container', true)) === 2" />
-                    <transition event="submit" target="results_stats" cond="($.bbq.getState('result-container', true)) === 3" />
+                    <transition event="submit" target="results_lemgram" cond="($.bbq.getState('result-container', true)) === 1" />
+                    <transition event="submit" target="results_stats" cond="($.bbq.getState('result-container', true)) === 2" />
                     
                 </state>
                 
@@ -187,6 +189,12 @@
                                 util.setJsonLink(lemgramProxy.prevRequest);
                             </script>
                         </onentry>
+                        <transition event="submit.kwic" target="results_lemgram" >
+                            <script>
+                                $.log("faking kwic result tab click");
+                                $("#result-container li:first > a").trigger("change");
+                            </script>
+                        </transition>
                     </state>
                     <state id="results_stats">
                         <onentry>
@@ -194,6 +202,11 @@
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>
+                        <transition event="submit.kwic" target="results_stats">
+                            <script>
+                                $("#result-container li:first > a").trigger("change");
+                            </script>
+                        </transition>
                     </state>
                     
                 </state>

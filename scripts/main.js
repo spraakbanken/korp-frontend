@@ -46,8 +46,6 @@ $(function(){
 		$("#result-container li.ui-state-disabled").live({
 			mouseover : function() {
 				nTimeout = setTimeout(function() {
-					$(this).css("position", "relative")
-					.css("z-index", 1100);
 					$("#lemgram_select").highlight();
 				}, 750);
 				
@@ -55,11 +53,13 @@ $(function(){
 			mouseout : function() {
 				if(nTimeout)
 					clearTimeout(nTimeout);
+				$("#lemgram_select").highlight("abort");
 			}
 		});
 		
 		var tabs = $(".ui-tabs");
 		tabs.find( tab_a_selector ).click(function() {
+			if($(this).parent().is(".ui-state-disabled")) return;
 			var state = {},
 			id = $(this).closest( '.ui-tabs' ).attr( 'id' ),
 			// Get the index of this tab.

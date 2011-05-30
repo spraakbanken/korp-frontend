@@ -171,6 +171,7 @@ var SimpleSearch = {
 				if(this.selectedIndex != 0) {
 					self.selectLemgram($(this).val());
 				}
+				$(this).prev("label").andSelf().remove();
 			});
 			
 			select.get(0).selectedIndex = 0;
@@ -222,29 +223,35 @@ var SimpleSearch = {
 		$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
 		
 		// wordlist
-		$($.map(data, function(item, i){
-			var match = util.splitLemgram(item);
-			return $.format("<a href='javascript:void(0)' data-lemgram='%s'>%s</a>", [item, match[0]]);
-		}).join(" "))
-		.click(function() {
-			simpleSearch.selectLemgram($(this).data("lemgram"));
-		})
-		.appendTo("#similar_lemgrams");
-		$("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
+		function makeLinks(array) {
+			return $($.map(array, function(item, i){
+				var match = util.splitLemgram(item);
+				return $.format("<a href='javascript:' data-lemgram='%s'>%s</a>", [item, match[0]]);
+			}).join(" "))
+			.click(function() {
+				simpleSearch.selectLemgram($(this).data("lemgram"));
+			});
+		}
+		
+		makeLinks(data.slice(0,30)).appendTo("#similar_lemgrams");
+		var breakDiv = $("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
 		
 		
 		$("#show_more").remove();
-		var div = $("#similar_lemgrams").css("opacity", 0).height("auto").show();
-		if(div.height() > 128) {
-			div.height(128).after(
+		
+		var div = $("#similar_lemgrams").css("opacity", 0).show();
+		
+		var restOfData = data.slice(30);
+		if(restOfData.length) {
+			div.after(
 				$("<div id='show_more' />")
 				.html($.format("<a href='javascript:' rel='localize[show_more]'>Visa fler</a>", util.getLocaleString("show_more")))
-				//.css("right", (div.innerWidth() -) *-1)
 				.click(function() {
 					$(this).fadeOut("fast", function() {
 						$(this).remove();
 					});
-					$("#similar_lemgrams").height("auto");
+					makeLinks(restOfData).appendTo("#similar_lemgrams");
+					breakDiv.appendTo("#similar_lemgrams");
 				})
 			);
 		}
@@ -282,7 +289,8 @@ var SimpleSearch = {
 	},
 	
 	resetView : function() {
-		$("#similar_lemgrams").empty();
+		$("#similar_lemgrams").empty().height("auto");
+		$("#show_more").remove();
 		return this;
 	},
 	

@@ -111,6 +111,7 @@ function cqpToken(token) {
     	}
         $.log("arg_value data", $(this).find(".arg_value").data("value"), data.displayType);
         args[type].push({data : data, value : value || $(this).find(".arg_value").data("value") || ""});
+        $.log("arg obj", data, value);
     });
     
     $.each(args, function(type, valueArray) {
