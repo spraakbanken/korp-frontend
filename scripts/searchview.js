@@ -326,7 +326,8 @@ var ExtendedSearch = {
 		} else {
 			var $select = this.$main.find("select.arg_type");
 			switch($select.val()) {
-			case "saldo":
+//			case "saldo":
+//				break;
 			case "lex":
 				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
 				util.searchHash(searchType, $select.next().data("value"));
