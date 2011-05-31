@@ -1,5 +1,5 @@
 if(window.console == null) window.console = {"log" : $.noop};
-
+var isDev = window.location.host == "localhost";
 
 // onDOMReady
 $(function(){
@@ -122,7 +122,7 @@ $(function(){
 			case "word":
 				$("#simple_text").val(value);
 				simpleSearch.onSimpleChange();
-				simpleSearch.setPlaceholder("");
+				simpleSearch.setPlaceholder(null, null);
 				simpleSearch.makeLemgramSelect();
 				$.sm.send("submit.kwic", value);
 				break;

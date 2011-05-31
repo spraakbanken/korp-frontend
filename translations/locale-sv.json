@@ -78,6 +78,21 @@
 	"genre" : "genre",
 	"article" : "artikel",
 	"type" : "typ",
+	"month" : "månad",
+	"publisher" : "utgivare",
+	"article_publisher" : "artikelutgivare",
+	"article_author" : "artikelförfattare",
+	"article_issue" : "artikelutgåva",
+	"article_genre" : "artikelgenre",
+	"article_section" : "artikelavdelning",
+	"article_topic" : "artikelns ämne/tema",
+	"text_volume" : "band",
+	
+	"sentence_link" : "meningslänk",
+	"text_issue" : "utgåva",
+	"text_recipient" : "mottagare",
+	"text_sv" : "verksnummer",
+	
 	"oneSentence" : "en mening",
 	
 	"statistics" : "Statistik",

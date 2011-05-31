@@ -500,7 +500,7 @@ table {
 }
 
 #controls_n {
-	margin-top : 6px;
+	margin-top : 3px;
 }
 
 #results-wraper {
@@ -508,7 +508,7 @@ table {
 }
 
 #results-lemgram {
-	overflow:auto
+	overflow:auto;
 }
 #lemgram_help {
 	float : none;

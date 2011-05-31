@@ -404,8 +404,8 @@ settings.corpora.gp2009 = {
 	},
 	struct_attributes : {
 		article_date : sattrs.date,
-		article_author : {label : "author"},
-		article_section : {label : "section"}
+		article_author : {label : "article_author"},
+		article_section : {label : "article_section"}
 	}
 };
 
@@ -428,7 +428,7 @@ settings.corpora.gp2d = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "issue"}
+		article_issue : {label : "article_issue"}
 	}
 };
 
@@ -451,8 +451,8 @@ settings.corpora.ordat = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
-		text_volume : {label : "volym"}
+		text_year : {label : "text_year"},
+		text_volume : {label : "text_year"}
 	}
 };
 
@@ -475,7 +475,7 @@ settings.corpora.fof = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "nr."}
+		article_issue : {label : "article_issue"}
 	}
 };
 
@@ -498,10 +498,10 @@ settings.corpora.press65 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "date"},
-		article_publisher : {label : "publisher"},
-		article_topic : {label : "topic"},
-		article_genre : {label : "genre"}
+		article_date : {label : "article_date"},
+		article_publisher : {label : "article_publisher"},
+		article_topic : {label : "article_topic"},
+		article_genre : {label : "article_genre"}
 	}
 };
 
@@ -525,7 +525,7 @@ settings.corpora.press76 = {
 	},
 	struct_attributes : {
 		article_year : {label : "year"},
-		article_publisher : {label : "publisher"}
+		article_publisher : {label : "article_publisher"}
 	}
 };
 
@@ -549,7 +549,7 @@ settings.corpora.press95 = {
 	},
 	struct_attributes : {
 		article_date : {label : "date"},
-		article_publisher : {label : "publisher"},
+		article_publisher : {label : "article_publisher"},
 		article_sectionshort : {label : "section"}
 	}
 };
@@ -574,7 +574,7 @@ settings.corpora.press96 = {
 	},
 	struct_attributes : {
 		article_date : {label : "date"},
-		article_publisher : {label : "publisher"},
+		article_publisher : {label : "article_publisher"},
 		article_sectionshort : {label : "section"}
 	}
 };
@@ -624,7 +624,7 @@ settings.corpora.press98 = {
 	},
 	struct_attributes : {
 		article_date : {label : "date"},
-		article_publisher : {label : "publisher"},
+		article_publisher : {label : "article_publisher"},
 		article_sectionshort : {label : "section"}
 	}
 };
@@ -990,7 +990,7 @@ settings.corpora.strindbergromaner = {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
 		text_year : {label : "year"},
-		text_sv : {label : "verksnummer"}
+		text_sv : {label : "text_sv"}
 	}
 };
 
@@ -1016,11 +1016,11 @@ settings.corpora.strindbergbrev = {
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
-		text_recipient : {label : "mottagare"},
+		text_recipient : {label : "text_recipient"},
 		text_year : {label : "year"},
 		text_month : {label : "month"},
 		text_day : {label : "day"},
-		text_volume : {label : "volume"}
+		text_volume : {label : "text_volume"}
 	}
 };
 
@@ -1140,7 +1140,7 @@ settings.corpora.astranova = {
 	},
 	struct_attributes : {
 		text_year : {label : "year"},
-		text_issue : {label : "issue"}
+		text_issue : {label : "text_issue"}
 	}
 };
 

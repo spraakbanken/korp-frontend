@@ -137,6 +137,12 @@ var SimpleSearch = {
 		})
 		.korp_autocomplete($.proxy(this.selectLemgram, this));
 		
+		$("#prefixChk, #suffixChk").click(function() {
+			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
+				self.enable();
+			}
+		});
+		
 	},
 	
 	isSearchPrefix : function() {
@@ -185,7 +191,10 @@ var SimpleSearch = {
 	
 	onSubmit : function(event) {
 		this.parent(event);
-		util.searchHash("word", $("#simple_text").val());
+		if($("#simple_text").val() != "")
+			util.searchHash("word", $("#simple_text").val());
+		else if($("#simple_text").attr("placeholder") != null)
+			this.selectLemgram($("#simple_text").data("lemgram"));
 	},
 	
 	selectLemgram : function(lemgram) {
@@ -247,9 +256,7 @@ var SimpleSearch = {
 				$("<div id='show_more' />")
 				.html($.format("<a href='javascript:' rel='localize[show_more]'>Visa fler</a>", util.getLocaleString("show_more")))
 				.click(function() {
-					$(this).fadeOut("fast", function() {
-						$(this).remove();
-					});
+					$(this).remove();
 					makeLinks(restOfData).appendTo("#similar_lemgrams");
 					breakDiv.appendTo("#similar_lemgrams");
 				})
@@ -261,7 +268,6 @@ var SimpleSearch = {
 	onSimpleChange : function(event) {
 		if(event && event.keyCode == 27) { //escape
 			$.log("key", event.keyCode);
-//			$("#simple_text").preloader("hide");
 			return;
 		}
 		
@@ -294,8 +300,8 @@ var SimpleSearch = {
 		return this;
 	},
 	
-	setPlaceholder : function(str) {
-		$("#simple_text").attr("placeholder", str)
+	setPlaceholder : function(str, data) {
+		$("#simple_text").data("lemgram", data).attr("placeholder", str)
 		.placeholder();
 		return this;
 	},
@@ -321,6 +327,7 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
+		
 	},
 	
 	onentry : function() {
@@ -488,7 +495,7 @@ var ExtendedSearch = {
 	    	closeBtn.css("right", "-235").css("top", "-55");
 	    }
 	    
-	    var wrapper = $("<div />").append($("<span rel='localize[and]'>and</span>"), insert);
+	    var wrapper = $("<div />").append($("<span/>", {rel : "localize[and]"}).text(util.getLocaleString("and")), insert);
 	    
 	    row.append(
 	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)

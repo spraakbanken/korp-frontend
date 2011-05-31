@@ -77,6 +77,22 @@
 	"genre" : "genre",
 	"article" : "article",
 	"type" : "type",
+	"month" : "month",
+	"publisher" : "publisher",
+	"article_publisher" : "article publisher",
+	"article_author" : "article author",
+	"article_issue" : "article issue",
+	"article_genre" : "article genre",
+	"article_section" : "article section",
+	"article_topic" : "article topic",
+	"text_volume" : "volume",
+	
+	"sentence_link" : "sentence link",
+	"text_issue" : "issue",
+	
+	"text_recipient" : "recipient",
+	"text_sv" : "work number",
+	
 	"oneSentence" : "one sentence",
 	
 	"statistics" : "Statistics",

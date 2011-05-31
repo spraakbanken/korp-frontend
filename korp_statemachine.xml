@@ -5,7 +5,7 @@
         function lemgramSearch(lemgram, searchPrefix, searchSuffix) {
             $.log("lemgramSearch", lemgram);
             simpleSearch
-            .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""))
+            .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
             .clear();
             lemgramProxy.relationsSearch(lemgram);
             searchProxy.relatedWordSearch(lemgram);
@@ -131,7 +131,7 @@
                     </onentry>
                     <onexit>
                         <script>
-                            $('#results-wrapper').show();
+                            $('#results-wrapper').fadeIn();
                         </script>
                     </onexit>
                     
