@@ -47,7 +47,7 @@ function sidebarSaldoFormat() {
 			return itm && itm.length;  
 		}).sort();
 			
-		var labelArray = util.lemgramArraytoString(idArray);
+		var labelArray = util.sblexArraytoString(idArray);
 		$(this)
 		.html($.arrayToHTMLList(labelArray))
 		.find("li")
@@ -68,35 +68,19 @@ function sidebarSaldoFormat() {
 //		}
 		
 	});
-	var saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/;
 	var $saldo = $("#sidebar_saldo"); 
 	var saldoidArray = $.grep($saldo.text().split("|"), function(itm) {
 		return itm && itm.length;  
 	}).sort();
-	var saldolabelArray = util.lemgramArraytoString(saldoidArray, function(saldoId, appendIndex) {
-		var match = saldoId.match(saldoRegExp);
-		var infixIndex = "";
-		if(appendIndex != null && match[2] != "1")
-			infixIndex = $.format("<sup>%s</sup>", match[2]);
-		return $.format("%s%s", [match[1], infixIndex]);
-	});
-//	if(!saldoidArray.length) {
-//		$saldo.html($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
-//	} else {
+	var saldolabelArray = util.sblexArraytoString(saldoidArray, util.saldoToString);
+
 	$saldo.html($.arrayToHTMLList(saldolabelArray))
 	.find("li")
 	.each(function(i, item){
-		var id = saldoidArray[i].match(saldoRegExp).slice(1,3).join("..");
+		var id = saldoidArray[i].match(util.saldoRegExp).slice(1,3).join("..");
 		$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", id));
 	})
 	.hoverIcon("ui-icon-extlink");
-//	.hover(function(){
-//		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon ui-icon-extlink'/>").appendTo($(this));
-//	}, function() {
-//		$(this).find(".ui-icon").remove();
-//	});
-//	}
-	
 	
 }
 

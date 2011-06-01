@@ -75,12 +75,20 @@ util.lemgramToString = function(lemgram, appendIndex) {
 			[concept, infixIndex, type, util.getLocaleString(type)]);
 };
 
-util.lemgramArraytoString = function(lemgramArray, labelFunction) {
+util.saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/;
+util.saldoToString = function(saldoId, appendIndex) {
+	var match = saldoId.match(util.saldoRegExp);
+	var infixIndex = "";
+	if(appendIndex != null && match[2] != "1")
+		infixIndex = $.format("<sup>%s</sup>", match[2]);
+	return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex]);
+};
+util.sblexArraytoString = function(idArray, labelFunction) {
 	labelFunction = labelFunction || util.lemgramToString;
-	var tempArray = $.map(lemgramArray, function(lemgram){
+	var tempArray = $.map(idArray, function(lemgram){
 		return labelFunction(lemgram, false);
 	});
-	return $.map(lemgramArray, function(lemgram) {
+	return $.map(idArray, function(lemgram) {
 		var isAmbigous = $.grep(tempArray, function(tempLemgram) {
 			return tempLemgram == labelFunction(lemgram, false);
 		}).length > 1;
@@ -98,6 +106,10 @@ util.splitLemgram = function(lemgram) {
 		return;
 	}
 	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(1);
+};
+
+util.splitSaldo = function(saldo) {
+	return saldo.match(util.saldoRegExp);
 };
 
 util.setJsonLink = function(settings){

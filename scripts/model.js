@@ -137,6 +137,43 @@ var LemgramProxy = {
 					lemgramResults.renderResult(data, lemgram);
 				}	
 			});
+		},
+		
+		sblexSearch : function(word, type) {
+			var deferred = $.Deferred(function( dfd ){
+				$.ajax({
+				    url : "http://spraakbanken.gu.se/ws/lexikon", 
+				    data : {
+				        wf : word,
+				        lexikon : "saldom",
+				        format : "json"
+			        },
+				    success : function(data) {
+			            var leArray = $.map(data.div, function(item) {
+			            	return item.LexicalEntry;
+			            });
+			            
+			            var output = $.grep(leArray, function(le) {
+			            	
+			            	if(le.pos.slice(-1) == "h") return false;
+			            	
+		            		var formArray = le.table.form;
+			        		for ( var i = 0; i < formArray.length; i++) {
+								var form = formArray[i];
+								if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
+									return true;
+							}
+			        		return false;
+			            });
+			        	output = $.map(output, function(le) {
+			        		return le[type];
+			        	});
+			        	dfd.resolve(output);
+			        }
+			        
+				});
+			}).promise();
+			return deferred;
 		}
 	};
 

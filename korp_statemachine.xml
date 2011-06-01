@@ -2,6 +2,15 @@
     profile="ecmascript" initial="init" >
     
     <script><![CDATA[
+    
+        function kwicSearch() {
+            if(In("results_lemgram") || In("results_stats")) {
+                $("#result-container li:first > a").trigger("change");
+            }
+            simpleSearch.resetView();
+            kwicProxy.makeRequest();
+        }
+    
         function lemgramSearch(lemgram, searchPrefix, searchSuffix) {
             $.log("lemgramSearch", lemgram);
             simpleSearch
@@ -54,26 +63,22 @@
             <state id="search" initial="simple">
                 <state id="search_inner"> 
                     
-                    <onentry>
-                        <script>
-                            $.log("disabling all result tabs");
-                            if($("#result-container").is(".ui-tabs")) 
-                                 $("#result-container").tabs("option", "disabled", [0,1,2]);
-                        </script>
-                    </onentry>
                     
                     <history id="search_history">
+                        <onentry>
+                            <script>
+                                $.log("disabling all result tabs");
+                                if($("#result-container").is(".ui-tabs")) 
+                                     $("#result-container").tabs("option", "disabled", [0,1,2]);
+                            </script>
+                        </onentry>
                         <transition target="simple" />
                     </history>
                 
                     <transition event="submit.kwic" target="search_history">
                         <script>
-                            if(In("results_lemgram") || In("results_stats"))
-                                $("#result-container li:first > a").trigger("change");
-                            //simpleSearch.clear();
                             $("#simple_text").get(0).blur();
-                            simpleSearch.resetView();
-                            kwicProxy.makeRequest();
+                            kwicSearch();
                         </script>
                     </transition>
                     
@@ -96,16 +101,10 @@
                         </onexit>
                     </state>
                     <state id="extended">
-<!--                         <onentry> -->
-<!--                             <script> -->
-<!--                                 extendedSearch.onentry(); -->
-<!--                             </script> -->
-<!--                         </onentry> -->
                         <transition event="submit.kwic" target="search_history">
                             <script>
                                 advancedSearch.updateCQP();
-                                simpleSearch.resetView();
-                                kwicProxy.makeRequest();
+                                kwicSearch();
                             </script>
                         </transition>
                         <transition event="submit.lemgram" target="search_history">

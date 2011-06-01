@@ -179,5 +179,7 @@ $(function(){
 		$(window).trigger("hashchange");
 		$("body").fadeTo(400, 1);
 		
+		
 	});
 });
+
