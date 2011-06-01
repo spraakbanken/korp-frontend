@@ -856,13 +856,13 @@ var StatsResults = {
 		
 		$(".searchForWordform").click(function() {
 			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
-			$.bbq.pushState({search : "cqp|" + '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]'});
+			$.bbq.pushState({search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]'});
 		});
 		
 		$(".searchForWordformInCorpus").click(function() {
 			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
 			var parts = $(this).parent().attr("id").split("__");
-			$.bbq.pushState({search : "cqp|" + '[(word = "' + parts[2] + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]', corpus : parts[1].toLowerCase()});
+			$.bbq.pushState({search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + parts[2] + '" %c)]', corpus : parts[1].toLowerCase()});
 		});
 		
 		$(".corpusTitleHeader").click(function() {
