@@ -545,9 +545,20 @@ function newDataInPie(dataName, horizontalDiagram) {
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))//util.getLocaleString("example_dialog_header")))
 							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:80%;"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 							.dialog({
-								width : 300,
-								height : 400,
-								resize: function(){stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);}
+								width : 400,
+								height : 500,
+								resize: function(){stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);},
+								resizeStop: function(event, ui) {
+									var w = $(this).dialog("option","width");
+									var h = $(this).dialog("option","height");
+									if(this.width*1.25 > this.height) {
+										$(this).dialog("option","height", w*1.25);
+									} else {
+										$(this).dialog("option","width", h*0.80);
+									}
+									stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);
+								}
+
 							});
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		
@@ -611,27 +622,38 @@ function newDataInPie(dataName, horizontalDiagram) {
 			});
 		});
 	
-		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
-			if(corpus == dataName) {
-				//$.each(obj, function(word, freq) {
-				//	dataItems.push({"value":freq, "caption": word + ": " + freq, "shape_id" : word});
-				//});
-				$.each(wordArray, function(key, fvalue) {
-					var freq = obj["relative"][fvalue];
-					if (freq) {
-						dataItems.push({"value":parseFloat(obj["relative"][fvalue]), "caption" : fvalue, "shape_id" : fvalue});
-					} else {
-						dataItems.push({"value":0, "caption" : fvalue, "shape_id" : fvalue});
-					}
-				});
-				return false; // break it
-			}
-		});
+		$(".statstable").css({"background-color":"white"});
+		if(dataName == "all") {
+			
+			$.each(statsResults.totalForWordform, function(key, fvalue) {
+				dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
+			});
+			$(".statstable__all").css({"background-color":"#EEEEEE"});
+			
+		} else {
+			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+				if(corpus == dataName) {
+					//$.each(obj, function(word, freq) {
+					//	dataItems.push({"value":freq, "caption": word + ": " + freq, "shape_id" : word});
+					//});
+					$.each(wordArray, function(key, fvalue) {
+						var freq = obj["relative"][fvalue];
+						if (freq) {
+							dataItems.push({"value":parseFloat(obj["relative"][fvalue]), "caption" : fvalue, "shape_id" : fvalue});
+						} else {
+							dataItems.push({"value":0, "caption" : fvalue, "shape_id" : fvalue});
+						}
+					});
+					return false; // break it
+				}
+			});
+			$(".statstablecorpus__" + dataName).css({"background-color":"#EEEEEE"});
+		}
 		
 		statsResults.selectedCorpus = dataName;
 		diagramInstance.pie_widget("newData", dataItems);
-		$(".statstable").css({"background-color":"white"});
-		$(".statstablecorpus__" + dataName).css({"background-color":"#EEEEEE"});
+		
+		
 	//diagramInstance = $('#circle_diagram').pie_widget({container_id: "circle_diagram", data_items: dataItems});
 	}
 }
@@ -721,6 +743,8 @@ var StatsResults = {
 			bc++;
 		});
 		
+		this.totalForWordform = totalForWordform;
+		
 		this.selectedCorpus = dummy;
 		$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
 
@@ -728,7 +752,7 @@ var StatsResults = {
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px"><td>'+ fvalue + ' <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px"><td><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr>';
 		});
 		leftHTML += '<tr><td>∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr></table>';
 		
@@ -747,7 +771,7 @@ var StatsResults = {
 		
 		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px"><span class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(/ /g,"&nbsp;") + '</span><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
+			theHTML += '<th style="height:60px"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
 		});
 		var c = 0;
 		var totalForAllWordforms = 0;
@@ -768,7 +792,7 @@ var StatsResults = {
 				
 				if (rel_hits) {
 					rel_hits = parseFloat(rel_hits);
-					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'">' + formatOutput(rel_hits.toFixed(1)) + '&nbsp;<span class="absStat">(' + abs_hits + ')</span></td>';
+					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + formatOutput(rel_hits.toFixed(1)) + '&nbsp;</a><a href="javascript:void(0)" class="absStat searchForWordformInCorpus">(' + abs_hits + ')</a></td>';
 				} else {
 					theHTML += '<td class="statstable statstablecorpus__' + gvalue + '"></td>';
 				}
@@ -829,6 +853,25 @@ var StatsResults = {
 		
 	
 		$(".statstable__all").css({"background-color":"#EEEEEE"});
+		
+		$(".searchForWordform").click(function() {
+			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
+			$.bbq.pushState({search : "cqp|" + '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]'});
+		});
+		
+		$(".searchForWordformInCorpus").click(function() {
+			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
+			var parts = $(this).parent().attr("id").split("__");
+			$.bbq.pushState({search : "cqp|" + '[(word = "' + parts[2] + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]', corpus : parts[1].toLowerCase()});
+		});
+		
+		$(".corpusTitleHeader").click(function() {
+			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
+			var parts = $(this).attr("id").split("__");
+			//$.bbq.pushState({corpus : parts[1].toLowerCase(), search: "lemgram|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '")]'});
+			$.bbq.pushState({corpus : parts[1].toLowerCase()});
+			simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
+		});
 		
 		$(".statstable").tooltip({
 			delay : 80,

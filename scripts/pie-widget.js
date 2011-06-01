@@ -1,6 +1,6 @@
 /******
-OPTIONS:
 
+ACTS AS PIE DIAGRAM AS WELL AS BAR DIAGRAM, DEPENDING ON THE SPECIFIED OPTIONS
 
 ******/
 
@@ -10,7 +10,7 @@ var pie_widget = {
 	options: {
 		container_id : '',
 		data_items : '',
-		diameter : 200,
+		diameter : 300,
 		sort_desc : false,
 		diagram_type : 1,
 		offset_x: 0,
@@ -35,7 +35,7 @@ var pie_widget = {
 	},
 	
 	resizeDiagram: function(newDiameter) {
-		if(newDiameter >= 10) {
+		if(newDiameter >= 150) {
 			$(this.container_id).width(newDiameter + 60);
 			$(this.container_id).height(newDiameter + 60);
 			this.options.diameter = newDiameter;
@@ -56,6 +56,7 @@ var pie_widget = {
 		if(updateOptions) {
 			//this.options.concat(updateOptions);
 		}
+		this.options.data_items = data_items;
 		this.shapes = this.initDiagram(data_items, {"threshold":0.01}, this.options.diagram_type);
 	},
 	
@@ -425,8 +426,3 @@ var pie_widget = {
 }
 
 $.widget("hp.pie_widget", pie_widget); // create the widget
-
-
-// Callbacks
-// • Mouse over arc
-// • Arc clicked

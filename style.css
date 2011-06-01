@@ -216,6 +216,18 @@ input:placeholder, textarea:placeholder {
 	border-style: hidden;
 }
 
+.searchForWordform {
+	cursor:pointer;
+}
+
+.searchForWordformInCorpus {
+	cursor:pointer;
+}
+
+.corpusTitleHeader {
+	cursor:pointer;
+}
+
 .ext {
 	margin-right: 0px;
 }
@@ -231,10 +243,24 @@ input:placeholder, textarea:placeholder {
 
 .buttonlink {
 	padding: .4em 1em .4em 20px;
+	color: #222222;
 	text-decoration: none;
 	position: relative;
 	text-size: .6em;
 }
+
+.buttonlink:link {
+	color: #222222;
+}
+
+.buttonlink:visited {
+	color: #222222;
+}
+
+.buttonlink:hover {
+	color: #444444;
+}
+
 
 .buttonlink span.ui-icon {
 	margin: 0 5px 0 0;
@@ -752,8 +778,20 @@ table {
 	text-align: right;
 }
 
-span.absStat {
+a.absStat {
 	color: #999999;
+}
+
+a.absStat:hover {
+	color: red;
+}
+
+a.relStat {
+	color: #000000;
+}
+
+a.relStat:hover {
+	color: red;
 }
 
 .word_column {

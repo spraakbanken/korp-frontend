@@ -147,7 +147,7 @@ var hp_corpusChooser = {
 			
 			newHTML += '<div class="popupchecks ui-corner-bottom">';
 			
-			newHTML += '<p style="text-align:right; margin-top:10px; margin-right:8px"><a href="#" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="#" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
+			newHTML += '<p style="text-align:right; margin-top:10px; margin-right:8px"><a href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
 			
 			newHTML += recursive_transform(body,0);
 			newHTML += '</div>';
