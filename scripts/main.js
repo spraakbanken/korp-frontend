@@ -1,10 +1,26 @@
 if(window.console == null) window.console = {"log" : $.noop};
 var isDev = window.location.host == "localhost";
 
+
 // onDOMReady
 $(function(){
 	$.revision = parseInt("$Rev$".split(" ")[1]);
 	$("#revision").text($.revision);
+	
+	$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+		if(options.preloadCallback == null) {
+			return;
+		}
+		var def = $.Deferred();
+	
+		setTimeout(function() {
+			def.resolve();
+		}, options.preloadTimeout || 1000);
+		$.when(jqXHR, def).then(function() {
+			options.preloadCallback();
+		});
+		
+	});
 	$.ajaxSetup({ 
 		dataType: "jsonp",
 		traditional: true

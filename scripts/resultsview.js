@@ -371,13 +371,12 @@ var LemgramResults = {
 			return;
 		}
 		
-		$.log("wordClass", lemgram, wordClass);
 		var relMapping = {};
 		var sortedList = [];
 		$.each(data, function(index, item) {
 			var toIndex = $.inArray(item.rel, order[wordClass]);
 			if(toIndex == -1) {
-				$.log("getting rel index failed for " + item.rel);
+//				$.log("getting rel index failed for " + item.rel);
 				return;
 			}
 			if(!sortedList[toIndex]) sortedList[toIndex] = [];
@@ -478,7 +477,7 @@ var LemgramResults = {
 	showNoResults : function() {
 		this.hidePreloader();
 		$("#results-lemgram")
-		.append($.format("<p><i rel='localize[no_lemgram_results]'>%s</i></p>", util.getLocaleString("no_lemgram_results")));
+		.append($("<i />").localeKey("no_lemgram_results"));
 	},
 	
 	hideWordclass : function() {
@@ -955,24 +954,21 @@ var StatsResults = {
 		});
 		//$("#results-stats").append($("<div />").css("clear", "both"));
 		
-		
-		
 		this.hidePreloader();
-		
 		
 	},
 	
 	showError : function() {
 		this.hidePreloader();
-		$("<i rel='localize[error_occurred]>")
-		.text(util.getLocaleString("error_occurred"))
+		$("<i/>")
+		.localeKey("error_occurred")
 		.appendTo("#results-stats");
 	},
 	
 	showNoResults : function() {
 		this.hidePreloader();
-		$("<i rel='localize[no_stats_results]' />")
-		.text(util.getLocaleString("no_stats_results"))
+		$("<i/>")
+		.localeKey("no_stats_results")
 		.appendTo("#results-stats");
 	}
 	

@@ -97,14 +97,15 @@ $.fn.korp_autocomplete = function(options) {
 					selector.autocomplete("widget").addClass("ui-autocomplete-tall");
 				}
 				$("#autocomplete_header").remove();	
-				selector.autocomplete("widget")
-				.prepend("<li id='autocomplete_header' rel='localize[autocomplete_header]'/>")
-				.find("li").first().text(util.getLocaleString("autocomplete_header")).css("font-weight", "bold").css("font-size", 10);
+				
+				$("<li id='autocomplete_header'")
+				.localeKey("autocomplete_header")
+				.css("font-weight", "bold").css("font-size", 10)
+				.prependTo(selector.autocomplete("widget"));
 				
 				selector.preloader("hide");
 			});
 				
-			
 			
 			selector.data("promise", promise);
 		},
@@ -190,7 +191,7 @@ var SimpleSearch = {
 			.appendTo("#korp-simple")
 			.addClass("lemgram_select")
 			.prepend(
-				$("<option>", {rel : "localize[none_selected]"}).html(util.getLocaleString("none_selected"))
+				$("<option>").localeKey("none_selected")
 			)
 			.bind("change", function() {
 				if(this.selectedIndex != 0) {
@@ -234,7 +235,8 @@ var SimpleSearch = {
 		var self = this;
 		
 		$("#similar_lemgrams").empty().append("<div id='similar_header' />");
-		$("<p rel='localize[similar_header]' />").html(util.getLocaleString("similar_header"))
+		$("<p/>")
+		.localeKey("similar_header")
 		.css("float", "left")
 		.appendTo("#similar_header");
 		
@@ -262,18 +264,20 @@ var SimpleSearch = {
 		}
 		
 		makeLinks(data.slice(0,30)).appendTo("#similar_lemgrams");
-		var breakDiv = $("<div name='wrapper' style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
+		var breakDiv = $("<div style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
 		
 		
 		$("#show_more").remove();
 		
-		var div = $("#similar_lemgrams").css("opacity", 0).show();
+//		var div = $("#similar_lemgrams").css("opacity", 0).show();
+		var div = $("#similar_lemgrams").show().slideUp(0);
+		
 		
 		var restOfData = data.slice(30);
 		if(restOfData.length) {
 			div.after(
 				$("<div id='show_more' />")
-				.html($.format("<a href='javascript:' rel='localize[show_more]'>Visa fler</a>", util.getLocaleString("show_more")))
+				.append($("<a href='javascript:' />").localeKey("show_more"))
 				.click(function() {
 					$(this).remove();
 					makeLinks(restOfData).appendTo("#similar_lemgrams");
@@ -281,7 +285,8 @@ var SimpleSearch = {
 				})
 			);
 		}
-		div.fadeTo("fast", 1.0);
+//		div.fadeTo("fast", 1.0);
+		div.slideDown("fast");
 	},
 	
 	onSimpleChange : function(event) {
@@ -416,7 +421,7 @@ var ExtendedSearch = {
 		case "select":
 			arg_value = $("<select />");
 			$.each(data.dataset, function(key, value) {
-				$("<option />", {value : key, rel : $.format("localize[%s]", value)}).text(util.getLocaleString(value)).appendTo(arg_value);
+				$("<option />").localeKey(value).appendTo(arg_value);
 			});
 			break;
 		case "autocomplete":
@@ -528,7 +533,7 @@ var ExtendedSearch = {
 	    	closeBtn.css("right", "-235").css("top", "-55");
 	    }
 	    
-	    var wrapper = $("<div />").append($("<span/>", {rel : "localize[and]"}).text(util.getLocaleString("and")), insert);
+	    var wrapper = $("<div />").append($("<span/>").localeKey("and"), insert);
 	    
 	    row.append(
 	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)

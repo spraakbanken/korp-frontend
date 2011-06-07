@@ -222,3 +222,10 @@ jQuery.fn.highlight = function(command) {
 	});
 	return this;
 };
+
+$.fn.localeKey = function(key) {
+	this.each(function() {
+		$(this).attr("rel", $.format("localize[%s]", key)).html(util.getLocaleString(key));
+	});
+	return this;
+};
