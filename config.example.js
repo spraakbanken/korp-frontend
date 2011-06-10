@@ -8,6 +8,9 @@ settings.corpora = {};
 settings.defaultContext = {
 	"1 sentence" : language.oneSentence
 };
+settings.defaultWithin = {
+	"sentence" : language.oneSentence	
+};
 
 settings.defaultLanguage = "sv";
 
@@ -62,7 +65,8 @@ attrs.lemgram = {
 };
 attrs.saldo = {
 	label : "saldo",
-	type : "set"
+	type : "set",
+	displayType : "autocomplete"
 };
 attrs.dephead = {
 	label : "dephead",

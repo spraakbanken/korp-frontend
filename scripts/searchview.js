@@ -55,6 +55,7 @@ var BaseSearch = {
 
 view.BaseSearch = new Class(BaseSearch);
 delete BaseSearch;
+
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
 	
@@ -70,7 +71,7 @@ $.fn.korp_autocomplete = function(options) {
 		position: {
 			my: "right center",
 			at: "right center",
-			offset: "-1 2",
+			offset: "-1 0",
 			collision: "none"
 		}
 	})
@@ -80,6 +81,7 @@ $.fn.korp_autocomplete = function(options) {
 			
 			var promise = lemgramProxy.sblexSearch(request.term, options.type)
 			.done(function(idArray) {
+				idArray = $.unique(idArray);
 				idArray.sort(options.sortFunction);
 				
 				var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
@@ -98,7 +100,7 @@ $.fn.korp_autocomplete = function(options) {
 				}
 				$("#autocomplete_header").remove();	
 				
-				$("<li id='autocomplete_header'")
+				$("<li id='autocomplete_header' />")
 				.localeKey("autocomplete_header")
 				.css("font-weight", "bold").css("font-size", 10)
 				.prependTo(selector.autocomplete("widget"));
@@ -153,7 +155,6 @@ var SimpleSearch = {
 		.korp_autocomplete({
 			type : "lem",
 			select : $.proxy(this.selectLemgram, this)
-		
 		});
 		
 		$("#prefixChk, #suffixChk").click(function() {
@@ -176,11 +177,8 @@ var SimpleSearch = {
 		var promise = $("#simple_text").data("promise") 
 		|| lemgramProxy.sblexSearch($("#simple_text").val(), "lem"); 
 		
-		$.ajax({
-			url: "http://spraakbanken.gu.se/ws/saldo-ws/flem/json/" + $("#simple_text").val()
-		});
-		
 		promise.done(function(lemgramArray) {
+			$("#lemgram_select").prev("label").andSelf().remove();
 			if(lemgramArray.length == 0) return;
 			lemgramArray.sort(view.lemgramSort);
 			lemgramArray = $.map(lemgramArray, function(item) {
@@ -269,9 +267,7 @@ var SimpleSearch = {
 		
 		$("#show_more").remove();
 		
-//		var div = $("#similar_lemgrams").css("opacity", 0).show();
-		var div = $("#similar_lemgrams").show().slideUp(0);
-		
+		var div = $("#similar_lemgrams").show().height("auto").slideUp(0);
 		
 		var restOfData = data.slice(30);
 		if(restOfData.length) {
@@ -280,12 +276,18 @@ var SimpleSearch = {
 				.append($("<a href='javascript:' />").localeKey("show_more"))
 				.click(function() {
 					$(this).remove();
+					var h = $("#similar_lemgrams").outerHeight();
+					
 					makeLinks(restOfData).appendTo("#similar_lemgrams");
 					breakDiv.appendTo("#similar_lemgrams");
+					$("#similar_lemgrams").height("auto");
+					var newH = $("#similar_lemgrams").outerHeight();
+					$("#similar_lemgrams").height(h);
+					
+					$("#similar_lemgrams").animate({height : newH}, "fast");
 				})
 			);
 		}
-//		div.fadeTo("fast", 1.0);
 		div.slideDown("fast");
 	},
 	
@@ -295,23 +297,26 @@ var SimpleSearch = {
 			return;
 		}
 		
+		
+		var currentText = $("#simple_text").val();
+		currentText = $.trim(currentText, '"');
 		var val;
-		if(util.isLemgramId($("#simple_text").val())) { // if the input is a lemgram, do semantic search.
-			val = $.format('[(lex contains "%s")]', $("#simple_text").val());
+		if(util.isLemgramId(currentText)) { // if the input is a lemgram, do semantic search.
+			val = $.format('[(lex contains "%s")]', currentText);
 		} else if(this.isSearchPrefix() || this.isSearchSuffix()) {
 			var prefix = this.isSearchSuffix() ? ".*" : "";
 			var suffix = this.isSearchPrefix() ? ".*" : "";
-			val = $.format('[(word = "%s%s%s")]', [prefix, $("#simple_text").val(), suffix]) ;
+			val = $.format('[(word = "%s%s%s")]', [prefix, regescape(currentText), suffix]) ;
 		}
 		else {
-			var valArray = $("#simple_text").val().split(" ");
-			var cqp = $.map(valArray, function(item, i){
-				return '[(word = "' + item + '")]';
+			var wordArray = currentText.split(" ");
+			var cqp = $.map(wordArray, function(item, i){
+				return '[(word = "' + regescape(item) + '")]';
 			});
 			val = cqp.join(" ");
 		}
 		$("#cqp_string").val(val);
-		if($("#simple_text").val() != "") {
+		if(currentText != "") {
 			this.enable();
 		} else {
 			this.disable();
@@ -321,6 +326,7 @@ var SimpleSearch = {
 	resetView : function() {
 		$("#similar_lemgrams").empty().height("auto");
 		$("#show_more").remove();
+//		$("#lemgram_select").prev("label").andSelf().remove();
 		return this;
 	},
 	

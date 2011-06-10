@@ -110,7 +110,6 @@ input:placeholder, textarea:placeholder {
 #header {
 	padding-top: 8px;
 	width: 100%;
-	margin-bottom: 15px;
 }
 
 #content {
@@ -134,6 +133,9 @@ input:placeholder, textarea:placeholder {
 	/*	text-align:center;*/
 }
 
+#num_hits {
+	min-width : 37px;	
+}
 
 .lang_selected {
 	color : black;	
@@ -238,7 +240,7 @@ input:placeholder, textarea:placeholder {
 	width: 400px;
 	height: 33px;
 	overflow: hidden;
-	margin-bottom: 8px;
+	margin-bottom: 5px;
 }
 
 .buttonlink {

@@ -49,6 +49,7 @@ var KWICProxy = {
 				if(settings.corpora[id].context != null)
 					return id.toUpperCase() + ":" + $.keys(settings.corpora[id].context)[0];
 			}), Boolean).join(),
+			within : "sentence",
 			show:[],
 			show_struct:[]  
 		};
@@ -124,7 +125,7 @@ var LemgramProxy = {
 				data : {
 					command : "relations",
 					lemgram : lemgram,
-					corpus : $.map(corpus, function(item){return item.toUpperCase();}) 
+					corpus : $.map(corpus, function(item){return item.toUpperCase();})
 				},
 				beforeSend : function(jqXHR, settings) {
 					$.log("before relations send", settings);

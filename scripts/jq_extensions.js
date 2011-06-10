@@ -229,3 +229,10 @@ $.fn.localeKey = function(key) {
 	});
 	return this;
 };
+
+
+$._oldtrim = $.trim;
+$.trim = function(string, char) {
+	if(char == null) return $._oldtrim(string, char);
+	return string.replace(new RegExp($.format("(^%s+)|(%s+$)", [char, char]), "g"), "");
+};

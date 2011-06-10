@@ -235,6 +235,7 @@ var KWICResults = {
 			kwicProxy.makeRequest(cqp, start, end, kwicProxy.queryData);
 			this.current_page = new_page_index;
 			$.bbq.pushState({"page" : this.current_page});
+			$("<div>")
 		}
 	    
 	   return false;
@@ -371,7 +372,6 @@ var LemgramResults = {
 			return;
 		}
 		
-		var relMapping = {};
 		var sortedList = [];
 		$.each(data, function(index, item) {
 			var toIndex = $.inArray(item.rel, order[wordClass]);
@@ -391,7 +391,7 @@ var LemgramResults = {
 			}
 		});
 		var toIndex = $.inArray("_", order[wordClass]);
-		sortedList.splice(toIndex, 0, {"word" : util.lemgramToString(lemgram).split(" ")[0]});
+		sortedList.splice(toIndex, 0, {"word" : lemgram.split("..")[0].replace(/_/g, " ")});
 		sortedList = $.grep ( sortedList, function(item, index){
 			return Boolean(item);
 		});

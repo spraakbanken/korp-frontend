@@ -93,11 +93,6 @@ $(function(){
 				return prevFragment[key] != e.getState(key);
 			}
 			
-			tabs.each(function() {
-				var idx = e.getState( this.id, true ) || 0;
-				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
-			});
-			
 			var page = e.getState("page", true);
 			if(hasChanged("page") && !hasChanged("search"))
 				kwicResults.setPage(page);
@@ -126,35 +121,36 @@ $(function(){
 			}
 			
 			var search = e.getState("search");
-			if(search == null || search === prevFragment["search"]) {
-				$.bbq.prevFragment = $.deparam.fragment();
-				return;
+			if(search != null && search !== prevFragment["search"]) {
+			
+				var type = search.split("|")[0];
+				var value = search.split("|")[1];
+				
+				switch(type) {
+				case "word":
+					$("#simple_text").val(value);
+					simpleSearch.onSimpleChange();
+					simpleSearch.setPlaceholder(null, null);
+					simpleSearch.makeLemgramSelect();
+					$.sm.send("submit.kwic", value);
+					break;
+				case "lemgram":
+					$.sm.send("submit.lemgram", value);
+					break;
+				case "saldo":
+					extendedSearch.setOneToken("saldo", value);
+					$.sm.send("submit.kwic", value);
+					break;
+				case "cqp":
+					advancedSearch.setCQP(value);
+					$.sm.send("submit.kwic", value);
+					break;
+				}
 			}
-			
-			var type = search.split("|")[0];
-			var value = search.split("|")[1];
-			
-			switch(type) {
-			case "word":
-				$("#simple_text").val(value);
-				simpleSearch.onSimpleChange();
-				simpleSearch.setPlaceholder(null, null);
-				simpleSearch.makeLemgramSelect();
-				$.sm.send("submit.kwic", value);
-				break;
-			case "lemgram":
-				$.sm.send("submit.lemgram", value);
-				break;
-			case "saldo":
-				extendedSearch.setOneToken("saldo", value);
-				$.sm.send("submit.kwic", value);
-				break;
-			case "cqp":
-				advancedSearch.setCQP(value);
-				$.sm.send("submit.kwic", value);
-				break;
-			}
-			
+			tabs.each(function() {
+				var idx = e.getState( this.id, true ) || 0;
+				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
+			});
 			
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
