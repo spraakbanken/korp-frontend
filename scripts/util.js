@@ -171,6 +171,16 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	return outHTML;
 }
 
+/* Helper function to turn "8455999" into "8 455 999" */
+function prettyNumbers(numstring) {
+	var regex = /(\d+)(\d{3})/;
+	var outStrNum = numstring;
+  	while (regex.test(outStrNum)) {
+    	outStrNum = outStrNum.replace(regex, '$1' + ' ' + '$2');
+  	}
+  	return outStrNum;
+}
+
 /* Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget */
 function loadCorpora() {
 	added_corpora_ids = [];
@@ -185,5 +195,5 @@ function loadCorpora() {
     	else
     		maybeInfo = "";
     	var numTokens = settings.corpora[corpusID]["info"]["Size"];
-    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/><b>" + util.getLocaleString("corpselector_numberoftokens") + ":</b> " + numTokens}});
+    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/><b>" + util.getLocaleString("corpselector_numberoftokens") + ":</b> " + prettyNumbers(numTokens)}});
 }
