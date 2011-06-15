@@ -169,6 +169,7 @@
 	"corpselector_selectedmultiple" : " corpora selected",
 	"corpselector_buttonselectall" : "Select all",
 	"corpselector_buttonselectnone" : "Select none",
+	"corpselector_numberoftokens" : "Number of tokens",
 	
 	"statstable_allcorpora" : "All&nbsp;corpora",
 	"statstable_relfreq" : "relative frequency (per million words):",

@@ -13,6 +13,7 @@ var hp_corpusChooser = {
 				var disp = $(".popupchecks").css("display");
 				if(disp != "none" && e.target != self) {
 					$(".popupchecks").fadeOut('fast');
+					$(".corpusInfoSpace").fadeOut('fast');
 					$(".hp_topframe").removeClass("ui-corner-top");
 					$(".hp_topframe").addClass("ui-corner-all");
 				}
@@ -38,7 +39,9 @@ var hp_corpusChooser = {
 		var allboxes = $(".boxdiv label .checked");
 		allboxes.each(function() {
 			var idstring = $(this).attr('id');
-			IDArray.push(idstring.slice(9));
+			if (idstring != "") {
+				IDArray.push(idstring.slice(9));
+			}
 		});
 		return IDArray;
 	},
@@ -152,6 +155,12 @@ var hp_corpusChooser = {
 			newHTML += recursive_transform(body,0);
 			newHTML += '</div>';
 			
+			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:362px; background-color:white">';
+			
+			newHTML += '<div class=""><p style="padding-left:10px; padding-right:10px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
+			
+			newHTML += "</div>";
+			
 			el.replaceWith(newHTML);
 			
 			hp_this.countSelected();
@@ -172,6 +181,7 @@ var hp_corpusChooser = {
 				$(this).disableSelection();
 				if($(this).siblings(".popupchecks").css("display") == "block") {
 					$(".popupchecks").fadeOut('fast');
+					$(".corpusInfoSpace").fadeOut('fast');
 					$(".hp_topframe").removeClass("ui-corner-top");
 					$(".hp_topframe").addClass("ui-corner-all");
 				} else {
@@ -234,6 +244,7 @@ var hp_corpusChooser = {
 			
 		 	$(".ext").unbind("click");
 		 	$(".ext").click(function() {
+		 		$(".corpusInfoSpace").fadeOut('fast');
 		 		if($(this).parent().attr('class') == "tree collapsed") {
 		 			$(this).parent().removeClass('collapsed');
 		 			$(this).parent().addClass('extended');
@@ -275,6 +286,31 @@ var hp_corpusChooser = {
 				if ($.isFunction(callback)) callback(hp_this.selectedItems());
  			});
  			
+ 			var hoverConfig = {    
+     			over: function() {
+     				// Fire callback "infoPopup":
+					var callback = hp_this.options.infoPopup;
+					var returnValue = "";
+					var inValue = "";
+					var idstring = $(this).find("img").attr("id")
+					if (idstring != "") {
+						inValue = idstring.slice(9);
+					}
+					if ($.isFunction(callback)) returnValue = callback(inValue);
+ 					$(".corpusInfoSpace").css({"top": $(this).offset().top});
+ 					$(".corpusInfoSpace").find("p").html(returnValue);
+ 					$(".corpusInfoSpace").fadeIn('fast');
+ 					//$(".corpusInfoSpace").css({"display": "block"});
+ 				},  
+     			interval: 200, // number = milliseconds delay before onMouseOut    
+     			out: function() {
+ 					/*$(".corpusInfoSpace").fadeOut('fast');
+ 					//$(".corpusInfoSpace").css({"display": "none"});*/
+ 				}
+			};
+
+ 			$(".boxdiv").hoverIntent(hoverConfig);
+ 			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function() {
 				$(this).disableSelection();
@@ -298,6 +334,7 @@ var hp_corpusChooser = {
 		function recursive_transform(einHTML, levelindent) {
 			var outStr = "";
 			var ul = $(einHTML).children();
+			var hasDirectCorporaChildren = false;
 			ul = ul.each(function(index){
 				var theHTML = $(this).html();
 				if(theHTML != null) {
@@ -322,9 +359,11 @@ var hp_corpusChooser = {
 					} else {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
+							hasDirectCorporaChildren = true
 							outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (330-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
+								hasDirectCorporaChildren = true
 								outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:330px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
 							}
 						}
@@ -332,9 +371,13 @@ var hp_corpusChooser = {
 				}
 	
 			});
+			if (!hasDirectCorporaChildren) {
+				outStr += '<div class="extra_fill" style="height:2px; display:none; visible:false"></div>';
+			}
 
 			return outStr;
 		};
+
 	}
 }
 

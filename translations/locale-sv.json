@@ -168,6 +168,7 @@
 	"corpselector_selectedmultiple" : " korpusar valda",
 	"corpselector_buttonselectall" : "Markera alla",
 	"corpselector_buttonselectnone" : "Avmarkera",
+	"corpselector_numberoftokens" : "Antal tokens",
 	
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",

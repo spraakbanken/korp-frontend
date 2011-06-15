@@ -132,9 +132,9 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	if (first_level) 
 		outHTML = '<ul>';
 	else {
-		if(!folder["contents"] || folder["contents"].length == 0) {
+		/*if(!folder["contents"]) {
 			return "";
-		}
+		} */
 		outHTML = '<ul title="' + folder.title + '">';
 	}
 	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
@@ -146,6 +146,7 @@ function loadCorporaFolderRecursive(first_level, folder) {
 		// Corpora
 		if (folder["contents"] && folder["contents"].length > 0) {
 			$.each(folder.contents, function(key, value) {
+				$.log(value);
 				outHTML += '<li id="' + value + '">' + settings.corpora[value]["title"] + '</li>';
 				added_corpora_ids.push(value);
 				
@@ -174,10 +175,15 @@ function loadCorporaFolderRecursive(first_level, folder) {
 function loadCorpora() {
 	added_corpora_ids = [];
 	outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
-    
 	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
 		$.log("corpus changed", corpora);
 		$.bbq.pushState({"corpus" : corpora.join(",")});
     	extendedSearch.refreshSelects();
-    }});
+    }, infoPopup: function(corpusID) {
+    	if(settings.corpora[corpusID].description)
+    		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
+    	else
+    		maybeInfo = "";
+    	var numTokens = settings.corpora[corpusID]["info"]["Size"];
+    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/><b>" + util.getLocaleString("corpselector_numberoftokens") + ":</b> " + numTokens}});
 }

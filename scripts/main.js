@@ -29,6 +29,11 @@ var deferred_domReady = $.Deferred(function( dfd ){
 
 $.when(deferred_load, deferred_info, deferred_domReady, deferred_sm).then(function(searchbar_html, info_data) {
 	$.log("everything ready", info_data);
+	
+	$.each(settings.corpora, function(key){
+		settings.corpora[key]["info"] = info_data[0]["corpora"][key.toUpperCase()]["info"];
+	});
+	
 	$.revision = parseInt("$Rev$".split(" ")[1]);
 	$("#revision").text($.revision);
 	
