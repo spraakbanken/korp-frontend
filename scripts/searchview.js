@@ -432,14 +432,15 @@ var ExtendedSearch = {
 			break;
 		case "autocomplete":
 			$.log("displayType autocomplete");
+			var type, labelFunc, sortFunc;
 			if(data.label == "lemgram") {
-				var type = "lem";
-				var labelFunc = util.lemgramToString;
-				var sortFunc = view.lemgramSort;
+				type = "lem";
+				labelFunc = util.lemgramToString;
+				sortFunc = view.lemgramSort;
 			} else {
-				var type = "saldo";
-				var labelFunc = util.saldoToString;
-				var sortFunc = view.saldoSort;
+				type = "saldo";
+				labelFunc = util.saldoToString;
+				sortFunc = view.saldoSort;
 			}
 			arg_value = $("<input type='text'/>").korp_autocomplete({
 				labelFunction : labelFunc,
@@ -449,13 +450,13 @@ var ExtendedSearch = {
 					$.log("extended lemgram", lemgram, $(this));
 					$(this).data("value", lemgram);
 					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
-					$(this).val("");
 				}
 			})
 			.change(function(event) {
 				$.log("value null");
 				$(this).attr("placeholder", null)
-				.data("value", null);
+				.data("value", null)
+				.placeholder();
 			}).blur(function() {
 				var self = this;
 				setTimeout(function() {
@@ -466,7 +467,8 @@ var ExtendedSearch = {
 					else {
 						$(self).addClass("invalid_input")
 						.attr("placeholder", null)
-						.data("value", null);
+						.data("value", null)
+						.placeholder();
 					}
 					advancedSearch.updateCQP();
 				}, 100);
