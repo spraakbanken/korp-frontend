@@ -427,7 +427,7 @@ var ExtendedSearch = {
 		case "select":
 			arg_value = $("<select />");
 			$.each(data.dataset, function(key, value) {
-				$("<option />").localeKey(value).appendTo(arg_value);
+				$("<option />").localeKey(value).val(key).appendTo(arg_value);
 			});
 			break;
 		case "autocomplete":
