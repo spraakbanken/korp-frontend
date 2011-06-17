@@ -141,12 +141,138 @@ settings.corporafolders.newspapertexts.press = {
 
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
+	contents : []
+};
+
+settings.corporafolders.fisk.essayistic = {
+	title : "Essäistisk litteratur",
+	contents : ["fsbessaistik"]
+};
+
+settings.corporafolders.fisk.novels = {
+	title : "Skönlitteratur",
+	contents : ["fsbskonlit"]
+};
+
+settings.corporafolders.fisk.newspapertexts = {
+	title : "Tidningstexter",
 	contents : ["astranova"]
+};
+
+settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
+	title : "Jakobstads tidning 1999-2000",
+	contents : ["jakobstadstidning1999", "jakobstadstidning2000"]
+};
+
+settings.corporafolders.parallel = {
+	title : "Parallella material",
+	contents : []
+};
+
+settings.corporafolders.parallel.salt = {
+	title : "SALT",
+	contents : ["saltnld_swe"]
 };
 
 /*
  * CORPORA
  */
+
+settings.corpora.fsbskonlit = {
+	title : "Skönlitteratur 1970-2011",
+	languages : {
+		FSBSKONLIT : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_year : {label : "year"},
+	    text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.fsbessaistik = {
+	title : "Essäistisk litteratur 1970-2011",
+	languages : {
+		FSBESSAISTIK : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_year : {label : "year"},
+	    text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.jakobstadstidning1999 = {
+	title : "Jakobstads tidning 1999",
+	languages : {
+		JAKOBSTADSTIDNING1999 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora.jakobstadstidning2000 = {
+	title : "Jakobstads tidning 2000",
+	languages : {
+		JAKOBSTADSTIDNING2000 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	}
+};
 
 settings.corpora.dn1987 = {
 	title : "DN 1987",
@@ -681,7 +807,7 @@ settings.corpora.storsuc = {
 
 //settings.corpora.saltnld = {
 settings.corpora.saltnld_swe = {
-	title: "SALT-NLD", 
+	title: "Svenska-nederländska", 
 	languages : { 
 		SALTNLD_SWE: "svenska", 
 		SALTNLD_NLD: "nederländska"
@@ -1100,7 +1226,7 @@ settings.corpora.drama = {
 };
 
 settings.corpora.wikipedia = {
-	title : "Svenska Wikipedia",
+	title : "Svenska Wikipedia (juni 2011)",
 	languages : {
 		WIKIPEDIA : "svenska"
 	},
@@ -1172,6 +1298,7 @@ settings.arg_groups = {
 		notword : "word_is_not",
 		beginswith : "word_beginswith",
 		endswith : "word_endswith",
+		anyword : "any",
 		regexp : "matches_regexp"
 	},
 //	"ordklass" : {
@@ -1199,6 +1326,9 @@ settings.inner_args = {
 	},
 	endswith : function(s) {
 		return 'word = ".*' + regescape(s) + '"';
+	},
+	anyword : function(s) {
+		return "";
 	},
 	regexp : function(s) {
 		return 'word = "' + s + '"';

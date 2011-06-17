@@ -160,6 +160,8 @@ input:placeholder, textarea:placeholder {
 }
 
 .query_row {
+	overflow :auto;
+	white-space: nowrap;
 }
 .query_row table {
 	margin-bottom : 15px;

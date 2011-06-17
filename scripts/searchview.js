@@ -422,7 +422,7 @@ var ExtendedSearch = {
 		
 		var data = $(this).find(":selected").data("dataProvider");
 		$.log("didSelectArgtype ", data);
-		var arg_value;
+		var arg_value = null;
 		switch(data.displayType) {
 		case "select":
 			arg_value = $("<select />");
@@ -480,6 +480,10 @@ var ExtendedSearch = {
 			arg_value = $("<input type='text'/>");
 			break;
 		} 
+		
+		if($(this).val() == "anyword") {
+			arg_value.css("visibility", "hidden");
+		}
 		
 		arg_value.addClass("arg_value")
 	    .change(didChangeArgvalue);

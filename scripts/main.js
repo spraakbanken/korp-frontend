@@ -124,7 +124,7 @@
 				simpleSearch.enable();
 			}
 			
-			if(e.getState("display") == "about") {
+			function showAbout() {
 				$("#about_content").dialog({
 					beforeClose : function() {
 						$.bbq.removeState("display");
@@ -133,6 +133,15 @@
 				}).css("opacity", 0);
 				$("#ui-dialog-title-about_content").attr("rel", "localize[about]");
 				$("#about_content").fadeTo(400,1);
+			}
+			
+			if(e.getState("display") == "about") {
+				if($("#about_content").is(":empty")) {
+					$("#about_content").load("about.html", showAbout);
+				} else {
+					showAbout();
+				}
+				
 			} else  {
 				$("#about_content").closest(".ui-dialog").fadeTo(400, 0, function() {
 					$("#about_content").dialog("destroy");

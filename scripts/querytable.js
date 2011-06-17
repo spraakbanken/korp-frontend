@@ -97,15 +97,10 @@ function cqpToken(token) {
         var type = $(this).find(".arg_type").val();
         var data = $(this).find(".arg_type :selected").data("dataProvider");
         var value = $(this).find(".arg_value").val();
-        if(type == "word" && value == "") {
-        	$(this).find(".arg_value").attr("placeholder", util.getLocaleString("any"));
-        	return "[]";
-        }
         
         if(data.displayType == "autocomplete") {
         	value = null;
         }
-//        $(this).find(".arg_value").attr("placeholder", "");
         if (!args[type]) { 
         	args[type] = []; 
     	}
@@ -134,7 +129,8 @@ function cqpToken(token) {
     		inner_query.push(argFunc(obj.value));
     	});
     	if (inner_query.length) {
-    		query.token.push("(" + inner_query.join(" | ") + ")");
+    		query.token.push(inner_query.join(" | "));
+//    		query.token.push("(" + inner_query.join(" | ") + ")");
     	}
     	
     });
