@@ -203,7 +203,7 @@ function loadCorpora() {
     		
     		totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
     	});
-    	var maybeInfo = ""
+    	var maybeInfo = "";
     	if(desc && desc != "")
     		maybeInfo = desc + "<br/><br/>";
     	var glueString = "";
