@@ -122,7 +122,7 @@ var hp_corpusChooser = {
 				header_text = num_checked_checkboxes;
 				header_text_2 = 'corpselector_allselected';
 			} else if (num_checked_checkboxes == 1) {
-				var currentCorpusName = checked_checkboxes.parent().parent().attr('title');
+				var currentCorpusName = checked_checkboxes.parent().parent().attr('data');
 				if (currentCorpusName.length > 37) { // Ellipsis
 					currentCorpusName = $.trim(currentCorpusName.substr(0,37)) + "...";
 				}
@@ -132,9 +132,19 @@ var hp_corpusChooser = {
 				header_text = num_checked_checkboxes;
 				header_text_2 = "corpselector_selectedmultiple";
 			}
+			
+			// Number of tokens
+			var totNumberOfTokens = 0;
+			checked_checkboxes.each(function(key, corpItem) {
+				//$.log(">>>>>>" + $(this).attr('id'));
+				var corpusID = $(this).attr('id').slice(9);
+				totNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
+			});
+			
 			$("#hp_corpora_title1").text(header_text);
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
+			$("#hp_corpora_title3").text(" — " + prettyNumbers(totNumberOfTokens.toString()) + " tokens");
 	},
 	_transform: function() {	
 			var el = this.element;
@@ -146,7 +156,7 @@ var hp_corpusChooser = {
 				body = el.html();
 			}
 			var newHTML = '<div class="scroll_checkboxes">';
-			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
+			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
 			
 			newHTML += '<div class="popupchecks ui-corner-bottom">';
 			
@@ -155,7 +165,7 @@ var hp_corpusChooser = {
 			newHTML += recursive_transform(body,0);
 			newHTML += '</div>';
 			
-			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:362px; background-color:white">';
+			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:422px; background-color:white">';
 			
 			newHTML += '<div class=""><p style="padding-left:10px; padding-right:10px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
 			
@@ -308,8 +318,35 @@ var hp_corpusChooser = {
  					//$(".corpusInfoSpace").css({"display": "none"});*/
  				}
 			};
+			
+			var hoverFolderConfig = {
+				over: function() {
+					var callback = hp_this.options.infoPopupFolder;
+					var returnValue = "";
+					var indata = [];
+					var boxes = $(this).find(".boxdiv")
+					var corpusID = [];
+					boxes.each(function(index) {
+						corpusID.push($(this).find("img").attr('id').slice(9));
+					});
+					indata["corporaID"] = corpusID;
+					var desc = $(this).attr("data").split("___")[1];
+					if(!desc) {
+						desc = "";
+					}
+					indata["description"] = desc;
+					indata["title"] = $(this).attr("data").split("___")[0];
+					if ($.isFunction(callback)) returnValue = callback(indata);
+					$(".corpusInfoSpace").css({"top": $(this).offset().top});
+ 					$(".corpusInfoSpace").find("p").html(returnValue);
+ 					$(".corpusInfoSpace").fadeIn('fast');
+				},
+				interval: 200,
+				out: function() {}
+			};
 
  			$(".boxdiv").hoverIntent(hoverConfig);
+ 			$(".tree").hoverIntent(hoverFolderConfig);
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function() {
@@ -352,7 +389,10 @@ var hp_corpusChooser = {
 							cssattrib = "; display:none";
 						}
 						var foldertitle = $(this).children('ul').attr('title');
-						outStr += '<div title="' + foldertitle + '" style="left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
+						var folderdescription = $(this).children('ul').attr('description');
+						if(folderdescription == "undefined")
+							folderdescription = "";
+						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 						
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
@@ -360,11 +400,11 @@ var hp_corpusChooser = {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
 							hasDirectCorporaChildren = true
-							outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (330-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
+							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (390-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
 								hasDirectCorporaChildren = true
-								outStr += '<div title="' + theHTML + '" class="boxdiv ui-corner-all" style="width:330px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
+								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:390px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
 							}
 						}
 					}

@@ -169,6 +169,9 @@
 	"corpselector_buttonselectall" : "Markera alla",
 	"corpselector_buttonselectnone" : "Avmarkera",
 	"corpselector_numberoftokens" : "Antal tokens",
+	"corpselector_tokens" : "tokens",
+	"corpselector_corporawith_sing" : "korpus med",
+	"corpselector_corporawith_plur" : "korpusar med",
 	
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",

@@ -239,7 +239,7 @@ input:placeholder, textarea:placeholder {
 .scroll_checkboxes {
 	float: left;
 	clear: both;
-	width: 400px;
+	width: 460px;
 	height: 33px;
 	overflow: hidden;
 	margin-bottom: 5px;
@@ -277,7 +277,7 @@ input:placeholder, textarea:placeholder {
 .popupchecks {
 	z-index: 9999;
 	max-height:600px;
-	width: 382px;
+	width: 442px;
 /* 	#top: 124px; */
 	border-color: #CCCCCC;
 	border-style: solid;
@@ -297,7 +297,7 @@ input:placeholder, textarea:placeholder {
 
 .hp_topframe {
 	height: 16px;
-	width: 353px;
+	width: 413px;
 	text-align: center;
 	padding-top: 10px;
 }
@@ -307,7 +307,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .tree {
-	width: 330px;
+	width: 390px;
 	position: relative;
 	margin-top: 1px;
 	margin-bottom: -3px;

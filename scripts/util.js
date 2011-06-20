@@ -135,12 +135,12 @@ function loadCorporaFolderRecursive(first_level, folder) {
 		/*if(!folder["contents"]) {
 			return "";
 		} */
-		outHTML = '<ul title="' + folder.title + '">';
+		outHTML = '<ul title="' + folder.title + '" description="' + folder.description + '">';
 	}
 	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
 		// Folders
 		$.each(folder, function(fol, folVal) {
-			if (fol != "contents" && fol != "title")
+			if (fol != "contents" && fol != "title" && fol != "description")
 				outHTML += '<li>' + loadCorporaFolderRecursive(false, folVal) + "</li>";
 		});
 		// Corpora
@@ -190,10 +190,27 @@ function loadCorpora() {
 		$.bbq.pushState({"corpus" : corpora.join(",")});
     	extendedSearch.refreshSelects();
     }, infoPopup: function(corpusID) {
+    	var maybeInfo = ""
     	if(settings.corpora[corpusID].description)
     		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
-    	else
-    		maybeInfo = "";
     	var numTokens = settings.corpora[corpusID]["info"]["Size"];
-    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/><b>" + util.getLocaleString("corpselector_numberoftokens") + ":</b> " + prettyNumbers(numTokens)}});
+    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b>";
+    }, infoPopupFolder: function(indata) {
+    	var corporaID = indata.corporaID;
+    	var desc = indata.description;
+    	var totalTokens = 0;
+    	$(corporaID).each(function(key,oneID) {
+    		
+    		totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
+    	});
+    	var maybeInfo = ""
+    	if(desc && desc != "")
+    		maybeInfo = desc + "<br/><br/>";
+    	var glueString = "";
+    	if(corporaID.length == 1)
+    		glueString = util.getLocaleString("corpselector_corporawith_sing");
+    	else
+    		glueString = util.getLocaleString("corpselector_corporawith_plur");
+    	return "<b>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> tokens";
+    }});
 }
