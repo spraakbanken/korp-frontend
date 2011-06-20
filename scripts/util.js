@@ -190,7 +190,7 @@ function loadCorpora() {
 		$.bbq.pushState({"corpus" : corpora.join(",")});
     	extendedSearch.refreshSelects();
     }, infoPopup: function(corpusID) {
-    	var maybeInfo = ""
+    	var maybeInfo = "";
     	if(settings.corpora[corpusID].description)
     		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
     	var numTokens = settings.corpora[corpusID]["info"]["Size"];
