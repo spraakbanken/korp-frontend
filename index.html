@@ -58,6 +58,7 @@
 				$.error("Localization failed");
 			
 		</script>
+		<script type="text/javascript" src="lib/jstorage.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
 		<script type="text/javascript" src="config.js"></script>
 		
@@ -74,14 +75,21 @@
 		<script type="text/javascript" src="scripts/sidebar.js"></script>
 		
 		
-		
-		<script type="text/javascript" src="lib/jstorage.js"></script>
 	</head>
   	<body style="opacity : 0">
   		<div id="header">
-  			<a href=""><img src="img/korplogo.png" /></a>
+  			<div id="header_left">
+	  			<div id="radio">
+					<input type="radio" id="radio1" data-mode="default" checked="checked" /><label for="radio1">Moderna texter</label>
+					<input type="radio" id="radio2" data-mode="parallel" /><label for="radio2">Parallella texter</label>
+				</div>
+  			
+ 				<a href=""><img src="img/korplogo.png" /></a>
+	 			<div id="corpusbox"></div>
+  			</div>
+  			
   			<div id="header_right">
-			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
+				<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
 	  			<ul id="languages">
 	  				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
 	  				<li rel="localize[english]" data-lang="en">Engelska</li>
@@ -91,7 +99,7 @@
   			<div style='clear : both;'></div>
   		</div>
 		
-  		<div id="corpusbox"></div>
+  		
   		
 		<div id="content">
 	   		

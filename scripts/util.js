@@ -16,8 +16,9 @@ util.SelectionManager.select = function(word, aux) {
 	}
 		
 	this.selected = word;
-	this.aux = aux;
-	aux.addClass("word_selected aux_selected");
+	
+	this.aux = aux || $();
+	this.aux.addClass("word_selected aux_selected");
 	return word.addClass("word_selected token_selected");
 };
 util.SelectionManager.deselect = function() {

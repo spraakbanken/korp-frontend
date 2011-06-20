@@ -71,6 +71,17 @@ a:hover {color:red;}  /* mouse over link */
 	font-family : inherit;
 }	
 
+#radio {
+	font-size : 10px;
+}
+#radio .ui-button-text {
+	padding : 0.2em 1.4em;
+	
+}
+
+#header_left {
+	float : left;	
+}
 #header_right {
 	float : right;	
 }
@@ -108,7 +119,6 @@ input:placeholder, textarea:placeholder {
 }
 
 #header {
-	padding-top: 8px;
 	width: 100%;
 }
 
@@ -119,9 +129,8 @@ input:placeholder, textarea:placeholder {
 	padding-bottom : 10px;
 }
 
-#header img {
-	float: left;
-	margin-top : -14px;
+#header a {
+	padding-right : 10px;
 }
 
 
@@ -237,8 +246,8 @@ input:placeholder, textarea:placeholder {
 }
 
 .scroll_checkboxes {
-	float: left;
-	clear: both;
+/* 	float: left; */
+/* 	clear: both; */
 	width: 460px;
 	height: 33px;
 	overflow: hidden;

@@ -148,15 +148,9 @@ var KWICResults = {
 					.find(".word")
 					.click(function(event) {
 						event.stopPropagation();
-						var word = $(this);
-						
-						var data = $(this).tmplItem().data;
-						var currentSentence = $(this).parent().is(".linked_sentence") ? sentence.aligned : sentence;  
-						var i = Number(data.dephead);
-						var aux = $(word.closest("tr").find(".word").get(i - 1));
-						util.SelectionManager.select(word, aux);
-						updateSidebar(currentSentence.structs, data, sentence.corpus);
+						self.onWordClick($(this), sentence);
 						$.sm.send("word.select");
+						
 					}).end();
 					
 			if(i % 2 == 0) {
@@ -168,10 +162,6 @@ var KWICResults = {
 			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
 		
-		function getStruct(sentence) {
-			
-		}
-		
 //		$("#attrlistTmpl").tmpl(data.kwic)
 //		.appendTo("#attrlist")
 		
@@ -180,6 +170,13 @@ var KWICResults = {
 		
 		this.centerScrollbar();
 		this.hidePreloader();
+	},
+	
+	onWordClick : function(word, sentence) {
+		var data = word.tmplItem().data;
+		
+		util.SelectionManager.select(word);
+		updateSidebar(sentence.structs, data, sentence.corpus);
 	},
 	
 	selectLeft : function(sentence, offset) {

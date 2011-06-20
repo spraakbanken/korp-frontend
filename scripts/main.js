@@ -1,3 +1,7 @@
+var PARALLEL_MODE = "parallel_mode";
+var currentMode;
+
+
 (function(){
 	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
@@ -13,48 +17,50 @@
 		$.sm("korp_statemachine.xml", dfd.resolve);
 	}).promise();
 	
-	var deferred_info = $.ajax({
-		url : settings.cgi_script,
-		data : {
-			command : "info",
-			corpus : $.map($.keys(settings.corpora), function(item) {
-				return item.toUpperCase();
-			}).join()
-		}
-	});
 	
 	var deferred_domReady = $.Deferred(function( dfd ){
 		$(dfd.resolve);
 	}).promise();
 	
+	var deferred_mode = $.Deferred();
+	if($.deparam.querystring().mode != null) {
+		deferred_mode = $.getScript($.format("modes/%s_mode.js", $.deparam.querystring().mode));
+	} else {
+		deferred_mode.resolve();
+	}
 	
-	$.when(deferred_load, deferred_info, deferred_domReady, deferred_sm).then(function(searchbar_html, info_data) {
-		$.log("everything ready", info_data);
+    var chained = deferred_mode.pipe(function() {
+        return $.ajax({
+			url : settings.cgi_script,
+			data : {
+				command : "info",
+				corpus : $.map($.keys(settings.corpora), function(item) {
+					return item.toUpperCase();
+				}).join()
+			}
+		});
+    });
+
+	chained.done(function( info_data ) {
+		$.each(settings.corpora, function(key){
+			settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"];
+		});
+	});
+	
+	$.when(deferred_load, chained, deferred_domReady, deferred_sm, deferred_mode).then(function(searchbar_html) {
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		
-		$.each(settings.corpora, function(key){
-			settings.corpora[key]["info"] = info_data[0]["corpora"][key.toUpperCase()]["info"];
-		});
+		currentMode = $.deparam.querystring().mode || "default";
+		$.log("radio", $.format("#radio > input[data-mode=%s]", currentMode))
+		$($.format("#radio > input[data-mode=%s]", currentMode)).click();
 		
-		$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-			if(options.preloadCallback == null) {
-				return;
-			}
-			var def = $.Deferred();
-			
-			setTimeout(function() {
-				def.resolve();
-			}, options.preloadTimeout || 1000);
-			$.when(jqXHR, def).then(function() {
-				options.preloadCallback();
-			});
-			
+		$( "#radio" ).buttonset().find("input").click(function(event) {
+			var mode = $(event.target).data("mode");
+			location.search = "?mode=" + mode;
 		});
 		
 		$("#searchbar").html(searchbar_html[0]);
 		
-		// this fires only when both have been loaded. 
-		$.log("content load and sm init");
 		loadCorpora();
 		
 		$.sm.start();
@@ -221,10 +227,6 @@
 		$(window).trigger("hashchange");
 		$("body").fadeTo(400, 1);
 	});
-	
-	
-	
-		
 			
 })();
 
