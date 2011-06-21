@@ -23,7 +23,7 @@ var currentMode;
 	}).promise();
 	
 	var deferred_mode = $.Deferred();
-	if($.deparam.querystring().mode != null) {
+	if($.deparam.querystring().mode != null && $.deparam.querystring().mode != "default") {
 		deferred_mode = $.getScript($.format("modes/%s_mode.js", $.deparam.querystring().mode));
 	} else {
 		deferred_mode.resolve();
@@ -51,12 +51,18 @@ var currentMode;
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		
 		currentMode = $.deparam.querystring().mode || "default";
-		$.log("radio", $.format("#radio > input[data-mode=%s]", currentMode))
-		$($.format("#radio > input[data-mode=%s]", currentMode)).click();
+		$.log("radio", $.format("#radio > input[data-mode=%s]", currentMode));
+		$($.format("#radio > input[data-mode=%s]", currentMode)).attr("checked", "checked");
 		
-		$( "#radio" ).buttonset().find("input").click(function(event) {
+		$( "#radio" ).buttonset()
+		.find("input").click(function(event) {
 			var mode = $(event.target).data("mode");
-			location.search = "?mode=" + mode;
+			$.bbq.removeState("corpus");
+			if(mode == "default") {
+				location.search = "";
+			} else {
+				location.search = "?mode=" + mode;
+			}
 		});
 		
 		$("#searchbar").html(searchbar_html[0]);

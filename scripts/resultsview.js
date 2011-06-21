@@ -154,7 +154,7 @@ var KWICResults = {
 					}).end();
 					
 			if(i % 2 == 0) {
-				rows.addClass("alt");
+				rows.css("background-color", settings.primaryColor);
 			}
 			
 		});

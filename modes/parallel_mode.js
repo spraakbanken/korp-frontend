@@ -2,7 +2,7 @@ var ParallelExtendedSearch = {
 	Extends : view.ExtendedSearch,
 	initialize : function(mainDivId) {
 		this.parent(mainDivId);
-		this.$main.prepend("<i>This is the parallel view.</i>");
+//		this.$main.prepend("<i>This is the parallel view.</i>");
 	}
 };
 
@@ -23,6 +23,8 @@ var ParallelKWICResults = {
 view.ExtendedSearch = new Class(ParallelExtendedSearch);
 view.KWICResults = new Class(ParallelKWICResults);
 
+
+settings.primaryColor = "#FFF3D8";
 settings.corporafolders = {};
 settings.corporafolders.salt = {
 	title : "SALT",
