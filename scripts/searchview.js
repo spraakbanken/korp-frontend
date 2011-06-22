@@ -136,7 +136,7 @@ var SimpleSearch = {
 	Extends : view.BaseSearch,
 	initialize : function(mainDivId) {
 		this.parent(mainDivId);
-		
+		$("#similar_lemgrams").css("background-color", settings.primaryColor);
 		var self = this;
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
 		this.onSimpleChange();
@@ -273,6 +273,7 @@ var SimpleSearch = {
 		if(restOfData.length) {
 			div.after(
 				$("<div id='show_more' />")
+				.css("background-color", settings.primaryColor)
 				.append($("<a href='javascript:' />").localeKey("show_more"))
 				.click(function() {
 					$(this).remove();

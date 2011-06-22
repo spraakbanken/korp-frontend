@@ -65,6 +65,9 @@ a:hover {color:red;}  /* mouse over link */
 .color_red {
 	background-color : #FFDDD8;
 }
+.color_white {
+	background-color : white;	
+}
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-size : 1em;
@@ -390,7 +393,6 @@ input:placeholder, textarea:placeholder {
 
 #similar_lemgrams {
 	margin-top : 5px;
-	background-color : #EDF3FF;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -423,7 +425,6 @@ input:placeholder, textarea:placeholder {
 
 #show_more {
 	float:right;
-	background-color : #EDF3FF;
 }
 #show_more a {
 	font-size : 12px;

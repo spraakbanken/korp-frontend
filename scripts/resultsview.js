@@ -309,21 +309,27 @@ var LemgramResults = {
 	
 	renderHeader : function(wordClass) {
 		$.log("renderHeader", $("#results-lemgram"));
-		var colorArray = ["color_blue", "color_purple", "color_green", "color_yellow", "color_azure", "color_red"];
+		var colorMapping = {
+				SS : "color_blue", 
+				OBJ : "color_purple", 
+				ADV : "color_green", 
+				Head : "color_yellow", 
+				AT : "color_azure", 
+				ET : "color_red"};
 		var $parent = $("<div id='lemgram_help' />").prependTo("#results-lemgram");
 		
 		$(".lemgram_result").each(function(i) {
 			if($(this).data("rel")) {
-				var color = colorArray.shift();
-				$($.format("<span>%s</span>", wordClass == "av" ? util.getLocaleString("head") : $(this).data("rel")))
+				var color = colorMapping[$(this).data("rel")];
+				$("<span />").localeKey(wordClass == "av" ? "head" : "malt_" + $(this).data("rel"))
 				.addClass(color)
 				.appendTo($parent)
-				.tooltip({
-					delay : 600,
-					bodyHandler : function() {
-						return util.getLocaleString("tooltip_" + $(this).text());
-					}
-				})
+//				.tooltip({
+//					delay : 600,
+//					bodyHandler : function() {
+//						return util.getLocaleString("tooltip_" + $(this).text());
+//					}
+//				})
 				.mouseenter(function(event) {
 					$(".lemgram_result." + $(this).attr("class")).addClass("lemgram_highlight");
 				})
@@ -339,7 +345,6 @@ var LemgramResults = {
 			}
 				
 		});
-		
 		$("</label><input id='wordclassChk' type='checkbox' /><label rel='localize[show_wordclass]' for='wordclassChk'>").appendTo($parent)
 		.change(function() {
 			if($(this).is(":checked")) {
@@ -358,7 +363,8 @@ var LemgramResults = {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
-			vb : "SS,_,IO,OO,OA,RA,TA".split(","),
+//			vb : "SS,_,IO,OO,OA,RA,TA".split(","),
+			vb : "SS,_,OBJ,ADV".split(","),
 			nn : "AT,_,ET".split(","),
 			av :"_,AT".split(",")
 		};
@@ -417,7 +423,6 @@ var LemgramResults = {
 			
 		this.renderHeader(wordClass);
 		//$('#results-wrapper').show();
-		util.localize();
 		this.hidePreloader();
 	},
 	

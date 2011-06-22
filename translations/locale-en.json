@@ -153,6 +153,8 @@
 	"malt_RA" : "Place adverbial",
 	"malt_SS" : "Subject",
 	"malt_TA" : "Time adverbial",
+	"malt_OBJ" : "Object",
+	"malt_ADV" : "Adverbial",
 
 	"tooltip_AT" : "Nominal (adjectival) pre-modifier",
 	"tooltip_ET" : "Other nominal post-modifier",
