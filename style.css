@@ -2,6 +2,7 @@
 body {
 	font-family : Helvetica, Arial, Verdana, sans-serif;
 	font-size: 13px;
+	margin : 0;
 }
 
 ul, ol {
@@ -11,17 +12,6 @@ ul, ol {
 .ui-widget {
 	font-family : inherit; 
 }
-
-/* .ui-dialog .ui-resizable-se { */
-/*     bottom: -2px; */
-/*     height: 14px; */
-/*     right: 3px; */
-/*     width: 14px; */
-/* } */
-
-/* .ui-dialog { */
-/* 	padding-top : 8px;	 */
-/* } */
 
 sup {
 	line-height : 0px;	
@@ -69,6 +59,10 @@ a:hover {color:red;}  /* mouse over link */
 	background-color : white;	
 }
 
+li[data-lang] {
+	display : inline-block;	
+}
+
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-size : 1em;
 	font-family : inherit;
@@ -76,6 +70,7 @@ a:hover {color:red;}  /* mouse over link */
 
 #radio {
 	font-size : 10px;
+	float : left;
 }
 #radio .ui-button-text {
 	padding : 0.2em 1.4em;
@@ -89,8 +84,36 @@ a:hover {color:red;}  /* mouse over link */
 	float : right;	
 }
 
+#about {
+	float : right;	
+}
+
 #aboutLink {
-	padding-top : 10px;	
+	padding-top : 10px;
+/* 	float : right;	 */
+}
+
+#top_bar {
+	
+	height : 30px;
+	width : 100%;
+/* IE10 */ 
+background-image: -ms-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+
+/* Mozilla Firefox */ 
+background-image: -moz-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+
+/* Opera */ 
+background-image: -o-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+
+/* Webkit (Safari/Chrome 10) */ 
+background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FCFAFC), color-stop(1, #D9D9D9));
+
+/* Webkit (Chrome 11+) */ 
+background-image: -webkit-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+
+/* Proposed W3C Markup */ 
+background-image: linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
 }
 
 /*match placeholder/watermark padding to border+padding for input element*/
@@ -123,13 +146,15 @@ input:placeholder, textarea:placeholder {
 
 #header {
 	width: 100%;
+	margin : 0;
 }
 
 #content {
-	float: left;
-	clear: both;
-	width: 100%;
-	padding-bottom : 10px;
+/* 	float: left; */
+/* 	clear: both; */
+/* 	width: 100%; */
+/* 	padding-bottom : 10px; */
+	padding : 0 8px 8px 8px;
 }
 
 #header a {
@@ -157,6 +182,8 @@ input:placeholder, textarea:placeholder {
 	list-style: none;
 	color : navy;
 	padding : 0;
+	float : right;
+	margin : 0;
 }
 #languages li {
 	margin : 0 0;
@@ -541,10 +568,6 @@ table {
 
 #controls_n {
 	margin-top : 3px;
-}
-
-#results-wraper {
-	display: none;
 }
 
 #results-lemgram {
