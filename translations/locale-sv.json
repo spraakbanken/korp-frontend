@@ -1,6 +1,8 @@
 {
 	"swedish" : "Svenska",
 	"english" : "English",
+	"modern_texts" : "Moderna texter",
+	"parallel_texts" : "Parallella texter",
 	"about" : "Om Korp",
 	"about_body" : "Korp är Språkbanken i Göteborgs konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
 	"about_man" : "Projektledning",

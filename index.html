@@ -79,27 +79,21 @@
   	<body style="opacity : 0">
   		<div id="header">
   			<div id="top_bar">
-	  			<div id="radio">
-					<input type="radio" id="radio1" name="mode_input" data-mode="default" checked="checked" /><label for="radio1">Moderna texter</label>
-					<input type="radio" id="radio2" name="mode_input" data-mode="parallel" /><label for="radio2">Parallella texter</label>
-				</div>
+  				<div id="mode_switch">
+  					<a href="javascript:" rel="localize[modern_texts]" data-mode="default">Moderna texter</a>
+  					<a href="javascript:" rel="localize[parallel_texts]" data-mode="parallel">Parallella texter</a>
+  				</div>
 				
-	  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
-				<ul id="languages">
-	  				<li rel="localize[swedish]" data-lang="sv">Svenska</li>
-	  				<li rel="localize[english]" data-lang="en">Engelska</li>
-	<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
-	  			</ul>
+		  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
+					<div id="languages">
+		  				<a href="javascript:" rel="localize[swedish]" data-lang="sv">Svenska</a>
+		  				<a href="javascript:" rel="localize[english]" data-lang="en">Engelska</a>
+		<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
+		  			</div>
   			</div>
   			<div id="header_left">
-  			
  				<a href=""><img src="img/korplogo.png" /></a>
 	 			<div id="corpusbox"></div>
-  			</div>
-  			
-  			<div id="header_right">
-				
-	  			
   			</div>
   			<div style='clear : both;'></div>
   		</div>
@@ -225,7 +219,7 @@
 			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
 			<tr>
 				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
-				<td>${$value.mi}</td>
+				<td>${$.format("%.1f", $value.mi)}</td>
 				<td id="example_link" 
 					data-head="${$value['head']}" 
 					data-dep="${$value['dep']}" 

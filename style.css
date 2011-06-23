@@ -68,24 +68,20 @@ li[data-lang] {
 	font-family : inherit;
 }	
 
-#radio {
-	font-size : 10px;
-	float : left;
-}
-#radio .ui-button-text {
-	padding : 0.2em 1.4em;
-	
-}
-
 #header_left {
 	float : left;	
 }
-#header_right {
-	float : right;	
+#header_left a {
+	margin-right : 10px;
+		
 }
+#header_left img {
+}
+	
 
 #about {
-	float : right;	
+	float : right;
+	margin : 0 8px;	
 }
 
 #aboutLink {
@@ -94,6 +90,7 @@ li[data-lang] {
 }
 
 #top_bar {
+	display : table;
 	
 	height : 30px;
 	width : 100%;
@@ -157,11 +154,6 @@ input:placeholder, textarea:placeholder {
 	padding : 0 8px 8px 8px;
 }
 
-#header a {
-	padding-right : 10px;
-}
-
-
 #header p {
 	margin: 0px;
 	margin-left: 10px;
@@ -179,16 +171,13 @@ input:placeholder, textarea:placeholder {
 }
 
 #languages {
-	list-style: none;
-	color : navy;
-	padding : 0;
 	float : right;
-	margin : 0;
+	margin-right : 8px;
 }
-#languages li {
-	margin : 0 0;
-	cursor : pointer;
-}
+/* #languages li { */
+/* 	margin : 0 0; */
+/* 	cursor : pointer; */
+/* } */
 
 .select_operation .select_language {
 	visibility: hidden;
@@ -869,3 +858,32 @@ a.relStat:hover {
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
 }
+
+.inline_list {
+	margin: 0;
+	padding: 0;
+}
+.inline_list li {
+	display: inline-block;
+	*display: inline;
+}
+
+.inline_list span {
+	padding : 0 5px;
+	color : grey;
+}
+
+#mode_switch {
+	margin-left : 8px;
+	float : left;
+}
+
+.radioList_selected {
+	color : black !important;
+		
+}
+
+/* #top_bar_right { */
+/* 	float : right; */
+/* 	margin-right : 8px; */
+/* } */

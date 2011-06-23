@@ -51,19 +51,20 @@ var currentMode;
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		
 		currentMode = $.deparam.querystring().mode || "default";
-		$.log("radio", $.format("#radio > input[data-mode=%s]", currentMode));
-		$($.format("#radio > input[data-mode=%s]", currentMode)).attr("checked", "checked");
 		
-		$( "#radio" ).buttonset()
-		.find("input").click(function(event) {
-			var mode = $(event.target).data("mode");
-			$.bbq.removeState("corpus");
-			if(mode == "default") {
-				location.search = "";
-			} else {
-				location.search = "?mode=" + mode;
-			}
-		});
+		$("#mode_switch").radioList({
+            change : function() {
+            	$.log("changed", this);
+            	var mode = $(this).data("mode");
+    			$.bbq.removeState("corpus");
+    			if(mode == "default") {
+    				location.search = "";
+    			} else {
+    				location.search = "?mode=" + mode;
+    			}
+            },
+            selected : $($.format("a[data-mode=%s]", currentMode)).index()
+		}).add("#about").vAlign();
 		
 		$("#searchbar").html(searchbar_html[0]);
 		
@@ -211,13 +212,11 @@ var currentMode;
 			}
 		});
 		
-		// setup language
-		$("#languages").children().click(function(){
-			$("#languages").children().removeClass("lang_selected");
-			$(this).addClass("lang_selected");
-			util.localize();
-		});
-		$($.format("[data-lang=%s]", settings.defaultLanguage)).click();
+		$("#languages").radioList({
+			change : function() {
+				util.localize();
+			}  
+		}).vAlign();
 		
 		// move out sidebar
 		hideSidebar();
@@ -228,8 +227,8 @@ var currentMode;
 			$("#simple_text").autocomplete("close");
 		});
 		extendedSearch.insertRow();
-	//		resetQuery();
 		
+		util.localize();
 		$(window).trigger("hashchange");
 		$("body").fadeTo(400, 1);
 	});

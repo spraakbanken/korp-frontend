@@ -46,7 +46,7 @@ util.getLocaleString = function(key) {
 };
 
 util.localize = function() {
-	var lang = $("#languages .lang_selected").data("lang");
+	var lang = $("#languages").radioList("getSelected").data("lang");
 	$("[rel^=localize]").localize("locale" ,{
 		pathPrefix : "translations", 
 		language : lang

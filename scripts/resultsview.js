@@ -389,7 +389,7 @@ var LemgramResults = {
 		$.each(sortedList, function(index, list) {
 			if(list) {
 				list.sort(function(first, second) {
-					return second.freq - first.freq;
+					return second.mi - first.mi;
 				});
 			}
 		});

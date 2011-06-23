@@ -41,7 +41,7 @@
 			var ah = $(this).height();
 			var ph = $(this).parent().height();
 			var mh = Math.ceil((ph - ah) / 2);
-			$(this).css('margin-top', mh);
+			$(this).css('padding-top', mh);
 		});
 	};
 
@@ -233,6 +233,43 @@ $.fn.localeKey = function(key) {
 
 $._oldtrim = $.trim;
 $.trim = function(string, char) {
-	if(char == null) return $._oldtrim(string, char);
+	if(char == null) return $._oldtrim(string);
 	return string.replace(new RegExp($.format("(^%s+)|(%s+$)", [char, char]), "g"), "");
 };
+$.widget("ui.radioList", {
+	options : {change : $.noop, separator : "|", selected : 0},
+	_init : function() {
+		var self = this;
+		$.each(this.element, function() {
+			
+			$(this).children().wrap("<li />")
+			.click(function() {
+				if(!$(this).is(".radioList_selected")) {
+					self.select($(this).parent().index());
+					$.proxy(self.options.change, this)();
+				}
+			})
+			.parent().prepend(
+						$("<span>").text(self.options.separator)
+					).wrapAll("<ul class='inline_list' />");
+			
+		});
+		this.element.find(".inline_list span:first").remove();
+		this.select(this.options.selected);
+		$.log("radioList", this, this.options.selected);
+	},
+	
+	select : function(index) {
+		this.options.selected = index;
+		this.element.find(".radioList_selected").removeClass("radioList_selected");
+		this.element.find($.format("a:nth(%s)", String(index))).addClass("radioList_selected");
+		return this.element;
+	},
+	getSelected: function() {
+		return this.element.find(".radioList_selected");
+	}
+	
+	
+	
+});
+	
