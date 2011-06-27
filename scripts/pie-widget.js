@@ -14,7 +14,7 @@ var pie_widget = {
 		sort_desc : false,
 		diagram_type : 1,
 		offset_x: 0,
-		offset_y: 61,
+		offset_y: 0,
 		bar_width : 25,
 		bar_spacing : 1,
 		bar_silhouette : true,
@@ -25,7 +25,6 @@ var pie_widget = {
 	canvas: null,
 	
 	_create: function() {
-		
 		this.shapes = this.initDiagram(this.options.data_items, {"threshold":0.01}, this.options.diagram_type);
 	},
 	
@@ -149,6 +148,7 @@ var pie_widget = {
 		var barObjects = new Array();
 		var counter = 0;
 		$.each(parts, function(key,fvalue) {
+			//r.rect(0,0,nowthis.options.offset_x,nowthis.options.offset_y,0).attr({color: "#EEEEEE"});
 			// Make silhouette
 			if (nowthis.options.bar_silhouette) {
 				var sx = counter*(nowthis.options.bar_width+nowthis.options.bar_spacing);
@@ -156,11 +156,11 @@ var pie_widget = {
 				var sw = nowthis.options.bar_width;
 				var sh = totheight;
 				if (nowthis.options.bar_horizontal) {
-					var silrect = r.rect(nowthis.options.offset_x, sx+nowthis.options.offset_y, sh, sw, 3);
+					var silrect = r.rect(nowthis.options.offset_x, sx+nowthis.options.offset_y, sh, sw, 0);
 				} else {
-					var silrect = r.rect(sx+nowthis.options.offset_x, sy+nowthis.options.offset_y, sw, sh, 3);
+					var silrect = r.rect(sx+nowthis.options.offset_x, sy+nowthis.options.offset_y, sw, sh, 0);
 				}
-				silrect.attr({fill: "#FBFBFB", "stroke-width": 0});
+				silrect.attr({fill: "#FBFBFB", "stroke-width": 1, stroke:"#EEEEEE"});
 			}
 			//if (nowthis.options.bar_horizontal) {
 				
@@ -175,7 +175,7 @@ var pie_widget = {
 			} else {
 				var newrect = r.rect(rx+nowthis.options.offset_x,ry+nowthis.options.offset_y,rw,rh,3);
 			}
-			newrect.attr({fill: fvalue["color"]});
+			newrect.attr({fill: fvalue["color"], stroke:"#EEEEEE"});
 			//newrect.attr({"opacity": 0.7});
 			newrect.attr({"stroke-width": 0});
 			newrect.node["shape_id"] = fvalue["shape_id"];

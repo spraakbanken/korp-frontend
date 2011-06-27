@@ -563,6 +563,9 @@ function newDataInPie(dataName, horizontalDiagram) {
 							});
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		
+		
+		
+		
 		$(".statsAbsRelNumbers").click(function() {
 			var typestring;
 			if ($(this).attr("id") == "statsAbsNumbers")
@@ -654,7 +657,6 @@ function newDataInPie(dataName, horizontalDiagram) {
 		statsResults.selectedCorpus = dataName;
 		diagramInstance.pie_widget("newData", dataItems);
 		
-		
 	//diagramInstance = $('#circle_diagram').pie_widget({container_id: "circle_diagram", data_items: dataItems});
 	}
 }
@@ -671,7 +673,7 @@ var StatsResults = {
 			return;
 		}
 		
-		$("#results-stats").children().empty();
+		//$("#results-stats").children().empty();
 		
 		var wordArray = [];
 		var corpusArray = [];
@@ -772,7 +774,7 @@ var StatsResults = {
 		
 		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
+			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
 		});
 		var c = 0;
 		var totalForAllWordforms = 0;
@@ -807,15 +809,14 @@ var StatsResults = {
 		//	return s;
 		//};
 		
-		theHTML += '<tr><td>' + totalForAllWordforms.toFixed(1) + '&nbsp;<span class="absStat">(' + totalForAllWordformsAbs + ')</span></td>';
+		theHTML += '<tr class="sumOfCorpora"><td>' + totalForAllWordforms.toFixed(1) + '&nbsp;<span class="absStat">(' + totalForAllWordformsAbs + ')</span></td>';
 		$.each(totalForCorpus, function(key, fvalue) {
 			theHTML += '<td>' + formatOutput(fvalue.toFixed(1)) + '&nbsp;<span class="absStat">(' + totalForCorpusAbs[key] + ')</span></td>';
 		});
 		theHTML += '</tr></table>';
 
 		$("#rightStatsTable").append(theHTML);
-
-	// $("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
+		// $("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
 		$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
@@ -823,28 +824,34 @@ var StatsResults = {
 		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
 		
 		
-		$(".export_csv").click(function() {
-			var datatype;
-			if ($(this).attr('id') == "export_csv_abs")
-				datatype = "absolute";
-			else
-				datatype = "relative";
+		$("#exportButton").click(function() {
+			var selVal = $("#kindOfData option:selected").val();
+			var selType = $("#kindOfFormat option:selected").val();
+			var dataDelimiter = ";";
+			if (selType == "TSV")
+				dataDelimiter = "\t";
+			// if ($(this).attr('id') == "export_csv_abs")
+			//	datatype = "absolute";
+			//else
+			//	datatype = "relative";
 				
 			// Generate CSV from the data
-			var output = "corpus;";
+			
+			
+			var output = "corpus" + dataDelimiter;
 			$.each(statsResults.savedWordArray, function(key, aword) {
-				output += aword + ";";
+				output += aword + dataDelimiter;
 			});
 			output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
 			
 			$.each(statsResults.savedData["corpora"], function(key, acorpus) {
-				output += settings.corpora[key.toLowerCase()]["title"] + ";";
+				output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter;
 				$.each(statsResults.savedWordArray, function(wkey, aword) {
-					var amount = acorpus[datatype][aword];
+					var amount = acorpus[selVal][aword];
 					if(amount)
-						output += amount + ";";
+						output += amount + dataDelimiter;
 					else
-						output += "0;";
+						output += "0" + dataDelimiter;
 				});
 				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
 			});
@@ -853,7 +860,7 @@ var StatsResults = {
 		
 		
 	
-		$(".statstable__all").css({"background-color":"#EEEEEE"});
+		//$(".statstable__all").css({"background-color":"#EEEEEE"});
 		
 		$(".searchForWordform").click(function() {
 			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
@@ -911,6 +918,10 @@ var StatsResults = {
 
 
 		// Make Bar Diagram ------------------------------------------------------- //
+		
+		$("#stats1_diagram").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
+		$("#statsBubble").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
+		
 		$.each(totalForWordform, function(key, fvalue) {
 			dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
 		});
@@ -918,13 +929,26 @@ var StatsResults = {
 		
 		diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
 		
-		$(".corpusName").click(function() {
+		
+		$(".corpusName").hover(function() {
 			var parts = $(this).attr("id").split("__");
 			newDataInPie(parts[1],false);
+			$("#statsBubble").fadeIn();
+			$("#statsBubble").css({"background-color":"white"});
+			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+		}, function() {
+			$("#statsBubble").css({"display": "none"});
+			$(".statstable").css({"background-color":"white"});
 		});
 		
-		$(".corpusNameAll").click(function() {
+		$(".corpusNameAll").hover(function() {
 			newDataInPie("all",false);
+			$("#statsBubble").fadeIn();
+			$("#statsBubble").css({"background-color":"white"});
+			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+		}, function() {
+			$("#statsBubble").css({"display": "none"});
+			$(".statstable").css({"background-color":"white"});
 		});
 		
 		$(".wordsName").click(function() {

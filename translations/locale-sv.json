@@ -185,6 +185,9 @@
 	"statstable_absfigures_hits" : "Träffar i absoluta tal.",
 	"statstable_relfigures_hits" : "Träffar i relativa tal.",
 	"statstable_hitsheader" : "Träffar för ",
-	"statstable_hitsheader_lemgram" : "Träffar för lemgrammet"
+	"statstable_hitsheader_lemgram" : "Träffar för lemgrammet",
+	"statstable_exp_csv" : "CSV (kommaseparerade värden)",
+	"statstable_exp_tsv" : "TSV (tabseparerade värden)",
+	"statstable_export" : "Exportera"
     
 }

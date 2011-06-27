@@ -186,5 +186,8 @@
 	"statstable_absfigures_hits" : "Hits, absolute figures",
 	"statstable_relfigures_hits" : "Hits, relative figures.",
 	"statstable_hitsheader" : "Hits for ",
-	"statstable_hitsheader_lemgram" : "Hits for the lemgram"
+	"statstable_hitsheader_lemgram" : "Hits for the lemgram",
+	"statstable_exp_csv" : "CSV (comma separated values)",
+	"statstable_exp_tsv" : "TSV (tab separated values)",
+	"statstable_export" : "Export"
 }

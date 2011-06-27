@@ -165,13 +165,15 @@ var hp_corpusChooser = {
 			newHTML += recursive_transform(body,0);
 			newHTML += '</div>';
 			
-			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:422px; background-color:white">';
+			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '422' + 'px; background-color:white">';
 			
-			newHTML += '<div class=""><p style="padding-left:10px; padding-right:10px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
+			newHTML += '<div class=""><p style="padding:10px; margin:0px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
 			
 			newHTML += "</div>";
 			
 			el.replaceWith(newHTML);
+			var pos = $(".scroll_checkboxes").offset().left + 414;
+			$(".corpusInfoSpace").css({"left": (pos.toString() + "px")});
 			
 			hp_this.countSelected();
 			// Update the number of children for all folders:
