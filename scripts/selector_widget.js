@@ -402,11 +402,11 @@ var hp_corpusChooser = {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
 							hasDirectCorporaChildren = true
-							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (390-levelindent*30) + 'px; visible:false; left:46px; display:none"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
+							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (390-levelindent*30) + 'px; visible:false; left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
 								hasDirectCorporaChildren = true
-								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:390px; left:16px"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
+								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:390px; left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
 							}
 						}
 					}
