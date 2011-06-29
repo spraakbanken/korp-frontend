@@ -939,7 +939,7 @@ var StatsResults = {
 			e.stopPropagation();
 		});
 		
-		
+
 		
 		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false);
@@ -960,22 +960,21 @@ var StatsResults = {
 		
 		$(window).unbind('click.statistics');
 			$(window).bind('click.statistics', function(e) {
-				var disp = $("#statsBubble").css("display");
-				if(disp != "none" && e.target != this) {
-					$("#statsBubble").fadeOut('fast');
-				}
-				$(".statstable").css({"background-color":"white"});
+				clearStatisticsBars();
 		});
 		
 		$("#rightStatsTable").unbind('scroll');
 			$("#rightStatsTable").bind('scroll', function(e) {
-				var disp = $("#statsBubble").css("display");
+				clearStatisticsBars();
+		});
+		
+		function clearStatisticsBars() {
+			var disp = $("#statsBubble").css("display");
 				if(disp != "none") {
 					$("#statsBubble").fadeOut('fast');
 				}
 				$(".statstable").css({"background-color":"white"});
-		});
-		
+		}
 		
 		
 		// ------------------------------------------------------------------------ //
