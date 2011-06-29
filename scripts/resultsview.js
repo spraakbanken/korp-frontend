@@ -767,7 +767,7 @@ var StatsResults = {
 			}
 		}
 		
-		$("#leftStatsTable").append(leftHTML);
+		$("#leftStatsTable").html(leftHTML);
 		
 		
 		// Make Right Stats Table -------------------------------------------------------- //
@@ -815,7 +815,7 @@ var StatsResults = {
 		});
 		theHTML += '</tr></table>';
 
-		$("#rightStatsTable").append(theHTML);
+		$("#rightStatsTable").html(theHTML);
 		// $("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
@@ -959,14 +959,10 @@ var StatsResults = {
 		});
 		
 		$(window).unbind('click.statistics');
-			$(window).bind('click.statistics', function(e) {
-				clearStatisticsBars();
-		});
-		
+			$(window).bind('click.statistics', function(e) { clearStatisticsBars(); });
 		$("#rightStatsTable").unbind('scroll');
-			$("#rightStatsTable").bind('scroll', function(e) {
-				clearStatisticsBars();
-		});
+			$("#rightStatsTable").bind('scroll', function(e) { clearStatisticsBars(); });
+		$("#result-container").bind('tabsselect', function() { clearStatisticsBars(); });
 		
 		function clearStatisticsBars() {
 			var disp = $("#statsBubble").css("display");

@@ -426,7 +426,3 @@ var hp_corpusChooser = {
 $.widget("hp.corpusChooser", hp_corpusChooser); // create the widget
 
 
-	
-
-
-
