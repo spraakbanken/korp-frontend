@@ -934,8 +934,7 @@ var StatsResults = {
 			var parts = $(this).attr("id").split("__");
 			newDataInPie(parts[1],false);
 			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white"});
-			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
 			e.stopPropagation();
 		});
 		
@@ -944,8 +943,7 @@ var StatsResults = {
 		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false);
 			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white"});
-			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
 			e.stopPropagation();
 		});
 		
@@ -959,9 +957,9 @@ var StatsResults = {
 		});
 		
 		$(window).unbind('click.statistics');
-			$(window).bind('click.statistics', function(e) { clearStatisticsBars(); });
+			$(window).bind('click.statistics', function() { clearStatisticsBars(); });
 		$("#rightStatsTable").unbind('scroll');
-			$("#rightStatsTable").bind('scroll', function(e) { clearStatisticsBars(); });
+			$("#rightStatsTable").bind('scroll', function() { clearStatisticsBars(); });
 		$("#result-container").bind('tabsselect', function() { clearStatisticsBars(); });
 		
 		function clearStatisticsBars() {
