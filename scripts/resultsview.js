@@ -930,25 +930,23 @@ var StatsResults = {
 		diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
 		
 		
-		$(".corpusName").hover(function() {
+		$(".corpusName").click(function(e) {
 			var parts = $(this).attr("id").split("__");
 			newDataInPie(parts[1],false);
 			$("#statsBubble").fadeIn();
 			$("#statsBubble").css({"background-color":"white"});
 			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
-		}, function() {
-			$("#statsBubble").css({"display": "none"});
-			$(".statstable").css({"background-color":"white"});
+			e.stopPropagation();
 		});
 		
-		$(".corpusNameAll").hover(function() {
+		
+		
+		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false);
 			$("#statsBubble").fadeIn();
 			$("#statsBubble").css({"background-color":"white"});
 			$("#statsBubble").css({"display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
-		}, function() {
-			$("#statsBubble").css({"display": "none"});
-			$(".statstable").css({"background-color":"white"});
+			e.stopPropagation();
 		});
 		
 		$(".wordsName").click(function() {
@@ -959,6 +957,27 @@ var StatsResults = {
 				newDataInPie("SIGMA_ALL",true);
 			}
 		});
+		
+		$(window).unbind('click.statistics');
+			$(window).bind('click.statistics', function(e) {
+				var disp = $("#statsBubble").css("display");
+				if(disp != "none" && e.target != this) {
+					$("#statsBubble").fadeOut('fast');
+				}
+				$(".statstable").css({"background-color":"white"});
+		});
+		
+		$("#rightStatsTable").unbind('scroll');
+			$("#rightStatsTable").bind('scroll', function(e) {
+				var disp = $("#statsBubble").css("display");
+				if(disp != "none") {
+					$("#statsBubble").fadeOut('fast');
+				}
+				$(".statstable").css({"background-color":"white"});
+		});
+		
+		
+		
 		// ------------------------------------------------------------------------ //
 		
 		$(".statstable").hover(function() {
