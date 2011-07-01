@@ -10,8 +10,8 @@
 			$.when(this.fetchScript(), this.fetchXML())
 			.then(function(xhrArgArray, xmlArgArray) {
 				// cookie
-				var storedObj = $.parseJSON($.jStorage.get("compiled_scxml"));
-				var cookieLastMod;
+				var storedObj = $.parseJSON($.jStorage.get("compiled_scxml_korp"));
+				var cookieLastMod = null;
 				if(storedObj != null)
 					cookieLastMod = new Date(storedObj.time);
 				

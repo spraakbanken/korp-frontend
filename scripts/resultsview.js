@@ -77,10 +77,25 @@ var KWICResults = {
 	onentry : function() {
 		this.centerScrollbar();
 		$(document).keydown(this.onKeydown);
+		$(document).keydown(this.onPageKeyNav);
 	},
 	
 	onexit : function() {
 		$(document).unbind("keydown", this.onKeydown);
+		$(document).unbind("keydown", this.onPageKeyNav);
+	},
+	
+	onPageKeyNav : function(event) {
+		if($("#simple_text").is(":focus")) return;
+		switch(event.which) {
+		case 78: // n
+			$(".pagination .next").click();
+			return false;
+		case 70: // f
+			$(".pagination .prev").click();
+			return false;
+		
+		}
 	},
 	
 	onKeydown : function(event) {

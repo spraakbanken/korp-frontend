@@ -256,7 +256,6 @@ $.widget("ui.radioList", {
 		});
 		this.element.find(".inline_list span:first").remove();
 		this.select(this.options.selected);
-		$.log("radioList", this, this.options.selected);
 	},
 	
 	select : function(index) {
@@ -272,4 +271,52 @@ $.widget("ui.radioList", {
 	
 	
 });
+$.ui.tabs.subclass = $.ui.widget.subclass;
+$.ui.tabs.subclass("ui.korptabs", {
 	
+	_create : function() {
+		var self = this;
+		$(".tabClose").live("click", function() {
+			if(!$(this).parent().is(".ui-state-disabled")) {
+				var index = self.lis.index($(this).parent());
+	            if (index > -1) {
+	                // call _trigger to see if remove is allowed
+	                if (false === self._trigger("closableClick", null, self._ui( $(self.lis[index]).find( "a" )[ 0 ], self.panels[index] ))) return;
+	
+	                // remove this tab
+	                self.remove(index);
+	            }
+	
+	            // don't follow the link
+	            return false;
+			}
+				
+		});
+		
+	},
+	
+	_tabify : function(init) {
+		this._super(init);
+		this.redrawTabs();
+	},
+	
+	redrawTabs : function() {
+		$(".custom_tab").css("margin-left", "auto");
+		$(".custom_tab:first").css("margin-left", 8);
+	},
+	
+	addTab : function( url , label , index) {
+		this.add(url, label, index);
+		this.element.find("li:last").addClass("custom_tab")
+	    .append('<a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a>');
+		this.redrawTabs();
+	},
+	
+	enableAll : function() {
+		var self = this;
+		$.each(".custom_tab", function(i, elem) {
+			self.enable(i);
+		});
+	}
+	
+});

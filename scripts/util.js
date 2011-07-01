@@ -147,7 +147,6 @@ function loadCorporaFolderRecursive(first_level, folder) {
 		// Corpora
 		if (folder["contents"] && folder["contents"].length > 0) {
 			$.each(folder.contents, function(key, value) {
-				$.log(value);
 				outHTML += '<li id="' + value + '">' + settings.corpora[value]["title"] + '</li>';
 				added_corpora_ids.push(value);
 				
@@ -171,6 +170,19 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	outHTML += "</ul>";
 	return outHTML;
 }
+// Helper function to turn 1.2345 into 1,2345 (locale dependent)
+util.localizeFloat = function(float, nDec) {
+	var lang = $("#languages").radioList("getSelected").data("lang");
+	var sep = null;
+	nDec = nDec || float.toString().split(".")[1].length;
+	
+	if(lang == "sv") {
+		sep = ",";
+	} else if(lang == "en") {
+		sep = ".";
+	}
+	return $.format("%." + nDec + "f", float).replace(".", sep);
+};
 
 /* Helper function to turn "8455999" into "8 455 999" */
 function prettyNumbers(numstring) {
@@ -215,3 +227,4 @@ function loadCorpora() {
     	return "<b>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> tokens";
     }});
 }
+

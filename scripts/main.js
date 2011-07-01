@@ -3,6 +3,7 @@ var currentMode;
 
 
 (function(){
+	var t = $.now();
 	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
 	
@@ -49,7 +50,7 @@ var currentMode;
 	
 	$.when(deferred_load, chained, deferred_domReady, deferred_sm, deferred_mode).then(function(searchbar_html) {
 		$.revision = parseInt("$Rev$".split(" ")[1]);
-		
+		$.log("preloading done, t = ", $.now() - t);
 		currentMode = $.deparam.querystring().mode || "default";
 		
 		$("#mode_switch").radioList({
@@ -74,13 +75,13 @@ var currentMode;
 		var tab_a_selector = 'ul.ui-tabs-nav a';
 		
 		$("#search-tab").tabs({
-			event : "change",
+//			event : "change",
 			show : function(event, ui) {
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
 		});
-		$("#result-container").tabs({
+		$("#result-container").korptabs({
 			event : "change",
 			show : function(event, ui) {
 				var currentId = $(ui.panel).attr("id");
@@ -105,7 +106,7 @@ var currentMode;
 		});
 		
 		var tabs = $(".ui-tabs");
-		tabs.find( tab_a_selector ).click(function() {
+		tabs.find( tab_a_selector ).live("click", function() {
 			if($(this).parent().is(".ui-state-disabled")) return;
 			var state = {},
 			id = $(this).closest( '.ui-tabs' ).attr( 'id' ),
@@ -234,4 +235,5 @@ var currentMode;
 	});
 			
 })();
+
 

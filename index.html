@@ -31,12 +31,14 @@
 
 		<script type="text/javascript" src="lib/ui/jquery.ui.autocomplete.js"></script>
 		<script type="text/javascript" src="lib/ui/minified/jquery.ui.dialog.min.js"></script>
-		<script type="text/javascript" src="lib/ui/minified/jquery.ui.tabs.min.js"></script>
+		<script type="text/javascript" src="lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="lib/ui/minified/jquery.ui.button.min.js"></script>
 		<script type="text/javascript" src="lib/ui/minified/jquery.effects.core.min.js"></script>
 		<script type="text/javascript" src="lib/ui/minified/jquery.effects.highlight.min.js"></script>
 		<script type="text/javascript" src="lib/ui/minified/jquery.effects.slide.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.ui.preloader.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.ui.subclass.js"></script>
+<!-- 		<script type="text/javascript" src="lib/ui.tabs.closable.js"></script> -->
 		
 		<script type="text/javascript" src="lib/jquery.json-2.2.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.jLog.min.js"></script>
@@ -228,7 +230,7 @@
 			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
 			<tr>
 				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
-				<td>${$.format("%.1f", $value.mi)}</td>
+				<td>${util.localizeFloat($value.mi, 1)}</td>
 				<td id="example_link" 
 					data-head="${$value['head']}" 
 					data-dep="${$value['dep']}" 
