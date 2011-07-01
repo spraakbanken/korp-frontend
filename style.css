@@ -879,7 +879,9 @@ a.relStat:hover {
 
 .radioList_selected {
 	color : black !important;
+	cursor : default;
 }
+
 
 .tabClose {
 	padding : 0 !important;

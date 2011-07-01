@@ -934,8 +934,8 @@ var StatsResults = {
 
 		// Make Bar Diagram ------------------------------------------------------- //
 		
-		$("#stats1_diagram").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
-		$("#statsBubble").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
+//		$("#stats1_diagram").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
+//		$("#statsBubble").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
 		
 		$.each(totalForWordform, function(key, fvalue) {
 			dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
@@ -949,7 +949,9 @@ var StatsResults = {
 			var parts = $(this).attr("id").split("__");
 			newDataInPie(parts[1],false);
 			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
+			// Johan: H4CK3D UR C0DE!!!!.
+			diagramInstance.find("svg").attr("height", 1000);
 			e.stopPropagation();
 		});
 		
@@ -958,7 +960,9 @@ var StatsResults = {
 		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false);
 			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
+			// Johan: H4CK3D UR C0DE!!!!.
+			diagramInstance.find("svg").attr("height", 1000);
 			e.stopPropagation();
 		});
 		
@@ -969,6 +973,7 @@ var StatsResults = {
 			else { // The ∑ row
 				newDataInPie("SIGMA_ALL",true);
 			}
+
 		});
 		
 		$(window).unbind('click.statistics');

@@ -75,7 +75,7 @@ var currentMode;
 		var tab_a_selector = 'ul.ui-tabs-nav a';
 		
 		$("#search-tab").tabs({
-//			event : "change",
+			event : "change",
 			show : function(event, ui) {
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
@@ -106,7 +106,8 @@ var currentMode;
 		});
 		
 		var tabs = $(".ui-tabs");
-		tabs.find( tab_a_selector ).live("click", function() {
+		$(".ui-tabs-nav a").click(function() {
+			$.log("tabs live");
 			if($(this).parent().is(".ui-state-disabled")) return;
 			var state = {},
 			id = $(this).closest( '.ui-tabs' ).attr( 'id' ),
@@ -116,6 +117,11 @@ var currentMode;
 			// Set the state!
 			state[ id ] = idx;
 			$.bbq.pushState( state );
+		});
+		
+		$(".custom_tab a:first").live("mouseup", function() {
+			$.log("custom click");
+			$(this).triggerHandler( 'change' );
 		});
 		
 		$(window).bind( 'hashchange', function(e) {

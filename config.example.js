@@ -4,6 +4,7 @@
  */
 
 var settings = {};
+settings.primaryColor = "#dde9ff";
 settings.corpora = {};
 settings.defaultContext = {
 	"1 sentence" : language.oneSentence
@@ -149,6 +150,11 @@ settings.corporafolders.fisk.essayistic = {
 	contents : ["fsbessaistik"]
 };
 
+settings.corporafolders.fisk.articles = {
+	title : "Sakprosa",
+	contents : ["fsbsakprosa"]
+};
+
 settings.corporafolders.fisk.novels = {
 	title : "Skönlitteratur",
 	contents : ["fsbskonlit"]
@@ -156,12 +162,22 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["astranova"]
+	contents : []
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 	title : "Jakobstads tidning 1999-2000",
 	contents : ["jakobstadstidning1999", "jakobstadstidning2000"]
+};
+
+settings.corporafolders.fisk.magazines = {
+	title : "Tidskrifter",
+	contents : ["astranova"]
+};
+
+settings.corporafolders.medical = {
+	title : "Medicinska texter",
+	contents : ["lt", "smittskydd"]
 };
 
 settings.corporafolders.parallel = {
@@ -208,6 +224,32 @@ settings.corpora.fsbessaistik = {
 	title : "Essäistisk litteratur 1970-2011",
 	languages : {
 		FSBESSAISTIK : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_year : {label : "year"},
+	    text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.fsbsakprosa = {
+	title : "Sakprosa 1970-2011",
+	languages : {
+		FSBSAKPROSA : "svenska"
 	},
 	within : within.defaultStruct,
 	attributes : {
@@ -558,7 +600,7 @@ settings.corpora.gp2d = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "article_issue"}
+		article_issue : {label : "issue"}
 	}
 };
 
@@ -605,7 +647,7 @@ settings.corpora.fof = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "article_issue"}
+		article_issue : {label : "issue"}
 	}
 };
 
@@ -882,6 +924,31 @@ settings.corpora.lt = {
 	struct_attributes : {
 		article_id : {label : "article"},
 		text_id : {label : "text"}
+	}
+};
+
+settings.corpora.smittskydd = {
+	title : "Smittskydd",
+	languages : {
+		SMITTSKYDD : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -1270,7 +1337,7 @@ settings.corpora.astranova = {
 	},
 	struct_attributes : {
 		text_year : {label : "year"},
-		text_issue : {label : "text_issue"}
+		text_issue : {label : "issue"}
 	}
 };
 
