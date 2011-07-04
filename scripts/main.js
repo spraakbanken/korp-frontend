@@ -84,12 +84,17 @@ var currentMode;
 		$("#result-container").korptabs({
 			event : "change",
 			show : function(event, ui) {
-				var currentId = $(ui.panel).attr("id");
-	//				if(currentId == null) return;
-				var selected = currentId.split("-")[1];
-				$("#rightStatsTable").css("max-width", $("#content").innerWidth() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 50));
-				$.sm.send("resultstab." + selected);
-			} 
+				if($(ui.tab).parent().is(".custom_tab")) {
+					$.sm.send("resultstab.custom");
+				} else {
+					var currentId = $(ui.panel).attr("id");
+					//				if(currentId == null) return;
+					var selected = currentId.split("-")[1];
+					$("#rightStatsTable").css("max-width", $("#content").innerWidth() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 50));
+					$.sm.send("resultstab." + selected);
+				}
+			},
+			panelTemplate : "<div>" + kwicResults.initHTML + "</div>"
 		});
 		$("#result-container li.ui-state-disabled").live({
 			mouseover : function() {
@@ -106,8 +111,7 @@ var currentMode;
 		});
 		
 		var tabs = $(".ui-tabs");
-		$(".ui-tabs-nav a").click(function() {
-			$.log("tabs live");
+		tabs.find(tab_a_selector).click(function() {
 			if($(this).parent().is(".ui-state-disabled")) return;
 			var state = {},
 			id = $(this).closest( '.ui-tabs' ).attr( 'id' ),
@@ -121,6 +125,7 @@ var currentMode;
 		
 		$(".custom_tab a:first").live("mouseup", function() {
 			$.log("custom click");
+			$.bbq.removeState("result-container");
 			$(this).triggerHandler( 'change' );
 		});
 		
@@ -198,16 +203,12 @@ var currentMode;
 				}
 			}
 			tabs.each(function() {
-				var idx = e.getState( this.id, true ) || 0;
+				var idx = e.getState( this.id, true );
+				if(idx === null) return;
 				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
 			});
 			
 			$.bbq.prevFragment = $.deparam.fragment();
-		});
-		
-		$("#result-container").click(function(){
-			util.SelectionManager.deselect();
-			$.sm.send("word.deselect");
 		});
 		
 		//setup about link

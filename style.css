@@ -59,10 +59,6 @@ a:hover {color:red;}  /* mouse over link */
 	background-color : white;	
 }
 
-li[data-lang] {
-	display : inline-block;	
-}
-
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-size : 1em;
 	font-family : inherit;
@@ -162,7 +158,7 @@ input:placeholder, textarea:placeholder {
 	/*	text-align:center;*/
 }
 
-#num_hits {
+.num_hits {
 	min-width : 37px;	
 }
 
@@ -540,21 +536,21 @@ table {
 /* 	-ms-overflow-y: hidden; */
 }
 
-#Pagination {
+.pagination {
 	margin-left : 2px;
-	font-size : inherit;	
+	font-size : 90% !important;
 }
 
-#result_controls {
+.result_controls {
 	margin-bottom : -20px;
 	margin-left : 2px;
 }
 
-#result_controls > * {
+.result_controls > * {
 	float : left;
 }
 
-#controls_n {
+.controls_n {
 	margin-top : 3px;
 }
 
@@ -602,7 +598,7 @@ table {
 }
 
 
-#table_scrollarea {
+.table_scrollarea {
 	
 	overflow: auto; 
 	clear: both;
@@ -611,7 +607,7 @@ table {
 	
 }
 
-#results-table {
+.results_table {
 	padding-left : 0;
 	margin-left : 0;
 /* 	max-width : 900px; */
@@ -619,8 +615,9 @@ table {
 	
 }
 
-#results-table td{
-	border-width : 0px;	
+.results_table td{
+	border-width : 0px;
+	white-space : nowrap;	
 }
 
 #display_word {
@@ -629,10 +626,7 @@ table {
 	margin : auto 0;
 }
 
-#pager-wraper {
-	clear: both;
-}
-#pager-wraper > div {
+.pager-wrapper > div {
 	margin-bottom : 30px;	
 }
 
@@ -882,6 +876,9 @@ a.relStat:hover {
 	cursor : default;
 }
 
+.custom_tab {
+	cursor : pointer;
+}
 
 .tabClose {
 	padding : 0 !important;

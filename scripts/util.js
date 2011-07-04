@@ -5,10 +5,9 @@
 var util = {};
 // <!-- SelectionManager
 util.SelectionManager = function() {
-	$.error("SelectionManager is a static class, don't instantiate it.");
 };
 
-util.SelectionManager.select = function(word, aux) {
+util.SelectionManager.prototype.select = function(word, aux) {
 	if(word == null || !word.length) return;
 	if(this.selected) {
 		this.selected.removeClass("word_selected token_selected");
@@ -21,14 +20,14 @@ util.SelectionManager.select = function(word, aux) {
 	this.aux.addClass("word_selected aux_selected");
 	return word.addClass("word_selected token_selected");
 };
-util.SelectionManager.deselect = function() {
+util.SelectionManager.prototype.deselect = function() {
 	if(!this.selected) return;
 	this.selected.removeClass("word_selected token_selected");
 	this.selected = null;
 	this.aux.removeClass("word_selected aux_selected");
 	this.aux = null;
 };
-util.SelectionManager.hasSelected = function() {
+util.SelectionManager.prototype.hasSelected = function() {
 	return this.selected != null;
 };
 // SelectionManager -->

@@ -20,17 +20,24 @@ var KWICProxy = {
 	initialize : function() {
 		this.prevRequest = null;
 		this.queryData = null;
+		this.command = "query";
 	},
-	makeRequest : function(cqp, start, end, queryData) {
+	makeRequest : function(options) {
 		var self = this;
-		kwicResults.num_result = 0;
-		cqp	= cqp || $("#cqp_string").val();
-		$.log("kwicProxy.makeRequest", cqp);
 		
-		start = start || 0;
-		end = end || $("#num_hits").val()-1;
+		var o = $.extend({
+			cqp : $("#cqp_string").val(), 
+			start : 0, 
+			end : $(".num_hits").val()-1, 
+			queryData : null,
+			ajaxParams : null,
+			success : function(data) {kwicResults.renderResult(data);}
+		}, options);
 		
-		kwicResults.showPreloader();
+//		kwicResults.num_result = 0;
+		$.log("kwicProxy.makeRequest", o.cqp);
+		
+//		kwicResults.showPreloader();
 		
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n)
@@ -39,11 +46,11 @@ var KWICProxy = {
 	    });
 		
 		var data = {
-			command:'query',
+			command:this.command,
 			corpus:selected_uppercased_corpora_ids.join(),
-			cqp:cqp,
-			start:start,
-			end:end,
+			cqp:o.cqp,
+			start:o.start,
+			end:o.end,
 			defaultcontext: $.keys(settings.defaultContext)[0],
 			context : $.grep($.map(selected_corpora_ids, function(id) {
 				if(settings.corpora[id].context != null)
@@ -53,8 +60,9 @@ var KWICProxy = {
 			show:[],
 			show_struct:[]  
 		};
-		if(queryData != null) {
-			data.querydata = queryData;
+		$.extend(data, o.ajaxParams);
+		if(o.queryData != null) {
+			data.querydata = o.queryData;
 		}
 
 		var selected_corpora = $.map(selected_corpora_ids, function(n) {
@@ -79,7 +87,7 @@ var KWICProxy = {
 			data.show.push("saltnld_nld");
 		}
 
-		$("#Pagination").data("cqp", cqp);
+		$(".pagination:visible").data("cqp", o.cqp);
 		data.show = data.show.join();
 		data.show_struct = data.show_struct.join();
 		this.prevRequest = data;
@@ -92,9 +100,18 @@ var KWICProxy = {
 			success: function(data) {
 				$.log("kwic result", data);
 				self.queryData = data.querydata; 
-				kwicResults.renderResult(data);
+				o.success(data);
 			}
 		});
+	}
+};
+model.KWICProxy = new Class(KWICProxy);
+
+var ExamplesProxy = {
+	Extends : model.KWICProxy,
+	initialize : function() {
+		this.parent();
+		this.command = "relations_sentences";
 	}
 };
 
@@ -113,7 +130,7 @@ var LemgramProxy = {
 			
 			var cqp = $.format('[(lex contains "%s")%s%s]', 
 					[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
-			kwicProxy.makeRequest(cqp);
+			kwicProxy.makeRequest({cqp : cqp});
 			return cqp;
 		},
 		
@@ -218,8 +235,9 @@ var StatsProxy = {
 
 model.SearchProxy = new Class(SearchProxy);
 model.LemgramProxy = new Class(LemgramProxy);
-model.KWICProxy = new Class(KWICProxy);
+
 model.StatsProxy = new Class(StatsProxy);
+model.ExamplesProxy = new Class(ExamplesProxy);
 
 delete SearchProxy;
 delete KWICProxy;

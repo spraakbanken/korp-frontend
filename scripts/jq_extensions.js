@@ -276,6 +276,8 @@ $.ui.tabs.subclass("ui.korptabs", {
 	
 	_create : function() {
 		var self = this;
+		this.n = 0;
+		this.urlPattern = "#custom-tab-";
 		$(".tabClose").live("click", function() {
 			if(!$(this).parent().is(".ui-state-disabled")) {
 				var index = self.lis.index($(this).parent());
@@ -292,7 +294,6 @@ $.ui.tabs.subclass("ui.korptabs", {
 			}
 				
 		});
-		
 	},
 	
 	_tabify : function(init) {
@@ -305,11 +306,23 @@ $.ui.tabs.subclass("ui.korptabs", {
 		$(".custom_tab:first").css("margin-left", 8);
 	},
 	
-	addTab : function( url , label , index) {
-		this.add(url, label, index);
-		this.element.find("li:last").addClass("custom_tab")
+	addTab : function(klass, contentData) {
+		var url = this.urlPattern + this.n;
+		this.add(url, "Example");
+		var li = this.element.find("li:last").addClass("custom_tab")
 	    .append('<a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a>');
 		this.redrawTabs();
+		var instance = new klass(li, url);
+		instance.showPreloader();
+//		this._setOption("selected", li.prevAll().length);
+		li.find("a").trigger("mouseup");
+		instance.renderResult(contentData);
+		li.data("instance", instance);
+		this.n++;
+	},
+	
+	remove : function(index) {
+		this._super(index);
 	},
 	
 	enableAll : function() {
@@ -317,6 +330,11 @@ $.ui.tabs.subclass("ui.korptabs", {
 		$.each(".custom_tab", function(i, elem) {
 			self.enable(i);
 		});
+	},
+	
+	getCurrentInstance : function() {
+		$.log("getCurrentInstance", this.lis);
+		return this.lis.filter(".ui-tabs-selected").data("instance") || null; 
 	}
 	
 });

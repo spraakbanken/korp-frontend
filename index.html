@@ -116,19 +116,18 @@
 								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a></li>
 							</ul>
 							<div id="results-kwic">
-								<a name="results"></a>
-									<div id="result_controls">
-									   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-									   <input name="num_hits" id="num_hits" size="3" value="25" type="number" step="5" ></div> 
-									   <div id="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span id="num-result"></span></div>
-									   <div style="clear : both; float : none;" ></div>
-								   </div>
-								<div id="pager-wraper">
-									<div class="pagination" id="Pagination"></div>
+								<div class="result_controls">
+								   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+								   <input class="num_hits" size="3" value="25" type="number" step="5" ></div> 
+								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
+								   <div style="clear : both; float : none;" ></div>
+							   </div>
+								<div class="pager-wrapper">
+									<div id="Pagination" class="pagination"></div>
 								</div>
 								
-								<div id="table_scrollarea">
-									<table id="results-table" class="result_table" cellspacing="0"></table>
+								<div class="table_scrollarea">
+									<table class="results_table" cellspacing="0"></table>
 								</div>
 							</div>
 							<div id="results-lemgram"></div>
@@ -163,7 +162,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<div id="about_content" title="Om Korp" style="display : none;"></div>
 			
 		

@@ -52,12 +52,15 @@ delete BaseResults;
 var KWICResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
+		var self = this;
 		this.parent(tabSelector, resultSelector);
+		this.initHTML = this.$result.html();
 		this.num_result = 0;
 		this.current_page = 0;
+		this.selectionManager = new util.SelectionManager();
 		if(!Modernizr.inputtypes.number) {
-			var $select = $('<select name="num_hits" id="num_hits"></div>');
-			$("#num_hits").replaceWith($select);
+			var $select = $('<select class="num_hits"></div>');
+			this.$result.find(".num_hits").replaceWith($select);
 			
 			$.each([25, 50, 75, 100], function(i, item) {
 				$("<option />").attr("value", item).text(item).appendTo($select);
@@ -65,53 +68,56 @@ var KWICResults = {
 			$select.val(25)
 			.css("margin-right", 5);
 		}
+		
+		this.$result.click(function(){
+			if(!self.selectionManager.hasSelected()) return;
+			self.selectionManager.deselect();
+			$.sm.send("word.deselect");
+		});
 	},
 	
 	resultError : function(data) {
 		this.parent(data);
-		$("#results-table").empty();
-		$("#Pagination").empty();
-		$("#results-table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
+		this.$result.find(".results_table").empty();
+		this.$result.find(".pagination").empty();
+		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
 	},
 	
 	onentry : function() {
 		this.centerScrollbar();
-		$(document).keydown(this.onKeydown);
-		$(document).keydown(this.onPageKeyNav);
+		$.log("onentry", this.keyListener);
+		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
 	onexit : function() {
 		$(document).unbind("keydown", this.onKeydown);
-		$(document).unbind("keydown", this.onPageKeyNav);
-	},
-	
-	onPageKeyNav : function(event) {
-		if($("#simple_text").is(":focus")) return;
-		switch(event.which) {
-		case 78: // n
-			$(".pagination .next").click();
-			return false;
-		case 70: // f
-			$(".pagination .prev").click();
-			return false;
-		
-		}
 	},
 	
 	onKeydown : function(event) {
-		if(!util.SelectionManager.hasSelected() || $("input[type=text], textarea").is(":focus")) return;
+		if($("input[type=text], textarea").is(":focus")) return;
+		
+		switch(event.which) {
+		case 78: // n
+			this.$result.find(".pagination .next").click();
+			return false;
+		case 70: // f
+			this.$result.find(".pagination .prev").click();
+			return false;
+		}
+		
+		if(!this.selectionManager.hasSelected()) return;
 	    switch(event.which) {
 			case 38: //up
-				kwicResults.selectUp();
+				this.selectUp();
 				return false;
 			case 39: // right
-				kwicResults.selectNext();
+				this.selectNext();
 				return false;
 			case 37: //left
-				kwicResults.selectPrev();
+				this.selectPrev();
 				return false;
 			case 40: // down
-				kwicResults.selectDown();
+				this.selectDown();
 				return false;
 	    }
 	},
@@ -127,21 +133,21 @@ var KWICResults = {
 			this.buildPager(data.hits);
 		}
 		this.num_result = data.hits;
-		$('#num-result').html(data.hits);
+		this.$result.find('.num-result').html(data.hits);
 		if(!data.hits) {
 
 			$.log("no kwic results");
-			$("#results-table").empty();
-			$("#Pagination").empty();
+			this.$result.find(".results_table").empty();
+			this.$result.find(".pagination").empty();
 			this.hidePreloader();
 			return;
 		}				
 
 
 		var effectSpeed = 100;
-		if($.trim($("#results-table").html()).length) {
-			$("#results-kwic").fadeOut(effectSpeed, function() {
-				$("#results-table").empty();
+		if($.trim(this.$result.find(".results_table").html()).length) {
+			this.$result.fadeOut(effectSpeed, function() {
+				$(this).find(".results_table").empty();
 				self.renderResult(data);
 			});
 			return;
@@ -149,7 +155,7 @@ var KWICResults = {
 //		else {
 //			$("#results-kwic").css("opacity", 0);
 //		}
-		$.log("corpus_results");
+		$.log("corpus_results", data.kwic);
 		//$("#results-kwic").show();
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
@@ -159,7 +165,7 @@ var KWICResults = {
 		    		"right" : self.selectRight(sentence)
 		    };
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
-					.appendTo( "#results-table" )
+					.appendTo( self.$result.find(".results_table") )
 					.find(".word")
 					.click(function(event) {
 						event.stopPropagation();
@@ -180,8 +186,8 @@ var KWICResults = {
 //		$("#attrlistTmpl").tmpl(data.kwic)
 //		.appendTo("#attrlist")
 		
-		$(".match").children().first().click();
-		$("#results-kwic").fadeIn(effectSpeed);
+		this.$result.find(".match").children().first().click();
+		this.$result.fadeIn(effectSpeed);
 		
 		this.centerScrollbar();
 		this.hidePreloader();
@@ -190,7 +196,7 @@ var KWICResults = {
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
 		
-		util.SelectionManager.select(word);
+		this.selectionManager.select(word);
 		updateSidebar(sentence.structs, data, sentence.corpus);
 	},
 	
@@ -212,10 +218,10 @@ var KWICResults = {
 	},
 	
 	buildPager : function(number_of_hits){
-		var items_per_page = $("#num_hits").val();
+		var items_per_page = this.$result.find(".num_hits").val();
 		if(number_of_hits > items_per_page){
-			$('#Pagination').unbind();
-			$("#Pagination").pagination(number_of_hits, {
+			this.$result.find('.pagination').unbind();
+			this.$result.find(".pagination").pagination(number_of_hits, {
 				items_per_page : items_per_page, 
 				callback : $.proxy(this.handlePaginationClick, this),
 				next_text: util.getLocaleString("next"),
@@ -225,50 +231,51 @@ var KWICResults = {
 				ellipse_text: '..',
 				current_page : $.bbq.getState("page", true) || 0
 			});
-			$(".next").attr("rel", "localize[next]");
-			$(".prev").attr("rel", "localize[prev]");
+			this.$result.find(".next").attr("rel", "localize[next]");
+			this.$result.find(".prev").attr("rel", "localize[prev]");
 			
 		}else{
-			$("#Pagination").html('');
+			this.$result.find(".pagination").html('');
 		}
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container) {
 		$.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page) {
-			var items_per_page = parseInt($("#num_hits").val());
+			var items_per_page = parseInt(this.$result.find(".num_hits").val());
 			
 //			var cqp 	= kwicProxy.prevRequest.cqp;
-			var cqp 	= $("#Pagination").data("cqp");
+			var opts = {};
+			opts.cqp 	= this.$result.find(".pagination").data("cqp");
 			
-			var start = new_page_index*items_per_page;
-			var end = (start + items_per_page);
-			$.log("pagination request", cqp, start, end);		
-			kwicProxy.makeRequest(cqp, start, end, kwicProxy.queryData);
+			opts.start = new_page_index*items_per_page;
+			opts.end = (opts.start + items_per_page);
+			opts.queryData = kwicProxy.queryData;
+			$.log("pagination request", opts);		
+			kwicProxy.makeRequest(opts);
 			this.current_page = new_page_index;
 			$.bbq.pushState({"page" : this.current_page});
-			$("<div>")
 		}
 	    
 	   return false;
 	},
 	
 	setPage : function(page) {
-		$("#Pagination").trigger('setPage', [page]);
+		this.$result.find(".Pagination").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {
-		if(!$(".match").first().length) return;
-		$("#table_scrollarea").scrollLeft(0);
-		var matchLeft = $(".match").first().position().left;
+		if(!this.$result.find(".match").first().length) return;
+		this.$result.find(".table_scrollarea").scrollLeft(0);
+		var matchLeft = this.$result.find(".match").first().position().left;
 		var sidebarWidth = $("#sidebar").outerWidth() || 0;
-		$("#table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
+		this.$result.find(".table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
 		
 	
 	getCurrentRow : function() {
-		var tr = $(".token_selected").closest("tr");
-		if($(".token_selected").parent().is("td")) {
+		var tr = this.$result.find(".token_selected").closest("tr");
+		if(this.$result.find(".token_selected").parent().is("td")) {
 			return tr.find("td > .word");
 		} else {
 			return tr.find("div > .word");
@@ -276,24 +283,24 @@ var KWICResults = {
 	},
 	
 	selectNext : function() {
-		var i = this.getCurrentRow().index($(".token_selected").get(0));
+		var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
 		var next = this.getCurrentRow().get(i+1);
 		if(next == null) return;
 		$(next).click();
 	},
 	selectPrev : function() {
-		var i = this.getCurrentRow().index($(".token_selected").get(0));
+		var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
 		if(i == 0) return;
 		var prev = this.getCurrentRow().get(i-1);
 		$(prev).click();
 	},
 	selectUp : function() {
-		var prevMatch = util.SelectionManager.selected.closest("tr").prevAll(".sentence:first").find(".match span:first");
+		var prevMatch = this.selectionManager.selected.closest("tr").prevAll(".sentence:first").find(".match span:first");
 		prevMatch.click();
 	},
 	
 	selectDown : function() {
-		var nextMatch = util.SelectionManager.selected.closest("tr").nextAll(".sentence:first").find(".match span:first");
+		var nextMatch = this.selectionManager.selected.closest("tr").nextAll(".sentence:first").find(".match span:first");
 		nextMatch.click();
 	}
 	
@@ -378,7 +385,6 @@ var LemgramResults = {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
-//			vb : "SS,_,IO,OO,OA,RA,TA".split(","),
 			vb : "SS,_,OBJ,ADV".split(","),
 			nn : "AT,_,ET".split(","),
 			av :"_,AT".split(",")
@@ -442,10 +448,25 @@ var LemgramResults = {
 	},
 	
 	onClickExample : function(event) {
-		$("#dialog").remove();
+//		$("#dialog").remove();
 		var self = this;
-		this.showPreloader();
+//		this.showPreloader();
 		var $target = $(event.currentTarget);
+		$.log("onClickExample", $target);
+		new model.ExamplesProxy().makeRequest({
+			ajaxParams : {
+				head : $target.data("head"),
+				dep : $target.data("dep"),
+				rel : $target.data("rel"),
+				depextra : $target.data("depextra"),
+				corpus : $target.data("corpus").split(",")
+			},
+			success : function(data) {
+				$.sm.send("request_examples", data);
+			}
+		});
+		
+		return;
 		$.ajax({ url : settings.cgi_script, 
 			data:{
 				command : 'relations_sentences',
@@ -467,26 +488,37 @@ var LemgramResults = {
 					$.log("An error has occurred: no results from example, head: " + $target.data("head"));
 					var pElems = $("<i>An error occurred while fetching examples.</i>");
 				} else {
-					var pElems = $.map(data.kwic, function(sentence) {
-						return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
-							var prefix = postfix = "";
-							if(sentence.match.start == i)
-								prefix = "<b>";
-							else if(sentence.match.end == (i))
-								postfix = "</b>";
-							return prefix + token.word + postfix;
-						}).join(" ").replace(/\s([\.,\:])/g, "$1"));
-					}).join("\n");
-				}
-				
-				
-				$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
-				.appendTo("#results-lemgram").append("<ol />")
-				.dialog({
-					width : 600,
-					height : 500
-				})
-				.find("ol").html(pElems);
+//					$("#result-container").korptabs("addTab", "#custom_tab", "Custom");
+//					
+//					$(kwicResults.initHTML).appendTo("#custom_tab");
+					$.sm.send("request_examples", data);
+					
+					
+					
+//					new view.KWICResults('#result-container li:last', '#custom_tab').renderResult(data);
+				}		
+//					return;
+//					
+//					var pElems = $.map(data.kwic, function(sentence) {
+//						return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
+//							var prefix = postfix = "";
+//							if(sentence.match.start == i)
+//								prefix = "<b>";
+//							else if(sentence.match.end == (i))
+//								postfix = "</b>";
+//							return prefix + token.word + postfix;
+//						}).join(" ").replace(/\s([\.,\:])/g, "$1"));
+//					}).join("\n");
+//				}
+//				
+//				
+//				$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
+//				.appendTo("#results-lemgram").append("<ol />")
+//				.dialog({
+//					width : 600,
+//					height : 500
+//				})
+//				.find("ol").html(pElems);
 			}
 		});
 	},

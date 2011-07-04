@@ -24,9 +24,14 @@
             var cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
             $("#cqp_string").val(cqp);
         }
+        
+        function gotoFirstResultTab() {
+            $.log("faking kwic result tab click");
+            $("#result-container li:first > a").trigger("change");
+        }
     ]]></script>
     
-<!--     <datamodel> -->
+    <datamodel>
 <!--         <data id="kwicProxy"/> -->
 <!--         <data id="lemgramProxy"/> -->
 <!--         <data id="statsProxy"/> -->
@@ -35,14 +40,15 @@
 <!--         <data id="lemgramResults"/> -->
 <!--         <data id="statsResults"/> -->
     
-<!--     </datamodel> -->
+        <data id="currentCustom" />
+    </datamodel>
     
     <state id="init">
         <transition target="main">
             <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
-            <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first')"/>
+            <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first', '#results-kwic')"/>
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(2)')"/>
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(3)')"/>
             
@@ -145,6 +151,7 @@
                     <transition event="resultstab.kwic" target="results_kwic" /> 
                     <transition event="resultstab.lemgram" target="results_lemgram" /> 
                     <transition event="resultstab.stats" target="results_stats" />
+                    <transition event="resultstab.custom" target="results_custom" />
                     
                     <state id="results_kwic" initial="selected_h">
                         <onentry>
@@ -190,10 +197,16 @@
                         </onentry>
                         <transition event="submit.kwic" target="results_lemgram" >
                             <script>
-                                $.log("faking kwic result tab click");
-                                $("#result-container li:first > a").trigger("change");
+                                gotoFirstResultTab();
                             </script>
                         </transition>
+                        
+                        <transition event="request_examples" target="results_lemgram">
+                            <script>
+                                $("#result-container").korptabs("addTab", view.KWICResults, _event.data);
+                            </script>
+                        </transition>
+                        
                     </state>
                     <state id="results_stats">
                         <onentry>
@@ -203,9 +216,48 @@
                         </onentry>
                         <transition event="submit.kwic" target="results_stats">
                             <script>
-                                $("#result-container li:first > a").trigger("change");
+                                gotoFirstResultTab();
                             </script>
                         </transition>
+                    </state>
+                    
+                    <state id="results_custom" initial="custom_h">
+                        <onentry>
+                            <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
+                            <script>
+                                $.log("custom onentry", $('#result-container').korptabs('option', 'selected'));
+                                currentCustom.onentry();
+                                //util.setJsonLink(kwicProxy.prevRequest);
+                            </script>
+                        </onentry>
+                        
+                        <history id="custom_h">
+                            <transition target="custom_word_selected" />
+                        </history>
+                        
+                        <state id="custom_word_selected">
+                            <onentry>
+                                <script>
+                                    showSidebar();
+                                </script>
+                            </onentry>
+                            <transition event="word.deselect" target="custom_word_not_selected" />
+                            <onexit>
+                                <script>
+                                    hideSidebar();
+                                </script>
+                            </onexit>
+                        </state>
+                        
+                        <state id="custom_word_not_selected">
+                            <transition event="word.select" target="custom_word_selected" />
+                        </state>
+                        
+                        <onexit>
+                            <script>
+                                currentCustom.onexit();
+                            </script>
+                        </onexit>
                     </state>
                     
                 </state>
