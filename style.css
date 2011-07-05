@@ -797,9 +797,14 @@ table {
 	text-align: right;
 }
 
+span.absStat {
+	color: #999999;
+}
+
 a.absStat {
 	color: #999999;
 }
+
 
 a.absStat:hover {
 	color: red;

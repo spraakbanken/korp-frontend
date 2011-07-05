@@ -991,6 +991,8 @@ var StatsResults = {
 		
 		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false);
+			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			$("#stats1_diagram").height(parseInt($("#rightStatsTable").height())-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
 			$("#statsBubble").fadeIn();
 			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
 			// Johan: H4CK3D UR C0DE!!!!.

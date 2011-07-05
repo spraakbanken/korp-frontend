@@ -155,17 +155,17 @@ var hp_corpusChooser = {
 			} else {
 				body = el.html();
 			}
+			var textoffset = -1;
+			if ($.browser.webkit) {
+				textoffset = -2;
+			}
+			
 			var newHTML = '<div class="scroll_checkboxes inline_block">';
-			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
-			
-			newHTML += '<div class="popupchecks ui-corner-bottom">';
-			
-			newHTML += '<p style="text-align:right; margin-top:10px; margin-right:8px"><a href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
+			newHTML += '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;margin-top:' + textoffset + 'px;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
+			newHTML += '<div class="popupchecks ui-corner-bottom"><p style="text-align:right; margin-top:10px; margin-right:8px"><a href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
 			
 			newHTML += recursive_transform(body,0);
-			newHTML += '</div>';
-			
-			newHTML += '<div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '422' + 'px; background-color:white">';
+			newHTML += '</div><div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '422' + 'px; background-color:white">';
 			
 			newHTML += '<div class=""><p style="padding:10px; margin:0px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
 			
