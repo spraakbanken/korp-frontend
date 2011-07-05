@@ -736,11 +736,14 @@ var StatsResults = {
 			});
 		});
 		
-		if(!$.all($.map(data["corpora"], function(item) { //if data only contains empty objects, display message
-			return !$.isEmptyObject(item);
-		}))) {
+		var hasHit = false;
+		$.each(data["total"]["absolute"], function(item) {
+			if(!$.isEmptyObject(item))
+				hasHit = true;
+		});
+		if(!hasHit) {
 			this.showNoResults();
-			return;
+			return;	
 		}
 		
 		this["savedWordArray"] = wordArray;
@@ -797,6 +800,12 @@ var StatsResults = {
 		
 		this.selectedCorpus = dummy;
 		$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
+		
+		
+		// Show export section -----
+		$("#kindOfData").css({"visibility": "visible"});
+		$("#kindOfFormat").css({"visibility": "visible"});
+		$("#exportButton").css({"visibility": "visible"});
 
 		// Make Left Stats Table --------------------------------------------------------- //
 		
@@ -1059,9 +1068,14 @@ var StatsResults = {
 	
 	showNoResults : function() {
 		this.hidePreloader();
-		$("<i/>")
-		.localeKey("no_stats_results")
-		.appendTo("#results-stats");
+		$("#rightStatsTable").html("");
+		$("#leftStatsTable").html($("<i/>").localeKey("no_stats_results"));
+		$("#kindOfData").css({"visibility": "hidden"});
+		$("#kindOfFormat").css({"visibility": "hidden"});
+		$("#exportButton").css({"visibility": "hidden"});
+		//$("<i/>")
+		//.localeKey("no_stats_results")
+		//.appendTo("#results-stats");
 	}
 	
 };
