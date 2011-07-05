@@ -198,8 +198,10 @@ var KWICResults = {
 	
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
+		var i = Number(data.dephead);
+		var aux = $(word.closest("tr").find(".word").get(i - 1));
+		this.selectionManager.select(word, aux);
 		
-		this.selectionManager.select(word);
 		updateSidebar(sentence.structs, data, sentence.corpus);
 	},
 	

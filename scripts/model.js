@@ -34,7 +34,7 @@ var KWICProxy = {
 			ajaxParams : this.prevAjaxParams,
 			success : function(data) {kwicResults.renderResult(data);}
 		}, options);
-		this.prevAjaxParams = options.ajaxParams || this.prevAjaxParams;
+		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
 		$.log("kwicProxy.makeRequest", o.cqp);
 		
