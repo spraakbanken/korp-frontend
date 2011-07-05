@@ -155,7 +155,7 @@ jQuery.fn.hoverIcon = function(icon) {
 		.appendTo($(this));
 		
 	}, function() {
-		$(".ui-icon").remove();
+		$(this).find(".ui-icon").remove();
 	});
 	return this;
 };
