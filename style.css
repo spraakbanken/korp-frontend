@@ -881,13 +881,15 @@ a.relStat:hover {
 	cursor : default;
 }
 
-.custom_tab {
-	cursor : pointer;
+
+.custom_anchor {
+	padding-right: 8px !important;
 }
 
 .tabClose {
 	padding : 0 !important;
 	margin-right : 6px;
+	cursor : pointer !important;
 }
 
 /* #top_bar_right { */

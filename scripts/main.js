@@ -94,8 +94,10 @@ var currentMode;
 					$.sm.send("resultstab." + selected);
 				}
 			},
-			panelTemplate : "<div>" + kwicResults.initHTML + "</div>"
+			panelTemplate : "<div>" + kwicResults.initHTML + "</div>",
+			tabTemplate : '<li class="custom_tab"><a class="custom_anchor" href="#{href}"><span>#{label}</span></a><a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a></li>'
 		});
+		
 		$("#result-container li.ui-state-disabled").live({
 			mouseover : function() {
 				nTimeout = setTimeout(function() {
@@ -123,7 +125,7 @@ var currentMode;
 			$.bbq.pushState( state );
 		});
 		
-		$(".custom_tab a:first").live("mouseup", function() {
+		$(".custom_anchor").live("mouseup", function() {
 			$.log("custom click");
 			$.bbq.removeState("result-container");
 			$(this).triggerHandler( 'change' );

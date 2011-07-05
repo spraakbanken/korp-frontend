@@ -54,7 +54,7 @@ function sidebarSaldoFormat() {
 		.wrap("<a href='javascript:void(0)' />")
 		.click(function() {
 			var split = util.splitLemgram(idArray[$(this).parent().index()]);
-			var id = split[0] + ".." + split[1] + "." + split[2];
+			var id = $.format("%s..%s.%s", split); //split[0] + ".." + split[1] + "." + split[2];
 			$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
 			simpleSearch.selectLemgram(id);
 		})
@@ -84,20 +84,33 @@ function sidebarSaldoFormat() {
 	
 }
 
+function refreshSidebar() {
+	var instance = $('#result-container').korptabs('getCurrentInstance');
+    if(instance && instance.selectionManager.selected)
+        instance.selectionManager.selected.click();
+}
+
 function hideSidebar() {
 	if($("#sidebar").css("right") == 273) return;
 	var speed = 400;
 	$("#sidebar").hide("slide", {direction : "right"}, speed);
 	$("#left-column").animate({
 		right : 8
-	}, speed);
+	}, speed, null, function() {
+		$.sm.send("sidebar.hide");
+	});
 	
 }
 function showSidebar() {
-	var speed = 400;
-	$("#sidebar").show("slide", {direction : "right"}, speed);
-	$("#left-column").animate({
-		right : 273
-	}, speed);
+	$.when($("#sidebar")).done(function() {
+		refreshSidebar();
+		var speed = 400;
+		$("#sidebar").show("slide", {direction : "right"}, speed);
+		$("#left-column").animate({
+			right : 273
+		}, speed, null, function() {
+			$.sm.send("sidebar.show");
+		});
+	});
 	
 }

@@ -53,8 +53,10 @@ var KWICResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
 		var self = this;
+		this.prevCQP = null;
 		this.parent(tabSelector, resultSelector);
 		this.initHTML = this.$result.html();
+		this.proxy = kwicProxy;
 		this.num_result = 0;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
@@ -122,12 +124,13 @@ var KWICResults = {
 	    }
 	},
 		
-	renderResult : function(data) {
+	renderResult : function(data, sourceCQP) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
 		var self = this;
+		this.prevCQP = sourceCQP;
 		
 		if(!this.num_result) {
 			this.buildPager(data.hits);
@@ -155,7 +158,7 @@ var KWICResults = {
 //		else {
 //			$("#results-kwic").css("opacity", 0);
 //		}
-		$.log("corpus_results", data.kwic);
+		$.log("corpus_results");
 		//$("#results-kwic").show();
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
@@ -229,7 +232,7 @@ var KWICResults = {
 				link_to : "javascript:void(0)",
 				num_edge_entries : 2,
 				ellipse_text: '..',
-				current_page : $.bbq.getState("page", true) || 0
+				current_page : this.current_page || 0
 			});
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
@@ -246,22 +249,24 @@ var KWICResults = {
 			
 //			var cqp 	= kwicProxy.prevRequest.cqp;
 			var opts = {};
-			opts.cqp 	= this.$result.find(".pagination").data("cqp");
+			opts.cqp = this.prevCQP;
 			
 			opts.start = new_page_index*items_per_page;
 			opts.end = (opts.start + items_per_page);
-			opts.queryData = kwicProxy.queryData;
+			opts.queryData = this.proxy.queryData;
 			$.log("pagination request", opts);		
-			kwicProxy.makeRequest(opts);
+			this.showPreloader();
 			this.current_page = new_page_index;
+			this.proxy.makeRequest(opts);
 			$.bbq.pushState({"page" : this.current_page});
 		}
 	    
 	   return false;
 	},
 	
+	
 	setPage : function(page) {
-		this.$result.find(".Pagination").trigger('setPage', [page]);
+		this.$result.find(".pagination").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {
@@ -306,6 +311,67 @@ var KWICResults = {
 	
 
 };
+
+view.KWICResults = new Class(KWICResults);
+delete KWICResults;
+
+
+var ExampleResults = {
+	Extends : view.KWICResults,
+	
+	initialize : function(tabSelector, resultSelector) {
+		this.parent(tabSelector, resultSelector);
+		this.proxy = new model.ExamplesProxy();
+	},
+	
+	makeRequest : function(opts) {
+		$.log("ExampleResults.makeRequest", opts);
+		var self = this;
+		$.extend(opts, {
+			success : function(data) {
+				$.log("ExampleResults success", data);
+				self.renderResult(data);
+			}
+		});
+		this.showPreloader();
+		this.proxy.makeRequest(opts);
+	},
+	
+	handlePaginationClick : function(new_page_index, pagination_container) {
+		$.log("handlePaginationClick", new_page_index, this.current_page);
+		if(new_page_index != this.current_page) {
+			var items_per_page = parseInt(this.$result.find(".num_hits").val());
+			
+//			var cqp 	= kwicProxy.prevRequest.cqp;
+			var opts = {};
+			opts.cqp = this.prevCQP;
+			
+			opts.start = new_page_index*items_per_page;
+			opts.end = (opts.start + items_per_page);
+//			opts.queryData = kwicProxy.queryData;
+			$.log("pagination request", opts);		
+			
+			this.current_page = new_page_index;
+//			kwicProxy.makeRequest(opts);
+			this.makeRequest(opts);
+//			$.bbq.pushState({"page" : this.current_page});
+		}
+	    
+	   return false;
+	},
+	
+	showPreloader : function() {
+		this.parent();
+		this.$tab.find(".spinner").css("padding-left", 8);
+		this.$tab.find(".tabClose").hide();
+	},
+	hidePreloader : function() {
+		this.parent();
+		this.$tab.find(".tabClose").show();
+	}
+	
+};
+
 
 var LemgramResults = {
 	Extends : view.BaseResults,
@@ -448,78 +514,21 @@ var LemgramResults = {
 	},
 	
 	onClickExample : function(event) {
-//		$("#dialog").remove();
 		var self = this;
-//		this.showPreloader();
 		var $target = $(event.currentTarget);
 		$.log("onClickExample", $target);
-		new model.ExamplesProxy().makeRequest({
+		
+		var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
+		
+		instance.makeRequest({
 			ajaxParams : {
 				head : $target.data("head"),
 				dep : $target.data("dep"),
 				rel : $target.data("rel"),
 				depextra : $target.data("depextra"),
 				corpus : $target.data("corpus").split(",")
-			},
-			success : function(data) {
-				$.sm.send("request_examples", data);
 			}
-		});
 		
-		return;
-		$.ajax({ url : settings.cgi_script, 
-			data:{
-				command : 'relations_sentences',
-				head : $target.data("head"),
-				dep : $target.data("dep"),
-				rel : $target.data("rel"),
-				depextra : $target.data("depextra"),
-				corpus : $target.data("corpus").split(",")
-//				context : "1 sentence",
-//				defaultContext : "1 sentence"
-			},
-			success: function(data) {
-				$.log("example success", data);
-				self.hidePreloader();
-				if(data.ERROR) {
-					$.error($.dump(data));
-					return;
-				} else if(data.hits == 0) {
-					$.log("An error has occurred: no results from example, head: " + $target.data("head"));
-					var pElems = $("<i>An error occurred while fetching examples.</i>");
-				} else {
-//					$("#result-container").korptabs("addTab", "#custom_tab", "Custom");
-//					
-//					$(kwicResults.initHTML).appendTo("#custom_tab");
-					$.sm.send("request_examples", data);
-					
-					
-					
-//					new view.KWICResults('#result-container li:last', '#custom_tab').renderResult(data);
-				}		
-//					return;
-//					
-//					var pElems = $.map(data.kwic, function(sentence) {
-//						return $.format("<li>%s</li>", $.map(sentence.tokens, function(token, i) {
-//							var prefix = postfix = "";
-//							if(sentence.match.start == i)
-//								prefix = "<b>";
-//							else if(sentence.match.end == (i))
-//								postfix = "</b>";
-//							return prefix + token.word + postfix;
-//						}).join(" ").replace(/\s([\.,\:])/g, "$1"));
-//					}).join("\n");
-//				}
-//				
-//				
-//				$($.format("<div id='dialog' title='%s'></div>", util.getLocaleString("example_dialog_header")))
-//				.appendTo("#results-lemgram").append("<ol />")
-//				.dialog({
-//					width : 600,
-//					height : 500
-//				})
-//				.find("ol").html(pElems);
-			}
 		});
 	},
 	
@@ -1080,9 +1089,9 @@ var StatsResults = {
 	
 };
 
-view.KWICResults = new Class(KWICResults);
+view.ExampleResults = new Class(ExampleResults);
 view.LemgramResults = new Class(LemgramResults);
 view.StatsResults = new Class(StatsResults);
-delete KWICResults;
+delete ExampleResults;
 delete LemgramResults;
 delete StatsResults;

@@ -8,11 +8,14 @@
                 $("#result-container li:first > a").trigger("change");
             }
             simpleSearch.resetView();
+            kwicResults.showPreloader();
             kwicProxy.makeRequest();
         }
     
         function lemgramSearch(lemgram, searchPrefix, searchSuffix) {
             $.log("lemgramSearch", lemgram);
+            kwicResults.showPreloader();
+            lemgramResults.showPreloader();
             simpleSearch
             .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
             .clear();
@@ -31,7 +34,7 @@
         }
     ]]></script>
     
-    <datamodel>
+<!--     <datamodel> -->
 <!--         <data id="kwicProxy"/> -->
 <!--         <data id="lemgramProxy"/> -->
 <!--         <data id="statsProxy"/> -->
@@ -40,11 +43,16 @@
 <!--         <data id="lemgramResults"/> -->
 <!--         <data id="statsResults"/> -->
     
-        <data id="currentCustom" />
-    </datamodel>
+<!--         <data id="currentCustom" /> -->
+<!--     </datamodel> -->
     
     <state id="init">
         <transition target="main">
+            <assign location="searchProxy"    expr="new model.SearchProxy()"/>
+            <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
+            <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
+            <assign location="statsProxy"     expr="new model.StatsProxy()"/>
+            
             <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
@@ -52,10 +60,7 @@
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(2)')"/>
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(3)')"/>
             
-            <assign location="searchProxy"    expr="new model.SearchProxy()"/>
-            <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
-            <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
-            <assign location="statsProxy"     expr="new model.StatsProxy()"/>
+            
         </transition>
     </state>
     
@@ -203,7 +208,7 @@
                         
                         <transition event="request_examples" target="results_lemgram">
                             <script>
-                                $("#result-container").korptabs("addTab", view.KWICResults, _event.data);
+                                //$("#result-container").korptabs("addTab", view.KWICResults, _event.data);
                             </script>
                         </transition>
                         
@@ -221,25 +226,34 @@
                         </transition>
                     </state>
                     
-                    <state id="results_custom" initial="custom_h">
+                    <state id="results_custom" initial="custom_entry">
+                    
                         <onentry>
                             <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
                             <script>
-                                $.log("custom onentry", $('#result-container').korptabs('option', 'selected'));
                                 currentCustom.onentry();
                                 //util.setJsonLink(kwicProxy.prevRequest);
                             </script>
                         </onentry>
-                        
-                        <history id="custom_h">
-                            <transition target="custom_word_selected" />
-                        </history>
+                        <state id="custom_entry">
+                            <onentry>
+                                <script>
+                                    $.log("custom_entry", currentCustom.selectionManager.hasSelected())
+                                </script>
+                            </onentry>
+                            <transition 
+                                cond="currentCustom.selectionManager.hasSelected()" 
+                                target="custom_word_selected"></transition>
+                                
+                            <transition target="custom_word_not_selected" />
+                        </state>
                         
                         <state id="custom_word_selected">
                             <onentry>
-                                <script>
+                                <script><![CDATA[
+                                    $.log("custom_word_selected onentry");
                                     showSidebar();
-                                </script>
+                                ]]></script>
                             </onentry>
                             <transition event="word.deselect" target="custom_word_not_selected" />
                             <onexit>
@@ -266,10 +280,12 @@
             
             <state id="sidebar" initial="sidebar_hidden">
                 <state id="sidebar_hidden">
-                    <transition event="sidebar.show" target="sidebar_visible" />
+                    <transition event="sidebar.show" target="sidebar_visible">
+                    </transition>
                 </state>
                 <state id="sidebar_visible">
-                    <transition event="sidebar.hide" target="sidebar_hidden" />
+                    <transition event="sidebar.hide" target="sidebar_hidden">
+                    </transition>
                 </state>
             </state>
             

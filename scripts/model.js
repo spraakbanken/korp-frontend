@@ -21,6 +21,7 @@ var KWICProxy = {
 		this.prevRequest = null;
 		this.queryData = null;
 		this.command = "query";
+		this.prevAjaxParams = null;
 	},
 	makeRequest : function(options) {
 		var self = this;
@@ -30,10 +31,10 @@ var KWICProxy = {
 			start : 0, 
 			end : $(".num_hits").val()-1, 
 			queryData : null,
-			ajaxParams : null,
+			ajaxParams : this.prevAjaxParams,
 			success : function(data) {kwicResults.renderResult(data);}
 		}, options);
-		
+		this.prevAjaxParams = options.ajaxParams || this.prevAjaxParams;
 //		kwicResults.num_result = 0;
 		$.log("kwicProxy.makeRequest", o.cqp);
 		
@@ -87,7 +88,7 @@ var KWICProxy = {
 			data.show.push("saltnld_nld");
 		}
 
-		$(".pagination:visible").data("cqp", o.cqp);
+//		$(".pagination:visible").data("cqp", o.cqp);
 		data.show = data.show.join();
 		data.show_struct = data.show_struct.join();
 		this.prevRequest = data;
@@ -97,10 +98,10 @@ var KWICProxy = {
 			beforeSend : function(jqxhr, settings) {
 				self.prevRequest = settings;
 			},
-			success: function(data) {
+			success: function(data, status, jqxhr) {
 				$.log("kwic result", data);
 				self.queryData = data.querydata; 
-				o.success(data);
+				o.success(data, o.cqp);
 			}
 		});
 	}
@@ -126,7 +127,7 @@ var LemgramProxy = {
 		},
 		
 		lemgramSearch : function(lemgram, searchPrefix, searchSuffix) {
-			lemgramResults.showPreloader();
+			
 			
 			var cqp = $.format('[(lex contains "%s")%s%s]', 
 					[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
