@@ -310,12 +310,10 @@ $.ui.tabs.subclass("ui.korptabs", {
 	
 	addTab : function(klass) {
 		var url = this.urlPattern + this.n;
-		this.add(url, "Exempel");
-		var li = this.element.find("li:last"); //.addClass("custom_tab")
-//	    .append('<a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a>');
+		this.add(url, util.getLocaleString("example"));
+		var li = this.element.find("li:last"); 
 		this.redrawTabs();
 		var instance = new klass(li, url);
-//		this._setOption("selected", li.prevAll().length);
 		
 		li.data("instance", instance);
 		this.n++;

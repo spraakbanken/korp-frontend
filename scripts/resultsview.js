@@ -87,7 +87,6 @@ var KWICResults = {
 	
 	onentry : function() {
 		this.centerScrollbar();
-		$.log("onentry", this.keyListener);
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
@@ -160,6 +159,7 @@ var KWICResults = {
 //		}
 		$.log("corpus_results");
 		//$("#results-kwic").show();
+		var punctArray = [",", ".", ";", ":", "!", "?"];
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
 		    var splitObj = {
@@ -170,6 +170,10 @@ var KWICResults = {
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( self.$result.find(".results_table") )
 					.find(".word")
+					.each(function() {
+						if($.inArray($(this).text(), punctArray) != -1)
+							$(this).prev().html("");
+					})
 					.click(function(event) {
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
@@ -181,9 +185,6 @@ var KWICResults = {
 				rows.css("background-color", settings.primaryColor);
 			}
 			
-		});
-		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
-			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
 		
 //		$("#attrlistTmpl").tmpl(data.kwic)
@@ -324,15 +325,16 @@ var ExampleResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		this.proxy = new model.ExamplesProxy();
+		this.$result.find(".num_hits").parent().hide();
 	},
 	
 	makeRequest : function(opts) {
-		$.log("ExampleResults.makeRequest", opts);
 		var self = this;
 		$.extend(opts, {
 			success : function(data) {
 				$.log("ExampleResults success", data);
 				self.renderResult(data);
+				util.setJsonLink(self.proxy.prevRequest);
 			}
 		});
 		this.showPreloader();
@@ -344,19 +346,14 @@ var ExampleResults = {
 		if(new_page_index != this.current_page) {
 			var items_per_page = parseInt(this.$result.find(".num_hits").val());
 			
-//			var cqp 	= kwicProxy.prevRequest.cqp;
 			var opts = {};
 			opts.cqp = this.prevCQP;
 			
 			opts.start = new_page_index*items_per_page;
 			opts.end = (opts.start + items_per_page);
-//			opts.queryData = kwicProxy.queryData;
-			$.log("pagination request", opts);		
 			
 			this.current_page = new_page_index;
-//			kwicProxy.makeRequest(opts);
 			this.makeRequest(opts);
-//			$.bbq.pushState({"page" : this.current_page});
 		}
 	    
 	   return false;

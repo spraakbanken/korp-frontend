@@ -141,11 +141,7 @@
 	"mx" : "flerordsprefix",	  
 	"sx" : "prefix",	  					
 	
-	
-	"dep" : "Depentent",
-	"sources" : "Examples",
-	"head" : "Head",
-	"freq" : "Frequency",
+	"example" : "Example",
 
 	"malt_AT" : "Nominal (adjectival) pre-modifier",
 	"malt_ET" : "Other nominal post-modifier",

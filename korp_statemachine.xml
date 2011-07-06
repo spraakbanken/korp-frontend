@@ -226,21 +226,23 @@
                             <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
                             <script>
                                 currentCustom.onentry();
+                                //TODO: broken
                                 util.setJsonLink(currentCustom.proxy.prevRequest);
                             </script>
                         </onentry>
                         <state id="custom_entry">
-                            <onentry>
-                                <script>
-                                    $.log("custom_entry", currentCustom.selectionManager.hasSelected())
-                                </script>
-                            </onentry>
                             <transition 
                                 cond="currentCustom.selectionManager.hasSelected()" 
                                 target="custom_word_selected"></transition>
                                 
                             <transition target="custom_word_not_selected" />
                         </state>
+                        
+                        <transition event="submit" target="custom_entry">
+                            <script>
+                                gotoFirstResultTab();
+                            </script>
+                        </transition>
                         
                         <state id="custom_word_selected">
                             <onentry>

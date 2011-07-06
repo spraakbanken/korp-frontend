@@ -141,10 +141,7 @@
 	"mx" : "flerordsprefix",	  
 	"sx" : "prefix",
 	
-	"dep" : "Depentent",
-	"sources" : "Exempel",
-	"head" : "Head",
-	"freq" : "Frequency",
+	"example" : "Exempel",
 	
 	"malt_AT" : "Framförställt adjektivattribut",
 	"malt_ET" : "Övrigt efterställt attribut",

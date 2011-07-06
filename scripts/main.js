@@ -95,7 +95,7 @@ var currentMode;
 				}
 			},
 			panelTemplate : "<div>" + kwicResults.initHTML + "</div>",
-			tabTemplate : '<li class="custom_tab"><a class="custom_anchor" href="#{href}"><span>#{label}</span></a><a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a></li>'
+			tabTemplate : '<li class="custom_tab"><a class="custom_anchor" href="#{href}"><span rel="localize[example]">#{label}</span></a><a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a></li>'
 		});
 		
 		$("#result-container li.ui-state-disabled").live({
@@ -123,6 +123,7 @@ var currentMode;
 			// Set the state!
 			state[ id ] = idx;
 			$.bbq.pushState( state );
+			return false;
 		});
 		
 		$(".custom_anchor").live("mouseup", function() {

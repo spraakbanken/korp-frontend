@@ -71,7 +71,7 @@
 					 
 					 function(compiler){
 						
-						require([ window.DOMParser ?
+						require([ window.DOMParser && window.XSLTProcessor ?
 								"lib/scxml/browser" :
 									"lib/scxml/ie"],
 									function(transform) {

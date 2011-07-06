@@ -430,12 +430,13 @@ input:placeholder, textarea:placeholder {
 	font-size : 12px;
 }
 
-#similar_header {
-		
-}
 
 #show_more {
 	float:right;
+	position : relative;
+	top : -3px;
+	padding : 2px 2px 0 2px;
+	
 }
 #show_more a {
 	font-size : 12px;
