@@ -15,8 +15,8 @@ var pie_widget = {
 		diagram_type : 1,
 		offset_x: 0,
 		offset_y: 0,
-		bar_width : 25,
-		bar_spacing : 1,
+		bar_width : 26,
+		bar_spacing : 0,
 		bar_silhouette : true,
 		bar_horizontal : true,
 		bar_show_captions : false
@@ -171,9 +171,9 @@ var pie_widget = {
 				var rh = fvalue["share"]*totheight;
 			//}
 			if (nowthis.options.bar_horizontal) {
-				var newrect = r.rect(nowthis.options.offset_x,rx+nowthis.options.offset_y,rh,rw,3);
+				var newrect = r.rect(nowthis.options.offset_x,rx+nowthis.options.offset_y,rh,rw,0);
 			} else {
-				var newrect = r.rect(rx+nowthis.options.offset_x,ry+nowthis.options.offset_y,rw,rh,3);
+				var newrect = r.rect(rx+nowthis.options.offset_x,ry+nowthis.options.offset_y,rw,rh,0);
 			}
 			newrect.attr({fill: fvalue["color"], stroke:"#EEEEEE"});
 			//newrect.attr({"opacity": 0.7});

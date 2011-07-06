@@ -44,7 +44,7 @@
 	"search" : "   Sök   ",
 	"and_include" : "även som",
 	"hits_per_page" : "Träffar per sida",
-	"num_results" : "Antal resultat",
+	"num_results" : "Antal träffar",
 	"next" : "Nästa",
 	"prev" : "Tidigare",
 	"find" : "Leta efter",
@@ -141,7 +141,10 @@
 	"mx" : "flerordsprefix",	  
 	"sx" : "prefix",
 	
-	"example" : "Exempel",
+	"dep" : "Depentent",
+	"sources" : "Exempel",
+	"head" : "Head",
+	"freq" : "Frequency",
 	
 	"malt_AT" : "Framförställt adjektivattribut",
 	"malt_ET" : "Övrigt efterställt attribut",
@@ -169,8 +172,8 @@
 	"corpselector_selectedmultiple" : " korpusar valda",
 	"corpselector_buttonselectall" : "Markera alla",
 	"corpselector_buttonselectnone" : "Avmarkera",
-	"corpselector_numberoftokens" : "Antal tokens",
-	"corpselector_tokens" : "tokens",
+	"corpselector_numberoftokens" : "Antal token",
+	"corpselector_tokens" : "token",
 	"corpselector_corporawith_sing" : "korpus med",
 	"corpselector_corporawith_plur" : "korpusar med",
 	

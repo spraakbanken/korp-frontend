@@ -549,7 +549,7 @@ formatOutput = function(x) { // Use "," instead of "." if Swedish
 	return x.replace(".",",");
 };
 
-function newDataInPie(dataName, horizontalDiagram) {
+function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 	var dataItems = new Array();
 	
 	var wordArray = [];
@@ -687,7 +687,8 @@ function newDataInPie(dataName, horizontalDiagram) {
 			$.each(statsResults.totalForWordform, function(key, fvalue) {
 				dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
 			});
-			$(".statstable__all").css({"background-color":"#EEEEEE"});
+			
+			$(".statstable__all").animate({"background-color":"#EEEEEE"},"slow");
 			
 		} else {
 			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
@@ -706,11 +707,33 @@ function newDataInPie(dataName, horizontalDiagram) {
 					return false; // break it
 				}
 			});
-			$(".statstablecorpus__" + dataName).css({"background-color":"#EEEEEE"});
+			$(".statstablecorpus__" + dataName).animate({"background-color":"#EEEEEE"},"slow");
 		}
 		
 		statsResults.selectedCorpus = dataName;
-		diagramInstance.pie_widget("newData", dataItems);
+		
+		if (targetDiv) {
+			$(".barContainerClass").find("svg").attr("width", 0);
+			var targetDivID = '#' + targetDiv;
+			diagramInstance = $(targetDivID).pie_widget({container_id: targetDiv, data_items: dataItems});
+			diagramInstance.find("svg").attr("height", $("#actualRightStatsTable").height()-70);
+			
+			$(".barContainerClass").parent().css({"visibility": "hidden", "display": "none", "width": "0px"});
+			var offset = -1;
+			if ($.browser.webkit) {
+				offset = 3;
+			}
+			$(targetDivID).css({"padding-top": $(".corpusTitleClass").height()+offset});
+			$(targetDivID).find("svg").attr("width", 200);
+			$(targetDivID).css({"width": "1px"});
+			$(targetDivID).parent().css({"visibility":"visible", "display": "table-cell"});
+			$(targetDivID).animate({"width": "200px"});
+			
+			
+			
+		} else {
+			diagramInstance.pie_widget("newData", dataItems);
+		}
 		
 	//diagramInstance = $('#circle_diagram').pie_widget({container_id: "circle_diagram", data_items: dataItems});
 	}
@@ -836,9 +859,11 @@ var StatsResults = {
 		
 		// Make Right Stats Table -------------------------------------------------------- //
 		
-		var theHTML = '<table style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
+		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img src="img/stats.png" style="border:0px;"/></a></th>';
+		theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__all__" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__all__"></div></th>';
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>'; // ___/ /g___ Funkar inte ordentligt i Chrome!
+			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
+			theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
 		});
 		var c = 0;
 		var totalForAllWordforms = 0;
@@ -880,7 +905,6 @@ var StatsResults = {
 		theHTML += '</tr></table>';
 
 		$("#rightStatsTable").html(theHTML);
-		// $("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
 		$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
@@ -894,10 +918,6 @@ var StatsResults = {
 			var dataDelimiter = ";";
 			if (selType == "TSV")
 				dataDelimiter = "\t";
-			// if ($(this).attr('id') == "export_csv_abs")
-			//	datatype = "absolute";
-			//else
-			//	datatype = "relative";
 				
 			// Generate CSV from the data
 			
@@ -991,29 +1011,26 @@ var StatsResults = {
 		});
 		
 		
-		diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
+		//diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
+		diagramInstance = $('#theHide').pie_widget({container_id: "theHide", data_items: dataItems});
 		
 		
 		$(".corpusName").click(function(e) {
 			var parts = $(this).attr("id").split("__");
-			newDataInPie(parts[1],false);
-			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
-			// Johan: H4CK3D UR C0DE!!!!.
-			diagramInstance.find("svg").attr("height", 1000);
+			newDataInPie(parts[1], false, "corpusStatistics__" + parts[1]);
 			e.stopPropagation();
 		});
 		
 
 		
 		$(".corpusNameAll").click(function(e) {
-			newDataInPie("all",false);
-			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
-			$("#stats1_diagram").height(parseInt($("#rightStatsTable").height())-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
-			$("#statsBubble").fadeIn();
-			$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
+			newDataInPie("all",false, "corpusStatistics__all__");
+			//$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
+			//$("#stats1_diagram").height(parseInt($("#rightStatsTable").height())-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
+			//$("#statsBubble").fadeIn();
+			//$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
 			// Johan: H4CK3D UR C0DE!!!!.
-			diagramInstance.find("svg").attr("height", 1000);
+			//diagramInstance.find("svg").attr("height", 1000);
 			e.stopPropagation();
 		});
 		
@@ -1027,19 +1044,19 @@ var StatsResults = {
 
 		});
 		
-		$(window).unbind('click.statistics');
-			$(window).bind('click.statistics', function() { clearStatisticsBars(); });
-		$("#rightStatsTable").unbind('scroll');
-			$("#rightStatsTable").bind('scroll', function() { clearStatisticsBars(); });
-		$("#result-container").bind('tabsselect', function() { clearStatisticsBars(); });
-		
-		function clearStatisticsBars() {
-			var disp = $("#statsBubble").css("display");
-				if(disp != "none") {
-					$("#statsBubble").fadeOut('fast');
-				}
-				$(".statstable").css({"background-color":"white"});
-		}
+		//$(window).unbind('click.statistics');
+		//	$(window).bind('click.statistics', function() { clearStatisticsBars(); });
+		//$("#rightStatsTable").unbind('scroll');
+		//	$("#rightStatsTable").bind('scroll', function() { clearStatisticsBars(); });
+		//$("#result-container").bind('tabsselect', function() { clearStatisticsBars(); });
+		//
+		//function clearStatisticsBars() {
+		//	var disp = $("#statsBubble").css("display");
+		//		if(disp != "none") {
+		//			$("#statsBubble").fadeOut('fast');
+		//		}
+		//		$(".statstable").css({"background-color":"white"});
+		//}
 		
 		
 		// ------------------------------------------------------------------------ //
