@@ -731,7 +731,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			
 			
 			
-		} else {
+		} else {
 			diagramInstance.pie_widget("newData", dataItems);
 		}
 		
@@ -948,7 +948,11 @@ var StatsResults = {
 		
 		$(".searchForWordform").click(function() {
 			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
-			$.bbq.pushState({search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]'});
+			$.bbq.pushState({
+				search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]',
+				"result-container" : 0,
+				"search-tab" : 2
+			});
 		});
 		
 		$(".searchForWordformInCorpus").click(function() {

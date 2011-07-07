@@ -327,6 +327,7 @@ var SimpleSearch = {
 	resetView : function() {
 		$("#similar_lemgrams").empty().height("auto");
 		$("#show_more").remove();
+		this.setPlaceholder(null, null);
 //		$("#lemgram_select").prev("label").andSelf().remove();
 		return this;
 	},

@@ -4,8 +4,9 @@
     <script><![CDATA[
     
         function kwicSearch() {
-            if(In("results_lemgram") || In("results_stats")) {
-                $("#result-container li:first > a").trigger("change");
+            if(In("results_lemgram") ) { //|| In("results_stats")
+                $.log("conf", $.sm.getConfiguration());
+                gotoFirstResultTab();
             }
             simpleSearch.resetView();
             kwicResults.showPreloader();
@@ -30,7 +31,7 @@
         
         function gotoFirstResultTab() {
             $.log("faking kwic result tab click");
-            $("#result-container li:first > a").trigger("change");
+            $("#result-container li:first > a").trigger("click");
         }
     ]]></script>
     
@@ -201,9 +202,9 @@
                             </script>
                         </onentry>
                         <transition event="submit.kwic" target="results_lemgram" >
-                            <script>
-                                gotoFirstResultTab();
-                            </script>
+<!--                             <script> -->
+<!--                                 gotoFirstResultTab(); -->
+<!--                             </script> -->
                         </transition>
                         
                     </state>
@@ -215,7 +216,8 @@
                         </onentry>
                         <transition event="submit.kwic" target="results_stats">
                             <script>
-                                gotoFirstResultTab();
+                                //gotoFirstResultTab();
+                                $.log("submit.kwic, stats");
                             </script>
                         </transition>
                     </state>
@@ -226,7 +228,6 @@
                             <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
                             <script>
                                 currentCustom.onentry();
-                                //TODO: broken
                                 util.setJsonLink(currentCustom.proxy.prevRequest);
                             </script>
                         </onentry>
@@ -288,6 +289,9 @@
                 <state id="l2">
                     <transition event="*" target="l2">
                         <log expr="'event found: ' + _event.name" />
+<!--                         <script> -->
+<!--                             $.log("conf", $.sm.getConfiguration()); -->
+<!--                         </script> -->
                     </transition>
                 </state>
             </state>

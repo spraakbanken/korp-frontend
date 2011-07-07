@@ -178,6 +178,12 @@ var currentMode;
 				});
 			}
 			
+			tabs.each(function() {
+				var idx = e.getState( this.id, true );
+				if(idx === null) return;
+				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
+			});
+			
 			var search = e.getState("search");
 			if(search != null && search !== prevFragment["search"]) {
 				
@@ -205,11 +211,7 @@ var currentMode;
 					break;
 				}
 			}
-			tabs.each(function() {
-				var idx = e.getState( this.id, true );
-				if(idx === null) return;
-				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
-			});
+			
 			
 			$.bbq.prevFragment = $.deparam.fragment();
 		});
