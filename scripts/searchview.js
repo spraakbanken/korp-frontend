@@ -477,7 +477,6 @@ var ExtendedSearch = {
 			});
 			break;
 		case "date":
-			break;
 		default:
 			arg_value = $("<input type='text'/>");
 			break;

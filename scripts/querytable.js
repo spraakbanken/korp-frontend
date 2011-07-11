@@ -127,7 +127,6 @@ function cqpToken(token) {
     	});
     	if (inner_query.length) {
     		query.token.push(inner_query.join(" | "));
-//    		query.token.push("(" + inner_query.join(" | ") + ")");
     	}
     	
     });

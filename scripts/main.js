@@ -77,7 +77,7 @@ var currentMode;
 			event : "change",
 			show : function(event, ui) {
 				if($("#columns").position().top > 0)
-					updatePlacement(false);
+					updatePlacement(false); //place sidebar
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
@@ -154,9 +154,7 @@ var currentMode;
 			if(hasChanged("page") && !hasChanged("search"))
 				kwicResults.setPage(page);
 			
-			$.log("hashChange", isInit);
 			if(isInit) {
-//				kwicResults.pageOnInit = page;
 				kwicResults.current_page = page;
 			}
 			

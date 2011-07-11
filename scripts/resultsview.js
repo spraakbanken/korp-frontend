@@ -198,11 +198,37 @@ var KWICResults = {
 		this.hidePreloader();
 	},
 	
+	scrollToShowWord : function(word) {
+		var offset = 100;
+		var wordTop = word.offset().top;
+		var newY = window.scrollY;
+		if(wordTop > $(window).height() + window.scrollY)
+			newY += offset; 
+		else if(wordTop < window.scrollY) {
+			newY -= offset; 
+		}
+		$('html, body').stop(true, true).animate({"scrollTop" : newY});
+		
+		var wordLeft = word.offset().left;
+		var area = this.$result.find(".table_scrollarea");
+
+		var newX = parseInt(area.scrollLeft());
+		if(wordLeft > (area.offset().left + area.width())) {
+			newX += offset; 
+		}
+		else if(wordLeft < area.offset().left) {
+			newX -= offset; 
+		}
+		area.stop(true, true).animate({"scrollLeft" : newX});
+	},
+	
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
 		var i = Number(data.dephead);
 		var aux = $(word.closest("tr").find(".word").get(i - 1));
 		this.selectionManager.select(word, aux);
+		
+		this.scrollToShowWord(word);
 		
 		updateSidebar(sentence.structs, data, sentence.corpus);
 	},
@@ -218,10 +244,9 @@ var KWICResults = {
 
 	selectRight : function(sentence) {
 		var from = sentence.match.end;
-		var len=sentence.tokens.length;
-		var to = len;
+		var len = sentence.tokens.length;
 		
-		return sentence.tokens.slice(sentence.match.end, to);
+		return sentence.tokens.slice(from, len);
 	},
 	
 	buildPager : function(number_of_hits){
@@ -281,11 +306,12 @@ var KWICResults = {
 	},
 		
 	centerScrollbar : function() {
-		if(!this.$result.find(".match").first().length) return;
-		this.$result.find(".table_scrollarea").scrollLeft(0);
-		var matchLeft = this.$result.find(".match").first().position().left;
+		var m = this.$result.find(".match:first"); 
+		if(!m.length) return;
+		var area = this.$result.find(".table_scrollarea").scrollLeft(0);
+		var match = m.first().position().left + m.width() / 2;
 		var sidebarWidth = $("#sidebar").outerWidth() || 0;
-		this.$result.find(".table_scrollarea").scrollLeft(matchLeft - ($("body").innerWidth() - sidebarWidth ) / 2);
+		area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
 		
 	
@@ -314,11 +340,12 @@ var KWICResults = {
 		var prevMatch = this.selectionManager.selected.closest("tr").prevAll(".sentence:first").find(".match span:first");
 		prevMatch.click();
 	},
-	
 	selectDown : function() {
 		var nextMatch = this.selectionManager.selected.closest("tr").nextAll(".sentence:first").find(".match span:first");
 		nextMatch.click();
-	}
+	},
+	
+	
 	
 
 };

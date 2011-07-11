@@ -168,8 +168,12 @@
                             </script>
                         </onentry>
                         
+<!--                         <state id="results_kwic_init"> -->
+<!--                             <transition target="selected_h" cond="kwicResults.$result.find('.results_table').is(':parent')" /> -->
+<!--                         </state> -->
+                        
                         <history id="selected_h">
-                            <transition target="kwic_word_selected" />
+                            <transition target="kwic_word_not_selected" />
                         </history>
                         
                         <state id="kwic_word_selected">
