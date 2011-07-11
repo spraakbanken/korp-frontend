@@ -1,4 +1,3 @@
-var PARALLEL_MODE = "parallel_mode";
 var currentMode;
 
 
@@ -77,6 +76,8 @@ var currentMode;
 		$("#search-tab").tabs({
 			event : "change",
 			show : function(event, ui) {
+				if($("#columns").position().top > 0)
+					updatePlacement(false);
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
@@ -112,6 +113,10 @@ var currentMode;
 			}
 		});
 		
+		$(window).scroll(function() {
+			updatePlacement(true);
+		});
+		
 		var tabs = $(".ui-tabs");
 		tabs.find(tab_a_selector).click(function() {
 			if($(this).parent().is(".ui-state-disabled")) return;
@@ -132,16 +137,28 @@ var currentMode;
 			$(this).triggerHandler( 'change' );
 		});
 		
-		$(window).bind( 'hashchange', function(e) {
+		function onHashChange(event, isInit) {
 			var prevFragment = $.bbq.prevFragment || {};
-			
+			var e = $.bbq;
 			function hasChanged(key) {
 				return prevFragment[key] != e.getState(key);
+			}
+			
+			var hpp = e.getState("hpp", true);
+			kwicResults.$result.find(".num_hits").val(hpp);
+			if(!isInit && hasChanged("hpp")) {
+				kwicResults.handlePaginationClick(0, null, true);
 			}
 			
 			var page = e.getState("page", true);
 			if(hasChanged("page") && !hasChanged("search"))
 				kwicResults.setPage(page);
+			
+			$.log("hashChange", isInit);
+			if(isInit) {
+//				kwicResults.pageOnInit = page;
+				kwicResults.current_page = page;
+			}
 			
 			var corpus = e.getState("corpus");
 			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
@@ -196,25 +213,25 @@ var currentMode;
 					simpleSearch.onSimpleChange();
 					simpleSearch.setPlaceholder(null, null);
 					simpleSearch.makeLemgramSelect();
-					$.sm.send("submit.kwic", value);
+					$.sm.send("submit.kwic", {value : value, page : page});
 					break;
 				case "lemgram":
-					$.sm.send("submit.lemgram", value);
+					$.sm.send("submit.lemgram", {value : value, page : page});
 					break;
 				case "saldo":
 					extendedSearch.setOneToken("saldo", value);
-					$.sm.send("submit.kwic", value);
+					$.sm.send("submit.kwic", {value : value, page : page});
 					break;
 				case "cqp":
 					advancedSearch.setCQP(value);
-					$.sm.send("submit.kwic", value);
+					$.sm.send("submit.kwic", {value : value, page : page});
 					break;
 				}
 			}
 			
-			
 			$.bbq.prevFragment = $.deparam.fragment();
-		});
+		}
+		$(window).bind( 'hashchange', onHashChange);
 		
 		//setup about link
 		$("#about").click(function() {
@@ -242,7 +259,7 @@ var currentMode;
 		extendedSearch.insertRow();
 		
 		util.localize();
-		$(window).trigger("hashchange");
+		onHashChange(null, true);
 		$("body").fadeTo(400, 1);
 	});
 			

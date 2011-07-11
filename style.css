@@ -159,7 +159,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .num_hits {
-	min-width : 37px;	
+	margin-right : 5px;
 }
 
 .lang_selected {
@@ -266,7 +266,7 @@ input:placeholder, textarea:placeholder {
 	width: 460px;
 	height: 33px;
 	overflow: hidden;
-	margin-bottom: 5px;
+	margin-bottom: 3px;
 }
 
 .buttonlink {

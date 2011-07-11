@@ -117,8 +117,15 @@
 							</ul>
 							<div id="results-kwic">
 								<div class="result_controls">
-								   <div><label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-								   <input class="num_hits" size="3" value="25" type="number" step="5" ></div> 
+								   <div>
+									   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
+									   <select id="num_hits" class="num_hits">
+									   		<option value="25">25</option>
+									   		<option value="50">50</option>
+									   		<option value="75">75</option>
+									   		<option value="100">100</option>
+									   </select>
+								   </div> 
 								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
 								   <div style="clear : both; float : none;" ></div>
 							   </div>

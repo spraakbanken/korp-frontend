@@ -57,19 +57,10 @@ var KWICResults = {
 		this.parent(tabSelector, resultSelector);
 		this.initHTML = this.$result.html();
 		this.proxy = kwicProxy;
-		this.num_result = 0;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
-		if(!Modernizr.inputtypes.number) {
-			var $select = $('<select class="num_hits"></div>');
-			this.$result.find(".num_hits").replaceWith($select);
-			
-			$.each([25, 50, 75, 100], function(i, item) {
-				$("<option />").attr("value", item).text(item).appendTo($select);
-			});
-			$select.val(25)
-			.css("margin-right", 5);
-		}
+		
+		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this));
 		
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
@@ -92,6 +83,10 @@ var KWICResults = {
 	
 	onexit : function() {
 		$(document).unbind("keydown", this.onKeydown);
+	},
+	
+	onHpp : function(event) {
+		$.bbq.pushState({hpp : $(event.currentTarget).val()});
 	},
 	
 	onKeydown : function(event) {
@@ -122,6 +117,14 @@ var KWICResults = {
 				return false;
 	    }
 	},
+	
+	getPageInterval : function(page) {
+		var items_per_page = parseInt(this.$result.find(".num_hits").val());
+		var output = {};
+		output.start = (page || 0) * items_per_page;
+		output.end = (output.start + items_per_page);
+		return output;
+	},
 		
 	renderResult : function(data, sourceCQP) {
 		var resultError = this.parent(data);
@@ -131,11 +134,6 @@ var KWICResults = {
 		var self = this;
 		this.prevCQP = sourceCQP;
 		
-		if(!this.num_result) {
-			this.buildPager(data.hits);
-		}
-		this.num_result = data.hits;
-		this.$result.find('.num-result').html(data.hits);
 		if(!data.hits) {
 
 			$.log("no kwic results");
@@ -144,7 +142,6 @@ var KWICResults = {
 			this.hidePreloader();
 			return;
 		}				
-
 
 		var effectSpeed = 100;
 		if($.trim(this.$result.find(".results_table").html()).length) {
@@ -159,6 +156,10 @@ var KWICResults = {
 //		}
 		$.log("corpus_results");
 		//$("#results-kwic").show();
+		
+		this.$result.find('.num-result').html(data.hits);
+		this.buildPager(data.hits);
+		
 		var punctArray = [",", ".", ";", ":", "!", "?"];
 		$.each(data.kwic, function(i,sentence) { 
 			var offset = 0; 
@@ -224,9 +225,11 @@ var KWICResults = {
 	},
 	
 	buildPager : function(number_of_hits){
+		$.log("buildPager", this.current_page);
 		var items_per_page = this.$result.find(".num_hits").val();
+		
 		if(number_of_hits > items_per_page){
-			this.$result.find('.pagination').unbind();
+			this.$result.find('.pagination').unbind().empty();
 			this.$result.find(".pagination").pagination(number_of_hits, {
 				items_per_page : items_per_page, 
 				callback : $.proxy(this.handlePaginationClick, this),
@@ -240,33 +243,38 @@ var KWICResults = {
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
 			
-		}else{
-			this.$result.find(".pagination").html('');
-		}
+		} 
 	},
 	
-	handlePaginationClick : function(new_page_index, pagination_container) {
+	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		$.log("handlePaginationClick", new_page_index, this.current_page);
-		if(new_page_index != this.current_page) {
-			var items_per_page = parseInt(this.$result.find(".num_hits").val());
+		if(new_page_index != this.current_page || !!force_click) {
 			
-//			var cqp 	= kwicProxy.prevRequest.cqp;
-			var opts = {};
-			opts.cqp = this.prevCQP;
-			
-			opts.start = new_page_index*items_per_page;
-			opts.end = (opts.start + items_per_page);
-			opts.queryData = this.proxy.queryData;
-			$.log("pagination request", opts);		
 			this.showPreloader();
 			this.current_page = new_page_index;
-			this.proxy.makeRequest(opts);
-			$.bbq.pushState({"page" : this.current_page});
+			this.makeRequest();
+			$.bbq.pushState({"page" : new_page_index});
 		}
 	    
 	   return false;
 	},
 	
+	buildQueryOptions : function() {
+		var opts = {};
+//		var items_per_page = parseInt(this.$result.find(".num_hits").val());
+		opts.cqp = this.prevCQP;
+//		new_page_index = new_page_index || 0;
+//		opts.start = new_page_index * items_per_page;
+//		opts.end = (opts.start + items_per_page);
+//		$.extend(opts, this.getPageInterval(new_page_index));
+		
+		opts.queryData = this.proxy.queryData;
+		return opts;
+	},
+	
+	makeRequest : function(page_num) {
+		this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page);
+	},
 	
 	setPage : function(page) {
 		this.$result.find(".pagination").trigger('setPage', [page]);
@@ -325,7 +333,7 @@ var ExampleResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		this.proxy = new model.ExamplesProxy();
-		this.$result.find(".num_hits").parent().hide();
+//		this.$result.find(".num_hits").parent().hide();
 	},
 	
 	makeRequest : function(opts) {
@@ -341,9 +349,14 @@ var ExampleResults = {
 		this.proxy.makeRequest(opts);
 	},
 	
-	handlePaginationClick : function(new_page_index, pagination_container) {
+	onHpp : function() {
+		//refresh search
+		this.handlePaginationClick(this.$result.find(".pagination").data("current_page"), null, true);
+	},
+	
+	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		$.log("handlePaginationClick", new_page_index, this.current_page);
-		if(new_page_index != this.current_page) {
+		if(new_page_index != this.current_page || !!force_click) {
 			var items_per_page = parseInt(this.$result.find(".num_hits").val());
 			
 			var opts = {};
@@ -518,17 +531,15 @@ var LemgramResults = {
 		$.log("onClickExample", $target);
 		
 		var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
-		
-		instance.makeRequest({
-			ajaxParams : {
+		var opts = instance.getPageInterval();
+		opts.ajaxParams = {
 				head : $target.data("head"),
 				dep : $target.data("dep"),
 				rel : $target.data("rel"),
 				depextra : $target.data("depextra"),
 				corpus : $target.data("corpus").split(",")
-			}
-		
-		});
+			};  
+		instance.makeRequest(opts);
 	},
 	
 	showNoResults : function() {

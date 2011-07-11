@@ -3,17 +3,18 @@
     
     <script><![CDATA[
     
-        function kwicSearch() {
+        function kwicSearch(page) {
             if(In("results_lemgram") ) { //|| In("results_stats")
                 $.log("conf", $.sm.getConfiguration());
                 gotoFirstResultTab();
             }
             simpleSearch.resetView();
             kwicResults.showPreloader();
-            kwicProxy.makeRequest();
+            //kwicResults.makeRequest();
+            kwicProxy.makeRequest(null, page);
         }
     
-        function lemgramSearch(lemgram, searchPrefix, searchSuffix) {
+        function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
             $.log("lemgramSearch", lemgram);
             kwicResults.showPreloader();
             lemgramResults.showPreloader();
@@ -26,6 +27,7 @@
             statsProxy.makeRequest(lemgram);
             
             var cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
+            kwicProxy.makeRequest({cqp : cqp}, page);
             $("#cqp_string").val(cqp);
         }
         
@@ -90,7 +92,7 @@
                     <transition event="submit.kwic" target="search_history">
                         <script>
                             $("#simple_text").get(0).blur();
-                            kwicSearch();
+                            kwicSearch(_event.data.page);
                         </script>
                     </transition>
                     
@@ -102,7 +104,7 @@
                         
                         <transition event="submit.lemgram" target="simple">
                             <script>
-                                lemgramSearch(_event.data, simpleSearch.isSearchPrefix(), simpleSearch.isSearchSuffix());
+                                lemgramSearch(_event.data.value, simpleSearch.isSearchPrefix(), simpleSearch.isSearchSuffix(), _event.data.page);
                             </script>
                         </transition>
                     
@@ -115,14 +117,13 @@
                     <state id="extended">
                         <transition event="submit.kwic" target="search_history">
                             <script>
-                                advancedSearch.updateCQP();
-                                kwicSearch();
+                                kwicSearch(_event.data.page);
                             </script>
                         </transition>
                         <transition event="submit.lemgram" target="search_history">
                             <script>
                                 //extendedSearch.setOneToken("lex", _event.data);
-                                lemgramSearch(_event.data);
+                                lemgramSearch(_event.data.value, null, null, _event.data.page);
                             </script>
                         </transition>
                     </state>

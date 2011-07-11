@@ -23,17 +23,15 @@ var KWICProxy = {
 		this.command = "query";
 		this.prevAjaxParams = null;
 	},
-	makeRequest : function(options) {
+	makeRequest : function(options, page) {
 		var self = this;
 		
 		var o = $.extend({
 			cqp : $("#cqp_string").val(), 
-			start : 0, 
-			end : $(".num_hits").val()-1, 
 			queryData : null,
 			ajaxParams : this.prevAjaxParams,
 			success : function(data) {kwicResults.renderResult(data);}
-		}, options);
+		}, kwicResults.getPageInterval(page), options);
 		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
 		$.log("kwicProxy.makeRequest", o.cqp);
@@ -131,7 +129,6 @@ var LemgramProxy = {
 			
 			var cqp = $.format('[(lex contains "%s")%s%s]', 
 					[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
-			kwicProxy.makeRequest({cqp : cqp});
 			return cqp;
 		},
 		

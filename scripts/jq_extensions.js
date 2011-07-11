@@ -338,3 +338,9 @@ $.ui.tabs.subclass("ui.korptabs", {
 	}
 	
 });
+
+//$.extend($.fn.pagination.prototype, {
+//	getCurrentPage : function() {
+//		return this.current_page
+//	}
+//});

@@ -114,3 +114,46 @@ function showSidebar() {
 	});
 	
 }
+
+function updatePlacement(animate) {
+	var top;
+	var max = Math.round($("#columns").position().top);
+	if(window.scrollY < max)
+		top = max;
+	else {
+		top = window.scrollY + 8;
+	}
+	$("#sidebar").stop(true, true).animate({top : top}, animate ? "fast" : 0);
+}
+
+//$.widget("ui.sidebar", {
+//	
+//	_init : function() {
+//		
+//	},
+//	
+//	show : function() {
+//		var self = this;
+//		$.when(this.element).done(function() {
+//			refreshSidebar();
+//			var speed = 400;
+//			self.element.show("slide", {direction : "right"}, speed);
+//			$("#left-column").animate({
+//				right : 273
+//			}, speed, null, function() {
+//				$.sm.send("sidebar.show");
+//			});
+//		});
+//	}, 
+//	hide : function() {
+//		if(this.element.css("right") == 273) return;
+//		var self = this;
+//		var speed = 400;
+//		self.element.hide("slide", {direction : "right"}, speed);
+//		$("#left-column").animate({
+//			right : 8
+//		}, speed, null, function() {
+//			$.sm.send("sidebar.hide");
+//		});
+//	}
+//});
