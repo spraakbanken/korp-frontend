@@ -184,6 +184,15 @@ var pie_widget = {
 					r.text(totheight*0.5+nowthis.options.offset_x,rx+rw*0.5+nowthis.options.offset_y,fvalue["caption"]);
 				}
 				newrect.attr({title: fvalue["caption"]});
+				$(newrect.node).tooltip({
+				delay : 80,
+				bodyHandler : function() {
+					if (fvalue["caption"])
+						return fvalue["caption"];
+					else
+						return "";
+					}
+				});
 			}
 			
 			//var newtext = r.text(rx,ry,"Teststräng");

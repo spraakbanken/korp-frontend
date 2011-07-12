@@ -53,10 +53,8 @@ var KWICResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
 		var self = this;
-		this.prevCQP = null;
 		this.parent(tabSelector, resultSelector);
 		this.initHTML = this.$result.html();
-		this.proxy = kwicProxy;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
 		
@@ -78,6 +76,7 @@ var KWICResults = {
 	
 	onentry : function() {
 		this.centerScrollbar();
+		$.log("onentry", this.keyListener);
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
@@ -126,13 +125,12 @@ var KWICResults = {
 		return output;
 	},
 		
-	renderResult : function(data, sourceCQP) {
+	renderResult : function(data) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
 		var self = this;
-		this.prevCQP = sourceCQP;
 		
 		if(!data.hits) {
 
@@ -154,7 +152,7 @@ var KWICResults = {
 //		else {
 //			$("#results-kwic").css("opacity", 0);
 //		}
-		$.log("corpus_results");
+		$.log("corpus_results", data.kwic);
 		//$("#results-kwic").show();
 		
 		this.$result.find('.num-result').html(data.hits);
@@ -171,10 +169,6 @@ var KWICResults = {
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( self.$result.find(".results_table") )
 					.find(".word")
-					.each(function() {
-						if($.inArray($(this).text(), punctArray) != -1)
-							$(this).prev().html("");
-					})
 					.click(function(event) {
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
@@ -186,6 +180,9 @@ var KWICResults = {
 				rows.css("background-color", settings.primaryColor);
 			}
 			
+		});
+		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
+			$($.format(".word:contains(%s)", item)).prev().html('');
 		});
 		
 //		$("#attrlistTmpl").tmpl(data.kwic)
@@ -224,9 +221,6 @@ var KWICResults = {
 	
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
-		var i = Number(data.dephead);
-		var aux = $(word.closest("tr").find(".word").get(i - 1));
-		this.selectionManager.select(word, aux);
 		
 		this.scrollToShowWord(word);
 		
@@ -263,7 +257,7 @@ var KWICResults = {
 				link_to : "javascript:void(0)",
 				num_edge_entries : 2,
 				ellipse_text: '..',
-				current_page : this.current_page || 0
+				current_page : $.bbq.getState("page", true) || 0
 			});
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
@@ -275,7 +269,7 @@ var KWICResults = {
 		$.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
 			
-			this.showPreloader();
+			kwicProxy.makeRequest(opts);
 			this.current_page = new_page_index;
 			this.makeRequest();
 			$.bbq.pushState({"page" : new_page_index});
@@ -302,7 +296,7 @@ var KWICResults = {
 	},
 	
 	setPage : function(page) {
-		this.$result.find(".pagination").trigger('setPage', [page]);
+		this.$result.find(".Pagination").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {
@@ -553,7 +547,9 @@ var LemgramResults = {
 	},
 	
 	onClickExample : function(event) {
+//		$("#dialog").remove();
 		var self = this;
+//		this.showPreloader();
 		var $target = $(event.currentTarget);
 		$.log("onClickExample", $target);
 		
@@ -621,6 +617,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			}
 		});
 		
+		//$("#dialog").fadeTo(400,0);
 		$("#dialog").remove();
 		
 		var topheader;
@@ -653,7 +650,8 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 									stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);
 								}
 
-							});
+							}).css("opacity", 0);
+		$("#dialog").fadeTo(400,1);
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		
 		
@@ -756,7 +754,17 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			diagramInstance = $(targetDivID).pie_widget({container_id: targetDiv, data_items: dataItems});
 			diagramInstance.find("svg").attr("height", $("#actualRightStatsTable").height()-70);
 			
-			$(".barContainerClass").parent().css({"visibility": "hidden", "display": "none", "width": "0px"});
+			if(typeof(selected_statisticsbars_corpus) != "undefined") {
+				if($(targetDivID).parent() != selected_statisticsbars_corpus ) {
+					$(selected_statisticsbars_corpus).css({"width": $(selected_statisticsbars_corpus).width()});
+					//alert(selected_statisticsbars_corpus);
+					$(selected_statisticsbars_corpus).children().animate({"width": "0px"});
+					$(selected_statisticsbars_corpus).animate({"width": "0px"});
+					$(selected_statisticsbars_corpus).fadeOut("fast");
+				}
+			}
+			
+			//$(".barContainerClass").parent().css({"visibility": "hidden", "display": "none", "width": "0px"});
 			var offset = -1;
 			if ($.browser.webkit) {
 				offset = 3;
@@ -767,7 +775,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			$(targetDivID).parent().css({"visibility":"visible", "display": "table-cell"});
 			$(targetDivID).animate({"width": "200px"});
 			
-			
+			selected_statisticsbars_corpus = $(targetDivID).parent();
 			
 		} else {
 			diagramInstance.pie_widget("newData", dataItems);
@@ -791,11 +799,13 @@ var StatsResults = {
 		
 		//$("#results-stats").children().empty();
 		
+		
 		var wordArray = [];
 		var corpusArray = [];
 		
 		var absdata;
 		var reldata;
+		
 		
 		$.each(data["corpora"], function(corpus, obj) {
 			corpusArray.push(corpus);
@@ -872,17 +882,18 @@ var StatsResults = {
 		
 		
 		// Show export section -----
-		$("#kindOfData").css({"visibility": "visible"});
-		$("#kindOfFormat").css({"visibility": "visible"});
-		$("#exportButton").css({"visibility": "visible"});
+		$("#exportStatsSection").css({"display": "block"});
+		//$("#kindOfData").css({"display": "inline"});
+		//$("#kindOfFormat").css({"display": "inline"});
+		//$("#exportButton").css({"display": "inline"});
 
 		// Make Left Stats Table --------------------------------------------------------- //
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px"><td><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px"><td><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
 		});
-		leftHTML += '<tr><td>∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" style="border:0px"/></a></td></tr></table>';
+		leftHTML += '<tr><td>∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr></table>';
 		
 		function makeEllipsis(str) {
 			if(str.length > 18) {
@@ -893,11 +904,14 @@ var StatsResults = {
 		}
 		
 		$("#leftStatsTable").html(leftHTML);
-		
+		if (corpusArray.length > 1) {
+			$(".arcDiagramPicture").css({"visibility":"visible"});
+			$(".wordsName").css({"visibility":"visible"});
+		};
 		
 		// Make Right Stats Table -------------------------------------------------------- //
 		
-		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img src="img/stats.png" style="border:0px;"/></a></th>';
+		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img src="img/stats.png" style="border:0px"/></a></th>';
 		theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__all__" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__all__"></div></th>';
 		$.each(corpusArray, function(key, fvalue) {
 			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
@@ -930,6 +944,7 @@ var StatsResults = {
 			theHTML += '</tr>';
 			c++;
 		});
+	
 		
 		//sum = function(o) { // Helper Method
 		//	for(var s = 0, i = o.length; i; s += o[--i]);
@@ -945,7 +960,7 @@ var StatsResults = {
 		$("#rightStatsTable").html(theHTML);
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
-		$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
+		//$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
 		
 		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
 		
@@ -958,7 +973,6 @@ var StatsResults = {
 				dataDelimiter = "\t";
 				
 			// Generate CSV from the data
-			
 			
 			var output = "corpus" + dataDelimiter;
 			$.each(statsResults.savedWordArray, function(key, aword) {
@@ -977,12 +991,12 @@ var StatsResults = {
 				});
 				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
 			});
-			window.open( "data:text/csv;charset=utf-8," + escape(output));
+			if (selType == "TSV")
+				window.open( "data:text/tsv;charset=utf-8," + escape(output));
+			else
+				window.open( "data:text/csv;charset=utf-8," + escape(output));
 		});
 		
-		
-	
-		//$(".statstable__all").css({"background-color":"#EEEEEE"});
 		
 		$(".searchForWordform").click(function() {
 			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
@@ -1045,15 +1059,11 @@ var StatsResults = {
 
 		// Make Bar Diagram ------------------------------------------------------- //
 		
-//		$("#stats1_diagram").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
-//		$("#statsBubble").height(parseInt($("#rightStatsTable").css("height"))-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
-		
 		$.each(totalForWordform, function(key, fvalue) {
 			dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
 		});
 		
 		
-		//diagramInstance = $('#stats1_diagram').pie_widget({container_id: "stats1_diagram", data_items: dataItems});
 		diagramInstance = $('#theHide').pie_widget({container_id: "theHide", data_items: dataItems});
 		
 		
@@ -1062,17 +1072,10 @@ var StatsResults = {
 			newDataInPie(parts[1], false, "corpusStatistics__" + parts[1]);
 			e.stopPropagation();
 		});
-		
 
 		
 		$(".corpusNameAll").click(function(e) {
 			newDataInPie("all",false, "corpusStatistics__all__");
-			//$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+7});
-			//$("#stats1_diagram").height(parseInt($("#rightStatsTable").height())-$(".corpusTitleClass").height()-$(".sumOfCorpora").height()-7);
-			//$("#statsBubble").fadeIn();
-			//$("#statsBubble").css({"background-color":"white", "display": "block", "left": $(this).parent().offset().left + $(this).parent().width()+1, "top": $(this).parent().position().top + $(this).parent().height()+6});
-			// Johan: H4CK3D UR C0DE!!!!.
-			//diagramInstance.find("svg").attr("height", 1000);
 			e.stopPropagation();
 		});
 		
@@ -1086,19 +1089,6 @@ var StatsResults = {
 
 		});
 		
-		//$(window).unbind('click.statistics');
-		//	$(window).bind('click.statistics', function() { clearStatisticsBars(); });
-		//$("#rightStatsTable").unbind('scroll');
-		//	$("#rightStatsTable").bind('scroll', function() { clearStatisticsBars(); });
-		//$("#result-container").bind('tabsselect', function() { clearStatisticsBars(); });
-		//
-		//function clearStatisticsBars() {
-		//	var disp = $("#statsBubble").css("display");
-		//		if(disp != "none") {
-		//			$("#statsBubble").fadeOut('fast');
-		//		}
-		//		$(".statstable").css({"background-color":"white"});
-		//}
 		
 		
 		// ------------------------------------------------------------------------ //
@@ -1137,9 +1127,11 @@ var StatsResults = {
 		this.hidePreloader();
 		$("#rightStatsTable").html("");
 		$("#leftStatsTable").html($("<i/>").localeKey("no_stats_results"));
-		$("#kindOfData").css({"visibility": "hidden"});
-		$("#kindOfFormat").css({"visibility": "hidden"});
-		$("#exportButton").css({"visibility": "hidden"});
+		$("#exportStatsSection").css({"display": "none"});
+		//$("#kindOfData").css({"display": "none"});
+		//$("#kindOfFormat").css({"display": "none"});
+		//$("#exportButton").css({"display": "none"});
+		
 		//$("<i/>")
 		//.localeKey("no_stats_results")
 		//.appendTo("#results-stats");
@@ -1147,9 +1139,9 @@ var StatsResults = {
 	
 };
 
-view.ExampleResults = new Class(ExampleResults);
+view.KWICResults = new Class(KWICResults);
 view.LemgramResults = new Class(LemgramResults);
 view.StatsResults = new Class(StatsResults);
-delete ExampleResults;
+delete KWICResults;
 delete LemgramResults;
 delete StatsResults;

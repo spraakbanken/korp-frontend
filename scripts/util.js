@@ -223,7 +223,7 @@ function loadCorpora() {
     		glueString = util.getLocaleString("corpselector_corporawith_sing");
     	else
     		glueString = util.getLocaleString("corpselector_corporawith_plur");
-    	return "<b>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> tokens";
+    	return "<b>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens");
     }});
 }
 

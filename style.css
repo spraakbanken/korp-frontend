@@ -263,7 +263,7 @@ input:placeholder, textarea:placeholder {
 .scroll_checkboxes {
 /* 	float: left; */
 /* 	clear: both; */
-	width: 460px;
+	width: 480px;
 	height: 33px;
 	overflow: hidden;
 	margin-bottom: 3px;
@@ -301,13 +301,13 @@ input:placeholder, textarea:placeholder {
 .popupchecks {
 	z-index: 9999;
 	max-height:600px;
-	width: 442px;
-/* 	#top: 124px; */
+	width: 462px;
 	border-color: #CCCCCC;
 	border-style: solid;
 	border-width: 1px;
 	background-color: #FEFEFE;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	padding-top: 4px;
 	margin-top: 0px;
 	padding-left: 4px;
@@ -321,7 +321,7 @@ input:placeholder, textarea:placeholder {
 
 .hp_topframe {
 	height: 16px;
-	width: 413px;
+	width: 433px;
 	text-align: center;
 	padding-top: 10px;
 }
@@ -331,7 +331,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .tree {
-	width: 390px;
+	max-width: 410px;
 	position: relative;
 	margin-top: 1px;
 	margin-bottom: -3px;

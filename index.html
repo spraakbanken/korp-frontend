@@ -142,20 +142,20 @@
 							<div id="results-stats">
 								<div id="leftStatsTable" style="float:left; margin-left:-8"></div>
 								<div id="rightStatsTable" style="float:left; overflow-x:auto; margin-left: -20px; padding-left: 0px"></div>
-								<div style="clear : both; float : none;"></div><br/>
-								<select id="kindOfData">
-									<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
-									<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
-								</select>
-								<select id="kindOfFormat">
-									<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
-									<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
-								</select>
-								<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
-							</div>
-								<div id="statsBubble" style="display:none; border-width:1; border-color:#00EEEE; background-color:#00EEEE; position:absolute; left:100px; top:100px; width:200px; height:100px; margin-left: 1px; z-index: 100">
-									<div id="stats1_diagram"></div><br/>
+								<div style="clear : both; float : none;"></div>
+								<div id="exportStatsSection">
+									<br/><br/><select id="kindOfData">
+										<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
+										<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+									</select>
+									<select id="kindOfFormat">
+										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
+										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+									</select>
+									
+									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
 								</div>
+							</div>
 						</div>
 						<div id="tooltip-container"></div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
