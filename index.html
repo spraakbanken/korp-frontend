@@ -172,7 +172,9 @@
 		</div>
 		<div id="about_content" title="Om Korp" style="display : none;"></div>
 			
-		
+		<!-- for showing full deprel locale names.
+		{{else $index == "deprel"}}
+			${util.getLocaleString("malt_" + $data[$index])}</p>-->
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
 		<h4 rel="localize[${$item.header}_attr]">${util.getLocaleString($item.header + "_attr")}</h4>
@@ -184,6 +186,7 @@
 			 ${$value.dataset[$data[$index]]}
 			{{else $index == "lemma"}}
 			{{html $item.parseLemma($data[$index])}} 
+			 
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else $value.type == "url"}}

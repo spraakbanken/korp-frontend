@@ -22,7 +22,13 @@ var KWICProxy = {
 		this.queryData = null;
 		this.command = "query";
 		this.prevAjaxParams = null;
+		this.pendingRequest = {abort : $.noop};
 	},
+	
+	abort : function() {
+		this.pendingRequest.abort();
+	},
+	
 	makeRequest : function(options, page) {
 		var self = this;
 		
@@ -90,7 +96,7 @@ var KWICProxy = {
 		data.show = data.show.join();
 		data.show_struct = data.show_struct.join();
 		this.prevRequest = data;
-		$.ajax({ 
+		this.pendingRequest = $.ajax({ 
 			url: settings.cgi_script, 
 			data:data,
 			beforeSend : function(jqxhr, settings) {
@@ -116,82 +122,87 @@ var ExamplesProxy = {
 
 var LemgramProxy = {
 		
-		initialize : function() {
-		},
-			
-		buildAffixQuery : function(isValid, key, value) {
-			if(!isValid) return "";
-			return $.format('| (%s contains "%s")', [key, value]);
-		},
+	initialize : function() {
+		this.pendingRequest = null;
+	},
 		
-		lemgramSearch : function(lemgram, searchPrefix, searchSuffix) {
-			
-			
-			var cqp = $.format('[(lex contains "%s")%s%s]', 
-					[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
-			return cqp;
-		},
-		
-		relationsSearch : function(lemgram) {
-			var self = this;
-			var corpus = getSelectedCorpora();
-			$.ajax({
-				url: settings.cgi_script,
-				data : {
-					command : "relations",
-					lemgram : lemgram,
-					corpus : $.map(corpus, function(item){return item.toUpperCase();})
-				},
-				beforeSend : function(jqXHR, settings) {
-					$.log("before relations send", settings);
-					self.prevRequest = settings;
+	buildAffixQuery : function(isValid, key, value) {
+		if(!isValid) return "";
+		return $.format('| (%s contains "%s")', [key, value]);
+	},
+	
+	lemgramSearch : function(lemgram, searchPrefix, searchSuffix) {
+		var cqp = $.format('[(lex contains "%s")%s%s]', 
+				[lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram) ]);
+		return cqp;
+	},
+	
+	relationsSearch : function(lemgram) {
+		var self = this;
+		var corpus = getSelectedCorpora();
+		$.ajax({
+			url: settings.cgi_script,
+			data : {
+				command : "relations",
+				lemgram : lemgram,
+				corpus : $.map(corpus, function(item){return item.toUpperCase();})
+			},
+			beforeSend : function(jqXHR, settings) {
+				$.log("before relations send", settings);
+				self.prevRequest = settings;
 //					if($("#results-lemgram").is(":visible"))
 //						util.setJsonLink(settings);
-				},
-				success : function(data) {
-					$.log("relations success", data);
-					lemgramResults.renderResult(data, lemgram);
-				}	
+			},
+			success : function(data) {
+				$.log("relations success", data);
+				lemgramResults.renderResult(data, lemgram);
+			}	
+		});
+	},
+	
+	abort : function() {
+		this.pendingRequest.abort();
+		this.pendingRequest = {abort : $.noop};
+	},
+	
+	sblexSearch : function(word, type) {
+		var self = this;
+		var deferred = $.Deferred(function( dfd ){
+			self.pendingRequest = $.ajax({
+			    url : "http://spraakbanken.gu.se/ws/lexikon", 
+			    data : {
+			        wf : word,
+			        lexikon : "saldom",
+			        format : "json"
+		        },
+			    success : function(data) {
+		            var leArray = $.map(data.div, function(item) {
+		            	return item.LexicalEntry;
+		            });
+		            
+		            var output = $.grep(leArray, function(le) {
+		            	
+		            	if(le.pos.slice(-1) == "h") return false;
+		            	
+	            		var formArray = le.table.form;
+		        		for ( var i = 0; i < formArray.length; i++) {
+							var form = formArray[i];
+							if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
+								return true;
+						}
+		        		return false;
+		            });
+		        	output = $.map(output, function(le) {
+		        		return le[type];
+		        	});
+		        	dfd.resolve(output);
+		        }
+		        
 			});
-		},
-		
-		sblexSearch : function(word, type) {
-			var deferred = $.Deferred(function( dfd ){
-				$.ajax({
-				    url : "http://spraakbanken.gu.se/ws/lexikon", 
-				    data : {
-				        wf : word,
-				        lexikon : "saldom",
-				        format : "json"
-			        },
-				    success : function(data) {
-			            var leArray = $.map(data.div, function(item) {
-			            	return item.LexicalEntry;
-			            });
-			            
-			            var output = $.grep(leArray, function(le) {
-			            	
-			            	if(le.pos.slice(-1) == "h") return false;
-			            	
-		            		var formArray = le.table.form;
-			        		for ( var i = 0; i < formArray.length; i++) {
-								var form = formArray[i];
-								if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
-									return true;
-							}
-			        		return false;
-			            });
-			        	output = $.map(output, function(le) {
-			        		return le[type];
-			        	});
-			        	dfd.resolve(output);
-			        }
-			        
-				});
-			}).promise();
-			return deferred;
-		}
-	};
+		}).promise();
+		return deferred;
+	}
+};
 
 var StatsProxy = {
 	initialize : function() {

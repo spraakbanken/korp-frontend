@@ -10,7 +10,7 @@
             }
             simpleSearch.resetView();
             kwicResults.showPreloader();
-            //kwicResults.makeRequest();
+            
             kwicProxy.makeRequest(null, page);
         }
     

@@ -56,82 +56,6 @@ var BaseSearch = {
 view.BaseSearch = new Class(BaseSearch);
 delete BaseSearch;
 
-$.fn.korp_autocomplete = function(options) {
-	var selector = $(this);
-	
-	options = $.extend({
-		type : "lem",
-		select : $.noop,
-		labelFunction : util.lemgramToString,
-		sortFunction : view.lemgramSort
-	},options);
-	
-	selector.preloader({
-		timeout: 500,
-		position: {
-			my: "right center",
-			at: "right center",
-			offset: "-1 0",
-			collision: "none"
-		}
-	})
-	.autocomplete({
-		html : true,
-		source: function( request, response ) {
-			
-			var promise = lemgramProxy.sblexSearch(request.term, options.type)
-			.done(function(idArray) {
-				idArray = $.unique(idArray);
-				idArray.sort(options.sortFunction);
-				
-				var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
-				var listItems = $.map(idArray, function(item, i) {
-					return {
-						label : labelArray[i],
-						value : item,
-						input : request.term
-					};
-				});
-				
-				selector.data("dataArray", listItems);
-				response(listItems);
-				if(selector.autocomplete("widget").height() > 300) {
-					selector.autocomplete("widget").addClass("ui-autocomplete-tall");
-				}
-				$("#autocomplete_header").remove();	
-				
-				$("<li id='autocomplete_header' />")
-				.localeKey("autocomplete_header")
-				.css("font-weight", "bold").css("font-size", 10)
-				.prependTo(selector.autocomplete("widget"));
-				
-				selector.preloader("hide");
-			});
-				
-			
-			selector.data("promise", promise);
-		},
-		search: function() {
-			selector.preloader("show");
-		},
-		minLength: 1,
-		select: function( event, ui ) {
-			event.preventDefault();
-			var selectedItem = ui.item.value;
-			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
-			
-			$.proxy(options.select, selector)(selectedItem);
-		},
-		close : function(event) {
-			return false;
-		},
-		focus : function() {
-			return false;
-		}
-	});
-	return selector;
-};
-
 var SimpleSearch = {
 	Extends : view.BaseSearch,
 	initialize : function(mainDivId) {
@@ -209,6 +133,7 @@ var SimpleSearch = {
 	
 	onSubmit : function(event) {
 		this.parent(event);
+		$("#simple_text").korp_autocomplete("abort");
 		if($("#simple_text").val() != "")
 			util.searchHash("word", $("#simple_text").val());
 		else if($("#simple_text").attr("placeholder") != null)

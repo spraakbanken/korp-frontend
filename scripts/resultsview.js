@@ -138,6 +138,8 @@ var KWICResults = {
 			this.$result.find(".results_table").empty();
 			this.$result.find(".pagination").empty();
 			this.hidePreloader();
+			this.$result.find('.num-result').html(0);
+			this.$result.click();
 			return;
 		}				
 

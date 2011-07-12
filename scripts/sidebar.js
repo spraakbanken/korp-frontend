@@ -118,12 +118,13 @@ function showSidebar() {
 function updatePlacement(animate) {
 	var top;
 	var max = Math.round($("#columns").position().top);
-	if(window.scrollY < max)
-		top = max;
-	else {
-		top = window.scrollY + 8;
+	if($(window).scrollTop() < max) {
+		$("#sidebar").css("top", "");
 	}
-	$("#sidebar").stop(true, true).animate({top : top}, animate ? "fast" : 0);
+	else {
+		top = $(window).scrollTop() + 8;
+		$("#sidebar").stop(true, true).animate({top : top}, animate ? "fast" : 0);
+	}
 }
 
 //$.widget("ui.sidebar", {
