@@ -720,11 +720,22 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 		$(".statstable").css({"background-color":"white"});
 		if(dataName == "all") {
 			
-			$.each(statsResults.totalForWordform, function(key, fvalue) {
-				dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
-			});
+			//var relTotForWordform = data["total"]["relative"][fvalue];
+			//$.each(statsResults.totalForWordform, function(key, fvalue) {
+			//	dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
+			//});
+			//$.each(statsResults.savedData["total"]["relative"], function(key, fvalue) {
+				$.each(wordArray, function(key, fvalue) {
+					var freq = statsResults.savedData["total"]["relative"][fvalue];
+					if (freq) {
+						dataItems.push({"value":freq, "caption" : fvalue, "shape_id" : fvalue});
+					} else {
+						dataItems.push({"value":0, "caption" : key, "shape_id" : key});
+					}
+				});
+			//});
 			
-			$(".statstable__all").animate({"background-color":"#EEEEEE"},"slow");
+			//$(".statstable__all").animate({"background-color":"#EEEEEE"},"slow");
 			
 		} else {
 			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
@@ -743,39 +754,63 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					return false; // break it
 				}
 			});
-			$(".statstablecorpus__" + dataName).animate({"background-color":"#EEEEEE"},"slow");
+			//if(dataName != 
+			//	$(".statstablecorpus__" + dataName).animate({"background-color":"#EEEEEE"},"slow");
+			
 		}
 		
 		statsResults.selectedCorpus = dataName;
 		
 		if (targetDiv) {
+			
+			var offset = -1;
+			if ($.browser.webkit)
+				offset = 3;
+	
 			$(".barContainerClass").find("svg").attr("width", 0);
 			var targetDivID = '#' + targetDiv;
 			diagramInstance = $(targetDivID).pie_widget({container_id: targetDiv, data_items: dataItems});
 			diagramInstance.find("svg").attr("height", $("#actualRightStatsTable").height()-70);
 			
 			if(typeof(selected_statisticsbars_corpus) != "undefined") {
-				if($(targetDivID).parent() != selected_statisticsbars_corpus ) {
-					$(selected_statisticsbars_corpus).css({"width": $(selected_statisticsbars_corpus).width()});
-					//alert(selected_statisticsbars_corpus);
-					$(selected_statisticsbars_corpus).children().animate({"width": "0px"});
-					$(selected_statisticsbars_corpus).animate({"width": "0px"});
-					$(selected_statisticsbars_corpus).fadeOut("fast");
+				if (targetDiv.split("__")[1] == selected_statisticsbars_corpus.attr("id").split("__")[1]) {
+					// The same statistics bar icon was clicked as before
+					var ssc = $(selected_statisticsbars_corpus)
+					ssc.css({"width": $(selected_statisticsbars_corpus).width()});
+					ssc.children().animate({"width": "0px"});
+					ssc.animate({"width": "0px"});
+					ssc.fadeOut("fast");
+					selected_statisticsbars_corpus = undefined;
+				} else {
+					// A new statistics bar icon was clicked
+					var ssc = $(selected_statisticsbars_corpus)
+					ssc.css({"width": $(selected_statisticsbars_corpus).width()});
+					ssc.children().animate({"width": "0px"});
+					ssc.animate({"width": "0px"});
+					ssc.fadeOut("fast");
+					var tdi = $(targetDivID);
+					tdi.css({"padding-top": $(".corpusTitleClass").height()+offset, "width": "1px"});
+					tdi.find("svg").attr("width", 200);
+					tdi.parent().css({"visibility":"visible", "display": "table-cell"});
+					tdi.animate({"width": "200px"});
+					$(".statstablecorpus__" + targetDiv.split("__")[1]).animate({"background-color":"#EEEEEE"},"slow");
+					selected_statisticsbars_corpus = $(targetDivID).parent();
+					//}
 				}
+			} else {
+				
+				var tdi = $(targetDivID);
+				tdi.css({"padding-top": $(".corpusTitleClass").height()+offset, "width": "1px"});
+				tdi.find("svg").attr("width", 200);
+				tdi.parent().css({"visibility":"visible", "display": "table-cell"});
+				tdi.animate({"width": "200px"});
+				$(".statstablecorpus__" + targetDiv.split("__")[1]).animate({"background-color":"#EEEEEE"},"slow");
+				selected_statisticsbars_corpus = $(targetDivID).parent();
 			}
 			
-			//$(".barContainerClass").parent().css({"visibility": "hidden", "display": "none", "width": "0px"});
-			var offset = -1;
-			if ($.browser.webkit) {
-				offset = 3;
-			}
-			$(targetDivID).css({"padding-top": $(".corpusTitleClass").height()+offset});
-			$(targetDivID).find("svg").attr("width", 200);
-			$(targetDivID).css({"width": "1px"});
-			$(targetDivID).parent().css({"visibility":"visible", "display": "table-cell"});
-			$(targetDivID).animate({"width": "200px"});
-			
-			selected_statisticsbars_corpus = $(targetDivID).parent();
+				
+				
+				
 			
 		} else {
 			diagramInstance.pie_widget("newData", dataItems);
@@ -869,16 +904,16 @@ var StatsResults = {
 			});
 
 			
-			if(firstIteration) // ändra sen så att "alla" blir default
-				dummy = corpus;
-			firstIteration = false;
+			//if(firstIteration) // ändra sen så att "alla" blir default
+			//	dummy = corpus;
+			//firstIteration = false;
 			bc++;
 		});
 		
 		this.totalForWordform = totalForWordform;
 		
-		this.selectedCorpus = dummy;
-		$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
+		//this.selectedCorpus = dummy;
+		//$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
 		
 		
 		// Show export section -----
@@ -1059,9 +1094,9 @@ var StatsResults = {
 
 		// Make Bar Diagram ------------------------------------------------------- //
 		
-		$.each(totalForWordform, function(key, fvalue) {
-			dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
-		});
+		//$.each(totalForWordform, function(key, fvalue) {
+		//	dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
+		//});
 		
 		
 		diagramInstance = $('#theHide').pie_widget({container_id: "theHide", data_items: dataItems});

@@ -183,12 +183,12 @@ var pie_widget = {
 				if (nowthis.options.bar_show_captions) {
 					r.text(totheight*0.5+nowthis.options.offset_x,rx+rw*0.5+nowthis.options.offset_y,fvalue["caption"]);
 				}
-				newrect.attr({title: fvalue["caption"]});
+				//newrect.attr({title: fvalue["caption"]});
 				$(newrect.node).tooltip({
 				delay : 80,
 				bodyHandler : function() {
 					if (fvalue["caption"])
-						return fvalue["caption"];
+						return fvalue["caption"] + ": " + formatOutput((fvalue["share"]*100).toFixed(1)) + "%";
 					else
 						return "";
 					}
