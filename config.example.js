@@ -57,7 +57,8 @@ attrs.msd = {
 };
 attrs.baseform = {
 	label : "baseform",
-	type : "set"
+	type : "set",
+	displayType : "autocomplete"
 };
 attrs.lemgram = {
 	label : "lemgram",
@@ -1405,6 +1406,9 @@ settings.inner_args = {
 	},
 	msd : function(s) {
 		return 'msd = "' + regescape(s) + '.*"';
+	},
+	lemma : function(s) {
+		return $.format('lemma contains "%s"', s.split(".")[0]); 
 	}
 	
 };
