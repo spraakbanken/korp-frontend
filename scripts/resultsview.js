@@ -256,9 +256,9 @@ var KWICResults = {
 	buildPager : function(number_of_hits){
 		$.log("buildPager", this.current_page);
 		var items_per_page = this.$result.find(".num_hits").val();
+		this.$result.find('.pagination').unbind().empty();
 		
 		if(number_of_hits > items_per_page){
-			this.$result.find('.pagination').unbind().empty();
 			this.$result.find(".pagination").pagination(number_of_hits, {
 				items_per_page : items_per_page, 
 				callback : $.proxy(this.handlePaginationClick, this),
@@ -382,7 +382,7 @@ var ExampleResults = {
 	
 	onHpp : function() {
 		//refresh search
-		this.handlePaginationClick(this.$result.find(".pagination").data("current_page"), null, true);
+		this.handlePaginationClick(0, null, true);
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
