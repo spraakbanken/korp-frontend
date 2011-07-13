@@ -179,13 +179,13 @@
                         <state id="kwic_word_selected">
                             <onentry>
                                 <script>
-                                    showSidebar();
+                                    $("#sidebar").sidebar("show");
                                 </script>
                             </onentry>
                             <transition event="word.deselect" target="kwic_word_not_selected" />
                             <onexit>
                                 <script>
-                                    hideSidebar();
+                                    $("#sidebar").sidebar("hide");
                                 </script>
                             </onexit>
                         </state>
@@ -253,13 +253,13 @@
                         <state id="custom_word_selected">
                             <onentry>
                                 <script><![CDATA[
-                                    showSidebar();
+                                    $("#sidebar").sidebar("show");
                                 ]]></script>
                             </onentry>
                             <transition event="word.deselect" target="custom_word_not_selected" />
                             <onexit>
                                 <script>
-                                    hideSidebar();
+                                    $("#sidebar").sidebar("hide");
                                 </script>
                             </onexit>
                         </state>

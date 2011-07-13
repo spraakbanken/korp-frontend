@@ -52,6 +52,8 @@ var currentMode;
 		$.log("preloading done, t = ", $.now() - t);
 		currentMode = $.deparam.querystring().mode || "default";
 		
+		util.browserWarn();
+		
 		$("#mode_switch").radioList({
             change : function() {
             	$.log("changed", this);
@@ -77,7 +79,7 @@ var currentMode;
 			event : "change",
 			show : function(event, ui) {
 				if($("#columns").position().top > 0)
-					updatePlacement(false); //place sidebar
+					$("#sidebar").sidebar("updatePlacement", false); //place sidebar
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
@@ -114,7 +116,7 @@ var currentMode;
 		});
 		
 		$(window).scroll(function() {
-			updatePlacement(true);
+			$("#sidebar").sidebar("updatePlacement", true);
 		});
 		
 		var tabs = $(".ui-tabs");
@@ -247,7 +249,9 @@ var currentMode;
 		}).vAlign();
 		
 		// move out sidebar
-		hideSidebar();
+//		hideSidebar();
+		
+		$("#sidebar").sidebar().sidebar("hide");
 		
 		$("#simple_text")[0].focus();
 		

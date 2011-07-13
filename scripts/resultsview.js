@@ -157,7 +157,7 @@ var KWICResults = {
 //		else {
 //			$("#results-kwic").css("opacity", 0);
 //		}
-		$.log("corpus_results", data.kwic);
+		$.log("corpus_results");
 		//$("#results-kwic").show();
 		
 		this.$result.find('.num-result').html(data.hits);
@@ -234,7 +234,7 @@ var KWICResults = {
 		
 		this.scrollToShowWord(word);
 		
-		updateSidebar(sentence.structs, data, sentence.corpus);
+		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus);
 	},
 	
 	selectLeft : function(sentence, offset) {

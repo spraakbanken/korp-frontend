@@ -227,3 +227,46 @@ function loadCorpora() {
     }});
 }
 
+util.browserWarn = function() {
+	$.reject({
+		reject : {
+			all : false,
+			msie5 : true, msie6 : true, msie7 : true //, msie8 : true,
+		},
+		imagePath : "img/browsers/",
+		display: ['firefox','chrome','safari','opera'],
+		browserInfo: { // Settings for which browsers to display   
+	        firefox: {   
+	            text: 'Firefox', // Text below the icon   
+	            url: 'http://www.mozilla.com/firefox/' // URL For icon/text link   
+	        },   
+	        safari: {   
+	            text: 'Safari',   
+	            url: 'http://www.apple.com/safari/download/'   
+	        },   
+	        opera: {   
+	            text: 'Opera',   
+	            url: 'http://www.opera.com/download/'   
+	        },   
+	        chrome: {   
+	            text: 'Chrome',   
+	            url: 'http://www.google.com/chrome/'   
+	        }
+	        ,   
+	        msie: {   
+	            text: 'Internet Explorer',   
+	            url: 'http://www.microsoft.com/windows/Internet-explorer/'   
+	        }
+		},
+		header: 'Du använder en omodern webbläsare', // Header of pop-up window   
+	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista av de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1   
+	    paragraph2: '', // Paragraph 2
+	    closeMessage: 'Du kan fortsätta ändå, men med begränsad funktionalitet.', // Message displayed below closing link   
+	    closeLink: 'Stäng varningen' // Text for closing link   
+//		header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window   
+//	    paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1   
+//	    paragraph2: 'Just click on the icons to get to the download page', // Paragraph 2
+//	    closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link   
+//	    closeLink: 'Close This Window', // Text for closing link   
+	});
+};
