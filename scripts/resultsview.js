@@ -53,8 +53,10 @@ var KWICResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
 		var self = this;
+		this.prevCQP = null;
 		this.parent(tabSelector, resultSelector);
 		this.initHTML = this.$result.html();
+		this.proxy = kwicProxy;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
 		
@@ -125,12 +127,13 @@ var KWICResults = {
 		return output;
 	},
 		
-	renderResult : function(data) {
+	renderResult : function(data, sourceCQP) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
 		var self = this;
+		this.prevCQP = sourceCQP;
 		
 		if(!data.hits) {
 
@@ -171,6 +174,10 @@ var KWICResults = {
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( self.$result.find(".results_table") )
 					.find(".word")
+					.each(function() {
+						if($.inArray($(this).text(), punctArray) != -1)
+							$(this).prev().html("");
+					})
 					.click(function(event) {
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
@@ -183,9 +190,7 @@ var KWICResults = {
 			}
 			
 		});
-		$.each([",", ".", ";", ":", "!", "?"], function(i, item) {
-			$($.format(".word:contains(%s)", item)).prev().html('');
-		});
+		
 		
 //		$("#attrlistTmpl").tmpl(data.kwic)
 //		.appendTo("#attrlist")
@@ -223,6 +228,9 @@ var KWICResults = {
 	
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
+		var i = Number(data.dephead);
+		var aux = $(word.closest("tr").find(".word").get(i - 1));
+		this.selectionManager.select(word, aux);
 		
 		this.scrollToShowWord(word);
 		
@@ -259,7 +267,7 @@ var KWICResults = {
 				link_to : "javascript:void(0)",
 				num_edge_entries : 2,
 				ellipse_text: '..',
-				current_page : $.bbq.getState("page", true) || 0
+				current_page : this.current_page || 0
 			});
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
@@ -271,7 +279,7 @@ var KWICResults = {
 		$.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
 			
-			kwicProxy.makeRequest(opts);
+			this.showPreloader();
 			this.current_page = new_page_index;
 			this.makeRequest();
 			$.bbq.pushState({"page" : new_page_index});
@@ -298,7 +306,7 @@ var KWICResults = {
 	},
 	
 	setPage : function(page) {
-		this.$result.find(".Pagination").trigger('setPage', [page]);
+		this.$result.find(".pagination").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {
@@ -731,7 +739,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					var freq = statsResults.savedData["total"]["relative"][fvalue];
 					if (freq) {
 						dataItems.push({"value":freq, "caption" : fvalue, "shape_id" : fvalue});
-					} else {
+					} else {
 						dataItems.push({"value":0, "caption" : key, "shape_id" : key});
 					}
 				});
@@ -1176,9 +1184,9 @@ var StatsResults = {
 	
 };
 
-view.KWICResults = new Class(KWICResults);
+view.ExampleResults = new Class(ExampleResults);
 view.LemgramResults = new Class(LemgramResults);
 view.StatsResults = new Class(StatsResults);
-delete KWICResults;
+delete ExampleResults;
 delete LemgramResults;
 delete StatsResults;
