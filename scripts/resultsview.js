@@ -589,9 +589,7 @@ var LemgramResults = {
 	
 };
 
-formatOutput = function(x) { // Use "," instead of "." if Swedish
-	return x.replace(".",",");
-};
+
 
 function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 	var dataItems = new Array();
@@ -627,7 +625,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			}
 		});
 		
-		//$("#dialog").fadeTo(400,0);
+		
 		$("#dialog").remove();
 		
 		var topheader;
@@ -643,7 +641,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 		var absString = util.getLocaleString("statstable_absfigures");
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
-		$($.format('<div id="dialog" title="' + topheader + '"></div>'))//util.getLocaleString("example_dialog_header")))
+		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
 							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:80%;"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 							.dialog({
 								width : 400,
@@ -719,7 +717,6 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 		
 	} else { // hits/wordform
 		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
-			if(corpus == "time") return;
 			corpusArray.push(corpus);
 			$.each(obj["relative"], function(word, freq) {
 				if($.inArray(word, wordArray) == -1)
@@ -727,14 +724,10 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			});
 		});
 	
+		// Abstrahera avsnittet nedan vid tillfälle!
 		$(".statstable").css({"background-color":"white"});
 		if(dataName == "all") {
 			
-			//var relTotForWordform = data["total"]["relative"][fvalue];
-			//$.each(statsResults.totalForWordform, function(key, fvalue) {
-			//	dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
-			//});
-			//$.each(statsResults.savedData["total"]["relative"], function(key, fvalue) {
 				$.each(wordArray, function(key, fvalue) {
 					var freq = statsResults.savedData["total"]["relative"][fvalue];
 					if (freq) {
@@ -743,16 +736,10 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 						dataItems.push({"value":0, "caption" : key, "shape_id" : key});
 					}
 				});
-			//});
-			
-			//$(".statstable__all").animate({"background-color":"#EEEEEE"},"slow");
 			
 		} else {
 			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
 				if(corpus == dataName) {
-					//$.each(obj, function(word, freq) {
-					//	dataItems.push({"value":freq, "caption": word + ": " + freq, "shape_id" : word});
-					//});
 					$.each(wordArray, function(key, fvalue) {
 						var freq = obj["relative"][fvalue];
 						if (freq) {
@@ -764,8 +751,6 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					return false; // break it
 				}
 			});
-			//if(dataName != 
-			//	$(".statstablecorpus__" + dataName).animate({"background-color":"#EEEEEE"},"slow");
 			
 		}
 		
@@ -805,7 +790,6 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					tdi.animate({"width": "200px"});
 					$(".statstablecorpus__" + targetDiv.split("__")[1]).animate({"background-color":"#EEEEEE"},"slow");
 					selected_statisticsbars_corpus = $(targetDivID).parent();
-					//}
 				}
 			} else {
 				
@@ -847,11 +831,7 @@ var StatsResults = {
 		
 		var wordArray = [];
 		var corpusArray = [];
-		
-		var absdata;
-		var reldata;
-		
-		
+
 		$.each(data["corpora"], function(corpus, obj) {
 			corpusArray.push(corpus);
 			$.each(obj["relative"], function(word, freq) {
@@ -872,16 +852,8 @@ var StatsResults = {
 		
 		this["savedWordArray"] = wordArray;
 		
-		//$("#results-wraper").show();
-		//$("#statTableTmpl").tmpl(data["corpora"], {wordArray : wordArray, corpusArray : corpusArray})
-		//.appendTo("#results-stats");
-		
-		var totalForWordform = [];
-		var totalForWordformAbs = [];
-		$.each(wordArray, function(key, fvalue) {
-			totalForWordform.push(0);
-			totalForWordformAbs.push(0);
-		});
+
+		// Snygga till koden nedan!!
 		var totalForCorpus = [];
 		var totalForCorpusAbs = [];
 		$.each(corpusArray, function(key, fvalue) {
@@ -891,54 +863,33 @@ var StatsResults = {
 		
 		
 		var dataItems = new Array();
-		var dummy;
-		var firstIteration = true;
+
 		var bc = 0;
 		$.each(data["corpora"], function(corpus, obj) {
-			var c = 0;
 			$.each(wordArray, function(key, fvalue) {
-				
 				if(obj["relative"])
 					var rel_freq = obj["relative"][fvalue];
 				if(obj["absolute"])
 					var abs_freq = obj["absolute"][fvalue];
-				
 				if (rel_freq) {
-					totalForWordform[c] += parseFloat(rel_freq);
-					totalForWordformAbs[c] += abs_freq;
 					totalForCorpus[bc] += parseFloat(rel_freq);
 					totalForCorpusAbs[bc] += abs_freq;
-				}
-						
-				c++;
+				}		
 			});
-
-			
-			//if(firstIteration) // ändra sen så att "alla" blir default
-			//	dummy = corpus;
-			//firstIteration = false;
 			bc++;
 		});
-		
-		this.totalForWordform = totalForWordform;
-		
-		//this.selectedCorpus = dummy;
-		//$(".statstablecorpus__" + this.selectedCorpus).css({"background-color":"#EEEEEE"});
 		
 		
 		// Show export section -----
 		$("#exportStatsSection").css({"display": "block"});
-		//$("#kindOfData").css({"display": "inline"});
-		//$("#kindOfFormat").css({"display": "inline"});
-		//$("#exportButton").css({"display": "inline"});
 
 		// Make Left Stats Table --------------------------------------------------------- //
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px"><td><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
 		});
-		leftHTML += '<tr><td>∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr></table>';
+		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr></table>';
 		
 		function makeEllipsis(str) {
 			if(str.length > 18) {
@@ -962,7 +913,6 @@ var StatsResults = {
 			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
 			theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
 		});
-		var c = 0;
 		var totalForAllWordforms = 0;
 		var totalForAllWordformsAbs = 0;
 		$.each(wordArray, function(key, fvalue) {
@@ -970,10 +920,9 @@ var StatsResults = {
 			// First the value for ALL corpora
 			var relTotForWordform = data["total"]["relative"][fvalue];
 			var absTotForWordform = data["total"]["absolute"][fvalue];
-			theHTML += '<td id="totcorpus__' + fvalue + '" class="statstable statstable__all">' + formatOutput(relTotForWordform.toFixed(1)) + '&nbsp;<span class="absStat">(' + formatOutput(absTotForWordform.toString()) + ")</span></td>";
+			theHTML += '<td id="totcorpus__' + fvalue + '" class="statstable statstable__all">' + util.formatDecimalString(relTotForWordform.toFixed(1),true) + '&nbsp;<span class="absStat">(' + absTotForWordform.toString() + ")</span></td>";
 			totalForAllWordforms += relTotForWordform;
 			totalForAllWordformsAbs += absTotForWordform;
-			//theHTML += '<td id="totcorpus_' + c + '" class="statstable">' + formatOutput(totalForWordform[c].toFixed(1)) + '&nbsp;<span class="absStat">(' + totalForWordformAbs[c] + ")</span></td>";
 			// Then for each corpus seperately
 			$.each(corpusArray, function(gkey, gvalue) {
 				var rel_hits = data["corpora"][gvalue]["relative"][fvalue];
@@ -981,13 +930,12 @@ var StatsResults = {
 				
 				if (rel_hits) {
 					rel_hits = parseFloat(rel_hits);
-					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + formatOutput(rel_hits.toFixed(1)) + '&nbsp;</a><a href="javascript:void(0)" class="absStat searchForWordformInCorpus">(' + abs_hits + ')</a></td>';
+					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + util.formatDecimalString(rel_hits.toFixed(1),true) + '&nbsp;</a><a href="javascript:void(0)" class="absStat searchForWordformInCorpus">(' + abs_hits + ')</a></td>';
 				} else {
 					theHTML += '<td class="statstable statstablecorpus__' + gvalue + '"></td>';
 				}
 			});
 			theHTML += '</tr>';
-			c++;
 		});
 	
 		
@@ -996,20 +944,19 @@ var StatsResults = {
 		//	return s;
 		//};
 		
-		theHTML += '<tr class="sumOfCorpora"><td>' + totalForAllWordforms.toFixed(1) + '&nbsp;<span class="absStat">(' + totalForAllWordformsAbs + ')</span></td>';
+		theHTML += '<tr class="sumOfCorpora"><td>' + util.formatDecimalString(totalForAllWordforms.toFixed(1),true) + '&nbsp;<span class="absStat">(' + totalForAllWordformsAbs + ')</span></td>';
 		$.each(totalForCorpus, function(key, fvalue) {
-			theHTML += '<td>' + formatOutput(fvalue.toFixed(1)) + '&nbsp;<span class="absStat">(' + totalForCorpusAbs[key] + ')</span></td>';
+			theHTML += '<td>' + util.formatDecimalString(fvalue.toFixed(1),true) + '&nbsp;<span class="absStat">(' + totalForCorpusAbs[key] + ')</span></td>';
 		});
 		theHTML += '</tr></table>';
 
 		$("#rightStatsTable").html(theHTML);
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
-		//$("#export_area").append('<a href="javascript:void(0)" class="export_csv" id="export_csv_rel"><img src="img/csvrel.png"></a> <a href="javascript:void(0)" class="export_csv" id="export_csv_abs"><img src="img/csvabs.png"></a>');
-		
 		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
 		
 		
+		$("#exportButton").unbind("click");
 		$("#exportButton").click(function() {
 			var selVal = $("#kindOfData option:selected").val();
 			var selType = $("#kindOfFormat option:selected").val();
@@ -1030,7 +977,7 @@ var StatsResults = {
 				$.each(statsResults.savedWordArray, function(wkey, aword) {
 					var amount = acorpus[selVal][aword];
 					if(amount)
-						output += amount + dataDelimiter;
+						output += util.formatDecimalString(amount.toString(), false) + dataDelimiter;
 					else
 						output += "0" + dataDelimiter;
 				});
@@ -1044,7 +991,6 @@ var StatsResults = {
 		
 		
 		$(".searchForWordform").click(function() {
-			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
 			$.bbq.pushState({
 				search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]',
 				"result-container" : 0,
@@ -1053,15 +999,12 @@ var StatsResults = {
 		});
 		
 		$(".searchForWordformInCorpus").click(function() {
-			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
 			var parts = $(this).parent().attr("id").split("__");
 			$.bbq.pushState({search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + parts[2] + '" %c)]', corpus : parts[1].toLowerCase()});
 		});
 		
 		$(".corpusTitleHeader").click(function() {
-			//util.searchHash("cqp", '[(word = "' + $(this).text() + '") & (lex contains "' + $("#simple_text").data("lemgram") + '")]');
 			var parts = $(this).attr("id").split("__");
-			//$.bbq.pushState({corpus : parts[1].toLowerCase(), search: "lemgram|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '")]'});
 			$.bbq.pushState({corpus : parts[1].toLowerCase()});
 			simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
 		});
@@ -1078,14 +1021,11 @@ var StatsResults = {
 					var hoveredCorpus = parts[1];
 					var hoveredWord = parts[2];
 					var relFreq = statsResults.savedData["corpora"][hoveredCorpus]["relative"][hoveredWord];
-					if(!relFreq)
-						relFreq = 0;
 					var absFreq = statsResults.savedData["corpora"][hoveredCorpus]["absolute"][hoveredWord];
-					return relString + "<br/><b>" + formatOutput(relFreq.toString()) +"</b><br/>" + absString + "<br/><b>" + absFreq + "</b>";
+					return relString + "<br/><b>" + util.formatDecimalString(relFreq.toString()) +"</b><br/>" + absString + "<br/><b>" + absFreq + "</b>";
 				} else if (parts.length == 2) {
 					// Left total
 					return relString + "<br/><b>" + statsResults.savedData["total"]["relative"][parts[1]] + "</b><br/>" + absString + "<br/><b>" + statsResults.savedData["total"]["absolute"][parts[1]] + "</b>";
-					//return "relativ frekvens (per en miljon ord):<br/><b>" + formatOutput(totalForWordform[parts[1]].toString()) + "</b><br/>absolut frekvens:<br/><b>" + totalForWordformAbs[parts[1]] + "</b>";
 				} else {
 					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
 				}
@@ -1095,7 +1035,6 @@ var StatsResults = {
 		$(".corpusTitleHeader").tooltip({
 			delay : 80,
 			bodyHandler : function() {
-				//return "test";
 				return settings.corpora[$(this).attr('id').split("__")[1].toLowerCase()]["title"];
 			}
 		});
@@ -1103,10 +1042,6 @@ var StatsResults = {
 
 
 		// Make Bar Diagram ------------------------------------------------------- //
-		
-		//$.each(totalForWordform, function(key, fvalue) {
-		//	dataItems.push({"value":fvalue, "caption" : wordArray[key], "shape_id" : wordArray[key]});
-		//});
 		
 		
 		diagramInstance = $('#theHide').pie_widget({container_id: "theHide", data_items: dataItems});
@@ -1148,12 +1083,9 @@ var StatsResults = {
 			}
 		}, function() {
 			if(!$(this).attr('id'))
-					return;
-			var currItem = $(this).attr('id');
-			var parts = currItem.split("__");
-			if (parts[1] == statsResults.selectedCorpus) {
-				diagramInstance.pie_widget("deHighlightArc",parts[2]);
-			}
+				return;
+			if ($(this).attr('id').split("__")[1] == statsResults.selectedCorpus)
+				diagramInstance.pie_widget("deHighlightArc",$(this).attr('id').split("__")[2]);
 		});
 		//$("#results-stats").append($("<div />").css("clear", "both"));
 		
@@ -1173,13 +1105,6 @@ var StatsResults = {
 		$("#rightStatsTable").html("");
 		$("#leftStatsTable").html($("<i/>").localeKey("no_stats_results"));
 		$("#exportStatsSection").css({"display": "none"});
-		//$("#kindOfData").css({"display": "none"});
-		//$("#kindOfFormat").css({"display": "none"});
-		//$("#exportButton").css({"display": "none"});
-		
-		//$("<i/>")
-		//.localeKey("no_stats_results")
-		//.appendTo("#results-stats");
 	}
 	
 };

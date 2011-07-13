@@ -183,6 +183,15 @@ util.localizeFloat = function(float, nDec) {
 	return $.format("%." + nDec + "f", float).replace(".", sep);
 };
 
+util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swedish, if mode is 
+	var decimalSeparator = util.getLocaleString("util_decimalseparator");
+	if(mode)
+		return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
+	else
+		return x.replace(".", decimalSeparator);
+};
+
+
 /* Helper function to turn "8455999" into "8 455 999" */
 function prettyNumbers(numstring) {
 	var regex = /(\d+)(\d{3})/;

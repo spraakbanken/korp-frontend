@@ -185,6 +185,8 @@
 	"statstable_hitsheader_lemgram" : "Träffar för lemgrammet",
 	"statstable_exp_csv" : "CSV (kommaseparerade värden)",
 	"statstable_exp_tsv" : "TSV (tabseparerade värden)",
-	"statstable_export" : "Exportera"
+	"statstable_export" : "Exportera",
+	
+	"util_decimalseparator" : ","
     
 }
