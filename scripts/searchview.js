@@ -423,7 +423,7 @@ var ExtendedSearch = {
 	insertArg : function(token) {
 		$.log("insertArg");
 		var self = this;
-	    var token = $(token).closest(".query_token").children("tbody");
+	    token = $(token).closest(".query_token").children("tbody");
 	    var row = $("<tr/>").addClass("query_arg").appendTo(token);
 	    
 	    var arg_select = this.makeSelect();

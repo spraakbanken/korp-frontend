@@ -15,7 +15,7 @@ var ParallelKWICResults = {
 		var i = Number(data.dephead);
 		var aux = $(word.closest("tr").find(".word").get(i - 1));
 		this.selectionManager.select(word, aux);
-		updateSidebar(currentSentence.structs, data, sentence.corpus);
+		$("#sidebar").sidebar("updateContent", currentSentence.structs, data, sentence.corpus);
 	}
 	
 };

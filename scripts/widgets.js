@@ -306,3 +306,13 @@ $.widget("ui.sidebar", {
 		});
 	}
 });
+
+
+$.widget("ui.extendedtoken", {
+	options : {},
+	_init : function() {
+		
+	},
+	
+	
+});

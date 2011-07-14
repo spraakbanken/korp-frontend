@@ -160,7 +160,7 @@ var KWICResults = {
 		$.log("corpus_results");
 		//$("#results-kwic").show();
 		
-		this.$result.find('.num-result').html(data.hits);
+		this.$result.find('.num-result').html(prettyNumbers(data.hits.toString()));
 		this.buildPager(data.hits);
 		
 		var punctArray = [",", ".", ";", ":", "!", "?"];
@@ -341,15 +341,28 @@ var KWICResults = {
 		$(prev).click();
 	},
 	selectUp : function() {
-		var prevMatch = this.selectionManager.selected.closest("tr").prevAll(".sentence:first").find(".match span:first");
+		var current = this.selectionManager.selected;
+		var prevMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").prev());
 		prevMatch.click();
 	},
 	selectDown : function() {
-		var nextMatch = this.selectionManager.selected.closest("tr").nextAll(".sentence:first").find(".match span:first");
+		var current = this.selectionManager.selected;
+		var nextMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").next());
 		nextMatch.click();
 	},
 	
-	
+	getWordAt : function(xCoor, $row) {
+		var output = $();
+		$row.find(".word").each(function() {
+			output = $(this); 
+			var thisLeft = $(this).offset().left;
+			var thisRight = $(this).offset().left + $(this).width();
+			if((xCoor > thisLeft && xCoor < thisRight) || thisLeft > xCoor ) {
+				return false;
+			}
+		});
+		return output;
+	}
 	
 
 };

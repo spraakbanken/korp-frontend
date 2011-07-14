@@ -175,23 +175,29 @@
 			
 		<!-- for showing full deprel locale names.
 		{{else $index == "deprel"}}
-			${util.getLocaleString("malt_" + $data[$index])}</p>-->
+			${util.getLocaleString("malt_" + $data[$index])}</p>
+			
+			{{if $value.dataset}}
+			 ${$value.dataset[$data[$index]]}
+			-->
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
 		<h4 rel="localize[${$item.header}_attr]">${util.getLocaleString($item.header + "_attr")}</h4>
 		{{each $item.corpusAttributes}}
+		
 		<tr>
 			{{if $value.displayType != "hidden"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
-			{{if $value.dataset}}
-			 ${$value.dataset[$data[$index]]}
-			{{else $index == "lemma"}}
+			
+			{{if $index == "lemma"}}
 			{{html $item.parseLemma($data[$index])}} 
-			 
+			{{else $index == "pos"}}
+				${util.getLocaleString($data[$index])}</p> 
 			{{else $value.type == "set"}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
 			{{else $value.type == "url"}}
 			<a href="${$data[$index]}" class="exturl">${decodeURI($data[$index].split("/").slice(-1))}</a>
+			
 			{{else}}
 			${$data[$index]}</p>
 			{{/if}}
@@ -240,7 +246,7 @@
 			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
 			<tr>
 				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
-				<td>${util.localizeFloat($value.mi, 1)}</td>
+				<td>{{html util.formatDecimalString($.format("%.2f", $value.mi), true)}}</td>
 				<td id="example_link" 
 					data-head="${$value['head']}" 
 					data-dep="${$value['dep']}" 
