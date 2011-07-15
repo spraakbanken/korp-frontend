@@ -342,9 +342,15 @@ var ExtendedSearch = {
 	
 	insertToken : function(button) {
 		
-	    var token = $("<table />").extendedToken({}).insertBefore($(button));
-	    
-	    didToggleToken(button);
+	    var token = $("<table />").insertBefore($(button))
+	    .extendedToken({
+	    	close : function() {
+	    		advancedSearch.updateCQP();
+	    	},
+	    	change : function() {
+	    		advancedSearch.updateCQP();
+	    	}
+	    });
 	},
 	
 	refreshTokens : function() {

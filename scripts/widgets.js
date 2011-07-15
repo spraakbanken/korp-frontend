@@ -308,8 +308,8 @@ $.widget("ui.sidebar", {
 });
 
 
-$.widget("ui.extendedToken", {
-	options : {},
+var ExtendedToken = {
+	options : {showClose : true},
 	_init : function() {
 		
         this.element.addClass("query_token")
@@ -326,7 +326,7 @@ $.widget("ui.extendedToken", {
 	    
 	    var arg_value = $("<input type='text'/>").addClass("arg_value")
 	    .change(function(){
-    		didChangeArgvalue();
+    		self._trigger("change");
 		});
 	    
 	    var remove = $('<img src="img/minus.png">')
@@ -349,13 +349,13 @@ $.widget("ui.extendedToken", {
 	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
 	    .click(function() {
 	    	$(this).closest("table").remove();
-	    	advancedSearch.updateCQP();
 	    	
 	    	if($(".query_token").length == 1) {
 	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
 	    	} else {
 	    		$(".query_token .btn-icon:first").css("visibility", "visible");
 	    	}
+	    	self._trigger("close");
 	    });
 	    
 	    
@@ -384,7 +384,7 @@ $.widget("ui.extendedToken", {
 		if(!row.is(":first-child") ) {
 			closeBtn.css("visibility", "hidden");
 		}
-		
+		$.log(".query_token.length", $(".query_token").length);
 		if($(".query_token").length == 1) {
 			closeBtn.css("visibility", "hidden");
 		}
@@ -392,27 +392,27 @@ $.widget("ui.extendedToken", {
 			$(".query_token .btn-icon:first").css("visibility", "visible");
 		}
 	    
-	    didToggleToken(row);
 	    $(".query_row").sortable({
 	    	items : ".query_token"
 	    		
 	    });
+	    
+	    this._trigger("change");
 	},
 	
 	removeArg : function(arg) {
 	    arg = $(arg).closest(".query_arg");
-	    var row = arg.closest(".query_row");
 	    if (arg.siblings().length >= 1) {
 	        arg.remove();
 	    } else {
 	        arg.closest(".query_token").remove();
 	    }
-	    didToggleToken(row);
+	    this._trigger("change")
 	},
 	
 	makeSelect : function() {
 		var arg_select = $("<select/>").addClass("arg_type")
-		.change(this.onArgTypeChange);
+		.change($.proxy(this.onArgTypeChange, this));
 
 		var groups = $.extend({}, settings.arg_groups, {
 			"word_attr" : getCurrentAttributes(),
@@ -459,12 +459,14 @@ $.widget("ui.extendedToken", {
 		});
 	},
 	
-	onArgTypeChange : function() {
+	onArgTypeChange : function(event) {
 		// change input widget
-		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
-		$(this).siblings(".arg_value").remove();
+		var self = this;
+		var target = $(event.currentTarget);
+		var oldVal = target.siblings(".arg_value:input[type=text]").val() || "";
+		target.siblings(".arg_value").remove();
 		
-		var data = $(this).find(":selected").data("dataProvider");
+		var data = target.find(":selected").data("dataProvider");
 		$.log("didSelectArgtype ", data);
 		var arg_value = null;
 		switch(data.displayType) {
@@ -502,19 +504,19 @@ $.widget("ui.extendedToken", {
 				.data("value", null)
 				.placeholder();
 			}).blur(function() {
-				var self = this;
+				var input = this;
 				setTimeout(function() {
 					$.log("blur");
 					//if($(this).autocomplete("widget").is(":visible")) return;
-					if(util.isLemgramId($(self).val()) || $(self).data("value") != null)
-						$(self).removeClass("invalid_input");
+					if(util.isLemgramId($(input).val()) || $(input).data("value") != null)
+						$(input).removeClass("invalid_input");
 					else {
-						$(self).addClass("invalid_input")
+						$(input).addClass("invalid_input")
 						.attr("placeholder", null)
 						.data("value", null)
 						.placeholder();
 					}
-//					advancedSearch.updateCQP();
+					self._trigger("change");
 				}, 100);
 			});
 			break;
@@ -524,17 +526,19 @@ $.widget("ui.extendedToken", {
 			break;
 		} 
 		
-		if($(this).val() == "anyword") {
+		if(target.val() == "anyword") {
 			arg_value.css("visibility", "hidden");
 		}
 		
 		arg_value.addClass("arg_value")
-	    .change(didChangeArgvalue);
-		$(this).after(arg_value);
+	    .change(function() {
+	    	self._trigger("change");
+	    });
+		target.after(arg_value);
 		if(oldVal != null && oldVal.length)
 			arg_value.val(oldVal);
 		
-//		advancedSearch.updateCQP();
+		this._trigger("change");
 	},
 	
 	getCQP : function() {
@@ -586,4 +590,5 @@ $.widget("ui.extendedToken", {
 	    }
 	    return query_string;
 	}
-});
+};
+$.widget("ui.extendedToken", ExtendedToken);

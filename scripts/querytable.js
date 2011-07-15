@@ -5,21 +5,6 @@ function getSelectedCorpora() {
 	return corpusChooserInstance.corpusChooser("selectedItems");
 }
 
-
-function didToggleToken(row) {
-    var args = $(row).closest(".query_row").find(".query_arg");
-    var visibility = args.length > 1 ? "visible" : "hidden";
-//    args.first().find(".remove_arg").css("visibility", visibility);
-//    advancedSearch.updateCQP();
-}
-
-function didChangeArgvalue(input) {
-    advancedSearch.updateCQP();
-}
-
-
-//////////////////////////////////////////////////////////////////////
-
 function regescape(s) {
     return s.replace(/[\.|\?|\+|\*|\|\'|\"]/g, "\\$&");
 }
