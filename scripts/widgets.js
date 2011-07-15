@@ -308,11 +308,282 @@ $.widget("ui.sidebar", {
 });
 
 
-$.widget("ui.extendedtoken", {
+$.widget("ui.extendedToken", {
 	options : {},
 	_init : function() {
 		
+        this.element.addClass("query_token")
+        .attr({cellPadding: 0, cellSpacing: 0});
+	    this.insertArg();
 	},
 	
+	insertArg : function(token) {
+		$.log("insertArg");
+		var self = this;
+	    var row = $("<tr/>").addClass("query_arg").appendTo(this.element);
+	    
+	    var arg_select = this.makeSelect();
+	    
+	    var arg_value = $("<input type='text'/>").addClass("arg_value")
+	    .change(function(){
+    		didChangeArgvalue();
+		});
+	    
+	    var remove = $('<img src="img/minus.png">')
+        .addClass("image_button")
+        .addClass("remove_arg")
+        .click(function(){
+        	if(row.is(":last-child"))
+        		row.prev().find(".insert_arg").show();
+        	self.removeArg(this);
+    	});
+
+	    var insert = $('<img src="img/plus.png"/>')
+        .addClass("image_button")
+	    .addClass("insert_arg")
+	    .click(function() {
+	    	self.insertArg(this);
+	    	$(this).hide();
+	    });
+	    
+	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
+	    .click(function() {
+	    	$(this).closest("table").remove();
+	    	advancedSearch.updateCQP();
+	    	
+	    	if($(".query_token").length == 1) {
+	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
+	    	} else {
+	    		$(".query_token .btn-icon:first").css("visibility", "visible");
+	    	}
+	    });
+	    
+	    
+	    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
+	    var rightCol = $("<div />").append(arg_select, arg_value)
+	    .css("display", "inline-block")
+	    .css("margin-left", 5);
+	    
+	    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
+	    	// let's patch it up! (maybe I shouldn't have used inline-block)
+	    	leftCol.add(rightCol).css("display", "inline");
+	    	rightCol.find("input").css("float", "right");
+	    	closeBtn.css("right", "-235").css("top", "-55");
+	    }
+	    
+	    var wrapper = $("<div />").append($("<span/>").localeKey("and"), insert);
+	    
+	    row.append(
+	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
+	    );
+	    
+	    if(row.is(":first-child")) {
+	    	remove.css("visibility", "hidden");
+	    }
+	    
+		if(!row.is(":first-child") ) {
+			closeBtn.css("visibility", "hidden");
+		}
+		
+		if($(".query_token").length == 1) {
+			closeBtn.css("visibility", "hidden");
+		}
+		else {
+			$(".query_token .btn-icon:first").css("visibility", "visible");
+		}
+	    
+	    didToggleToken(row);
+	    $(".query_row").sortable({
+	    	items : ".query_token"
+	    		
+	    });
+	},
 	
+	removeArg : function(arg) {
+	    arg = $(arg).closest(".query_arg");
+	    var row = arg.closest(".query_row");
+	    if (arg.siblings().length >= 1) {
+	        arg.remove();
+	    } else {
+	        arg.closest(".query_token").remove();
+	    }
+	    didToggleToken(row);
+	},
+	
+	makeSelect : function() {
+		var arg_select = $("<select/>").addClass("arg_type")
+		.change(this.onArgTypeChange);
+
+		var groups = $.extend({}, settings.arg_groups, {
+			"word_attr" : getCurrentAttributes(),
+			"sentence_attr" : getStructAttrs()
+			});
+		
+		$.each(groups, function(lbl, group) {
+			if($.isEmptyObject(group)) {
+				return;
+			}
+			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
+			$.each(group, function(key, val) {
+				if(val.displayType == "hidden")
+					return;
+				var labelKey = val.label || val;
+				
+				var option = $('<option/>',{rel : $.format("localize[%s]", labelKey)})
+				.val(key).text(util.getLocaleString(labelKey) || "")
+				.appendTo(optgroup)
+				.data("dataProvider", val);
+				
+//				if(val.disabled === true) {
+//					option.attr("disabled", "disabled");
+//				}
+			});
+			
+		});
+		
+		return arg_select;
+	},
+	
+	refresh : function() {
+		var self = this;
+		this.element.find(".arg_type").each(function() {
+			var i = $(this).find(":selected").index();
+			var before = $(this).find(":selected").val();
+			var newSelect = self.makeSelect();
+			newSelect.get(0).selectedIndex = i;
+			$(this).replaceWith(newSelect);
+			if(before != newSelect.val()) {
+				newSelect.get(0).selectedIndex = 0;
+				newSelect.trigger("change");
+			}
+		});
+	},
+	
+	onArgTypeChange : function() {
+		// change input widget
+		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
+		$(this).siblings(".arg_value").remove();
+		
+		var data = $(this).find(":selected").data("dataProvider");
+		$.log("didSelectArgtype ", data);
+		var arg_value = null;
+		switch(data.displayType) {
+		case "select":
+			arg_value = $("<select />");
+			$.each(data.dataset, function(key, value) {
+				$("<option />").localeKey(value).val(key).appendTo(arg_value);
+			});
+			break;
+		case "autocomplete":
+			$.log("displayType autocomplete");
+			var type, labelFunc, sortFunc;
+			if(data.label == "lemgram") {
+				type = "lem";
+				labelFunc = util.lemgramToString;
+				sortFunc = view.lemgramSort;
+			} else {
+				type = "saldo";
+				labelFunc = util.saldoToString;
+				sortFunc = view.saldoSort;
+			}
+			arg_value = $("<input type='text'/>").korp_autocomplete({
+				labelFunction : labelFunc,
+				sortFunction : sortFunc,
+				type : type, 
+				select : function(lemgram) {
+					$.log("extended lemgram", lemgram, $(this));
+					$(this).data("value", lemgram);
+					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
+				}
+			})
+			.change(function(event) {
+				$.log("value null");
+				$(this).attr("placeholder", null)
+				.data("value", null)
+				.placeholder();
+			}).blur(function() {
+				var self = this;
+				setTimeout(function() {
+					$.log("blur");
+					//if($(this).autocomplete("widget").is(":visible")) return;
+					if(util.isLemgramId($(self).val()) || $(self).data("value") != null)
+						$(self).removeClass("invalid_input");
+					else {
+						$(self).addClass("invalid_input")
+						.attr("placeholder", null)
+						.data("value", null)
+						.placeholder();
+					}
+//					advancedSearch.updateCQP();
+				}, 100);
+			});
+			break;
+		case "date":
+		default:
+			arg_value = $("<input type='text'/>");
+			break;
+		} 
+		
+		if($(this).val() == "anyword") {
+			arg_value.css("visibility", "hidden");
+		}
+		
+		arg_value.addClass("arg_value")
+	    .change(didChangeArgvalue);
+		$(this).after(arg_value);
+		if(oldVal != null && oldVal.length)
+			arg_value.val(oldVal);
+		
+//		advancedSearch.updateCQP();
+	},
+	
+	getCQP : function() {
+	    var query = {token: [], min: "", max: ""};
+
+	    var args = {};
+	    this.element.find(".query_arg").each(function(){
+	        var type = $(this).find(".arg_type").val();
+	        var data = $(this).find(".arg_type :selected").data("dataProvider");
+	        var value = $(this).find(".arg_value").val();
+	        
+	        if(data.displayType == "autocomplete") {
+	        	value = null;
+	        }
+	        if (!args[type]) { 
+	        	args[type] = []; 
+	    	}
+	        args[type].push({data : data, value : value || $(this).find(".arg_value").data("value") || ""});
+	    });
+	    
+	    $.each(args, function(type, valueArray) {
+	    	var inner_query = [];
+	    	
+	    	if(settings.outer_args[type] != null) {
+	    		settings.outer_args[type](query, $.map(args[type], function(item) {
+	            	return item.value;
+	            }));
+	    		return;
+	    	} 
+	    	$.each(valueArray, function(i, obj) {
+	    		function defaultArgsFunc(s) {
+	    			var operator = obj.data.type == "set" ? "contains" : "=";
+	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
+	    			
+	    			return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
+	    		};
+	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
+	    		inner_query.push(argFunc(obj.value));
+	    	});
+	    	if (inner_query.length) {
+	    		query.token.push(inner_query.join(" | "));
+	    	}
+	    	
+	    });
+
+	    var query_string = "[" + query.token.join(" & ") + "]";
+	    if (query.min | query.max) {
+	        query_string += "{" + (query.min || 0) + "," + query.max + "}";
+	    }
+	    return query_string;
+	}
 });

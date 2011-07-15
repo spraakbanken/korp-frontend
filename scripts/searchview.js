@@ -285,6 +285,8 @@ var ExtendedSearch = {
 			return false;
 		});
 		
+		this.insertRow();
+		
 	},
 	
 	onentry : function() {
@@ -320,232 +322,33 @@ var ExtendedSearch = {
 	},
 	
 	insertRow : function() {
+		var self = this;
 	    var row = $('<div/>').addClass("query_row")
 	    .appendTo($("#query_table"));
 
-	    var remove_row_button = mkRemoveButton().addClass("remove_row")
-	    .click(function(){
-	    	removeRow(this);
-		});
 
-	    var insert_token_button = mkInsertButton().addClass("insert_token")
+	    var insert_token_button = $('<img src="img/plus.png"/>')
+        .addClass("image_button")
+        .addClass("insert_token")
 	    .click(function(){
-	    	insertToken(this);
+	    	self.insertToken(this);
 		});
 	    
-	    var operators = row.siblings().length ? settings.operators : settings.first_operators;
+//	    var operators = row.siblings().length ? settings.operators : settings.first_operators;
 	    
-	    row.append(remove_row_button, insert_token_button);
-	    
+	    row.append(insert_token_button);
 	    insert_token_button.click();
-	    didToggleRow();
 	},
 	
-	didSelectArgtype : function() {
-		var self = this;
-		// change input widget
-		var oldVal = $(this).siblings(".arg_value:input[type=text]").val() || "";
-		$(this).siblings(".arg_value").remove();
+	insertToken : function(button) {
 		
-		var data = $(this).find(":selected").data("dataProvider");
-		$.log("didSelectArgtype ", data);
-		var arg_value = null;
-		switch(data.displayType) {
-		case "select":
-			arg_value = $("<select />");
-			$.each(data.dataset, function(key, value) {
-				$("<option />").localeKey(value).val(key).appendTo(arg_value);
-			});
-			break;
-		case "autocomplete":
-			$.log("displayType autocomplete");
-			var type, labelFunc, sortFunc;
-			if(data.label == "lemgram") {
-				type = "lem";
-				labelFunc = util.lemgramToString;
-				sortFunc = view.lemgramSort;
-			} else {
-				type = "saldo";
-				labelFunc = util.saldoToString;
-				sortFunc = view.saldoSort;
-			}
-			arg_value = $("<input type='text'/>").korp_autocomplete({
-				labelFunction : labelFunc,
-				sortFunction : sortFunc,
-				type : type, 
-				select : function(lemgram) {
-					$.log("extended lemgram", lemgram, $(this));
-					$(this).data("value", lemgram);
-					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
-				}
-			})
-			.change(function(event) {
-				$.log("value null");
-				$(this).attr("placeholder", null)
-				.data("value", null)
-				.placeholder();
-			}).blur(function() {
-				var self = this;
-				setTimeout(function() {
-					$.log("blur");
-					//if($(this).autocomplete("widget").is(":visible")) return;
-					if(util.isLemgramId($(self).val()) || $(self).data("value") != null)
-						$(self).removeClass("invalid_input");
-					else {
-						$(self).addClass("invalid_input")
-						.attr("placeholder", null)
-						.data("value", null)
-						.placeholder();
-					}
-					advancedSearch.updateCQP();
-				}, 100);
-			});
-			break;
-		case "date":
-		default:
-			arg_value = $("<input type='text'/>");
-			break;
-		} 
-		
-		if($(this).val() == "anyword") {
-			arg_value.css("visibility", "hidden");
-		}
-		
-		arg_value.addClass("arg_value")
-	    .change(didChangeArgvalue);
-		$(this).after(arg_value);
-		if(oldVal != null && oldVal.length)
-			arg_value.val(oldVal);
-		
-		advancedSearch.updateCQP();
+	    var token = $("<table />").extendedToken({}).insertBefore($(button));
+	    
+	    didToggleToken(button);
 	},
 	
-	insertArg : function(token) {
-		$.log("insertArg");
-		var self = this;
-	    token = $(token).closest(".query_token").children("tbody");
-	    var row = $("<tr/>").addClass("query_arg").appendTo(token);
-	    
-	    var arg_select = this.makeSelect();
-	    
-	    var arg_value = $("<input type='text'/>").addClass("arg_value")
-	    .change(function(){
-    		didChangeArgvalue();
-		});
-	    
-	    var remove = mkRemoveButton().addClass("remove_arg")
-	        .click(function(){
-	        	if(row.is(":last-child"))
-	        		row.prev().find(".insert_arg").show();
-	        	removeArg(this);
-	    	});
-
-	    var insert = mkInsertButton().addClass("insert_arg")
-	    .click(function() {
-	    	self.insertArg(this);
-	    	$(this).hide();
-	    });
-	    
-	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
-	    .click(function() {
-	    	$(this).closest("table").remove();
-	    	advancedSearch.updateCQP();
-	    	
-	    	if($(".query_token").length == 1) {
-	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
-	    	} else {
-	    		$(".query_token .btn-icon:first").css("visibility", "visible");
-	    	}
-	    });
-	    
-	    
-	    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
-	    var rightCol = $("<div />").append(arg_select, arg_value)
-	    .css("display", "inline-block")
-	    .css("margin-left", 5);
-	    
-	    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
-	    	// let's patch it up! (maybe I shouldn't have used inline-block)
-	    	leftCol.add(rightCol).css("display", "inline");
-	    	rightCol.find("input").css("float", "right");
-	    	closeBtn.css("right", "-235").css("top", "-55");
-	    }
-	    
-	    var wrapper = $("<div />").append($("<span/>").localeKey("and"), insert);
-	    
-	    row.append(
-	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
-	    );
-	    
-	    if(row.is(":first-child")) {
-	    	remove.css("visibility", "hidden");
-	    }
-	    
-		if(!row.is(":first-child") ) {
-			closeBtn.css("visibility", "hidden");
-		}
-		
-		if($(".query_token").length == 1) {
-			closeBtn.css("visibility", "hidden");
-		}
-		else {
-			$(".query_token .btn-icon:first").css("visibility", "visible");
-		}
-	    
-	    didToggleToken(row);
-	    $(".query_row").sortable({
-	    	items : ".query_token"
-	    		
-	    });
-	},
-	
-	refreshSelects : function() {
-		var self = this;
-		$(".arg_type").each(function() {
-			var i = $(this).find(":selected").index();
-			var before = $(this).find(":selected").val();
-			var newSelect = self.makeSelect();
-			newSelect.get(0).selectedIndex = i;
-			$(this).replaceWith(newSelect);
-			if(before != newSelect.val()) {
-				newSelect.get(0).selectedIndex = 0;
-				newSelect.trigger("change");
-			}
-		});
-	},
-	
-	makeSelect : function() {
-		var arg_select = $("<select/>").addClass("arg_type")
-	    .change(extendedSearch.didSelectArgtype);
-
-		var groups = $.extend({}, settings.arg_groups, {
-			"word_attr" : getCurrentAttributes(),
-			"sentence_attr" : getStructAttrs()
-			});
-		
-		$.each(groups, function(lbl, group) {
-			if($.isEmptyObject(group)) {
-				return;
-			}
-			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
-			$.each(group, function(key, val) {
-				if(val.displayType == "hidden")
-					return;
-				var labelKey = val.label || val;
-				
-				var option = $('<option/>',{rel : $.format("localize[%s]", labelKey)})
-				.val(key).text(util.getLocaleString(labelKey) || "")
-				.appendTo(optgroup)
-				.data("dataProvider", val);
-				
-//				if(val.disabled === true) {
-//					option.attr("disabled", "disabled");
-//				}
-			});
-			
-		});
-		
-		return arg_select;
+	refreshTokens : function() {
+		$(".query_token").extendedToken("refresh");
 	}
 };
 
@@ -560,16 +363,12 @@ var AdvancedSearch = {
 	},
 	
 	updateCQP : function() {
-		
-	    var query = "";
 	    var nr_lines = 2;
-	    var main_corpus_lang = "";
-	    $(".query_row").each(function(){
-	        query += cqpRow(this);
-	    });
-	    $.log("updateCQP", query, nr_lines, main_corpus_lang,$("#cqp_string"));
-	    $("#cqp_string").val(query).attr("rows", nr_lines);
-	    $("#corpus_id").val(main_corpus_lang);
+	    var query = $(".query_token").map(function() {
+	    	return $(this).extendedToken("getCQP");
+	    }).get().join(" ");
+	    $.log("updateCQP", query, nr_lines,$("#cqp_string"));
+	    this.setCQP(query);
 	    return query;
 	},
 	

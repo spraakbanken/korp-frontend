@@ -263,7 +263,6 @@ var currentMode;
 		$(document).click(function() {
 			$("#simple_text").autocomplete("close");
 		});
-		extendedSearch.insertRow();
 		
 		util.localize();
 		onHashChange(null, true);
