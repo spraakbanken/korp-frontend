@@ -90,23 +90,23 @@ a:hover {color:red;}  /* mouse over link */
 	
 	height : 30px;
 	width : 100%;
-/* IE10 */ 
-background-image: -ms-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-
-/* Mozilla Firefox */ 
-background-image: -moz-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-
-/* Opera */ 
-background-image: -o-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-
-/* Webkit (Safari/Chrome 10) */ 
-background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FCFAFC), color-stop(1, #D9D9D9));
-
-/* Webkit (Chrome 11+) */ 
-background-image: -webkit-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-
-/* Proposed W3C Markup */ 
-background-image: linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+	/* IE10 */ 
+	background-image: -ms-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+	
+	/* Mozilla Firefox */ 
+	background-image: -moz-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+	
+	/* Opera */ 
+	background-image: -o-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+	
+	/* Webkit (Safari/Chrome 10) */ 
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FCFAFC), color-stop(1, #D9D9D9));
+	
+	/* Webkit (Chrome 11+) */ 
+	background-image: -webkit-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
+	
+	/* Proposed W3C Markup */ 
+	background-image: linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
 }
 
 /*match placeholder/watermark padding to border+padding for input element*/
@@ -143,19 +143,12 @@ input:placeholder, textarea:placeholder {
 }
 
 #content {
-/* 	float: left; */
-/* 	clear: both; */
-/* 	width: 100%; */
-/* 	padding-bottom : 10px; */
 	padding : 0 8px 8px 8px;
 }
 
 #header p {
 	margin: 0px;
 	margin-left: 10px;
-	/*	border-style:dotted;*/
-	/*	border-width:1px;	*/
-	/*	text-align:center;*/
 }
 
 .num_hits {
@@ -170,37 +163,14 @@ input:placeholder, textarea:placeholder {
 	float : right;
 	margin-right : 8px;
 }
-/* #languages li { */
-/* 	margin : 0 0; */
-/* 	cursor : pointer; */
-/* } */
 
-.select_operation .select_language {
-	visibility: hidden;
-}
-
-.query_table {
+#query_table {
 	overflow : auto;	
-}
-
-.query_row {
-	overflow :auto;
 	white-space: nowrap;
-}
-.query_row table {
 	margin-bottom : 15px;
 }
 
-.image_button {
-/* 	padding : 0 8px; */
-/* 	background-repeat: no-repeat; */
-}
-
-.insert_arg, .insert_token {
-/* 	background-image: url(img/plus.png); */
-}
 .remove_arg {
-/* 	background-image: url(img/minus.png); */
 	position: relative;
 	top : 15px;
 }
@@ -210,14 +180,12 @@ input:placeholder, textarea:placeholder {
 	vertical-align: bottom;
 }
 
-
 .insert_token {
 	position: relative;
 	top : 29px;
 }
 
 .arg_type {
-/* 	margin-top : 2px;	 */
 	width : 220px !important;
 	display : inline-block;
 }
@@ -391,14 +359,6 @@ input:placeholder, textarea:placeholder {
 }
 
 
-#tabs-container {
-	margin-top: -20px;
-}
-
-#korp-simple > div {
-/* 	#float : left; */
-}
-
 #similar_lemgrams {
 	margin-top : 5px;
 	border-radius: 5px;
@@ -468,31 +428,11 @@ input:placeholder, textarea:placeholder {
 	background-size : 18px 18px;
 }
 
-.results_settings {
-	margin: 0px;
-	width: 83%;
-}
-
 .image_button:hover {
 	cursor: pointer;
 }
 
 
-.line_above {
-	border-style: dotted;
-	border-width: 1px 0px 0px 0px
-}
-
-.indent {
-	padding-left: 20px
-}
-
-.buttons_row {
-	border-style: dotted;
-	border-width: 1px 0px
-}
-
-/* div { padding: 10px 0px }  */
 td {
 	margin: 0px
 }
@@ -501,7 +441,6 @@ table {
 	margin: 0px 10px;
 	padding: 0px 5px
 }
-
 
 .query_token {
 	background-color: #e1e1e1;
@@ -524,14 +463,6 @@ table {
 .cqp_toggle {
 	margin-top: 5px;
 	margin-bottom: 5px;
-}
-
-/* results*/
-#results {
-/* 	overflow: auto; */
-/* 	clear: both; */
-/* 	overflow-y: hidden; */
-/* 	-ms-overflow-y: hidden; */
 }
 
 .pagination {
@@ -576,12 +507,6 @@ table {
 	margin : 3px 2px -2px -10px;
 }
 
-
-
-/* result tab */
-#result-container li:first {
-}
-
 .lemgram_result {
 	float : left;
 	padding-top : 4px;
@@ -608,9 +533,6 @@ table {
 .results_table {
 	padding-left : 0;
 	margin-left : 0;
-/* 	max-width : 900px; */
-	
-	
 }
 
 .results_table td{
@@ -619,8 +541,6 @@ table {
 }
 
 #display_word {
-/*	position: absolute;*/
-/*	top: 50%;*/
 	margin : auto 0;
 }
 
@@ -705,11 +625,6 @@ table {
 	clear: both;
 }
 
-/*.lemgram_result td {*/
-/*	padding-left : 10px;*/
-/*	padding-right : 10px;*/
-/*}*/
-
 #json-link {
 	float: right;
 	display: none;
@@ -771,9 +686,6 @@ table {
 #dialog ol > li {
 	padding : 5px 0;
 	line-height : 18px;	
-}
-
-#results-stats {
 }
 
 #results-stats table {
@@ -841,7 +753,6 @@ a.relStat:hover {
 /* when selecting a word, not a lemgram, this pops up. */
 .lemgram_select {
 	margin-top : 8px;
-/* 	border : solid 3px white; */
 }
 
 #highlight {
@@ -879,7 +790,6 @@ a.relStat:hover {
 	cursor : default;
 }
 
-
 .custom_anchor {
 	padding-right: 8px !important;
 }
@@ -890,7 +800,3 @@ a.relStat:hover {
 	cursor : pointer !important;
 }
 
-/* #top_bar_right { */
-/* 	float : right; */
-/* 	margin-right : 8px; */
-/* } */

@@ -86,7 +86,6 @@ var SimpleSearch = {
 				self.enable();
 			}
 		});
-		
 	},
 	
 	isSearchPrefix : function() {
@@ -125,7 +124,9 @@ var SimpleSearch = {
 			select.get(0).selectedIndex = 0;
 			
 			var label = $("<label />", {"for" : "lemgram_select"})
-			.html($.format("<i>%s</i> <span rel='localize[autocomplete_header]'>%s</span>", [$("#simple_text").val(), util.getLocaleString("autocomplete_header")]))
+			.html($.format("<i>%s</i> <span rel='localize[autocomplete_header]'>%s</span>", 
+					[$("#simple_text").val(), util.getLocaleString("autocomplete_header")]
+			))
 			.css("margin-right", 8);
 			select.before( label );
 		});
@@ -228,11 +229,11 @@ var SimpleSearch = {
 		currentText = $.trim(currentText, '"');
 		var val;
 		if(util.isLemgramId(currentText)) { // if the input is a lemgram, do semantic search.
-			val = $.format('[(lex contains "%s")]', currentText);
+			val = $.format('[lex contains "%s"]', currentText);
 		} else if(this.isSearchPrefix() || this.isSearchSuffix()) {
 			var prefix = this.isSearchSuffix() ? ".*" : "";
 			var suffix = this.isSearchPrefix() ? ".*" : "";
-			val = $.format('[(word = "%s%s%s")]', [prefix, regescape(currentText), suffix]) ;
+			val = $.format('[word = "%s%s%s"]', [prefix, regescape(currentText), suffix]) ;
 		}
 		else {
 			var wordArray = currentText.split(" ");
@@ -285,8 +286,17 @@ var ExtendedSearch = {
 			return false;
 		});
 		
-		this.insertRow();
-		
+		var insert_token_button = $('<img src="img/plus.png"/>')
+        .addClass("image_button")
+        .addClass("insert_token")
+	    .click(function(){
+	    	self.insertToken(this);
+		});
+	    
+	    $("#query_table").append(insert_token_button).sortable({
+	    	items : ".query_token"
+	    });
+	    insert_token_button.click();
 	},
 	
 	onentry : function() {
@@ -321,28 +331,9 @@ var ExtendedSearch = {
 		advancedSearch.updateCQP();
 	},
 	
-	insertRow : function() {
-		var self = this;
-	    var row = $('<div/>').addClass("query_row")
-	    .appendTo($("#query_table"));
-
-
-	    var insert_token_button = $('<img src="img/plus.png"/>')
-        .addClass("image_button")
-        .addClass("insert_token")
-	    .click(function(){
-	    	self.insertToken(this);
-		});
-	    
-//	    var operators = row.siblings().length ? settings.operators : settings.first_operators;
-	    
-	    row.append(insert_token_button);
-	    insert_token_button.click();
-	},
-	
 	insertToken : function(button) {
 		
-	    var token = $("<table />").insertBefore($(button))
+	    $("<table />").insertBefore($(button))
 	    .extendedToken({
 	    	close : function() {
 	    		advancedSearch.updateCQP();

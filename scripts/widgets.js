@@ -392,11 +392,6 @@ var ExtendedToken = {
 			$(".query_token .btn-icon:first").css("visibility", "visible");
 		}
 	    
-	    $(".query_row").sortable({
-	    	items : ".query_token"
-	    		
-	    });
-	    
 	    this._trigger("change");
 	},
 	

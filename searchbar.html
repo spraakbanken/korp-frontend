@@ -1,56 +1,42 @@
-            
-            <div id="search-tab">
-            
-                <ul>
-                    <li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
-                    <li ><a href="#korp-extended" rel="localize[detailed]">Detaljerad</a></li>
-                    <li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
-                </ul>
-                
-                <div id="korp-simple">
-                    <div class="ui-widget">
-                        <label for="simple_text" rel="localize[search_for]">Sök efter</label><input id="simple_text" type="text" /> 
-                        <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
-                        <span rel="localize[and_include]">och inkludera</span>
-                        <span>
-	                        <input id="prefixChk" type="checkbox" ><label rel="localize[prefix]" for="prefixChk">förled</label>
-	                        <input id="suffixChk" type="checkbox"><label rel="localize[suffix]" for="suffixChk">efterled</label>
-                        </span>
-                        <!--<div>
-	                        <span rel="localize[in_corpus]">i</span>
-	                        <select class="select_corpus" onchange="didSelectCorpus()"></select>
-                        </div>-->
-                    </div> 
-                    <div id="similar_wrapper">
-                    	<div id="similar_lemgrams"></div>
-                    </div>
-                    <div style="float : none; clear : both;"></div>
-                </div>
-                
-                <div id="korp-extended">                    
-                    <div id="simple">
-                        <div id="simple_query">
-                            <div id="query_table"></div>
-                            <div class="buttons_row" style="display : none;">
-                            	<span id="buttons_row"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
-                </div>
-                
-                <div id="korp-advanced">
-                    <div id="advanced">
-                        <div class="query_footer">
-                            <span class="cqp_toggle" rel="localize[cqp_query]">
-                                Fullständig CQP-fråga
-                            </span>:
-                            <!--<select class="select_corpus" onchange="didSelectCorpus()"></select>-->
-                            <textarea  rows="2" id="cqp_string">[(word = "")]</textarea>
-                        </div>
-                        <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
-                    </div>
-                </div>
-                
+<div id="search-tab">
+
+    <ul>
+        <li ><a href="#korp-simple" rel="localize[simple]">Enkel</a></li>
+        <li ><a href="#korp-extended" rel="localize[detailed]">Detaljerad</a></li>
+        <li ><a href="#korp-advanced"rel="localize[advanced]">Avancerad</a></li>
+    </ul>
+    
+    <div id="korp-simple">
+        <div class="ui-widget">
+            <label for="simple_text" rel="localize[search_for]">Sök efter</label><input id="simple_text" type="text" /> 
+            <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
+            <span rel="localize[and_include]">och inkludera</span>
+            <span>
+             <input id="prefixChk" type="checkbox" ><label rel="localize[prefix]" for="prefixChk">förled</label>
+             <input id="suffixChk" type="checkbox"><label rel="localize[suffix]" for="suffixChk">efterled</label>
+            </span>
+        </div> 
+        <div id="similar_wrapper">
+        	<div id="similar_lemgrams"></div>
+        </div>
+        <div style="float : none; clear : both;"></div>
+    </div>
+    
+    <div id="korp-extended">                    
+        <div id="query_table"></div>
+        <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
+    </div>
+    
+    <div id="korp-advanced">
+        <div id="advanced">
+            <div class="query_footer">
+                <span class="cqp_toggle" rel="localize[cqp_query]">
+                    Fullständig CQP-fråga
+                </span>:
+                <textarea id="cqp_string">[word = ""]</textarea>
             </div>
-            
+            <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
+        </div>
+    </div>
+    
+</div>
