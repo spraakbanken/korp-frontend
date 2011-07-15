@@ -1382,8 +1382,6 @@ settings.arg_groups = {
 
 settings.inner_args = {
 	word : function(s) {
-//		if(s == "")
-//			return "[]";
 		return 'word = "' + regescape(s) + '"';
 	},
 	notword : function(s) {
