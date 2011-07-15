@@ -700,7 +700,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 						if(numFreq)
 							totfreq += numFreq;
 					});
-					dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + totfreq, "shape_id":"sigma_all"});
+					dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(),false), "shape_id":"sigma_all"});
 				} else {
 					// Individual wordform selected
 					
@@ -709,7 +709,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					else
 						var freq = parseFloat(obj[typestring][dataName]);
 					if (freq) {
-						dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + freq, "shape_id":dataName});
+						dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(),false), "shape_id":dataName});
 					} else {
 						dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
 					}
@@ -900,7 +900,7 @@ var StatsResults = {
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
 		});
 		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr></table>';
 		
@@ -913,17 +913,30 @@ var StatsResults = {
 		}
 		
 		$("#leftStatsTable").html(leftHTML);
+		
 		if (corpusArray.length > 1) {
 			$(".arcDiagramPicture").css({"visibility":"visible"});
 			$(".wordsName").css({"visibility":"visible"});
 		};
 		
+		$.each(wordArray, function(wkey, wvalue) {
+			var numCorporaWithWordform = 0;
+			$.each(corpusArray, function(ckey, cvalue) {
+				if (data["corpora"][cvalue]["relative"][wvalue]) {
+					numCorporaWithWordform++;
+				}
+			});
+			if(numCorporaWithWordform < 2) {
+				$("#circlediagrambutton__" + wvalue).css({"visibility": "hidden"});
+			}
+		});
+		
 		// Make Right Stats Table -------------------------------------------------------- //
 		
-		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img src="img/stats.png" style="border:0px"/></a></th>';
+		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden"><th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img class="bardiagrambutton" src="img/stats.png" style="border:0px"/></a></th>';
 		theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__all__" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__all__"></div></th>';
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img src="img/stats.png" style="border:0px"/></a></th>';
+			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img class="bardiagrambutton" id="bardiagrambutton__' + fvalue + '" src="img/stats.png" style="border:0px"/></a></th>';
 			theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
 		});
 		var totalForAllWordforms = 0;
@@ -950,6 +963,7 @@ var StatsResults = {
 			});
 			theHTML += '</tr>';
 		});
+		
 	
 		
 		//sum = function(o) { // Helper Method
@@ -964,6 +978,20 @@ var StatsResults = {
 		theHTML += '</tr></table>';
 
 		$("#rightStatsTable").html(theHTML);
+
+		if(wordArray.length < 2)
+			$(".bardiagrambutton").css({"visibility": "hidden"});
+		
+		
+		$.each(corpusArray, function(key, fvalue) {
+			var c = 0;
+			$.each(data["corpora"][fvalue]["relative"], function(bkey,bvalue) {
+				c++; // fulväg att komma runt att .length returnerar undefined, vet inte varför
+			});
+			if(c < 2)
+				$("#bardiagrambutton__" + fvalue).css({"visibility": "hidden"});
+		});
+		
 		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
 		
 		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));

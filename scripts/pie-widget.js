@@ -188,7 +188,7 @@ var pie_widget = {
 				delay : 80,
 				bodyHandler : function() {
 					if (fvalue["caption"])
-						return fvalue["caption"] + ": " + formatOutput((fvalue["share"]*100).toFixed(1)) + "%";
+						return fvalue["caption"] + ": " + util.formatDecimalString((fvalue["share"]*100).toFixed(1),false) + "%";
 					else
 						return "";
 					}
