@@ -449,7 +449,7 @@ var ExtendedToken = {
 	
 	makeOptsSelect : function(groups) {
 		var self = this;
-		if($.isEmptyObject(groups)) return $();
+		if($.isEmptyObject(groups)) return $("<span>", {"class" : "arg_opts"});
 		return $("<select>", {"class" : "arg_opts"}).append(
 				$.map(groups, function(key, value) {
 					return $("<option>", {value : key}).localeKey(key).get(0);
