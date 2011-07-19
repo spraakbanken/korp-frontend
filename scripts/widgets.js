@@ -359,6 +359,7 @@ var ExtendedToken = {
 	    });
 	    
 	    
+	    
 	    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
 	    var rightCol = $("<div />").append(arg_select, arg_value)
 	    .css("display", "inline-block")
@@ -422,31 +423,41 @@ var ExtendedToken = {
 			$.each(group, function(key, val) {
 				if(val.displayType == "hidden")
 					return;
-				var labelKey = val.label || val;
+//				var labelKey = val.label || val;
 				
-				var option = $('<option/>',{rel : $.format("localize[%s]", labelKey)})
-				.val(key).text(util.getLocaleString(labelKey) || "")
+				$('<option/>',{rel : $.format("localize[%s]", val.label)})
+				.val(key).text(util.getLocaleString(val.label) || "")
 				.appendTo(optgroup)
 				.data("dataProvider", val);
-				
-//				if(val.disabled === true) {
-//					option.attr("disabled", "disabled");
-//				}
+
 			});
-			
 		});
 		
-		return arg_select;
+		var arg_opts = this.makeOptsSelect(settings.defaultOptions);
+		$.log("arg_opts", arg_opts);
+		
+		return $("<div>", {"class" : "arg_selects"}).append(arg_select, arg_opts);
+	},
+	
+	makeOptsSelect : function(groups) {
+		var self = this;
+		if($.isEmptyObject(groups)) return $();
+		return $("<select>", {"class" : "arg_opts"}).append(
+				$.map(groups, function(key, value) {
+					return $("<option>", {value : key}).localeKey(key).get(0);
+				})
+		).change(function() {
+			self._trigger("change");
+		});
 	},
 	
 	refresh : function() {
 		var self = this;
-		this.element.find(".arg_type").each(function() {
-			var i = $(this).find(":selected").index();
-			var before = $(this).find(":selected").val();
-			var newSelect = self.makeSelect();
+		this.element.find(".arg_selects").each(function() {
+			var i = $(this).find(".arg_type :selected").index();
+			var before = $(this).find(".arg_type :selected").val();
+			var newSelect = $(this).replaceWith(self.makeSelect()).find(".arg_type"); 
 			newSelect.get(0).selectedIndex = i;
-			$(this).replaceWith(newSelect);
 			if(before != newSelect.val()) {
 				newSelect.get(0).selectedIndex = 0;
 				newSelect.trigger("change");
@@ -458,8 +469,8 @@ var ExtendedToken = {
 		// change input widget
 		var self = this;
 		var target = $(event.currentTarget);
-		var oldVal = target.siblings(".arg_value:input[type=text]").val() || "";
-		target.siblings(".arg_value").remove();
+		var oldVal = target.parent().siblings(".arg_value:input[type=text]").val() || "";
+//		target.siblings(".arg_value").remove();
 		
 		var data = target.find(":selected").data("dataProvider");
 		$.log("didSelectArgtype ", data);
@@ -489,7 +500,7 @@ var ExtendedToken = {
 				type : type, 
 				select : function(lemgram) {
 					$.log("extended lemgram", lemgram, $(this));
-					$(this).data("value", lemgram);
+					$(this).data("value", data.label == "baseform" ? lemgram.split(".")[0] : lemgram);
 					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
 				}
 			})
@@ -529,7 +540,10 @@ var ExtendedToken = {
 	    .change(function() {
 	    	self._trigger("change");
 	    });
-		target.after(arg_value);
+//		target.after(arg_value);
+		
+		target.parent().siblings(".arg_value").replaceWith(arg_value);
+		target.siblings(".arg_opts").replaceWith(this.makeOptsSelect(data.opts || settings.defaultOptions));
 		if(oldVal != null && oldVal.length)
 			arg_value.val(oldVal);
 		
@@ -544,6 +558,7 @@ var ExtendedToken = {
 	        var type = $(this).find(".arg_type").val();
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();
+	        var opt = $(this).find(".arg_opts").val();
 	        
 	        if(data.displayType == "autocomplete") {
 	        	value = null;
@@ -551,7 +566,11 @@ var ExtendedToken = {
 	        if (!args[type]) { 
 	        	args[type] = []; 
 	    	}
-	        args[type].push({data : data, value : value || $(this).find(".arg_value").data("value") || ""});
+	        args[type].push({
+	        	data : data, 
+	        	value : value || $(this).find(".arg_value").data("value") || "",
+	        	opt : opt
+        	});
 	    });
 	    
 	    $.each(args, function(type, valueArray) {
@@ -564,14 +583,24 @@ var ExtendedToken = {
 	    		return;
 	    	} 
 	    	$.each(valueArray, function(i, obj) {
-	    		function defaultArgsFunc(s) {
+	    		function defaultArgsFunc(s, op) {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
+	    			var not_operator = obj.data.type == "set" ? "not contains" : "!=";
 	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
+	    			var formatter = op == "matches" ? function(arg) {return arg;} : regescape;
+	    			var value = formatter(s);
+	    			op = {
+	    					"is" : [operator, "", value, ""],
+	    					"is_not" : [not_operator, "", value, ""],
+	    					"starts_with" : ["=", "", value, ".*"],
+	    					"ends_with" : ["=", ".*", value, ""],
+	    					"matches" : ["=", "", value, ""]
+	    				}[op];
 	    			
-	    			return $.format('%s%s %s "%s"', [prefix, type, operator, regescape(s)]);
+	    			return $.format('%s%s %s "%s%s%s"', [prefix, type].concat(op));
 	    		};
 	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
-	    		inner_query.push(argFunc(obj.value));
+	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	if (inner_query.length) {
 	    		query.token.push(inner_query.join(" | "));

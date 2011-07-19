@@ -19,6 +19,15 @@ settings.defaultLanguage = "sv";
  * ATTRIBUTES
  */
 
+settings.defaultOptions = {
+	"is" : "is",
+	"is_not" : "is_not",
+	"starts_with" : "starts_with",
+	"ends_with" : "ends_with",
+	"matches" : "matches"
+};
+settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "ends_with", "matches"]);
+
 var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes
 
@@ -50,25 +59,29 @@ attrs.pos = {
 		"SN" : "SN",
 		"UO" : "UO",
 		"VB" : "VB"
-	}
+	},
+	opts : settings.liteOptions
 };
 attrs.msd = {
-	label : "msd"
+	label : "msd",
+	opts : {}
 };
 attrs.baseform = {
 	label : "baseform",
-	type : "set",
-	displayType : "autocomplete"
+	displayType : "autocomplete",
+	opts : settings.liteOptions
 };
 attrs.lemgram = {
 	label : "lemgram",
 	type : "set",
-	displayType : "autocomplete"
+	displayType : "autocomplete",
+	opts : settings.liteOptions
 };
 attrs.saldo = {
 	label : "saldo",
 	type : "set",
-	displayType : "autocomplete"
+	displayType : "autocomplete",
+	opts : settings.liteOptions
 };
 attrs.dephead = {
 	label : "dephead",
@@ -80,12 +93,14 @@ attrs.deprel = {
 attrs.prefix = {
 	label : "prefix",
 	type : "set",
-	displayType : "autocomplete"
+	displayType : "autocomplete",
+	opts : settings.liteOptions
 };
 attrs.suffix = {
 	label : "suffix",
 	type : "set",
-	displayType : "autocomplete"
+	displayType : "autocomplete",
+	opts : settings.liteOptions
 };
 attrs.ref = {
 	label : "ref",
@@ -1348,66 +1363,75 @@ settings.corpora.astranova = {
 
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
-settings.arg_types = {
-	"word" : String,
-	"notword" : String,
-	"beginswith" : String,
-	"endswith" : String,
-	"regexp" : RegExp,
-	"pos" : attrs.pos.dataset,
-	"msd" : String,
-	"max" : Number,
-	"min" : Number
-};
+//settings.arg_types = {
+//	"word" : String,
+//	"notword" : String,
+//	"beginswith" : String,
+//	"endswith" : String,
+//	"regexp" : RegExp,
+//	"pos" : attrs.pos.dataset,
+//	"msd" : String,
+//	"max" : Number,
+//	"min" : Number
+//};
 // values here represent translation keys.
 settings.arg_groups = {
 	"word" : {
-		word : "word_is",
-		notword : "word_is_not",
-		beginswith : "word_beginswith",
-		endswith : "word_endswith",
-		anyword : "any",
-		regexp : "matches_regexp"
+		word : {label : "word"},
+//		notword : "word_is_not",
+//		beginswith : "word_beginswith",
+//		endswith : "word_endswith",
+		anyword : {label : "any", opts : {}}
+//		regexp : "matches_regexp"
 	},
 //	"ordklass" : {
 //		pos : language.wordclass_is,
 //		msd : language.wordclass_starts
 //	},
 	"interval" : {
-		max : "max",
-		min : "min"
+		max : {label : "max", opts : {}},
+		min : {label : "min", opts : {}}
 	}
 };
 
 
 settings.inner_args = {
-	word : function(s) {
-		return 'word = "' + regescape(s) + '"';
-	},
-	notword : function(s) {
-		return 'word != "' + regescape(s) + '"';
-	},
-	beginswith : function(s) {
-		return 'word = "' + regescape(s) + '.*"';
-	},
-	endswith : function(s) {
-		return 'word = ".*' + regescape(s) + '"';
-	},
+//	word : function(s, op) {
+//		var formatter = op == "matches" ? function(arg) {return arg;} : regescape;
+//		op = {
+//			"is" : ["=", "", ""],
+//			"is_not" : ["!=", "", ""],
+//			"starts_with" : ["=", "", ".*"],
+//			"ends_with" : ["=", ".*", ""],
+//			"matches" : "matches"
+//		}[op];
+//		return $.format('word %s "%s%s%s"', [op, formatter(s)]);
+////		return 'word = "' + regescape(s) + '"';
+//	},
+//	notword : function(s) {
+//		return 'word != "' + regescape(s) + '"';
+//	},
+//	beginswith : function(s) {
+//		return 'word = "' + regescape(s) + '.*"';
+//	},
+//	endswith : function(s) {
+//		return 'word = ".*' + regescape(s) + '"';
+//	},
 	anyword : function(s) {
 		return "";
 	},
-	regexp : function(s) {
-		return 'word = "' + s + '"';
-	},
-	pos : function(s) {
-		return 'pos = "' + regescape(s) + '"';
-	},
+//	regexp : function(s) {
+//		return 'word = "' + s + '"';
+//	},
+//	pos : function(s) {
+//		return 'pos = "' + regescape(s) + '"';
+//	},
 	msd : function(s) {
 		return 'msd = "' + regescape(s) + '.*"';
 	},
-	lemma : function(s) {
-		return $.format('lemma contains "%s"', s.split(".")[0]); 
-	}
+//	lemma : function(s, op) {
+//		return $.format('lemma contains "%s"', s.split(".")[0]); 
+//	}
 	
 };
 
@@ -1420,15 +1444,15 @@ settings.outer_args = {
 	}
 };
 
-settings.operators = {
-	include : "eller",
-	intersect : "och",
-	exclude : "men inte"
-};
+//settings.operators = {
+//	include : "eller",
+//	intersect : "och",
+//	exclude : "men inte"
+//};
 
-settings.first_operators = {
-	find : "Leta efter"
-};
+//settings.first_operators = {
+//	find : "Leta efter"
+//};
 
 delete attrs;
 delete sattrs;

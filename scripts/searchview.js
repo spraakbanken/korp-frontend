@@ -21,6 +21,23 @@ view.saldoSort = function(first, second) {
 	return first.length - second.length;
 };
 
+view.updateSearchHistory = function(value) {
+	var searches = $.jStorage.get("searches") || [];
+	var searchLocations = $.map(searches, function(item) {
+		return item.location;
+	});
+	if($.inArray(location.href, searchLocations) == -1)
+		searches.splice(0, 0, {label : value, location : location.href});
+	
+	if(!searches.length) return;
+	var opts = $.map(searches, function(item) {
+		var output = $("<option />", {value : item.location}).text(item.label).get(0);
+		return output;
+	});
+	var placeholder = $("<option>").localeKey("search_history").get(0);
+	$("#search_history").html([placeholder].concat(opts));
+};
+
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
@@ -314,7 +331,7 @@ var ExtendedSearch = {
 //				break;
 			case "lex":
 				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
-				util.searchHash(searchType, $select.next().data("value"));
+				util.searchHash(searchType, $select.parent().next().data("value"));
 				break;
 			default:
 				var query = advancedSearch.updateCQP();

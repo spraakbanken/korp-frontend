@@ -70,6 +70,11 @@ var currentMode;
 		
 		$("#searchbar").html(searchbar_html[0]);
 		
+		$("#search_history").change(function(event) {
+			$.log("select", $(this).find(":selected"));
+			location.href = $(this).find(":selected").val();
+		});
+		
 		loadCorpora();
 		
 		$.sm.start();
@@ -211,6 +216,8 @@ var currentMode;
 				
 				var type = search.split("|")[0];
 				var value = search.split("|")[1];
+				
+				view.updateSearchHistory(value);
 				
 				switch(type) {
 				case "word":

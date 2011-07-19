@@ -3,6 +3,7 @@
 	"english" : "English",
 	"modern_texts" : "Modern texts",
 	"parallel_texts" : "Parallel texts",
+	"search_history" : "Search history",
 	"about" : "About Korp",
 	"about_body" : "Korp is the concordance search tool of the Gothenburg Language Bank. For more information, comments or suggestions, <a href='mailto:sb-info@svenska.gu.se'>contact us</a>.",
 	"about_man" : "Project Managers",
@@ -16,6 +17,12 @@
 	"min" : "at least",
 	"and" : "and",
 	"or" : "or",
+	"is" : "is", 
+	"is_not" : "is not",
+	"starts_with" : "begins with",
+	"ends_with" : "ends with",
+	
+	
 	"word_is" : "word is",
 	"word_is_not" : "word is not",
 	"word_beginswith" : "word begins with",
@@ -24,6 +31,7 @@
 	"wordclass_is" : "word class is",
 	"wordclass_starts" : "word class begins with",
 	"interval" : "interval",
+	"matches" : "regexp",
 	
 	"none_selected" : "&lt;none selected&gt;",
 	

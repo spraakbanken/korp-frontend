@@ -36,12 +36,13 @@
 		return output;
 	};
 
-	$.fn.vAlign = function() {
+	$.fn.vAlign = function(useMargin) {
+		var cssType = useMargin ? "margin" : "padding";
 		return this.each(function(i) {
 			var ah = $(this).height();
 			var ph = $(this).parent().height();
 			var mh = Math.ceil((ph - ah) / 2);
-			$(this).css('padding-top', mh);
+			$(this).css(cssType + '-top', mh);
 		});
 	};
 
@@ -235,4 +236,26 @@ $._oldtrim = $.trim;
 $.trim = function(string, char) {
 	if(char == null) return $._oldtrim(string);
 	return string.replace(new RegExp($.format("(^%s+)|(%s+$)", [char, char]), "g"), "");
+};
+
+// for filtering objects
+$._oldgrep = $.grep;
+$.grep = function(array, callback, invert) {
+	if($.isPlainObject(array)) {
+		var output = {};
+		$.each(array, function(key, value) {
+			if(!!callback(value, key)) 
+				output[key] = value;
+		});
+		return output;
+	} else {
+		return $._oldgrep(array, callback, invert);
+	}
+	
+};
+// filters the object keys in the keys array from obj.
+$.exclude = function(obj, keys) {
+	return $.grep(obj, function(value, key) {
+		return $.inArray(key, keys) == -1;
+	});
 };

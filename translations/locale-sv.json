@@ -3,6 +3,7 @@
 	"english" : "English",
 	"modern_texts" : "Moderna texter",
 	"parallel_texts" : "Parallella texter",
+	"search_history" : "Sökhistorik",
 	"about" : "Om Korp",
 	"about_body" : "Korp är Språkbanken i Göteborgs konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
 	"about_man" : "Projektledning",
@@ -16,6 +17,12 @@
 	"min" : "minst",
 	"and" : "och",
 	"or" : "eller",
+	
+	"is" : "är", 
+	"is_not" : "är inte",
+	"starts_with" : "börjar med",
+	"ends_with" : "slutar med",
+	
 	"word_is" : "ordet är",
 	"word_is_not" : "ordet är inte",
 	"word_beginswith" : "ordet börjar med",
@@ -24,6 +31,7 @@
 	"wordclass_is" : "ordklassen är",
 	"wordclass_starts" : "ordklassen börjar med",
 	"interval" : "intervall",
+	"matches" : "regexp",
 	
 	
 	"none_selected" : "&lt;ej vald&gt;",

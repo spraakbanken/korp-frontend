@@ -73,7 +73,22 @@ a:hover {color:red;}  /* mouse over link */
 }
 #header_left img {
 }
+
+#search_history {
+	float : right;
+	margin-right : 8px;
+	margin-top : 45px;
+	vertical-align: bottom;
 	
+}
+
+#search_history > option:first-child {
+	color : grey;
+}
+
+#search_history:empty {
+	visibility: hidden;
+}
 
 #about {
 	float : right;
@@ -86,7 +101,6 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 #top_bar {
-	display : table;
 	
 	height : 30px;
 	width : 100%;
@@ -185,14 +199,24 @@ input:placeholder, textarea:placeholder {
 	top : 29px;
 }
 
+.arg_selects {
+	
+}
 .arg_type {
-	width : 220px !important;
 	display : inline-block;
+}
+.arg_opts {
+	padding-bottom : 1px;
+	margin-left : 5px;
 }
 
 .arg_value {
 	display : block;
-	width : 220px !important;
+	width : 100%;
+}
+.arg_value option {
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 
 .btn-icon {

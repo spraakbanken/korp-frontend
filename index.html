@@ -3,6 +3,8 @@
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link type="text/css" href="lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<!-- 		<link type="text/css" href="lib/themes/Aristo/jquery-ui-1.8.7.custom.css" rel="stylesheet" /> -->
+
 		<link type="text/css" href="jquery.tooltip.css" rel="stylesheet" />
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
 		<link rel="stylesheet" type="text/css" href="style.css">
@@ -88,17 +90,17 @@
   					<a href="javascript:" rel="localize[parallel_texts]" data-mode="parallel">Parallella texter</a>
   				</div>
 				
-		  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
-					<div id="languages">
-		  				<a href="javascript:" rel="localize[swedish]" data-lang="sv">Svenska</a>
-		  				<a href="javascript:" rel="localize[english]" data-lang="en">Engelska</a>
-		<!--   				<li id="aboutLink" rel="localize[about]"></li> -->
-		  			</div>
+	  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
+				<div id="languages">
+	  				<a href="javascript:" rel="localize[swedish]" data-lang="sv">Svenska</a>
+	  				<a href="javascript:" rel="localize[english]" data-lang="en">Engelska</a>
+	  			</div>
   			</div>
   			<div id="header_left">
  				<a href=""><img src="img/korplogo.png" /></a>
 	 			<div id="corpusbox"></div>
   			</div>
+  			<select id="search_history"></select>
   			<div style='clear : both;'></div>
   		</div>
 		
@@ -139,7 +141,15 @@
 									<table class="results_table" cellspacing="0"></table>
 								</div>
 							</div>
-							<div id="results-lemgram"></div>
+							<div id="results-lemgram">
+								<div class="ui-widget">
+									<div style="margin-top: 20px; padding: 0 .7em;" class="ui-state-highlight ui-corner-all"> 
+										<p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span>
+										<strong>Did you know:</strong> Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. </p>
+									</div>
+								</div>
+							
+							</div>
 							<div id="results-stats">
 								<div id="leftStatsTable" style="float:left; margin-left:-8"></div>
 								<div id="rightStatsTable" style="float:left; overflow-x:auto; margin-left: -20px; padding-left: 0px; width: 200px"></div>

@@ -452,7 +452,6 @@ var LemgramResults = {
 	},
 	
 	renderHeader : function(wordClass) {
-		$.log("renderHeader", $("#results-lemgram"));
 		var colorMapping = {
 				SS : "color_blue", 
 				OBJ : "color_purple", 
