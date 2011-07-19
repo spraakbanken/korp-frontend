@@ -59,8 +59,11 @@ var KWICResults = {
 		this.proxy = kwicProxy;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
-		
+		$.log("num hits", this.$result.find(".num_hits").val())
+		if(this.$result.find(".num_hits").val() == null)
+			this.$result.find(".num_hits").get(0).selectedIndex = 0;
 		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this));
+		$.log("num hits", this.$result.find(".num_hits").val())
 		
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
@@ -72,7 +75,7 @@ var KWICResults = {
 	resultError : function(data) {
 		this.parent(data);
 		this.$result.find(".results_table").empty();
-		this.$result.find(".pagination").empty();
+		this.$result.find(".pager-wrapper").empty();
 		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
 	},
 	
@@ -95,10 +98,10 @@ var KWICResults = {
 		
 		switch(event.which) {
 		case 78: // n
-			this.$result.find(".pagination .next").click();
+			this.$result.find(".pager-wrapper .next").click();
 			return false;
 		case 70: // f
-			this.$result.find(".pagination .prev").click();
+			this.$result.find(".pager-wrapper .prev").click();
 			return false;
 		}
 		
@@ -120,6 +123,7 @@ var KWICResults = {
 	},
 	
 	getPageInterval : function(page) {
+		$.log("getPageInterval", this.$result.find(".num_hits").val());
 		var items_per_page = parseInt(this.$result.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
@@ -139,7 +143,7 @@ var KWICResults = {
 
 			$.log("no kwic results");
 			this.$result.find(".results_table").empty();
-			this.$result.find(".pagination").empty();
+			this.$result.find(".pager-wrapper").empty();
 			this.hidePreloader();
 			this.$result.find('.num-result').html(0);
 			this.$result.click();
@@ -256,10 +260,10 @@ var KWICResults = {
 	buildPager : function(number_of_hits){
 		$.log("buildPager", this.current_page);
 		var items_per_page = this.$result.find(".num_hits").val();
-		this.$result.find('.pagination').unbind().empty();
+		this.$result.find('.pager-wrapper').unbind().empty();
 		
 		if(number_of_hits > items_per_page){
-			this.$result.find(".pagination").pagination(number_of_hits, {
+			this.$result.find(".pager-wrapper").pagination(number_of_hits, {
 				items_per_page : items_per_page, 
 				callback : $.proxy(this.handlePaginationClick, this),
 				next_text: util.getLocaleString("next"),
@@ -306,7 +310,7 @@ var KWICResults = {
 	},
 	
 	setPage : function(page) {
-		this.$result.find(".pagination").trigger('setPage', [page]);
+		this.$result.find(".pager-wrapper").trigger('setPage', [page]);
 	},
 		
 	centerScrollbar : function() {

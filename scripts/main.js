@@ -157,7 +157,8 @@ var currentMode;
 			}
 			
 			var hpp = e.getState("hpp", true);
-			kwicResults.$result.find(".num_hits").val(hpp);
+			if(hpp)
+				kwicResults.$result.find(".num_hits").val(hpp);
 			if(!isInit && hasChanged("hpp")) {
 				kwicResults.handlePaginationClick(0, null, true);
 			}

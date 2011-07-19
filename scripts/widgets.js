@@ -184,14 +184,17 @@ $.ui.tabs.subclass("ui.korptabs", {
 });
 
 
-$.widget("ui.sidebar", {
+var Sidebar = {
 	options : {},
 	_init : function() {
 	},
 	
 	updateContent : function(sentenceData, wordData, corpus) {
-		$("#selected_word").empty();
-		$("#selected_sentence").empty();
+//		$("#selected_word").empty();
+//		$("#selected_sentence").empty();
+		
+		this.element.empty().append('<div id="selected_sentence" />', '<div id="selected_word" />');
+		
 		var corpusObj = settings.corpora[corpus.toLowerCase()];
 		$("<div />").html(
 				$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
@@ -264,9 +267,14 @@ $.widget("ui.sidebar", {
 	},
 	
 	refreshContent : function() {
-		var instance = $('#result-container').korptabs('getCurrentInstance');
-	    if(instance && instance.selectionManager.selected)
-	        instance.selectionManager.selected.click();
+		if($.sm.In("results_lemgram")) {
+			this.element.load("parse_warning.html");
+		} else {
+			var instance = $('#result-container').korptabs('getCurrentInstance');
+			if(instance && instance.selectionManager.selected)
+				instance.selectionManager.selected.click();
+			
+		}
 	},
 	
 	updatePlacement : function(animate) {
@@ -305,14 +313,14 @@ $.widget("ui.sidebar", {
 			$.sm.send("sidebar.hide");
 		});
 	}
-});
+};
 
 
 var ExtendedToken = {
 	options : {showClose : true},
 	_init : function() {
 		
-        this.element.addClass("query_token")
+        this.element.addClass("query_token ui-corner-all ui-state-default")
         .attr({cellPadding: 0, cellSpacing: 0});
 	    this.insertArg();
 	},
@@ -615,4 +623,5 @@ var ExtendedToken = {
 	    return query_string;
 	}
 };
+$.widget("ui.sidebar", Sidebar);
 $.widget("ui.extendedToken", ExtendedToken);

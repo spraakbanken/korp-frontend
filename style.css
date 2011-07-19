@@ -78,8 +78,7 @@ a:hover {color:red;}  /* mouse over link */
 	float : right;
 	margin-right : 8px;
 	margin-top : 45px;
-	vertical-align: bottom;
-	
+	max-width : 150px;
 }
 
 #search_history > option:first-child {
@@ -376,19 +375,11 @@ input:placeholder, textarea:placeholder {
 	padding: 1px 8px 8px 8px;
 	margin-bottom: 5px;
 	width: 50%;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;
 }
 
 
 #similar_lemgrams {
 	margin-top : 5px;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;
 	padding : 8px;
 	overflow-y : hidden;
 }
@@ -472,11 +463,7 @@ table {
 	*display : inline;
 	vertical-align: top;
 	padding: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;
-	border-radius: 5px;
-	border : 1px solid #000;
+	border : 1px solid #999;
 	cursor : move; 
 }
 
@@ -489,14 +476,12 @@ table {
 	margin-bottom: 5px;
 }
 
-.pagination {
-	margin-left : 2px;
-	font-size : 90% !important;
+.result_controls {
+/* 	margin-left : 2px; */
 }
 
-.result_controls {
-	margin-bottom : -20px;
-	margin-left : 2px;
+#results-kwic > div:not(:last-child) {
+	margin-bottom : 8px;
 }
 
 .result_controls > * {
@@ -568,8 +553,11 @@ table {
 	margin : auto 0;
 }
 
-.pager-wrapper > div {
-	margin-bottom : 30px;	
+.pager-wrapper {
+}
+
+.pagination {
+	height : 20px;
 }
 
 .result_table td {
@@ -678,10 +666,6 @@ table {
 	border-color: #999;
 /* 	#border-right-color:#fff; */
 	padding: 5px 0px 5px 5px;
-	border-radius : 4px;
-	-moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -khtml-border-radius: 4px;
 	margin-right : 8px;
 	margin-left : 8px;
 }
