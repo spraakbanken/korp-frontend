@@ -81,7 +81,7 @@ var KWICResults = {
 	
 	onentry : function() {
 		this.centerScrollbar();
-		$.log("onentry", this.keyListener);
+		$.log("onentry");
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
@@ -194,10 +194,6 @@ var KWICResults = {
 			}
 			
 		});
-		
-		
-//		$("#attrlistTmpl").tmpl(data.kwic)
-//		.appendTo("#attrlist")
 		
 		this.$result.find(".match").children().first().click();
 		this.$result.fadeIn(effectSpeed);
@@ -435,10 +431,11 @@ var ExampleResults = {
 
 var LemgramResults = {
 	Extends : view.BaseResults,
-//	initialize : function(tabSelector, resultSelector) {
-//		$.log("initialize", this.parent)
-//		this.parent.initialize(tabSelector, resultSelector);
-//	},
+	initialize : function(tabSelector, resultSelector) {
+		this.parent(tabSelector, resultSelector);
+		this.resultDeferred = $.Deferred();
+		
+	},
 	
 	renderResult : function(data, lemgram) {
 		var resultError = this.parent(data);
@@ -448,11 +445,13 @@ var LemgramResults = {
 		$("#results-lemgram").empty();
 		if(data.relations){
 			this.renderTables(lemgram, data.relations);
+			this.resultDeferred.resolve();
 		}
 		else {
 			this.showNoResults();
+			this.resultDeferred.reject();
 		}
-		var warn = $.jStorage.get("lemgram_warn");
+		
 	},
 	
 	renderHeader : function(wordClass) {
@@ -589,6 +588,28 @@ var LemgramResults = {
 				corpus : $target.data("corpus").split(",")
 			};  
 		instance.makeRequest(opts);
+	},
+	
+	showWarning : function() {
+		var hasWarned = !!$.jStorage.get("lemgram_warning");
+//		var hasWarned = false;
+		if(!hasWarned) {
+			$.jStorage.set("lemgram_warning", true);
+			$("#sidebar").sidebar("show", "lemgramWarning");
+			self.timeout = setTimeout(function() {
+				$("#sidebar").sidebar("hide");
+			}, 5000);
+		}
+	},
+	
+	onentry : function() {
+		$.log("lemgramResults.onentry", $.sm.getConfiguration());
+		this.resultDeferred.done(this.showWarning);
+	},
+	
+	onexit : function() {
+		clearTimeout(self.timeout);
+		$("#sidebar").sidebar("hide");
 	},
 	
 	showNoResults : function() {

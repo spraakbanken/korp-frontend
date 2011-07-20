@@ -266,17 +266,19 @@ var Sidebar = {
 		.hoverIcon("ui-icon-extlink");
 	},
 	
-	refreshContent : function() {
-		if($.sm.In("results_lemgram")) {
-			var self = this;
+	refreshContent : function(mode) {
+		var self = this;
+		if(mode == "lemgramWarning") {
 			return $.Deferred(function( dfd ){
 				self.element.load("parse_warning.html", function() {
 					util.localize();
+					self.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
 					dfd.resolve();
 				});
 			}).promise();
 			 
 		} else {
+			this.element.removeClass("ui-state-highlight").addClass("kwic_sidebar");
 			var instance = $('#result-container').korptabs('getCurrentInstance');
 			if(instance && instance.selectionManager.selected)
 				instance.selectionManager.selected.click();
@@ -296,30 +298,30 @@ var Sidebar = {
 		}
 	},
 	
-	show : function() {
+	show : function(mode) {
+//		$.sm.send("sidebar.show.start");
 		var self = this;
-//		$.when(this.element).done(function() {
-		$.when(this.element).pipe($.proxy(self.refreshContent, self)).done(function() {
-			
-//			self.refreshContent();
-			var speed = 400;
-			self.element.show("slide", {direction : "right"}, speed);
+		// make sure that both hide animation and content load is done before showing
+		$.when(this.element).pipe(function() {
+			return self.refreshContent(mode);
+		}).done(function() {
+			self.element.show("slide", {direction : "right"});
 			$("#left-column").animate({
 				right : 273
-			}, speed, null, function() {
-				$.sm.send("sidebar.show");
+			}, null, null, function() {
+				$.sm.send("sidebar.show.end");
 			});
 		});
 	}, 
 	hide : function() {
-		if(this.element.css("right") == 273) return;
+//		$.sm.send("sidebar.hide.start");
+		if($("#left-column").css("right") == "8px") return;
 		var self = this;
-		var speed = 400;
-		self.element.hide("slide", {direction : "right"}, speed);
+		self.element.hide("slide", {direction : "right"});
 		$("#left-column").animate({
 			right : 8
-		}, speed, null, function() {
-			$.sm.send("sidebar.hide");
+		}, null, null, function() {
+			$.sm.send("sidebar.hide.end");
 		});
 	}
 };

@@ -160,7 +160,7 @@
                     <transition event="resultstab.stats" target="results_stats" />
                     <transition event="resultstab.custom" target="results_custom" />
                     
-                    <state id="results_kwic" initial="selected_h">
+                    <state id="results_kwic" initial="results_kwic_init">
                         <onentry>
                             <script>
                                 kwicResults.onentry();
@@ -168,13 +168,14 @@
                             </script>
                         </onentry>
                         
-<!--                         <state id="results_kwic_init"> -->
-<!--                             <transition target="selected_h" cond="kwicResults.$result.find('.results_table').is(':parent')" /> -->
-<!--                         </state> -->
-                        
-                        <history id="selected_h">
+                        <state id="results_kwic_init">
+                            <transition target="kwic_word_selected" cond="kwicResults.selectionManager.hasSelected()" />
                             <transition target="kwic_word_not_selected" />
-                        </history>
+                        </state>
+                        
+<!--                         <history id="selected_h"> -->
+<!--                             <transition target="kwic_word_not_selected" /> -->
+<!--                         </history> -->
                         
                         <state id="kwic_word_selected">
                             <onentry>
@@ -204,6 +205,7 @@
                         <onentry>
                             <script>
                                 util.setJsonLink(lemgramProxy.prevRequest);
+                                lemgramResults.onentry();
                             </script>
                         </onentry>
                         <transition event="submit.kwic" target="results_lemgram" >
@@ -211,7 +213,11 @@
 <!--                                 gotoFirstResultTab(); -->
 <!--                             </script> -->
                         </transition>
-                        
+                        <onexit>
+                            <script>
+                                lemgramResults.onexit();
+                            </script>
+                        </onexit>
                     </state>
                     <state id="results_stats">
                         <onentry>
@@ -281,12 +287,10 @@
             
             <state id="sidebar" initial="sidebar_hidden">
                 <state id="sidebar_hidden">
-                    <transition event="sidebar.show" target="sidebar_visible">
-                    </transition>
+                    <transition event="sidebar.show.end" target="sidebar_visible"></transition>
                 </state>
                 <state id="sidebar_visible">
-                    <transition event="sidebar.hide" target="sidebar_hidden">
-                    </transition>
+                    <transition event="sidebar.hide.end" target="sidebar_hidden"></transition>
                 </state>
             </state>
             

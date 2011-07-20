@@ -1,11 +1,13 @@
 var util = {};
 // <!-- SelectionManager
 util.SelectionManager = function() {
+	this.selected = $();
+	this.aux = $();
 };
 
 util.SelectionManager.prototype.select = function(word, aux) {
 	if(word == null || !word.length) return;
-	if(this.selected) {
+	if(this.selected.length) {
 		this.selected.removeClass("word_selected token_selected");
 		this.aux.removeClass("word_selected aux_selected");
 	}
@@ -17,14 +19,14 @@ util.SelectionManager.prototype.select = function(word, aux) {
 	return word.addClass("word_selected token_selected");
 };
 util.SelectionManager.prototype.deselect = function() {
-	if(!this.selected) return;
+	if(!this.selected.length) return;
 	this.selected.removeClass("word_selected token_selected");
-	this.selected = null;
+	this.selected = $();
 	this.aux.removeClass("word_selected aux_selected");
-	this.aux = null;
+	this.aux = $();
 };
 util.SelectionManager.prototype.hasSelected = function() {
-	return this.selected != null;
+	return this.selected.length > 0;
 };
 // SelectionManager -->
 
