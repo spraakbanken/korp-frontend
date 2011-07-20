@@ -452,7 +452,7 @@ var LemgramResults = {
 		else {
 			this.showNoResults();
 		}
-		
+		var warn = $.jStorage.get("lemgram_warn");
 	},
 	
 	renderHeader : function(wordClass) {

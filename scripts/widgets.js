@@ -268,7 +268,14 @@ var Sidebar = {
 	
 	refreshContent : function() {
 		if($.sm.In("results_lemgram")) {
-			this.element.load("parse_warning.html");
+			var self = this;
+			return $.Deferred(function( dfd ){
+				self.element.load("parse_warning.html", function() {
+					util.localize();
+					dfd.resolve();
+				});
+			}).promise();
+			 
 		} else {
 			var instance = $('#result-container').korptabs('getCurrentInstance');
 			if(instance && instance.selectionManager.selected)
@@ -278,21 +285,23 @@ var Sidebar = {
 	},
 	
 	updatePlacement : function(animate) {
-		var top;
 		var max = Math.round($("#columns").position().top);
 		if($(window).scrollTop() < max) {
 			this.element.css("top", "");
+			this.element.css("position", "absolute");
 		}
 		else {
-			top = $(window).scrollTop() + 8;
-			this.element.stop(true, true).animate({top : top}, animate ? "fast" : 0);
+			this.element.css("top", 8);
+			this.element.css("position", "fixed");
 		}
 	},
 	
 	show : function() {
 		var self = this;
-		$.when(this.element).done(function() {
-			self.refreshContent();
+//		$.when(this.element).done(function() {
+		$.when(this.element).pipe($.proxy(self.refreshContent, self)).done(function() {
+			
+//			self.refreshContent();
 			var speed = 400;
 			self.element.show("slide", {direction : "right"}, speed);
 			$("#left-column").animate({
