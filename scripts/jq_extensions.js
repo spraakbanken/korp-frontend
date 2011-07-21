@@ -239,23 +239,52 @@ $.trim = function(string, char) {
 };
 
 // for filtering objects
-$._oldgrep = $.grep;
-$.grep = function(array, callback, invert) {
-	if($.isPlainObject(array)) {
-		var output = {};
-		$.each(array, function(key, value) {
-			if(!!callback(value, key)) 
-				output[key] = value;
-		});
-		return output;
-	} else {
-		return $._oldgrep(array, callback, invert);
-	}
+//$._oldgrep = $.grep;
+$.grepObj = function(array, callback, invert) {
+	var output = {};
+	$.each(array, function(key, value) {
+		if(!!callback(value, key)) 
+			output[key] = value;
+	});
+	return output;
 	
 };
 // filters the object keys in the keys array from obj.
 $.exclude = function(obj, keys) {
-	return $.grep(obj, function(value, key) {
+	return $.grepObj(obj, function(value, key) {
 		return $.inArray(key, keys) == -1;
 	});
 };
+
+$.onScrollOut = function(upOpts, downOpts) {
+	if(typeof upOpts == "string") {
+		$(window).unbind("scroll", $.onScrollOut.prevScrollFunction);
+		return;
+	}
+	var activePoint = upOpts.point;
+	
+	// for unbinding purposes
+	$.onScrollOut.prevScrollFunction = function() {
+		var screenTop = $(window).scrollTop();
+		var screenBottom = screenTop + $(window).height();
+		
+		var upPointInWindow = upOpts.point > screenTop && upOpts.point < screenBottom;
+		var downPointInWindow = downOpts.point > screenTop && downOpts.point < screenBottom;
+		
+//		$.log("scroll", upPointInWindow, downPointInWindow, screenTop, upOpts.point);
+		if(upPointInWindow && downPointInWindow) {
+			activePoint = upOpts.point;
+		} else if(activePoint != upOpts.point && upPointInWindow) {
+			$.log("up!")
+			activePoint = upOpts.point;
+			upOpts.callback();
+		} else if(activePoint != downOpts.point && downPointInWindow) {
+			$.log("down!")
+			activePoint = downOpts.point;
+			downOpts.callback();
+		}
+		
+	};
+	$(window).scroll($.onScrollOut.prevScrollFunction);
+};
+

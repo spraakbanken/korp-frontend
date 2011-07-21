@@ -553,7 +553,8 @@ table {
 	margin : auto 0;
 }
 
-.pager-wrapper {
+.table_scrollarea + .pager-wrapper {
+	margin-top : 15px;
 }
 
 .pagination {
@@ -645,10 +646,6 @@ table {
 
 #json-link img {
 	border: 0px;
-}
-
-#tooltip-container {
-	display: none;
 }
 
 #left-column {

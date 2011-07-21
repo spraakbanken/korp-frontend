@@ -59,17 +59,16 @@ var KWICResults = {
 		this.proxy = kwicProxy;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
-		$.log("num hits", this.$result.find(".num_hits").val())
 		if(this.$result.find(".num_hits").val() == null)
 			this.$result.find(".num_hits").get(0).selectedIndex = 0;
 		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this));
-		$.log("num hits", this.$result.find(".num_hits").val())
 		
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
 			self.selectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
+		
 	},
 	
 	resultError : function(data) {
@@ -200,6 +199,7 @@ var KWICResults = {
 		
 		this.centerScrollbar();
 		this.hidePreloader();
+		this.setupPagerMover();
 	},
 	
 	scrollToShowWord : function(word) {
@@ -256,6 +256,8 @@ var KWICResults = {
 	buildPager : function(number_of_hits){
 		$.log("buildPager", this.current_page);
 		var items_per_page = this.$result.find(".num_hits").val();
+		this.movePager("up");
+		$.onScrollOut("unbind");
 		this.$result.find('.pager-wrapper').unbind().empty();
 		
 		if(number_of_hits > items_per_page){
@@ -290,13 +292,7 @@ var KWICResults = {
 	
 	buildQueryOptions : function() {
 		var opts = {};
-//		var items_per_page = parseInt(this.$result.find(".num_hits").val());
 		opts.cqp = this.prevCQP;
-//		new_page_index = new_page_index || 0;
-//		opts.start = new_page_index * items_per_page;
-//		opts.end = (opts.start + items_per_page);
-//		$.extend(opts, this.getPageInterval(new_page_index));
-		
 		opts.queryData = this.proxy.queryData;
 		return opts;
 	},
@@ -362,9 +358,39 @@ var KWICResults = {
 			}
 		});
 		return output;
-	}
+	},
 	
-
+	setupPagerMover : function() {
+		var self = this;
+		var pager = this.$result.find(".pager-wrapper");
+		var upOpts = {
+			point : pager.offset().top + pager.height(),
+			callback : function() {
+				self.movePager("up");
+			}
+		};
+		self.movePager("down");
+		var downOpts = {
+			point : pager.offset().top + pager.height(),
+			callback : function() {
+				self.movePager("down");
+			}
+		};
+		self.movePager("up");
+		$.log("onscrollout", upOpts.point, downOpts.point);
+		$.onScrollOut(upOpts, downOpts);
+	},
+	
+	movePager : function(dir) {
+		var pager = this.$result.find(".pager-wrapper");
+		if(dir == "down") {
+			pager.data("prevPos", pager.prev()).appendTo(this.$result);
+		} else {
+			if(pager.data("prevPos")) {
+				pager.data("prevPos").after(pager);
+			}
+		}
+	}
 };
 
 view.KWICResults = new Class(KWICResults);
@@ -524,7 +550,6 @@ var LemgramResults = {
 		$.each(data, function(index, item) {
 			var toIndex = $.inArray(item.rel, order[wordClass]);
 			if(toIndex == -1) {
-//				$.log("getting rel index failed for " + item.rel);
 				return;
 			}
 			if(!sortedList[toIndex]) sortedList[toIndex] = [];

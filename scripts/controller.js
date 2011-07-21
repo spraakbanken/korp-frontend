@@ -89,10 +89,11 @@
 							}, function(scArr){
 								var transformedJs = scArr[0];
 								
-								$.jStorage.set("compiled_scxml_korp", $.toJSON({data : transformedJs, time : new Date()}));
+								$.jStorage.set("compiled_scxml_korp", $.toJSON({data : transformedJs, time : $.now()}));
 								
 								$.log("statechart compiled and started: ");
 								$.log("compile time", new Date().getTime() - t );
+								$.log("doc ", transformedJs );
 								delete t;
 								self.eval(transformedJs);
 							},transform);

@@ -302,7 +302,7 @@ util.browserWarn = function() {
 	$.reject({
 		reject : {
 			all : false,
-			msie5 : true, msie6 : true, msie7 : true, msie8 : true,
+			msie5 : true, msie6 : true, msie7 : true //, msie8 : true,
 		},
 		imagePath : "img/browsers/",
 		display: ['firefox','chrome','safari','opera'],
