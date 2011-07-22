@@ -286,7 +286,7 @@ var Sidebar = {
 		}
 	},
 	
-	updatePlacement : function(animate) {
+	updatePlacement : function() {
 		var max = Math.round($("#columns").position().top);
 		if($(window).scrollTop() < max) {
 			this.element.css("top", "");

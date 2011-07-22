@@ -195,11 +195,12 @@ var KWICResults = {
 		});
 		
 		this.$result.find(".match").children().first().click();
-		this.$result.fadeIn(effectSpeed);
+		this.$result.fadeIn(effectSpeed, function() {
+			self.setupPagerMover();
+			self.centerScrollbar();
+		});
 		
-		this.centerScrollbar();
 		this.hidePreloader();
-		this.setupPagerMover();
 	},
 	
 	scrollToShowWord : function(word) {

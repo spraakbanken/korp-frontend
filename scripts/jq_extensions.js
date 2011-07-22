@@ -258,7 +258,8 @@ $.exclude = function(obj, keys) {
 
 $.onScrollOut = function(upOpts, downOpts) {
 	if(typeof upOpts == "string") {
-		$(window).unbind("scroll", $.onScrollOut.prevScrollFunction);
+		if($.onScrollOut.prevScrollFunction)
+			$(window).unbind("scroll", $.onScrollOut.prevScrollFunction);
 		return;
 	}
 	var activePoint = upOpts.point;

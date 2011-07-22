@@ -248,8 +248,9 @@ var currentMode;
 		}
 		$(window).bind( 'hashchange', onHashChange);
 		
+		$.log("window scroll init");
 		$(window).scroll(function() {
-			$("#sidebar").sidebar("updatePlacement", true);
+			$("#sidebar").sidebar("updatePlacement");
 		});
 		
 		//setup about link
