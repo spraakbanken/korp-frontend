@@ -1428,7 +1428,7 @@ settings.inner_args = {
 //	},
 	msd : function(s) {
 		return 'msd = "' + regescape(s) + '.*"';
-	},
+	}
 //	lemma : function(s, op) {
 //		return $.format('lemma contains "%s"', s.split(".")[0]); 
 //	}

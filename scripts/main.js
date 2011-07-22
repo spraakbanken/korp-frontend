@@ -10,8 +10,12 @@ var currentMode;
 	var deferred_load = $.get("searchbar.html");
 	
 	$.ajaxSetup({ 
-		dataType: "jsonp",
+		dataType: "json",
 		traditional: true
+	});
+	
+	$.ajaxPrefilter('json', function(options, orig, jqXHR) {
+	    if (options.crossDomain && !$.support.cors) return 'jsonp';
 	});
 	
 	var deferred_sm = $.Deferred(function( dfd ){
