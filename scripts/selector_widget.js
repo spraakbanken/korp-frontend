@@ -144,7 +144,7 @@ var hp_corpusChooser = {
 			$("#hp_corpora_title1").text(header_text);
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-			$("#hp_corpora_title3").text(" — " + prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
+			$("#hp_corpora_title3").html(" — " + prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
 	},
 	_transform: function() {	
 			var el = this.element;
@@ -165,11 +165,7 @@ var hp_corpusChooser = {
 			newHTML += '<div class="popupchecks ui-corner-bottom"><p style="text-align:right; margin-top:10px; margin-right:8px"><a style="outline: none" href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a style="outline: none" href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
 			
 			newHTML += recursive_transform(body,0);
-			newHTML += '</div><div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '442' + 'px; background-color:white">';
-			
-			newHTML += '<div class=""><p style="padding:10px; margin:0px"><b>SUC 2.0</b><br/><br/>Stockholm-Umeå Corpus<br/><br/>Förvaltas och utvecklas av Språkbanken<br/>Institutionen för svenska språket<br/>Göteborgs universitet<br/><br/>Antal tokens: <b>34330</b></p></div>';
-			
-			newHTML += "</div>";
+			newHTML += '</div><div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '442' + 'px; background-color:white; padding-right:4px"><div class=""><p style="padding:10px; margin:0px"></p></div></div>';
 			
 			el.replaceWith(newHTML);
 			var pos = $(".scroll_checkboxes").offset().left + 434;

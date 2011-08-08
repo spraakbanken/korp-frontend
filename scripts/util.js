@@ -195,7 +195,7 @@ function prettyNumbers(numstring) {
 	var regex = /(\d+)(\d{3})/;
 	var outStrNum = numstring;
   	while (regex.test(outStrNum)) {
-    	outStrNum = outStrNum.replace(regex, '$1' + ' ' + '$2');
+    	outStrNum = outStrNum.replace(regex, '$1' + '<span rel="localize[util_numbergroupseparator]">' + util.getLocaleString("util_numbergroupseparator") + '</span>' + '$2');
   	}
   	return outStrNum;
 }
@@ -213,15 +213,28 @@ function loadCorpora() {
     	if(settings.corpora[corpusID].description)
     		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
     	var numTokens = settings.corpora[corpusID]["info"]["Size"];
-    	return "<b>" + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b>";
+    	var numSentences = settings.corpora[corpusID]["info"]["Sentences"];
+    	var sentenceString = "-";
+    	if (numSentences)
+    		sentenceString = prettyNumbers(numSentences.toString());
+    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + "</b>";
     }, infoPopupFolder: function(indata) {
     	var corporaID = indata.corporaID;
     	var desc = indata.description;
     	var totalTokens = 0;
+    	var totalSentences = 0;
+    	var missingSentenceData = false;
     	$(corporaID).each(function(key,oneID) {
-    		
     		totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
+    		var oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"];
+    		if (oneCorpusSentences)
+    			totalSentences += parseInt(oneCorpusSentences);
+    		else
+    			missingSentenceData = true;
     	});
+    	var totalSentencesString = prettyNumbers(totalSentences.toString());
+    	if (missingSentenceData)
+    		totalSentencesString += "+";
     	var maybeInfo = "";
     	if(desc && desc != "")
     		maybeInfo = desc + "<br/><br/>";
@@ -230,7 +243,7 @@ function loadCorpora() {
     		glueString = util.getLocaleString("corpselector_corporawith_sing");
     	else
     		glueString = util.getLocaleString("corpselector_corporawith_plur");
-    	return "<b>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens");
+    	return '<b><img src="img/folder.png" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>' + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
     }});
 }
 

@@ -190,6 +190,7 @@ var currentMode;
 				}).css("opacity", 0);
 				$("#ui-dialog-title-about_content").attr("rel", "localize[about]");
 				$("#about_content").fadeTo(400,1);
+				$("#about_content").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 			}
 			
 			if(e.getState("display") == "about") {
@@ -281,8 +282,14 @@ var currentMode;
 		$("body").fadeTo(400, 1, function() {
 			$(this).css("opacity", "");
 		});
+		
+		/* $("#cqp_string").bind("resize",function() { // Flytta denna sen, fråga Johan vart
+			var newWidth = $(this).width() + 2;
+			$(".query_footer").css({"width": newWidth});
+		}); */
 	});
-			
+
+
 })();
 
 

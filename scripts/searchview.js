@@ -4,7 +4,6 @@ var view = {};
 // Search view objects
 //**************
 
-
 view.lemgramSort = function(first, second) {
 	var match1 = util.splitLemgram(first);
 	var match2 = util.splitLemgram(second);

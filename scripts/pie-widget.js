@@ -160,7 +160,7 @@ var pie_widget = {
 				} else {
 					var silrect = r.rect(sx+nowthis.options.offset_x, sy+nowthis.options.offset_y, sw, sh, 0);
 				}
-				silrect.attr({fill: "#FBFBFB", "stroke-width": 1, stroke:"#EEEEEE"});
+				silrect.attr({fill: "#F8F8F8", "stroke-width": 1, stroke:"#EEEEEE"});
 			}
 			//if (nowthis.options.bar_horizontal) {
 				

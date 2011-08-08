@@ -181,7 +181,9 @@
 	"corpselector_buttonselectall" : "Markera alla",
 	"corpselector_buttonselectnone" : "Avmarkera",
 	"corpselector_numberoftokens" : "Antal token",
+	"corpselector_numberofsentences" : "Antal meningar",
 	"corpselector_tokens" : "token",
+	"corpselector_sentences" : "meningar",
 	"corpselector_corporawith_sing" : "korpus med",
 	"corpselector_corporawith_plur" : "korpusar med",
 	
@@ -198,6 +200,6 @@
 	"statstable_exp_tsv" : "TSV (tabseparerade värden)",
 	"statstable_export" : "Exportera",
 	
-	"util_decimalseparator" : ","
-    
+	"util_decimalseparator" : ",",
+	"util_numbergroupseparator" : "&nbsp;"
 }

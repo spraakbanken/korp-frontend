@@ -181,7 +181,9 @@
 	"corpselector_buttonselectall" : "Select all",
 	"corpselector_buttonselectnone" : "Select none",
 	"corpselector_numberoftokens" : "Number of tokens",
+	"corpselector_numberofsentences" : "Number of sentences",
 	"corpselector_tokens" : "tokens",
+	"corpselector_sentences" : "sentences",
 	"corpselector_corporawith_sing" : "corpus with",
 	"corpselector_corporawith_plur" : "corpora with",
 	
@@ -198,5 +200,6 @@
 	"statstable_exp_tsv" : "TSV (tab separated values)",
 	"statstable_export" : "Export",
 	
-	"util_decimalseparator" : "."
+	"util_decimalseparator" : ".",
+	"util_numbergroupseparator" : ","
 }
