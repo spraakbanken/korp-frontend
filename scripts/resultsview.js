@@ -138,6 +138,8 @@ var KWICResults = {
 		var self = this;
 		this.prevCQP = sourceCQP;
 		
+		//$.log(data);
+		
 		if(!data.hits) {
 
 			$.log("no kwic results");
@@ -146,8 +148,73 @@ var KWICResults = {
 			this.hidePreloader();
 			this.$result.find('.num-result').html(0);
 			this.$result.click();
+			$("#hits_picture").html("");
 			return;
-		}				
+		}
+		
+		// PUT NEW STUFF INTO THE HITS PICTURE
+		if (getSelectedCorpora().length > 1) {
+                    var totalhits = data["hits"];
+                    var hits_picture_html = '<table class="hits_picture_table" style="opacity:.3; border:1px solid #CCCCCC; width: 100%; float:right; padding:0px;"><tr height="18px">';
+                    var barcolors = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
+                    var ccounter = 0;
+                    $.each(data["corpus_hits"], function(corp, hits) {				
+                            if (hits > 0)
+                                    hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 + '%;background-color:#EEEEEE"></td>';
+                            ccounter = ++ccounter % 6;
+                    });
+                    hits_picture_html += '</tr></table>';
+                    $("#hits_picture").html(hits_picture_html);
+
+
+                    hoverHitPictureConfig = {
+                            sensitivity: 3, interval: 100, timeout: 800,
+                            over: function() {                
+                                //$(".hits_picture_table").css({"width":($("#results-kwic").width()-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
+                                //var leftstart = $(".controls_n").offset().left+$(".controls_n").width();
+                                //$(".hits_picture_table").animate({"opacity":"1","height":"18px","margin-top":"","width":($("#results-kwic").width()-20-leftstart) + "px"},400);
+                                $(".hits_picture_table").find("td").each(function(){
+                                    $.log($(this).css("background-color"));
+                                    if ($(this).css("background-color") != "rgb(128, 128, 128)")
+                                        $(this).css({"background-color":""});
+                                });
+                                $(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
+                            },
+                            out: function() {
+                                $(".hits_picture_table").stop().animate({"opacity":".3","height":"18px","margin-top":""});  
+                                $(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
+                            }
+                        }
+                    $(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
+                    $(".hits_picture_corp").hover(function() {
+                        $(this).css({"background-color": "gray"});
+                    }, function() {
+                        $(this).css({"background-color": ""});
+                    });
+	        
+	        
+			
+			
+                    $(".hits_picture_corp").each(function() {
+                        var corpus_name = $(this).attr("data");
+	           	$(this).tooltip({delay : 0, bodyHandler : function() {
+	return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_refinesearch") + '</i>';}});
+                    });
+	        
+                    // Click to refine search in one corpus
+                    $(".hits_picture_corp").click(function(event) {
+				$.bbq.pushState({corpus : $(this).attr("data").toLowerCase()});
+				simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
+				event.stopPropagation();
+                    });
+		} else {
+			$("#hits_picture").html("");
+		}
+                
+                
+        
+		// // // // // // // // // // // //
+		
 
 		var effectSpeed = 100;
 		if($.trim(this.$result.find(".results_table").html()).length) {
@@ -201,7 +268,13 @@ var KWICResults = {
 		});
 		
 		this.hidePreloader();
-	},
+
+                /* There is probably a better CSS-solution than the code below. Johan, kolla gŠrna pŒ det om du orkar... */
+                $(".hits_picture_table").css({"width":($("#results-kwic").width()-($("#sidebar").width())-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
+                $(window).resize(function() {
+                    $(".hits_picture_table").css({"width":($("#results-kwic").width()-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
+                });
+        },
 	
 	scrollToShowWord : function(word) {
 		var offset = 100;
@@ -275,7 +348,7 @@ var KWICResults = {
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
 			
-		} 
+		}
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
@@ -654,7 +727,7 @@ var LemgramResults = {
 
 
 
-function newDataInPie(dataName, horizontalDiagram, targetDiv) {
+function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 	var dataItems = new Array();
 	
 	var wordArray = [];
@@ -725,7 +798,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 
 							}).css("opacity", 0);
 		$("#dialog").fadeTo(400,1);
-		$("#dialog").find("a").blur(); // Prvents the focus of the first link in the "dialog"
+		$("#dialog").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		
 		
@@ -749,7 +822,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 						if (typestring == "absolute")
 							var numFreq = parseInt(freq);
 						else
-							var numFreq = parseFloat(freq);
+							numFreq = parseFloat(freq);
 						if(numFreq)
 							totfreq += numFreq;
 					});
@@ -760,7 +833,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					if(typestring == "absolute")
 						var freq = parseInt(obj[typestring][dataName]);
 					else
-						var freq = parseFloat(obj[typestring][dataName]);
+						freq = parseFloat(obj[typestring][dataName]);
 					if (freq) {
 						dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(),false), "shape_id":dataName});
 					} else {
@@ -771,12 +844,8 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			stats2Instance.pie_widget("newData", dataItems);
 			
 			if(typestring == "absolute") {
-				//$("#hitsDescription").text(util.getLocaleString("statstable_absfigures_hits"));
-				//$("#hitsDescription").attr({"rel" : "localize[statstable_absfigures_hits]"});
 				$("#hitsDescription").text(util.getLocaleString("statstable_absfigures_hits")).attr({"rel" : "localize[statstable_absfigures_hits]"});
 			} else {
-				//$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits"));
-				//$("#hitsDescription").attr({"rel" : "localize[statstable_relfigures_hits]"});
 				$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits")).attr({"rel" : "localize[statstable_relfigures_hits]"});
 			}
 		});
@@ -853,7 +922,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					// A new statistics bar icon was clicked
 					if (!rollingOccupied) {
 						rollingOccupied = true;
-						var ssc = $(selected_statisticsbars_corpus)
+						ssc = $(selected_statisticsbars_corpus)
 						ssc.css({"width": $(selected_statisticsbars_corpus).width()});
 						ssc.children().animate({"width": "0px"});
 						ssc.animate({"width": "0px"});
@@ -874,7 +943,7 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 			} else {
 				if (!rollingOccupied) {
 					rollingOccupied = true;
-					var tdi = $(targetDivID);
+					tdi = $(targetDivID);
 					tdi.css({"padding-top": $(".corpusTitleClass").height()+offset, "width": "1px"});
 					tdi.find("svg").attr("width", 200);
 					tdi.parent().css({"visibility":"visible", "display": "table-cell"});
@@ -886,17 +955,10 @@ function newDataInPie(dataName, horizontalDiagram, targetDiv) {
 					selected_statisticsbars_corpus = $(targetDivID).parent();
 					rollingOccupied = false;
 				}
-			}
-		
-			
-				
-				
-			
+			}	
 		} else {
 			diagramInstance.pie_widget("newData", dataItems);
 		}
-		
-	//diagramInstance = $('#circle_diagram').pie_widget({container_id: "circle_diagram", data_items: dataItems});
 	}
 }
 
@@ -990,7 +1052,7 @@ var StatsResults = {
 		if (corpusArray.length > 1) {
 			$(".arcDiagramPicture").css({"visibility":"visible"});
 			$(".wordsName").css({"visibility":"visible"});
-		};
+		}
 		
 		$.each(wordArray, function(wkey, wvalue) {
 			var numCorporaWithWordform = 0;
@@ -1171,22 +1233,22 @@ var StatsResults = {
 		
 		$(".corpusName").click(function(e) {
 			var parts = $(this).attr("id").split("__");
-			newDataInPie(parts[1], false, "corpusStatistics__" + parts[1]);
+			newDataInGraph(parts[1], false, "corpusStatistics__" + parts[1]);
 			e.stopPropagation();
 		});
 
 		
 		$(".corpusNameAll").click(function(e) {
-			newDataInPie("all",false, "corpusStatistics__all__");
+			newDataInGraph("all",false, "corpusStatistics__all__");
 			e.stopPropagation();
 		});
 		
 		$(".wordsName").click(function() {
 			var parts = $(this).attr("id").split("__");
 			if(parts.length == 2)
-				newDataInPie(parts[1],true);
+				newDataInGraph(parts[1],true);
 			else { // The âˆ‘ row
-				newDataInPie("SIGMA_ALL",true);
+				newDataInGraph("SIGMA_ALL",true);
 			}
 
 		});

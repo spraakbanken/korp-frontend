@@ -201,5 +201,8 @@
 	"statstable_export" : "Export",
 	
 	"util_decimalseparator" : ".",
-	"util_numbergroupseparator" : ","
+	"util_numbergroupseparator" : ",",
+	
+	"hitspicture_hits" : "hits",
+	"hitspicture_refinesearch" : "Click to search only in this corpus"
 }

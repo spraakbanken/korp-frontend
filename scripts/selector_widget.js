@@ -280,7 +280,7 @@ var hp_corpusChooser = {
 	 			} else { // Unchecked, check it!
 	 				hp_this.setStatus(childMan,"checked");
 	 				if (($(this).parent().hasClass('tree'))) { // If tree, check all descendants
-		 				var descendants = childMan.parent().siblings('div').find('.checkbox');
+		 				descendants = childMan.parent().siblings('div').find('.checkbox');
 		 				hp_this.setStatus(descendants,"checked");
 	 				}
 				}
@@ -414,7 +414,7 @@ var hp_corpusChooser = {
 			}
 
 			return outStr;
-		};
+		}
 
 	}
 }

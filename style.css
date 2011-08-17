@@ -59,6 +59,10 @@ a:hover {color:red;}  /* mouse over link */
 	background-color : white;	
 }
 
+.color_unfocused {
+	background-color : #EEEEEE;
+}
+
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-size : 1em;
 	font-family : inherit;
@@ -351,7 +355,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .boxlabel {
-	padding-right; 6px;
+	padding-right: 6px;
 	padding-left: 6px;
 	padding-top: 2px;
 	padding-bottom: 0px;

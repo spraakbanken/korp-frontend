@@ -311,7 +311,7 @@ var Sidebar = {
 			}, null, null, function() {
 				$.sm.send("sidebar.show.end");
 			});
-		});
+		});      
 	}, 
 	hide : function() {
 //		$.sm.send("sidebar.hide.start");

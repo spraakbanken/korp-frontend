@@ -83,8 +83,8 @@ var pie_widget = {
 				var newX = (radius*1.1)*Math.sin(degree);
 				var newY = (radius*1.1)*Math.cos(degree);
 			} else {
-				var newX = -(radius*1.1)*Math.sin(degree);
-				var newY = (radius*1.1)*Math.cos(degree);
+				newX = -(radius*1.1)*Math.sin(degree);
+				newY = (radius*1.1)*Math.cos(degree);
 			}
 			lineToArcX = offsetX+radius-newX;
 			lineToArcY = offsetY+radius+newY;
@@ -116,11 +116,11 @@ var pie_widget = {
 		if (highlight) {
 			var endDegree = Math.acos((y2-offsetY-radius)/radius);
 			if (x2 < offsetX+radius) {
-				var x2 = offsetX+radius-(radius*1.1)*Math.sin(endDegree);
-				var y2 = offsetX+radius+(radius*1.1)*Math.cos(endDegree);
+				x2 = offsetX+radius-(radius*1.1)*Math.sin(endDegree);
+				y2 = offsetX+radius+(radius*1.1)*Math.cos(endDegree);
 			} else {
-				var x2 = offsetX+radius+(radius*1.1)*Math.sin(endDegree);
-				var y2 = offsetX+radius+(radius*1.1)*Math.cos(endDegree);	
+				x2 = offsetX+radius+(radius*1.1)*Math.sin(endDegree);
+				y2 = offsetX+radius+(radius*1.1)*Math.cos(endDegree);	
 			}
 		}
 		
@@ -158,7 +158,7 @@ var pie_widget = {
 				if (nowthis.options.bar_horizontal) {
 					var silrect = r.rect(nowthis.options.offset_x, sx+nowthis.options.offset_y, sh, sw, 0);
 				} else {
-					var silrect = r.rect(sx+nowthis.options.offset_x, sy+nowthis.options.offset_y, sw, sh, 0);
+					silrect = r.rect(sx+nowthis.options.offset_x, sy+nowthis.options.offset_y, sw, sh, 0);
 				}
 				silrect.attr({fill: "#F8F8F8", "stroke-width": 1, stroke:"#EEEEEE"});
 			}
@@ -173,7 +173,7 @@ var pie_widget = {
 			if (nowthis.options.bar_horizontal) {
 				var newrect = r.rect(nowthis.options.offset_x,rx+nowthis.options.offset_y,rh,rw,0);
 			} else {
-				var newrect = r.rect(rx+nowthis.options.offset_x,ry+nowthis.options.offset_y,rw,rh,0);
+				newrect = r.rect(rx+nowthis.options.offset_x,ry+nowthis.options.offset_y,rw,rh,0);
 			}
 			newrect.attr({fill: fvalue["color"], stroke:"#EEEEEE"});
 			//newrect.attr({"opacity": 0.7});
@@ -250,12 +250,12 @@ var pie_widget = {
 			var origPath = nowthis._constructSVGPath(false,pieTrack,!first,30,30,radius,partOfTotal)
 			var newPiece = r.path(origPath);
 			var newPieceDOMNode = newPiece.node;
-			newPieceDOMNode["continue"] = !first;
+			newPieceDOMNode["continue"] = !first;
 			newPieceDOMNode["offsetX"] = 30;
 			newPieceDOMNode["offsetY"] = 30;
 			newPieceDOMNode["radius"] = radius;
 			newPieceDOMNode["shape_id"] = fvalue["shape_id"];
-			newPieceDOMNode["part"] = partOfTotal;
+			newPieceDOMNode["part"] = partOfTotal;
 			newPieceDOMNode["track"] = bufferPieTrack;
 			newPieceDOMNode["origpath"] = origPath;
 			
