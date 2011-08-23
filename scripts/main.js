@@ -79,9 +79,8 @@ var currentMode;
 			$.log("select", $(this).find(":selected"));
 			location.href = $(this).find(":selected").val();
 		});
-		$.log("beforeCorpora")
+
 		loadCorpora();
-		$.log("afterCorpora")
 		
 		$.sm.start();
 		var tab_a_selector = 'ul.ui-tabs-nav a';
@@ -219,7 +218,7 @@ var currentMode;
 			if(search != null && search !== prevFragment["search"]) {
 				
 				var type = search.split("|")[0];
-				var value = search.split("|")[1];
+				var value = search.split("|").slice(1).join("|");
 				
 				view.updateSearchHistory(value);
 				

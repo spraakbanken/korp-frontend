@@ -93,7 +93,6 @@
 								
 								$.log("statechart compiled and started: ");
 								$.log("compile time", new Date().getTime() - t );
-								$.log("doc ", transformedJs );
 								delete t;
 								self.eval(transformedJs);
 							},transform);

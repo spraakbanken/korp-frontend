@@ -9,7 +9,7 @@
 	"about_man" : "Projektledning",
 	"about_dev" : "Utvecklare",
 	"warning_header" : "Vänligen uppmärksamma",
-	"warning_body" : "Relationerna mellan orden har beräknats med hjälp av automatisk parsning. ",
+	"warning_body" : "Relationerna mellan orden är ett resultat av automatisk parsning. ",
 	"corpus" : "Korpus",
 	"search_for" : "Sök efter ",
 	"show_more" : "Visa fler",

@@ -9,7 +9,7 @@ var SearchProxy = {
 		$.ajax({
 			url: "http://spraakbanken.gu.se/ws/saldo-ws/rel/json/" + lemgram,
 			success : function(data) {
-				$.log("related words success", data);
+				$.log("related words success");
 				simpleSearch.renderSimilarHeader(lemgram, data);
 			}
 		});
@@ -152,6 +152,9 @@ var LemgramProxy = {
 				self.prevRequest = settings;
 //					if($("#results-lemgram").is(":visible"))
 //						util.setJsonLink(settings);
+			},
+			abort : function(data) {
+				$.log("relationsearch abort", arguments);
 			},
 			success : function(data) {
 				$.log("relations success", data);

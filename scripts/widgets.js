@@ -40,6 +40,7 @@ $.fn.korp_autocomplete = function(options) {
 	if(typeof options === "string" && options == "abort") {
 		lemgramProxy.abort();
 		selector.preloader("hide");
+		return;
 	}
 	
 	options = $.extend({
@@ -101,7 +102,7 @@ $.fn.korp_autocomplete = function(options) {
 		select: function( event, ui ) {
 			event.preventDefault();
 			var selectedItem = ui.item.value;
-			$.log("autocomplete select", selectedItem, ui.item.value, ui, event);
+			$.log("autocomplete select", options.select, selectedItem, ui.item.value, ui, event);
 			
 			$.proxy(options.select, selector)(selectedItem);
 		},
@@ -473,14 +474,14 @@ var ExtendedToken = {
 	refresh : function() {
 		var self = this;
 		this.element.find(".arg_selects").each(function() {
-			var i = $(this).find(".arg_type :selected").index();
-			var before = $(this).find(".arg_type :selected").val();
-			var newSelect = $(this).replaceWith(self.makeSelect()).find(".arg_type"); 
-			newSelect.get(0).selectedIndex = i;
-			if(before != newSelect.val()) {
-				newSelect.get(0).selectedIndex = 0;
-				newSelect.trigger("change");
-			}
+			var oldVal = $(this).find(".arg_type").val();
+			var optVal = $(this).find(".arg_opts").val();
+//			var before = $(this).find(".arg_type :selected").val();
+			var newSelects = self.makeSelect(); 
+			$(this).replaceWith(newSelects);
+			newSelects.find(".arg_type").val(oldVal).trigger("change");
+			newSelects.find(".arg_opts").val(optVal);
+//			newSelect.get(0).selectedIndex = i;
 		});
 	},
 	
@@ -489,6 +490,8 @@ var ExtendedToken = {
 		var self = this;
 		var target = $(event.currentTarget);
 		var oldVal = target.parent().siblings(".arg_value:input[type=text]").val() || "";
+//		var oldOptIndex = target.next().find("option:selected").index();
+		var oldOptVal = target.next().val();
 //		target.siblings(".arg_value").remove();
 		
 		var data = target.find(":selected").data("dataProvider");
@@ -562,7 +565,9 @@ var ExtendedToken = {
 //		target.after(arg_value);
 		
 		target.parent().siblings(".arg_value").replaceWith(arg_value);
-		target.siblings(".arg_opts").replaceWith(this.makeOptsSelect(data.opts || settings.defaultOptions));
+		target.next().replaceWith(this.makeOptsSelect(data.opts || settings.defaultOptions));
+		target.next().val(oldOptVal);
+		
 		if(oldVal != null && oldVal.length)
 			arg_value.val(oldVal);
 		
@@ -622,7 +627,7 @@ var ExtendedToken = {
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	if (inner_query.length) {
-	    		query.token.push(inner_query.join(" | "));
+	    		query.token.push(inner_query.join(" & "));
 	    	}
 	    	
 	    });

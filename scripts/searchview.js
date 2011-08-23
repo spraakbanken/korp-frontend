@@ -25,8 +25,10 @@ view.updateSearchHistory = function(value) {
 	var searchLocations = $.map(searches, function(item) {
 		return item.location;
 	});
-	if($.inArray(location.href, searchLocations) == -1)
+	if($.inArray(location.href, searchLocations) == -1) {
 		searches.splice(0, 0, {label : value, location : location.href});
+		$.jStorage.set("searches", searches);
+	}
 	
 	if(!searches.length) return;
 	var opts = $.map(searches, function(item) {
@@ -254,7 +256,7 @@ var SimpleSearch = {
 		else {
 			var wordArray = currentText.split(" ");
 			var cqp = $.map(wordArray, function(item, i){
-				return '[(word = "' + regescape(item) + '")]';
+				return '[word = "' + regescape(item) + '"]';
 			});
 			val = cqp.join(" ");
 		}
@@ -348,7 +350,6 @@ var ExtendedSearch = {
 	},
 	
 	insertToken : function(button) {
-		
 	    $("<table />").insertBefore($(button))
 	    .extendedToken({
 	    	close : function() {

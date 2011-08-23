@@ -1,12 +1,15 @@
-<scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml" 
+<scxml version="1.0" xmlns="http://www.w3.org/2005/07/scxml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2005/07/scxml http://www.w3.org/2011/04/SCXML/scxml.xsd" 
     profile="ecmascript" initial="init" >
     
     <script><![CDATA[
     
         function kwicSearch(page) {
-            if(In("results_lemgram") ) { //|| In("results_stats")
+            if(In("results_lemgram") || In("results_stats") ) { 
                 $.log("conf", $.sm.getConfiguration());
-                gotoFirstResultTab();
+                $("#result-container").korptabs("select", 0)
+                $.bbq.pushState({"result-container" : 0})
             }
             simpleSearch.resetView();
             kwicResults.showPreloader();

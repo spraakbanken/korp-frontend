@@ -3,12 +3,14 @@
 //************
 
 view.disableTab = function(index) {
+	$.log("disableTab", index);
 	if($("#result-container").tabs("option", "selected") == index) {
 		$.log("iscurrentselected")
-		$("#result-container li:first > a").trigger("change");
+		$("#result-container li:first > a").trigger("click");
 	}
 	$("#result-container").tabs("disable", index);
 };
+
 
 var BaseResults = {
 	initialize : function(tabSelector, resultSelector) {
@@ -126,7 +128,7 @@ var KWICResults = {
 		var items_per_page = parseInt(this.$result.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
-		output.end = (output.start + items_per_page);
+		output.end = (output.start + items_per_page) - 1;
 		return output;
 	},
 		
@@ -269,7 +271,7 @@ var KWICResults = {
 		
 		this.hidePreloader();
 
-                /* There is probably a better CSS-solution than the code below. Johan, kolla gŠrna pŒ det om du orkar... */
+                /* There is probably a better CSS-solution than the code below. Johan, kolla gï¿½rna pï¿½ det om du orkar... */
                 $(".hits_picture_table").css({"width":($("#results-kwic").width()-($("#sidebar").width())-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
                 $(window).resize(function() {
                     $(".hits_picture_table").css({"width":($("#results-kwic").width()-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
