@@ -203,7 +203,7 @@ function prettyNumbers(numstring) {
 /* Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget */
 function loadCorpora() {
 	added_corpora_ids = [];
-	outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
+	var outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
 	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
 		$.log("corpus changed", corpora);
 		$.bbq.pushState({"corpus" : corpora.join(",")});

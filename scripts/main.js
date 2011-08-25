@@ -165,8 +165,9 @@ var currentMode;
 			}
 			
 			var page = e.getState("page", true);
-			if(hasChanged("page") && !hasChanged("search"))
+			if(hasChanged("page") && !hasChanged("search")) {
 				kwicResults.setPage(page);
+			}
 			
 			if(isInit) {
 				kwicResults.current_page = page;
@@ -216,7 +217,7 @@ var currentMode;
 			
 			var search = e.getState("search");
 			if(search != null && search !== prevFragment["search"]) {
-				
+				kwicResults.current_page = page || 0;
 				var type = search.split("|")[0];
 				var value = search.split("|").slice(1).join("|");
 				

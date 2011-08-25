@@ -322,7 +322,7 @@ input:placeholder, textarea:placeholder {
 }
 
 #corpusbox {
-	height: 100px;
+	cursor : pointer;
 }
 
 .tree {

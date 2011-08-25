@@ -56,7 +56,7 @@
 	"hits_per_page" : "Träffar per sida",
 	"num_results" : "Antal träffar",
 	"next" : "Nästa",
-	"prev" : "Tidigare",
+	"prev" : "Föregående",
 	"find" : "Leta efter",
 	"get_sentence" : "Hämta kontext",
 	"example_dialog_header" : "Belägg",

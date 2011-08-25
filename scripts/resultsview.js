@@ -4,11 +4,11 @@
 
 view.disableTab = function(index) {
 	$.log("disableTab", index);
-	if($("#result-container").tabs("option", "selected") == index) {
+	if($("#result-container").korptabs("option", "selected") == index) {
 		$.log("iscurrentselected")
 		$("#result-container li:first > a").trigger("click");
 	}
-	$("#result-container").tabs("disable", index);
+	$("#result-container").korptabs("disable", index);
 };
 
 
@@ -26,11 +26,11 @@ var BaseResults = {
 		}
 		var self = this;
         //$("#result-container").tabs("select", 0);
-        var disabled = $("#result-container").tabs("option", "disabled");
+        var disabled = $("#result-container").korptabs("option", "disabled");
         var newDisabled = $.grep(disabled, function(item) {
         	return item != self.$tab.index();
         });
-        $("#result-container").tabs("option", "disabled", newDisabled);
+        $("#result-container").korptabs("option", "disabled", newDisabled);
 	},
 	
 	resultError : function(data) {

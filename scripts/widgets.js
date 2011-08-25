@@ -116,10 +116,12 @@ $.fn.korp_autocomplete = function(options) {
 	return selector;
 };
 
-$.ui.tabs.subclass = $.ui.widget.subclass;
-$.ui.tabs.subclass("ui.korptabs", {
-	
+//$.ui.tabs.subclass = $.ui.widget.subclass;
+//$.ui.tabs.subclass("ui.korptabs", {
+//$.ui.widget("ui.korptabs", $.extend({}, $.ui.tabs.prototype, {
+$.widget( "ui.korptabs", $.ui.tabs, {
 	_create : function() {
+		this._super( "_create");
 		var self = this;
 		this.n = 0;
 		this.urlPattern = "#custom-tab-";
@@ -144,7 +146,7 @@ $.ui.tabs.subclass("ui.korptabs", {
 	},
 	
 	_tabify : function(init) {
-		this._super(init);
+		this._super( "_tabify", init );
 		this.redrawTabs();
 	},
 	
@@ -166,9 +168,10 @@ $.ui.tabs.subclass("ui.korptabs", {
 		return instance;
 	},
 	
-	remove : function(index) {
-		this._super(index);
-	},
+//	remove : function(index) {
+//		this._super(index);
+//		$.ui.tabs.prototype.remove(init);
+//	},
 	
 	enableAll : function() {
 		var self = this;
@@ -476,12 +479,10 @@ var ExtendedToken = {
 		this.element.find(".arg_selects").each(function() {
 			var oldVal = $(this).find(".arg_type").val();
 			var optVal = $(this).find(".arg_opts").val();
-//			var before = $(this).find(".arg_type :selected").val();
 			var newSelects = self.makeSelect(); 
 			$(this).replaceWith(newSelects);
 			newSelects.find(".arg_type").val(oldVal).trigger("change");
 			newSelects.find(".arg_opts").val(optVal);
-//			newSelect.get(0).selectedIndex = i;
 		});
 	},
 	
@@ -490,9 +491,7 @@ var ExtendedToken = {
 		var self = this;
 		var target = $(event.currentTarget);
 		var oldVal = target.parent().siblings(".arg_value:input[type=text]").val() || "";
-//		var oldOptIndex = target.next().find("option:selected").index();
 		var oldOptVal = target.next().val();
-//		target.siblings(".arg_value").remove();
 		
 		var data = target.find(":selected").data("dataProvider");
 		$.log("didSelectArgtype ", data);
@@ -549,6 +548,7 @@ var ExtendedToken = {
 			});
 			break;
 		case "date":
+			// at some point, fix this.
 		default:
 			arg_value = $("<input type='text'/>");
 			break;
@@ -562,7 +562,6 @@ var ExtendedToken = {
 	    .change(function() {
 	    	self._trigger("change");
 	    });
-//		target.after(arg_value);
 		
 		target.parent().siblings(".arg_value").replaceWith(arg_value);
 		target.next().replaceWith(this.makeOptsSelect(data.opts || settings.defaultOptions));

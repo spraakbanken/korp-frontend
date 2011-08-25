@@ -86,7 +86,7 @@
                             <script>
                                 $.log("disabling all result tabs");
                                 if($("#result-container").is(".ui-tabs")) 
-                                     $("#result-container").tabs("option", "disabled", [0,1,2]);
+                                     $("#result-container").korptabs("option", "disabled", [0,1,2]);
                             </script>
                         </onentry>
                         <transition target="simple" />
