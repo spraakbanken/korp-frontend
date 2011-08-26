@@ -276,11 +276,9 @@ $.onScrollOut = function(upOpts, downOpts) {
 		if(upPointInWindow && downPointInWindow) {
 			activePoint = upOpts.point;
 		} else if(activePoint != upOpts.point && upPointInWindow) {
-			$.log("up!")
 			activePoint = upOpts.point;
 			upOpts.callback();
 		} else if(activePoint != downOpts.point && downPointInWindow) {
-			$.log("down!")
 			activePoint = downOpts.point;
 			downOpts.callback();
 		}
@@ -289,3 +287,25 @@ $.onScrollOut = function(upOpts, downOpts) {
 	$(window).scroll($.onScrollOut.prevScrollFunction);
 };
 
+$.fn.cover = function() {
+	
+	this.each(function() {
+		var pos = $(this).position();
+		var cover = $("<div />").css({
+			position : "absolute",
+			top : pos.top,
+			left : pos.left,
+			height : $(this).outerHeight(),
+			width : $(this).outerWidth()
+		}).appendTo("body");
+		$(this).data("cover", cover);
+	});
+	return this;
+};
+$.fn.uncover = function() {
+	this.each(function() {
+		($(this).data("cover") || $()).remove();
+		$(this).data("cover", null);
+	});
+	return this;
+};

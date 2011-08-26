@@ -57,8 +57,6 @@ var currentMode;
 		$.log("preloading done, t = ", $.now() - t);
 		currentMode = $.deparam.querystring().mode || "default";
 		util.browserWarn();
-		// TODO: because the korptab is broken, this is an ugly hack. 
-		$.bbq.pushState({"result-container" : 0});
 		
 		$("#mode_switch").radioList({
             change : function() {
@@ -90,7 +88,7 @@ var currentMode;
 			event : "change",
 			show : function(event, ui) {
 				if($("#columns").position().top > 0)
-					$("#sidebar").sidebar("updatePlacement", false); //place sidebar
+					$("#sidebar").sidebar("updatePlacement"); //place sidebar
 				var selected = $(ui.panel).attr("id").split("-")[1];
 				$.sm.send("searchtab." + selected);
 			}
@@ -283,11 +281,7 @@ var currentMode;
 		$("body").fadeTo(400, 1, function() {
 			$(this).css("opacity", "");
 		});
-		
-		/* $("#cqp_string").bind("resize",function() { // Flytta denna sen, fråga Johan vart
-			var newWidth = $(this).width() + 2;
-			$(".query_footer").css({"width": newWidth});
-		}); */
+		view.updateSearchHistory();
 	});
 
 

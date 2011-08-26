@@ -5,29 +5,30 @@ var hp_corpusChooser = {
 	},
 	
 	_create: function() {
-		this._super("_create");
-			this._transform();
-			
-			// Make the popup disappear when the user clicks outside it
-			$(window).unbind('click.corpusselector');
-			$(window).bind('click.corpusselector', function(e) {
-				var disp = $(".popupchecks").css("display");
-				if(disp != "none" && e.target != self) {
-					$(".popupchecks").fadeOut('fast');
-					$(".corpusInfoSpace").fadeOut('fast');
-					$(".hp_topframe").removeClass("ui-corner-top");
-					$(".hp_topframe").addClass("ui-corner-all");
-				}
-			});
-			
-			$('.buttonlink, ul#icons li').hover(
+//		this._super("_create");
+//		$.Widget.prototype._create.call(this);
+		this._transform();
+
+		// Make the popup disappear when the user clicks outside it
+		$(window).unbind('click.corpusselector');
+		$(window).bind('click.corpusselector', function(e) {
+			var disp = $(".popupchecks").css("display");
+			if(disp != "none" && e.target != self) {
+				$(".popupchecks").fadeOut('fast');
+				$(".corpusInfoSpace").fadeOut('fast');
+				$(".hp_topframe").removeClass("ui-corner-top");
+				$(".hp_topframe").addClass("ui-corner-all");
+			}
+		});
+
+		$('.buttonlink, ul#icons li').hover(
 				function() { $(this).addClass('ui-state-hover'); }, 
 				function() { $(this).removeClass('ui-state-hover'); }
-			);
-			
-			
-			
-			
+		);
+
+
+
+
 	},
 	isSelected: function(id) {
 		// Test if a given id is selected

@@ -310,7 +310,7 @@ function invalidateAttrs(attrs) {
 }
 
 function regescape(s) {
-    return s.replace(/[\.|\?|\+|\*|\|\'|\"]/g, "\\$&");
+    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
 }
 
 util.browserWarn = function() {

@@ -40,7 +40,7 @@
 		<script type="text/javascript" src="lib/ui/jquery.effects.highlight.js"></script>
 		<script type="text/javascript" src="lib/ui/jquery.effects.slide.js"></script>
 		<script type="text/javascript" src="lib/jquery.ui.preloader.min.js"></script>
-<!-- 		<script type="text/javascript" src="lib/jquery.ui.subclass.js"></script> -->
+		<script type="text/javascript" src="lib/jquery.ui.subclass.js"></script>
 <!-- 		<script type="text/javascript" src="lib/ui.tabs.closable.js"></script> -->
 		
 		<script type="text/javascript" src="lib/jquery.json-2.2.min.js"></script>
@@ -165,12 +165,13 @@
 						</div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="sidebar" class="ui-corner-all kwic_sidebar" ></div>	
+					<div id="sidebar" class="ui-corner-all kwic_sidebar" style="display : none;" ></div>	
 					
 					<div style="clear : both; float : none;"></div>
 				</div>
 			</div>
 		</div>
+		<div id="click_cover"></div>
 		<div id="about_content" title="Om Korp" style="display : none;"></div>
 			
 		<!-- for showing full deprel locale names.
@@ -246,7 +247,7 @@
 			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
 			<tr>
 				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
-				<td>{{html util.formatDecimalString($.format("%.2f", $value.mi), true)}}</td>
+				<!--<td>{{html util.formatDecimalString($.format("%.2f", $value.mi), true)}}</td>-->
 				<td id="example_link" 
 					data-head="${$value['head']}" 
 					data-dep="${$value['dep']}" 

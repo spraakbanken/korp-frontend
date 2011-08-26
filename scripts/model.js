@@ -173,7 +173,6 @@ var LemgramProxy = {
 		var deferred = $.Deferred(function( dfd ){
 			self.pendingRequest = $.ajax({
 			    url : "http://spraakbanken.gu.se/ws/lexikon",
-			    dataType : "jsonp",
 			    data : {
 			        wf : word,
 			        lexikon : "saldom",
@@ -231,6 +230,10 @@ var StatsProxy = {
 			},
 			beforeSend : function(jqXHR, settings) {
 				self.prevRequest = settings;
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				$.error("gettings stats error, status: " +	 textStatus);
+				statsResults.showError();
 			},
 			success: function(data) {
 				if(data.ERROR != null) {

@@ -154,65 +154,7 @@ var KWICResults = {
 			return;
 		}
 		
-		// PUT NEW STUFF INTO THE HITS PICTURE
-		if (getSelectedCorpora().length > 1) {
-			var totalhits = data["hits"];
-			var hits_picture_html = '<table class="hits_picture_table"><tr height="18px">';
-			var barcolors = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
-			var ccounter = 0;
-			$.each(data["corpus_hits"], function(corp, hits) {				
-				if (hits > 0)
-					hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 + '%;background-color:#EEEEEE"></td>';
-				ccounter = ++ccounter % 6;
-			});
-			hits_picture_html += '</tr></table>';
-			$("#hits_picture").html(hits_picture_html);
-
-
-			hoverHitPictureConfig = {
-				sensitivity: 3, interval: 100, timeout: 800,
-				over: function() {                
-					//$(".hits_picture_table").css({"width":($("#results-kwic").width()-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
-					//var leftstart = $(".controls_n").offset().left+$(".controls_n").width();
-					//$(".hits_picture_table").animate({"opacity":"1","height":"18px","margin-top":"","width":($("#results-kwic").width()-20-leftstart) + "px"},400);
-					$(".hits_picture_table").find("td").each(function(){
-						$.log($(this).css("background-color"));
-						if ($(this).css("background-color") != "rgb(128, 128, 128)")
-							$(this).css({"background-color":""});
-					});
-					$(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
-				},
-				out: function() {
-					$(".hits_picture_table").stop().animate({"opacity":".5","height":"18px","margin-top":""});  
-					$(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
-				}
-			};
-			$(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
-			$(".hits_picture_corp").hover(function() {
-				$(this).css({"background-color": "gray"});
-			}, function() {
-				$(this).css({"background-color": ""});
-			});
-
-
-			$(".hits_picture_corp").each(function() {
-				var corpus_name = $(this).attr("data");
-				$(this).tooltip({delay : 0, bodyHandler : function() {
-					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_refinesearch") + '</i>';}});
-			});
-
-			// Click to refine search in one corpus
-			$(".hits_picture_corp").click(function(event) {
-				$.bbq.pushState({corpus : $(this).attr("data").toLowerCase()});
-				simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
-				event.stopPropagation();
-			});
-		} else {
-			$("#hits_picture").html("");
-		}
-		
-        
-		// // // // // // // // // // // //
+		this.renderHitsPicture(data);
 		
 
 		var effectSpeed = 100;
@@ -268,15 +210,63 @@ var KWICResults = {
 		
 		this.hidePreloader();
 
-//        $(".hits_picture_table").css({"width":($("#results-kwic").width()-($("#sidebar").width())-20-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
-		function resize() {
-			$(".hits_picture_table").css({"width":($("#results-kwic").width()-($(".controls_n").position().left+$(".controls_n").width())) + "px"});
-		}
-//        $(window).resize(resize);
-//        resize();
-		this.$result.find("#hits_picture").css("left", this.$result.find(".controls_n").offset().left + this.$result.find(".controls_n").width());
     },
 	
+    renderHitsPicture : function(data) {
+		if (getSelectedCorpora().length > 1) {
+			var totalhits = data["hits"];
+			var hits_picture_html = '<table class="hits_picture_table"><tr height="18px">';
+			var barcolors = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
+			var ccounter = 0;
+			$.each(data["corpus_hits"], function(corp, hits) {				
+				if (hits > 0)
+					hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 + '%;background-color:#EEEEEE"></td>';
+				ccounter = ++ccounter % 6;
+			});
+			hits_picture_html += '</tr></table>';
+			$("#hits_picture").html(hits_picture_html);
+
+
+			hoverHitPictureConfig = {
+				sensitivity: 3, interval: 100, timeout: 800,
+				over: function() {                
+					$(".hits_picture_table").find("td").each(function(){
+						$.log($(this).css("background-color"));
+						if ($(this).css("background-color") != "rgb(128, 128, 128)")
+							$(this).css({"background-color":""});
+					});
+					$(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
+				},
+				out: function() {
+					$(".hits_picture_table").stop().animate({"opacity":".5","height":"18px","margin-top":""});  
+					$(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
+				}
+			};
+			$(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
+			$(".hits_picture_corp").hover(function() {
+				$(this).css({"background-color": "gray"});
+			}, function() {
+				$(this).css({"background-color": ""});
+			});
+
+
+			$(".hits_picture_corp").each(function() {
+				var corpus_name = $(this).attr("data");
+				$(this).tooltip({delay : 0, bodyHandler : function() {
+					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_refinesearch") + '</i>';}});
+			});
+
+			// Click to refine search in one corpus
+			$(".hits_picture_corp").click(function(event) {
+				$.bbq.pushState({corpus : $(this).attr("data").toLowerCase()});
+				simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
+				event.stopPropagation();
+			});
+		} else {
+			$("#hits_picture").html("");
+		}
+    },
+    
 	scrollToShowWord : function(word) {
 		var offset = 100;
 		var wordTop = word.offset().top;
@@ -570,19 +560,7 @@ var LemgramResults = {
 				var color = colorMapping[$(this).data("rel")];
 				$("<span />").localeKey(wordClass == "av" ? "head" : "malt_" + $(this).data("rel"))
 				.addClass(color)
-				.appendTo($parent)
-//				.tooltip({
-//					delay : 600,
-//					bodyHandler : function() {
-//						return util.getLocaleString("tooltip_" + $(this).text());
-//					}
-//				})
-				.mouseenter(function(event) {
-					$(".lemgram_result." + $(this).attr("class")).addClass("lemgram_highlight");
-				})
-				.mouseleave(function() {
-					$(".lemgram_result." + $(this).attr("class")).removeClass("lemgram_highlight");
-				});
+				.appendTo($parent);
 				$(this).addClass(color)
 				.css("border-color", $(this).css("background-color"));
 			}
@@ -779,25 +757,25 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
-							.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
-							.dialog({
-								width : 400,
-								height : 500,
-								resize: function(){
-									$("#chartFrame").css("height",$("#chartFrame").parent().width()-20);
-									stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);},
-								resizeStop: function(event, ui) {
-									var w = $(this).dialog("option","width");
-									var h = $(this).dialog("option","height");
-									if(this.width*1.25 > this.height) {
-										$(this).dialog("option","height", w*1.25);
-									} else {
-										$(this).dialog("option","width", h*0.80);
-									}
-									stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);
-								}
+		.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
+		.dialog({
+			width : 400,
+			height : 500,
+			resize: function(){
+				$("#chartFrame").css("height",$("#chartFrame").parent().width()-20);
+				stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);},
+				resizeStop: function(event, ui) {
+					var w = $(this).dialog("option","width");
+					var h = $(this).dialog("option","height");
+					if(this.width*1.25 > this.height) {
+						$(this).dialog("option","height", w*1.25);
+					} else {
+						$(this).dialog("option","width", h*0.80);
+					}
+					stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);
+				}
 
-							}).css("opacity", 0);
+		}).css("opacity", 0);
 		$("#dialog").fadeTo(400,1);
 		$("#dialog").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});

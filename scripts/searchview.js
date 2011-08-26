@@ -25,7 +25,7 @@ view.updateSearchHistory = function(value) {
 	var searchLocations = $.map(searches, function(item) {
 		return item.location;
 	});
-	if($.inArray(location.href, searchLocations) == -1) {
+	if(value != null && $.inArray(location.href, searchLocations) == -1) {
 		searches.splice(0, 0, {label : value, location : location.href});
 		$.jStorage.set("searches", searches);
 	}
@@ -40,10 +40,9 @@ view.updateSearchHistory = function(value) {
 };
 view.enableSearch = function(bool) {
 	if(bool) {
-		$("#search-tab").tabs("enable").removeClass("ui-state-disabled");
+		$("#search-tab").tabs("enable").removeClass("ui-state-disabled").uncover();
 	} else {
-		$("#search-tab").tabs("disable").addClass("ui-state-disabled");
-		
+		$("#search-tab").tabs("disable").addClass("ui-state-disabled").cover();
 	}
 	
 };
@@ -100,7 +99,8 @@ var SimpleSearch = {
 				
 			switch(event.keyCode) {
 			case keyCode.ENTER:
-				self.onSubmit();
+				if($("#search-tab").data("cover") == null)
+					self.onSubmit();
 				break;
 			}
 		})
@@ -170,6 +170,7 @@ var SimpleSearch = {
 	},
 	
 	selectLemgram : function(lemgram) {
+		if($("#search-tab").data("cover") != null) return;
 		this.refreshSearch();
 		util.searchHash("lemgram", lemgram);
 	},
@@ -307,7 +308,7 @@ var ExtendedSearch = {
 		this.parent(mainDivId);
 		var self = this;
 		$("#korp-extended").keyup(function(event) {
-			if(event.keyCode == "13") {
+			if(event.keyCode == "13" && $("#search-tab").data("cover") != null) {
 				self.onSubmit();
 			}
 			return false;

@@ -87,6 +87,9 @@ $.fn.korp_autocomplete = function(options) {
 				.prependTo(selector.autocomplete("widget"));
 				
 				selector.preloader("hide");
+			})
+			.fail(function() {
+				$.log("sblex fail", arguments);
 			});
 				
 			
@@ -115,7 +118,8 @@ $.fn.korp_autocomplete = function(options) {
 
 var KorpTabs = {
 	_create : function() {
-		this._super( "_create");
+//		this._super( "_create");
+//		$.ui.tabs.prototype._create.call(this);
 		var self = this;
 		this.n = 0;
 		this.urlPattern = "#custom-tab-";
@@ -136,7 +140,8 @@ var KorpTabs = {
 	},
 	
 	_tabify : function(init) {
-		this._super( "_tabify", init );
+//		this._super( "_tabify", init );
+		this._super(init);
 		this.redrawTabs();
 	},
 	
@@ -166,13 +171,16 @@ var KorpTabs = {
 	},
 	
 	getCurrentInstance : function() {
-		var ret = this.lis.filter(".ui-tabs-active").data("instance") || null;
+//		var ret = this.lis.filter(".ui-tabs-active").data("instance") || null; //for jquery ui 1.9
+		var ret = this.lis.filter(".ui-tabs-selected").data("instance") || null;
 		$.log("getCurrentInstance", this.lis, ret);
 		return ret;
 	}
 	
 };
-$.widget( "ui.korptabs", $.ui.tabs, KorpTabs);
+//$.widget( "ui.korptabs", $.ui.tabs, KorpTabs);
+$.ui.tabs.subclass = $.ui.widget.subclass;
+$.ui.tabs.subclass("ui.korptabs", KorpTabs);
 
 var Sidebar = {
 	options : {},
@@ -180,10 +188,7 @@ var Sidebar = {
 	},
 	
 	updateContent : function(sentenceData, wordData, corpus) {
-//		$("#selected_word").empty();
-//		$("#selected_sentence").empty();
-		
-		this.element.html('<div id="selected_sentence" />', '<div id="selected_word" />');
+		this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
 		
 		var corpusObj = settings.corpora[corpus.toLowerCase()];
 		$("<div />").html(
