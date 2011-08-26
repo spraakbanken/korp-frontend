@@ -159,7 +159,7 @@ var KorpTabs = {
 		
 		li.data("instance", instance);
 		this.n++;
-//		li.find("a").trigger("mouseup");
+		li.find("a").trigger("mouseup");
 		return instance;
 	},
 	

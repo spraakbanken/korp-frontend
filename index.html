@@ -246,8 +246,12 @@
 			{{each $data}}
 			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
 			<tr>
+				<td>${$index + 1}. </td>
 				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
 				<!--<td>{{html util.formatDecimalString($.format("%.2f", $value.mi), true)}}</td>-->
+				<td>${$value.freq}</td>
+				
+
 				<td id="example_link" 
 					data-head="${$value['head']}" 
 					data-dep="${$value['dep']}" 

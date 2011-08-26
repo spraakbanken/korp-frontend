@@ -231,7 +231,7 @@ var KWICResults = {
 				sensitivity: 3, interval: 100, timeout: 800,
 				over: function() {                
 					$(".hits_picture_table").find("td").each(function(){
-						$.log($(this).css("background-color"));
+//						$.log($(this).css("background-color"));
 						if ($(this).css("background-color") != "rgb(128, 128, 128)")
 							$(this).css({"background-color":""});
 					});
@@ -630,8 +630,8 @@ var LemgramResults = {
 		.click($.proxy(this.onClickExample, this));
 		
 		// splits up the label
-		$("#results-lemgram td:first-child").each(function() {
-			var $siblings = $(this).parent().siblings().find("td:first-child");
+		$("#results-lemgram td:nth-child(2)").each(function() {
+			var $siblings = $(this).parent().siblings().find("td:nth-child(2)");
 			
 			var siblingLemgrams = $.map($siblings, function(item) {
 				return $(item).data("lemgram").slice(0, -1);
@@ -650,9 +650,7 @@ var LemgramResults = {
 	},
 	
 	onClickExample : function(event) {
-//		$("#dialog").remove();
 		var self = this;
-//		this.showPreloader();
 		var $target = $(event.currentTarget);
 		$.log("onClickExample", $target);
 		
