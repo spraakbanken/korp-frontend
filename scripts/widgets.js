@@ -29,9 +29,6 @@ $.widget("ui.radioList", {
 	getSelected: function() {
 		return this.element.find(".radioList_selected");
 	}
-	
-	
-	
 });
 
 $.fn.korp_autocomplete = function(options) {
@@ -116,10 +113,7 @@ $.fn.korp_autocomplete = function(options) {
 	return selector;
 };
 
-//$.ui.tabs.subclass = $.ui.widget.subclass;
-//$.ui.tabs.subclass("ui.korptabs", {
-//$.ui.widget("ui.korptabs", $.extend({}, $.ui.tabs.prototype, {
-$.widget( "ui.korptabs", $.ui.tabs, {
+var KorpTabs = {
 	_create : function() {
 		this._super( "_create");
 		var self = this;
@@ -131,17 +125,13 @@ $.widget( "ui.korptabs", $.ui.tabs, {
 	            if (index > -1) {
 	                // call _trigger to see if remove is allowed
 	                if (false === self._trigger("closableClick", null, self._ui( $(self.lis[index]).find( "a" )[ 0 ], self.panels[index] ))) return;
-	
 	                // remove this tab
 	                self.remove(index);
 	            }
-	
 	            // don't follow the link
 	            return false;
 			}
-				
 		});
-		
 		this.lis.first().data("instance", kwicResults);
 	},
 	
@@ -164,14 +154,9 @@ $.widget( "ui.korptabs", $.ui.tabs, {
 		
 		li.data("instance", instance);
 		this.n++;
-		li.find("a").trigger("mouseup");
+//		li.find("a").trigger("mouseup");
 		return instance;
 	},
-	
-//	remove : function(index) {
-//		this._super(index);
-//		$.ui.tabs.prototype.remove(init);
-//	},
 	
 	enableAll : function() {
 		var self = this;
@@ -181,12 +166,13 @@ $.widget( "ui.korptabs", $.ui.tabs, {
 	},
 	
 	getCurrentInstance : function() {
-		$.log("getCurrentInstance", this.lis);
-		return this.lis.filter(".ui-tabs-selected").data("instance") || null; 
+		var ret = this.lis.filter(".ui-tabs-active").data("instance") || null;
+		$.log("getCurrentInstance", this.lis, ret);
+		return ret;
 	}
 	
-});
-
+};
+$.widget( "ui.korptabs", $.ui.tabs, KorpTabs);
 
 var Sidebar = {
 	options : {},
@@ -197,7 +183,7 @@ var Sidebar = {
 //		$("#selected_word").empty();
 //		$("#selected_sentence").empty();
 		
-		this.element.empty().append('<div id="selected_sentence" />', '<div id="selected_word" />');
+		this.element.html('<div id="selected_sentence" />', '<div id="selected_word" />');
 		
 		var corpusObj = settings.corpora[corpus.toLowerCase()];
 		$("<div />").html(

@@ -469,7 +469,8 @@ table {
 	vertical-align: top;
 	padding: 5px;
 	border : 1px solid #999;
-	cursor : move; 
+	cursor : move;
+	margin-left : 0;
 }
 
 .query_token.ui-sortable-helper {
@@ -483,6 +484,7 @@ table {
 
 .result_controls {
 /* 	margin-left : 2px; */
+	position: relative;
 }
 
 #results-kwic > div:not(:last-child) {
@@ -490,7 +492,9 @@ table {
 }
 
 .result_controls > * {
-	float : left;
+/* 	float : left; */
+	display : inline-block;
+	*display : inline;
 }
 
 .controls_n {
@@ -813,3 +817,15 @@ a.relStat:hover {
 	cursor : pointer !important;
 }
 
+.hits_picture_table {
+	opacity: .5;
+	border: 1px solid #CCCCCC;
+	width: 100%;
+	padding: 0px;
+}
+#hits_picture {
+	cursor : pointer;
+	position: absolute;
+	right : 9px;
+	bottom : 0px;
+}

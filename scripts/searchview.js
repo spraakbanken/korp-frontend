@@ -38,6 +38,15 @@ view.updateSearchHistory = function(value) {
 	var placeholder = $("<option>").localeKey("search_history").get(0);
 	$("#search_history").html([placeholder].concat(opts));
 };
+view.enableSearch = function(bool) {
+	if(bool) {
+		$("#search-tab").tabs("enable").removeClass("ui-state-disabled");
+	} else {
+		$("#search-tab").tabs("disable").addClass("ui-state-disabled");
+		
+	}
+	
+};
 
 var BaseSearch = {
 	initialize : function(mainDivId) {
@@ -61,11 +70,12 @@ var BaseSearch = {
 	isEnabled : function() {
 		return this._enabled;
 	},
-	enable : function() {
+	enableSubmit : function() {
 		this._enabled = true;
 		this.$main.find("#sendBtn").attr("disabled", false);
 	},
-	disable : function() {
+	
+	disableSubmit : function() {
 		this._enabled = false;
 		this.$main.find("#sendBtn").attr("disabled", "disabled");
 	}
@@ -101,7 +111,7 @@ var SimpleSearch = {
 		
 		$("#prefixChk, #suffixChk").click(function() {
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
-				self.enable();
+				self.enableSubmit();
 			}
 		});
 	},
@@ -242,7 +252,6 @@ var SimpleSearch = {
 			return;
 		}
 		
-		
 		var currentText = $("#simple_text").val();
 		currentText = $.trim(currentText, '"');
 		var val;
@@ -262,9 +271,9 @@ var SimpleSearch = {
 		}
 		$("#cqp_string").val(val);
 		if(currentText != "") {
-			this.enable();
+			this.enableSubmit();
 		} else {
-			this.disable();
+			this.disableSubmit();
 		}
 	},
 	
@@ -285,7 +294,7 @@ var SimpleSearch = {
 	clear : function() {
 		$("#simple_text").val("")
         .get(0).blur();
-		this.disable();
+		this.disableSubmit();
 		return this;
 	}
 	

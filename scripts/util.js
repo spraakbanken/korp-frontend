@@ -208,6 +208,8 @@ function loadCorpora() {
 		$.log("corpus changed", corpora);
 		$.bbq.pushState({"corpus" : corpora.join(",")});
     	extendedSearch.refreshTokens();
+    	var enableSearch = !!corpora.length;
+    	view.enableSearch(enableSearch);
     }, infoPopup: function(corpusID) {
     	var maybeInfo = "";
     	if(settings.corpora[corpusID].description)

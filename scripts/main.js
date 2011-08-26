@@ -56,8 +56,9 @@ var currentMode;
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		$.log("preloading done, t = ", $.now() - t);
 		currentMode = $.deparam.querystring().mode || "default";
-		
 		util.browserWarn();
+		// TODO: because the korptab is broken, this is an ugly hack. 
+		$.bbq.pushState({"result-container" : 0});
 		
 		$("#mode_switch").radioList({
             change : function() {
@@ -178,7 +179,7 @@ var currentMode;
 				var corp_array = corpus.split(',');
 				corpusChooserInstance.corpusChooser("selectItems",corp_array);
 				$("#select_corpus").val(corpus);
-				simpleSearch.enable();
+				simpleSearch.enableSubmit();
 			}
 			
 			function showAbout() {
