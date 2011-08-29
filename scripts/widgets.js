@@ -325,16 +325,30 @@ var Sidebar = {
 var ExtendedToken = {
 	options : {showClose : true},
 	_init : function() {
+		var self = this;
 		
-        this.element.addClass("query_token ui-corner-all ui-state-default")
-        .attr({cellPadding: 0, cellSpacing: 0});
+        this.element.find(".logic_switcher")
+        .hide()
+        .find("select").change(function() {
+        	$.log("change", $(this).val());
+        	self.element.find(".and_any").localeKey($(this).val());
+        }).end()
+        .next() //close icon
+        .log()
+        .click(function() {
+        	$.log("close");
+        	self.element.remove();
+        	self._trigger("close");
+        });;
+        
+        this.table = this.element;
 	    this.insertArg();
 	},
 	
 	insertArg : function(token) {
 		$.log("insertArg");
 		var self = this;
-	    var row = $("<tr/>").addClass("query_arg").appendTo(this.element);
+	    var row = $("<tr/>").addClass("query_arg").appendTo(this.table);
 	    
 	    var arg_select = this.makeSelect();
 	    
@@ -347,9 +361,13 @@ var ExtendedToken = {
         .addClass("image_button")
         .addClass("remove_arg")
         .click(function(){
-        	if(row.is(":last-child"))
+        	if(row.is(":last-child")) {
         		row.prev().find(".insert_arg").show();
+        		row.prev().find(".and_any").hide();
+        	}
         	self.removeArg(this);
+        	if(self.element.find(".query_arg").length < 2)
+        		self.element.find(".logic_switcher").fadeOut("fast");
     	});
 
 	    var insert = $('<img src="img/plus.png"/>')
@@ -358,19 +376,15 @@ var ExtendedToken = {
 	    .click(function() {
 	    	self.insertArg(this);
 	    	$(this).hide();
+	    	$(this).prev().show();
+	    	self.element.find(".logic_switcher").fadeIn("fast");
 	    });
 	    
-	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
-	    .click(function() {
-	    	$(this).closest("table").remove();
-	    	
-	    	if($(".query_token").length == 1) {
-	    		$(".query_token .btn-icon:first").css("visibility", "hidden");
-	    	} else {
-	    		$(".query_token .btn-icon:first").css("visibility", "visible");
-	    	}
-	    	self._trigger("close");
-	    });
+//	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
+//	    .click(function() {
+//	    	$(this).closest("table").remove();
+//	    	self._trigger("close");
+//	    });
 	    
 	    
 	    
@@ -383,29 +397,17 @@ var ExtendedToken = {
 	    	// let's patch it up! (maybe I shouldn't have used inline-block)
 	    	leftCol.add(rightCol).css("display", "inline");
 	    	rightCol.find("input").css("float", "right");
-	    	closeBtn.css("right", "-235").css("top", "-55");
+//	    	closeBtn.css("right", "-235").css("top", "-55");
 	    }
 	    
-	    var wrapper = $("<div />").append($("<span/>").localeKey("and"), insert);
-	    
+	    var wrapper = $("<div />").append($("<span/>", {"class" : "and_any"}).localeKey("and").hide(), insert);
 	    row.append(
-	        $("<td/>").append(leftCol, rightCol, closeBtn, wrapper)
+	        $("<td/>").append(leftCol, rightCol, wrapper)
 	    );
 	    
-	    if(row.is(":first-child")) {
+	    if(row.is(":nth-child(2)")) {
 	    	remove.css("visibility", "hidden");
 	    }
-	    
-		if(!row.is(":first-child") ) {
-			closeBtn.css("visibility", "hidden");
-		}
-		$.log(".query_token.length", $(".query_token").length);
-		if($(".query_token").length == 1) {
-			closeBtn.css("visibility", "hidden");
-		}
-		else {
-			$(".query_token .btn-icon:first").css("visibility", "visible");
-		}
 	    
 	    this._trigger("change");
 	},
@@ -417,7 +419,7 @@ var ExtendedToken = {
 	    } else {
 	        arg.closest(".query_token").remove();
 	    }
-	    this._trigger("change")
+	    this._trigger("change");
 	},
 	
 	makeSelect : function() {
@@ -467,7 +469,7 @@ var ExtendedToken = {
 	
 	refresh : function() {
 		var self = this;
-		this.element.find(".arg_selects").each(function() {
+		this.table.find(".arg_selects").each(function() {
 			var oldVal = $(this).find(".arg_type").val();
 			var optVal = $(this).find(".arg_opts").val();
 			var newSelects = self.makeSelect(); 
@@ -568,7 +570,7 @@ var ExtendedToken = {
 	    var query = {token: [], min: "", max: ""};
 
 	    var args = {};
-	    this.element.find(".query_arg").each(function(){
+	    this.table.find(".query_arg").each(function(){
 	        var type = $(this).find(".arg_type").val();
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();

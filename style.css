@@ -215,7 +215,7 @@ input:placeholder, textarea:placeholder {
 
 .arg_value {
 	display : block;
-	width : 100%;
+	width : 98%;
 }
 .arg_value option {
 	padding-top: 1px;
@@ -468,6 +468,7 @@ table {
 	*display : inline;
 	vertical-align: top;
 	padding: 5px;
+	
 	border : 1px solid #999;
 	cursor : move;
 	margin-left : 0;
@@ -829,4 +830,28 @@ a.relStat:hover {
 	right : 9px;
 	bottom : 0px;
 	left : 340px;
+}
+
+/* .and_any:last-of-type { */
+/* 	visibility : hidden; */
+/* } */
+
+/* .and_any:hidden + .insert_arg { */
+/* 	visibility : visible; */
+/* } */
+
+/* .and_any:visible + .insert_arg { */
+/* 	visibility : hidden; */
+/* } */
+
+.query_token .logic_switcher {
+	float : left;
+}
+
+.query_token .ui-icon-circle-close {
+	float : right;
+}
+
+.query_token:only-of-type .ui-icon-circle-close:first-of-type {
+	visibility : hidden;
 }

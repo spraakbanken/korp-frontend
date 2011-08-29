@@ -39,6 +39,8 @@
 	"none_selected" : "&lt;ej vald&gt;",
 	
 	"any" : "vilket ord som helst",
+	"all" : "alla",
+	"one_of" : "någon av",
 	"error_occurred" : "Ett fel har inträffat.",
 	
 	"simple" : "Enkel",

@@ -24,6 +24,7 @@
     
     <div id="korp-extended">
         <div id="query_table"></div>
+        
         <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]"/>
     </div>
     
@@ -40,3 +41,17 @@
     </div>
     
 </div>
+<script id="tokenTmpl" type="text/x-jquery-tmpl">
+		<table class="query_token ui-corner-all ui-state-default" cellPadding="0" cellSpacing="0">
+			<tr><td>
+		<div class="logic_switcher">
+			<span rel="">Matcha</span> <select>
+				<option rel="localize[all]" value="and">alla</option>
+				<option rel="localize[one_of]" value="or">någon av</option>
+			</select> <span rel="">följande regler:</span>
+		</div>
+		<span class="ui-icon ui-icon-circle-close btn-icon"></span>
+
+			</td></tr>
+		</table>
+</script>

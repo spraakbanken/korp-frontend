@@ -38,6 +38,8 @@
 	"none_selected" : "&lt;none selected&gt;",
 	
 	"any" : "any word",
+	"all" : "all",
+	"one_of" : "any",
 	"error_occurred" : "An error occurred",
 	
 	"simple" : "Simple",

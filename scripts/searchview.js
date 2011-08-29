@@ -22,10 +22,15 @@ view.saldoSort = function(first, second) {
 
 view.updateSearchHistory = function(value) {
 	var searches = $.jStorage.get("searches") || [];
+	function filterParam(url) {
+		return $.grep($.param.fragment(url).split("&"), function(item) {
+			return item.split("=")[0] == "search" || item.split("=")[0] == "corpus";
+		}).join("&");
+	}
 	var searchLocations = $.map(searches, function(item) {
-		return item.location;
+		return filterParam(item.location);
 	});
-	if(value != null && $.inArray(location.href, searchLocations) == -1) {
+	if(value != null && $.inArray(filterParam(location.href), searchLocations) == -1) {
 		searches.splice(0, 0, {label : value, location : location.href});
 		$.jStorage.set("searches", searches);
 	}
@@ -360,7 +365,8 @@ var ExtendedSearch = {
 	},
 	
 	insertToken : function(button) {
-	    $("<table />").insertBefore($(button))
+//	    $("<table />").insertBefore($(button))
+		$.tmpl($("#tokenTmpl"))
 	    .extendedToken({
 	    	close : function() {
 	    		advancedSearch.updateCQP();
@@ -368,7 +374,7 @@ var ExtendedSearch = {
 	    	change : function() {
 	    		advancedSearch.updateCQP();
 	    	}
-	    });
+	    }).insertBefore(button);
 	},
 	
 	refreshTokens : function() {
