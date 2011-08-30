@@ -332,6 +332,7 @@ var ExtendedToken = {
         .find("select").change(function() {
         	$.log("change", $(this).val());
         	self.element.find(".and_any").localeKey($(this).val());
+        	self._trigger("change");
         }).end()
         .next() //close icon
         .log()
@@ -567,6 +568,7 @@ var ExtendedToken = {
 	},
 	
 	getCQP : function() {
+		var self = this;
 	    var query = {token: [], min: "", max: ""};
 
 	    var args = {};
@@ -619,11 +621,11 @@ var ExtendedToken = {
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	if (inner_query.length) {
-	    		query.token.push(inner_query.join(" & "));
+	    		var op = self.element.find("select").first().val() == "or" ? " | " : " & ";
+	    		query.token.push(inner_query.join(op));
 	    	}
 	    	
 	    });
-
 	    var query_string = "[" + query.token.join(" & ") + "]";
 	    if (query.min | query.max) {
 	        query_string += "{" + (query.min || 0) + "," + query.max + "}";

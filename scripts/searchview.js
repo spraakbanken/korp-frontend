@@ -212,25 +212,32 @@ var SimpleSearch = {
 		
 		// wordlist
 		function makeLinks(array) {
-			return $($.map(array, function(item, i){
-				var match = util.splitLemgram(item);
-				return $.format("<a href='javascript:' data-lemgram='%s'>%s</a>", [item, match[0]]);
-			}).join(" "))
-			.click(function() {
-				simpleSearch.selectLemgram($(this).data("lemgram"));
-			});
+			return $("#similarTmpl").tmpl(array);			
 		}
 		
-		makeLinks(data.slice(0,30)).appendTo("#similar_lemgrams");
-		var breakDiv = $("<div style='clear : both;float: none;' />").appendTo("#similar_lemgrams");
-		
+		function sliceData(from, upTo) {
+			var count = 0;
+			var output = from;
+			$.each(data, function(i, item) {
+				count += item.rel.length;
+				output = i;
+				if(upTo != null && count > upTo) {
+					return false;
+				}
+			});
+			return [data.slice(0, output + 1), data.slice(output + 1)];
+		}
+		var splitData = sliceData(0, 30);
+		var firstPart = splitData[0];
+		var theRest = splitData[1];
+		var list = $("<ul />").appendTo("#similar_lemgrams");
+		makeLinks(firstPart).appendTo(list);
 		
 		$("#show_more").remove();
 		
 		var div = $("#similar_lemgrams").show().height("auto").slideUp(0);
 		
-		var restOfData = data.slice(30);
-		if(restOfData.length) {
+		if(theRest.length) {
 			div.after(
 				$("<div id='show_more' />")
 				.css("background-color", settings.primaryColor)
@@ -239,7 +246,7 @@ var SimpleSearch = {
 					$(this).remove();
 					var h = $("#similar_lemgrams").outerHeight();
 					
-					makeLinks(restOfData).appendTo("#similar_lemgrams");
+					makeLinks(theRest).appendTo(list);
 					breakDiv.appendTo("#similar_lemgrams");
 					$("#similar_lemgrams").height("auto");
 					var newH = $("#similar_lemgrams").outerHeight();

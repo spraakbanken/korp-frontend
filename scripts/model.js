@@ -7,7 +7,7 @@ var SearchProxy = {
 	
 	relatedWordSearch : function(lemgram) {
 		$.ajax({
-			url: "http://spraakbanken.gu.se/ws/saldo-ws/rel/json/" + lemgram,
+			url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
 			success : function(data) {
 				$.log("related words success");
 				simpleSearch.renderSimilarHeader(lemgram, data);
@@ -26,7 +26,8 @@ var KWICProxy = {
 	},
 	
 	abort : function() {
-		this.pendingRequest.abort();
+		if(this.pendingRequest)
+			this.pendingRequest.abort();
 	},
 	
 	makeRequest : function(options, page) {

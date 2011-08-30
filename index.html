@@ -270,7 +270,15 @@
 		</div>
 	</script>
 	
-
+	
+	<script id="similarTmpl" type="text/x-jquery-tmpl">
+	<li>
+		{{each rel}}
+		<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value)[0]}</a>
+		{{/each}}
+	</li>
+		
+	</script>
 
 
 	</body>
