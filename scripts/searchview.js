@@ -211,33 +211,32 @@ var SimpleSearch = {
 		$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
 		
 		// wordlist
-		function makeLinks(array) {
-			return $("#similarTmpl").tmpl(array);			
-		}
+		data = $.grep(data, function(item) {
+			return !!item.rel.length;
+		});
+		// find the first 30 words
+		var count = 0;
+		var index = 0;
+		var sliced = $.extend(true, [], data);
+		var isSliced = false;
+		$.each(sliced, function(i, item) {
+			index = i;
+			if(count + item.rel.length > 30) {
+				item.rel = item.rel.slice(0, 30 - count);
+				isSliced = true;
+				return false;
+			}
+			count += item.rel.length;
+		});
 		
-		function sliceData(from, upTo) {
-			var count = 0;
-			var output = from;
-			$.each(data, function(i, item) {
-				count += item.rel.length;
-				output = i;
-				if(upTo != null && count > upTo) {
-					return false;
-				}
-			});
-			return [data.slice(0, output + 1), data.slice(output + 1)];
-		}
-		var splitData = sliceData(0, 30);
-		var firstPart = splitData[0];
-		var theRest = splitData[1];
 		var list = $("<ul />").appendTo("#similar_lemgrams");
-		makeLinks(firstPart).appendTo(list);
+		$("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list);
 		
 		$("#show_more").remove();
 		
 		var div = $("#similar_lemgrams").show().height("auto").slideUp(0);
 		
-		if(theRest.length) {
+		if(isSliced) {
 			div.after(
 				$("<div id='show_more' />")
 				.css("background-color", settings.primaryColor)
@@ -246,8 +245,7 @@ var SimpleSearch = {
 					$(this).remove();
 					var h = $("#similar_lemgrams").outerHeight();
 					
-					makeLinks(theRest).appendTo(list);
-					breakDiv.appendTo("#similar_lemgrams");
+					list.html( $("#similarTmpl").tmpl(data) );
 					$("#similar_lemgrams").height("auto");
 					var newH = $("#similar_lemgrams").outerHeight();
 					$("#similar_lemgrams").height(h);
