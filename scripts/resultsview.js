@@ -220,34 +220,45 @@ var KWICResults = {
 			var ccounter = 0;
 			$.each(data["corpus_hits"], function(corp, hits) {				
 				if (hits > 0)
-					hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 + '%;background-color:#EEEEEE"></td>';
+					hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 +'%;"></td>'; //'%;background-color:#EEEEEE"></td>';
 				ccounter = ++ccounter % 6;
 			});
 			hits_picture_html += '</tr></table>';
 			$("#hits_picture").html(hits_picture_html);
+                        
+                        // Make sure that there is no mousover-effect on mobile devices:
+                        if( navigator.userAgent.match(/Android/i) ||
+                            navigator.userAgent.match(/webOS/i)   ||
+                            navigator.userAgent.match(/iPhone/i)  ||
+                            navigator.userAgent.match(/iPod/i)
+                          ) {
+                           $(".hits_picture_table").css("opacity","1");
+                        }
 
 
 			hoverHitPictureConfig = {
 				sensitivity: 3, interval: 100, timeout: 800,
 				over: function() {                
-					$(".hits_picture_table").find("td").each(function(){
+					$(".hits_picture_table").find("td").each(function() {
 //						$.log($(this).css("background-color"));
 						if ($(this).css("background-color") != "rgb(128, 128, 128)")
 							$(this).css({"background-color":""});
 					});
-					$(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
+					//$(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
+                                        $(".hits_picture_table").stop().animate({"opacity":"1"},400);
 				},
 				out: function() {
-					$(".hits_picture_table").stop().animate({"opacity":".5","height":"18px","margin-top":""});  
-					$(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
+					//$(".hits_picture_table").stop().animate({"opacity":".2","height":"18px","margin-top":""});
+                                        $(".hits_picture_table").stop().animate({"opacity":".2"});  
+					//$(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
 				}
 			};
 			$(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
-			$(".hits_picture_corp").hover(function() {
+			/*$(".hits_picture_corp").hover(function() {
 				$(this).css({"background-color": "gray"});
 			}, function() {
 				$(this).css({"background-color": ""});
-			});
+			});*/
 
 
 			$(".hits_picture_corp").each(function() {
@@ -728,7 +739,6 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 				dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString()), "shape_id":"sigma_all"});
 			} else {
 				// Individual wordform selected
-				
 				var freq = parseFloat(obj["relative"][dataName]);
 				if (freq) {
 					dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString()), "shape_id":dataName});
@@ -755,8 +765,8 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
-		.appendTo("#results-lemgram").append('<p style="text-align:center"><a class="statsAbsRelNumbers" id="statsRelNumbers" href="javascript:void(0)" rel="localize[statstable_relfigures]">' + relString + '</a> | <a class="statsAbsRelNumbers" id="statsAbsNumbers" href="javascript:void(0)" rel="localize[statstable_absfigures]">' + absString + '</a></p><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
-		.dialog({
+		.appendTo("#results-lemgram").append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa tal</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta tal</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
+                .dialog({
 			width : 400,
 			height : 500,
 			resize: function(){
@@ -777,23 +787,16 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		$("#dialog").fadeTo(400,1);
 		$("#dialog").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
-		
-		
-		
-		
-		$(".statsAbsRelNumbers").click(function() {
-			var typestring;
-			if ($(this).attr("id") == "statsAbsNumbers")
-				typestring = "absolute";
-			else
-				typestring = "relative";
+		statsSwitchInstance = $("#statistics_switch").radioList({
+                    change : function() {
+                        var typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
 				
 			var dataItems = new Array();
 			var dataName = statsResults["lastDataName"];
 			
 			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
 				if(dataName == "SIGMA_ALL") {
-					// ∑ selected
+					// sigma selected
 					var totfreq = 0;
 					$.each(obj[typestring], function(wordform, freq) {
 						if (typestring == "absolute")
@@ -806,7 +809,6 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 					dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(),false), "shape_id":"sigma_all"});
 				} else {
 					// Individual wordform selected
-					
 					if(typestring == "absolute")
 						var freq = parseInt(obj[typestring][dataName]);
 					else
@@ -825,8 +827,9 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 			} else {
 				$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits")).attr({"rel" : "localize[statstable_relfigures_hits]"});
 			}
-		});
-		
+                    },
+                    selected : 0
+                });
 		
 		
 	} else { // hits/wordform

@@ -186,6 +186,7 @@
 	"corpselector_numberofsentences" : "Antal meningar",
 	"corpselector_tokens" : "token",
 	"corpselector_sentences" : "meningar",
+	"corpselector_sentences_long" : "meningar i de valda korpusarna",
 	"corpselector_corporawith_sing" : "korpus med",
 	"corpselector_corporawith_plur" : "korpusar med",
 	

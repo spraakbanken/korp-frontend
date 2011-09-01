@@ -186,6 +186,7 @@
 	"corpselector_numberofsentences" : "Number of sentences",
 	"corpselector_tokens" : "tokens",
 	"corpselector_sentences" : "sentences",
+	"corpselector_sentences_long" : "sentences in the selected corpora",
 	"corpselector_corporawith_sing" : "corpus with",
 	"corpselector_corporawith_plur" : "corpora with",
 	
