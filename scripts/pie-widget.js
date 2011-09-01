@@ -306,17 +306,12 @@ var pie_widget = {
 		// Default colours for the arcs:
 		var defaultOptions = new Array();
 		defaultOptions["colors"] = new Array();
-		var c = 0;
-		while(c < 8) {
-			defaultOptions["colors"].push("90-#C0C7E0-#D0D7F0:50-#D0D7F0");
-			defaultOptions["colors"].push("90-#E7C1D4-#F7D1E4:50-#F7D1E4");
-			defaultOptions["colors"].push("90-#DDECC5-#EDFCD5:50-#EDFCD5");
-			defaultOptions["colors"].push("90-#EFE3C8-#FFF3D8:50-#FFF3D8");
-			defaultOptions["colors"].push("90-#BADED8-#CAEEE8:50-#CAEEE8");
-			defaultOptions["colors"].push("90-#EFCDC8-#FFDDD8:50-#FFDDD8");
-			c++;
-		}
-
+                defaultOptions["colors"].push("90-#C0C7E0-#D0D7F0:50-#D0D7F0");
+                defaultOptions["colors"].push("90-#E7C1D4-#F7D1E4:50-#F7D1E4");
+                defaultOptions["colors"].push("90-#DDECC5-#EDFCD5:50-#EDFCD5");
+                defaultOptions["colors"].push("90-#EFE3C8-#FFF3D8:50-#FFF3D8");
+                defaultOptions["colors"].push("90-#BADED8-#CAEEE8:50-#CAEEE8");
+                defaultOptions["colors"].push("90-#EFCDC8-#FFDDD8:50-#FFDDD8");
 		// First sort the data in descending order
 		var sortedData;
 		if (this.options.sort_desc) {
@@ -352,7 +347,7 @@ var pie_widget = {
 			piePieceDefinitions.push({"share":relative, "color":(defaultOptions["colors"][colorCount]), "shape_id":itemID, "caption":itemCaption});
 			if(end)
 				return false;
-			colorCount++;
+			colorCount = (colorCount+1) % defaultOptions["colors"].length;
 		});
 		if (diagramtype == 0) {
 			return this._makeSVGPie(piePieceDefinitions, this.options.diameter*0.5);
