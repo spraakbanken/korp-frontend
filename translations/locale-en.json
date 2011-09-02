@@ -207,5 +207,5 @@
 	"util_numbergroupseparator" : ",",
 	
 	"hitspicture_hits" : "hits",
-	"hitspicture_refinesearch" : "Click to search only in this corpus"
+	"hitspicture_gotocorpushits" : "Click to go to the first page with hits from this corpus."
 }

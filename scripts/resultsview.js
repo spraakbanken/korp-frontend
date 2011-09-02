@@ -213,12 +213,14 @@ var KWICResults = {
     },
 	
     renderHitsPicture : function(data) {
+                var self=this;
 		if (getSelectedCorpora().length > 1) {
 			var totalhits = data["hits"];
 			var hits_picture_html = '<table class="hits_picture_table"><tr height="18px">';
 			var barcolors = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
 			var ccounter = 0;
-			$.each(data["corpus_hits"], function(corp, hits) {				
+                        $.each(data["corpus_order"], function(index, corp) {
+                                var hits = data["corpus_hits"][corp];
 				if (hits > 0)
 					hits_picture_html += '<td class="hits_picture_corp ' + barcolors[ccounter] + '" data="' + corp + '" style="width:' + hits/totalhits*100 +'%;"></td>'; //'%;background-color:#EEEEEE"></td>';
 				ccounter = ++ccounter % 6;
@@ -226,7 +228,7 @@ var KWICResults = {
 			hits_picture_html += '</tr></table>';
 			$("#hits_picture").html(hits_picture_html);
                         
-                        // Make sure that there is no mousover-effect on mobile devices:
+                        // Make sure that there is no mousover effect on touch screen devices:
                         if( navigator.userAgent.match(/Android/i) ||
                             navigator.userAgent.match(/webOS/i)   ||
                             navigator.userAgent.match(/iPhone/i)  ||
@@ -240,38 +242,37 @@ var KWICResults = {
 				sensitivity: 3, interval: 100, timeout: 800,
 				over: function() {                
 					$(".hits_picture_table").find("td").each(function() {
-//						$.log($(this).css("background-color"));
-						if ($(this).css("background-color") != "rgb(128, 128, 128)")
+						//if ($(this).css("background-color") != "rgb(128, 128, 128)")
 							$(this).css({"background-color":""});
 					});
-					//$(".hits_picture_table").stop().animate({"opacity":"1","height":"18px","margin-top":""},400);
                                         $(".hits_picture_table").stop().animate({"opacity":"1"},400);
 				},
 				out: function() {
-					//$(".hits_picture_table").stop().animate({"opacity":".2","height":"18px","margin-top":""});
-                                        $(".hits_picture_table").stop().animate({"opacity":".2"});  
-					//$(".hits_picture_table").find("td").animate({"background-color":"#EEEEEE"});
+                                        $(".hits_picture_table").stop().animate({"opacity":".3"});  
 				}
 			};
 			$(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
-			/*$(".hits_picture_corp").hover(function() {
-				$(this).css({"background-color": "gray"});
-			}, function() {
-				$(this).css({"background-color": ""});
-			});*/
 
 
 			$(".hits_picture_corp").each(function() {
 				var corpus_name = $(this).attr("data");
 				$(this).tooltip({delay : 0, bodyHandler : function() {
-					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_refinesearch") + '</i>';}});
+					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_gotocorpushits") + '</i>';}});
 			});
 
-			// Click to refine search in one corpus
+			// Click to ge to the first page with a hit in the particular corpus
 			$(".hits_picture_corp").click(function(event) {
-				$.bbq.pushState({corpus : $(this).attr("data").toLowerCase()});
-				simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
-				event.stopPropagation();
+                                var theCorpus = $(this).attr("data");
+                                // Count the index of the first hit for the corpus:
+                                var firstIndex = 0;
+                                $.each(data["corpus_order"], function(index, corp) {
+                                        if(corp == theCorpus)
+                                                return false;
+                                        firstIndex += data["corpus_hits"][corp];
+                                });
+                                var firstHitPage = Math.floor(firstIndex / $("#num_hits").val());
+                                self.handlePaginationClick(firstHitPage, null, true);
+                                return false;
 			});
 		} else {
 			$("#hits_picture").html("");

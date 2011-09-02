@@ -207,5 +207,5 @@
 	"util_numbergroupseparator" : "&nbsp;",
 	
 	"hitspicture_hits" : "träffar",
-	"hitspicture_refinesearch" : "Klicka för att söka i enbart denna korpus"
+	"hitspicture_gotocorpushits" : "Klicka för att gå till första sidan med träffar från denna korpus."
 }
