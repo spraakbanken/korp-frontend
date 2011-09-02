@@ -42,6 +42,9 @@
 	"one_of" : "any",
 	"error_occurred" : "An error occurred",
 	
+	"match" : "Match",
+	"following_rules" : "of the following rules",
+	
 	"simple" : "Simple",
 	"detailed" : "Extended",
 	"advanced" : "Advanced",

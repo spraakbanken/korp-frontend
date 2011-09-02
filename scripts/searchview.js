@@ -379,7 +379,8 @@ var ExtendedSearch = {
 	    	change : function() {
 	    		advancedSearch.updateCQP();
 	    	}
-	    }).insertBefore(button);
+	    }).insertBefore(button)
+	    .quickLocalize();
 	},
 	
 	refreshTokens : function() {

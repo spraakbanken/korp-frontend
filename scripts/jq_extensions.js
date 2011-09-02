@@ -310,3 +310,7 @@ $.fn.uncover = function() {
 	return this;
 };
 
+$.fn.quickLocalize = function() {
+	util.localize(this.selector);
+	return this;
+}

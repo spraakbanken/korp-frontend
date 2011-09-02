@@ -42,9 +42,11 @@ util.getLocaleString = function(key) {
 	return output;
 };
 
-util.localize = function() {
+util.localize = function(root) {
+	root = root || "body"; 
+	
 	var lang = $("#languages").radioList("getSelected").data("lang");
-	$("[rel^=localize]").localize("locale" ,{
+	$(root).find("[rel^=localize]").localize("locale" ,{
 		pathPrefix : "translations", 
 		language : lang
 	});

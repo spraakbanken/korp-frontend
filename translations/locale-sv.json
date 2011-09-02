@@ -43,6 +43,9 @@
 	"one_of" : "någon av",
 	"error_occurred" : "Ett fel har inträffat.",
 	
+	"match" : "Matcha",
+	"following_rules" : "följande regler",
+	
 	"simple" : "Enkel",
 	"detailed" : "Utökad",
 	"advanced" : "Avancerad",
