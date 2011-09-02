@@ -852,12 +852,19 @@ a.relStat:hover {
 	visibility : hidden;
 }
 
+.sort_select {
+	float : right;
+}
 
+.sort_select option:first-child {
+	color : grey;
+}
 
-/* .link_group { */
-/* 	color : inherit; */
-/* } */
-/* .link_group:hover { */
-/* 	color : grey; */
-/* } */
+.pager-wrapper {
+/* 	float: left; */
+	display: inline-block;
+}
+
+.col_wrapper {
+}	
 

@@ -37,7 +37,8 @@ var KWICProxy = {
 			cqp : $("#cqp_string").val(), 
 			queryData : null,
 			ajaxParams : this.prevAjaxParams,
-			success : function(data) {kwicResults.renderResult(data);}
+			success : function(data) {kwicResults.renderResult(data);},
+			error : function(data) {kwicResults.hidePreloader();}
 		}, kwicResults.getPageInterval(page), options);
 		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
@@ -107,7 +108,8 @@ var KWICProxy = {
 				$.log("kwic result", data);
 				self.queryData = data.querydata; 
 				o.success(data, o.cqp);
-			}
+			},
+			error : o.error
 		});
 	}
 };
@@ -154,8 +156,9 @@ var LemgramProxy = {
 //					if($("#results-lemgram").is(":visible"))
 //						util.setJsonLink(settings);
 			},
-			abort : function(data) {
+			error : function(data) {
 				$.log("relationsearch abort", arguments);
+				lemgramResults.hidePreloader();
 			},
 			success : function(data) {
 				$.log("relations success", data);
@@ -179,7 +182,7 @@ var LemgramProxy = {
 			        lexikon : "saldom",
 			        format : "json"
 		        },
-			    success : function(data) {
+			    success : function(data, textStatus, xhr) {
 		            var leArray = $.map(data.div, function(item) {
 		            	return item.LexicalEntry;
 		            });
@@ -199,7 +202,11 @@ var LemgramProxy = {
 		        	output = $.map(output, function(le) {
 		        		return le[type];
 		        	});
-		        	dfd.resolve(output);
+		        	dfd.resolve(output, textStatus, xhr);
+		        },
+		        error : function(jqXHR, textStatus, errorThrown) {
+		        	$.log("sblex error", jqXHR, textStatus, errorThrown);
+		        	dfd.reject();
 		        }
 		        
 			});
@@ -233,12 +240,13 @@ var StatsProxy = {
 				self.prevRequest = settings;
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
-				$.error("gettings stats error, status: " +	 textStatus);
-				statsResults.showError();
+				$.log("gettings stats error, status: " +	 textStatus);
+				statsResults.hidePreloader();
+//				statsResults.showError();
 			},
-			success: function(data) {
+			success : function(data) {
 				if(data.ERROR != null) {
-					$.error("gettings stats failed with error", $.dump(data.ERROR));
+					$.log("gettings stats failed with error", $.dump(data.ERROR));
 					statsResults.showError();
 					return;
 				}

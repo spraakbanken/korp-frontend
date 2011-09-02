@@ -63,7 +63,7 @@ var KWICResults = {
 		this.selectionManager = new util.SelectionManager();
 		if(this.$result.find(".num_hits").val() == null)
 			this.$result.find(".num_hits").get(0).selectedIndex = 0;
-		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this));
+		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this)).click(false);
 		
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
@@ -92,6 +92,7 @@ var KWICResults = {
 	
 	onHpp : function(event) {
 		$.bbq.pushState({hpp : $(event.currentTarget).val()});
+		return false;
 	},
 	
 	onKeydown : function(event) {
@@ -490,6 +491,9 @@ var ExampleResults = {
 				$.log("ExampleResults success", data);
 				self.renderResult(data);
 				util.setJsonLink(self.proxy.prevRequest);
+			},
+			error : function() {
+				self.hidePreloader();
 			}
 		});
 		this.showPreloader();
@@ -499,6 +503,7 @@ var ExampleResults = {
 	onHpp : function() {
 		//refresh search
 		this.handlePaginationClick(0, null, true);
+		return false;
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {

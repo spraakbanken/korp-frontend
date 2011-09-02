@@ -61,7 +61,8 @@ $.fn.korp_autocomplete = function(options) {
 		source: function( request, response ) {
 			
 			var promise = lemgramProxy.sblexSearch(request.term, options.type)
-			.done(function(idArray) {
+			.done(function(idArray, textstatus, xhr) {
+				$.log("sblex done", textstatus, xhr, xhr.status);
 				idArray = $.unique(idArray);
 				idArray.sort(options.sortFunction);
 				
@@ -90,6 +91,7 @@ $.fn.korp_autocomplete = function(options) {
 			})
 			.fail(function() {
 				$.log("sblex fail", arguments);
+				selector.preloader("hide");
 			});
 				
 			

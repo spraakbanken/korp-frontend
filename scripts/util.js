@@ -345,7 +345,7 @@ util.browserWarn = function() {
 	        }
 		},
 		header: 'Du använder en omodern webbläsare', // Header of pop-up window   
-	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista av de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1   
+	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1   
 	    paragraph2: '', // Paragraph 2
 	    closeMessage: 'Du kan fortsätta ändå, men med begränsad funktionalitet.', // Message displayed below closing link   
 	    closeLink: 'Stäng varningen' // Text for closing link   
