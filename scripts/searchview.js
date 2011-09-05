@@ -230,7 +230,10 @@ var SimpleSearch = {
 		});
 		
 		var list = $("<ul />").appendTo("#similar_lemgrams");
-		$("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list);
+		$("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list)
+		.click(function() {
+			self.selectLemgram($(this).data("lemgram"));
+		});
 		
 		$("#show_more").remove();
 		

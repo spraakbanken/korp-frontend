@@ -169,6 +169,11 @@ var currentMode;
 				kwicResults.setPage(page);
 			}
 			
+//			var sort = e.getState("sort");
+			if(hasChanged("sort")) {
+				simpleSearch.enableSubmit();
+			}
+			
 			if(isInit) {
 				kwicResults.current_page = page;
 			}
@@ -268,6 +273,7 @@ var currentMode;
 				util.localize();
 			}  
 		}).vAlign();
+		
 		
 		$("#sidebar").sidebar().sidebar("hide");
 		

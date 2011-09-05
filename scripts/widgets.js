@@ -342,7 +342,7 @@ var ExtendedToken = {
         	$.log("close");
         	self.element.remove();
         	self._trigger("close");
-        });;
+        });
         
         this.table = this.element;
 	    this.insertArg();

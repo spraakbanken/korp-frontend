@@ -65,7 +65,8 @@ var KWICProxy = {
 			}), Boolean).join(),
 			within : "sentence",
 			show:[],
-			show_struct:[]  
+			show_struct:[],
+			sort : o.sort
 		};
 		$.extend(data, o.ajaxParams);
 		if(o.queryData != null) {
@@ -126,7 +127,7 @@ var ExamplesProxy = {
 var LemgramProxy = {
 		
 	initialize : function() {
-		this.pendingRequest = null;
+		this.pendingRequest = {abort : $.noop};
 	},
 		
 	buildAffixQuery : function(isValid, key, value) {

@@ -70,6 +70,8 @@ var KWICResults = {
 			self.selectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
+		$.log("initialize", this.$result.find(".sort_select"), this.$result);
+		this.$result.find(".sort_select").change(this.onSortChange).click(false);
 		
 	},
 	
@@ -78,6 +80,17 @@ var KWICResults = {
 		this.$result.find(".results_table").empty();
 		this.$result.find(".pager-wrapper").empty();
 		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
+	},
+	
+	onSortChange : function() {
+		var opt = $(this).find(":selected");
+		$.log("sort", opt);
+		if(opt.is(":first-child")) {
+			$.bbq.removeState("sort");
+		} else {
+			$.log("sort", $(this).val());
+			$.bbq.pushState({"sort" : $(this).val()});
+		}
 	},
 	
 	onentry : function() {
@@ -493,7 +506,7 @@ var ExampleResults = {
 				util.setJsonLink(self.proxy.prevRequest);
 			},
 			error : function() {
-				self.hidePreloader();
+				self.hidePreloader()
 			}
 		});
 		this.showPreloader();

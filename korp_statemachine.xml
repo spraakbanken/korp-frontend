@@ -14,7 +14,7 @@
             simpleSearch.resetView();
             kwicResults.showPreloader();
             
-            kwicProxy.makeRequest(null, page);
+            kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
         }
     
         function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
@@ -30,7 +30,7 @@
             statsProxy.makeRequest(lemgram);
             
             var cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
-            kwicProxy.makeRequest({cqp : cqp}, page);
+            kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page);
             $("#cqp_string").val(cqp);
         }
         
