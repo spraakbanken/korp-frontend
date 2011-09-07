@@ -169,9 +169,12 @@ var currentMode;
 				kwicResults.setPage(page);
 			}
 			
-//			var sort = e.getState("sort");
-			if(hasChanged("sort")) {
-				simpleSearch.enableSubmit();
+			var sort = e.getState("sort");
+			if(isInit && sort) {
+				kwicResults.$result.find(".sort_select").val(sort);
+			}
+			if(!isInit && hasChanged("sort")) {
+				kwicResults.handlePaginationClick(0, null, true);
 			}
 			
 			if(isInit) {

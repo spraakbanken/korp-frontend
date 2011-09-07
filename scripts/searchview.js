@@ -64,7 +64,7 @@ var BaseSearch = {
 		$(window).trigger("hashchange");
 	},
 	
-	onSubmit : function(event) {
+	onSubmit : function() {
 		this.refreshSearch();
 	},
 	
@@ -165,8 +165,8 @@ var SimpleSearch = {
 		});
 	},
 	
-	onSubmit : function(event) {
-		this.parent(event);
+	onSubmit : function() {
+		this.parent();
 		$("#simple_text").korp_autocomplete("abort");
 		if($("#simple_text").val() != "")
 			util.searchHash("word", $("#simple_text").val());
@@ -343,8 +343,8 @@ var ExtendedSearch = {
 	onentry : function() {
 	},
 	
-	onSubmit : function(event) {
-		this.parent(event);
+	onSubmit : function() {
+		this.parent();
 		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
 			var query = advancedSearch.updateCQP();
 			util.searchHash("cqp", query);
@@ -411,8 +411,8 @@ var AdvancedSearch = {
 	    return query;
 	},
 	
-	onSubmit : function(event) {
-		this.parent(event);
+	onSubmit : function() {
+		this.parent();
 		util.searchHash("cqp", $("#cqp_string").val());
 	}
 

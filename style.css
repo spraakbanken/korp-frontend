@@ -868,3 +868,6 @@ a.relStat:hover {
 .col_wrapper {
 }	
 
+.sidebar_url {
+	white-space: nowrap;
+}

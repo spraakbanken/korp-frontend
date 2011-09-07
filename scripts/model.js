@@ -192,12 +192,19 @@ var LemgramProxy = {
 		            	
 		            	if(le.pos.slice(-1) == "h") return false;
 		            	
-	            		var formArray = le.table.form;
-		        		for ( var i = 0; i < formArray.length; i++) {
-							var form = formArray[i];
-							if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
-								return true;
-						}
+		            	var formArray;
+		            	if($.isPlainObject(le.table.form)) {
+		            		 formArray = [le.table.form];
+		            	} else {
+		            		formArray = le.table.form;
+	            		}
+		            	
+		            	
+	            			for ( var i = 0; i < formArray.length; i++) {
+	            				var form = formArray[i];
+	            				if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
+	            					return true;
+	            			}
 		        		return false;
 		            });
 		        	output = $.map(output, function(le) {

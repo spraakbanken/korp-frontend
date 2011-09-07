@@ -55,6 +55,8 @@
 <!-- 		<script type="text/javascript" src="lib/jquery.placeholder2.js"></script> -->
 		<script type="text/javascript" src="lib/jquery.raphael.spinner.js"></script>
 		<script type="text/javascript" src="lib/jquery.reject.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.autoellipsis-1.0.2.js"></script>
+		
 		
 		<script type="text/javascript" src="lib/jquery.hoverIntent.js"></script>
 		<!-- <script type="text/javascript" src="lib/jquery.ba-resize.min.js"></script> -->
@@ -147,7 +149,7 @@
 								
 								<div class="pager-wrapper"></div>
 								<select class="sort_select">
-									<option rel="localize[sort_default]">Sortera inom korpus på</option>
+									<option value="" rel="localize[sort_default]">Sortera inom korpus på</option>
 									<option value="keyword" rel="localize[word_context]">Ordkontext</option>
 									<option value="left" rel="localize[left_context]">Vänsterkontext</option>
 									<option value="right" rel="localize[right_context]">Högerkontext</option>
@@ -194,6 +196,9 @@
 			
 			{{if $value.dataset}}
 			 ${$value.dataset[$data[$index]]}
+			 
+			 
+			 {{html $item.defaultSetFormatter($data[$index]).outerHTML() }}
 			-->
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
@@ -204,14 +209,20 @@
 			{{if $value.displayType != "hidden"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
 			
-			{{if $index == "lemma"}}
+			{{if $data[$index] && $data[$index].replace("|", "") == ""}}
+				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
+			{{else $index == "lemma"}}
 			{{html $item.parseLemma($data[$index])}} 
 			{{else $index == "pos"}}
 				${util.getLocaleString($data[$index])}</p> 
-			{{else $value.type == "set"}}
+			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
 			<span id="sidebar_${$index}">${$data[$index]}</span>
+			{{else $value.type == "set"}}
+				<ul data-type="${$value.label}">
+				{{tmpl($.grep($data[$index].split("|"), Boolean)) '#defaultSetTmpl'}}
+				</ul>
 			{{else $value.type == "url"}}
-			<a href="${$data[$index]}" class="exturl">${decodeURI($data[$index].split("/").slice(-1))}</a>
+			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
 			
 			{{else}}
 			${$data[$index]}</p>
@@ -222,6 +233,11 @@
 	    </tr>
 		{{/each}}
 	</script>
+	
+	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
+		<li>${$data}</li>
+	</script>
+	
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
 		<tr class="sentence">
 		  	<td class="left">

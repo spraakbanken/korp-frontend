@@ -294,7 +294,7 @@ var KWICResults = {
     },
     
 	scrollToShowWord : function(word) {
-		var offset = 100;
+		var offset = 200;
 		var wordTop = word.offset().top;
 		var newY = window.scrollY;
 		if(wordTop > $(window).height() + window.scrollY)
@@ -385,6 +385,7 @@ var KWICResults = {
 		var opts = {};
 		opts.cqp = this.prevCQP;
 		opts.queryData = this.proxy.queryData;
+		opts.sort = this.$result.find(".sort_select").val();
 		return opts;
 	},
 	
@@ -529,7 +530,7 @@ var ExampleResults = {
 			
 			opts.start = new_page_index*items_per_page;
 			opts.end = (opts.start + items_per_page);
-			
+			opts.sort = this.$result.find(".sort_select").val();
 			this.current_page = new_page_index;
 			this.makeRequest(opts);
 		}

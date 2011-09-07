@@ -212,7 +212,34 @@ var Sidebar = {
 			$.error("sidebartemplate broken");
 		
 		this._sidebarSaldoFormat();
-		//$("[data-lang=" + $.defaultLanguage.split("-")[0] + "]").click();
+		
+		var totalWidth = this.element.width();
+		this.element.find(".sidebar_url")
+		.css("white-space", "nowrap")
+		// ellipse for too long links of type=url
+		.each(function() {
+			while($(this).width() > totalWidth) {
+				var oldtext = $(this).text(); 
+				var a = $.trim(oldtext, "/").replace("...", "").split("/");
+				var domain = a.slice(2,3);
+				var midsection = a.slice(3).join("/");
+				
+					
+				midsection = "..." + midsection.slice(2);
+				
+				$(this).text(["http:/"].concat(domain, midsection).join("/"));
+				
+				if(midsection == "...") {
+					break;
+				}
+			}
+		});
+		
+//		this.element.find(".defaultSetItem").click(function() {
+//			var type = $(this).closest("ul").data("type");
+//			advancedSearch.setCQP($.format("[_.post_%s contains '%s']", [type, $(this).text()]) );
+//			advancedSearch.onSubmit();
+//		});
 	},
 	
 	_parseLemma : function(attr) {
