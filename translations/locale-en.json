@@ -117,6 +117,17 @@
 	
 	"oneSentence" : "one sentence",
 	
+	"source" : "source",
+	"age" : "age",
+	
+	"blog_title" : "blog title",
+	"blog_url" : "blog address",
+	"author_age" : "author age",
+	"city" : "city",
+	"post_title" : "post title",
+	"tags" : "tags",
+	"post_url" : "post address",
+	
 	"statistics" : "Statistics",
 	
 	

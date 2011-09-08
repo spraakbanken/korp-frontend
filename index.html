@@ -181,7 +181,7 @@
 						</div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="sidebar" class="ui-corner-all kwic_sidebar" style="display : none;" ></div>	
+					<div id="sidebar" class="ui-corner-all kwic_sidebar" ></div>	
 					
 					<div style="clear : both; float : none;"></div>
 				</div>
@@ -208,8 +208,8 @@
 		<tr>
 			{{if $value.displayType != "hidden"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
-			
-			{{if $data[$index] && $data[$index].replace("|", "") == ""}}
+			 
+			{{if $data[$index] == "|" || $data[$index] == ""}}
 				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
 			{{else $index == "lemma"}}
 			{{html $item.parseLemma($data[$index])}} 

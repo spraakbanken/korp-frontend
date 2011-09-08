@@ -117,6 +117,17 @@
 	
 	"oneSentence" : "en mening",
 	
+	"source" : "källa",
+	"age" : "ålder",
+	
+	"blog_title" : "bloggtitel",
+	"blog_url" : "bloggaddress",
+	"author_age" : "författarens ålder",
+	"city" : "stad",
+	"post_title" : "inläggets titel",
+	"tags" : "nyckelord",
+	"post_url" : "inläggsadress",
+	
 	"statistics" : "Statistik",
 	
 	"AB":"adverb", 

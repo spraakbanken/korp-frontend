@@ -213,6 +213,8 @@ var Sidebar = {
 		
 		this._sidebarSaldoFormat();
 		
+		var oldDisplay = this.element.css("display");
+		this.element.css("display", "block");
 		var totalWidth = this.element.width();
 		this.element.find(".sidebar_url")
 		.css("white-space", "nowrap")
@@ -234,7 +236,7 @@ var Sidebar = {
 				}
 			}
 		});
-		
+		this.element.css("display", oldDisplay);
 //		this.element.find(".defaultSetItem").click(function() {
 //			var type = $(this).closest("ul").data("type");
 //			advancedSearch.setCQP($.format("[_.post_%s contains '%s']", [type, $(this).text()]) );
@@ -330,6 +332,9 @@ var Sidebar = {
 			return self.refreshContent(mode);
 		}).done(function() {
 			self.element.show("slide", {direction : "right"});
+//			self.element.animate({
+//				right : 0
+//			});
 			$("#left-column").animate({
 				right : 273
 			}, null, null, function() {
@@ -342,6 +347,9 @@ var Sidebar = {
 		if($("#left-column").css("right") == "8px") return;
 		var self = this;
 		self.element.hide("slide", {direction : "right"});
+//		self.element.animate({
+//			right : -273
+//		});
 		$("#left-column").animate({
 			right : 8
 		}, null, null, function() {

@@ -1,7 +1,6 @@
 var currentMode;
 
 
-
 (function(){
 	var t = $.now();
 	if(window.console == null) window.console = {"log" : $.noop};

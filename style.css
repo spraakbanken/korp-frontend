@@ -679,6 +679,11 @@ table {
 	margin-left : 8px;
 }
 
+#sidebar:empty {
+	padding : 0;
+	border : none;
+}
+
 .kwic_sidebar {
 	background-color: #fff;
 	border-style: solid;

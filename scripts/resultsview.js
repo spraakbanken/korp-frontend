@@ -109,7 +109,8 @@ var KWICResults = {
 	},
 	
 	onKeydown : function(event) {
-		if($("input[type=text], textarea").is(":focus")) return;
+		var isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
+		if(isSpecialKeyDown || $("input[type=text], textarea").is(":focus")) return;
 		
 		switch(event.which) {
 		case 78: // n

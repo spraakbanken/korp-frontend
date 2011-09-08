@@ -231,6 +231,7 @@ var SimpleSearch = {
 		
 		var list = $("<ul />").appendTo("#similar_lemgrams");
 		$("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list)
+		.find("a")
 		.click(function() {
 			self.selectLemgram($(this).data("lemgram"));
 		});
