@@ -163,7 +163,7 @@ var KWICResults = {
 			this.showNoResults();
 			return;
 		}
-		this.$.result.find(".sort_select").show();
+		this.$result.find(".sort_select").show();
 		this.renderHitsPicture(data);
 		
 
