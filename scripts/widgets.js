@@ -213,6 +213,16 @@ var Sidebar = {
 		
 		this._sidebarSaldoFormat();
 		
+		this.applyEllipse();
+		
+//		this.element.find(".defaultSetItem").click(function() {
+//			var type = $(this).closest("ul").data("type");
+//			advancedSearch.setCQP($.format("[_.post_%s contains '%s']", [type, $(this).text()]) );
+//			advancedSearch.onSubmit();
+//		});
+	},
+	
+	applyEllipse : function() {
 		var oldDisplay = this.element.css("display");
 		this.element.css("display", "block");
 		var totalWidth = this.element.width();
@@ -237,11 +247,6 @@ var Sidebar = {
 			}
 		});
 		this.element.css("display", oldDisplay);
-//		this.element.find(".defaultSetItem").click(function() {
-//			var type = $(this).closest("ul").data("type");
-//			advancedSearch.setCQP($.format("[_.post_%s contains '%s']", [type, $(this).text()]) );
-//			advancedSearch.onSubmit();
-//		});
 	},
 	
 	_parseLemma : function(attr) {
@@ -318,7 +323,7 @@ var Sidebar = {
 			this.element.css("top", "");
 			this.element.css("position", "absolute");
 		}
-		else {
+		else if($("#left-column").height() > $("#sidebar").height()){
 			this.element.css("top", 8);
 			this.element.css("position", "fixed");
 		}
@@ -663,7 +668,8 @@ var ExtendedToken = {
 	    	}
 	    	
 	    });
-	    var query_string = "[" + query.token.join(" & ") + "]";
+	    var tokens = $.grep(query.token, Boolean);
+	    var query_string = "[" + tokens.join(" & ") + "]";
 	    if (query.min | query.max) {
 	        query_string += "{" + (query.min || 0) + "," + query.max + "}";
 	    }

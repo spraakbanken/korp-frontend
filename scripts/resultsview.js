@@ -160,15 +160,10 @@ var KWICResults = {
 		if(!data.hits) {
 
 			$.log("no kwic results");
-			this.$result.find(".results_table").empty();
-			this.$result.find(".pager-wrapper").empty();
-			this.hidePreloader();
-			this.$result.find('.num-result').html(0);
-			this.$result.click();
-			$("#hits_picture").html("");
+			this.showNoResults();
 			return;
 		}
-		
+		this.$.result.find(".sort_select").show();
 		this.renderHitsPicture(data);
 		
 
@@ -227,6 +222,16 @@ var KWICResults = {
 
     },
 	
+    showNoResults : function() {
+    	this.$result.find(".results_table").empty();
+		this.$result.find(".pager-wrapper").empty();
+		this.hidePreloader();
+		this.$result.find('.num-result').html(0);
+		this.$result.click();
+		this.$result.find(".sort_select").hide();
+		$("#hits_picture").html("");
+    },
+    
     renderHitsPicture : function(data) {
                 var self=this;
 		if (getSelectedCorpora().length > 1) {
@@ -327,6 +332,7 @@ var KWICResults = {
 		this.scrollToShowWord(word);
 		
 		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus);
+		$("#columns").height($("#sidebar").height());
 	},
 	
 	selectLeft : function(sentence, offset) {
