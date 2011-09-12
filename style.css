@@ -41,20 +41,38 @@ a:hover {color:red;}  /* mouse over link */
 .color_blue {
 	background-color : #D0D7F0;
 }
+.color_blue_light {
+	background-color : #ebeefa;
+}
 .color_purple {
 	background-color : #F7D1E4;
+}
+.color_purple_light {
+	background-color : #f7edf3;
 }
 .color_green {
 	background-color : #EDFCD5;
 }
+.color_green_light {
+	background-color : #f7fceb;
+}
 .color_yellow {
 	background-color : #FFF3D8;
+}
+.color_yellow_light {
+	background-color : #fffaed;
 }
 .color_azure {
 	background-color : #CAEEE8;
 }
+.color_azure_light {
+	background-color : #edf7f5;
+}
 .color_red {
 	background-color : #FFDDD8;
+}
+.color_red_light {
+	background-color : #fcece8;
 }
 .color_white {
 	background-color : white;	
@@ -594,6 +612,27 @@ table {
 	padding : 0 4px;
 }
 
+.corpus_title {
+	font-weight: bold;
+	vertical-align: text-top;
+	text-align : center;
+	padding : 0 4px;
+	
+	
+	font-weight: normal;
+	font-variant: small-caps;
+	color : #666;
+	font-size : 11px;
+	border-top : 3px solid white;
+	border-bottom : 3px solid white;
+	border-width : 3px !important;
+	
+}
+
+.corpus_title_span {
+	margin : 0 -50px;
+}
+
 .right {
 	vertical-align: text-top;
 }
@@ -831,12 +870,12 @@ a.relStat:hover {
 }
 
 .hits_picture_table {
-	opacity: .3;
+/* 	opacity: .3; */
 	width: 100%;
 	padding: 0px;
 }
 .hits_picture_corp:hover {
-	background-color: darkslategray;
+/* 	background-color: darkslategray; */
 }
 #hits_picture {
 	cursor : pointer;
@@ -876,4 +915,17 @@ a.relStat:hover {
 
 .sidebar_url {
 	white-space: nowrap;
+}
+
+
+
+/* .even_corpus + .odd_corpus > td { */
+/* 	border-top-style : solid; */
+/* 	border-width : 1px; */
+/* 	border-color : inherit; */
+/* } */
+.odd_corpus + .even_corpus > td,.even_corpus + .odd_corpus > td {
+	border-top-style : solid;
+	border-width : 1px;
+	border-color : inherit; 
 }

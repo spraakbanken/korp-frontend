@@ -227,7 +227,7 @@ var StatsProxy = {
 	initialize : function() {
 		this.prevRequest = null;
 	},
-	makeRequest : function(lemgram) {
+	makeRequest : function(cqp) {
 		var self = this;
 		statsResults.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
@@ -238,10 +238,9 @@ var StatsProxy = {
 		$.ajax({ 
 			url: settings.cgi_script,
 			data : {
-				command : "annotationstats",
-				annotation : "lex",
-				group : "word",
-				value : lemgram,
+				command : "count",
+				groupby : "word",
+				cqp : cqp,
 				corpus : selected_uppercased_corpora_ids
 			},
 			beforeSend : function(jqXHR, settings) {

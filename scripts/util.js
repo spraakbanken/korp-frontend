@@ -364,3 +364,50 @@ util.browserWarn = function() {
         },   
 	});
 };
+// singleton for getting colors. use syntax util.colors.getNext()
+util.colors = function() {
+	util.colors = this;
+	this.c = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
+	this.n = -1;
+	this.getNext = function() {
+		return this.c[++this.n % this.c.length];
+	};
+};
+util.colors();
+
+//from http://plugins.jquery.com/files/jquery.color.js.txt
+//Parse strings looking for color tuples [255,255,255]
+util.getRGB = function(color) {
+	var result;
+
+	// Check if we're already dealing with an array of colors
+	if ( color && color.constructor == Array && color.length == 3 )
+		return color;
+
+	// Look for rgb(num,num,num)
+	if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color))
+		return [parseInt(result[1]), parseInt(result[2]), parseInt(result[3])];
+
+	// Look for rgb(num%,num%,num%)
+	if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color))
+		return [parseFloat(result[1])*2.55, parseFloat(result[2])*2.55, parseFloat(result[3])*2.55];
+
+	// Look for #a0b1c2
+	if (result = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(color))
+		return [parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16)];
+
+	// Look for #fff
+	if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color))
+		return [parseInt(result[1]+result[1],16), parseInt(result[2]+result[2],16), parseInt(result[3]+result[3],16)];
+
+	// Otherwise, we're most likely dealing with a named color
+	return colors[jQuery.trim(color).toLowerCase()];
+};
+
+util.changeColor = function(rgbstr, incr) {
+	var rgb = util.getRGB(rgbstr);
+    for(var i = 0; i < rgb.length; i++){
+        rgb[i] = Math.max(0, Math.min(rgb[i] + incr, 255));
+    }
+    return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+};
