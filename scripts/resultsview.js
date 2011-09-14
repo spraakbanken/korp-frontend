@@ -478,12 +478,12 @@ var KWICResults = {
 	},
 	selectUp : function() {
 		var current = this.selectionManager.selected;
-		var prevMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").prev());
+		var prevMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").prevAll(".sentence").first());
 		prevMatch.click();
 	},
 	selectDown : function() {
 		var current = this.selectionManager.selected;
-		var nextMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").next());
+		var nextMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").nextAll(".sentence").first());
 		nextMatch.click();
 	},
 	
@@ -1022,8 +1022,8 @@ var StatsResults = {
 			return;
 		}
 		
-		//$("#results-stats").children().empty();
-		
+		$("#stats_showing").html("");
+		$("#stats_total").text(data.count);
 		rollingOccupied = false;
 		var wordArray = [];
 		var corpusArray = [];
@@ -1035,7 +1035,17 @@ var StatsResults = {
 					wordArray.push(word);
 			});
 		});
-		
+		corpusArray.sort(function(c1, c2) {
+			c1 = settings.corpora[c1.toLowerCase()].title;
+			c2 = settings.corpora[c2.toLowerCase()].title;
+			if(c1 > c2) {
+				return 1;
+			} else if(c1 == c2) {
+				return 0;
+			} else {
+				return -1;
+			}
+		});
 		var hasHit = false;
 		$.each(data["total"]["absolute"], function(item) {
 			if(!$.isEmptyObject(item))
@@ -1061,7 +1071,8 @@ var StatsResults = {
 		var dataItems = new Array();
 
 		var bc = 0;
-		$.each(data["corpora"], function(corpus, obj) {
+		$.each(corpusArray, function(i, corpus) {
+			var obj = data.corpora[corpus];
 			$.each(wordArray, function(key, fvalue) {
 				if(obj["relative"])
 					var rel_freq = obj["relative"][fvalue];
@@ -1083,9 +1094,9 @@ var StatsResults = {
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><a class="searchForWordform">' + fvalue + '</a> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><span class="searchForWordform">' + fvalue + '</span> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr>';
 		});
-		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px; visibility: hidden"/></a></td></tr></table>';
+		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr></table>';
 		
 		function makeEllipsis(str) {
 			if(str.length > 18) {
@@ -1098,7 +1109,6 @@ var StatsResults = {
 		$("#leftStatsTable").html(leftHTML);
 		
 		if (corpusArray.length > 1) {
-			$(".arcDiagramPicture").css({"visibility":"visible"});
 			$(".wordsName").css({"visibility":"visible"});
 		}
 		
@@ -1110,7 +1120,7 @@ var StatsResults = {
 				}
 			});
 			if(numCorporaWithWordform < 2) {
-				$("#circlediagrambutton__" + wvalue).css({"visibility": "hidden"});
+				$($.format(".searchForWordform:contains(%s)", wvalue)).next().css({"visibility": "hidden"});
 			}
 		});
 		
@@ -1143,7 +1153,7 @@ var StatsResults = {
 				
 				if (rel_hits) {
 					rel_hits = parseFloat(rel_hits);
-					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + util.formatDecimalString(rel_hits.toFixed(1),true) + '&nbsp;</a><a href="javascript:void(0)" class="absStat searchForWordformInCorpus">(' + prettyNumbers(abs_hits.toString()) + ')</a></td>';
+					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + util.formatDecimalString(rel_hits.toFixed(1),true) + '&nbsp;</a><a href="javascript:" class="absStat searchForWordformInCorpus">(' + prettyNumbers(abs_hits.toString()) + ')</a></td>';
 				} else {
 					theHTML += '<td class="statstable statstablecorpus__' + gvalue + '"></td>';
 				}
@@ -1221,14 +1231,14 @@ var StatsResults = {
 				window.open( "data:text/csv;charset=utf-8," + escape(output));
 		});
 		
-		
-		$(".searchForWordform").click(function() {
-			$.bbq.pushState({
-				search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]',
-				"result-container" : 0,
-				"search-tab" : 2
-			});
-		});
+//		TODO: broken, might fix later.
+//		$(".searchForWordform").click(function() {
+//			$.bbq.pushState({
+//				search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]',
+//				"result-container" : 0,
+//				"search-tab" : 2
+//			});
+//		});
 		
 		$(".searchForWordformInCorpus").click(function() {
 			var parts = $(this).parent().attr("id").split("__");
@@ -1241,13 +1251,13 @@ var StatsResults = {
 			simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
 		});
 		
-		$(".statstable").tooltip({
+		$(".statstable").not(":empty").tooltip({
 			delay : 80,
 			bodyHandler : function() {
 				var relString = util.getLocaleString("statstable_relfreq");
 				var absString = util.getLocaleString("statstable_absfreq");
-				if(!$(this).attr('id'))
-					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
+//				if(!$(this).attr('id'))
+//					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
 				var parts = $(this).attr('id').split("__");
 				if(parts.length == 3) {
 					var hoveredCorpus = parts[1];

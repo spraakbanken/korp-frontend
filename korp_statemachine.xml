@@ -6,7 +6,7 @@
     <script><![CDATA[
     
         function kwicSearch(page) {
-            if(In("results_lemgram") || In("results_stats") ) { 
+            if(In("results_lemgram") ) { 
                 $.log("conf", $.sm.getConfiguration());
                 $("#result-container").korptabs("select", 0)
                 $.bbq.pushState({"result-container" : 0})
@@ -58,15 +58,15 @@
         <transition target="main">
             <assign location="searchProxy"    expr="new model.SearchProxy()"/>
             <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
-            <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
             <assign location="statsProxy"     expr="new model.StatsProxy()"/>
+            <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
             
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
             <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first', '#results-kwic')"/>
-            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(2)')"/>
-            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(3)')"/>
+            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(2)')"/>
+            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
             
             
         </transition>

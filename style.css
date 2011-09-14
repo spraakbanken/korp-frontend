@@ -259,7 +259,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .searchForWordform {
-	cursor:pointer;
+/* 	cursor:pointer; */
 }
 
 .searchForWordformInCorpus {

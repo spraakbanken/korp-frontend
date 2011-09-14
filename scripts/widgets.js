@@ -542,14 +542,14 @@ var ExtendedToken = {
 		case "autocomplete":
 			$.log("displayType autocomplete");
 			var type, labelFunc, sortFunc;
-			if(data.label == "lemgram") {
-				type = "lem";
-				labelFunc = util.lemgramToString;
-				sortFunc = view.lemgramSort;
-			} else {
+			if(data.label == "saldo") {
 				type = "saldo";
 				labelFunc = util.saldoToString;
 				sortFunc = view.saldoSort;
+			} else {
+				type = "lem";
+				labelFunc = util.lemgramToString;
+				sortFunc = view.lemgramSort;
 			}
 			arg_value = $("<input type='text'/>").korp_autocomplete({
 				labelFunction : labelFunc,

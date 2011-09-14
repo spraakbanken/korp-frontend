@@ -226,23 +226,25 @@ var LemgramProxy = {
 var StatsProxy = {
 	initialize : function() {
 		this.prevRequest = null;
+		this.currentPage = 0;
+		this.page_incr = 25;
 	},
-	makeRequest : function(cqp) {
+	makeRequest : function(cqp, range) {
 		var self = this;
 		statsResults.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
 	    });
-		
+		range = range || {start : 0, end : 1000};
 		$.ajax({ 
 			url: settings.cgi_script,
-			data : {
+			data : $.extend({
 				command : "count",
 				groupby : "word",
 				cqp : cqp,
 				corpus : selected_uppercased_corpora_ids
-			},
+			}, range),
 			beforeSend : function(jqXHR, settings) {
 				self.prevRequest = settings;
 			},
@@ -257,11 +259,30 @@ var StatsProxy = {
 					statsResults.showError();
 					return;
 				}
+				
 				statsResults.renderResult(data);
 				statsResults.savedData = data;
 			}
 		
 		});
+	},
+	sliceData : function(data, i) {
+		var n = 0;
+		var output = $.extend(true, {}, data);
+		
+		$.each(function(k, v) {
+			
+		})
+	}, 
+	
+	take : function(obj, n) {
+		var output = {};
+		$.each(obj, function(k, v) {
+			if(--n >= 0) {
+				output[k] = v;
+			}
+		});
+		return output;
 	}
 };
 
