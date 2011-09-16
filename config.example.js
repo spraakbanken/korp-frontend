@@ -4,7 +4,8 @@
  */
 
 var settings = {};
-settings.primaryColor = "#dde9ff";
+settings.primaryColor = "rgb(221, 233, 255)";
+settings.primaryLight = "rgb(242, 247, 255)";
 settings.corpora = {};
 settings.defaultContext = {
 	"1 sentence" : language.oneSentence
