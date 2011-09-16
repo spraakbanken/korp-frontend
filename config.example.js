@@ -138,7 +138,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
-	contents : ["romi", "romii", "storsuc", "romg", "strindbergromaner"]
+	contents : ["romi", "romii", "rom99", "strindbergromaner", "storsuc", "romg"]
 };
 
 settings.corporafolders.newspapertexts = {
@@ -178,7 +178,12 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : []
+	contents : ["vasabladet"]
+};
+
+settings.corporafolders.fisk.newspapertexts.hbl = {
+	title : "Hufvudstadsbladet 1991, 1998-1999",
+	contents : ["hbl1991", "hbl1998", "hbl1999"]
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
@@ -188,17 +193,22 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova"]
+	contents : ["astranova", "kallan", "nyaargus", "svenskbygden"]
 };
 
 settings.corporafolders.medical = {
 	title : "Medicinska texter",
-	contents : ["lt", "smittskydd"]
+	contents : ["diabetolog", "lt", "smittskydd"]
 };
 
 settings.corporafolders.parallel = {
 	title : "Parallella material",
 	contents : []
+};
+
+settings.corporafolders.parallel.europarl = {
+	title : "Europarl",
+	contents : ["europarlda_sv"]
 };
 
 settings.corporafolders.parallel.salt = {
@@ -288,6 +298,30 @@ settings.corpora.fsbsakprosa = {
 	}
 };
 
+settings.corpora.svenskbygden = {
+	title : "Svenskbygden 2010-2011",
+	languages : {
+		SVENSKBYGDEN : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_year : {label : "year"},
+	    text_issue : {label : "issue"}
+	}
+};
+
 settings.corpora.jakobstadstidning1999 = {
 	title : "Jakobstads tidning 1999",
 	languages : {
@@ -351,8 +385,8 @@ settings.corpora.dn1987 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -375,8 +409,8 @@ settings.corpora.gp1994 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_section : {label : "section"}
+		text_date : sattrs.date,
+		text_section : {label : "section"}
 	}
 };
 
@@ -399,8 +433,8 @@ settings.corpora.gp2001 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -423,8 +457,8 @@ settings.corpora.gp2002 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -447,8 +481,8 @@ settings.corpora.gp2003 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -471,8 +505,8 @@ settings.corpora.gp2004 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -495,8 +529,8 @@ settings.corpora.gp2005 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -519,8 +553,8 @@ settings.corpora.gp2006 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -543,8 +577,8 @@ settings.corpora.gp2007 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -567,8 +601,8 @@ settings.corpora.gp2008 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_sectionshort : {label : "section"}
+		text_date : sattrs.date,
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -591,9 +625,9 @@ settings.corpora.gp2009 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : sattrs.date,
-		article_author : {label : "article_author"},
-		article_section : {label : "article_section"}
+		text_date : sattrs.date,
+		text_author : {label : "article_author"},
+		text_section : {label : "article_section"}
 	}
 };
 
@@ -616,7 +650,7 @@ settings.corpora.gp2d = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "issue"}
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -663,7 +697,7 @@ settings.corpora.fof = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_issue : {label : "issue"}
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -686,10 +720,10 @@ settings.corpora.press65 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "article_date"},
-		article_publisher : {label : "article_publisher"},
-		article_topic : {label : "article_topic"},
-		article_genre : {label : "article_genre"}
+		text_date : {label : "date"},
+		text_publisher : {label : "article_publisher"},
+		text_topic : {label : "article_topic"},
+		text_genre : {label : "article_genre"}
 	}
 };
 
@@ -712,8 +746,8 @@ settings.corpora.press76 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_year : {label : "year"},
-		article_publisher : {label : "article_publisher"}
+		text_year : {label : "year"},
+		text_publisher : {label : "article_publisher"}
 	}
 };
 
@@ -736,9 +770,9 @@ settings.corpora.press95 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "date"},
-		article_publisher : {label : "article_publisher"},
-		article_sectionshort : {label : "section"}
+		text_date : {label : "date"},
+		text_publisher : {label : "article_publisher"},
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -761,9 +795,9 @@ settings.corpora.press96 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "date"},
-		article_publisher : {label : "article_publisher"},
-		article_sectionshort : {label : "section"}
+		text_date : {label : "date"},
+		text_publisher : {label : "article_publisher"},
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -786,9 +820,9 @@ settings.corpora.press97 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "date"},
-		article_publisher : {label : "publisher"},
-		article_sectionshort : {label : "section"}
+		text_date : {label : "date"},
+		text_publisher : {label : "publisher"},
+		text_sectionshort : {label : "section"}
 	}
 };
 
@@ -811,9 +845,41 @@ settings.corpora.press98 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_date : {label : "date"},
-		article_publisher : {label : "article_publisher"},
-		article_sectionshort : {label : "section"}
+		text_date : {label : "date"},
+		text_publisher : {label : "article_publisher"},
+		text_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.bloggmix = {
+	title : "Bloggmix (september 2011)",
+	languages : {
+		BLOGGMIX : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		blog_title : {label : "blog_title"},
+		blog_url : {label : "blog_url", type : "url"},
+		blog_age : {label : "author_age"},
+		blog_city : {label : "city"},
+		//blog_categories : {label : "title", type : "set"},
+		post_title : {label : "post_title"},
+		post_date : {label : "date"},
+		post_tags : {label : "tags", type : "set"},
+		post_url : {label : "post_url", type : "url"}
 	}
 };
 
@@ -893,6 +959,35 @@ settings.corpora.saltnld_swe = {
 	}
 };
 
+settings.corpora.europarlda_sv = {
+	title: "Svenska-danska", 
+	languages : { 
+		EUROPARLDA_SV: "svenska", 
+		EUROPARLDA_DA: "danska"
+	}, 
+	context: context.defaultAligned, 
+	within: {
+		"link": "meningspar"
+	}, 
+	attributes: {
+		pos: attrs.pos, 
+		msd: attrs.msd, 
+		lemma: attrs.baseform,
+		lex: attrs.lemgram, 
+		saldo: attrs.saldo, 
+		dephead: attrs.dephead, 
+		deprel: attrs.deprel, 
+		ref: attrs.ref, 
+		link: attrs.link, 
+		text: attrs.text
+	},
+	struct_attributes : {
+//		text_origlang : {
+//			label : "original_language"
+//		}
+	}
+};
+
 settings.corpora.parole = {
 	title : "PAROLE",
 	languages : {
@@ -913,6 +1008,31 @@ settings.corpora.parole = {
 	},
 	struct_attributes : {
 		text_id : {label : "text"}
+	}
+};
+
+settings.corpora.diabetolog = {
+	title : "DiabetologNytt (1996-1999)",
+	languages : {
+		diabetolog : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_title : {label : "title"},
+		text_source : {label : "url", type : "url"}
 	}
 };
 
@@ -938,7 +1058,7 @@ settings.corpora.lt = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		article_id : {label : "article"},
+		text_article : {label : "article"},
 		text_id : {label : "text"}
 	}
 };
@@ -1180,6 +1300,32 @@ settings.corpora.romg = {
 	}
 };
 
+settings.corpora.rom99 = {
+	title : "Norstedtsromaner (1999)",
+	languages : {
+		ROM99 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_year : {label : "year"}
+	}
+};
+
 settings.corpora.strindbergromaner = {
 	title : "Strindbergs romaner och dramer",
 	languages : {
@@ -1287,6 +1433,35 @@ settings.corpora.psalmboken = {
 	}
 };
 
+settings.corpora.lasbart = {
+	title : "LäSBarT - Lättläst svenska och barnbokstext",
+	languages : {
+		LASBART : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_source : {label : "source"},
+		text_type : {label : "type"},
+		text_date : {label : "date"},
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_age : {label : "age"}
+	}
+};
+
 settings.corpora.drama = {
 	title : "Dramawebben (demo)",
 	languages : {
@@ -1309,7 +1484,7 @@ settings.corpora.drama = {
 };
 
 settings.corpora.wikipedia = {
-	title : "Svenska Wikipedia (juni 2011)",
+	title : "Svenska Wikipedia (augusti 2011)",
 	languages : {
 		WIKIPEDIA : "svenska"
 	},
@@ -1354,6 +1529,155 @@ settings.corpora.astranova = {
 	struct_attributes : {
 		text_year : {label : "year"},
 		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.kallan = {
+	title : "Källan 2008-2010",
+	languages : {
+		KALLAN : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.nyaargus = {
+	title : "Nya Argus 2010-2011",
+	languages : {
+		NYAARGUS : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.vasabladet = {
+	title : "Vasabladet 1991",
+	languages : {
+		VASABLADET : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_type : {label : "section"}
+	}
+};
+
+settings.corpora.hbl1991 = {
+	title : "Hufvudstadsbladet 1991",
+	languages : {
+		HBL1991 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_year : {label : "year"},
+	    text_type : {label : "section"}
+	}
+};
+
+settings.corpora.hbl1998 = {
+	title : "Hufvudstadsbladet 1998",
+	languages : {
+		HBL1998 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_year : {label : "year"}
+	}
+};
+
+settings.corpora.hbl1999 = {
+	title : "Hufvudstadsbladet 1999",
+	languages : {
+		HBL1999 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_year : {label : "year"}
 	}
 };
 
