@@ -375,13 +375,15 @@ var ExtendedSearch = {
 	
 	insertToken : function(button) {
 //	    $("<table />").insertBefore($(button))
+		var self = this;
 		$.tmpl($("#tokenTmpl"))
 	    .extendedToken({
 	    	close : function() {
 	    		advancedSearch.updateCQP();
 	    	},
 	    	change : function() {
-	    		advancedSearch.updateCQP();
+	    		if(self.$main.is(":visible"))
+	    			advancedSearch.updateCQP();
 	    	}
 	    }).insertBefore(button)
 	    .quickLocalize();

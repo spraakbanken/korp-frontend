@@ -834,7 +834,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
 		.appendTo("#results-lemgram").append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa tal</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta tal</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
-                .dialog({
+		.dialog({
 			width : 400,
 			height : 500,
 			resize: function(){
@@ -856,50 +856,50 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		$("#dialog").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
 		statsSwitchInstance = $("#statistics_switch").radioList({
-                    change : function() {
-                        var typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
-				
-			var dataItems = new Array();
-			var dataName = statsResults["lastDataName"];
-			
-			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
-				if(dataName == "SIGMA_ALL") {
-					// sigma selected
-					var totfreq = 0;
-					$.each(obj[typestring], function(wordform, freq) {
-						if (typestring == "absolute")
-							var numFreq = parseInt(freq);
-						else
-							numFreq = parseFloat(freq);
-						if(numFreq)
-							totfreq += numFreq;
-					});
-					dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(),false), "shape_id":"sigma_all"});
-				} else {
-					// Individual wordform selected
-					if(typestring == "absolute")
-						var freq = parseInt(obj[typestring][dataName]);
-					else
-						freq = parseFloat(obj[typestring][dataName]);
-					if (freq) {
-						dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(),false), "shape_id":dataName});
+			change : function() {
+				var typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
+
+				var dataItems = new Array();
+				var dataName = statsResults["lastDataName"];
+
+				$.each(statsResults.savedData["corpora"], function(corpus, obj) {
+					if(dataName == "SIGMA_ALL") {
+						// sigma selected
+						var totfreq = 0;
+						$.each(obj[typestring], function(wordform, freq) {
+							if (typestring == "absolute")
+								var numFreq = parseInt(freq);
+							else
+								numFreq = parseFloat(freq);
+							if(numFreq)
+								totfreq += numFreq;
+						});
+						dataItems.push({"value":totfreq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(),false), "shape_id":"sigma_all"});
 					} else {
-						dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
-					}
-				} 
-			});
-			stats2Instance.pie_widget("newData", dataItems);
-			
-			if(typestring == "absolute") {
-				$("#hitsDescription").text(util.getLocaleString("statstable_absfigures_hits")).attr({"rel" : "localize[statstable_absfigures_hits]"});
-			} else {
-				$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits")).attr({"rel" : "localize[statstable_relfigures_hits]"});
-			}
-                    },
-                    selected : 0
-                });
-		
-		
+						// Individual wordform selected
+						if(typestring == "absolute")
+							var freq = parseInt(obj[typestring][dataName]);
+						else
+							freq = parseFloat(obj[typestring][dataName]);
+						if (freq) {
+							dataItems.push({"value":freq, "caption":settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(),false), "shape_id":dataName});
+						} else {
+							dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
+						}
+					} 
+				});
+				stats2Instance.pie_widget("newData", dataItems);
+
+				if(typestring == "absolute") {
+					$("#hitsDescription").text(util.getLocaleString("statstable_absfigures_hits")).attr({"rel" : "localize[statstable_absfigures_hits]"});
+				} else {
+					$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits")).attr({"rel" : "localize[statstable_relfigures_hits]"});
+				}
+			},
+			selected : 0
+		});
+
+
 	} else { // hits/wordform
 		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
 			corpusArray.push(corpus);
@@ -1016,7 +1016,92 @@ var StatsResults = {
 //	initialize : function(tabSelector, resultSelector) {
 //	},
 	
-	renderResult : function(data) {
+	renderResult : function(columns, data) {
+		statsResults.savedData = data;
+		var resultError = this.parent(data);
+		if(resultError === false) {
+			return;
+		}
+		var options = {
+			enableCellNavigation: false,
+            enableColumnReorder: true
+            
+		};
+		var dataView = new Slick.Data.DataView();
+		
+		
+		var grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
+		this.grid = grid;
+		this.resizeGrid();
+//		grid.autosizeColumns();
+		
+		// wire up model events to drive the grid
+		dataView.onRowCountChanged.subscribe(function(args) {
+			grid.updateRowCount();
+            grid.render();
+		});
+		var selectedRowIds = [];
+		dataView.onRowsChanged.subscribe(function(rows) {
+			grid.removeRows(rows);
+			grid.render();
+
+			if (selectedRowIds.length > 0)
+			{
+				// since how the original data maps onto rows has changed,
+				// the selected rows in the grid need to be updated
+				var selRows = [];
+				for (var i = 0; i < selectedRowIds.length; i++)
+				{
+					var idx = dataView.getRowById(selectedRowIds[i]);
+					if (idx != undefined)
+						selRows.push(idx);
+				}
+
+				grid.setSelectedRows(selRows);
+			}
+		});
+		var sortCol = columns[1];
+		
+		function sort(a,b) {
+			if(sortCol.field == "hit_value")
+				var x = a[sortCol.field], y = b[sortCol.field];
+			else
+				var x = a[sortCol.field].absolute, y = b[sortCol.field].absolute;
+				
+			return (x == y ? 0 : (x > y ? 1 : -1));
+		}
+		
+		grid.onSort = function (col, sortAsc) {
+			sortCol = col;
+			dataView.sort(sort, sortAsc);
+		};
+        
+        dataView.beginUpdate();
+		dataView.setItems(data);
+		dataView.setFilter(function(item) {
+			return true;
+		});
+		dataView.endUpdate();
+//		dataView.refresh();
+//		grid.refresh();
+		
+		$(".slick-header-column:nth(1)").click().click();
+		
+		this.hidePreloader();
+	},
+	
+	resizeGrid : function() {
+		var tableWidth = $(".slick-header-column").last().width() * $(".slick-header-column").length;
+		var parentWidth = $("#result-container > div:visible").width();
+		if(tableWidth < parentWidth) {
+			$("#myGrid").width(tableWidth + 20);
+			this.grid.autosizeColumns();
+		}
+		else
+			$("#myGrid").width(parentWidth);
+	},
+	
+	_old_renderResult : function(data) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;

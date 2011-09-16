@@ -100,14 +100,14 @@ var currentMode;
 					$.sm.send("resultstab.custom");
 				} else {
 					var currentId = $(ui.panel).attr("id");
-					//				if(currentId == null) return;
+//					//				if(currentId == null) return;
 					var selected = currentId.split("-")[1];
-					if($("#sidebar").is(":hidden"))
-						$("#rightStatsTable").css({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
-					else {
-						$("#rightStatsTable").css("width", $("#content").innerWidth() - ($("#leftStatsTable").width() +500));
-						$("#rightStatsTable").animate({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
-					}
+//					if($("#sidebar").is(":hidden"))
+//						$("#rightStatsTable").css({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
+//					else {
+//						$("#rightStatsTable").css("width", $("#content").innerWidth() - ($("#leftStatsTable").width() +500));
+//						$("#rightStatsTable").animate({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
+//					}
 					$.sm.send("resultstab." + selected);
 				}
 			},

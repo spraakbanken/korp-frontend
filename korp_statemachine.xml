@@ -227,6 +227,7 @@
                     <state id="results_stats">
                         <onentry>
                             <script>
+                                statsResults.resizeGrid();
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>
@@ -257,7 +258,7 @@
                         
                         <transition event="submit" target="custom_entry">
                             <script>
-                                gotoFirstResultTab();
+                                //gotoFirstResultTab();
                             </script>
                         </transition>
                         

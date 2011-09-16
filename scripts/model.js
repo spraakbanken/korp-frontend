@@ -236,15 +236,15 @@ var StatsProxy = {
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
 	    });
-		range = range || {start : 0, end : 1000};
+//		range = range || {start : 0, end : 1000};
 		$.ajax({ 
 			url: settings.cgi_script,
-			data : $.extend({
+			data : {
 				command : "count",
 				groupby : "word",
 				cqp : cqp,
 				corpus : selected_uppercased_corpora_ids
-			}, range),
+			},
 			beforeSend : function(jqXHR, settings) {
 				self.prevRequest = settings;
 			},
@@ -260,20 +260,60 @@ var StatsProxy = {
 					return;
 				}
 				
-				statsResults.renderResult(data);
-				statsResults.savedData = data;
+				var columns = [{
+					id : "hit",
+					name : "Hit",
+					field : "hit_value",
+					sortable : true
+				},
+				{
+					id : "total",
+					name : "Total",
+					field : "total_value",
+					sortable : true,
+					formatter : self.valueFormatter
+				}];
+				$.each(data.corpora, function(corpus, obj) {
+					columns.push({
+						id : corpus,
+						name : settings.corpora[corpus.toLowerCase()].title,
+						field : corpus + "_value",
+						sortable : true,
+						formatter : self.valueFormatter
+					});
+				});
+				
+				var dataset = [];
+				var wordArray = $.keys(data.total.absolute);
+				
+				$.each(wordArray, function(i, word) {
+					var row = {
+						id : "row" + i,
+						hit_value : word,
+						total_value : {"absolute" : data.total.absolute[word], "relative" : data.total.relative[word]}
+//						toString : function() {
+//							return data.total.relative[word] || "0";
+//						}
+						
+					};
+					$.each(data.corpora, function(corpus, obj) {
+						row[corpus + "_value"] = {"absolute" : obj.absolute[word], "relative" : obj.relative[word]}; // + obj.relative[word];
+					});
+					dataset.push(row);
+				});
+				
+				statsResults.renderResult(columns, dataset);
 			}
 		
 		});
 	},
-	sliceData : function(data, i) {
-		var n = 0;
-		var output = $.extend(true, {}, data);
-		
-		$.each(function(k, v) {
-			
-		})
-	}, 
+	
+	valueFormatter : function(row, cell, value, columnDef, dataContext) {
+		if (!value.relative && !value.absolute)
+            return "";
+		return $.format("<span class='relStat'>%s</span> <span class='absStat'>(%s)</span>", [util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
+	},
+	
 	
 	take : function(obj, n) {
 		var output = {};
