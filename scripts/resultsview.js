@@ -1095,7 +1095,8 @@ var StatsResults = {
 		var parentWidth = $("#result-container > div:visible").width();
 		if(tableWidth < parentWidth) {
 			$("#myGrid").width(tableWidth + 20);
-			this.grid.autosizeColumns();
+			if(this.grid)
+				this.grid.autosizeColumns();
 		}
 		else
 			$("#myGrid").width(parentWidth);
