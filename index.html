@@ -165,22 +165,22 @@
 							<div id="results-stats">
 <!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->
 								<div id="myGrid" style="width:600px;height:500px;"></div>
+								<div id="exportStatsSection">
+									<br/><br/><select id="kindOfData">
+										<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
+										<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+									</select>
+									<select id="kindOfFormat">
+										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
+										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+									</select>
+									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>									
+								</div>
 								
 <!-- 								<div id="leftStatsTable" style="float:left; margin-left:-8"></div> -->
 <!-- 								<div id="rightStatsTable" style="float:left; overflow-x:auto; margin-left: -20px; padding-left: 0px; width: 200px"></div> -->
 <!-- 								<div style="clear : both; float : none;"></div> -->
-<!-- 								<div id="exportStatsSection"> -->
-<!-- 									<br/><br/><select id="kindOfData"> -->
-<!-- 										<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option> -->
-<!-- 										<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option> -->
-<!-- 									</select> -->
-<!-- 									<select id="kindOfFormat"> -->
-<!-- 										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option> -->
-<!-- 										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option> -->
-<!-- 									</select> -->
-									
-<!-- 								</div> -->
-<!-- 									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/> -->
+
 							</div>
 							<div id="results-lemgram">
 							</div>

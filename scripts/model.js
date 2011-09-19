@@ -264,7 +264,8 @@ var StatsProxy = {
 					id : "hit",
 					name : "Hit",
 					field : "hit_value",
-					sortable : true
+					sortable : true,
+					formatter : self.hitFormatter
 				},
 				{
 					id : "total",
@@ -273,7 +274,7 @@ var StatsProxy = {
 					sortable : true,
 					formatter : self.valueFormatter
 				}];
-				$.each(data.corpora, function(corpus, obj) {
+				$.each($.keys(data.corpora).sort(), function(i, corpus) {
 					columns.push({
 						id : corpus,
 						name : settings.corpora[corpus.toLowerCase()].title,
@@ -301,7 +302,8 @@ var StatsProxy = {
 					});
 					dataset.push(row);
 				});
-				
+				statsResults.savedData = data;
+				statsResults.savedWordArray = wordArray;
 				statsResults.renderResult(columns, dataset);
 			}
 		
@@ -312,6 +314,23 @@ var StatsProxy = {
 		if (!value.relative && !value.absolute)
             return "";
 		return $.format("<span class='relStat'>%s</span> <span class='absStat'>(%s)</span>", [util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
+	},
+	
+	hitFormatter : function(row, cell, value, columnDef, dataContext) {
+		function filterCorpora(rowObj) {
+			return $.grepObj(rowObj, function(value, key) {
+				return key != "total_value" && $.isPlainObject(value);
+			});
+		}
+		
+		var corpora = $.grepObj(filterCorpora(dataContext), function(value, key) {
+			return value.relative != null;
+		});
+		
+		var output = $.format("<span>%s</span>", value);
+		if($.keys(corpora).length > 1)
+			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
+		return output;
 	},
 	
 	

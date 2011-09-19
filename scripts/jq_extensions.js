@@ -239,7 +239,6 @@ $.trim = function(string, char) {
 };
 
 // for filtering objects
-//$._oldgrep = $.grep;
 $.grepObj = function(array, callback, invert) {
 	var output = {};
 	$.each(array, function(key, value) {

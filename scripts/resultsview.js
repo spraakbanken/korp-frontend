@@ -1013,11 +1013,59 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 
 var StatsResults = {
 	Extends : view.BaseResults,
-//	initialize : function(tabSelector, resultSelector) {
-//	},
+	initialize : function(tabSelector, resultSelector) {
+		this.parent(tabSelector, resultSelector);
+		var self = this;
+		$(".arcDiagramPicture").live("click", function() {
+			$.log("clicked arcDiagramPicture" );
+			var parts = $(this).attr("id").split("__");
+			if(parts.length == 2)
+				newDataInGraph(parts[1],true);
+			else { // The ∑ row
+				newDataInGraph("SIGMA_ALL",true);
+			}
+
+		});
+		$(window).resize(function() {
+			self.resizeGrid();
+		});
+		
+		$("#exportButton").unbind("click");
+		$("#exportButton").click(function() {
+			var selVal = $("#kindOfData option:selected").val();
+			var selType = $("#kindOfFormat option:selected").val();
+			var dataDelimiter = ";";
+			if (selType == "TSV")
+				dataDelimiter = "\t";
+				
+			// Generate CSV from the data
+			
+			var output = "corpus" + dataDelimiter;
+			$.each(statsResults.savedWordArray, function(key, aword) {
+				output += aword + dataDelimiter;
+			});
+			output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
+			
+			$.each(statsResults.savedData["corpora"], function(key, acorpus) {
+				output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter;
+				$.each(statsResults.savedWordArray, function(wkey, aword) {
+					var amount = acorpus[selVal][aword];
+					if(amount)
+						output += util.formatDecimalString(amount.toString(), false) + dataDelimiter;
+					else
+						output += "0" + dataDelimiter;
+				});
+				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
+			});
+			if (selType == "TSV")
+				window.open( "data:text/tsv; charset=utf-8," + escape(output));
+			else
+				window.open( "data:text/csv; charset=utf-8," + escape(output));
+		});
+	},
 	
 	renderResult : function(columns, data) {
-		statsResults.savedData = data;
+//		statsResults.savedData = data;
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
@@ -1025,15 +1073,17 @@ var StatsResults = {
 		var options = {
 			enableCellNavigation: false,
             enableColumnReorder: true
-            
 		};
 		var dataView = new Slick.Data.DataView();
 		
-		
-		var grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
+		grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
 		this.grid = grid;
+		
+		
+//		setTimeout(this.resizeGrid, 10);
 		this.resizeGrid();
 //		grid.autosizeColumns();
+		
 		
 		// wire up model events to drive the grid
 		dataView.onRowCountChanged.subscribe(function(args) {
@@ -1066,7 +1116,7 @@ var StatsResults = {
 			if(sortCol.field == "hit_value")
 				var x = a[sortCol.field], y = b[sortCol.field];
 			else
-				var x = a[sortCol.field].absolute, y = b[sortCol.field].absolute;
+				var x = a[sortCol.field].absolute || 0, y = b[sortCol.field].absolute || 0;
 				
 			return (x == y ? 0 : (x > y ? 1 : -1));
 		}
@@ -1085,21 +1135,49 @@ var StatsResults = {
 //		dataView.refresh();
 //		grid.refresh();
 		
-		$(".slick-header-column:nth(1)").click().click();
+		grid.setSortColumn("total", true);
 		
 		this.hidePreloader();
 	},
 	
 	resizeGrid : function() {
-		var tableWidth = $(".slick-header-column").last().width() * $(".slick-header-column").length;
-		var parentWidth = $("#result-container > div:visible").width();
+		var widthArray = $(".slick-header-column").map(function(item) {
+			return $(this).width();
+		});
+		var tableWidth = $.reduce(widthArray, function(a, b) {
+			return a + b;
+		});
+//		tableWidth += 20;
+		
+		var parentWidth = $("body").width() - 65;
+		$("#myGrid").width(parentWidth);
 		if(tableWidth < parentWidth) {
-			$("#myGrid").width(tableWidth + 20);
-			if(this.grid)
-				this.grid.autosizeColumns();
+			this.grid.autosizeColumns();
 		}
-		else
-			$("#myGrid").width(parentWidth);
+		else {
+			if(!$(".c0").length) {
+				setTimeout($.proxy(this.resizeHits, this), 1);
+			} else {
+				this.resizeHits();
+			}
+		}
+	},
+	
+	resizeHits : function() {
+		this.setHitsWidth(this.getHitsWidth());
+	},
+	
+	getHitsWidth : function() {
+		var widthArray = $(".c0").map(function() {
+			return $(this).find(":nth-child(1)").outerWidth() + ($(this).find(":nth-child(2)").outerWidth() || 0);
+		});
+		return $.reduce(widthArray, Math.max);
+	},
+	
+	setHitsWidth : function(w) {
+		var data = this.grid.getColumns();
+		data[0].currentWidth = w;
+		this.grid.setColumns(data);
 	},
 	
 	_old_renderResult : function(data) {
@@ -1180,7 +1258,10 @@ var StatsResults = {
 		
 		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
 		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><span class="searchForWordform">' + fvalue + '</span> <a class="wordsName" id="wordstable__' + fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr>';
+			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><span class="searchForWordform">' +
+			fvalue + '</span> <a class="wordsName" id="wordstable__' +
+			fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + 
+			fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr>';
 		});
 		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr></table>';
 		
@@ -1218,7 +1299,12 @@ var StatsResults = {
 			theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__all__" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__all__"></div></th>';
 		}
 		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + '</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + fvalue + '" href="javascript:void(0)"><img class="bardiagrambutton" id="bardiagrambutton__' + fvalue + '" src="img/stats.png" style="border:0px"/></a></th><th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
+			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + 
+			fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + 
+			'</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + 
+			fvalue + '" href="javascript:void(0)"><img class="bardiagrambutton" id="bardiagrambutton__' + 
+			fvalue + '" src="img/stats.png" style="border:0px"/></a></th><th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + 
+			fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
 		});
 		var totalForAllWordforms = 0;
 		var totalForAllWordformsAbs = 0;
@@ -1284,38 +1370,6 @@ var StatsResults = {
   			$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
 		});
 		
-		$("#exportButton").unbind("click");
-		$("#exportButton").click(function() {
-			var selVal = $("#kindOfData option:selected").val();
-			var selType = $("#kindOfFormat option:selected").val();
-			var dataDelimiter = ";";
-			if (selType == "TSV")
-				dataDelimiter = "\t";
-				
-			// Generate CSV from the data
-			
-			var output = "corpus" + dataDelimiter;
-			$.each(statsResults.savedWordArray, function(key, aword) {
-				output += aword + dataDelimiter;
-			});
-			output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
-			
-			$.each(statsResults.savedData["corpora"], function(key, acorpus) {
-				output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter;
-				$.each(statsResults.savedWordArray, function(wkey, aword) {
-					var amount = acorpus[selVal][aword];
-					if(amount)
-						output += util.formatDecimalString(amount.toString(), false) + dataDelimiter;
-					else
-						output += "0" + dataDelimiter;
-				});
-				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
-			});
-			if (selType == "TSV")
-				window.open( "data:text/tsv;charset=utf-8," + escape(output));
-			else
-				window.open( "data:text/csv;charset=utf-8," + escape(output));
-		});
 		
 //		TODO: broken, might fix later.
 //		$(".searchForWordform").click(function() {
