@@ -900,7 +900,10 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		});
 
 
-	} else { // hits/wordform
+	} 
+	
+	/*
+	else { // hits/wordform
 		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
 			corpusArray.push(corpus);
 			$.each(obj["relative"], function(word, freq) {
@@ -1008,6 +1011,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 			diagramInstance.pie_widget("newData", dataItems);
 		}
 	}
+	*/
 }
 
 
@@ -1058,9 +1062,9 @@ var StatsResults = {
 				output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
 			});
 			if (selType == "TSV")
-				window.open( "data:text/tsv; charset=utf-8," + escape(output));
+				window.open( "data:text/tsv;charset=latin1," + escape(output));
 			else
-				window.open( "data:text/csv; charset=utf-8," + escape(output));
+				window.open( "data:text/csv;charset=latin1," + escape(output));
 		});
 	},
 	
@@ -1080,10 +1084,10 @@ var StatsResults = {
 		this.grid = grid;
 		
 		
+		
 //		setTimeout(this.resizeGrid, 10);
 		this.resizeGrid();
 //		grid.autosizeColumns();
-		
 		
 		// wire up model events to drive the grid
 		dataView.onRowCountChanged.subscribe(function(args) {
@@ -1132,10 +1136,9 @@ var StatsResults = {
 			return true;
 		});
 		dataView.endUpdate();
-//		dataView.refresh();
-//		grid.refresh();
 		
-		grid.setSortColumn("total", true);
+//		grid.setSortColumn("total", true);
+		$(".slick-header-column:nth(1)").click().click();
 		
 		this.hidePreloader();
 	},
@@ -1175,305 +1178,12 @@ var StatsResults = {
 	},
 	
 	setHitsWidth : function(w) {
+		if(!this.grid) return;
 		var data = this.grid.getColumns();
 		data[0].currentWidth = w;
 		this.grid.setColumns(data);
 	},
 	
-	_old_renderResult : function(data) {
-		var resultError = this.parent(data);
-		if(resultError === false) {
-			return;
-		}
-		
-		$("#stats_showing").html("");
-		$("#stats_total").text(data.count);
-		rollingOccupied = false;
-		var wordArray = [];
-		var corpusArray = [];
-
-		$.each(data["corpora"], function(corpus, obj) {
-			corpusArray.push(corpus);
-			$.each(obj["relative"], function(word, freq) {
-				if($.inArray(word, wordArray) == -1)
-					wordArray.push(word);
-			});
-		});
-		corpusArray.sort(function(c1, c2) {
-			c1 = settings.corpora[c1.toLowerCase()].title;
-			c2 = settings.corpora[c2.toLowerCase()].title;
-			if(c1 > c2) {
-				return 1;
-			} else if(c1 == c2) {
-				return 0;
-			} else {
-				return -1;
-			}
-		});
-		var hasHit = false;
-		$.each(data["total"]["absolute"], function(item) {
-			if(!$.isEmptyObject(item))
-				hasHit = true;
-		});
-		if(!hasHit) {
-			this.showNoResults();
-			return;	
-		}
-		
-		this["savedWordArray"] = wordArray;
-		
-
-		// Snygga till koden nedan!!
-		var totalForCorpus = [];
-		var totalForCorpusAbs = [];
-		$.each(corpusArray, function(key, fvalue) {
-			totalForCorpus.push(0);
-			totalForCorpusAbs.push(0);
-		});
-		
-		
-		var dataItems = new Array();
-
-		var bc = 0;
-		$.each(corpusArray, function(i, corpus) {
-			var obj = data.corpora[corpus];
-			$.each(wordArray, function(key, fvalue) {
-				if(obj["relative"])
-					var rel_freq = obj["relative"][fvalue];
-				if(obj["absolute"])
-					var abs_freq = obj["absolute"][fvalue];
-				if (rel_freq) {
-					totalForCorpus[bc] += parseFloat(rel_freq);
-					totalForCorpusAbs[bc] += abs_freq;
-				}		
-			});
-			bc++;
-		});
-		
-		
-		// Show export section -----
-		$("#exportStatsSection").css({"display": "block"});
-
-		// Make Left Stats Table --------------------------------------------------------- //
-		
-		var leftHTML = '<table class="statisticWords"><th style="height:60px;"><span style="color:white">-<br/>-</span></th>';
-		$.each(wordArray, function(key, fvalue) {
-			leftHTML += '<tr style="height:26px;"><td style="padding-right: 20px"><span class="searchForWordform">' +
-			fvalue + '</span> <a class="wordsName" id="wordstable__' +
-			fvalue + '" href="javascript:void(0)" style="visibility: hidden"><img id="circlediagrambutton__' + 
-			fvalue + '" src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr>';
-		});
-		leftHTML += '<tr><td style="padding-right: 20px">∑ <a class="wordsName" id="wordstableTotal" href="javascript:void(0)"><img src="img/stats2.png" class="arcDiagramPicture" style="border:0px;"/></a></td></tr></table>';
-		
-		function makeEllipsis(str) {
-			if(str.length > 18) {
-				return str.substr(0,14) + "...";
-			} else {
-				return str;
-			}
-		}
-		
-		$("#leftStatsTable").html(leftHTML);
-		
-		if (corpusArray.length > 1) {
-			$(".wordsName").css({"visibility":"visible"});
-		}
-		
-		$.each(wordArray, function(wkey, wvalue) {
-			var numCorporaWithWordform = 0;
-			$.each(corpusArray, function(ckey, cvalue) {
-				if (data["corpora"][cvalue]["relative"][wvalue]) {
-					numCorporaWithWordform++;
-				}
-			});
-			if(numCorporaWithWordform < 2) {
-				$($.format(".searchForWordform:contains(%s)", wvalue)).next().css({"visibility": "hidden"});
-			}
-		});
-		
-		// Make Right Stats Table -------------------------------------------------------- //
-		
-		var theHTML = '<table id="actualRightStatsTable" style="border-collapse:collapse;border-spacing:0px;border-style:hidden">';
-		if(corpusArray.length > 1) {
-			theHTML += '<th><i><span id="statsAllCorporaString">Samtliga</span></i><br/><a class="corpusNameAll" href="javascript:void(0)" style="outline: none;"><img class="bardiagrambutton" src="img/stats.png" style="border:0px"/></a></th>';
-			theHTML += '<th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__all__" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__all__"></div></th>';
-		}
-		$.each(corpusArray, function(key, fvalue) {
-			theHTML += '<th style="height:60px" class="corpusTitleClass"><a class="corpusTitleHeader" id="corpusTitleHeader__' + 
-			fvalue + '">' + makeEllipsis(settings.corpora[fvalue.toLowerCase()]["title"]).replace(new RegExp(" ", "gi"),"&nbsp;").replace(new RegExp("-","gi"),"&#8209;") + 
-			'</a><br/><a style="outline: none;" class="corpusName" id="corpustable__' + 
-			fvalue + '" href="javascript:void(0)"><img class="bardiagrambutton" id="bardiagrambutton__' + 
-			fvalue + '" src="img/stats.png" style="border:0px"/></a></th><th style="width:0px; visibility:hidden; display:none; padding:0px;" id="corpusStatisticsCell__' + 
-			fvalue + '" rowspan="100%"><div style="padding-top:52px" class="barContainerClass" id="corpusStatistics__' + fvalue + '"></div></th>';
-		});
-		var totalForAllWordforms = 0;
-		var totalForAllWordformsAbs = 0;
-		$.each(wordArray, function(key, fvalue) {
-			theHTML += '<tr style="height:26px; width:60px;">';
-			// First the value for ALL corpora
-			if(corpusArray.length > 1) {
-				var relTotForWordform = data["total"]["relative"][fvalue];
-				var absTotForWordform = data["total"]["absolute"][fvalue];
-				theHTML += '<td id="totcorpus__' + fvalue + '" class="statstable statstable__all">' + util.formatDecimalString(relTotForWordform.toFixed(1),true) + '&nbsp;<span class="absStat">(' + prettyNumbers(absTotForWordform.toString()) + ")</span></td>";
-				totalForAllWordforms += relTotForWordform;
-				totalForAllWordformsAbs += absTotForWordform;
-			}
-			// Then for each corpus seperately
-			$.each(corpusArray, function(gkey, gvalue) {
-				var rel_hits = data["corpora"][gvalue]["relative"][fvalue];
-				var abs_hits = data["corpora"][gvalue]["absolute"][fvalue];
-				
-				if (rel_hits) {
-					rel_hits = parseFloat(rel_hits);
-					theHTML += '<td id="statstable__' + gvalue + '__' + fvalue + '" class="statstable statstablecorpus__' + gvalue +'"><a href="javascript:void(0)" class="relStat searchForWordformInCorpus">' + util.formatDecimalString(rel_hits.toFixed(1),true) + '&nbsp;</a><a href="javascript:" class="absStat searchForWordformInCorpus">(' + prettyNumbers(abs_hits.toString()) + ')</a></td>';
-				} else {
-					theHTML += '<td class="statstable statstablecorpus__' + gvalue + '"></td>';
-				}
-			});
-			theHTML += '</tr>';
-		});
-		
-	
-		
-		//sum = function(o) { // Helper Method
-		//	for(var s = 0, i = o.length; i; s += o[--i]);
-		//	return s;
-		//};
-		if(corpusArray.length > 1) {
-			theHTML += '<tr class="sumOfCorpora"><td>' + util.formatDecimalString(totalForAllWordforms.toFixed(1),true) + '&nbsp;<span class="absStat">(' + prettyNumbers(totalForAllWordformsAbs.toString()) + ')</span></td>';
-		}
-		$.each(totalForCorpus, function(key, fvalue) {
-			theHTML += '<td>' + util.formatDecimalString(fvalue.toFixed(1),true) + '&nbsp;<span class="absStat">(' + prettyNumbers(totalForCorpusAbs[key].toString()) + ')</span></td>';
-		});
-		theHTML += '</tr></table>';
-
-		$("#rightStatsTable").html(theHTML);
-
-		if(wordArray.length < 2)
-			$(".bardiagrambutton").css({"visibility": "hidden"});
-		
-		
-		$.each(corpusArray, function(key, fvalue) {
-			var c = 0;
-			$.each(data["corpora"][fvalue]["relative"], function(bkey,bvalue) {
-				c++; // fulväg att komma runt att .length returnerar undefined, vet inte varför
-			});
-			if(c < 2)
-				$("#bardiagrambutton__" + fvalue).css({"visibility": "hidden"});
-		});
-		
-		$("#statsAllCorporaString").attr({"rel" : "localize[statstable_allcorpora]"});
-		
-		$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
-		
-		$(window).resize(function() {
-  			$("#rightStatsTable").css("max-width", $("#rightStatsTable").parent().width() - ($("#leftStatsTable").width() + $("#stats1_diagram").width() + 20));
-		});
-		
-		
-//		TODO: broken, might fix later.
-//		$(".searchForWordform").click(function() {
-//			$.bbq.pushState({
-//				search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + $(this).text() + '" %c)]',
-//				"result-container" : 0,
-//				"search-tab" : 2
-//			});
-//		});
-		
-		$(".searchForWordformInCorpus").click(function() {
-			var parts = $(this).parent().attr("id").split("__");
-			$.bbq.pushState({search : "cqp|" + '[(lex contains "' + $("#simple_text").data("lemgram") + '") & (word = "' + parts[2] + '" %c)]', corpus : parts[1].toLowerCase()});
-		});
-		
-		$(".corpusTitleHeader").click(function() {
-			var parts = $(this).attr("id").split("__");
-			$.bbq.pushState({corpus : parts[1].toLowerCase()});
-			simpleSearch.selectLemgram($("#simple_text").data("lemgram"));
-		});
-		
-		$(".statstable").not(":empty").tooltip({
-			delay : 80,
-			bodyHandler : function() {
-				var relString = util.getLocaleString("statstable_relfreq");
-				var absString = util.getLocaleString("statstable_absfreq");
-//				if(!$(this).attr('id'))
-//					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
-				var parts = $(this).attr('id').split("__");
-				if(parts.length == 3) {
-					var hoveredCorpus = parts[1];
-					var hoveredWord = parts[2];
-					var relFreq = statsResults.savedData["corpora"][hoveredCorpus]["relative"][hoveredWord];
-					var absFreq = statsResults.savedData["corpora"][hoveredCorpus]["absolute"][hoveredWord];
-					return relString + "<br/><b>" + util.formatDecimalString(relFreq.toString()) +"</b><br/>" + absString + "<br/><b>" + prettyNumbers(absFreq.toString()) + "</b>";
-				} else if (parts.length == 2) {
-					// Left total
-					return relString + "<br/><b>" + util.formatDecimalString(statsResults.savedData["total"]["relative"][parts[1]].toString()) + "</b><br/>" + absString + "<br/><b>" + prettyNumbers(statsResults.savedData["total"]["absolute"][parts[1]].toString()) + "</b>";
-				} else {
-					return relString + "<br/><b>0</b><br>" + absString + "<br/><b>0</b>";
-				}
-			}
-		});
-		
-		$(".corpusTitleHeader").tooltip({
-			delay : 80,
-			bodyHandler : function() {
-				return settings.corpora[$(this).attr('id').split("__")[1].toLowerCase()]["title"];
-			}
-		});
-
-
-
-		// Make Bar Diagram ------------------------------------------------------- //
-		
-		
-		diagramInstance = $('#theHide').pie_widget({container_id: "theHide", data_items: dataItems});
-		
-		
-		$(".corpusName").click(function(e) {
-			var parts = $(this).attr("id").split("__");
-			newDataInGraph(parts[1], false, "corpusStatistics__" + parts[1]);
-			e.stopPropagation();
-		});
-
-		
-		$(".corpusNameAll").click(function(e) {
-			newDataInGraph("all",false, "corpusStatistics__all__");
-			e.stopPropagation();
-		});
-		
-		$(".wordsName").click(function() {
-			var parts = $(this).attr("id").split("__");
-			if(parts.length == 2)
-				newDataInGraph(parts[1],true);
-			else { // The ∑ row
-				newDataInGraph("SIGMA_ALL",true);
-			}
-
-		});
-		
-		
-		
-		// ------------------------------------------------------------------------ //
-		
-		$(".statstable").hover(function() {
-			if(!$(this).attr('id'))
-					return;
-			var currItem = $(this).attr('id');
-			var parts = currItem.split("__");
-			if (parts[1] == statsResults.selectedCorpus) {
-				diagramInstance.pie_widget("highlightArc",parts[2]);
-			}
-		}, function() {
-			if(!$(this).attr('id'))
-				return;
-			if ($(this).attr('id').split("__")[1] == statsResults.selectedCorpus)
-				diagramInstance.pie_widget("deHighlightArc",$(this).attr('id').split("__")[2]);
-		});
-		//$("#results-stats").append($("<div />").css("clear", "both"));
-		
-		this.hidePreloader();
-		
-	},
 	
 	showError : function() {
 		this.hidePreloader();

@@ -497,6 +497,7 @@ table {
 	border : 1px solid #999;
 	cursor : move;
 	margin-left : 0;
+	margin-right : 10px;
 }
 
 .query_token.ui-sortable-helper {
@@ -897,6 +898,58 @@ a.relStat:hover {
 	visibility : hidden;
 }
 
+.disjunction {
+	background
+}
+
+.right_col input {
+	*float : right;
+}
+
+.query_arg {
+	border-radius : 2px;
+	padding : 5px;
+	background-color : #f7fceb;
+	border : solid 1px #999;
+	margin-bottom : 5px;
+}
+
+.or_arg {
+	margin-bottom : 5px;
+}
+
+.query_arg:only-of-type:only-child .or_arg:only-child .remove_arg {
+	visibility: hidden;
+}
+.arg_header {
+	visibility: hidden;
+}
+.or_arg:not(:only-child):first-child .arg_header {
+	visibility: visible;
+}
+
+.arg_header {
+	font-size : 10px;
+}
+
+.arg_footer {
+	position: relative;
+	width : 50%;
+	height : 20px;
+}
+
+.insert_or {
+	position: absolute;
+	padding-top : 6px;
+	right : 0;
+	cursor : pointer;
+}
+
+.insert_or .ui-icon {
+	margin-top : 4px;
+	margin-right : 4px;
+}
+
 .sort_select {
 	float : right;
 }
@@ -935,4 +988,17 @@ a.relStat:hover {
 	margin-bottom : -2px;
 	padding-left : 5px;
 	padding-right : 5px;
+}
+
+.c0 {
+	position: relative;
+}
+.arcDiagramPicture {
+	position: absolute;
+	right : 0;
+}
+
+.slick-cell > span {
+	position: absolute;
+	top : 3px;
 }

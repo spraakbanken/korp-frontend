@@ -365,105 +365,67 @@ var Sidebar = {
 
 
 var ExtendedToken = {
-	options : {showClose : true},
+	options : {},
 	_init : function() {
 		var self = this;
+		this.table = this.element;
 		
-        this.element.find(".logic_switcher")
-        .hide()
-        .find("select").change(function() {
-        	$.log("change", $(this).val());
-        	self.element.find(".and_any").localeKey($(this).val());
-        	self._trigger("change");
-        }).end()
-        .next() //close icon
-        .log()
+        this.element.find(".ui-icon-circle-close") //close icon
         .click(function() {
         	$.log("close");
         	self.element.remove();
         	self._trigger("close");
         });
+        this.element.find(".insert_arg").click(function() {
+    		self.insertArg();
+	    }).click();
         
-        this.table = this.element;
-	    this.insertArg();
+        
+        
 	},
 	
-	insertArg : function(token) {
+	insertArg : function() {
 		$.log("insertArg");
 		var self = this;
-	    var row = $("<tr/>").addClass("query_arg").appendTo(this.table);
+		
 	    
-	    var arg_select = this.makeSelect();
-	    
-	    var arg_value = $("<input type='text'/>").addClass("arg_value")
-	    .change(function(){
-    		self._trigger("change");
-		});
-	    
-	    var remove = $('<img src="img/minus.png">')
-        .addClass("image_button")
-        .addClass("remove_arg")
-        .click(function(){
-        	if(row.is(":last-child")) {
-        		row.prev().find(".insert_arg").show();
-        		row.prev().find(".and_any").hide();
-        	}
-        	self.removeArg(this);
-        	if(self.element.find(".query_arg").length < 2)
-        		self.element.find(".logic_switcher").fadeOut("fast");
-    	});
-
-	    var insert = $('<img src="img/plus.png"/>')
-        .addClass("image_button")
-	    .addClass("insert_arg")
-	    .click(function() {
-	    	self.insertArg(this);
-	    	$(this).hide();
-	    	$(this).prev().show();
-	    	self.element.find(".logic_switcher").fadeIn("fast");
-	    });
-	    
-//	    var closeBtn = $("<span />", {"class" : "ui-icon ui-icon-circle-close btn-icon"})
-//	    .click(function() {
-//	    	$(this).closest("table").remove();
-//	    	self._trigger("close");
-//	    });
-	    
-	    
-	    
-	    var leftCol = $("<div />").append(remove).css("display", "inline-block").css("vertical-align", "top");
-	    var rightCol = $("<div />").append(arg_select, arg_value)
-	    .css("display", "inline-block")
-	    .css("margin-left", 5);
-	    
-	    if($.browser.msie && $.browser.version.slice(0, 1) == "7") { // IE7 :(
-	    	// let's patch it up! (maybe I shouldn't have used inline-block)
-	    	leftCol.add(rightCol).css("display", "inline");
-	    	rightCol.find("input").css("float", "right");
-//	    	closeBtn.css("right", "-235").css("top", "-55");
-	    }
-	    
-	    var wrapper = $("<div />").append($("<span/>", {"class" : "and_any"}).localeKey("and").hide(), insert);
-	    row.append(
-	        $("<td/>").append(leftCol, rightCol, wrapper)
-	    );
-	    
-	    if(row.is(":nth-child(2)")) {
-	    	remove.css("visibility", "hidden");
-	    }
-	    
-	    this._trigger("change");
+		$("#argTmpl").tmpl()
+		.find(".or_container").append(this.insertOr()).end()
+	    .find(".insert_or").click(function() {
+	    	$.log("insert or!");
+//	    	self.insertArg().appendTo($(this).closest(".and_arg").find(".or_block")).addClass("or_arg");
+//	    	$("#orTmpl").tmpl().appendBefore($(this).parent());
+	    	self.insertOr().appendTo($(this).closest(".query_arg").find(".or_container"));
+	    	self._trigger("change");
+	    }).end()
+	    .appendTo(this.element.find(".args"));
+		
+		self._trigger("change");
 	},
 	
-	removeArg : function(arg) {
-	    arg = $(arg).closest(".query_arg");
-	    if (arg.siblings().length >= 1) {
-	        arg.remove();
-	    } else {
-	        arg.closest(".query_token").remove();
-	    }
-	    this._trigger("change");
+	insertOr : function() {
+		var self = this;
+		var arg_select = this.makeSelect();
+		var arg_value = $("<input type='text'/>").addClass("arg_value")
+		.change(function(){
+			self._trigger("change");
+		});
+		
+		
+		return $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
+		.find(".remove_arg")
+	    .click(function(){
+	    	var arg = $(this).closest(".or_arg"); 
+	    	if(arg.siblings(".or_arg").length == 0) {
+	    		arg.closest(".query_arg").remove();
+	    	} else {
+	    		arg.remove();
+	    	}
+	    	
+		    self._trigger("change");
+	    }).end();
 	},
+	
 	
 	makeSelect : function() {
 		var arg_select = $("<select/>").addClass("arg_type")
@@ -609,12 +571,12 @@ var ExtendedToken = {
 		this._trigger("change");
 	},
 	
-	getCQP : function() {
+	getOrCQP : function(andSection) {
 		var self = this;
 	    var query = {token: [], min: "", max: ""};
 
 	    var args = {};
-	    this.table.find(".query_arg").each(function(){
+	    andSection.find(".or_arg").each(function(){
 	        var type = $(this).find(".arg_type").val();
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();
@@ -640,7 +602,7 @@ var ExtendedToken = {
 	    		settings.outer_args[type](query, $.map(args[type], function(item) {
 	            	return item.value;
 	            }));
-	    		return;
+	    		return; //TODO: what is this?
 	    	} 
 	    	$.each(valueArray, function(i, obj) {
 	    		function defaultArgsFunc(s, op) {
@@ -663,17 +625,31 @@ var ExtendedToken = {
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	if (inner_query.length) {
-	    		var op = self.element.find("select").first().val() == "or" ? " | " : " & ";
-	    		query.token.push(inner_query.join(op));
+	    		query.token.push(inner_query.join(" | "));
 	    	}
 	    	
 	    });
 	    var tokens = $.grep(query.token, Boolean);
-	    var query_string = "[" + tokens.join(" & ") + "]";
+	    $.log("tokens", tokens);
+	    var output = "";
+	    if(tokens.length < 2)
+	    	output = tokens.join(" | ");
+	    else
+	    	output = "(" + tokens.join(" | ") + ")";
 	    if (query.min | query.max) {
-	        query_string += "{" + (query.min || 0) + "," + query.max + "}";
+	        output += "{" + (query.min || 0) + "," + query.max + "}";
 	    }
-	    return query_string;
+	    return output;
+	},
+	
+	getCQP : function() {
+		var self = this;
+		
+		var output = this.element.find(".query_arg").map(function() {
+			return self.getOrCQP($(this));; 
+		}).get().join(" & ");
+		$.log("output", output);
+		return $.format("[%s]", [output]); 
 	}
 };
 $.widget("ui.sidebar", Sidebar);

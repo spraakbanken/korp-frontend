@@ -313,7 +313,7 @@ var StatsProxy = {
 	valueFormatter : function(row, cell, value, columnDef, dataContext) {
 		if (!value.relative && !value.absolute)
             return "";
-		return $.format("<span class='relStat'>%s</span> <span class='absStat'>(%s)</span>", [util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
+		return $.format("<span><span class='relStat'>%s</span> <span class='absStat'>(%s)</span><span>", [util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
 	},
 	
 	hitFormatter : function(row, cell, value, columnDef, dataContext) {
@@ -331,18 +331,8 @@ var StatsProxy = {
 		if($.keys(corpora).length > 1)
 			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
 		return output;
-	},
-	
-	
-	take : function(obj, n) {
-		var output = {};
-		$.each(obj, function(k, v) {
-			if(--n >= 0) {
-				output[k] = v;
-			}
-		});
-		return output;
 	}
+	
 };
 
 model.SearchProxy = new Class(SearchProxy);

@@ -336,7 +336,8 @@ var ExtendedSearch = {
 		});
 	    
 	    $("#query_table").append(insert_token_button).sortable({
-	    	items : ".query_token"
+	    	items : ".query_token",
+	    	delay : 50
 	    });
 	    insert_token_button.click();
 	},
