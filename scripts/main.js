@@ -41,7 +41,8 @@ var currentMode;
 				command : "info",
 				corpus : $.map($.keys(settings.corpora), function(item) {
 					return item.toUpperCase();
-				}).join()
+				}).join(),
+				log : 1
 			}
 		});
     });
