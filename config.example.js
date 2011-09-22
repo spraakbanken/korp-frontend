@@ -223,6 +223,7 @@ settings.corporafolders.parallel.salt = {
 
 settings.corpora.fsbskonlit = {
 	title : "Skönlitteratur 1970-2011",
+	description : "",
 	languages : {
 		FSBSKONLIT : "svenska"
 	},
@@ -249,6 +250,7 @@ settings.corpora.fsbskonlit = {
 
 settings.corpora.fsbessaistik = {
 	title : "Essäistisk litteratur 1970-2011",
+	description : "",
 	languages : {
 		FSBESSAISTIK : "svenska"
 	},
@@ -275,6 +277,7 @@ settings.corpora.fsbessaistik = {
 
 settings.corpora.fsbsakprosa = {
 	title : "Sakprosa 1970-2011",
+	description : "",
 	languages : {
 		FSBSAKPROSA : "svenska"
 	},
@@ -301,6 +304,7 @@ settings.corpora.fsbsakprosa = {
 
 settings.corpora.svenskbygden = {
 	title : "Svenskbygden 2010-2011",
+	description : "",
 	languages : {
 		SVENSKBYGDEN : "svenska"
 	},
@@ -325,6 +329,7 @@ settings.corpora.svenskbygden = {
 
 settings.corpora.jakobstadstidning1999 = {
 	title : "Jakobstads tidning 1999",
+	description : "",
 	languages : {
 		JAKOBSTADSTIDNING1999 : "svenska"
 	},
@@ -347,6 +352,7 @@ settings.corpora.jakobstadstidning1999 = {
 
 settings.corpora.jakobstadstidning2000 = {
 	title : "Jakobstads tidning 2000",
+	description : "",
 	languages : {
 		JAKOBSTADSTIDNING2000 : "svenska"
 	},
@@ -369,6 +375,7 @@ settings.corpora.jakobstadstidning2000 = {
 
 settings.corpora.dn1987 = {
 	title : "DN 1987",
+	description : "Dagens Nyheter 1987",
 	languages : {
 		DN1987 : "svenska"
 	},
@@ -393,6 +400,7 @@ settings.corpora.dn1987 = {
 
 settings.corpora.gp1994 = {
 	title : "GP 1994",
+	description : "",
 	languages : {
 		GP1994 : "svenska"
 	},
@@ -417,6 +425,7 @@ settings.corpora.gp1994 = {
 
 settings.corpora.gp2001 = {
 	title : "GP 2001",
+	description : "",
 	languages : {
 		GP2001 : "svenska"
 	},
@@ -441,6 +450,7 @@ settings.corpora.gp2001 = {
 
 settings.corpora.gp2002 = {
 	title : "GP 2002",
+	description : "",
 	languages : {
 		GP2002 : "svenska"
 	},
@@ -465,6 +475,7 @@ settings.corpora.gp2002 = {
 
 settings.corpora.gp2003 = {
 	title : "GP 2003",
+	description : "",
 	languages : {
 		GP2003 : "svenska"
 	},
@@ -489,6 +500,7 @@ settings.corpora.gp2003 = {
 
 settings.corpora.gp2004 = {
 	title : "GP 2004",
+	description : "",
 	languages : {
 		GP2004 : "svenska"
 	},
@@ -513,6 +525,7 @@ settings.corpora.gp2004 = {
 
 settings.corpora.gp2005 = {
 	title : "GP 2005",
+	description : "",
 	languages : {
 		GP2005 : "svenska"
 	},
@@ -537,6 +550,7 @@ settings.corpora.gp2005 = {
 
 settings.corpora.gp2006 = {
 	title : "GP 2006",
+	description : "",
 	languages : {
 		GP2006 : "svenska"
 	},
@@ -561,6 +575,7 @@ settings.corpora.gp2006 = {
 
 settings.corpora.gp2007 = {
 	title : "GP 2007",
+	description : "",
 	languages : {
 		GP2007 : "svenska"
 	},
@@ -585,6 +600,7 @@ settings.corpora.gp2007 = {
 
 settings.corpora.gp2008 = {
 	title : "GP 2008",
+	description : "",
 	languages : {
 		GP2008 : "svenska"
 	},
@@ -609,6 +625,7 @@ settings.corpora.gp2008 = {
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
+	description : "",
 	languages : {
 		GP2009 : "svenska"
 	},
@@ -634,6 +651,7 @@ settings.corpora.gp2009 = {
 
 settings.corpora.gp2d = {
 	title : "GP - Två dagar",
+	description : "",
 	languages : {
 		GP2D : "svenska"
 	},
@@ -657,6 +675,7 @@ settings.corpora.gp2d = {
 
 settings.corpora.ordat = {
 	title : "ORDAT: Svenska dagbladets årsbok 1923 - 1958",
+	description : "",
 	languages : {
 		ORDAT : "svenska"
 	},
@@ -681,6 +700,7 @@ settings.corpora.ordat = {
 
 settings.corpora.fof = {
 	title : "Forskning och framsteg",
+	description : "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
 	languages : {
 		FOF : "svenska"
 	},
@@ -704,6 +724,7 @@ settings.corpora.fof = {
 
 settings.corpora.press65 = {
 	title : "Press 65",
+	description : "",
 	languages : {
 		PRESS65 : "svenska"
 	},
@@ -730,6 +751,7 @@ settings.corpora.press65 = {
 
 settings.corpora.press76 = {
 	title : "Press 76",
+	description : "",
 	languages : {
 		PRESS76 : "svenska"
 	},
@@ -754,6 +776,7 @@ settings.corpora.press76 = {
 
 settings.corpora.press95 = {
 	title : "Press 95",
+	description : "",
 	languages : {
 		PRESS95 : "svenska"
 	},
@@ -779,6 +802,7 @@ settings.corpora.press95 = {
 
 settings.corpora.press96 = {
 	title : "Press 96",
+	description : "",
 	languages : {
 		PRESS96 : "svenska"
 	},
@@ -804,6 +828,7 @@ settings.corpora.press96 = {
 
 settings.corpora.press97 = {
 	title : "Press 97",
+	description : "",
 	languages : {
 		PRESS97 : "svenska"
 	},
@@ -829,6 +854,7 @@ settings.corpora.press97 = {
 
 settings.corpora.press98 = {
 	title : "Press 98",
+	description : "",
 	languages : {
 		PRESS98 : "svenska"
 	},
@@ -854,6 +880,7 @@ settings.corpora.press98 = {
 
 settings.corpora.bloggmix = {
 	title : "Bloggmix (september 2011)",
+	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet.",
 	languages : {
 		BLOGGMIX : "svenska"
 	},
@@ -886,6 +913,7 @@ settings.corpora.bloggmix = {
 
 settings.corpora.suc2 = {
 	title : "SUC 2.0",
+	description : "Stockholm-Umeå Corpus",
 	languages : {
 		SUC2 : "svenska"
 	},
@@ -909,6 +937,7 @@ settings.corpora.suc2 = {
 
 settings.corpora.storsuc = {
 	title : "SUC-romaner",
+	description : "En samling romaner och andra böcker som har använts i urvalet till SUC. 58 böcker ingår.",
 	languages : {
 		STORSUC : "svenska"
 	},
@@ -930,9 +959,31 @@ settings.corpora.storsuc = {
 	}
 };
 
-//settings.corpora.saltnld = {
+
 settings.corpora.saltnld_swe = {
 	title: "Svenska-nederländska", 
+	description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
+<ul>\
+<li>Bergman, Ingmar: Laterna magica</li>\
+<li>Claus, Hugo: Rykten / De geruchten</li>\
+<li>Dekker, Rudolf och van de Pol, Lotte: Kvinnor i manskläder / Vrouwen en mannekleren</li>\
+<li>Ekman, Kerstin: Händelser vid vatten / Zwart water</li>\
+<li>Froman, Ingmarie: Sverige och Belgien / Zweden und Belgiê</li>\
+<li>Guillou, Jan: Fiendens fiende / De vijand van de vijand</li>\
+<li>Gustafsson, Lars: En kakesättares eftermiddag / De namiddag van een tegelzetter</li>\
+<li>Johanisson, Karin: Den mörka kontinenten / Het duistere continent</li>\
+<li>Krabbé, Tim: De försvunna / Het gouden ei</li>\
+<li>Mankell, Henning: Mördare utan ansikte / Moordenaar zonder gezicht</li>\
+<li>Mulish, Harry: Överfallet / De aanslag</li>\
+<li>Nilson, Peter: Hem till jorden / Terug naar de aarde</li>\
+<li>van Paemel, Monika: Den första stenen / De eersten steen</li>\
+<li>Sjöwall, Maj och Wahlöö, Per: Brandbilen som försvann / De brandweerauto die verdween</li>\
+<li>Swartz, Richard: Room service</li>\
+<li>Tunström, Göran: Tjuven / Die dief</li>\
+<li>Wolkers, Jan: Turkisk konfekt / Turks fruit</li>\
+</ul>\
+\
+Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
 	languages : { 
 		SALTNLD_SWE: "svenska", 
 		SALTNLD_NLD: "nederländska"
@@ -962,6 +1013,7 @@ settings.corpora.saltnld_swe = {
 
 settings.corpora.europarlda_sv = {
 	title: "Svenska-danska", 
+	description : "",
 	languages : { 
 		EUROPARLDA_SV: "svenska", 
 		EUROPARLDA_DA: "danska"
@@ -991,6 +1043,7 @@ settings.corpora.europarlda_sv = {
 
 settings.corpora.parole = {
 	title : "PAROLE",
+	description : "",
 	languages : {
 		PAROLE : "svenska"
 	},
@@ -1014,6 +1067,7 @@ settings.corpora.parole = {
 
 settings.corpora.diabetolog = {
 	title : "DiabetologNytt (1996-1999)",
+	description : "",
 	languages : {
 		diabetolog : "svenska"
 	},
@@ -1039,6 +1093,7 @@ settings.corpora.diabetolog = {
 
 settings.corpora.lt = {
 	title : "Läkartidningen (1996)",
+	description : "Läkartidningens publicerade artiklar under 1996.<br/>Antal artiklar: 2345",
 	languages : {
 		LT : "svenska"
 	},
@@ -1066,6 +1121,7 @@ settings.corpora.lt = {
 
 settings.corpora.smittskydd = {
 	title : "Smittskydd",
+	description : "",
 	languages : {
 		SMITTSKYDD : "svenska"
 	},
@@ -1091,6 +1147,7 @@ settings.corpora.smittskydd = {
 
 settings.corpora.snp7879 = {
 	title : "SNP 78-79 (Riksdagens snabbprotokoll)",
+	description : "Riksdagens snabbprotokoll 1978-1979.",
 	languages : {
 		SNP7879 : "svenska"
 	},
@@ -1112,6 +1169,7 @@ settings.corpora.snp7879 = {
 
 settings.corpora.vivill = {
 	title : "Svenska partiprogram och valmanifest 1887-2010",
+	description : "",
 	languages : {
 		VIVILL : "svenska"
 	},
@@ -1228,6 +1286,7 @@ settings.corpora.vivill = {
 
 settings.corpora.romi = {
 	title : "Bonniersromaner I (1976-77)",
+	description : "69 romaner utgivna 1976-77.",
 	languages : {
 		ROMI : "svenska"
 	},
@@ -1253,6 +1312,7 @@ settings.corpora.romi = {
 
 settings.corpora.romii = {
 	title : "Bonniersromaner II (1980-81)",
+	description : "60 romaner från 1980-81.",
 	languages : {
 		ROMII : "svenska"
 	},
@@ -1277,6 +1337,7 @@ settings.corpora.romii = {
 
 settings.corpora.romg = {
 	title : "Äldre svenska romaner",
+	description : "",
 	languages : {
 		ROMG : "svenska"
 	},
@@ -1303,6 +1364,7 @@ settings.corpora.romg = {
 
 settings.corpora.rom99 = {
 	title : "Norstedtsromaner (1999)",
+    description : "",
 	languages : {
 		ROM99 : "svenska"
 	},
@@ -1329,6 +1391,7 @@ settings.corpora.rom99 = {
 
 settings.corpora.strindbergromaner = {
 	title : "Strindbergs romaner och dramer",
+	description : "",
 	languages : {
 		STRINDBERGROMANER : "svenska"
 	},
@@ -1356,6 +1419,7 @@ settings.corpora.strindbergromaner = {
 
 settings.corpora.strindbergbrev = {
 	title : "Strindbergs brev",
+	description : "",
 	languages : {
 		STRINDBERGBREV : "svenska"
 	},
@@ -1386,6 +1450,7 @@ settings.corpora.strindbergbrev = {
 
 settings.corpora.sfs = {
 	title : "Svensk författningssamling 1978-1981",
+	description : "",
 	languages : {
 		SFS : "svenska"
 	},
@@ -1412,6 +1477,7 @@ settings.corpora.sfs = {
 
 settings.corpora.psalmboken = {
 	title : "Psalmboken (1937)",
+	description : "",
 	languages : {
 		PSALMBOKEN : "svenska"
 	},
@@ -1436,6 +1502,7 @@ settings.corpora.psalmboken = {
 
 settings.corpora.lasbart = {
 	title : "LäSBarT - Lättläst svenska och barnbokstext",
+	description : "",
 	languages : {
 		LASBART : "svenska"
 	},
@@ -1465,6 +1532,7 @@ settings.corpora.lasbart = {
 
 settings.corpora.drama = {
 	title : "Dramawebben (demo)",
+	description : "",
 	languages : {
 		DRAMA : "svenska"
 	},
@@ -1486,6 +1554,7 @@ settings.corpora.drama = {
 
 settings.corpora.wikipedia = {
 	title : "Svenska Wikipedia (augusti 2011)",
+	description : "Samtliga artikar från svenska Wikipedia. Uppdateras med ojämna mellanrum.",
 	languages : {
 		WIKIPEDIA : "svenska"
 	},
@@ -1510,6 +1579,7 @@ settings.corpora.wikipedia = {
 
 settings.corpora.astranova = {
 	title : "Astra Nova 2008-2010",
+	description : "Innehåller samtliga nummer av Astra Nova från perioden 2008-2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
 	languages : {
 		ASTRANOVA : "svenska"
 	},
@@ -1535,6 +1605,7 @@ settings.corpora.astranova = {
 
 settings.corpora.kallan = {
 	title : "Källan 2008-2010",
+	description : "",
 	languages : {
 		KALLAN : "svenska"
 	},
@@ -1560,6 +1631,7 @@ settings.corpora.kallan = {
 
 settings.corpora.nyaargus = {
 	title : "Nya Argus 2010-2011",
+	description : "",
 	languages : {
 		NYAARGUS : "svenska"
 	},
@@ -1585,6 +1657,7 @@ settings.corpora.nyaargus = {
 
 settings.corpora.vasabladet = {
 	title : "Vasabladet 1991",
+	description : "",
 	languages : {
 		VASABLADET : "svenska"
 	},
@@ -1611,6 +1684,7 @@ settings.corpora.vasabladet = {
 
 settings.corpora.hbl1991 = {
 	title : "Hufvudstadsbladet 1991",
+	description : "",
 	languages : {
 		HBL1991 : "svenska"
 	},
@@ -1636,6 +1710,7 @@ settings.corpora.hbl1991 = {
 
 settings.corpora.hbl1998 = {
 	title : "Hufvudstadsbladet 1998",
+	description : "",
 	languages : {
 		HBL1998 : "svenska"
 	},
@@ -1660,6 +1735,7 @@ settings.corpora.hbl1998 = {
 
 settings.corpora.hbl1999 = {
 	title : "Hufvudstadsbladet 1999",
+	description : "",
 	languages : {
 		HBL1999 : "svenska"
 	},
