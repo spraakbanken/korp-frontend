@@ -207,6 +207,7 @@
 	"corpselector_sentences_long" : "sentences in the selected corpora",
 	"corpselector_corporawith_sing" : "corpus with",
 	"corpselector_corporawith_plur" : "corpora with",
+	"corpselector_lastupdate" : "Last update",
 	
 	"statstable_allcorpora" : "All&nbsp;corpora",
 	"statstable_relfreq" : "relative frequency (per million words):",

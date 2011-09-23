@@ -183,12 +183,16 @@ util.localizeFloat = function(float, nDec) {
 	return $.format("%." + nDec + "f", float).replace(".", sep);
 };
 
-util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swedish, if mode is 
+util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swedish, if mode is
+	// Split the string into two parts
+	var parts = x.split(".");
 	var decimalSeparator = util.getLocaleString("util_decimalseparator");
 	if(mode)
-		return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
+		return prettyNumbers(parts[0]) + '<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>' + parts[1];
+		//return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
 	else
-		return x.replace(".", decimalSeparator);
+		return prettyNumbers(parts[0]) + decimalSeparator + parts[1];
+		//return x.replace(".", decimalSeparator);
 };
 
 
@@ -218,10 +222,14 @@ function loadCorpora() {
     		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
     	var numTokens = settings.corpora[corpusID]["info"]["Size"];
     	var numSentences = settings.corpora[corpusID]["info"]["Sentences"];
+    	var lastUpdate = settings.corpora[corpusID]["info"]["Updated"];
+    	if (!lastUpdate) {
+       	    lastUpdate = "?";
+    	}
     	var sentenceString = "-";
     	if (numSentences)
     		sentenceString = prettyNumbers(numSentences.toString());
-    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + "</b>";
+    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + "</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b>";
     }, infoPopupFolder: function(indata) {
     	var corporaID = indata.corporaID;
     	var desc = indata.description;

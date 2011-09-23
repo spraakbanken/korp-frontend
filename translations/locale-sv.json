@@ -207,6 +207,7 @@
 	"corpselector_sentences_long" : "meningar i de valda korpusarna",
 	"corpselector_corporawith_sing" : "korpus med",
 	"corpselector_corporawith_plur" : "korpusar med",
+	"corpselector_lastupdate" : "Senast uppdaterad",
 	
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",
