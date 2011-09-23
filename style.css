@@ -29,6 +29,11 @@ a:link {color:navy;}      /* unvisited link */
 a:visited {color:purple;}  /* visited link */
 a:hover {color:red;}  /* mouse over link */
 
+.link {color : navy;cursor : pointer;}
+.link:hover {color : red;}
+
+
+
 .inline_block {
 	display : inline-block;
 	*display : inline;
@@ -209,6 +214,10 @@ input:placeholder, textarea:placeholder {
 .remove_arg {
 	position: relative;
 	top : 15px;
+	opacity : 1;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
 }
 
 .insert_arg {
@@ -218,7 +227,8 @@ input:placeholder, textarea:placeholder {
 
 .insert_token {
 	position: relative;
-	top : 29px;
+	top : 54px;
+	margin-left : 10px;
 }
 
 .arg_selects {
@@ -232,7 +242,7 @@ input:placeholder, textarea:placeholder {
 	margin-left : 5px;
 }
 
-.arg_value {
+input.arg_value {
 	display : block;
 	width : 98%;
 }
@@ -498,6 +508,8 @@ table {
 	cursor : move;
 	margin-left : 0;
 	margin-right : 10px;
+	margin-bottom : 5px;
+	box-shadow: 2px 2px 3px grey;
 }
 
 .query_token.ui-sortable-helper {
@@ -892,10 +904,19 @@ a.relStat:hover {
 
 .query_token .ui-icon-circle-close {
 	float : right;
+	opacity : 1;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
 }
 
 .query_token:only-of-type .ui-icon-circle-close {
-	visibility : hidden;
+/* 	visibility : hidden; */
+	opacity : 0;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
+	
 }
 
 .disjunction {
@@ -918,14 +939,32 @@ a.relStat:hover {
 	margin-bottom : 5px;
 }
 
-.query_arg:only-of-type:only-child .or_arg:only-child .remove_arg {
-	visibility: hidden;
+.query_arg:only-of-type .or_arg:only-child .remove_arg {
+	cursor : default;
+	opacity : 0;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
 }
 .arg_header {
-	visibility: hidden;
+/* 	visibility: hidden; */
+	opacity : 0;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
+	
 }
 .or_arg:not(:only-child):first-child .arg_header {
-	visibility: visible;
+/* 	visibility: visible; */
+	opacity : 1;
+	-moz-transition: opacity 200ms ease;
+	-webkit-transition: opacity 200ms ease;
+	transition: opacity 200ms ease;
+	
+}
+
+.and:first-of-type {
+	display : none !important;
 }
 
 .arg_header {
@@ -933,22 +972,23 @@ a.relStat:hover {
 }
 
 .arg_footer {
-	position: relative;
-	width : 50%;
-	height : 20px;
+/* 	position: relative; */
+/* 	width : 50%; */
+/* 	height : 20px; */
 }
 
 .insert_or {
-	position: absolute;
+/* 	position: absolute; */
 	padding-top : 6px;
 	right : 0;
 	cursor : pointer;
+	float : right;
 }
 
-.insert_or .ui-icon {
-	margin-top : 4px;
-	margin-right : 4px;
-}
+/* .insert_or .ui-icon { */
+/* 	margin-top : 4px; */
+/* 	margin-right : 4px; */
+/* } */
 
 .sort_select {
 	float : right;
@@ -1002,3 +1042,8 @@ a.relStat:hover {
 	position: absolute;
 	top : 3px;
 }
+
+.slick-cell {
+	position: relative;
+}
+

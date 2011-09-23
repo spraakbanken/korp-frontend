@@ -118,6 +118,7 @@ var SimpleSearch = {
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
 				self.enableSubmit();
 			}
+			self.onSimpleChange();
 		});
 	},
 	
@@ -249,7 +250,11 @@ var SimpleSearch = {
 					$(this).remove();
 					var h = $("#similar_lemgrams").outerHeight();
 					
-					list.html( $("#similarTmpl").tmpl(data) );
+					list.html( $("#similarTmpl").tmpl(data) )
+					.find("a")
+					.click(function() {
+						self.selectLemgram($(this).data("lemgram"));
+					});
 					$("#similar_lemgrams").height("auto");
 					var newH = $("#similar_lemgrams").outerHeight();
 					$("#similar_lemgrams").height(h);
@@ -273,9 +278,19 @@ var SimpleSearch = {
 		if(util.isLemgramId(currentText)) { // if the input is a lemgram, do semantic search.
 			val = $.format('[lex contains "%s"]', currentText);
 		} else if(this.isSearchPrefix() || this.isSearchSuffix()) {
-			var prefix = this.isSearchSuffix() ? ".*" : "";
-			var suffix = this.isSearchPrefix() ? ".*" : "";
-			val = $.format('[word = "%s%s%s"]', [prefix, regescape(currentText), suffix]) ;
+			var query = [];
+			this.isSearchPrefix() && query.push("%s.*");
+			this.isSearchSuffix() && query.push(".*%s");
+			val = $.map(currentText.split(" "), function(wd) {
+				return "[" + $.map(query, function(q) {
+					return $.format($.format('word = "%s"', q), wd);
+				}).join(" | ")  + "]";
+			}).join(" ");
+			
+//			val = $.map(currentText.split(" "), function(wd) {
+//				return $.format('[%s]', query.join(" | ")) ;
+//			})
+			
 		}
 		else {
 			var wordArray = currentText.split(" ");
@@ -337,7 +352,8 @@ var ExtendedSearch = {
 	    
 	    $("#query_table").append(insert_token_button).sortable({
 	    	items : ".query_token",
-	    	delay : 50
+	    	delay : 50,
+	    	tolerance : "pointer"
 	    });
 	    insert_token_button.click();
 	},

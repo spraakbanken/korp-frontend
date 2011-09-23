@@ -377,28 +377,29 @@ var ExtendedToken = {
         	self._trigger("close");
         });
         this.element.find(".insert_arg").click(function() {
-    		self.insertArg();
-	    }).click();
+    		self.insertArg(true);
+	    });
         
-        
+        this.insertArg();
         
 	},
 	
-	insertArg : function() {
+	insertArg : function(animate) {
 		$.log("insertArg");
 		var self = this;
 		
 	    
-		$("#argTmpl").tmpl()
+		var arg = $("#argTmpl").tmpl()
 		.find(".or_container").append(this.insertOr()).end()
 	    .find(".insert_or").click(function() {
-	    	$.log("insert or!");
-//	    	self.insertArg().appendTo($(this).closest(".and_arg").find(".or_block")).addClass("or_arg");
-//	    	$("#orTmpl").tmpl().appendBefore($(this).parent());
-	    	self.insertOr().appendTo($(this).closest(".query_arg").find(".or_container"));
+	    	self.insertOr().appendTo($(this).closest(".query_arg").find(".or_container")).hide().slideDown();
 	    	self._trigger("change");
 	    }).end()
-	    .appendTo(this.element.find(".args"));
+	    .appendTo(this.element.find(".args"))
+	    .before($("<span>", {"class" : "and"}).localeKey("and").hide().fadeIn());
+		
+		if(animate)
+			arg.hide().slideDown("fast");
 		
 		self._trigger("change");
 	},
@@ -406,6 +407,7 @@ var ExtendedToken = {
 	insertOr : function() {
 		var self = this;
 		var arg_select = this.makeSelect();
+
 		var arg_value = $("<input type='text'/>").addClass("arg_value")
 		.change(function(){
 			self._trigger("change");
@@ -417,9 +419,17 @@ var ExtendedToken = {
 	    .click(function(){
 	    	var arg = $(this).closest(".or_arg"); 
 	    	if(arg.siblings(".or_arg").length == 0) {
-	    		arg.closest(".query_arg").remove();
+	    		
+	    		arg.closest(".query_arg").slideUp("fast",function() {
+//	    			$(this).prev().fadeOut("fast",function() {
+//	    				$(this).remove();
+//	    			})
+	    			$(this).remove();
+	    		}).prev().remove(); //.prev().fadeOut();
 	    	} else {
-	    		arg.remove();
+	    		arg.slideUp(function() {
+	    			$(this).remove();
+	    		});
 	    	}
 	    	
 		    self._trigger("change");
@@ -440,11 +450,11 @@ var ExtendedToken = {
 			if($.isEmptyObject(group)) {
 				return;
 			}
-			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl}).appendTo(arg_select);
+			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl})
+			.appendTo(arg_select);
 			$.each(group, function(key, val) {
 				if(val.displayType == "hidden")
 					return;
-//				var labelKey = val.label || val;
 				
 				$('<option/>',{rel : $.format("localize[%s]", val.label)})
 				.val(key).text(util.getLocaleString(val.label) || "")
@@ -553,6 +563,13 @@ var ExtendedToken = {
 		} 
 		
 		if(target.val() == "anyword") {
+//			arg_value = $("#anywordTmpl").tmpl().change(function() {
+//				var val = $(this).find("input").map(function() {
+//					Number($(this).val());
+//				}).get();
+//				$(this).data("value", val);
+//				self._trigger("change");
+//			});
 			arg_value.css("visibility", "hidden");
 		}
 		
@@ -630,15 +647,15 @@ var ExtendedToken = {
 	    	
 	    });
 	    var tokens = $.grep(query.token, Boolean);
-	    $.log("tokens", tokens);
+	    $.log("tokens", query);
 	    var output = "";
 	    if(tokens.length < 2)
 	    	output = tokens.join(" | ");
 	    else
 	    	output = "(" + tokens.join(" | ") + ")";
-	    if (query.min | query.max) {
-	        output += "{" + (query.min || 0) + "," + query.max + "}";
-	    }
+//	    if (query.min | query.max) {
+//	        output += "{" + (query.min || 0) + "," + query.max + "}";
+//	    }
 	    return output;
 	},
 	
@@ -646,7 +663,7 @@ var ExtendedToken = {
 		var self = this;
 		
 		var output = this.element.find(".query_arg").map(function() {
-			return self.getOrCQP($(this));; 
+			return self.getOrCQP($(this)); 
 		}).get().join(" & ");
 		$.log("output", output);
 		return $.format("[%s]", [output]); 
