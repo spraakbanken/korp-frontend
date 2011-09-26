@@ -36,6 +36,7 @@
 	"interval" : "intervall",
 	"matches" : "regexp",
 	
+	"repeat" : "upprepa",
 	
 	"none_selected" : "&lt;ej vald&gt;",
 	

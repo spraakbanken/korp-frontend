@@ -1084,10 +1084,9 @@ var StatsResults = {
 		this.grid = grid;
 		
 		
-		
 //		setTimeout(this.resizeGrid, 10);
+		
 		this.resizeGrid();
-//		grid.autosizeColumns();
 		
 		// wire up model events to drive the grid
 		dataView.onRowCountChanged.subscribe(function(args) {

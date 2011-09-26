@@ -1783,15 +1783,15 @@ settings.arg_groups = {
 //		endswith : "word_endswith",
 		anyword : {label : "any", opts : {}}
 //		regexp : "matches_regexp"
-	},
+	}
 //	"ordklass" : {
 //		pos : language.wordclass_is,
 //		msd : language.wordclass_starts
 //	},
-	"interval" : {
-		max : {label : "max", opts : {}},
-		min : {label : "min", opts : {}}
-	}
+//	"interval" : {
+//		max : {label : "max", opts : {}},
+//		min : {label : "min", opts : {}}
+//	}
 };
 
 
@@ -1835,14 +1835,14 @@ settings.inner_args = {
 	
 };
 
-settings.outer_args = {
-	min : function(query, values) {
-		query.min = Math.min(values);
-	},
-	max : function(query, values) {
-		query.max = Math.max(values);
-	}
-};
+//settings.outer_args = {
+//	min : function(query, values) {
+//		query.min = Math.min(values);
+//	},
+//	max : function(query, values) {
+//		query.max = Math.max(values);
+//	}
+//};
 
 //settings.operators = {
 //	include : "eller",

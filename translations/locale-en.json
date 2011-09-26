@@ -36,6 +36,8 @@
 	"interval" : "interval",
 	"matches" : "regexp",
 	
+	"repeat" : "repeat",
+	
 	"none_selected" : "&lt;none selected&gt;",
 	
 	"any" : "any word",

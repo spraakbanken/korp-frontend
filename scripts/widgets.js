@@ -382,6 +382,22 @@ var ExtendedToken = {
         
         this.insertArg();
         
+        this.element.find("button").button({
+        	icons: {
+                primary: "ui-icon-gear"
+        	},
+        	text : false
+        }).click(function() {
+        	$(this).next().toggle("slide", {direction : 'right'}, function() {
+        		self._trigger("change");
+        	});
+        	
+        }).next().hide().find("input").change(function() {
+        	self._trigger("change");
+        });
+        
+//        $("<ul>").append($("<li>").localeKey("repeat")).insertBefore(gear);
+        
 	},
 	
 	insertArg : function(animate) {
@@ -421,18 +437,15 @@ var ExtendedToken = {
 	    	if(arg.siblings(".or_arg").length == 0) {
 	    		
 	    		arg.closest(".query_arg").slideUp("fast",function() {
-//	    			$(this).prev().fadeOut("fast",function() {
-//	    				$(this).remove();
-//	    			})
 	    			$(this).remove();
+	    			self._trigger("change");
 	    		}).prev().remove(); //.prev().fadeOut();
 	    	} else {
 	    		arg.slideUp(function() {
 	    			$(this).remove();
+	    			self._trigger("change");
 	    		});
 	    	}
-	    	
-		    self._trigger("change");
 	    }).end();
 	},
 	
@@ -563,13 +576,6 @@ var ExtendedToken = {
 		} 
 		
 		if(target.val() == "anyword") {
-//			arg_value = $("#anywordTmpl").tmpl().change(function() {
-//				var val = $(this).find("input").map(function() {
-//					Number($(this).val());
-//				}).get();
-//				$(this).data("value", val);
-//				self._trigger("change");
-//			});
 			arg_value.css("visibility", "hidden");
 		}
 		
@@ -590,7 +596,7 @@ var ExtendedToken = {
 	
 	getOrCQP : function(andSection) {
 		var self = this;
-	    var query = {token: [], min: "", max: ""};
+	    var query = {token: []};
 
 	    var args = {};
 	    andSection.find(".or_arg").each(function(){
@@ -615,12 +621,12 @@ var ExtendedToken = {
 	    $.each(args, function(type, valueArray) {
 	    	var inner_query = [];
 	    	
-	    	if(settings.outer_args[type] != null) {
-	    		settings.outer_args[type](query, $.map(args[type], function(item) {
-	            	return item.value;
-	            }));
-	    		return; //TODO: what is this?
-	    	} 
+//	    	if(settings.outer_args[type] != null) {
+//	    		settings.outer_args[type](query, $.map(args[type], function(item) {
+//	            	return item.value;
+//	            }));
+//	    		return; //TODO: what is this?
+//	    	} 
 	    	$.each(valueArray, function(i, obj) {
 	    		function defaultArgsFunc(s, op) {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
@@ -653,9 +659,6 @@ var ExtendedToken = {
 	    	output = tokens.join(" | ");
 	    else
 	    	output = "(" + tokens.join(" | ") + ")";
-//	    if (query.min | query.max) {
-//	        output += "{" + (query.min || 0) + "," + query.max + "}";
-//	    }
 	    return output;
 	},
 	
@@ -665,8 +668,18 @@ var ExtendedToken = {
 		var output = this.element.find(".query_arg").map(function() {
 			return self.getOrCQP($(this)); 
 		}).get().join(" & ");
-		$.log("output", output);
-		return $.format("[%s]", [output]); 
+		
+		var min_max = this.element.find(".repeat:visible input").map(function() {
+			return $(this).val();
+		}).get();
+		var suffix = "";
+		if(min_max.length) {
+			min_max[0] = Number(min_max[0]) || 0;
+			min_max[1] = Number(min_max[1]) || "";
+			suffix = $.format("{%s}", min_max.join(", "));
+		}
+		
+		return $.format("[%s]%s", [output, suffix]); 
 	}
 };
 $.widget("ui.sidebar", Sidebar);

@@ -221,8 +221,22 @@ input:placeholder, textarea:placeholder {
 }
 
 .insert_arg {
-	margin-top : 5px;
-	vertical-align: bottom;
+	margin-top : 4px;
+	float : left;
+}
+
+.query_token .repeat {
+	float : right;
+	font-size : 10px;
+	margin-right : 25px;
+}
+.query_token .repeat input {
+	max-width : 30px;
+	
+}
+
+.ui-icon-gear {
+    background-position: -193px -114px;
 }
 
 .insert_token {
@@ -261,7 +275,28 @@ input.arg_value {
     top : -5px;
 }
 
-	
+.query_token button {
+	width : 20px;
+	height : 20px;
+	float : right;
+}
+.token_footer {
+	position: relative;
+}
+
+.token_footer ul {
+	margin-top : -5px;
+	background-color : white;
+	position: absolute;
+	display: none;
+}
+.query_token button .ui-button-text {
+	height : 0;
+}
+.token_footer ul, li {
+	margin : 0;
+	padding : 0;
+}
 
 /* JONATAN */
 .statisticWords {

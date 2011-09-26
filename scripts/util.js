@@ -364,7 +364,7 @@ util.browserWarn = function() {
 //	    paragraph2: 'Just click on the icons to get to the download page', // Paragraph 2
 //	    closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link   
 //	    closeLink: 'Close This Window', // Text for closing link
-    	closeCookie: false, // If cookies should be used to remmember if the window was closed (see cookieSettings for more options)   
+    	closeCookie: true, // If cookies should be used to remmember if the window was closed (see cookieSettings for more options)   
         // Cookie settings are only used if closeCookie is true   
         cookieSettings: {   
             path: '/', // Path for the cookie to be saved on (should be root domain in most cases)   
