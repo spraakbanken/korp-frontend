@@ -183,12 +183,12 @@ settings.corporafolders.fisk.newspapertexts = {
 };
 
 settings.corporafolders.fisk.newspapertexts.hbl = {
-	title : "Hufvudstadsbladet 1991, 1998-1999",
+	title : "Hufvudstadsbladet 1991, 1998–1999",
 	contents : ["hbl1991", "hbl1998", "hbl1999"]
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
-	title : "Jakobstads tidning 1999-2000",
+	title : "Jakobstads tidning 1999–2000",
 	contents : ["jakobstadstidning1999", "jakobstadstidning2000"]
 };
 
@@ -222,7 +222,7 @@ settings.corporafolders.parallel.salt = {
  */
 
 settings.corpora.fsbskonlit = {
-	title : "Skönlitteratur 1970-2011",
+	title : "Skönlitteratur 1970–2011",
 	description : "",
 	languages : {
 		FSBSKONLIT : "svenska"
@@ -249,7 +249,7 @@ settings.corpora.fsbskonlit = {
 };
 
 settings.corpora.fsbessaistik = {
-	title : "Essäistisk litteratur 1970-2011",
+	title : "Essäistisk litteratur 1970–2011",
 	description : "",
 	languages : {
 		FSBESSAISTIK : "svenska"
@@ -276,7 +276,7 @@ settings.corpora.fsbessaistik = {
 };
 
 settings.corpora.fsbsakprosa = {
-	title : "Sakprosa 1970-2011",
+	title : "Sakprosa 1970–2011",
 	description : "",
 	languages : {
 		FSBSAKPROSA : "svenska"
@@ -303,7 +303,7 @@ settings.corpora.fsbsakprosa = {
 };
 
 settings.corpora.svenskbygden = {
-	title : "Svenskbygden 2010-2011",
+	title : "Svenskbygden 2010–2011",
 	description : "",
 	languages : {
 		SVENSKBYGDEN : "svenska"
@@ -375,7 +375,7 @@ settings.corpora.jakobstadstidning2000 = {
 
 settings.corpora.dn1987 = {
 	title : "DN 1987",
-	description : "Dagens Nyheter 1987",
+	description : "Dagens Nyheter 1987.",
 	languages : {
 		DN1987 : "svenska"
 	},
@@ -400,7 +400,7 @@ settings.corpora.dn1987 = {
 
 settings.corpora.gp1994 = {
 	title : "GP 1994",
-	description : "",
+	description : "Göteborgs-Posten 1994.",
 	languages : {
 		GP1994 : "svenska"
 	},
@@ -425,7 +425,7 @@ settings.corpora.gp1994 = {
 
 settings.corpora.gp2001 = {
 	title : "GP 2001",
-	description : "",
+	description : "Göteborgs-Posten 2001.",
 	languages : {
 		GP2001 : "svenska"
 	},
@@ -450,7 +450,7 @@ settings.corpora.gp2001 = {
 
 settings.corpora.gp2002 = {
 	title : "GP 2002",
-	description : "",
+	description : "Göteborgs-Posten 2002.",
 	languages : {
 		GP2002 : "svenska"
 	},
@@ -475,7 +475,7 @@ settings.corpora.gp2002 = {
 
 settings.corpora.gp2003 = {
 	title : "GP 2003",
-	description : "",
+	description : "Göteborgs-Posten 2003.",
 	languages : {
 		GP2003 : "svenska"
 	},
@@ -500,7 +500,7 @@ settings.corpora.gp2003 = {
 
 settings.corpora.gp2004 = {
 	title : "GP 2004",
-	description : "",
+	description : "Göteborgs-Posten 2004.",
 	languages : {
 		GP2004 : "svenska"
 	},
@@ -525,7 +525,7 @@ settings.corpora.gp2004 = {
 
 settings.corpora.gp2005 = {
 	title : "GP 2005",
-	description : "",
+	description : "Göteborgs-Posten 2005.",
 	languages : {
 		GP2005 : "svenska"
 	},
@@ -550,7 +550,7 @@ settings.corpora.gp2005 = {
 
 settings.corpora.gp2006 = {
 	title : "GP 2006",
-	description : "",
+	description : "Göteborgs-Posten 2006.",
 	languages : {
 		GP2006 : "svenska"
 	},
@@ -575,7 +575,7 @@ settings.corpora.gp2006 = {
 
 settings.corpora.gp2007 = {
 	title : "GP 2007",
-	description : "",
+	description : "Göteborgs-Posten 2007.",
 	languages : {
 		GP2007 : "svenska"
 	},
@@ -600,7 +600,7 @@ settings.corpora.gp2007 = {
 
 settings.corpora.gp2008 = {
 	title : "GP 2008",
-	description : "",
+	description : "Göteborgs-Posten 2008.",
 	languages : {
 		GP2008 : "svenska"
 	},
@@ -625,7 +625,7 @@ settings.corpora.gp2008 = {
 
 settings.corpora.gp2009 = {
 	title : "GP 2009",
-	description : "",
+	description : "Göteborgs-Posten 2009.",
 	languages : {
 		GP2009 : "svenska"
 	},
@@ -650,8 +650,8 @@ settings.corpora.gp2009 = {
 };
 
 settings.corpora.gp2d = {
-	title : "GP - Två dagar",
-	description : "",
+	title : "GP – Två dagar",
+	description : "Helgbilaga till Göteborgs-Posten.",
 	languages : {
 		GP2D : "svenska"
 	},
@@ -674,8 +674,8 @@ settings.corpora.gp2d = {
 };
 
 settings.corpora.ordat = {
-	title : "ORDAT: Svenska dagbladets årsbok 1923 - 1958",
-	description : "",
+	title : "ORDAT: Svenska dagbladets årsbok 1923–1958",
+	description : "25 årgångar av Svenska Dagbladets årsbok, 1923–45, 1948 och 1958.",
 	languages : {
 		ORDAT : "svenska"
 	},
@@ -724,7 +724,7 @@ settings.corpora.fof = {
 
 settings.corpora.press65 = {
 	title : "Press 65",
-	description : "",
+	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
 	languages : {
 		PRESS65 : "svenska"
 	},
@@ -751,7 +751,7 @@ settings.corpora.press65 = {
 
 settings.corpora.press76 = {
 	title : "Press 76",
-	description : "",
+	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
 	languages : {
 		PRESS76 : "svenska"
 	},
@@ -776,7 +776,7 @@ settings.corpora.press76 = {
 
 settings.corpora.press95 = {
 	title : "Press 95",
-	description : "",
+	description : "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
 	languages : {
 		PRESS95 : "svenska"
 	},
@@ -802,7 +802,7 @@ settings.corpora.press95 = {
 
 settings.corpora.press96 = {
 	title : "Press 96",
-	description : "",
+	description : "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
 	languages : {
 		PRESS96 : "svenska"
 	},
@@ -828,7 +828,7 @@ settings.corpora.press96 = {
 
 settings.corpora.press97 = {
 	title : "Press 97",
-	description : "",
+	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
 	languages : {
 		PRESS97 : "svenska"
 	},
@@ -854,7 +854,7 @@ settings.corpora.press97 = {
 
 settings.corpora.press98 = {
 	title : "Press 98",
-	description : "",
+	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
 	languages : {
 		PRESS98 : "svenska"
 	},
@@ -1013,7 +1013,7 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
 
 settings.corpora.europarlda_sv = {
 	title: "Svenska-danska", 
-	description : "",
+	description : "Texter från Europaparlamentets webbsida.",
 	languages : { 
 		EUROPARLDA_SV: "svenska", 
 		EUROPARLDA_DA: "danska"
@@ -1043,7 +1043,7 @@ settings.corpora.europarlda_sv = {
 
 settings.corpora.parole = {
 	title : "PAROLE",
-	description : "",
+	description : "Material insamlat inom ramen för EU-projektet PAROLE. Innehåller romaner, dagstidningar, tidskrifter och webbtexter.",
 	languages : {
 		PAROLE : "svenska"
 	},
@@ -1066,7 +1066,7 @@ settings.corpora.parole = {
 };
 
 settings.corpora.diabetolog = {
-	title : "DiabetologNytt (1996-1999)",
+	title : "DiabetologNytt (1996–1999)",
 	description : "",
 	languages : {
 		diabetolog : "svenska"
@@ -1121,7 +1121,7 @@ settings.corpora.lt = {
 
 settings.corpora.smittskydd = {
 	title : "Smittskydd",
-	description : "",
+	description : "Smittskyddsinstitutets tidskrift, årgångarna 2002–2010.",
 	languages : {
 		SMITTSKYDD : "svenska"
 	},
@@ -1146,8 +1146,8 @@ settings.corpora.smittskydd = {
 };
 
 settings.corpora.snp7879 = {
-	title : "SNP 78-79 (Riksdagens snabbprotokoll)",
-	description : "Riksdagens snabbprotokoll 1978-1979.",
+	title : "SNP 78–79 (Riksdagens snabbprotokoll)",
+	description : "Riksdagens snabbprotokoll 1978–1979.",
 	languages : {
 		SNP7879 : "svenska"
 	},
@@ -1168,7 +1168,7 @@ settings.corpora.snp7879 = {
 };
 
 settings.corpora.vivill = {
-	title : "Svenska partiprogram och valmanifest 1887-2010",
+	title : "Svenska partiprogram och valmanifest 1887–2010",
 	description : "",
 	languages : {
 		VIVILL : "svenska"
@@ -1285,8 +1285,8 @@ settings.corpora.vivill = {
 };
 
 settings.corpora.romi = {
-	title : "Bonniersromaner I (1976-77)",
-	description : "69 romaner utgivna 1976-77.",
+	title : "Bonniersromaner I (1976–77)",
+	description : "69 romaner utgivna 1976–77.",
 	languages : {
 		ROMI : "svenska"
 	},
@@ -1311,8 +1311,8 @@ settings.corpora.romi = {
 };
 
 settings.corpora.romii = {
-	title : "Bonniersromaner II (1980-81)",
-	description : "60 romaner från 1980-81.",
+	title : "Bonniersromaner II (1980–81)",
+	description : "60 romaner från 1980–81.",
 	languages : {
 		ROMII : "svenska"
 	},
@@ -1357,14 +1357,13 @@ settings.corpora.romg = {
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
-		text_title : {label : "title"},
-		text_year : {label : "year"}
+		text_title : {label : "title"}
 	}
 };
 
 settings.corpora.rom99 = {
 	title : "Norstedtsromaner (1999)",
-    description : "",
+    description : "23 romaner utgivna 1999 på Norstedts förlag.",
 	languages : {
 		ROM99 : "svenska"
 	},
@@ -1391,7 +1390,7 @@ settings.corpora.rom99 = {
 
 settings.corpora.strindbergromaner = {
 	title : "Strindbergs romaner och dramer",
-	description : "",
+	description : "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
 	languages : {
 		STRINDBERGROMANER : "svenska"
 	},
@@ -1419,7 +1418,7 @@ settings.corpora.strindbergromaner = {
 
 settings.corpora.strindbergbrev = {
 	title : "Strindbergs brev",
-	description : "",
+	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
 	languages : {
 		STRINDBERGBREV : "svenska"
 	},
@@ -1449,7 +1448,7 @@ settings.corpora.strindbergbrev = {
 };
 
 settings.corpora.sfs = {
-	title : "Svensk författningssamling 1978-1981",
+	title : "Svensk författningssamling 1978–1981",
 	description : "",
 	languages : {
 		SFS : "svenska"
@@ -1501,7 +1500,7 @@ settings.corpora.psalmboken = {
 };
 
 settings.corpora.lasbart = {
-	title : "LäSBarT - Lättläst svenska och barnbokstext",
+	title : "LäSBarT – Lättläst svenska och barnbokstext",
 	description : "",
 	languages : {
 		LASBART : "svenska"
@@ -1553,8 +1552,8 @@ settings.corpora.drama = {
 };
 
 settings.corpora.wikipedia = {
-	title : "Svenska Wikipedia (augusti 2011)",
-	description : "Samtliga artikar från svenska Wikipedia. Uppdateras med ojämna mellanrum.",
+	title : "Svenska Wikipedia (september 2011)",
+	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
 	languages : {
 		WIKIPEDIA : "svenska"
 	},
@@ -1578,8 +1577,8 @@ settings.corpora.wikipedia = {
 };
 
 settings.corpora.astranova = {
-	title : "Astra Nova 2008-2010",
-	description : "Innehåller samtliga nummer av Astra Nova från perioden 2008-2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
+	title : "Astra Nova 2008–2010",
+	description : "Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
 	languages : {
 		ASTRANOVA : "svenska"
 	},
@@ -1604,7 +1603,7 @@ settings.corpora.astranova = {
 };
 
 settings.corpora.kallan = {
-	title : "Källan 2008-2010",
+	title : "Källan 2008–2010",
 	description : "",
 	languages : {
 		KALLAN : "svenska"
@@ -1630,7 +1629,7 @@ settings.corpora.kallan = {
 };
 
 settings.corpora.nyaargus = {
-	title : "Nya Argus 2010-2011",
+	title : "Nya Argus 2010–2011",
 	description : "",
 	languages : {
 		NYAARGUS : "svenska"
