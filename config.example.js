@@ -137,26 +137,6 @@ var context = {
  
 settings.corporafolders = {};
 
-settings.corporafolders.novels = {
-	title : "Skönlitteratur",
-	contents : ["romi", "romii", "rom99", "strindbergromaner", "storsuc", "romg"]
-};
-
-settings.corporafolders.newspapertexts = {
-	title : "Tidningstexter",
-	contents : ["dn1987", "fof", "ordat"]
-};
-
-settings.corporafolders.newspapertexts.gp = {
-	title : "GP",
-	contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2d"]
-};
-
-settings.corporafolders.newspapertexts.press = {
-	title : "Press",
-	contents : ["press65", "press76", "press95", "press96", "press97", "press98"]
-};
-
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : []
@@ -215,6 +195,31 @@ settings.corporafolders.parallel.europarl = {
 settings.corporafolders.parallel.salt = {
 	title : "SALT",
 	contents : ["saltnld_swe"]
+};
+
+settings.corporafolders.novels = {
+	title : "Skönlitteratur",
+	contents : ["romi", "romii", "rom99", "strindbergromaner", "storsuc", "romg"]
+};
+
+settings.corporafolders.newspapertexts = {
+	title : "Tidningstexter",
+	contents : ["dn1987", "ordat"]
+};
+
+settings.corporafolders.newspapertexts.gp = {
+	title : "GP",
+	contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2d"]
+};
+
+settings.corporafolders.newspapertexts.press = {
+	title : "Press",
+	contents : ["press65", "press76", "press95", "press96", "press97", "press98"]
+};
+
+settings.corporafolders.magazines = {
+	title : "Tidskrifter",
+	contents : ["fof"]
 };
 
 /*
@@ -911,6 +916,162 @@ settings.corpora.bloggmix = {
 	}
 };
 
+settings.corpora.drama = {
+	title : "Dramawebben (demo)",
+	description : "",
+	languages : {
+		DRAMA : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {}
+};
+
+
+settings.corpora.lasbart = {
+	title : "LäSBarT – Lättläst svenska och barnbokstext",
+	description : "",
+	languages : {
+		LASBART : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_source : {label : "source"},
+		text_type : {label : "type"},
+		text_date : {label : "date"},
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_age : {label : "age"}
+	}
+};
+
+settings.corpora.parole = {
+	title : "PAROLE",
+	description : "Material insamlat inom ramen för EU-projektet PAROLE. Innehåller romaner, dagstidningar, tidskrifter och webbtexter.",
+	languages : {
+		PAROLE : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_id : {label : "text"}
+	}
+};
+
+settings.corpora.psalmboken = {
+	title : "Psalmboken (1937)",
+	description : "",
+	languages : {
+		PSALMBOKEN : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"}
+	}
+};
+
+settings.corpora.snp7879 = {
+	title : "SNP 78–79 (Riksdagens snabbprotokoll)",
+	description : "Riksdagens snabbprotokoll 1978–1979.",
+	languages : {
+		SNP7879 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	}, 
+	struct_attributes : {}
+};
+
+
+settings.corpora.strindbergbrev = {
+	title : "Strindbergs brev",
+	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
+	languages : {
+		STRINDBERGBREV : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_recipient : {label : "text_recipient"},
+		text_year : {label : "year"},
+		text_month : {label : "month"},
+		text_day : {label : "day"},
+		text_volume : {label : "text_volume"}
+	}
+};
+
 settings.corpora.suc2 = {
 	title : "SUC 2.0",
 	description : "Stockholm-Umeå Corpus",
@@ -1041,30 +1202,6 @@ settings.corpora.europarlda_sv = {
 	}
 };
 
-settings.corpora.parole = {
-	title : "PAROLE",
-	description : "Material insamlat inom ramen för EU-projektet PAROLE. Innehåller romaner, dagstidningar, tidskrifter och webbtexter.",
-	languages : {
-		PAROLE : "svenska"
-	},
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
-	struct_attributes : {
-		text_id : {label : "text"}
-	}
-};
-
 settings.corpora.diabetolog = {
 	title : "DiabetologNytt (1996–1999)",
 	description : "",
@@ -1143,28 +1280,6 @@ settings.corpora.smittskydd = {
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
-};
-
-settings.corpora.snp7879 = {
-	title : "SNP 78–79 (Riksdagens snabbprotokoll)",
-	description : "Riksdagens snabbprotokoll 1978–1979.",
-	languages : {
-		SNP7879 : "svenska"
-	},
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	}, 
-	struct_attributes : {}
 };
 
 settings.corpora.vivill = {
@@ -1416,37 +1531,6 @@ settings.corpora.strindbergromaner = {
 	}
 };
 
-settings.corpora.strindbergbrev = {
-	title : "Strindbergs brev",
-	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
-	languages : {
-		STRINDBERGBREV : "svenska"
-	},
-	context : context.defaultStruct,
-	within : within.defaultStruct,
-	
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_author : {label : "author"},
-		text_recipient : {label : "text_recipient"},
-		text_year : {label : "year"},
-		text_month : {label : "month"},
-		text_day : {label : "day"},
-		text_volume : {label : "text_volume"}
-	}
-};
-
 settings.corpora.sfs = {
 	title : "Svensk författningssamling 1978–1981",
 	description : "",
@@ -1472,83 +1556,6 @@ settings.corpora.sfs = {
 		text_ref : {label : "referensnummer"},
 		text_year : {label : "year"}
 	}
-};
-
-settings.corpora.psalmboken = {
-	title : "Psalmboken (1937)",
-	description : "",
-	languages : {
-		PSALMBOKEN : "svenska"
-	},
-	within : within.defaultStruct,
-	
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_year : {label : "year"}
-	}
-};
-
-settings.corpora.lasbart = {
-	title : "LäSBarT – Lättläst svenska och barnbokstext",
-	description : "",
-	languages : {
-		LASBART : "svenska"
-	},
-	within : within.defaultStruct,
-	
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_source : {label : "source"},
-		text_type : {label : "type"},
-		text_date : {label : "date"},
-		text_author : {label : "author"},
-		text_title : {label : "title"},
-		text_age : {label : "age"}
-	}
-};
-
-settings.corpora.drama = {
-	title : "Dramawebben (demo)",
-	description : "",
-	languages : {
-		DRAMA : "svenska"
-	},
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {}
 };
 
 settings.corpora.wikipedia = {
