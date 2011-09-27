@@ -363,7 +363,7 @@ var ExtendedSearch = {
 	
 	onSubmit : function() {
 		this.parent();
-		if(this.$main.find(".query_token").length > 1 || this.$main.find(".query_arg").length > 1) {
+		if(this.$main.find(".query_token, .or_arg").length > 1) {
 			var query = advancedSearch.updateCQP();
 			util.searchHash("cqp", query);
 		} else {
@@ -377,7 +377,6 @@ var ExtendedSearch = {
 				break;
 			default:
 				var query = advancedSearch.updateCQP();
-			
 				util.searchHash("cqp", query);
 			}
 		}
