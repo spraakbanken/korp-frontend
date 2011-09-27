@@ -142,7 +142,9 @@ var hp_corpusChooser = {
 				//$.log(">>>>>>" + $(this).attr('id'));
 				var corpusID = $(this).attr('id').slice(9);
 				totNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
-                                totNumberOfSentences += parseInt(settings.corpora[corpusID]["info"]["Sentences"]);
+				var numSen = parseInt(settings.corpora[corpusID]["info"]["Sentences"]);
+				if(!isNaN(numSen))
+                    totNumberOfSentences += numSen;
 			});
 			
 			$("#hp_corpora_title1").text(header_text);
