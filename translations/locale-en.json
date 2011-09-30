@@ -187,6 +187,8 @@
 	"malt_TA" : "Time adverbial",
 	"malt_OBJ" : "Object",
 	"malt_ADV" : "Adverbial",
+	"malt_PA" : "Complement of preposition",
+	"malt_head" : "Head",
 	
 	"tooltip_AT" : "Nominal (adjectival) pre-modifier",
 	"tooltip_ET" : "Other nominal post-modifier",

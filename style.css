@@ -578,13 +578,16 @@ table {
 #results-lemgram {
 	overflow:auto;
 }
-#lemgram_help {
+#results-lemgram > span * {
+	margin-top : 11px;
+}
+.lemgram_help {
 	float : none;
 	margin-left : 35px;
 	margin-top : 10px;
 	margin-bottom : 20px;
 }
-#lemgram_help > span {
+.lemgram_help > span {
 	padding : 10px 10px;
 }
 
@@ -1082,3 +1085,6 @@ a.relStat:hover {
 	position: relative;
 }
 
+.lemgram_section {
+	float : left;
+}

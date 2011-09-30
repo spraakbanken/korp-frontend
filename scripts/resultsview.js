@@ -631,33 +631,39 @@ var LemgramResults = {
 				ADV : "color_green", 
 				Head : "color_yellow", 
 				AT : "color_azure", 
-				ET : "color_red"};
-		var $parent = $("<div id='lemgram_help' />").prependTo("#results-lemgram");
+				ET : "color_red",
+				PA : "color_green"};
 		
-		$(".lemgram_result").each(function(i) {
-			if($(this).data("rel")) {
-				var color = colorMapping[$(this).data("rel")];
-				$("<span />").localeKey(wordClass == "av" ? "head" : "malt_" + $(this).data("rel"))
-				.addClass(color)
-				.appendTo($parent);
-				$(this).addClass(color)
-				.css("border-color", $(this).css("background-color"));
-			}
-			else {
-				$($.format("<span><b>%s</b></span>", $(this).data("word")))
-				.appendTo($parent);
-			}
-				
-		});
-		$("</label><input id='wordclassChk' type='checkbox' /><label rel='localize[show_wordclass]' for='wordclassChk'>").appendTo($parent)
+		$(".lemgram_section").each(function(i) {
+//			var $parent = $("<div class='lemgram_help' />").prependTo(this);
+			var $parent = $(this).find(".lemgram_help");
+			
+			$(this).find(".lemgram_result").each(function() {
+				if($(this).data("rel")) {
+					var color = colorMapping[$(this).data("rel")];
+					$("<span />").localeKey("malt_" + (i == 1 ? "head" : $(this).data("rel")))
+					.addClass(color)
+					.appendTo($parent);
+					$(this).addClass(color)
+					.css("border-color", $(this).css("background-color"));
+				}
+				else {
+					$($.format("<span><b>%s</b></span>", $(this).data("word")))
+					.appendTo($parent);
+				}
+					
+			});
+			
+		}).append("<div style='clear:both;'/>");
+		$("<span><input id='wordclassChk' type='checkbox' /><label rel='localize[show_wordclass]' for='wordclassChk'></span>").prependTo("#results-lemgram")
 		.change(function() {
-			if($(this).is(":checked")) {
+			if($(this).find("#wordclassChk").is(":checked")) {
 				$("#results-lemgram .wordclass_suffix").show();
 			}
 			else {
 				$("#results-lemgram .wordclass_suffix").hide();
 			}
-		
+			
 		}).filter("label").css("margin-left", "5px");
 		
 		util.localize();
@@ -667,10 +673,12 @@ var LemgramResults = {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
-			vb : "SS,_,OBJ,ADV".split(","),
-			nn : "AT,_,ET".split(","),
-			av :"_,AT".split(",")
+			vb : ["SS_d,OBJ_h,_,OBJ_d,ADV_d".split(",")], //
+			nn : ["PA_h,AT_d,_,ET_d".split(","), "SS_h,_".split(",")],
+			av : [[], "_,AT_h".split(",")],
+			pp : [[], "PA_d,_".split(",")]
 		};
+		
 		var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
 		
 		if(order[wordClass] == null) {
@@ -678,37 +686,59 @@ var LemgramResults = {
 			return;
 		}
 		
-		var sortedList = [];
+		function inArray(rel, orderList) {
+			var i = $.inArray(rel, orderList);
+			var type = rel.slice(-1) == "h" ? "head" : "dep";
+			return {"i" : i, "type" : type};
+		}
+		
+		function getRelType(item) {
+			if(item.dep == lemgram) return item.rel + "_h";
+			else return item.rel + "_d";
+		}
+//		function getRelType(item) {return item.rel;}
+		
+		var orderArrays = [[], []];
+		
 		$.each(data, function(index, item) {
-			var toIndex = $.inArray(item.rel, order[wordClass]);
-			if(toIndex == -1) {
-				return;
-			}
-			if(!sortedList[toIndex]) sortedList[toIndex] = [];
-			sortedList[toIndex].push(item); 
+			$.each(order[wordClass], function(i, rel_type_list) {
+				var list = orderArrays[i];
+				var ret = inArray(getRelType(item), rel_type_list);
+				if(ret.i == -1) {
+					return;
+				}
+				if(!list[ret.i]) list[ret.i] = [];
+				item.show_rel = ret.type;
+				list[ret.i].push(item); 
+			});
 		});
+//		$.log("orderArrays", orderArrays[1]);
 		
-		$.each(sortedList, function(index, list) {
-			if(list) {
-				list.sort(function(first, second) {
-					return second.mi - first.mi;
-				});
+		$.each(orderArrays, function(i, unsortedList) {
+			
+			$.each(unsortedList, function(_, list) {
+				if(list) {
+					list.sort(function(first, second) {
+						return second.mi - first.mi;
+					});
+				}
+			});
+			if(order[wordClass][i] && unsortedList.length) {
+				var toIndex = $.inArray("_", order[wordClass][i]);
+				unsortedList.splice(toIndex, 0, {"word" : lemgram.split("..")[0].replace(/_/g, " ")});
 			}
+			unsortedList = $.grep ( unsortedList, function(item, index){
+				return Boolean(item);
+			});
+			//$.log("unsortedList", unsortedList.length, unsortedList);
+			
 		});
-		var toIndex = $.inArray("_", order[wordClass]);
-		sortedList.splice(toIndex, 0, {"word" : lemgram.split("..")[0].replace(/_/g, " ")});
-		sortedList = $.grep ( sortedList, function(item, index){
-			return Boolean(item);
-		});
-		
-		$("#lemgramRowTmpl").tmpl(sortedList, {lemgram : lemgram, isAdj : wordClass == "av"})
-		.appendTo("#results-lemgram")
-		.addClass("lemgram_result")
-		.find("#example_link").addClass("ui-icon ui-icon-document")
+		$("#lemgramResultsTmpl").tmpl(orderArrays, {lemgram : lemgram})
+		.find(".example_link").addClass("ui-icon ui-icon-document")
 		.css("cursor", "pointer")
-		.click($.proxy(this.onClickExample, this));
+		.click($.proxy(self.onClickExample, self)).end()
+		.appendTo("#results-lemgram");
 		
-		// splits up the label
 		$("#results-lemgram td:nth-child(2)").each(function() {
 			var $siblings = $(this).parent().siblings().find("td:nth-child(2)");
 			
@@ -718,10 +748,13 @@ var LemgramResults = {
 			var hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) != -1;
 			var prefix = $(this).data("depextra").length ? $(this).data("depextra") + " " : "";
 //				prefix = "";
-			$(this).html(prefix + util.lemgramToString($(this).data("lemgram"), hasHomograph));
+			var label = $(this).data("lemgram") != "" ? util.lemgramToString($(this).data("lemgram"), hasHomograph) : "&mdash;";
+			$(this).html(prefix + label);
 			
 		});
 		$("#results-lemgram .wordclass_suffix").hide();
+		
+		// splits up the label
 			
 		this.renderHeader(wordClass);
 		//$('#results-wrapper').show();
@@ -732,15 +765,15 @@ var LemgramResults = {
 		var self = this;
 		var $target = $(event.currentTarget);
 		$.log("onClickExample", $target);
-		
+		var data = $target.parent().tmplItem().data;
 		var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 		var opts = instance.getPageInterval();
 		opts.ajaxParams = {
-				head : $target.data("head"),
-				dep : $target.data("dep"),
-				rel : $target.data("rel"),
-				depextra : $target.data("depextra"),
-				corpus : $target.data("corpus").split(",")
+				head : data.head, 
+				dep : data.dep,
+				rel : data.rel,
+				depextra : data.depextra,
+				corpus : data.corpus
 			};  
 		instance.makeRequest(opts);
 	},

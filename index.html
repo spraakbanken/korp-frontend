@@ -271,40 +271,46 @@
 		<span class="word">${word}</span><span class="word_gap"> </span>
 	</script>
 	
-	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
-		<div 
+	<script id="lemgramResultsTmpl" type="text/x-jquery-tmpl">
+		<div class="lemgram_section">
+			<div class='lemgram_help' />
+			{{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramTableTmpl'}}
+		</div>
+	</script>
+	
+	<script id="lemgramTableTmpl" type="text/x-jquery-tmpl">
+		<div class="lemgram_result"
 		{{if word}}
 		data-word="${word}">
 			<h3 id="display_word"></h3>
 		{{else}}
-		data-rel="${$data[0].rel}">
+		data-rel="${$data[0].rel}"
+		data-show_rel="${$data[0].show_rel}">
 		<table>
-			{{each $data}}
-			{{if $item.lemgram == $.grep($value[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}}
-			<tr>
-				<td>${$index + 1}. </td>
-				<td data-lemgram="${$.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0]}" data-depextra="${$value.depextra}"></td> 
-				<!--<td>{{html util.formatDecimalString($.format("%.2f", $value.mi), true)}}</td>-->
-				<td>${$value.freq}</td>
-				
-
-				<td id="example_link" 
-					data-head="${$value['head']}" 
-					data-dep="${$value['dep']}" 
-					data-rel="${$value.rel}" 
-					data-depextra="${$value.depextra}" 
-					data-corpus="${$value.corpus.join(",")}"
-					{{if !util.isLemgramId($.grep($value[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0])}}
-					class="alt_form"
-					{{/if}}
-					></td>
-		    </tr>
-			{{/if}}
-			{{/each}}
+			{{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramRowTmpl'}}
 		</table>
 		{{/if}}
 		</div>
 	</script>
+	<!-- {{if $item.lemgram == $.grep($item.data[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}} -->
+	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
+			<tr>
+				<td><span class="enumerate"/></td>
+				<td data-lemgram="${$.grep($item.data[show_rel].split("|"), Boolean)[0]}" data-depextra="${depextra}"></td> 
+				<!--<td>{{html util.formatDecimalString($.format("%.2f", mi), true)}}</td>-->
+				<td>${freq}</td>
+				<td class="example_link"></td> 
+		    </tr>
+	</script>
+<!-- 		{{/if}} -->
+<!--{{if !util.isLemgramId($.grep($item.data[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0])}}
+					class="alt_form"
+					{{/if}}
+					-->
+<!-- 	<script id="type1RowTmpl" type="text/x-jquery-tmpl"> -->
+
+<!-- 	</script> -->
+	
 	
 	
 	<script id="similarTmpl" type="text/x-jquery-tmpl">
