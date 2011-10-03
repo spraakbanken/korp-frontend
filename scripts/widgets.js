@@ -520,8 +520,12 @@ var ExtendedToken = {
 		switch(data.displayType) {
 		case "select":
 			arg_value = $("<select />");
-			$.each(data.dataset, function(key, value) {
-				$("<option />").localeKey(value).val(key).appendTo(arg_value);
+			var keys = $.keys(data.dataset).sort(function(a, b) {
+				return util.getLocaleString(a) >= util.getLocaleString(b) ? 1 : -1;
+			});
+			
+			$.each(keys, function(_, key) {
+				$("<option />").localeKey(data.dataset[key]).val(key).appendTo(arg_value);
 			});
 			break;
 		case "autocomplete":

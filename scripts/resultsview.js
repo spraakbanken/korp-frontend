@@ -673,7 +673,7 @@ var LemgramResults = {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
-			vb : ["SS_d,OBJ_h,_,OBJ_d,ADV_d".split(",")], //
+			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h,
 			nn : ["PA_h,AT_d,_,ET_d".split(","), "SS_h,_".split(",")],
 			av : [[], "_,AT_h".split(",")],
 			pp : [[], "PA_d,_".split(",")]
@@ -1063,6 +1063,19 @@ var StatsResults = {
 			}
 
 		});
+		
+		$(".c0 .link").live("click", function() {
+			$.log("word click", $(this).data("context"), $(this).data("corpora"));
+//			$.bbq.pushState({search : "word|" + context})
+//			corpusChooserInstance.corpusChooser("selectItems",$(this).data("corpora"));
+			var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
+			instance.proxy.command = "query";
+			instance.makeRequest({
+				corpora : $(this).data("corpora").join(","),
+				cqp : $.format("[word='%s']", $(this).data("value"))
+			});
+		});
+		
 		$(window).resize(function() {
 			self.resizeGrid();
 		});

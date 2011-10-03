@@ -326,9 +326,12 @@ var StatsProxy = {
 		var corpora = $.grepObj(filterCorpora(dataContext), function(value, key) {
 			return value.relative != null;
 		});
-		
-		var output = $.format("<span>%s</span>", value);
-		if($.keys(corpora).length > 1)
+		corpora = $.map($.keys(corpora), function(item) {
+			return item.split("_")[0].toLowerCase();
+		});
+		var output = $.format("<span class='link' data-value='%s' data-corpora='%s'>%s</span>", 
+				[dataContext.hit_value, $.toJSON(corpora), value]);
+		if(corpora.length > 1)
 			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
 		return output;
 	}
