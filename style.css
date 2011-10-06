@@ -583,9 +583,12 @@ table {
 }
 .lemgram_help {
 	float : none;
-	margin-left : 35px;
 	margin-top : 10px;
 	margin-bottom : 20px;
+	width: intrinsic;         /* Safari/WebKit */
+    width: -moz-max-content;
+    margin-left : auto;
+    margin-right : auto;
 }
 .lemgram_help > span {
 	padding : 10px 10px;
@@ -928,7 +931,7 @@ a.relStat:hover {
 .hits_picture_corp:hover {
 /* 	background-color: darkslategray; */
 }
-#hits_picture {
+.hits_picture {
 	cursor : pointer;
 	position: absolute;
 	right : 9px;
@@ -1087,4 +1090,49 @@ a.relStat:hover {
 
 .lemgram_section {
 	float : left;
+	margin-right : 30px;
+}
+
+.explanation {
+	font-size : 12px;
+	padding : 0 20px;
+}
+
+
+
+.hbox {
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+	-webkit-box-align: stretch;
+ 
+	display: -moz-box;
+	-moz-box-orient: horizontal;
+	-moz-box-align: stretch;
+ 
+	display: box;
+	box-orient: horizontal;
+	box-align: stretch;
+}
+
+.vbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+ 
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+}
+
+.hbox,.vbox > * {
+	-webkit-box-flex: 0;
+	-moz-box-flex: 0;
+	box-flex: 0;
+	display: block;
+}
+
+.spacer {
+	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
+	box-flex: 1;
 }

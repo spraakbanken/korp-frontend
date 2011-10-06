@@ -154,7 +154,7 @@ var KorpTabs = {
 	
 	addTab : function(klass) {
 		var url = this.urlPattern + this.n;
-		this.add(url, util.getLocaleString("example"));
+		this.add(url, "KWIC");
 		var li = this.element.find("li:last"); 
 		this.redrawTabs();
 		var instance = new klass(li, url);

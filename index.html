@@ -146,7 +146,7 @@
 								   </div>
 								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
 								 
-								   <div id="hits_picture" ></div>
+								   <div class="hits_picture" ></div>
 							   	   <div style="clear : both; float : none;" ></div>
 							   </div>
 								
@@ -271,10 +271,13 @@
 		<span class="word">${word}</span><span class="word_gap"> </span>
 	</script>
 	
+<!-- 			<p class="explanation"></p> -->
 	<script id="lemgramResultsTmpl" type="text/x-jquery-tmpl">
 		<div class="lemgram_section">
+			{{if $data.length}}
 			<div class='lemgram_help' />
 			{{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramTableTmpl'}}
+			{{/if}}
 		</div>
 	</script>
 	
@@ -302,16 +305,6 @@
 				<td class="example_link"></td> 
 		    </tr>
 	</script>
-<!-- 		{{/if}} -->
-<!--{{if !util.isLemgramId($.grep($item.data[(!$item.isAdj ? "dep" : "head")].split("|"), Boolean)[0])}}
-					class="alt_form"
-					{{/if}}
-					-->
-<!-- 	<script id="type1RowTmpl" type="text/x-jquery-tmpl"> -->
-
-<!-- 	</script> -->
-	
-	
 	
 	<script id="similarTmpl" type="text/x-jquery-tmpl">
 	<li>

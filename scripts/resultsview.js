@@ -71,7 +71,7 @@ var KWICResults = {
 			$.sm.send("word.deselect");
 		});
 		$.log("initialize", this.$result.find(".sort_select"), this.$result);
-		this.$result.find(".sort_select").change(this.onSortChange).click(false);
+		this.$result.find(".sort_select").change($.proxy(this.onSortChange, this)).click(false);
 		
 	},
 	
@@ -82,14 +82,14 @@ var KWICResults = {
 		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
 	},
 	
-	onSortChange : function() {
-		var opt = $(this).find(":selected");
+	onSortChange : function(event) {
+		var opt = $(event.currentTarget).find(":selected");
 		$.log("sort", opt);
 		if(opt.is(":first-child")) {
 			$.bbq.removeState("sort");
 		} else {
-			$.log("sort", $(this).val());
-			$.bbq.pushState({"sort" : $(this).val()});
+			$.log("sort", opt.val());
+			$.bbq.pushState({"sort" : opt.val()});
 		}
 	},
 	
@@ -171,7 +171,7 @@ var KWICResults = {
 		if($.trim(this.$result.find(".results_table").html()).length) {
 			this.$result.fadeOut(effectSpeed, function() {
 				$(this).find(".results_table").empty();
-				self.renderResult(data);
+				self.renderResult(data, sourceCQP);
 			});
 			return;
 		}
@@ -265,7 +265,7 @@ var KWICResults = {
 		this.$result.find('.num-result').html(0);
 		this.$result.click();
 		this.$result.find(".sort_select").hide();
-		$("#hits_picture").html("");
+		this.$result.find(".hits_picture").html("");
     },
     
     renderHitsPicture : function(data) {
@@ -286,7 +286,7 @@ var KWICResults = {
 //				ccounter = ++ccounter % 6;
 			});
 			hits_picture_html += '</tr></table>';
-			$("#hits_picture").html(hits_picture_html);
+			this.$result.find(".hits_picture").html(hits_picture_html);
                         
 			// Make sure that there is no mousover effect on touch screen devices:
 			if( navigator.userAgent.match(/Android/i) ||
@@ -294,7 +294,7 @@ var KWICResults = {
 					navigator.userAgent.match(/iPhone/i)  ||
 					navigator.userAgent.match(/iPod/i)
 			) {
-				$(".hits_picture_table").css("opacity","1");
+				this.$result.find(".hits_picture_table").css("opacity","1");
 			}
 
 
@@ -311,18 +311,23 @@ var KWICResults = {
 //                    $(".hits_picture_table").stop().animate({"opacity":".3"});  
 				}
 			};
-			$(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
+			this.$result.find(".hits_picture_table").hoverIntent(hoverHitPictureConfig);
 
 
-			$(".hits_picture_corp").each(function() {
+			this.$result.find(".hits_picture_corp").each(function() {
 				var corpus_name = $(this).attr("data");
 				$(this).tooltip({delay : 0, bodyHandler : function() {
-					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + settings.corpora[corpus_name.toLowerCase()]["title"] + ' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + ' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + util.getLocaleString("hitspicture_gotocorpushits") + '</i>';}
+					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + 
+						settings.corpora[corpus_name.toLowerCase()]["title"] + 
+						' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + 
+						' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + 
+						util.getLocaleString("hitspicture_gotocorpushits") + '</i>';
+					}
 				});
 			});
 
 			// Click to ge to the first page with a hit in the particular corpus
-			$(".hits_picture_corp").click(function(event) {
+			this.$result.find(".hits_picture_corp").click(function(event) {
 				var theCorpus = $(this).attr("data");
 				// Count the index of the first hit for the corpus:
 				var firstIndex = 0;
@@ -331,12 +336,12 @@ var KWICResults = {
 						return false;
 					firstIndex += data["corpus_hits"][corp];
 				});
-				var firstHitPage = Math.floor(firstIndex / $("#num_hits").val());
+				var firstHitPage = Math.floor(firstIndex / self.$result.find("#num_hits").val());
 				self.handlePaginationClick(firstHitPage, null, true);
 				return false;
 			});
 		} else {
-			$("#hits_picture").html("");
+			this.$result.find(".hits_picture").html("");
 		}
     },
     
@@ -550,8 +555,8 @@ var ExampleResults = {
 		var self = this;
 		$.extend(opts, {
 			success : function(data) {
-				$.log("ExampleResults success", data);
-				self.renderResult(data);
+				$.log("ExampleResults success", data, opts);
+				self.renderResult(data, opts.cqp);
 				util.setJsonLink(self.proxy.prevRequest);
 			},
 			error : function() {
@@ -584,6 +589,18 @@ var ExampleResults = {
 		}
 	    
 	   return false;
+	},
+	
+	onSortChange : function(event) {
+		var opt = $(event.currentTarget).find(":selected");
+		$.log("sort", opt);
+		if(opt.is(":first-child")) {
+			$.bbq.removeState("sort");
+		} else {
+			$.log("sort", opt.val());
+			this.handlePaginationClick(0, null, true);
+//			$.bbq.pushState({"sort" : opt.val()});
+		}
 	},
 	
 	showPreloader : function() {
@@ -641,9 +658,18 @@ var LemgramResults = {
 			$(this).find(".lemgram_result").each(function() {
 				if($(this).data("rel")) {
 					var color = colorMapping[$(this).data("rel")];
-					$("<span />").localeKey("malt_" + (i == 1 ? "head" : $(this).data("rel")))
+					var cell = $("<span />", {"class" : "lemgram_header_item"}).localeKey((i == 1 ? altLabel : "malt_" + $(this).data("rel")))
 					.addClass(color)
 					.appendTo($parent);
+					if(i > 0) {
+						var altLabel = {
+							"av" : "NN",
+							"nn" : "VB",
+							"pp" : "NN"
+						}[wordClass]; 
+							
+						cell.attr("rel", altLabel).text(util.getLocaleString(altLabel).capitalize());
+					}
 					$(this).addClass(color)
 					.css("border-color", $(this).css("background-color"));
 				}
@@ -653,9 +679,10 @@ var LemgramResults = {
 				}
 					
 			});
-			
+//			$(".explanation").localeKey("lemgram_explan_" + i);
 		}).append("<div style='clear:both;'/>");
-		$("<span><input id='wordclassChk' type='checkbox' /><label rel='localize[show_wordclass]' for='wordclassChk'></span>").prependTo("#results-lemgram")
+		$("<span><input id='wordclassChk' type='checkbox' /></span>")
+		.append($("<label>", {"for" : "wordclassChk"}).localeKey("show_wordclass")).prependTo("#results-lemgram")
 		.change(function() {
 			if($(this).find("#wordclassChk").is(":checked")) {
 				$("#results-lemgram .wordclass_suffix").show();
@@ -666,17 +693,17 @@ var LemgramResults = {
 			
 		}).filter("label").css("margin-left", "5px");
 		
-		util.localize();
+		
 	},
 	
 	renderTables : function (lemgram, data) {
 		var self = this;
 //			"_" represents the actual word in the order
 		var order = {
-			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h,
-			nn : ["PA_h,AT_d,_,ET_d".split(","), "SS_h,_".split(",")],
+			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h, , "SS_h,_".split(",")
+			nn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
 			av : [[], "_,AT_h".split(",")],
-			pp : [[], "PA_d,_".split(",")]
+			pp : [[], "_,PA_d".split(",")]
 		};
 		
 		var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
@@ -698,7 +725,7 @@ var LemgramResults = {
 		}
 //		function getRelType(item) {return item.rel;}
 		
-		var orderArrays = [[], []];
+		var orderArrays = [[], [], []];
 		
 		$.each(data, function(index, item) {
 			$.each(order[wordClass], function(i, rel_type_list) {
@@ -739,7 +766,11 @@ var LemgramResults = {
 		.click($.proxy(self.onClickExample, self)).end()
 		.appendTo("#results-lemgram");
 		
-		$("#results-lemgram td:nth-child(2)").each(function() {
+		$(".enumerate").each(function() {
+			$(this).text($(this).closest("tr").index() + 1 + ".");
+		});
+		
+		$("#results-lemgram td:nth-child(2)").each(function() { // labels
 			var $siblings = $(this).parent().siblings().find("td:nth-child(2)");
 			
 			var siblingLemgrams = $.map($siblings, function(item) {
@@ -754,8 +785,7 @@ var LemgramResults = {
 		});
 		$("#results-lemgram .wordclass_suffix").hide();
 		
-		// splits up the label
-			
+		
 		this.renderHeader(wordClass);
 		//$('#results-wrapper').show();
 		this.hidePreloader();
@@ -774,7 +804,8 @@ var LemgramResults = {
 				rel : data.rel,
 				depextra : data.depextra,
 				corpus : data.corpus
-			};  
+			};
+		util.localize(instance.$result);
 		instance.makeRequest(opts);
 	},
 	
@@ -1074,6 +1105,7 @@ var StatsResults = {
 				corpora : $(this).data("corpora").join(","),
 				cqp : $.format("[word='%s']", $(this).data("value"))
 			});
+			util.localize(instance.$result);
 		});
 		
 		$(window).resize(function() {

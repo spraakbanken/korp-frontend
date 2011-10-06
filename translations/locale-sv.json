@@ -62,6 +62,8 @@
 	"no_stats_results" : "Sökningen gav inga träffar.",
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",
+	"lemgram_explan_0" : "De vanligaste exemplen på ord som förhåller sig till sökordet enligt följande relation:",
+	"lemgram_explan_1" : "De vanligaste exemplen på ord som sökordet förhåller sig till enligt följande relation:",
 	"search" : "   Sök   ",
 	"and_include" : "även som",
 	"hits_per_page" : "Träffar per sida",
@@ -176,8 +178,8 @@
 	
 	"example" : "Exempel",
 	
-	"malt_AT" : "Framförställt adjektivattribut",
-	"malt_ET" : "Övrigt efterställt attribut",
+	"malt_AT" : "Attribut",
+	"malt_ET" : "Efterställt attribut",
 	"malt_IO" : "Indirekt objekt",
 	"malt_OA" : "Objektsadverbial",
 	"malt_OO" : "Direkt objekt",
