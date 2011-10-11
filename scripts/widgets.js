@@ -600,8 +600,8 @@ var ExtendedToken = {
 	
 	getOrCQP : function(andSection) {
 		var self = this;
-	    var query = {token: []};
-
+//	    var query = {token: []};
+		var output = "";
 	    var args = {};
 	    andSection.find(".or_arg").each(function(){
 	        var type = $(this).find(".arg_type").val();
@@ -625,12 +625,6 @@ var ExtendedToken = {
 	    $.each(args, function(type, valueArray) {
 	    	var inner_query = [];
 	    	
-//	    	if(settings.outer_args[type] != null) {
-//	    		settings.outer_args[type](query, $.map(args[type], function(item) {
-//	            	return item.value;
-//	            }));
-//	    		return; //TODO: what is this?
-//	    	} 
 	    	$.each(valueArray, function(i, obj) {
 	    		function defaultArgsFunc(s, op) {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
@@ -651,18 +645,13 @@ var ExtendedToken = {
 	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
-	    	if (inner_query.length) {
-	    		query.token.push(inner_query.join(" | "));
+	    	if (inner_query.length > 1) {
+	    		output = "(" + inner_query.join(" | ") + ")";
+	    	} else {
+	    		output = inner_query.join(" | ");
 	    	}
 	    	
 	    });
-	    var tokens = $.grep(query.token, Boolean);
-	    $.log("tokens", query);
-	    var output = "";
-	    if(tokens.length < 2)
-	    	output = tokens.join(" | ");
-	    else
-	    	output = "(" + tokens.join(" | ") + ")";
 	    return output;
 	},
 	
