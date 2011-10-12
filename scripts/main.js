@@ -184,9 +184,32 @@ var currentMode;
 			var corpus = e.getState("corpus");
 			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
 				var corp_array = corpus.split(',');
-				corpusChooserInstance.corpusChooser("selectItems",corp_array);
+				var processed_corp_array = Array();
+				$.each(corp_array, function(key, val) {
+				    processed_corp_array.extend(getAllCorporaInFolders(settings.corporafolders, val));
+				});
+				
+				corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
 				$("#select_corpus").val(corpus);
 				simpleSearch.enableSubmit();
+			}
+			
+			function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
+			    var outCorpora = Array();
+			    if (lastLevel[folderOrCorpus]) {
+			        // Folder
+			        // Continue to go through any subfolders
+			        $.each(lastLevel[folderOrCorpus], function(key, val) {
+			            if(key != "title" && key != "contents")
+			                outCorpora.extend(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
+			        });
+			        // And add the corpora in this folder level
+			        outCorpora.extend(lastLevel[folderOrCorpus]["contents"]);
+			    } else {
+                    // Corpus
+                    outCorpora.push(folderOrCorpus);
+			    }
+			    return outCorpora;
 			}
 			
 			function showAbout() {
