@@ -15,7 +15,7 @@
 	"search_for" : "Sök efter ",
 	"show_more" : "Visa fler",
 	"in_corpus" : "i korpus",
-	"cqp_query" : "Fullständig <a href='http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQPTutorial/html/'>CQP</a>-fråga",
+	"cqp_query" : "Fullständig <a class='link' href='http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQPTutorial/html/'>CQP</a>-fråga",
 	"max" : "upp till",
 	"min" : "minst",
 	"and" : "och",

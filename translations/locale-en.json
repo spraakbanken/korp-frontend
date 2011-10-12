@@ -15,7 +15,7 @@
 	"search_for" : "Search for ",
 	"show_more" : "Show more",
 	"in_corpus" : "in corpus",
-	"cqp_query" : "<a href='http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQPTutorial/html/'>CQP</a> query",
+	"cqp_query" : "<a class='link' href='http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQPTutorial/html/'>CQP</a> query",
 	"max" : "up to",
 	"min" : "at least",
 	"and" : "and",
@@ -179,8 +179,8 @@
 	
 	"example" : "Example",
 
-	"malt_AT" : "Nominal (adjectival) pre-modifier",
-	"malt_ET" : "Other nominal post-modifier",
+	"malt_AT" : "Pre-modifier",
+	"malt_ET" : "Post-modifier",
 	"malt_IO" : "Indirect object",
 	"malt_OA" : "Object adverbial",
 	"malt_OO" : "Direct object",

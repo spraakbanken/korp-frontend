@@ -29,8 +29,12 @@ a:link {color:navy;}      /* unvisited link */
 a:visited {color:purple;}  /* visited link */
 a:hover {color:red;}  /* mouse over link */
 
-.link {color : navy;cursor : pointer;}
+.link {
+	color : navy !important;
+	cursor : pointer;
+}
 .link:hover {color : red;}
+
 
 
 
