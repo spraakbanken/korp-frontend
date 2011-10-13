@@ -1101,9 +1101,13 @@ var StatsResults = {
 //			corpusChooserInstance.corpusChooser("selectItems",$(this).data("corpora"));
 			var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 			instance.proxy.command = "query";
+			var query = $.map($(this).data("value").split(" "), function(item) {
+				return $.format("[word='%s']", item);
+			}).join(" ");
+			$.log("query", query);
 			instance.makeRequest({
 				corpora : $(this).data("corpora").join(","),
-				cqp : $.format("[word='%s']", $(this).data("value"))
+				cqp : query
 			});
 			util.localize(instance.$result);
 		});

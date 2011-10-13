@@ -622,6 +622,10 @@ var ExtendedToken = {
         	});
 	    });
 	    
+//	    if($.keys(args).length > 1 && args["anyword"] != null) {
+//	    	delete args["anyword"];
+//	    }
+	    
 	    $.each(args, function(type, valueArray) {
 	    	var inner_query = [];
 	    	
@@ -660,7 +664,8 @@ var ExtendedToken = {
 		
 		var output = this.element.find(".query_arg").map(function() {
 			return self.getOrCQP($(this)); 
-		}).get().join(" & ");
+		}).get();
+		output = $.grep(output, Boolean);
 		
 		var min_max = this.element.find(".repeat:visible input").map(function() {
 			return $(this).val();
