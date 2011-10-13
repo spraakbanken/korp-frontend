@@ -45,7 +45,17 @@ util.getLocaleString = function(key) {
 util.localize = function(root) {
 	root = root || "body"; 
 	
-	var lang = $("#languages").radioList("getSelected").data("lang");
+//	var lang = $("#languages").radioList("getSelected").data("lang");
+	var lang = $.bbq.getState("lang") || "sv";
+	lang = {
+		"swe"  : "sv",
+		"sv" : "sv",
+		"eng" : "en",
+		"en" : "en"
+	}[lang];
+	var langIndex = $($.format("[data-lang=%s]", lang)).index();
+	$("#languages").radioList("select", langIndex);
+	
 	$(root).find("[rel^=localize]").localize("locale" ,{
 		pathPrefix : "translations", 
 		language : lang

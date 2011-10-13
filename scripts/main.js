@@ -164,6 +164,11 @@ var currentMode;
 				kwicResults.handlePaginationClick(0, null, true);
 			}
 			
+			if(hasChanged("lang")) {
+				util.localize();
+			}
+				
+			
 			var page = e.getState("page", true);
 			if(hasChanged("page") && !hasChanged("search")) {
 				kwicResults.setPage(page);
@@ -200,7 +205,7 @@ var currentMode;
 			        // Folder
 			        // Continue to go through any subfolders
 			        $.each(lastLevel[folderOrCorpus], function(key, val) {
-			            if(key != "title" && key != "contents")
+			            if(key != "title" && key != "contents" && key != "description")
 			                outCorpora.extend(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
 			        });
 			        // And add the corpora in this folder level
@@ -280,7 +285,6 @@ var currentMode;
 		}
 		$(window).bind( 'hashchange', onHashChange);
 		
-		$.log("window scroll init");
 		$(window).scroll(function() {
 			$("#sidebar").sidebar("updatePlacement");
 		});
@@ -296,7 +300,8 @@ var currentMode;
 		
 		$("#languages").radioList({
 			change : function() {
-				util.localize();
+//				util.localize();
+				$.bbq.pushState({lang : $(this).radioList("getSelected").data("lang")});
 			}  
 		}).vAlign();
 		
@@ -309,7 +314,7 @@ var currentMode;
 			$("#simple_text").autocomplete("close");
 		});
 		
-		util.localize();
+//		util.localize();
 		onHashChange(null, true);
 		$("body").fadeTo(400, 1, function() {
 			$(this).css("opacity", "");
