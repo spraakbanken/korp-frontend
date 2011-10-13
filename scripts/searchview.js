@@ -97,7 +97,7 @@ var SimpleSearch = {
 		$("#simple_text").keyup($.proxy(this.onSimpleChange, this));
 		this.onSimpleChange();
 		$("#similar_lemgrams").hide();
-		
+		this.savedSelect = null;
 		$("#simple_text").bind("keydown.autocomplete", function(event) {
 			var keyCode = $.ui.keyCode;
 			if(!self.isVisible() || $("#ui-active-menuitem").length !== 0) return;
@@ -129,27 +129,30 @@ var SimpleSearch = {
 		return $("#suffixChk").is(":checked");
 	},
 	
-	makeLemgramSelect : function() {
+	makeLemgramSelect : function(lemgram) {
 		var self = this;
+		
 		var promise = $("#simple_text").data("promise") 
-		|| lemgramProxy.sblexSearch($("#simple_text").val(), "lem"); 
+			|| lemgramProxy.sblexSearch(lemgram || $("#simple_text").val(), "lem"); 
 		
 		promise.done(function(lemgramArray) {
 			$("#lemgram_select").prev("label").andSelf().remove();
+			self.savedSelect = null;
 			if(lemgramArray.length == 0) return;
 			lemgramArray.sort(view.lemgramSort);
 			lemgramArray = $.map(lemgramArray, function(item) {
 				return {label : util.lemgramToString(item), value : item};
 			});
-			
+			$.log("makeLemgramSelect")
 			var select = self.buildLemgramSelect(lemgramArray)
 			.appendTo("#korp-simple")
 			.addClass("lemgram_select")
 			.prepend(
 				$("<option>").localeKey("none_selected")
 			)
-			.bind("change", function() {
+			.change(function() {
 				if(this.selectedIndex != 0) {
+					self.savedSelect = lemgramArray;
 					self.selectLemgram($(this).val());
 				}
 				$(this).prev("label").andSelf().remove();
@@ -181,12 +184,12 @@ var SimpleSearch = {
 		util.searchHash("lemgram", lemgram);
 	},
 	
-	buildLemgramSelect : function(lemgrams, labelLocalKey) {
+	buildLemgramSelect : function(lemgrams) {
 		$("#lemgram_select").prev("label").andSelf().remove();
 		var optionElems = $.map(lemgrams, function(item) {
 			return $.format("<option value='%(value)s'>%(label)s</option>", item);
 		});
-		return $("<select id='lemgram_select' />").html(optionElems.join(""));
+		return $("<select id='lemgram_select' />").html(optionElems.join("")).data("dataprovider", lemgrams);
 	},
 	
 	renderSimilarHeader : function(selectedItem, data) {
@@ -199,11 +202,13 @@ var SimpleSearch = {
 		.css("float", "left")
 		.appendTo("#similar_header");
 		
-		var lemgrams = $( "#simple_text" ).data("dataArray");
+		var lemgrams = self.savedSelect || $( "#simple_text" ).data("dataArray");
+		self.savedSelect = null;
 		if(lemgrams != null && lemgrams.length ) {
 			this.buildLemgramSelect(lemgrams).appendTo("#similar_header")
 			.css("float", "right")
 			.change(function(){
+				self.savedSelect = lemgrams;
 				self.selectLemgram($(this).val());
 			})
 			.val(selectedItem);
