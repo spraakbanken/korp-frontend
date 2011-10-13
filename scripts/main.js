@@ -201,6 +201,20 @@ var currentMode;
 			
 			function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
 			    var outCorpora = Array();
+			    
+			    // Go down the alley to the last subfolder
+			    while(folderOrCorpus.contains(".")) {
+			         var posOfPeriod = folderOrCorpus.indexOf(".");
+			         var leftPart = folderOrCorpus.substr(0, posOfPeriod);
+			         var rightPart = folderOrCorpus.substr(posOfPeriod+1);
+			         if(lastLevel[leftPart]) {
+			             lastLevel = lastLevel[leftPart];
+			             folderOrCorpus = rightPart;
+			         } else {
+			             break;   
+			         }
+			    }
+			    
 			    if (lastLevel[folderOrCorpus]) {
 			        // Folder
 			        // Continue to go through any subfolders
