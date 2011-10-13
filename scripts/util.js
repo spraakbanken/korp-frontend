@@ -195,14 +195,18 @@ util.localizeFloat = function(float, nDec) {
 
 util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
-	var parts = x.split(".");
-	var decimalSeparator = util.getLocaleString("util_decimalseparator");
-	if(mode)
-		return prettyNumbers(parts[0]) + '<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>' + parts[1];
-		//return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
-	else
-		return prettyNumbers(parts[0]) + decimalSeparator + parts[1];
-		//return x.replace(".", decimalSeparator);
+	if(x.contains(".")) {
+    	var parts = x.split(".");
+    	var decimalSeparator = util.getLocaleString("util_decimalseparator");
+    	if(mode)
+    		return prettyNumbers(parts[0]) + '<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>' + parts[1];
+    		//return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
+    	else
+    		return prettyNumbers(parts[0]) + decimalSeparator + parts[1];
+    		//return x.replace(".", decimalSeparator);
+	} else {
+	    return prettyNumbers(x);
+	}
 };
 
 
