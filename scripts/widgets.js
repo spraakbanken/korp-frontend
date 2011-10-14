@@ -35,6 +35,7 @@ $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
 	
 	if(typeof options === "string" && options == "abort") {
+		$.log("autocomplete hide");
 		lemgramProxy.abort();
 		selector.preloader("hide");
 		return;
@@ -621,10 +622,6 @@ var ExtendedToken = {
 	        	opt : opt
         	});
 	    });
-	    
-//	    if($.keys(args).length > 1 && args["anyword"] != null) {
-//	    	delete args["anyword"];
-//	    }
 	    
 	    $.each(args, function(type, valueArray) {
 	    	var inner_query = [];

@@ -143,7 +143,6 @@ var SimpleSearch = {
 			lemgramArray = $.map(lemgramArray, function(item) {
 				return {label : util.lemgramToString(item), value : item};
 			});
-			$.log("makeLemgramSelect")
 			var select = self.buildLemgramSelect(lemgramArray)
 			.appendTo("#korp-simple")
 			.addClass("lemgram_select")
@@ -272,6 +271,7 @@ var SimpleSearch = {
 	},
 	
 	onSimpleChange : function(event) {
+		$("#simple_text").data("promise", null);
 		if(event && event.keyCode == 27) { //escape
 			$.log("key", event.keyCode);
 			return;
