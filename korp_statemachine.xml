@@ -65,8 +65,8 @@
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>
             <assign location="simpleSearch"   expr="new view.SimpleSearch('#korp-simple')"/>
             <assign location="kwicResults"    expr="new view.KWICResults('#result-container li:first', '#results-kwic')"/>
-            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(2)')"/>
-            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)')"/>
+            <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(2)', '#results-stats')"/>
+            <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)', '#results-lemgram')"/>
             
             
         </transition>

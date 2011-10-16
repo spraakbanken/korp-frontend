@@ -24,6 +24,9 @@ var BaseResults = {
 			this.resultError(data);
 			return false;
 		}
+		$.log("renderResults", this.proxy);
+		if(this.$result.is(":visible"))
+			util.setJsonLink(this.proxy.prevRequest);
 		var self = this;
         //$("#result-container").tabs("select", 0);
         var disabled = $("#result-container").korptabs("option", "disabled");
@@ -621,7 +624,7 @@ var LemgramResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		this.resultDeferred = $.Deferred();
-		
+		this.proxy = lemgramProxy;
 	},
 	
 	renderResult : function(data, lemgram) {
@@ -1084,6 +1087,7 @@ var StatsResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		var self = this;
+		this.proxy = statsProxy;
 		$(".arcDiagramPicture").live("click", function() {
 			$.log("clicked arcDiagramPicture" );
 			var parts = $(this).attr("id").split("__");

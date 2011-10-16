@@ -397,8 +397,6 @@ var ExtendedToken = {
         	self._trigger("change");
         });
         
-//        $("<ul>").append($("<li>").localeKey("repeat")).insertBefore(gear);
-        
 	},
 	
 	insertArg : function(animate) {
@@ -498,13 +496,17 @@ var ExtendedToken = {
 	
 	refresh : function() {
 		var self = this;
-		this.table.find(".arg_selects").each(function() {
+		this.table.find(".or_arg").each(function() {
 			var oldVal = $(this).find(".arg_type").val();
 			var optVal = $(this).find(".arg_opts").val();
+			var oldLower = $(this).find(".arg_value").val();
 			var newSelects = self.makeSelect(); 
-			$(this).replaceWith(newSelects);
-			newSelects.find(".arg_type").val(oldVal).trigger("change");
+			$(this).find(".arg_selects").replaceWith(newSelects);
+			newSelects.find(".arg_type")
+			.val(oldVal)
+			.change();
 			newSelects.find(".arg_opts").val(optVal);
+			$(this).find(".arg_value").val(oldLower);
 		});
 	},
 	

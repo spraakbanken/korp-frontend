@@ -117,8 +117,9 @@ var SimpleSearch = {
 		$("#prefixChk, #suffixChk").click(function() {
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
 				self.enableSubmit();
+			} else {
+				self.onSimpleChange();
 			}
-			self.onSimpleChange();
 		});
 	},
 	
