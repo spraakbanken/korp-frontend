@@ -676,7 +676,7 @@ var ExtendedToken = {
 			suffix = $.format("{%s}", min_max.join(", "));
 		}
 		
-		return $.format("[%s]%s", [output, suffix]); 
+		return $.format("[%s]%s", [output.join(" & "), suffix]); 
 	}
 };
 $.widget("ui.sidebar", Sidebar);
