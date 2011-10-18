@@ -371,7 +371,7 @@ util.browserWarn = function() {
 		header: 'Du använder en omodern webbläsare', // Header of pop-up window   
 	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1   
 	    paragraph2: '', // Paragraph 2
-	    closeMessage: 'Du kan fortsätta ändå, men med begränsad funktionalitet.', // Message displayed below closing link   
+	    closeMessage: 'Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut.', // Message displayed below closing link   
 	    closeLink: 'Stäng varningen', // Text for closing link   
 //		header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window   
 //	    paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1   
