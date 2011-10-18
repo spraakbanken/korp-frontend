@@ -900,7 +900,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
-		.appendTo("#results-lemgram").append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa tal</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta tal</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
+		.appendTo("#results-lemgram").append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 		.dialog({
 			width : 400,
 			height : 500,
