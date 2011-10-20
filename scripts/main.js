@@ -247,6 +247,7 @@ var currentMode;
 				if($("#about_content").is(":empty")) {
 					$("#about_content").load("about.html", function() {
 						$("#revision").text($.revision);
+						util.localize(this);
 						showAbout();
 					});
 				} else {
