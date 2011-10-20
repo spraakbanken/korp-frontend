@@ -227,9 +227,11 @@ function loadCorpora() {
 	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
 		$.log("corpus changed", corpora);
 		$.bbq.pushState({"corpus" : corpora.join(",")});
-    	extendedSearch.refreshTokens();
-    	var enableSearch = !!corpora.length;
-    	view.enableSearch(enableSearch);
+		if(corpora.length) {
+			extendedSearch.refreshTokens();
+		}
+		var enableSearch = !!corpora.length;
+		view.enableSearch(enableSearch);
     }, infoPopup: function(corpusID) {
     	var maybeInfo = "";
     	if(settings.corpora[corpusID].description)

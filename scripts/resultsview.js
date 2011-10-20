@@ -705,6 +705,7 @@ var LemgramResults = {
 		var order = {
 			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h, , "SS_h,_".split(",")
 			nn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
+//			pn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
 			av : [[], "_,AT_h".split(",")],
 			pp : [[], "_,PA_d".split(",")]
 		};

@@ -499,14 +499,28 @@ var ExtendedToken = {
 		this.table.find(".or_arg").each(function() {
 			var oldVal = $(this).find(".arg_type").val();
 			var optVal = $(this).find(".arg_opts").val();
-			var oldLower = $(this).find(".arg_value").val();
+			var oldLower = $(this).find(".arg_value");
+			var old_ph = oldLower.attr("placeholder");
+			var old_data = oldLower.data("value");
+//			$.log("refresh", oldLower.prop("placeholder"), oldLower.attr("placeholder"));
 			var newSelects = self.makeSelect(); 
 			$(this).find(".arg_selects").replaceWith(newSelects);
 			newSelects.find(".arg_type")
 			.val(oldVal)
 			.change();
 			newSelects.find(".arg_opts").val(optVal);
-			$(this).find(".arg_value").val(oldLower);
+			
+			if(oldLower.attr("placeholder")) {
+				$(this).find(".arg_value")
+				.data("value", old_data)
+				.attr("placeholder", old_ph)
+				.placeholder();
+				
+			} else {
+				$(this).find(".arg_value")
+				.val(oldLower.val())
+			}
+			
 		});
 	},
 	
