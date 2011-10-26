@@ -382,16 +382,17 @@ var ExtendedToken = {
 	    });
         
         this.insertArg();
-        
+        var repeat = this.element.find(".repeat");
         this.element.find("button").button({
         	icons: {
                 primary: "ui-icon-gear"
         	},
         	text : false
         }).click(function() {
-        	$(this).next().toggle("slide", {direction : 'right'}, function() {
-        		self._trigger("change");
-        	});
+			repeat.toggle("slide", {direction : 'right'}, function() {
+    		
+    		self._trigger("change");
+    	});
         	
         }).next().hide().find("input").change(function() {
         	self._trigger("change");
