@@ -181,35 +181,15 @@ var LemgramProxy = {
 			    data : {
 			        wf : word,
 			        lexikon : "saldom",
-			        format : "json"
+			        format : "json",
+			        "sms-forms" : false
 		        },
 			    success : function(data, textStatus, xhr) {
-		            var leArray = $.map(data.div, function(item) {
-		            	return item.LexicalEntry;
+			    	var div = $.isPlainObject(data.div) ? [data.div] : data.div;
+		            var output = $.map(div, function(item) {
+		            	return item.LexicalEntry[type];
 		            });
 		            
-		            var output = $.grep(leArray, function(le) {
-		            	
-		            	if(le.pos.slice(-1) == "h") return false;
-		            	
-		            	var formArray;
-		            	if($.isPlainObject(le.table.form)) {
-		            		 formArray = [le.table.form];
-		            	} else {
-		            		formArray = le.table.form;
-	            		}
-		            	
-		            	
-	            			for ( var i = 0; i < formArray.length; i++) {
-	            				var form = formArray[i];
-	            				if(form.wf === word && $.inArray(form.param, ["ci", "cm", "c"]) == -1)
-	            					return true;
-	            			}
-		        		return false;
-		            });
-		        	output = $.map(output, function(le) {
-		        		return le[type];
-		        	});
 		        	dfd.resolve(output, textStatus, xhr);
 		        },
 		        error : function(jqXHR, textStatus, errorThrown) {

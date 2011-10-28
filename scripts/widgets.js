@@ -373,6 +373,7 @@ var ExtendedToken = {
 		
         this.element.find(".ui-icon-circle-close") //close icon
         .click(function() {
+        	if(!$(this).css("opacity") == "0") return;
         	$.log("close");
         	self.element.remove();
         	self._trigger("close");
@@ -423,7 +424,7 @@ var ExtendedToken = {
 	insertOr : function() {
 		var self = this;
 		var arg_select = this.makeSelect();
-
+		
 		var arg_value = $("<input type='text'/>").addClass("arg_value")
 		.change(function(){
 			self._trigger("change");
@@ -432,7 +433,8 @@ var ExtendedToken = {
 		
 		return $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
 		.find(".remove_arg")
-	    .click(function(){
+	    .click(function() {
+	    	if(!$(this).css("opacity") == "0") return;
 	    	var arg = $(this).closest(".or_arg"); 
 	    	if(arg.siblings(".or_arg").length == 0) {
 	    		
@@ -597,22 +599,56 @@ var ExtendedToken = {
 			break;
 		} 
 		
-		if(target.val() == "anyword") {
-			arg_value.css("visibility", "hidden");
-		}
-		
-		arg_value.addClass("arg_value")
-	    .change(function() {
-	    	self._trigger("change");
-	    });
 		
 		target.parent().siblings(".arg_value").replaceWith(arg_value);
-		target.next().replaceWith(this.makeOptsSelect(data.opts || settings.defaultOptions));
+		var newSelect = this.makeOptsSelect(data.opts || settings.defaultOptions);
+		target.next().replaceWith(newSelect);
 		target.next().val(oldOptVal);
 		
 		if(oldVal != null && oldVal.length)
 			arg_value.val(oldVal);
 		
+		switch(target.val()) {
+		case "anyword":
+			arg_value.css("visibility", "hidden");
+			break;
+		case "msd":
+			$("#msd_popup").load("msd.html", function() {
+				
+				$(this).find("a").click(function() {
+					arg_value.val($(this).parent().data("value"));
+					$("#msd_popup").dialog("close");
+				});
+			});
+			
+			$("<span class='ui-icon ui-icon-info' />")
+			.click(function() {
+				var w = $("html").width() * 0.6;
+				var h = $("html").height();
+				$("#msd_popup")
+				.fadeIn("fast")
+				.dialog({
+					width : w,
+					height : h,
+					modal : true
+				});
+				$(".ui-widget-overlay").one("click", function(evt) {
+					$.log("body click");
+					$("#msd_popup").dialog("close");
+				});
+//				$("body")
+			}).insertAfter(arg_value);
+			
+			arg_value.css("width", "93%");
+			break;
+		default:
+			this.element.find(".ui-icon-info").remove();
+		}
+		
+		arg_value.addClass("arg_value")
+		.change(function() {
+			self._trigger("change");
+		});
 		this._trigger("change");
 	},
 	

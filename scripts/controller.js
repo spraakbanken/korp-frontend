@@ -7,57 +7,42 @@
 		this.compiledDoc;
 		
 		this.init = function() {
-			$.when(this.fetchScript(), this.fetchXML())
-			.then(function(xhrArgArray, xmlArgArray) {
-				// cookie
-				var storedObj = $.parseJSON($.jStorage.get("compiled_scxml_korp"));
-				var cookieLastMod = null;
-				if(storedObj != null)
-					cookieLastMod = new Date(storedObj.time);
+			$.ajax({
+				url: this.src,
+				dataType : "text",
+				success : function(doc, status, xhr) {
+				  
+					// cookie
+					var storedObj = $.parseJSON($.jStorage.get("compiled_scxml_korp"));
+					var cookieLastMod = null;
+					if(storedObj != null)
+						cookieLastMod = new Date(storedObj.time);
+					
+					
+					// xml file.
+					var xmlMod = new Date(xhr.getResponseHeader("Last-Modified"));
+					
+					$.log(cookieLastMod, xmlMod);
+					
+					function max(a, b) {
+						return a > b ? a : b;
+					}
+					
+					switch($.reduce([cookieLastMod, xmlMod], max )) {
+					case cookieLastMod:
+						$.log("scxml: running stored data");
+						self.eval(storedObj.data);
+						break;
+					case xmlMod:
+						$.log("scxml: recompiling");
+						self.compileAndEval(doc);
+						break;
+					}
 				
-				// precompiled javascript file: '_generatedStatechart.js'
-				var scriptMod = new Date(xhrArgArray[2].getResponseHeader("Last-Modified"));
-				
-				// xml file.
-				var xmlMod = new Date(xmlArgArray[2].getResponseHeader("Last-Modified"));
-				
-				$.log(cookieLastMod, scriptMod, xmlMod);
-				
-				function max(a, b) {
-					return a > b ? a : b;
+				},
+				error : function() {
+					$.error("loading of either scxml script file or xml file failed");
 				}
-				
-				switch($.reduce([cookieLastMod, scriptMod, xmlMod], max )) {
-				case cookieLastMod:
-					$.log("scxml: running stored data");
-					self.eval(storedObj.data);
-					break;
-				case scriptMod:
-					$.log("scxml: running precompiled");
-					self.eval(xhrArgArray[0]);
-					break;
-				case xmlMod:
-					$.log("scxml: recompiling");
-					self.compileAndEval(xmlArgArray[0]);
-					break;
-				}
-				
-			}, function() {
-				$.error("loading of either scxml script file or xml file failed");
-			});
-		};
-		
-		this.fetchXML = function() {
-			return $.ajax({
-				  url: this.src,
-				  dataType : "text"
-			});
-		};
-		
-		this.fetchScript = function() {
-			return $.ajax({
-				  url: "scripts/_generatedStatechart.js",
-				  dataType : "text"
 			});
 		};
 		
@@ -104,10 +89,8 @@
 		
 		this.eval = function(scxmlScript) {
 			this.compiledDoc = scxmlScript;
-//			$.log("scxmlScript", scxmlScript);
 			eval(scxmlScript);
 			self.compiledStatechartInstance = new StatechartExecutionContext();
-//			self.compiledStatechartInstance.initialize();
 			readyCallback();
 		};
 		

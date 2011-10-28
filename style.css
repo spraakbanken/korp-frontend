@@ -261,8 +261,10 @@ input:placeholder, textarea:placeholder {
 }
 
 input.arg_value {
-	display : block;
 	width : 98%;
+}
+input.arg_value {
+	
 }
 .arg_value option {
 	padding-top: 1px;
@@ -984,6 +986,13 @@ a.relStat:hover {
 	margin-bottom : 5px;
 }
 
+.or_arg .ui-icon-info {
+	display : inline-block;
+	cursor : pointer;
+	position : relative;
+	top : 3px;
+}
+
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
 	cursor : default;
 	opacity : 0;
@@ -1139,4 +1148,12 @@ a.relStat:hover {
 	-webkit-box-flex: 1;
 	-moz-box-flex: 1;
 	box-flex: 1;
+}
+
+.ui-dialog ul,ol {
+	padding-left : 0; 
+}
+
+.ui-dialog li {
+	margin-bottom : 3px;
 }

@@ -65,7 +65,7 @@ attrs.pos = {
 };
 attrs.msd = {
 	label : "msd",
-	opts : {}
+	opts : settings.defaultOptions
 };
 attrs.baseform = {
 	label : "baseform",
@@ -89,8 +89,76 @@ attrs.dephead = {
 	displayType : "hidden"
 };
 attrs.deprel = {
-	label : "deprel"
-};
+		label : "deprel",
+		displayType : "select",
+		dataset : {
+			"++" : "++",
+			"+A" : "+A",
+			"+F" : "+F",
+			"AA" : "AA",
+			"AG" : "AG",
+			"AN" : "AN",
+			"AT" : "AT",
+			"CA" : "CA",
+			"DB" : "DB",
+			"DT" : "DT",
+			"EF" : "EF",
+			"EO" : "EO",
+			"ES" : "ES",
+			"ET" : "ET",
+			"FO" : "FO",
+			"FP" : "FP",
+			"FS" : "FS",
+			"FV" : "FV",
+			"I?" : "I?",
+			"IC" : "IC",
+			"IG" : "IG",
+			"IK" : "IK",
+			"IM" : "IM",
+			"IO" : "IO",
+			"IP" : "IP",
+			"IQ" : "IQ",
+			"IR" : "IR",
+			"IS" : "IS",
+			"IT" : "IT",
+			"IU" : "IU",
+			"IV" : "IV",
+			"JC" : "JC",
+			"JG" : "JG",
+			"JR" : "JR",
+			"JT" : "JT",
+			"KA" : "KA",
+			"MA" : "MA",
+			"MS" : "MS",
+			"NA" : "NA",
+			"OA" : "OA",
+			"OO" : "OO",
+			"OP" : "OP",
+			"PL" : "PL",
+			"PR" : "PR",
+			"PT" : "PT",
+			"RA" : "RA",
+			"SP" : "SP",
+			"SS" : "SS",
+			"TA" : "TA",
+			"TT" : "TT",
+			"UK" : "UK",
+			"VA" : "VA",
+			"VO" : "VO",
+			"VS" : "VS",
+			"XA" : "XA",
+			"XF" : "XF",
+			"XT" : "XT",
+			"XX" : "XX",
+			"YY" : "YY",
+			"CJ" : "CJ",
+			"HD" : "HD",
+			"IF" : "IF",
+			"PA" : "PA",
+			"UA" : "UA",
+			"VG" : "VG"
+		}
+	};
 attrs.prefix = {
 	label : "prefix",
 	type : "set",
@@ -1875,16 +1943,16 @@ settings.inner_args = {
 //	},
 	anyword : function(s) {
 		return "";
-	},
+	}
 //	regexp : function(s) {
 //		return 'word = "' + s + '"';
 //	},
 //	pos : function(s) {
 //		return 'pos = "' + regescape(s) + '"';
 //	},
-	msd : function(s) {
-		return 'msd = "' + regescape(s) + '.*"';
-	}
+//	msd : function(s) {
+//		return 'msd = "' + regescape(s) + '.*"';
+//	}
 //	lemma : function(s, op) {
 //		return $.format('lemma contains "%s"', s.split(".")[0]); 
 //	}
