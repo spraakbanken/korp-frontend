@@ -960,14 +960,11 @@ a.relStat:hover {
 .query_token:only-of-type .ui-icon-circle-close {
 /* 	visibility : hidden; */
 	opacity : 0;
+	cursor : default; 
 	-moz-transition: opacity 200ms ease;
 	-webkit-transition: opacity 200ms ease;
 	transition: opacity 200ms ease;
 	
-}
-
-.disjunction {
-	background
 }
 
 .right_col input {

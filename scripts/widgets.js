@@ -373,7 +373,7 @@ var ExtendedToken = {
 		
         this.element.find(".ui-icon-circle-close") //close icon
         .click(function() {
-        	if(!$(this).css("opacity") == "0") return;
+        	if($(this).css("opacity") === "0") return;
         	$.log("close");
         	self.element.remove();
         	self._trigger("close");
@@ -434,7 +434,8 @@ var ExtendedToken = {
 		return $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
 		.find(".remove_arg")
 	    .click(function() {
-	    	if(!$(this).css("opacity") == "0") return;
+	    	$.log("remove", !$(this).css("opacity") === 0, !$(this).css("opacity") === "0");
+	    	if($(this).css("opacity") === "0") return;
 	    	var arg = $(this).closest(".or_arg"); 
 	    	if(arg.siblings(".or_arg").length == 0) {
 	    		

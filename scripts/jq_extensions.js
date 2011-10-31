@@ -315,4 +315,3 @@ $.fn.quickLocalize = function() {
 }
 
 
-//var newTable = $("#actualRightStatsTable").clone().find("tr").not(":first-child").css("visibility", "hidden").end().end().find(".bardiagrambutton").remove().end().prependTo("body")
