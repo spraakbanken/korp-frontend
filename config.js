@@ -157,7 +157,8 @@ attrs.deprel = {
 			"PA" : "PA",
 			"UA" : "UA",
 			"VG" : "VG"
-		}
+		},
+		opts : settings.liteOptions
 	};
 attrs.prefix = {
 	label : "prefix",
