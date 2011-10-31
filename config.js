@@ -248,7 +248,12 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.medical = {
 	title : "Medicinska texter",
-	contents : ["diabetolog", "lt", "smittskydd"]
+	contents : ["diabetolog", "smittskydd"]
+};
+
+settings.corporafolders.medical.ltd = {
+	title : "Läkartidningen",
+	contents : ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001"]
 };
 
 settings.corporafolders.parallel = {
@@ -1297,11 +1302,11 @@ settings.corpora.diabetolog = {
 	}
 };
 
-settings.corpora.lt = {
-	title : "Läkartidningen (1996)",
+settings.corpora.lt1996 = {
+	title : "Läkartidningen 1996",
 	description : "Läkartidningens publicerade artiklar under 1996.<br/>Antal artiklar: 2345",
 	languages : {
-		LT : "svenska"
+		LT1996 : "svenska"
 	},
 	within : within.defaultStruct,
 	attributes : {
@@ -1322,6 +1327,136 @@ settings.corpora.lt = {
 	struct_attributes : {
 		text_article : {label : "article"},
 		text_id : {label : "text"}
+	}
+};
+
+settings.corpora.lt1997 = {
+	title : "Läkartidningen 1997",
+	description : "Läkartidningens publicerade artiklar under 1997.",
+	languages : {
+		LT1997 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
+	}
+};
+
+settings.corpora.lt1998 = {
+	title : "Läkartidningen 1998",
+	description : "Läkartidningens publicerade artiklar under 1998.",
+	languages : {
+		LT1998 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
+	}
+};
+
+settings.corpora.lt1999 = {
+	title : "Läkartidningen 1999",
+	description : "Läkartidningens publicerade artiklar under 1999.",
+	languages : {
+		LT1999 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
+	}
+};
+
+settings.corpora.lt2000 = {
+	title : "Läkartidningen 2000",
+	description : "Läkartidningens publicerade artiklar under 2000.",
+	languages : {
+		LT2000 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
+	}
+};
+
+settings.corpora.lt2001 = {
+	title : "Läkartidningen 2001",
+	description : "Läkartidningens publicerade artiklar under 2001.",
+	languages : {
+		LT2001 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"},
+		text_title : {label : "title"}
 	}
 };
 
