@@ -135,7 +135,8 @@
 	"statistics" : "Statistik",
 	
 	"pos_AB": "adverb", 
-	"pos_DL": "determinerare",
+	"pos_MAD": "interpunktion",
+	"pos_MID": "interpunktion",
 	"pos_DL": "interpunktion",
 	"pos_DT": "determinerare",
 	"pos_HA": "frågande/relativt adverb",
@@ -191,6 +192,7 @@
 	"malt_PA" : "Preposition",
 	"malt_head" : "Huvud",
 	
+	"deprel_ROOT" : "ROOT",
 	"deprel_++" : "Coordinating conjunction",
 	"deprel_+A" : "Conjunctional adverbial",
 	"deprel_+F" : "Coordination at main clause level",

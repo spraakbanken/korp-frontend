@@ -138,6 +138,8 @@
 	
 	"pos_AB" : "adverb",
 	"pos_DL" : "punctuation",
+	"pos_MAD": "punctuation",
+	"pos_MID": "punctuation",
 	"pos_DT" : "determiner",
 	"pos_HA" : "interrogative/relative adverb",
 	"pos_HD" : "interrogative/relative determiner",
@@ -192,6 +194,7 @@
 	"malt_PA" : "Preposition",
 	"malt_head" : "Head",
 	
+	"deprel_ROOT" : "ROOT",
 	"deprel_++" : "Coordinating conjunction",
 	"deprel_+A" : "Conjunctional adverbial",
 	"deprel_+F" : "Coordination at main clause level",

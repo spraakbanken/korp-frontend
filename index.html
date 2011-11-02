@@ -215,25 +215,29 @@
 		<tr>
 			{{if $value.displayType != "hidden"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
-			 
-			{{if $data[$index] == "|" || $data[$index] == ""}}
-				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
-			{{else $index == "lemma"}}
-			{{html $item.parseLemma($data[$index])}} 
-			{{else $index == "pos"}}
-				${util.getLocaleString($data[$index])}</p> 
-			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
-			<span id="sidebar_${$index}">${$data[$index]}</span>
-			{{else $value.type == "set"}}
-				<ul data-type="${$value.label}">
-				{{tmpl($.grep($data[$index].split("|"), Boolean)) '#defaultSetTmpl'}}
-				</ul>
-			{{else $value.type == "url"}}
-			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
-			
-			{{else}}
-			${$data[$index]}</p>
-			{{/if}}
+			 	
+
+				
+    			{{if $data[$index] == "|" || $data[$index] == ""}}
+    				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
+    			{{else $index == "lemma"}}
+    			{{html $item.parseLemma($data[$index])}} 
+    			{{else $index == "pos"}}
+    				${util.getLocaleString("pos_" + $data[$index])}</p> 
+				{{else $index == "deprel"}}
+    				${util.getLocaleString("deprel_" + $data[$index])}</p>
+    			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
+    			<span id="sidebar_${$index}">${$data[$index]}</span>
+    			{{else $value.type == "set"}}
+    				<ul data-type="${$value.label}">
+    				{{tmpl($.grep($data[$index].split("|"), Boolean)) '#defaultSetTmpl'}}
+    				</ul>
+    			{{else $value.type == "url"}}
+    			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
+    			
+    			{{else}}
+    			${$data[$index]}</p>
+    			{{/if}}
 
 			</p>
 			{{/if}}
