@@ -242,7 +242,7 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "kallan", "meddelanden", "nyaargus", "svenskbygden"]
+	contents : ["astranova", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.medical = {
