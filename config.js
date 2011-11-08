@@ -405,6 +405,31 @@ settings.corpora.svenskbygden = {
 	}
 };
 
+settings.corpora.studentbladet = {
+	title : "Studentbladet 2011",
+	description : "",
+	languages : {
+		STUDENTBLADET : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_year : {label : "year"},
+	    text_issue : {label : "issue"}
+	}
+};
+
 settings.corpora.jakobstadstidning1999 = {
 	title : "Jakobstads tidning 1999",
 	description : "",
