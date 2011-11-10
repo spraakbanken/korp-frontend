@@ -185,6 +185,10 @@ var LemgramProxy = {
 			        "sms-forms" : false
 		        },
 			    success : function(data, textStatus, xhr) {
+			    	if(data.count == 0) {
+			    		dfd.reject();
+			    		return;
+			    	}
 			    	var div = $.isPlainObject(data.div) ? [data.div] : data.div;
 		            var output = $.map(div, function(item) {
 		            	return item.LexicalEntry[type];
