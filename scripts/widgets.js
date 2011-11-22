@@ -685,7 +685,8 @@ var ExtendedToken = {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
 	    			var not_operator = obj.data.type == "set" ? "not contains" : "!=";
 	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
-	    			var formatter = op == "matches" ? function(arg) {return arg;} : regescape;
+	    			$.log("formatter", obj.data);
+	    			var formatter = op == "matches" || obj.data.displayType == "select" ? function(arg) {return arg;} : regescape;
 	    			var value = formatter(s);
 	    			op = {
 	    					"is" : [operator, "", value, ""],
