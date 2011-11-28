@@ -140,6 +140,7 @@
 	"pos_DL" : "punctuation",
 	"pos_MAD": "punctuation",
 	"pos_MID": "punctuation",
+	"pos_PAD": "punctuation",
 	"pos_DT" : "determiner",
 	"pos_HA" : "interrogative/relative adverb",
 	"pos_HD" : "interrogative/relative determiner",
