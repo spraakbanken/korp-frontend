@@ -243,7 +243,7 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+	contents : ["astranova", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.medical = {
@@ -378,6 +378,31 @@ settings.corpora.fsbsakprosa = {
 	    text_title : {label : "title"},
 	    text_year : {label : "year"},
 	    text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.hanken = {
+	title : "Hanken 2008–2011",
+	description : "",
+	languages : {
+		HANKEN : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_year : {label : "year"},
+	    text_issue : {label : "issue"}
 	}
 };
 
