@@ -221,6 +221,11 @@ settings.corporafolders.fisk.articles = {
 	contents : ["fsbsakprosa"]
 };
 
+settings.corporafolders.fisk.governmental = {
+	title : "Myndighetstexter",
+	contents : ["lagtexter", "myndighet"]
+};
+
 settings.corporafolders.fisk.novels = {
 	title : "Skönlitteratur",
 	contents : ["fsbskonlit"]
@@ -231,14 +236,24 @@ settings.corporafolders.fisk.newspapertexts = {
 	contents : ["vasabladet"]
 };
 
+settings.corporafolders.fisk.newspapertexts.fnb = {
+	title : "FNB 1999-2000",
+	contents : ["fnb1999", "fnb2000"],
+	description : "FNB är Finlands ledande nyhets- och bildbyrå."
+	// http://www.stt.fi/sv
+};
+
 settings.corporafolders.fisk.newspapertexts.hbl = {
 	title : "Hufvudstadsbladet 1991, 1998–1999",
-	contents : ["hbl1991", "hbl1998", "hbl1999"]
+	contents : ["hbl1991", "hbl1998", "hbl1999"],
+	description : "Hufvudstadsbladet är den största finlandssvenska dagstidningen i Finland."
+	//description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland."
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 	title : "Jakobstads tidning 1999–2000",
-	contents : ["jakobstadstidning1999", "jakobstadstidning2000"]
+	contents : ["jakobstadstidning1999", "jakobstadstidning2000"],
+	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008."
 };
 
 settings.corporafolders.fisk.magazines = {
@@ -302,7 +317,7 @@ settings.corporafolders.magazines = {
 
 settings.corpora.fsbskonlit = {
 	title : "Skönlitteratur 1970–2011",
-	description : "",
+	description : "Material ur skönlitterära verk publicerade under 1970-2011 av Söderströms förlag.",
 	languages : {
 		FSBSKONLIT : "svenska"
 	},
@@ -329,7 +344,7 @@ settings.corpora.fsbskonlit = {
 
 settings.corpora.fsbessaistik = {
 	title : "Essäistisk litteratur 1970–2011",
-	description : "",
+	description : "Material ur essäistiska verk publicerade under 1970-2011 av Söderströms förlag.",
 	languages : {
 		FSBESSAISTIK : "svenska"
 	},
@@ -356,7 +371,7 @@ settings.corpora.fsbessaistik = {
 
 settings.corpora.fsbsakprosa = {
 	title : "Sakprosa 1970–2011",
-	description : "",
+	description : "Material ur facklitterära verk publicerade under 1970-2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
 	languages : {
 		FSBSAKPROSA : "svenska"
 	},
@@ -381,9 +396,55 @@ settings.corpora.fsbsakprosa = {
 	}
 };
 
+settings.corpora.lagtexter = {
+	title : "Lagtexter 1990-2000",
+	description : "Material ur Finlands lag.",
+	languages : {
+		LAGTEXTER : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora.myndighet = {
+	title : "Myndighetsprosa 1990-2000",
+	description : "Material ur bland annat Utbildningsstyrelsens, Undervisningsministeriets och Länsstyrelsens publikationer.",
+	languages : {
+		MYNDIGHET : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	}
+};
+
 settings.corpora.hanken = {
 	title : "Hanken 2008–2011",
-	description : "",
+	description : "Tidningen <a href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
 	languages : {
 		HANKEN : "svenska"
 	},
@@ -408,7 +469,7 @@ settings.corpora.hanken = {
 
 settings.corpora.svenskbygden = {
 	title : "Svenskbygden 2010–2011",
-	description : "",
+	description : "<a href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
 	languages : {
 		SVENSKBYGDEN : "svenska"
 	},
@@ -433,7 +494,7 @@ settings.corpora.svenskbygden = {
 
 settings.corpora.studentbladet = {
 	title : "Studentbladet 2011",
-	description : "",
+	description : "<a href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
 	languages : {
 		STUDENTBLADET : "svenska"
 	},
@@ -458,7 +519,7 @@ settings.corpora.studentbladet = {
 
 settings.corpora.jakobstadstidning1999 = {
 	title : "Jakobstads tidning 1999",
-	description : "",
+	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
 	languages : {
 		JAKOBSTADSTIDNING1999 : "svenska"
 	},
@@ -481,7 +542,7 @@ settings.corpora.jakobstadstidning1999 = {
 
 settings.corpora.jakobstadstidning2000 = {
 	title : "Jakobstads tidning 2000",
-	description : "",
+	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
 	languages : {
 		JAKOBSTADSTIDNING2000 : "svenska"
 	},
@@ -1031,7 +1092,176 @@ settings.corpora.bloggmix = {
 		blog_title : {label : "blog_title"},
 		blog_url : {label : "blog_url", type : "url"},
 		blog_age : {label : "author_age"},
-		blog_city : {label : "city"},
+		blog_city : {label : "city", displayType : "select", dataset : {
+            "Alingsås" : "Alingsås",
+            "Alnö" : "Alnö",
+            "Arboga" : "Arboga",
+            "Arild" : "Arild",
+            "Bankeryd" : "Bankeryd",
+            "Bergviken" : "Bergviken",
+            "Birsta" : "Birsta",
+            "Bjursås" : "Bjursås",
+            "Boden" : "Boden",
+            "Bohus" : "Bohus",
+            "Borgholm" : "Borgholm",
+            "Borlänge" : "Borlänge",
+            "Borås" : "Borås",
+            "Brunflo" : "Brunflo",
+            "Brynäs" : "Brynäs",
+            "Bygdeå" : "Bygdeå",
+            "Danholn" : "Danholn",
+            "Deje" : "Deje",
+            "Djurslöv" : "Djurslöv",
+            "Enköping" : "Enköping",
+            "Enskede" : "Enskede",
+            "Eriksberg" : "Eriksberg",
+            "Eskilstuna" : "Eskilstuna",
+            "Falun" : "Falun",
+            "Finspång" : "Finspång",
+            "Frösö" : "Frösö",
+            "Färjestaden" : "Färjestaden",
+            "Fårbo" : "Fårbo",
+            "Gimo" : "Gimo",
+            "Gnesta" : "Gnesta",
+            "Granlo" : "Granlo",
+            "Grebo" : "Grebo",
+            "Grums" : "Grums",
+            "Grycksbo" : "Grycksbo",
+            "Gryta" : "Gryta",
+            "Gränna" : "Gränna",
+            "Gustafs" : "Gustafs",
+            "Gävle" : "Gävle",
+            "Göteborg" : "Göteborg",
+            "Habo" : "Habo",
+            "Haga" : "Haga",
+            "Hallstahammar" : "Hallstahammar",
+            "Handen" : "Handen",
+            "Hedemora" : "Hedemora",
+            "Helsingborg" : "Helsingborg",
+            "Hillared" : "Hillared",
+            "Hille" : "Hille",
+            "Holmsund" : "Holmsund",
+            "Hortlax" : "Hortlax",
+            "Huddinge" : "Huddinge",
+            "Huskvarna" : "Huskvarna",
+            "Höganäs" : "Höganäs",
+            "Högsby" : "Högsby",
+            "Hönö" : "Hönö",
+            "Irsta" : "Irsta",
+            "Järna" : "Järna",
+            "Jönköping" : "Jönköping",
+            "Kalmar" : "Kalmar",
+            "Karlskoga" : "Karlskoga",
+            "Karlstad" : "Karlstad",
+            "Kimstad" : "Kimstad",
+            "Kinna" : "Kinna",
+            "Klippan" : "Klippan",
+            "Kristinehamn" : "Kristinehamn",
+            "Krokek" : "Krokek",
+            "Kumla" : "Kumla",
+            "Kungsbacka" : "Kungsbacka",
+            "Kungsholmen" : "Kungsholmen",
+            "Kungälv" : "Kungälv",
+            "Köping" : "Köping",
+            "Landskrona" : "Landskrona",
+            "Laxå" : "Laxå",
+            "Lerum" : "Lerum",
+            "Lidingö" : "Lidingö",
+            "Lilla Alby" : "Lilla Alby",
+            "Lillån" : "Lillån",
+            "Limhamn" : "Limhamn",
+            "Lindesberg" : "Lindesberg",
+            "Lindsdal" : "Lindsdal",
+            "Linköping" : "Linköping",
+            "Ljunga" : "Ljunga",
+            "Lomma" : "Lomma",
+            "Luleå" : "Luleå",
+            "Lund" : "Lund",
+            "Löberöd" : "Löberöd",
+            "Malmö" : "Malmö",
+            "Mariefred" : "Mariefred",
+            "Mjölby" : "Mjölby",
+            "Motala" : "Motala",
+            "Mullsjö" : "Mullsjö",
+            "Mölnbo" : "Mölnbo",
+            "Mönsterås" : "Mönsterås",
+            "Mörbylånga" : "Mörbylånga",
+            "Nacka" : "Nacka",
+            "Nacksta" : "Nacksta",
+            "Nolhaga" : "Nolhaga",
+            "Nora" : "Nora",
+            "Norrköping" : "Norrköping",
+            "Norrtälje" : "Norrtälje",
+            "Nässjö" : "Nässjö",
+            "Oskarshamn" : "Oskarshamn",
+            "Partille" : "Partille",
+            "Piteå" : "Piteå",
+            "Pålsjö" : "Pålsjö",
+            "Ransta" : "Ransta",
+            "Rosvik" : "Rosvik",
+            "Rutvik" : "Rutvik",
+            "Ryd" : "Ryd",
+            "Röbäck" : "Röbäck",
+            "Sala" : "Sala",
+            "Sandhult" : "Sandhult",
+            "Sandskogen" : "Sandskogen",
+            "Sandviken" : "Sandviken",
+            "Sigtuna" : "Sigtuna",
+            "Sjöbo" : "Sjöbo",
+            "Skanör med Falsterbo" : "Skanör med Falsterbo",
+            "Skellefteå" : "Skellefteå",
+            "Skeppsvik" : "Skeppsvik",
+            "Skurholmsstaden" : "Skurholmsstaden",
+            "Skönsmon" : "Skönsmon",
+            "Smedby" : "Smedby",
+            "Smedslätten" : "Smedslätten",
+            "Sollentuna" : "Sollentuna",
+            "Staffanstorp" : "Staffanstorp",
+            "Stockholm" : "Stockholm",
+            "Stora Vickleby" : "Stora Vickleby",
+            "Storvreta" : "Storvreta",
+            "Strålsnäs" : "Strålsnäs",
+            "Sundsvall" : "Sundsvall",
+            "Svedala" : "Svedala",
+            "Säffle" : "Säffle",
+            "Särö" : "Särö",
+            "Säter" : "Säter",
+            "Sävar" : "Sävar",
+            "Sävedalen" : "Sävedalen",
+            "Södermalm" : "Södermalm",
+            "Södertälje" : "Södertälje",
+            "Södra Möckleby" : "Södra Möckleby",
+            "Sörby" : "Sörby",
+            "Tallboda" : "Tallboda",
+            "Tierp" : "Tierp",
+            "Torvalla" : "Torvalla",
+            "Tranemo" : "Tranemo",
+            "Trelleborg" : "Trelleborg",
+            "Trollhättan" : "Trollhättan",
+            "Trosa" : "Trosa",
+            "Tuve" : "Tuve",
+            "Ulricehamn" : "Ulricehamn",
+            "Umeå" : "Umeå",
+            "Uppsala" : "Uppsala",
+            "Vadstena" : "Vadstena",
+            "Vagnhärad" : "Vagnhärad",
+            "Valbo" : "Valbo",
+            "Vaplan" : "Vaplan",
+            "Vasastaden" : "Vasastaden",
+            "Vejbystrand" : "Vejbystrand",
+            "Vellinge" : "Vellinge",
+            "Vimmerby" : "Vimmerby",
+            "Västerljung" : "Västerljung",
+            "Västerås" : "Västerås",
+            "Åre" : "Åre",
+            "Årsunda" : "Årsunda",
+            "Älvkarleby" : "Älvkarleby",
+            "Ängelholm" : "Ängelholm",
+            "Örebro" : "Örebro",
+            "Östermalm" : "Östermalm",
+            "Östersund" : "Östersund",
+            "Övre Ullerud" : "Övre Ullerud"
+		}},
 		//blog_categories : {label : "title", type : "set"},
 		post_title : {label : "post_title"},
 		post_date : {label : "date"},
@@ -1862,7 +2092,7 @@ settings.corpora.swewac = {
 
 settings.corpora.astranova = {
 	title : "Astra Nova 2008–2010",
-	description : "Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
+	description : "<a href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
 	languages : {
 		ASTRANOVA : "svenska"
 	},
@@ -1888,7 +2118,7 @@ settings.corpora.astranova = {
 
 settings.corpora.kallan = {
 	title : "Källan 2008–2010",
-	description : "",
+	description : "<a href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
 	languages : {
 		KALLAN : "svenska"
 	},
@@ -1914,7 +2144,7 @@ settings.corpora.kallan = {
 
 settings.corpora.meddelanden = {
 	title : "Meddelanden från Åbo Akademi 2002–2010",
-	description : "",
+	description : "<a href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
 	languages : {
 		MEDDELANDEN : "svenska"
 	},
@@ -1940,7 +2170,7 @@ settings.corpora.meddelanden = {
 
 settings.corpora.nyaargus = {
 	title : "Nya Argus 2010–2011",
-	description : "",
+	description : "<a href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
 	languages : {
 		NYAARGUS : "svenska"
 	},
@@ -1966,7 +2196,7 @@ settings.corpora.nyaargus = {
 
 settings.corpora.vasabladet = {
 	title : "Vasabladet 1991",
-	description : "",
+	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
 	languages : {
 		VASABLADET : "svenska"
 	},
@@ -1991,9 +2221,57 @@ settings.corpora.vasabladet = {
 	}
 };
 
+settings.corpora.fnb1999 = {
+	title : "FNB 1999",
+	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
+	languages : {
+		FNB1999 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora.fnb2000 = {
+	title : "FNB 2000",
+	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
+	languages : {
+		FNB2000 : "svenska"
+	},
+	within : within.defaultStruct,
+	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
+
 settings.corpora.hbl1991 = {
 	title : "Hufvudstadsbladet 1991",
-	description : "",
+	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
 	languages : {
 		HBL1991 : "svenska"
 	},
@@ -2019,7 +2297,7 @@ settings.corpora.hbl1991 = {
 
 settings.corpora.hbl1998 = {
 	title : "Hufvudstadsbladet 1998",
-	description : "",
+	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
 	languages : {
 		HBL1998 : "svenska"
 	},
@@ -2044,7 +2322,7 @@ settings.corpora.hbl1998 = {
 
 settings.corpora.hbl1999 = {
 	title : "Hufvudstadsbladet 1999",
-	description : "",
+	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
 	languages : {
 		HBL1999 : "svenska"
 	},
