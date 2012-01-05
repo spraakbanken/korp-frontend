@@ -120,7 +120,10 @@ a:hover {color:red;}  /* mouse over link */
 #search_history:empty {
 	visibility: hidden;
 }
-
+#docs {
+	float : right;
+	margin : 8px;
+}
 #about {
 	float : right;
 	margin : 0 8px;	
