@@ -2043,7 +2043,7 @@ settings.corpora.sfs = {
 };
 
 settings.corpora.wikipedia = {
-	title : "Svenska Wikipedia (november 2011)",
+	title : "Svenska Wikipedia (januari 2012)",
 	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
 	languages : {
 		WIKIPEDIA : "svenska"
