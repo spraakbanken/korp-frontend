@@ -57,7 +57,7 @@
 		<script type="text/javascript" src="lib/jquery.reject.min.js"></script>
 		<script type="text/javascript" src="lib/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
 		<script type="text/javascript" src="lib/slickgrid/slick.grid.js"></script>
-		<script language="JavaScript" src="lib/slickgrid/slick.model.js"></script>
+		<script type="text/javascript" src="lib/slickgrid/slick.model.js"></script>
 		
 		
 		<script type="text/javascript" src="lib/jquery.hoverIntent.js"></script>
@@ -72,8 +72,8 @@
 			
 		</script>
 		<script type="text/javascript" src="lib/jstorage.js"></script>
-		<script type="text/javascript" src="scripts/widgets.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
+		<script type="text/javascript" src="scripts/widgets.js"></script>
 		<script type="text/javascript" src="config.js"></script>
 		
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
@@ -315,7 +315,7 @@
 	<script id="similarTmpl" type="text/x-jquery-tmpl">
 	<li>
 		{{each rel}}
-		<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value)[0]}</a>
+			<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value)[0]}</a>
 		{{/each}}
 	</li>
 		

@@ -30,6 +30,18 @@ $.widget("ui.radioList", {
 		return this.element.find(".radioList_selected");
 	}
 });
+$.extend( $.ui.autocomplete.prototype, {
+	_renderItem: function( ul, item) {
+		var li = $("<li></li>").data("item.autocomplete", item).append(
+				$("<a></a>")[this.options.html ? "html" : "text"]
+						(item.label)).appendTo(ul);
+		
+		if(!item["enabled"]) {
+			li.addClass("autocomplete-item-disabled");
+		}
+		return li;
+	},
+});
 
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
@@ -45,7 +57,23 @@ $.fn.korp_autocomplete = function(options) {
 		type : "lem",
 		select : $.noop,
 		labelFunction : util.lemgramToString,
-		sortFunction : view.lemgramSort
+		middleware : function(request, idArray) {
+			var dfd = $.Deferred();
+			
+			idArray.sort(view.lemgramSort);
+			
+			var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
+			var listItems = $.map(idArray, function(item, i) {
+				return {
+					label : labelArray[i],
+					value : item,
+					input : request.term
+				};
+			});
+			
+			dfd.resolve(listItems);
+			return dfd.promise();
+		},
 	},options);
 	
 	selector.preloader({
@@ -65,30 +93,27 @@ $.fn.korp_autocomplete = function(options) {
 			.done(function(idArray, textstatus, xhr) {
 				$.log("sblex done", textstatus, xhr, xhr.status);
 				idArray = $.unique(idArray);
-				idArray.sort(options.sortFunction);
+//				idArray.sort(options.sortFunction);
 				
-				var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
-				var listItems = $.map(idArray, function(item, i) {
-					return {
-						label : labelArray[i],
-						value : item,
-						input : request.term
-					};
+				options.middleware(request, idArray).done(function(listItems) {
+					
+					
+					
+					selector.data("dataArray", listItems);
+					response(listItems);
+					if(selector.autocomplete("widget").height() > 300) {
+						selector.autocomplete("widget").addClass("ui-autocomplete-tall");
+					}
+					$("#autocomplete_header").remove();	
+					
+					$("<li id='autocomplete_header' />")
+					.localeKey("autocomplete_header")
+					.css("font-weight", "bold").css("font-size", 10)
+					.prependTo(selector.autocomplete("widget"));
+					
+					selector.preloader("hide");
 				});
 				
-				selector.data("dataArray", listItems);
-				response(listItems);
-				if(selector.autocomplete("widget").height() > 300) {
-					selector.autocomplete("widget").addClass("ui-autocomplete-tall");
-				}
-				$("#autocomplete_header").remove();	
-				
-				$("<li id='autocomplete_header' />")
-				.localeKey("autocomplete_header")
-				.css("font-weight", "bold").css("font-size", 10)
-				.prependTo(selector.autocomplete("widget"));
-				
-				selector.preloader("hide");
 			})
 			.fail(function() {
 				$.log("sblex fail", arguments);

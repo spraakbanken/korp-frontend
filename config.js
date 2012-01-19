@@ -37,7 +37,7 @@ attrs.pos = {
 	displayType : "select",
 	dataset : {
 		"AB" : "pos_AB",
-		"MID|MAD" : "pos_DL",
+		"MID|MAD|PAD" : "pos_DL",
 		"DT" : "pos_DT",
 		"HA" : "pos_HA",
 		"HD" : "pos_HD",

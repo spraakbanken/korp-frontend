@@ -107,10 +107,11 @@ a:hover {color:red;}  /* mouse over link */
 }
 
 #search_history {
-	float : right;
 	margin-right : 8px;
 	margin-top : 45px;
 	max-width : 150px;
+	position : absolute;
+	right : 0;
 }
 
 #search_history > option:first-child {
@@ -188,6 +189,7 @@ input:placeholder, textarea:placeholder {
 #header {
 	width: 100%;
 	margin : 0;
+	position : relative;
 }
 
 #content {
@@ -1157,3 +1159,14 @@ a.relStat:hover {
 .ui-dialog li {
 	margin-bottom : 3px;
 }
+
+/* .ui-menu-item.ui-state-disabled a.ui-state-hover { */
+/* 	background: none; */
+/* 	border-color : white; */
+/* } */
+.autocomplete-item-disabled a {
+	font-style: italic;
+	color : red;
+	opacity : 0.7;
+}
+

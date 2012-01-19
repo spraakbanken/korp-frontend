@@ -111,7 +111,29 @@ var SimpleSearch = {
 		})
 		.korp_autocomplete({
 			type : "lem",
-			select : $.proxy(this.selectLemgram, this)
+			select : $.proxy(this.selectLemgram, this),
+			middleware : function(request, idArray) {
+				var dfd = $.Deferred();
+				lemgramProxy.lemgramCount(idArray).done(function(freqs) {
+					delete freqs["time"];
+					idArray.sort(function(first, second) {
+						return (freqs[second] || 0) - (freqs[first] || 0);
+					});
+					
+					var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
+					var listItems = $.map(idArray, function(item, i) {
+						return {
+							label : labelArray[i],
+							value : item,
+							input : request.term,
+							enabled : item in freqs
+						};
+					});
+					
+					dfd.resolve(listItems);
+				});
+				return dfd.promise();
+			}
 		});
 		
 		$("#prefixChk, #suffixChk").click(function() {
@@ -269,6 +291,12 @@ var SimpleSearch = {
 			);
 		}
 		div.slideDown("fast");
+	},
+	
+	removeSimilarHeader : function() {
+		$("#similar_lemgrams").slideUp(function() {
+			$(this).empty();
+		})
 	},
 	
 	onSimpleChange : function(event) {

@@ -10,7 +10,27 @@ var SearchProxy = {
 			url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
 			success : function(data) {
 				$.log("related words success");
-				simpleSearch.renderSimilarHeader(lemgram, data);
+				
+				var lemgrams = [];
+				$.each(data, function(i, item) {
+					lemgrams = lemgrams.concat(item.rel);
+				});
+				var hasAnyFreq = false;
+				lemgramProxy.lemgramCount(lemgrams).done(function(freqs) {
+					$.each(data, function(i, item) {
+						item.rel = $.grep(item.rel, function(lemgram) {
+							if(freqs[lemgram])
+								hasAnyFreq = true;
+							return !!freqs[lemgram];
+						});
+					});
+					$.log("hasAnyFreq", hasAnyFreq, data);
+					if(hasAnyFreq)
+						simpleSearch.renderSimilarHeader(lemgram, data);
+					else
+						simpleSearch.removeSimilarHeader();
+				});
+				
 			}
 		});
 	}
@@ -204,6 +224,19 @@ var LemgramProxy = {
 			});
 		}).promise();
 		return deferred;
+	},
+	
+	lemgramCount : function(lemgrams) {
+		var selected_corpora_ids = getSelectedCorpora();
+		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
+			return n.toUpperCase();
+	    });
+		return $.post(settings.cgi_script, {
+			command : "lemgram_count", 
+			lemgram : lemgrams, 
+			corpus : selected_uppercased_corpora_ids
+			} 
+		);
 	}
 };
 
