@@ -171,7 +171,7 @@ var hp_corpusChooser = {
 			var newHTML = '<div class="popupchecks ui-corner-bottom"><p style="text-align:right; margin-top:10px; margin-right:8px"><a style="outline: none" href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a style="outline: none" href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
 			
 			newHTML += recursive_transform(body,0);
-			newHTML += '<br/><p style="font-size:85%" id="sentenceCounter">X meningar totalt i valda korpusar.</p></div><div class="corpusInfoSpace ui-corner-all" style="display: none; border:1px solid #CCCCCC; z-index: 10000; min-width:30px; min-height:30px; position:absolute; left:' + '442' + 'px; background-color:white; padding-right:4px"><div class=""><p style="padding:10px; margin:0px"></p></div>'; //</div>
+			newHTML += '<br/><p style="font-size:85%" id="sentenceCounter">X meningar totalt i valda korpusar.</p></div><div class="corpusInfoSpace ui-corner-all" style="display: none; border: 1px solid #CCCCCC; z-index: 10000; min-width: 30px; min-height: 30px; max-width: 33%; position: absolute; left:' + '442' + 'px; background-color: white; padding-right: 4px"><div class=""><p style="padding: 10px; margin: 0px"></p></div>'; //</div>
 			
 //			el.replaceWith(newHTML);
 			el.html(upper);
@@ -406,7 +406,7 @@ var hp_corpusChooser = {
 						outStr += "</div>";
 					} else {
 						if(levelindent > 0) {
-							// Indragna och gömda per default
+							// Indragna och g√∂mda per default
 							hasDirectCorporaChildren = true
 							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (410-levelindent*30) + 'px; visible:false; left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
