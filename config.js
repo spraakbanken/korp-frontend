@@ -1070,7 +1070,7 @@ settings.corpora.press98 = {
 };
 
 settings.corpora.bloggmix = {
-	title : "Bloggmix (oktober 2011)",
+	title : "Bloggmix (januari 2012)",
 	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet.",
 	languages : {
 		BLOGGMIX : "svenska"
