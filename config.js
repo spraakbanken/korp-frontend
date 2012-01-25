@@ -234,7 +234,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["vasabladet"]
+	contents : ["pargaskungorelser", "vasabladet"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -1076,7 +1076,6 @@ settings.corpora.bloggmix = {
 		BLOGGMIX : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1301,7 +1300,6 @@ settings.corpora.lasbart = {
 		LASBART : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1355,7 +1353,6 @@ settings.corpora.psalmboken = {
 		PSALMBOKEN : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1404,7 +1401,6 @@ settings.corpora.strindbergbrev = {
 	},
 	context : context.defaultStruct,
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1774,7 +1770,6 @@ settings.corpora.vivill = {
 		VIVILL : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1891,7 +1886,6 @@ settings.corpora.romi = {
 		ROMI : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1942,7 +1936,6 @@ settings.corpora.romg = {
 		ROMG : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1968,7 +1961,6 @@ settings.corpora.rom99 = {
 		ROM99 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1995,7 +1987,6 @@ settings.corpora.strindbergromaner = {
 		STRINDBERGROMANER : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2024,7 +2015,6 @@ settings.corpora.sfs = {
 	},
 	context : context.defaultStruct,
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2098,7 +2088,6 @@ settings.corpora.astranova = {
 		ASTRANOVA : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2124,7 +2113,6 @@ settings.corpora.kallan = {
 		KALLAN : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2150,7 +2138,6 @@ settings.corpora.meddelanden = {
 		MEDDELANDEN : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2176,7 +2163,31 @@ settings.corpora.nyaargus = {
 		NYAARGUS : "svenska"
 	},
 	within : within.defaultStruct,
-	
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.pargaskungorelser = {
+	title : "Pargas Kungörelser 2011",
+	description : "",
+	languages : {
+		PARGASKUNGORELSER : "svenska"
+	},
+	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2202,7 +2213,6 @@ settings.corpora.vasabladet = {
 		VASABLADET : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2229,7 +2239,6 @@ settings.corpora.fnb1999 = {
 		FNB1999 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2253,7 +2262,6 @@ settings.corpora.fnb2000 = {
 		FNB2000 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2277,7 +2285,6 @@ settings.corpora.hbl1991 = {
 		HBL1991 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2303,7 +2310,6 @@ settings.corpora.hbl1998 = {
 		HBL1998 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2328,7 +2334,6 @@ settings.corpora.hbl1999 = {
 		HBL1999 : "svenska"
 	},
 	within : within.defaultStruct,
-	
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
