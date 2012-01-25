@@ -114,7 +114,7 @@ var SimpleSearch = {
 			select : $.proxy(this.selectLemgram, this),
 			middleware : function(request, idArray) {
 				var dfd = $.Deferred();
-				lemgramProxy.lemgramCount(idArray).done(function(freqs) {
+				lemgramProxy.lemgramCount(idArray, self.isSearchPrefix(), self.isSearchSuffix()).done(function(freqs) {
 					delete freqs["time"];
 					idArray.sort(function(first, second) {
 						return (freqs[second] || 0) - (freqs[first] || 0);
@@ -320,10 +320,6 @@ var SimpleSearch = {
 					return $.format($.format('word = "%s"', q), wd);
 				}).join(" | ")  + "]";
 			}).join(" ");
-			
-//			val = $.map(currentText.split(" "), function(wd) {
-//				return $.format('[%s]', query.join(" | ")) ;
-//			})
 			
 		}
 		else {

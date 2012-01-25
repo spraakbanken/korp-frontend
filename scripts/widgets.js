@@ -318,7 +318,7 @@ var Sidebar = {
 		.find("li")
 		.each(function(i, item){
 			var id = saldoidArray[i].match(util.saldoRegExp).slice(1,3).join("..");
-			$(item).wrap($.format("<a href='http://spraakbanken.gu.se/sblex/%s' target='_blank' />", id));
+			$(item).wrap($.format("<a href='http://demosb.spraakdata.gu.se/karp/#search=sense|%s&lang=%s' target='_blank' />", [id, $.bbq.getState("lang") || "sv"]));
 		})
 		.hoverIcon("ui-icon-extlink");
 	},

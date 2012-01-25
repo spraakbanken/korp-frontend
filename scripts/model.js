@@ -226,14 +226,16 @@ var LemgramProxy = {
 		return deferred;
 	},
 	
-	lemgramCount : function(lemgrams) {
+	lemgramCount : function(lemgrams, findPrefix, findSuffix) {
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
 	    });
+		var count = $.grep(["lemgram", findPrefix ? "prefix" : "", findSuffix ? "suffix" : ""], Boolean);
 		return $.post(settings.cgi_script, {
 			command : "lemgram_count", 
-			lemgram : lemgrams, 
+			lemgram : lemgrams,
+			count : count.join(","),
 			corpus : selected_uppercased_corpora_ids
 			} 
 		);
