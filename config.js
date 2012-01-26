@@ -1069,6 +1069,36 @@ settings.corpora.press98 = {
 	}
 };
 
+settings.corpora.strindbergbrev = {
+	title : "August Strindbergs brev",
+	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
+	languages : {
+		STRINDBERGBREV : "svenska"
+	},
+	context : context.defaultStruct,
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_recipient : {label : "text_recipient"},
+		text_year : {label : "year"},
+		text_month : {label : "month"},
+		text_day : {label : "day"},
+		text_volume : {label : "text_volume"}
+	}
+};
+
 settings.corpora.bloggmix = {
 	title : "Bloggmix (januari 2012)",
 	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet.",
@@ -1390,37 +1420,6 @@ settings.corpora.snp7879 = {
 		ref : attrs.ref
 	}, 
 	struct_attributes : {}
-};
-
-
-settings.corpora.strindbergbrev = {
-	title : "Strindbergs brev",
-	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
-	languages : {
-		STRINDBERGBREV : "svenska"
-	},
-	context : context.defaultStruct,
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_author : {label : "author"},
-		text_recipient : {label : "text_recipient"},
-		text_year : {label : "year"},
-		text_month : {label : "month"},
-		text_day : {label : "day"},
-		text_volume : {label : "text_volume"}
-	}
 };
 
 settings.corpora.suc2 = {
@@ -1879,6 +1878,33 @@ settings.corpora.vivill = {
 	}
 };
 
+settings.corpora.strindbergromaner = {
+	title : "August Strindbergs samlade verk",
+	description : "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
+	languages : {
+		STRINDBERGROMANER : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_year : {label : "year"},
+		text_sv : {label : "text_sv"}
+	}
+};
+
 settings.corpora.romi = {
 	title : "Bonniersromaner I (1976–77)",
 	description : "69 romaner utgivna 1976–77.",
@@ -1977,33 +2003,6 @@ settings.corpora.rom99 = {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
 		text_year : {label : "year"}
-	}
-};
-
-settings.corpora.strindbergromaner = {
-	title : "Strindbergs romaner och dramer",
-	description : "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
-	languages : {
-		STRINDBERGROMANER : "svenska"
-	},
-	within : within.defaultStruct,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_author : {label : "author"},
-		text_title : {label : "title"},
-		text_year : {label : "year"},
-		text_sv : {label : "text_sv"}
 	}
 };
 
