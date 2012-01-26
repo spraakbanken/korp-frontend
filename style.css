@@ -795,6 +795,7 @@ table {
     top: 3px;
     left: 5px;
     opacity: .8;
+    margin-top : -4px;
 }
 
 .kwic_sidebar {
