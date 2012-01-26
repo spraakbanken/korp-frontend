@@ -289,7 +289,7 @@ settings.corporafolders.parallel.salt = {
 
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
-	contents : ["romi", "romii", "rom99", "strindbergromaner", "storsuc", "romg"]
+	contents : ["strindbergromaner", "romi", "romii", "rom99", "storsuc", "romg"]
 };
 
 settings.corporafolders.newspapertexts = {
