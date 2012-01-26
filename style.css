@@ -789,6 +789,14 @@ table {
 	border : none;
 }
 
+#sidbar_info {
+	display : inline-block;
+	position: relative;
+    top: 3px;
+    left: 5px;
+    opacity: .8;
+}
+
 .kwic_sidebar {
 	background-color: #fff;
 	border-style: solid;

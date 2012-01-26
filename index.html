@@ -227,6 +227,8 @@
     				${util.getLocaleString("pos_" + $data[$index])}</p> 
 				{{else $index == "deprel"}}
     				${util.getLocaleString("deprel_" + $data[$index])}</p>
+				{{else $index == "msd"}}
+					${$data[$index]}<a href="msdtags.html" target="_blank"><span id="sidbar_info" class="ui-icon ui-icon-info"></span><a></p>
     			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}

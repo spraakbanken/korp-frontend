@@ -67,7 +67,8 @@ $.fn.korp_autocomplete = function(options) {
 				return {
 					label : labelArray[i],
 					value : item,
-					input : request.term
+					input : request.term,
+					enabled : true
 				};
 			});
 			
