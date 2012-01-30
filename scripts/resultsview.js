@@ -1142,7 +1142,7 @@ var StatsResults = {
 				$.each(statsResults.savedWordArray, function(wkey, aword) {
 					var amount = acorpus[selVal][aword];
 					if(amount)
-						output += util.formatDecimalString(amount.toString(), false) + dataDelimiter;
+						output += util.formatDecimalString(amount.toString(), false, true) + dataDelimiter;
 					else
 						output += "0" + dataDelimiter;
 				});
