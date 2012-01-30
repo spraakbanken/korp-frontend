@@ -193,7 +193,7 @@ util.localizeFloat = function(float, nDec) {
 	return $.format("%." + nDec + "f", float).replace(".", sep);
 };
 
-util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swedish, if mode is
+util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
 	if(x.contains(".")) {
     	var parts = x.split(".");
@@ -205,7 +205,11 @@ util.formatDecimalString = function(x, mode) { // Use "," instead of "." if Swed
     		return prettyNumbers(parts[0]) + decimalSeparator + parts[1];
     		//return x.replace(".", decimalSeparator);
 	} else {
-	    return prettyNumbers(x);
+	    if(statsmode) {
+	       return x;
+	    } else {
+	       return prettyNumbers(x);
+	    }
 	}
 };
 
