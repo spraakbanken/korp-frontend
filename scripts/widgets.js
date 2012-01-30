@@ -568,7 +568,8 @@ var ExtendedToken = {
 		case "select":
 			arg_value = $("<select />");
 			var keys = $.keys(data.dataset).sort(function(a, b) {
-				return util.getLocaleString(a) >= util.getLocaleString(b) ? 1 : -1;
+				var prefix = data.translationKey || "";
+				return util.getLocaleString(prefix + a) >= util.getLocaleString(prefix + b) ? 1 : -1;
 			});
 			
 			$.each(keys, function(_, key) {

@@ -35,6 +35,7 @@ var sattrs = {}; // structural attributes
 attrs.pos = {
 	label : "pos",
 	displayType : "select",
+	translationKey : "pos_",
 	dataset : {
 		"AB" : "pos_AB",
 		"MID|MAD|PAD" : "pos_DL",
@@ -91,6 +92,7 @@ attrs.dephead = {
 attrs.deprel = {
 		label : "deprel",
 		displayType : "select",
+		translationKey : "deprel_",
 		dataset : {
 			"++" : "deprel_++",
 			"+A" : "deprel_+A",
