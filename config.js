@@ -892,7 +892,7 @@ settings.corpora.ordat = {
 };
 
 settings.corpora.fof = {
-	title : "Forskning och framsteg",
+	title : "Forskning & Framsteg",
 	description : "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
 	languages : {
 		FOF : "svenska"
