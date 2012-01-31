@@ -16,7 +16,7 @@
 	"search_for" : "Search for ",
 	"show_more" : "Show more",
 	"in_corpus" : "in corpus",
-	"cqp_query" : "<a class='link' href='http://cogsci.uni-osnabrueck.de/~korpora/ws/CWBdoc/CQP_Tutorial/ '>CQP</a> query",
+	"cqp_query" : "<a class='link' href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf'>CQP</a> query",
 	"max" : "up to",
 	"min" : "at least",
 	"and" : "and",
