@@ -211,7 +211,7 @@ settings.corporafolders = {};
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
-	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999-2000 fortsatte arbetet (ett samarbetsprojekt mellan Forskningscentralen för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011-2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Forskningscentralen för de inhemska språken och Göteborgs universitet."
+	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan Forskningscentralen för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Forskningscentralen för de inhemska språken och Göteborgs universitet."
 };
 
 settings.corporafolders.fisk.essayistic = {
@@ -240,7 +240,7 @@ settings.corporafolders.fisk.newspapertexts = {
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
-	title : "FNB 1999-2000",
+	title : "FNB 1999–2000",
 	contents : ["fnb1999", "fnb2000"],
 	description : "FNB är Finlands ledande nyhets- och bildbyrå."
 	// http://www.stt.fi/sv
@@ -320,7 +320,7 @@ settings.corporafolders.magazines = {
 
 settings.corpora.fsbskonlit = {
 	title : "Skönlitteratur 1970–2011",
-	description : "Material ur skönlitterära verk publicerade under 1970-2011 av Söderströms förlag.",
+	description : "Material ur skönlitterära verk publicerade under 1970–2011 av Söderströms förlag.",
 	languages : {
 		FSBSKONLIT : "svenska"
 	},
@@ -347,7 +347,7 @@ settings.corpora.fsbskonlit = {
 
 settings.corpora.fsbessaistik = {
 	title : "Essäistisk litteratur 1970–2011",
-	description : "Material ur essäistiska verk publicerade under 1970-2011 av Söderströms förlag.",
+	description : "Material ur essäistiska verk publicerade under 1970–2011 av Söderströms förlag.",
 	languages : {
 		FSBESSAISTIK : "svenska"
 	},
@@ -374,7 +374,7 @@ settings.corpora.fsbessaistik = {
 
 settings.corpora.fsbsakprosa = {
 	title : "Sakprosa 1970–2011",
-	description : "Material ur facklitterära verk publicerade under 1970-2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
+	description : "Material ur facklitterära verk publicerade under 1970–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
 	languages : {
 		FSBSAKPROSA : "svenska"
 	},
@@ -400,7 +400,7 @@ settings.corpora.fsbsakprosa = {
 };
 
 settings.corpora.lagtexter = {
-	title : "Lagtexter 1990-2000",
+	title : "Lagtexter 1990–2000",
 	description : "Material ur Finlands lag.",
 	languages : {
 		LAGTEXTER : "svenska"
@@ -423,7 +423,7 @@ settings.corpora.lagtexter = {
 };
 
 settings.corpora.myndighet = {
-	title : "Myndighetsprosa 1990-2000",
+	title : "Myndighetsprosa 1990–2000",
 	description : "Material ur bland annat Utbildningsstyrelsens, Undervisningsministeriets och Länsstyrelsens publikationer.",
 	languages : {
 		MYNDIGHET : "svenska"
@@ -2060,7 +2060,7 @@ settings.corpora.wikipedia = {
 };
 
 settings.corpora.swewac = {
-	title : "SweWaC - Swedish Web as Corpus",
+	title : "SweWaC – Swedish Web as Corpus",
 	description : "",
 	languages : {
 		SWEWAC : "svenska"
