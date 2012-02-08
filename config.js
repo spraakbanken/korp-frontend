@@ -2184,7 +2184,7 @@ settings.corpora.nyaargus = {
 
 settings.corpora.pargaskungorelser = {
 	title : "Pargas Kungörelser 2011",
-	description : "",
+	description : "<a href=\"http://www.pku.fi\">Pargas Kungörelser</a> är en regional svenskspråkig tidning i Pargas med omnejd.",
 	languages : {
 		PARGASKUNGORELSER : "svenska"
 	},
