@@ -211,7 +211,7 @@ settings.corporafolders = {};
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
-	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan Forskningscentralen för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Forskningscentralen för de inhemska språken och Göteborgs universitet."
+	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan Institutet för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Institutet för de inhemska språken och Göteborgs universitet."
 };
 
 settings.corporafolders.fisk.essayistic = {
