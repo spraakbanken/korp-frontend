@@ -301,7 +301,7 @@ settings.corporafolders.newspapertexts = {
 
 settings.corporafolders.newspapertexts.gp = {
 	title : "GP",
-	contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2010", "gp2d"]
+	contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2010", "gp2011", "gp2d"]
 };
 
 settings.corporafolders.newspapertexts.press = {
@@ -845,6 +845,32 @@ settings.corpora.gp2009 = {
 settings.corpora.gp2010 = {
 	title : "GP 2010",
 	description : "Göteborgs-Posten 2010.",
+	languages : {
+		GP2010 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_author : {label : "article_author"},
+		text_section : {label : "article_section"}
+	}
+};
+
+settings.corpora.gp2011 = {
+	title : "GP 2011",
+	description : "Göteborgs-Posten 2011.",
 	languages : {
 		GP2010 : "svenska"
 	},
