@@ -208,6 +208,11 @@ var context = {
  
 settings.corporafolders = {};
 
+settings.corporafolders.sweac = {
+	title : "Akademiska texter",
+	contents : ["sweachum"]
+};
+
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
@@ -563,6 +568,31 @@ settings.corpora.jakobstadstidning2000 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.sweachum = {
+	title : "Humaniora",
+	description : "",
+	languages : {
+		SWEACHUM : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_type : {label : "type"},
+	    text_subject : {label : "subject"}
 	}
 };
 
