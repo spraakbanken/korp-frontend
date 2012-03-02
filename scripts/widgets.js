@@ -312,7 +312,9 @@ var Sidebar = {
 		var $saldo = $("#sidebar_saldo"); 
 		var saldoidArray = $.grep($saldo.text().split("|"), function(itm) {
 			return itm && itm.length;  
-		}).sort();
+		}).sort(function(a, b) {
+			 return  parseInt(a.split("..")[1]) - parseInt(b.split("..")[1]);
+		});
 		var saldolabelArray = util.sblexArraytoString(saldoidArray, util.saldoToString);
 
 		$saldo.html($.arrayToHTMLList(saldolabelArray))
@@ -416,6 +418,7 @@ var ExtendedToken = {
         	},
         	text : false
         }).click(function() {
+        	if(repeat.filter(":animated").length) return; 
 			repeat.toggle("slide", {direction : 'right'}, function() {
     		
     		self._trigger("change");
@@ -690,7 +693,6 @@ var ExtendedToken = {
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();
 	        var opt = $(this).find(".arg_opts").val();
-	        
 	        if(data.displayType == "autocomplete") {
 	        	value = null;
 	        }
@@ -705,7 +707,7 @@ var ExtendedToken = {
 	    });
 	    
 	    var inner_query = [];
-	    $.each(args, function(type, valueArray) {
+	    $.sortedEach(args, function(type, valueArray) {
 	    	
 	    	$.each(valueArray, function(i, obj) {
 	    		function defaultArgsFunc(s, op) {
@@ -729,6 +731,8 @@ var ExtendedToken = {
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	
+	    }, function(a, b) { // sort function for key order
+	    	return 1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio)); 
 	    });
 	    if (inner_query.length > 1) {
 	    	output = "(" + inner_query.join(" | ") + ")";

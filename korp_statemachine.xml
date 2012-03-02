@@ -6,17 +6,18 @@
     <script><![CDATA[
     
         function kwicSearch(page) {
-            if(In("results_lemgram") ) { 
-                $.log("conf", $.sm.getConfiguration());
-                $("#result-container").korptabs("select", 0)
-                $.bbq.pushState({"result-container" : 0})
-            }
+            //if(In("results_lemgram") ) { 
+            //    $.log("conf", $.sm.getConfiguration());
+            //    $("#result-container").korptabs("select", 0)
+            //    $.bbq.pushState({"result-container" : 0})
+            //}
             simpleSearch.resetView();
             kwicResults.showPreloader();
+            lemgramResults.showPreloader();
             
             kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
             statsProxy.makeRequest($("#cqp_string").val());
-            
+            lemgramProxy.relationsWordSearch($("#simple_text").val());
         }
     
         function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
@@ -149,12 +150,13 @@
                     <onexit>
                         <script>
                             $('#results-wrapper').fadeIn();
+<!--                             $('#welcome').fadeOut(); -->
                         </script>
                     </onexit>
                     
                     <transition event="submit" target="results_kwic" cond="($.bbq.getState('result-container', true) || 0) === 0" />
-                    <transition event="submit" target="results_lemgram" cond="($.bbq.getState('result-container', true)) === 1" />
-                    <transition event="submit" target="results_stats" cond="($.bbq.getState('result-container', true)) === 2" />
+                    <transition event="submit" target="results_stats" cond="($.bbq.getState('result-container', true)) === 1" />
+                    <transition event="submit" target="results_lemgram" cond="($.bbq.getState('result-container', true)) === 2" />
                     
                 </state>
                 

@@ -20,6 +20,8 @@ settings.defaultLanguage = "sv";
  * ATTRIBUTES
  */
 
+settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
+
 settings.defaultOptions = {
 	"is" : "is",
 	"is_not" : "is_not",

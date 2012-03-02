@@ -79,7 +79,7 @@ util.lemgramToString = function(lemgram, appendIndex) {
 	}
 	else { // missing from saldo, and has the form word_NN instead.
 		var concept = lemgram.split("_")[0];
-		var type = lemgram.split("_")[1];
+		var type = lemgram.split("_")[1].toLowerCase();
 	}
 	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", 
 			[concept, infixIndex, type, util.getLocaleString(type)]);

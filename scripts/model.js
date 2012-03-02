@@ -164,13 +164,14 @@ var LemgramProxy = {
 	relationsSearch : function(lemgram) {
 		var self = this;
 		var corpus = getSelectedCorpora();
-		$.ajax({
-			url: settings.cgi_script,
-			data : {
+		var data = {
 				command : "relations",
 				lemgram : lemgram,
 				corpus : $.map(corpus, function(item){return item.toUpperCase();})
-			},
+			};
+		$.ajax({
+			url: settings.cgi_script,
+			data : data,
 			beforeSend : function(jqXHR, settings) {
 				$.log("before relations send", settings);
 				self.prevRequest = settings;
@@ -184,6 +185,34 @@ var LemgramProxy = {
 			success : function(data) {
 				$.log("relations success", data);
 				lemgramResults.renderResult(data, lemgram);
+			}	
+		});
+	},
+	
+	relationsWordSearch : function(word) {
+		var self = this;
+		var corpus = getSelectedCorpora();
+		var data = {
+				command : "relations",
+				word : word,
+				corpus : $.map(corpus, function(item){return item.toUpperCase();})
+			};
+		$.ajax({
+			url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_word.cgi",
+			data : data,
+			beforeSend : function(jqXHR, settings) {
+				$.log("before relations send", settings);
+				self.prevRequest = settings;
+//					if($("#results-lemgram").is(":visible"))
+//						util.setJsonLink(settings);
+			},
+			error : function(data) {
+				$.log("relationsearch abort", arguments);
+				lemgramResults.hidePreloader();
+			},
+			success : function(data) {
+				$.log("relations success", data);
+				lemgramResults.renderResult(data, word);
 			}	
 		});
 	},

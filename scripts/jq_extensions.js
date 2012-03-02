@@ -128,14 +128,60 @@
 })(jQuery);
 
 
-jQuery.reduce = function(array, fn) {
-	var acc;
-	var build = function(i, x) {
-		acc = i === 0 ? x : fn(acc, x);
-	};
-	$.each(array, build);
-	return acc;
+//jQuery.reduce = function(array, fn) {
+//	var acc;
+//	var build = function(i, x) {
+//		acc = i === 0 ? x : fn(acc, x);
+//	};
+//	$.each(array, build);
+//	return acc;
+//};
+
+/**
+ * Copyright (c) Mozilla Foundation http://www.mozilla.org/
+ * This code is available under the terms of the MIT License
+ */
+jQuery.reduce = function(array, fun /*, initial*/) {
+	
+    var len = array.length >>> 0;
+    if (typeof fun != "function") {
+        throw new TypeError();
+    }
+
+    // no value to return if no initial value and an empty array
+    if (len == 0 && arguments.length == 1)
+        throw new TypeError();
+
+    var i = 0;
+    if (arguments.length >= 3) {
+        var rv = arguments[2];
+    }
+    else {
+        do {
+            if (i in array) {
+                var rv = array[i++];
+                break;
+            }
+
+            // if array contains no values, no initial value to return
+            if (++i >= len) {
+                throw new TypeError();
+            }
+        }
+        while (true);
+    }
+
+    for (; i < len; i++) {
+        if (i in array) {
+            rv = fun.call(null, rv, array[i], i, array);
+        }
+    }
+
+    return rv;
 };
+
+
+
 
 jQuery.all = function(array) {
 	return jQuery.reduce (array, function(a1, a2) {
@@ -312,6 +358,18 @@ $.fn.uncover = function() {
 $.fn.quickLocalize = function() {
 	util.localize(this.selector);
 	return this;
-}
+};
+
+jQuery.sortedEach = function(obj, eachFunc, sortFunc) {
+	var keys = $.keys(obj);
+	
+	if(sortFunc) keys.sort(sortFunc);
+	else keys.sort();
+	
+	$.each(keys, function(i, key) {
+		return eachFunc(key, obj[key]);
+	});
+	
+};
 
 

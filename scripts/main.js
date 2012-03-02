@@ -150,6 +150,40 @@ var currentMode;
 			$(this).triggerHandler( 'change' );
 		});
 		
+		
+		function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
+		    var outCorpora = Array();
+		    
+		    // Go down the alley to the last subfolder
+		    while(folderOrCorpus.contains(".")) {
+		         var posOfPeriod = folderOrCorpus.indexOf(".");
+		         var leftPart = folderOrCorpus.substr(0, posOfPeriod);
+		         var rightPart = folderOrCorpus.substr(posOfPeriod+1);
+		         if(lastLevel[leftPart]) {
+		             lastLevel = lastLevel[leftPart];
+		             folderOrCorpus = rightPart;
+		         } else {
+	            	 break;
+	             }
+		    }
+		    
+		    if (lastLevel[folderOrCorpus]) {
+		        // Folder
+		        // Continue to go through any subfolders
+		        $.each(lastLevel[folderOrCorpus], function(key, val) {
+		            if(key != "title" && key != "contents" && key != "description")
+		                outCorpora.extend(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
+		        });
+		        // And add the corpora in this folder level
+		        outCorpora.extend(lastLevel[folderOrCorpus]["contents"]);
+		    } else {
+                // Corpus
+                outCorpora.push(folderOrCorpus);
+		    }
+		    return outCorpora;
+		}
+		
+		
 		function onHashChange(event, isInit) {
 			var prevFragment = $.bbq.prevFragment || {};
 			var e = $.bbq;
@@ -189,7 +223,7 @@ var currentMode;
 			var corpus = e.getState("corpus");
 			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
 				var corp_array = corpus.split(',');
-				var processed_corp_array = Array();
+				var processed_corp_array = [];
 				$.each(corp_array, function(key, val) {
 				    processed_corp_array.extend(getAllCorporaInFolders(settings.corporafolders, val));
 				});
@@ -199,37 +233,6 @@ var currentMode;
 				simpleSearch.enableSubmit();
 			}
 			
-			function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
-			    var outCorpora = Array();
-			    
-			    // Go down the alley to the last subfolder
-			    while(folderOrCorpus.contains(".")) {
-			         var posOfPeriod = folderOrCorpus.indexOf(".");
-			         var leftPart = folderOrCorpus.substr(0, posOfPeriod);
-			         var rightPart = folderOrCorpus.substr(posOfPeriod+1);
-			         if(lastLevel[leftPart]) {
-			             lastLevel = lastLevel[leftPart];
-			             folderOrCorpus = rightPart;
-			         } else {
-			             break;   
-			         }
-			    }
-			    
-			    if (lastLevel[folderOrCorpus]) {
-			        // Folder
-			        // Continue to go through any subfolders
-			        $.each(lastLevel[folderOrCorpus], function(key, val) {
-			            if(key != "title" && key != "contents" && key != "description")
-			                outCorpora.extend(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
-			        });
-			        // And add the corpora in this folder level
-			        outCorpora.extend(lastLevel[folderOrCorpus]["contents"]);
-			    } else {
-                    // Corpus
-                    outCorpora.push(folderOrCorpus);
-			    }
-			    return outCorpora;
-			}
 			
 			function showAbout() {
 				$("#about_content").dialog({

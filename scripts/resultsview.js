@@ -625,26 +625,41 @@ var LemgramResults = {
 		this.parent(tabSelector, resultSelector);
 		this.resultDeferred = $.Deferred();
 		this.proxy = lemgramProxy;
+
+		this.order = {  //		"_" represents the actual word in the order
+			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h, , "SS_h,_".split(",")
+			nn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
+//				pn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
+			av : [[], "_,AT_h".split(",")],
+			pp : [[], "_,PA_d".split(",")]
+		};
+		
+		
+		
 	},
 	
-	renderResult : function(data, lemgram) {
+	renderResult : function(data, query) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
 		$("#results-lemgram").empty();
-		if(data.relations){
-			this.renderTables(lemgram, data.relations);
+		if(!data.relations){
+			this.showNoResults();
+			this.resultDeferred.reject();
+		} else if(util.isLemgramId(query)) {
+			this.renderTables(query, data.relations);
 			this.resultDeferred.resolve();
 		}
 		else {
-			this.showNoResults();
-			this.resultDeferred.reject();
+			this.renderWordTables(query, data.relations);
+			this.resultDeferred.resolve();
+			
 		}
 		
 	},
 	
-	renderHeader : function(wordClass) {
+	renderHeader : function(wordClass, sections) {
 		var colorMapping = {
 				SS : "color_blue", 
 				OBJ : "color_purple", 
@@ -653,8 +668,7 @@ var LemgramResults = {
 				AT : "color_azure", 
 				ET : "color_red",
 				PA : "color_green"};
-		
-		$(".lemgram_section").each(function(i) {
+		$(".tableContainer:last .lemgram_section").each(function(i) {
 //			var $parent = $("<div class='lemgram_help' />").prependTo(this);
 			var $parent = $(this).find(".lemgram_help");
 			
@@ -666,9 +680,9 @@ var LemgramResults = {
 					.appendTo($parent);
 					if(i > 0) {
 						var altLabel = {
-							"av" : "NN",
-							"nn" : "VB",
-							"pp" : "NN"
+							"av" : "nn",
+							"nn" : "vb",
+							"pp" : "nn"
 						}[wordClass]; 
 							
 						cell.attr("rel", altLabel).text(util.getLocaleString(altLabel).capitalize());
@@ -677,42 +691,101 @@ var LemgramResults = {
 					.css("border-color", $(this).css("background-color"));
 				}
 				else {
-					$($.format("<span><b>%s</b></span>", $(this).data("word")))
+					$($.format("<span class='hit'><b>%s</b></span>", $(this).data("word")))
 					.appendTo($parent);
 				}
 					
 			});
 //			$(".explanation").localeKey("lemgram_explan_" + i);
 		}).append("<div style='clear:both;'/>");
-		$("<span><input id='wordclassChk' type='checkbox' /></span>")
-		.append($("<label>", {"for" : "wordclassChk"}).localeKey("show_wordclass")).prependTo("#results-lemgram")
-		.change(function() {
-			if($(this).find("#wordclassChk").is(":checked")) {
-				$("#results-lemgram .wordclass_suffix").show();
-			}
-			else {
-				$("#results-lemgram .wordclass_suffix").hide();
-			}
-			
-		}).filter("label").css("margin-left", "5px");
 		
 		
 	},
 	
+	renderWordTables : function(word, data) {
+		var self = this;
+		
+		$.log("renderWordTables", word, data);
+		
+		var wordlist = $.map(data, function(item) {
+			var output = [];
+			if(item.head.split("_")[0] == word) {
+				output.push(item.head);
+			} 
+			if(item.dep.split("_")[0] == word) {
+				output.push(item.dep);
+			}
+			return output;
+		});
+		
+		
+		var unique_words = [];
+		$.each(wordlist, function(i, word) {
+			if($.inArray(word, unique_words) == -1)
+				unique_words.push(word);
+		});
+		
+		$.log("renderWordTables", unique_words);
+
+		$.each(unique_words, function(i, currentWd) {
+			var wordClass = currentWd.split("_")[1].toLowerCase();
+			function getRelType(item) {
+				if(item.dep == currentWd) return item.rel + "_h";
+				else if(item.head == currentWd) return item.rel + "_d";
+				else return false;
+			}
+			self.drawTable(currentWd, wordClass, data, getRelType);
+			self.renderHeader(wordClass);
+		});
+		
+		
+		$(".lemgram_result .wordclass_suffix").hide();
+		
+		$(".tableContainer:odd").css("background-color", settings.primaryLight);
+		this.drawChk();
+		this.hidePreloader();
+	},
+	
 	renderTables : function (lemgram, data) {
 		var self = this;
-//			"_" represents the actual word in the order
-		var order = {
-			vb : ["SS_d,_,OBJ_d,ADV_d".split(",")], //OBJ_h, , "SS_h,_".split(",")
-			nn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
-//			pn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
-			av : [[], "_,AT_h".split(",")],
-			pp : [[], "_,PA_d".split(",")]
-		};
 		
 		var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
 		
-		if(order[wordClass] == null) {
+		function getRelType(item) {
+			if(item.dep == lemgram) return item.rel + "_h";
+			else return item.rel + "_d";
+		}
+		
+		this.drawTable(lemgram, wordClass, data, getRelType);
+//		table.appendTo("#results-lemgram");
+		$(".lemgram_result .wordclass_suffix").hide();
+		
+		this.renderHeader(wordClass);
+		this.drawChk();
+		this.hidePreloader();
+		
+	},
+	
+	drawChk : function() {
+		$("<span><input id='wordclassChk' type='checkbox' /></span>")
+		.append($("<label>", {"for" : "wordclassChk"}).localeKey("show_wordclass"))
+		.change(function() {
+			if($(this).find("#wordclassChk").is(":checked")) {
+				$(".lemgram_result .wordclass_suffix").show();
+			}
+			else {
+				$(".lemgram_result .wordclass_suffix").hide();
+			}
+			
+		})
+		.appendTo(".tableContainer:first")
+		.filter("label").css("margin-left", "5px");
+		
+	},
+	
+	drawTable : function(token, wordClass, data, relTypeFunc) {
+		var self = this;
+		if(this.order[wordClass] == null) {
 			this.showNoResults();
 			return;
 		}
@@ -723,18 +796,15 @@ var LemgramResults = {
 			return {"i" : i, "type" : type};
 		}
 		
-		function getRelType(item) {
-			if(item.dep == lemgram) return item.rel + "_h";
-			else return item.rel + "_d";
-		}
-//		function getRelType(item) {return item.rel;}
 		
 		var orderArrays = [[], [], []];
 		
 		$.each(data, function(index, item) {
-			$.each(order[wordClass], function(i, rel_type_list) {
+			$.each(self.order[wordClass], function(i, rel_type_list) {
 				var list = orderArrays[i];
-				var ret = inArray(getRelType(item), rel_type_list);
+				var rel = relTypeFunc(item);
+				if(rel === false) return;
+				var ret = inArray(rel, rel_type_list);
 				if(ret.i == -1) {
 					return;
 				}
@@ -743,8 +813,6 @@ var LemgramResults = {
 				list[ret.i].push(item); 
 			});
 		});
-//		$.log("orderArrays", orderArrays[1]);
-		
 		$.each(orderArrays, function(i, unsortedList) {
 			
 			$.each(unsortedList, function(_, list) {
@@ -754,9 +822,12 @@ var LemgramResults = {
 					});
 				}
 			});
-			if(order[wordClass][i] && unsortedList.length) {
-				var toIndex = $.inArray("_", order[wordClass][i]);
-				unsortedList.splice(toIndex, 0, {"word" : lemgram.split("..")[0].replace(/_/g, " ")});
+			if(self.order[wordClass][i] && unsortedList.length) {
+				var toIndex = $.inArray("_", self.order[wordClass][i]);
+				if(util.isLemgramId(token))
+					unsortedList.splice(toIndex, 0, {"word" : token.split("..")[0].replace(/_/g, " ")});
+				else
+					unsortedList.splice(toIndex, 0, {"word" : util.lemgramToString(token)});
 			}
 			unsortedList = $.grep ( unsortedList, function(item, index){
 				return Boolean(item);
@@ -764,11 +835,13 @@ var LemgramResults = {
 			//$.log("unsortedList", unsortedList.length, unsortedList);
 			
 		});
-		$("#lemgramResultsTmpl").tmpl(orderArrays, {lemgram : lemgram})
+		var container = $("<div>", {"class" : "tableContainer"}).appendTo("#results-lemgram");
+		$("#lemgramResultsTmpl").tmpl(orderArrays, {lemgram : token})
 		.find(".example_link").addClass("ui-icon ui-icon-document")
 		.css("cursor", "pointer")
 		.click($.proxy(self.onClickExample, self)).end()
-		.appendTo("#results-lemgram");
+		.appendTo(container);
+//		.appendTo("#results-lemgram");
 		
 		$(".enumerate").each(function() {
 			$(this).text($(this).closest("tr").index() + 1 + ".");
@@ -787,12 +860,8 @@ var LemgramResults = {
 			$(this).html(prefix + label);
 			
 		});
-		$("#results-lemgram .wordclass_suffix").hide();
 		
-		
-		this.renderHeader(wordClass);
-		//$('#results-wrapper').show();
-		this.hidePreloader();
+//		self.renderHeader(wordClass);
 	},
 	
 	onClickExample : function(event) {
@@ -1230,12 +1299,13 @@ var StatsResults = {
 	},
 	
 	resizeGrid : function() {
+		if(!this.grid) return;
 		var widthArray = $(".slick-header-column").map(function(item) {
 			return $(this).width();
 		});
 		var tableWidth = $.reduce(widthArray, function(a, b) {
 			return a + b;
-		});
+		}, 100);
 //		tableWidth += 20;
 		
 		var parentWidth = $("body").width() - 65;
