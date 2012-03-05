@@ -45,13 +45,13 @@ $.extend( $.ui.autocomplete.prototype, {
 
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
-	
 	if(typeof options === "string" && options == "abort") {
-		$.log("autocomplete hide");
+		$.log("autocomplete abort", selector);
 		lemgramProxy.abort();
 		selector.preloader("hide");
 		return;
 	}
+	$.log("korp_autocomplete init");
 	
 	options = $.extend({
 		type : "lem",

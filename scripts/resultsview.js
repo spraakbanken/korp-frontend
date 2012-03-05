@@ -705,8 +705,6 @@ var LemgramResults = {
 	renderWordTables : function(word, data) {
 		var self = this;
 		
-		$.log("renderWordTables", word, data);
-		
 		var wordlist = $.map(data, function(item) {
 			var output = [];
 			if(item.head.split("_")[0] == word) {
@@ -725,8 +723,6 @@ var LemgramResults = {
 				unique_words.push(word);
 		});
 		
-		$.log("renderWordTables", unique_words);
-
 		$.each(unique_words, function(i, currentWd) {
 			var wordClass = currentWd.split("_")[1].toLowerCase();
 			function getRelType(item) {
