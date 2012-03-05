@@ -1123,6 +1123,7 @@ a.relStat:hover {
 .lemgram_section {
 	display : inline-block;
 	margin-right : 30px;
+	padding : 10px;
 }
 
 .tableContainer {

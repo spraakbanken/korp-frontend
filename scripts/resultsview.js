@@ -778,7 +778,7 @@ var LemgramResults = {
 			}
 			
 		})
-		.appendTo(".tableContainer:first")
+		.appendTo(".lemgram_help:first")
 		.filter("label").css("margin-left", "5px");
 		
 	},
