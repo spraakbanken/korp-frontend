@@ -221,6 +221,11 @@ settings.corporafolders.fisk = {
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan Institutet för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Institutet för de inhemska språken och Göteborgs universitet."
 };
 
+settings.corporafolders.fisk.blogs = {
+	title : "Bloggtexter",
+	contents : ["fsbbloggvuxna"]
+};
+
 settings.corporafolders.fisk.essayistic = {
 	title : "Essäistisk litteratur",
 	contents : ["fsbessaistik"]
@@ -324,6 +329,37 @@ settings.corporafolders.magazines = {
 /*
  * CORPORA
  */
+
+settings.corpora.fsbbloggvuxna = {
+	title : "Vuxna bloggare",
+	description : "",
+	languages : {
+		FSBBLOGGVUXNA : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		blog_title : {label : "blog_title"},
+		blog_url : {label : "blog_url", type : "url"},
+		blog_age : {label : "author_age"},
+		blog_city : {label : "city"},
+		post_title : {label : "post_title"},
+		post_date : {label : "date"},
+		post_tags : {label : "tags", type : "set"},
+		post_url : {label : "post_url", type : "url"}
+	}
+};
 
 settings.corpora.fsbskonlit = {
 	title : "Skönlitteratur 1970–2011",
