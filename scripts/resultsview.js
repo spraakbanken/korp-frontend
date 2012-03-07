@@ -732,12 +732,15 @@ var LemgramResults = {
 			}
 			self.drawTable(currentWd, wordClass, data, getRelType);
 			self.renderHeader(wordClass);
+			$(".tableContainer:last").prepend($("<div>", {"class" : "header"}).html(util.lemgramToString(currentWd)))
+			.find(".hit .wordclass_suffix").hide();
+			
 		});
 		
 		
 		$(".lemgram_result .wordclass_suffix").hide();
 		
-		$(".tableContainer:odd").css("background-color", settings.primaryLight);
+//		$(".tableContainer:odd").css("background-color", settings.primaryLight);
 		this.drawChk();
 		this.hidePreloader();
 	},
@@ -763,7 +766,7 @@ var LemgramResults = {
 	},
 	
 	drawChk : function() {
-		$("<span><input id='wordclassChk' type='checkbox' /></span>")
+		$("<div><input id='wordclassChk' type='checkbox' /></div>").css("margin-bottom", "10px")
 		.append($("<label>", {"for" : "wordclassChk"}).localeKey("show_wordclass"))
 		.change(function() {
 			if($(this).find("#wordclassChk").is(":checked")) {
@@ -774,7 +777,7 @@ var LemgramResults = {
 			}
 			
 		})
-		.appendTo(".lemgram_help:first")
+		.prependTo("#results-lemgram")
 		.filter("label").css("margin-left", "5px");
 		
 	},

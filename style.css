@@ -615,7 +615,7 @@ table {
 
 
 .ui-tabs .ui-tabs-nav li a {
-	padding-top : 0.4em !important;
+	padding-top : 0.3em !important;
 	padding-bottom : 0.4em !important;
 }
 
@@ -1123,13 +1123,33 @@ a.relStat:hover {
 .lemgram_section {
 	display : inline-block;
 	margin-right : 30px;
-	padding : 10px;
 }
 
 .tableContainer {
 	margin-bottom : 15px;
 	display : inline-block;
 	padding : 10px;
+	
+	border : solid 1px lightgray;
+	margin-right : 20px;
+	
+	
+	background: #f9fdff; /* Old browsers */
+	background: -moz-radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%); /* FF3.6+ */
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(56%,#f9fdff), color-stop(100%,#ebf0f4)); /* Chrome,Safari4+ */
+	background: -webkit-radial-gradient(center, ellipse cover, #f9fdff 56%,#ebf0f4 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-radial-gradient(center, ellipse cover, #f9fdff 56%,#ebf0f4 100%); /* Opera 12+ */
+	background: -ms-radial-gradient(center, ellipse cover, #f9fdff 56%,#ebf0f4 100%); /* IE10+ */
+	background: radial-gradient(center, ellipse cover, #f9fdff 56%,#ebf0f4 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9fdff', endColorstr='#ebf0f4',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	
+}
+
+.tableContainer > .header {
+	color : #333;
+	font-size : 1.1em;
+	margin-bottom : 1em;
+	font-family : Lucida Grande, sans-serif;
 }
 
 .explanation {
