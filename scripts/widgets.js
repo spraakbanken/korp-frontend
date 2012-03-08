@@ -438,7 +438,7 @@ var ExtendedToken = {
 		var arg = $("#argTmpl").tmpl()
 		.find(".or_container").append(this.insertOr()).end()
 	    .find(".insert_or").click(function() {
-	    	self.insertOr().appendTo($(this).closest(".query_arg").find(".or_container")).hide().slideDown();
+	    	self.insertOr(true).appendTo($(this).closest(".query_arg").find(".or_container")).hide().slideDown();
 	    	self._trigger("change");
 	    }).end()
 	    .appendTo(this.element.find(".args"))
@@ -450,17 +450,21 @@ var ExtendedToken = {
 		self._trigger("change");
 	},
 	
-	insertOr : function() {
+	insertOr : function(usePrev) {
 		var self = this;
+		var lastVal;
+		if(usePrev)
+			lastVal = $(".arg_type:last").val();
+		$.log("lastVal", lastVal);
 		var arg_select = this.makeSelect();
+		
 		
 		var arg_value = $("<input type='text'/>").addClass("arg_value")
 		.change(function(){
 			self._trigger("change");
 		});
 		
-		
-		return $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
+		var orElem = $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
 		.find(".remove_arg")
 	    .click(function() {
 	    	$.log("remove", !$(this).css("opacity") === 0, !$(this).css("opacity") === "0");
@@ -479,6 +483,11 @@ var ExtendedToken = {
 	    		});
 	    	}
 	    }).end();
+		
+		if(lastVal)
+			arg_select.find(".arg_type").val(lastVal).trigger("change");
+		
+		return orElem;
 	},
 	
 	

@@ -19,7 +19,13 @@ var currentMode;
 	});
 	
 	var deferred_sm = $.Deferred(function( dfd ){
+		if( navigator.userAgent.match(/Android/i) && !window.XSLTProcessor) {
+			alert("Använd Firefox eller Opera för att köra Korp i Android.");
+			return;
+		}	
 		$.sm("korp_statemachine.xml", dfd.resolve);
+		
+		
 	}).promise();
 	
 	

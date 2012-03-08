@@ -631,6 +631,7 @@ var LemgramResults = {
 			nn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
 //				pn : ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
 			av : [[], "_,AT_h".split(",")],
+			jj : [[], "_,AT_h".split(",")],
 			pp : [[], "_,PA_d".split(",")]
 		};
 		
@@ -681,6 +682,7 @@ var LemgramResults = {
 					if(i > 0) {
 						var altLabel = {
 							"av" : "nn",
+							"jj" : "nn",
 							"nn" : "vb",
 							"pp" : "nn"
 						}[wordClass]; 
@@ -766,7 +768,7 @@ var LemgramResults = {
 	},
 	
 	drawChk : function() {
-		$("<div><input id='wordclassChk' type='checkbox' /></div>").css("margin-bottom", "10px")
+		$("<div><input id='wordclassChk' type='checkbox' /></div>").css({"margin-bottom" : "10px", "float" : "right"})
 		.append($("<label>", {"for" : "wordclassChk"}).localeKey("show_wordclass"))
 		.change(function() {
 			if($(this).find("#wordclassChk").is(":checked")) {
@@ -784,6 +786,7 @@ var LemgramResults = {
 	
 	drawTable : function(token, wordClass, data, relTypeFunc) {
 		var self = this;
+		$.log("drawTable", wordClass, this.order[wordClass]);
 		if(this.order[wordClass] == null) {
 			this.showNoResults();
 			return;
@@ -834,7 +837,7 @@ var LemgramResults = {
 			//$.log("unsortedList", unsortedList.length, unsortedList);
 			
 		});
-		var container = $("<div>", {"class" : "tableContainer"}).appendTo("#results-lemgram");
+		var container = $("<div>", {"class" : "tableContainer radialBkg"}).appendTo("#results-lemgram");
 		$("#lemgramResultsTmpl").tmpl(orderArrays, {lemgram : token})
 		.find(".example_link").addClass("ui-icon ui-icon-document")
 		.css("cursor", "pointer")

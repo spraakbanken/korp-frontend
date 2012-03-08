@@ -167,6 +167,7 @@
 		
 	"nn" : "noun", 
 	"av" : "adjective", 
+	"jj" : "adjective", 
 	"vb" : "verb", 
 	"pm" : "proper noun", 
 	"ab" : "adverb", 

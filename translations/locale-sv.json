@@ -165,6 +165,7 @@
     
 	"nn" : "substantiv", 
 	"av" : "adjektiv", 
+	"jj" : "adjektiv", 
 	"vb" : "verb", 
 	"pm" : "egennamn", 
 	"ab" : "adverb", 
