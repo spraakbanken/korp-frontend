@@ -3,9 +3,9 @@
 //************
 
 view.disableTab = function(index) {
-	$.log("disableTab", index);
+	c.log("disableTab", index);
 	if($("#result-container").korptabs("option", "selected") == index) {
-		$.log("iscurrentselected")
+		c.log("iscurrentselected")
 		$("#result-container li:first > a").trigger("click");
 	}
 	$("#result-container").korptabs("disable", index);
@@ -24,7 +24,7 @@ var BaseResults = {
 			this.resultError(data);
 			return false;
 		}
-		$.log("renderResults", this.proxy);
+		c.log("renderResults", this.proxy);
 		if(this.$result.is(":visible"))
 			util.setJsonLink(this.proxy.prevRequest);
 		var self = this;
@@ -37,7 +37,7 @@ var BaseResults = {
 	},
 	
 	resultError : function(data) {
-		$.log("json fetch error: " + $.dump(data.ERROR));
+		c.log("json fetch error: " + $.dump(data.ERROR));
 		this.hidePreloader();
 	},
 	
@@ -73,7 +73,7 @@ var KWICResults = {
 			self.selectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
-		$.log("initialize", this.$result.find(".sort_select"), this.$result);
+		c.log("initialize", this.$result.find(".sort_select"), this.$result);
 		this.$result.find(".sort_select").change($.proxy(this.onSortChange, this)).click(false);
 		
 	},
@@ -87,18 +87,18 @@ var KWICResults = {
 	
 	onSortChange : function(event) {
 		var opt = $(event.currentTarget).find(":selected");
-		$.log("sort", opt);
+		c.log("sort", opt);
 		if(opt.is(":first-child")) {
 			$.bbq.removeState("sort");
 		} else {
-			$.log("sort", opt.val());
+			c.log("sort", opt.val());
 			$.bbq.pushState({"sort" : opt.val()});
 		}
 	},
 	
 	onentry : function() {
 		this.centerScrollbar();
-		$.log("onentry");
+		c.log("onentry");
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
@@ -142,7 +142,7 @@ var KWICResults = {
 	},
 	
 	getPageInterval : function(page) {
-		$.log("getPageInterval", this.$result.find(".num_hits").val());
+		c.log("getPageInterval", this.$result.find(".num_hits").val());
 		var items_per_page = parseInt(this.$result.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
@@ -158,11 +158,11 @@ var KWICResults = {
 		var self = this;
 		this.prevCQP = sourceCQP;
 		
-		//$.log(data);
+		//c.log(data);
 		
 		if(!data.hits) {
 
-			$.log("no kwic results");
+			c.log("no kwic results");
 			this.showNoResults();
 			return;
 		}
@@ -181,7 +181,7 @@ var KWICResults = {
 //		else {
 //			$("#results-kwic").css("opacity", 0);
 //		}
-		$.log("corpus_results");
+		c.log("corpus_results");
 		//$("#results-kwic").show();
 		
 		this.$result.find('.num-result').html(prettyNumbers(data.hits.toString()));
@@ -401,7 +401,7 @@ var KWICResults = {
 	},
 	
 	buildPager : function(number_of_hits){
-		$.log("buildPager", this.current_page);
+		c.log("buildPager", this.current_page);
 		var items_per_page = this.$result.find(".num_hits").val();
 		this.movePager("up");
 		$.onScrollOut("unbind");
@@ -425,7 +425,7 @@ var KWICResults = {
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
-		$.log("handlePaginationClick", new_page_index, this.current_page);
+		c.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
 			
 			this.showPreloader();
@@ -525,7 +525,7 @@ var KWICResults = {
 			}
 		};
 		self.movePager("up");
-		$.log("onscrollout", upOpts.point, downOpts.point);
+		c.log("onscrollout", upOpts.point, downOpts.point);
 		$.onScrollOut(upOpts, downOpts);
 	},
 	
@@ -558,7 +558,7 @@ var ExampleResults = {
 		var self = this;
 		$.extend(opts, {
 			success : function(data) {
-				$.log("ExampleResults success", data, opts);
+				c.log("ExampleResults success", data, opts);
 				self.renderResult(data, opts.cqp);
 				util.setJsonLink(self.proxy.prevRequest);
 			},
@@ -577,7 +577,7 @@ var ExampleResults = {
 	},
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
-		$.log("handlePaginationClick", new_page_index, this.current_page);
+		c.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
 			var items_per_page = parseInt(this.$result.find(".num_hits").val());
 			
@@ -596,11 +596,11 @@ var ExampleResults = {
 	
 	onSortChange : function(event) {
 		var opt = $(event.currentTarget).find(":selected");
-		$.log("sort", opt);
+		c.log("sort", opt);
 		if(opt.is(":first-child")) {
 			$.bbq.removeState("sort");
 		} else {
-			$.log("sort", opt.val());
+			c.log("sort", opt.val());
 			this.handlePaginationClick(0, null, true);
 //			$.bbq.pushState({"sort" : opt.val()});
 		}
@@ -786,7 +786,7 @@ var LemgramResults = {
 	
 	drawTable : function(token, wordClass, data, relTypeFunc) {
 		var self = this;
-		$.log("drawTable", wordClass, this.order[wordClass]);
+		c.log("drawTable", wordClass, this.order[wordClass]);
 		if(this.order[wordClass] == null) {
 			this.showNoResults();
 			return;
@@ -834,7 +834,7 @@ var LemgramResults = {
 			unsortedList = $.grep ( unsortedList, function(item, index){
 				return Boolean(item);
 			});
-			//$.log("unsortedList", unsortedList.length, unsortedList);
+			//c.log("unsortedList", unsortedList.length, unsortedList);
 			
 		});
 		var container = $("<div>", {"class" : "tableContainer radialBkg"}).appendTo("#results-lemgram");
@@ -869,7 +869,7 @@ var LemgramResults = {
 	onClickExample : function(event) {
 		var self = this;
 		var $target = $(event.currentTarget);
-		$.log("onClickExample", $target);
+		c.log("onClickExample", $target);
 		var data = $target.parent().tmplItem().data;
 		var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 		var opts = instance.getPageInterval();
@@ -897,7 +897,7 @@ var LemgramResults = {
 	},
 	
 	onentry : function() {
-		$.log("lemgramResults.onentry", $.sm.getConfiguration());
+		c.log("lemgramResults.onentry", $.sm.getConfiguration());
 		this.resultDeferred.done(this.showWarning);
 	},
 	
@@ -1161,7 +1161,7 @@ var StatsResults = {
 		var self = this;
 		this.proxy = statsProxy;
 		$(".arcDiagramPicture").live("click", function() {
-			$.log("clicked arcDiagramPicture" );
+			c.log("clicked arcDiagramPicture" );
 			var parts = $(this).attr("id").split("__");
 			if(parts.length == 2)
 				newDataInGraph(parts[1],true);
@@ -1172,7 +1172,7 @@ var StatsResults = {
 		});
 		
 		$(".c0 .link").live("click", function() {
-			$.log("word click", $(this).data("context"), $(this).data("corpora"));
+			c.log("word click", $(this).data("context"), $(this).data("corpora"));
 //			$.bbq.pushState({search : "word|" + context})
 //			corpusChooserInstance.corpusChooser("selectItems",$(this).data("corpora"));
 			var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
@@ -1180,7 +1180,7 @@ var StatsResults = {
 			var query = $.map($(this).data("value").split(" "), function(item) {
 				return $.format("[word='%s']", item);
 			}).join(" ");
-			$.log("query", query);
+			c.log("query", query);
 			instance.makeRequest({
 				corpora : $(this).data("corpora").join(","),
 				cqp : query

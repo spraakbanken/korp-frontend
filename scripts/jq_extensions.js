@@ -317,7 +317,7 @@ $.onScrollOut = function(upOpts, downOpts) {
 		var upPointInWindow = upOpts.point > screenTop && upOpts.point < screenBottom;
 		var downPointInWindow = downOpts.point > screenTop && downOpts.point < screenBottom;
 		
-//		$.log("scroll", upPointInWindow, downPointInWindow, screenTop, upOpts.point);
+//		c.log("scroll", upPointInWindow, downPointInWindow, screenTop, upOpts.point);
 		if(upPointInWindow && downPointInWindow) {
 			activePoint = upOpts.point;
 		} else if(activePoint != upOpts.point && upPointInWindow) {

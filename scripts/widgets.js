@@ -46,12 +46,12 @@ $.extend( $.ui.autocomplete.prototype, {
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
 	if(typeof options === "string" && options == "abort") {
-		$.log("autocomplete abort", selector);
+		c.log("autocomplete abort", selector);
 		lemgramProxy.abort();
 		selector.preloader("hide");
 		return;
 	}
-	$.log("korp_autocomplete init");
+	c.log("korp_autocomplete init");
 	
 	options = $.extend({
 		type : "lem",
@@ -92,7 +92,7 @@ $.fn.korp_autocomplete = function(options) {
 			
 			var promise = lemgramProxy.sblexSearch(request.term, options.type)
 			.done(function(idArray, textstatus, xhr) {
-				$.log("sblex done", textstatus, xhr, xhr.status);
+				c.log("sblex done", textstatus, xhr, xhr.status);
 				idArray = $.unique(idArray);
 //				idArray.sort(options.sortFunction);
 				
@@ -117,7 +117,7 @@ $.fn.korp_autocomplete = function(options) {
 				
 			})
 			.fail(function() {
-				$.log("sblex fail", arguments);
+				c.log("sblex fail", arguments);
 				selector.preloader("hide");
 			});
 				
@@ -131,7 +131,7 @@ $.fn.korp_autocomplete = function(options) {
 		select: function( event, ui ) {
 			event.preventDefault();
 			var selectedItem = ui.item.value;
-			$.log("autocomplete select", options.select, selectedItem, ui.item.value, ui, event);
+			c.log("autocomplete select", options.select, selectedItem, ui.item.value, ui, event);
 			
 			$.proxy(options.select, selector)(selectedItem);
 		},
@@ -202,7 +202,7 @@ var KorpTabs = {
 	getCurrentInstance : function() {
 //		var ret = this.lis.filter(".ui-tabs-active").data("instance") || null; //for jquery ui 1.9
 		var ret = this.lis.filter(".ui-tabs-selected").data("instance") || null;
-		$.log("getCurrentInstance", this.lis, ret);
+		c.log("getCurrentInstance", this.lis, ret);
 		return ret;
 	}
 	
@@ -303,7 +303,7 @@ var Sidebar = {
 			.click(function() {
 				var split = util.splitLemgram(idArray[$(this).parent().index()]);
 				var id = $.format("%s..%s.%s", split); //split[0] + ".." + split[1] + "." + split[2];
-				$.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
+				c.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
 				simpleSearch.selectLemgram(id);
 			})
 			.hoverIcon("ui-icon-search");
@@ -402,7 +402,7 @@ var ExtendedToken = {
         this.element.find(".ui-icon-circle-close") //close icon
         .click(function() {
         	if($(this).css("opacity") === "0") return;
-        	$.log("close");
+        	c.log("close");
         	self.element.remove();
         	self._trigger("close");
         });
@@ -431,7 +431,7 @@ var ExtendedToken = {
 	},
 	
 	insertArg : function(animate) {
-		$.log("insertArg");
+		c.log("insertArg");
 		var self = this;
 		
 	    
@@ -455,7 +455,7 @@ var ExtendedToken = {
 		var lastVal;
 		if(usePrev)
 			lastVal = $(".arg_type:last").val();
-		$.log("lastVal", lastVal);
+		c.log("lastVal", lastVal);
 		var arg_select = this.makeSelect();
 		
 		
@@ -467,7 +467,7 @@ var ExtendedToken = {
 		var orElem = $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
 		.find(".remove_arg")
 	    .click(function() {
-	    	$.log("remove", !$(this).css("opacity") === 0, !$(this).css("opacity") === "0");
+	    	c.log("remove", !$(this).css("opacity") === 0, !$(this).css("opacity") === "0");
 	    	if($(this).css("opacity") === "0") return;
 	    	var arg = $(this).closest(".or_arg"); 
 	    	if(arg.siblings(".or_arg").length == 0) {
@@ -519,7 +519,7 @@ var ExtendedToken = {
 		});
 		
 		var arg_opts = this.makeOptsSelect(settings.defaultOptions);
-		$.log("arg_opts", arg_opts);
+		c.log("arg_opts", arg_opts);
 		
 		return $("<div>", {"class" : "arg_selects"}).append(arg_select, arg_opts);
 	},
@@ -544,7 +544,7 @@ var ExtendedToken = {
 			var oldLower = $(this).find(".arg_value");
 			var old_ph = oldLower.attr("placeholder");
 			var old_data = oldLower.data("value");
-//			$.log("refresh", oldLower.prop("placeholder"), oldLower.attr("placeholder"));
+//			c.log("refresh", oldLower.prop("placeholder"), oldLower.attr("placeholder"));
 			var newSelects = self.makeSelect(); 
 			$(this).find(".arg_selects").replaceWith(newSelects);
 			newSelects.find(".arg_type")
@@ -574,7 +574,7 @@ var ExtendedToken = {
 		var oldOptVal = target.next().val();
 		
 		var data = target.find(":selected").data("dataProvider");
-		$.log("didSelectArgtype ", data);
+		c.log("didSelectArgtype ", data);
 		var arg_value = null;
 		switch(data.displayType) {
 		case "select":
@@ -589,7 +589,7 @@ var ExtendedToken = {
 			});
 			break;
 		case "autocomplete":
-			$.log("displayType autocomplete");
+			c.log("displayType autocomplete");
 			var type, labelFunc, sortFunc;
 			if(data.label == "saldo") {
 				type = "saldo";
@@ -605,20 +605,20 @@ var ExtendedToken = {
 				sortFunction : sortFunc,
 				type : type, 
 				select : function(lemgram) {
-					$.log("extended lemgram", lemgram, $(this));
+					c.log("extended lemgram", lemgram, $(this));
 					$(this).data("value", data.label == "baseform" ? lemgram.split(".")[0] : lemgram);
 					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
 				}
 			})
 			.change(function(event) {
-				$.log("value null");
+				c.log("value null");
 				$(this).attr("placeholder", null)
 				.data("value", null)
 				.placeholder();
 			}).blur(function() {
 				var input = this;
 				setTimeout(function() {
-					$.log("blur");
+					c.log("blur");
 					//if($(this).autocomplete("widget").is(":visible")) return;
 					if(util.isLemgramId($(input).val()) || $(input).data("value") != null)
 						$(input).removeClass("invalid_input");
@@ -673,7 +673,7 @@ var ExtendedToken = {
 					modal : true
 				});
 				$(".ui-widget-overlay").one("click", function(evt) {
-					$.log("body click");
+					c.log("body click");
 					$("#msd_popup").dialog("close");
 				});
 //				$("body")
@@ -723,7 +723,7 @@ var ExtendedToken = {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
 	    			var not_operator = obj.data.type == "set" ? "not contains" : "!=";
 	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
-	    			$.log("formatter", obj.data);
+	    			c.log("formatter", obj.data);
 	    			var formatter = op == "matches" || obj.data.displayType == "select" ? function(arg) {return arg;} : regescape;
 	    			var value = formatter(s);
 	    			op = {

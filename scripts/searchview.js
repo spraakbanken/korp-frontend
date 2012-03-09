@@ -215,7 +215,7 @@ var SimpleSearch = {
 	},
 	
 	renderSimilarHeader : function(selectedItem, data) {
-		$.log("renderSimilarHeader");
+		c.log("renderSimilarHeader");
 		var self = this;
 		
 		$("#similar_lemgrams").empty().append("<div id='similar_header' />");
@@ -302,7 +302,7 @@ var SimpleSearch = {
 	onSimpleChange : function(event) {
 		$("#simple_text").data("promise", null);
 		if(event && event.keyCode == 27) { //escape
-			$.log("key", event.keyCode);
+			c.log("key", event.keyCode);
 			return;
 		}
 		
@@ -455,7 +455,7 @@ var AdvancedSearch = {
 	    var query = $(".query_token").map(function() {
 	    	return $(this).extendedToken("getCQP");
 	    }).get().join(" ");
-	    $.log("updateCQP", query, nr_lines,$("#cqp_string"));
+	    c.log("updateCQP", query, nr_lines,$("#cqp_string"));
 	    this.setCQP(query);
 	    return query;
 	},

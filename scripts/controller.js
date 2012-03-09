@@ -22,7 +22,7 @@
 					// xml file.
 					var xmlMod = new Date(xhr.getResponseHeader("Last-Modified"));
 					
-					$.log(cookieLastMod, xmlMod);
+					c.log(cookieLastMod, xmlMod);
 					
 					function max(a, b) {
 						return a > b ? a : b;
@@ -30,11 +30,11 @@
 					
 					switch($.reduce([cookieLastMod, xmlMod], max )) {
 					case cookieLastMod:
-						$.log("scxml: running stored data");
+						c.log("scxml: running stored data");
 						self.eval(storedObj.data);
 						break;
 					case xmlMod:
-						$.log("scxml: recompiling");
+						c.log("scxml: recompiling");
 						self.compileAndEval(doc);
 						break;
 					}
@@ -76,8 +76,8 @@
 								
 								$.jStorage.set("compiled_scxml_korp", $.toJSON({data : transformedJs, time : $.now()}));
 								
-								$.log("statechart compiled and started: ");
-								$.log("compile time", new Date().getTime() - t );
+								c.log("statechart compiled and started: ");
+								c.log("compile time", new Date().getTime() - t );
 								delete t;
 								self.eval(transformedJs);
 							},transform);

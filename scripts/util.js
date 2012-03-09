@@ -124,7 +124,7 @@ util.splitSaldo = function(saldo) {
 
 util.setJsonLink = function(settings){
 	if(settings == null) {
-		$.log("failed to update json link");
+		c.log("failed to update json link");
 		return;
 	}
 	$('#json-link').attr('href', settings.url);
@@ -229,7 +229,7 @@ function loadCorpora() {
 	added_corpora_ids = [];
 	var outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
 	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
-		$.log("corpus changed", corpora);
+		c.log("corpus changed", corpora);
 		$.bbq.pushState({"corpus" : corpora.join(",")});
 		if(corpora.length) {
 			extendedSearch.refreshTokens();

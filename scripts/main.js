@@ -3,7 +3,6 @@ var currentMode;
 
 (function(){
 	var t = $.now();
-	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
 	
 	
@@ -61,13 +60,13 @@ var currentMode;
 	
 	$.when(deferred_load, chained, deferred_domReady, deferred_sm, deferred_mode).then(function(searchbar_html) {
 		$.revision = parseInt("$Rev$".split(" ")[1]);
-		$.log("preloading done, t = ", $.now() - t);
+		c.log("preloading done, t = ", $.now() - t);
 		currentMode = $.deparam.querystring().mode || "default";
 		util.browserWarn();
 		
 		$("#mode_switch").radioList({
             change : function() {
-            	$.log("changed", this);
+            	c.log("changed", this);
             	var mode = $(this).data("mode");
     			$.bbq.removeState("corpus");
     			if(mode == "default") {
@@ -82,7 +81,7 @@ var currentMode;
 		$("#searchbar").html(searchbar_html[0]);
 		
 		$("#search_history").change(function(event) {
-			$.log("select", $(this).find(":selected"));
+			c.log("select", $(this).find(":selected"));
 			location.href = $(this).find(":selected").val();
 		});
 
@@ -151,7 +150,7 @@ var currentMode;
 		});
 		
 		$(".custom_anchor").live("mouseup", function() {
-			$.log("custom click");
+			c.log("custom click");
 			$.bbq.removeState("result-container");
 			$(this).triggerHandler( 'change' );
 		});

@@ -9,7 +9,7 @@ var SearchProxy = {
 		$.ajax({
 			url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
 			success : function(data) {
-				$.log("related words success");
+				c.log("related words success");
 				
 				var lemgrams = [];
 				$.each(data, function(i, item) {
@@ -24,7 +24,7 @@ var SearchProxy = {
 							return !!freqs[lemgram];
 						});
 					});
-					$.log("hasAnyFreq", hasAnyFreq, data);
+					c.log("hasAnyFreq", hasAnyFreq, data);
 					if(hasAnyFreq)
 						simpleSearch.renderSimilarHeader(lemgram, data);
 					else
@@ -62,7 +62,7 @@ var KWICProxy = {
 		}, kwicResults.getPageInterval(page), options);
 		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
-		$.log("kwicProxy.makeRequest", o.cqp);
+		c.log("kwicProxy.makeRequest", o.cqp);
 		
 //		kwicResults.showPreloader();
 		
@@ -126,7 +126,7 @@ var KWICProxy = {
 				self.prevRequest = settings;
 			},
 			success: function(data, status, jqxhr) {
-				$.log("kwic result", data);
+				c.log("kwic result", data);
 				self.queryData = data.querydata; 
 				o.success(data, o.cqp);
 			},
@@ -173,17 +173,17 @@ var LemgramProxy = {
 			url: settings.cgi_script,
 			data : data,
 			beforeSend : function(jqXHR, settings) {
-				$.log("before relations send", settings);
+				c.log("before relations send", settings);
 				self.prevRequest = settings;
 //					if($("#results-lemgram").is(":visible"))
 //						util.setJsonLink(settings);
 			},
 			error : function(data) {
-				$.log("relationsearch abort", arguments);
+				c.log("relationsearch abort", arguments);
 				lemgramResults.hidePreloader();
 			},
 			success : function(data) {
-				$.log("relations success", data);
+				c.log("relations success", data);
 				lemgramResults.renderResult(data, lemgram);
 			}	
 		});
@@ -201,17 +201,17 @@ var LemgramProxy = {
 			url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_word.cgi",
 			data : data,
 			beforeSend : function(jqXHR, settings) {
-				$.log("before relations send", settings);
+				c.log("before relations send", settings);
 				self.prevRequest = settings;
 //					if($("#results-lemgram").is(":visible"))
 //						util.setJsonLink(settings);
 			},
 			error : function(data) {
-				$.log("relationsearch abort", arguments);
+				c.log("relationsearch abort", arguments);
 				lemgramResults.hidePreloader();
 			},
 			success : function(data) {
-				$.log("relations success", data);
+				c.log("relations success", data);
 				lemgramResults.renderResult(data, word);
 			}	
 		});
@@ -246,7 +246,7 @@ var LemgramProxy = {
 		        	dfd.resolve(output, textStatus, xhr);
 		        },
 		        error : function(jqXHR, textStatus, errorThrown) {
-		        	$.log("sblex error", jqXHR, textStatus, errorThrown);
+		        	c.log("sblex error", jqXHR, textStatus, errorThrown);
 		        	dfd.reject();
 		        }
 		        
@@ -297,13 +297,13 @@ var StatsProxy = {
 				self.prevRequest = settings;
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
-				$.log("gettings stats error, status: " +	 textStatus);
+				c.log("gettings stats error, status: " +	 textStatus);
 				statsResults.hidePreloader();
 //				statsResults.showError();
 			},
 			success : function(data) {
 				if(data.ERROR != null) {
-					$.log("gettings stats failed with error", $.dump(data.ERROR));
+					c.log("gettings stats failed with error", $.dump(data.ERROR));
 					statsResults.showError();
 					return;
 				}

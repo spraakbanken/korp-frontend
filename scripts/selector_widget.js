@@ -139,7 +139,7 @@ var hp_corpusChooser = {
 			var totNumberOfTokens = 0;
                         var totNumberOfSentences = 0;
 			checked_checkboxes.each(function(key, corpItem) {
-				//$.log(">>>>>>" + $(this).attr('id'));
+				//c.log(">>>>>>" + $(this).attr('id'));
 				var corpusID = $(this).attr('id').slice(9);
 				totNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
 				var numSen = parseInt(settings.corpora[corpusID]["info"]["Sentences"]);
@@ -195,7 +195,7 @@ var hp_corpusChooser = {
 			
 			$(".scroll_checkboxes").unbind("mousedown");
 			$(".scroll_checkboxes").mousedown(function(e) {
-				$.log(".scroll_checkboxes clicked");
+				c.log(".scroll_checkboxes clicked");
 				$(this).disableSelection();
 				if($(this).siblings(".popupchecks").css("display") == "block") {
 					$(".popupchecks").fadeOut('fast');
