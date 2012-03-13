@@ -65,6 +65,8 @@
 		
 		
 		<script type="text/javascript" src="common_lib/jquery.hoverIntent.js"></script>
+		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
+		<script type="text/javascript" src="lib/g.line-min.js"></script>
 		
 		<!-- <script type="text/javascript" src="lib/jquery.ba-resize.min.js"></script> -->
 		
@@ -176,7 +178,7 @@
 								</div>
 							</div>
 							<div id="results-stats">
-<!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->
+<!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->   <div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div>
 								<div id="myGrid" style="width:600px;height:500px;"></div>
 								<div id="exportStatsSection">
 									<br/><br/><select id="kindOfData">
@@ -187,7 +189,8 @@
 										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
 										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
 									</select>
-									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>									
+									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
+									
 								</div>
 								
 <!-- 								<div id="leftStatsTable" style="float:left; margin-left:-8"></div> -->
@@ -209,6 +212,7 @@
 		<div id="click_cover"></div>
 		<div id="about_content" title="Om Korp" style="display : none;"></div>
 		<div id="msd_popup" title="Morfosyntaktisk beskrivning" style="display : none;"></div>
+		<div id="line_diagram_window"><div id="linecontainer" style="width:470px; height:400px"></div></div>
 			
 		<!-- for showing full deprel locale names.
 		{{else $index == "deprel"}}

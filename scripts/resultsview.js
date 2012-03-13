@@ -1224,6 +1224,7 @@ var StatsResults = {
 			else
 				window.open( "data:text/csv;charset=latin1," + escape(output));
 		});
+		
 	},
 	
 	renderResult : function(columns, data) {
@@ -1296,6 +1297,65 @@ var StatsResults = {
 		
 //		grid.setSortColumn("total", true);
 		$(".slick-header-column:nth(1)").click().click();
+		
+		if(statsResults.rLine != undefined)
+		  statsResults.rLine.remove();
+		
+		statsResults.rLine = null;
+		
+		// Line Diagram
+		$("#showLineDiagram").click(function() {
+		    $.log(statsResults.savedData.corpora);
+		    
+		    if(statsResults.rLine)
+		      statsResults.rLine.remove();
+		    
+		    statsResults.rLine = Raphael("linecontainer"),
+                txtattr = { font: "12px sans-serif" };
+		    
+		    var ys = new Array();
+		    var nulls = new Array();
+		    var xs = new Array();
+		    
+		    statsResults.corpusNames = new Array();
+		    $.each(statsResults.savedData.corpora, function(key, corpus) {
+		        statsResults.corpusNames.push(key);
+		    });
+		    
+		    statsResults.corpusNames.sort();
+		    
+		    //$.each(statsResults.savedData.corpora, function(key, corpus) {
+		    for(var i = 0; i < statsResults.corpusNames.length; i++) {
+                ys.push(statsResults.savedData.corpora[statsResults.corpusNames[i]].sums.relative);
+                xs.push(i);
+                nulls.push(0);
+		    }
+            //});
+            
+                statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
+                    //if(this.value != 0) {
+                        // Find the correct corpus
+                            this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
+                    //}
+                }, function() {
+                    //this.symbol.attr({'fill' : '#444'});
+                    //if(this.value != 0) {
+                        this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+                    //}
+                });
+                
+		    $("circle[fill=#1751a7]").hide();
+            
+    		$("#line_diagram_window").dialog({
+    			width : 500,
+    			height : 500,
+    			title : "Hit per million tokens",
+    			resize: function(){},
+    			resizeStop: function(){}
+    		}).css("opacity", 0);
+    		$("#line_diagram_window").fadeTo(400,1);
+    		$("#line_diagram_window").find("a").blur();
+		});
 		
 		this.hidePreloader();
 	},
