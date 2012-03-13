@@ -1349,7 +1349,7 @@ var StatsResults = {
     		$("#line_diagram_window").dialog({
     			width : 500,
     			height : 500,
-    			title : "Hit per million tokens",
+    			title : "Träffar per miljon token",
     			resize: function(){},
     			resizeStop: function(){}
     		}).css("opacity", 0);
