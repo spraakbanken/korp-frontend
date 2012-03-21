@@ -4,6 +4,7 @@
 	"english" : "English",
 	"modern_texts" : "Modern texts",
 	"parallel_texts" : "Parallel texts",
+	"Faroese_texts" : "Faroese texts",
 	"search_history" : "Search history",
 	"about" : "About Korp",
 	"about_body" : "Korp is the concordance search tool of Språkbanken (The Swedish Language Bank). For more information, comments or suggestions, <a href='mailto:sb-info@svenska.gu.se'>contact us</a>.",
@@ -46,8 +47,9 @@
 	"one_of" : "any",
 	"error_occurred" : "An error occurred",
 	
-	"match" : "Match",
-	"following_rules" : "of the following rules",
+	"following_text" : "Match any of the following rules:",
+	"stats_hit" : "Hit",
+	"stats_total" : "Total",
 	
 	"simple" : "Simple",
 	"detailed" : "Extended",
@@ -134,6 +136,16 @@
 	"post_title" : "post title",
 	"tags" : "tags",
 	"post_url" : "post address",
+	
+	"page" : "page",
+	"author_type" : "author type",
+	"gender" : "gender",
+	"journalist" : "journalist",
+	"reader" : "reader",
+	"male" : "male",
+	"female" : "female",
+	"unknown" : "unknown",
+	"male_female" : "both",
 	
 	"statistics" : "Statistics",
 	

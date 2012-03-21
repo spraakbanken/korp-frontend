@@ -98,7 +98,7 @@ var SimpleSearch = {
 		this.onSimpleChange();
 		$("#similar_lemgrams").hide();
 		this.savedSelect = null;
-		$("#simple_text").bind("keydown.autocomplete", function(event) {
+		var textinput = $("#simple_text").bind("keydown.autocomplete", function(event) {
 			var keyCode = $.ui.keyCode;
 			if(!self.isVisible() || $("#ui-active-menuitem").length !== 0) return;
 				
@@ -108,33 +108,34 @@ var SimpleSearch = {
 					self.onSubmit();
 				break;
 			}
-		})
-		.korp_autocomplete({
-			type : "lem",
-			select : $.proxy(this.selectLemgram, this),
-			middleware : function(request, idArray) {
-				var dfd = $.Deferred();
-				lemgramProxy.lemgramCount(idArray, self.isSearchPrefix(), self.isSearchSuffix()).done(function(freqs) {
-					delete freqs["time"];
-					idArray.sort(function(first, second) {
-						return (freqs[second] || 0) - (freqs[first] || 0);
-					});
-					
-					var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
-					var listItems = $.map(idArray, function(item, i) {
-						return {
-							label : labelArray[i],
-							value : item,
-							input : request.term,
-							enabled : item in freqs
-						};
-					});
-					
-					dfd.resolve(listItems);
-				});
-				return dfd.promise();
-			}
 		});
+		if(settings.autocomplete)
+			textinput.korp_autocomplete({
+				type : "lem",
+				select : $.proxy(this.selectLemgram, this),
+				middleware : function(request, idArray) {
+					var dfd = $.Deferred();
+					lemgramProxy.lemgramCount(idArray, self.isSearchPrefix(), self.isSearchSuffix()).done(function(freqs) {
+						delete freqs["time"];
+						idArray.sort(function(first, second) {
+							return (freqs[second] || 0) - (freqs[first] || 0);
+						});
+						
+						var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
+						var listItems = $.map(idArray, function(item, i) {
+							return {
+								label : labelArray[i],
+								value : item,
+								input : request.term,
+								enabled : item in freqs
+							};
+						});
+						
+						dfd.resolve(listItems);
+					});
+					return dfd.promise();
+				}
+			});
 		
 		$("#prefixChk, #suffixChk").click(function() {
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
@@ -164,7 +165,7 @@ var SimpleSearch = {
 			if(lemgramArray.length == 0) return;
 			lemgramArray.sort(view.lemgramSort);
 			lemgramArray = $.map(lemgramArray, function(item) {
-				return {label : util.lemgramToString(item), value : item};
+				return {label : util.lemgramToString(item, true), value : item};
 			});
 			var select = self.buildLemgramSelect(lemgramArray)
 			.appendTo("#korp-simple")
@@ -209,9 +210,9 @@ var SimpleSearch = {
 	buildLemgramSelect : function(lemgrams) {
 		$("#lemgram_select").prev("label").andSelf().remove();
 		var optionElems = $.map(lemgrams, function(item) {
-			return $.format("<option value='%(value)s'>%(label)s</option>", item);
+			return $("<option>", {value : item.value}).html(item.label).get(0);
 		});
-		return $("<select id='lemgram_select' />").html(optionElems.join("")).data("dataprovider", lemgrams);
+		return $("<select id='lemgram_select' />").html(optionElems).data("dataprovider", lemgrams);; 
 	},
 	
 	renderSimilarHeader : function(selectedItem, data) {

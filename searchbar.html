@@ -67,8 +67,8 @@
 <div class="query_arg">
 	<div class="or_container"></div>
 	<div class="arg_footer">
-		<span class="insert_or link">
-			eller
+		<span class="insert_or link" rel="localize[or]">
+			${util.getLocaleString('or')}
 		</span>
 		<div style="clear:both;" />
 	</div>
@@ -77,7 +77,7 @@
 
 <script id="orTmpl" type="text/x-jquery-tmpl">
 	<div class="or_arg">
-	<div class="arg_header">Matcha någon av följande regler:</div>
+	<div class="arg_header" rel="localize[following_text]">${util.getLocaleString('following_text')}</div>
 	<div class="left_col inline_block" vertical-align: top;">
 		<img src="img/minus.png" class="image_button remove_arg">
 	</div>

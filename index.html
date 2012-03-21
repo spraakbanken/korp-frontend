@@ -2,6 +2,8 @@
 <html>
 	<head>  
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" 
+		content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text." />
 		<link rel="stylesheet" href="lib/slickgrid/slick.grid.css" type="text/css" media="screen" charset="utf-8" />
 		<link type="text/css" href="common_lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <!-- 		<link type="text/css" href="lib/themes/Aristo/Aristo.css" rel="stylesheet" /> -->
@@ -97,7 +99,7 @@
 		
 		
 	</head>
-  	<body >
+  	<body>
 	  	<noscript>
 	  		<h2>You need JavaScript to run Korp.</h2>
 	  	</noscript>
@@ -109,14 +111,15 @@
   				<div id="mode_switch">
   					<a href="javascript:" rel="localize[modern_texts]" data-mode="default">Moderna texter</a>
   					<a href="javascript:" rel="localize[parallel_texts]" data-mode="parallel">Parallella texter</a>
+  					<a href="javascript:" rel="localize[Faroese_texts]" data-mode="faroe">Färöiska texter</a>
   				</div>
 				
 	  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
-	  			<a id="docs" href="http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning" target="_blank" rel="localize[docs]"></a>
 				<div id="languages">
 	  				<a href="javascript:" rel="localize[swedish]" data-lang="sv">Svenska</a>
 	  				<a href="javascript:" rel="localize[english]" data-lang="en">Engelska</a>
 	  			</div>
+	  			<a id="docs" href="http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning" target="_blank" rel="localize[docs]"></a>
   			</div>
   			<div id="header_left">
  				<a href=""><img src="img/korplogo.png" /></a>
@@ -144,7 +147,7 @@
 							<ul>
 								<li class="on"><a href="#results-kwic">KWIC</a></li>
 								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a></li>
-								<li><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a></li><!-- class="ui-icon ui-icon-script" -->
+								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a></li><!-- class="ui-icon ui-icon-script" -->
 							</ul>
 							<div id="results-kwic">
 								<div class="result_controls">
@@ -178,7 +181,8 @@
 								</div>
 							</div>
 							<div id="results-stats">
-<!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->   <div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div>
+<!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->   
+								<div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div>
 								<div id="myGrid" style="width:600px;height:500px;"></div>
 								<div id="exportStatsSection">
 									<br/><br/><select id="kindOfData">
@@ -189,8 +193,7 @@
 										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
 										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
 									</select>
-									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
-									
+									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>									
 								</div>
 								
 <!-- 								<div id="leftStatsTable" style="float:left; margin-left:-8"></div> -->
@@ -224,27 +227,25 @@
 			 
 			 {{html $item.defaultSetFormatter($data[$index]).outerHTML() }}
 			-->
+			
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
-		<h4 rel="localize[${$item.header}_attr]">${util.getLocaleString($item.header + "_attr")}</h4>
+		
 		{{each $item.corpusAttributes}}
 		
-		<tr>
 			{{if $value.displayType != "hidden"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
-			 	
-
 				
     			{{if $data[$index] == "|" || $data[$index] == ""}}
     				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
     			{{else $index == "lemma"}}
     			{{html $item.parseLemma($data[$index])}} 
     			{{else $index == "pos"}}
-    				${util.getLocaleString("pos_" + $data[$index])}</p> 
+    				${util.getLocaleString("pos_" + $data[$index])} 
 				{{else $index == "deprel"}}
-    				${util.getLocaleString("deprel_" + $data[$index])}</p>
+    				${util.getLocaleString("deprel_" + $data[$index])}
 				{{else $index == "msd"}}
-					${$data[$index]}<a href="msdtags.html" target="_blank"><span id="sidbar_info" class="ui-icon ui-icon-info"></span></a></p>
+					${$data[$index]}<a href="msdtags.html" target="_blank"><span id="sidbar_info" class="ui-icon ui-icon-info"></span></a>
     			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
@@ -255,12 +256,11 @@
     			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
     			
     			{{else}}
-    			${$data[$index]}</p>
+    			${$data[$index]}
     			{{/if}}
 
 			</p>
 			{{/if}}
-	    </tr>
 		{{/each}}
 	</script>
 	

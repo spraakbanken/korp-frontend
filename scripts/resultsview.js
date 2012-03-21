@@ -1224,7 +1224,6 @@ var StatsResults = {
 			else
 				window.open( "data:text/csv;charset=latin1," + escape(output));
 		});
-		
 	},
 	
 	renderResult : function(columns, data) {
@@ -1242,9 +1241,10 @@ var StatsResults = {
 		grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
 		this.grid = grid;
 		
-		
-//		setTimeout(this.resizeGrid, 10);
-		
+		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
+			$(this).localeKey($(this).text());
+		});
+
 		this.resizeGrid();
 		
 		// wire up model events to drive the grid

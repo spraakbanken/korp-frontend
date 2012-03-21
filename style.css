@@ -438,6 +438,9 @@ input.arg_value {
 	padding-bottom: 1px;
 	margin-bottom: 2px;
 }
+.boxdiv:only-of-type {
+	margin-top : 1em;
+}
 
 .hplabel {
 	padding-right: 6px;

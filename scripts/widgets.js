@@ -74,7 +74,7 @@ $.fn.korp_autocomplete = function(options) {
 			
 			dfd.resolve(listItems);
 			return dfd.promise();
-		},
+		}
 	},options);
 	
 	selector.preloader({
@@ -217,6 +217,7 @@ var Sidebar = {
 	},
 	
 	updateContent : function(sentenceData, wordData, corpus) {
+		c.log("updateContent", sentenceData, wordData);
 		this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
 		
 		var corpusObj = settings.corpora[corpus.toLowerCase()];
@@ -224,29 +225,28 @@ var Sidebar = {
 				$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
 				.prependTo("#selected_sentence");
 		
-		if(!$.isEmptyObject(corpusObj.struct_attributes)) {
+		
+		if($("#sidebarTmpl").length == 0)
+			$.error("sidebartemplate broken");
+		
+		if(!$.isEmptyObject(corpusObj.attributes)) {
+			$("#selected_word").append($.format('<h4 rel="localize[word_attr]">%s</h4>', [util.getLocaleString("word_attr")]));
 			$("#sidebarTmpl")
-			.tmpl([sentenceData], {"header" : "sentence", "corpusAttributes" : corpusObj.struct_attributes})
+			.tmpl([wordData], {"corpusAttributes" : corpusObj.attributes, parseLemma : this._parseLemma})
+			.appendTo("#selected_word");
+		}
+		
+		if(!$.isEmptyObject(corpusObj.struct_attributes)) {
+			$("#selected_sentence").append($.format('<h4 rel="localize[sentence_attr]">%s</h4>', [util.getLocaleString("sentence_attr")]));
+			$("#sidebarTmpl")
+			.tmpl([sentenceData], {"corpusAttributes" : corpusObj.struct_attributes})
 //			.find(".exturl").hoverIcon("ui-icon-extlink")
 			.appendTo("#selected_sentence");
 		}
-		
-		if($("#sidebarTmpl").length > 0)
-			$("#sidebarTmpl")
-			.tmpl([wordData], {"header" : "word", "corpusAttributes" : corpusObj.attributes, parseLemma : this._parseLemma})
-			.appendTo("#selected_word");
-		else
-			$.error("sidebartemplate broken");
-		
 		this._sidebarSaldoFormat();
 		
 		this.applyEllipse();
 		
-//		this.element.find(".defaultSetItem").click(function() {
-//			var type = $(this).closest("ul").data("type");
-//			advancedSearch.setCQP($.format("[_.post_%s contains '%s']", [type, $(this).text()]) );
-//			advancedSearch.onSubmit();
-//		});
 	},
 	
 	applyEllipse : function() {
@@ -438,7 +438,11 @@ var ExtendedToken = {
 		var arg = $("#argTmpl").tmpl()
 		.find(".or_container").append(this.insertOr()).end()
 	    .find(".insert_or").click(function() {
+	    	var thisarg = $(this).closest(".query_arg").find(".or_container");
+	    	var lastVal = thisarg.find(".arg_type:last").val();
 	    	self.insertOr(true).appendTo($(this).closest(".query_arg").find(".or_container")).hide().slideDown();
+	    	thisarg.find(".arg_type:last").val(lastVal).trigger("change");
+	    	
 	    	self._trigger("change");
 	    }).end()
 	    .appendTo(this.element.find(".args"))
@@ -452,10 +456,6 @@ var ExtendedToken = {
 	
 	insertOr : function(usePrev) {
 		var self = this;
-		var lastVal;
-		if(usePrev)
-			lastVal = $(".arg_type:last").val();
-		c.log("lastVal", lastVal);
 		var arg_select = this.makeSelect();
 		
 		
@@ -483,9 +483,6 @@ var ExtendedToken = {
 	    		});
 	    	}
 	    }).end();
-		
-		if(lastVal)
-			arg_select.find(".arg_type").val(lastVal).trigger("change");
 		
 		return orElem;
 	},

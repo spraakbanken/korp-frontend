@@ -4,6 +4,7 @@
 	"english" : "English",
 	"modern_texts" : "Moderna texter",
 	"parallel_texts" : "Parallella texter",
+	"Faroe_texts" : "Färöiska texter",
 	"search_history" : "Sökhistorik",
 	"about" : "Om Korp",
 	"about_body" : "Korp är Språkbankens konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
@@ -46,8 +47,9 @@
 	"one_of" : "någon av",
 	"error_occurred" : "Ett fel har inträffat.",
 	
-	"match" : "Matcha",
-	"following_rules" : "följande regler",
+	"following_text" : "Matcha någon av följande regler:",
+	"stats_hit" : "Träff",
+	"stats_total" : "Totalt",
 	
 	"simple" : "Enkel",
 	"detailed" : "Utökad",
@@ -61,6 +63,7 @@
 	"autocomplete_header" : "är en ordform i",
 	"no_lemgram_results" : "Hittade inga förekomster.",
 	"no_stats_results" : "Sökningen gav inga träffar.",
+	
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",
 	"lemgram_explan_0" : "De vanligaste exemplen på ord som förhåller sig till sökordet enligt följande relation:",
@@ -133,6 +136,16 @@
 	"post_title" : "inläggets titel",
 	"tags" : "nyckelord",
 	"post_url" : "inläggsadress",
+	
+	"page" : "sida",
+	"author_type" : "författartyp",
+	"gender" : "kön",
+	"journalist" : "journalist",
+	"reader" : "läsare",
+	"male" : "man",
+	"female" : "kvinna",
+	"unknown" : "okänd",
+	"male_female" : "man och kvinna",
 	
 	"statistics" : "Statistik",
 	

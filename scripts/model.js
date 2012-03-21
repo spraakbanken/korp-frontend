@@ -310,14 +310,14 @@ var StatsProxy = {
 				
 				var columns = [{
 					id : "hit",
-					name : "Hit",
+					name : "stats_hit",
 					field : "hit_value",
 					sortable : true,
 					formatter : self.hitFormatter
 				},
 				{
 					id : "total",
-					name : "Total",
+					name : "stats_total",
 					field : "total_value",
 					sortable : true,
 					formatter : self.valueFormatter

@@ -3,6 +3,7 @@ var currentMode;
 
 (function(){
 	var t = $.now();
+//	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
 	
 	
@@ -287,7 +288,8 @@ var currentMode;
 					$("#simple_text").val(value);
 					simpleSearch.onSimpleChange();
 					simpleSearch.setPlaceholder(null, null);
-					simpleSearch.makeLemgramSelect();
+					if(settings.lemgramSelect)
+						simpleSearch.makeLemgramSelect();
 					$.sm.send("submit.kwic", {value : value, page : page});
 					break;
 				case "lemgram":
