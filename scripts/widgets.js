@@ -1,5 +1,5 @@
 $.widget("ui.radioList", {
-	options : {change : $.noop, separator : "|", selected : 0},
+	options : {change : $.noop, separator : "|", selected : "default"},
 	_init : function() {
 		var self = this;
 		$.each(this.element, function() {
@@ -7,7 +7,7 @@ $.widget("ui.radioList", {
 			$(this).children().wrap("<li />")
 			.click(function() {
 				if(!$(this).is(".radioList_selected")) {
-					self.select($(this).parent().index());
+					self.select($(this).data("mode"));
 					$.proxy(self.options.change, this)();
 				}
 			})
@@ -20,16 +20,37 @@ $.widget("ui.radioList", {
 		this.select(this.options.selected);
 	},
 	
-	select : function(index) {
-		this.options.selected = index;
+	select : function(mode) {
+		this.options.selected = mode;
+		
+		var target = this.element.find("a").filter(function() {
+			return $(this).data("mode") == mode;
+		});
+		
 		this.element.find(".radioList_selected").removeClass("radioList_selected");
-		this.element.find($.format("a:nth(%s)", String(index))).addClass("radioList_selected");
+		this.element.find(target).addClass("radioList_selected");
 		return this.element;
 	},
 	getSelected: function() {
 		return this.element.find(".radioList_selected");
 	}
 });
+
+
+var ModeSelector = {
+	options : {modes : []},
+	_init : function() {
+		var self = this;
+		$.each(self.options.modes, function(i, item) {
+			$("<a>", {"href" : "javascript:"}).localeKey(item.localekey).data("mode", item.mode)
+			.appendTo(self.element);
+		});
+		$.ui.radioList.prototype._init.call(this);
+	}
+};
+$.ui.radioList.subclass = $.ui.widget.subclass;
+$.ui.radioList.subclass("ui.modeSelector", ModeSelector);
+
 $.extend( $.ui.autocomplete.prototype, {
 	_renderItem: function( ul, item) {
 		var li = $("<li></li>").data("item.autocomplete", item).append(

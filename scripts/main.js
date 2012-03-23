@@ -65,7 +65,7 @@ var currentMode;
 		currentMode = $.deparam.querystring().mode || "default";
 		util.browserWarn();
 		
-		$("#mode_switch").radioList({
+		$("#mode_switch").modeSelector({
             change : function() {
             	c.log("changed", this);
             	var mode = $(this).data("mode");
@@ -76,7 +76,13 @@ var currentMode;
     				location.search = "?mode=" + mode;
     			}
             },
-            selected : $($.format("a[data-mode=%s]", currentMode)).index()
+//            selected : $($.format("a[data-mode=%s]", currentMode)).index(),
+            selected : currentMode,
+            modes : [
+                 {localekey : "modern_texts", mode : "default"},
+                 {localekey : "parallel_texts", mode : "parallel"},
+                 {localekey : "faroese_texts", mode : "faroe"}
+                     ]
 		}).add("#about").vAlign();
 		
 		$("#searchbar").html(searchbar_html[0]);

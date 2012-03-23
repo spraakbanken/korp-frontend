@@ -1332,17 +1332,17 @@ var StatsResults = {
 		    }
             //});
             
-                statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
-                    //if(this.value != 0) {
-                        // Find the correct corpus
-                            this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
-                    //}
-                }, function() {
-                    //this.symbol.attr({'fill' : '#444'});
-                    //if(this.value != 0) {
-                        this.flag.animate({opacity: 0}, 300, function () {this.remove();});
-                    //}
-                });
+            statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
+                //if(this.value != 0) {
+                    // Find the correct corpus
+                        this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
+                //}
+            }, function() {
+                //this.symbol.attr({'fill' : '#444'});
+                //if(this.value != 0) {
+                    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+                //}
+            });
                 
 		    $("circle[fill=#1751a7]").hide();
             
