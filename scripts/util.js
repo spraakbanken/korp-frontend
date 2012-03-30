@@ -369,7 +369,7 @@ util.browserWarn = function() {
         cookieSettings: {   
             path: '/', // Path for the cookie to be saved on (should be root domain in most cases)   
             expires: 100000 // Expiration Date (in seconds), 0 (default) means it ends with the current session   
-        },   
+        }   
 	});
 };
 // singleton for getting colors. use syntax util.colors.getNext()

@@ -110,9 +110,14 @@ var KWICProxy = {
 				});
 			}
 		});
-//		TODO: we should clean this up...
-		if($.inArray("saltnld_swe", selected_corpora_ids) != -1) {
-			data.show.push("saltnld_nld");
+//		TODO: we should clean this up... looks terrible.
+		if (currentMode == "parallel") {
+			if($.inArray("saltnld_swe", selected_corpora_ids) != -1) {
+				data.show.push("saltnld_nld");
+			}
+			if($.inArray("europarlda_sv", selected_corpora_ids) != -1) {
+				data.show.push("europarlda_da");
+			}
 		}
 
 //		$(".pagination:visible").data("cqp", o.cqp);

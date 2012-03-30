@@ -61,7 +61,7 @@ $.extend( $.ui.autocomplete.prototype, {
 			li.addClass("autocomplete-item-disabled");
 		}
 		return li;
-	},
+	}
 });
 
 $.fn.korp_autocomplete = function(options) {
