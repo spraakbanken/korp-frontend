@@ -349,12 +349,7 @@ var isLab = $.trim(window.location.pathname, "/") == "korplabb";
 				if(e.getState("display") == "line_diagram") {
 					statsResults.showLineDiagram();
 				} else {
-//					statsResults.rLine.clear();
-					statsResults.rLine.remove();
-//					delete statsResults.rLine;
-//					$("#linecontainer").empty();
 					$("#line_diagram_window").dialog("destroy");
-	//				$("#line_diagram_window.ui-dialog-content").parent().fadeOut('fast');
 				}
 			
 			}

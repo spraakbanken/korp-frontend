@@ -1295,7 +1295,7 @@ var StatsResults = {
 		
 //		grid.setSortColumn("total", true);
 		$(".slick-header-column:nth(1)").click().click();
-		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
+		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
 			$(this).localeKey($(this).text());
 		});
 		
@@ -1351,9 +1351,9 @@ var StatsResults = {
 	    
 	    if($.keys(statsResults.savedData.corpora).length < 2) return;
 	    
-//	    if(statsResults.rLine) {
-//	    	statsResults.rLine.remove();
-//	    }
+	    if(statsResults.rLine) {
+	    	statsResults.rLine.remove();
+	    }
 	    
 	    statsResults.rLine = Raphael("linecontainer"),
             txtattr = { font: "12px sans-serif" };
@@ -1424,6 +1424,11 @@ var StatsResults = {
 				this.resizeHits();
 			}
 		}
+		
+		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
+            $(this).localeKey($(this).text());
+        });
+		
 	},
 	
 	resizeHits : function() {

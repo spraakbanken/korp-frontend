@@ -233,9 +233,6 @@
                         <onentry>
                             <script>
                                 statsResults.resizeGrid();
-                                //$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
-                                    //$(this).localeKey($(this).text());
-                                //});
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>

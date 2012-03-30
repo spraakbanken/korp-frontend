@@ -67,12 +67,10 @@ $.extend( $.ui.autocomplete.prototype, {
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
 	if(typeof options === "string" && options == "abort") {
-		c.log("autocomplete abort", selector);
 		lemgramProxy.abort();
 		selector.preloader("hide");
 		return;
 	}
-	c.log("korp_autocomplete init");
 	
 	options = $.extend({
 		type : "lem",
@@ -113,9 +111,7 @@ $.fn.korp_autocomplete = function(options) {
 			
 			var promise = lemgramProxy.sblexSearch(request.term, options.type)
 			.done(function(idArray, textstatus, xhr) {
-				c.log("sblex done", textstatus, xhr, xhr.status);
 				idArray = $.unique(idArray);
-//				idArray.sort(options.sortFunction);
 				
 				options.middleware(request, idArray).done(function(listItems) {
 					
@@ -152,7 +148,6 @@ $.fn.korp_autocomplete = function(options) {
 		select: function( event, ui ) {
 			event.preventDefault();
 			var selectedItem = ui.item.value;
-			c.log("autocomplete select", options.select, selectedItem, ui.item.value, ui, event);
 			
 			$.proxy(options.select, selector)(selectedItem);
 		},
