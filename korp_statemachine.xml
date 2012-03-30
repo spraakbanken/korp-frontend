@@ -17,7 +17,7 @@
             
             kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
             statsProxy.makeRequest($("#cqp_string").val());
-            if(isLab) {
+            if(isLab && currentMode == "default") {
                 lemgramResults.showPreloader();
                 lemgramProxy.relationsWordSearch($("#simple_text").val());
             }

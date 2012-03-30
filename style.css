@@ -935,7 +935,9 @@ a.relStat:hover {
 }
 .inline_list li {
 	display: inline-block;
-	*display: inline;
+}
+.msie8 .inline_list li {
+	display: inline;
 }
 
 .inline_list span {

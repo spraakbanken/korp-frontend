@@ -7,6 +7,7 @@ settings.wordpicture = false;
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
+$("#showLineDiagram").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
