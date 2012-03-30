@@ -32,39 +32,19 @@ util.SelectionManager.prototype.hasSelected = function() {
 
 util.getLocaleString = function(key) {
 	if(!$.localize.data) {
-		$.error("Locale string cannot be found because no data file has been read.");
+		c.error("Locale string cannot be found because no data file has been read.");
 		return;
 	}
-	var output = $.localize.data.locale[key];
+	var output = $.localize.data.locale[key] || $.localize.data.corpora[key];
 	if(output == null && key != null)
 		return key;
 //		$.error("Could not find translation key " + key);
 	return output;
 };
-
+//TODO: get rid of this
 util.localize = function(root) {
 	root = root || "body"; 
-	
-//	var lang = $("#languages").radioList("getSelected").data("lang");
-	var lang = $.bbq.getState("lang") || "sv";
-	lang = {
-		"swe"  : "sv",
-		"sv" : "sv",
-		"eng" : "en",
-		"en" : "en"
-	}[lang];
-	var langIndex = $($.format("[data-lang=%s]", lang)).index();
-	$("#languages").radioList("select", langIndex);
-	
-	$(root).find("[rel^=localize]").localize("locale" ,{
-		pathPrefix : "translations", 
-		language : lang
-	});
-	
-	$("optgroup").each(function() {
-		$(this).attr("label", util.getLocaleString($(this).data("localeString")).toLowerCase());
-	});
-	
+	$(root).localize();
 };
 
 util.lemgramToString = function(lemgram, appendIndex) {

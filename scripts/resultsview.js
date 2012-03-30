@@ -83,6 +83,7 @@ var KWICResults = {
 		this.$result.find(".results_table").empty();
 		this.$result.find(".pager-wrapper").empty();
 		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
+		util.setJsonLink(this.proxy.prevRequest);
 	},
 	
 	onSortChange : function(event) {
@@ -1239,11 +1240,8 @@ var StatsResults = {
 		var dataView = new Slick.Data.DataView();
 		
 		grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
-		this.grid = grid;
 		
-		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
-			$(this).localeKey($(this).text());
-		});
+		this.grid = grid;
 
 		this.resizeGrid();
 		
@@ -1297,67 +1295,111 @@ var StatsResults = {
 		
 //		grid.setSortColumn("total", true);
 		$(".slick-header-column:nth(1)").click().click();
-		
-		if(statsResults.rLine != undefined)
-		  statsResults.rLine.remove();
-		
-		statsResults.rLine = null;
-		
-		// Line Diagram
-		$("#showLineDiagram").click(function() {
-		    $.log(statsResults.savedData.corpora);
-		    
-		    if(statsResults.rLine)
-		      statsResults.rLine.remove();
-		    
-		    statsResults.rLine = Raphael("linecontainer"),
-                txtattr = { font: "12px sans-serif" };
-		    
-		    var ys = new Array();
-		    var nulls = new Array();
-		    var xs = new Array();
-		    
-		    statsResults.corpusNames = new Array();
-		    $.each(statsResults.savedData.corpora, function(key, corpus) {
-		        statsResults.corpusNames.push(key);
-		    });
-		    
-		    statsResults.corpusNames.sort();
-		    
-		    //$.each(statsResults.savedData.corpora, function(key, corpus) {
-		    for(var i = 0; i < statsResults.corpusNames.length; i++) {
-                ys.push(statsResults.savedData.corpora[statsResults.corpusNames[i]].sums.relative);
-                xs.push(i);
-                nulls.push(0);
-		    }
-            //});
-            
-            statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
-                //if(this.value != 0) {
-                    // Find the correct corpus
-                        this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
-                //}
-            }, function() {
-                //this.symbol.attr({'fill' : '#444'});
-                //if(this.value != 0) {
-                    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
-                //}
-            });
-                
-		    $("circle[fill=#1751a7]").hide();
-            
-    		$("#line_diagram_window").dialog({
-    			width : 500,
-    			height : 500,
-    			title : "Träffar per miljon token",
-    			resize: function(){},
-    			resizeStop: function(){}
-    		}).css("opacity", 0);
-    		$("#line_diagram_window").fadeTo(400,1);
-    		$("#line_diagram_window").find("a").blur();
+		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
+			$(this).localeKey($(this).text());
 		});
 		
+		this.renderLineDiagram();
+		
 		this.hidePreloader();
+	},
+	
+	renderLineDiagram : function() {
+		var self = this;
+//		if(statsResults.rLine) {
+//			statsResults.rLine.remove();
+//		}
+			
+		statsResults.rLine = null;
+		var src;
+		var css = {};
+		if($.keys(statsResults.savedData.corpora).length > 1) {
+			src = "stats3.png";
+			css["cursor"] = "pointer";
+		} else {
+			src = "stats3_disabled.png";
+			css["cursor"] = "normal";
+		}
+		
+		// Line Diagram
+		$("#showLineDiagram")
+		.attr("src", "img/" + src)
+		.css(css)
+		.click(function() {
+		    $.bbq.pushState({"display" : "line_diagram"});
+		    return false;
+		});
+		
+		if($.bbq.getState("display") == "line_diagram")
+			this.showLineDiagram();
+	},
+	
+	showLineDiagram : function() {
+		$.log(statsResults.savedData.corpora);
+	    
+//		if($("#line_diagram_window.ui-dialog-content").length) {
+//			$("#line_diagram_window").parent().fadeIn("fast");
+//			return;
+//		}
+		
+	    statsResults.corpusNames = [];
+	    $.each(statsResults.savedData.corpora, function(key, corpus) {
+	        statsResults.corpusNames.push(key);
+	    });
+	    
+	    statsResults.corpusNames.sort();
+	    
+	    if($.keys(statsResults.savedData.corpora).length < 2) return;
+	    
+//	    if(statsResults.rLine) {
+//	    	statsResults.rLine.remove();
+//	    }
+	    
+	    statsResults.rLine = Raphael("linecontainer"),
+            txtattr = { font: "12px sans-serif" };
+	    
+	    var ys = [];
+	    var nulls = [];
+	    var xs = [];
+	    
+	    
+	    
+	    //$.each(statsResults.savedData.corpora, function(key, corpus) {
+	    for(var i = 0; i < statsResults.corpusNames.length; i++) {
+            ys.push(statsResults.savedData.corpora[statsResults.corpusNames[i]].sums.relative);
+            xs.push(i);
+            nulls.push(0);
+	    }
+        //});
+        
+        statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
+            // Find the correct corpus
+//        	if(this.flag) this.flag.remove()
+    		
+        	if(!this.flag.show)
+        		this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
+        	else
+        		this.flag.animate({opacity: 1}, 200);
+            //}
+        }, function() {
+                this.flag.animate({opacity: 0}, 200);
+                
+        });
+            
+	    $("circle[fill=#2f69bf]").remove();
+	    $("path[stroke=#2f69bf]").attr({"stroke" : "#000000", "stroke-width" : 1});
+        
+		$("#line_diagram_window").dialog({
+			width : 500,
+			height : 500,
+			title : "Träffar per miljon token",
+			beforeClose : function() {
+				$.bbq.removeState("display");
+				return false;
+			}
+		}).css("opacity", 0);
+		$("#line_diagram_window").fadeTo(400,1);
+		$("#line_diagram_window").find("a").blur();
 	},
 	
 	resizeGrid : function() {

@@ -13,7 +13,7 @@
 				success : function(doc, status, xhr) {
 				  
 					// cookie
-					var storedObj = $.parseJSON($.jStorage.get("compiled_scxml_korp"));
+					var storedObj = $.parseJSON($.jStorage.get("compiled_scxml_" + $.trim(window.location.pathname, "/")));
 					var cookieLastMod = null;
 					if(storedObj != null)
 						cookieLastMod = new Date(storedObj.time);
@@ -74,7 +74,7 @@
 							}, function(scArr){
 								var transformedJs = scArr[0];
 								
-								$.jStorage.set("compiled_scxml_korp", $.toJSON({data : transformedJs, time : $.now()}));
+								$.jStorage.set("compiled_scxml_" + $.trim(window.location.pathname, "/"), $.toJSON({data : transformedJs, time : $.now()}));
 								
 								c.log("statechart compiled and started: ");
 								c.log("compile time", new Date().getTime() - t );

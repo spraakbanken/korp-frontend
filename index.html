@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="common_lib/mootools-1.2.4-base.js"></script>
 		<script type="text/javascript" src="common_lib/Class.Mutators.jQuery.js"></script>
 		<script type="text/javascript" src="common_lib/raphael.js"></script>
+		<script type="text/javascript" src="lib/raphael.blur.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.ba-bbq.min.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.jLog.min.js"></script>
 		
@@ -65,32 +66,32 @@
 		<script type="text/javascript" src="lib/slickgrid/slick.grid.js"></script>
 		<script type="text/javascript" src="lib/slickgrid/slick.model.js"></script>
 		
+		<script type="text/javascript" src="scripts/util.js"></script>
+		<script>
+			//$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : "sv"});
+			//var language = $.localize.data.locale;
+			//if(!language)
+			//	$.error("Localization failed");
+			//util.localize();	
+			if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
+			window.c = window.console;
+			
+		</script>
 		
 		<script type="text/javascript" src="common_lib/jquery.hoverIntent.js"></script>
 		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
-		
-		<!-- <script type="text/javascript" src="lib/jquery.ba-resize.min.js"></script> -->
-		
-		<script>
-			$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : "sv"});
-			var language = $.localize.data.locale;
-			if(!language)
-				$.error("Localization failed");
-			
-			if(window.console == null) window.console = {"log" : $.noop};
-			window.c = window.console;
-			
-		</script>
 		<script type="text/javascript" src="lib/jstorage.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
 		<script type="text/javascript" src="scripts/widgets.js"></script>
+		
+		
 		<script type="text/javascript" src="config.js"></script>
 		
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
 		<script type="text/javascript" src="scripts/pie-widget.js"></script>
 		
-		<script type="text/javascript" src="scripts/util.js"></script>
+		
 		<script type="text/javascript" src="scripts/controller.js"></script>
 		<script type="text/javascript" src="scripts/searchview.js"></script>
 		<script type="text/javascript" src="scripts/resultsview.js"></script>
@@ -110,15 +111,24 @@
   			<div id="top_bar">
   				<div id="mode_switch"></div>
 				
-	  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a>
+				<div id="cog"></div>
+				<ul id="cog_menu">
+					<li><a id="about" href="javascript:" rel="localize[about]">About Korp</a></li>
+					<li><a id="docs" href="http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning" target="_blank" rel="localize[docs]"></a></li>
+					<li id="korplink"><a href="/korp" class="follow_link" rel="localize[korp]"></a></li>
+					<li id="korplablink"><a href="/korplabb" class="follow_link" rel="localize[korp_lab]"></a></li>
+				</ul>
+<!-- 	  			<a id="about" href="javascript:" rel="localize[about]">About Korp</a> -->
 				<div id="languages">
-	  				<a href="javascript:" rel="localize[swedish]" data-lang="sv">Svenska</a>
-	  				<a href="javascript:" rel="localize[english]" data-lang="en">Engelska</a>
+	  				<a href="javascript:" rel="localize[swedish]" data-mode="sv">Svenska</a>
+	  				<a href="javascript:" rel="localize[english]" data-mode="en">Engelska</a>
 	  			</div>
-	  			<a id="docs" href="http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning" target="_blank" rel="localize[docs]"></a>
+	  			
+	  			
   			</div>
   			<div id="header_left">
  				<a href=""><img src="img/korplogo.png" /></a>
+ 				<div id="labs_logo"></div>
 	 			<div id="corpusbox"></div>
   			</div>
   			<select id="search_history"></select>
@@ -161,6 +171,7 @@
 								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
 								 
 								   <div class="hits_picture" ></div>
+								   <div style="float:right"><img id="showLineDiagram"/></div>
 							   	   <div style="clear : both; float : none;" ></div>
 							   </div>
 								
@@ -178,7 +189,7 @@
 							</div>
 							<div id="results-stats">
 <!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->   
-								<div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div>
+<!-- 								<div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div> -->
 								<div id="myGrid" style="width:600px;height:500px;"></div>
 								<div id="exportStatsSection">
 									<br/><br/><select id="kindOfData">

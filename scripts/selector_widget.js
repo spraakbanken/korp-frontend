@@ -120,7 +120,7 @@ var hp_corpusChooser = {
 			var num_checkboxes = $(".hplabel .checkbox").length;
 			if (num_unchecked_checkboxes == num_checkboxes) {
 				header_text_2 = 'corpselector_noneselected';
-			} else if (num_checked_checkboxes == num_checkboxes) {
+			} else if (num_checked_checkboxes == num_checkboxes && num_checkboxes > 1) {
 				header_text = num_checked_checkboxes;
 				header_text_2 = 'corpselector_allselected';
 			} else if (num_checked_checkboxes == 1) {

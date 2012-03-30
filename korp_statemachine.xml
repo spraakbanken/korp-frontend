@@ -13,11 +13,14 @@
             //}
             simpleSearch.resetView();
             kwicResults.showPreloader();
-            lemgramResults.showPreloader();
+            
             
             kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
             statsProxy.makeRequest($("#cqp_string").val());
-            lemgramProxy.relationsWordSearch($("#simple_text").val());
+            if(isLab) {
+                lemgramResults.showPreloader();
+                lemgramProxy.relationsWordSearch($("#simple_text").val());
+            }
         }
     
         function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
@@ -230,6 +233,9 @@
                         <onentry>
                             <script>
                                 statsResults.resizeGrid();
+                                //$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
+                                    //$(this).localeKey($(this).text());
+                                //});
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>

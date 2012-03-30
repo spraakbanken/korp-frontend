@@ -2,8 +2,8 @@
  * lexem => lemgram, lemgram
  * 
  */
-
 var settings = {};
+//var language = $.localize.data.locale;
 
 settings.lemgramSelect = true;
 settings.autocomplete = true;
@@ -12,10 +12,10 @@ settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
 settings.corpora = {};
 settings.defaultContext = {
-	"1 sentence" : language.oneSentence
+	"1 sentence" : "1 sentence"
 };
 settings.defaultWithin = {
-	"sentence" : language.oneSentence	
+	"sentence" : "sentence"	
 };
 
 settings.defaultLanguage = "sv";
@@ -198,7 +198,7 @@ sattrs.date = {
 
 var within = {
 	"defaultStruct" : {
-		"sentence" : language.sentence
+		"sentence" : "sentence"
 	}
 };
 
@@ -222,7 +222,13 @@ settings.corporafolders.sweac = {
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
-	description : "Det första steget för att skapa en finlandssvensk korpus togs redan på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan Institutet för de inhemska språken, Institutionen för allmän språkvetenskap och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, Institutet för de inhemska språken och Göteborgs universitet."
+	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
+			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
+			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
+			"Institutet för de inhemska språken, Institutionen för allmän språkvetenskap " +
+			"och CSC (IT Center for Science)). Under åren 2011–2013 byggs den finlandssvenska " +
+			"korpusen ut som ett samarbetsprojekt mellan Svenska litteratursällskapet i Finland, " +
+			"Institutet för de inhemska språken och Göteborgs universitet."
 };
 
 settings.corporafolders.fisk.blogs = {

@@ -522,7 +522,7 @@ var ExtendedToken = {
 			if($.isEmptyObject(group)) {
 				return;
 			}
-			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "data-locale-string" : lbl})
+			var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "rel" : $.format("localize[%s]", lbl)})
 			.appendTo(arg_select);
 			$.each(group, function(key, val) {
 				if(val.displayType == "hidden")

@@ -138,19 +138,18 @@ a:hover {color:red;}  /* mouse over link */
 #search_history:empty {
 	visibility: hidden;
 }
-#docs {
-	float : right;
-	margin : 8px;
-}
-#about {
-	float : right;
-	margin : 0 8px;	
-}
+/* #docs { */
+/* 	float : right; */
+/* 	margin : 8px; */
+/* } */
+/* #about { */
+/* 	float : right; */
+/* 	margin : 0 8px;	 */
+/* } */
 
-#aboutLink {
-	padding-top : 10px;
-/* 	float : right;	 */
-}
+/* #aboutLink { */
+/* 	padding-top : 10px; */
+/* } */
 
 #top_bar {
 	
@@ -975,9 +974,14 @@ a.relStat:hover {
 .hits_picture {
 	cursor : pointer;
 	position: absolute;
-	right : 9px;
+	right : 30px;
 	bottom : 0px;
 	left : 340px;
+}
+
+#showLineDiagram {
+	position : relative;
+	top : 3px;
 }
 
 .query_token .logic_switcher {
@@ -1217,4 +1221,40 @@ a.relStat:hover {
 	opacity : 0.7;
 }
 
+#showLineDiagram {
+	display: none;
+}
+.lab #showLineDiagram {
+	display : inline;	
+}
+#labs_logo {
+	display : none;
+}
+.lab #labs_logo {
+	display : inline-block;
+	*display : inline;
+}
+#korplink {
+	display : none;
+}
+.lab #korplablink {
+	display : none;
+} 
+.lab #korplink {
+	display : block;
+}
 
+
+#cog {
+	float : right;
+	margin-top : -2px;
+	cursor : pointer;
+}
+#cog_menu {
+/* 	display: none; */
+	position : absolute;
+	font-size : inherit;
+	z-index : 999;
+	text-align : right;
+	box-shadow: 2px 2px 3px grey;
+}
