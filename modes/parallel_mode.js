@@ -26,13 +26,50 @@ view.KWICResults = new Class(ParallelKWICResults);
 
 settings.primaryColor = "#FFF3D8";
 settings.corporafolders = {};
+
+settings.corporafolders.europarl = {
+	title : "Europarl3",
+	contents : ["europarlda_sv"]
+};
+
 settings.corporafolders.salt = {
 	title : "SALT",
 	contents : ["saltnld_swe"]
 };
 
-//settings.corpora.saltnld = {
 settings.corpora = {};
+
+settings.corpora.europarlda_sv = {
+	title: "Svenska-danska", 
+	languages : { 
+		EUROPARLDA_SV: "svenska", 
+		EUROPARLDA_DA: "danska"
+	}, 
+	context: context.defaultAligned, 
+	within: {
+		"link": "meningspar"
+	}, 
+	attributes: {
+		pos: attrs.pos, 
+		msd: attrs.msd, 
+		lemma: attrs.baseform,
+		lex: attrs.lemgram, 
+		saldo: attrs.saldo, 
+		dephead: attrs.dephead, 
+		deprel: attrs.deprel, 
+		ref: attrs.ref, 
+		link: attrs.link, 
+		text: attrs.text
+	},
+	struct_attributes : {
+//		text_origlang : {
+//			label : "original_language"
+//		}
+	}
+};
+
+
+//settings.corpora.saltnld = {
 settings.corpora.saltnld_swe = {
 	title: "Svenska-nederländska", 
 	languages : { 
