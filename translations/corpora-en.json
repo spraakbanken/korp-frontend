@@ -112,7 +112,8 @@
 	
 	"mx" : "flerordsprefix",	  
 	"sx" : "prefix",	  					
-	
+	"page_num" : "page number",
+		
 	"example" : "Example",
 
 	"malt_AT" : "Pre-modifier",

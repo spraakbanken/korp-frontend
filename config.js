@@ -2482,6 +2482,26 @@ settings.corpora.hbl1999 = {
 	}
 };
 
+if(isLab) {
+	// this is where we add corpora visible only in the lab.
+	
+	settings.corpora.fornsvenska = {
+			title : "Fornsvenska",
+			description : "Fornsvenska",
+			languages : {
+				FORNSVENSKA : "svenska"
+			},
+			within : within.defaultStruct,
+			attributes : {
+			},
+			struct_attributes : {
+				"text_title" : {label : "title"},
+				"paragraph_pnum" : {label : "page_num"}
+			}
+		};
+}
+
+
 /*
  * MISC
  */

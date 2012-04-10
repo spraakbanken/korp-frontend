@@ -1,5 +1,5 @@
 var currentMode;
-var isLab = $.trim(window.location.pathname, "/") == "korplabb";
+
 
 
 

@@ -66,17 +66,20 @@
 		<script type="text/javascript" src="lib/slickgrid/slick.model.js"></script>
 		
 		<script type="text/javascript" src="scripts/util.js"></script>
+		
 		<script>
 			//$("[rel^=localize]").localize("locale" ,{pathPrefix : "translations", language : "sv"});
 			//var language = $.localize.data.locale;
 			//if(!language)
 			//	$.error("Localization failed");
 			//util.localize();	
+			
+			var isLab = window.location.pathname == "/korplabb/";
+			
 			if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
 			window.c = window.console;
 			
 		</script>
-		
 		<script type="text/javascript" src="common_lib/jquery.hoverIntent.js"></script>
 		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
