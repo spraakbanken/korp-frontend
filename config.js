@@ -23,7 +23,7 @@ settings.defaultLanguage = "sv";
 /*
  * ATTRIBUTES
  */
-
+// for optimization purposes
 settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
 
 settings.defaultOptions = {
@@ -43,29 +43,29 @@ attrs.pos = {
 	displayType : "select",
 	translationKey : "pos_",
 	dataset : {
-		"AB" : "pos_AB",
-		"MID|MAD|PAD" : "pos_DL",
-		"DT" : "pos_DT",
-		"HA" : "pos_HA",
-		"HD" : "pos_HD",
-		"HP" : "pos_HP",
-		"HS" : "pos_HS",
-		"IE" : "pos_IE",
-		"IN" : "pos_IN",
-		"JJ" : "pos_JJ",
-		"KN" : "pos_KN",
-		"NN" : "pos_NN",
-		"PC" : "pos_PC",
-		"PL" : "pos_PL",
-		"PM" : "pos_PM",
-		"PN" : "pos_PN",
-		"PP" : "pos_PP",
-		"PS" : "pos_PS",
-		"RG" : "pos_RG",
-		"RO" : "pos_RO",
-		"SN" : "pos_SN",
-		"UO" : "pos_UO",
-		"VB" : "pos_VB"
+		"AB" : "AB",
+		"MID|MAD|PAD" : "DL",
+		"DT" : "DT",
+		"HA" : "HA",
+		"HD" : "HD",
+		"HP" : "HP",
+		"HS" : "HS",
+		"IE" : "IE",
+		"IN" : "IN",
+		"JJ" : "JJ",
+		"KN" : "KN",
+		"NN" : "NN",
+		"PC" : "PC",
+		"PL" : "PL",
+		"PM" : "PM",
+		"PN" : "PN",
+		"PP" : "PP",
+		"PS" : "PS",
+		"RG" : "RG",
+		"RO" : "RO",
+		"SN" : "SN",
+		"UO" : "UO",
+		"VB" : "VB"
 	},
 	opts : settings.liteOptions
 };
@@ -100,71 +100,71 @@ attrs.deprel = {
 		displayType : "select",
 		translationKey : "deprel_",
 		dataset : {
-			"++" : "deprel_++",
-			"+A" : "deprel_+A",
-			"+F" : "deprel_+F",
-			"AA" : "deprel_AA",
-			"AG" : "deprel_AG",
-			"AN" : "deprel_AN",
-			"AT" : "deprel_AT",
-			"CA" : "deprel_CA",
-			"DB" : "deprel_DB",
-			"DT" : "deprel_DT",
-			"EF" : "deprel_EF",
-			"EO" : "deprel_EO",
-			"ES" : "deprel_ES",
-			"ET" : "deprel_ET",
-			"FO" : "deprel_FO",
-			"FP" : "deprel_FP",
-			"FS" : "deprel_FS",
-			"FV" : "deprel_FV",
-			"I?" : "deprel_I?",
-			"IC" : "deprel_IC",
-			"IG" : "deprel_IG",
-			"IK" : "deprel_IK",
-			"IM" : "deprel_IM",
-			"IO" : "deprel_IO",
-			"IP" : "deprel_IP",
-			"IQ" : "deprel_IQ",
-			"IR" : "deprel_IR",
-			"IS" : "deprel_IS",
-			"IT" : "deprel_IT",
-			"IU" : "deprel_IU",
-			"IV" : "deprel_IV",
-			"JC" : "deprel_JC",
-			"JG" : "deprel_JG",
-			"JR" : "deprel_JR",
-			"JT" : "deprel_JT",
-			"KA" : "deprel_KA",
-			"MA" : "deprel_MA",
-			"MS" : "deprel_MS",
-			"NA" : "deprel_NA",
-			"OA" : "deprel_OA",
-			"OO" : "deprel_OO",
-			"OP" : "deprel_OP",
-			"PL" : "deprel_PL",
-			"PR" : "deprel_PR",
-			"PT" : "deprel_PT",
-			"RA" : "deprel_RA",
-			"SP" : "deprel_SP",
-			"SS" : "deprel_SS",
-			"TA" : "deprel_TA",
-			"TT" : "deprel_TT",
-			"UK" : "deprel_UK",
-			"VA" : "deprel_VA",
-			"VO" : "deprel_VO",
-			"VS" : "deprel_VS",
-			"XA" : "deprel_XA",
-			"XF" : "deprel_XF",
-			"XT" : "deprel_XT",
-			"XX" : "deprel_XX",
-			"YY" : "deprel_YY",
-			"CJ" : "deprel_CJ",
-			"HD" : "deprel_HD",
-			"IF" : "deprel_IF",
-			"PA" : "deprel_PA",
-			"UA" : "deprel_UA",
-			"VG" : "deprel_VG"
+			"++" : "++",
+			"+A" : "+A",
+			"+F" : "+F",
+			"AA" : "AA",
+			"AG" : "AG",
+			"AN" : "AN",
+			"AT" : "AT",
+			"CA" : "CA",
+			"DB" : "DB",
+			"DT" : "DT",
+			"EF" : "EF",
+			"EO" : "EO",
+			"ES" : "ES",
+			"ET" : "ET",
+			"FO" : "FO",
+			"FP" : "FP",
+			"FS" : "FS",
+			"FV" : "FV",
+			"I?" : "I?",
+			"IC" : "IC",
+			"IG" : "IG",
+			"IK" : "IK",
+			"IM" : "IM",
+			"IO" : "IO",
+			"IP" : "IP",
+			"IQ" : "IQ",
+			"IR" : "IR",
+			"IS" : "IS",
+			"IT" : "IT",
+			"IU" : "IU",
+			"IV" : "IV",
+			"JC" : "JC",
+			"JG" : "JG",
+			"JR" : "JR",
+			"JT" : "JT",
+			"KA" : "KA",
+			"MA" : "MA",
+			"MS" : "MS",
+			"NA" : "NA",
+			"OA" : "OA",
+			"OO" : "OO",
+			"OP" : "OP",
+			"PL" : "PL",
+			"PR" : "PR",
+			"PT" : "PT",
+			"RA" : "RA",
+			"SP" : "SP",
+			"SS" : "SS",
+			"TA" : "TA",
+			"TT" : "TT",
+			"UK" : "UK",
+			"VA" : "VA",
+			"VO" : "VO",
+			"VS" : "VS",
+			"XA" : "XA",
+			"XF" : "XF",
+			"XT" : "XT",
+			"XX" : "XX",
+			"YY" : "YY",
+			"CJ" : "CJ",
+			"HD" : "HD",
+			"IF" : "IF",
+			"PA" : "PA",
+			"UA" : "UA",
+			"VG" : "VG"
 		},
 		opts : settings.liteOptions
 	};
@@ -1648,9 +1648,6 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
 		text: attrs.text
 	},
 	struct_attributes : {
-//		text_origlang : {
-//			label : "original_language"
-//		}
 	}
 };
 
@@ -2482,25 +2479,6 @@ settings.corpora.hbl1999 = {
 	}
 };
 
-if(isLab) {
-	// this is where we add corpora visible only in the lab.
-	
-	settings.corpora.fornsvenska = {
-			title : "Fornsvenska",
-			description : "Fornsvenska",
-			languages : {
-				FORNSVENSKA : "svenska"
-			},
-			within : within.defaultStruct,
-			attributes : {
-			},
-			struct_attributes : {
-				"text_title" : {label : "title"},
-				"paragraph_pnum" : {label : "page_num"}
-			}
-		};
-}
-
 
 /*
  * MISC
@@ -2508,96 +2486,20 @@ if(isLab) {
 
 settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
-//settings.arg_types = {
-//	"word" : String,
-//	"notword" : String,
-//	"beginswith" : String,
-//	"endswith" : String,
-//	"regexp" : RegExp,
-//	"pos" : attrs.pos.dataset,
-//	"msd" : String,
-//	"max" : Number,
-//	"min" : Number
-//};
-// values here represent translation keys.
+// label values here represent translation keys.
 settings.arg_groups = {
 	"word" : {
 		word : {label : "word"},
-//		notword : "word_is_not",
-//		beginswith : "word_beginswith",
-//		endswith : "word_endswith",
 		anyword : {label : "any", opts : {}}
-//		regexp : "matches_regexp"
 	}
-//	"ordklass" : {
-//		pos : language.wordclass_is,
-//		msd : language.wordclass_starts
-//	},
-//	"interval" : {
-//		max : {label : "max", opts : {}},
-//		min : {label : "min", opts : {}}
-//	}
 };
 
 
 settings.inner_args = {
-//	word : function(s, op) {
-//		var formatter = op == "matches" ? function(arg) {return arg;} : regescape;
-//		op = {
-//			"is" : ["=", "", ""],
-//			"is_not" : ["!=", "", ""],
-//			"starts_with" : ["=", "", ".*"],
-//			"ends_with" : ["=", ".*", ""],
-//			"matches" : "matches"
-//		}[op];
-//		return $.format('word %s "%s%s%s"', [op, formatter(s)]);
-////		return 'word = "' + regescape(s) + '"';
-//	},
-//	notword : function(s) {
-//		return 'word != "' + regescape(s) + '"';
-//	},
-//	beginswith : function(s) {
-//		return 'word = "' + regescape(s) + '.*"';
-//	},
-//	endswith : function(s) {
-//		return 'word = ".*' + regescape(s) + '"';
-//	},
 	anyword : function(s) {
 		return "";
 	}
-//	regexp : function(s) {
-//		return 'word = "' + s + '"';
-//	},
-//	pos : function(s) {
-//		return 'pos = "' + regescape(s) + '"';
-//	},
-//	msd : function(s) {
-//		return 'msd = "' + regescape(s) + '.*"';
-//	}
-//	lemma : function(s, op) {
-//		return $.format('lemma contains "%s"', s.split(".")[0]); 
-//	}
-	
 };
-
-//settings.outer_args = {
-//	min : function(query, values) {
-//		query.min = Math.min(values);
-//	},
-//	max : function(query, values) {
-//		query.max = Math.max(values);
-//	}
-//};
-
-//settings.operators = {
-//	include : "eller",
-//	intersect : "och",
-//	exclude : "men inte"
-//};
-
-//settings.first_operators = {
-//	find : "Leta efter"
-//};
 
 delete attrs;
 delete sattrs;

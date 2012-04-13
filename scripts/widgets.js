@@ -375,16 +375,12 @@ var Sidebar = {
 	},
 	
 	show : function(mode) {
-//		$.sm.send("sidebar.show.start");
 		var self = this;
 		// make sure that both hide animation and content load is done before showing
 		$.when(this.element).pipe(function() {
 			return self.refreshContent(mode);
 		}).done(function() {
 			self.element.show("slide", {direction : "right"});
-//			self.element.animate({
-//				right : 0
-//			});
 			$("#left-column").animate({
 				right : 273
 			}, null, null, function() {
@@ -573,7 +569,7 @@ var ExtendedToken = {
 				
 			} else {
 				$(this).find(".arg_value")
-				.val(oldLower.val())
+				.val(oldLower.val());
 			}
 			
 		});
@@ -598,7 +594,10 @@ var ExtendedToken = {
 			});
 			
 			$.each(keys, function(_, key) {
-				$("<option />").localeKey(data.dataset[key]).val(key).appendTo(arg_value);
+				c.log("key", data.translationKey + key)
+				$("<option />")
+				.localeKey(data.translationKey + data.dataset[key])
+				.val(key).appendTo(arg_value);
 			});
 			break;
 		case "autocomplete":

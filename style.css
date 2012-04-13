@@ -4,6 +4,7 @@ body {
 	font-size: 13px;
 	margin : 0;
 	overflow-x : hidden;
+/* 	opacity : 0; */
 }
 
 ul, ol {

@@ -159,19 +159,8 @@ var currentMode;
 					$.sm.send("resultstab.custom");
 				} else {
 					var currentId = $(ui.panel).attr("id");
-//					//				if(currentId == null) return;
 					var selected = currentId.split("-")[1];
-//					if($("#sidebar").is(":hidden"))
-//						$("#rightStatsTable").css({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
-//					else {
-//						$("#rightStatsTable").css("width", $("#content").innerWidth() - ($("#leftStatsTable").width() +500));
-//						$("#rightStatsTable").animate({"width": $("#content").innerWidth() - ($("#leftStatsTable").width() + 50)});
-//					}
 					$.sm.send("resultstab." + selected);
-					// hack for slickgrid header
-//					$(".slick-column-name:nth(0),.slick-column-name:nth(1)").each(function() {
-//						$(this).localeKey($(this).text());
-//					});
 				}
 			},
 			panelTemplate : "<div>" + kwicResults.initHTML + "</div>",
@@ -262,12 +251,15 @@ var currentMode;
 			
 			if(hasChanged("lang")) {
 				var lang = $.bbq.getState("lang") || "sv";
-				lang = {
+				// some language identifyer aliases
+				var trans = {
 					"swe"  : "sv",
 					"sv" : "sv",
 					"eng" : "en",
 					"en" : "en"
-				}[lang];
+				};
+				if(lang in trans)
+					lang = trans[lang];
 				
 				var loc_dfd = $.localize("init", {
 					packages : ["locale", "corpora"],
@@ -421,9 +413,10 @@ var currentMode;
 		});
 		
 		onHashChange(null, true);
-		$("body").fadeTo(400, 1, function() {
+		$("body").animate({"opacity" : 1}, function() {
 			$(this).css("opacity", "");
 		});
+//		$("body").css("opacity", 1)
 		view.updateSearchHistory();
 	});
 

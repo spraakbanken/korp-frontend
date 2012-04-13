@@ -335,6 +335,7 @@ $.onScrollOut = function(upOpts, downOpts) {
 $.fn.cover = function() {
 	
 	this.each(function() {
+		if($(this).data("cover") != null) return;
 		var pos = $(this).position();
 		var cover = $("<div />").css({
 			position : "absolute",
