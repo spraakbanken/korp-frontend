@@ -1261,3 +1261,17 @@ a.relStat:hover {
 	text-align : right;
 	box-shadow: 2px 2px 3px grey;
 }
+
+.korp_fail {
+	height : 80px;
+}
+.fail_text {
+	margin : 1em 0 0 1em;
+	vertical-align: top;
+	font-family : Garamond,Cochin,Serif;
+	font-size : 1.3em;
+}
+
+.error_msg ~ * {
+	display : none;
+}

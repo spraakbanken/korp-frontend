@@ -304,12 +304,11 @@ var StatsProxy = {
 			error : function(jqXHR, textStatus, errorThrown) {
 				c.log("gettings stats error, status: " +	 textStatus);
 				statsResults.hidePreloader();
-//				statsResults.showError();
 			},
 			success : function(data) {
 				if(data.ERROR != null) {
 					c.log("gettings stats failed with error", $.dump(data.ERROR));
-					statsResults.showError();
+					statsResults.resultError(data);
 					return;
 				}
 				

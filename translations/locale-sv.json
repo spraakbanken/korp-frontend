@@ -15,6 +15,7 @@
 	"about_logo" : "Logotyp av",
 	"warning_header" : "Vänligen uppmärksamma",
 	"warning_body" : "Relationerna mellan orden är ett resultat av automatisk parsning. ",
+	"fail_text" : "Ett fel har uppstått. ",
 	"corpus" : "Korpus",
 	"search_for" : "Sök efter ",
 	"show_more" : "Visa fler",

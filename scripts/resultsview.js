@@ -2,14 +2,14 @@
 // Result view objects
 //************
 
-view.disableTab = function(index) {
-	c.log("disableTab", index);
-	if($("#result-container").korptabs("option", "selected") == index) {
-		c.log("iscurrentselected")
-		$("#result-container li:first > a").trigger("click");
-	}
-	$("#result-container").korptabs("disable", index);
-};
+//view.disableTab = function(index) {
+//	c.log("disableTab", index);
+//	if($("#result-container").korptabs("option", "selected") == index) {
+//		c.log("iscurrentselected")
+//		$("#result-container li:first > a").trigger("click");
+//	}
+//	$("#result-container").korptabs("disable", index);
+//};
 
 
 var BaseResults = {
@@ -20,10 +20,7 @@ var BaseResults = {
 	},
 	
 	renderResult : function(data) {
-		if(data.ERROR) {
-			this.resultError(data);
-			return false;
-		}
+		this.resetView();
 		c.log("renderResults", this.proxy);
 		if(this.$result.is(":visible"))
 			util.setJsonLink(this.proxy.prevRequest);
@@ -31,14 +28,28 @@ var BaseResults = {
         //$("#result-container").tabs("select", 0);
         var disabled = $("#result-container").korptabs("option", "disabled");
         var newDisabled = $.grep(disabled, function(item) {
-        	return item != self.$tab.index();
+        	return item != self.index;
         });
         $("#result-container").korptabs("option", "disabled", newDisabled);
+        
+        if(data.ERROR) {
+			this.resultError(data);
+			return false;
+		}
 	},
 	
 	resultError : function(data) {
 		c.log("json fetch error: " + $.dump(data.ERROR));
 		this.hidePreloader();
+		this.resetView();
+		$("<img class='korp_fail' src='img/korp_fail.svg'>")
+		.add($("<div class='fail_text' />").localeKey("fail_text"))
+		.addClass("inline_block")
+		.prependTo(this.$result)
+		.wrapAll("<div class='error_msg'>");
+		
+		
+		util.setJsonLink(this.proxy.prevRequest);
 	},
 	
 	showPreloader : function() {
@@ -48,6 +59,10 @@ var BaseResults = {
 	},
 	hidePreloader : function() {
 		this.$tab.find(".spinner").remove();
+	},
+	
+	resetView : function() {
+		this.$result.find(".error_msg").remove();
 	}
 };
 
@@ -77,14 +92,17 @@ var KWICResults = {
 		this.$result.find(".sort_select").change($.proxy(this.onSortChange, this)).click(false);
 		
 	},
-	
-	resultError : function(data) {
-		this.parent(data);
-		this.$result.find(".results_table").empty();
-		this.$result.find(".pager-wrapper").empty();
-		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
-		util.setJsonLink(this.proxy.prevRequest);
+	resetView : function() {
+		this.parent();
+		this.$result.find(".results_table,.pager-wrapper,.results_table").empty();
 	},
+//	resultError : function(data) {
+//		this.parent(data);
+//		this.$result.find(".results_table").empty();
+//		this.$result.find(".pager-wrapper").empty();
+//		this.$result.find(".results_table").html($.format("<i>There was a CQP error: <br/>%s:</i>", data.ERROR.traceback.join("<br/>")));
+//		util.setJsonLink(this.proxy.prevRequest);
+//	},
 	
 	onSortChange : function(event) {
 		var opt = $(event.currentTarget).find(":selected");
@@ -640,12 +658,17 @@ var LemgramResults = {
 		
 	},
 	
+	resetView : function() {
+		this.parent();
+		$("#results-lemgram").empty();
+	},
+	
 	renderResult : function(data, query) {
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
-		$("#results-lemgram").empty();
+//		$("#results-lemgram").empty();
 		if(!data.relations){
 			this.showNoResults();
 			this.resultDeferred.reject();
@@ -1450,12 +1473,12 @@ var StatsResults = {
 	},
 	
 	
-	showError : function() {
-		this.hidePreloader();
-		$("<i/>")
-		.localeKey("error_occurred")
-		.appendTo("#results-stats");
-	},
+//	showError : function() {
+//		this.hidePreloader();
+//		$("<i/>")
+//		.localeKey("error_occurred")
+//		.appendTo("#results-stats");
+//	},
 	
 	showNoResults : function() {
 		this.hidePreloader();

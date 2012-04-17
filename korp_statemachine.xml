@@ -17,10 +17,7 @@
             
             kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
             statsProxy.makeRequest($("#cqp_string").val());
-            if(isLab && currentMode == "default") {
-                lemgramResults.showPreloader();
-                lemgramProxy.relationsWordSearch($("#simple_text").val());
-            }
+            
         }
     
         function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
@@ -110,13 +107,22 @@
                     <transition event="searchtab.advanced" target="advanced" /> 
                         
                     <state id="simple">
+                        <transition event="submit.kwic" target="simple">
+                            <script><![CDATA[
+                                $("#simple_text").get(0).blur();
+                                kwicSearch(_event.data.page);
+                                if(isLab && currentMode == "default") {
+                                    lemgramResults.showPreloader();
+                                    lemgramProxy.relationsWordSearch($("#simple_text").val());
+                                }
+                            ]]></script>
+                        </transition>
                         
                         <transition event="submit.lemgram" target="simple">
                             <script>
                                 lemgramSearch(_event.data.value, simpleSearch.isSearchPrefix(), simpleSearch.isSearchSuffix(), _event.data.page);
                             </script>
                         </transition>
-                    
                         <onexit>
                             <script>
                                 $("#simple_text").autocomplete("close");

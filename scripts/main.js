@@ -251,15 +251,6 @@ var currentMode;
 			
 			if(hasChanged("lang")) {
 				var lang = $.bbq.getState("lang") || "sv";
-				// some language identifyer aliases
-				var trans = {
-					"swe"  : "sv",
-					"sv" : "sv",
-					"eng" : "en",
-					"en" : "en"
-				};
-				if(lang in trans)
-					lang = trans[lang];
 				
 				var loc_dfd = $.localize("init", {
 					packages : ["locale", "corpora"],
@@ -269,7 +260,7 @@ var currentMode;
 				loc_dfd.done(function() {
 					util.localize();
 				});
-				$("#languages").radioList("select", lang);
+				$("#languages").radioList("select", $.localize("getLang"));
 			}
 				
 			
