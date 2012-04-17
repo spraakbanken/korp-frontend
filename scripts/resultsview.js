@@ -42,7 +42,8 @@ var BaseResults = {
 		c.log("json fetch error: " + $.dump(data.ERROR));
 		this.hidePreloader();
 		this.resetView();
-		$("<img class='korp_fail' src='img/korp_fail.svg'>")
+		$('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg"> ')
+		.append("<img class='korp_fail' src='img/korp_fail.svg'>")
 		.add($("<div class='fail_text' />").localeKey("fail_text"))
 		.addClass("inline_block")
 		.prependTo(this.$result)

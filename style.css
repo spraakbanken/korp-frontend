@@ -1264,12 +1264,14 @@ a.relStat:hover {
 
 .korp_fail {
 	height : 80px;
+	width : 180px;
 }
 .fail_text {
 	margin : 1em 0 0 1em;
 	vertical-align: top;
 	font-family : Garamond,Cochin,Serif;
 	font-size : 1.3em;
+	
 }
 
 .error_msg ~ * {
