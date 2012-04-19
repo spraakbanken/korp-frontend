@@ -258,7 +258,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["pargaskungorelser", "vasabladet"]
+	contents : ["pargaskungorelser", "vasabladet", "osterbottenstidning2011"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -2357,6 +2357,29 @@ settings.corpora.vasabladet = {
 		text_year : {label : "year"},
 		text_issue : {label : "issue"},
 		text_type : {label : "section"}
+	}
+};
+
+settings.corpora.osterbottenstidning2011 = {
+	title : "Österbottens tidning 2011",
+	description : "",
+	languages : {
+		OSTERBOTTENSTIDNING2011 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
 	}
 };
 
