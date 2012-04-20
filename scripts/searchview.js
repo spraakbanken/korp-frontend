@@ -391,6 +391,7 @@ var ExtendedSearch = {
 	    	tolerance : "pointer"
 	    });
 	    insert_token_button.click();
+	    this.updateReduceSelect();
 	},
 	
 	onentry : function() {
@@ -451,7 +452,6 @@ var ExtendedSearch = {
 								 return val.disabled !== true;
 							  })
 			});
-		
 		
 		
 		var select = util.makeAttrSelect(groups);
