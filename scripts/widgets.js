@@ -684,6 +684,8 @@ var ExtendedToken = {
 					height : h,
 					modal : true
 				});
+				$("#ui-dialog-title-msd_popup").localeKey("msd_long");
+				
 				$(".ui-widget-overlay").one("click", function(evt) {
 					c.log("body click");
 					$("#msd_popup").dialog("close");

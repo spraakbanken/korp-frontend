@@ -26,6 +26,9 @@
 	"and" : "och",
 	"or" : "eller",
 	
+	"case_insensitive" : "skiftlägesoberoende",
+	"reduce_text" : "Sammanställ statistiken med avseende på",
+	
 	"is" : "är", 
 	"is_not" : "är inte",
 	"starts_with" : "börjar med",
@@ -86,6 +89,7 @@
 	"text" : "text",
 	"word" : "ord",
 	
+	"msd_long" : "Morfosyntaktisk beskrvning",
 	
 	
 	"corpselector_allselected" : " korpusar valda (alla)",

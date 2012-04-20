@@ -213,6 +213,7 @@ function loadCorpora() {
 		$.bbq.pushState({"corpus" : corpora.join(",")});
 		if(corpora.length) {
 			extendedSearch.refreshTokens();
+			extendedSearch.updateReduceSelect();
 		}
 		var enableSearch = !!corpora.length;
 		view.enableSearch(enableSearch);
@@ -318,6 +319,28 @@ function invalidateAttrs(attrs) {
 	});
 	return union;
 }
+
+util.makeAttrSelect = function(groups) {
+	var arg_select = $("<select/>");
+	$.each(groups, function(lbl, group) {
+		if($.isEmptyObject(group)) {
+			return;
+		}
+		var optgroup = $("<optgroup/>", {label : util.getLocaleString(lbl).toLowerCase(), "rel" : $.format("localize[%s]", lbl)})
+		.appendTo(arg_select);
+		$.each(group, function(key, val) {
+			if(val.displayType == "hidden")
+				return;
+			
+			$('<option/>',{rel : $.format("localize[%s]", val.label)})
+			.val(key).text(util.getLocaleString(val.label) || "")
+			.appendTo(optgroup)
+			.data("dataProvider", val);
+
+		});
+	});
+	return arg_select;
+};
 
 function regescape(s) {
     return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");

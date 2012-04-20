@@ -11,14 +11,22 @@
 
 	<div id="korp-simple">
 		<div class="ui-widget">
-			<label for="simple_text" rel="localize[search_for]">Sök efter</label><input
-				id="simple_text" type="text" /> <input id="sendBtn" value="  Sök  "
-				type="submit" rel="localize[search]" /> <span
-				rel="localize[and_include]">och inkludera</span> <span> <input
-				id="prefixChk" type="checkbox"><label
-				rel="localize[prefix]" for="prefixChk">förled</label> <input
-				id="suffixChk" type="checkbox"><label rel="localize[suffix]"
-				for="suffixChk">efterled</label> </span>
+			<label for="simple_text" rel="localize[search_for]">Sök efter</label>
+			<input id="simple_text" type="text" /> 
+			<input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" /> 
+			<span rel="localize[and_include]">och inkludera</span>
+			<input id="prefixChk" type="checkbox">
+			<label rel="localize[prefix]" for="prefixChk">förled</label>
+			<input id="suffixChk" type="checkbox">
+			<label rel="localize[suffix]" for="suffixChk">efterled</label>
+			&nbsp;
+			<span rel="localize[and]">och</span>
+			<input id="caseChk" type="checkbox">
+			<label for="caseChk" rel="localize[case_insensitive]">shiftlägesoberoende</label>
+			
+				
+				 
+				
 		</div>
 		<div id="similar_wrapper">
 			<div id="similar_lemgrams"></div>
@@ -29,8 +37,9 @@
 	<div id="korp-extended">
 		<div id="query_table"></div>
 
-		<input id="sendBtn" value="  Sök  " type="submit"
-			rel="localize[search]" />
+		<input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />
+		<span rel="localize[reduce_text]"></span>
+		<span id="reduceSelect"></span>
 	</div>
 
 	<div id="korp-advanced">

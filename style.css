@@ -1277,3 +1277,15 @@ a.relStat:hover {
 .error_msg ~ * {
 	display : none;
 }
+
+.sidebar_msd {
+	font-size : 0.8em;
+}
+
+.lab #sendBtn ~ * {
+	display : inline;
+}
+
+#sendBtn ~ * {
+	display : none;	
+}

@@ -30,6 +30,8 @@
 	"starts_with" : "begins with",
 	"ends_with" : "ends with",
 	
+	"case_insensitive" : "case insensitive",
+	"reduce_text" : "Compile the statistics according to",
 	
 	"word_is" : "word is",
 	"word_is_not" : "word is not",
@@ -86,6 +88,7 @@
 	"text" : "text",
 	"word" : "word",
 	
+	"msd_long" : "Morphosyntactic description",
 	
 	"corpselector_allselected" : " corpora selected (all)",
 	"corpselector_noneselected" : "No corpus selected",

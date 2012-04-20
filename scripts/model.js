@@ -294,7 +294,7 @@ var StatsProxy = {
 			url: settings.cgi_script,
 			data : {
 				command : "count",
-				groupby : "word",
+				groupby : extendedSearch.getReduction(),
 				cqp : cqp,
 				corpus : selected_uppercased_corpora_ids
 			},
