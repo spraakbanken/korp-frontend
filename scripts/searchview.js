@@ -322,7 +322,8 @@ var SimpleSearch = {
 			this.isSearchSuffix() && query.push(".*%s");
 			val = $.map(currentText.split(" "), function(wd) {
 				return "[" + $.map(query, function(q) {
-					return $.format($.format('word = "%s"%s', [q, suffix]), wd);
+					q = $.format(q, wd);
+					return $.format('word = "%s"%s', [q, suffix]);
 				}).join(" | ")  + "]";
 			}).join(" ");
 			
