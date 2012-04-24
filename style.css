@@ -1282,10 +1282,10 @@ a.relStat:hover {
 	font-size : 0.8em;
 }
 
-.lab #sendBtn ~ * {
-	display : inline;
-}
+/* .lab label[for=suffixChk] ~ * { */
+/* 	display : inline; */
+/* } */
 
-#sendBtn ~ * {
-	display : none;	
-}
+/* .lab label[for=suffixChk] ~ *  { */
+/* 	display : none;	 */
+/* } */
