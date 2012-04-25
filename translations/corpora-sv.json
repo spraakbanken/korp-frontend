@@ -16,6 +16,9 @@
 	"day" : "dag",
 	"party" : "parti",
 	
+	"year_from" : "startår",
+	"year_to" : "slutår",
+	
 	
 	"text_year" : "år",
 	"text_party" : "parti",

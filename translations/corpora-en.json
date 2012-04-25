@@ -17,6 +17,9 @@
 	"day" : "day",
 	"party" : "party",
 	
+	"year_from" : "starting year",
+	"year_to" : "ending year",
+	
 	"text_year" : "year",
 	"text_party" : "party",
 	"date" : "date",

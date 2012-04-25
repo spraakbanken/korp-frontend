@@ -1296,3 +1296,11 @@ a.relStat:hover {
 /* .lab label[for=suffixChk] ~ *  { */
 /* 	display : none;	 */
 /* } */
+
+#mode_switch li:last-child {
+	display : none;
+}
+
+.lab #mode_switch li:last-child {
+	display : inline-block;
+}

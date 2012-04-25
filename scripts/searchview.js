@@ -138,11 +138,9 @@ var SimpleSearch = {
 			});
 		
 		$("#prefixChk, #suffixChk, #caseChk").click(function() {
-			c.log("caseChk before");
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
 				self.enableSubmit();
 			} else {
-				c.log("caseChk");
 				self.onSimpleChange();
 			}
 		});
