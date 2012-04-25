@@ -2502,6 +2502,28 @@ settings.corpora.hbl1999 = {
 	}
 };
 
+settings.corpora.talbanken = {
+	title : "Talbanken",
+	description : "",
+	languages : {
+		TALBANKEN : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
 
 /*
  * MISC
