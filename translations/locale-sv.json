@@ -44,7 +44,9 @@
 	"interval" : "intervall",
 	"matches" : "regexp",
 	
-	"repeat" : "upprepa",
+	"repeat" : "Upprepa",
+	"to" : "till",
+	"times" : "gånger",
 	
 	"none_selected" : "&lt;ej vald&gt;",
 	

@@ -43,7 +43,9 @@
 	"interval" : "interval",
 	"matches" : "regexp",
 	
-	"repeat" : "repeat",
+	"repeat" : "Repeat",
+	"to" : "to",
+	"times" : "times",
 	
 	"none_selected" : "&lt;none selected&gt;",
 	

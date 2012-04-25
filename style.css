@@ -1282,6 +1282,13 @@ a.relStat:hover {
 	font-size : 0.8em;
 }
 
+#korp-extended #sendBtn ~ * {
+	display : none;
+}
+.lab #korp-extended #sendBtn ~ * {
+	display : inline;
+}
+
 /* .lab label[for=suffixChk] ~ * { */
 /* 	display : inline; */
 /* } */
