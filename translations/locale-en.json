@@ -72,8 +72,8 @@
 	"no_lemgram_results" : "No examples found.",
 	"no_stats_results" : "The search generated no results.",
 	
-	"sentence_attr" : "Text attributes",
-	"word_attr" : "Word attributes",
+	"sentence_attr" : "text attributes",
+	"word_attr" : "word attributes",
 	
 	"similar_header" : "Related words",
 	"show_wordclass" : "Show word class",

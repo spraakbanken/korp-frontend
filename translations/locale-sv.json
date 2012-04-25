@@ -73,8 +73,8 @@
 	"no_lemgram_results" : "Hittade inga förekomster.",
 	"no_stats_results" : "Sökningen gav inga träffar.",
 	
-	"sentence_attr" : "Textattribut",
-	"word_attr" : "Ordattribut",
+	"sentence_attr" : "textattribut",
+	"word_attr" : "ordattribut",
 	
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",
