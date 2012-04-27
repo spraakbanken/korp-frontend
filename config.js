@@ -2529,7 +2529,7 @@ settings.corpora.talbanken = {
  * MISC
  */
 
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
+settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 
 // label values here represent translation keys.
 settings.arg_groups = {

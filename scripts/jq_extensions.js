@@ -372,5 +372,23 @@ jQuery.sortedEach = function(obj, eachFunc, sortFunc) {
 	});
 	
 };
-
-
+jQuery.fn.customSelect = function() {
+	
+	this.change(function() {
+		$("option", this).each(function() {
+			$(this).text($(this).val());
+			$(this).data("locPrefix", null);
+		});
+		
+//		var prefix = $(this).find("option:disabled").text() + ": ";
+		var selected = $(this).find("option:selected");
+		
+		selected.data("locPrefix", $(this).data("prefix"));
+		$(this).localize();
+//		if($(this).find("option:not([rel])").length)
+//			selected.text(util.getLocaleString($(this).data("prefix")) + ": " + selected.text());
+		
+		
+	});
+	return this;
+};

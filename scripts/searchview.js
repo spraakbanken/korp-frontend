@@ -52,6 +52,55 @@ view.enableSearch = function(bool) {
 	
 };
 
+view.initSearchOptions = function() {
+	$("#num_hits,.sort_select").customSelect();
+	view.updateReduceSelect();
+	
+	$("#search_options").css("background-color", settings.primaryLight)
+	.change(function(event) {
+		simpleSearch.enableSubmit();
+		extendedSearch.enableSubmit();
+		advancedSearch.enableSubmit();
+		var target = $(event.target);
+		
+		var state = {};
+		state[target.data("history")] = target.val();
+		$.bbq.pushState(state);
+	})
+	.find("select")
+	.each(function() {
+		var state = $.bbq.getState($(this).data("history"));
+		if(!!state) {
+			$(this).val(state)
+			.change();
+		} else {
+			$(this).prop("selectedIndex", 0)
+			.change();
+		}
+	});
+};
+
+view.updateReduceSelect = function() {
+	var groups = $.extend({word : {word : {label : "word"}}}, {
+		"word_attr" : getCurrentAttributes(),
+		"sentence_attr" : $.grepObj(getStructAttrs(), function(val, key) {
+							 return val.disabled !== true;
+						  })
+		});
+	
+	
+	var select = util.makeAttrSelect(groups);
+//	$("<option disabled>").localeKey("reduce_text")
+//	.prependTo(select);
+	$("#reduceSelect").html(select);
+	select
+	.attr("data-history", "stats_reduce")
+	.attr("data-prefix", "reduce_text")
+	.customSelect();
+//	.get(0).selectedIndex = 0;
+	return select;
+};
+
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
@@ -390,7 +439,6 @@ var ExtendedSearch = {
 	    	tolerance : "pointer"
 	    });
 	    insert_token_button.click();
-	    this.updateReduceSelect();
 	},
 	
 	onentry : function() {
@@ -444,22 +492,11 @@ var ExtendedSearch = {
 		$(".query_token").extendedToken("refresh");
 	},
 	
-	updateReduceSelect : function() {
-		var groups = $.extend({word : {word : {label : "word"}}}, {
-			"word_attr" : getCurrentAttributes(),
-			"sentence_attr" : $.grepObj(getStructAttrs(), function(val, key) {
-								 return val.disabled !== true;
-							  })
-			});
-		
-		
-		var select = util.makeAttrSelect(groups);
-		$("#reduceSelect").html(select);
-	},
 	
-	getReduction : function() {
-		return $("#reduceSelect select").val();
-	}
+	
+//	getReduction : function() {
+//		return $("#reduceSelect select").val();
+//	}
 	
 };
 

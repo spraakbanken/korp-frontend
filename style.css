@@ -190,7 +190,18 @@ input:placeholder, textarea:placeholder {
 }
 
 #content > div  {
-	margin-bottom: 8px;
+/* 	margin-bottom: 8px; */
+}
+
+#search_options {
+	border-top : none;
+	padding : 8px;
+	background-image : none;
+	margin-bottom : 8px;
+}
+#search_options > div {
+	display : inline-block;
+	margin-right : 10px;
 }
 
 #corpus_id {
@@ -1084,11 +1095,7 @@ a.relStat:hover {
 /* } */
 
 .sort_select {
-	float : right;
-}
-
-.sort_select option:first-child {
-	color : grey;
+/* 	float : right; */
 }
 
 .pager-wrapper {
@@ -1263,8 +1270,8 @@ a.relStat:hover {
 }
 
 .korp_fail {
-	height : 80px;
-	width : 180px;
+	height : 146px;
+	width : 290px;
 }
 .fail_text {
 	margin : 1em 0 0 1em;
@@ -1303,4 +1310,10 @@ a.relStat:hover {
 
 .lab #mode_switch li:last-child {
 	display : inline-block;
+}
+
+
+#search-tab {
+	border-bottom-right-radius : 0;
+	border-bottom-left-radius : 0;
 }

@@ -28,7 +28,7 @@
 	"or" : "eller",
 	
 	"case_insensitive" : "skiftlägesoberoende",
-	"reduce_text" : "Sammanställ statistiken med avseende på",
+	"reduce_text" : "sammanställ på",
 	
 	"is" : "är", 
 	"is_not" : "är inte",
@@ -63,8 +63,10 @@
 	"simple" : "Enkel",
 	"detailed" : "Utökad",
 	"advanced" : "Avancerad",
+	"statistics" : "Statistik",
 	"lemgram_results" : "Ordbild", 
 	"sort_default" : "sortera inom korpus på",
+	"appearance_context" : "förekomst",
 	"word_context" : "träff",
 	"left_context" : "vänsterkontext",
 	"right_context" : "högerkontext",
@@ -80,7 +82,7 @@
 	"show_wordclass" : "Visa ordklass",
 	"search" : "   Sök   ",
 	"and_include" : "även som",
-	"hits_per_page" : "Träffar per sida",
+	"hits_per_page" : "träffar per sida",
 	"num_results" : "Antal träffar",
 	"next" : "Nästa",
 	"prev" : "Föregående",

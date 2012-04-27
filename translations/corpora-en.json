@@ -20,6 +20,9 @@
 	"year_from" : "starting year",
 	"year_to" : "ending year",
 	
+	"url" : "url",
+	"referensnummer" : "reference number",
+	
 	"text_year" : "year",
 	"text_party" : "party",
 	"date" : "date",
@@ -67,9 +70,6 @@
 	"female" : "female",
 	"unknown" : "unknown",
 	"male_female" : "both",
-	
-	"statistics" : "Statistics",
-	
 	
 	"pos_AB" : "adverb",
 	"pos_DL" : "punctuation",

@@ -61,17 +61,13 @@ var currentMode;
 			settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"];
 		});
 	});
-	
-	var loc_dfd = $.localize("init", {
-		packages : ["locale", "corpora"],
-		pathPrefix : "translations",
-		language : $.bbq.getState("lang") || "sv" 
-	});
+	var loc_dfd = util.initLocalize();
 	
 	$.when(deferred_load, chained, deferred_domReady, deferred_sm, deferred_mode, loc_dfd).then(function(searchbar_html) {
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		c.log("preloading done, t = ", $.now() - t);
 		if(isLab) $("body").addClass("lab");
+		
 		currentMode = $.deparam.querystring().mode || "default";
 		util.browserWarn();
 		
@@ -245,19 +241,13 @@ var currentMode;
 			
 			var hpp = e.getState("hpp", true);
 			if(hpp)
-				kwicResults.$result.find(".num_hits").val(hpp);
+				$(".num_hits").val(hpp);
 			if(!isInit && hasChanged("hpp")) {
-				kwicResults.handlePaginationClick(0, null, true);
+//				kwicResults.handlePaginationClick(0, null, true);
 			}
 			
 			if(hasChanged("lang")) {
-				var lang = $.bbq.getState("lang") || "sv";
-				
-				var loc_dfd = $.localize("init", {
-					packages : ["locale", "corpora"],
-					pathPrefix : "translations",
-					language : lang 
-				});
+				var loc_dfd = util.initLocalize();
 				loc_dfd.done(function() {
 					util.localize();
 				});
@@ -270,13 +260,13 @@ var currentMode;
 				kwicResults.setPage(page);
 			}
 			
-			var sort = e.getState("sort");
-			if(isInit && sort) {
-				kwicResults.$result.find(".sort_select").val(sort);
-			}
-			if(!isInit && hasChanged("sort")) {
-				kwicResults.handlePaginationClick(0, null, true);
-			}
+//			var sort = e.getState("sort");
+//			if(isInit && sort) {
+//				kwicResults.$result.find(".sort_select").val(sort);
+//			}
+//			if(!isInit && hasChanged("sort")) {
+//				kwicResults.handlePaginationClick(0, null, true);
+//			}
 			
 			if(isInit) {
 				kwicResults.current_page = page;
@@ -409,7 +399,7 @@ var currentMode;
 			$(this).css("opacity", "");
 		});
 //		$("body").css("opacity", 1)
-		view.updateSearchHistory();
+//		view.updateSearchHistory();
 	});
 
 

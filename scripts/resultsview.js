@@ -17,6 +17,7 @@ var BaseResults = {
 		this.$tab = $(tabSelector);
 		this.$result = $(resultSelector);
 		this.index = this.$tab.index();
+		this.optionWidget = $("#search_options"); 
 	},
 	
 	renderResult : function(data) {
@@ -80,17 +81,13 @@ var KWICResults = {
 		this.proxy = kwicProxy;
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
-		if(this.$result.find(".num_hits").val() == null)
-			this.$result.find(".num_hits").get(0).selectedIndex = 0;
-		this.$result.find(".num_hits").bind("change", $.proxy(this.onHpp, this)).click(false);
 		
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
 			self.selectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
-		c.log("initialize", this.$result.find(".sort_select"), this.$result);
-		this.$result.find(".sort_select").change($.proxy(this.onSortChange, this)).click(false);
+		
 		
 	},
 	resetView : function() {
@@ -105,17 +102,6 @@ var KWICResults = {
 //		util.setJsonLink(this.proxy.prevRequest);
 //	},
 	
-	onSortChange : function(event) {
-		var opt = $(event.currentTarget).find(":selected");
-		c.log("sort", opt);
-		if(opt.is(":first-child")) {
-			$.bbq.removeState("sort");
-		} else {
-			c.log("sort", opt.val());
-			$.bbq.pushState({"sort" : opt.val()});
-		}
-	},
-	
 	onentry : function() {
 		this.centerScrollbar();
 		c.log("onentry");
@@ -124,11 +110,6 @@ var KWICResults = {
 	
 	onexit : function() {
 		$(document).unbind("keydown", this.onKeydown);
-	},
-	
-	onHpp : function(event) {
-		$.bbq.pushState({hpp : $(event.currentTarget).val()});
-		return false;
 	},
 	
 	onKeydown : function(event) {
@@ -162,8 +143,8 @@ var KWICResults = {
 	},
 	
 	getPageInterval : function(page) {
-		c.log("getPageInterval", this.$result.find(".num_hits").val());
-		var items_per_page = parseInt(this.$result.find(".num_hits").val());
+		c.log("getPageInterval", this.optionWidget.find(".num_hits").val());
+		var items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
 		output.end = (output.start + items_per_page) - 1;
@@ -186,7 +167,7 @@ var KWICResults = {
 			this.showNoResults();
 			return;
 		}
-		this.$result.find(".sort_select").show();
+//		this.$result.find(".sort_select").show();
 		this.renderHitsPicture(data);
 		
 
@@ -287,7 +268,7 @@ var KWICResults = {
 		this.hidePreloader();
 		this.$result.find('.num-result').html(0);
 		this.$result.click();
-		this.$result.find(".sort_select").hide();
+//		this.$result.find(".sort_select").hide();
 		this.$result.find(".hits_picture").html("");
     },
     
@@ -422,7 +403,7 @@ var KWICResults = {
 	
 	buildPager : function(number_of_hits){
 		c.log("buildPager", this.current_page);
-		var items_per_page = this.$result.find(".num_hits").val();
+		var items_per_page = this.optionWidget.find(".num_hits").val();
 		this.movePager("up");
 		$.onScrollOut("unbind");
 		this.$result.find('.pager-wrapper').unbind().empty();
@@ -461,7 +442,7 @@ var KWICResults = {
 		var opts = {};
 		opts.cqp = this.prevCQP;
 		opts.queryData = this.proxy.queryData;
-		opts.sort = this.$result.find(".sort_select").val();
+		opts.sort = $(".sort_select").val();
 		return opts;
 	},
 	
@@ -599,14 +580,14 @@ var ExampleResults = {
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		c.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
-			var items_per_page = parseInt(this.$result.find(".num_hits").val());
+			var items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
 			
 			var opts = {};
 			opts.cqp = this.prevCQP;
 			
 			opts.start = new_page_index*items_per_page;
 			opts.end = (opts.start + items_per_page);
-			opts.sort = this.$result.find(".sort_select").val();
+			opts.sort = $(".sort_select").val();
 			this.current_page = new_page_index;
 			this.makeRequest(opts);
 		}
@@ -1188,7 +1169,7 @@ var StatsResults = {
 		$(".arcDiagramPicture").live("click", function() {
 			c.log("clicked arcDiagramPicture" );
 			var parts = $(this).attr("id").split("__");
-			if(parts.length == 2)
+			if(parts[1] != "Σ")
 				newDataInGraph(parts[1],true);
 			else { // The ∑ row
 				newDataInGraph("SIGMA_ALL",true);

@@ -142,6 +142,30 @@
 		<div id="content">
 	   		
 	   		<div id="searchbar" ></div>
+	   		<div id="search_options" class="ui-widget-content ui-corner-bottom">
+	   			<div>
+		   			<span style="font-size:.9em">KWIC:</span>
+		   			<select id="num_hits" class="num_hits" data-history="hpp" data-prefix="hits_per_page" rel="localize[dummy]">
+				   		<option value="25">25</option>
+				   		<option value="50">50</option>
+				   		<option value="75">75</option>
+				   		<option value="100">100</option>
+				   		<option value="500">500</option>
+				   		<option value="1000">1000</option>
+				   </select>
+				   
+				   <select class="sort_select" data-history="sort" data-prefix="sort_default">
+						<option value="" rel="localize[appearance_context]">Förekomst</option>
+						<option value="keyword" rel="localize[word_context]">Ordkontext</option>
+						<option value="left" rel="localize[left_context]">Vänsterkontext</option>
+						<option value="right" rel="localize[right_context]">Högerkontext</option>
+					</select>
+				</div>
+				<div>
+					<span rel=localize[statistics]>Statistik</span>:
+					<span id="reduceSelect"></span>
+				</div>
+	   		</div>
 <!-- 			<div id="welcome" class="ui-widget ui-widget-content ui-corner-all"> -->
 <!-- 				<div class="welcome-header ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix "> -->
 <!-- 					<span class="ui-dialog-title">Välkommen</span> -->
@@ -160,15 +184,8 @@
 							<div id="results-kwic">
 								<div class="result_controls">
 								   <div>
-									   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>: 
-									   <select id="num_hits" class="num_hits">
-									   		<option value="25" selected="selected">25</option>
-									   		<option value="50">50</option>
-									   		<option value="75">75</option>
-									   		<option value="100">100</option>
-									   		<option value="500">500</option>
-									   		<option value="1000">1000</option>
-									   </select>
+<!-- 									   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>:  -->
+									   
 								   </div>
 								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
 								 
@@ -178,12 +195,7 @@
 							   </div>
 								
 								<div class="pager-wrapper"></div>
-								<select class="sort_select">
-									<option value="" rel="localize[sort_default]">Sortera inom korpus på</option>
-									<option value="keyword" rel="localize[word_context]">Ordkontext</option>
-									<option value="left" rel="localize[left_context]">Vänsterkontext</option>
-									<option value="right" rel="localize[right_context]">Högerkontext</option>
-								</select>
+								
 								
 								<div class="table_scrollarea">
 									<table class="results_table" cellspacing="0"></table>
