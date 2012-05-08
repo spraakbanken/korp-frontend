@@ -31,7 +31,8 @@
 	"starts_with" : "begins with",
 	"ends_with" : "ends with",
 	
-	"case_insensitive" : "case insensitive",
+	"case_insensitive" : "case-insensitive",
+	"case_sensitive" : "case-sensitive",
 	"reduce_text" : "compile based on",
 	
 	"word_is" : "word is",
@@ -58,6 +59,7 @@
 	"following_text" : "Match any of the following rules:",
 	"stats_hit" : "Hit",
 	"stats_total" : "Total",
+	"options" : "Options",
 	
 	"simple" : "Simple",
 	"detailed" : "Extended",
@@ -127,5 +129,7 @@
 	"util_numbergroupseparator" : ",",
 	
 	"hitspicture_hits" : "hits",
-	"hitspicture_gotocorpushits" : "Click to go to the first page with hits from this corpus."
+	"hitspicture_gotocorpushits" : "Click to go to the first page with hits from this corpus.",
+	
+	"hits_per_mil" : "Hits per million tokens"
 }

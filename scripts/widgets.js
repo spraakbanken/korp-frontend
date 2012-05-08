@@ -475,11 +475,39 @@ var ExtendedToken = {
 		.change(function(){
 			self._trigger("change");
 		});
-		
-		var orElem = $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value).end()
+		var link_mod = $("<span class='val_mod insensitive'>").text("Aa")
+		.click(function() {
+			var btn = $(this);
+			if($("#mod_menu").length) {
+				$("#mod_menu").remove();
+				return;
+			}
+			$("<ul id='mod_menu'>")
+			.append($("<li />").append($("<a>").localeKey("case_insensitive").data("val", "insensitive")))
+			.append($("<li />").append($("<a>").localeKey("case_sensitive").data("val", "sensitive")))
+			.insertAfter(this)
+			.menu({
+			})
+			.position({
+				my : "right top",
+				at : "right bottom",
+				of : this
+			})
+			.find("a").click(function(event) {
+				c.log("click", $(this).data("val"));
+				btn.removeClass("sensitive insensitive")
+				.addClass($(this).data("val"));
+				self._trigger("change");
+			});
+			$("body").one("click", function() {
+				$("#mod_menu").remove();
+			});
+			return false;
+		});
+		var orElem = $("#orTmpl").tmpl().find(".right_col")
+		.append(arg_select, arg_value, link_mod).end()
 		.find(".remove_arg")
 	    .click(function() {
-	    	c.log("remove", !$(this).css("opacity") === 0, !$(this).css("opacity") === "0");
 	    	if($(this).css("opacity") === "0") return;
 	    	var arg = $(this).closest(".or_arg"); 
 	    	if(arg.siblings(".or_arg").length == 0) {
@@ -703,6 +731,7 @@ var ExtendedToken = {
 		.change(function() {
 			self._trigger("change");
 		});
+		
 		this._trigger("change");
 	},
 	
@@ -716,6 +745,7 @@ var ExtendedToken = {
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();
 	        var opt = $(this).find(".arg_opts").val();
+	        var case_sens = $(this).find(".val_mod.sensitive").length === 0 ? "" : " %c";
 	        if(data.displayType == "autocomplete") {
 	        	value = null;
 	        }
@@ -725,7 +755,8 @@ var ExtendedToken = {
 	        args[type].push({
 	        	data : data, 
 	        	value : value || $(this).find(".arg_value").data("value") || "",
-	        	opt : opt
+	        	opt : opt,
+	        	case_sens : case_sens
         	});
 	    });
 	    
@@ -737,7 +768,6 @@ var ExtendedToken = {
 	    			var operator = obj.data.type == "set" ? "contains" : "=";
 	    			var not_operator = obj.data.type == "set" ? "not contains" : "!=";
 	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
-	    			c.log("formatter", obj.data);
 	    			var formatter = op == "matches" || obj.data.displayType == "select" ? function(arg) {return arg;} : regescape;
 	    			var value = formatter(s);
 	    			op = {
@@ -747,8 +777,8 @@ var ExtendedToken = {
 	    					"ends_with" : ["=", ".*", value, ""],
 	    					"matches" : ["=", "", value, ""]
 	    				}[op];
-	    			
-	    			return $.format('%s%s %s "%s%s%s"', [prefix, type].concat(op));
+	    			c.log("case_sens", obj.case_sense);
+	    			return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(op, [obj.case_sens]));
 	    		};
 	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
@@ -783,7 +813,8 @@ var ExtendedToken = {
 			suffix = $.format("{%s}", min_max.join(", "));
 		}
 		
-		return $.format("[%s]%s", [output.join(" & "), suffix]); 
+		return "[" + output.join(" & ") + "]" + suffix; 
+//		return $.format("[%s]%s", [output.join(" & "), suffix]); 
 	}
 };
 $.widget("ui.sidebar", Sidebar);

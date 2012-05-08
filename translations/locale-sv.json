@@ -28,6 +28,7 @@
 	"or" : "eller",
 	
 	"case_insensitive" : "skiftlägesoberoende",
+	"case_sensitive" : "skiftlägesberoende",
 	"reduce_text" : "sammanställ på",
 	
 	"is" : "är", 
@@ -59,6 +60,7 @@
 	"following_text" : "Matcha någon av följande regler:",
 	"stats_hit" : "Träff",
 	"stats_total" : "Totalt",
+	"options" : "Alternativ",
 	
 	"simple" : "Enkel",
 	"detailed" : "Utökad",
@@ -94,7 +96,7 @@
 	"text" : "text",
 	"word" : "ord",
 	
-	"msd_long" : "Morfosyntaktisk beskrvning",
+	"msd_long" : "Morfosyntaktisk beskrivning",
 	
 	
 	"corpselector_allselected" : " korpusar valda (alla)",
@@ -129,5 +131,7 @@
 	"util_numbergroupseparator" : "&nbsp;",
 	
 	"hitspicture_hits" : "träffar",
-	"hitspicture_gotocorpushits" : "Klicka för att gå till första sidan med träffar från denna korpus."
+	"hitspicture_gotocorpushits" : "Klicka för att gå till första sidan med träffar från denna korpus.",
+	
+	"hits_per_mil" : "Träffar per miljon token"
 }

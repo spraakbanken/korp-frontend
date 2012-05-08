@@ -88,16 +88,17 @@ view.updateReduceSelect = function() {
 						  })
 		});
 	
-	
+	var prevVal = $("#reduceSelect select").val();
 	var select = util.makeAttrSelect(groups);
-//	$("<option disabled>").localeKey("reduce_text")
-//	.prependTo(select);
 	$("#reduceSelect").html(select);
-	select
-	.attr("data-history", "stats_reduce")
+	
+	select.attr("data-history", "stats_reduce")
 	.attr("data-prefix", "reduce_text")
 	.customSelect();
-//	.get(0).selectedIndex = 0;
+	if(prevVal) {
+		select.val(prevVal);
+		select.trigger("change");
+	}
 	return select;
 };
 

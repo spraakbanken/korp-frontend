@@ -1911,7 +1911,7 @@ settings.corpora.vivill = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year", includeInKWIC : true, displayType : "select",
+		text_year : {label : "year", displayType : "select",
 					dataset : {
 								"1887" : "1887",
 								"1902" : "1902",
@@ -1976,7 +1976,6 @@ settings.corpora.vivill = {
 					}},
 		text_party : {
 			label : "party", 
-			includeInKWIC : true,
 			displayType : "select",
 			dataset: {
 				"all" : "Alliansen",

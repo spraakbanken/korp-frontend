@@ -315,7 +315,7 @@ var currentMode;
 				});
 			}
 			
-			if(!isInit) {
+			if(!isInit && hasChanged("display")) {
 				
 				if(e.getState("display") == "line_diagram") {
 					statsResults.showLineDiagram();

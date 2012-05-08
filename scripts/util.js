@@ -45,9 +45,8 @@ util.initLocalize = function() {
 	return $.localize("init", {
 		packages : ["locale", "corpora"],
 		pathPrefix : "translations",
-		language : $.bbq.getState("lang") || "sv",
+		language : $.bbq.getState("lang") || settings.defaultLanguage,
 		callback : function() {
-			c.log("callback", this)
 			if(this.is(".num_hits")) {
 				var selected = this.find("option:selected");
 				c.log("selected", selected, util.getLocaleString(this.data("prefix")) + ": " + selected.text())

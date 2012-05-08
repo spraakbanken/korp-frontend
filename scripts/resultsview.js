@@ -978,7 +978,8 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
-		.appendTo("#results-lemgram").append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
+		.appendTo("#results-lemgram")
+		.append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 		.dialog({
 			width : 400,
 			height : 500,
@@ -997,6 +998,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 				}
 
 		}).css("opacity", 0);
+		
 		$("#dialog").fadeTo(400,1);
 		$("#dialog").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 		stats2Instance = $('#chartFrame').pie_widget({container_id: "chartFrame", data_items: dataItems, bar_horizontal: false, diagram_type: 0});
@@ -1041,7 +1043,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 					$("#hitsDescription").text(util.getLocaleString("statstable_relfigures_hits")).attr({"rel" : "localize[statstable_relfigures_hits]"});
 				}
 			},
-			selected : 0
+			selected : "relative"
 		});
 
 
@@ -1403,6 +1405,7 @@ var StatsResults = {
 				return false;
 			}
 		}).css("opacity", 0);
+		$("#ui-dialog-title-line_diagram_window").localeKey("hits_per_mil");
 		$("#line_diagram_window").fadeTo(400,1);
 		$("#line_diagram_window").find("a").blur();
 	},

@@ -1,4 +1,3 @@
-
 body {
 	font-family : Helvetica, Arial, Verdana, sans-serif;
 	font-size: 13px;
@@ -41,7 +40,7 @@ a:hover {color:red;}  /* mouse over link */
 	color : navy !important;
 	cursor : pointer;
 }
-.link:hover {color : red;}
+.link:hover {color : red !important;}
 
 
 .radialBkg {
@@ -1020,6 +1019,10 @@ a.relStat:hover {
 	
 }
 
+.right_col {
+	padding-right : 2px;
+}
+
 .right_col input {
 	*float : right;
 }
@@ -1056,7 +1059,7 @@ a.relStat:hover {
 	-moz-transition: opacity 200ms ease;
 	-webkit-transition: opacity 200ms ease;
 	transition: opacity 200ms ease;
-	
+	margin-bottom : 1px;
 }
 .or_arg:not(:only-child):first-child .arg_header {
 /* 	visibility: visible; */
@@ -1317,3 +1320,41 @@ a.relStat:hover {
 	border-bottom-right-radius : 0;
 	border-bottom-left-radius : 0;
 }
+
+.val_mod {
+	display : none;
+	letter-spacing : 1px;
+	font-size : .8em;
+	cursor : pointer;
+	margin-right : 1px;
+}
+
+.arg_value[type=text]:not(.ui-autocomplete-input) {
+	width : 93%;
+	margin-right : 3px;
+}
+.arg_value[type=text]:not(.ui-autocomplete-input) + .val_mod {
+	display : inline;
+}
+
+#mod_menu {
+	cursor : default;
+	position : absolute;
+	z-index : 300;
+	font-size : .9em;
+}
+
+.val_mod.insensitive {
+	color : lightgrey;
+}
+.val_mod.sensitive {
+	color : black;
+}
+
+.val_mod.insensitive + #mod_menu li:first-of-type a {
+	text-decoration: underline;
+}
+.val_mod.sensitive + #mod_menu li:nth-of-type(2) a {
+	text-decoration: underline;
+}
+
