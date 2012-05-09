@@ -22,8 +22,8 @@ var hp_corpusChooser = {
 		});
 
 		$('.buttonlink, ul#icons li').hover(
-				function() { $(this).addClass('ui-state-hover'); }, 
-				function() { $(this).removeClass('ui-state-hover'); }
+			function() { $(this).addClass('ui-state-hover'); }, 
+			function() { $(this).removeClass('ui-state-hover'); }
 		);
 
 
@@ -97,9 +97,7 @@ var hp_corpusChooser = {
 		
 	},
  	setStatus: function (obj, stat) { /* Change status of item */
- 			obj.removeClass("intermediate");
- 			obj.removeClass("unchecked");
- 			obj.removeClass("checked");
+ 			obj.removeClass("intermediate unchecked checked");
  			if(stat == "checked") {
  				obj.addClass("checked");
  				obj.attr({src : "img/checked.png"});
@@ -137,7 +135,7 @@ var hp_corpusChooser = {
 			
 			// Number of tokens
 			var totNumberOfTokens = 0;
-                        var totNumberOfSentences = 0;
+            var totNumberOfSentences = 0;
 			checked_checkboxes.each(function(key, corpItem) {
 				//c.log(">>>>>>" + $(this).attr('id'));
 				var corpusID = $(this).attr('id').slice(9);
@@ -151,7 +149,7 @@ var hp_corpusChooser = {
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
 			$("#hp_corpora_title3").html(" — " + prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
-                        $("#sentenceCounter").html("<i>" + prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
+            $("#sentenceCounter").html("<i>" + prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
 	},
 	_transform: function() {	
 			var el = this.element;
@@ -168,10 +166,10 @@ var hp_corpusChooser = {
 			}
 			
 			var upper = '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;margin-top:' + textoffset + 'px;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
-			var newHTML = '<div class="popupchecks ui-corner-bottom"><p style="text-align:right; margin-top:10px; margin-right:8px"><a style="outline: none" href="javascript:void(0)" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a style="outline: none" href="javascript:void(0)" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]">' + this.options.buttonSelectNone + '</span></a></p>';
+			var newHTML = '<div class="popupchecks ui-corner-bottom"><div class="header"><a href="javascript:" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="javascript:" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]"></span></a></div>';
 			
 			newHTML += recursive_transform(body,0);
-			newHTML += '<br/><p style="font-size:85%" id="sentenceCounter">X meningar totalt i valda korpusar.</p></div><div class="corpusInfoSpace ui-corner-all" style="display: none; border: 1px solid #CCCCCC; z-index: 10000; min-width: 30px; min-height: 30px; max-width: 33%; position: absolute; left:' + '442' + 'px; background-color: white; padding-right: 4px"><div class=""><p style="padding: 10px; margin: 0px"></p></div>'; //</div>
+			newHTML += '<br/><p style="font-size:85%" id="sentenceCounter"></p></div><div class="corpusInfoSpace ui-corner-all" style="display: none; border: 1px solid #CCCCCC; z-index: 10000; min-width: 30px; min-height: 30px; max-width: 33%; position: absolute; left:' + '442' + 'px; background-color: white; padding-right: 4px"><div class=""><p style="padding: 10px; margin: 0px"></p></div>';
 			
 //			el.replaceWith(newHTML);
 			el.html(upper);
@@ -260,8 +258,9 @@ var hp_corpusChooser = {
 				return false;
 			});
 			
-		 	$(".ext").unbind("click");
-		 	$(".ext").click(function() {
+		 	$(".ext")
+		 	.unbind("click")
+		 	.click(function() {
 		 		$(".corpusInfoSpace").fadeOut('fast');
 		 		if($(this).parent().attr('class') == "tree collapsed") {
 		 			$(this).parent().removeClass('collapsed');
@@ -276,8 +275,9 @@ var hp_corpusChooser = {
 		 		}
 			});
 			
-			$(".boxlabel").unbind("click"); // "folders"
-			$(".boxlabel").click(function() {
+			$(".boxlabel")
+			.unbind("click") // "folders"
+			.click(function() {
 				hp_this.updateState($(this).parent());
 	 			var childMan = $(this).children('.checkbox');
 	 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
@@ -400,7 +400,7 @@ var hp_corpusChooser = {
 						var folderdescription = $(this).children('ul').attr('description');
 						if(folderdescription == "undefined")
 							folderdescription = "";
-						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
+						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="margin-left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 						
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
@@ -408,11 +408,11 @@ var hp_corpusChooser = {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
 							hasDirectCorporaChildren = true
-							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:' + (410-levelindent*30) + 'px; visible:false; left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
+							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
 								hasDirectCorporaChildren = true
-								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="width:410px; left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
+								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
 							}
 						}
 					}

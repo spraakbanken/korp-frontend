@@ -116,11 +116,8 @@ a:hover {color:red;}  /* mouse over link */
 #header_left {
 	float : left;	
 }
-#header_left a {
+#header_left > a {
 	margin-right : 10px;
-		
-}
-#header_left img {
 }
 
 #search_history {
@@ -221,11 +218,6 @@ input:placeholder, textarea:placeholder {
 
 #content {
 	padding : 0 8px 8px 8px;
-}
-
-#header p {
-	margin: 0px;
-	margin-left: 10px;
 }
 
 .num_hits {
@@ -398,18 +390,20 @@ input.arg_value {
 .popupchecks {
 	z-index: 9999;
 	max-height:600px;
-	width: 462px;
-	border-color: #CCCCCC;
-	border-style: solid;
-	border-width: 1px;
+	width: 446px;
+	border : solid thin #CCCCCC;
 	background-color: #FEFEFE;
 	overflow-y: auto;
 	overflow-x: hidden;
-	padding-top: 4px;
-	margin-top: 0px;
-	padding-left: 4px;
-	padding-bottom: 8px;
 	display: none;
+	padding : 10px;
+}
+.popupchecks .header {
+	text-align:right;
+	margin : 10px 0;
+}
+.popupchecks .header a {
+	margin-left : 8px;	
 }
 
 .numberOfChildren {
@@ -428,12 +422,12 @@ input.arg_value {
 }
 
 .tree {
-	max-width: 410px;
-	position: relative;
+/* 	position: relative; */
 	margin-top: 1px;
 	margin-bottom: -3px;
 	padding-top: 3px;
 	padding-bottom: 1px;
+	overflow-x : hidden;
 }
 
 .collapsed {
@@ -443,13 +437,10 @@ input.arg_value {
 .boxdiv {
 	margin-top: 2px;
 	background-color: #F6F6F6;
-	position: relative;
+/* 	position: relative; */
 	padding-top: 3px;
 	padding-bottom: 1px;
 	margin-bottom: 2px;
-}
-.boxdiv:only-of-type {
-	margin-top : 1em;
 }
 
 .hplabel {
@@ -904,7 +895,6 @@ a.relStat:hover {
 
 .word_column {
 	text-align : left;
-		
 }
 
 .linked_sentence {
@@ -1267,9 +1257,11 @@ a.relStat:hover {
 /* 	display: none; */
 	position : absolute;
 	font-size : inherit;
-	z-index : 999;
 	text-align : right;
+}
+.ui-menu {
 	box-shadow: 2px 2px 3px grey;
+	z-index : 999;
 }
 
 .korp_fail {
@@ -1299,19 +1291,11 @@ a.relStat:hover {
 	display : inline;
 }
 
-/* .lab label[for=suffixChk] ~ * { */
-/* 	display : inline; */
-/* } */
-
-/* .lab label[for=suffixChk] ~ *  { */
-/* 	display : none;	 */
-/* } */
-
-#mode_switch li:last-child {
+#mode_switch li:last-child, #mode_switch li:nth-last-child(2) {
 	display : none;
 }
 
-.lab #mode_switch li:last-child {
+.lab #mode_switch li:last-child, .lab #mode_switch li:nth-last-child(2) {
 	display : inline-block;
 }
 
@@ -1340,8 +1324,8 @@ a.relStat:hover {
 #mod_menu {
 	cursor : default;
 	position : absolute;
-	z-index : 300;
 	font-size : .9em;
+	text-align : right;
 }
 
 .val_mod.insensitive {

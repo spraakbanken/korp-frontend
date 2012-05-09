@@ -340,7 +340,7 @@ var KWICResults = {
 						return false;
 					firstIndex += data["corpus_hits"][corp];
 				});
-				var firstHitPage = Math.floor(firstIndex / self.$result.find("#num_hits").val());
+				var firstHitPage = Math.floor(firstIndex / $("#num_hits").val());
 				self.handlePaginationClick(firstHitPage, null, true);
 				return false;
 			});
