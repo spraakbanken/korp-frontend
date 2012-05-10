@@ -258,7 +258,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["pargaskungorelser", "vasabladet", "osterbottenstidning2011"]
+	contents : ["pargaskungorelser", "sydosterbotten2012"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -279,6 +279,19 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 	title : "Jakobstads tidning 1999–2000",
 	contents : ["jakobstadstidning1999", "jakobstadstidning2000"],
 	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008."
+};
+
+settings.corporafolders.fisk.newspapertexts.vasab = {
+	title : "Vasabladet",
+	contents : ["vasabladet", "vasabladet2012"],
+	description : "Vasabladet är en regional svenskspråkig dagstidning i Österbotten."
+	//description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
+};
+
+settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
+	title : "Österbottens tidning",
+	contents : ["osterbottenstidning2011", "osterbottenstidning2012"],
+	description : ""
 };
 
 settings.corporafolders.fisk.magazines = {
@@ -2333,6 +2346,29 @@ settings.corpora.pargaskungorelser = {
 	}
 };
 
+settings.corpora.sydosterbotten2012 = {
+	title : "Syd-Österbotten 2012",
+	description : "",
+	languages : {
+		SYDOSTERBOTTEN2012 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
+
 settings.corpora.vasabladet = {
 	title : "Vasabladet 1991",
 	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
@@ -2359,11 +2395,57 @@ settings.corpora.vasabladet = {
 	}
 };
 
+settings.corpora.vasabladet2012 = {
+	title : "Vasabladet 2012",
+	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	languages : {
+		VASABLADET2012 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
+
 settings.corpora.osterbottenstidning2011 = {
 	title : "Österbottens tidning 2011",
 	description : "",
 	languages : {
 		OSTERBOTTENSTIDNING2011 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora.osterbottenstidning2012 = {
+	title : "Österbottens tidning 2012",
+	description : "",
+	languages : {
+		OSTERBOTTENSTIDNING2012 : "svenska"
 	},
 	within : within.defaultStruct,
 	attributes : {
