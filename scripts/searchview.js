@@ -182,6 +182,11 @@ var SimpleSearch = {
 						});
 						
 						dfd.resolve(listItems);
+					})
+					.fail(function() {
+						c.log("reject");
+						dfd.reject();
+						textinput.preloader("hide");
 					});
 					return dfd.promise();
 				}

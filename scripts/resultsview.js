@@ -851,9 +851,6 @@ var LemgramResults = {
 		.appendTo(container);
 //		.appendTo("#results-lemgram");
 		
-		$(".enumerate").each(function() {
-			$(this).text($(this).closest("tr").index() + 1 + ".");
-		});
 		
 		$("#results-lemgram td:nth-child(2)").each(function() { // labels
 			var $siblings = $(this).parent().siblings().find("td:nth-child(2)");
@@ -1048,117 +1045,6 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 
 
 	} 
-	
-	/*
-	else { // hits/wordform
-		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
-			corpusArray.push(corpus);
-			$.each(obj["relative"], function(word, freq) {
-				if($.inArray(word, wordArray) == -1)
-					wordArray.push(word);
-			});
-		});
-	
-		// Abstrahera avsnittet nedan vid tillfälle!
-		$(".statstable").css({"background-color":"white"});
-		if(dataName == "all") {
-			
-				$.each(wordArray, function(key, fvalue) {
-					var freq = statsResults.savedData["total"]["relative"][fvalue];
-					if (freq) {
-						dataItems.push({"value":freq, "caption" : fvalue, "shape_id" : fvalue});
-					} else {
-						dataItems.push({"value":0, "caption" : key, "shape_id" : key});
-					}
-				});
-			
-		} else {
-			$.each(statsResults.savedData["corpora"], function(corpus, obj) {
-				if(corpus == dataName) {
-					$.each(wordArray, function(key, fvalue) {
-						var freq = obj["relative"][fvalue];
-						if (freq) {
-							dataItems.push({"value":parseFloat(obj["relative"][fvalue]), "caption" : fvalue, "shape_id" : fvalue});
-						} else {
-							dataItems.push({"value":0, "caption" : fvalue, "shape_id" : fvalue});
-						}
-					});
-					return false; // break it
-				}
-			});
-			
-		}
-		
-		statsResults.selectedCorpus = dataName;
-		
-		if (targetDiv) {
-			
-			var offset = -1;
-			if ($.browser.webkit)
-				offset = 3;
-	
-			$(".barContainerClass").find("svg").attr("width", 0);
-			var targetDivID = '#' + targetDiv;
-			diagramInstance = $(targetDivID).pie_widget({container_id: targetDiv, data_items: dataItems});
-			diagramInstance.find("svg").attr("height", $("#actualRightStatsTable").height()-70);
-			
-			
-		
-			if(typeof(selected_statisticsbars_corpus) != "undefined") {
-				if (targetDiv.split("__")[1] == selected_statisticsbars_corpus.attr("id").split("__")[1]) {
-					// The same statistics bar icon was clicked as before
-					if (!rollingOccupied) {
-						rollingOccupied = true;
-						var ssc = $(selected_statisticsbars_corpus)
-						ssc.css({"width": $(selected_statisticsbars_corpus).width()});
-						ssc.children().animate({"width": "0px"});
-						ssc.animate({"width": "0px"});
-						ssc.fadeOut("fast",function(){rollingOccupied = false;});
-						selected_statisticsbars_corpus = undefined;
-					}
-				} else {
-					// A new statistics bar icon was clicked
-					if (!rollingOccupied) {
-						rollingOccupied = true;
-						ssc = $(selected_statisticsbars_corpus)
-						ssc.css({"width": $(selected_statisticsbars_corpus).width()});
-						ssc.children().animate({"width": "0px"});
-						ssc.animate({"width": "0px"});
-						ssc.fadeOut("fast");
-						var tdi = $(targetDivID);
-						tdi.css({"padding-top": $(".corpusTitleClass").height()+offset, "width": "1px"});
-						tdi.find("svg").attr("width", 200);
-						tdi.parent().css({"visibility":"visible", "display": "table-cell"});
-						tdi.animate({"width": "200px"});
-						if(targetDiv.split("__")[1] == "all")
-							$(".statstable__all").animate({"background-color":"#F3F3F3"},"slow");
-						else
-							$(".statstablecorpus__" + targetDiv.split("__")[1]).animate({"background-color":"#F3F3F3"},"slow");
-						selected_statisticsbars_corpus = $(targetDivID).parent();
-						rollingOccupied = false;
-					}
-				}
-			} else {
-				if (!rollingOccupied) {
-					rollingOccupied = true;
-					tdi = $(targetDivID);
-					tdi.css({"padding-top": $(".corpusTitleClass").height()+offset, "width": "1px"});
-					tdi.find("svg").attr("width", 200);
-					tdi.parent().css({"visibility":"visible", "display": "table-cell"});
-					tdi.animate({"width": "200px"});
-					if(targetDiv.split("__")[1] == "all")
-						$(".statstable__all").animate({"background-color":"#F3F3F3"},"slow");
-					else
-						$(".statstablecorpus__" + targetDiv.split("__")[1]).animate({"background-color":"#F3F3F3"},"slow");
-					selected_statisticsbars_corpus = $(targetDivID).parent();
-					rollingOccupied = false;
-				}
-			}	
-		} else {
-			diagramInstance.pie_widget("newData", dataItems);
-		}
-	}
-	*/
 }
 
 
@@ -1240,6 +1126,16 @@ var StatsResults = {
 		if(resultError === false) {
 			return;
 		}
+		
+		c.log("stats.renderResults columns", columns);
+		c.log("stats.renderResults data", data);
+		
+		if(data[0].total_value.absolute === 0) {
+			this.showNoResults();
+			return;
+		}
+		
+		
 		var options = {
 			enableCellNavigation: false,
             enableColumnReorder: true
@@ -1306,18 +1202,13 @@ var StatsResults = {
 			$(this).localeKey($(this).text());
 		});
 		
-		this.renderLineDiagram();
+		this.renderPlot();
 		
 		this.hidePreloader();
 	},
 	
-	renderLineDiagram : function() {
+	renderPlot : function() {
 		var self = this;
-//		if(statsResults.rLine) {
-//			statsResults.rLine.remove();
-//		}
-			
-		statsResults.rLine = null;
 		var src;
 		var css = {};
 		if($.keys(statsResults.savedData.corpora).length > 1) {
@@ -1329,75 +1220,43 @@ var StatsResults = {
 		}
 		
 		// Line Diagram
-		$("#showLineDiagram")
+		$("#showBarPlot")
 		.attr("src", "img/" + src)
 		.css(css)
 		.click(function() {
-		    $.bbq.pushState({"display" : "line_diagram"});
+		    $.bbq.pushState({"display" : "bar_plot"});
 		    return false;
 		});
 		
-		if($.bbq.getState("display") == "line_diagram")
-			this.showLineDiagram();
+		if($.bbq.getState("display") == "bar_plot")
+			this.drawBarPlot();
 	},
 	
-	showLineDiagram : function() {
-		$.log(statsResults.savedData.corpora);
-	    
-//		if($("#line_diagram_window.ui-dialog-content").length) {
-//			$("#line_diagram_window").parent().fadeIn("fast");
-//			return;
-//		}
-		
-	    statsResults.corpusNames = [];
-	    $.each(statsResults.savedData.corpora, function(key, corpus) {
-	        statsResults.corpusNames.push(key);
-	    });
-	    
-	    statsResults.corpusNames.sort();
-	    
-	    if($.keys(statsResults.savedData.corpora).length < 2) return;
-	    
-	    if(statsResults.rLine) {
-	    	statsResults.rLine.remove();
-	    }
-	    
-	    statsResults.rLine = Raphael("linecontainer"),
-            txtattr = { font: "12px sans-serif" };
-	    
-	    var ys = [];
-	    var nulls = [];
-	    var xs = [];
-	    
-	    
-	    
-	    //$.each(statsResults.savedData.corpora, function(key, corpus) {
-	    for(var i = 0; i < statsResults.corpusNames.length; i++) {
-            ys.push(statsResults.savedData.corpora[statsResults.corpusNames[i]].sums.relative);
-            xs.push(i);
-            nulls.push(0);
-	    }
-        //});
-        
-        statsResults.rLine.linechart(60, 50, 350, 270, xs, [nulls,ys], {shade: true, symbol: "circle", axis: "0 0 0 1", smooth: false }).hover(function() {
-            // Find the correct corpus
-//        	if(this.flag) this.flag.remove()
-    		
-        	if(!this.flag.show)
-        		this.flag = statsResults.rLine.popup(this.x, this.y, statsResults.corpusNames[this.axis]).insertBefore(this);
-        	else
-        		this.flag.animate({opacity: 1}, 200);
-            //}
-        }, function() {
-                this.flag.animate({opacity: 0}, 200);
-                
-        });
-            
-	    $("circle[fill=#2f69bf]").remove();
-	    $("path[stroke=#2f69bf]").attr({"stroke" : "#000000", "stroke-width" : 1});
-        
-		$("#line_diagram_window").dialog({
-			width : 500,
+	drawBarPlot : function() {
+		$.log("drawBarPlot", statsResults.savedData.corpora);
+		var data = statsResults.savedData.corpora;
+		var display = [];
+		var max = 0;
+		var ticks = [];
+		var spacing = .25;
+		var accu = 0;
+		$.each($.keys(data).sort(), function(i, corpus) {
+			ticks.push([accu + .5, corpus]);
+			display.push([accu, data[corpus].sums.relative]);
+			if(max < data[corpus].sums.relative) max = data[corpus].sums.relative;
+			accu = accu + 1 + spacing;
+		});
+		var width = display.length * 60;
+		$("#plot_canvas").width(width);
+		$.plot($("#plot_canvas"), [display], {
+			yaxis : {max : max},
+			xaxis : {ticks : ticks},
+			bars : {show : true}
+//			lines : {show : true}
+		});
+		width = width > 1000 ? 1000 : width + 40;
+		$("#plot_popup").dialog({
+			width : width + 40,
 			height : 500,
 			title : "Träffar per miljon token",
 			beforeClose : function() {
@@ -1405,9 +1264,9 @@ var StatsResults = {
 				return false;
 			}
 		}).css("opacity", 0);
-		$("#ui-dialog-title-line_diagram_window").localeKey("hits_per_mil");
-		$("#line_diagram_window").fadeTo(400,1);
-		$("#line_diagram_window").find("a").blur();
+		$("#ui-dialog-title-plot_popup").localeKey("hits_per_mil");
+		$("#plot_popup").fadeTo(400,1);
+//		$("#plot_popup").find("a").blur();
 	},
 	
 	resizeGrid : function() {
@@ -1465,11 +1324,15 @@ var StatsResults = {
 //		.appendTo("#results-stats");
 //	},
 	
+	resetView : function() {
+		this.parent();
+		$("#exportStatsSection").show();
+	},
+	
 	showNoResults : function() {
 		this.hidePreloader();
-		$("#rightStatsTable").html("");
-		$("#leftStatsTable").html($("<i/>").localeKey("no_stats_results"));
-		$("#exportStatsSection").css({"display": "none"});
+		$("#results-stats").prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
+		$("#exportStatsSection").hide();
 	}
 	
 };

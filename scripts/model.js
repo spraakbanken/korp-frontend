@@ -289,8 +289,7 @@ var StatsProxy = {
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
 			return n.toUpperCase();
 	    });
-//		range = range || {start : 0, end : 1000};
-		$.ajax({ 
+		return $.ajax({ 
 			url: settings.cgi_script,
 			data : {
 				command : "count",

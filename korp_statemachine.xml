@@ -315,7 +315,7 @@
             <state id="logger" initial="l2">
                 <state id="l2">
                     <transition event="*" target="l2">
-                        <log expr="'event found: ' + _event.name" />
+<!--                         <log expr="'event found: ' + _event.name" /> -->
 <!--                         <script> -->
 <!--                             $.log("conf", $.sm.getConfiguration()); -->
 <!--                         </script> -->

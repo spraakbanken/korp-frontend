@@ -690,7 +690,7 @@ var ExtendedToken = {
 		
 		switch(target.val()) {
 		case "anyword":
-			arg_value.css("visibility", "hidden");
+			arg_value.replaceWith("<span class='arg_value'>");
 			break;
 		case "msd":
 			$("#msd_popup").load("msd.html", function() {

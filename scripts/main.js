@@ -1,8 +1,6 @@
 var currentMode;
 
 
-
-
 (function(){
 	var t = $.now();
 //	if(window.console == null) window.console = {"log" : $.noop};
@@ -165,19 +163,19 @@ var currentMode;
 			tabTemplate : '<li class="custom_tab"><a class="custom_anchor" href="#{href}"><span rel="localize[example]">#{label}</span></a><a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a></li>'
 		});
 		
-		$("#result-container li.ui-state-disabled").live({
-			mouseover : function() {
-				nTimeout = setTimeout(function() {
-					$("#lemgram_select").highlight();
-				}, 750);
-				
-			},
-			mouseout : function() {
-				if(nTimeout)
-					clearTimeout(nTimeout);
-				$("#lemgram_select").highlight("abort");
-			}
-		});
+//		$("#result-container li.ui-state-disabled").live({
+//			mouseover : function() {
+//				nTimeout = setTimeout(function() {
+//					$("#lemgram_select").highlight();
+//				}, 750);
+//				
+//			},
+//			mouseout : function() {
+//				if(nTimeout)
+//					clearTimeout(nTimeout);
+//				$("#lemgram_select").highlight("abort");
+//			}
+//		});
 		
 		var tabs = $(".ui-tabs");
 		tabs.find(tab_a_selector).click(function() {
@@ -318,10 +316,11 @@ var currentMode;
 			
 			if(!isInit && hasChanged("display")) {
 				
-				if(e.getState("display") == "line_diagram") {
-					statsResults.showLineDiagram();
+				if(e.getState("display") == "bar_plot") {
+					statsResults.drawBarPlot();
 				} else {
-					$("#line_diagram_window").dialog("destroy");
+					$("#plot_popup").dialog("destroy")
+					.css({"opacity" : 0, "display" : "block", "height" : 0});
 				}
 			
 			}

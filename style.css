@@ -135,21 +135,8 @@ a:hover {color:red;}  /* mouse over link */
 #search_history:empty {
 	visibility: hidden;
 }
-/* #docs { */
-/* 	float : right; */
-/* 	margin : 8px; */
-/* } */
-/* #about { */
-/* 	float : right; */
-/* 	margin : 0 8px;	 */
-/* } */
-
-/* #aboutLink { */
-/* 	padding-top : 10px; */
-/* } */
 
 #top_bar {
-	
 	height : 30px;
 	width : 100%;
 	/* IE10 */ 
@@ -207,7 +194,6 @@ input:placeholder, textarea:placeholder {
 #cqp_string {
 	font-family: monospace;
 	width: 100%
-	
 }
 
 #header {
@@ -298,7 +284,6 @@ input.arg_value {
 .btn-icon {
 	vertical-align : top;
 	display : inline-block;
-/* 	*display : inline; */
 	cursor : pointer;
 	position : relative;
 	right : -4px;
@@ -328,13 +313,8 @@ input.arg_value {
 	padding : 0;
 }
 
-/* JONATAN */
 .statisticWords {
 	border-style: hidden;
-}
-
-.searchForWordform {
-/* 	cursor:pointer; */
 }
 
 .searchForWordformInCorpus {
@@ -350,8 +330,6 @@ input.arg_value {
 }
 
 .scroll_checkboxes {
-/* 	float: left; */
-/* 	clear: both; */
 	width: 480px;
 	height: 33px;
 	overflow: hidden;
@@ -422,7 +400,6 @@ input.arg_value {
 }
 
 .tree {
-/* 	position: relative; */
 	margin-top: 1px;
 	margin-bottom: -3px;
 	padding-top: 3px;
@@ -437,25 +414,15 @@ input.arg_value {
 .boxdiv {
 	margin-top: 2px;
 	background-color: #F6F6F6;
-/* 	position: relative; */
 	padding-top: 3px;
 	padding-bottom: 1px;
 	margin-bottom: 2px;
 }
 
-.hplabel {
-	padding-right: 6px;
-	padding-left: 6px;
-	padding-top: 2px;
-	padding-bottom: 0px;	
+.hplabel, .boxlabel {
+	padding : 2px 6px 0px 6px;
 }
 
-.boxlabel {
-	padding-right: 6px;
-	padding-left: 6px;
-	padding-top: 2px;
-	padding-bottom: 0px;
-}
 
 .boxlabel > span {
 	background: #FFFFFF;
@@ -466,7 +433,6 @@ input.arg_value {
 	height: 12px;
 }
 
-/* SLUT JONATAN */
 
 
 
@@ -644,6 +610,7 @@ table {
 	padding-bottom : 5px;
 	padding-left : 5px;
 	padding-right : 2px;
+	counter-reset: wordpic;	
 }
 
 .lemgram_result table{
@@ -978,8 +945,8 @@ a.relStat:hover {
 	cursor : pointer;
 	position: absolute;
 	right : 30px;
-	bottom : 0px;
-	left : 340px;
+	bottom : -3px;
+	left : 160px;
 }
 
 #showLineDiagram {
@@ -1342,3 +1309,16 @@ a.relStat:hover {
 	text-decoration: underline;
 }
 
+#plot_popup {
+	padding-top : 15px;
+	height : 0;
+	overflow-y : hidden;
+	overflow-x : scroll;
+	
+}
+.enumerate {
+    counter-increment: wordpic;
+}
+.enumerate:before {
+    content: counter(wordpic) ".";
+}
