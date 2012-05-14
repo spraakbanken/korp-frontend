@@ -1313,7 +1313,7 @@ a.relStat:hover {
 	padding-top : 15px;
 	height : 0;
 	overflow-y : hidden;
-	overflow-x : scroll;
+	overflow-x : auto;
 	
 }
 .enumerate {
