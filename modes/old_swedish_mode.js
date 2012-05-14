@@ -13,8 +13,8 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.fornsvenska = {
-	title : "Fornsvenska",
-	description : "Fornsvenska texter",
+	title : "Fornsvenska textbankens material",
+	description : '<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.',
                languages : {
 		FORNSVENSKA : "svenska"
 	},
