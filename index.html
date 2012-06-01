@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="common_lib/jquery.ba-bbq.min.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.jLog.min.js"></script>
 		
+		
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.core.js" ></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.position.js"></script>
@@ -40,6 +41,7 @@
 		<script type="text/javascript" src="common_lib/ui/jquery.effects.slide.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.ui.preloader.min.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.ui.subclass.js"></script>
+		
 		
 		<script type="text/javascript" src="common_lib/jquery.json-2.2.min.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.tmpl.js"></script>
@@ -85,7 +87,6 @@
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
 		<script type="text/javascript" src="lib/flot/jquery.flot.min.js"></script>
 		<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="lib/flot/excanvas.min.js"></script><![endif]-->
-<!-- 		<script type="text/javascript" src="lib/g.bar-min.js"></script> -->
 		<script type="text/javascript" src="lib/jstorage.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
 		<script type="text/javascript" src="scripts/widgets.js"></script>
@@ -180,20 +181,18 @@
 					<div id="left-column" >
 						<div id="result-container">
 							<ul>
-								<li class="on"><a href="#results-kwic">KWIC</a></li>
-								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a></li>
-								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a></li><!-- class="ui-icon ui-icon-script" -->
+								<li class="on"><a href="#results-kwic">KWIC</a><div class="tab_progress" ></div></li>
+								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a><div class="tab_progress" ></div></li>
+								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a><div class="tab_progress" ></div></li><!-- class="ui-icon ui-icon-script" -->
 							</ul>
 							<div id="results-kwic">
 								<div class="result_controls">
-								   <div>
-<!-- 									   <label for="num_hits" rel="localize[hits_per_page]">Träffar per sida</label>:  -->
-									   
-								   </div>
-								   <div class="controls_n" ><span rel="localize[num_results]">Antal resultat</span>: <span class="num-result"></span></div>
-								 
+								   <div class="controls_n" ><span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span></div>
+									<div class="progress">
+										<progress value="0" max="100"></progress>
+									</div>
 								   <div class="hits_picture" ></div>
-								   <div style="float:right"><img id="showBarPlot"/></div>
+								   
 							   	   <div style="clear : both; float : none;" ></div>
 							   </div>
 								
@@ -207,6 +206,10 @@
 							<div id="results-stats">
 <!-- 								<div>Visar <span id="stats_showing"></span>Totalt antal: <span id="stats_total"></span><input type="button" value="Hämta fler"><input type="button" value="Hämta alla"></div> -->   
 <!-- 								<div style="float:right"><img src="img/stats3.png" id="showLineDiagram"/></div> -->
+								<div class="progress">
+									<progress value="0" max="100"></progress>
+								</div>
+								<div id="showBarPlot"></div>
 								<div id="myGrid" style="width:600px;height:500px;"></div>
 								<div id="exportStatsSection">
 									<br/><br/><select id="kindOfData">
@@ -226,6 +229,15 @@
 
 							</div>
 							<div id="results-lemgram">
+								<div id="wordclassChkParent">
+									<input id='wordclassChk' type='checkbox'>
+									<label for="wordclassChk" rel="localize[show_wordclass]"></label>
+								</div>
+								<div class="progress">
+									<progress value="0" max="100"></progress>
+								</div>
+							
+								<div class="content_target"></div>
 							</div>
 						</div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>

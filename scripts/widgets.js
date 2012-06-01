@@ -233,7 +233,6 @@ var Sidebar = {
 	},
 	
 	updateContent : function(sentenceData, wordData, corpus) {
-		c.log("updateContent", sentenceData, wordData);
 		this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
 		
 		var corpusObj = settings.corpora[corpus.toLowerCase()];
@@ -382,7 +381,7 @@ var Sidebar = {
 		}).done(function() {
 			self.element.show("slide", {direction : "right"});
 			$("#left-column").animate({
-				right : 273
+				right : 265
 			}, null, null, function() {
 				$.sm.send("sidebar.show.end");
 			});
@@ -397,7 +396,7 @@ var Sidebar = {
 //			right : -273
 //		});
 		$("#left-column").animate({
-			right : 8
+			right : 0
 		}, null, null, function() {
 			$.sm.send("sidebar.hide.end");
 		});

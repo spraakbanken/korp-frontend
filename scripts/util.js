@@ -211,7 +211,7 @@ util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of 
 /* Helper function to turn "8455999" into "8 455 999" */
 function prettyNumbers(numstring) {
 	var regex = /(\d+)(\d{3})/;
-	var outStrNum = numstring;
+	var outStrNum = numstring.toString();
   	while (regex.test(outStrNum)) {
     	outStrNum = outStrNum.replace(regex, '$1' + '<span rel="localize[util_numbergroupseparator]">' + util.getLocaleString("util_numbergroupseparator") + '</span>' + '$2');
   	}

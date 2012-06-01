@@ -458,8 +458,6 @@ var ExtendedSearch = {
 		} else {
 			var $select = this.$main.find("select.arg_type");
 			switch($select.val()) {
-//			case "saldo":
-//				break;
 			case "lex":
 				var searchType = $select.val() == "lex" ? "lemgram"  : $select.val();
 				util.searchHash(searchType, $select.parent().next().data("value"));
@@ -479,7 +477,6 @@ var ExtendedSearch = {
 	},
 	
 	insertToken : function(button) {
-//	    $("<table />").insertBefore($(button))
 		var self = this;
 		$.tmpl($("#tokenTmpl"))
 	    .extendedToken({
@@ -497,12 +494,6 @@ var ExtendedSearch = {
 	refreshTokens : function() {
 		$(".query_token").extendedToken("refresh");
 	},
-	
-	
-	
-//	getReduction : function() {
-//		return $("#reduceSelect select").val();
-//	}
 	
 };
 

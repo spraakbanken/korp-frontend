@@ -1,8 +1,81 @@
 var model = {};
 
-var SearchProxy = {
+
+var BaseProxy = {
 	initialize : function() {
+		// progress
+		this.prev = "";
+		this.progress = 0;
+		this.total;
 		
+		this.total_results = 0;
+	},
+	
+	makeRequest : function() {
+		this.prev = "";
+		this.progress = 0;
+		this.total_results = 0;
+		this.total = null;
+//		this.total = $.reduce(
+//				$.map(getSelectedCorpora(), function(corpus) {
+//					return parseInt(settings.corpora[corpus].info.Size);
+//				}), 
+//				function(val1, val2) {return val1 + val2;});
+	},
+	
+	calcProgress : function(e) {
+		var self = this;
+		var newText = e.target.responseText.slice(this.prev.length);
+		
+		try {
+			var prefix = newText[0] == "{" ? "" : "{";
+			var suffix = newText.slice(-1) == "}" ? "" : "}";
+			var json = prefix + newText.slice(0,-2) + suffix;
+			
+			
+			var struct = JSON.parse(json);
+		} catch (e) {
+			//c.log("json parse broken:");
+//			c.log(json);
+			
+			try {
+				var struct = JSON.parse(newText);
+			} catch(e) {
+				c.log("second json parse failed");
+				return;
+			}
+		}
+        
+        $.each(struct, function(key, val) {
+            if(key != "progress_corpora" && key.split("_")[0] == "progress" ) {
+            	var currentCorpus = val.corpus || val;
+            	self.progress += Number(settings.corpora[currentCorpus.toLowerCase()].info.Size);
+            	
+            	self.total_results += parseInt(val.hits);
+            	
+            }
+            
+        });
+        var stats = (self.progress / self.total) * 100;
+        
+        if(this.total == null && "progress_corpora" in struct) {
+        	this.total = $.reduce(
+    				$.map(struct["progress_corpora"], function(corpus) {
+    					return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
+    				}), 
+    				function(val1, val2) {return val1 + val2;});
+        }
+		
+        self.prev = e.target.responseText;
+        return {struct : struct, stats : stats, total_results : this.total_results};
+	}
+};
+
+model.BaseProxy = new Class(BaseProxy);
+
+var SearchProxy = {
+	Extends : model.BaseProxy,
+	initialize : function() {
 	},
 	
 	relatedWordSearch : function(lemgram) {
@@ -24,7 +97,6 @@ var SearchProxy = {
 							return !!freqs[lemgram];
 						});
 					});
-					c.log("hasAnyFreq", hasAnyFreq, data);
 					if(hasAnyFreq)
 						simpleSearch.renderSimilarHeader(lemgram, data);
 					else
@@ -37,12 +109,16 @@ var SearchProxy = {
 };
 
 var KWICProxy = {
+	Extends : model.BaseProxy,
 	initialize : function() {
+		this.parent();
 		this.prevRequest = null;
 		this.queryData = null;
 		this.command = "query";
 		this.prevAjaxParams = null;
 		this.pendingRequest = {abort : $.noop};
+		
+
 	},
 	
 	abort : function() {
@@ -50,15 +126,34 @@ var KWICProxy = {
 			this.pendingRequest.abort();
 	},
 	
-	makeRequest : function(options, page) {
+	makeRequest : function(options, page, callback) {
 		var self = this;
+		this.parent();
+		
+		self.progress = 0;
 		
 		var o = $.extend({
 			cqp : $("#cqp_string").val(), 
 			queryData : null,
 			ajaxParams : this.prevAjaxParams,
-			success : function(data) {kwicResults.renderResult(data);},
-			error : function(data) {kwicResults.hidePreloader();}
+			success : function(data) {
+				kwicResults.renderCompleteResult(data);
+			},
+			error : function(data) {
+				c.log("kwic error", data);
+				kwicResults.hidePreloader();
+			},
+			progress : function(data, e) {
+				var progressObj = self.calcProgress(e);
+				if(progressObj == null) return;
+				
+				callback(progressObj);
+				if(progressObj["struct"].kwic) {
+		        	c.log("found kwic!");
+		        	kwicResults.renderResult(progressObj["struct"]);
+		        }
+				
+			}
 		}, kwicResults.getPageInterval(page), options);
 		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
@@ -86,7 +181,8 @@ var KWICProxy = {
 			within : "sentence",
 			show:[],
 			show_struct:[],
-			sort : o.sort
+			sort : o.sort,
+			incremental : $.support.ajaxProgress
 		};
 		$.extend(data, o.ajaxParams);
 		if(o.queryData != null) {
@@ -135,7 +231,8 @@ var KWICProxy = {
 				self.queryData = data.querydata; 
 				o.success(data, o.cqp);
 			},
-			error : o.error
+			error : o.error,
+			progress : o.progress
 		});
 	}
 };
@@ -150,8 +247,9 @@ var ExamplesProxy = {
 };
 
 var LemgramProxy = {
-		
+	Extends : model.BaseProxy,
 	initialize : function() {
+		this.parent();
 		this.pendingRequest = {abort : $.noop};
 	},
 		
@@ -166,13 +264,16 @@ var LemgramProxy = {
 		return cqp;
 	},
 	
-	relationsSearch : function(lemgram) {
+	makeRequest : function(word, type, callback) {
+		this.parent();
 		var self = this;
 		var corpus = getSelectedCorpora();
 		var data = {
 				command : "relations",
-				lemgram : lemgram,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();})
+				word : word,
+				corpus : $.map(corpus, function(item){return item.toUpperCase();}),
+				incremental : $.support.ajaxProgress,
+				type : type
 			};
 		$.ajax({
 			url: settings.cgi_script,
@@ -180,8 +281,6 @@ var LemgramProxy = {
 			beforeSend : function(jqXHR, settings) {
 				c.log("before relations send", settings);
 				self.prevRequest = settings;
-//					if($("#results-lemgram").is(":visible"))
-//						util.setJsonLink(settings);
 			},
 			error : function(data) {
 				c.log("relationsearch abort", arguments);
@@ -189,8 +288,17 @@ var LemgramProxy = {
 			},
 			success : function(data) {
 				c.log("relations success", data);
-				lemgramResults.renderResult(data, lemgram);
-			}	
+				lemgramResults.renderResult(data, word);
+			}, progress : function(data, e) {
+				var progressObj = self.calcProgress(e);
+				if(progressObj == null) return;
+				
+				callback(progressObj);
+//				if(progressObj["struct"].kwic) {
+//		        	c.log("found kwic!");
+//		        	kwicResults.renderResult(progressObj["struct"]);
+//		        }
+			}
 		});
 	},
 	
@@ -200,10 +308,11 @@ var LemgramProxy = {
 		var data = {
 				command : "relations",
 				word : word,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();})
+				corpus : $.map(corpus, function(item){return item.toUpperCase();}),
+				incremental : $.support.ajaxProgress
 			};
 		$.ajax({
-			url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_word.cgi",
+			url: settings.cgi_script,
 			data : data,
 			beforeSend : function(jqXHR, settings) {
 				c.log("before relations send", settings);
@@ -277,13 +386,17 @@ var LemgramProxy = {
 };
 
 var StatsProxy = {
+	Extends : model.BaseProxy,
 	initialize : function() {
+		this.parent();
 		this.prevRequest = null;
 		this.currentPage = 0;
 		this.page_incr = 25;
 	},
-	makeRequest : function(cqp, range) {
+	makeRequest : function(cqp, callback) {
+		c.log("statsproxy.makeRequest", callback);
 		var self = this;
+		this.parent();
 		statsResults.showPreloader();
 		var selected_corpora_ids = getSelectedCorpora();
 		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
@@ -295,7 +408,8 @@ var StatsProxy = {
 				command : "count",
 				groupby : $.bbq.getState("stats_reduce") || "",
 				cqp : cqp,
-				corpus : selected_uppercased_corpora_ids
+				corpus : selected_uppercased_corpora_ids,
+				incremental : $.support.ajaxProgress
 			},
 			beforeSend : function(jqXHR, settings) {
 				self.prevRequest = settings;
@@ -304,6 +418,13 @@ var StatsProxy = {
 				c.log("gettings stats error, status: " +	 textStatus);
 				statsResults.hidePreloader();
 			},
+			
+			progress : function(data, e) {
+				var progressObj = self.calcProgress(e);
+				if(progressObj == null) return;
+				callback(progressObj);
+			},
+			
 			success : function(data) {
 				if(data.ERROR != null) {
 					c.log("gettings stats failed with error", $.dump(data.ERROR));
@@ -399,6 +520,7 @@ model.LemgramProxy = new Class(LemgramProxy);
 model.StatsProxy = new Class(StatsProxy);
 model.ExamplesProxy = new Class(ExamplesProxy);
 
+delete BaseProxy;
 delete SearchProxy;
 delete KWICProxy;
 delete LemgramProxy;

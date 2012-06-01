@@ -4,19 +4,16 @@
     profile="ecmascript" initial="init" >
     
     <script><![CDATA[
-    
+        
+        
         function kwicSearch(page) {
-            //if(In("results_lemgram") ) { 
-            //    $.log("conf", $.sm.getConfiguration());
-            //    $("#result-container").korptabs("select", 0)
-            //    $.bbq.pushState({"result-container" : 0})
-            //}
             simpleSearch.resetView();
             kwicResults.showPreloader();
             
             
-            kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page);
-            statsProxy.makeRequest($("#cqp_string").val());
+            
+            kwicProxy.makeRequest({"sort" : $.bbq.getState("sort")}, page, $.proxy(kwicResults.onProgress, kwicResults));
+            statsProxy.makeRequest($("#cqp_string").val(), $.proxy(statsResults.onProgress, statsResults));
             
         }
     
@@ -27,13 +24,14 @@
             simpleSearch
             .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
             .clear();
-            lemgramProxy.relationsSearch(lemgram);
+            var type = 
+            lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults));
             searchProxy.relatedWordSearch(lemgram);
             
             
             var cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
-            statsProxy.makeRequest(cqp);
-            kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page);
+            statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
+            kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page, $.proxy(kwicResults.onProgress, kwicResults));
             $("#cqp_string").val(cqp);
         }
         
@@ -112,10 +110,10 @@
                             <script><![CDATA[
                                 $("#simple_text").get(0).blur();
                                 kwicSearch(_event.data.page);
-                                if(isLab && currentMode == "default") {
+                                //if(isLab && currentMode == "default") {
                                     lemgramResults.showPreloader();
-                                    lemgramProxy.relationsWordSearch($("#simple_text").val());
-                                }
+                                    lemgramProxy.makeRequest($("#simple_text").val(), "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+                                //}
                             ]]></script>
                         </transition>
                         
@@ -315,7 +313,7 @@
             <state id="logger" initial="l2">
                 <state id="l2">
                     <transition event="*" target="l2">
-<!--                         <log expr="'event found: ' + _event.name" /> -->
+                        <log expr="'event found: ' + _event.name" />
 <!--                         <script> -->
 <!--                             $.log("conf", $.sm.getConfiguration()); -->
 <!--                         </script> -->
