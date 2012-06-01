@@ -332,20 +332,20 @@ var hp_corpusChooser = {
 					var callback = hp_this.options.infoPopupFolder;
 					var returnValue = "";
 					var indata = [];
-					var boxes = $(this).find(".boxdiv")
+					var boxes = $(this).parent().find(".boxdiv");
 					var corpusID = [];
 					boxes.each(function(index) {
 						corpusID.push($(this).find("img").attr('id').slice(9));
 					});
 					indata["corporaID"] = corpusID;
-					var desc = $(this).attr("data").split("___")[1];
+					var desc = $(this).parent().attr("data").split("___")[1];
 					if(!desc) {
 						desc = "";
 					}
 					indata["description"] = desc;
-					indata["title"] = $(this).attr("data").split("___")[0];
+					indata["title"] = $(this).parent().attr("data").split("___")[0];
 					if ($.isFunction(callback)) returnValue = callback(indata);
-					$(".corpusInfoSpace").css({"top": $(this).offset().top});
+					$(".corpusInfoSpace").css({"top": $(this).parent().offset().top});
  					$(".corpusInfoSpace").find("p").html(returnValue);
  					$(".corpusInfoSpace").fadeIn('fast');
 				},
@@ -354,7 +354,7 @@ var hp_corpusChooser = {
 			};
 
  			$(".boxdiv").hoverIntent(hoverConfig);
- 			$(".tree").hoverIntent(hoverFolderConfig);
+ 			$(".boxlabel").hoverIntent(hoverFolderConfig);
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function() {
