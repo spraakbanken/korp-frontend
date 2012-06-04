@@ -219,6 +219,10 @@ settings.corporafolders.sweac = {
 	contents : ["sweachum"]
 };
 
+settings.corporafolders.strindberg = {
+		title : "August Strindberg",
+		contents : ["strindbergromaner", "strindbergbrev"]
+};
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
@@ -326,7 +330,7 @@ settings.corporafolders.parallel.salt = {
 
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
-	contents : ["strindbergromaner", "romi", "romii", "rom99", "storsuc", "romg"]
+	contents : ["romi", "romii", "rom99", "storsuc", "romg"]
 };
 
 settings.corporafolders.newspapertexts = {

@@ -18,13 +18,15 @@ var BaseResults = {
 		this.$result = $(resultSelector);
 		this.index = this.$tab.index();
 		this.optionWidget = $("#search_options");
-		this.num_result = this.$result.find(".num-result"); 
+		this.num_result = this.$result.find(".num-result");
+		this.$result.add(this.$tab).addClass("not_loading");
 	},
 	
 	onProgress : function(progressObj) {
 		// TODO: this item only exists in the kwic.
 		this.num_result.html(prettyNumbers(progressObj["total_results"]));
-		this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+		if(!isNaN(progressObj["stats"]))
+			this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
 		this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
 	},
 	
@@ -66,17 +68,17 @@ var BaseResults = {
 		//this.$tab.find(".spinner").remove();
 		//$("<div class='spinner' />").appendTo(this.$tab)
 		//.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-		this.$result.addClass("loading");
-		this.$tab.find(".tab_progress").css("width", 0).show();
+		this.$result.add(this.$tab).toggleClass("loading not_loading");
+		this.$tab.find(".tab_progress").css("width", 0); //.show();
 		this.$result.find("progress").attr("value", 0);
-		this.$result.find(".progress").show();
+//		this.$result.find(".progress").show();
 	},
 	hidePreloader : function() {
 //		this.$tab.find(".spinner").remove();
-		this.$result.removeClass("loading");
-		this.$tab.find(".tab_progress").hide();
-		this.$result.find(".progress:visible").hide("clip");
-		this.$result.find(".progress:hidden").hide();
+		this.$result.add(this.$tab).toggleClass("loading not_loading");
+//		this.$tab.find(".tab_progress").hide();
+//		this.$result.find(".progress:visible").hide("clip");
+//		this.$result.find(".progress:hidden").hide();
 			
 	},
 	
@@ -396,11 +398,21 @@ var KWICResults = {
 	
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		c.log("handlePaginationClick", new_page_index, this.current_page);
+		var self = this;
 		if(new_page_index != this.current_page || !!force_click) {
 			
 			this.showPreloader();
 			this.current_page = new_page_index;
-			this.makeRequest();
+			this.proxy.makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) { 
+				//progress
+				if(!isNaN(progressObj["stats"]))
+					self.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+				self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
+			}, function(data) {
+				//success
+				self.buildPager(data.hits);
+				self.hidePreloader();
+			});
 			$.bbq.pushState({"page" : new_page_index});
 		}
 	    

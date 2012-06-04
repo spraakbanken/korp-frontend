@@ -126,10 +126,10 @@ var KWICProxy = {
 			this.pendingRequest.abort();
 	},
 	
-	makeRequest : function(options, page, callback) {
+	makeRequest : function(options, page, callback, successCallback) {
 		var self = this;
 		this.parent();
-		
+		successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults); 
 		self.progress = 0;
 		
 		var o = $.extend({
@@ -137,7 +137,7 @@ var KWICProxy = {
 			queryData : null,
 			ajaxParams : this.prevAjaxParams,
 			success : function(data) {
-				kwicResults.renderCompleteResult(data);
+				successCallback(data);
 			},
 			error : function(data) {
 				c.log("kwic error", data);

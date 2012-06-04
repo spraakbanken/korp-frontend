@@ -564,6 +564,7 @@ table {
 /* 	float : left; */
 	display : inline-block;
 	*display : inline;
+	vertical-align: bottom;
 }
 
 .controls_n {
@@ -945,6 +946,10 @@ a.relStat:hover {
 	right : 10px;
 	left : 280px;
 	top : -1px;
+	
+	-moz-transition: left 400ms ease;
+	-webkit-transition: left 400ms ease;
+	transition: left 400ms ease;
 }
 
 #showLineDiagram {
@@ -1272,5 +1277,34 @@ a.relStat:hover {
 .tab_progress {
 	height : 2px;
 	background-color : darkblue;
+	
+}
+.not_loading .tab_progress {
+	display : none;
+}
+.progress {
+	width : 143px;
+	overflow-x : hidden;
+	-moz-transition: width 400ms ease;
+	-webkit-transition: width 400ms ease;
+	transition: width 400ms ease;
+}
+#results-kwic.not_loading .progress {
+	width : 0;
+	
+	-moz-transition: width 400ms ease;
+	-webkit-transition: width 400ms ease;
+	transition: width 400ms ease;
+}
+
+.not_loading .hits_picture {
+	left : 180px;
+	-moz-transition: left 400ms ease;
+	-webkit-transition: left 400ms ease;
+	transition: left 400ms ease;
+}
+
+#results-stats.not_loading .progress, #results-lemgram.not_loading .progress {
+	display : none;
 }
 
