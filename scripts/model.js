@@ -16,32 +16,24 @@ var BaseProxy = {
 		this.progress = 0;
 		this.total_results = 0;
 		this.total = null;
-//		this.total = $.reduce(
-//				$.map(getSelectedCorpora(), function(corpus) {
-//					return parseInt(settings.corpora[corpus].info.Size);
-//				}), 
-//				function(val1, val2) {return val1 + val2;});
 	},
 	
 	calcProgress : function(e) {
 		var self = this;
 		var newText = e.target.responseText.slice(this.prev.length);
-		
+		var struct = {};
 		try {
 			var prefix = newText[0] == "{" ? "" : "{";
 			var suffix = newText.slice(-1) == "}" ? "" : "}";
 			var json = prefix + newText.slice(0,-2) + suffix;
 			
-			
-			var struct = JSON.parse(json);
+			struct = JSON.parse(json);
 		} catch (e) {
-			//c.log("json parse broken:");
-//			c.log(json);
 			
 			try {
-				var struct = JSON.parse(newText);
+				struct = JSON.parse(newText);
 			} catch(e) {
-				c.log("second json parse failed");
+				c.log("second json parse failed in ", this);
 				return;
 			}
 		}

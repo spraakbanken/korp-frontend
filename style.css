@@ -1261,10 +1261,10 @@ a.relStat:hover {
 }
 
 #showBarPlot {
-	display : inline-block;
+	display : none;
 }
 .lab #showBarPlot {
-	display : none;
+	display : inline-block;
 }
 
 #wordclassChkParent {

@@ -621,9 +621,8 @@ var ExtendedToken = {
 			});
 			
 			$.each(keys, function(_, key) {
-				c.log("key", data.translationKey + key)
 				$("<option />")
-				.localeKey(data.translationKey + data.dataset[key])
+				.localeKey((data.translationKey || "") + data.dataset[key])
 				.val(key).appendTo(arg_value);
 			});
 			break;
