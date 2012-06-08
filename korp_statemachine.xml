@@ -110,10 +110,9 @@
                             <script><![CDATA[
                                 $("#simple_text").get(0).blur();
                                 kwicSearch(_event.data.page);
-                                //if(isLab && currentMode == "default") {
-                                    lemgramResults.showPreloader();
-                                    lemgramProxy.makeRequest($("#simple_text").val(), "word", $.proxy(lemgramResults.onProgress, lemgramResults));
-                                //}
+                                
+                                lemgramResults.showPreloader();
+                                lemgramProxy.makeRequest($("#simple_text").val(), "word", $.proxy(lemgramResults.onProgress, lemgramResults));
                             ]]></script>
                         </transition>
                         
@@ -129,17 +128,23 @@
                         </onexit>
                     </state>
                     <state id="extended">
-                        <transition event="submit.kwic" target="search_history">
+                        <transition event="submit.kwic" target="extended">
                             <script>
                                 kwicSearch(_event.data.page);
+                                gotoFirstResultTab();
                             </script>
                         </transition>
-                        <transition event="submit.lemgram" target="search_history">
+                        <transition event="submit.lemgram" target="extended">
                             <script>
                                 //extendedSearch.setOneToken("lex", _event.data);
                                 lemgramSearch(_event.data.value, null, null, _event.data.page);
                             </script>
                         </transition>
+                        <onexit>
+                            <script>
+                                $("#result-container").korptabs("option", "disabled", [2]);
+                            </script>
+                        </onexit>
                     </state>
                     <state id="advanced">
                     
@@ -313,7 +318,7 @@
             <state id="logger" initial="l2">
                 <state id="l2">
                     <transition event="*" target="l2">
-<!--                         <log expr="'event found: ' + _event.name" /> -->
+                        <log expr="'event found: ' + _event.name" />
 <!--                         <script> -->
 <!--                             $.log("conf", $.sm.getConfiguration()); -->
 <!--                         </script> -->
