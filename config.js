@@ -262,7 +262,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["pargaskungorelser", "sydosterbotten2012"]
+	contents : ["sydosterbotten2012"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -283,6 +283,13 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 	title : "Jakobstads tidning 1999–2000",
 	contents : ["jakobstadstidning1999", "jakobstadstidning2000"],
 	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008."
+};
+
+settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
+	title : "Pargas kungörelser",
+	contents : ["pargaskungorelser2011", "pargaskungorelser2012"],
+	description : "Pargas Kungörelser är en regional svenskspråkig tidning i Pargas med omnejd."
+	// http://www.pku.fi
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
@@ -2325,11 +2332,36 @@ settings.corpora.nyaargus = {
 	}
 };
 
-settings.corpora.pargaskungorelser = {
+settings.corpora.pargaskungorelser2011 = {
 	title : "Pargas Kungörelser 2011",
-	description : "<a href=\"http://www.pku.fi\">Pargas Kungörelser</a> är en regional svenskspråkig tidning i Pargas med omnejd.",
+	description : "",
 	languages : {
-		PARGASKUNGORELSER : "svenska"
+		PARGASKUNGORELSER2011 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.pargaskungorelser2012 = {
+	title : "Pargas Kungörelser 2012",
+	description : "",
+	languages : {
+		PARGASKUNGORELSER2012 : "svenska"
 	},
 	within : within.defaultStruct,
 	attributes : {
