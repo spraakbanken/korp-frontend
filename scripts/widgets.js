@@ -364,12 +364,14 @@ var Sidebar = {
 	updatePlacement : function() {
 		var max = Math.round($("#columns").position().top);
 		if($(window).scrollTop() < max) {
-			this.element.css("top", "");
-			this.element.css("position", "absolute");
+			this.element.removeClass("fixed");
+//			this.element.css("top", "");
+//			this.element.css("position", "absolute");
 		}
 		else if($("#left-column").height() > $("#sidebar").height()){
-			this.element.css("top", 8);
-			this.element.css("position", "fixed");
+			this.element.addClass("fixed");
+//			this.element.css("top", 8);
+//			this.element.css("position", "fixed");
 		}
 	},
 	

@@ -770,7 +770,12 @@ table {
 	right: 0px;
 	width: 250px;
 	padding: 5px 0px 5px 5px;
-	margin-left : 8px;
+	
+}
+#sidebar.fixed {
+	right : 8px;
+	position : fixed;
+	top : 8px;
 }
 
 #sidebar:empty {
