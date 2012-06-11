@@ -345,18 +345,18 @@ var currentMode;
 					simpleSearch.setPlaceholder(null, null);
 					if(settings.lemgramSelect)
 						simpleSearch.makeLemgramSelect();
-					$.sm.send("submit.kwic", {value : value, page : page});
+					$.sm.send("submit.word", {value : value, page : page});
 					break;
 				case "lemgram":
 					$.sm.send("submit.lemgram", {value : value, page : page});
 					break;
 				case "saldo":
 					extendedSearch.setOneToken("saldo", value);
-					$.sm.send("submit.kwic", {value : value, page : page});
+					$.sm.send("submit.cqp", {value : value, page : page});
 					break;
 				case "cqp":
 					advancedSearch.setCQP(value);
-					$.sm.send("submit.kwic", {value : value, page : page});
+					$.sm.send("submit.cqp", {value : value, page : page});
 					break;
 				}
 			}
