@@ -1282,7 +1282,7 @@ a.relStat:hover {
 .tab_progress {
 	height : 2px;
 	background-color : darkblue;
-	
+	max-width : 100%;
 }
 .not_loading .tab_progress {
 	display : none;
