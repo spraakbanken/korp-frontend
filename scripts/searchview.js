@@ -478,17 +478,26 @@ var ExtendedSearch = {
 	
 	insertToken : function(button) {
 		var self = this;
-		$.tmpl($("#tokenTmpl"))
-	    .extendedToken({
-	    	close : function() {
-	    		advancedSearch.updateCQP();
-	    	},
-	    	change : function() {
-	    		if(self.$main.is(":visible"))
-	    			advancedSearch.updateCQP();
-	    	}
-	    }).insertBefore(button)
-	    .quickLocalize();
+		try {
+			$.tmpl($("#tokenTmpl"))
+			.insertBefore(button)
+		    .extendedToken({
+		    	close : function() {
+		    		advancedSearch.updateCQP();
+		    	},
+		    	change : function() {
+		    		if(self.$main.is(":visible"))
+		    			advancedSearch.updateCQP();
+		    	}
+		    });
+		} catch(error) {
+			c.log("error creating extendedToken", error);
+			this.$main.find("*").remove();
+			$("<div>Extended search is broken on this browser.</div>").prependTo(this.$main)
+			.nextAll().remove();
+		}
+//	    .quickLocalize();
+		util.localize();
 	},
 	
 	refreshTokens : function() {
