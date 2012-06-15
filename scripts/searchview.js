@@ -353,7 +353,7 @@ var SimpleSearch = {
 	removeSimilarHeader : function() {
 		$("#similar_lemgrams").slideUp(function() {
 			$(this).empty();
-		})
+		});
 	},
 	
 	onSimpleChange : function(event) {
@@ -493,7 +493,7 @@ var ExtendedSearch = {
 	
 	refreshTokens : function() {
 		$(".query_token").extendedToken("refresh");
-	},
+	}
 	
 };
 

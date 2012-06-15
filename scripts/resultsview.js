@@ -521,7 +521,7 @@ var KWICResults = {
 				pager.data("prevPos").after(pager);
 			}
 		}
-	},
+	}
 	
 };
 
