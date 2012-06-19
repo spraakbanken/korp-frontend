@@ -342,7 +342,7 @@ settings.corporafolders.novels = {
 
 settings.corporafolders.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["dn1987", "ordat"]
+	contents : ["attasidor", "dn1987", "ordat"]
 };
 
 settings.corporafolders.newspapertexts.gp = {
@@ -665,6 +665,31 @@ settings.corpora.sweachum = {
 	struct_attributes : {
 	    text_type : {label : "type"},
 	    text_subject : {label : "subject"}
+	}
+};
+
+settings.corpora.attasidor = {
+	title : "8 SIDOR",
+	description : "<a href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
+	languages : {
+		ATTASIDOR : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"}
 	}
 };
 
