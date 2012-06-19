@@ -218,7 +218,7 @@ var KorpTabs = {
 	getCurrentInstance : function() {
 //		var ret = this.lis.filter(".ui-tabs-active").data("instance") || null; //for jquery ui 1.9
 		var ret = this.lis.filter(".ui-tabs-selected").data("instance") || null;
-		c.log("getCurrentInstance", this.lis, ret);
+		c.log("getCurrentInstance", ret);
 		return ret;
 	}
 	

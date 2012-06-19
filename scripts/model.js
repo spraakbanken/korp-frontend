@@ -110,7 +110,6 @@ var KWICProxy = {
 		this.prevAjaxParams = null;
 		this.pendingRequest = {abort : $.noop};
 		
-
 	},
 	
 	abort : function() {
@@ -118,10 +117,11 @@ var KWICProxy = {
 			this.pendingRequest.abort();
 	},
 	
-	makeRequest : function(options, page, callback, successCallback) {
+	makeRequest : function(options, page, callback, successCallback, kwicCallback) {
 		var self = this;
 		this.parent();
-		successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults); 
+		successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults);
+		kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
 		self.progress = 0;
 		
 		var o = $.extend({
@@ -142,10 +142,11 @@ var KWICProxy = {
 				callback(progressObj);
 				if(progressObj["struct"].kwic) {
 		        	c.log("found kwic!");
-		        	kwicResults.renderResult(progressObj["struct"]);
+		        	kwicCallback(progressObj["struct"]);
 		        }
 				
-			}
+			},
+			incremental : $.support.ajaxProgress
 		}, kwicResults.getPageInterval(page), options);
 		this.prevAjaxParams = o.ajaxParams;
 //		kwicResults.num_result = 0;
@@ -158,7 +159,6 @@ var KWICProxy = {
 	   	{ 
 			return(n.toUpperCase());
 	    });
-		
 		var data = {
 			command:this.command,
 			corpus:selected_uppercased_corpora_ids.join(),
@@ -174,7 +174,7 @@ var KWICProxy = {
 			show:[],
 			show_struct:[],
 			sort : o.sort,
-			incremental : $.support.ajaxProgress
+			incremental : o.incremental
 		};
 		$.extend(data, o.ajaxParams);
 		if(o.queryData != null) {
@@ -221,6 +221,10 @@ var KWICProxy = {
 			success: function(data, status, jqxhr) {
 				c.log("kwic result", data);
 				self.queryData = data.querydata; 
+				
+				if(o.incremental == false)
+					kwicCallback(data);
+				
 				o.success(data, o.cqp);
 			},
 			error : o.error,

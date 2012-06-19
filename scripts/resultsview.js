@@ -171,6 +171,7 @@ var KWICResults = {
 			this.showNoResults();
 			return;
 		}
+		this.$result.find('.num-result').html(prettyNumbers(data.hits));
 		this.renderHitsPicture(data);
 		this.buildPager(data.hits);
 		
@@ -553,11 +554,12 @@ var ExampleResults = {
 			},
 			error : function() {
 				self.hidePreloader();
-			}
+			},
+			incremental : false
 		});
 		this.showPreloader();
 //		this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
-		this.proxy.makeRequest(opts, null, $.noop);
+		this.proxy.makeRequest(opts, null, $.noop, $.noop, $.noop);
 	},
 	
 	onHpp : function() {
