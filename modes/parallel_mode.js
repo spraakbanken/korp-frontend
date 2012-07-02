@@ -25,6 +25,7 @@ view.KWICResults = new Class(ParallelKWICResults);
 
 
 settings.primaryColor = "#FFF3D8";
+settings.primaryLight = "#FFF9EE";
 settings.corporafolders = {};
 
 settings.corporafolders.europarl = {

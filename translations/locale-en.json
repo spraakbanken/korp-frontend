@@ -133,5 +133,8 @@
 	"hitspicture_hits" : "hits",
 	"hitspicture_gotocorpushits" : "Click to go to the first page with hits from this corpus.",
 	
-	"hits_per_mil" : "Hits per million tokens"
+	"hits_per_mil" : "Hits per million tokens",
+	
+	"chapter" : "chapter",
+	"verse" : "verse"
 }

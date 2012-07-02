@@ -135,5 +135,9 @@
 	"hitspicture_hits" : "träffar",
 	"hitspicture_gotocorpushits" : "Klicka för att gå till första sidan med träffar från denna korpus.",
 	
-	"hits_per_mil" : "Träffar per miljon token"
+	"hits_per_mil" : "Träffar per miljon token",
+	
+	"chapter" : "kapitel",
+	"verse" : "vers"
+	
 }

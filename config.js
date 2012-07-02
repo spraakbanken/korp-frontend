@@ -10,6 +10,7 @@ settings.autocomplete = true;
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
+settings.secondaryColor = "";
 settings.corpora = {};
 settings.defaultContext = {
 	"1 sentence" : "1 sentence"
