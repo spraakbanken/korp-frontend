@@ -276,7 +276,7 @@
     				${util.getLocaleString("deprel_" + $data[$index])}
 				{{else $index == "msd"}}
 					<span class="sidebar_msd">${$data[$index]}</span><a href="msdtags.html" target="_blank"><span id="sidbar_info" class="ui-icon ui-icon-info"></span></a>
-    			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo"]) != -1}}
+    			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
 				${c.log($index, $data[$index]) || ""}

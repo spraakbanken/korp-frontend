@@ -305,11 +305,11 @@ var Sidebar = {
 	},
 	
 	_sidebarSaldoFormat : function() {
-		$("#sidebar_lex, #sidebar_prefix, #sidebar_suffix").each(function() {
+		$("#sidebar_lex, #sidebar_prefix, #sidebar_suffix, #sidebar_dalinlem, #sidebar_saldolem").each(function() {
 			var idArray = $.grep($(this).text().split("|"), function(itm) {
 				return itm && itm.length;  
 			}).sort();
-				
+			var attr = $(this).attr("id").split("_")[1];
 			var labelArray = util.sblexArraytoString(idArray);
 			$(this)
 			.html($.arrayToHTMLList(labelArray))
@@ -317,9 +317,16 @@ var Sidebar = {
 			.wrap("<a href='javascript:void(0)' />")
 			.click(function() {
 				var split = util.splitLemgram(idArray[$(this).parent().index()]);
-				var id = $.format("%s..%s.%s", split); //split[0] + ".." + split[1] + "." + split[2];
+				var id = $.format("%s..%s.%s", split);
 				c.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
-				simpleSearch.selectLemgram(id);
+				if($.inArray(attr, ["dalinlem", "saldolem"]) != -1) {
+					advancedSearch.setCQP($.format("[%s contains '%s']", [attr, id]));
+					advancedSearch.onSubmit();
+				}
+				else
+					simpleSearch.selectLemgram(id);
+				
+				
 			})
 			.hoverIcon("ui-icon-search");
 			
