@@ -119,6 +119,8 @@
 	
 	"example" : "Exempel",
 	"page_num" : "sidonummer",
+        "year_to"  : "datum (start)",
+        "year_from"  : "datum (slut)",
 	
 	"malt_AT" : "Attribut",
 	"malt_ET" : "Efterställt attribut",

@@ -37,8 +37,8 @@ settings.corpora.bibel1917 = {
 		"text_title" : {
 			label : "title"
 		},
-        "paragraph_chap" : {label : "chapter"},
-        "verse_n" : {label : "verse"},
+                "paragraph_chap" : {label : "chapter"},
+                "verse_n" : {label : "verse"},
 		"text_datefrom" : {
 			label : "year_from"
 		},
@@ -54,7 +54,7 @@ settings.corpora.bibel1873 = {
 	languages : {
 		BIBEL1873 : "svenska"
 	},
-    within : within.defaultStruct,
+        within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -71,7 +71,7 @@ settings.corpora.bibel1873 = {
 		"text_title" : {
 			label : "title"
 		},
-        "paragraph_chap" : {label : "chapter"},
+                "paragraph_chap" : {label : "chapter"},
 		"text_datefrom" : {
 			label : "year_from"
 		},
@@ -90,23 +90,22 @@ settings.corpora.bibel1873dalin = {
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
+		lemma    : attrs.baseform,
+		dalinlem : {label : "lemgram",
+                            type  : "set"},
+		saldolem : {label : "modern",
+                            type  : "set"},
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref,
-		saldo : {
-			label : "modern",
-			type : "set",
-			opts : settings.liteOptions
-		}
-		
 	},
 	struct_attributes : {
 		"text_title" : {
 			label : "title"
 		},
-        "paragraph_chap" : {label : "chapter"},
+                "paragraph_chap" : {label : "chapter"},
 		"text_datefrom" : {
 			label : "year_from"
 		},

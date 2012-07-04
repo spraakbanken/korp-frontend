@@ -116,6 +116,8 @@
 	"mx" : "flerordsprefix",	  
 	"sx" : "prefix",	  					
 	"page_num" : "page number",
+        "year_to"  : "date (to)",
+        "year_from"  : "date (from)",
 		
 	"example" : "Example",
 

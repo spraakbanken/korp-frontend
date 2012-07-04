@@ -138,6 +138,7 @@
 	"hits_per_mil" : "Träffar per miljon token",
 	
 	"chapter" : "kapitel",
-	"verse" : "vers"
+	"verse" : "vers",
+	"modern" : "modern"
 	
 }
