@@ -279,7 +279,6 @@
     			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
-				${c.log($index, $data[$index]) || ""}
     				<ul data-type="${$value.label}">
     				{{tmpl($.grep($data[$index].split("|"), Boolean)) '#defaultSetTmpl'}}
     				</ul>

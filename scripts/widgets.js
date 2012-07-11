@@ -18,6 +18,7 @@ $.widget("ui.radioList", {
 		});
 		this.element.find(".inline_list span:first").remove();
 		this.select(this.options.selected);
+		
 	},
 	
 	select : function(mode) {
@@ -79,7 +80,7 @@ $.fn.korp_autocomplete = function(options) {
 		middleware : function(request, idArray) {
 			var dfd = $.Deferred();
 			
-			idArray.sort(view.lemgramSort);
+			idArray.sort(options.sortFunction || view.lemgramSort);
 			
 			var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
 			var listItems = $.map(idArray, function(item, i) {
@@ -642,6 +643,7 @@ var ExtendedToken = {
 				type = "saldo";
 				labelFunc = util.saldoToString;
 				sortFunc = view.saldoSort;
+				c.log("saldo");
 			} else {
 				type = "lem";
 				labelFunc = util.lemgramToString;
@@ -784,7 +786,6 @@ var ExtendedToken = {
 	    					"ends_with" : ["=", ".*", value, ""],
 	    					"matches" : ["=", "", value, ""]
 	    				}[op];
-	    			c.log("case_sens", obj.case_sense);
 	    			return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(op, [obj.case_sens]));
 	    		};
 	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
