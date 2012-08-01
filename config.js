@@ -226,7 +226,7 @@ settings.corporafolders.strindberg = {
 };
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
-	contents : [],
+	contents : ["magmakolumner"],
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
 			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
 			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
@@ -364,6 +364,33 @@ settings.corporafolders.magazines = {
 /*
  * CORPORA
  */
+
+settings.corpora.magmakolumner = {
+	title : "Magma kolumner",
+	description : "Material ur kolumner publicerade av <a href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
+	languages : {
+		MAGMAKOLUMNER : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_year : {label : "year"},
+	    text_date : {label : "date"}
+	}
+};
 
 settings.corpora.fsbbloggvuxna = {
 	title : "Vuxna bloggare",
