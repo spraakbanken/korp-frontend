@@ -86,7 +86,8 @@ var currentMode;
                  {localekey : "parallel_texts", mode : "parallel"},
                  {localekey : "faroese_texts", mode : "faroe"},
                  {localekey : "1800_texts", mode : "1800"},
-                 {localekey : "old_swedish_texts", mode : "old_swedish"}
+                 {localekey : "old_swedish_texts", mode : "old_swedish"},
+                 {localekey : "lb_texts", mode : "lb"}
                      ]
 		}).add("#about").vAlign();
 		
