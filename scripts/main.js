@@ -6,8 +6,6 @@ var currentMode;
 //	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
 	
-		
-	
 	var deferred_load = $.get("searchbar.html");
 	
 	$.ajaxSetup({ 

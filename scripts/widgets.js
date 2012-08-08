@@ -1,3 +1,4 @@
+
 $.widget("ui.radioList", {
 	options : {change : $.noop, separator : "|", selected : "default"},
 	_init : function() {
@@ -242,9 +243,6 @@ var Sidebar = {
 				.prependTo("#selected_sentence");
 		
 		
-		if($("#sidebarTmpl").length == 0)
-			$.error("sidebartemplate broken");
-		
 		if(!$.isEmptyObject(corpusObj.attributes)) {
 			$("#selected_word").append($.format('<h4 rel="localize[word_attr]">%s</h4>', [util.getLocaleString("word_attr")]));
 			$("#sidebarTmpl")
@@ -373,13 +371,9 @@ var Sidebar = {
 		var max = Math.round($("#columns").position().top);
 		if($(window).scrollTop() < max) {
 			this.element.removeClass("fixed");
-//			this.element.css("top", "");
-//			this.element.css("position", "absolute");
 		}
 		else if($("#left-column").height() > $("#sidebar").height()){
 			this.element.addClass("fixed");
-//			this.element.css("top", 8);
-//			this.element.css("position", "fixed");
 		}
 	},
 	
@@ -398,13 +392,9 @@ var Sidebar = {
 		});      
 	}, 
 	hide : function() {
-//		$.sm.send("sidebar.hide.start");
-		if($("#left-column").css("right") == "8px") return;
+		if($("#left-column").css("right") == "0px") return;
 		var self = this;
 		self.element.hide("slide", {direction : "right"});
-//		self.element.animate({
-//			right : -273
-//		});
 		$("#left-column").animate({
 			right : 0
 		}, null, null, function() {
@@ -484,7 +474,7 @@ var ExtendedToken = {
 		.change(function(){
 			self._trigger("change");
 		});
-		var link_mod = $("<span class='val_mod insensitive'>").text("Aa")
+		var link_mod = $("<span class='val_mod sensitive'>").text("Aa")
 		.click(function() {
 			var btn = $(this);
 			if($("#mod_menu").length) {
@@ -492,8 +482,8 @@ var ExtendedToken = {
 				return;
 			}
 			$("<ul id='mod_menu'>")
-			.append($("<li />").append($("<a>").localeKey("case_insensitive").data("val", "insensitive")))
 			.append($("<li />").append($("<a>").localeKey("case_sensitive").data("val", "sensitive")))
+			.append($("<li />").append($("<a>").localeKey("case_insensitive").data("val", "insensitive")))
 			.insertAfter(this)
 			.menu({
 			})

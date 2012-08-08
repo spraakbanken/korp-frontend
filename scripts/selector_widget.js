@@ -160,12 +160,8 @@ var hp_corpusChooser = {
 			} else {
 				body = el.html();
 			}
-			var textoffset = -1;
-			if ($.browser.webkit) {
-				textoffset = -2;
-			}
 			
-			var upper = '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div style="float:left;margin-top:' + textoffset + 'px;"><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
+			var upper = '<div class="hp_topframe buttonlink ui-state-default ui-corner-all"><div><span id="hp_corpora_title1"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_title3" style="color:#888888"></span></div><div style="float:right; width:16px"><span style="text-align:right; left:auto" class="ui-icon ui-icon-triangle-2-n-s"></span></div></div></div>';
 			var newHTML = '<div class="popupchecks ui-corner-bottom"><div class="header"><a href="javascript:" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span> <span rel="localize[corpselector_buttonselectall]">' + this.options.buttonSelectAll + '</span></a> <a href="javascript:" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span> <span rel="localize[corpselector_buttonselectnone]"></span></a></div>';
 			
 			newHTML += recursive_transform(body,0);
@@ -186,9 +182,9 @@ var hp_corpusChooser = {
 			});
 			
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
-			$(".popupchecks").css({"top": popoffset-1});
+//			$(".popupchecks").css({"top": popoffset-1});
 			// ie7 hack
-			$(".popupchecks").css({"left": $(".scroll_checkboxes").position().left});
+//			$(".popupchecks").css({"left": $(".scroll_checkboxes").position().left});
 			
 			
 			$(".scroll_checkboxes").unbind("mousedown");
@@ -201,8 +197,15 @@ var hp_corpusChooser = {
 					$(".hp_topframe").removeClass("ui-corner-top");
 					$(".hp_topframe").addClass("ui-corner-all");
 				} else {
-					$(this).siblings(".popupchecks").css({"position":"absolute"});
-					$(this).siblings(".popupchecks").css({"display":"block"});
+					$(".popupchecks")
+					.css({"position":"absolute", "display":"block"})
+					.position({
+					    my : "left top",
+					    at : "left bottom",
+					    of : "#corpusbox",
+					    offset : "0 -2px"
+					});
+					
 					$(".hp_topframe").addClass("ui-corner-top");
 					$(".hp_topframe").removeClass("ui-corner-all");
 				}

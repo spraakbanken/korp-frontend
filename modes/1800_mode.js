@@ -44,7 +44,7 @@ settings.corpora.bibel1917 = {
 		},
 		"text_dateto" : {
 			label : "year_to"
-		},
+		}
 	}
 };
 
@@ -54,7 +54,7 @@ settings.corpora.bibel1873 = {
 	languages : {
 		BIBEL1873 : "svenska"
 	},
-        within : within.defaultStruct,
+    within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -65,7 +65,7 @@ settings.corpora.bibel1873 = {
 		suffix : attrs.suffix,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
-		ref : attrs.ref,
+		ref : attrs.ref
 	},
 	struct_attributes : {
 		"text_title" : {
@@ -77,7 +77,7 @@ settings.corpora.bibel1873 = {
 		},
 		"text_dateto" : {
 			label : "year_to"
-		},
+		}
 	}
 };
 settings.corpora.bibel1873dalin = {
@@ -99,19 +99,21 @@ settings.corpora.bibel1873dalin = {
 		suffix : attrs.suffix,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
-		ref : attrs.ref,
+		ref : attrs.ref
+		
 	},
 	struct_attributes : {
 		"text_title" : {
 			label : "title"
 		},
-                "paragraph_chap" : {label : "chapter"},
+        "paragraph_chap" : {label : "chapter"},
 		"text_datefrom" : {
 			label : "year_from"
 		},
 		"text_dateto" : {
 			label : "year_to"
 		},
+		"verse_n" : {label : "verse"}
 	}
 };
 

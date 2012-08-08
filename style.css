@@ -1,5 +1,7 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
 body {
-	font-family : Helvetica, Arial, Verdana, sans-serif;
+	font-family : 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
 	font-size: 13px;
 	margin : 0;
 	overflow-x : hidden;
@@ -336,7 +338,8 @@ input.arg_value {
 	width: 480px;
 	height: 33px;
 	overflow: hidden;
-	margin-bottom: 3px;
+	margin-bottom: 6px;
+	vertical-align: bottom;
 }
 
 .buttonlink {
@@ -394,8 +397,12 @@ input.arg_value {
 .hp_topframe {
 	height: 16px;
 	width: 433px;
-	text-align: center;
-	padding-top: 10px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.webkit .hp_topframe > div {
+    margin-top : 1px;
 }
 
 #corpusbox {
@@ -1243,10 +1250,10 @@ a.relStat:hover {
 	color : black;
 }
 
-.val_mod.insensitive + #mod_menu li:first-of-type a {
+.val_mod.sensitive + #mod_menu li:first-of-type a {
 	text-decoration: underline;
 }
-.val_mod.sensitive + #mod_menu li:nth-of-type(2) a {
+.val_mod.insensitive + #mod_menu li:nth-of-type(2) a {
 	text-decoration: underline;
 }
 

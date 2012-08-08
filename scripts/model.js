@@ -402,7 +402,7 @@ var StatsProxy = {
 			url: settings.cgi_script,
 			data : {
 				command : "count",
-				groupby : $.bbq.getState("stats_reduce") || "",
+				groupby : $.bbq.getState("stats_reduce") || "word",
 				cqp : cqp,
 				corpus : selected_uppercased_corpora_ids,
 				incremental : $.support.ajaxProgress

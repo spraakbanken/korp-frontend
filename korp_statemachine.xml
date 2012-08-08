@@ -37,6 +37,10 @@
         function gotoFirstResultTab() {
             $.log("faking kwic result tab click");
             $("#result-container li:first > a").trigger("click");
+            setTimeout(function() {
+            	if($("#result-container").is(".ui-tabs")) 
+                	$("#result-container").korptabs("option", "disabled", [0,1,2]);
+            }, 100);    
         }
     ]]></script>
     
@@ -82,7 +86,7 @@
                 <state id="search_inner"> 
                     
                     
-                    <history id="search_history">
+                    <!--<history id="search_history">
                         <onentry>
                             <script>
                                 $.log("disabling all result tabs");
@@ -91,14 +95,9 @@
                             </script>
                         </onentry>
                         <transition target="simple" />
-                    </history>
+                </history>-->
                 
-                    <transition event="submit.cqp" target="search_history">
-                        <script>
-                            $("#simple_text").get(0).blur();
-                            kwicSearch(_event.data.page);
-                        </script>
-                    </transition>
+                    
                     
                     <transition event="searchtab.simple" target="simple" /> 
                     <transition event="searchtab.extended" target="extended" /> 
@@ -120,6 +119,14 @@
                                 lemgramSearch(_event.data.value, simpleSearch.isSearchPrefix(), simpleSearch.isSearchSuffix(), _event.data.page);
                             </script>
                         </transition>
+                        
+                        <transition event="submit.cqp" target="simple">
+                            <script>
+                                $("#simple_text").get(0).blur();
+                                kwicSearch(_event.data.page);
+                            </script>
+                        </transition>
+                        
                         <onexit>
                             <script>
                                 $("#simple_text").autocomplete("close");
@@ -130,7 +137,6 @@
                         <transition event="submit.cqp" target="extended">
                             <script>
                                 kwicSearch(_event.data.page);
-                                gotoFirstResultTab();
                             </script>
                         </transition>
                         <transition event="submit.lemgram" target="extended">
@@ -146,7 +152,21 @@
                         </onexit>
                     </state>
                     <state id="advanced">
-                    
+                        <transition event="submit.cqp" target="advanced">
+                            <script>
+                                $("#simple_text").get(0).blur();
+                                kwicSearch(_event.data.page);
+                            </script>
+                        </transition>
+                        <!--<transition event="submit.cqp" target="search_history">
+                            <script>
+                                c.log("submit.cqp, advanced");
+                                $("#simple_text").get(0).blur();
+                                kwicSearch(_event.data.page);
+                                gotoFirstResultTab();
+                            </script>
+                        </transition>
+                    -->
                     </state>
                 </state>
             </state>
@@ -192,10 +212,6 @@
                             <transition target="kwic_word_not_selected" />
                         </state>
                         
-<!--                         <history id="selected_h"> -->
-<!--                             <transition target="kwic_word_not_selected" /> -->
-<!--                         </history> -->
-                        
                         <state id="kwic_word_selected">
                             <onentry>
                                 <script>
@@ -220,24 +236,6 @@
                             </script>
                         </onexit>
                     </state>
-                    <state id="results_lemgram">
-                        <onentry>
-                            <script>
-                                util.setJsonLink(lemgramProxy.prevRequest);
-                                lemgramResults.onentry();
-                            </script>
-                        </onentry>
-<!--                         <transition event="submit.cqp" target="results_lemgram" > -->
-<!--                             <script> -->
-<!--                                 gotoFirstResultTab(); -->
-<!--                             </script> -->
-<!--                         </transition> -->
-                        <onexit>
-                            <script>
-                                lemgramResults.onexit();
-                            </script>
-                        </onexit>
-                    </state>
                     <state id="results_stats">
                         <onentry>
                             <script>
@@ -248,6 +246,25 @@
                         <transition event="submit.word" target="results_stats" />
                         <transition event="submit.cqp" target="results_stats" />
                         
+                    </state>
+                    <state id="results_lemgram">
+                        <onentry>
+                            <script>
+                                util.setJsonLink(lemgramProxy.prevRequest);
+                                lemgramResults.onentry();
+                            </script>
+                        </onentry>
+                         <transition event="submit.cqp" target="results_lemgram" >
+                             <script>
+                                 gotoFirstResultTab();
+                                 
+                             </script>
+                        </transition>
+                        <onexit>
+                            <script>
+                                lemgramResults.onexit();
+                            </script>
+                        </onexit>
                     </state>
                     
                     <state id="results_custom" initial="custom_entry">
@@ -314,7 +331,7 @@
             <state id="logger" initial="l2">
                 <state id="l2">
                     <transition event="*" target="l2">
-<!--                         <log expr="'event found: ' + _event.name" /> -->
+                         <log expr="'event found: ' + _event.name" />
 <!--                         <script> -->
 <!--                             $.log("conf", $.sm.getConfiguration()); -->
 <!--                         </script> -->
