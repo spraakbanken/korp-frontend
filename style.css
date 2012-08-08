@@ -1199,11 +1199,11 @@ a.relStat:hover {
 	display : inline;
 }
 
-#mode_switch li:last-child, #mode_switch li:nth-last-child(2) {
+#mode_switch li:last-child, #mode_switch li:nth-last-child(2), #mode_switch li:nth-last-child(3) {
 	display : none;
 }
 
-.lab #mode_switch li:last-child, .lab #mode_switch li:nth-last-child(2) {
+.lab #mode_switch li:last-child, .lab #mode_switch li:nth-last-child(2), .lab #mode_switch li:nth-last-child(3) {
 	display : inline-block;
 }
 
