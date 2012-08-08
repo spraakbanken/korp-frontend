@@ -744,7 +744,7 @@ var ExtendedToken = {
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
 	        var value = $(this).find(".arg_value").val();
 	        var opt = $(this).find(".arg_opts").val();
-	        var case_sens = $(this).find(".val_mod.sensitive").length === 0 ? "" : " %c";
+	        var case_sens = $(this).find(".val_mod.sensitive").length === 0 ? " %c" : "";
 	        if(data.displayType == "autocomplete") {
 	        	value = null;
 	        }
