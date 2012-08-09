@@ -1807,6 +1807,7 @@ settings.corpora.lt1996 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+	    text_year : {label : "year"},
 		text_article : {label : "article"},
 		text_id : {label : "text"}
 	}
@@ -1832,7 +1833,7 @@ settings.corpora.lt1997 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
@@ -1858,7 +1859,7 @@ settings.corpora.lt1998 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
@@ -1884,7 +1885,7 @@ settings.corpora.lt1999 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
@@ -1910,7 +1911,7 @@ settings.corpora.lt2000 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
@@ -1936,7 +1937,7 @@ settings.corpora.lt2001 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"},
 		text_title : {label : "title"}
 	}
