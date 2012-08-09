@@ -2210,7 +2210,7 @@ settings.corpora.strindbergromaner = {
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_sv : {label : "text_sv"}
 	}
 };
