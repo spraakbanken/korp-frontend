@@ -2338,7 +2338,7 @@ settings.corpora.sfs = {
 	},
 	struct_attributes : {
 		text_ref : {label : "referensnummer"},
-		text_year : {label : "year"}
+		text_date : {label : "year"}
 	}
 };
 
