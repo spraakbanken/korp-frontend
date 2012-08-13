@@ -570,7 +570,7 @@ settings.corpora.hanken = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_issue : {label : "issue"}
 	}
 };
