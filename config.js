@@ -2413,7 +2413,7 @@ settings.corpora.astranova = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
