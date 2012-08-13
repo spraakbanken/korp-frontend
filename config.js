@@ -1581,7 +1581,10 @@ settings.corpora.parole = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_id : {label : "text"}
+		text_id : {label : "text"},
+		text_date : {label : "date"},
+		text_title : {label : "title"},
+		text_publisher : {label : "publisher"},
 	}
 };
 
