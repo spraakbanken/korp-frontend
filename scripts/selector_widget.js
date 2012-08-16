@@ -12,8 +12,7 @@ var hp_corpusChooser = {
 		// Make the popup disappear when the user clicks outside it
 		$(window).unbind('click.corpusselector');
 		$(window).bind('click.corpusselector', function(e) {
-			var disp = $(".popupchecks").css("display");
-			if(disp != "none" && e.target != self) {
+			if($(".popupchecks").is(":visible") && e.target != self) {
 				$(".popupchecks").fadeOut('fast');
 				$(".corpusInfoSpace").fadeOut('fast');
 				$(".hp_topframe").removeClass("ui-corner-top");
@@ -198,12 +197,11 @@ var hp_corpusChooser = {
 					$(".hp_topframe").addClass("ui-corner-all");
 				} else {
 					$(".popupchecks")
-					.css({"position":"absolute", "display":"block"})
-					.position({
-					    my : "left top",
-					    at : "left bottom",
-					    of : "#corpusbox",
-					    offset : "0 -2px"
+					.show()
+					.css({
+						"position" : "absolute",
+						"top" : $("#corpusbox").offset().top + $("#corpusbox").height() - 2,
+						"left" : $("#corpusbox").offset().left
 					});
 					
 					$(".hp_topframe").addClass("ui-corner-top");
@@ -430,7 +428,7 @@ var hp_corpusChooser = {
 		}
 
 	}
-}
+};
 
 $.widget("hp.corpusChooser", hp_corpusChooser); // create the widget
 
