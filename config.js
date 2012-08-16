@@ -263,7 +263,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["sydosterbotten2012"]
+	contents : ["sydosterbotten2012", "at2012"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -295,7 +295,7 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
 	title : "Vasabladet",
-	contents : ["vasabladet", "vasabladet2012"],
+	contents : ["vasabladet1991", "vasabladet2012"],
 	description : "Vasabladet är en regional svenskspråkig dagstidning i Österbotten."
 	//description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
@@ -416,10 +416,10 @@ settings.corpora.fsbbloggvuxna = {
 		blog_url : {label : "blog_url", type : "url"},
 		blog_age : {label : "author_age"},
 		blog_city : {label : "city"},
-		post_title : {label : "post_title"},
-		post_date : {label : "date"},
-		post_tags : {label : "tags", type : "set"},
-		post_url : {label : "post_url", type : "url"}
+		text_title : {label : "post_title"},
+		text_date : {label : "date"},
+		text_tags : {label : "tags", type : "set"},
+		text_url : {label : "post_url", type : "url"}
 	}
 };
 
@@ -445,7 +445,7 @@ settings.corpora.fsbskonlit = {
 	struct_attributes : {
 	    text_author : {label : "author"},
 	    text_title : {label : "title"},
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_publisher : {label : "publisher"}
 	}
 };
@@ -472,7 +472,7 @@ settings.corpora.fsbessaistik = {
 	struct_attributes : {
 	    text_author : {label : "author"},
 	    text_title : {label : "title"},
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_publisher : {label : "publisher"}
 	}
 };
@@ -499,7 +499,7 @@ settings.corpora.fsbsakprosa = {
 	struct_attributes : {
 	    text_author : {label : "author"},
 	    text_title : {label : "title"},
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_publisher : {label : "publisher"}
 	}
 };
@@ -620,7 +620,7 @@ settings.corpora.studentbladet = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_issue : {label : "issue"}
 	}
 };
@@ -645,6 +645,7 @@ settings.corpora.jakobstadstidning1999 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+		text_date : {label : "date"}
 	}
 };
 
@@ -668,6 +669,7 @@ settings.corpora.jakobstadstidning2000 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+		text_date : {label : "date"}
 	}
 };
 
@@ -2438,7 +2440,7 @@ settings.corpora.kallan = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
@@ -2463,7 +2465,7 @@ settings.corpora.meddelanden = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
@@ -2488,7 +2490,7 @@ settings.corpora.nyaargus = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
@@ -2513,7 +2515,7 @@ settings.corpora.pargaskungorelser2011 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
@@ -2538,7 +2540,7 @@ settings.corpora.pargaskungorelser2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
+		text_date : {label : "year"},
 		text_issue : {label : "issue"}
 	}
 };
@@ -2566,11 +2568,11 @@ settings.corpora.sydosterbotten2012 = {
 	}
 };
 
-settings.corpora.vasabladet = {
-	title : "Vasabladet 1991",
-	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+settings.corpora.at2012 = {
+	title : "Ålandstidningen 2012",
+	description : "<a href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
 	languages : {
-		VASABLADET : "svenska"
+		AT2012 : "svenska"
 	},
 	within : within.defaultStruct,
 	attributes : {
@@ -2586,8 +2588,31 @@ settings.corpora.vasabladet = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_year : {label : "year"},
-		text_issue : {label : "issue"},
+	    text_date : {label : "date"}
+	}
+};
+
+settings.corpora.vasabladet1991 = {
+	title : "Vasabladet 1991",
+	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	languages : {
+		VASABLADET1991 : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"},
 		text_type : {label : "section"}
 	}
 };
@@ -2681,6 +2706,8 @@ settings.corpora.fnb1999 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -2704,6 +2731,8 @@ settings.corpora.fnb2000 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -2727,7 +2756,7 @@ settings.corpora.hbl1991 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_year : {label : "year"},
+	    text_date : {label : "year"},
 	    text_type : {label : "section"}
 	}
 };
