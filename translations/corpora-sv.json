@@ -200,5 +200,8 @@
 	"deprel_IF" : "Infinitivfras, utom infinitivmärke",
 	"deprel_PA" : "Prepositions komplement",
 	"deprel_UA" : "Underordnad sats (bisats), utom subjunktion",
-	"deprel_VG" : "Verbgrupp"
-	}
+	"deprel_VG" : "Verbgrupp",
+	
+	"INFIN" : "Infinit verb",
+	"FINIT" : "Finit verb"
+}

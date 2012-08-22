@@ -19,8 +19,14 @@ settings.corpora.siberiangermandialogs = {
 	within : within.defaultStruct,
 	attributes : {
 		sib_de_msd : {
-			label : "msd"
-		},
+			label : "msd",
+			displayType : "select",
+			dataset : {
+				"INFIN" : "INFIN",
+				"FINIT" : "FINIT"
+			}
+				
+		}
 	},
 	struct_attributes : {},
 }

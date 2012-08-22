@@ -199,5 +199,8 @@
 	"deprel_IF" : "Infinitive verb phrase minus infinitive marker",
 	"deprel_PA" : "Complement of preposition",
 	"deprel_UA" : "Subordinate clause minus subordinating conjunction",
-	"deprel_VG" : "Verb group"
-	}
+	"deprel_VG" : "Verb group",
+	
+	"INFIN" : "Nonfinite verb",
+    "FINIT" : "Finite verb"
+}
