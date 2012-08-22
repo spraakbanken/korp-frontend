@@ -1,5 +1,5 @@
-settings.primaryColor = "#EDFCD5";
-settings.primaryLight = "#f7fceb";
+settings.primaryColor = "#FFE7D2";
+settings.primaryLight = "#FFF4EB";
 settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
