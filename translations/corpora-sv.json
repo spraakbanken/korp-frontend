@@ -202,6 +202,6 @@
 	"deprel_UA" : "Underordnad sats (bisats), utom subjunktion",
 	"deprel_VG" : "Verbgrupp",
 	
-	"INFIN" : "Infinit verb",
+	"INFINIT" : "Infinit verb",
 	"FINIT" : "Finit verb"
 }

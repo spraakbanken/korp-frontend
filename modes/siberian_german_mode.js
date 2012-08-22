@@ -22,7 +22,7 @@ settings.corpora.siberiangermandialogs = {
 			label : "msd",
 			displayType : "select",
 			dataset : {
-				"INFIN" : "INFIN",
+				"INFINIT" : "INFINIT",
 				"FINIT" : "FINIT"
 			}
 				

@@ -201,6 +201,6 @@
 	"deprel_UA" : "Subordinate clause minus subordinating conjunction",
 	"deprel_VG" : "Verb group",
 	
-	"INFIN" : "Nonfinite verb",
+	"INFINIT" : "Nonfinite verb",
     "FINIT" : "Finite verb"
 }
