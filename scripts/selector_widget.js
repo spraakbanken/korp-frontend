@@ -279,6 +279,12 @@ var hp_corpusChooser = {
 			$(".boxlabel")
 			.unbind("click") // "folders"
 			.click(function() {
+			    if( event.altKey == 1 ) {
+                    $(".checkbox").each(function() {
+                        hp_this.setStatus($(this), "unchecked");
+                    });
+                }
+			 
 				hp_this.updateState($(this).parent());
 	 			var childMan = $(this).children('.checkbox');
 	 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
@@ -359,6 +365,12 @@ var hp_corpusChooser = {
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function() {
+			    if( event.altKey == 1 ) {
+                    $(".checkbox").each(function() {
+                        hp_this.setStatus($(this), "unchecked");
+                    });
+                }
+			 
 				$(this).disableSelection();
 				hp_this.updateState($(this));
 	 			var childMan = $(this).children('label').children('.checkbox');
