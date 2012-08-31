@@ -30,6 +30,8 @@
 	"min" : "minst",
 	"and" : "och",
 	"or" : "eller",
+	"show_reading" : "Visa läsläge",
+	"show_kwic" : "Visa KWIC",
 	
 	"any_word_placeholder" : "<vilket ord som helst>",
 	"case_insensitive" : "skiftlägesoberoende",

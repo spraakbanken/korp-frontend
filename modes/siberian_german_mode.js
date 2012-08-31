@@ -11,6 +11,7 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.siberiangermandialogs = {
+	id : "siberiangermandialogs",
 	title : "Sibirientyska",
 	description : "",
 	languages : {
@@ -25,8 +26,10 @@ settings.corpora.siberiangermandialogs = {
 				"INFINIT" : "INFINIT",
 				"FINIT" : "FINIT"
 			}
-				
+			
 		}
 	},
 	struct_attributes : {},
-}
+};
+
+settings.corpusListing = new CorpusListing(settings.corpora);

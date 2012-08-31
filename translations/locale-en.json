@@ -30,6 +30,9 @@
 	"min" : "at least",
 	"and" : "and",
 	"or" : "or",
+	"show_reading" : "Show reading mode",
+    "show_kwic" : "Show KWIC",
+	
 	"is" : "is", 
 	"is_not" : "is not",
 	"starts_with" : "begins with",

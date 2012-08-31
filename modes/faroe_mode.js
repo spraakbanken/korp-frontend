@@ -12,32 +12,41 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.fts = {
-	   title : "FTS - Färöisk textsamling",
-	   description : "Färöisk textsamling, i samarbete med Färöarnas universitet, Fróðskaparsetur Føroya.",
-	   languages : {
-	       FTS : "svenska"
-	   },
-	   within : within.defaultStruct,
-	   attributes : {
-	   },
-	   struct_attributes : {
-	       text_date : {label : "date"},
-	       text_page : {label : "page"},
-	       text_authortype : {label : "author_type", 
-	    	   displayType : "select",
-	    	   dataset : {
-	    		   journalist : "journalist",
-	    		   reader : "reader"
-	    		   
-	    	   }},
-	       text_gender : {label : "gender",
-	    	   displayType : "select",
-	    	   dataset : 
-	    		   {
-	    		   unknown : "unknown",
-	    		   male : "male",
-	    		   female : "female",
-	    		   "male/female" : "male_female"
-	    		   }}
-	   }
-	};
+	id : "fts",
+	title : "FTS - Färöisk textsamling",
+	description : "Färöisk textsamling, i samarbete med Färöarnas universitet, Fróðskaparsetur Føroya.",
+	languages : {
+		FTS : "svenska"
+	},
+	within : within.defaultStruct,
+	attributes : {},
+	struct_attributes : {
+		text_date : {
+			label : "date"
+		},
+		text_page : {
+			label : "page"
+		},
+		text_authortype : {
+			label : "author_type",
+			displayType : "select",
+			dataset : {
+				journalist : "journalist",
+				reader : "reader"
+
+			}
+		},
+		text_gender : {
+			label : "gender",
+			displayType : "select",
+			dataset : {
+				unknown : "unknown",
+				male : "male",
+				female : "female",
+				"male/female" : "male_female"
+			}
+		}
+	}
+};
+
+settings.corpusListing = new CorpusListing(settings.corpora);

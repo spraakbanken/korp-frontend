@@ -2895,6 +2895,7 @@ var ParallelCorpusListing = new Class({
 	},
 	
 	select : function(idArray) {
+		c.log("select", idArray)
 		var self = this;
 		this.selected = [];
 		$.each(idArray, function(i, id) {
@@ -2939,5 +2940,4 @@ var ParallelCorpusListing = new Class({
 
 
 settings.corpusListing = new CorpusListing(settings.corpora);
-delete CorpusListing;
 

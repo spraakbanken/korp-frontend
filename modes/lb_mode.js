@@ -8,6 +8,7 @@ settings.wordpicture = true;
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.lb = {
+	id : "lb",
 	title : "Litteraturbanken",
 	description : '',
     languages : {
@@ -35,3 +36,4 @@ settings.corpora.lb = {
 	}
 };
 
+settings.corpusListing = new CorpusListing(settings.corpora);

@@ -15,11 +15,9 @@ settings.corporafolders = {};
 
 
 settings.corpora.bibel1917 = {
+	id : "bibel1917",
 	title : "Bibeln 1917",
 	description : "",
-	languages : {
-		BIBEL1917 : "svenska"
-	},
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -49,11 +47,9 @@ settings.corpora.bibel1917 = {
 };
 
 settings.corpora.bibel1873 = {
+	id : "bibel1873",
 	title : "Bibeln 1873",
 	description : "",
-	languages : {
-		BIBEL1873 : "svenska"
-	},
     within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -71,7 +67,7 @@ settings.corpora.bibel1873 = {
 		"text_title" : {
 			label : "title"
 		},
-                "paragraph_chap" : {label : "chapter"},
+        "paragraph_chap" : {label : "chapter"},
 		"text_datefrom" : {
 			label : "year_from"
 		},
@@ -81,11 +77,9 @@ settings.corpora.bibel1873 = {
 	}
 };
 settings.corpora.bibel1873dalin = {
+	id : "bibel1873dalin",
 	title : "Bibeln 1873 (Dalin)",
 	description : "Annoterad med Dalin",
-	languages : {
-		BIBEL1873DALIN : "svenska"
-	},
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
@@ -118,3 +112,4 @@ settings.corpora.bibel1873dalin = {
 };
 
 
+settings.corpusListing = new CorpusListing(settings.corpora);
