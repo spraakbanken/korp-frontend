@@ -7,12 +7,12 @@
 		<link rel="stylesheet" href="lib/slickgrid/slick.grid.css" type="text/css" media="screen" charset="utf-8" />
 		<link type="text/css" href="common_lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
 <!-- 		<link type="text/css" href="lib/themes/Aristo/Aristo.css" rel="stylesheet" /> -->
-		<link type="text/css" href="ui_mods.css" rel="stylesheet" />
+		<link type="text/css" href="styles/ui_mods.css" rel="stylesheet" />
 
-		<link type="text/css" href="jquery.tooltip.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css" />
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico" />
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<link rel="stylesheet" type="text/css" href="pagination.css" />
+		<link rel="stylesheet" type="text/css" href="styles/style.css" />
+		<link rel="stylesheet" type="text/css" href="styles/pagination.css" />
 		
 		<title>Korp</title>
 		<script type="text/javascript" src="common_lib/jquery.js" ></script>
@@ -50,6 +50,7 @@
 		<script type="text/javascript" src="common_lib/jquery.localize.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.placeholder.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.raphael.spinner.js"></script>
+		<script type="text/javascript" src="common_lib/underscore.js"></script>
 		
 		<script type="text/javascript" src="lib/modernizr-1.7.min.js"></script>
 		
@@ -185,7 +186,9 @@
 							</ul>
 							<div id="results-kwic">
 								<div class="result_controls">
-								   <div class="controls_n" ><span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span></div>
+								   <div class="controls_n" >
+								   	<span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
+								   </div>
 									<div class="progress">
 										<progress value="0" max="100"></progress>
 									</div>
@@ -193,10 +196,13 @@
 							   </div>
 								
 								<div class="pager-wrapper"></div>
+								<span class="reading_btn show link">Visa läsläge</span>
+								<span class="reading_btn hide link">Visa kwic</span>
 								
 								
 								<div class="table_scrollarea">
-									<table class="results_table" cellspacing="0"></table>
+									<table class="results_table kwic" cellspacing="0"></table>
+									<table class="results_table reading" cellspacing="0"></table>
 								</div>
 							</div>
 							<div id="results-stats">
@@ -243,17 +249,6 @@
 		<div id="plot_popup">
 			<div id="plot_canvas" style="width:470px; height:400px"></div>
 		</div>
-			
-		<!-- for showing full deprel locale names.
-		{{else $index == "deprel"}}
-			${util.getLocaleString("malt_" + $data[$index])}</p>
-			
-			{{if $value.dataset}}
-			 ${$value.dataset[$data[$index]]}
-			 
-			 
-			 {{html $item.defaultSetFormatter($data[$index]).outerHTML() }}
-			-->
 			
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		
@@ -308,7 +303,7 @@
 		  	</td>
 	    </tr>
 		{{if $item.aligned != null}}
-		<tr id="linked_${corpus}" class="linked_sentence">
+		<tr class="linked_sentence">
 			<td colspan="3">
 				{{each(corpus, sentence) $item.aligned}}
 				{{tmpl(sentence) '#wordTmpl'}}
@@ -346,13 +341,12 @@
 		{{/if}}
 		</div>
 	</script>
-	<!-- {{if $item.lemgram == $.grep($item.data[(!$item.isAdj ? "head" : "dep")].split("|"), Boolean)[0]}} -->
 	<script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
 			<tr>
 				<td><span class="enumerate"/></td>
 				<td data-lemgram="${$.grep($item.data[show_rel].split("|"), Boolean)[0]}" data-depextra="${depextra}"></td> 
 				<!--<td>{{html util.formatDecimalString($.format("%.2f", mi), true)}}</td>-->
-				<td>${freq}</td>
+				<td title="${$.format("mi: %.2f", mi)}">${freq}</td>
 				<td class="example_link"></td> 
 		    </tr>
 	</script>

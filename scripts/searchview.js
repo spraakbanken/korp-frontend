@@ -1,5 +1,8 @@
 var view = {};
 
+
+
+
 //**************
 // Search view objects
 //**************
@@ -82,8 +85,8 @@ view.initSearchOptions = function() {
 
 view.updateReduceSelect = function() {
 	var groups = $.extend({word : {word : {label : "word"}}}, {
-		"word_attr" : getCurrentAttributes(),
-		"sentence_attr" : $.grepObj(getStructAttrs(), function(val, key) {
+		"word_attr" : settings.corpusListing.getCurrentAttributes(),
+		"sentence_attr" : $.grepObj(settings.corpusListing.getStructAttrs(), function(val, key) {
 							 return val.disabled !== true;
 						  })
 		});
@@ -105,7 +108,7 @@ view.updateReduceSelect = function() {
 var BaseSearch = {
 	initialize : function(mainDivId) {
 		this.$main = $(mainDivId);
-		this.$main.find(":submit").click($.proxy(this.onSubmit, this));
+		this.$main.find("#sendBtn:submit").click($.proxy(this.onSubmit, this));
 		this._enabled = true;
 	},
 	
@@ -432,6 +435,12 @@ var ExtendedSearch = {
 			return false;
 		});
 		
+		this.setupContainer("#query_table");
+		
+	},
+	
+	setupContainer : function(selector) {
+		var self = this;
 		var insert_token_button = $('<img src="img/plus.png"/>')
         .addClass("image_button")
         .addClass("insert_token")
@@ -439,7 +448,7 @@ var ExtendedSearch = {
 	    	self.insertToken(this);
 		});
 	    
-	    $("#query_table").append(insert_token_button).sortable({
+	    $(selector).append(insert_token_button).sortable({
 	    	items : ".query_token",
 	    	delay : 50,
 	    	tolerance : "pointer"
@@ -513,15 +522,14 @@ var AdvancedSearch = {
 	},
 	
 	setCQP : function(query) {
+		c.log("setCQP", query)
 		$("#cqp_string").val(query);
 	},
 	
 	updateCQP : function() {
-	    var nr_lines = 2;
 	    var query = $(".query_token").map(function() {
 	    	return $(this).extendedToken("getCQP");
 	    }).get().join(" ");
-	    c.log("updateCQP", query, nr_lines,$("#cqp_string"));
 	    this.setCQP(query);
 	    return query;
 	},

@@ -1,4 +1,4 @@
-var model = {};
+var model = {}; 
 
 
 var BaseProxy = {
@@ -39,12 +39,19 @@ var BaseProxy = {
 		}
         
         $.each(struct, function(key, val) {
-            if(key != "progress_corpora" && key.split("_")[0] == "progress" ) {
+            	if(key != "progress_corpora" && key.split("_")[0] == "progress" ) {
             	var currentCorpus = val.corpus || val;
-            	self.progress += Number(settings.corpora[currentCorpus.toLowerCase()].info.Size);
+            	
+            	var sum = _.chain(currentCorpus.split("|"))
+				.map(function(corpus) {
+					return parseInt(settings.corpora[corpus.toLowerCase()].info.Size)
+				}).reduce(function(a,b){
+					return a + b;
+				}, 0).value();
+            	
+            	self.progress += sum;
             	
             	self.total_results += parseInt(val.hits);
-            	
             }
             
         });
@@ -53,7 +60,12 @@ var BaseProxy = {
         if(this.total == null && "progress_corpora" in struct) {
         	this.total = $.reduce(
     				$.map(struct["progress_corpora"], function(corpus) {
-    					return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
+    					return _.chain(corpus.split("|"))
+    						.map(function(corpus) {
+    							return parseInt(settings.corpora[corpus.toLowerCase()].info.Size)
+    						}).reduce(function(a,b){
+    							return a + b;
+    						}, 0).value();
     				}), 
     				function(val1, val2) {return val1 + val2;});
         }
@@ -124,6 +136,11 @@ var KWICProxy = {
 		kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
 		self.progress = 0;
 		
+		var corpus = settings.corpusListing.stringifySelected();
+		if(currentMode == "parallel") {
+			corpus = extendedSearch.getCorporaQuery();
+		}
+		
 		var o = $.extend({
 			cqp : $("#cqp_string").val(), 
 			queryData : null,
@@ -138,6 +155,7 @@ var KWICProxy = {
 			progress : function(data, e) {
 				var progressObj = self.calcProgress(e);
 				if(progressObj == null) return;
+				c.log("progressObj", progressObj)
 				
 				callback(progressObj);
 				if(progressObj["struct"].kwic) {
@@ -154,19 +172,14 @@ var KWICProxy = {
 		
 //		kwicResults.showPreloader();
 		
-		var selected_corpora_ids = getSelectedCorpora();
-		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n)
-	   	{ 
-			return(n.toUpperCase());
-	    });
 		var data = {
 			command:this.command,
-			corpus:selected_uppercased_corpora_ids.join(),
+			corpus:corpus,
 			cqp:o.cqp,
 			start:o.start,
 			end:o.end,
 			defaultcontext: $.keys(settings.defaultContext)[0],
-			context : $.grep($.map(selected_corpora_ids, function(id) {
+			context : $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
 				if(settings.corpora[id].context != null)
 					return id.toUpperCase() + ":" + $.keys(settings.corpora[id].context)[0];
 			}), Boolean).join(),
@@ -181,11 +194,7 @@ var KWICProxy = {
 			data.querydata = o.queryData;
 		}
 
-		var selected_corpora = $.map(selected_corpora_ids, function(n) {
-			return(settings.corpora[n]);
-	    });
-	    
-		$.each(selected_corpora, function(_, corpus) {
+		$.each(settings.corpusListing.selected, function(_, corpus) {
 			$.each(corpus.attributes, function(key,val){
 				if($.inArray(key, data.show) == -1)
 					data.show.push(key);
@@ -198,17 +207,7 @@ var KWICProxy = {
 				});
 			}
 		});
-//		TODO: we should clean this up... looks terrible.
-		if (currentMode == "parallel") {
-			if($.inArray("saltnld_swe", selected_corpora_ids) != -1) {
-				data.show.push("saltnld_nld");
-			}
-			if($.inArray("europarlda_sv", selected_corpora_ids) != -1) {
-				data.show.push("europarlda_da");
-			}
-		}
 
-//		$(".pagination:visible").data("cqp", o.cqp);
 		data.show = data.show.join();
 		data.show_struct = data.show_struct.join();
 		this.prevRequest = data;
@@ -263,14 +262,13 @@ var LemgramProxy = {
 	makeRequest : function(word, type, callback) {
 		this.parent();
 		var self = this;
-		var corpus = getSelectedCorpora();
 		var data = {
-				command : "relations",
-				word : word,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();}),
-				incremental : $.support.ajaxProgress,
-				type : type
-			};
+			command : "relations",
+			word : word,
+			corpus : settings.corpusListing.stringifySelected(),
+			incremental : $.support.ajaxProgress,
+			type : type
+		};
 		$.ajax({
 			url: settings.cgi_script,
 			data : data,
@@ -290,21 +288,16 @@ var LemgramProxy = {
 				if(progressObj == null) return;
 				
 				callback(progressObj);
-//				if(progressObj["struct"].kwic) {
-//		        	c.log("found kwic!");
-//		        	kwicResults.renderResult(progressObj["struct"]);
-//		        }
 			}
 		});
 	},
 	
 	relationsWordSearch : function(word) {
 		var self = this;
-		var corpus = getSelectedCorpora();
 		var data = {
 				command : "relations",
 				word : word,
-				corpus : $.map(corpus, function(item){return item.toUpperCase();}),
+				corpus : settings.corpusListing.stringifySelected(),
 				incremental : $.support.ajaxProgress
 			};
 		$.ajax({
@@ -366,16 +359,12 @@ var LemgramProxy = {
 	},
 	
 	lemgramCount : function(lemgrams, findPrefix, findSuffix) {
-		var selected_corpora_ids = getSelectedCorpora();
-		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
-			return n.toUpperCase();
-	    });
 		var count = $.grep(["lemgram", findPrefix ? "prefix" : "", findSuffix ? "suffix" : ""], Boolean);
 		return $.post(settings.cgi_script, {
 			command : "lemgram_count", 
 			lemgram : lemgrams,
 			count : count.join(","),
-			corpus : selected_uppercased_corpora_ids
+			corpus : settings.corpusListing.stringifySelected()
 			} 
 		);
 	}
@@ -394,17 +383,14 @@ var StatsProxy = {
 		var self = this;
 		this.parent();
 		statsResults.showPreloader();
-		var selected_corpora_ids = getSelectedCorpora();
-		var selected_uppercased_corpora_ids = $.map(selected_corpora_ids, function(n) {
-			return n.toUpperCase();
-	    });
+		var reduceval = $.bbq.getState("stats_reduce") || "word";
 		return $.ajax({ 
 			url: settings.cgi_script,
 			data : {
 				command : "count",
-				groupby : $.bbq.getState("stats_reduce") || "word",
+				groupby : reduceval,
 				cqp : cqp,
-				corpus : selected_uppercased_corpora_ids,
+				corpus : settings.corpusListing.stringifySelected(),
 				incremental : $.support.ajaxProgress
 			},
 			beforeSend : function(jqXHR, settings) {
@@ -433,7 +419,7 @@ var StatsProxy = {
 					name : "stats_hit",
 					field : "hit_value",
 					sortable : true,
-					formatter : self.hitFormatter
+					formatter : settings.reduce_stringify(reduceval)
 				},
 				{
 					id : "total",
@@ -485,29 +471,9 @@ var StatsProxy = {
 	valueFormatter : function(row, cell, value, columnDef, dataContext) {
 		if (!value.relative && !value.absolute)
             return "";
-		return $.format("<span><span class='relStat'>%s</span> <span class='absStat'>(%s)</span><span>", [util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
-	},
-	
-	hitFormatter : function(row, cell, value, columnDef, dataContext) {
-		function filterCorpora(rowObj) {
-			return $.grepObj(rowObj, function(value, key) {
-				return key != "total_value" && $.isPlainObject(value);
-			});
-		}
-		
-		var corpora = $.grepObj(filterCorpora(dataContext), function(value, key) {
-			return value.relative != null;
-		});
-		corpora = $.map($.keys(corpora), function(item) {
-			return item.split("_")[0].toLowerCase();
-		});
-		var output = $.format("<span class='link' data-value='%s' data-corpora='%s'>%s</span>", 
-				[dataContext.hit_value, $.toJSON(corpora), value]);
-		if(corpora.length > 1)
-			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
-		return output;
+		return $.format("<span><span class='relStat'>%s</span> <span class='absStat'>(%s)</span><span>", 
+				[util.formatDecimalString(value.relative.toFixed(1), true), prettyNumbers(String(value.absolute))]);
 	}
-	
 };
 
 model.SearchProxy = new Class(SearchProxy);

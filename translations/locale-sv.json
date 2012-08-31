@@ -31,6 +31,7 @@
 	"and" : "och",
 	"or" : "eller",
 	
+	"any_word_placeholder" : "<vilket ord som helst>",
 	"case_insensitive" : "skiftlägesoberoende",
 	"case_sensitive" : "skiftlägesberoende",
 	"reduce_text" : "sammanställ på",
@@ -69,6 +70,10 @@
 	"simple" : "Enkel",
 	"detailed" : "Utökad",
 	"advanced" : "Avancerad",
+	"parallel" : "Parallell",
+	"swe" : "svenska",
+	"dan" : "danska",
+	"nld" : "holländska",
 	"statistics" : "Statistik",
 	"lemgram_results" : "Ordbild", 
 	"sort_default" : "sortera inom korpus på",

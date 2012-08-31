@@ -6,7 +6,7 @@ var currentMode;
 //	if(window.console == null) window.console = {"log" : $.noop};
 	var isDev = window.location.host == "localhost";
 	
-	var deferred_load = $.get("searchbar.html");
+	var deferred_load = $.get("markup/searchbar.html");
 	
 	$.ajaxSetup({ 
 		dataType: "json",
@@ -33,8 +33,9 @@ var currentMode;
 	}).promise();
 	
 	var deferred_mode = $.Deferred();
-	if($.deparam.querystring().mode != null && $.deparam.querystring().mode != "default") {
-		deferred_mode = $.getScript($.format("modes/%s_mode.js", $.deparam.querystring().mode));
+	var mode = $.deparam.querystring().mode;
+	if(mode != null && mode != "default") {
+		deferred_mode = $.getScript($.format("modes/%s_mode.js", mode));
 	} else {
 		deferred_mode.resolve();
 	}
@@ -65,6 +66,7 @@ var currentMode;
 		if(isLab) $("body").addClass("lab");
 		
 		currentMode = $.deparam.querystring().mode || "default";
+		$("body").addClass("mode-" + currentMode);
 		util.browserWarn();
 		
 		$("#mode_switch").modeSelector({
@@ -139,6 +141,7 @@ var currentMode;
 		$.sm.start();
 		var tab_a_selector = 'ul.ui-tabs-nav a';
 		
+		
 		$("#search-tab").tabs({
 			event : "change",
 			show : function(event, ui) {
@@ -148,6 +151,18 @@ var currentMode;
 				$.sm.send("searchtab." + selected);
 			}
 		});
+		
+		if(currentMode == "parallel") {
+			$(".ui-tabs-nav li").first().hide();
+			$(".ui-tabs-nav li").last().hide();
+			$("#korp-simple").hide();
+			$(".ui-tabs-nav a").eq(1).localeKey("parallel");
+			$("#korp-advanced").hide();
+			$("#search-tab").tabs("select", 1);
+			
+			$("#result-container > ul li:last ").hide();
+		}
+		
 		$("#result-container").korptabs({
 			event : "change",
 			show : function(event, ui) {
@@ -162,20 +177,6 @@ var currentMode;
 			panelTemplate : "<div>" + kwicResults.initHTML + "</div>",
 			tabTemplate : '<li class="custom_tab"><a class="custom_anchor" href="#{href}"><span rel="localize[example]">#{label}</span></a><a class="tabClose" href="#"><span class="ui-icon ui-icon-circle-close"></span></a></li>'
 		});
-		
-//		$("#result-container li.ui-state-disabled").live({
-//			mouseover : function() {
-//				nTimeout = setTimeout(function() {
-//					$("#lemgram_select").highlight();
-//				}, 750);
-//				
-//			},
-//			mouseout : function() {
-//				if(nTimeout)
-//					clearTimeout(nTimeout);
-//				$("#lemgram_select").highlight("abort");
-//			}
-//		});
 		
 		var tabs = $(".ui-tabs");
 		tabs.find(tab_a_selector).click(function() {
@@ -299,7 +300,7 @@ var currentMode;
 			
 			if(e.getState("display") == "about") {
 				if($("#about_content").is(":empty")) {
-					$("#about_content").load("about.html", function() {
+					$("#about_content").load("markup/about.html", function() {
 						$("#revision").text($.revision);
 						util.localize(this);
 						showAbout();
@@ -400,6 +401,8 @@ var currentMode;
 		});
 //		$("body").css("opacity", 1)
 //		view.updateSearchHistory();
+	}, function() {
+		c.log("failed to load some resource at startup.", arguments)
 	});
 
 

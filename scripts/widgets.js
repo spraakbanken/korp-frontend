@@ -236,8 +236,7 @@ var Sidebar = {
 	
 	updateContent : function(sentenceData, wordData, corpus) {
 		this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
-		
-		var corpusObj = settings.corpora[corpus.toLowerCase()];
+		var corpusObj = settings.corpora[corpus];
 		$("<div />").html(
 				$.format("<h4 rel='localize[corpus]'>%s</h4> <p>%s</p>", [util.getLocaleString("corpus"), corpusObj.title]))
 				.prependTo("#selected_sentence");
@@ -351,7 +350,7 @@ var Sidebar = {
 		var self = this;
 		if(mode == "lemgramWarning") {
 			return $.Deferred(function( dfd ){
-				self.element.load("parse_warning.html", function() {
+				self.element.load("markup/parse_warning.html", function() {
 					util.localize();
 					self.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
 					dfd.resolve();
@@ -458,7 +457,7 @@ var ExtendedToken = {
 	    }).end()
 	    .appendTo(this.element.find(".args"))
 	    .before($("<span>", {"class" : "and"}).localeKey("and").hide().fadeIn());
-		
+		util.localize(arg);
 		if(animate)
 			arg.hide().slideDown("fast");
 		
@@ -469,11 +468,8 @@ var ExtendedToken = {
 		var self = this;
 		var arg_select = this.makeSelect();
 		
+		var arg_value = this.makeWordArgValue();
 		
-		var arg_value = $("<input type='text'/>").addClass("arg_value")
-		.change(function(){
-			self._trigger("change");
-		});
 		var link_mod = $("<span class='val_mod sensitive'>").text("Aa")
 		.click(function() {
 			var btn = $(this);
@@ -522,7 +518,7 @@ var ExtendedToken = {
 	    		});
 	    	}
 	    }).end();
-		
+		arg_value.keyup();
 		return orElem;
 	},
 	
@@ -530,10 +526,13 @@ var ExtendedToken = {
 	makeSelect : function() {
 		var arg_select = $("<select/>").addClass("arg_type")
 		.change($.proxy(this.onArgTypeChange, this));
-
+		
+		var lang;
+		if(currentMode == "parallel") 
+			lang = this.element.closest(".lang_row,#query_table").find(".lang_select").val();
 		var groups = $.extend({}, settings.arg_groups, {
-			"word_attr" : getCurrentAttributes(),
-			"sentence_attr" : getStructAttrs()
+			"word_attr" : settings.corpusListing.getCurrentAttributes(lang),
+			"sentence_attr" : settings.corpusListing.getStructAttrs(lang)
 			});
 		
 		$.each(groups, function(lbl, group) {
@@ -600,6 +599,27 @@ var ExtendedToken = {
 			}
 			
 		});
+	},
+	
+	makeWordArgValue : function() {
+		var self = this;
+		return $("<input type='text'/>")
+		.addClass("arg_value")
+		.attr("data-placeholder", "any_word_placeholder")
+		.keyup(function() {
+			if($(this).val() == "") {
+//				$(this).closest(".query_arg").addClass("word_empty");
+				$(this).prev().find(".arg_opts").attr("disabled", "disabled");
+			}
+			else {
+//				$(this).closest(".query_arg").removeClass("word_empty");
+				$(this).prev().find(".arg_opts").attr("disabled", null);
+			}
+		})
+		.change(function(){
+			self._trigger("change");
+		}).keyup();
+		
 	},
 	
 	onArgTypeChange : function(event) {
@@ -674,7 +694,8 @@ var ExtendedToken = {
 		case "date":
 			// at some point, fix this.
 		default:
-			arg_value = $("<input type='text'/>");
+			arg_value = this.makeWordArgValue();
+			util.localize(arg_value);
 			break;
 		} 
 		
@@ -692,7 +713,7 @@ var ExtendedToken = {
 			arg_value.replaceWith("<span class='arg_value'>");
 			break;
 		case "msd":
-			$("#msd_popup").load("msd.html", function() {
+			$("#msd_popup").load("markup/msd.html", function() {
 				
 				$(this).find("a").click(function() {
 					arg_value.val($(this).parent().data("value"));
@@ -726,7 +747,7 @@ var ExtendedToken = {
 			this.element.find(".ui-icon-info").remove();
 		}
 		
-		arg_value.addClass("arg_value")
+		arg_value.addClass("arg_value").keyup()
 		.change(function() {
 			self._trigger("change");
 		});
@@ -778,7 +799,12 @@ var ExtendedToken = {
 	    				}[op];
 	    			return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(op, [obj.case_sens]));
 	    		};
-	    		var argFunc = settings.inner_args[type] ||  defaultArgsFunc; 
+	    		var argFunc;
+	    		if(type == "word" && !obj.value) {
+	    			argFunc = function() {return "";};
+	    		}
+	    		else
+	    			argFunc = defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	

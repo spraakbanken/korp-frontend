@@ -49,9 +49,12 @@ util.initLocalize = function() {
 		callback : function() {
 			if(this.is(".num_hits")) {
 				var selected = this.find("option:selected");
-				c.log("selected", selected, util.getLocaleString(this.data("prefix")) + ": " + selected.text())
+				c.log("selected", selected, util.getLocaleString(this.data("prefix")) + ": " + selected.text());
 				selected.text(util.getLocaleString(this.data("prefix")) + ": " + selected.text());
 			}
+			this.find("[data-placeholder]").add(this.filter("[data-placeholder]")).each(function() {
+				$(this).attr("placeholder", util.getLocaleString($(this).data("placeholder")));
+			});
 		}
 	});
 };
@@ -136,9 +139,6 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	if (first_level) 
 		outHTML = '<ul>';
 	else {
-		/*if(!folder["contents"]) {
-			return "";
-		} */
 		outHTML = '<ul title="' + folder.title + '" description="' + folder.description + '">';
 	}
 	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
@@ -161,7 +161,7 @@ function loadCorporaFolderRecursive(first_level, folder) {
 		// Add all corpora which have not been added to a corpus
 		searchloop: for (var val in settings.corpora) {
 			for (var usedid in added_corpora_ids) {
-				if (added_corpora_ids[usedid] == val) {
+				if (added_corpora_ids[usedid] == val || settings.corpora[val].hide) {
 					continue searchloop;
 				}
 			}
@@ -169,7 +169,12 @@ function loadCorporaFolderRecursive(first_level, folder) {
 			outHTML += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
 		}
 	}
-	
+//	if(settings.parallel_corpora) {
+//		$.each(settings.parallel_corpora, function(corpora, struct) {
+//			var corp = struct[struct["default"]];
+//			outHTML += $("<li />", {id: corp.id}).text(corp.title).outerHTML();
+//		});
+//	}
 	outHTML += "</ul>";
 	return outHTML;
 }
@@ -222,117 +227,71 @@ function prettyNumbers(numstring) {
 function loadCorpora() {
 	added_corpora_ids = [];
 	var outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
-	corpusChooserInstance = $('#corpusbox').corpusChooser({template: outStr, change : function(corpora) {
-		c.log("corpus changed", corpora);
-		$.bbq.pushState({"corpus" : corpora.join(",")});
-		if(corpora.length) {
-			extendedSearch.refreshTokens();
-			view.updateReduceSelect();
-		}
-		var enableSearch = !!corpora.length;
-		view.enableSearch(enableSearch);
-    }, infoPopup: function(corpusID) {
-    	var maybeInfo = "";
-    	if(settings.corpora[corpusID].description)
-    		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
-    	var numTokens = settings.corpora[corpusID]["info"]["Size"];
-    	var numSentences = settings.corpora[corpusID]["info"]["Sentences"];
-    	var lastUpdate = settings.corpora[corpusID]["info"]["Updated"];
-    	if (!lastUpdate) {
-       	    lastUpdate = "?";
-    	}
-    	var sentenceString = "-";
-    	if (numSentences)
-    		sentenceString = prettyNumbers(numSentences.toString());
-    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' + settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + ": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + "</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b>";
-    }, infoPopupFolder: function(indata) {
-    	var corporaID = indata.corporaID;
-    	var desc = indata.description;
-    	var totalTokens = 0;
-    	var totalSentences = 0;
-    	var missingSentenceData = false;
-    	$(corporaID).each(function(key,oneID) {
-    		totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
-    		var oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"];
-    		if (oneCorpusSentences)
-    			totalSentences += parseInt(oneCorpusSentences);
-    		else
-    			missingSentenceData = true;
-    	});
-    	var totalSentencesString = prettyNumbers(totalSentences.toString());
-    	if (missingSentenceData)
-    		totalSentencesString += "+";
-    	var maybeInfo = "";
-    	if(desc && desc != "")
-    		maybeInfo = desc + "<br/><br/>";
-    	var glueString = "";
-    	if(corporaID.length == 1)
-    		glueString = util.getLocaleString("corpselector_corporawith_sing");
-    	else
-    		glueString = util.getLocaleString("corpselector_corporawith_plur");
-    	return '<b><img src="img/folder.png" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>' + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
-    }});
+	corpusChooserInstance = $('#corpusbox')
+	.corpusChooser({
+		template: outStr, 
+		change : function(corpora) {
+			c.log("corpus changed", corpora);
+			settings.corpusListing.select(corpora);
+			$.bbq.pushState({"corpus" : corpora.join(",")});
+			if(corpora.length) {
+				extendedSearch.refreshTokens();
+				view.updateReduceSelect();
+			}
+			var enableSearch = !!corpora.length;
+			view.enableSearch(enableSearch);
+	    }, 
+	    infoPopup: function(corpusID) {
+	    	var maybeInfo = "";
+	    	if(settings.corpora[corpusID].description)
+	    		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
+	    	var numTokens = settings.corpora[corpusID]["info"]["Size"];
+	    	var numSentences = settings.corpora[corpusID]["info"]["Sentences"];
+	    	var lastUpdate = settings.corpora[corpusID]["info"]["Updated"];
+	    	if (!lastUpdate) {
+	       	    lastUpdate = "?";
+	    	}
+	    	var sentenceString = "-";
+	    	if (numSentences)
+	    		sentenceString = prettyNumbers(numSentences.toString());
+	    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' +
+	    	settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + 
+	    	": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + 
+	    	"</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b>";
+	    }, 
+	    infoPopupFolder: function(indata) {
+	    	var corporaID = indata.corporaID;
+	    	var desc = indata.description;
+	    	var totalTokens = 0;
+	    	var totalSentences = 0;
+	    	var missingSentenceData = false;
+	    	$(corporaID).each(function(key,oneID) {
+	    		totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
+	    		var oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"];
+	    		if (oneCorpusSentences)
+	    			totalSentences += parseInt(oneCorpusSentences);
+	    		else
+	    			missingSentenceData = true;
+	    	});
+	    	var totalSentencesString = prettyNumbers(totalSentences.toString());
+	    	if (missingSentenceData)
+	    		totalSentencesString += "+";
+	    	var maybeInfo = "";
+	    	if(desc && desc != "")
+	    		maybeInfo = desc + "<br/><br/>";
+	    	var glueString = "";
+	    	if(corporaID.length == 1)
+	    		glueString = util.getLocaleString("corpselector_corporawith_sing");
+	    	else
+	    		glueString = util.getLocaleString("corpselector_corporawith_plur");
+	    	return '<b><img src="img/folder.png" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>' + indata.title + 
+	    	"</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + 
+	    	"</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
+	    }
+    });
+	settings.corpusListing.select(corpusChooserInstance.corpusChooser("selectedItems"));
 }
 
-/* Returns an array of all the selected corpora's IDs in uppercase */
-function getSelectedCorpora() {
-	return corpusChooserInstance.corpusChooser("selectedItems");
-}
-
-function mapSelectedCorpora(f) {
-	return $.map(getSelectedCorpora(), function(item) {
-		return f(settings.corpora[item]);
-	});
-}
-// takes an array of mapping objs and returns their intersection
-function mapping_intersection(mappingArray) {
-	return $.reduce(mappingArray, function(a,b) {
-		var output = {};
-		$.each(a, function(key, value) {
-			if(b[key] != null)
-				output[key] = value;
-		});
-		return output;
-	});
-}
-
-function mapping_union(mappingArray) {
-	return $.reduce(mappingArray, function(a, b) {
-		return $.extend({}, a, b);
-	}) || {};
-}
-
-function getCurrentAttributes() {
-	var attrs = mapSelectedCorpora(function(corpus) {
-		return corpus.attributes;
-	});
-	
-	return invalidateAttrs(attrs);
-	
-}
-function getStructAttrs() {
-	var attrs = mapSelectedCorpora(function(corpus) {
-		$.each(corpus.struct_attributes, function(key, value) {
-			value["isStructAttr"] = true; 
-		});
-		return corpus.struct_attributes;
-	});
-	
-	return invalidateAttrs(attrs);
-}
-
-function invalidateAttrs(attrs) {
-	var union = mapping_union(attrs);
-	var intersection = mapping_intersection(attrs);
-	$.each(union, function(key, value) {
-		if(intersection[key] == null) {
-			value["disabled"] = true;
-		} else {
-			delete value["disabled"];
-		}
-	});
-	return union;
-}
 
 util.makeAttrSelect = function(groups) {
 	var arg_select = $("<select/>");

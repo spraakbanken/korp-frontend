@@ -37,8 +37,9 @@
 	<div id="korp-extended">
 		<div id="query_table"></div>
 
+		<input id="removeLang" type="submit" value="Färre språk">
+		<input id="linkedLang" type="submit" value="Fler språk">
 		<input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />
-<!-- 		<span rel="localize[reduce_text]"></span> -->
 		
 	</div>
 
@@ -47,7 +48,7 @@
 			<div class="query_footer ui-corner-all ui-state-default">
 				<span class="cqp_toggle" rel="localize[cqp_query]">
 					Fullständig CQP-fråga </span>:
-				<textarea id="cqp_string">[word = ""]</textarea>
+				<textarea id="cqp_string">[]</textarea>
 			</div>
 			<input id="sendBtn" value="  Sök  " type="submit"
 				rel="localize[search]" />
@@ -93,7 +94,7 @@
 <script id="orTmpl" type="text/x-jquery-tmpl">
 	<div class="or_arg">
 	<div class="arg_header" rel="localize[following_text]">${util.getLocaleString('following_text')}</div>
-	<div class="left_col inline_block" vertical-align: top;">
+	<div class="left_col inline_block" style="vertical-align: top;">
 		<img src="img/minus.png" class="image_button remove_arg">
 	</div>
 	<div class="right_col inline_block" style="margin-left: 5px;"></div>

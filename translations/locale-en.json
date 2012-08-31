@@ -35,6 +35,7 @@
 	"starts_with" : "begins with",
 	"ends_with" : "ends with",
 	
+	"any_word_placeholder" : "<any word>",
 	"case_insensitive" : "case-insensitive",
 	"case_sensitive" : "case-sensitive",
 	"reduce_text" : "compile based on",
@@ -68,6 +69,10 @@
 	"simple" : "Simple",
 	"detailed" : "Extended",
 	"advanced" : "Advanced",
+	"parallel" : "Parallel",
+	"swe" : "swedish",
+    "dan" : "danish",
+    "nld" : "dutch",
 	"statistics" : "Statistics",
 	"lemgram_results" : "Word picture",
 	"sort_default" : "sort within corpora",

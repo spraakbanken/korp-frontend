@@ -108,11 +108,49 @@ var KWICResults = {
 			$.sm.send("word.deselect");
 		});
 		
-		
+		this.$result.find(".reading_btn").click(function() {
+			self.$result.toggleClass("reading_mode");
+			if(self.$result.is(".reading_mode")) {
+				$.bbq.pushState({"reading_mode" : true});
+			} else {
+				$.bbq.removeState("reading_mode");
+			}
+			self.setReadingMode();
+			return false;
+		});
+		if($.bbq.getState("reading_mode")) {
+			this.$result.addClass("reading_mode");
+		}
 	},
 	resetView : function() {
 		this.parent();
-		this.$result.find(".results_table,.pager-wrapper,.results_table").empty();
+		this.$result.find(".results_table,.pager-wrapper").empty();
+	},
+	
+	setReadingMode : function() {
+		if(this.$result.is(".reading_mode")) {
+			
+			var newResult = this.$result.find(".results_table.kwic").hide()
+			.children().first().clone(true, true);
+			newResult.find(".match .word").addClass("reading_match");
+			newResult.find(".word").unwrap();
+			
+			$(".results_table.reading").html(newResult).show()
+			.find(".token_selected").click();
+			
+		} else {
+			this.$result.find(".results_table.kwic").show();
+			
+			if($(".results_table.reading .token_selected").length) {
+				var p_index = $(".token_selected").parent().index();
+				var w_index = $(".token_selected").prevAll(".word").length + 1;
+				this.$result.find(".results_table.kwic")
+				.find(".sentence").eq(p_index-1).find(".word").eq(w_index-1).click();
+				
+			}
+			this.$result.find(".results_table.reading").empty();
+			this.centerScrollbar();
+		}
 	},
 	
 	onentry : function() {
@@ -175,6 +213,7 @@ var KWICResults = {
 		this.renderHitsPicture(data);
 		this.buildPager(data.hits);
 		
+		
 		this.hidePreloader();
 	},
 	
@@ -187,9 +226,9 @@ var KWICResults = {
 		this.prevCQP = sourceCQP;
 		
 		var effectSpeed = 100;
-		if($.trim(this.$result.find(".results_table").html()).length) {
+		if($.trim(this.$result.find(".results_table.kwic").html()).length) {
 			this.$result.fadeOut(effectSpeed, function() {
-				$(this).find(".results_table").empty();
+				$(this).find(".results_table.kwic").empty();
 				self.renderResult(data, sourceCQP);
 			});
 			return;
@@ -199,7 +238,7 @@ var KWICResults = {
 		var punctArray = [",", ".", ";", ":", "!", "?"];
 		var borderColor = util.changeColor(settings.primaryColor, -15);
 		var prevCorpus = "";
-		var table = self.$result.find(".results_table");
+		var table = self.$result.find(".results_table.kwic");
 		$.each(data.kwic, function(i,sentence) {
 			var offset = 0; 
 		    var splitObj = {
@@ -209,8 +248,14 @@ var KWICResults = {
 		    };
 		    
 		    if(prevCorpus != sentence.corpus) {
+		    	var corpus = settings.corpora[sentence.corpus.toLowerCase()];
+		    	if(currentMode == "parallel") {
+		    		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
+//		    		var parent = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()].parent; 
+//		    		corpus = settings.parallel_corpora[parent];
+		    	}
 		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s</span></td><td /></tr>", 
-		    			settings.corpora[sentence.corpus.toLowerCase()].title )).appendTo(table);
+		    			corpus.title )).appendTo(table);
 		    }
 		    
 		    prevCorpus = sentence.corpus;
@@ -222,6 +267,7 @@ var KWICResults = {
 							$(this).prev().html("");
 					})
 					.click(function(event) {
+						var corpus = sentence.corpus
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
 						$.sm.send("word.select");
@@ -247,7 +293,8 @@ var KWICResults = {
 		});
 		
 //		this.hidePreloader();
-
+		
+		this.setReadingMode();
     },
 	
     showNoResults : function() {
@@ -262,7 +309,7 @@ var KWICResults = {
     
     renderHitsPicture : function(data) {
     	var self=this;
-		if (getSelectedCorpora().length > 1) {
+		if (settings.corpusListing.selected.length > 1) {
 			var totalhits = data["hits"];
 			var hits_picture_html = '<table class="hits_picture_table"><tr height="18px">';
 			var barcolors = ["color_blue","color_purple","color_green","color_yellow","color_azure","color_red"];
@@ -293,8 +340,13 @@ var KWICResults = {
 			this.$result.find(".hits_picture_corp").each(function() {
 				var corpus_name = $(this).attr("data");
 				$(this).tooltip({delay : 0, bodyHandler : function() {
+					var corpusObj = settings.corpora[corpus_name.toLowerCase()];
+			    	if(currentMode == "parallel") {
+			    		corpusObj = settings.corpora[corpus_name.split("|")[0].toLowerCase()];
+			    	}
+					
 					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + 
-						settings.corpora[corpus_name.toLowerCase()]["title"] + 
+					corpusObj["title"] + 
 						' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + 
 						' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + 
 						util.getLocaleString("hitspicture_gotocorpushits") + '</i>';
@@ -353,7 +405,8 @@ var KWICResults = {
 		
 		this.scrollToShowWord(word);
 		
-		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus);
+		
+		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus.toLowerCase());
 		$("#columns").height($("#sidebar").height());
 	},
 	
@@ -457,26 +510,61 @@ var KWICResults = {
 	},
 	
 	selectNext : function() {
-		var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
-		var next = this.getCurrentRow().get(i+1);
-		if(next == null) return;
-		$(next).click();
+		if(!this.$result.is(".reading_mode")) {
+			var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
+			var next = this.getCurrentRow().get(i+1);
+			if(next == null) return;
+			$(next).click();
+		} else {
+			this.$result.find(".token_selected").next().next(".word").click();
+		}
 	},
 	selectPrev : function() {
-		var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
-		if(i == 0) return;
-		var prev = this.getCurrentRow().get(i-1);
-		$(prev).click();
+		if(!this.$result.is(".reading_mode")) {
+			var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
+			if(i == 0) return;
+			var prev = this.getCurrentRow().get(i-1);
+			$(prev).click();
+		} else {
+			this.$result.find(".token_selected").prev().prev(".word").click();
+		}
 	},
 	selectUp : function() {
 		var current = this.selectionManager.selected;
-		var prevMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").prevAll(".sentence").first());
-		prevMatch.click();
+		if(!this.$result.is(".reading_mode")) {
+			var prevMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").prevAll(".sentence").first());
+			prevMatch.click();
+		} else {
+			var searchwords = current.prevAll(".word").get().concat(current.closest(".sentence").prev().find(".word").get().reverse());
+			var def = current.parent().prev().find(".word:last");
+			this.getFirstAtCoor(current.offset().left + current.width()/2, $(searchwords), def).click();
+		}
 	},
 	selectDown : function() {
 		var current = this.selectionManager.selected;
-		var nextMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").nextAll(".sentence").first());
-		nextMatch.click();
+		if(!this.$result.is(".reading_mode")) {
+			var nextMatch = this.getWordAt(current.offset().left + current.width()/2, current.closest("tr").nextAll(".sentence").first());
+			nextMatch.click();
+		} else {
+			var searchwords = current.nextAll(".word").add(current.closest(".sentence").next().find(".word"));
+			var def = current.parent().next().find(".word:first");
+			this.getFirstAtCoor(current.offset().left + current.width()/2, searchwords, def).click();
+		}
+	},
+	
+	getFirstAtCoor : function(xCoor, wds, default_word) {
+		var output = null;
+		
+		wds.each(function(i, item) {
+			var thisLeft = $(this).offset().left;
+			var thisRight = $(this).offset().left + $(this).width();
+			if((xCoor > thisLeft && xCoor < thisRight)) {
+				output = $(this);
+				return false;
+			}
+		});
+		
+		return output || default_word;
 	},
 	
 	getWordAt : function(xCoor, $row) {
@@ -538,6 +626,7 @@ var ExampleResults = {
 		this.proxy = new model.ExamplesProxy();
 //		this.$result.find(".num_hits").parent().hide();
 		this.$result.find(".progress").hide();
+		this.$result.add(this.$tab).addClass("not_loading");
 	},
 	
 	makeRequest : function(opts) {
@@ -599,6 +688,7 @@ var ExampleResults = {
 	},
 	
 	showPreloader : function() {
+		this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
 		this.$tab.find(".spinner").remove();
 		$("<div class='spinner' />").appendTo(this.$tab)
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
@@ -606,6 +696,7 @@ var ExampleResults = {
 		this.$tab.find(".tabClose").hide();
 	},
 	hidePreloader : function() {
+		this.$result.add(this.$tab).addClass("not_loading").removeClass("loading");
 		this.$tab.find(".spinner").remove();
 		this.$tab.find(".tabClose").show();
 	}
@@ -1041,13 +1132,11 @@ var StatsResults = {
 			c.log("word click", $(this).data("context"), $(this).data("corpora"));
 			var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 			instance.proxy.command = "query";
-			var query = $.map($(this).data("value").split(" "), function(item) {
-				return $.format("[word='%s']", item);
-			}).join(" ");
-			c.log("query", query);
+			
+			var query = $(this).data('query');
 			instance.makeRequest({
 				corpora : $(this).data("corpora").join(","),
-				cqp : query
+				cqp : decodeURIComponent(query)
 			});
 			util.localize(instance.$result);
 		});
