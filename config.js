@@ -2418,8 +2418,8 @@ settings.corpora.sydosterbotten2012 = {
 
 settings.corpora.abounderrattelser2012 = {
 	id : "abounderrattelser2012",
-	title : "Åbo underrättelser 2012",
-	description : "<a href=\"www.abounderrattelser.fi\">Åbo underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
+	title : "Åbo Underrättelser 2012",
+	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
