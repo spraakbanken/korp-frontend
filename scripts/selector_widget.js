@@ -278,7 +278,7 @@ var hp_corpusChooser = {
 			
 			$(".boxlabel")
 			.unbind("click") // "folders"
-			.click(function() {
+			.click(function(event) {
 			    if( event.altKey == 1 ) {
                     $(".checkbox").each(function() {
                         hp_this.setStatus($(this), "unchecked");
@@ -364,7 +364,7 @@ var hp_corpusChooser = {
  			$(".boxlabel").hoverIntent(hoverFolderConfig);
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
-			$(".boxdiv").click(function() {
+			$(".boxdiv").click(function(event) {
 			    if( event.altKey == 1 ) {
                     $(".checkbox").each(function() {
                         hp_this.setStatus($(this), "unchecked");
