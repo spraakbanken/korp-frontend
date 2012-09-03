@@ -2221,7 +2221,7 @@ settings.corpora.sfs = {
 	}
 };
 
-settings.corpora.wikipedia-sv = {
+settings.corpora["wikipedia-sv"] = {
 	id : "wikipedia-sv",
 	title : "Svenska Wikipedia (augusti 2012)",
 	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
