@@ -263,7 +263,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["sydosterbotten2012", "at2012"]
+	contents : ["sydosterbotten2012", "abounderrattelser2012", "at2012"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -1620,10 +1620,6 @@ settings.corpora.saltnld_swe = {
 </ul>\
 \
 Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
-	languages : { 
-		SALTNLD_SWE: "svenska", 
-		SALTNLD_NLD: "nederländska"
-	}, 
 	context: context.defaultAligned, 
 	within: {
 		"link": "meningspar"
@@ -1648,10 +1644,6 @@ settings.corpora.europarlda_sv = {
 	id : "europarlda_sv",
 	title: "Svenska-danska", 
 	description : "Texter från Europaparlamentets webbsida.",
-	languages : { 
-		EUROPARLDA_SV: "svenska", 
-		EUROPARLDA_DA: "danska"
-	}, 
 	context: context.defaultAligned, 
 	within: {
 		"link": "meningspar"
@@ -2424,13 +2416,33 @@ settings.corpora.sydosterbotten2012 = {
 	}
 };
 
+settings.corpora.abounderrattelser2012 = {
+	id : "abounderrattelser2012",
+	title : "Åbo underrättelser 2012",
+	description : "<a href=\"www.abounderrattelser.fi\">Åbo underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
+	within : within.defaultStruct,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
+
 settings.corpora.at2012 = {
 	id : "at2012",
 	title : "Ålandstidningen 2012",
 	description : "<a href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
-	languages : {
-		AT2012 : "svenska"
-	},
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,
