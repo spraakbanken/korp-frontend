@@ -2100,7 +2100,14 @@ settings.corpora.romi = {
 	id : "romi",
 	title : "Bonniersromaner I (1976–77)",
 	description : "69 romaner utgivna 1976–77.",
-	within : within.defaultStruct,
+	context : {
+		"1 sentence" : "1 sentence",
+		"1 paragraph" : "1 paragraph"
+	},
+	within : {
+		"sentence" : "sentence",
+		"paragraph" : "paragraph"
+	},
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
