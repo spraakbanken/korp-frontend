@@ -16,7 +16,7 @@ settings.corpora.fornsvenska = {
 	id : "fornsvenska",
 	title : "Fornsvenska textbankens material",
 	description : '<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.',
-	within : within.defaultStruct,
+	within : settings.defaultWithin,
 	attributes : {},
 	struct_attributes : {
 		"text_title" : {label : "title"},

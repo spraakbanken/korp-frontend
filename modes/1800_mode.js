@@ -18,7 +18,7 @@ settings.corpora.bibel1917 = {
 	id : "bibel1917",
 	title : "Bibeln 1917",
 	description : "",
-	within : within.defaultStruct,
+	within : settings.defaultWithin,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -50,7 +50,7 @@ settings.corpora.bibel1873 = {
 	id : "bibel1873",
 	title : "Bibeln 1873",
 	description : "",
-    within : within.defaultStruct,
+    within : settings.defaultWithin,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -80,7 +80,7 @@ settings.corpora.bibel1873dalin = {
 	id : "bibel1873dalin",
 	title : "Bibeln 1873 (Dalin)",
 	description : "Annoterad med Dalin",
-	within : within.defaultStruct,
+	within : settings.defaultWithin,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
