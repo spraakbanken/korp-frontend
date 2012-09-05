@@ -11,9 +11,6 @@ settings.corpora.lb = {
 	id : "lb",
 	title : "Litteraturbanken",
 	description : '',
-    languages : {
-		LB : "svenska"
-	},
 	within : within.defaultStruct,
 	attributes : {
 		pos : attrs.pos,

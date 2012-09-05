@@ -21,7 +21,7 @@ settings.corpora.fornsvenska = {
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_datefrom" : {label : "year_from"},
-		"text_dateto" : {label : "year_to"},
+		"text_dateto" : {label : "year_to"}
 	}
 };
 

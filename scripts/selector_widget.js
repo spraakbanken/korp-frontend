@@ -171,7 +171,8 @@ var hp_corpusChooser = {
                         
 			el.after(newHTML).addClass("scroll_checkboxes inline_block");
 			var pos = $(".scroll_checkboxes").offset().left + 434;
-			$(".corpusInfoSpace").css({"left": (pos.toString() + "px")});
+			$(".corpusInfoSpace").css({"left": (pos.toString() + "px")})
+			.click(false);
 			
 			hp_this.countSelected();
 			// Update the number of children for all folders:

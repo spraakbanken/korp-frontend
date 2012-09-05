@@ -402,5 +402,8 @@ $.each(settings.parallel_corpora, function(corpora, struct) {
 });
 
 
+
 settings.corpusListing = new ParallelCorpusListing(settings.parallel_corpora);
 delete ParallelCorpusListing;
+
+$.extend(settings.corpora, settings.corpusListing.struct);

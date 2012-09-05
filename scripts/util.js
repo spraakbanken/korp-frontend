@@ -237,6 +237,7 @@ function loadCorpora() {
 			if(corpora.length) {
 				extendedSearch.refreshTokens();
 				view.updateReduceSelect();
+				view.updateWithinSelect();
 			}
 			var enableSearch = !!corpora.length;
 			view.enableSearch(enableSearch);

@@ -183,7 +183,7 @@ var KWICProxy = {
 				if(settings.corpora[id].context != null)
 					return id.toUpperCase() + ":" + $.keys(settings.corpora[id].context)[0];
 			}), Boolean).join(),
-			within : "sentence",
+			within : $(".within_select").val(),
 			show:[],
 			show_struct:[],
 			sort : o.sort,

@@ -56,8 +56,9 @@ view.enableSearch = function(bool) {
 };
 
 view.initSearchOptions = function() {
-	$("#num_hits,.sort_select").customSelect();
+	$("#num_hits,.sort_select,.within_select").customSelect();
 	view.updateReduceSelect();
+	view.updateWithinSelect();
 	
 	$("#search_options").css("background-color", settings.primaryLight)
 	.change(function(event) {
@@ -80,6 +81,18 @@ view.initSearchOptions = function() {
 			$(this).prop("selectedIndex", 0)
 			.change();
 		}
+	});
+};
+
+view.updateWithinSelect = function() {
+	var current = settings.corpusListing.getAttrIntersection("within");
+	$(".within_select option").each(function() {
+		c.log($(this).val())
+		if($.inArray($(this).attr("value"), current) != -1) $(this).attr("disabled", null);
+		else {
+			$(this).attr("disabled", "disabled").parent().val("sentence").change();
+		}
+		
 	});
 };
 
