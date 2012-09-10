@@ -1232,7 +1232,7 @@ settings.corpora.strindbergbrev = {
 
 settings.corpora.bloggmix = {
 	id : "bloggmix",
-	title : "Bloggmix (januari 2012)",
+	title : "Bloggmix (augusti 2012)",
 	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet.",
 	within : settings.defaultWithin,
 	attributes : {
@@ -1422,10 +1422,10 @@ settings.corpora.bloggmix = {
             "Övre Ullerud" : "Övre Ullerud"
 		}},
 		//blog_categories : {label : "title", type : "set"},
-		post_title : {label : "post_title"},
-		post_date : {label : "date"},
-		post_tags : {label : "tags", type : "set"},
-		post_url : {label : "post_url", type : "url"}
+		text_title : {label : "post_title"},
+		text_date : {label : "date"},
+		text_tags : {label : "tags", type : "set"},
+		text_url : {label : "post_url", type : "url"}
 	}
 };
 
