@@ -341,7 +341,8 @@ var Sidebar = {
 		.find("li")
 		.each(function(i, item){
 			var id = saldoidArray[i].match(util.saldoRegExp).slice(1,3).join("..");
-			$(item).wrap($.format("<a href='http://spraakbanken.gu.se/karp/#search=sense|%s&lang=%s' target='_blank' />", [id, $.bbq.getState("lang") || "sv"]));
+			$(item).wrap($.format("<a href='http://spraakbanken.gu.se/karp/#search-tab=1&search=cql|(saldo+%3D+\"%s\")&lang=\%s' target='_blank' />", 
+					[id, $.bbq.getState("lang") || "sv"]));
 		})
 		.hoverIcon("ui-icon-extlink");
 	},
