@@ -640,7 +640,17 @@ table {
 /* 	float : left; */
 	display : inline-block;
 	*display : inline;
+	zoom : 1;
 	vertical-align: bottom;
+}
+
+.within_select {
+    display : none;    
+}
+.lab .within_select {
+    display : inline-block;
+    *display : inline;
+    zoom : 1;
 }
 
 .controls_n {
