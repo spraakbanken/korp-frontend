@@ -57,6 +57,9 @@
 	"to" : "to",
 	"times" : "times",
 	
+	"sent_start" : "Sentence start",
+    "sent_end" : "Sentence end",
+	
 	"none_selected" : "&lt;none selected&gt;",
 	
 	"any" : "any word",
@@ -81,7 +84,7 @@
 	"sort_default" : "sort within corpora",
 	"within" : "search within",
 	"context_sentence" : "mening",
-    "context_paragraph" : "paragraf",
+    "context_paragraph" : "paragraph",
 	"appearance_context" : "not sorted",
 	"word_context" : "matched word(s)",
 	"left_context" : "left context",

@@ -18,28 +18,30 @@ var BaseProxy = {
 		this.total = null;
 	},
 	
+	parseJSON : function(data) {
+		try {
+			var prefix = data[0] == "{" ? "" : "{";
+			var suffix = data.slice(-1) == "}" ? "" : "}";
+			var json = prefix + data.slice(0,-2) + suffix;
+			
+			return JSON.parse(json);
+		} catch (e) {
+			return JSON.parse(data);
+		}
+	},
+	
 	calcProgress : function(e) {
 		var self = this;
 		var newText = e.target.responseText.slice(this.prev.length);
 		var struct = {};
 		try {
-			var prefix = newText[0] == "{" ? "" : "{";
-			var suffix = newText.slice(-1) == "}" ? "" : "}";
-			var json = prefix + newText.slice(0,-2) + suffix;
-			
-			struct = JSON.parse(json);
-		} catch (e) {
-			
-			try {
-				struct = JSON.parse(newText);
-			} catch(e) {
-				c.log("second json parse failed in ", this);
-				return;
-			}
+			struct = this.parseJSON(newText);
+		} catch(e) {
+			c.log("json parse failed in ", this);
 		}
         
         $.each(struct, function(key, val) {
-            	if(key != "progress_corpora" && key.split("_")[0] == "progress" ) {
+        	if(key != "progress_corpora" && key.split("_")[0] == "progress" ) {
             	var currentCorpus = val.corpus || val;
             	
             	var sum = _.chain(currentCorpus.split("|"))

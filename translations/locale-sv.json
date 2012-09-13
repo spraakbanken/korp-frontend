@@ -57,6 +57,10 @@
 	"to" : "till",
 	"times" : "gånger",
 	
+	"sent_start" : "Meningsbörjan",
+	"sent_end" : "Meningsslut",
+	
+	
 	"none_selected" : "&lt;ej vald&gt;",
 	
 	"any" : "vilket ord som helst",
@@ -81,7 +85,7 @@
 	"sort_default" : "sortera inom korpus på",
 	"within" : "sök inom",
 	"within_sentence" : "mening",
-	"within_paragraph" : "paragraf",
+	"within_paragraph" : "stycke",
 	"appearance_context" : "förekomst",
 	"word_context" : "träff",
 	"left_context" : "vänsterkontext",

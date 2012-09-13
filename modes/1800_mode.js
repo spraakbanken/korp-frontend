@@ -35,8 +35,8 @@ settings.corpora.bibel1917 = {
 		"text_title" : {
 			label : "title"
 		},
-                "paragraph_chap" : {label : "chapter"},
-                "verse_n" : {label : "verse"},
+        "paragraph_chap" : {label : "chapter"},
+        "verse_n" : {label : "verse"},
 		"text_datefrom" : {
 			label : "year_from"
 		},

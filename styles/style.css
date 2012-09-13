@@ -1,4 +1,7 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+@font-face {
+    font-family: "Source Sans Pro";
+    src: url(SourceSansPro-Regular.otf);
+}
 
 body {
 	font-family : 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
@@ -188,6 +191,10 @@ input:placeholder, textarea:placeholder {
 	margin-bottom : 8px;
 }
 
+#search_options select {
+    margin-right : 5px;
+}
+
 #search_options > div {
 	display : inline-block;
 	margin-right : 10px;
@@ -210,10 +217,6 @@ input:placeholder, textarea:placeholder {
 
 #content {
 	padding : 0 8px 8px 8px;
-}
-
-.num_hits {
-	margin-right : 5px;
 }
 
 .lang_selected {
@@ -269,19 +272,7 @@ input:placeholder, textarea:placeholder {
 	float : left;
 }
 
-.query_token .repeat {
-	float : right;
-	font-size : 10px;
-	margin-right : 25px;
-}
-.query_token .repeat input {
-	max-width : 30px;
-	
-}
 
-.ui-icon-gear {
-    background-position: -193px -114px;
-}
 
 .insert_token {
 	position: relative;
@@ -325,8 +316,24 @@ input.arg_value {
 	height : 20px;
 	float : right;
 }
+
+.query_token .repeat {
+    float : right;
+    margin-right : 25px;
+    
+}
+.query_token .repeat input {
+    max-width : 30px;
+    
+}
+
+.ui-icon-gear {
+    background-position: -193px -114px;
+}
+
 .token_footer {
 	position: relative;
+	font-size : .8em;
 }
 
 .token_footer ul {
@@ -341,6 +348,42 @@ input.arg_value {
 .token_footer ul, li {
 	margin : 0;
 	padding : 0;
+}
+
+.close_token {
+    border-radius : 20px;
+    color : black;
+    background-color : rgb(242, 247, 255);
+    border : thin lightgrey solid;
+    padding-left : 5px;
+    padding-right : 1px;
+    cursor : default; 
+}
+
+.lower_footer {
+    text-align : right;
+    margin-top : 2px;    
+}
+
+#opt_menu {
+    display : none;
+    font-size : .8em;
+    cursor : pointer;
+}
+
+
+.close_token .ui-icon-close {
+    display : inline-block;
+    position : relative;
+    top : 3px;
+    cursor : pointer;
+}
+
+.repeat,.lower_footer > * {
+    display : none;
+}
+.repeat_item .repeat,.lbound_item .lbound,.rbound_item .rbound {
+    display : inline;
 }
 
 .statisticWords {
@@ -692,7 +735,9 @@ table {
 }
 
 
-.reading_mode .reading_btn.show, .reading_btn.hide {
+.reading_mode .reading_btn.show, 
+.reading_btn.hide,
+.zero_results .reading_btn {
     display : none;
 }
 .reading_mode .reading_btn.hide {
@@ -1261,6 +1306,8 @@ a.relStat:hover {
 .sidebar_msd {
 	font-size : 0.8em;
 }
+
+
 
 #korp-extended #sendBtn ~ * {
 	display : none;

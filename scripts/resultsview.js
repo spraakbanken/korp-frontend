@@ -209,6 +209,7 @@ var KWICResults = {
 			this.showNoResults();
 			return;
 		}
+		this.$result.removeClass("zero_results");
 		this.$result.find('.num-result').html(prettyNumbers(data.hits));
 		this.renderHitsPicture(data);
 		this.buildPager(data.hits);
@@ -298,11 +299,12 @@ var KWICResults = {
     },
 	
     showNoResults : function() {
+    	
     	this.$result.find(".results_table").empty();
 		this.$result.find(".pager-wrapper").empty();
 		this.hidePreloader();
 		this.$result.find('.num-result').html(0);
-		this.$result.click();
+		this.$result.addClass("zero_results").click();
 //		this.$result.find(".sort_select").hide();
 		this.$result.find(".hits_picture").html("");
     },

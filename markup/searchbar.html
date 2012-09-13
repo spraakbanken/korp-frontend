@@ -60,25 +60,43 @@
 		<div class="query_token ui-corner-all ui-state-default" cellPadding="0" cellSpacing="0">
 			<div class="token_header">
 				<span class="ui-icon ui-icon-circle-close btn-icon"></span>
-				<div style="clear:both;" />
+				<div style="clear:both;"></div>
 			</div>
 
 			<div class="args"></div>
 			
 			<div class="token_footer">
-				<img src="img/plus.png" class="image_button insert_arg">
-				<button rel="localize[options]">Alternativ</button>
-				<span class="repeat">
-					<span rel="localize[repeat]">Upprepa</span> 
-					<input type="number" value="1"> 
-					<span rel="localize[to]">till</span> 
-					<input type="number" value="1">
-					<span rel="localize[times]">gånger<span>
+				<div>
+					<img src="img/plus.png" class="image_button insert_arg">
+					<button rel="localize[options]">Alternativ</button>
+					<div class="repeat">
+						<span rel="localize[repeat]">Upprepa</span> 
+						<input type="number" value="1"> 
+						<span rel="localize[to]">till</span> 
+						<input type="number" value="1">
+						<span rel="localize[times]">gånger<span>
+					</div>
+
+					<div style="clear:both;"></div>
+				</div>
+				
+			<div class="lower_footer">
+				<span class="lbound close_token" data-item="lbound_item">
+					<span rel="localize[sent_start]">Meningsbörjan</span>
+					<span class="ui-icon ui-icon-close"></span>
+				</span> 
+				<span class="rbound close_token" data-item="rbound_item"> 
+					<span rel="localize[sent_end]">Meningsslut</span>
+					<span class="ui-icon ui-icon-close"></span>
 				</span>
-				<div style="clear:both;" />
 			</div>
 		</div>
-</script>
+	</div>
+			</script>
+
+
+
+
 <script id="argTmpl" type="text/x-jquery-tmpl">
 <div class="query_arg">
 	<div class="or_container"></div>

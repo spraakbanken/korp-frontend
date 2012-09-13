@@ -428,17 +428,47 @@ var ExtendedToken = {
         	},
         	text : false
         }).click(function() {
-        	if(repeat.filter(":animated").length) return; 
-			repeat.toggle("slide", {direction : 'right'}, function() {
-    		
-    		self._trigger("change");
-    	});
+        	if($("#opt_menu").is(":visible")) {
+        		return;
+        	}
+        	$("#opt_menu").show().menu({
+        	})
+        	.one("click", function(evt) {
+        		c.log("click", evt.target );
+        		if(!$(evt.target).is("a")) return;
+        		var item = $(evt.target).data("item");
+        		self.element.toggleClass(item);
+        		self._trigger("change");
+        	})
+        	.position({
+        		my : "right top",
+        		at : "right bottom",
+        		of : this
+        	});
+        	$("body").one("click", function() {
+        		$("#opt_menu").hide();
+        	});
         	
-        }).next().hide().find("input").change(function() {
+        	return false;
+        });
+        this.element.find(".close_token .ui-icon").click(function() {
+        	var item = $(this).closest(".close_token").data("item");
+        	self.element.toggleClass(item);
+        	self._trigger("change");
+        });
+        this.element.find(".repeat input").change(function() {
         	self._trigger("change");
         });
         
 	},
+	
+//	toggleRange : function() {
+//		if(repeat.filter(":animated").length) return; 
+//		repeat.toggle("slide", {direction : 'right'}, function() {
+//			self._trigger("change");
+//		});
+//		
+//	},
 	
 	insertArg : function(animate) {
 		c.log("insertArg");
@@ -811,12 +841,19 @@ var ExtendedToken = {
 	    }, function(a, b) { // sort function for key order
 	    	return 1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio)); 
 	    });
+	    
 	    if (inner_query.length > 1) {
 	    	output = "(" + inner_query.join(" | ") + ")";
 	    } else {
 	    	output = inner_query.join(" | ");
 	    }
-	    return output;
+	    var bound = [];
+	    if(this.element.is(".lbound_item")) bound.push("lbound(sentence)")
+	    if(this.element.is(".rbound_item")) bound.push("rbound(sentence)")
+	    var boundprefix = " & ";
+	    if(output == "") boundprefix = "";
+	    var boundStr = bound.length ? boundprefix + bound.join(" & ") : "";
+	    return output + boundStr;
 	},
 	
 	getCQP : function() {
