@@ -26,6 +26,7 @@ var BaseProxy = {
 			
 			return JSON.parse(json);
 		} catch (e) {
+//			c.log("trying data", data);
 			return JSON.parse(data);
 		}
 	},
@@ -33,6 +34,7 @@ var BaseProxy = {
 	calcProgress : function(e) {
 		var self = this;
 		var newText = e.target.responseText.slice(this.prev.length);
+		c.log('progress', e.target.responseText);
 		var struct = {};
 		try {
 			struct = this.parseJSON(newText);
@@ -123,6 +125,7 @@ var KWICProxy = {
 		this.command = "query";
 		this.prevAjaxParams = null;
 		this.pendingRequest = {abort : $.noop};
+		this.foundKwic = false;
 		
 	},
 	
@@ -133,6 +136,7 @@ var KWICProxy = {
 	
 	makeRequest : function(options, page, callback, successCallback, kwicCallback) {
 		var self = this;
+		this.foundKwic = false;
 		this.parent();
 		successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults);
 		kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
@@ -162,6 +166,7 @@ var KWICProxy = {
 				callback(progressObj);
 				if(progressObj["struct"].kwic) {
 		        	c.log("found kwic!");
+		        	this.foundKwic = true;
 		        	kwicCallback(progressObj["struct"]);
 		        }
 				
@@ -223,7 +228,7 @@ var KWICProxy = {
 				c.log("kwic result", data);
 				self.queryData = data.querydata; 
 				
-				if(o.incremental == false)
+				if(o.incremental == false || !this.foundKwic)
 					kwicCallback(data);
 				
 				o.success(data, o.cqp);
