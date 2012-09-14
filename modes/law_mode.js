@@ -43,7 +43,7 @@ settings.corpora["lag1734"] = {
 };
 settings.corpora["tankebok"] = {
 		id : "tankebok",
-		title : "Tankebok",
+		title : "Stockholms stads tänkeböcker",
 		description : "",
 		within : settings.defaultWithin,
 		attributes : {},

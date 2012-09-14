@@ -89,7 +89,7 @@ var currentMode;
                  {localekey : "old_swedish_texts", mode : "old_swedish"},
                  {localekey : "lb_texts", mode : "lb"},
                  {localekey : "siberian_texts", mode : "siberian_german"},
-                 {localekey : "lawroom", mode : "lawroom"}
+                 {localekey : "lawroom", mode : "law"}
                      ]
 		}).add("#about").vAlign();
 		
