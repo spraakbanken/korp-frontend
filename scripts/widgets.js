@@ -791,6 +791,7 @@ var ExtendedToken = {
 //	    var query = {token: []};
 		var output = "";
 	    var args = {};
+	    var annoVals = [];
 	    andSection.find(".or_arg").each(function(){
 	        var type = $(this).find(".arg_type").val();
 	        var data = $(this).find(".arg_type :selected").data("dataProvider");
@@ -809,7 +810,12 @@ var ExtendedToken = {
 	        	opt : opt,
 	        	case_sens : case_sens
         	});
+	        if(currentMode == "law") {
+	        	annoVals.push(getAnnotationRank(type));
+	        }
 	    });
+	    var minAnno = Math.min.apply(null, annoVals);
+	    c.log("minAnno", minAnno);
 	    
 	    var inner_query = [];
 	    $.sortedEach(args, function(type, valueArray) {
@@ -821,14 +827,28 @@ var ExtendedToken = {
 	    			var prefix = obj.data.isStructAttr != null ? "_." : "";
 	    			var formatter = op == "matches" || obj.data.displayType == "select" ? function(arg) {return arg;} : regescape;
 	    			var value = formatter(s);
-	    			op = {
-	    					"is" : [operator, "", value, ""],
-	    					"is_not" : [not_operator, "", value, ""],
-	    					"starts_with" : ["=", "", value, ".*"],
-	    					"ends_with" : ["=", ".*", value, ""],
-	    					"matches" : ["=", "", value, ""]
+	    			function getOp(value) {
+	    				return {
+	    						"is" : [operator, "", value, ""],
+	    						"is_not" : [not_operator, "", value, ""],
+	    						"starts_with" : ["=", "", value, ".*"],
+	    						"ends_with" : ["=", ".*", value, ""],
+	    						"matches" : ["=", "", value, ""]
 	    				}[op];
-	    			return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(op, [obj.case_sens]));
+	    			}
+	    			function stringify(value) {
+	    				return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(getOp(value), [obj.case_sens]));
+	    			}
+	    			
+	    			if(currentMode == "law") {
+	    				c.log('currentRank', getAnnotationRank(type));
+	    				if(getAnnotationRank(type) > minAnno) {
+//	    					return $.format("(%s)", [stringify(value), stringify("")].join(" | "));
+	    				}
+	    			} 
+    				return stringify(value);
+	    			
+	    			
 	    		};
 	    		var argFunc;
 	    		if(type == "word" && !obj.value) {
@@ -876,7 +896,6 @@ var ExtendedToken = {
 		}
 		
 		return "[" + output.join(" & ") + "]" + suffix; 
-//		return $.format("[%s]%s", [output.join(" & "), suffix]); 
 	}
 };
 $.widget("ui.sidebar", Sidebar);

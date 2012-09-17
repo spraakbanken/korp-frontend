@@ -2089,7 +2089,7 @@ settings.corpora.romi = {
 	title : "Bonniersromaner I (1976–77)",
 	description : "69 romaner utgivna 1976–77.",
 	context : {
-		"1 sentence" : "1 sentence",
+//		"1 sentence" : "1 sentence",
 		"1 paragraph" : "1 paragraph"
 	},
 	within : {

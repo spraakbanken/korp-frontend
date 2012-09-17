@@ -79,7 +79,6 @@ var currentMode;
     				location.href = location.pathname + "?mode=" + mode;
     			}
             },
-//            selected : $($.format("a[data-mode=%s]", currentMode)).index(),
             selected : currentMode,
             modes : [
                  {localekey : "modern_texts", mode : "default"},
@@ -404,6 +403,8 @@ var currentMode;
 //		view.updateSearchHistory();
 	}, function() {
 		c.log("failed to load some resource at startup.", arguments)
+		$("body").css({"opacity" : 1, padding : 20}).html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg"> ')
+		.append("<p>The server failed to respond, please try again later.</p>");
 	});
 
 
