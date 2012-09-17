@@ -401,15 +401,27 @@ var KWICResults = {
 	
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
-		var i = Number(data.dephead);
-		var aux = $(word.closest("tr").find(".word").get(i - 1));
-		this.selectionManager.select(word, aux);
-		
-		this.scrollToShowWord(word);
-		
-		
 		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus.toLowerCase());
 		$("#columns").height($("#sidebar").height());
+		this.scrollToShowWord(word);
+		
+		if(data.dephead == null) {
+			this.selectionManager.select(word, null);
+			return;
+		}
+		var i = Number(data.dephead);
+		var paragraph = word.closest("tr").find(".word");
+		var sent_start = 0;
+		if(word.is(".sent_start")) {
+			sent_start = paragraph.index(word);
+		} else {
+			var l = paragraph.filter(function(i, item) {
+				return $(item).is(word) || $(item).is(".sent_start");
+			});
+			sent_start = paragraph.index(l.eq(l.index(word)-1));
+		}
+		var aux = $(paragraph.get(sent_start + i - 1));
+		this.selectionManager.select(word, aux);
 	},
 	
 	selectLeft : function(sentence, offset) {
@@ -626,7 +638,6 @@ var ExampleResults = {
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		this.proxy = new model.ExamplesProxy();
-//		this.$result.find(".num_hits").parent().hide();
 		this.$result.find(".progress").hide();
 		this.$result.add(this.$tab).addClass("not_loading");
 	},

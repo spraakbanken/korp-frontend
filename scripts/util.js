@@ -231,34 +231,43 @@ function loadCorpora() {
 	.corpusChooser({
 		template: outStr, 
 		change : function(corpora) {
-			c.log("corpus changed", corpora);
+			c.log("corpus changed");
 			settings.corpusListing.select(corpora);
 			$.bbq.pushState({"corpus" : corpora.join(",")});
 			if(corpora.length) {
 				extendedSearch.refreshTokens();
 				view.updateReduceSelect();
 				view.updateWithinSelect();
+				view.updateContextSelect();
 			}
 			var enableSearch = !!corpora.length;
 			view.enableSearch(enableSearch);
 	    }, 
 	    infoPopup: function(corpusID) {
+	    	var corpusObj = settings.corpora[corpusID];
 	    	var maybeInfo = "";
-	    	if(settings.corpora[corpusID].description)
-	    		maybeInfo = "<br/><br/>" + settings.corpora[corpusID].description;
-	    	var numTokens = settings.corpora[corpusID]["info"]["Size"];
-	    	var numSentences = settings.corpora[corpusID]["info"]["Sentences"];
-	    	var lastUpdate = settings.corpora[corpusID]["info"]["Updated"];
+	    	if(corpusObj.description)
+	    		maybeInfo = "<br/><br/>" + corpusObj.description;
+	    	var numTokens = corpusObj["info"]["Size"];
+	    	var numSentences = corpusObj["info"]["Sentences"];
+	    	var lastUpdate = corpusObj["info"]["Updated"];
 	    	if (!lastUpdate) {
 	       	    lastUpdate = "?";
 	    	}
 	    	var sentenceString = "-";
 	    	if (numSentences)
 	    		sentenceString = prettyNumbers(numSentences.toString());
-	    	return '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' +
-	    	settings.corpora[corpusID].title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + 
+	    	var output = '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' +
+	    	corpusObj.title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + 
 	    	": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + 
-	    	"</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b>";
+	    	"</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b><br/><br/>";
+	    	
+	    	var supportsContext = _.keys(corpusObj.context).length > 1;
+	    	if(supportsContext)
+	    		output += $("<div>").localeKey("corpselector_supports").html(); 
+	    	
+	    	return output;
+	    	
 	    }, 
 	    infoPopupFolder: function(indata) {
 	    	var corporaID = indata.corporaID;

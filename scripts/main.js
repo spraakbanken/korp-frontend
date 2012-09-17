@@ -284,6 +284,7 @@ var currentMode;
 				$("#select_corpus").val(corpus);
 				simpleSearch.enableSubmit();
 			}
+			view.initSearchOptions();
 			
 			
 			function showAbout() {

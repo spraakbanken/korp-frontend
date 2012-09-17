@@ -70,8 +70,6 @@
             <assign location="statsResults"   expr="new view.StatsResults('#result-container li:nth-child(2)', '#results-stats')"/>
             <assign location="lemgramResults" expr="new view.LemgramResults('#result-container li:nth-child(3)', '#results-lemgram')"/>
             
-            <script>view.initSearchOptions();</script>
-            
         </transition>
     </state>
     

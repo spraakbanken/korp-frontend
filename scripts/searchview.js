@@ -56,9 +56,21 @@ view.enableSearch = function(bool) {
 };
 
 view.initSearchOptions = function() {
-	$("#num_hits,.sort_select,.within_select").customSelect();
+	var selects = $("#search_options > div:first select").customSelect();
 	view.updateReduceSelect();
 	view.updateWithinSelect();
+	view.updateContextSelect();
+	$("#search_options select").each(function() {
+		var state = $.bbq.getState($(this).data("history"));
+		if(!!state) {
+			$(this).val(state)
+			.change();
+		} else {
+			$(this).prop("selectedIndex", 0)
+			.change();
+		}
+	});
+	
 	
 	$("#search_options").css("background-color", settings.primaryLight)
 	.change(function(event) {
@@ -69,26 +81,31 @@ view.initSearchOptions = function() {
 		
 		var state = {};
 		state[target.data("history")] = target.val();
-		$.bbq.pushState(state);
-	})
-	.find("select")
-	.each(function() {
-		var state = $.bbq.getState($(this).data("history"));
-		if(!!state) {
-			$(this).val(state)
-			.change();
-		} else {
-			$(this).prop("selectedIndex", 0)
-			.change();
-		}
+		if(target.prop("selectedIndex") != 0)
+			$.bbq.pushState(state);
+		else 
+			$.bbq.removeState(target.data("history"));
 	});
+	
 };
 
 view.updateWithinSelect = function() {
 	var current = settings.corpusListing.getAttrIntersection("within");
 	$(".within_select option").each(function() {
-		c.log($(this).val())
-		if($.inArray($(this).attr("value"), current) != -1) $(this).attr("disabled", null);
+		if($.inArray($(this).attr("value"), current) != -1) 
+			$(this).attr("disabled", null);
+		else {
+			$(this).attr("disabled", "disabled").parent().val("sentence").change();
+		}
+		
+	});
+};
+view.updateContextSelect = function() {
+	var current = settings.corpusListing.getAttrIntersection("context");
+	c.log("context ", current);
+	$(".context_select option").each(function() {
+		if($.inArray($(this).attr("value"), current) != -1) 
+			$(this).attr("disabled", null);
 		else {
 			$(this).attr("disabled", "disabled").parent().val("sentence").change();
 		}

@@ -34,7 +34,6 @@ var BaseProxy = {
 	calcProgress : function(e) {
 		var self = this;
 		var newText = e.target.responseText.slice(this.prev.length);
-		c.log('progress', e.target.responseText);
 		var struct = {};
 		try {
 			struct = this.parseJSON(newText);
@@ -187,11 +186,12 @@ var KWICProxy = {
 			end:o.end,
 			defaultcontext: $.keys(settings.defaultContext)[0],
 			context : $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-				if(settings.corpora[id].context != null)
-					return id.toUpperCase() + ":" + $.keys(settings.corpora[id].context)[0];
+				if($(".context_select").val() in settings.corpora[id].context)
+					return id.toUpperCase() + ":" + $(".context_select").val();
 			}), Boolean).join(),
+//			context : $(".context_select").val(),
 			within : $(".within_select").val(),
-			show:[],
+			show:["sentence"],
 			show_struct:[],
 			sort : o.sort,
 			incremental : o.incremental
@@ -225,7 +225,6 @@ var KWICProxy = {
 				self.prevRequest = settings;
 			},
 			success: function(data, status, jqxhr) {
-				c.log("kwic result", data);
 				self.queryData = data.querydata; 
 				
 				if(o.incremental == false || !this.foundKwic)

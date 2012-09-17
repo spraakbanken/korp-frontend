@@ -85,6 +85,7 @@
 	"lemgram_results" : "Ordbild", 
 	"sort_default" : "sortera inom korpus på",
 	"within" : "sök inom",
+	"context" : "kontext",
 	"within_sentence" : "mening",
 	"within_paragraph" : "stycke",
 	"appearance_context" : "förekomst",
@@ -132,6 +133,7 @@
 	"corpselector_corporawith_sing" : "korpus med",
 	"corpselector_corporawith_plur" : "korpusar med",
 	"corpselector_lastupdate" : "Senast uppdaterad",
+	"corpselector_supports" : "Stödjer utökad kontextvisning.",
 	
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",

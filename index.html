@@ -167,6 +167,10 @@
 						<option value="sentence" rel="localize[within_sentence]">Mening</option>
 						<option value="paragraph" rel="localize[within_paragraph]">Paragraf</option>
 					</select>
+					<select class="context_select" data-history="context" data-prefix="context">
+						<option value="1 sentence" rel="localize[within_sentence]">Mening</option>
+						<option value="1 paragraph" rel="localize[within_paragraph]">Stycke</option>
+					</select>
 				</div>
 				<div>
 					<span rel=localize[statistics]>Statistik</span>:
@@ -326,7 +330,7 @@
 	</script>
 	
 	<script id="wordTmpl" type="text/x-jquery-tmpl">
-		<span class="word">${word}</span><span class="word_gap"> </span>
+		<span class="word${typeof structs != 'undefined' && structs.open ? ' sent_start' : ''}">${word}</span><span class="word_gap"> </span>
 	</script>
 	
 <!-- 			<p class="explanation"></p> -->
