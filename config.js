@@ -302,7 +302,7 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+	contents : ["astranova", "finsktidskrift", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.medical = {
@@ -534,6 +534,30 @@ settings.corpora.myndighet = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.finsktidskrift = {
+	id : "finsktidskrift",
+	title : "Finsk tidskrift 2011–2012",
+	description : "<a href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_date : {label : "year"},
+	    text_issue : {label : "issue"}
 	}
 };
 
