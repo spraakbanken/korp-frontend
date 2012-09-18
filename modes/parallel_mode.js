@@ -281,6 +281,13 @@ delete ParallelStatsProxy;
 
 settings.primaryColor = "#FFF3D8";
 settings.primaryLight = "#FFF9EE";
+
+var context = {
+	"defaultAligned" : {
+		"1 link" : "1 link"
+	}
+};
+
 settings.corporafolders = {};
 
 settings.corporafolders.europarl = {
@@ -347,6 +354,7 @@ settings.parallel_corpora.salt = {
 		parent : "salt",
 		title: "Svenska-nederländska", 
 		context: context.defaultAligned, 
+		context : settings.defaultContext,
 		within: {
 			"link": "meningspar"
 		}, 
@@ -405,5 +413,5 @@ $.each(settings.parallel_corpora, function(corpora, struct) {
 
 settings.corpusListing = new ParallelCorpusListing(settings.parallel_corpora);
 delete ParallelCorpusListing;
-
+delete context;
 $.extend(settings.corpora, settings.corpusListing.struct);

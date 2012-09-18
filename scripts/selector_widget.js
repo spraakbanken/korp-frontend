@@ -148,7 +148,7 @@ var hp_corpusChooser = {
 			$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 			$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
 			$("#hp_corpora_title3").html(" — " + prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
-            $("#sentenceCounter").html("<i>" + prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
+            $("#sentenceCounter").html(prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
 	},
 	_transform: function() {	
 			var el = this.element;
@@ -225,6 +225,7 @@ var hp_corpusChooser = {
 			/* SELECT ALL BUTTON */
 			$(".selectall").unbind("click");
 			$(".selectall").click(function() {
+				
 				var roots = $(this).parent().siblings();
 				roots.each(function() {
 					var check = $(this).children("label").children('.checkbox');

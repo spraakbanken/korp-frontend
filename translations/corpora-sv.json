@@ -206,5 +206,7 @@
     "FINIT" : "Finit verb",
     
     "origlang" : "orginalspråk",
-    "page_n" : "sidonummer"
+    "page_n" : "sidonummer",
+    
+    "paragraph_marginal" : "marginalnoter"
 }

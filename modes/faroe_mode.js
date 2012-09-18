@@ -16,6 +16,7 @@ settings.corpora.fts = {
 	title : "FTS - Färöisk textsamling",
 	description : "Färöisk textsamling, i samarbete med Färöarnas universitet, Fróðskaparsetur Føroya.",
 	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {},
 	struct_attributes : {
 		text_date : {

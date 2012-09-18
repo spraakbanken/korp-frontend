@@ -249,6 +249,9 @@ input:placeholder, textarea:placeholder {
 .mode-parallel #linkedLang {
     display : inline;
 }
+.mode-parallel .context_select, .mode-parallel .within_select {
+    display : none;
+}
 
 #removeLang, #linkedLang {
     display : none;   
@@ -644,15 +647,6 @@ table {
 	vertical-align: bottom;
 }
 
-.within_select {
-    display : none;    
-}
-.lab .within_select {
-    display : inline-block;
-    *display : inline;
-    zoom : 1;
-}
-
 .controls_n {
 	margin-top : 3px;
 	margin-right : 5px;
@@ -766,7 +760,7 @@ table {
 .results_table.reading tr {
     display : block;
     padding : 1em;
-    width : 400px;
+    width : 510px;
 }
 
 .result_table td {

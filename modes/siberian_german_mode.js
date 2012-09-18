@@ -18,6 +18,7 @@ settings.corpora.siberiangermandialogs = {
 		siberiangermandialogs : "svenska"
 	},
 	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {
 		sib_de_msd : {
 			label : "msd",

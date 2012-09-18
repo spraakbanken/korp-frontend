@@ -12,6 +12,7 @@ settings.corpora.lb = {
 	title : "Litteraturbanken",
 	description : '',
 	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,

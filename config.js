@@ -197,12 +197,6 @@ sattrs.date = {
 	displayType : "date"
 };
 
-var context = {
-	"defaultAligned" : {
-		"1 link" : "1 link"
-	}
-};
-
 /*
  * FOLDERS
  */

@@ -239,12 +239,11 @@ var currentMode;
 				return prevFragment[key] != e.getState(key);
 			}
 			
-			var hpp = e.getState("hpp", true);
-			if(hpp)
-				$(".num_hits").val(hpp);
-			if(!isInit && hasChanged("hpp")) {
-//				kwicResults.handlePaginationClick(0, null, true);
-			}
+//			var hpp = e.getState("hpp", true);
+//			if(hpp)
+//				$(".num_hits").val(hpp);
+//			if(!isInit && hasChanged("hpp")) {
+//			}
 			
 			if(hasChanged("lang")) {
 				var loc_dfd = util.initLocalize();
@@ -273,7 +272,7 @@ var currentMode;
 			}
 			
 			var corpus = e.getState("corpus");
-			if (corpus && corpus.length != 0 && corpus != prevFragment["corpus"]){
+			if (isInit && corpus && corpus.length != 0 && hasChanged("corpus")){
 				var corp_array = corpus.split(',');
 				var processed_corp_array = [];
 				$.each(corp_array, function(key, val) {
@@ -284,8 +283,6 @@ var currentMode;
 				$("#select_corpus").val(corpus);
 				simpleSearch.enableSubmit();
 			}
-			view.initSearchOptions();
-			
 			
 			function showAbout() {
 				$("#about_content").dialog({
@@ -397,6 +394,7 @@ var currentMode;
 		});
 		
 		onHashChange(null, true);
+		view.initSearchOptions();
 		$("body").animate({"opacity" : 1}, function() {
 			$(this).css("opacity", "");
 		});
