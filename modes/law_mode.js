@@ -18,7 +18,7 @@ settings.corporafolders.magazines = {
 settings.corpora.fsvlagrummetnew = {
 	id : "fsvlagrummetnew",
 	title : "Fornsvenska textbankens lagtexter",
-	description : "",
+	description : "Giftermåls balk, Kristoffers Landslag, Konungastyrelsen, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {},
@@ -34,7 +34,7 @@ settings.corpora.fsvlagrummetnew = {
 settings.corpora["lag1734"] = {
 	id : "lag1734",
 	title : "1734 års lag",
-	description : "",
+	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {},
@@ -47,25 +47,35 @@ settings.corpora["lag1734"] = {
 		}
 	}
 };
-
-settings.corpora["lag1734foerarbeten"] = {
-	id : "lag1734foerarbeten",
-	title : "1734 års lag – Förarbeten",
-	description : "",
+settings.corpora["lag1800"] = {
+	id : "lag1800",
+	title : "Lagar från 1800-talet",
+	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-//		pos : attrs.pos,
-//		msd : attrs.msd,
-//		lemma : attrs.baseform,
-//		lex : attrs.lemgram,
-//		saldo : attrs.saldo,
-//		prefix : attrs.prefix,
-//		suffix : attrs.suffix,
-//		dephead : attrs.dephead,
-//		deprel : attrs.deprel,
-//		ref : attrs.ref
-	},
+	attributes : {},
+	struct_attributes : {
+		text_title : {
+			label : "title"
+		},
+		paragraph_date : {
+			label : "date"
+			
+		},
+		paragraph_marginal : {
+			label : "paragraph_marginal"
+		}
+	}
+};
+
+
+settings.corpora["tankebok"] = {
+	id : "tankebok",
+	title : "Stockholms stads tänkeböcker",
+	description : "Stockholms stads tänkeböcker från 1626",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {},
 	struct_attributes : {
 		text_date : {
 			label : "date"
@@ -75,23 +85,6 @@ settings.corpora["lag1734foerarbeten"] = {
 		},
 		paragraph_marginal : {
 			label : "paragraph_marginal"
-		}
-	}
-};
-
-settings.corpora["tankebok"] = {
-	id : "tankebok",
-	title : "Stockholms stads tänkeböcker",
-	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
-	attributes : {},
-	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
-		text_title : {
-			label : "title"
 		}
 	}
 };
