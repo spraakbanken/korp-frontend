@@ -15,8 +15,16 @@ settings.corpora = {};
 settings.defaultContext = {
 	"1 sentence" : "1 sentence"
 };
+settings.spContext = {
+	"1 sentence" : "1 sentence",
+	"1 paragraph" : "1 paragraph"
+};
 settings.defaultWithin = {
 	"sentence" : "sentence"	
+};
+settings.spWithin = {
+	"sentence" : "sentence",
+	"paragraph" : "paragraph"
 };
 
 settings.defaultLanguage = "sv";
@@ -357,8 +365,8 @@ settings.corpora.magmakolumner = {
 	id : "magmakolumner",
 	title : "Magma kolumner",
 	description : "Material ur kolumner publicerade av <a href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -383,8 +391,8 @@ settings.corpora.fsbbloggvuxna = {
 	id : "fsbbloggvuxna",
 	title : "Vuxna bloggare",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -413,8 +421,8 @@ settings.corpora.fsbskonlit = {
 	id : "fsbskonlit",
 	title : "Skönlitteratur 1970–2011",
 	description : "Material ur skönlitterära verk publicerade under 1970–2011 av Söderströms förlag.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -491,8 +499,8 @@ settings.corpora.lagtexter = {
 	id : "lagtexter",
 	title : "Lagtexter 1990–2000",
 	description : "Material ur Finlands lag.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -513,8 +521,8 @@ settings.corpora.myndighet = {
 	id : "myndighet",
 	title : "Myndighetsprosa 1990–2000",
 	description : "Material ur bland annat Utbildningsstyrelsens, Undervisningsministeriets och Länsstyrelsens publikationer.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -535,8 +543,8 @@ settings.corpora.finsktidskrift = {
 	id : "finsktidskrift",
 	title : "Finsk tidskrift 2011–2012",
 	description : "<a href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -559,8 +567,8 @@ settings.corpora.hanken = {
 	id : "hanken",
 	title : "Hanken 2008–2011",
 	description : "Tidningen <a href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -583,8 +591,8 @@ settings.corpora.svenskbygden = {
 	id : "svenskbygden",
 	title : "Svenskbygden 2010–2011",
 	description : "<a href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -607,8 +615,8 @@ settings.corpora.studentbladet = {
 	id : "studentbladet",
 	title : "Studentbladet 2011",
 	description : "<a href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -631,8 +639,8 @@ settings.corpora.jakobstadstidning1999 = {
 	id : "jakobstadstidning1999",
 	title : "Jakobstads tidning 1999",
 	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -654,8 +662,8 @@ settings.corpora.jakobstadstidning2000 = {
 	id : "jakobstadstidning2000",
 	title : "Jakobstads tidning 2000",
 	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -725,8 +733,8 @@ settings.corpora.dn1987 = {
 	id : "dn1987",
 	title : "DN 1987",
 	description : "Dagens Nyheter 1987.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -749,8 +757,8 @@ settings.corpora.gp1994 = {
 	id : "gp1994",
 	title : "GP 1994",
 	description : "Göteborgs-Posten 1994.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -773,8 +781,8 @@ settings.corpora.gp2001 = {
 	id : "gp2001",
 	title : "GP 2001",
 	description : "Göteborgs-Posten 2001.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -797,8 +805,8 @@ settings.corpora.gp2002 = {
 	id : "gp2002",
 	title : "GP 2002",
 	description : "Göteborgs-Posten 2002.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -821,8 +829,8 @@ settings.corpora.gp2003 = {
 	id : "gp2003",
 	title : "GP 2003",
 	description : "Göteborgs-Posten 2003.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -845,8 +853,8 @@ settings.corpora.gp2004 = {
 	id : "gp2004",
 	title : "GP 2004",
 	description : "Göteborgs-Posten 2004.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -869,8 +877,8 @@ settings.corpora.gp2005 = {
 	id : "gp2005",
 	title : "GP 2005",
 	description : "Göteborgs-Posten 2005.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -893,8 +901,8 @@ settings.corpora.gp2006 = {
 	id : "gp2006",
 	title : "GP 2006",
 	description : "Göteborgs-Posten 2006.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -917,8 +925,8 @@ settings.corpora.gp2007 = {
 	id : "gp2007",
 	title : "GP 2007",
 	description : "Göteborgs-Posten 2007.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -941,8 +949,8 @@ settings.corpora.gp2008 = {
 	id : "gp2008",
 	title : "GP 2008",
 	description : "Göteborgs-Posten 2008.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -965,8 +973,8 @@ settings.corpora.gp2009 = {
 	id : "gp2009",
 	title : "GP 2009",
 	description : "Göteborgs-Posten 2009.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -990,8 +998,8 @@ settings.corpora.gp2010 = {
 	id : "gp2010",
 	title : "GP 2010",
 	description : "Göteborgs-Posten 2010.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1015,8 +1023,8 @@ settings.corpora.gp2011 = {
 	id : "gp2011",
 	title : "GP 2011",
 	description : "Göteborgs-Posten 2011.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1040,8 +1048,8 @@ settings.corpora.gp2d = {
 	id : "gp2d",
 	title : "GP – Två dagar",
 	description : "Helgbilaga till Göteborgs-Posten.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1110,8 +1118,8 @@ settings.corpora.press65 = {
 	id : "press65",
 	title : "Press 65",
 	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1136,8 +1144,8 @@ settings.corpora.press76 = {
 	id : "press76",
 	title : "Press 76",
 	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1160,8 +1168,8 @@ settings.corpora.press95 = {
 	id : "press95",
 	title : "Press 95",
 	description : "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1185,8 +1193,8 @@ settings.corpora.press96 = {
 	id : "press96",
 	title : "Press 96",
 	description : "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1210,8 +1218,8 @@ settings.corpora.press97 = {
 	id : "press97",
 	title : "Press 97",
 	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1235,8 +1243,8 @@ settings.corpora.press98 = {
 	id : "press98",
 	title : "Press 98",
 	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2140,8 +2148,8 @@ settings.corpora.strindbergromaner = {
 	id : "strindbergromaner",
 	title : "August Strindbergs samlade verk",
 	description : "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2158,7 +2166,8 @@ settings.corpora.strindbergromaner = {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
 		text_date : {label : "year"},
-		text_sv : {label : "text_sv"}
+		text_sv : {label : "text_sv"},
+		page_n : {label : "page"}
 	}
 };
 
@@ -2166,14 +2175,8 @@ settings.corpora.romi = {
 	id : "romi",
 	title : "Bonniersromaner I (1976–77)",
 	description : "69 romaner utgivna 1976–77.",
-	context : {
-		"1 sentence" : "1 sentence",
-		"1 paragraph" : "1 paragraph"
-	},
-	within : {
-		"sentence" : "sentence",
-		"paragraph" : "paragraph"
-	},
+	context : settings.spContext,
+	within : settings.spWithin,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2196,8 +2199,8 @@ settings.corpora.romii = {
 	id : "romii",
 	title : "Bonniersromaner II (1980–81)",
 	description : "60 romaner från 1980–81.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2220,8 +2223,8 @@ settings.corpora.romg = {
 	id : "romg",
 	title : "Äldre svenska romaner",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2269,8 +2272,8 @@ settings.corpora.sfs = {
 	id : "sfs",
 	title : "Svensk författningssamling 1978–1981",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2293,8 +2296,8 @@ settings.corpora["wikipedia-sv"] = {
 	id : "wikipedia-sv",
 	title : "Svenska Wikipedia (augusti 2012)",
 	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2339,8 +2342,8 @@ settings.corpora.astranova = {
 	id : "astranova",
 	title : "Astra Nova 2008–2010",
 	description : "<a href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2363,8 +2366,8 @@ settings.corpora.kallan = {
 	id : "kallan",
 	title : "Källan 2008–2010",
 	description : "<a href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2387,8 +2390,8 @@ settings.corpora.meddelanden = {
 	id : "meddelanden",
 	title : "Meddelanden från Åbo Akademi 2002–2010",
 	description : "<a href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2411,8 +2414,8 @@ settings.corpora.nyaargus = {
 	id : "nyaargus",
 	title : "Nya Argus 2010–2011",
 	description : "<a href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2435,8 +2438,8 @@ settings.corpora.pargaskungorelser2011 = {
 	id : "pargaskungorelser2011",
 	title : "Pargas Kungörelser 2011",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2459,8 +2462,8 @@ settings.corpora.pargaskungorelser2012 = {
 	id : "pargaskungorelser2012",
 	title : "Pargas Kungörelser 2012",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2505,8 +2508,8 @@ settings.corpora.abounderrattelser2012 = {
 	id : "abounderrattelser2012",
 	title : "Åbo Underrättelser 2012",
 	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2529,8 +2532,8 @@ settings.corpora.at2012 = {
 	id : "at2012",
 	title : "Ålandstidningen 2012",
 	description : "<a href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2552,8 +2555,8 @@ settings.corpora.vasabladet1991 = {
 	id : "vasabladet1991",
 	title : "Vasabladet 1991",
 	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2642,8 +2645,8 @@ settings.corpora.fnb1999 = {
 	id : "fnb1999",
 	title : "FNB 1999",
 	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2666,8 +2669,8 @@ settings.corpora.fnb2000 = {
 	id : "fnb2000",
 	title : "FNB 2000",
 	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2690,8 +2693,8 @@ settings.corpora.hbl1991 = {
 	id : "hbl1991",
 	title : "Hufvudstadsbladet 1991",
 	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2714,8 +2717,8 @@ settings.corpora.hbl1998 = {
 	id : "hbl1998",
 	title : "Hufvudstadsbladet 1998",
 	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2737,8 +2740,8 @@ settings.corpora.hbl1999 = {
 	id : "hbl1999",
 	title : "Hufvudstadsbladet 1999",
 	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
