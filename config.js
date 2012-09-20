@@ -447,8 +447,8 @@ settings.corpora.fsbessaistik = {
 	id : "fsbessaistik",
 	title : "Essäistisk litteratur 1970–2011",
 	description : "Material ur essäistiska verk publicerade under 1970–2011 av Söderströms förlag.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -473,8 +473,8 @@ settings.corpora.fsbsakprosa = {
 	id : "fsbsakprosa",
 	title : "Sakprosa 1970–2011",
 	description : "Material ur facklitterära verk publicerade under 1970–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -1268,8 +1268,8 @@ settings.corpora.strindbergbrev = {
 	id : "strindbergbrev",
 	title : "August Strindbergs brev",
 	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
