@@ -822,7 +822,7 @@ table {
 }
 
 .no_context .corpus_title_span {
-    margin-left : -100px;
+    margin-left : -200px;
     margin-right : 0;
     position : relative;
     left : 60px;

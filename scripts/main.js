@@ -454,8 +454,8 @@ var currentMode;
 			$("#simple_text").autocomplete("close");
 		});
 		
-		onHashChange(null, true);
 		view.initSearchOptions();
+		onHashChange(null, true);
 		$("body").animate({"opacity" : 1}, function() {
 			$(this).css("opacity", "");
 		});
