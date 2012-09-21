@@ -92,7 +92,7 @@
 	"sort_default" : "sortera inom korpus på",
 	"within" : "sök inom",
 	"context" : "kontext",
-	"only_support" : "Endast för utvalda korpusar.",
+	"only_support" : "Endast för korpusar med stöd för utökad kontext.",
 	"no_context_support" : "stödjer ej utökad kontext",
 	"within_sentence" : "mening",
 	"within_paragraph" : "upp till stycke",

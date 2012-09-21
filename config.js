@@ -1661,29 +1661,6 @@ settings.corpora.suc2 = {
 	}
 };
 
-settings.corpora.minisuc = {
-		id : "minisuc",
-		title : "minisuc",
-		description : "",
-		within : settings.defaultWithin,
-		context : {
-			"1 sentence" : "1 sentence"
-		},
-		attributes : {
-			pos : attrs.pos,
-			msd : attrs.msd,
-			lemma : attrs.baseform,
-			lex : attrs.lemgram,
-			saldo : attrs.saldo,
-			dephead : attrs.dephead,
-			deprel : attrs.deprel,
-			ref : attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {},
-		limited_access : true
-	};
 
 settings.corpora.storsuc = {
 	id : "storsuc",
