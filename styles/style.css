@@ -840,6 +840,9 @@ table {
     font-size : 12px;
     display : block;
 }
+.webkit .reading .no_context .corpus_title_warn {
+    margin-bottom : -40px;
+}
 .corpus_title_warn:before {
     content : "(";
 }
