@@ -249,7 +249,7 @@ settings.corporafolders.fisk.articles = {
 
 settings.corporafolders.fisk.governmental = {
 	title : "Myndighetstexter",
-	contents : ["lagtexter", "myndighet"]
+	contents : ["lagtexter", "myndighet", "myndighet2"]
 };
 
 settings.corporafolders.fisk.novels = {
@@ -536,6 +536,31 @@ settings.corpora.myndighet = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.myndighet2 = {
+	id : "myndighet2",
+	title : "Myndighetsprosa 2001–2012",
+	description : "Material utgivet av offentliga myndigheter.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"},
+		text_title : {label : "title"},
 	}
 };
 
