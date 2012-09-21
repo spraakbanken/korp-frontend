@@ -382,7 +382,6 @@ settings.corpora.magmakolumner = {
 	struct_attributes : {
 	    text_author : {label : "author"},
 	    text_title : {label : "title"},
-	    text_year : {label : "year"},
 	    text_date : {label : "date"}
 	}
 };
