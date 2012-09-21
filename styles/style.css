@@ -827,11 +827,18 @@ table {
     position : relative;
     left : 60px;
 }
+.reading .no_context .corpus_title_span {
+    left : 0;   
+}
 .corpus_title_warn {
     margin-right : -100px;
     position : relative;
     left : 10px;
     font-variant: normal;
+}
+.reading .corpus_title_warn {
+    font-size : 12px;
+    display : block;
 }
 .corpus_title_warn:before {
     content : "(";
