@@ -384,6 +384,7 @@ jQuery.fn.customSelect = function() {
 		var selected = $(this).find("option:selected");
 		
 		selected.data("locPrefix", $(this).data("prefix"));
+		selected.data("locSuffix", $(this).data("suffix"));
 		$(this).localize();
 //		if($(this).find("option:not([rel])").length)
 //			selected.text(util.getLocaleString($(this).data("prefix")) + ": " + selected.text());

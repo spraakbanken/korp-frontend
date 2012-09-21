@@ -1,6 +1,5 @@
 var currentMode;
 
-
 (function(){
 	var t = $.now();
 //	if(window.console == null) window.console = {"log" : $.noop};
@@ -10,7 +9,14 @@ var currentMode;
 	
 	$.ajaxSetup({ 
 		dataType: "json",
-		traditional: true
+		traditional: true,
+//		beforeSend : function(req) {
+//			c.log("beforeSend");
+//			if(typeof authenticationProxy != "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
+//				c.log("adding creds", authenticationProxy.loginObj.auth)
+//				req.setRequestHeader('Authorization', 'Basic ' + authenticationProxy.loginObj.auth);
+//			}
+//		}
 	});
 	
 	$.ajaxPrefilter('json', function(options, orig, jqXHR) {
@@ -68,6 +74,7 @@ var currentMode;
 		currentMode = $.deparam.querystring().mode || "default";
 		$("body").addClass("mode-" + currentMode);
 		util.browserWarn();
+		
 		
 		$("#mode_switch").modeSelector({
             change : function() {
@@ -137,8 +144,13 @@ var currentMode;
 		});
 
 		loadCorpora();
+		var creds = $.jStorage.get("creds");
 		
 		$.sm.start();
+		if(creds) {
+			authenticationProxy.loginObj = creds;
+			util.setLogin();
+		}
 		var tab_a_selector = 'ul.ui-tabs-nav a';
 		
 		
@@ -198,9 +210,17 @@ var currentMode;
 			$(this).triggerHandler( 'change' );
 		});
 		
+		$("#log_out").click(function() {
+			$.each(authenticationProxy.loginObj.credentials, function(i, item) {
+				$($.format(".boxdiv[data=%s]", item.toLowerCase())).addClass("disabled");
+			});
+			authenticationProxy.loginObj = {};
+			$.jStorage.deleteKey("creds");
+			$("body").toggleClass("logged_in not_logged_in");
+		});
 		
 		function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
-		    var outCorpora = Array();
+		    var outCorpora = [];
 		    
 		    // Go down the alley to the last subfolder
 		    while(folderOrCorpus.contains(".")) {
@@ -239,12 +259,6 @@ var currentMode;
 				return prevFragment[key] != e.getState(key);
 			}
 			
-//			var hpp = e.getState("hpp", true);
-//			if(hpp)
-//				$(".num_hits").val(hpp);
-//			if(!isInit && hasChanged("hpp")) {
-//			}
-			
 			if(hasChanged("lang")) {
 				var loc_dfd = util.initLocalize();
 				loc_dfd.done(function() {
@@ -258,14 +272,6 @@ var currentMode;
 			if(hasChanged("page") && !hasChanged("search")) {
 				kwicResults.setPage(page);
 			}
-			
-//			var sort = e.getState("sort");
-//			if(isInit && sort) {
-//				kwicResults.$result.find(".sort_select").val(sort);
-//			}
-//			if(!isInit && hasChanged("sort")) {
-//				kwicResults.handlePaginationClick(0, null, true);
-//			}
 			
 			if(isInit) {
 				kwicResults.current_page = page;
@@ -295,8 +301,8 @@ var currentMode;
 				$("#about_content").fadeTo(400,1);
 				$("#about_content").find("a").blur(); // Prevents the focus of the first link in the "dialog"
 			}
-			
-			if(e.getState("display") == "about") {
+			var display = e.getState("display");
+			if(display == "about") {
 				if($("#about_content").is(":empty")) {
 					$("#about_content").load("markup/about.html", function() {
 						$("#revision").text($.revision);
@@ -307,9 +313,55 @@ var currentMode;
 					showAbout();
 				}
 				
-			} else  {
-				$("#about_content").closest(".ui-dialog").fadeTo(400, 0, function() {
-					$("#about_content").dialog("destroy");
+			} else if(display == "login") {
+				$("#login_popup").dialog({
+					height : 220,
+					width : 177,
+					modal : true,
+					resizable : false,
+					create : function() {
+						$(".err_msg", this).hide();
+					},
+					open: function(){
+			            $('.ui-widget-overlay').hide().fadeIn();
+			        },
+			        beforeClose: function(){
+			            $('.ui-widget-overlay').remove();
+			            $("<div />", {
+			                'class':'ui-widget-overlay'
+			            }).css(
+			                {
+			                    height: $("body").outerHeight(),
+			                    width: $("body").outerWidth(),
+			                    zIndex: 1001
+			                }
+			            ).appendTo("body").fadeOut(function(){
+			                $(this).remove();
+			            });
+			            $.bbq.removeState("display");
+						return false;	 
+			        }
+					
+				}).show()
+				.unbind("submit")
+				.submit(function() {
+					var self = this;
+					authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val())
+					.done(function(data) {
+						util.setLogin();
+						$.bbq.removeState("display");
+					}).fail(function() {
+						c.log("login fail");
+						$("#pass", self).val("");
+						$(".err_msg", self).show();
+					});
+					return false;
+				});
+				$("#ui-dialog-title-login_popup").attr("rel", "localize[log_in]");
+			} else { 
+			
+				$(".ui-dialog").fadeTo(400, 0, function() {
+					$(".ui-dialog-content", this).dialog("destroy");
 				});
 			}
 			
@@ -376,6 +428,15 @@ var currentMode;
 				$.bbq.removeState("display");
 			}
 		});
+		$("#login").click(function() {
+			if($.bbq.getState("display") == null) {
+				$.bbq.pushState({display : "login"});
+			} else {
+				$.bbq.removeState("display");
+			}
+			
+			
+		});
 		
 		$("#languages").radioList({
 			change : function() {
@@ -398,6 +459,7 @@ var currentMode;
 		$("body").animate({"opacity" : 1}, function() {
 			$(this).css("opacity", "");
 		});
+		
 //		$("body").css("opacity", 1)
 //		view.updateSearchHistory();
 	}, function() {

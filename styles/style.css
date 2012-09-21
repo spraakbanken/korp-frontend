@@ -500,11 +500,18 @@ input.arg_value {
 	padding-bottom: 1px;
 	margin-bottom: 2px;
 }
+.boxdiv.disabled {
+    color : grey;
+}
+.boxdiv.disabled img {
+    display : none;
+}
+.boxdiv.disabled label {
+}
 
 .hplabel, .boxlabel {
 	padding : 2px 6px 0px 6px;
 }
-
 
 .boxlabel > span {
 	background: #FFFFFF;
@@ -513,6 +520,24 @@ input.arg_value {
 .checkbox {
 	width: 12px;
 	height: 12px;
+    display : inline-block;
+	
+}
+.checkbox.checked {
+    background-image : url("../img/checked.png");
+}
+.checkbox.unchecked {
+    background-image : url("../img/unchecked.png");
+}
+.checkbox.intermediate {
+    background-image : url("../img/intermediate.png");
+}
+.boxdiv.disabled .checkbox{
+    background-image : url("../common_lib/themes/base/images/ui-icons_222222_256x240.png");
+    background-position : -192px -96px;
+    height : 13px;
+    width : 14px;
+    margin-left : -2px;
 }
 .query_footer {
 	background-color: #e1e1e1;
@@ -796,6 +821,26 @@ table {
 	
 }
 
+.no_context .corpus_title_span {
+    margin-left : -100px;
+    margin-right : 0;
+    position : relative;
+    left : 60px;
+}
+.corpus_title_warn {
+    margin-right : -100px;
+    position : relative;
+    left : 10px;
+    font-variant: normal;
+}
+.corpus_title_warn:before {
+    content : "(";
+}
+.corpus_title_warn:after {
+    content : ")";
+}
+
+
 .reading_mode .corpus_title_span {
     margin : 0;
     margin-left : -21px;
@@ -1005,6 +1050,41 @@ a.relStat:hover {
 	margin-top : 8px;
 }
 
+#login {
+    display : none;
+}
+
+#login_popup {
+    display : none;
+}
+#login_popup * {
+    display : block;   
+}
+#login_popup label {
+    margin-top : 5px;   
+}
+#login_popup .err_msg {
+    display : none;
+    font-size : .8em;
+}
+#login_popup input[type=submit] {
+    float : right;
+    margin-top : 2em;
+}
+
+.logged_in #login {
+    display : none;
+}
+
+#log_out {
+    display : none;
+    float : right;
+    margin-right : 8px;
+    margin-top : 8px;
+}
+.logged_in #log_out {
+    display : block;
+}
 /* when selecting a word, not a lemgram, this pops up. */
 .lemgram_select {
 	margin-top : 8px;
@@ -1278,7 +1358,7 @@ a.relStat:hover {
 
 #cog {
 	float : right;
-	margin-top : -2px;
+	margin-top : -1px;
 	cursor : pointer;
 }
 #cog_menu {

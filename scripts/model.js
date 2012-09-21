@@ -31,6 +31,13 @@ var BaseProxy = {
 		}
 	},
 	
+	addAuthorizationHeader : function(req) {
+		if(typeof authenticationProxy != "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
+			c.log("adding creds", authenticationProxy.loginObj.auth)
+			req.setRequestHeader('Authorization', 'Basic ' + authenticationProxy.loginObj.auth);
+		}
+	},	
+	
 	calcProgress : function(e) {
 		var self = this;
 		var newText = e.target.responseText.slice(this.prev.length);
@@ -221,8 +228,9 @@ var KWICProxy = {
 		this.pendingRequest = $.ajax({ 
 			url: settings.cgi_script, 
 			data:data,
-			beforeSend : function(jqxhr, settings) {
+			beforeSend : function(req, settings) {
 				self.prevRequest = settings;
+				self.addAuthorizationHeader(req);
 			},
 			success: function(data, status, jqxhr) {
 				self.queryData = data.querydata; 
@@ -289,12 +297,14 @@ var LemgramProxy = {
 			success : function(data) {
 				c.log("relations success", data);
 				lemgramResults.renderResult(data, word);
-			}, progress : function(data, e) {
+			}, 
+			progress : function(data, e) {
 				var progressObj = self.calcProgress(e);
 				if(progressObj == null) return;
 				
 				callback(progressObj);
-			}
+			},
+			beforeSend : this.addAuthorizationHeader
 		});
 	},
 	
@@ -399,8 +409,9 @@ var StatsProxy = {
 				corpus : settings.corpusListing.stringifySelected(),
 				incremental : $.support.ajaxProgress
 			},
-			beforeSend : function(jqXHR, settings) {
+			beforeSend : function(req, settings) {
 				self.prevRequest = settings;
+				self.addAuthorizationHeader(req);
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				c.log("gettings stats error, status: " +	 textStatus);
@@ -482,14 +493,66 @@ var StatsProxy = {
 	}
 };
 
+var AuthenticationProxy = {
+	initialize : function() {
+		this.loginObj = {};
+	},
+	
+	makeRequest : function(usr, pass) {
+		var self = this;
+		if (window.btoa) {
+			var auth = window.btoa(usr + ":" + pass);
+		} else {
+			throw "window.btoa is undefined";
+		}
+        var dfd = $.Deferred();
+        
+		$.ajax({
+            url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi",
+            type: 'GET',
+            data: {
+            	command : "authenticate",
+            },
+            beforeSend: function (req) {
+            	req.setRequestHeader('Authorization', 'Basic ' + auth);
+            },
+        }).done(function (data, status, xhr) {
+        	c.log("auth done", arguments);
+        	if(!data.corpora) {
+        		dfd.reject();
+        		return;
+        	} 
+        	self.loginObj = {
+				name : usr,
+				credentials : data.corpora,
+				auth : auth
+			};
+        	$.jStorage.set("creds", self.loginObj);
+        	dfd.resolve(data);
+        	
+        }).fail(function (xhr, status, error) {
+        	c.log("auth fail", arguments);
+            /*
+            if (xhr.status == 401) {
+            }
+            */
+        	dfd.reject();
+        });
+		return dfd;
+	}
+}
+
+
 model.SearchProxy = new Class(SearchProxy);
 model.LemgramProxy = new Class(LemgramProxy);
 
 model.StatsProxy = new Class(StatsProxy);
 model.ExamplesProxy = new Class(ExamplesProxy);
+model.AuthenticationProxy = new Class(AuthenticationProxy);
 
 delete BaseProxy;
 delete SearchProxy;
 delete KWICProxy;
 delete LemgramProxy;
 delete StatsProxy;
+delete AuthenticationProxy;

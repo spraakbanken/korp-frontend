@@ -54,13 +54,15 @@ var hp_corpusChooser = {
 			/* First clear all items */
 			hp_this.setStatus($(this),"unchecked");	
 		});
-		var realboxes = $(".boxdiv label .checkbox");
+//		var realboxes = $(".boxdiv label .checkbox");
+		var realboxes = $(".boxdiv");
 		realboxes.each(function() {
-			if($.inArray($(this).attr('id'), item_ids) != -1) {
+			var chk = $(".checkbox", this);
+			if($.inArray(chk.attr('id'), item_ids) != -1 && !$(this).is(".disabled")) {
 				/* Change status of item */
-	 			hp_this.setStatus($(this),"checked");
-	 			hp_this.updateState($(this));
-	 			var ancestors = $(this).parents('.tree');
+	 			hp_this.setStatus(chk,"checked");
+	 			hp_this.updateState(chk);
+	 			var ancestors = chk.parents('.tree');
 	 			ancestors.each(function(){
 		 			hp_this.updateState($(this));
 		 		});
@@ -99,13 +101,13 @@ var hp_corpusChooser = {
  			obj.removeClass("intermediate unchecked checked");
  			if(stat == "checked") {
  				obj.addClass("checked");
- 				obj.attr({src : "img/checked.png"});
+// 				obj.attr({src : "img/checked.png"});
  			} else if(stat == "intermediate") {
  				obj.addClass("intermediate");
- 				obj.attr({src : "img/intermediate.png"});
+// 				obj.attr({src : "img/intermediate.png"});
  			} else {
  				obj.addClass("unchecked");	
- 				obj.attr({src : "img/unchecked.png"});
+// 				obj.attr({src : "img/unchecked.png"});
  			}
  	},
 	countSelected: function () { /* Update header */
@@ -228,6 +230,7 @@ var hp_corpusChooser = {
 				
 				var roots = $(this).parent().siblings();
 				roots.each(function() {
+					if($(this).is(".disabled")) return;
 					var check = $(this).children("label").children('.checkbox');
 					hp_this.setStatus(check,"checked");
 					$(this).find('.checkbox').each(function() {
@@ -286,7 +289,7 @@ var hp_corpusChooser = {
                         hp_this.setStatus($(this), "unchecked");
                     });
                 }
-			 
+			    if($(this).is(".disabled")) return;
 				hp_this.updateState($(this).parent());
 	 			var childMan = $(this).children('.checkbox');
 	 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
@@ -319,7 +322,7 @@ var hp_corpusChooser = {
 					var callback = hp_this.options.infoPopup;
 					var returnValue = "";
 					var inValue = "";
-					var idstring = $(this).find("img").attr("id")
+					var idstring = $(this).find("span").attr("id")
 					if (idstring != "") {
 						inValue = idstring.slice(9);
 					}
@@ -344,7 +347,7 @@ var hp_corpusChooser = {
 					var boxes = $(this).parent().find(".boxdiv");
 					var corpusID = [];
 					boxes.each(function(index) {
-						corpusID.push($(this).find("img").attr('id').slice(9));
+						corpusID.push($(this).find("span").attr('id').slice(9));
 					});
 					indata["corporaID"] = corpusID;
 					var desc = $(this).parent().attr("data").split("___")[1];
@@ -367,12 +370,13 @@ var hp_corpusChooser = {
  			
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function(event) {
+				if($(this).is(".disabled")) return;
 			    if( event.altKey == 1 ) {
                     $(".checkbox").each(function() {
                         hp_this.setStatus($(this), "unchecked");
                     });
                 }
-			 
+			    
 				$(this).disableSelection();
 				hp_this.updateState($(this));
 	 			var childMan = $(this).children('label').children('.checkbox');
@@ -415,19 +419,20 @@ var hp_corpusChooser = {
 						var folderdescription = $(this).children('ul').attr('description');
 						if(folderdescription == "undefined")
 							folderdescription = "";
-						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="margin-left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
+						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="margin-left:' + leftattrib + 'px;' + cssattrib + '" class="tree collapsed"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 						
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
 					} else {
+						var disable = settings.corpora[$(this).attr('id')].limited_access != null;
 						if(levelindent > 0) {
 							// Indragna och gömda per default
-							hasDirectCorporaChildren = true
-							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png" /> ' + theHTML + ' </label></div>';
+							hasDirectCorporaChildren = true;
+							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox checked" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
-								hasDirectCorporaChildren = true
-								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><img id="' + item_id + '" class="checkbox checked" src="img/checked.png"/> ' + theHTML + ' </label></div>';
+								hasDirectCorporaChildren = true;
+								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox checked" /> ' + theHTML + ' </label></div>';
 							}
 						}
 					}

@@ -237,8 +237,8 @@ function loadCorpora() {
 			if(corpora.length) {
 				extendedSearch.refreshTokens();
 				view.updateReduceSelect();
-				view.updateWithinSelect();
-				view.updateContextSelect();
+				view.updateContextSelect("within");
+				view.updateContextSelect("context");
 			}
 			var enableSearch = !!corpora.length;
 			view.enableSearch(enableSearch);
@@ -264,9 +264,14 @@ function loadCorpora() {
 	    	
 	    	var supportsContext = _.keys(corpusObj.context).length > 1;
 	    	if(supportsContext)
-	    		output += $("<div>").localeKey("corpselector_supports").html(); 
+	    		output += $("<div>").localeKey("corpselector_supports").html();
+	    	
+	    	if(corpusObj.limited_access)
+	    		output += $("<div>").localeKey("corpselector_limited").html();
 	    	
 	    	return output;
+	    	
+	    	
 	    	
 	    }, 
 	    infoPopupFolder: function(indata) {
@@ -424,4 +429,35 @@ util.changeColor = function(rgbstr, incr) {
         rgb[i] = Math.max(0, Math.min(rgb[i] + incr, 255));
     }
     return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+};
+
+//util.login = function(usr, pass) {
+//	c.log("submit ", usr, pass);
+//	var self = this;
+//	authenticationProxy.makeRequest(usr, pass)
+//	.done(function(data) {
+//		c.log("login success");
+//		$("body").toggleClass("logged_in not_logged_in");
+//		$.each(data.corpora, function(i, item) {
+//			$($.format(".boxdiv[data=%s]", item.toLowerCase())).removeClass("disabled");
+//		});
+//		$("#log_out .usrname").text(usr);
+//		$(".err_msg", self).hide();
+//		$.bbq.removeState("display");
+//		
+//	}).fail(function() {
+//		c.log("login fail");
+//		$("#pass", self).val("");
+//		$(".err_msg", self).show();
+//	});
+//};
+
+util.setLogin = function() {
+	c.log("login success");
+	$("body").toggleClass("logged_in not_logged_in");
+	$.each(authenticationProxy.loginObj.credentials, function(i, item) {
+		$($.format(".boxdiv[data=%s]", item.toLowerCase())).removeClass("disabled");
+	});
+	$("#log_out .usrname").text(authenticationProxy.loginObj.name);
+	$(".err_msg", self).hide();
 };

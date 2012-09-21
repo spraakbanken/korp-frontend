@@ -1661,6 +1661,30 @@ settings.corpora.suc2 = {
 	}
 };
 
+settings.corpora.minisuc = {
+		id : "minisuc",
+		title : "minisuc",
+		description : "",
+		within : settings.defaultWithin,
+		context : {
+			"1 sentence" : "1 sentence"
+		},
+		attributes : {
+			pos : attrs.pos,
+			msd : attrs.msd,
+			lemma : attrs.baseform,
+			lex : attrs.lemgram,
+			saldo : attrs.saldo,
+			dephead : attrs.dephead,
+			deprel : attrs.deprel,
+			ref : attrs.ref,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix
+		},
+		struct_attributes : {},
+		limited_access : true
+	};
+
 settings.corpora.storsuc = {
 	id : "storsuc",
 	title : "SUC-romaner",
@@ -2809,7 +2833,8 @@ settings.corpora.talbanken = {
  * MISC
  */
 
-settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
+//settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
+settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi";
 //settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_word2.cgi";
 //settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_incremental.cgi";
 
@@ -3015,6 +3040,13 @@ var CorpusListing = new Class({
 			return _.keys(corpus[attr]);
 		});
 		return _.intersection.apply(null, struct);
+	},
+	
+	getAttrUnion : function(attr) {
+		var struct = _.map(this.selected, function(corpus) {
+			return _.keys(corpus[attr]);
+		}); 
+		return _.union.apply(null, struct);
 	}
 	
 });

@@ -62,6 +62,7 @@
             <assign location="kwicProxy"      expr="new model.KWICProxy()"/>
             <assign location="statsProxy"     expr="new model.StatsProxy()"/>
             <assign location="lemgramProxy"   expr="new model.LemgramProxy()"/>
+            <assign location="authenticationProxy"   expr="new model.AuthenticationProxy()"/>
             
             <assign location="advancedSearch" expr="new view.AdvancedSearch('#korp-advanced')"/>
             <assign location="extendedSearch" expr="new view.ExtendedSearch('#korp-extended')"/>

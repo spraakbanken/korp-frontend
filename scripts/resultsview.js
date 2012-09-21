@@ -252,11 +252,29 @@ var KWICResults = {
 		    	var corpus = settings.corpora[sentence.corpus.toLowerCase()];
 		    	if(currentMode == "parallel") {
 		    		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
-//		    		var parent = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()].parent; 
-//		    		corpus = settings.parallel_corpora[parent];
 		    	}
-		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s</span></td><td /></tr>", 
-		    			corpus.title )).appendTo(table);
+//		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s <span class='corpus_title_warn' rel='%s'></span></span></td><td /></tr>", 
+//		    			[corpus.title, supportsContext ? "" : "localize[no_context_support]"] )).appendTo(table);
+		    	
+		    	
+		    	var title = $("<span class='corpus_title_span'>").text(corpus.title + " ");
+		    	
+		    	var td = $("<td class='corpus_title' colspan='1'>").append(title);
+		    	var row = $("<tr>").append("<td>")
+		    	.append(td);
+		    	
+		    	if(_.keys(corpus.context).length == 1) {
+		    		td.addClass("no_context");
+		    		title.append($("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>"));
+//		    		title.css({position : "relative", left : 60});
+		    	} else {
+		    		
+		    	}
+		    	row.appendTo(table).localize();
+		    	
+		    	
+//		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s</span></td><td /></tr>", 
+//		    			[corpus.title] )).appendTo(table);
 		    }
 		    
 		    prevCorpus = sentence.corpus;

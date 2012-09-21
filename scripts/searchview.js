@@ -58,8 +58,8 @@ view.enableSearch = function(bool) {
 view.initSearchOptions = function() {
 	var selects = $("#search_options > div:first select").customSelect();
 	view.updateReduceSelect();
-	view.updateWithinSelect();
-	view.updateContextSelect();
+	view.updateContextSelect("within");
+	view.updateContextSelect("context");
 	$("#search_options select").each(function() {
 		var state = $.bbq.getState($(this).data("history"));
 		if(!!state) {
@@ -89,28 +89,35 @@ view.initSearchOptions = function() {
 	
 };
 
-view.updateWithinSelect = function() {
-	var current = settings.corpusListing.getAttrIntersection("within");
-	$(".within_select option").each(function() {
-		if($.inArray($(this).attr("value"), current) != -1) 
-			$(this).attr("disabled", null);
-		else {
-			$(this).attr("disabled", "disabled").parent().val("sentence").change();
-		}
+view.updateContextSelect = function(withinOrContext) {
+	var intersect = settings.corpusListing.getAttrIntersection(withinOrContext);
+	var union = settings.corpusListing.getAttrUnion(withinOrContext);
+	var opts = $("." + withinOrContext + "_select option");
+	opts.data('locSuffix', null).attr("disabled", null).removeClass("limited");
+//	if(union.length == 2 && intersect.length == 2) {
+		// all support enhanced context
+	if(union.length > intersect.length) {
+		// partial
+		opts.each(function() {
+			if($.inArray($(this).attr("value"), intersect) == -1) {
+				$(this).addClass("limited").data("locSuffix", "asterix")
+				
+			}
+			
+		});
 		
-	});
-};
-view.updateContextSelect = function() {
-	var current = settings.corpusListing.getAttrIntersection("context");
-	c.log("context ", current);
-	$(".context_select option").each(function() {
-		if($.inArray($(this).attr("value"), current) != -1) 
-			$(this).attr("disabled", null);
-		else {
-			$(this).attr("disabled", "disabled").parent().val("sentence").change();
-		}
 		
-	});
+	} else if(union.length == 1 && intersect.length == 1) {
+		// none support
+		
+		opts.each(function() {
+			if($.inArray($(this).attr("value"), intersect) != -1) 
+				$(this).attr("disabled", null);
+			else 
+				$(this).attr("disabled", "disabled").parent().val("sentence").change();
+		});
+	}
+	$("." + withinOrContext + "_select").localize();
 };
 
 view.updateReduceSelect = function() {
