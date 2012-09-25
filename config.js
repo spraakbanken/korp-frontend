@@ -39,10 +39,11 @@ settings.defaultOptions = {
 	"is" : "is",
 	"is_not" : "is_not",
 	"starts_with" : "starts_with",
+	"contains" : "contains",
 	"ends_with" : "ends_with",
 	"matches" : "matches"
 };
-settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "ends_with", "matches"]);
+settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "contains", "ends_with", "matches"]);
 
 var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes

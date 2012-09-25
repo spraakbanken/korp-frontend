@@ -815,7 +815,6 @@ var ExtendedToken = {
 	        }
 	    });
 	    var minAnno = Math.min.apply(null, annoVals);
-	    c.log("minAnno", minAnno);
 	    
 	    var inner_query = [];
 	    $.sortedEach(args, function(type, valueArray) {
@@ -832,6 +831,7 @@ var ExtendedToken = {
 	    						"is" : [operator, "", value, ""],
 	    						"is_not" : [not_operator, "", value, ""],
 	    						"starts_with" : ["=", "", value, ".*"],
+	    						"contains" : ["=", ".*", value, ".*"],
 	    						"ends_with" : ["=", ".*", value, ""],
 	    						"matches" : ["=", "", value, ""]
 	    				}[op];
@@ -843,6 +843,7 @@ var ExtendedToken = {
 	    			if(currentMode == "law") {
 	    				c.log('currentRank', getAnnotationRank(type));
 	    				if(getAnnotationRank(type) > minAnno) {
+	    					// TODO: continue here.
 //	    					return $.format("(%s)", [stringify(value), stringify("")].join(" | "));
 	    				}
 	    			} 
