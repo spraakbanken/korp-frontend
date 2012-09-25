@@ -197,10 +197,6 @@ attrs.ref = {
 attrs.link = {
 	label : "sentence_link"
 };
-attrs.text = {
-	label : "text"
-};
-
 sattrs.date = {
 	label : "date",
 	displayType : "date"

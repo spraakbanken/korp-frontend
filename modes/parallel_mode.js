@@ -322,8 +322,7 @@ settings.parallel_corpora.europarl = {
 			saldo: attrs.saldo, 
 			dephead: attrs.dephead, 
 			deprel: attrs.deprel, 
-			ref: attrs.ref, 
-			text: attrs.text
+			ref: attrs.ref
 		},
 		struct_attributes : {
 		}
@@ -366,8 +365,7 @@ settings.parallel_corpora.salt = {
 			saldo: attrs.saldo, 
 			dephead: attrs.dephead, 
 			deprel: attrs.deprel, 
-			ref: attrs.ref, 
-			text: attrs.text
+			ref: attrs.ref
 		},
 		struct_attributes : {
 			text_author : {label : "author"},
