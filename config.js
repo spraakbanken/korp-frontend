@@ -1112,7 +1112,7 @@ settings.corpora.ordat = {
 	},
 	struct_attributes : {
 		text_year : {label : "text_year"},
-		text_volume : {label : "text_year"}
+		text_volume : {label : "text_volume"}
 	}
 };
 
@@ -1723,7 +1723,6 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
 		dephead: attrs.dephead, 
 		deprel: attrs.deprel, 
 		ref: attrs.ref, 
-		text: attrs.text
 	},
 	struct_attributes : {
 	}
@@ -1744,7 +1743,6 @@ settings.corpora.europarlda_sv = {
 		dephead: attrs.dephead, 
 		deprel: attrs.deprel, 
 		ref: attrs.ref, 
-		text: attrs.text
 	},
 	struct_attributes : {
 //		text_origlang : {
