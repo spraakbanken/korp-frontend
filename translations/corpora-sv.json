@@ -208,5 +208,9 @@
     "origlang" : "orginalspråk",
     "page_n" : "sidonummer",
     
-    "paragraph_marginal" : "marginalnoter"
+    "paragraph_marginal" : "marginalnoter",
+
+    "fsv:baseform" : "fsv:grundform",
+    "fsv:lemgram" : "fsv:lemgram",
+    "fsv:variants" : "fsv:varianter"
 }

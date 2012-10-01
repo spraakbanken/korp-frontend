@@ -206,5 +206,10 @@
     
     "origlang" : "original language",
     "page_n" : "page number",
-    "paragraph_marginal" : "margin notes"
+    "paragraph_marginal" : "margin notes",
+
+
+    "fsv:baseform" : "fsv:baseform",
+    "fsv:lemgram" : "fsv:lemgram",
+    "fsv:variants" : "fsv:variants"
 }

@@ -21,7 +21,20 @@ settings.corpora.fsvlagrummetnew = {
 	description : "Giftermåls balk, Kristoffers Landslag, Konungastyrelsen, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {},
+	attributes : {
+		fsvbaseform :{
+			type : "set",
+			label : "fsv:baseform"
+			},
+		fsvlemgram:{
+			type : "set",
+			label : "fsv:lemgram"
+			},
+		fsvvariants:{
+			type : "set",
+			label : "fsv:variants"
+			}
+		},
 	struct_attributes : {
 		text_date : {
 			label : "date"
