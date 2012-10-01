@@ -43,6 +43,25 @@ settings.defaultOptions = {
 	"ends_with" : "ends_with",
 	"matches" : "matches"
 };
+
+settings.getTransformFunc = function(type, value) {
+	c.log("getTransformFunc", type, value);
+	
+	if(type == "word" && !value) return function() {return "";};
+	
+	if(type == "text_date") {
+		
+		function stringifyDate(year) {
+			return year.toString() + "0000000000"; 
+		}
+		
+		return function() {
+			return $.format("(int(_.text_datefrom) >= %s & int(_.text_dateto) <= %s)", _.map(value, stringifyDate));
+		};
+	
+	}
+};
+
 settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "contains", "ends_with", "matches"]);
 
 var attrs = {};  // positional attributes
@@ -2807,8 +2826,6 @@ settings.corpora.talbanken = {
 
 settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 //settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi";
-//settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_word2.cgi";
-//settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_incremental.cgi";
 
 // label values here represent translation keys.
 settings.arg_groups = {
@@ -2947,20 +2964,20 @@ var CorpusListing = new Class({
 	},
 	// takes an array of mapping objs and returns their intersection
 	_mapping_intersection : function(mappingArray) {
-		return $.reduce(mappingArray, function(a,b) {
+		return _.reduce(mappingArray, function(a,b) {
 			var output = {};
 			$.each(a, function(key, value) {
 				if(b[key] != null)
 					output[key] = value;
 			});
 			return output;
-		});
+		}, {});
 	},
 
 	_mapping_union : function(mappingArray) {
-		return $.reduce(mappingArray, function(a, b) {
+		return _.reduce(mappingArray, function(a, b) {
 			return $.extend({}, a, b);
-		}) || {};
+		}, {});
 	},
 
 	getCurrentAttributes : function() {
