@@ -211,5 +211,31 @@
 
     "fsv:baseform" : "fsv:baseform",
     "fsv:lemgram" : "fsv:lemgram",
-    "fsv:variants" : "fsv:variants"
+    "fsv:variants" : "fsv:variants",
+
+
+     "sst_koncept" : "Stockholms stads tänkebok - Koncept",
+     "sst_notariat" : "Stockholms stads tänkebok - Notariat",
+     "sst_renskr" : "Stockholms stads tänkebok - Renskr",
+     "lassakyrka" : "Författningssamling 1800 Låssa kyrkas arkiv",
+     "ostgotalagen": "Östgötalagen",
+     "regeringsformen": "Regeringsformen 1809",
+     "forord1734" : "1734 års lag Förord",
+     "domareregler1734" : "1734 års lag Domareregler",
+     "Lagtext1734" : "1734 års lag Lagtext",
+     "forarbeten1734v1-3" : "1734 års lag Förarbeten vol 1-3",
+     "forarbeten1734v4" : "1734 års lag Förarbeten vol 4",
+     "forarbeten1734v5" : "1734 års lag Förarbeten vol 5",
+     "forarbeten1734v6" : "1734 års lag Förarbeten vol 6",
+     "forarbeten1734v7" : "1734 års lag Förarbeten vol 7",
+     "forarbeten1734v8" : "1734 års lag Förarbeten vol 8",
+     "missgierningsbalk": "Missgierningsbalk",
+     "giftermalsbalk": "Giftermåls balk (1734)",
+     "krLandrade" :"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
+     "krLdirekt" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
+     "krLnyskrivna" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
+     "konungastyrelsen": "Konungastyrelsen, Bureus utgåva",
+     "meL": "Magnus Erikssons Landslag",
+     "meSt": "Magnus Erikssons Stadslag, exklusiva stadslagsflockar"
+			
 }

@@ -40,8 +40,19 @@ settings.corpora.fsvlagrummetnew = {
 			label : "date"
 		},
 		text_title : {
-			label : "title"
-		}
+			label : "title",
+			displayType : "select",
+			dataset : {
+				"Giftermåls balk \\(1734\\)": "giftermalsbalk",
+				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL":"krLandrade",
+			        "Kristoffers Landslag, flockar direkt hämtade från MEL" : "krLdirekt",
+				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL":"krLnyskrivna",
+				"Konungastyrelsen, Bureus utgåva":"konungastyrelsen",
+				"Magnus Erikssons Landslag":"meL",
+				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar" : "meSt" 
+				}
+	
+			}	
 	}
 };
 settings.corpora["lag1734"] = {
@@ -56,7 +67,20 @@ settings.corpora["lag1734"] = {
 			label : "date"
 		},
 		text_title : {
-			label : "title"
+			label : "title",
+			displayType : "select",
+			dataset : {
+				"1734 års lag Förord" : "forord1734",
+				"1734 års lag Domareregler" : "domareregler1734",
+				"1734 års lag Lagtext" : "Lagtext1734",
+				"1734 års lag Förarbeten vol 1-3" : "forarbeten1734v1-3",
+				"1734 års lag Förarbeten vol 4" : "forarbeten1734v4",
+				"1734 års lag Förarbeten vol 5" : "forarbeten1734v5",
+				"1734 års lag Förarbeten vol 6" : "forarbeten1734v6",
+				"1734 års lag Förarbeten vol 7" : "forarbeten1734v7",
+				"1734 års lag Förarbeten vol 8" : "forarbeten1734v8",
+				"Missgierningsbalk": "missgierningsbalk"
+			}
 		}
 	}
 };
@@ -69,7 +93,13 @@ settings.corpora["lag1800"] = {
 	attributes : {},
 	struct_attributes : {
 		text_title : {
-			label : "title"
+			label : "title",
+			displayType : "select",
+			dataset : {
+				"Författningssamling 1800 Låssa kyrkas arkiv" : "lassakyrka",
+				"Östgötalagen": "ostgotalagen",
+				"Regeringsformen 1809 ": "regeringsformen"
+			}
 		},
 		paragraph_date : {
 			label : "date"
@@ -94,7 +124,13 @@ settings.corpora["tankebok"] = {
 			label : "date"
 		},
 		text_title : {
-			label : "title"
+			label : "title",
+			displayType : "select",
+			dataset : {
+				"Stockholms stads tänkebok - Koncept " : "sst_koncept",
+				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
+				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
+			}
 		},
 		paragraph_marginal : {
 			label : "paragraph_marginal"
