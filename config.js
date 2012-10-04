@@ -2309,7 +2309,7 @@ settings.corpora.rom99 = {
 
 settings.corpora.sfs = {
 	id : "sfs",
-	title : "Svensk författningssamling 1978–1981",
+	title : "Svensk författningssamling",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -2326,8 +2326,8 @@ settings.corpora.sfs = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_ref : {label : "referensnummer"},
-		text_date : {label : "year"}
+		text_title : {label : "title"},
+		text_date : {label : "date"}
 	}
 };
 

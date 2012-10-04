@@ -13,7 +13,7 @@ settings.corpora = {};
 settings.corporafolders = {};
 settings.corporafolders.magazines = {
 	title : "Moderna lagar och rättsfall",
-	contents : ["moderntsfs", "moderntdv"]
+	contents : ["sfs", "moderntdv"]
 };
 settings.corpora.fsvlagrummetnew = {
 	id : "fsvlagrummetnew",
@@ -138,8 +138,8 @@ settings.corpora["tankebok"] = {
 	}
 };
 
-settings.corpora["moderntsfs"] = {
-	id : "moderntsfs",
+settings.corpora["sfs"] = {
+	id : "sfs",
 	title : "Svensk författningssamling",
 	description : "",
 	within : settings.defaultWithin,
@@ -163,9 +163,6 @@ settings.corpora["moderntsfs"] = {
 		text_title : {
 			label : "title"
 		}
-//			text_datefrom : {
-//				
-//			}
 	}
 };
 settings.corpora["moderntdv"] = {
