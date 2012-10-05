@@ -101,7 +101,7 @@ settings.corpora["lag1800"] = {
 				"Regeringsformen 1809 ": "regeringsformen"
 			}
 		},
-		paragraph_date : {
+		text_date : {
 			label : "date"
 			
 		},
