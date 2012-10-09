@@ -15,6 +15,7 @@ settings.corporafolders.magazines = {
 	title : "Moderna lagar och rättsfall",
 	contents : ["sfs", "moderntdv"]
 };
+
 settings.corpora.fsvlagrummetnew = {
 	id : "fsvlagrummetnew",
 	title : "Fornsvenska textbankens lagtexter",
@@ -36,9 +37,7 @@ settings.corpora.fsvlagrummetnew = {
 			}
 		},
 	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
+		text_date : {label : "date"},
 		text_title : {
 			label : "title",
 			displayType : "select",
@@ -54,6 +53,7 @@ settings.corpora.fsvlagrummetnew = {
 			}	
 	}
 };
+
 settings.corpora["lag1734"] = {
 	id : "lag1734",
 	title : "1734 års lag",
@@ -62,9 +62,7 @@ settings.corpora["lag1734"] = {
 	context : settings.defaultContext,
 	attributes : {},
 	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
+		text_date : {label : "date"},
 		text_title : {
 			label : "title",
 			displayType : "select",
@@ -83,6 +81,7 @@ settings.corpora["lag1734"] = {
 		}
 	}
 };
+
 settings.corpora["lag1800"] = {
 	id : "lag1800",
 	title : "Lagar från 1800-talet",
@@ -100,16 +99,10 @@ settings.corpora["lag1800"] = {
 				"Regeringsformen 1809 ": "regeringsformen"
 			}
 		},
-		text_date : {
-			label : "date"
-			
-		},
-		paragraph_marginal : {
-			label : "paragraph_marginal"
-		}
+		text_date : {label : "date"},
+		paragraph_marginal : {label : "paragraph_marginal"}
 	}
 };
-
 
 settings.corpora["tankebok"] = {
 	id : "tankebok",
@@ -119,9 +112,7 @@ settings.corpora["tankebok"] = {
 	context : settings.defaultContext,
 	attributes : {},
 	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
+		text_date : {label : "date"},
 		text_title : {
 			label : "title",
 			displayType : "select",
@@ -131,9 +122,7 @@ settings.corpora["tankebok"] = {
 				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
 			}
 		},
-		paragraph_marginal : {
-			label : "paragraph_marginal"
-		}
+		paragraph_marginal : {label : "paragraph_marginal"}
 	}
 };
 
@@ -156,12 +145,8 @@ settings.corpora["sfs"] = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
-		text_title : {
-			label : "title"
-		}
+		text_date : {label : "date"},
+		text_title : {label : "title"}
 	}
 };
 settings.corpora["moderntdv"] = {
@@ -183,18 +168,13 @@ settings.corpora["moderntdv"] = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_date : {
-			label : "date"
-		},
-		text_title : {
-			label : "title"
-		}
+		text_date : {label : "date"},
+		text_title : {label : "title"}
 	}
 };
 
 
 settings.corpusListing = new CorpusListing(settings.corpora);
-
 
 function getAnnotationRank(anno) {
 	return {
