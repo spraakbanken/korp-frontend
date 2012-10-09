@@ -18,7 +18,7 @@ settings.corporafolders.magazines = {
 settings.corpora.fsvlagrummetnew = {
 	id : "fsvlagrummetnew",
 	title : "Fornsvenska textbankens lagtexter",
-	description : "Giftermåls balk, Kristoffers Landslag, Konungastyrelsen, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
+	description : "Giftermåls balk, Kristoffers Landslag, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {
@@ -47,7 +47,6 @@ settings.corpora.fsvlagrummetnew = {
 				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL":"krLandrade",
 			        "Kristoffers Landslag, flockar direkt hämtade från MEL" : "krLdirekt",
 				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL":"krLnyskrivna",
-				"Konungastyrelsen, Bureus utgåva":"konungastyrelsen",
 				"Magnus Erikssons Landslag":"meL",
 				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar" : "meSt" 
 				}
