@@ -6,7 +6,7 @@
 		content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text." />
 		<link rel="stylesheet" href="lib/slickgrid/slick.grid.css" type="text/css" media="screen" charset="utf-8" />
 		<link type="text/css" href="common_lib/themes/base/jquery.ui.all.css" rel="stylesheet" />
-<!-- 		<link type="text/css" href="lib/themes/Aristo/Aristo.css" rel="stylesheet" /> -->
+<!-- 		<link type="text/css" href="common_lib/themes/Aristo/Aristo.css" rel="stylesheet" /> -->
 		<link type="text/css" href="styles/ui_mods.css" rel="stylesheet" />
 
 		<link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css" />
@@ -36,6 +36,7 @@
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.dialog.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.tabs.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.ui.button.js"></script>
+		<script type="text/javascript" src="common_lib/ui/jquery.ui.slider.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.effects.core.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.effects.highlight.js"></script>
 		<script type="text/javascript" src="common_lib/ui/jquery.effects.slide.js"></script>
@@ -87,6 +88,7 @@
 		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
 		<script type="text/javascript" src="lib/flot/jquery.flot.min.js"></script>
+		<script type="text/javascript" src="lib/flot/jquery.flot.stack.js"></script>
 		<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="lib/flot/excanvas.min.js"></script><![endif]-->
 		<script type="text/javascript" src="lib/jstorage.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
@@ -112,6 +114,7 @@
 	  	<script>
 	  		$("body").css("opacity", 0);
 	  	</script>
+	  	<div id="main">
   		<div id="header">
   			<div id="top_bar">
   				<div id="mode_switch"></div>
@@ -137,9 +140,51 @@
   			<div id="header_left">
  				<a href=""><img src="img/korplogo.png" /></a>
  				<div id="labs_logo"></div>
-	 			<div id="corpusbox"></div>
-  			</div>
-  			<select id="search_history"></select>
+				
+ 				
+				<div id="corpusbox">
+					<div class="hp_topframe buttonlink ui-state-default ui-corner-all">
+						<div>
+							<span id="hp_corpora_title1"></span>
+							<span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span>
+							<span id="hp_corpora_title3" style="color: #888888"></span>
+						</div>
+						<div style="float: right; width: 16px">
+							<span style="text-align: right; left: auto" class="ui-icon ui-icon-triangle-2-n-s"></span>
+						</div>
+					</div>
+				</div>
+				<div class="popupchecks ui-corner-bottom">
+					<div class='header'>
+						<div id="time">
+							<div id="time_graph"></div>
+							<div id="rest_time_graph"></div>
+<!-- 							<div id="time_slider"></div> -->
+<!-- 							<div id="time_inputs"> -->
+<!-- 								<span id="time_from"></span> - <span id="time_to"></span> -->
+<!-- 							</div> -->
+						</div>
+						<div class="buttons">
+							<a href="javascript:" class="buttonlink ui-state-default ui-corner-all selectall">
+								<span class="ui-icon ui-icon-check"></span>
+								<span rel="localize[corpselector_buttonselectall]"></span>
+							</a> 
+							<a href="javascript:" class="selectnone buttonlink ui-state-default ui-corner-all">
+								<span class="ui-icon ui-icon-closethick"></span>
+								<span rel="localize[corpselector_buttonselectnone]"></span>
+							</a>
+								
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+					
+					<div class="checks"></div>
+	
+					<br/><p style="font-size:85%" id="sentenceCounter"></p></div><div class="corpusInfoSpace ui-corner-all"><div class=""><p style="padding: 10px; margin: 0px"></p></div>
+				</div>
+			</div>
+			
+			<select id="search_history"></select>
   			<div style='clear : both;'></div>
   		</div>
 		
@@ -166,18 +211,17 @@
 						<option value="left" rel="localize[left_context]">Vänsterkontext</option>
 						<option value="right" rel="localize[right_context]">Högerkontext</option>
 					</select>
-					<select class="within_select" data-history="within" data-prefix="within">
-						<option value="sentence" rel="localize[within_sentence]">Mening</option>
-						<option value="paragraph" rel="localize[within_paragraph]" data-loc-title="only_support">Stycke</option>
-					</select>
-					<select class="context_select" data-history="context" data-prefix="context">
-						<option value="1 sentence" rel="localize[within_sentence]">Mening</option>
-						<option value="1 paragraph" rel="localize[within_paragraph]" data-loc-title="only_support">Stycke</option>
-					</select>
+					
+<!-- 					<select class="context_select" data-history="context" data-prefix="context"> -->
+<!-- 						<option value="1 sentence" rel="localize[within_sentence]">Mening</option> -->
+<!-- 						<option value="1 paragraph" rel="localize[within_paragraph]" data-loc-title="only_support">Stycke</option> -->
+<!-- 					</select> -->
 				</div>
 				<div>
 					<span rel=localize[statistics]>Statistik</span>:
 					<span id="reduceSelect"></span>
+					<!--<input id="statscase" type="checkbox">
+					 <label for="statscase" rel="localize[case_insensitive]"></label> -->
 				</div>
 	   		</div>
 <!-- 			<div id="welcome" class="ui-widget ui-widget-content ui-corner-all"> -->
@@ -214,7 +258,9 @@
 								<div class="table_scrollarea">
 									<table class="results_table kwic" cellspacing="0"></table>
 									<table class="results_table reading" cellspacing="0"></table>
+<!-- 									<table class="results_table cached_kwic" cellspacing="0"></table> -->
 								</div>
+								
 							</div>
 							<div id="results-stats">
 								<div class="progress">
@@ -280,11 +326,11 @@
 			<li><a data-item="lbound_item" rel="localize[sent_start]">Meningsbörjan</a></li>
 			<li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
 		</ul>
-			
+	</div>
 	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
 		{{each $item.corpusAttributes}}
 		
-			{{if $value.displayType != "hidden"}}
+			{{if $value.displayType != "hidden" && $value.displayType != "date_interval"}}
 			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
 				
     			{{if $data[$index] == "|" || $data[$index] == ""}}
@@ -301,7 +347,8 @@
 						<span id="sidbar_info" class="ui-icon ui-icon-info"></span>
 					</a>	
 					
-    			{{else $value.type == "set" && $.inArray($index, ["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem"]) != -1}}
+    			{{else $value.type == "set" && $.inArray($index, 
+					["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem", "fsvbaseform", "fsvlemgram", "fsvvariants"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
     				<ul data-type="${$value.label}">
@@ -347,7 +394,7 @@
 	</script>
 	
 	<script id="wordTmpl" type="text/x-jquery-tmpl">
-		<span class="word${typeof structs != 'undefined' && structs.open ? ' sent_start' : ''}">${word}</span><span class="word_gap"> </span>
+		<span class="word${((typeof structs != 'undefined') && (' sent_' + _.keys(structs)[0])) || ''}">${word}</span><span class="word_gap"> </span>
 	</script>
 	
 <!-- 			<p class="explanation"></p> -->
@@ -393,6 +440,6 @@
 		
 	</script>
 
-
+	
 	</body>
  </html>

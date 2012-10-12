@@ -75,8 +75,14 @@ util.lemgramToString = function(lemgram, appendIndex) {
 		var type = match[1].slice(0, 2);
 	}
 	else { // missing from saldo, and has the form word_NN instead.
-		var concept = lemgram.split("_")[0];
-		var type = lemgram.split("_")[1].toLowerCase();
+		var concept = "";
+		var type = "";
+		try {
+			 concept = lemgram.split("_")[0];
+			 type = lemgram.split("_")[1].toLowerCase();
+		} catch(e) {
+			c.log("lemgramToString broken for ", lemgram);
+		}
 	}
 	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", 
 			[concept, infixIndex, type, util.getLocaleString(type)]);
@@ -169,12 +175,6 @@ function loadCorporaFolderRecursive(first_level, folder) {
 			outHTML += '<li id="' + val + '">' + settings.corpora[val].title + '</li>';
 		}
 	}
-//	if(settings.parallel_corpora) {
-//		$.each(settings.parallel_corpora, function(corpora, struct) {
-//			var corp = struct[struct["default"]];
-//			outHTML += $("<li />", {id: corp.id}).text(corp.title).outerHTML();
-//		});
-//	}
 	outHTML += "</ul>";
 	return outHTML;
 }
@@ -230,19 +230,6 @@ function loadCorpora() {
 	corpusChooserInstance = $('#corpusbox')
 	.corpusChooser({
 		template: outStr, 
-		change : function(corpora) {
-			c.log("corpus changed");
-			settings.corpusListing.select(corpora);
-			$.bbq.pushState({"corpus" : corpora.join(",")});
-			if(corpora.length) {
-				extendedSearch.refreshTokens();
-				view.updateReduceSelect();
-				view.updateContextSelect("within");
-				view.updateContextSelect("context");
-			}
-			var enableSearch = !!corpora.length;
-			view.enableSearch(enableSearch);
-	    }, 
 	    infoPopup: function(corpusID) {
 	    	var corpusObj = settings.corpora[corpusID];
 	    	var maybeInfo = "";
@@ -303,6 +290,20 @@ function loadCorpora() {
 	    	"</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + 
 	    	"</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
 	    }
+    }).bind("corpuschooserchange", function(evt, corpora) {
+    	c.log("corpus changed", corpora);
+		settings.corpusListing.select(corpora);
+		if(_.keys(corpora).length < _.keys(settings.corpora).length) {
+			$.bbq.pushState({"corpus" : corpora.join(",")});
+		}
+		if(corpora.length) {
+			extendedSearch.refreshTokens();
+			view.updateReduceSelect();
+			view.updateContextSelect("within");
+			view.updateContextSelect("context");
+		}
+		var enableSearch = !!corpora.length;
+		view.enableSearch(enableSearch);
     });
 	settings.corpusListing.select(corpusChooserInstance.corpusChooser("selectedItems"));
 }
@@ -431,26 +432,6 @@ util.changeColor = function(rgbstr, incr) {
     return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
 };
 
-//util.login = function(usr, pass) {
-//	c.log("submit ", usr, pass);
-//	var self = this;
-//	authenticationProxy.makeRequest(usr, pass)
-//	.done(function(data) {
-//		c.log("login success");
-//		$("body").toggleClass("logged_in not_logged_in");
-//		$.each(data.corpora, function(i, item) {
-//			$($.format(".boxdiv[data=%s]", item.toLowerCase())).removeClass("disabled");
-//		});
-//		$("#log_out .usrname").text(usr);
-//		$(".err_msg", self).hide();
-//		$.bbq.removeState("display");
-//		
-//	}).fail(function() {
-//		c.log("login fail");
-//		$("#pass", self).val("");
-//		$(".err_msg", self).show();
-//	});
-//};
 
 util.setLogin = function() {
 	c.log("login success");

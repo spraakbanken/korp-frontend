@@ -91,7 +91,7 @@
 	"statistics" : "Statistik",
 	"lemgram_results" : "Ordbild", 
 	"sort_default" : "sortera inom korpus på",
-	"within" : "sök inom",
+	"within" : "inom",
 	"context" : "kontext",
 	"only_support" : "Endast för korpusar med stöd för utökad kontext.",
 	"no_context_support" : "stödjer ej utökad kontext",
@@ -107,6 +107,7 @@
 	"no_lemgram_results" : "Hittade inga förekomster.",
 	"no_stats_results" : "Sökningen gav inga träffar.",
 	
+	"word_insensitive" : "ord (skiftlägesoberoende)",
 	"sentence_attr" : "textattribut",
 	"word_attr" : "ordattribut",
 	
@@ -145,6 +146,10 @@
 	"corpselector_lastupdate" : "Senast uppdaterad",
 	"corpselector_supports" : "Stödjer utökad kontextvisning.",
 	"corpselector_limited" : "Korpusen är skyddat.",
+	"corpselector_time" : "Material daterat",
+	"corpselector_rest_time" : "Odaterat material",
+	"corpselector_time_chosen" : "Valt material",
+	"corpselector_of_total" : "av sammanlagt",
 	
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",

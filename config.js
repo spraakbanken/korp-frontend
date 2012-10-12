@@ -49,14 +49,15 @@ settings.getTransformFunc = function(type, value) {
 	
 	if(type == "word" && !value) return function() {return "";};
 	
-	if(type == "text_date") {
+	if(type == "date_interval") {
 		
 		function stringifyDate(year) {
-			return year.toString() + "0000000000"; 
+			return year.toString() + "0000"; 
 		}
-		
+		var from = value[0].toString() + "0000";
+		var to = value[1].toString() + "1231";
 		return function() {
-			return $.format("(int(_.text_datefrom) >= %s & int(_.text_dateto) <= %s)", _.map(value, stringifyDate));
+			return $.format("(int(_.text_datefrom) >= %s & int(_.text_dateto) <= %s)", [from, to]);
 		};
 	
 	}
@@ -3036,6 +3037,13 @@ var CorpusListing = new Class({
 			return _.keys(corpus[attr]);
 		}); 
 		return _.union.apply(null, struct);
+	},
+	
+	getContextQueryString : function() {
+		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
+			if("1 paragraph" in settings.corpora[id].context)
+				return id.toUpperCase() + ":1 paragraph";
+		}), Boolean).join();
 	}
 	
 });

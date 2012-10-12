@@ -15,7 +15,7 @@ ul, ol {
 }
 
 h4 {
-	text-transform: capitalize;
+	/*text-transform: capitalize;*/
 }
 
 #welcome {
@@ -385,7 +385,9 @@ input.arg_value {
 .repeat,.lower_footer > * {
     display : none;
 }
-.repeat_item .repeat,.lbound_item .lbound,.rbound_item .rbound {
+.repeat_item .repeat,
+.lbound_item .lbound,
+.rbound_item .rbound {
     display : inline;
 }
 
@@ -454,12 +456,19 @@ input.arg_value {
 	padding : 10px;
 	position : absolute;
 }
-.popupchecks .header {
-	text-align:right;
+.popupchecks .buttons {
 	margin : 10px 0;
+	display : inline-block;
+	vertical-align : top;
+	font-size : .8em;
 }
-.popupchecks .header a {
-	margin-left : 8px;	
+.popupchecks .buttons a {
+	display : block;
+	margin-bottom : 5px;
+		
+}
+.popupchecks .header {
+    
 }
 
 .numberOfChildren {
@@ -481,9 +490,23 @@ input.arg_value {
 	cursor : pointer;
 }
 
+.corpusInfoSpace {
+    display: none; 
+    border: 1px solid #CCCCCC; 
+    z-index: 10000; 
+    min-width: 30px; 
+    min-height: 30px; 
+    max-width: 33%; 
+    position: absolute; 
+    left:615px; 
+    background-color: white; 
+    padding-right: 4px
+}
+
 .tree {
 	margin-top: 1px;
 	margin-bottom: -3px;
+	margin-left : 2px;
 	padding-top: 3px;
 	padding-bottom: 1px;
 	overflow-x : hidden;
@@ -673,8 +696,8 @@ table {
 }
 
 .controls_n {
-	margin-top : 3px;
 	margin-right : 5px;
+	min-width : 125px;
 }
 .loading .controls_n {
 	color : darkgrey;
@@ -730,7 +753,6 @@ table {
 	-ms-overflow-y: hidden;
 	
 }
-
 .results_table {
 	padding-left : 0;
 	margin-left : 0;
@@ -752,7 +774,19 @@ table {
 .pagination {
 	height : 20px;
 }
-
+/* removing context for custom tab */
+.customtab .reading_btn {
+    display : none !important;
+}
+.loading .reading_btn {
+    display : none;
+}
+.pager-wrapper:empty + .reading_btn {
+    margin-left : 0;
+}
+.reading_btn .show {
+    line-height : 1.1;
+}
 .reading_btn {
     margin-left : 1em;
     display : none;
@@ -760,7 +794,7 @@ table {
     margin-top : 3px;
 }
 .not_loading .reading_btn {
-    display : inline-block;
+    display : inline;
 }
 
 
@@ -771,7 +805,14 @@ table {
 }
 .reading_mode .reading_btn.hide {
     display : inline;
-    
+}
+
+.results_table.reading, 
+.reading_mode .results_table.kwic {
+    display : none;   
+}
+.reading_mode .results_table.reading {
+    display : block;
 }
 
 .results_table.reading {
@@ -780,6 +821,7 @@ table {
 
 .reading_match {
    font-weight : bold;
+   color : black !important;
 }
 
 .results_table.reading tr {
@@ -890,7 +932,12 @@ table {
 .word {
 	cursor: pointer;	
 }
-
+.reading_mode .word {
+    color : #666;
+}
+.matching_sentence {
+    color : black !important;
+}
 .word:hover {
 	color: indianred;
 }
@@ -907,7 +954,7 @@ table {
 }
 
 .token_selected {
-	color: #fff;
+	color: #fff !important;
 	background-color: #666;
 }
 
@@ -918,6 +965,7 @@ table {
 
 #result-container {
 	clear: both;
+	min-height : 400px;
 }
 
 #json-link {
@@ -1260,6 +1308,49 @@ a.relStat:hover {
 
 .sort_select {
 }
+#time {
+    margin-top : 10px;
+    display : inline-block;
+}
+#time_inputs {
+   /*display : inline-block;*/
+}
+#time_inputs input {
+    border : none;
+    font-weight : bold;
+    width : 30px;   
+}
+
+#time_graph {
+    display : inline-block;
+    width : 335px;
+    height : 70px;
+}
+
+#rest_time_graph {
+    display : inline-block;
+    height : 70px;
+    width : 5px;
+    position : relative;
+    bottom : 20px;
+}
+
+#time_slider {
+    display : inline-block;
+    width : 250px;
+    margin-right : 10px;
+}
+
+.query_arg .ui-slider {
+    margin-right : 9px;
+    margin-top : 10px;
+    margin-bottom : 10px;
+}
+
+.ui-slider-handle {
+    border-radius : 20px;
+}
+
 
 .pager-wrapper {
 	display: inline-block;
@@ -1271,12 +1362,6 @@ a.relStat:hover {
 .sidebar_url {
 	white-space: nowrap;
 }
-
-/* .odd_corpus + .even_corpus > td,.even_corpus + .odd_corpus > td { */
-/* 	border-top-style : solid; */
-/* 	border-width : 1px; */
-/* 	border-color : inherit;  */
-/* } */
 
 .arcDiagramPicture {
 	cursor : pointer;
@@ -1403,7 +1488,7 @@ a.relStat:hover {
 
 
 
-#korp-extended #sendBtn ~ * {
+#korp-extended .within_select ~ * {
 	display : none;
 }
 .lab #korp-extended #sendBtn ~ * {
@@ -1519,7 +1604,18 @@ a.relStat:hover {
 	transition: left 400ms ease;
 }
 
-#results-stats.not_loading .progress, #results-lemgram.not_loading .progress {
+#results-stats.not_loading .progress, 
+#results-lemgram.not_loading .progress {
 	display : none;
 }
 
+.arg_value .from, .arg_value .to  {
+    width : 50px;
+}
+.arg_value .from {
+    float : left;    
+}
+.arg_value .to {
+    float : right;
+    text-align: left;    
+}

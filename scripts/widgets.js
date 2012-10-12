@@ -341,10 +341,68 @@ var Sidebar = {
 		.find("li")
 		.each(function(i, item){
 			var id = saldoidArray[i].match(util.saldoRegExp).slice(1,3).join("..");
-			$(item).wrap($.format("<a href='http://spraakbanken.gu.se/karp/#search-tab=1&search=cql|(saldo+%3D+\"%s\")&lang=\%s' target='_blank' />", 
+			$(item).wrap($.format("<a href='http://spraakbanken.gu.se/karp/#search-tab=1&search=cql|(saldo+%3D+\"%s\")&lang=\%s' target='_blank' />",
 					[id, $.bbq.getState("lang") || "sv"]));
 		})
 		.hoverIcon("ui-icon-extlink");
+		
+		
+		// hacked in at the last minute
+		
+		
+		var fsvbase = $("#sidebar_fsvbaseform"); 
+		var labelArray = $.grep(fsvbase.text().split("|"), Boolean).sort();
+
+		fsvbase.html($.arrayToHTMLList(labelArray))
+		.find("li")
+		.each(function(i, item){
+			$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=cql%7Cgf%7C%s" target="_blank" />', $(this).text()));
+		})
+		.hoverIcon("ui-icon-extlink");
+		
+		function getStringVal(str) {
+			return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), function(a,b) {return a + b});
+		}
+		
+		$("#sidebar_fsvlemgram,#sidebar_fsvvariants").each(function() {
+			
+			var saldoidArray = $.grep($(this).text().split("|"), function(itm) {
+				return itm && itm.length;  
+			}).sort(function(a, b) {
+				var splita = util.splitLemgram(a);
+				var splitb = util.splitLemgram(b);
+				var strvala = getStringVal(splita[0]) + getStringVal(splita[1]) + splita[2]; 
+				var strvalb = getStringVal(splitb[0]) + getStringVal(splitb[1]) + splitb[2]; 
+								
+				return parseInt(strvala) - parseInt(strvalb);
+				
+			});
+			var saldolabelArray = util.sblexArraytoString(saldoidArray, util.lemgramToString);
+
+			$(this).html($.arrayToHTMLList(saldolabelArray))
+			.find("li")
+			.each(function(i, item){
+				$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7C%s" target="_blank" />', saldoidArray[i] )); 
+			})
+			.hoverIcon("ui-icon-extlink");
+			
+			
+			
+			
+			
+//			var labelArray = $.grep($(this).text().split("|"), Boolean).sort();
+//			
+//			$(this).html($.arrayToHTMLList(labelArray))
+//			.find("li")
+//			.each(function(i, item){
+//				var label = util.lemgramToString($(this).text());
+//				$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7C%s" target="_blank">%s</a>', 
+//						[$(this).text().split("..")[0], label] ));
+//			})
+//			.hoverIcon("ui-icon-extlink");
+			
+		});
+		
 	},
 	
 	refreshContent : function(mode) {
@@ -678,7 +736,6 @@ var ExtendedToken = {
 			});
 			break;
 		case "autocomplete":
-			c.log("displayType autocomplete");
 			var type, labelFunc, sortFunc;
 			if(data.label == "saldo") {
 				type = "saldo";
@@ -722,8 +779,50 @@ var ExtendedToken = {
 				}, 100);
 			});
 			break;
-		case "date":
-			// at some point, fix this.
+		case "date_interval":
+			var all_years = _.chain(settings.corpusListing.selected)
+				.pluck("time")
+				.map(_.pairs)
+				.flatten(true)
+				.filter(function(tuple) {
+					return tuple[1];
+				})
+				.map(_.head)
+				.map(Number)
+				.value();
+			
+			c.log('all', all_years);
+			var start = Math.min.apply(null, all_years);
+			var end = Math.max.apply(null, all_years);
+			
+//			var start = 1900;
+//			var end = new Date().getFullYear();
+			
+			arg_value = $("<div>");
+			var from = $("<input type='text' class='from'>").val(start);
+			var to = $("<input type='text' class='to'>").val(end);
+			
+			var slider = $( "<div />" ).slider({
+				range: true,
+				min: start,
+				max: end,
+				values: [ start, end ],
+				slide : function(event, ui) {
+					from.val(ui.values[0]);
+					to.val(ui.values[1]);
+				},
+				change : function(event, ui) {
+					$(this).data("value", ui.values);
+					arg_value.data("value", ui.values);
+					self._trigger("change");
+				}
+			});
+			from.add(to).keyup(function() {
+				self._trigger("change");
+				
+			});
+			arg_value.append(slider, from, to);
+			break;
 		default:
 			arg_value = this.makeWordArgValue();
 			util.localize(arg_value);
@@ -852,11 +951,11 @@ var ExtendedToken = {
 	    			
 	    		};
 	    		var argFunc;
-	    		if(type == "word" && !obj.value) {
-	    			argFunc = function() {return "";};
-	    		}
-	    		else
-	    			argFunc = defaultArgsFunc; 
+//	    		if(type == "word" && !obj.value) {
+//	    			argFunc = function() {return "";};
+//	    		}
+//	    		else
+    			argFunc = settings.getTransformFunc(type, obj.value) || defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	

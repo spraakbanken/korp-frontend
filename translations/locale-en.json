@@ -90,7 +90,7 @@
 	"statistics" : "Statistics",
 	"lemgram_results" : "Word picture",
 	"sort_default" : "sort within corpora",
-	"within" : "search within",
+	"within" : "within",
 	"context" : "contex",
 	"only_support" : "Only for supported corpora.",
 	"no_context_support" : "does not support extended context",
@@ -105,7 +105,9 @@
 	"autocomplete_header" : "is a word form in",
 	"no_lemgram_results" : "No examples found.",
 	"no_stats_results" : "The search generated no results.",
-	
+    
+    
+    "word_insensitive" : "word (case insensitive)",	
 	"sentence_attr" : "text attributes",
 	"word_attr" : "word attributes",
 	
@@ -143,6 +145,10 @@
 	"corpselector_lastupdate" : "Last update",
 	"corpselector_supports" : "Supports extended context.",
 	"corpselector_limited" : "The corpus is protected.",
+	"corpselector_time" : "Material dated",
+	"corpselector_rest_time" : "Undated material",
+	"corpselector_time_chosen" : "Selected material",
+    "corpselector_of_total" : "of total",
 	
 	"statstable_allcorpora" : "All&nbsp;corpora",
 	"statstable_relfreq" : "relative frequency (per million words):",

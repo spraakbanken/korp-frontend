@@ -58,8 +58,8 @@ view.enableSearch = function(bool) {
 view.initSearchOptions = function() {
 	var selects = $("#search_options > div:first select").customSelect();
 	view.updateReduceSelect();
-	view.updateContextSelect("within");
-	view.updateContextSelect("context");
+//	view.updateContextSelect("within");
+//	view.updateContextSelect("context");
 	$("#search_options select").each(function() {
 		var state = $.bbq.getState($(this).data("history"));
 		if(!!state) {
@@ -121,7 +121,12 @@ view.updateContextSelect = function(withinOrContext) {
 };
 
 view.updateReduceSelect = function() {
-	var groups = $.extend({word : {word : {label : "word"}}}, {
+	var groups = $.extend({
+		word : { 
+			word : {label : "word"},
+			word_insensitive : {label : "word_insensitive"}
+		}},	
+		{
 		"word_attr" : settings.corpusListing.getCurrentAttributes(),
 		"sentence_attr" : $.grepObj(settings.corpusListing.getStructAttrs(), function(val, key) {
 							 return val.disabled !== true;

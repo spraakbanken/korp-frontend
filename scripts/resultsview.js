@@ -2,14 +2,6 @@
 // Result view objects
 //************
 
-//view.disableTab = function(index) {
-//	c.log("disableTab", index);
-//	if($("#result-container").korptabs("option", "selected") == index) {
-//		c.log("iscurrentselected")
-//		$("#result-container li:first > a").trigger("click");
-//	}
-//	$("#result-container").korptabs("disable", index);
-//};
 
 
 var BaseResults = {
@@ -31,7 +23,7 @@ var BaseResults = {
 	},
 	
 	renderResult : function(data) {
-		this.resetView();
+//		this.resetView();
 		c.log("renderResults", this.proxy);
 		if(this.$result.is(":visible"))
 			util.setJsonLink(this.proxy.prevRequest);
@@ -65,21 +57,12 @@ var BaseResults = {
 	},
 	
 	showPreloader : function() {
-		//this.$tab.find(".spinner").remove();
-		//$("<div class='spinner' />").appendTo(this.$tab)
-		//.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-		this.$result.add(this.$tab).toggleClass("loading not_loading");
+		this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
 		this.$tab.find(".tab_progress").css("width", 0); //.show();
 		this.$result.find("progress").attr("value", 0);
-//		this.$result.find(".progress").show();
 	},
 	hidePreloader : function() {
-//		this.$tab.find(".spinner").remove();
-		this.$result.add(this.$tab).toggleClass("loading not_loading");
-//		this.$tab.find(".tab_progress").hide();
-//		this.$result.find(".progress:visible").hide("clip");
-//		this.$result.find(".progress:hidden").hide();
-			
+		this.$result.add(this.$tab).removeClass("loading").addClass("not_loading");
 	},
 	
 	resetView : function() {
@@ -99,6 +82,7 @@ var KWICResults = {
 		this.parent(tabSelector, resultSelector);
 		this.initHTML = this.$result.html();
 		this.proxy = kwicProxy;
+		this.readingProxy = new model.KWICProxy();
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
 		
@@ -109,14 +93,17 @@ var KWICResults = {
 		});
 		
 		this.$result.find(".reading_btn").click(function() {
-			self.$result.toggleClass("reading_mode");
-			if(self.$result.is(".reading_mode")) {
-				$.bbq.pushState({"reading_mode" : true});
-			} else {
+			
+			var isReading = self.$result.is(".reading_mode");
+			
+			
+			if($.bbq.getState("reading_mode")) {
 				$.bbq.removeState("reading_mode");
+			} else {
+				$.bbq.pushState({"reading_mode" : true});
 			}
-			self.setReadingMode();
-			return false;
+			
+//			return false;
 		});
 		if($.bbq.getState("reading_mode")) {
 			this.$result.addClass("reading_mode");
@@ -127,35 +114,14 @@ var KWICResults = {
 		this.$result.find(".results_table,.pager-wrapper").empty();
 	},
 	
-	setReadingMode : function() {
-		if(this.$result.is(".reading_mode")) {
-			
-			var newResult = this.$result.find(".results_table.kwic").hide()
-			.children().first().clone(true, true);
-			newResult.find(".match .word").addClass("reading_match");
-			newResult.find(".word").unwrap();
-			
-			$(".results_table.reading").html(newResult).show()
-			.find(".token_selected").click();
-			
-		} else {
-			this.$result.find(".results_table.kwic").show();
-			
-			if($(".results_table.reading .token_selected").length) {
-				var p_index = $(".token_selected").parent().index();
-				var w_index = $(".token_selected").prevAll(".word").length + 1;
-				this.$result.find(".results_table.kwic")
-				.find(".sentence").eq(p_index-1).find(".word").eq(w_index-1).click();
-				
-			}
-			this.$result.find(".results_table.reading").empty();
-			this.centerScrollbar();
-		}
+	getProxy : function() {
+		if(this.$result.is(".reading_mode"))
+			return this.readingProxy;
+			return this.proxy;
 	},
 	
 	onentry : function() {
 		this.centerScrollbar();
-		c.log("onentry");
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
 	
@@ -194,7 +160,6 @@ var KWICResults = {
 	},
 	
 	getPageInterval : function(page) {
-		c.log("getPageInterval", this.optionWidget.find(".num_hits").val());
 		var items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
@@ -218,28 +183,48 @@ var KWICResults = {
 		this.hidePreloader();
 	},
 	
-	renderResult : function(data, sourceCQP) {
+	renderContextResult : function(data, sourceCQP) {
+		this.renderResult(".results_table.reading", data, sourceCQP).done(function() {
+//			_.defer(function() {
+				
+				$(".results_table.reading").find(".match .word").addClass("reading_match");
+				$(".results_table.reading").find(".word").unwrap();
+				$(".reading_match").each(function() {
+					var open = $(this).prevAll(".sent_open").first();  
+					var close = $(this).nextAll(".sent_close").first();  
+					$(this).prevUntil(open).add(open).add($(this).nextUntil(close).add(close))
+					.addClass("matching_sentence");
+				}).first().click();
+//			});
+		});
+	},
+	
+	renderKwicResult : function(data, sourceCQP) {
+		this.renderResult(".results_table.kwic", data, sourceCQP);
+	},
+	
+	renderResult : function(drawtarget, data, sourceCQP, dfd) {
+		dfd = dfd || $.Deferred();
 		var resultError = this.parent(data);
 		if(resultError === false) {
-			return;
+			return dfd.reject();
 		}
 		var self = this;
-		this.prevCQP = sourceCQP;
+//		this.prevCQP = sourceCQP;
 		
 		var effectSpeed = 100;
-		if($.trim(this.$result.find(".results_table.kwic").html()).length) {
+		if($.trim(this.$result.find(drawtarget).html()).length) {
 			this.$result.fadeOut(effectSpeed, function() {
-				$(this).find(".results_table.kwic").empty();
-				self.renderResult(data, sourceCQP);
+				$(this).find(drawtarget).empty();
+				self.renderResult(drawtarget, data, sourceCQP, dfd);
 			});
-			return;
+			return dfd;
 		}
 		c.log("corpus_results");
 		
 		var punctArray = [",", ".", ";", ":", "!", "?"];
-		var borderColor = util.changeColor(settings.primaryColor, -15);
 		var prevCorpus = "";
-		var table = self.$result.find(".results_table.kwic");
+		var table = self.$result.find(drawtarget);
 		$.each(data.kwic, function(i,sentence) {
 			var offset = 0; 
 		    var splitObj = {
@@ -253,10 +238,6 @@ var KWICResults = {
 		    	if(currentMode == "parallel") {
 		    		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
 		    	}
-//		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s <span class='corpus_title_warn' rel='%s'></span></span></td><td /></tr>", 
-//		    			[corpus.title, supportsContext ? "" : "localize[no_context_support]"] )).appendTo(table);
-		    	
-		    	
 		    	var title = $("<span class='corpus_title_span'>").text(corpus.title + " ");
 		    	
 		    	var td = $("<td class='corpus_title' colspan='1'>").append(title);
@@ -266,15 +247,10 @@ var KWICResults = {
 		    	if(_.keys(corpus.context).length == 1) {
 		    		td.addClass("no_context");
 		    		title.append($("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>"));
-//		    		title.css({position : "relative", left : 60});
 		    	} else {
 		    		
 		    	}
 		    	row.appendTo(table).localize();
-		    	
-		    	
-//		    	$($.format("<tr><td /><td class='corpus_title' colspan='1'><span class='corpus_title_span'>%s</span></td><td /></tr>", 
-//		    			[corpus.title] )).appendTo(table);
 		    }
 		    
 		    prevCorpus = sentence.corpus;
@@ -286,7 +262,7 @@ var KWICResults = {
 							$(this).prev().html("");
 					})
 					.click(function(event) {
-						var corpus = sentence.corpus
+						var corpus = sentence.corpus;
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
 						$.sm.send("word.select");
@@ -302,7 +278,6 @@ var KWICResults = {
 			}
 			 
 			rows.css("background-color", color);
-			//rows.css("border-color", borderColor);
 		});
 		
 		this.$result.find(".match").children().first().click();
@@ -312,8 +287,7 @@ var KWICResults = {
 		});
 		
 //		this.hidePreloader();
-		
-		this.setReadingMode();
+		return dfd.resolve();
     },
 	
     showNoResults : function() {
@@ -430,11 +404,11 @@ var KWICResults = {
 		var i = Number(data.dephead);
 		var paragraph = word.closest("tr").find(".word");
 		var sent_start = 0;
-		if(word.is(".sent_start")) {
+		if(word.is(".sent_open")) {
 			sent_start = paragraph.index(word);
 		} else {
 			var l = paragraph.filter(function(i, item) {
-				return $(item).is(word) || $(item).is(".sent_start");
+				return $(item).is(word) || $(item).is(".sent_open");
 			});
 			sent_start = paragraph.index(l.eq(l.index(word)-1));
 		}
@@ -486,10 +460,18 @@ var KWICResults = {
 		c.log("handlePaginationClick", new_page_index, this.current_page);
 		var self = this;
 		if(new_page_index != this.current_page || !!force_click) {
-			
-			this.showPreloader();
+			var isReading = this.$result.is(".reading_mode");
+			if(isReading)
+				this.$result.find(".results_table.kwic").empty();
+			else
+				this.$result.find(".results_table.reading").empty();
+				
+			var kwicCallback = isReading ? this.renderContextResult : this.renderKwicResult;
+//			this.showPreloader();
 			this.current_page = new_page_index;
-			this.proxy.makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) { 
+//			this.proxy.makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) {
+			this.getProxy().makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) {
+			
 				//progress
 				if(!isNaN(progressObj["stats"]))
 					self.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
@@ -497,8 +479,9 @@ var KWICResults = {
 			}, function(data) {
 				//success
 				self.buildPager(data.hits);
-				self.hidePreloader();
-			});
+//				self.hidePreloader();
+			},
+			$.proxy(kwicCallback, this));
 			$.bbq.pushState({"page" : new_page_index});
 		}
 	    
@@ -510,11 +493,23 @@ var KWICResults = {
 		opts.cqp = this.prevCQP;
 		opts.queryData = this.proxy.queryData;
 		opts.sort = $(".sort_select").val();
+		if(this.$result.is(".reading_mode")) {
+			opts.context = settings.corpusListing.getContextQueryString();
+		}
 		return opts;
 	},
 	
 	makeRequest : function(page_num) {
-	 	this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.proxy(this.onProgress, this));
+		var isReading = this.$result.is(".reading_mode");
+		var kwicCallback = isReading ? this.renderContextResult : this.renderKwicResult;
+	 	this.proxy.makeRequest(
+	 			this.buildQueryOptions(), 
+	 			page_num || this.current_page, 
+	 			isReading ? $.noop : $.proxy(this.onProgress, this),
+	 			
+	 			$.proxy(this.renderCompleteResult, this),
+	 			$.proxy(kwicCallback, this)
+	 			);
 //		this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.noop);
 	},
 	
@@ -657,15 +652,16 @@ var ExampleResults = {
 		this.parent(tabSelector, resultSelector);
 		this.proxy = new model.ExamplesProxy();
 		this.$result.find(".progress").hide();
-		this.$result.add(this.$tab).addClass("not_loading");
+		this.$result.add(this.$tab).addClass("not_loading customtab");
 	},
 	
 	makeRequest : function(opts) {
 		var self = this;
+		this.resetView();
 		$.extend(opts, {
 			success : function(data) {
 				c.log("ExampleResults success", data, opts);
-				self.renderResult(data, opts.cqp);
+				self.renderResult(".results_table.kwic", data, opts.cqp);
 				self.renderCompleteResult(data);
 				self.hidePreloader();
 				util.setJsonLink(self.proxy.prevRequest);
@@ -762,6 +758,7 @@ var LemgramResults = {
 	
 	renderResult : function(data, query) {
 		var resultError = this.parent(data);
+		this.resetView();
 		if(resultError === false) {
 			return;
 		}
@@ -937,7 +934,7 @@ var LemgramResults = {
 		var container = $("<div>", {"class" : "tableContainer radialBkg"})
 		.appendTo("#results-lemgram .content_target");
 		$("#lemgramResultsTmpl").tmpl(orderArrays, {lemgram : token})
-		.find(".example_link").addClass("ui-icon ui-icon-document")
+		.find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document"))
 		.css("cursor", "pointer")
 		.click($.proxy(self.onClickExample, self)).end()
 		.appendTo(container);
@@ -1222,6 +1219,7 @@ var StatsResults = {
 	},
 	
 	renderResult : function(columns, data) {
+		this.resetView();
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;

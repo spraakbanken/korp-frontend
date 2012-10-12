@@ -413,7 +413,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 				"Giftermåls balk \\(1734\\)" : "Giftermåls balk (1734)"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 

@@ -76,6 +76,24 @@ var currentMode;
 		util.browserWarn();
 		
 		
+		var from = $("#time_from");
+		var to = $("#time_to");
+		var start = 1900;
+		var end = new Date().getFullYear();
+		$("#time_slider").slider({
+			range: true,
+			min: start,
+			max: end,
+			values: [ 1982, end ],
+			slide : function(event, ui) {
+				from.val(ui.values[0]);
+				to.val(ui.values[1]);
+			},
+			change : function(event, ui) {
+				$(this).data("value", ui.values);
+			}
+		});
+		
 		$("#mode_switch").modeSelector({
             change : function() {
             	var mode = $(this).data("mode");
@@ -381,6 +399,26 @@ var currentMode;
 				$(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
 			});
 			
+			var reading = e.getState("reading_mode");
+			if(hasChanged("reading_mode")) {
+//				$.sm.send("display_change");
+				
+				if(reading) {
+					kwicResults.$result.addClass("reading_mode");
+    				if(!isInit && kwicResults.$result.find(".results_table.reading").is(":empty")) {
+						kwicResults.makeRequest();
+					} 
+				} else {
+					kwicResults.$result.removeClass("reading_mode");
+					if(!isInit && kwicResults.$result.find(".results_table.kwic").is(":empty")) {
+						kwicResults.makeRequest();
+					} else {  
+						kwicResults.centerScrollbar();
+					}
+				}
+			}
+			
+			
 			var search = e.getState("search");
 			if(search != null && search !== prevFragment["search"]) {
 				kwicResults.current_page = page || 0;
@@ -388,7 +426,6 @@ var currentMode;
 				var value = search.split("|").slice(1).join("|");
 				
 				view.updateSearchHistory(value);
-				
 				switch(type) {
 				case "word":
 					$("#simple_text").val(value);
@@ -411,6 +448,8 @@ var currentMode;
 					break;
 				}
 			}
+			
+			
 			
 			$.bbq.prevFragment = $.deparam.fragment();
 		}
@@ -462,12 +501,215 @@ var currentMode;
 		
 //		$("body").css("opacity", 1)
 //		view.updateSearchHistory();
+		
+		initTimeGraph();
+		
 	}, function() {
 		c.log("failed to load some resource at startup.", arguments)
-		$("body").css({"opacity" : 1, padding : 20}).html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg"> ')
+		$("body")
+		.css({"opacity" : 1, padding : 20})
+		.html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg"> ')
 		.append("<p>The server failed to respond, please try again later.</p>");
 	});
+	
+	
+	
+	function initTimeGraph() {
+		var time_comb = timeProxy.makeRequest(true);
+		
+		var time = timeProxy.makeRequest(false).done(function(data) {
+			$.each(data, function(corpus, struct) {
+				if(corpus !== "time") {
+					var cor = settings.corpora[corpus.toLowerCase()];
+					cor.time = struct;
+					if(_.keys(struct).length > 1) {
+						cor.struct_attributes.date_interval = {
+								label : "date_interval", 
+								displayType : "date_interval",
+								opts : settings.liteOptions
+						};
+					}
+				}
+			});
+			$("#corpusbox").trigger("corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]);
+		});
+		var timestruct;
+		var all_timestruct;
+		var restdata;
+		var restyear;
+		$.when(time_comb, time).then(function(combdata, timedata) {
+			c.log("combdata", combdata);
+			all_timestruct = [].concat(combdata[0]);
+			$("#corpusbox").bind("corpuschooserchange", function(evt, data) {
+				var output = _.chain(settings.corpusListing.selected)
+				  .pluck("time")
+				  .filter(Boolean)
+				  .map(_.pairs)
+				  .flatten(true)
+				  .reduce(function(memo, val) {
+				    var a = val[0], b = val[1];
+				    if(typeof memo[a] == "undefined") memo[a] = b;
+				    else memo[a] += b;
+				    return memo;
+				  }, {}).value();
+				
+//				c.log("keys length", timestruct);
+				var max = _.reduce(all_timestruct, function(accu,item) {
+					if(item[1] > accu) return item[1];
+					return accu;
+				}, 0);
+				c.log('max', max);
 
+				// the 46 here is the presumed value of
+				//the height of the graph
+				var one_px = max / 46;
+				c.log('one_px', one_px);
+				function normalize(array) {
+					return _.map(array, function(item) {
+						var out = [].concat(item);
+						if(out[1] < one_px && out[1] > 0) out[1] = one_px;
+						return out;
+					});
+				}
+				
+				 
+				timestruct = timeProxy.compilePlotArray(output);
+				
+//				c.log('output struct', timestruct, all_timestruct);
+				
+				var endyear = all_timestruct.slice(-1)[0][0];
+				var yeardiff = endyear - all_timestruct[0][0];
+				restyear =  endyear + (yeardiff / 25);
+				restdata = _.chain(settings.corpusListing.selected)
+				.filter(function(item) {
+					return item.time;
+				})
+				.reduce(function(accu, corp) {
+					return accu + parseInt(corp.time[''] || "0");
+				}, 0).value();
+				
+//				all_timestruct.push([restyear, combdata[1]]);
+//				timestruct.push([restyear, restdata, 0]);
+				var plots = [{
+	                	//color : "white",
+	                	data : normalize([].concat(all_timestruct, [[restyear, combdata[1]]])),
+	              	bars :   {
+	              		fillColor : "lightgrey"
+	              	}
+	                }, 
+	                {		
+	              	  //color : "white", 
+	              	  data : normalize(timestruct),
+	              	  bars : {
+	              		  fillColor : "navy"
+	              	  }
+	                }
+	            ];
+				if(restdata) {
+					plots.push({		
+	                	  //color : "white", 
+	                	  data : normalize([[restyear, restdata]]),
+	                	  bars : {
+	                		  fillColor : "indianred"
+	                	  }
+	                  });
+				}
+				
+				plot = $.plot($("#time_graph"), plots,
+                   {
+					bars : {show : true, fill : 1, align : "center"},
+					
+					grid: {
+						hoverable : true,
+						borderColor : "white"
+							
+					},
+					//stack : true,
+					yaxis : {
+						show : false
+					},
+					xaxis : {
+						show : true
+					},
+					hoverable : true,
+					colors : ["lightgrey", "navy"]
+					
+					
+               });
+				// hack for hiding the red future restyear graph. 
+				$.each($("#time_graph .tickLabel"), function() {
+					if(parseInt($(this).text()) > new Date().getFullYear())
+						$(this).hide();
+				});
+			});
+			
+			function getValByDate(date, struct) {
+				var output;
+				$.each(struct, function(i, item) {
+					if(date == item[0]) {
+						output = item[1];
+						return false;
+					}
+				});
+				return output;
+			}
+			
+			$("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
+				if(item) {
+					c.log("hover", pos, item, item.datapoint);
+					var date = item.datapoint[0];
+					var header = $("<h4>");
+					var val, total;
+					if(date == restyear) {
+						header.text(util.getLocaleString("corpselector_rest_time"));
+						val = restdata; 
+						total = combdata[1];
+						
+					} else {
+						header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0]);
+						val = getValByDate(date, timestruct);  //item.datapoint[1].toString()
+						total = getValByDate(date, all_timestruct);  //item.datapoint[1].toString()
+					}
+					
+//					var body = $("<span>");
+					c.log("output", timestruct[item.datapoint[0].toString()]);
+					
+//					var firstrow = $("<p>").append($("<span>").html(prettyNumbers(total) + " " + util.getLocaleString("corpselector_tokens")))
+					
+					var pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
+					
+					var firstrow = pTmpl({loc : 'corpselector_time_chosen', num : prettyNumbers(val)});
+					var secondrow = pTmpl({loc : 'corpselector_of_total', num : prettyNumbers(total)});
+					
+					var time = item.datapoint[0];
+					
+					$(".corpusInfoSpace").css({"top": $(this).parent().offset().top});
+					$(".corpusInfoSpace").find("p")
+					.empty()
+					.append(header, "<span> </span>", firstrow, secondrow)
+					.localize()
+					.end()
+					.fadeIn("fast");
+					
+					
+				} else {
+					$(".corpusInfoSpace").fadeOut("fast");
+				}
+			},100));
+			
+			
+		});
+
+		var opendfd = $.Deferred();
+//		opendfd.resolve();
+		$("#corpusbox").one("corpuschooseropen", function() {
+			opendfd.resolve();
+		});
+		$.when(time_comb, time, opendfd).then(function() {
+			$("#corpusbox").trigger("corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]);
+		});
+	}
+	
 
 })();
 

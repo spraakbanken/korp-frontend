@@ -209,6 +209,7 @@
     "page_n" : "sidonummer",
     
     "paragraph_marginal" : "marginalnoter",
+    "date_interval" : "tidsinterval",
 
     "fsv:baseform" : "fsv:grundform",
     "fsv:lemgram" : "fsv:lemgram",

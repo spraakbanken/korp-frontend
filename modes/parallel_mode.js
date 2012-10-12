@@ -91,8 +91,7 @@ var ParallelExtendedSearch = {
 		var corps = _.filter(settings.corpusListing.selected, function(item) {
 			return item["lang"] == lang;
 		});
-		c.log('getlinnkedto', corps, _.flatten(_.map(corps, settings.corpusListing.getLinked)));
-		window.corps = corps;
+		
 		return _.flatten(_.map(corps, function(item) {
 			return settings.corpusListing.getLinked(item);
 		}));
@@ -249,14 +248,15 @@ var ParallelKWICResults = {
 		$("#sidebar").sidebar("updateContent", currentSentence.structs, data, corpus);
 	},
 	
-	renderResult : function(data, sourceCQP) {
-		this.parent(data, sourceCQP);
+	renderResult : function(target, data, sourceCQP) {
+		var def = this.parent(target, data, sourceCQP);
 		var offset = $(".table_scrollarea").scrollLeft(0);
 		$(".linked_sentence span:first-child").each(function(i, linked) {
 			var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
 			$(linked).parent().css("padding-left", Math.round(mainLeft));
 		});
 		this.centerScrollbar();
+		return def;
 	}
 	
 };
