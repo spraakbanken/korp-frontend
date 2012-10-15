@@ -49,7 +49,9 @@ settings.corpora.fsvlagrummetnew = {
 				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL":"krLnyskrivna",
 				"Magnus Erikssons Landslag":"meL",
 				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar" : "meSt" 
-				}
+
+				},
+	                opts : settings.liteOptions
 	
 			}	
 	}
@@ -78,7 +80,8 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förarbeten vol 7" : "forarbeten1734v7",
 				"1734 års lag Förarbeten vol 8" : "forarbeten1734v8",
 				"Missgierningsbalk": "missgierningsbalk"
-			}
+			},
+	                opts : settings.liteOptions
 		}
 	}
 };
@@ -98,7 +101,9 @@ settings.corpora["lag1800"] = {
 				"Författningssamling 1800 Låssa kyrkas arkiv" : "lassakyrka",
 				"Östgötalagen": "ostgotalagen",
 				"Regeringsformen 1809 ": "regeringsformen"
-			}
+			},
+	                opts : settings.liteOptions
+
 		},
 		text_date : {label : "date"},
 		paragraph_marginal : {label : "paragraph_marginal"}
@@ -121,7 +126,9 @@ settings.corpora["tankebok"] = {
 				"Stockholms stads tänkebok - Koncept " : "sst_koncept",
 				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
 				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
-			}
+			},
+	                opts : settings.liteOptions
+
 		},
 		paragraph_marginal : {label : "paragraph_marginal"}
 	}
