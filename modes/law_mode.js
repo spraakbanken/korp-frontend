@@ -5,6 +5,7 @@ settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
 
+
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
 $("#showLineDiagram").remove();
@@ -22,18 +23,18 @@ settings.corpora.fsvlagrummetnew = {
 	description : "Giftermåls balk, Kristoffers Landslag, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		fsvbaseform :{
+	attributes :  {
+		baseform :{
 			type : "set",
-			label : "fsv:baseform"
+			label : "baseform"
 			},
-		fsvlemgram:{
+		lemgram:{
 			type : "set",
-			label : "fsv:lemgram"
+			label : "lemgram"
 			},
-		fsvvariants:{
+		variants:{
 			type : "set",
-			label : "fsv:variants"
+			label : "variants"
 			}
 		},
 	struct_attributes : {
