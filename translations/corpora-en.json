@@ -213,7 +213,9 @@
     "fsv:baseform" : "fsv:baseform",
     "fsv:lemgram" : "fsv:lemgram",
     "fsv:variants" : "fsv:variants",
-
+    "dalin:baseform" : "dalin:baseform",
+    "saldo:lemgram" : "saldo:lemgram",
+    "dalin:lemgram" : "dalin:lemgram",
 
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
@@ -235,7 +237,6 @@
      "krLandrade" :"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
      "krLdirekt" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
      "krLnyskrivna" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
-     "konungastyrelsen": "Konungastyrelsen, Bureus utgåva",
      "meL": "Magnus Erikssons Landslag",
      "meSt": "Magnus Erikssons Stadslag, exklusiva stadslagsflockar"
 			

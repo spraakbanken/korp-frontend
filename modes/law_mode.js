@@ -22,7 +22,7 @@ settings.corpora.fsvlagrummetnew = {
 	title : "Fornsvenska textbankens lagtexter",
 	description : "Giftermåls balk, Kristoffers Landslag, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes :  {
 		baseform :{
 			type : "set",
@@ -62,7 +62,7 @@ settings.corpora["lag1734"] = {
 	title : "1734 års lag",
 	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_date : {label : "date"},
@@ -91,7 +91,7 @@ settings.corpora["lag1800"] = {
 	title : "Lagar från 1800-talet",
 	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
@@ -115,7 +115,7 @@ settings.corpora["tankebok"] = {
 	title : "Stockholms stads tänkeböcker",
 	description : "Stockholms stads tänkeböcker från 1626",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_date : {label : "date"},
@@ -139,7 +139,7 @@ settings.corpora["sfs"] = {
 	title : "Svensk författningssamling",
 	description : "",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -162,7 +162,7 @@ settings.corpora["moderntdv"] = {
 	title : "Domar",
 	description : "",
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,

@@ -19,6 +19,8 @@ settings.fsvattributes = {
   	}
   };
 
+
+
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
 //$("#showLineDiagram").remove();
@@ -46,7 +48,7 @@ settings.corpora["fsv-aldrelagar"] = {
 	title : "Äldre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -92,7 +94,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 	title : "Äldre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -115,7 +117,7 @@ settings.corpora["fsv-profanprosa"] = {
 	title : "Profan prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 	}
@@ -126,7 +128,7 @@ settings.corpora["fsv-verser"] = {
 	title : "Verser – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -150,7 +152,7 @@ settings.corpora["fsv-yngrelagar"] = {
 	title : "Yngre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -172,7 +174,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
 	title : "Yngre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -280,7 +282,7 @@ settings.corpora["fsv-yngretankebocker"] = {
 	title : "Yngre tankeböcker – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
 		text_title : {
@@ -311,7 +313,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
 	title : "Nysvenska bibelböcker – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
@@ -325,13 +327,12 @@ settings.corpora["fsv-nysvenskbibel"] = {
 		text_date : {label : "date"}
 	}
 };
-
 settings.corpora["fsv-nysvenskdalin"] = {
 	id : "fsv-nysvenskdalin",
 	title : "Dalin: then swänska argus – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
@@ -350,7 +351,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
 	title : "Nysvenska krönikor – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
@@ -373,7 +374,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
 	title : "Nysvenska, övrigt – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
@@ -402,7 +403,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 	title : "Nysvenska lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : {},
 	struct_attributes : {
 		text_title : {
