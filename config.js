@@ -1127,7 +1127,7 @@ settings.corpora.ordat = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-		text_year : {label : "text_year"},
+		text_date : {label : "text_year"},
 		text_volume : {label : "text_volume"}
 	}
 };
