@@ -83,7 +83,7 @@ settings.corpora["fsv-aldrelagar"] = {
 				"Östgötalagen, fragment E, ur Ups B 22" : "Östgötalagen, fragment E, ur Ups B 22"
 			},
         },	
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -106,7 +106,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 				"Fornsvenska legendariet enligt Codex Bildstenianus" : "Fornsvenska legendariet enligt Codex Bildstenianus"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -141,7 +141,7 @@ settings.corpora["fsv-verser"] = {
 				"Karlskrönikan" : "Karlskrönikan"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -163,7 +163,7 @@ settings.corpora["fsv-yngrelagar"] = {
 				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -271,7 +271,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
 				"Johannes döparens födelse ur Codex Bildstenianus Ups C 528" : "Johannes döparens födelse ur Codex Bildstenianus Ups C 528"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -301,7 +301,7 @@ settings.corpora["fsv-yngretankebocker"] = {
 				"Läkedom, efter Peder Månssons handskrift i Linköpings Stiftsbibliotek" : "Läkedom, efter Peder Månssons handskrift i Linköpings Stiftsbibliotek"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -322,7 +322,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
 				"Gustav Vasas Bibel, Lukasevangeliet" : "Gustav Vasas Bibel, Lukasevangeliet"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -341,7 +341,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
 				"Dalin: Then Swänska Argus" : "Dalin: Then Swänska Argus"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -364,7 +364,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
 				"Olaus Petris Krönika" : "Olaus Petris Krönika"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -393,7 +393,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
 				"UrbanHiärne: Stratonice" : "UrbanHiärne: Stratonice"
 			},
 		},
-		text_date : {label : "date"},
+		text_date : {label : "date"}
 	}
 };
 
