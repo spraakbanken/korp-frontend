@@ -238,6 +238,13 @@
      "krLdirekt" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
      "krLnyskrivna" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
      "meL": "Magnus Erikssons Landslag",
-     "meSt": "Magnus Erikssons Stadslag, exklusiva stadslagsflockar"
+     "meSt": "Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
+     
+    "activity1": "activity 1",
+    "activity2": "activity 2",
+    "activity3": "activity 3",
+    "duration": "duration",
+    "project": "project",
+    "speaker": "speaker"
 			
 }
