@@ -24,14 +24,8 @@ settings.corpora.fsvlagrummetnew = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes :  {
-		baseform :{
-			type : "set",
-			label : "baseform"
-			},
-		lemgram:{
-			type : "set",
-			label : "lemgram"
-			},
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
 		variants:{
 			type : "set",
 			label : "variants"
