@@ -207,16 +207,16 @@
     "origlang" : "original language",
     "page_n" : "page number",
     "paragraph_marginal" : "margin notes",
-    "date_interval" : "tidsinterval",
+    "date_interval" : "time interval",
 
-
-    "fsv:baseform" : "fsv:baseform",
-    "fsv:lemgram" : "fsv:lemgram",
-    "fsv:variants" : "fsv:variants",
     "dalin:baseform" : "dalin:baseform",
     "saldo:lemgram" : "saldo:lemgram",
     "dalin:lemgram" : "dalin:lemgram",
-
+    "fsv:baseform" : "baseform (old Swedish)",
+    "fsv:lemgram" : "lemgram (old Swedish)",
+    "fsv:variants" : "variants (old Swedish)",
+    "variants" : "variants",
+    
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
      "sst_renskr" : "Stockholms stads tänkebok - Renskr",

@@ -24,6 +24,7 @@ var BaseResults = {
 	
 	renderResult : function(data) {
 //		this.resetView();
+		this.$result.find(".error_msg").remove();
 		c.log("renderResults", this.proxy);
 		if(this.$result.is(":visible"))
 			util.setJsonLink(this.proxy.prevRequest);
@@ -185,16 +186,15 @@ var KWICResults = {
 	
 	renderContextResult : function(data, sourceCQP) {
 		this.renderResult(".results_table.reading", data, sourceCQP).done(function() {
-//			_.defer(function() {
-				
-				$(".results_table.reading").find(".match .word").addClass("reading_match");
-				$(".results_table.reading").find(".word").unwrap();
-				$(".reading_match").each(function() {
-					var open = $(this).prevAll(".sent_open").first();  
-					var close = $(this).nextAll(".sent_close").first();  
-					$(this).prevUntil(open).add(open).add($(this).nextUntil(close).add(close))
-					.addClass("matching_sentence");
-				}).first().click();
+			c.log('rendercontextresult', $(".results_table.reading"))
+			$(".results_table.reading .match .word").addClass("reading_match");
+			$(".results_table.reading .word").unwrap();
+			$(".reading_match").each(function() {
+				var open = $(this).prevAll(".sent_open").first();  
+				var close = $(this).nextAll(".sent_close").first();  
+				$(this).prevUntil(open).add(open).add($(this).nextUntil(close).add(close))
+				.addClass("matching_sentence");
+			}).first().click();
 //			});
 		});
 	},
@@ -282,12 +282,12 @@ var KWICResults = {
 		
 		this.$result.find(".match").children().first().click();
 		this.$result.fadeIn(effectSpeed, function() {
+			dfd.resolve();
 			self.setupPagerMover();
 			self.centerScrollbar();
 		});
 		
-//		this.hidePreloader();
-		return dfd.resolve();
+		return dfd;
     },
 	
     showNoResults : function() {

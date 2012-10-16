@@ -9,14 +9,7 @@ var currentMode;
 	
 	$.ajaxSetup({ 
 		dataType: "json",
-		traditional: true,
-//		beforeSend : function(req) {
-//			c.log("beforeSend");
-//			if(typeof authenticationProxy != "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
-//				c.log("adding creds", authenticationProxy.loginObj.auth)
-//				req.setRequestHeader('Authorization', 'Basic ' + authenticationProxy.loginObj.auth);
-//			}
-//		}
+		traditional: true
 	});
 	
 	$.ajaxPrefilter('json', function(options, orig, jqXHR) {
@@ -33,20 +26,32 @@ var currentMode;
 		
 	}).promise();
 	
-	
+	var deferred_mode = $.Deferred();
 	var deferred_domReady = $.Deferred(function( dfd ){
-		$(dfd.resolve);
+		$(function() {
+			
+			var mode = $.deparam.querystring().mode;
+			if(mode != null && mode != "default") {
+				$.getScript($.format("modes/%s_mode.js", mode), function() {
+					deferred_mode.resolve();
+					dfd.resolve();
+				});
+			} else {
+				deferred_mode.resolve();
+				dfd.resolve();
+			}
+		});
 	}).promise();
 	
-	var deferred_mode = $.Deferred();
-	var mode = $.deparam.querystring().mode;
-	if(mode != null && mode != "default") {
-		deferred_mode = $.getScript($.format("modes/%s_mode.js", mode));
-	} else {
-		deferred_mode.resolve();
-	}
-	
-    var chained = deferred_mode.pipe(function() {
+//	var deferred_mode = $.Deferred();
+//	var mode = $.deparam.querystring().mode;
+//	if(mode != null && mode != "default") {
+//		deferred_mode = $.getScript($.format("modes/%s_mode.js", mode));
+//	} else {
+//		deferred_mode.resolve();
+//	}
+
+	var chained = deferred_mode.pipe(function() {
         return $.ajax({
 			url : settings.cgi_script,
 			data : {
@@ -66,12 +71,13 @@ var currentMode;
 	});
 	var loc_dfd = util.initLocalize();
 	
-	$.when(deferred_load, chained, deferred_domReady, deferred_sm, deferred_mode, loc_dfd).then(function(searchbar_html) {
+	$.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then(function(searchbar_html) {
 		$.revision = parseInt("$Rev$".split(" ")[1]);
 		c.log("preloading done, t = ", $.now() - t);
 		if(isLab) $("body").addClass("lab");
 		
 		currentMode = $.deparam.querystring().mode || "default";
+		
 		$("body").addClass("mode-" + currentMode);
 		util.browserWarn();
 		
@@ -108,11 +114,11 @@ var currentMode;
             modes : [
                  {localekey : "modern_texts", mode : "default"},
                  {localekey : "parallel_texts", mode : "parallel"},
-                 {localekey : "faroese_texts", mode : "faroe"},
-                 {localekey : "1800_texts", mode : "1800"},
                  {localekey : "old_swedish_texts", mode : "old_swedish"},
-                 {localekey : "lb_texts", mode : "lb"},
+                 {localekey : "faroese_texts", mode : "faroe"},
                  {localekey : "siberian_texts", mode : "siberian_german"},
+                 {localekey : "1800_texts", mode : "1800"},
+                 {localekey : "lb_texts", mode : "lb"},
                  {localekey : "lawroom", mode : "law"}
                      ]
 		}).add("#about").vAlign();
@@ -235,6 +241,7 @@ var currentMode;
 			authenticationProxy.loginObj = {};
 			$.jStorage.deleteKey("creds");
 			$("body").toggleClass("logged_in not_logged_in");
+			$('#corpusbox').corpusChooser("redraw");
 		});
 		
 		function getAllCorporaInFolders(lastLevel, folderOrCorpus) {
@@ -518,9 +525,11 @@ var currentMode;
 		var time_comb = timeProxy.makeRequest(true);
 		
 		var time = timeProxy.makeRequest(false).done(function(data) {
+			
 			$.each(data, function(corpus, struct) {
 				if(corpus !== "time") {
 					var cor = settings.corpora[corpus.toLowerCase()];
+					timeProxy.expandTimeStruct(struct);
 					cor.time = struct;
 					if(_.keys(struct).length > 1) {
 						cor.struct_attributes.date_interval = {
@@ -538,8 +547,10 @@ var currentMode;
 		var restdata;
 		var restyear;
 		$.when(time_comb, time).then(function(combdata, timedata) {
-			c.log("combdata", combdata);
-			all_timestruct = [].concat(combdata[0]);
+//			c.log("combdata", combdata);
+			all_timestruct = combdata[0];
+//			c.log("all_timestruct", all_timestruct)
+			
 			$("#corpusbox").bind("corpuschooserchange", function(evt, data) {
 				var output = _.chain(settings.corpusListing.selected)
 				  .pluck("time")
@@ -558,7 +569,7 @@ var currentMode;
 					if(item[1] > accu) return item[1];
 					return accu;
 				}, 0);
-				c.log('max', max);
+//				c.log('max', max);
 
 				// the 46 here is the presumed value of
 				//the height of the graph
@@ -575,7 +586,8 @@ var currentMode;
 				 
 				timestruct = timeProxy.compilePlotArray(output);
 				
-//				c.log('output struct', timestruct, all_timestruct);
+//				c.log('timestruct before', output);
+//				c.log('timestruct', timestruct);
 				
 				var endyear = all_timestruct.slice(-1)[0][0];
 				var yeardiff = endyear - all_timestruct[0][0];
@@ -678,7 +690,7 @@ var currentMode;
 					
 					var pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
 					
-					var firstrow = pTmpl({loc : 'corpselector_time_chosen', num : prettyNumbers(val)});
+					var firstrow = pTmpl({loc : 'corpselector_time_chosen', num : prettyNumbers(val || 0)});
 					var secondrow = pTmpl({loc : 'corpselector_of_total', num : prettyNumbers(total)});
 					
 					var time = item.datapoint[0];

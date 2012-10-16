@@ -105,6 +105,10 @@
 		<script type="text/javascript" src="scripts/resultsview.js"></script>
 		<script type="text/javascript" src="scripts/model.js"></script>
 		<script type="text/javascript" src="scripts/main.js"></script>
+		<script>
+			if(location.host == "localhost")
+				document.write('<script src="http://localhost:35729/livereload.js?snipver=1"></' + 'script>')
+		</script>
 		
 	</head>
   	<body class="not_logged_in">
@@ -159,10 +163,6 @@
 						<div id="time">
 							<div id="time_graph"></div>
 							<div id="rest_time_graph"></div>
-<!-- 							<div id="time_slider"></div> -->
-<!-- 							<div id="time_inputs"> -->
-<!-- 								<span id="time_from"></span> - <span id="time_to"></span> -->
-<!-- 							</div> -->
 						</div>
 						<div class="buttons">
 							<a href="javascript:" class="buttonlink ui-state-default ui-corner-all selectall">
@@ -336,7 +336,7 @@
     			{{if $data[$index] == "|" || $data[$index] == ""}}
     				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
     			{{else $index == "lemma"}}
-    			{{html $item.parseLemma($data[$index])}} 
+    			{{html $item.parseLemma($data[$index], $value)}} 
     			{{else $index == "pos"}}
     				${util.getLocaleString("pos_" + $data[$index])} 
 				{{else $index == "deprel"}}
@@ -352,7 +352,7 @@
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
     				<ul data-type="${$value.label}">
-    				{{tmpl($.grep($data[$index].split("|"), Boolean)) '#defaultSetTmpl'}}
+    				{{tmpl($.grep($data[$index].split("|"), Boolean), $value) '#defaultSetTmpl'}}
     				</ul>
     			{{else $value.type == "url"}}
     			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
@@ -367,7 +367,10 @@
 	</script>
 	
 	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
-		<li>${$data}</li>
+		{{if $pattern}}
+			<li>${$.format($pattern, $data)}</li>
+		{{else}}
+			<li>${$data}</li>
 	</script>
 	
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">

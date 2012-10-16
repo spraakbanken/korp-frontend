@@ -152,6 +152,11 @@ var hp_corpusChooser = {
 	triggerChange : function() {
 		this._trigger("change", null, [this.selectedItems()]);
 	},
+	
+	redraw : function() {
+		this._transform();
+	},
+	
 	_transform: function() {	
 			var el = this.element;
 			hp_this = this;
@@ -218,17 +223,7 @@ var hp_corpusChooser = {
 			/* SELECT ALL BUTTON */
 			$(".selectall").unbind("click");
 			$(".selectall").click(function() {
-				
-				var roots = $(this).closest(".header").siblings();
-				roots.each(function() {
-					if($(this).is(".disabled")) return;
-					var check = $(this).children("label").children('.checkbox');
-					hp_this.setStatus(check,"checked");
-					$(this).find('.checkbox').each(function() {
-						hp_this.setStatus($(this),"checked");
-					});
-					
-				});
+				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "checked"); 
 				hp_this.countSelected();
 				// Fire callback "change":
 				hp_this.triggerChange();
@@ -238,15 +233,7 @@ var hp_corpusChooser = {
 			/* SELECT NONE BUTTON */
 			$(".selectnone").unbind("click");
 			$(".selectnone").click(function() {
-				var roots = $(this).closest(".header").siblings();
-				roots.each(function() {
-					var check = $(this).children("label").children('.checkbox');
-					hp_this.setStatus(check,"unchecked");
-					$(this).find('.checkbox').each(function() {
-						hp_this.setStatus($(this),"unchecked");
-					});
-					
-				});
+				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "unchecked");
 				hp_this.countSelected();
 				// Fire callback "change":
 				hp_this.triggerChange();
@@ -414,11 +401,11 @@ var hp_corpusChooser = {
 						if(levelindent > 0) {
 							// Indragna och gömda per default
 							hasDirectCorporaChildren = true;
-							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox checked" /> ' + theHTML + ' </label></div>';
+							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox ' + (disable ? " unchecked" : "checked")  + '" /> ' + theHTML + ' </label></div>';
 						} else {
 							if (index != ul.size()) {
 								hasDirectCorporaChildren = true;
-								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox checked" /> ' + theHTML + ' </label></div>';
+								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox ' + (disable ? " unchecked" : "checked")  + '" /> ' + theHTML + ' </label></div>';
 							}
 						}
 					}

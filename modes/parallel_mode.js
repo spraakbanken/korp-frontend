@@ -245,18 +245,23 @@ var ParallelKWICResults = {
 		
 		this.scrollToShowWord(word);
 		
-		$("#sidebar").sidebar("updateContent", currentSentence.structs, data, corpus);
+		$("#sidebar").sidebar("updateContent", isLinked ? {} : sentence.structs, data, corpus);
 	},
 	
-	renderResult : function(target, data, sourceCQP) {
-		var def = this.parent(target, data, sourceCQP);
-		var offset = $(".table_scrollarea").scrollLeft(0);
-		$(".linked_sentence span:first-child").each(function(i, linked) {
-			var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
-			$(linked).parent().css("padding-left", Math.round(mainLeft));
+//	renderResult : function(target, data, sourceCQP, pDef) {
+//	},
+	
+	renderKwicResult : function(data, sourceCQP) {
+		var self = this;
+		this.renderResult(".results_table.kwic", data, sourceCQP).done(function() {
+			var offset = $(".table_scrollarea").scrollLeft(0);
+			$(".linked_sentence span:first-child").each(function(i, linked) {
+				var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
+				c.log("mainLeft", mainLeft);
+				$(linked).parent().css("padding-left", Math.round(mainLeft));
+			});
+			self.centerScrollbar();
 		});
-		this.centerScrollbar();
-		return def;
 	}
 	
 };

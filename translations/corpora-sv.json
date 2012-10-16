@@ -209,11 +209,12 @@
     "page_n" : "sidonummer",
     
     "paragraph_marginal" : "marginalnoter",
-    "date_interval" : "tidsinterval",
+    "date_interval" : "tidsintervall",
 
-    "fsv:baseform" : "fsv:grundform",
-    "fsv:lemgram" : "fsv:lemgram",
-    "fsv:variants" : "fsv:varianter",
+    "fsv:baseform" : "grundform (fornsvenska)",
+    "fsv:lemgram" : "lemgram (fornsvenska)",
+    "fsv:variants" : "varianter (fornsvenska)",
+    "variants" : "varianter",
 
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",

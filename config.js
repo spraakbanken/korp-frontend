@@ -44,20 +44,26 @@ settings.defaultOptions = {
 	"matches" : "matches"
 };
 
-settings.getTransformFunc = function(type, value) {
+settings.getTransformFunc = function(type, value, opt) {
 	c.log("getTransformFunc", type, value);
 	
 	if(type == "word" && !value) return function() {return "";};
 	
 	if(type == "date_interval") {
 		
-		function stringifyDate(year) {
-			return year.toString() + "0000"; 
-		}
-		var from = value[0].toString() + "0000";
+		var from = value[0].toString() + "0101";
 		var to = value[1].toString() + "1231";
+		
+		var operator1 = ">=", operator2 = "<=", bool = "&";
+		if(opt == "is_not") {
+			operator1 = "<";
+			operator2 = ">";
+			bool = "|";
+		}
+		
 		return function() {
-			return $.format("(int(_.text_datefrom) >= %s & int(_.text_dateto) <= %s)", [from, to]);
+			return $.format("(int(_.text_datefrom) %s %s %s int(_.text_dateto) %s %s)", 
+					[operator1, from, bool, operator2, to]);
 		};
 	
 	}
@@ -576,7 +582,7 @@ settings.corpora.myndighet2 = {
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_publisher : {label : "publisher"},
-		text_title : {label : "title"},
+		text_title : {label : "title"}
 	}
 };
 
@@ -1355,7 +1361,11 @@ settings.corpora.bloggmix = {
 		blog_title : {label : "blog_title"},
 		blog_url : {label : "blog_url", type : "url"},
 		blog_age : {label : "author_age"},
-		blog_city : {label : "city", displayType : "select", dataset : {
+		blog_city : {
+			label : "city", 
+			displayType : "select",
+			localize : false,
+			dataset : {
             "Alingsås" : "Alingsås",
             "Alnö" : "Alnö",
             "Arboga" : "Arboga",
@@ -2821,12 +2831,46 @@ settings.corpora.talbanken = {
 	}
 };
 
+
+settings.corpora.gslc = {
+		id : "gslc",
+		title : "Göteborg Spoken Language Corpus (GSLC)",
+		description : '',
+		limited_access : true,
+		within : settings.defaultWithin,
+		context : settings.defaultContext,
+		attributes : {
+			pos : attrs.pos,
+			msd : attrs.msd,
+			lemma : attrs.baseform,
+			lex : attrs.lemgram,
+			saldo : attrs.saldo,
+			dephead : attrs.dephead,
+			deprel : attrs.deprel,
+			ref : attrs.ref,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix
+		},
+		struct_attributes : {
+			"text_activity1" : {label : "activity1"},
+			"text_activity2" : {label : "activity2"},
+			"text_activity3" : {label : "activity3"},
+			"text_title" : {label : "title"},
+			"text_duration" : {label : "dialogduration"},
+			"text_project" : {label : "project"},
+			"line_speaker" : {label : "speaker"},
+			"text_date" : {label : "date"},
+			"section_name" : {label : "section"}
+		}
+	};
+
+
+
 /*
  * MISC
  */
 
 settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
-//settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi";
 
 // label values here represent translation keys.
 settings.arg_groups = {
@@ -2913,7 +2957,7 @@ settings.reduce_stringify = function(type) {
 			return $.format('[deprel="%s"]', item);
 		}).join(" ");
 		return $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
-				[query, $.toJSON(corpora), value, util.getLocaleString("deprel_" + value)]);
+				[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
 	};
 	default:
 		return function(row, cell, value, columnDef, dataContext) {
@@ -2967,7 +3011,7 @@ var CorpusListing = new Class({
 	_mapping_intersection : function(mappingArray) {
 		return _.reduce(mappingArray, function(a,b) {
 			var output = {};
-			$.each(a, function(key, value) {
+			$.each(b, function(key, value) {
 				if(b[key] != null)
 					output[key] = value;
 			});
@@ -2996,8 +3040,29 @@ var CorpusListing = new Class({
 			});
 			return corpus.struct_attributes;
 		});
+		c.log("getStructAttrs", attrs);
+		var rest = this._invalidateAttrs(attrs);
+		c.log("getStructAttrs", rest);
 		
-		return this._invalidateAttrs(attrs);
+		// fix for combining dataset values
+		var withDataset = _.filter(_.pairs(rest), function(item) {
+			return item[1].dataset;
+		});
+		
+		$.each(withDataset, function(i, item) {
+			var key = item[0];
+			var val = item[1];
+			$.each(attrs, function(j, origStruct) {
+				
+				if(origStruct[key] && origStruct[key].dataset) {
+					var ds = origStruct[key].dataset;
+					if($.isArray(ds))
+						ds = _.object(ds, ds);
+					$.extend(val.dataset, ds);
+				}
+			});
+		});
+		return $.extend(rest, _.object(withDataset));
 	},
 
 	_invalidateAttrs : function(attrs) {
@@ -3094,6 +3159,10 @@ var ParallelCorpusListing = new Class({
 		var struct = _.reduce(corpora, function(a, b) {
 			return $.extend({}, a.struct_attributes, b.struct_attributes);
 		},{});
+		$.each(struct, function(key, val) {
+			val["isStructAttr"] = true;
+		});
+		c.log("struct", struct);
 		return struct;
 	},
 	

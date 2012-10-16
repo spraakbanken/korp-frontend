@@ -129,13 +129,14 @@ view.updateReduceSelect = function() {
 		{
 		"word_attr" : settings.corpusListing.getCurrentAttributes(),
 		"sentence_attr" : $.grepObj(settings.corpusListing.getStructAttrs(), function(val, key) {
+							 if(val.displayType == "date_interval") return false;
 							 return val.disabled !== true;
 						  })
 		});
-	
 	var prevVal = $("#reduceSelect select").val();
 	var select = util.makeAttrSelect(groups);
 	$("#reduceSelect").html(select);
+	c.log("updateReduceSelect", groups, select);
 	
 	select.attr("data-history", "stats_reduce")
 	.attr("data-prefix", "reduce_text")

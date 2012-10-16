@@ -300,7 +300,7 @@ function loadCorpora() {
 			extendedSearch.refreshTokens();
 			view.updateReduceSelect();
 			view.updateContextSelect("within");
-			view.updateContextSelect("context");
+//			view.updateContextSelect("context");
 		}
 		var enableSearch = !!corpora.length;
 		view.enableSearch(enableSearch);
@@ -437,7 +437,7 @@ util.setLogin = function() {
 	c.log("login success");
 	$("body").toggleClass("logged_in not_logged_in");
 	$.each(authenticationProxy.loginObj.credentials, function(i, item) {
-		$($.format(".boxdiv[data=%s]", item.toLowerCase())).removeClass("disabled");
+		$($.format("#hpcorpus_%s", item.toLowerCase())).closest(".boxdiv.disabled").removeClass("disabled");
 	});
 	$("#log_out .usrname").text(authenticationProxy.loginObj.name);
 	$(".err_msg", self).hide();

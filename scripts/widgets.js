@@ -289,11 +289,16 @@ var Sidebar = {
 		this.element.css("display", oldDisplay);
 	},
 	
-	_parseLemma : function(attr) {
+	_parseLemma : function(attr, tmplVal) {
+		c.log("parseLemma", attr, tmplVal);
 		var seq = [];
 		if(attr != null) {
 			seq = $.map(attr.split("|"), function(item) {
-				return item.split(":")[0];
+				var lemma = item.split(":")[0];
+				if(tmplVal.pattern)
+					return $.format(tmplVal.pattern, [lemma, lemma]);
+				else 
+					return lemma;
 			});
 		}
 		seq = $.grep(seq, function(itm) {
@@ -467,7 +472,6 @@ var ExtendedToken = {
 	_init : function() {
 		var self = this;
 		this.table = this.element;
-		
         this.element.find(".ui-icon-circle-close") //close icon
         .click(function() {
         	if($(this).css("opacity") === "0") return;
@@ -558,7 +562,7 @@ var ExtendedToken = {
 		var arg_select = this.makeSelect();
 		
 		var arg_value = this.makeWordArgValue();
-		
+		arg_value.attr("data-placeholder", "any_word_placeholder");
 		var link_mod = $("<span class='val_mod sensitive'>").text("Aa")
 		.click(function() {
 			var btn = $(this);
@@ -694,7 +698,7 @@ var ExtendedToken = {
 		var self = this;
 		return $("<input type='text'/>")
 		.addClass("arg_value")
-		.attr("data-placeholder", "any_word_placeholder")
+		
 		.keyup(function() {
 			if($(this).val() == "") {
 //				$(this).closest(".query_arg").addClass("word_empty");
@@ -724,15 +728,29 @@ var ExtendedToken = {
 		switch(data.displayType) {
 		case "select":
 			arg_value = $("<select />");
-			var keys = $.keys(data.dataset).sort(function(a, b) {
+			
+			function sorter(a, b) {
+				if(data.localize === false) return a > b;
 				var prefix = data.translationKey || "";
 				return util.getLocaleString(prefix + a) >= util.getLocaleString(prefix + b) ? 1 : -1;
-			});
+			}
+			var keys;
+			if($.isArray(data.dataset)) {
+				keys = data.dataset;
+			} else {
+				keys = _.keys(data.dataset);
+			}
+			keys.sort(sorter);
+			
+			
 			
 			$.each(keys, function(_, key) {
-				$("<option />")
-				.localeKey((data.translationKey || "") + data.dataset[key])
-				.val(key).appendTo(arg_value);
+				var opt = $("<option />")
+				.val(regescape(key)).appendTo(arg_value);
+				if(data.localize === false)
+					opt.text(key);
+				else
+					opt.localeKey((data.translationKey || "") + data.dataset[key])
 			});
 			break;
 		case "autocomplete":
@@ -780,25 +798,23 @@ var ExtendedToken = {
 			});
 			break;
 		case "date_interval":
+			c.log(_.pluck(settings.corpusListing.selected, "time"));
 			var all_years = _.chain(settings.corpusListing.selected)
 				.pluck("time")
 				.map(_.pairs)
 				.flatten(true)
 				.filter(function(tuple) {
-					return tuple[1];
+					return tuple[0] && tuple[1];
 				})
-				.map(_.head)
-				.map(Number)
+				.map(_.compose(Number, _.head))
 				.value();
 			
 			c.log('all', all_years);
 			var start = Math.min.apply(null, all_years);
 			var end = Math.max.apply(null, all_years);
 			
-//			var start = 1900;
-//			var end = new Date().getFullYear();
-			
 			arg_value = $("<div>");
+			arg_value.data("value", [start, end]);
 			var from = $("<input type='text' class='from'>").val(start);
 			var to = $("<input type='text' class='to'>").val(end);
 			
@@ -825,6 +841,8 @@ var ExtendedToken = {
 			break;
 		default:
 			arg_value = this.makeWordArgValue();
+			if(data.label == "word")
+				arg_value.attr("data-placeholder", "any_word_placeholder");
 			util.localize(arg_value);
 			break;
 		} 
@@ -955,7 +973,7 @@ var ExtendedToken = {
 //	    			argFunc = function() {return "";};
 //	    		}
 //	    		else
-    			argFunc = settings.getTransformFunc(type, obj.value) || defaultArgsFunc; 
+    			argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	

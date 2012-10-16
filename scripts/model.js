@@ -389,14 +389,23 @@ var LemgramProxy = {
 	},
 	
 	lemgramCount : function(lemgrams, findPrefix, findSuffix) {
+		var self = this;
 		var count = $.grep(["lemgram", findPrefix ? "prefix" : "", findSuffix ? "suffix" : ""], Boolean);
-		return $.post(settings.cgi_script, {
-			command : "lemgram_count", 
-			lemgram : lemgrams,
-			count : count.join(","),
-			corpus : settings.corpusListing.stringifySelected()
-			} 
-		);
+		return $.ajax({
+			url : settings.cgi_script, 
+			data : {
+				command : "lemgram_count", 
+				lemgram : lemgrams,
+				count : count.join(","),
+				corpus : settings.corpusListing.stringifySelected()
+			},
+			beforeSend : function(req) {
+				self.addAuthorizationHeader(req);
+			},
+			method : "POST"
+		  });
+			
+		
 	}
 };
 
@@ -420,7 +429,8 @@ var StatsProxy = {
 			groupby : reduceval,
 			cqp : cqp,
 			corpus : settings.corpusListing.stringifySelected(),
-			incremental : $.support.ajaxProgress
+			incremental : $.support.ajaxProgress,
+			within : $(".within_select").val(),
 		};
 		if($("#reduceSelect select").val() == "word_insensitive") {
 			$.extend(data, {ignore_case : "word"});
@@ -527,7 +537,7 @@ var AuthenticationProxy = {
         var dfd = $.Deferred();
         
 		$.ajax({
-            url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi",
+            url: settings.cgi_script,
             type: 'GET',
             data: {
             	command : "authenticate",
@@ -566,12 +576,11 @@ var TimeProxy = {
 	initialize : function() {
 		this.data = [];
 		this.req = {
-				url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korpauth.cgi",
+				url: settings.cgi_script,
 				type : "GET",
 				data : {
 					command : "timespan",
 					granularity : "y",
-					points : true,
 					corpus : settings.corpusListing.stringifySelected()
 					
 				}
@@ -586,6 +595,8 @@ var TimeProxy = {
 		if(combined) {
 			xhr.done(function(data, status, xhr) {
 				var rest = data.combined[''];
+				delete data.combined[""];
+				self.expandTimeStruct(data.combined);
 				var output = self.compilePlotArray(data.combined);
 				dfd.resolve(output, rest);
 				
@@ -617,6 +628,27 @@ var TimeProxy = {
 		});
 		return output;
 		
+	},
+	
+	expandTimeStruct : function(struct) {
+		var years = _.map(_.pairs(_.omit(struct, '')), function(item) {return Number(item[0])});
+		
+		var minYear = Math.min.apply(null, years);
+		var maxYear = Math.max.apply(null, years);
+		var output = {}, prevVal = struct[minYear]; //, prevYear = minYear
+		for(var y = minYear; y < maxYear; y++) {
+			var thisVal = struct[y];
+			if(typeof thisVal == "undefined")
+				struct[y] = prevVal;
+			else {
+				struct[y] = thisVal;
+				prevVal = thisVal;
+			}
+		}
+		
+//		if(struct['']) output[''] = struct[''];
+		
+//		return output;
 	}
 	
 //	getCorpusBy
