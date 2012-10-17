@@ -185,6 +185,8 @@ var KWICResults = {
 	},
 	
 	renderContextResult : function(data, sourceCQP) {
+		this.$result.find(".results_table.kwic").empty();
+			
 		this.renderResult(".results_table.reading", data, sourceCQP).done(function() {
 			c.log('rendercontextresult', $(".results_table.reading"))
 			$(".results_table.reading .match .word").addClass("reading_match");
@@ -200,6 +202,7 @@ var KWICResults = {
 	},
 	
 	renderKwicResult : function(data, sourceCQP) {
+		this.$result.find(".results_table.reading").empty();
 		this.renderResult(".results_table.kwic", data, sourceCQP);
 	},
 	
