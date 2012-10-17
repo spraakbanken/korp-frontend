@@ -2900,7 +2900,6 @@ settings.reduce_stringify = function(type) {
 	switch(type) {
 	case "word":
 		return function(row, cell, value, columnDef, dataContext) {
-			c.log("reduce_stringify", type, row, cell, value, columnDef, dataContext);
 			if(value == "&Sigma;") return value;
 			var corpora = getCorpora(dataContext);
 			

@@ -653,6 +653,7 @@ var ExampleResults = {
 		this.proxy = new model.ExamplesProxy();
 		this.$result.find(".progress").hide();
 		this.$result.add(this.$tab).addClass("not_loading customtab");
+		this.$result.removeClass("reading_mode");
 	},
 	
 	makeRequest : function(opts) {

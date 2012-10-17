@@ -802,7 +802,6 @@ table {
     display : inline;
 }
 
-
 .reading_mode .reading_btn.show, 
 .reading_btn.hide,
 .zero_results .reading_btn {
@@ -823,7 +822,14 @@ table {
 .results_table.reading {
     margin-left : 10%;
 }
-
+/*
+.customtab .results_table.kwic {
+    display : block;
+}
+.customtab .results_table.reading {
+    display : none;
+}
+*/
 .reading_match {
    font-weight : bold;
    color : black !important;
