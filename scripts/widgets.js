@@ -387,7 +387,7 @@ var Sidebar = {
 			$(this).html($.arrayToHTMLList(saldolabelArray))
 			.find("li")
 			.each(function(i, item){
-				$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7C%s" target="_blank" />', saldoidArray[i] )); 
+				$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7Cfsvm:%s" target="_blank" />', saldoidArray[i] )); 
 			})
 			.hoverIcon("ui-icon-extlink");
 			

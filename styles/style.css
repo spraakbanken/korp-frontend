@@ -1389,6 +1389,10 @@ a.relStat:hover {
 	top : 3px;
 }
 
+.slick-cell .wordclass_suffix {
+    position :static;
+}
+
 .slick-cell {
 	position: relative;
 }
