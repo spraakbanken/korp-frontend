@@ -2919,27 +2919,27 @@ settings.reduce_stringify = function(type) {
 			return output;
 		}; 
 		
-	case "word_insensitive":
-		return function(row, cell, value, columnDef, dataContext) {
-		c.log("reduce_stringify", type, row, cell, value, columnDef, dataContext);
-		if(value == "&Sigma;") return value;
-		var corpora = getCorpora(dataContext);
-		
-		var query = $.map(dataContext.hit_value.split(" "), function(item) {
-			return $.format('[word="%s" %c]', item);
-		}).join(" ");
-		
-		var output = $("<span>", 
-				{
-				"class" : "link", 
-				"data-query" : encodeURIComponent(query), 
-				"data-corpora" : $.toJSON(corpora)
-				}).text(value).outerHTML();
-		if(corpora.length > 1)
-			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
-		return output;
-	};
-		break;
+//	case "word_insensitive":
+//		return function(row, cell, value, columnDef, dataContext) {
+//		c.log("reduce_stringify", type, row, cell, value, columnDef, dataContext);
+//		if(value == "&Sigma;") return value;
+//		var corpora = getCorpora(dataContext);
+//		
+//		var query = $.map(dataContext.hit_value.split(" "), function(item) {
+//			return $.format('[word="%s" %c]', item);
+//		}).join(" ");
+//		
+//		var output = $("<span>", 
+//				{
+//				"class" : "link", 
+//				"data-query" : encodeURIComponent(query), 
+//				"data-corpora" : $.toJSON(corpora)
+//				}).text(value).outerHTML();
+//		if(corpora.length > 1)
+//			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
+//		return output;
+//	};
+//		break;
 	case "pos":
 		return function(row, cell, value, columnDef, dataContext) {
 			if(value == "&Sigma;") return value;
