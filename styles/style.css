@@ -246,6 +246,10 @@ input:placeholder, textarea:placeholder {
     background-color: #F5F5F5;
 }
 
+.mode-parallel #korp-extended #sendBtn ~ * {
+    display : none;
+}
+
 .mode-parallel #linkedLang {
     display : inline;
 }

@@ -130,7 +130,7 @@ var KWICProxy = {
 		this.queryData = null;
 		this.command = "query";
 		this.prevAjaxParams = null;
-		this.pendingRequests = [];//{abort : $.noop};
+		this.pendingRequests = [];
 		this.foundKwic = false;
 		
 	},
@@ -194,8 +194,6 @@ var KWICProxy = {
 //		kwicResults.num_result = 0;
 		c.log("kwicProxy.makeRequest", o.cqp);
 		
-//		kwicResults.showPreloader();
-		
 		var data = {
 			command:this.command,
 			corpus:corpus,
@@ -203,20 +201,19 @@ var KWICProxy = {
 			start:o.start,
 			end:o.end,
 			defaultcontext: $.keys(settings.defaultContext)[0],
-//			context : "1 sentence",
-//			context : $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-//				if($(".context_select").val() in settings.corpora[id].context)
-//					return id.toUpperCase() + ":" + $(".context_select").val();
-//			}), Boolean).join(),
-//			context : $(".context_select").val(),
-			within : $(".within_select").val(),
+			defaultwithin : "sentence",
 			show:["sentence"],
 			show_struct:[],
 			sort : o.sort,
 			incremental : o.incremental
 		};
+		if($.sm.In("extended") && $(".within_select").val() == "paragraph") {
+			data.within = settings.corpusListing.getWithinQueryString();
+		}
 		if(o.context)
 			data.context = o.context;
+		if(o.within)
+			data.within = o.within;
 		$.extend(data, o.ajaxParams);
 		if(o.queryData != null) {
 			data.querydata = o.queryData;
@@ -430,10 +427,13 @@ var StatsProxy = {
 			cqp : cqp,
 			corpus : settings.corpusListing.stringifySelected(),
 			incremental : $.support.ajaxProgress,
-			within : $(".within_select").val(),
+			defaultwithin : "sentence"
 		};
 		if($("#reduceSelect select").val() == "word_insensitive") {
 			$.extend(data, {ignore_case : "word"});
+		}
+		if($.sm.In("extended") && $(".within_select").val() == "paragraph") {
+			data.within = settings.corpusListing.getWithinQueryString();
 		}
 		return $.ajax({ 
 			url: settings.cgi_script,

@@ -2856,7 +2856,7 @@ settings.corpora.gslc = {
 			"text_activity2" : {label : "activity2"},
 			"text_activity3" : {label : "activity3"},
 			"text_title" : {label : "title"},
-			"text_duration" : {label : "dialogduration"},
+			"text_duration" : {label : "duration"},
 			"text_project" : {label : "project"},
 			"line_speaker" : {label : "speaker"},
 			"text_date" : {label : "date"},
@@ -3108,6 +3108,12 @@ var CorpusListing = new Class({
 		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
 			if("1 paragraph" in settings.corpora[id].context)
 				return id.toUpperCase() + ":1 paragraph";
+		}), Boolean).join();
+	},
+	getWithinQueryString : function() {
+		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
+			if("paragraph" in settings.corpora[id].within)
+				return id.toUpperCase() + ":paragraph";
 		}), Boolean).join();
 	}
 	

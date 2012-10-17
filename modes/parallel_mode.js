@@ -115,7 +115,6 @@ var ParallelExtendedSearch = {
 		if(prevLang) {
 			other_corp = this.getLinkedTo(prevLang);
 			langs = _.pluck(other_corp , "lang");
-			c.log("langs", langs)
 		} else {
 			$.each(settings.corpusListing.selected, function(i, corp) {
 				var childCorpora = $.grepObj(settings.parallel_corpora[corp.parent], function(val, key) {
@@ -150,7 +149,6 @@ var ParallelExtendedSearch = {
 		var currentLangList = _.map($(".lang_select").get(), function(item) {
 			return $(item).val();
 		});
-		
 		// remove corpora for lang not used
 		var children = _.flatten(_.map(parents, function(p) {
 			var children = _.values(p);
@@ -181,14 +179,21 @@ var ParallelExtendedSearch = {
 			var output = _.filter(children, function(item) {
 				return item.parent == childWithLeastParents.parent;
 			});
-			return {"linked" : output};
+			return {"linked" : _.uniq(output)};
 		}
 	},
 	
 	getCorporaQuery : function() {
+		var currentLangList = _.map($(".lang_select").get(), function(item) {
+			return $(item).val();
+		});
 		var struct = this.getCorporaByLang();
 		if(struct.linked) {
-			return _.chain(struct.linked)
+			var struct = struct.linked.sort(function(a,b) {
+//				c.log("inarray", $.inArray(currentLangList, a.lang), $.inArray(currentLangList, b.lang))
+				return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList); 
+			});
+			return _.chain(struct)
 				.pluck("id")
 				.invoke("toUpperCase")
 				.value().join("|");
@@ -257,7 +262,6 @@ var ParallelKWICResults = {
 			var offset = $(".table_scrollarea").scrollLeft(0);
 			$(".linked_sentence span:first-child").each(function(i, linked) {
 				var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
-				c.log("mainLeft", mainLeft);
 				$(linked).parent().css("padding-left", Math.round(mainLeft));
 			});
 			self.centerScrollbar();
