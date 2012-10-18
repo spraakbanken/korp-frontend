@@ -18,7 +18,11 @@ var BaseResults = {
 		// TODO: this item only exists in the kwic.
 		this.num_result.html(prettyNumbers(progressObj["total_results"]));
 		if(!isNaN(progressObj["stats"]))
-			this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+			try {
+				this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+			} catch(e) {
+				c.log("onprogress error", e);
+			}
 		this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
 	},
 	
