@@ -2897,97 +2897,91 @@ settings.reduce_stringify = function(type) {
 		return corpora;
 	}
 	
+	function appendDiagram(output, corpora, value) {
+		if(corpora.length > 1)
+			return output + $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
+		else
+			return output;
+	}
+	var output = "";
 	switch(type) {
 	case "word":
 		return function(row, cell, value, columnDef, dataContext) {
-			if(value == "&Sigma;") return value;
 			var corpora = getCorpora(dataContext);
+			if(value == "&Sigma;") return appendDiagram(value, corpora, value);
 			
 			var query = $.map(dataContext.hit_value.split(" "), function(item) {
 				return $.format('[word="%s"]', item);
 			}).join(" ");
 			
-			var output = $("<span>", 
+			output = $("<span>", 
 					{
 					"class" : "link", 
 					"data-query" : encodeURIComponent(query), 
 					"data-corpora" : $.toJSON(corpora)
 					}).text(value).outerHTML();
-			if(corpora.length > 1)
-				output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
-			return output;
+			return appendDiagram(output, corpora, value);
+			 
 		}; 
 		
-//	case "word_insensitive":
-//		return function(row, cell, value, columnDef, dataContext) {
-//		c.log("reduce_stringify", type, row, cell, value, columnDef, dataContext);
-//		if(value == "&Sigma;") return value;
-//		var corpora = getCorpora(dataContext);
-//		
-//		var query = $.map(dataContext.hit_value.split(" "), function(item) {
-//			return $.format('[word="%s" %c]', item);
-//		}).join(" ");
-//		
-//		var output = $("<span>", 
-//				{
-//				"class" : "link", 
-//				"data-query" : encodeURIComponent(query), 
-//				"data-corpora" : $.toJSON(corpora)
-//				}).text(value).outerHTML();
-//		if(corpora.length > 1)
-//			output += $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
-//		return output;
-//	};
-//		break;
 	case "pos":
 		return function(row, cell, value, columnDef, dataContext) {
-			if(value == "&Sigma;") return value;
 			var corpora = getCorpora(dataContext);
+			if(value == "&Sigma;") return appendDiagram(value, corpora, value);
 			var query = $.map(dataContext.hit_value.split(" "), function(item) {
 				return $.format('[pos="%s"]', item);
 			}).join(" ");
-			return $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
+			output =  $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
 					[query, $.toJSON(corpora), value, util.getLocaleString("pos_" + value)]);
+			return appendDiagram(output, corpora, value);
 		};
 	case "lex":
 		return function(row, cell, value, columnDef, dataContext) {
-		if(value == "&Sigma;") return value;
-			return _.chain(value.split("|"))
+		var corpora = getCorpora(dataContext);
+		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+		output = _.chain(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
 					return util.lemgramToString(item, true);
 				})
 				.value().join(", ");
+		return appendDiagram(output, corpora, value);
 		};
 	case "prefix":
 	case "suffix":
 	case "saldo":
 		return function(row, cell, value, columnDef, dataContext) {
-		if(value == "&Sigma;") return value;
-			return _.chain(value.split("|"))
+		var corpora = getCorpora(dataContext);
+		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+		output = _.chain(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
 					return util.saldoToString(item, true);
 				})
 				.value().join(", ");
+		return appendDiagram(output, corpora, value);
 		};
 	case "deprel":
 		return function(row, cell, value, columnDef, dataContext) {
-		if(value == "&Sigma;") return value;
-		var corpora = getCorpora(dataContext);
-		var query = $.map(dataContext.hit_value.split(" "), function(item) {
-			return $.format('[deprel="%s"]', item);
-		}).join(" ");
-		return $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
-				[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
-	};
+			var corpora = getCorpora(dataContext);
+			if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+			var query = $.map(dataContext.hit_value.split(" "), function(item) {
+				return $.format('[deprel="%s"]', item);
+			}).join(" ");
+			var output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
+					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
+			return appendDiagram(output, corpora, value);
+			
+		};
 	default:
 		return function(row, cell, value, columnDef, dataContext) {
-			return value;
+			var corpora = getCorpora(dataContext);
+			if(value == "&Sigma;") return appendDiagram(output, corpora, value);
+			return appendDiagram(output, corpora, value);;
 		};
 	}
 	
-	
+	return output;
 };
 
 

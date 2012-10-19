@@ -241,6 +241,7 @@ var currentMode;
 			authenticationProxy.loginObj = {};
 			$.jStorage.deleteKey("creds");
 			$("body").toggleClass("logged_in not_logged_in");
+			$("#pass").val("");
 			$('#corpusbox').corpusChooser("redraw");
 		});
 		
