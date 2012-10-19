@@ -2835,7 +2835,7 @@ settings.corpora.talbanken = {
 settings.corpora.gslc = {
 		id : "gslc",
 		title : "Göteborg Spoken Language Corpus (GSLC)",
-		description : '',
+		description : 'GSLC is an incrementally growing corpus of spoken language from different social activities. Based on the fact that spoken language varies considerably in different social activities with regard to pronunciation, vocabulary and grammar, the goal of the corpus is to include spoken language from as many social activities as possible.',
 		limited_access : true,
 		within : settings.defaultWithin,
 		context : settings.defaultContext,

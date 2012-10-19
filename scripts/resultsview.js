@@ -1238,72 +1238,48 @@ var StatsResults = {
 			return;
 		}
 		
-		
-		var options = {
+		grid = new Slick.Grid($("#myGrid"), data, columns, {
 			enableCellNavigation: false,
             enableColumnReorder: true
-		};
-		var dataView = new Slick.Data.DataView();
-		
-		grid = new Slick.Grid($("#myGrid"), dataView.rows, columns, options);
+		});
 		
 		this.grid = grid;
-
+		
 		this.resizeGrid();
 		
-		// wire up model events to drive the grid
-		dataView.onRowCountChanged.subscribe(function(args) {
-			grid.updateRowCount();
-            grid.render();
-		});
-		var selectedRowIds = [];
-		dataView.onRowsChanged.subscribe(function(rows) {
-			grid.removeRows(rows);
-			grid.render();
-
-			if (selectedRowIds.length > 0)
-			{
-				// since how the original data maps onto rows has changed,
-				// the selected rows in the grid need to be updated
-				var selRows = [];
-				for (var i = 0; i < selectedRowIds.length; i++)
-				{
-					var idx = dataView.getRowById(selectedRowIds[i]);
-					if (idx != undefined)
-						selRows.push(idx);
-				}
-
-				grid.setSelectedRows(selRows);
-			}
-		});
 		var sortCol = columns[1];
 		
-		function sort(a,b) {
-			if(sortCol.field == "hit_value")
-				var x = a[sortCol.field], y = b[sortCol.field];
-			else
-				var x = a[sortCol.field].absolute || 0, y = b[sortCol.field].absolute || 0;
-				
-			return (x == y ? 0 : (x > y ? 1 : -1));
+		window.data =data;
+		
+		grid.onSort.subscribe(function(e, args){
+			sortCol = args.sortCol;
+			
+			data.sort(function(a,b) {
+				if(sortCol.field == "hit_value")
+					var x = a[sortCol.field], y = b[sortCol.field];
+				else
+					var x = a[sortCol.field].absolute || 0, y = b[sortCol.field].absolute || 0;
+				var ret = (x == y ? 0 : (x > y ? 1 : -1));
+				if(!args.sortAsc) ret *= -1;
+				return ret;
+			});
+			
+	        grid.setData(data);
+	        grid.updateRowCount();
+	        grid.render(); 
+			
+		});
+		function refreshHeaders() {
+			$(".slick-header-column:nth(1)").click().click();
+			$(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
+				$(this).localeKey($(this).text());
+			});
 		}
 		
-		grid.onSort = function (col, sortAsc) {
-			sortCol = col;
-			dataView.sort(sort, sortAsc);
-		};
-        
-        dataView.beginUpdate();
-		dataView.setItems(data);
-		dataView.setFilter(function(item) {
-			return true;
+		grid.onHeaderCellRendered.subscribe(function(e, args) {
+			refreshHeaders();
 		});
-		dataView.endUpdate();
-		
-//		grid.setSortColumn("total", true);
-		$(".slick-header-column:nth(1)").click().click();
-		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
-			$(this).localeKey($(this).text());
-		});
+		refreshHeaders();
 		
 		this.renderPlot();
 		

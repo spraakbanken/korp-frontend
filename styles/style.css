@@ -1390,10 +1390,9 @@ a.relStat:hover {
 	right : 0;
 }
 
-.slick-cell > span {
+/*.slick-cell > span {
 	position: absolute;
-	top : 3px;
-}
+	top : 3px;}
 
 .slick-cell .wordclass_suffix {
     position :static;
@@ -1402,7 +1401,7 @@ a.relStat:hover {
 .slick-cell {
 	position: relative;
 }
-
+*/
 .lemgram_section {
 	display : inline-block;
 	margin-right : 30px;
