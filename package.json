@@ -1,0 +1,9 @@
+{
+  "author": "Johan Roxendal",
+  "name": "Korp",
+  "homepage":"http://spraakbanken.gu.se/korp",
+  "licences":"GPL v.3",
+  "version": "2.0",
+  "dependencies": {},
+  "devDependencies": {}
+}
