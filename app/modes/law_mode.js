@@ -4,7 +4,8 @@ settings.primaryLight = "#F2FFFF";
 settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
-
+settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
+  
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -12,43 +13,108 @@ $("#showLineDiagram").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corporafolders.magazines = {
+settings.corporafolders.modern = {
 	title : "Moderna lagar och rättsfall",
 	contents : ["sfs", "moderntdv"]
 };
 
-settings.corpora.fsvlagrummetnew = {
-	id : "fsvlagrummetnew",
+settings.corporafolders.fsvlagar = {
 	title : "Fornsvenska textbankens lagtexter",
-	description : "Giftermåls balk, Kristoffers Landslag, Magnus Erikssons Landslag, Magnus Erikssons Stadslag",
+	contents : ["fsv-aldrelagar", "fsv-yngrelagar"]
+};
+
+
+settings.corpora["fsv-yngrelagar"] = {
+	id : "fsv-yngrelagar",
+	title : "Yngre lagar – Fornsvenska textbankens material",
+	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes :  {
+	attributes : {
+		pos : {
+ 		 	type : "set",
+ 		 	label : "pos"
+  			},
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
-		variants:{
-			type : "set",
-			label : "variants"
-		}
-	},
+		fsvvariants : {
+ 		 	type : "set",
+ 		 	label : "variants"
+  			}
+        },
 	struct_attributes : {
-		text_date : {label : "date"},
 		text_title : {
 			label : "title",
 			displayType : "select",
+			localize : false,
 			dataset : {
-				"Giftermåls balk \\(1734\\)": "giftermalsbalk",
-				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL":"krLandrade",
-			        "Kristoffers Landslag, flockar direkt hämtade från MEL" : "krLdirekt",
-				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL":"krLnyskrivna",
-				"Magnus Erikssons Landslag":"meL",
-				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar" : "meSt" 
-	
+				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL" : "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
+				"Kristoffers Landslag" : "Kristoffers Landslag",
+				"Kristoffers Landslag, flockar direkt hämtade från MEL" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
+				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
 			},
-            opts : settings.liteOptions
-		}	
+		},
+		text_date : {label : "date"}
 	}
 };
+
+settings.corpora["fsv-aldrelagar"] = {
+	id : "fsv-aldrelagar",
+	title : "Äldre lagar – Fornsvenska textbankens material",
+	description : settings.fsvdescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		fsvvariants : {
+ 		 	type : "set",
+ 		 	label : "variants"
+  			}
+        },
+	struct_attributes : {
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+				"Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
+				"Södermannalagen, enligt Codex iuris Sudermannici",
+				"Östgötalagen, fragment H, ur Kyrkobalken ur Skokloster Avdl I 145",
+				"Yngre Västmannalagen, enl Holm B 57",
+				"Vidhemsprästens anteckningar",
+				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
+				"Södermannalagens additamenta, efter NKS 2237",
+				"Hälsingelagen",
+				"Yngre Västgötalagen, tillägg, enligt Holm B 58",
+				"Östgötalagen, fragment C, ur Holm B 1709",
+				"Yngre Västgötalagen, enligt Holm B 58",
+				"Upplandslagen enl Schlyters utgåva och Codex Ups C 12, hskr A",
+				"Skånelagen",
+				"Östgötalagen, fragment D, ur Holm B 24",
+				"Östgötalagen A, ur Holm B 50",
+				"Äldre Västgötalagen",
+				"Östgötalagen, fragment M, ur Holm B 196",
+				"Gutalagen enligt Holm B 64",
+				"Upplandslagen enligt Codex Holm B 199, Schlyters hskr B",
+				"Gutalagens additamenta enligt AM 54",
+				"Smålandslagens kyrkobalk",
+				"Dalalagen (Äldre Västmannalagen)",
+				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
+				"Bjärköarätten",
+				"Magnus Erikssons Landslag",
+				"Östgötalagen, fragment N, ur Köpenhamn AM 1056",
+				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
+				"Östgötalagen, fragment E, ur Ups B 22"
+			],
+        },	
+		text_date : {label : "date"}
+	}
+};
+
+
+
 settings.corpora["lag1734"] = {
 	id : "lag1734",
 	title : "1734 års lag",
@@ -75,7 +141,7 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förarbeten vol 6" : "forarbeten1734v6",
 				"1734 års lag Förarbeten vol 7" : "forarbeten1734v7",
 				"1734 års lag Förarbeten vol 8" : "forarbeten1734v8",
-				"Giftermåls balk \\(1734\\)": "giftermalsbalk",
+				"Giftermåls balk \(1734\)": "giftermalsbalk",
 				"Missgierningsbalk": "missgierningsbalk"
 			},
 	                opts : settings.liteOptions
@@ -91,7 +157,11 @@ settings.corpora["lag1800"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : attrs.pos,
+		pos : {
+ 		 	type : "set",
+ 		 	label : "pos"
+  			},
+		//pos : attrs.pos,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
