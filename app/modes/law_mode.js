@@ -49,15 +49,18 @@ settings.corpora.fsvlagrummetnew = {
 		}	
 	}
 };
-
 settings.corpora["lag1734"] = {
 	id : "lag1734",
 	title : "1734 års lag",
-	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk",
+	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk, Giftermålsbalk",
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {
+		lemma : attrs.baseform,
+		lex : attrs.lemgram
+                },
 	struct_attributes : {
+		paragraph_marginal : {label : "paragraph_marginal"},
 		text_date : {label : "date"},
 		text_title : {
 			label : "title",
@@ -72,6 +75,7 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förarbeten vol 6" : "forarbeten1734v6",
 				"1734 års lag Förarbeten vol 7" : "forarbeten1734v7",
 				"1734 års lag Förarbeten vol 8" : "forarbeten1734v8",
+				"Giftermåls balk \\(1734\\)": "giftermalsbalk",
 				"Missgierningsbalk": "missgierningsbalk"
 			},
 	                opts : settings.liteOptions
@@ -79,13 +83,21 @@ settings.corpora["lag1734"] = {
 	}
 };
 
+
 settings.corpora["lag1800"] = {
 	id : "lag1800",
 	title : "Lagar från 1800-talet",
 	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {
+		pos : attrs.pos,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -126,6 +138,55 @@ settings.corpora["tankebok"] = {
 		paragraph_marginal : {label : "paragraph_marginal"}
 	}
 };
+
+settings.corpora["sfs"] = {
+	id : "sfs",
+	title : "Svensk författningssamling",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {label : "title"}
+	}
+};
+settings.corpora["moderntdv"] = {
+	id : "moderntdv",
+	title : "Domar",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {label : "title"}
+	}
+};
+
+
 
 settings.corpora["sfs"] = {
 	id : "sfs",
