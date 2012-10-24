@@ -5,7 +5,37 @@ settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
 settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
-  
+settings.posset = {
+       type : "set",
+       label : "pos",
+       displayType : "select",
+       dataset :  {
+		"AB" : "AB",
+		"MID|MAD|PAD" : "DL",
+		"DT" : "DT",
+		"HA" : "HA",
+		"HD" : "HD",
+		"HP" : "HP",
+		"HS" : "HS",
+		"IE" : "IE",
+		"IN" : "IN",
+		"JJ" : "JJ",
+		"KN" : "KN",
+		"NN" : "NN",
+		"PC" : "PC",
+		"PL" : "PL",
+		"PM" : "PM",
+		"PN" : "PN",
+		"PP" : "PP",
+		"PS" : "PS",
+		"RG" : "RG",
+		"RO" : "RO",
+		"SN" : "SN",
+		"UO" : "UO",
+		"VB" : "VB"
+  			}
+};
+	 
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -31,12 +61,10 @@ settings.corpora["fsv-yngrelagar"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : {
- 		 	type : "set",
- 		 	label : "pos"
-  			},
+                //När nya korpus är importerad: posset : settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
+		//När nya korpus är importerad: variants : {
 		fsvvariants : {
  		 	type : "set",
  		 	label : "variants"
@@ -65,9 +93,10 @@ settings.corpora["fsv-aldrelagar"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : attrs.pos,
+//                posset : settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
+		//variants : {
 		fsvvariants : {
  		 	type : "set",
  		 	label : "variants"
@@ -157,11 +186,7 @@ settings.corpora["lag1800"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : {
- 		 	type : "set",
- 		 	label : "pos"
-  			},
-		//pos : attrs.pos,
+                posset :  settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
@@ -216,7 +241,7 @@ settings.corpora["sfs"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : attrs.pos,
+                posset : settings.posset,
 		msd : attrs.msd,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
@@ -239,7 +264,7 @@ settings.corpora["moderntdv"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-		pos : attrs.pos,
+                posset : settings.posset,
 		msd : attrs.msd,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
@@ -255,56 +280,6 @@ settings.corpora["moderntdv"] = {
 		text_title : {label : "title"}
 	}
 };
-
-
-
-settings.corpora["sfs"] = {
-	id : "sfs",
-	title : "Svensk författningssamling",
-	description : "",
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_date : {label : "date"},
-		text_title : {label : "title"}
-	}
-};
-settings.corpora["moderntdv"] = {
-	id : "moderntdv",
-	title : "Domar",
-	description : "",
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_date : {label : "date"},
-		text_title : {label : "title"}
-	}
-};
-
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 
