@@ -214,7 +214,7 @@
     "fsv:baseform" : "grundform (fornsvenska)",
     "fsv:lemgram" : "lemgram (fornsvenska)",
     "fsv:variants" : "varianter (fornsvenska)",
-    "variants" : "varianter",
+    "variants" : "stavningsvarianter",
 
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
