@@ -14,7 +14,38 @@ settings.fsvattributes = {
   	type : "set",
   	label : "lemgram"
   	},
-  fsvvariants : {
+  posset : {
+       type : "set",
+       label : "pos",
+       displayType : "select",
+       translationKey : "pos_",
+       dataset :  {
+		"AB" : "AB",
+		"MID|MAD|PAD" : "DL",
+		"DT" : "DT",
+		"HA" : "HA",
+		"HD" : "HD",
+		"HP" : "HP",
+		"HS" : "HS",
+		"IE" : "IE",
+		"IN" : "IN",
+		"JJ" : "JJ",
+		"KN" : "KN",
+		"NN" : "NN",
+		"PC" : "PC",
+		"PL" : "PL",
+		"PM" : "PM",
+		"PN" : "PN",
+		"PP" : "PP",
+		"PS" : "PS",
+		"RG" : "RG",
+		"RO" : "RO",
+		"SN" : "SN",
+		"UO" : "UO",
+		"VB" : "VB"
+  			}
+   },
+  variants : {
   	type : "set",
   	label : "variants"
   	}
