@@ -871,7 +871,7 @@ var LemgramResults = {
 	renderTables : function (lemgram, data) {
 		var self = this;
 		
-		var wordClass = util.splitLemgram(lemgram)[1].slice(0, 2);
+		var wordClass = util.splitLemgram(lemgram).pos.slice(0, 2);
 		
 		function getRelType(item) {
 			if(item.dep == lemgram) return item.rel + "_h";

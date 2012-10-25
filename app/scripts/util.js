@@ -68,11 +68,11 @@ util.lemgramToString = function(lemgram, appendIndex) {
 	var infixIndex = "";
 	if(util.isLemgramId(lemgram)) {
 		var match = util.splitLemgram(lemgram);
-		if(appendIndex != null && match[2] != "1") {
-			infixIndex = $.format("<sup>%s</sup>", match[2]);
+		if(appendIndex != null && match.index != "1") {
+			infixIndex = $.format("<sup>%s</sup>", match.index);
 		}
-		var concept = match[0].replace(/_/g, " ");
-		var type = match[1].slice(0, 2);
+		var concept = match.form.replace(/_/g, " ");
+		var type = match.pos.slice(0, 2);
 	}
 	else { // missing from saldo, and has the form word_NN instead.
 		var concept = "";
@@ -118,7 +118,10 @@ util.splitLemgram = function(lemgram) {
 		throw new Error("Input to util.splitLemgram is not a lemgram: " + lemgram);
 		return;
 	}
-	return lemgram.match(/(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(1);
+	var keys = ["morph", "form", "pos", "index", "startIndex"];
+	var splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2);
+	
+	return _.object(keys, splitArray);
 };
 
 util.splitSaldo = function(saldo) {

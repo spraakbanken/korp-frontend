@@ -39,6 +39,7 @@
 	"login_fail_msg" : "Login misslyckades, kontrollera användarnamn och lösenord och försök igen.",
 	"send" : "Skicka",
 	"log_out" : "Logga ut",
+	"strict" : "strikt",
 	
 	"any_word_placeholder" : "<vilket ord som helst>",
 	"case_insensitive" : "skiftlägesoberoende",

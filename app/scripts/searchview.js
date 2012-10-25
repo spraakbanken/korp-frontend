@@ -10,8 +10,8 @@ var view = {};
 view.lemgramSort = function(first, second) {
 	var match1 = util.splitLemgram(first);
 	var match2 = util.splitLemgram(second);
-	if(match1[0] == match2[0])
-		return parseInt(match1[2]) - parseInt(match2[2]); 
+	if(match1.form == match2.form)
+		return parseInt(match1.index) - parseInt(match2.index); 
 	return first.length - second.length;
 };
 
@@ -478,6 +478,10 @@ var ExtendedSearch = {
 			return false;
 		});
 		
+		this.$main.find("#strict_chk").change(function() {
+			advancedSearch.updateCQP();
+		});
+		
 		this.setupContainer("#query_table");
 		
 	},
@@ -571,7 +575,7 @@ var AdvancedSearch = {
 	
 	updateCQP : function() {
 	    var query = $(".query_token").map(function() {
-	    	return $(this).extendedToken("getCQP");
+	    	return $(this).extendedToken("getCQP", $("#strict_chk").is(":checked"));
 	    }).get().join(" ");
 	    this.setCQP(query);
 	    return query;

@@ -100,8 +100,8 @@
 		<!-- build:js scripts/scripts.js -->
 		
 		
-		<script type="text/javascript" src="scripts/korp.js"></script>
-		<script type="text/javascript" src="scripts/sidebar.js"></script>
+<!-- 		<script type="text/javascript" src="scripts/korp.js"></script> -->
+<!-- 		<script type="text/javascript" src="scripts/sidebar.js"></script> -->
 		
 		<script type="text/javascript" src="scripts/util.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
@@ -442,7 +442,7 @@
 	<script id="similarTmpl" type="text/x-jquery-tmpl">
 	<li>
 		{{each rel}}
-			<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value)[0]}</a>
+			<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
 		{{/each}}
 	</li>
 		

@@ -318,8 +318,9 @@ var Sidebar = {
 			.find("li")
 			.wrap("<a href='javascript:void(0)' />")
 			.click(function() {
-				var split = util.splitLemgram(idArray[$(this).parent().index()]);
-				var id = $.format("%s..%s.%s", split);
+				var id = idArray[$(this).parent().index()];
+				var split = util.splitLemgram(id);
+				var id = $.format("%(form)s..%(pos)s.%(index)s", split);
 				c.log("sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram"));
 				if($.inArray(attr, ["dalinlem", "saldolem"]) != -1) {
 					advancedSearch.setCQP($.format("[%s contains '%s']", [attr, id]));
@@ -375,8 +376,8 @@ var Sidebar = {
 			}).sort(function(a, b) {
 				var splita = util.splitLemgram(a);
 				var splitb = util.splitLemgram(b);
-				var strvala = getStringVal(splita[0]) + getStringVal(splita[1]) + splita[2]; 
-				var strvalb = getStringVal(splitb[0]) + getStringVal(splitb[1]) + splitb[2]; 
+				var strvala = getStringVal(splita.form) + getStringVal(splita.pos) + splita.index; 
+				var strvalb = getStringVal(splitb.form) + getStringVal(splitb.pos) + splitb.index; 
 								
 				return parseInt(strvala) - parseInt(strvalb);
 				
@@ -902,30 +903,37 @@ var ExtendedToken = {
 		this._trigger("change");
 	},
 	
-	getOrCQP : function(andSection, minAnno) {
+	getOrCQP : function(andSection, expand) {
 		var self = this;
 //	    var query = {token: []};
 		var output = "";
 	    var args = {};
-	    andSection.find(".or_arg").each(function(){
-	        var type = $(this).find(".arg_type").val();
-	        var data = $(this).find(".arg_type :selected").data("dataProvider");
-	        var value = $(this).find(".arg_value").val();
-	        var opt = $(this).find(".arg_opts").val();
-	        var case_sens = $(this).find(".val_mod.sensitive").length === 0 ? " %c" : "";
-	        if(data.displayType == "autocomplete") {
-	        	value = null;
-	        }
-	        if (!args[type]) { 
-	        	args[type] = []; 
-	    	}
-	        args[type].push({
-	        	data : data, 
-	        	value : value || $(this).find(".arg_value").data("value") || "",
-	        	opt : opt,
-	        	case_sens : case_sens
-        	});
+	    $(".or_container", andSection).each(function(i, item) {
+//	    	var expand = expansionVector[i];
+	    	
+	    	$(this).find(".or_arg").each(function(){
+	    		var type = $(this).find(".arg_type").val();
+	    		var data = $(this).find(".arg_type :selected").data("dataProvider");
+	    		var value = $(this).find(".arg_value").val();
+	    		var opt = $(this).find(".arg_opts").val();
+	    		var case_sens = $(this).find(".val_mod.sensitive").length === 0 ? " %c" : "";
+	    		if(data.displayType == "autocomplete") {
+	    			value = null;
+	    		}
+	    		if (!args[type]) { 
+	    			args[type] = []; 
+	    		}
+	    		args[type].push({
+	    			data : data, 
+	    			value : value || $(this).find(".arg_value").data("value") || "",
+	    			opt : opt,
+	    			case_sens : case_sens
+	    		});
+	    	});
 	    });
+	    
+	    
+	    
 	    
 	    var inner_query = [];
 	    $.sortedEach(args, function(type, valueArray) {
@@ -959,33 +967,26 @@ var ExtendedToken = {
 	    					return $.format("(%s | %s)", [stringify(value), undef] );
 	    				}
 	    				
-	    				c.log('currentRank', getAnnotationRank(type), minAnno);
-	    				if(getAnnotationRank(type) > minAnno) {
+	    				if(expand) {
 	    					return expandToNonStrict(value);
-//	    					return $.format("(%s)", [stringify(value), stringify("")].join(" | "));
 	    				}
 	    			} 
     				return stringify(value);
 	    			
 	    			
 	    		};
-	    		var argFunc;
-//	    		if(type == "word" && !obj.value) {
-//	    			argFunc = function() {return "";};
-//	    		}
-//	    		else
-    			argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc; 
+    			var argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc; 
 	    		inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
 	    	});
 	    	
 	    }, function(a, b) { // sort function for key order
 	    	return 1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio)); 
 	    });
-	    
+	    c.log('inner_query', inner_query, expand);
 	    if (inner_query.length > 1) {
 	    	output = "(" + inner_query.join(" | ") + ")";
 	    } else {
-	    	output = inner_query.join(" | ");
+	    	output = inner_query[0];
 	    }
 	    var bound = [];
 	    if(this.element.is(".lbound_item")) bound.push("lbound(sentence)")
@@ -996,18 +997,39 @@ var ExtendedToken = {
 	    return output + boundStr;
 	},
 	
-	getCQP : function() {
+	getCQP : function(strict) {
 		var self = this;
+		function minOfContainer(or_container) {
+			var types = _.invoke(_.map($(".arg_type", or_container).get(), $), "val");
+			return Math.min.apply(null, _.map(types, getAnnotationRank));
+		}
 		
-		if(currentMode == "law") {
-			var types = _.invoke(_.map($(".arg_type"), $), "val");
-			var minAnno = Math.min.apply(null, _.map(types, getAnnotationRank));
-			c.log("getcqp min anno", minAnno)
+		if(!strict && currentMode == "law") {
+			// which or blocks must be expanded?
+			
+			var totalMin = _.map($(".or_container").get(), minOfContainer);
+			c.log("totalMin", totalMin);
+			
+			var min = Math.min.apply(null, totalMin);
+			
+//			var expansionVector = [];
+//			$(".or_container").each(function(i, item) {
+//				var or_min = minOfContainer(item);
+//				if(or_min > min) expansionVector[i] = true;
+//			});
+//			
+//			c.log("getcqp expansionVector", expansionVector);
+			
 			
 		}
 		
-		var output = this.element.find(".query_arg").map(function() {
-			return self.getOrCQP($(this), minAnno); 
+		var output = this.element.find(".query_arg").map(function(item, i) {
+			var expand = false;
+			if(!strict && currentMode == "law") {
+				var or_min = minOfContainer(item);
+				if(or_min > min) expand = true;
+			}
+			return self.getOrCQP($(this), expand); 
 		}).get();
 		output = $.grep(output, Boolean);
 		

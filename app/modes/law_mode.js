@@ -9,6 +9,7 @@ settings.posset = {
        type : "set",
        label : "pos",
        displayType : "select",
+       translationKey : "pos_",
        dataset :  {
 		"AB" : "AB",
 		"MID|MAD|PAD" : "DL",
@@ -173,7 +174,7 @@ settings.corpora["lag1734"] = {
 				"Giftermåls balk \(1734\)": "giftermalsbalk",
 				"Missgierningsbalk": "missgierningsbalk"
 			},
-	                opts : settings.liteOptions
+            opts : settings.liteOptions
 		}
 	}
 };
@@ -186,7 +187,7 @@ settings.corpora["lag1800"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-                posset :  settings.posset,
+        posset :  settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,

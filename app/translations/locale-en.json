@@ -39,6 +39,7 @@
     "login_fail_msg" : "Authentication failed, please check your username and password and try again.",
     "send" : "Send",
     "log_out" : "Log out",
+    "strict" : "strict",
 	
 	"is" : "is", 
 	"is_not" : "is not",
