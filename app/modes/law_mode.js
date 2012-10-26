@@ -62,11 +62,10 @@ settings.corpora["fsv-yngrelagar"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-                //När nya korpus är importerad: posset : settings.posset,
+                posset : settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
-		//När nya korpus är importerad: variants : {
-		fsvvariants : {
+		variants : {
  		 	type : "set",
  		 	label : "variants"
   			}
@@ -94,11 +93,10 @@ settings.corpora["fsv-aldrelagar"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-//                posset : settings.posset,
+                posset : settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
-		//variants : {
-		fsvvariants : {
+		variants : {
  		 	type : "set",
  		 	label : "variants"
   			}
@@ -143,6 +141,30 @@ settings.corpora["fsv-aldrelagar"] = {
 	}
 };
 
+
+settings.corpora["tankebok"] = {
+	id : "tankebok",
+	title : "Stockholms stads tänkeböcker",
+	description : "Stockholms stads tänkeböcker från 1626",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {},
+	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {
+			label : "title",
+			displayType : "select",
+			dataset : {
+				"Stockholms stads tänkebok - Koncept " : "sst_koncept",
+				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
+				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
+			},
+	                opts : settings.liteOptions
+
+		},
+		paragraph_marginal : {label : "paragraph_marginal"}
+	}
+};
 
 
 settings.corpora["lag1734"] = {
@@ -207,31 +229,7 @@ settings.corpora["lag1800"] = {
 
 		},
 		text_date : {label : "date"},
-		paragraph_marginal : {label : "paragraph_marginal"}
-	}
-};
-
-settings.corpora["tankebok"] = {
-	id : "tankebok",
-	title : "Stockholms stads tänkeböcker",
-	description : "Stockholms stads tänkeböcker från 1626",
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : {},
-	struct_attributes : {
-		text_date : {label : "date"},
-		text_title : {
-			label : "title",
-			displayType : "select",
-			dataset : {
-				"Stockholms stads tänkebok - Koncept " : "sst_koncept",
-				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
-				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
-			},
-	                opts : settings.liteOptions
-
-		},
-		paragraph_marginal : {label : "paragraph_marginal"}
+		text_marginal : {label : "paragraph_marginal"}
 	}
 };
 
