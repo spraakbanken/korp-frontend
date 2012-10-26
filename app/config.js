@@ -2968,7 +2968,7 @@ settings.reduce_stringify = function(type) {
 			var query = $.map(dataContext.hit_value.split(" "), function(item) {
 				return $.format('[deprel="%s"]', item);
 			}).join(" ");
-			var output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
+			output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
 					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
 			return appendDiagram(output, corpora, value);
 			
@@ -2976,8 +2976,15 @@ settings.reduce_stringify = function(type) {
 	default:
 		return function(row, cell, value, columnDef, dataContext) {
 			var corpora = getCorpora(dataContext);
+			var query = $.map(dataContext.hit_value.split(" "), function(item) {
+				return $.format('[%s="%s"]', [value, item]);
+			}).join(" ");
+			output = $.format("<span data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
+					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString(value)]); 
 			if(value == "&Sigma;") return appendDiagram(output, corpora, value);
-			return appendDiagram(output, corpora, value);;
+			c.log("stringify", row, cell, value, columnDef, dataContext, appendDiagram(output, corpora, value))
+			
+			return appendDiagram(output, corpora, value);
 		};
 	}
 	
