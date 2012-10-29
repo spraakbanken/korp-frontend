@@ -352,27 +352,33 @@ var LemgramProxy = {
 		this.pendingRequest = {abort : $.noop};
 	},
 	
-	sblexSearch : function(word, type) {
+	karpSearch : function(word, sw_forms) {
 		var self = this;
 		var deferred = $.Deferred(function( dfd ){
 			self.pendingRequest = $.ajax({
-			    url : "http://spraakbanken.gu.se/ws/lexikon",
+//			    url : "http://spraakbanken.gu.se/ws/lexikon",
+			    url : "http://spraakbanken.gu.se/ws/karp-sok",
 			    data : {
 			        wf : word,
-			        lexikon : "saldom",
+			        resource : settings.corpusListing.getMorphology(),
 			        format : "json",
-			        "sms-forms" : false
+			        "sms-forms" : false,
+			        "sw-forms" : sw_forms
 		        },
 			    success : function(data, textStatus, xhr) {
 			    	if(data.count == 0) {
 			    		dfd.reject();
 			    		return;
 			    	}
+			    	c.log('karp success', data, sw_forms);
+			    	
 			    	var div = $.isPlainObject(data.div) ? [data.div] : data.div;
-		            var output = $.map(div, function(item) {
-		            	return item.LexicalEntry[type];
+		            var output = $.map(div.slice(0, Number(data.count)), function(item) {
+		            	item = util.convertLMFFeatsToObjects(item);
+		            	
+		            	return item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram;
 		            });
-		            
+		            c.log("lemgramarray", output);
 		        	dfd.resolve(output, textStatus, xhr);
 		        },
 		        error : function(jqXHR, textStatus, errorThrown) {
@@ -383,6 +389,40 @@ var LemgramProxy = {
 			});
 		}).promise();
 		return deferred;
+	},
+	
+	saldoSearch : function(word, sw_forms) {
+		var dfd = $.Deferred();
+		this.karpSearch(word, sw_forms)
+		.done(function(lemgramArray) {
+			
+			$.ajax({
+				url : "http://spraakbanken.gu.se/ws/karp-sok",
+				data : {
+					lemgram : lemgramArray.join("|"),
+					resource : "saldo",
+					format : "json"
+				
+				}
+			}).done(function(data, textStatus, xhr) {
+				if(data.count == 0) {
+		    		dfd.reject();
+		    		return;
+		    	}
+		    	
+		    	var div = $.isPlainObject(data.div) ? [data.div] : data.div;
+	            var output = $.map(div.slice(0, Number(data.count)), function(item) {
+	            	var sense = item.LexicalEntry.Sense;
+	            	if(!$.isArray(sense)) sense = [sense];
+	            	return _.map(sense, function(item) {
+	            		return item.id;
+	            	});
+	            });
+	            
+	        	dfd.resolve(output, textStatus, xhr);
+			});
+		});
+		return dfd;
 	},
 	
 	lemgramCount : function(lemgrams, findPrefix, findSuffix) {

@@ -17,7 +17,7 @@
 		<!-- endbuild -->
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico" />
 		<script>
-			var isLab = window.location.pathname == "/korplabb/";
+			var isLab = window.location.pathname.split("/")[1] == "korplabb";
 			
 			if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
 			window.c = window.console;
@@ -91,23 +91,25 @@
 		<script type="text/javascript" src="lib/flot/jquery.flot.min.js"></script>
 		<script type="text/javascript" src="lib/flot/jquery.flot.stack.js"></script>
 		
-		
 		<!-- endbuild -->
 		
 		<script type="text/javascript" src="common_lib/jquery.ui.subclass.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
 		
+		<!-- 		<script type="text/javascript" src="scripts/korp.js"></script> -->
+<!-- 		<script type="text/javascript" src="scripts/bin/sidebar.js"></script> -->
+		
 		<!-- build:js scripts/scripts.js -->
 		
 		
-<!-- 		<script type="text/javascript" src="scripts/korp.js"></script> -->
-<!-- 		<script type="text/javascript" src="scripts/sidebar.js"></script> -->
+
 		
 		<script type="text/javascript" src="scripts/util.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
 		<script type="text/javascript" src="scripts/widgets.js"></script>
 		
 		<script type="text/javascript" src="config.js"></script>
+		<script type="text/javascript" src="config.stringify.js"></script>
 		
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
 		<script type="text/javascript" src="scripts/pie-widget.js"></script>
@@ -127,7 +129,7 @@
 		
 		
 	</head>
-  	<body class="not_logged_in" >
+  	<body class="not_logged_in" ng-app="korpApp">
 	  	<noscript>
 	  		<h2>You need JavaScript to run Korp.</h2>
 	  	</noscript>
@@ -304,7 +306,16 @@
 						</div>
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="sidebar" class="ui-corner-all kwic_sidebar" ></div>	
+					<div id="sidebar" class="ui-corner-all kwic_sidebar" ng-controller="SidebarCtrl" >
+						
+						<ul>
+							<li ng-repeat="(key,val) in data">
+								key : {{key}}, item : {{val}}
+							</li>
+						</ul>
+						{{hello}}
+					
+					</div>	
 					<div style="clear : both; float : none;"></div>
 				</div>
 			</div>
@@ -357,7 +368,7 @@
 					</a>	
 					
     			{{else $value.type == "set" && $.inArray($index, 
-					["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem", "fsvbaseform", "fsvlemgram", "fsvvariants"]) != -1}}
+					["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem", "fsvbaseform", "fsvlemgram", "variants"]) != -1}}
     			<span id="sidebar_${$index}">${$data[$index]}</span>
     			{{else $value.type == "set"}}
     				<ul data-type="${$value.label}">
@@ -376,7 +387,11 @@
 	</script>
 	
 	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
-			<li>${$data}</li>
+			{{if $item.translationKey}}
+				<li rel="localize[${$item.translationKey + $data}]">${$data}</li> 
+			{{else}}
+				<li>${$data}</li> 
+			{{/if}}
 	</script>
 	
 	<script id="sentenceTmpl" type="text/x-jquery-tmpl">

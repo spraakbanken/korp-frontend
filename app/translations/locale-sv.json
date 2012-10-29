@@ -175,6 +175,9 @@
 	
 	"chapter" : "kapitel",
 	"verse" : "vers",
-	"modern" : "modern"
+	"saldom" : "moderna",
+    "dalinm" : "1800-tal",
+    "swedbergm" : "1600-tal",
+    "fsvm" : "fornsvenska"
 	
 }

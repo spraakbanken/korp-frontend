@@ -63,8 +63,21 @@ $.extend( $.ui.autocomplete.prototype, {
 			li.addClass("autocomplete-item-disabled");
 		}
 		return li;
+	},
+	_renderMenu: function( ul, items ) {
+	    var that = this,
+	        currentCategory = "";
+	    $.each( items, function( index, item ) {
+	        if ( item.category && item.category != currentCategory ) {
+	            ul.append( $("<li class='ui-autocomplete-category'></li>").localeKey(item.category) );
+	            currentCategory = item.category;
+	        }
+	        that._renderItem( ul, item );
+	    });
 	}
 });
+
+
 
 $.fn.korp_autocomplete = function(options) {
 	var selector = $(this);
@@ -83,6 +96,7 @@ $.fn.korp_autocomplete = function(options) {
 			
 			idArray.sort(options.sortFunction || view.lemgramSort);
 			
+			
 			var labelArray = util.sblexArraytoString(idArray, options.labelFunction);
 			var listItems = $.map(idArray, function(item, i) {
 				return {
@@ -90,6 +104,7 @@ $.fn.korp_autocomplete = function(options) {
 					value : item,
 					input : request.term,
 					enabled : true
+//					categories : item.split("--")[0] || "saldom"
 				};
 			});
 			
@@ -110,9 +125,11 @@ $.fn.korp_autocomplete = function(options) {
 	.autocomplete({
 		html : true,
 		source: function( request, response ) {
-			
-			var promise = lemgramProxy.sblexSearch(request.term, options.type)
+			c.log("autocomplete request", request);
+			var promise = options.type == "saldo" ? lemgramProxy.saldoSearch(request.term, options["sw-forms"]) : 
+													lemgramProxy.karpSearch(request.term, options["sw-forms"]) 
 			.done(function(idArray, textstatus, xhr) {
+				
 				idArray = $.unique(idArray);
 				
 				options.middleware(request, idArray).done(function(listItems) {
@@ -257,7 +274,7 @@ var Sidebar = {
 			.appendTo("#selected_sentence");
 		}
 		this._sidebarSaldoFormat();
-		
+		this.element.localize();
 		this.applyEllipse();
 		
 	},
@@ -307,7 +324,7 @@ var Sidebar = {
 	},
 	
 	_sidebarSaldoFormat : function() {
-		$("#sidebar_lex, #sidebar_prefix, #sidebar_suffix, #sidebar_dalinlem, #sidebar_saldolem").each(function() {
+		$("#sidebar_lex, #sidebar_prefix, #sidebar_suffix, #sidebar_dalinlem, #sidebar_saldolem, #sidebar_variants").each(function() {
 			var idArray = $.grep($(this).text().split("|"), function(itm) {
 				return itm && itm.length;  
 			}).sort();
@@ -354,7 +371,7 @@ var Sidebar = {
 		
 		// hacked in at the last minute
 		
-		
+		/*
 		var fsvbase = $("#sidebar_fsvbaseform"); 
 		var labelArray = $.grep(fsvbase.text().split("|"), Boolean).sort();
 
@@ -369,7 +386,7 @@ var Sidebar = {
 			return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), function(a,b) {return a + b});
 		}
 		
-		$("#sidebar_fsvlemgram,#sidebar_fsvvariants").each(function() {
+		$("#sidebar_fsvlemgram,#sidebar_variants").each(function() {
 			
 			var saldoidArray = $.grep($(this).text().split("|"), function(itm) {
 				return itm && itm.length;  
@@ -390,7 +407,7 @@ var Sidebar = {
 				$(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7Cfsvm:%s" target="_blank" />', saldoidArray[i] )); 
 			})
 			.hoverIcon("ui-icon-extlink");
-			
+			*/
 			
 			
 			
@@ -406,7 +423,7 @@ var Sidebar = {
 //			})
 //			.hoverIcon("ui-icon-extlink");
 			
-		});
+//		});
 		
 	},
 	
@@ -773,7 +790,8 @@ var ExtendedToken = {
 					c.log("extended lemgram", lemgram, $(this));
 					$(this).data("value", data.label == "baseform" ? lemgram.split(".")[0] : lemgram);
 					$(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/gi, '')).val("").blur().placeholder();
-				}
+				},
+				"sw-forms" : true
 			})
 			.change(function(event) {
 				c.log("value null");
@@ -963,7 +981,8 @@ var ExtendedToken = {
 	    				
 	    				function expandToNonStrict(value) {
 	    					c.log("expandToNonStrict", $.format("(%s | %s)", [stringify(value), stringify("\\|")] ));
-	    					var undef = $.format("%s = '__UNDEF__'", type);
+	    					var prefix = obj.data.isStructAttr != null ? "_." : "";
+	    					var undef = $.format("%s%s = '__UNDEF__'", [prefix, type]);
 	    					return $.format("(%s | %s)", [stringify(value), undef] );
 	    				}
 	    				
@@ -1001,6 +1020,7 @@ var ExtendedToken = {
 		var self = this;
 		function minOfContainer(or_container) {
 			var types = _.invoke(_.map($(".arg_type", or_container).get(), $), "val");
+			c.log("minOfContainer", types, or_container, _.map(types, getAnnotationRank))
 			return Math.min.apply(null, _.map(types, getAnnotationRank));
 		}
 		
@@ -1012,21 +1032,13 @@ var ExtendedToken = {
 			
 			var min = Math.min.apply(null, totalMin);
 			
-//			var expansionVector = [];
-//			$(".or_container").each(function(i, item) {
-//				var or_min = minOfContainer(item);
-//				if(or_min > min) expansionVector[i] = true;
-//			});
-//			
-//			c.log("getcqp expansionVector", expansionVector);
-			
-			
 		}
 		
-		var output = this.element.find(".query_arg").map(function(item, i) {
+		var output = this.element.find(".query_arg").map(function(item) {
 			var expand = false;
 			if(!strict && currentMode == "law") {
-				var or_min = minOfContainer(item);
+				var or_min = minOfContainer(this);
+				c.log("or_min", min, or_min)
 				if(or_min > min) expand = true;
 			}
 			return self.getOrCQP($(this), expand); 

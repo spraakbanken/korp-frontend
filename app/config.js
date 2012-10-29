@@ -8,6 +8,8 @@ var settings = {};
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
+
+
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
 settings.secondaryColor = "";
@@ -3136,6 +3138,19 @@ var CorpusListing = new Class({
 			if("paragraph" in settings.corpora[id].within)
 				return id.toUpperCase() + ":paragraph";
 		}), Boolean).join();
+	},
+	
+	getMorphology : function() {
+		
+		return _.chain(this.selected)
+		.map(function(corpus) {
+			var morf = corpus.morf || "saldom";
+			return morf.split("|");
+		})
+		.flatten()
+		.unique()
+		.value()
+		.join("|");
 	}
 	
 });
@@ -3247,7 +3262,7 @@ settings.fsvlex = {
   	label : "lemgram"
 };
 settings.fsvvariants = {
-          pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+lemgram'>%s</a>",
+    pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+lemgram'>%s</a>",
   	type : "set",
   	label : "variants"
 };
@@ -3261,7 +3276,7 @@ var fsv_yngrelagar = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-                posset : settings.posset,
+        posset : settings.posset,
 		lemma : settings.fsvlemma,
 		lex : settings.fsvlex,
 		variants : settings.fsvvariants

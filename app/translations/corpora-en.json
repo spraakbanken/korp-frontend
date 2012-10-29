@@ -97,6 +97,7 @@
     "pos_SN" : "subjunction",
     "pos_UO" : "foreign word",
     "pos_VB" : "verb",
+    "pos_E": "e",
         
     "nn" : "noun", 
     "av" : "adjective", 
@@ -112,6 +113,7 @@
     "kn" : "conjunction", 
     "al" : "article", 
     "ie" : "infinitive particle",
+    "e" : "e",
     
     "mx" : "flerordsprefix",      
     "sx" : "prefix",                        

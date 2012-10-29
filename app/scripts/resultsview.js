@@ -401,6 +401,8 @@ var KWICResults = {
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
 		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus.toLowerCase());
+//		c.log("sidebar update", sentence.structs, data, sentence.corpus.toLowerCase());
+//		window.updateSidebar(data);
 		$("#columns").height($("#sidebar").height());
 		this.scrollToShowWord(word);
 		

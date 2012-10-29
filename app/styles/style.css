@@ -257,6 +257,14 @@ input:placeholder, textarea:placeholder {
     display : none;
 }
 
+.mode-law .within_select ~ * {
+    display : inline;
+}
+
+.within_select ~ * {
+    display : none;   
+}
+
 #removeLang, #linkedLang {
     display : none;   
 }
@@ -1633,4 +1641,12 @@ a.relStat:hover {
 .arg_value .to {
     float : right;
     text-align: left;    
+}
+
+.ui-autocomplete-category {
+    font-size : .7em;
+    text-transform: uppercase;
+    color : grey;
+    letter-spacing: 1.1;
+    
 }

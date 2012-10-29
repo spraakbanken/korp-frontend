@@ -213,18 +213,33 @@ var SimpleSearch = {
 					var dfd = $.Deferred();
 					lemgramProxy.lemgramCount(idArray, self.isSearchPrefix(), self.isSearchSuffix()).done(function(freqs) {
 						delete freqs["time"];
-						idArray.sort(function(first, second) {
-							return (freqs[second] || 0) - (freqs[first] || 0);
-						});
+						var has_morphs = settings.corpusListing.getMorphology().split("|").length > 1;
+						if(has_morphs) {
+							idArray.sort(function(a, b) {
+								var first = a.split("--").length > 1 ? a.split("--")[0] : "saldom";
+								var second = b.split("--").length > 1 ? b.split("--")[0] : "saldom";
+								if(first == second) return (freqs[b] || 0) - (freqs[a] || 0);
+								return second < first;
+								
+							});
+						} else {
+							idArray.sort(function(first, second) {
+								return (freqs[second] || 0) - (freqs[first] || 0);
+							});
+						}
 						
+						c.log("sortedArray", idArray)
 						var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
 						var listItems = $.map(idArray, function(item, i) {
-							return {
+							var out = {
 								label : labelArray[i],
 								value : item,
 								input : request.term,
 								enabled : item in freqs
 							};
+							if(has_morphs)
+								out["category"] = item.split("--").length > 1 ? item.split("--")[0] : "saldom";
+							return out;
 						});
 						
 						dfd.resolve(listItems);
@@ -235,7 +250,8 @@ var SimpleSearch = {
 						textinput.preloader("hide");
 					});
 					return dfd.promise();
-				}
+				},
+				"sw-forms" : false
 			});
 		
 		$("#prefixChk, #suffixChk, #caseChk").click(function() {
@@ -259,7 +275,7 @@ var SimpleSearch = {
 		var self = this;
 		
 		var promise = $("#simple_text").data("promise") 
-			|| lemgramProxy.sblexSearch(lemgram || $("#simple_text").val(), "lem"); 
+			|| lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), "Lemma"); 
 		
 		promise.done(function(lemgramArray) {
 			$("#lemgram_select").prev("label").andSelf().remove();

@@ -445,3 +445,81 @@ util.setLogin = function() {
 	$("#log_out .usrname").text(authenticationProxy.loginObj.name);
 	$(".err_msg", self).hide();
 };
+
+
+
+util.convertLMFFeatsToObjects = function(structure, key) {
+	   // Recursively traverse a tree, expanding each "feat" array into a real object, with the key "feat-[att]":
+
+	   if(structure != null) {
+	       var output = null;
+
+	       var theType = util.findoutType(structure);
+	       if( theType == "object" ) {
+	           output = {}
+
+	           $.each(structure, function(inkey, inval) {
+	               if( inkey == "feat" ) {
+
+	                   var innerType = util.findoutType(inval);
+
+	                   if( innerType == "array" ) {
+	                       $.each(inval, function(fkey, fval) {
+	                           var keyName = "feat_" + fval["att"];
+	                           if( output[keyName] === undefined ) {
+	                               output[keyName] = fval["val"];
+	                           } else {
+	                               if( $.isArray(output[keyName]) ) {
+	                                   output[keyName].push(fval["val"]);
+	                               } else {
+	                                   var dummy = output[keyName];
+	                                   output[keyName] = new Array();
+	                                   output[keyName].push(dummy);
+	                                   output[keyName].push(fval["val"]);
+	                               }
+	                           }
+	                       });
+	                   } else {
+	                       var keyName = "feat_" + inval["att"];
+	                       if( output[keyName] === undefined ) {
+	                           output[keyName] = inval["val"];
+	                       } else {
+	                           if( $.isArray(output[keyName]) ) {
+	                               output[keyName].push(inval["val"]);
+	                           } else {
+	                               var dummy = output[keyName];
+	                               output[keyName] = new Array();
+	                               output[keyName].push(dummy);
+	                               output[keyName].push(inval["val"]);
+	                           }
+	                       }
+	                   }
+
+	               } else {
+	                   output[inkey] = util.convertLMFFeatsToObjects(inval);
+	               }
+	           });
+
+	       } else if( theType == "array" ) {
+	           var dArr = new Array();
+	           $.each(structure, function(inkey, inval) {
+	               dArr.push(util.convertLMFFeatsToObjects(inval));
+	           });
+	           output = dArr;
+	       } else {
+	           output = structure;
+	       }
+
+	       return output;
+	   } else {
+	       return null;
+	   }
+	}
+
+util.findoutType = function(variable) {
+	   if( $.isArray(variable) ) {
+	       return "array";
+	   } else {
+	       return typeof(variable);
+	   }
+	};

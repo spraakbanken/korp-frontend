@@ -1,7 +1,7 @@
 
 settings.primaryColor = "#E0F4F4";
 settings.primaryLight = "#F2FFFF";
-settings.autocomplete = false;
+//settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
 
@@ -29,7 +29,7 @@ settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 
 settings.corpora["tankebok"] = {
-        morf : 'swedbergm|dalinm',
+    morf : 'swedbergm|dalinm',
 	id : "tankebok",
 	title : "Stockholms stads tänkeböcker",
 	description : "Stockholms stads tänkeböcker från 1626",

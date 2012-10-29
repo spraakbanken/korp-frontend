@@ -98,6 +98,7 @@
     "pos_SN": "subjunktion",
     "pos_UO": "utländskt ord",
     "pos_VB": "verb",
+    "pos_E": "e",
     
     "nn" : "substantiv", 
     "av" : "adjektiv", 
@@ -113,6 +114,7 @@
     "kn" : "konjunktion", 
     "al" : "artikel", 
     "ie" : "infinitivmärke",
+    "e" : "e",
     
     "mx" : "flerordsprefix",      
     "sx" : "prefix",
