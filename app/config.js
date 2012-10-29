@@ -3206,6 +3206,135 @@ var ParallelCorpusListing = new Class({
 });
 
 
+settings.posset = {
+       type : "set",
+       label : "pos",
+       displayType : "select",
+       translationKey : "pos_",
+       dataset :  {
+		"AB" : "AB",
+		"MID|MAD|PAD" : "DL",
+		"DT" : "DT",
+		"HA" : "HA",
+		"HD" : "HD",
+		"HP" : "HP",
+		"HS" : "HS",
+		"IE" : "IE",
+		"IN" : "IN",
+		"JJ" : "JJ",
+		"KN" : "KN",
+		"NN" : "NN",
+		"PC" : "PC",
+		"PL" : "PL",
+		"PM" : "PM",
+		"PN" : "PN",
+		"PP" : "PP",
+		"PS" : "PS",
+		"RG" : "RG",
+		"RO" : "RO",
+		"SN" : "SN",
+		"UO" : "UO",
+		"VB" : "VB"
+  			}
+};
+settings.fsvlemma = {
+	pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+wf'>%s</a>",
+  	type : "set",
+  	label : "baseform"
+};
+settings.fsvlex = {
+  	type : "set",
+  	label : "lemgram"
+};
+settings.fsvvariants = {
+          pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+lemgram'>%s</a>",
+  	type : "set",
+  	label : "variants"
+};
+ 
+settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
+var fsv_yngrelagar = {
+        morf : 'fsvm',
+	id : "fsv-yngrelagar",
+	title : "Yngre lagar – Fornsvenska textbankens material",
+	description : settings.fsvdescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+                posset : settings.posset,
+		lemma : settings.fsvlemma,
+		lex : settings.fsvlex,
+		variants : settings.fsvvariants
+        },
+	struct_attributes : {
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : {
+				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL" : "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
+				"Kristoffers Landslag" : "Kristoffers Landslag",
+				"Kristoffers Landslag, flockar direkt hämtade från MEL" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
+				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
+			},
+		},
+		text_date : {label : "date"}
+	}
+};
+
+var fsv_aldrelagar = {
+        morf : 'fsvm',
+	id : "fsv-aldrelagar",
+	title : "Äldre lagar – Fornsvenska textbankens material",
+	description : settings.fsvdescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+                posset : settings.posset,
+		lemma : settings.fsvlemma,
+		lex : settings.fsvlex,
+		variants : settings.fsvvariants
+                },
+	struct_attributes : {
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+				"Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
+				"Södermannalagen, enligt Codex iuris Sudermannici",
+				"Östgötalagen, fragment H, ur Kyrkobalken ur Skokloster Avdl I 145",
+				"Yngre Västmannalagen, enl Holm B 57",
+				"Vidhemsprästens anteckningar",
+				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
+				"Södermannalagens additamenta, efter NKS 2237",
+				"Hälsingelagen",
+				"Yngre Västgötalagen, tillägg, enligt Holm B 58",
+				"Östgötalagen, fragment C, ur Holm B 1709",
+				"Yngre Västgötalagen, enligt Holm B 58",
+				"Upplandslagen enl Schlyters utgåva och Codex Ups C 12, hskr A",
+				"Skånelagen",
+				"Östgötalagen, fragment D, ur Holm B 24",
+				"Östgötalagen A, ur Holm B 50",
+				"Äldre Västgötalagen",
+				"Östgötalagen, fragment M, ur Holm B 196",
+				"Gutalagen enligt Holm B 64",
+				"Upplandslagen enligt Codex Holm B 199, Schlyters hskr B",
+				"Gutalagens additamenta enligt AM 54",
+				"Smålandslagens kyrkobalk",
+				"Dalalagen (Äldre Västmannalagen)",
+				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
+				"Bjärköarätten",
+				"Magnus Erikssons Landslag",
+				"Östgötalagen, fragment N, ur Köpenhamn AM 1056",
+				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
+				"Östgötalagen, fragment E, ur Ups B 22"
+			],
+        },	
+		text_date : {label : "date"}
+	}
+};
+
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 

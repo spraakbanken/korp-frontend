@@ -75,54 +75,10 @@ settings.corporafolders.nysvenska = {
 	contents : ["fsv-nysvensklagar",  "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
 };
 
-settings.corpora["fsv-aldrelagar"] = {
-	id : "fsv-aldrelagar",
-	title : "Äldre lagar – Fornsvenska textbankens material",
-	description : settings.fsvdescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.fsvattributes,
-	struct_attributes : {
-		text_title : {
-			label : "title",
-			displayType : "select",
-			localize : false,
-			dataset : [
-				"Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
-				"Södermannalagen, enligt Codex iuris Sudermannici",
-				"Östgötalagen, fragment H, ur Kyrkobalken ur Skokloster Avdl I 145",
-				"Yngre Västmannalagen, enl Holm B 57",
-				"Vidhemsprästens anteckningar",
-				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
-				"Södermannalagens additamenta, efter NKS 2237",
-				"Hälsingelagen",
-				"Yngre Västgötalagen, tillägg, enligt Holm B 58",
-				"Östgötalagen, fragment C, ur Holm B 1709",
-				"Yngre Västgötalagen, enligt Holm B 58",
-				"Upplandslagen enl Schlyters utgåva och Codex Ups C 12, hskr A",
-				"Skånelagen",
-				"Östgötalagen, fragment D, ur Holm B 24",
-				"Östgötalagen A, ur Holm B 50",
-				"Äldre Västgötalagen",
-				"Östgötalagen, fragment M, ur Holm B 196",
-				"Gutalagen enligt Holm B 64",
-				"Upplandslagen enligt Codex Holm B 199, Schlyters hskr B",
-				"Gutalagens additamenta enligt AM 54",
-				"Smålandslagens kyrkobalk",
-				"Dalalagen (Äldre Västmannalagen)",
-				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
-				"Bjärköarätten",
-				"Magnus Erikssons Landslag",
-				"Östgötalagen, fragment N, ur Köpenhamn AM 1056",
-				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
-				"Östgötalagen, fragment E, ur Ups B 22"
-			],
-        },	
-		text_date : {label : "date"}
-	}
-};
+settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
+        morf : 'fsvm',
 	id : "fsv-aldrereligiosprosa",
 	title : "Äldre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -147,6 +103,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-profanprosa"] = {
+        morf : 'fsvm',
  	id : "fsv-profanprosa",
 	title : "Profan prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -158,6 +115,7 @@ settings.corpora["fsv-profanprosa"] = {
 };
 
 settings.corpora["fsv-verser"] = {
+        morf : 'fsvm',
 	id : "fsv-verser",
 	title : "Verser – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -182,31 +140,11 @@ settings.corpora["fsv-verser"] = {
 	}
 };
 
-settings.corpora["fsv-yngrelagar"] = {
-	id : "fsv-yngrelagar",
-	title : "Yngre lagar – Fornsvenska textbankens material",
-	description : settings.fsvdescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.fsvattributes,
-	struct_attributes : {
-		text_title : {
-			label : "title",
-			displayType : "select",
-			localize : false,
-			dataset : {
-				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL" : "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
-				"Kristoffers Landslag" : "Kristoffers Landslag",
-				"Kristoffers Landslag, flockar direkt hämtade från MEL" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
-				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
-			},
-		},
-		text_date : {label : "date"}
-	}
-};
+settings.corpora["fsv-yngrelagar"] = fsv_yngrelagar;
 
 settings.corpora["fsv-yngrereligiosprosa"] = {
 	id : "fsv-yngrereligiosprosa",
+        morf : 'fsvm',
 	title : "Yngre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
@@ -315,6 +253,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-yngretankebocker"] = {
+        morf : 'fsvm',
 	id : "fsv-yngretankebocker",
 	title : "Yngre tankeböcker – Fornsvenska textbankens material",
 	description : settings.fsvdescription,

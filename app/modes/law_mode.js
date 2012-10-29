@@ -4,39 +4,7 @@ settings.primaryLight = "#F2FFFF";
 settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
-settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
-settings.posset = {
-       type : "set",
-       label : "pos",
-       displayType : "select",
-       translationKey : "pos_",
-       dataset :  {
-		"AB" : "AB",
-		"MID|MAD|PAD" : "DL",
-		"DT" : "DT",
-		"HA" : "HA",
-		"HD" : "HD",
-		"HP" : "HP",
-		"HS" : "HS",
-		"IE" : "IE",
-		"IN" : "IN",
-		"JJ" : "JJ",
-		"KN" : "KN",
-		"NN" : "NN",
-		"PC" : "PC",
-		"PL" : "PL",
-		"PM" : "PM",
-		"PN" : "PN",
-		"PP" : "PP",
-		"PS" : "PS",
-		"RG" : "RG",
-		"RO" : "RO",
-		"SN" : "SN",
-		"UO" : "UO",
-		"VB" : "VB"
-  			}
-};
-	 
+
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -55,94 +23,13 @@ settings.corporafolders.fsvlagar = {
 };
 
 
-settings.corpora["fsv-yngrelagar"] = {
-	id : "fsv-yngrelagar",
-	title : "Yngre lagar – Fornsvenska textbankens material",
-	description : settings.fsvdescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : {
-                posset : settings.posset,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		variants : {
- 		 	type : "set",
- 		 	label : "variants"
-  			}
-        },
-	struct_attributes : {
-		text_title : {
-			label : "title",
-			displayType : "select",
-			localize : false,
-			dataset : {
-				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL" : "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
-				"Kristoffers Landslag" : "Kristoffers Landslag",
-				"Kristoffers Landslag, flockar direkt hämtade från MEL" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
-				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
-			},
-		},
-		text_date : {label : "date"}
-	}
-};
+settings.corpora["fsv-yngrelagar"] = fsv_yngrelagar; 
 
-settings.corpora["fsv-aldrelagar"] = {
-	id : "fsv-aldrelagar",
-	title : "Äldre lagar – Fornsvenska textbankens material",
-	description : settings.fsvdescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : {
-                posset : settings.posset,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		variants : {
- 		 	type : "set",
- 		 	label : "variants"
-  			}
-        },
-	struct_attributes : {
-		text_title : {
-			label : "title",
-			displayType : "select",
-			localize : false,
-			dataset : [
-				"Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
-				"Södermannalagen, enligt Codex iuris Sudermannici",
-				"Östgötalagen, fragment H, ur Kyrkobalken ur Skokloster Avdl I 145",
-				"Yngre Västmannalagen, enl Holm B 57",
-				"Vidhemsprästens anteckningar",
-				"Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
-				"Södermannalagens additamenta, efter NKS 2237",
-				"Hälsingelagen",
-				"Yngre Västgötalagen, tillägg, enligt Holm B 58",
-				"Östgötalagen, fragment C, ur Holm B 1709",
-				"Yngre Västgötalagen, enligt Holm B 58",
-				"Upplandslagen enl Schlyters utgåva och Codex Ups C 12, hskr A",
-				"Skånelagen",
-				"Östgötalagen, fragment D, ur Holm B 24",
-				"Östgötalagen A, ur Holm B 50",
-				"Äldre Västgötalagen",
-				"Östgötalagen, fragment M, ur Holm B 196",
-				"Gutalagen enligt Holm B 64",
-				"Upplandslagen enligt Codex Holm B 199, Schlyters hskr B",
-				"Gutalagens additamenta enligt AM 54",
-				"Smålandslagens kyrkobalk",
-				"Dalalagen (Äldre Västmannalagen)",
-				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
-				"Bjärköarätten",
-				"Magnus Erikssons Landslag",
-				"Östgötalagen, fragment N, ur Köpenhamn AM 1056",
-				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
-				"Östgötalagen, fragment E, ur Ups B 22"
-			],
-        },	
-		text_date : {label : "date"}
-	}
-};
+settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 
 settings.corpora["tankebok"] = {
+        morf : 'swedbergm|dalinm',
 	id : "tankebok",
 	title : "Stockholms stads tänkeböcker",
 	description : "Stockholms stads tänkeböcker från 1626",
@@ -172,6 +59,7 @@ settings.corpora["tankebok"] = {
 
 
 settings.corpora["lag1734"] = {
+        morf : 'swedbergm|dalinm',
 	id : "lag1734",
 	title : "1734 års lag",
 	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk, Giftermålsbalk",
@@ -207,6 +95,7 @@ settings.corpora["lag1734"] = {
 
 
 settings.corpora["lag1800"] = {
+        morf : 'saldom|dalinm',
 	id : "lag1800",
 	title : "Lagar från 1800-talet",
 	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
