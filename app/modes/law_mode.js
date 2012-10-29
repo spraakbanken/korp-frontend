@@ -148,7 +148,11 @@ settings.corpora["tankebok"] = {
 	description : "Stockholms stads tänkeböcker från 1626",
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {
+        	posset :  settings.posset,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram
+                },
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_title : {
@@ -209,7 +213,7 @@ settings.corpora["lag1800"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-        posset :  settings.posset,
+        	posset :  settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
