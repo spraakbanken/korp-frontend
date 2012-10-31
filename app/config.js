@@ -115,6 +115,9 @@ attrs.baseform = {
 	label : "baseform",
 	type : "set",
 	displayType : "autocomplete",
+	stringify : function(baseform) {
+		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
+	},
 	opts : settings.liteOptions
 };
 attrs.lemgram = {
