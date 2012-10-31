@@ -213,6 +213,11 @@ var SimpleSearch = {
 					var dfd = $.Deferred();
 					lemgramProxy.lemgramCount(idArray, self.isSearchPrefix(), self.isSearchSuffix()).done(function(freqs) {
 						delete freqs["time"];
+						if(currentMode == "law") {
+							idArray = _.filter(idArray, function(item) {
+								return item in freqs;
+							}); 
+						}
 						var has_morphs = settings.corpusListing.getMorphology().split("|").length > 1;
 						if(has_morphs) {
 							idArray.sort(function(a, b) {
@@ -228,7 +233,6 @@ var SimpleSearch = {
 							});
 						}
 						
-						c.log("sortedArray", idArray)
 						var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
 						var listItems = $.map(idArray, function(item, i) {
 							var out = {
@@ -517,6 +521,13 @@ var ExtendedSearch = {
 	    	tolerance : "pointer"
 	    });
 	    insert_token_button.click();
+	},
+	
+	reset : function() {
+		//$("#search-tab ul li:nth(2)").click()
+		this.$main.find(".query_token").remove();
+		$(".insert_token").click();
+		advancedSearch.updateCQP();
 	},
 	
 	onentry : function() {

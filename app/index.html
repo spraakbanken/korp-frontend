@@ -106,6 +106,7 @@
 		
 		<script type="text/javascript" src="scripts/util.js"></script>
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
+		<script type="text/javascript" src="scripts/bin/widgets_coffee.js"></script>
 		<script type="text/javascript" src="scripts/widgets.js"></script>
 		
 		<script type="text/javascript" src="config.js"></script>
@@ -347,45 +348,6 @@
 			<li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
 		</ul>
 	</div>
-	<script id="sidebarTmpl" type="text/x-jquery-tmpl">
-		{{each $item.corpusAttributes}}
-		
-			{{if $value.displayType != "hidden" && $value.displayType != "date_interval"}}
-			<p><span rel="localize[${$value.label}]">${util.getLocaleString($value.label)}</span>:
-				
-    			{{if $data[$index] == "|" || $data[$index] == ""}}
-    				<i rel='localize[empty]' style='color : grey'>${util.getLocaleString("empty")}</i>
-    			{{else $index == "lemma"}}
-    			{{html $item.parseLemma($data[$index], $value)}} 
-    			{{else $index == "pos"}}
-    				${util.getLocaleString("pos_" + $data[$index])} 
-				{{else $index == "deprel"}}
-    				${util.getLocaleString("deprel_" + $data[$index])}
-				{{else $index == "msd"}}
-					<span class="sidebar_msd">${$data[$index]}</span>
-					<a href="markup/msdtags.html" target="_blank">
-						<span id="sidbar_info" class="ui-icon ui-icon-info"></span>
-					</a>	
-					
-    			{{else $value.type == "set" && $.inArray($index, 
-					["lex", "prefix", "suffix", "saldo", "dalinlem", "saldolem", "fsvbaseform", "fsvlemgram", "variants"]) != -1}}
-    			<span id="sidebar_${$index}">${$data[$index]}</span>
-    			{{else $value.type == "set"}}
-    				<ul data-type="${$value.label}">
-    				{{tmpl($.grep($data[$index].split("|"), Boolean), $value) '#defaultSetTmpl'}}
-    				</ul>
-    			{{else $value.type == "url"}}
-    			<a href="${$data[$index]}" class="exturl sidebar_url">${decodeURI($data[$index])}</a>
-    			
-    			{{else}}
-    			${$data[$index]}
-    			{{/if}}
-
-			</p>
-			{{/if}}
-		{{/each}}
-	</script>
-	
 	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
 			{{if $item.translationKey}}
 				<li rel="localize[${$item.translationKey + $data}]">${$data}</li> 

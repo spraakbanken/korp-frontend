@@ -1023,6 +1023,22 @@ table {
 	padding : 0;
 	border : none;
 }
+.external_link { 
+    display : none;    
+}
+#sidebar li:hover .external_link {
+    background-image: url("../img/fish_icon.png");
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    display: inline-block !important;
+    height: 12px;
+    width: 15px;
+    background-size: 15px;
+    margin-left: 2em;
+    position : relative;
+    top : 2px;
+    cursor : pointer;
+}
 
 #sidbar_info {
 	display : inline-block;
@@ -1505,7 +1521,7 @@ a.relStat:hover {
 	display : none !important;
 }
 
-.sidebar_msd {
+.msd {
 	font-size : 0.8em;
 }
 
@@ -1575,6 +1591,14 @@ a.relStat:hover {
 	overflow-y : hidden;
 	overflow-x : auto;
 	
+}
+#plot_popup .xAxis .tickLabel {
+    -moz-transform: rotate(30deg);
+    -webkit-transform: rotate(30deg);
+    transform: rotate(30deg);
+    position: relative;
+    margin-top: 6px;
+    margin-left: 10px;
 }
 .enumerate {
     counter-increment: wordpic;
@@ -1650,3 +1674,4 @@ a.relStat:hover {
     letter-spacing: 1.1;
     
 }
+

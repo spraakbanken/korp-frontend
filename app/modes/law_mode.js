@@ -36,10 +36,10 @@ settings.corpora["tankebok"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-        	posset :  settings.posset,
+    	posset :  settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram
-                },
+    },
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_title : {
@@ -50,7 +50,7 @@ settings.corpora["tankebok"] = {
 				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
 				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
 			},
-	                opts : settings.liteOptions
+            opts : settings.liteOptions
 
 		},
 		paragraph_marginal : {label : "paragraph_marginal"}
@@ -95,14 +95,14 @@ settings.corpora["lag1734"] = {
 
 
 settings.corpora["lag1800"] = {
-        morf : 'saldom|dalinm',
+    morf : 'saldom|dalinm',
 	id : "lag1800",
 	title : "Lagar från 1800-talet",
 	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-        	posset :  settings.posset,
+    	posset :  settings.posset,
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
@@ -114,11 +114,11 @@ settings.corpora["lag1800"] = {
 			label : "title",
 			displayType : "select",
 			dataset : {
-				"Författningssamling 1800 Låssa kyrkas arkiv" : "lassakyrka",
-				"Östgötalagen": "ostgotalagen",
-				"Regeringsformen 1809 ": "regeringsformen"
+//				"Författningssamling 1800 Låssa kyrkas arkiv" : "lassakyrka",
+//				"Östgötalagen": "ostgotalagen",
+//				"Regeringsformen 1809 ": "regeringsformen"
 			},
-	                opts : settings.liteOptions
+            opts : settings.liteOptions
 
 		},
 		text_date : {label : "date"},

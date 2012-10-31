@@ -8,7 +8,7 @@ var settings = {};
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
-
+var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val %>%22)+sortBy+lemgram";
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
@@ -121,13 +121,23 @@ attrs.lemgram = {
 	label : "lemgram",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions
+	opts : settings.liteOptions,
+	stringify : function(lemgram) {
+		return util.lemgramToString(lemgram, true);
+	},
+	externalSearch : karpLemgramLink,
+	internalSearch : true
 };
 attrs.saldo = {
 	label : "saldo",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions
+	opts : settings.liteOptions,
+	stringify : function(saldo) {
+		return util.saldoToString(saldo, true);
+	},
+	externalSearch : "http://spraakbanken.gu.se/karp/#search-tab-1&search=cql|(saldo+%3D+<%= val %>)",
+	internalSearch : true
 };
 attrs.dephead = {
 	label : "dephead",
@@ -210,13 +220,23 @@ attrs.prefix = {
 	label : "prefix",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions
+	opts : settings.liteOptions,
+	stringify : function(lemgram) {
+		return util.lemgramToString(lemgram, true);
+	},
+	externalSearch : karpLemgramLink,
+	internalSearch : true
 };
 attrs.suffix = {
 	label : "suffix",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions
+	opts : settings.liteOptions,
+	stringify : function(lemgram) {
+		return util.lemgramToString(lemgram, true);
+	},
+	externalSearch : karpLemgramLink,
+	internalSearch : true
 };
 attrs.ref = {
 	label : "ref",
@@ -3065,8 +3085,9 @@ var CorpusListing = new Class({
 			});
 			return corpus.struct_attributes;
 		});
+		c.log('attrs', attrs)
 		var rest = this._invalidateAttrs(attrs);
-		
+		c.log('rest', rest)
 		// fix for combining dataset values
 		var withDataset = _.filter(_.pairs(rest), function(item) {
 			return item[1].dataset;
@@ -3253,23 +3274,37 @@ settings.posset = {
   			}
 };
 settings.fsvlemma = {
-	pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+wf'>%s</a>",
+	//pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= key %>%22)+sortBy+wf'><%= val %></a>",
   	type : "set",
-  	label : "baseform"
+  	label : "baseform",
+//  	externalSearch : "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val %>%22)+sortBy+lemgram",
+//	internalSearch : true
+  	
 };
 settings.fsvlex = {
   	type : "set",
-  	label : "lemgram"
+  	label : "lemgram",
+  	stringify : function(str) {
+  		return util.lemgramToString(str, true);
+  	},
+  	externalSearch : karpLemgramLink,
+	internalSearch : true
 };
 settings.fsvvariants = {
-    pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+lemgram'>%s</a>",
   	type : "set",
-  	label : "variants"
+  	label : "variants",
+  	stringify : function(str) {
+  		return util.lemgramToString(str, true);
+  	},
+  	displayType : "autocomplete",
+  	opts : settings.liteOptions,
+  	externalSearch : karpLemgramLink,
+	internalSearch : true
 };
  
 settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
 var fsv_yngrelagar = {
-        morf : 'fsvm',
+    morf : 'fsvm',
 	id : "fsv-yngrelagar",
 	title : "Yngre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -3298,14 +3333,14 @@ var fsv_yngrelagar = {
 };
 
 var fsv_aldrelagar = {
-        morf : 'fsvm',
+    morf : 'fsvm',
 	id : "fsv-aldrelagar",
 	title : "Äldre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-                posset : settings.posset,
+		posset : settings.posset,	
 		lemma : settings.fsvlemma,
 		lex : settings.fsvlex,
 		variants : settings.fsvvariants

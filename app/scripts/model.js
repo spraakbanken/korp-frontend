@@ -407,6 +407,7 @@ var LemgramProxy = {
 			}).done(function(data, textStatus, xhr) {
 				if(data.count == 0) {
 		    		dfd.reject();
+		    		c.log("saldo search 0 results");
 		    		return;
 		    	}
 		    	
@@ -418,8 +419,11 @@ var LemgramProxy = {
 	            		return item.id;
 	            	});
 	            });
-	            
+	            c.log("saldoSearch results", output);
 	        	dfd.resolve(output, textStatus, xhr);
+			}).fail(function() {
+				c.log("saldo search failed");
+				dfd.reject();
 			});
 		});
 		return dfd;

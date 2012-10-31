@@ -214,10 +214,8 @@
     "dalin:baseform" : "dalin:baseform",
     "saldo:lemgram" : "saldo:lemgram",
     "dalin:lemgram" : "dalin:lemgram",
-    "fsv:baseform" : "baseform (old Swedish)",
-    "fsv:lemgram" : "lemgram (old Swedish)",
-    "fsv:variants" : "variants (old Swedish)",
-    "variants" : "spelling variation",
+    
+    "variants" : "similar lemgram",
     
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
@@ -247,6 +245,8 @@
     "activity3": "activity 3",
     "duration": "duration",
     "project": "project",
-    "speaker": "speaker"
+    "speaker": "speaker",
+    
+    "verk" : "book location"
 			
 }

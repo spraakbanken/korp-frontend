@@ -213,10 +213,7 @@
     "paragraph_marginal" : "marginalnoter",
     "date_interval" : "tidsintervall",
 
-    "fsv:baseform" : "grundform (fornsvenska)",
-    "fsv:lemgram" : "lemgram (fornsvenska)",
-    "fsv:variants" : "varianter (fornsvenska)",
-    "variants" : "stavningsvarianter",
+    "variants" : "närliggande lemgram",
 
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
@@ -246,5 +243,7 @@
     "activity3": "aktivitet 3",
     "duration": "längd",
     "project": "projekt",
-    "speaker": "talare"
+    "speaker": "talare",
+    
+    "verk" : "länk till boken"
 }

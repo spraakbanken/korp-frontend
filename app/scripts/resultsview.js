@@ -1073,7 +1073,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
 		$($.format('<div id="dialog" title="' + topheader + '"></div>'))
-		.appendTo("#results-lemgram")
+		.appendTo("#results-stats")
 		.append('<br/><div id="statistics_switch" style="text-align:center"><a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a><a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a></div><div id="chartFrame" style="height:380"></div><p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">' + relHitsString + '</p>')
 		.dialog({
 			width : 400,
@@ -1156,7 +1156,7 @@ var StatsResults = {
 		var self = this;
 		this.proxy = statsProxy;
 		$(".arcDiagramPicture").live("click", function() {
-			c.log("clicked arcDiagramPicture" );
+			c.log("clicked arcDiagramPicture", this );
 			var parts = $(this).attr("id").split("__");
 			if(parts[1] != "Σ")
 				newDataInGraph(parts[1],true);
@@ -1322,7 +1322,7 @@ var StatsResults = {
 		var spacing = .25;
 		var accu = 0;
 		$.each($.keys(data).sort(), function(i, corpus) {
-			ticks.push([accu + .5, corpus]);
+			ticks.push([accu + .5, settings.corpora[corpus.toLowerCase()].title]);
 			display.push([accu, data[corpus].sums.relative]);
 			if(max < data[corpus].sums.relative) max = data[corpus].sums.relative;
 			accu = accu + 1 + spacing;
@@ -1385,10 +1385,14 @@ var StatsResults = {
 	},
 	
 	getHitsWidth : function() {
+		// FIXME: not sure what's going on here.
 		var widthArray = $(".c0").map(function() {
 			return $(this).find(":nth-child(1)").outerWidth() + ($(this).find(":nth-child(2)").outerWidth() || 0);
 		});
-		return $.reduce(widthArray, Math.max);
+		if(!widthArray.length)
+			return 400;
+		else
+			return $.reduce(widthArray, Math.max);
 	},
 	
 	setHitsWidth : function(w) {
