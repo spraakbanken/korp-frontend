@@ -3363,7 +3363,7 @@ var fsv_aldrelagar = {
 				"Östgötalagen, fragment C, ur Holm B 1709",
 				"Yngre Västgötalagen, enligt Holm B 58",
 				"Upplandslagen enl Schlyters utgåva och Codex Ups C 12, hskr A",
-				"Skånelagen",
+				"Skånelagen, enligt Holm B 76",
 				"Östgötalagen, fragment D, ur Holm B 24",
 				"Östgötalagen A, ur Holm B 50",
 				"Äldre Västgötalagen",
