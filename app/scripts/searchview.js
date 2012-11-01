@@ -266,6 +266,14 @@ var SimpleSearch = {
 			}
 		});
 		
+		$("#keyboard").click(function() {
+			c.log("click", arguments);
+			$("#char_table").toggle("slide", {direction : "up"}, "fast");
+			
+		});
+		$("#char_table td").click(function() {
+			$("#simple_text").val($("#simple_text").val() + $(this).text());
+		});
 	},
 	
 	isSearchPrefix : function() {

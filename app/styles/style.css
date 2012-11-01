@@ -2,6 +2,16 @@
     font-family: "Source Sans Pro";
     src: url(SourceSansPro-Regular.otf);
 }
+@font-face {
+  font-family: 'LigatureSymbols';
+  src: url('LigatureSymbols-2.07.eot?') format('eot'), url('LigatureSymbols-2.07.woff') format('woff'), url('LigatureSymbols-2.07.ttf') format('truetype');
+}
+
+.lig {
+    font-family : "LigatureSymbols";
+    text-rendering : optimizelegibility;
+    font-size : 28px;
+}
 
 body {
 	font-family : 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
@@ -1675,3 +1685,16 @@ a.relStat:hover {
     
 }
 
+#keyboard {
+    cursor : pointer;
+    padding : 0 3px;
+    display : none;
+}
+#char_table {
+    display : none;
+}
+.specialkey {
+    width: 12px; 
+    text-align: center; 
+    cursor: pointer;
+}

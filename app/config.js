@@ -8,7 +8,7 @@ var settings = {};
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
-var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val %>%22)+sortBy+lemgram";
+var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
@@ -47,7 +47,6 @@ settings.defaultOptions = {
 };
 
 settings.getTransformFunc = function(type, value, opt) {
-	c.log("getTransformFunc", type, value);
 	
 	if(type == "word" && !value) return function() {return "";};
 	
@@ -2856,7 +2855,7 @@ settings.corpora.talbanken = {
 	}
 };
 
-
+if(isLab)
 settings.corpora.gslc = {
 		id : "gslc",
 		title : "Göteborg Spoken Language Corpus (GSLC)",
@@ -3007,7 +3006,6 @@ settings.reduce_stringify = function(type) {
 			output = $.format("<span data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ", 
 					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString(value)]); 
 			if(value == "&Sigma;") return appendDiagram(output, corpora, value);
-			c.log("stringify", row, cell, value, columnDef, dataContext, appendDiagram(output, corpora, value))
 			
 			return appendDiagram(output, corpora, value);
 		};
@@ -3088,9 +3086,7 @@ var CorpusListing = new Class({
 			});
 			return corpus.struct_attributes;
 		});
-		c.log('attrs', attrs)
 		var rest = this._invalidateAttrs(attrs);
-		c.log('rest', rest)
 		// fix for combining dataset values
 		var withDataset = _.filter(_.pairs(rest), function(item) {
 			return item[1].dataset;
@@ -3280,6 +3276,9 @@ settings.fsvlemma = {
 	//pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= key %>%22)+sortBy+wf'><%= val %></a>",
   	type : "set",
   	label : "baseform",
+  	stringify : function(baseform) {
+		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
+	}
 //  	externalSearch : "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val %>%22)+sortBy+lemgram",
 //	internalSearch : true
   	

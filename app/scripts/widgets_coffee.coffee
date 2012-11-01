@@ -12,7 +12,7 @@ Sidebar =
   _init: ->
 
   updateContent: (sentenceData, wordData, corpus) ->
-    @element.html "<div id=\"selected_sentence\" /><div id=\"selected_word\" />"
+    @element.html '<div id="selected_sentence" /><div id="selected_word" />'
     corpusObj = settings.corpora[corpus]
     $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
     unless $.isEmptyObject(corpusObj.attributes)
@@ -151,99 +151,13 @@ Sidebar =
       itm and itm.length
     )
     $.arrayToHTMLList(seq).outerHTML()
-  ###
-  _sidebarSaldoFormat: ->
-    $("#sidebar_lex, #sidebar_prefix, #sidebar_suffix, #sidebar_dalinlem, #sidebar_saldolem, #sidebar_variants").each ->
-      idArray = $.grep($(this).text().split("|"), (itm) ->
-        itm and itm.length
-      ).sort()
-      attr = $(this).attr("id").split("_")[1]
-      labelArray = util.sblexArraytoString(idArray)
-      
-      $(this).html($.arrayToHTMLList(labelArray)).find("li").wrap("<a href='javascript:void(0)' />").click(->
-        id = idArray[$(this).parent().index()]
-        split = util.splitLemgram(id)
-        id = $.format("%(form)s..%(pos)s.%(index)s", split)
-        c.log "sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram")
-        unless $.inArray(attr, ["dalinlem", "saldolem"]) is -1
-          advancedSearch.setCQP $.format("[%s contains '%s']", [attr, id])
-          advancedSearch.onSubmit()
-        else
-          simpleSearch.selectLemgram id
-      ).hoverIcon "ui-icon-search"
 
-    $saldo = $("#sidebar_saldo")
-    saldoidArray = $.grep($saldo.text().split("|"), (itm) ->
-      itm and itm.length
-    ).sort((a, b) ->
-      parseInt(a.split("..")[1]) - parseInt(b.split("..")[1])
-    )
-    saldolabelArray = util.sblexArraytoString(saldoidArray, util.saldoToString)
-    $saldo.html($.arrayToHTMLList(saldolabelArray)).find("li").each((i, item) ->
-      id = saldoidArray[i].match(util.saldoRegExp).slice(1, 3).join("..")
-      $(item).wrap $.format("<a href='http://spraakbanken.gu.se/karp/#search-tab=1&search=cql|(saldo+%3D+\"%s\")&lang=%s' target='_blank' />", [id, $.bbq.getState("lang") or "sv"])
-    ).hoverIcon "ui-icon-extlink"
-  ###
-  
-  # hacked in at the last minute
-  
-  #
-  #   var fsvbase = $("#sidebar_fsvbaseform"); 
-  #   var labelArray = $.grep(fsvbase.text().split("|"), Boolean).sort();
-  #
-  #   fsvbase.html($.arrayToHTMLList(labelArray))
-  #   .find("li")
-  #   .each(function(i, item){
-  #     $(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=cql%7Cgf%7C%s" target="_blank" />', $(this).text()));
-  #   })
-  #   .hoverIcon("ui-icon-extlink");
-  #   
-  #   function getStringVal(str) {
-  #     return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), function(a,b) {return a + b});
-  #   }
-  #   
-  #   $("#sidebar_fsvlemgram,#sidebar_variants").each(function() {
-  #     
-  #     var saldoidArray = $.grep($(this).text().split("|"), function(itm) {
-  #       return itm && itm.length;  
-  #     }).sort(function(a, b) {
-  #       var splita = util.splitLemgram(a);
-  #       var splitb = util.splitLemgram(b);
-  #       var strvala = getStringVal(splita.form) + getStringVal(splita.pos) + splita.index; 
-  #       var strvalb = getStringVal(splitb.form) + getStringVal(splitb.pos) + splitb.index; 
-  #               
-  #       return parseInt(strvala) - parseInt(strvalb);
-  #       
-  #     });
-  #     var saldolabelArray = util.sblexArraytoString(saldoidArray, util.lemgramToString);
-  #
-  #     $(this).html($.arrayToHTMLList(saldolabelArray))
-  #     .find("li")
-  #     .each(function(i, item){
-  #       $(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7Cfsvm:%s" target="_blank" />', saldoidArray[i] )); 
-  #     })
-  #     .hoverIcon("ui-icon-extlink");
-  #     
-  
-  #     var labelArray = $.grep($(this).text().split("|"), Boolean).sort();
-  #     
-  #     $(this).html($.arrayToHTMLList(labelArray))
-  #     .find("li")
-  #     .each(function(i, item){
-  #       var label = util.lemgramToString($(this).text());
-  #       $(this).wrap($.format('<a href="http://spraakbanken.gu.se/karp/#search=lemgram%7C%s" target="_blank">%s</a>', 
-  #           [$(this).text().split("..")[0], label] ));
-  #     })
-  #     .hoverIcon("ui-icon-extlink");
-  
-  #   });
   refreshContent: (mode) ->
-    self = this
     if mode is "lemgramWarning"
       $.Deferred((dfd) ->
-        self.element.load "markup/parse_warning.html", ->
+        @element.load "markup/parse_warning.html", ->
           util.localize()
-          self.element.addClass("ui-state-highlight").removeClass "kwic_sidebar"
+          @element.addClass("ui-state-highlight").removeClass "kwic_sidebar"
           dfd.resolve()
 
       ).promise()
@@ -259,13 +173,12 @@ Sidebar =
     else @element.addClass "fixed"  if $("#left-column").height() > $("#sidebar").height()
 
   show: (mode) ->
-    self = this
     
     # make sure that both hide animation and content load is done before showing
     $.when(@element).pipe(->
-      self.refreshContent mode
+      @refreshContent mode
     ).done ->
-      self.element.show "slide",
+      @element.show "slide",
         direction: "right"
 
       $("#left-column").animate
@@ -277,8 +190,7 @@ Sidebar =
 
   hide: ->
     return  if $("#left-column").css("right") is "0px"
-    self = this
-    self.element.hide "slide",
+    @element.hide "slide",
       direction: "right"
 
     $("#left-column").animate
