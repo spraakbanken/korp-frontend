@@ -3,53 +3,13 @@ settings.primaryLight = "#FFEBF5";
 settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
-settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
+
 settings.fsvattributes = {
-  lemma : {
-	pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22%s%22)+sortBy+wf'>%s</a>",
-  	type : "set",
-  	label : "baseform"
-  	},
-  lex : {
-  	type : "set",
-  	label : "lemgram"
-  	},
-  posset : {
-       type : "set",
-       label : "pos",
-       displayType : "select",
-       translationKey : "pos_",
-       dataset :  {
-		"AB" : "AB",
-		"MID|MAD|PAD" : "DL",
-		"DT" : "DT",
-		"HA" : "HA",
-		"HD" : "HD",
-		"HP" : "HP",
-		"HS" : "HS",
-		"IE" : "IE",
-		"IN" : "IN",
-		"JJ" : "JJ",
-		"KN" : "KN",
-		"NN" : "NN",
-		"PC" : "PC",
-		"PL" : "PL",
-		"PM" : "PM",
-		"PN" : "PN",
-		"PP" : "PP",
-		"PS" : "PS",
-		"RG" : "RG",
-		"RO" : "RO",
-		"SN" : "SN",
-		"UO" : "UO",
-		"VB" : "VB"
-  			}
-   },
-  variants : {
-  	type : "set",
-  	label : "variants"
-  	}
-  };
+	lemma : settings.fsvlemma,
+	lex : settings.fsvlex,
+	posset : settings.posset,
+	variants : settings.fsvvariants
+};
 
 
 
