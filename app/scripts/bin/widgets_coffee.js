@@ -8,7 +8,7 @@
     _init: function() {},
     updateContent: function(sentenceData, wordData, corpus) {
       var corpusObj;
-      this.element.html("<div id=\"selected_sentence\" /><div id=\"selected_word\" />");
+      this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
       corpusObj = settings.corpora[corpus];
       $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>" + corpusObj.title + "</p>").prependTo("#selected_sentence");
       if (!$.isEmptyObject(corpusObj.attributes)) {
@@ -176,48 +176,13 @@
       });
       return $.arrayToHTMLList(seq).outerHTML();
     },
-    /*
-      _sidebarSaldoFormat: ->
-        $("#sidebar_lex, #sidebar_prefix, #sidebar_suffix, #sidebar_dalinlem, #sidebar_saldolem, #sidebar_variants").each ->
-          idArray = $.grep($(this).text().split("|"), (itm) ->
-            itm and itm.length
-          ).sort()
-          attr = $(this).attr("id").split("_")[1]
-          labelArray = util.sblexArraytoString(idArray)
-          
-          $(this).html($.arrayToHTMLList(labelArray)).find("li").wrap("<a href='javascript:void(0)' />").click(->
-            id = idArray[$(this).parent().index()]
-            split = util.splitLemgram(id)
-            id = $.format("%(form)s..%(pos)s.%(index)s", split)
-            c.log "sidebar click", split, idArray, $(this).parent().index(), $(this).data("lemgram")
-            unless $.inArray(attr, ["dalinlem", "saldolem"]) is -1
-              advancedSearch.setCQP $.format("[%s contains '%s']", [attr, id])
-              advancedSearch.onSubmit()
-            else
-              simpleSearch.selectLemgram id
-          ).hoverIcon "ui-icon-search"
-    
-        $saldo = $("#sidebar_saldo")
-        saldoidArray = $.grep($saldo.text().split("|"), (itm) ->
-          itm and itm.length
-        ).sort((a, b) ->
-          parseInt(a.split("..")[1]) - parseInt(b.split("..")[1])
-        )
-        saldolabelArray = util.sblexArraytoString(saldoidArray, util.saldoToString)
-        $saldo.html($.arrayToHTMLList(saldolabelArray)).find("li").each((i, item) ->
-          id = saldoidArray[i].match(util.saldoRegExp).slice(1, 3).join("..")
-          $(item).wrap $.format("<a href='http://spraakbanken.gu.se/karp/#search-tab=1&search=cql|(saldo+%3D+\"%s\")&lang=%s' target='_blank' />", [id, $.bbq.getState("lang") or "sv"])
-        ).hoverIcon "ui-icon-extlink"
-    */
-
     refreshContent: function(mode) {
-      var instance, self;
-      self = this;
+      var instance;
       if (mode === "lemgramWarning") {
         return $.Deferred(function(dfd) {
-          return self.element.load("markup/parse_warning.html", function() {
+          return this.element.load("markup/parse_warning.html", function() {
             util.localize();
-            self.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
+            this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
             return dfd.resolve();
           });
         }).promise();
@@ -241,12 +206,10 @@
       }
     },
     show: function(mode) {
-      var self;
-      self = this;
       return $.when(this.element).pipe(function() {
-        return self.refreshContent(mode);
+        return this.refreshContent(mode);
       }).done(function() {
-        self.element.show("slide", {
+        this.element.show("slide", {
           direction: "right"
         });
         return $("#left-column").animate({
@@ -257,12 +220,10 @@
       });
     },
     hide: function() {
-      var self;
       if ($("#left-column").css("right") === "0px") {
         return;
       }
-      self = this;
-      self.element.hide("slide", {
+      this.element.hide("slide", {
         direction: "right"
       });
       return $("#left-column").animate({
