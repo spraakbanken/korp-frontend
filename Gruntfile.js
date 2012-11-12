@@ -25,7 +25,7 @@ module.exports = function( grunt ) {
       dir: 'app/components'
     },
 
-    // Coffee to JS compilation
+    // Coffee to JS compilation 
     coffee: {
       compile: {
         files: {
@@ -51,9 +51,9 @@ module.exports = function( grunt ) {
     },
 
     // generate application cache manifest
-    manifest:{
-      dest: ''
-    },
+//    manifest:{
+//      dest: ''
+//    },
 
     // default watch configuration
     watch: {

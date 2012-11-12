@@ -2859,8 +2859,8 @@ settings.corpora.talbanken = {
 if(isLab)
 settings.corpora.gslc = {
 		id : "gslc",
-		title : "Göteborg Spoken Language Corpus (GSLC)",
-		description : 'GSLC is an incrementally growing corpus of spoken language from different social activities. Based on the fact that spoken language varies considerably in different social activities with regard to pronunciation, vocabulary and grammar, the goal of the corpus is to include spoken language from as many social activities as possible.',
+		title : "Gothenburg Dialogue Corpus (GDC)",
+		description : '',
 		limited_access : true,
 		within : settings.defaultWithin,
 		context : settings.defaultContext,
@@ -2886,6 +2886,8 @@ settings.corpora.gslc = {
 			"line_speaker" : {label : "speaker"},
 			"text_date" : {label : "date"},
 			"section_name" : {label : "section"}
+			// TODO: this gives some error, fix this.
+			//"meta_comment" : {label : "comment", type : "set"}
 		}
 	};
 

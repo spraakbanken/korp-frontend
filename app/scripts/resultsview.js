@@ -165,7 +165,7 @@ var KWICResults = {
 	},
 	
 	getPageInterval : function(page) {
-		var items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
+		var items_per_page = Number(this.optionWidget.find(".num_hits").val());
 		var output = {};
 		output.start = (page || 0) * items_per_page;
 		output.end = (output.start + items_per_page) - 1;
@@ -192,12 +192,12 @@ var KWICResults = {
 		this.$result.find(".results_table.kwic").empty();
 			
 		this.renderResult(".results_table.reading", data, sourceCQP).done(function() {
-			c.log('rendercontextresult', $(".results_table.reading"))
+			c.log('rendercontextresult', $(".results_table.reading"));
 			$(".results_table.reading .match .word").addClass("reading_match");
 			$(".results_table.reading .word").unwrap();
 			$(".reading_match").each(function() {
-				var open = $(this).prevAll(".sent_open").first();  
-				var close = $(this).nextAll(".sent_close").first();  
+				var open = $(this).prevAll(".sent_open").first();
+				var close = $(this).nextAll(".sent_close").first();
 				$(this).prevUntil(open).add(open).add($(this).nextUntil(close).add(close))
 				.addClass("matching_sentence");
 			}).first().click();
@@ -235,32 +235,32 @@ var KWICResults = {
 		$.each(data.kwic, function(i,sentence) {
 			var offset = 0; 
 		    var splitObj = {
-		    		"left" : self.selectLeft(sentence, offset),
-		    		"match" : self.selectMatch(sentence),
-		    		"right" : self.selectRight(sentence)
-		    };
-		    
-		    if(prevCorpus != sentence.corpus) {
-		    	var corpus = settings.corpora[sentence.corpus.toLowerCase()];
-		    	if(currentMode == "parallel") {
-		    		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
-		    	}
-		    	var title = $("<span class='corpus_title_span'>").text(corpus.title + " ");
-		    	
-		    	var td = $("<td class='corpus_title' colspan='1'>").append(title);
-		    	var row = $("<tr>").append("<td>")
-		    	.append(td);
-		    	
-		    	if(_.keys(corpus.context).length == 1) {
-		    		td.addClass("no_context");
-		    		title.append($("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>"));
-		    	} else {
-		    		
-		    	}
-		    	row.appendTo(table).localize();
-		    }
-		    
-		    prevCorpus = sentence.corpus;
+            		"left" : self.selectLeft(sentence, offset),
+            		"match" : self.selectMatch(sentence),
+            		"right" : self.selectRight(sentence)
+            };
+            
+            if(prevCorpus != sentence.corpus) {
+            	var corpus = settings.corpora[sentence.corpus.toLowerCase()];
+            	if(currentMode == "parallel") {
+            		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
+            	}
+            	var title = $("<span class='corpus_title_span'>").text(corpus.title + " ");
+            	
+            	var td = $("<td class='corpus_title' colspan='1'>").append(title);
+            	var row = $("<tr>").append("<td>")
+            	.append(td);
+            	
+            	if(_.keys(corpus.context).length == 1) {
+            		td.addClass("no_context");
+            		title.append($("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>"));
+            	} else {
+            		
+            	}
+            	row.appendTo(table).localize();
+            }
+            
+            prevCorpus = sentence.corpus;
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( table )
 					.find(".word")
@@ -388,7 +388,7 @@ var KWICResults = {
 		var wordLeft = word.offset().left;
 		var area = this.$result.find(".table_scrollarea");
 
-		var newX = parseInt(area.scrollLeft());
+		var newX = Number(area.scrollLeft());
 		if(wordLeft > (area.offset().left + area.width())) {
 			newX += offset; 
 		}

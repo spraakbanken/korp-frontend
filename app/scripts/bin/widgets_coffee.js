@@ -121,7 +121,7 @@
       if (attrs.type === "url") {
         return output.append("<a href='" + value + "' class='exturl sidebar_url'>" + (decodeURI(value)) + "</a>");
       } else if (key === "msd") {
-        return output.append("<span class='msd'>" + value + "</span>\n  <a href='markup/msdtags.html' target='_blank'>\n    <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n  </a> \n</span>  ");
+        return output.append("<span class='msd'>" + value + "</span>\n    <a href='markup/msdtags.html' target='_blank'>\n        <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n    </a> \n</span>  ");
       } else if (attrs.pattern) {
         return output.append(_.template(attrs.pattern));
       } else {
@@ -177,12 +177,13 @@
       return $.arrayToHTMLList(seq).outerHTML();
     },
     refreshContent: function(mode) {
-      var instance;
+      var instance,
+        _this = this;
       if (mode === "lemgramWarning") {
         return $.Deferred(function(dfd) {
-          return this.element.load("markup/parse_warning.html", function() {
+          return _this.element.load("markup/parse_warning.html", function() {
             util.localize();
-            this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
+            _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
             return dfd.resolve();
           });
         }).promise();
@@ -206,10 +207,11 @@
       }
     },
     show: function(mode) {
+      var _this = this;
       return $.when(this.element).pipe(function() {
-        return this.refreshContent(mode);
+        return _this.refreshContent(mode);
       }).done(function() {
-        this.element.show("slide", {
+        _this.element.show("slide", {
           direction: "right"
         });
         return $("#left-column").animate({

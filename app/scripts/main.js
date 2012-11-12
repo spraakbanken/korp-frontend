@@ -26,6 +26,7 @@ var currentMode;
 		
 	}).promise();
 	
+	
 	var deferred_mode = $.Deferred();
 	var deferred_domReady = $.Deferred(function( dfd ){
 		$(function() {
