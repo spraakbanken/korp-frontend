@@ -67,10 +67,25 @@ settings.corpora["lag1734"] = {
 	context : settings.spContext,
 	attributes : {
 		lemma : attrs.baseform,
-		lex : attrs.lemgram
+		lex : attrs.lemgram,
+                typograph : {
+                	label : "typography",
+                        type : "set",
+			displayType : "select",
+                        translationKey : "",
+			dataset : {
+				"bold" : "fab_bold",
+				"smallcaps" : "fab_smallcaps",
+				"header" : "fab_header",
+				"marginal" : "fab_marginal",
+				"footnote" : "fab_footnote",
+				"emphasis" : "fab_emphasis"
+			}
+
                 },
+        },
 	struct_attributes : {
-		paragraph_marginal : {label : "paragraph_marginal"},
+		//paragraph_marginal : {label : "paragraph_marginal"},
 		text_date : {label : "date"},
 		text_title : {
 			label : "title",
@@ -79,7 +94,9 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förord" : "forord1734",
 				"1734 års lag Domareregler" : "domareregler1734",
 				"1734 års lag Lagtext" : "Lagtext1734",
-				"1734 års lag Förarbeten vol 1-3" : "forarbeten1734v1-3",
+				"1734 års lag Förarbeten vol 1" : "forarbeten1734v1",
+				"1734 års lag Förarbeten vol 2" : "forarbeten1734v2",
+				"1734 års lag Förarbeten vol 3" : "forarbeten1734v3",
 				"1734 års lag Förarbeten vol 4" : "forarbeten1734v4",
 				"1734 års lag Förarbeten vol 5" : "forarbeten1734v5",
 				"1734 års lag Förarbeten vol 6" : "forarbeten1734v6",

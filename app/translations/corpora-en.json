@@ -216,6 +216,15 @@
     "dalin:lemgram" : "dalin:lemgram",
     
     "variants" : "similar lemgram",
+
+    "typography" : "typographic information",
+    "fab_footnote" : "footnote",
+    "fab_marginal" : "margin notes",
+    "fab_bold" : "bold text",
+    "fab_emphasis" : "emphasised text",
+    "fab_header" : "header",
+    "fab_smallcaps" : "small caps",
+    "fab_italics" : "italics",
     
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
@@ -226,7 +235,9 @@
      "forord1734" : "1734 års lag Förord",
      "domareregler1734" : "1734 års lag Domareregler",
      "Lagtext1734" : "1734 års lag Lagtext",
-     "forarbeten1734v1-3" : "1734 års lag Förarbeten vol 1-3",
+     "forarbeten1734v1" : "1734 års lag Förarbeten vol 1",
+     "forarbeten1734v2" : "1734 års lag Förarbeten vol 2",
+     "forarbeten1734v3" : "1734 års lag Förarbeten vol 3",
      "forarbeten1734v4" : "1734 års lag Förarbeten vol 4",
      "forarbeten1734v5" : "1734 års lag Förarbeten vol 5",
      "forarbeten1734v6" : "1734 års lag Förarbeten vol 6",
