@@ -46,7 +46,7 @@
       return $(items);
     },
     renderItem: function(key, value, attrs) {
-      var address, getStringVal, inner, li, lis, output, pattern, prefix, ul, val, valueArray, x;
+      var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, ul, val, valueArray, x;
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }
@@ -63,7 +63,7 @@
             return a + b;
           });
         };
-        valueArray = _.filter(value.split("|"), Boolean);
+        valueArray = _.filter((value != null ? value.split("|") : void 0) || [], Boolean);
         if (key === "variants") {
           valueArray.sort(function(a, b) {
             var splita, splitb, strvala, strvalb;
@@ -74,11 +74,13 @@
             return parseInt(strvala) - parseInt(strvalb);
           });
         }
+        c.log("isArray", valueArray);
+        itr = _.isArray(valueArray) ? valueArray : _.values(valueArray);
         lis = (function() {
           var _i, _len, _results;
           _results = [];
-          for (_i = 0, _len = valueArray.length; _i < _len; _i++) {
-            x = valueArray[_i];
+          for (_i = 0, _len = itr.length; _i < _len; _i++) {
+            x = itr[_i];
             if (!x.length) {
               continue;
             }
@@ -87,9 +89,10 @@
               key: x,
               val: val
             }));
-            if (attrs.translationKey) {
+            if (attrs.translationKey != null) {
               prefix = attrs.translationKey || "";
-              inner.localeKey(prefix + x);
+              c.log("inner", x, val, key);
+              inner.localeKey(prefix + val);
             }
             li = $("<li></li>").data("key", x).append(inner);
             if (attrs.externalSearch) {

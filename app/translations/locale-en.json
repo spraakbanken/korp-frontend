@@ -54,7 +54,7 @@
 	"word_is" : "word is",
 	"word_is_not" : "word is not",
 	"word_beginswith" : "word begins with",
-	"contains" : "innehåller",
+	"contains" : "contains",
 	"word_endswith" : "word ends with",
 	"matches_regexp" : "regular expression",
 	"wordclass_is" : "word class is",

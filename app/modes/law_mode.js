@@ -72,15 +72,15 @@ settings.corpora["lag1734"] = {
                 	label : "typography",
                         type : "set",
 			displayType : "select",
-                        translationKey : "",
-			dataset : {
-				"bold" : "fab_bold",
-				"smallcaps" : "fab_smallcaps",
-				"header" : "fab_header",
-				"marginal" : "fab_marginal",
-				"footnote" : "fab_footnote",
-				"emphasis" : "fab_emphasis"
-			}
+			translationKey : "fab_",
+			dataset : [
+				"bold",
+				"smallcaps",
+				"headline",
+				"marginal",
+				"footnote",
+				"emphasis"
+			]
 
                 },
         },

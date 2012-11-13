@@ -55,10 +55,9 @@ Sidebar =
             ul = $("<ul>")
             getStringVal = (str) ->
                 return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), (a,b) -> a + b);
-        
-            valueArray = _.filter(value.split("|"), Boolean)
+            valueArray = _.filter(value?.split("|") or [], Boolean)
             if key == "variants"
-#         TODO: this doesn't sort quite as expected
+                # TODO: this doesn't sort quite as expected
                 valueArray.sort (a, b) -> 
                     splita = util.splitLemgram(a);
                     splitb = util.splitLemgram(b);
@@ -66,16 +65,17 @@ Sidebar =
                     strvalb = getStringVal(splitb.form) + splitb.index + getStringVal(splitb.pos); 
                                     
                     return parseInt(strvala) - parseInt(strvalb);
-                
-            
-            
-            lis = for x in valueArray when x.length
+                 
+            c.log("isArray", valueArray)
+            itr = if _.isArray(valueArray) then valueArray else _.values(valueArray) 
+            lis = for x in itr when x.length
                 val = (attrs.stringify or _.identity)(x)
                  
                 inner = $(_.template(pattern, {key : x, val : val}))
-                if attrs.translationKey
+                if attrs.translationKey?
                     prefix = attrs.translationKey or ""
-                    inner.localeKey(prefix + x)
+                    c.log "inner", x, val, key
+                    inner.localeKey(prefix + val)
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
                     address = _.template(attrs.externalSearch, {val : x})
@@ -119,7 +119,6 @@ Sidebar =
                 return output.append "<span rel='localize[#{attrs.translationKey}#{value}]'></span>"
             else
                 return output.append "<span>#{value || ''}</span>"
-        
         
 
     applyEllipse: ->
