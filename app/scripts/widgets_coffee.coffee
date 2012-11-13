@@ -66,7 +66,6 @@ Sidebar =
                                     
                     return parseInt(strvala) - parseInt(strvalb);
                  
-            c.log("isArray", valueArray)
             itr = if _.isArray(valueArray) then valueArray else _.values(valueArray) 
             lis = for x in itr when x.length
                 val = (attrs.stringify or _.identity)(x)
@@ -74,7 +73,6 @@ Sidebar =
                 inner = $(_.template(pattern, {key : x, val : val}))
                 if attrs.translationKey?
                     prefix = attrs.translationKey or ""
-                    c.log "inner", x, val, key
                     inner.localeKey(prefix + val)
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch

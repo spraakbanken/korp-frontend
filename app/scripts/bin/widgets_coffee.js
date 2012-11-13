@@ -74,7 +74,6 @@
             return parseInt(strvala) - parseInt(strvalb);
           });
         }
-        c.log("isArray", valueArray);
         itr = _.isArray(valueArray) ? valueArray : _.values(valueArray);
         lis = (function() {
           var _i, _len, _results;
@@ -91,7 +90,6 @@
             }));
             if (attrs.translationKey != null) {
               prefix = attrs.translationKey || "";
-              c.log("inner", x, val, key);
               inner.localeKey(prefix + val);
             }
             li = $("<li></li>").data("key", x).append(inner);
