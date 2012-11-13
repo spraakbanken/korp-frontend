@@ -547,7 +547,7 @@ var ExtendedToken = {
                 if(data.localize === false)
                     opt.text(key);
                 else
-                    opt.localeKey((data.translationKey || "") + data.dataset[key])
+                    opt.localeKey((data.translationKey || "") + key);
             });
             break;
         case "autocomplete":
@@ -565,7 +565,7 @@ var ExtendedToken = {
             arg_value = $("<input type='text'/>").korp_autocomplete({
                 labelFunction : labelFunc,
                 sortFunction : sortFunc,
-                type : type, 
+                type : type,
                 select : function(lemgram) {
                     c.log("extended lemgram", lemgram, $(this));
                     $(this).data("value", data.label == "baseform" ? lemgram.split(".")[0] : lemgram);
@@ -718,11 +718,11 @@ var ExtendedToken = {
                 if(data.displayType == "autocomplete") {
                     value = null;
                 }
-                if (!args[type]) { 
-                    args[type] = []; 
+                if (!args[type]) {
+                    args[type] = [];
                 }
                 args[type].push({
-                    data : data, 
+                    data : data,
                     value : value || $(this).find(".arg_value").data("value") || "",
                     opt : opt,
                     case_sens : case_sens
@@ -740,7 +740,7 @@ var ExtendedToken = {
                 function defaultArgsFunc(s, op) {
                     var operator = obj.data.type == "set" ? "contains" : "=";
                     var not_operator = obj.data.type == "set" ? "not contains" : "!=";
-                    var prefix = obj.data.isStructAttr != null ? "_." : "";
+                    var prefix = obj.data.isStructAttr !== null ? "_." : "";
                     var formatter = op == "matches" || obj.data.displayType == "select" ? function(arg) {return arg;} : regescape;
                     var value = formatter(s);
                     function getOp(value) {
@@ -759,17 +759,17 @@ var ExtendedToken = {
                     
                     if(currentMode == "law") {
                         
-                        function expandToNonStrict(value) {
+                        var expandToNonStrict = function(value) {
                             c.log("expandToNonStrict", $.format("(%s | %s)", [stringify(value), stringify("\\|")] ));
-                            var prefix = obj.data.isStructAttr != null ? "_." : "";
+                            var prefix = obj.data.isStructAttr !== null ? "_." : "";
                             var undef = $.format("%s%s = '__UNDEF__'", [prefix, type]);
                             return $.format("(%s | %s)", [stringify(value), undef] );
-                        }
+                        };
                         
                         if(expand) {
                             return expandToNonStrict(value);
                         }
-                    } 
+                    }
                     return stringify(value);
                     
                     
@@ -832,7 +832,7 @@ var ExtendedToken = {
             suffix = $.format("{%s}", min_max.join(", "));
         }
         
-        return "[" + output.join(" & ") + "]" + suffix; 
+        return "[" + output.join(" & ") + "]" + suffix;
     }
 };
 

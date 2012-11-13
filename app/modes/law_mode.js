@@ -59,7 +59,7 @@ settings.corpora["tankebok"] = {
 
 
 settings.corpora["lag1734"] = {
-        morf : 'swedbergm|dalinm',
+    morf : 'swedbergm|dalinm',
 	id : "lag1734",
 	title : "1734 års lag",
 	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk, Giftermålsbalk",
@@ -68,9 +68,9 @@ settings.corpora["lag1734"] = {
 	attributes : {
 		lemma : attrs.baseform,
 		lex : attrs.lemgram,
-                typograph : {
-                	label : "typography",
-                        type : "set",
+        typograph : {
+            label : "typography",
+            type : "set",
 			displayType : "select",
 			translationKey : "fab_",
 			dataset : [
@@ -82,8 +82,8 @@ settings.corpora["lag1734"] = {
 				"emphasis"
 			]
 
-                },
         },
+    },
 	struct_attributes : {
 		//paragraph_marginal : {label : "paragraph_marginal"},
 		text_date : {label : "date"},
