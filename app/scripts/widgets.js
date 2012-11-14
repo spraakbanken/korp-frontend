@@ -141,8 +141,8 @@ $.fn.korp_autocomplete = function(options) {
         source: function( request, response ) {
             c.log("autocomplete request", request);
             c.log("autocomplete type", options.type);
-            var promise = options.type == "saldo" ? lemgramProxy.saldoSearch(request.term, options["sw-forms"]) : 
-                                                    lemgramProxy.karpSearch(request.term, options["sw-forms"]); 
+            var promise = options.type == "saldo" ? lemgramProxy.saldoSearch(request.term, options["sw-forms"]) :
+                                                    lemgramProxy.karpSearch(request.term, options["sw-forms"]);
             promise.done(function(idArray, textstatus, xhr) {
                 
                 idArray = $.unique(idArray);
@@ -156,7 +156,7 @@ $.fn.korp_autocomplete = function(options) {
                     if(selector.autocomplete("widget").height() > 300) {
                         selector.autocomplete("widget").addClass("ui-autocomplete-tall");
                     }
-                    $("#autocomplete_header").remove();    
+                    $("#autocomplete_header").remove();
                     
                     $("<li id='autocomplete_header' />")
                     .localeKey("autocomplete_header")
@@ -232,7 +232,7 @@ var KorpTabs = {
     addTab : function(klass) {
         var url = this.urlPattern + this.n;
         this.add(url, "KWIC");
-        var li = this.element.find("li:last"); 
+        var li = this.element.find("li:last");
         this.redrawTabs();
         var instance = new klass(li, url);
         
@@ -395,7 +395,7 @@ var ExtendedToken = {
         .click(function() {
             if($(this).css("opacity") === "0") return;
             var arg = $(this).closest(".or_arg");
-            if(arg.siblings(".or_arg").length == 0) {
+            if(arg.siblings(".or_arg").length === 0) {
                 
                 arg.closest(".query_arg").slideUp("fast",function() {
                     $(this).remove();
@@ -470,7 +470,7 @@ var ExtendedToken = {
             var old_ph = oldLower.attr("placeholder");
             var old_data = oldLower.data("value");
 //            c.log("refresh", oldLower.prop("placeholder"), oldLower.attr("placeholder"));
-            var newSelects = self.makeSelect(); 
+            var newSelects = self.makeSelect();
             $(this).find(".arg_selects").replaceWith(newSelects);
             newSelects.find(".arg_type")
             .val(oldVal)
@@ -497,7 +497,7 @@ var ExtendedToken = {
         .addClass("arg_value")
         
         .keyup(function() {
-            if($(this).val() == "") {
+            if($(this).val() === "") {
 //                $(this).closest(".query_arg").addClass("word_empty");
                 $(this).prev().find(".arg_opts").attr("disabled", "disabled");
             }
@@ -643,7 +643,7 @@ var ExtendedToken = {
                 arg_value.attr("data-placeholder", "any_word_placeholder");
             util.localize(arg_value);
             break;
-        } 
+        }
         
         
         target.parent().siblings(".arg_value").replaceWith(arg_value);

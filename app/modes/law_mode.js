@@ -45,11 +45,12 @@ settings.corpora["tankebok"] = {
 		text_title : {
 			label : "title",
 			displayType : "select",
-			dataset : {
-				"Stockholms stads tänkebok - Koncept " : "sst_koncept",
-				"Stockholms stads tänkebok - Notariat" : "sst_notariat",
-				"Stockholms stads tänkebok - Renskr " : "sst_renskr"
-			},
+			localize : false,
+			dataset : [
+				"Stockholms stads tänkebok - Koncept ",
+				"Stockholms stads tänkebok - Notariat",
+				"Stockholms stads tänkebok - Renskr "
+			],
             opts : settings.liteOptions
 
 		},
@@ -92,21 +93,22 @@ settings.corpora["lag1734"] = {
 		text_title : {
 			label : "title",
 			displayType : "select",
-			dataset : {
-				"1734 års lag Förord" : "forord1734",
-				"1734 års lag Domareregler" : "domareregler1734",
-				"1734 års lag Lagtext" : "Lagtext1734",
-				"1734 års lag Förarbeten vol 1" : "forarbeten1734v1",
-				"1734 års lag Förarbeten vol 2" : "forarbeten1734v2",
-				"1734 års lag Förarbeten vol 3" : "forarbeten1734v3",
-				"1734 års lag Förarbeten vol 4" : "forarbeten1734v4",
-				"1734 års lag Förarbeten vol 5" : "forarbeten1734v5",
-				"1734 års lag Förarbeten vol 6" : "forarbeten1734v6",
-				"1734 års lag Förarbeten vol 7" : "forarbeten1734v7",
-				"1734 års lag Förarbeten vol 8" : "forarbeten1734v8",
-				"Giftermåls balk \(1734\)": "giftermalsbalk",
-				"Missgierningsbalk": "missgierningsbalk"
-			},
+			localize : false,
+			dataset : [
+				"1734 års lag Förord",
+				"1734 års lag Domareregler",
+				"1734 års lag Lagtext",
+				"1734 års lag Förarbeten vol 1",
+				"1734 års lag Förarbeten vol 2",
+				"1734 års lag Förarbeten vol 3",
+				"1734 års lag Förarbeten vol 4",
+				"1734 års lag Förarbeten vol 5",
+				"1734 års lag Förarbeten vol 6",
+				"1734 års lag Förarbeten vol 7",
+				"1734 års lag Förarbeten vol 8",
+				"Giftermåls balk \(1734\)",
+				"Missgierningsbalk"
+			],
             opts : settings.liteOptions
 		}
 	}
