@@ -79,6 +79,7 @@ settings.corpora["lag1734"] = {
 				"headline",
 				"marginal",
 				"footnote",
+				"italic",
 				"emphasis"
 			],
 			opts : settings.liteOptions
