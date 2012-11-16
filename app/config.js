@@ -2857,6 +2857,52 @@ settings.corpora.talbanken = {
 };
 
 if(isLab)
+settings.corpora.twitter = {
+	id : "twitter",
+	title : "Twittermix (november 2012)",
+	description : "",
+	within : {
+		"sentence" : "sentence",
+		"text" : "text"
+	},
+	context : {
+		"1 sentence" : "1 sentence",
+		"1 text" : "1 text"
+	},
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		user_username : {label : "username2"},
+		user_name : {label : "name"},
+		text_datetime : {label : "date"},
+		text_weekday : {label : "weekday"},
+		text_hashtags : {label : "hashtags", type : "set"},
+		text_mentions : {label : "mentions", type : "set"},
+		text_retweets : {label : "retweets"},
+		text_location : {label : "location"},
+		text_coordinates : {label : "coordinates"},
+		text_replytouser : {label : "replytouser"},
+		user_location : {label : "user_location"},
+		user_followers : {label : "followers"},
+		user_following : {label : "following"},
+		user_tweets : {label : "tweets"}
+		user_description : {label : "description"},
+		user_created : {label : "user_since"},
+		user_trstrank : {label : "trstrank"},
+	}
+};
+
+if(isLab)
 settings.corpora.gslc = {
 		id : "gslc",
 		title : "Gothenburg Dialogue Corpus (GDC)",
