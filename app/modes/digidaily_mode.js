@@ -15,7 +15,7 @@ settings.corporafolders = {};
 settings.corpora["digidaily"] = {
     morf : 'saldom|dalinm',
 	id : "digidaily",
-	title : "Digidaily - tets ",
+	title : "Digidaily - test ",
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.spContext,
