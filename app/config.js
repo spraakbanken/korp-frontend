@@ -2896,7 +2896,11 @@ settings.corpora.twitter = {
 		user_followers : {label : "followers"},
 		user_following : {label : "following"},
 		user_tweets : {label : "tweets"},
-		user_description : {label : "description"},
+		user_description : {
+					label : "description",
+					pattern : '<p style="margin-left: 5px;"><%=val%></p>'
+			},
+		user_url : {label : "website"},
 		user_created : {label : "user_since"},
 		user_trstrank : {label : "trstrank"},
 	}

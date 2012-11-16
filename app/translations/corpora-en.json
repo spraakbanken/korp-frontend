@@ -39,6 +39,7 @@
 	"trstrank" : "trstrank",
 	"description" : "description",
 	"tweets" : "tweets",
+	"website" : "website",
     
     "text_year" : "year",
     "text_party" : "party",
