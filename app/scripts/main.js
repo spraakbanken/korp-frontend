@@ -120,7 +120,8 @@ var currentMode;
                  {localekey : "siberian_texts", mode : "siberian_german"},
                  {localekey : "1800_texts", mode : "1800"},
                  {localekey : "lb_texts", mode : "lb"},
-                 {localekey : "lawroom", mode : "law"}
+                 {localekey : "lawroom", mode : "law"},
+                 {localekey : "digidaily", mode : "digidaily"}
                      ]
 		}).add("#about").vAlign();
 		
