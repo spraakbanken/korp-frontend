@@ -2900,7 +2900,7 @@ settings.corpora.twitter = {
 					label : "description",
 					pattern : '<p style="margin-left: 5px;"><%=val%></p>'
 			},
-		user_url : {label : "website"},
+		user_url : {label : "website", type : "url"},
 		user_created : {label : "user_since"},
 		user_trstrank : {label : "trstrank"},
 	}
