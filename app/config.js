@@ -2895,7 +2895,7 @@ settings.corpora.twitter = {
 		user_location : {label : "user_location"},
 		user_followers : {label : "followers"},
 		user_following : {label : "following"},
-		user_tweets : {label : "tweets"}
+		user_tweets : {label : "tweets"},
 		user_description : {label : "description"},
 		user_created : {label : "user_since"},
 		user_trstrank : {label : "trstrank"},
@@ -3198,14 +3198,17 @@ var CorpusListing = new Class({
 	
 	getContextQueryString : function() {
 		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-			if("1 paragraph" in settings.corpora[id].context)
-				return id.toUpperCase() + ":1 paragraph";
+			if(_.keys(settings.corpora[id].context)) {
+				return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1);
+			}
+			// if("1 paragraph" in settings.corpora[id].context)
 		}), Boolean).join();
 	},
 	getWithinQueryString : function() {
 		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-			if("paragraph" in settings.corpora[id].within)
-				return id.toUpperCase() + ":paragraph";
+			if(_.keys(settings.corpora[id].within)) {
+				return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1);
+			}
 		}), Boolean).join();
 	},
 	
