@@ -132,13 +132,14 @@ settings.corpora["lag1800"] = {
 	},
 	struct_attributes : {
 		text_title : {
+			localize : false,
 			label : "title",
 			displayType : "select",
-			dataset : {
-//				"Författningssamling 1800 Låssa kyrkas arkiv" : "lassakyrka",
-//				"Östgötalagen": "ostgotalagen",
-//				"Regeringsformen 1809 ": "regeringsformen"
-			},
+			dataset : [
+				"Författningssamling 1800 Låssa kyrkas arkiv",
+				"Östgötalagen",
+				"Regeringsformen 1809 "
+			],
             opts : settings.liteOptions
 
 		},
@@ -193,6 +194,8 @@ settings.corpora["moderntdv"] = {
 		text_title : {label : "title"}
 	}
 };
+
+
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 

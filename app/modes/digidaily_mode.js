@@ -13,9 +13,9 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora["digidaily"] = {
-    morf : 'saldom|dalinm',
+    morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily",
-	title : "Digidaily - test ",
+	title : "Digidaily",
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.spContext,
@@ -32,7 +32,21 @@ settings.corpora["digidaily"] = {
 	},
 	struct_attributes : {
 		text_title : {
-			label : "title"},
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+				"Dalpilen",
+				"Gotlands tidning",
+ 				"Faluposten",
+ 				"Fahlu weckoblad",
+ 				"Folkets röst",
+ 				"Bollnäs tidning",
+			        ],
+            opts : settings.liteOptions
+
+		},
+	
 		text_date : {label : "date"}
 	//	text_edition : {label : "edition"}
 	}
