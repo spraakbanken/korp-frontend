@@ -517,8 +517,8 @@ settings.corpora.fsbessaistik = {
 
 settings.corpora.fsbsakprosa = {
 	id : "fsbsakprosa",
-	title : "Sakprosa 1970–2011",
-	description : "Material ur facklitterära verk publicerade under 1970–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
+	title : "Sakprosa 2006–2011",
+	description : "Material ur facklitterära verk publicerade under 2006–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
