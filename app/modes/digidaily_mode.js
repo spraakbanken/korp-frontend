@@ -20,8 +20,8 @@ settings.corpora["digidaily"] = {
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-    	posset :  settings.posset,
 		lemma : attrs.baseform,
+		pos : attrs.pos,
 		lex : attrs.lemgram,
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
