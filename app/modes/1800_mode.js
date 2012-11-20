@@ -34,12 +34,39 @@ settings.corpora.bibel1917 = {
 	},
 	struct_attributes : {
 		"text_title" : {label : "title"},
-        "chapter_name" : {label : "chapter"},
-        "verse_name" : {label : "verse"},
+		"chapter_name" : {label : "chapter"},
+		"verse_name" : {label : "verse"},
 		"text_date" : {label : "year"}
 	}
 };
 
+settings.corpora.bibel1873dalin = {
+	morf : 'saldom|dalinm|swedbergm',
+	id : "bibel1873dalin",
+	title : "Bibeln 1873",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma    : attrs.baseform,
+		lex : attrs.lemgram,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+		
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"chapter_name" : {label : "chapter"},
+		"verse_name" : {label : "verse"},
+		"text_date" : {label : "year"}
+	}
+};
+
+/*
 settings.corpora.bibel1873 = {
 	id : "bibel1873",
 	title : "Bibeln 1873",
@@ -65,33 +92,7 @@ settings.corpora.bibel1873 = {
 		"text_date" : {label : "year"}
 	}
 };
-
-settings.corpora.bibel1873dalin = {
-	id : "bibel1873dalin",
-	title : "Bibeln 1873 (Dalin)",
-	description : "Annoterad med Dalin",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma    : attrs.baseform,
-		dalinlem : {label : "lemgram", type  : "set"},
-		saldolem : {label : "modern", type  : "set"},
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-		
-	},
-	struct_attributes : {
-		"text_title" : {label : "title"},
-        "chapter_name" : {label : "chapter"},
-		"verse_name" : {label : "verse"},
-		"text_date" : {label : "year"}
-	}
-};
+*/
 
 
 settings.corpusListing = new CorpusListing(settings.corpora);
