@@ -109,7 +109,6 @@ settings.corpora["digidaily-jonkopingsbladet"] = {
 };
 
 
-/*
 settings.corpora["digidaily-folketsrost"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-folketsrost",
@@ -170,7 +169,46 @@ settings.corpora["digidaily-blekingsposten"] = {
        
 	struct_attributes : settings.digidailystruct_attributes,
 };
-*/
+
+
+settings.corpora["digidaily-postochinrikestidning"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-postochinrikestidning",
+	title : "Post och inrikes tidning",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-stockholmsposten"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-stockholmsposten",
+	title : "Stockholmsposten",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+
+settings.corpora["digidaily-kalmar"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-kalmar",
+	title : "Kalmar",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 
