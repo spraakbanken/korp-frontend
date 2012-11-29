@@ -50,13 +50,13 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Birgittaautograferna" : "Birgittaautograferna",
-				"Fornsvenska legendariet enligt Codex Bureanus" : "Fornsvenska legendariet enligt Codex Bureanus",
-				"Pentateuchparafrasen, enligt MB I A" : "Pentateuchparafrasen, enligt MB I A",
-				"Pentateuchparafrasen B, enligt MB I B" : "Pentateuchparafrasen B, enligt MB I B",
-				"Fornsvenska legendariet enligt Codex Bildstenianus" : "Fornsvenska legendariet enligt Codex Bildstenianus"
-			},
+			dataset : [
+				"Birgittaautograferna",
+				"Fornsvenska legendariet enligt Codex Bureanus",
+				"Pentateuchparafrasen, enligt MB I A",
+				"Pentateuchparafrasen B, enligt MB I B",
+				"Fornsvenska legendariet enligt Codex Bildstenianus"
+			],
 		},
 		text_date : {label : "date"}
 	}
@@ -71,6 +71,24 @@ settings.corpora["fsv-profanprosa"] = {
 	context : settings.spContext,
 	attributes : settings.fsvattributes,
 	struct_attributes : {
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+				"Barlaam och Josaphat, ur Codex  Holm A 49",
+				"Sju vise mästare B, Nådendals klosterbok, Codex Holm A 49",
+				"Didrik av Bern, hand A",
+				"Sverige krönika, eller Prosaiska krönikan efter Holm D 26",
+				"Konungastyrelsen, Bureus utgåva",
+				"Didrik av Bern, hand B",
+				"Namnlös och Valentin, ur Codex Holm D 4a",
+				"Sju vise mästare C, efter Codex Askabyensis",
+				"Historia Trojana, ur Codex Holm D 3a",
+				"Sju vise mästare A, ur Codex Holm D 4"
+                                ]
+			},
+		text_date : {label : "date"}
 	}
 };
 
@@ -87,14 +105,14 @@ settings.corpora["fsv-verser"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Fornsvenska Ordspråk" : "Fornsvenska Ordspråk",
-				"Erikskrönikan, ur Spegelbergs bok, Codex Holm D2" : "Erikskrönikan, ur Spegelbergs bok, Codex Holm D2",
-				"Fredrik av Normandie" : "Fredrik av Normandie",
-				"Ivan Lejonriddaren, ur SFSS Bd 50 Uppsala 1931" : "Ivan Lejonriddaren, ur SFSS Bd 50 Uppsala 1931",
-				"Flores och Blanzeflor" : "Flores och Blanzeflor",
-				"Karlskrönikan" : "Karlskrönikan"
-			},
+			dataset : [
+				"Fornsvenska Ordspråk",
+				"Erikskrönikan, ur Spegelbergs bok, Codex Holm D2" ,
+				"Fredrik av Normandie",
+				"Ivan Lejonriddaren, ur SFSS Bd 50 Uppsala 1931",
+				"Flores och Blanzeflor",
+				"Karlskrönikan"
+			]
 		},
 		text_date : {label : "date"}
 	}
@@ -257,14 +275,15 @@ settings.corpora["fsv-nysvenskbibel"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Gustav Vasas Bibel, Markusevanguliet" : "Gustav Vasas Bibel, Markusevanguliet",
-				"Gustav Vasas Bibel, Lukasevangeliet" : "Gustav Vasas Bibel, Lukasevangeliet"
-			},
+			dataset : [
+				"Gustav Vasas Bibel, Markusevanguliet",
+				"Gustav Vasas Bibel, Lukasevangeliet"
+			]
 		},
 		text_date : {label : "date"}
 	}
 };
+
 settings.corpora["fsv-nysvenskdalin"] = {
 	id : "fsv-nysvenskdalin",
 	title : "Dalin: then swänska argus – Fornsvenska textbankens material",
@@ -277,9 +296,9 @@ settings.corpora["fsv-nysvenskdalin"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Dalin: Then Swänska Argus" : "Dalin: Then Swänska Argus"
-			},
+			dataset : [
+				"Dalin: Then Swänska Argus"
+			],
 		},
 		text_date : {label : "date"}
 	}
@@ -297,13 +316,13 @@ settings.corpora["fsv-nysvenskkronikor"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Peder Swarts krönika" : "Peder Swarts krönika",
-				"Olaus Petris Krönika, stil A" : "Olaus Petris Krönika, stil A",
-				"Per Brahes krönika" : "Per Brahes krönika",
-				"Olaus Petris Krönika, stil B" : "Olaus Petris Krönika, stil B",
-				"Olaus Petris Krönika" : "Olaus Petris Krönika"
-			},
+			dataset : [
+				"Peder Swarts krönika",
+				"Olaus Petris Krönika",
+				"Per Brahes krönika",
+				"Olaus Petris Krönika, stil B",
+				"Olaus Petris Krönika"
+			],
 		},
 		text_date : {label : "date"}
 	}
@@ -321,19 +340,19 @@ settings.corpora["fsv-nysvenskovrigt"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Runius: Prosastycken" : "Runius: Prosastycken",
-				"Mag. Joh. Qvirfelds himmelska örtegårds-sällskap" : "Mag. Joh. Qvirfelds himmelska örtegårds-sällskap",
-				"Gyllenborg: Svenska sprätthöken" : "Gyllenborg: Svenska sprätthöken",
-				"Jon Stålhammars brev" : "Jon Stålhammars brev",
-				"Agneta Horns levnadsbeskrivning" : "Agneta Horns levnadsbeskrivning",
-				"Beskrifning öfwer Sweriges Lapmarker 1747 av Pehr Högström, kap 1-4" : "Beskrifning öfwer Sweriges Lapmarker 1747 av Pehr Högström, kap 1-4",
-				"AnnaVasas brev" : "AnnaVasas brev",
-				"Carl Carlsson Gyllenhielms anteckningar" : "Carl Carlsson Gyllenhielms anteckningar",
-				"Samuel Columbus: Mål-roo eller Roo-mål" : "Samuel Columbus: Mål-roo eller Roo-mål",
-				"Haqvin Spegel: Dagbok" : "Haqvin Spegel: Dagbok",
-				"UrbanHiärne: Stratonice" : "UrbanHiärne: Stratonice"
-			},
+			dataset : [
+				"Runius: Prosastycken",
+				"Mag. Joh. Qvirfelds himmelska örtegårds-sällskap",
+				"Gyllenborg: Svenska sprätthöken",
+				"Jon Stålhammars brev",
+				"Agneta Horns levnadsbeskrivning",
+				"Beskrifning öfwer Sweriges Lapmarker 1747 av Pehr Högström, kap 1-4",
+				"AnnaVasas brev",
+				"Carl Carlsson Gyllenhielms anteckningar",
+				"Samuel Columbus: Mål-roo eller Roo-mål",
+				"Haqvin Spegel: Dagbok",
+				"UrbanHiärne: Stratonice"
+			],
 		},
 		text_date : {label : "date"}
 	}
@@ -351,10 +370,10 @@ settings.corpora["fsv-nysvensklagar"] = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Missgiernings Balk" : "Missgiernings Balk",
-				"Giftermåls balk \\(1734\\)" : "Giftermåls balk (1734)"
-			},
+			dataset : [
+				"Missgiernings Balk",
+				"Giftermåls balk \\(1734\\)",
+			],
 		},
 		text_date : {label : "date"}
 	}
