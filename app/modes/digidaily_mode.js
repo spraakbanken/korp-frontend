@@ -41,7 +41,7 @@ settings.corpora["digidaily-dalpilen"] = {
 	title : "Dalpilen",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -53,7 +53,7 @@ settings.corpora["digidaily-goteborgsweckoblad"] = {
 	title : "Göteborgs weckoblad",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -65,7 +65,7 @@ settings.corpora["digidaily-gotlandstidning"] = {
 	title : "Gotlands tidning",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -78,7 +78,7 @@ settings.corpora["digidaily-faluposten"] = {
 	title : "Faluposten",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -90,7 +90,7 @@ settings.corpora["digidaily-fahluweckoblad"] = {
 	title : "Fahlu weckoblad",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -102,7 +102,7 @@ settings.corpora["digidaily-jonkopingsbladet"] = {
 	title : "Jönköpingsbladet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -115,7 +115,7 @@ settings.corpora["digidaily-folketsrost"] = {
 	title : "Folkets röst",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -127,7 +127,7 @@ settings.corpora["digidaily-bollnastidning"] = {
 	title : "Bollnäs tidning",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -140,7 +140,7 @@ settings.corpora["digidaily-norraskane"] = {
 	title : "Norra Skåne",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -152,7 +152,7 @@ settings.corpora["digidaily-lindesbergsallehanda"] = {
 	title : "Lindesbergs allehanda",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -164,7 +164,7 @@ settings.corpora["digidaily-blekingsposten"] = {
 	title : "Blekingsposten",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -174,10 +174,10 @@ settings.corpora["digidaily-blekingsposten"] = {
 settings.corpora["digidaily-postochinrikestidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-postochinrikestidning",
-	title : "Post och inrikes tidning",
+	title : "Post- och Inrikes Tidningar",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -189,7 +189,7 @@ settings.corpora["digidaily-stockholmsposten"] = {
 	title : "Stockholmsposten",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
@@ -202,7 +202,80 @@ settings.corpora["digidaily-kalmar"] = {
 	title : "Kalmar",
 	description : digidailydescription,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-wernamotidning"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-wernamotidning",
+	title : "Wernamo tidning",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-gotheborgsweckolista"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-gotheborgsweckolista",
+	title : "Götheborgs weckolista",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+
+settings.corpora["digidaily-ostgotaposten"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-ostgotaposten",
+	title : "Östgötaposten",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-ostergotlandsveckoblad"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-ostergotlandsveckoblad",
+	title : "Östergötlands veckoblad",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-wermlandslanstidning"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-wermlandslanstidning",
+	title : "Wermlands läns tidning",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes,
+};
+
+settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-tidningforwenersborgsstadochlan",
+	title : "Tidning för Wenersborgs stad och län",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
 	struct_attributes : settings.digidailystruct_attributes,
