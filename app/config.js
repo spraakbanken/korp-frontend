@@ -2947,8 +2947,8 @@ settings.corpora.soexempel = {
 		title : "Språkprov SO 2009",
 		description : '',
 		limited_access : true,
-		within : settings.defaultWithin,
-		context : settings.defaultContext,
+		within : settings.spWithin,
+		context : settings.spContext,
 		attributes : {
 			pos : attrs.pos,
 			msd : attrs.msd,
