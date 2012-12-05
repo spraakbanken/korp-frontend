@@ -89,6 +89,12 @@
     "unknown" : "unknown",
     "male_female" : "both",
     
+    "entryword" : "entry word",
+    "entryno" : "entry word (number)",
+    "sense1" : "sense 1",
+    "sense2" : "sense 2",
+    
+    
     "pos_AB" : "adverb",
     "pos_DL" : "punctuation",
     "pos_MAD": "punctuation",

@@ -87,6 +87,10 @@
     "unknown" : "okänd",
     "male_female" : "man och kvinna",
     
+    "entryword" : "uppslagsord",
+    "entryno" : "uppslagsord (nummer)",
+    "sense1" : "huvudbetydelse",
+    "sense2" : "betydelsenyans",
     
     
     "pos_AB": "adverb", 

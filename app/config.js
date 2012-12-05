@@ -2941,6 +2941,34 @@ settings.corpora.gslc = {
 		}
 	};
 
+if(isLab)
+settings.corpora.soexempel = {
+		id : "soexempel",
+		title : "Språkprov SO 2009",
+		description : '',
+		limited_access : true,
+		within : settings.defaultWithin,
+		context : settings.defaultContext,
+		attributes : {
+			pos : attrs.pos,
+			msd : attrs.msd,
+			lemma : attrs.baseform,
+			lex : attrs.lemgram,
+			saldo : attrs.saldo,
+			dephead : attrs.dephead,
+			deprel : attrs.deprel,
+			ref : attrs.ref,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix
+		},
+		struct_attributes : {
+			"text_date" : {label : "year"},
+			"entry_word" : {label : "entryword"},
+			"entry_entryno" : {label : "entryno"},
+			"entry_sense1" : {label : "sense1"},
+			"entry_sense2" : {label : "sense2"}
+		}
+	};
 
 
 /*
