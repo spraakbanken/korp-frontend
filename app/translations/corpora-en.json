@@ -52,6 +52,7 @@
     "type" : "type",
     "publisher" : "publisher",
     "issue" : "issue",
+    "translator" : "translator",
     "article_publisher" : "article publisher",
     "article_author" : "article author",
     "article_genre" : "article genre",

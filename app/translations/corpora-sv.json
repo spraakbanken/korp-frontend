@@ -51,6 +51,7 @@
     "type" : "typ",
     "publisher" : "utgivare",
     "issue" : "utgåva",
+    "translator" : "översättare",
     "article_publisher" : "artikelutgivare",
     "article_author" : "artikelförfattare",
     "article_genre" : "artikelgenre",
