@@ -356,6 +356,11 @@ settings.corporafolders.fisk.magazines = {
 	contents : ["astranova", "finsktidskrift", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
+settings.corporafolders.fisk.youthnovels = {
+    title : "Ungdomslitteratur",
+    contents : ["ungdomslitteratur"]
+};
+
 settings.corporafolders.medical = {
 	title : "Medicinska texter",
 	contents : ["diabetolog", "smittskydd"]
@@ -521,6 +526,32 @@ settings.corpora.fsbsakprosa = {
 	id : "fsbsakprosa",
 	title : "Sakprosa 2006–2011",
 	description : "Material ur facklitterära verk publicerade under 2006–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_date : {label : "year"},
+	    text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.ungdomslitteratur = {
+	id : "ungdomslitteratur",
+	title : "Ungdomslitteratur",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
