@@ -2439,6 +2439,29 @@ settings.corpora.astranova = {
 	}
 };
 
+settings.corpora.bullen = {
+	id : "bullen",
+	title : "Bullen 2010–2012",
+	description : "<a href=\"http://www.karen.abo.fi/index.php?u[2]=0&u[3]=70\">Bullen</a> är Åbo Akademis Studentkårs informationsbulletin.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"}
+	}
+};
+
 settings.corpora.kallan = {
 	id : "kallan",
 	title : "Källan 2008–2010",
