@@ -1,0 +1,2083 @@
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url(SourceSansPro-Regular.otf);
+}
+
+/*
+@font-face {
+  font-family: 'LigatureSymbols';
+  src: url('LigatureSymbols-2.07.eot?') format('eot'), url('LigatureSymbols-2.07.woff') format('woff'), url('LigatureSymbols-2.07.ttf') format('truetype');
+}
+
+.lig {
+    font-family : "LigatureSymbols";
+    text-rendering : optimizelegibility;
+    font-size : 28px;
+}
+*/
+/* line 27, styles.scss */
+body {
+  font-family: 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* line 34, styles.scss */
+ul, ol {
+  list-style: none;
+}
+
+/* line 38, styles.scss */
+h4 {
+  /*text-transform: capitalize;*/
+}
+
+/* line 42, styles.scss */
+#welcome {
+  padding: 0.2em;
+}
+
+/* line 46, styles.scss */
+.welcome-header {
+  padding: 0.7em;
+}
+
+/* line 50, styles.scss */
+.ui-widget {
+  font-family: inherit;
+}
+
+/* line 54, styles.scss */
+sup {
+  line-height: 0px;
+}
+
+/* line 58, styles.scss */
+img {
+  border: 0px;
+}
+
+/* line 62, styles.scss */
+a {
+  text-decoration: none;
+}
+/* line 64, styles.scss */
+a:link {
+  color: navy;
+}
+/* line 67, styles.scss */
+a:visited {
+  color: purple;
+}
+/* line 70, styles.scss */
+a:hover {
+  color: indianred;
+}
+
+/* unvisited link */
+/* visited link */
+/* mouse over link */
+/* line 79, styles.scss */
+.link {
+  color: navy !important;
+  cursor: pointer;
+}
+/* line 82, styles.scss */
+.link:hover {
+  color: indianred !important;
+}
+
+/* line 88, styles.scss */
+.radialBkg {
+  background: #f9fdff;
+  background-image: -webkit-gradient(radial, 50%, 0, 50%, 100, color-stop(56%, #f9fdff), color-stop(100%, #ebf0f4));
+  background-image: -webkit-radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%);
+  background-image: -moz-radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%);
+  background-image: -o-radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%);
+  background-image: radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9fdff', endColorstr='#ebf0f4',GradientType=1 );
+}
+
+/* line 94, styles.scss */
+.inline_block {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 98, styles.scss */
+.invalid_input {
+  border-color: red;
+}
+
+/* line 102, styles.scss */
+.color_blue {
+  background-color: #D0D7F0;
+}
+
+/* line 106, styles.scss */
+.color_blue_light {
+  background-color: #ebeefa;
+}
+
+/* line 110, styles.scss */
+.color_purple {
+  background-color: #F7D1E4;
+}
+
+/* line 114, styles.scss */
+.color_purple_light {
+  background-color: #f7edf3;
+}
+
+/* line 118, styles.scss */
+.color_green {
+  background-color: #EDFCD5;
+}
+
+/* line 122, styles.scss */
+.color_green_light {
+  background-color: #f7fceb;
+}
+
+/* line 126, styles.scss */
+.color_yellow {
+  background-color: #FFF3D8;
+}
+
+/* line 130, styles.scss */
+.color_yellow_light {
+  background-color: #fffaed;
+}
+
+/* line 134, styles.scss */
+.color_azure {
+  background-color: #CAEEE8;
+}
+
+/* line 138, styles.scss */
+.color_azure_light {
+  background-color: #edf7f5;
+}
+
+/* line 142, styles.scss */
+.color_red {
+  background-color: #FFDDD8;
+}
+
+/* line 146, styles.scss */
+.color_red_light {
+  background-color: #fcece8;
+}
+
+/* line 150, styles.scss */
+.color_white {
+  background-color: white;
+}
+
+/* line 154, styles.scss */
+.color_unfocused {
+  background-color: #EEEEEE;
+}
+
+/* line 159, styles.scss */
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+  font-size: 1em;
+  font-family: inherit;
+}
+
+/* line 165, styles.scss */
+#header_left {
+  float: left;
+}
+/* line 167, styles.scss */
+#header_left > a {
+  margin-right: 10px;
+}
+
+/* line 172, styles.scss */
+#search_history {
+  margin-right: 8px;
+  margin-top: 45px;
+  max-width: 150px;
+  position: absolute;
+  right: 0;
+}
+/* line 178, styles.scss */
+#search_history > option:first-child {
+  color: grey;
+}
+/* line 181, styles.scss */
+#search_history:empty {
+  visibility: hidden;
+}
+
+/* line 186, styles.scss */
+#top_bar {
+  height: 30px;
+  width: 100%;
+  background-image: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #fcfafc), color-stop(100%, #d9d9d9));
+  background-image: -webkit-linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%);
+  background-image: -moz-linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%);
+  background-image: -o-linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%);
+  background-image: linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%);
+}
+
+/*match placeholder/watermark padding to border+padding for input element*/
+/* line 194, styles.scss */
+label.placeholder {
+  cursor: text;
+  padding: 4px 4px 4px 4px;
+  color: #999999;
+}
+
+/* html5 placeholder support */
+/* line 202, styles.scss */
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:placeholder, textarea:placeholder {
+  color: #999999;
+}
+
+/* line 206, styles.scss */
+#search_options {
+  border-top: none;
+  padding: 8px;
+  background-image: none;
+  margin-bottom: 8px;
+}
+/* line 211, styles.scss */
+#search_options select {
+  margin-right: 5px;
+}
+/* line 214, styles.scss */
+#search_options > div {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  margin-right: 10px;
+}
+
+/* line 220, styles.scss */
+#corpus_id {
+  font-family: monospace;
+}
+
+/* line 224, styles.scss */
+#cqp_string {
+  font-family: monospace;
+  width: 100%;
+}
+
+/* line 229, styles.scss */
+#header {
+  width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+/* line 235, styles.scss */
+#content {
+  padding: 0 8px 8px 8px;
+}
+
+/* line 239, styles.scss */
+.lang_selected {
+  color: black;
+}
+
+/* line 243, styles.scss */
+#languages {
+  float: right;
+  margin-right: 8px;
+}
+
+/* line 248, styles.scss */
+#query_table {
+  overflow: auto;
+  white-space: nowrap;
+  margin-bottom: 15px;
+}
+
+/* line 254, styles.scss */
+.lang_row {
+  overflow: auto;
+  white-space: nowrap;
+  margin-bottom: 15px;
+  padding: 8px;
+}
+
+/* line 261, styles.scss */
+#query_table > select {
+  margin-left: 2px;
+  display: block;
+}
+
+/* line 267, styles.scss */
+.lang_row > select {
+  margin-left: 2px;
+  display: block;
+}
+/* line 271, styles.scss */
+.lang_row:nth-child(2n) {
+  background-color: #F5F5F5;
+}
+
+/* line 277, styles.scss */
+.mode-parallel #korp-extended #sendBtn ~ * {
+  display: none;
+}
+/* line 280, styles.scss */
+.mode-parallel #linkedLang {
+  display: inline;
+}
+/* line 283, styles.scss */
+.mode-parallel .context_select, .mode-parallel .within_select {
+  display: none;
+}
+
+/* line 288, styles.scss */
+.mode-law .within_select ~ * {
+  display: inline;
+}
+
+/* line 292, styles.scss */
+.within_select ~ *, #removeLang, #linkedLang {
+  display: none;
+}
+
+/* line 296, styles.scss */
+.lang_row + #removeLang {
+  display: inline;
+}
+
+/* line 300, styles.scss */
+.remove_arg {
+  position: relative;
+  top: 15px;
+  opacity: 1;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+}
+
+/* line 307, styles.scss */
+.insert_arg {
+  margin-top: 4px;
+  float: left;
+}
+
+/* line 312, styles.scss */
+.insert_token {
+  position: relative;
+  top: 54px;
+  margin-left: 10px;
+}
+
+/* line 320, styles.scss */
+.arg_type {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  min-width: 150px;
+}
+
+/* line 325, styles.scss */
+.arg_opts {
+  margin-left: 5px;
+}
+
+/* line 329, styles.scss */
+input.arg_value {
+  width: 98%;
+}
+
+/* line 333, styles.scss */
+.arg_value {
+  max-width: 300px;
+}
+
+/* line 337, styles.scss */
+select.arg_value option {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* line 342, styles.scss */
+.btn-icon {
+  vertical-align: top;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  cursor: pointer;
+  position: relative;
+  right: -4px;
+  top: -5px;
+}
+
+/* line 352, styles.scss */
+.query_token button {
+  width: 20px;
+  height: 20px;
+  float: right;
+}
+/* line 357, styles.scss */
+.query_token .repeat {
+  float: right;
+  margin-right: 25px;
+}
+/* line 360, styles.scss */
+.query_token .repeat input {
+  max-width: 30px;
+}
+
+/* line 366, styles.scss */
+.ui-icon-gear {
+  background-position: -193px -114px;
+}
+
+/* line 370, styles.scss */
+.token_footer {
+  position: relative;
+  font-size: .8em;
+}
+/* line 373, styles.scss */
+.token_footer ul {
+  margin-top: -5px;
+  background-color: white;
+  position: absolute;
+  display: none;
+}
+
+/* line 381, styles.scss */
+.query_token button .ui-button-text {
+  height: 0;
+}
+
+/* line 385, styles.scss */
+.token_footer ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 390, styles.scss */
+.close_token {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px;
+  color: black;
+  background-color: #f2f7ff;
+  border: thin lightgrey solid;
+  padding-left: 5px;
+  padding-right: 1px;
+  cursor: default;
+}
+
+/* line 401, styles.scss */
+.lower_footer {
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* line 406, styles.scss */
+#opt_menu {
+  display: none;
+  font-size: .8em;
+  cursor: pointer;
+  width: 100px;
+}
+
+/* line 413, styles.scss */
+.close_token .ui-icon-close {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  position: relative;
+  top: 3px;
+  cursor: pointer;
+}
+
+/* line 420, styles.scss */
+.repeat, .lower_footer > * {
+  display: none;
+}
+
+/* line 424, styles.scss */
+.repeat_item .repeat, .lbound_item .lbound, .rbound_item .rbound {
+  display: inline;
+}
+
+/* line 428, styles.scss */
+.statisticWords {
+  border-style: hidden;
+}
+
+/* line 432, styles.scss */
+.searchForWordformInCorpus, .corpusTitleHeader {
+  cursor: pointer;
+}
+
+/* line 436, styles.scss */
+.ext {
+  margin-right: 0px;
+}
+
+/* line 440, styles.scss */
+.scroll_checkboxes {
+  width: 480px;
+  height: 33px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  vertical-align: bottom;
+}
+
+/* line 448, styles.scss */
+.buttonlink {
+  padding: .4em 1em .4em 20px;
+  color: #222222;
+  text-decoration: none;
+  position: relative;
+  text-size: .6em;
+}
+/* line 454, styles.scss */
+.buttonlink:link, .buttonlink:visited {
+  color: #222222;
+}
+/* line 457, styles.scss */
+.buttonlink:hover {
+  color: #444444;
+}
+/* line 460, styles.scss */
+.buttonlink span.ui-icon {
+  margin: 0 5px 0 0;
+  position: absolute;
+  left: .2em;
+  top: 50%;
+  margin-top: -8px;
+}
+
+/* line 469, styles.scss */
+.popupchecks {
+  z-index: 9999;
+  max-height: 600px;
+  width: 446px;
+  border: solid thin #CCCCCC;
+  background-color: #FEFEFE;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+  padding: 10px;
+  position: absolute;
+}
+/* line 480, styles.scss */
+.popupchecks .buttons {
+  margin: 10px 0;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  font-size: .8em;
+}
+/* line 484, styles.scss */
+.popupchecks .buttons a {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* line 492, styles.scss */
+.numberOfChildren {
+  color: #888888;
+}
+
+/* line 496, styles.scss */
+.hp_topframe {
+  height: 16px;
+  width: 433px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+/* line 503, styles.scss */
+.webkit .hp_topframe > div {
+  margin-top: 1px;
+}
+
+/* line 507, styles.scss */
+#corpusbox {
+  cursor: pointer;
+}
+
+/* line 511, styles.scss */
+.corpusInfoSpace {
+  display: none;
+  border: 1px solid #CCCCCC;
+  z-index: 10000;
+  min-width: 30px;
+  min-height: 30px;
+  max-width: 33%;
+  position: absolute;
+  left: 615px;
+  background-color: white;
+  padding-right: 4px;
+}
+
+/* line 524, styles.scss */
+.tree {
+  margin-top: 1px;
+  margin-bottom: -3px;
+  margin-left: 2px;
+  padding-top: 3px;
+  padding-bottom: 1px;
+  overflow-x: hidden;
+}
+
+/* line 533, styles.scss */
+.collapsed {
+  margin-bottom: 0px;
+}
+
+/* line 537, styles.scss */
+.boxdiv {
+  margin-top: 2px;
+  background-color: #F6F6F6;
+  padding-top: 3px;
+  padding-bottom: 1px;
+  margin-bottom: 2px;
+}
+/* line 543, styles.scss */
+.boxdiv.disabled {
+  color: grey;
+}
+/* line 545, styles.scss */
+.boxdiv.disabled img {
+  display: none;
+}
+
+/* line 552, styles.scss */
+.hplabel {
+  padding: 2px 6px 0px 6px;
+}
+
+/* line 556, styles.scss */
+.boxlabel {
+  padding: 2px 6px 0px 6px;
+}
+/* line 558, styles.scss */
+.boxlabel > span {
+  background: #FFFFFF;
+}
+
+/* line 563, styles.scss */
+.checkbox {
+  width: 12px;
+  height: 12px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+/* line 567, styles.scss */
+.checkbox.checked {
+  background-image: url("../img/checked.png");
+}
+/* line 570, styles.scss */
+.checkbox.unchecked {
+  background-image: url("../img/unchecked.png");
+}
+/* line 573, styles.scss */
+.checkbox.intermediate {
+  background-image: url("../img/intermediate.png");
+}
+
+/* line 578, styles.scss */
+.boxdiv.disabled .checkbox {
+  background-image: url("../common_lib/themes/base/images/ui-icons_222222_256x240.png");
+  background-position: -192px -96px;
+  height: 13px;
+  width: 14px;
+  margin-left: -2px;
+}
+
+/* line 586, styles.scss */
+.query_footer {
+  background-color: #e1e1e1;
+  padding: 1px 8px 8px 8px;
+  margin-bottom: 5px;
+  width: 50%;
+  display: table;
+}
+
+/* line 594, styles.scss */
+#similar_lemgrams {
+  margin-top: 5px;
+  padding: 8px;
+  overflow-y: hidden;
+}
+
+/* line 600, styles.scss */
+#similar_wrapper {
+  max-width: 50%;
+}
+
+/* line 605, styles.scss */
+#similar_lemgrams:empty {
+  padding: 0;
+}
+/* line 608, styles.scss */
+#similar_lemgrams p {
+  margin-top: 2px;
+  margin-bottom: 7px;
+}
+/* line 612, styles.scss */
+#similar_lemgrams a {
+  font-size: 12px;
+}
+/* line 615, styles.scss */
+#similar_lemgrams ul {
+  margin: 0;
+  padding-left: 10px;
+}
+/* line 619, styles.scss */
+#similar_lemgrams li {
+  padding: 5px 0;
+}
+
+/* line 624, styles.scss */
+#show_more {
+  float: right;
+  position: relative;
+  top: -3px;
+  padding: 2px 2px 0 2px;
+}
+/* line 629, styles.scss */
+#show_more a {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* line 635, styles.scss */
+.ui-tabs .ui-tabs-nav li a {
+  float: left;
+  padding-bottom: 0.2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.2em;
+  text-decoration: none;
+}
+
+/* line 644, styles.scss */
+.ui-autocomplete-tall {
+  max-height: 335px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+  /* add padding to account for vertical scrollbar */
+  padding-right: 20px;
+}
+
+/* line 653, styles.scss */
+.ui-preloader {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  background-size: 18px 18px;
+}
+
+/* line 661, styles.scss */
+.image_button:hover {
+  cursor: pointer;
+}
+
+/* line 665, styles.scss */
+td {
+  margin: 0px;
+}
+
+/* line 669, styles.scss */
+table {
+  margin: 0px 10px;
+  padding: 0px 5px;
+}
+
+/* line 674, styles.scss */
+.query_token {
+  background-color: #e1e1e1;
+  display: inline-table;
+  *display: inline;
+  vertical-align: top;
+  padding: 5px;
+  border: 1px solid #999;
+  cursor: move;
+  margin-left: 0;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  box-shadow: 2px 2px 3px grey;
+}
+/* line 686, styles.scss */
+.query_token.ui-sortable-helper {
+  width: 275px !important;
+}
+
+/* line 691, styles.scss */
+.cqp_toggle {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* line 696, styles.scss */
+.result_controls {
+  position: relative;
+}
+
+/* line 700, styles.scss */
+#results-kwic > div:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+/* line 704, styles.scss */
+.result_controls > * {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: bottom;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 708, styles.scss */
+.controls_n {
+  margin-right: 5px;
+  min-width: 125px;
+}
+
+/* line 713, styles.scss */
+.loading .controls_n {
+  color: darkgrey;
+  font-style: italic;
+}
+
+/* line 718, styles.scss */
+#results-lemgram {
+  overflow: auto;
+}
+/* line 720, styles.scss */
+#results-lemgram > span * {
+  margin-top: 11px;
+}
+
+/* line 725, styles.scss */
+.lemgram_help {
+  white-space: nowrap;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+/* line 729, styles.scss */
+.lemgram_help > span {
+  padding: 10px 10px;
+}
+
+/* line 734, styles.scss */
+.ui-tabs .ui-tabs-nav li a {
+  padding-top: 0.3em !important;
+  padding-bottom: 0.3em !important;
+}
+
+/* line 739, styles.scss */
+.spinner {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  margin: 3px 2px -2px -4px;
+}
+
+/* line 744, styles.scss */
+.lemgram_result {
+  float: left;
+  padding-top: 4px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 2px;
+  counter-reset: wordpic;
+}
+/* line 751, styles.scss */
+.lemgram_result table {
+  padding: 0 0;
+  margin: 0 0;
+}
+
+/* line 757, styles.scss */
+.table_scrollarea {
+  overflow: auto;
+  clear: both;
+  overflow-y: hidden;
+  -ms-overflow-y: hidden;
+}
+
+/* line 764, styles.scss */
+.results_table {
+  padding-left: 0;
+  margin-left: 0;
+}
+/* line 767, styles.scss */
+.results_table td {
+  white-space: nowrap;
+  border: none;
+}
+
+/* line 773, styles.scss */
+#display_word {
+  margin: auto 0;
+}
+
+/* line 777, styles.scss */
+.table_scrollarea + .pager-wrapper {
+  margin-top: 15px;
+}
+
+/* line 781, styles.scss */
+.pagination {
+  height: 20px;
+}
+
+/* removing context for custom tab */
+/* line 787, styles.scss */
+.customtab .reading_btn {
+  display: none !important;
+}
+
+/* line 791, styles.scss */
+.loading .reading_btn {
+  display: none;
+}
+
+/* line 795, styles.scss */
+.pager-wrapper:empty ~ .reading_btn {
+  margin-left: 0;
+}
+
+/* line 799, styles.scss */
+.reading_btn {
+  margin-left: 1em;
+  display: none;
+  vertical-align: top;
+  margin-top: 3px;
+}
+/* line 800, styles.scss */
+.reading_btn .show {
+  line-height: 1.1;
+}
+
+/* line 809, styles.scss */
+.not_loading .reading_btn {
+  display: inline;
+}
+
+/* line 813, styles.scss */
+.reading_mode .reading_btn.show, .reading_btn.hide, .zero_results .reading_btn {
+  display: none;
+}
+
+/* line 817, styles.scss */
+.reading_mode .reading_btn.hide {
+  display: inline;
+}
+
+/* line 821, styles.scss */
+.results_table.reading {
+  display: none;
+}
+
+/* line 826, styles.scss */
+.reading_mode .results_table.kwic {
+  display: none;
+}
+/* line 829, styles.scss */
+.reading_mode .results_table.reading {
+  display: block;
+}
+
+/* line 834, styles.scss */
+.results_table.reading {
+  margin-left: 10%;
+}
+
+/*
+.customtab .results_table.kwic {
+    display : block;
+}
+.customtab .results_table.reading {
+    display : none;
+}
+*/
+/* line 847, styles.scss */
+.reading_match {
+  font-weight: bold;
+  color: black !important;
+}
+
+/* line 852, styles.scss */
+.results_table.reading tr {
+  display: block;
+  padding: 1em !important;
+  width: 510px;
+}
+
+/* line 858, styles.scss */
+.result_table td {
+  white-space: nowrap;
+}
+
+/* line 862, styles.scss */
+.left {
+  text-align: right;
+  vertical-align: text-top;
+}
+
+/* line 867, styles.scss */
+.match {
+  font-weight: bold;
+  vertical-align: text-top;
+  text-align: center;
+  padding: 0 4px;
+}
+
+/* line 874, styles.scss */
+.corpus_title {
+  font-weight: bold;
+  vertical-align: text-top;
+  text-align: center;
+  padding: 0 4px;
+  font-weight: normal;
+  font-variant: small-caps;
+  color: #666;
+  font-size: 11px;
+  border-top: 3px solid white;
+  border-bottom: 3px solid white;
+  border-width: 3px !important;
+}
+
+/* line 888, styles.scss */
+.no_context .corpus_title_span {
+  margin-left: -200px;
+  margin-right: 0;
+  position: relative;
+  left: 60px;
+}
+
+/* line 895, styles.scss */
+.reading .no_context .corpus_title_span {
+  left: 0;
+}
+
+/* line 899, styles.scss */
+.corpus_title_warn {
+  margin-right: -100px;
+  position: relative;
+  left: 10px;
+  font-variant: normal;
+}
+
+/* line 906, styles.scss */
+.reading .corpus_title_warn {
+  font-size: 12px;
+  display: block;
+}
+
+/* line 911, styles.scss */
+.webkit .reading .no_context .corpus_title_warn {
+  margin-bottom: -40px;
+}
+
+/* line 916, styles.scss */
+.corpus_title_warn:before {
+  content: "(";
+}
+/* line 919, styles.scss */
+.corpus_title_warn:after {
+  content: ")";
+}
+
+/* line 924, styles.scss */
+.reading_mode .corpus_title_span {
+  margin: 0;
+  margin-left: -21px;
+  font-size: 3em;
+}
+
+/* line 930, styles.scss */
+.corpus_title_span {
+  margin: 0 -100px;
+}
+
+/* line 934, styles.scss */
+.right {
+  vertical-align: text-top;
+}
+
+/* line 938, styles.scss */
+.extra {
+  color: #e1e1e1;
+}
+
+/* line 942, styles.scss */
+.alt {
+  background-color: #dde9ff;
+}
+/* line 944, styles.scss */
+.alt td {
+  border: none;
+}
+
+/* line 949, styles.scss */
+.attr {
+  display: none;
+  font-size: xx-small;
+  vertical-align: bottom;
+}
+
+/* line 955, styles.scss */
+.sentence img {
+  border-width: 0px;
+}
+
+/* line 959, styles.scss */
+.word {
+  cursor: pointer;
+}
+
+/* line 963, styles.scss */
+.reading_mode .word {
+  color: #666;
+}
+
+/* line 967, styles.scss */
+.matching_sentence {
+  color: black !important;
+}
+
+/* line 971, styles.scss */
+.word:hover {
+  color: indianred;
+}
+
+/* line 975, styles.scss */
+.word_selected {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+/* line 983, styles.scss */
+.token_selected {
+  color: #fff !important;
+  background-color: #666;
+}
+
+/* line 988, styles.scss */
+.aux_selected {
+  color: #000;
+  background-color: #FFDDD8;
+}
+
+/* line 993, styles.scss */
+#result-container {
+  clear: both;
+  min-height: 400px;
+}
+
+/* line 998, styles.scss */
+#json-link {
+  float: right;
+  display: none;
+}
+/* line 1001, styles.scss */
+#json-link img {
+  border: 0px;
+}
+
+/* line 1006, styles.scss */
+#columns {
+  position: relative;
+  max-height: 600px;
+}
+
+/* line 1011, styles.scss */
+#left-column {
+  position: absolute;
+  left: 0px;
+}
+
+/* line 1016, styles.scss */
+#sidebar {
+  position: absolute;
+  right: 0px;
+  width: 250px;
+  padding: 5px 0px 5px 5px;
+  display: none;
+}
+/* line 1022, styles.scss */
+#sidebar.fixed {
+  right: 8px;
+  position: fixed;
+  top: 8px;
+}
+/* line 1027, styles.scss */
+#sidebar:empty {
+  padding: 0;
+  border: none;
+}
+
+/* line 1033, styles.scss */
+.external_link {
+  display: none;
+}
+
+/* line 1037, styles.scss */
+#sidebar li:hover .external_link {
+  background-image: url("../img/fish_icon.png");
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  display: inline-block !important;
+  height: 12px;
+  width: 15px;
+  background-size: 15px;
+  margin-left: 2em;
+  position: relative;
+  top: 2px;
+  cursor: pointer;
+}
+
+/* line 1052, styles.scss */
+#sidbar_info {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  position: relative;
+  top: 3px;
+  left: 5px;
+  opacity: .8;
+  margin-top: -4px;
+}
+
+/* line 1061, styles.scss */
+.kwic_sidebar {
+  background-color: #fff;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #999;
+}
+
+/* line 1069, styles.scss */
+#sidebar div {
+  margin-bottom: 10px;
+}
+/* line 1072, styles.scss */
+#sidebar p {
+  margin: 0 0 0 0;
+}
+/* line 1075, styles.scss */
+#sidebar ul {
+  margin-top: 0;
+  margin-bottom: 2px;
+  padding-left: 20px;
+  list-style: none;
+  line-height: 16px;
+}
+
+/* line 1084, styles.scss */
+#dialog ol {
+  margin: 10px 0;
+  font-size: 12px;
+  list-style: decimal;
+}
+/* line 1088, styles.scss */
+#dialog ol > li {
+  padding: 5px 0;
+  line-height: 18px;
+}
+
+/* line 1095, styles.scss */
+span.absStat {
+  color: #999999;
+}
+
+/* line 1100, styles.scss */
+a.absStat {
+  color: #999999;
+}
+/* line 1102, styles.scss */
+a.absStat:hover {
+  color: indianred;
+}
+/* line 1106, styles.scss */
+a.relStat {
+  color: #000000;
+}
+/* line 1108, styles.scss */
+a.relStat:hover {
+  color: indianred;
+}
+
+/* line 1114, styles.scss */
+.word_column {
+  text-align: left;
+}
+
+/* line 1118, styles.scss */
+.linked_sentence {
+  overflow-x: visible;
+  font-weight: normal;
+  color: #999;
+  font-style: italic;
+  position: relative;
+}
+/* line 1124, styles.scss */
+.linked_sentence td {
+  /*text-align : center;*/
+}
+
+/* line 1129, styles.scss */
+#about_content ul {
+  padding-left: 10px;
+  margin-top: 8px;
+}
+
+/* line 1134, styles.scss */
+#login {
+  /*display : none;*/
+}
+
+/* line 1138, styles.scss */
+#login_popup {
+  display: none;
+}
+/* line 1140, styles.scss */
+#login_popup * {
+  display: block;
+}
+/* line 1143, styles.scss */
+#login_popup label {
+  margin-top: 5px;
+}
+/* line 1146, styles.scss */
+#login_popup .err_msg {
+  display: none;
+  font-size: .8em;
+}
+/* line 1150, styles.scss */
+#login_popup input[type=submit] {
+  float: right;
+  margin-top: 2em;
+}
+
+/* line 1156, styles.scss */
+.logged_in #login {
+  display: none;
+}
+
+/* line 1160, styles.scss */
+#log_out {
+  display: none;
+  float: right;
+  margin-right: 8px;
+  margin-top: 7px;
+  margin-left: 3px;
+}
+
+/* line 1168, styles.scss */
+.logged_in #log_out {
+  display: block;
+}
+
+/* when selecting a word, not a lemgram, this pops up. */
+/* line 1174, styles.scss */
+.lemgram_select {
+  margin-top: 8px;
+}
+
+/* line 1178, styles.scss */
+#highlight {
+  position: absolute;
+  background-color: #FFF3D8;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 1185, styles.scss */
+.inline_list {
+  margin: 0;
+  padding: 0;
+}
+/* line 1188, styles.scss */
+.inline_list li {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1193, styles.scss */
+.msie8 .inline_list li {
+  display: inline;
+}
+
+/* line 1197, styles.scss */
+.inline_list span {
+  padding: 0 5px;
+  color: grey;
+}
+
+/* line 1202, styles.scss */
+#mode_switch {
+  margin-left: 8px;
+  float: left;
+}
+
+/* line 1207, styles.scss */
+.radioList_selected {
+  color: black !important;
+  cursor: default;
+}
+
+/* line 1212, styles.scss */
+.custom_anchor {
+  padding-right: 8px !important;
+}
+
+/* line 1216, styles.scss */
+.tabClose {
+  padding: 0 !important;
+  margin-right: 6px;
+  cursor: pointer !important;
+}
+
+/* line 1222, styles.scss */
+.hits_picture_table {
+  /*    opacity: .3; */
+  width: 100%;
+  padding: 0px;
+}
+
+/* line 1230, styles.scss */
+.hits_picture {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  left: 280px;
+  top: -1px;
+  -webkit-transition: left 400ms ease;
+  -moz-transition: left 400ms ease;
+  -o-transition: left 400ms ease;
+  transition: left 400ms ease;
+}
+
+/* line 1239, styles.scss */
+#showLineDiagram {
+  position: relative;
+  top: 3px;
+}
+
+/* line 1245, styles.scss */
+.query_token .logic_switcher {
+  float: left;
+}
+/* line 1248, styles.scss */
+.query_token .ui-icon-circle-close {
+  float: right;
+  opacity: 1;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+}
+/* line 1253, styles.scss */
+.query_token:only-of-type .ui-icon-circle-close {
+  opacity: 0;
+  cursor: default;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+}
+
+/* line 1260, styles.scss */
+.right_col {
+  padding-right: 2px;
+}
+/* line 1262, styles.scss */
+.right_col input {
+  *float: right;
+}
+
+/* line 1267, styles.scss */
+.query_arg {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  padding: 5px;
+  background-color: #f7fceb;
+  border: solid 1px #999;
+  margin-bottom: 5px;
+}
+
+/* line 1275, styles.scss */
+.or_arg {
+  margin-bottom: 5px;
+}
+/* line 1277, styles.scss */
+.or_arg .ui-icon-info {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  cursor: pointer;
+  position: relative;
+  top: 3px;
+}
+
+/* line 1285, styles.scss */
+.query_arg:only-of-type .or_arg:only-child .remove_arg {
+  cursor: default;
+  opacity: 0;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+}
+
+/* line 1291, styles.scss */
+.arg_header {
+  opacity: 0;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+  margin-bottom: 1px;
+}
+
+/* line 1297, styles.scss */
+.or_arg:not(:only-child):first-child .arg_header {
+  opacity: 1;
+  -webkit-transition: opacity 200ms ease;
+  -moz-transition: opacity 200ms ease;
+  -o-transition: opacity 200ms ease;
+  transition: opacity 200ms ease;
+}
+
+/* line 1302, styles.scss */
+.and:first-of-type {
+  display: none !important;
+}
+
+/* line 1306, styles.scss */
+.arg_header {
+  font-size: 10px;
+}
+
+/* line 1312, styles.scss */
+.insert_or {
+  padding-top: 6px;
+  right: 0;
+  cursor: pointer;
+  float: right;
+}
+
+/* line 1321, styles.scss */
+#time {
+  margin-top: 10px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1327, styles.scss */
+#time_inputs input {
+  border: none;
+  font-weight: bold;
+  width: 30px;
+}
+
+/* line 1334, styles.scss */
+#time_graph {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  width: 335px;
+  height: 70px;
+}
+
+/* line 1340, styles.scss */
+#rest_time_graph {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  height: 70px;
+  width: 5px;
+  position: relative;
+  bottom: 20px;
+}
+
+/* line 1348, styles.scss */
+#time_slider {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  width: 250px;
+  margin-right: 10px;
+}
+
+/* line 1354, styles.scss */
+.query_arg .ui-slider {
+  margin-right: 9px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* line 1360, styles.scss */
+.ui-slider-handle {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px;
+}
+
+/* line 1364, styles.scss */
+.pager-wrapper {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1370, styles.scss */
+.sidebar_url {
+  white-space: nowrap;
+}
+
+/* line 1374, styles.scss */
+.arcDiagramPicture {
+  cursor: pointer;
+  margin-bottom: -2px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* line 1381, styles.scss */
+.c0 {
+  position: relative;
+}
+
+/* line 1385, styles.scss */
+.arcDiagramPicture {
+  position: absolute;
+  right: 0;
+}
+
+/* line 1391, styles.scss */
+.lemgram_section {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  margin-right: 30px;
+}
+
+/* line 1396, styles.scss */
+.tableContainer {
+  margin-bottom: 15px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  padding: 10px;
+  border: solid 1px lightgray;
+  margin-right: 20px;
+}
+/* line 1402, styles.scss */
+.tableContainer > .header {
+  color: #333;
+  font-size: 1.1em;
+  margin-bottom: 1em;
+  font-family: Lucida Grande, sans-serif;
+}
+
+/* line 1410, styles.scss */
+.explanation {
+  font-size: 12px;
+  padding: 0 20px;
+}
+
+/* line 1415, styles.scss */
+.ui-dialog ul, ol {
+  padding-left: 0;
+}
+
+/* line 1419, styles.scss */
+.ui-dialog li {
+  margin-bottom: 3px;
+}
+
+/* line 1423, styles.scss */
+.autocomplete-item-disabled a {
+  font-style: italic;
+  color: indianred;
+  opacity: 0.7;
+}
+
+/* line 1429, styles.scss */
+#showLineDiagram {
+  display: none;
+}
+
+/* line 1433, styles.scss */
+.lab #showLineDiagram {
+  display: inline;
+}
+
+/* line 1437, styles.scss */
+#labs_logo {
+  display: none;
+}
+
+/* line 1441, styles.scss */
+.lab #labs_logo {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: bottom;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1445, styles.scss */
+#korplink {
+  display: none;
+}
+
+/* line 1450, styles.scss */
+.lab #korplablink {
+  display: none;
+}
+/* line 1453, styles.scss */
+.lab #korplink {
+  display: block;
+}
+
+/* line 1458, styles.scss */
+#cog {
+  float: right;
+  margin-top: -1px;
+  cursor: pointer;
+}
+
+/* line 1464, styles.scss */
+#cog_menu {
+  position: absolute;
+  font-size: inherit;
+  text-align: right;
+}
+
+/* line 1470, styles.scss */
+.ui-menu {
+  box-shadow: 2px 2px 3px grey;
+  z-index: 999;
+}
+
+/* line 1475, styles.scss */
+.korp_fail {
+  height: 146px;
+  width: 290px;
+}
+
+/* line 1480, styles.scss */
+.fail_text {
+  margin: 1em 0 0 1em;
+  vertical-align: top;
+  font-family: Garamond,Cochin,Serif;
+  font-size: 1.3em;
+}
+
+/* line 1487, styles.scss */
+.error_msg ~ * {
+  display: none !important;
+}
+
+/* line 1491, styles.scss */
+.msd {
+  font-size: 0.8em;
+}
+
+/* line 1495, styles.scss */
+#korp-extended .within_select ~ * {
+  display: none;
+}
+
+/* line 1499, styles.scss */
+.lab #korp-extended #sendBtn ~ * {
+  display: inline;
+}
+
+/* line 1503, styles.scss */
+#mode_switch li:nth-child(5) ~ * {
+  display: none;
+}
+
+/* line 1507, styles.scss */
+.lab #mode_switch li {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1511, styles.scss */
+#search-tab {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* line 1516, styles.scss */
+.val_mod {
+  display: none;
+  letter-spacing: 1px;
+  font-size: .8em;
+  cursor: pointer;
+  margin-right: 1px;
+}
+
+/* line 1524, styles.scss */
+.arg_value[type=text]:not(.ui-autocomplete-input) {
+  width: 91%;
+  margin-right: 3px;
+}
+/* line 1527, styles.scss */
+.arg_value[type=text]:not(.ui-autocomplete-input) + .val_mod {
+  display: inline;
+}
+
+/* line 1532, styles.scss */
+#mod_menu {
+  cursor: default;
+  position: absolute;
+  font-size: .9em;
+  text-align: right;
+}
+
+/* line 1540, styles.scss */
+.val_mod.insensitive {
+  color: lightgrey;
+}
+/* line 1543, styles.scss */
+.val_mod.sensitive {
+  color: black;
+}
+/* line 1545, styles.scss */
+.val_mod.sensitive + #mod_menu li:first-of-type a {
+  text-decoration: underline;
+}
+/* line 1549, styles.scss */
+.val_mod.insensitive + #mod_menu li:nth-of-type(2) a {
+  text-decoration: underline;
+}
+
+/* line 1554, styles.scss */
+#plot_popup {
+  padding-top: 15px;
+  height: 0;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+/* line 1559, styles.scss */
+#plot_popup .xAxis .tickLabel {
+  -webkit-transform: rotate(30deg);
+  -moz-transform: rotate(30deg);
+  -ms-transform: rotate(30deg);
+  -o-transform: rotate(30deg);
+  transform: rotate(30deg);
+  position: relative;
+  margin-top: 6px;
+  margin-left: 10px;
+}
+
+/* line 1567, styles.scss */
+.enumerate {
+  counter-increment: wordpic;
+}
+/* line 1569, styles.scss */
+.enumerate:before {
+  content: counter(wordpic) ".";
+}
+
+/* line 1574, styles.scss */
+#showBarPlot {
+  display: none;
+}
+
+/* line 1578, styles.scss */
+.lab #showBarPlot {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1582, styles.scss */
+#wordclassChkParent {
+  float: right;
+}
+
+/* line 1588, styles.scss */
+.tab_progress {
+  height: 2px;
+  background-color: darkblue;
+  max-width: 100%;
+}
+
+/* line 1594, styles.scss */
+.not_loading .tab_progress {
+  display: none;
+}
+
+/* line 1598, styles.scss */
+.progress {
+  width: 143px;
+  overflow-x: hidden;
+  -moz-transition: width 400ms ease;
+  -webkit-transition: width 400ms ease;
+  transition: width 400ms ease;
+}
+
+/* line 1606, styles.scss */
+#results-kwic.not_loading .progress {
+  width: 0;
+  -moz-transition: width 400ms ease;
+  -webkit-transition: width 400ms ease;
+  transition: width 400ms ease;
+}
+
+/* line 1613, styles.scss */
+.not_loading .hits_picture {
+  left: 180px;
+  -moz-transition: left 400ms ease;
+  -webkit-transition: left 400ms ease;
+  transition: left 400ms ease;
+}
+
+/* line 1621, styles.scss */
+#results-stats.not_loading .progress,
+#results-lemgram.not_loading .progress {
+  display: none;
+}
+
+/* line 1626, styles.scss */
+.arg_value .from, .arg_value .to {
+  width: 50px;
+}
+/* line 1629, styles.scss */
+.arg_value .from {
+  float: left;
+}
+/* line 1632, styles.scss */
+.arg_value .to {
+  float: right;
+  text-align: left;
+}
+
+/* line 1638, styles.scss */
+.ui-autocomplete-category {
+  font-size: .7em;
+  text-transform: uppercase;
+  color: grey;
+  letter-spacing: 1.1;
+}
+
+/* line 1645, styles.scss */
+#keyboard {
+  cursor: pointer;
+  padding: 0 3px;
+  display: none;
+}
+
+/* line 1651, styles.scss */
+#char_table {
+  display: none;
+}
+
+/* line 1655, styles.scss */
+.specialkey {
+  width: 12px;
+  text-align: center;
+  cursor: pointer;
+}
