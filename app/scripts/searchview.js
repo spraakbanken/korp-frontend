@@ -11,7 +11,7 @@ view.lemgramSort = function(first, second) {
 	var match1 = util.splitLemgram(first);
 	var match2 = util.splitLemgram(second);
 	if(match1.form == match2.form)
-		return parseInt(match1.index) - parseInt(match2.index); 
+		return parseInt(match1.index) - parseInt(match2.index);
 	return first.length - second.length;
 };
 
@@ -19,7 +19,7 @@ view.saldoSort = function(first, second) {
 	var match1 = util.splitSaldo(first);
 	var match2 = util.splitSaldo(second);
 	if(match1[1] == match2[1])
-		return parseInt(match1[2]) - parseInt(match2[2]); 
+		return parseInt(match1[2]) - parseInt(match2[2]);
 	return first.length - second.length;
 };
 
@@ -37,7 +37,7 @@ view.updateSearchHistory = function(value) {
 		searches.splice(0, 0, {label : value, location : location.href});
 		$.jStorage.set("searches", searches);
 	}
-	
+
 	if(!searches.length) return;
 	var opts = $.map(searches, function(item) {
 		var output = $("<option />", {value : item.location}).text(item.label).get(0);
@@ -52,14 +52,12 @@ view.enableSearch = function(bool) {
 	} else {
 		$("#search-tab").tabs("disable").addClass("ui-state-disabled").cover();
 	}
-	
+
 };
 
 view.initSearchOptions = function() {
 	var selects = $("#search_options > div:first select").customSelect();
 	view.updateReduceSelect();
-//	view.updateContextSelect("within");
-//	view.updateContextSelect("context");
 	$("#search_options select").each(function() {
 		var state = $.bbq.getState($(this).data("history"));
 		if(!!state) {
@@ -70,23 +68,23 @@ view.initSearchOptions = function() {
 			.change();
 		}
 	});
-	
-	
+
+
 	$("#search_options").css("background-color", settings.primaryLight)
 	.change(function(event) {
 		simpleSearch.enableSubmit();
 		extendedSearch.enableSubmit();
 		advancedSearch.enableSubmit();
 		var target = $(event.target);
-		
+
 		var state = {};
 		state[target.data("history")] = target.val();
 		if(target.prop("selectedIndex") != 0)
 			$.bbq.pushState(state);
-		else 
+		else
 			$.bbq.removeState(target.data("history"));
 	});
-	
+
 };
 
 view.updateContextSelect = function(withinOrContext) {
@@ -94,26 +92,25 @@ view.updateContextSelect = function(withinOrContext) {
 	var union = settings.corpusListing.getAttrUnion(withinOrContext);
 	var opts = $("." + withinOrContext + "_select option");
 	opts.data('locSuffix', null).attr("disabled", null).removeClass("limited");
-//	if(union.length == 2 && intersect.length == 2) {
 		// all support enhanced context
 	if(union.length > intersect.length) {
-		// partial
+		// partial support for enhanced context
 		opts.each(function() {
 			if($.inArray($(this).attr("value"), intersect) == -1) {
 				$(this).addClass("limited").data("locSuffix", "asterix")
-				
+
 			}
-			
+
 		});
-		
-		
+
+
 	} else if(union.length == 1 && intersect.length == 1) {
-		// none support
-		
+		// no support
+
 		opts.each(function() {
-			if($.inArray($(this).attr("value"), intersect) != -1) 
+			if($.inArray($(this).attr("value"), intersect) != -1)
 				$(this).attr("disabled", null);
-			else 
+			else
 				$(this).attr("disabled", "disabled").parent().val("sentence").change();
 		});
 	}
@@ -122,10 +119,10 @@ view.updateContextSelect = function(withinOrContext) {
 
 view.updateReduceSelect = function() {
 	var groups = $.extend({
-		word : { 
+		word : {
 			word : {label : "word"},
 			word_insensitive : {label : "word_insensitive"}
-		}},	
+		}},
 		{
 		"word_attr" : settings.corpusListing.getCurrentAttributes(),
 		"sentence_attr" : $.grepObj(settings.corpusListing.getStructAttrs(), function(val, key) {
@@ -137,7 +134,7 @@ view.updateReduceSelect = function() {
 	var select = util.makeAttrSelect(groups);
 	$("#reduceSelect").html(select);
 	c.log("updateReduceSelect", groups, select);
-	
+
 	select.attr("data-history", "stats_reduce")
 	.attr("data-prefix", "reduce_text")
 	.customSelect();
@@ -154,16 +151,16 @@ var BaseSearch = {
 		this.$main.find("#sendBtn:submit").click($.proxy(this.onSubmit, this));
 		this._enabled = true;
 	},
-	
+
 	refreshSearch : function() {
 		$.bbq.removeState("search");
 		$(window).trigger("hashchange");
 	},
-	
+
 	onSubmit : function() {
 		this.refreshSearch();
 	},
-	
+
 	isVisible : function() {
 		return this.$main.is(":visible");
 	},
@@ -174,7 +171,7 @@ var BaseSearch = {
 		this._enabled = true;
 		this.$main.find("#sendBtn").attr("disabled", false);
 	},
-	
+
 	disableSubmit : function() {
 		this._enabled = false;
 		this.$main.find("#sendBtn").attr("disabled", "disabled");
@@ -197,7 +194,7 @@ var SimpleSearch = {
 		var textinput = $("#simple_text").bind("keydown.autocomplete", function(event) {
 			var keyCode = $.ui.keyCode;
 			if(!self.isVisible() || $("#ui-active-menuitem").length !== 0) return;
-				
+
 			switch(event.keyCode) {
 			case keyCode.ENTER:
 				if($("#search-tab").data("cover") == null)
@@ -216,7 +213,7 @@ var SimpleSearch = {
 						if(currentMode == "law") {
 							idArray = _.filter(idArray, function(item) {
 								return item in freqs;
-							}); 
+							});
 						}
 						var has_morphs = settings.corpusListing.getMorphology().split("|").length > 1;
 						if(has_morphs) {
@@ -225,14 +222,14 @@ var SimpleSearch = {
 								var second = b.split("--").length > 1 ? b.split("--")[0] : "saldom";
 								if(first == second) return (freqs[b] || 0) - (freqs[a] || 0);
 								return second < first;
-								
+
 							});
 						} else {
 							idArray.sort(function(first, second) {
 								return (freqs[second] || 0) - (freqs[first] || 0);
 							});
 						}
-						
+
 						var labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
 						var listItems = $.map(idArray, function(item, i) {
 							var out = {
@@ -245,7 +242,7 @@ var SimpleSearch = {
 								out["category"] = item.split("--").length > 1 ? item.split("--")[0] : "saldom";
 							return out;
 						});
-						
+
 						dfd.resolve(listItems);
 					})
 					.fail(function() {
@@ -257,7 +254,7 @@ var SimpleSearch = {
 				},
 				"sw-forms" : false
 			});
-		
+
 		$("#prefixChk, #suffixChk, #caseChk").click(function() {
 			if($("#simple_text").attr("placeholder") && $("#simple_text").text() == "" ) {
 				self.enableSubmit();
@@ -265,30 +262,30 @@ var SimpleSearch = {
 				self.onSimpleChange();
 			}
 		});
-		
+
 		$("#keyboard").click(function() {
 			c.log("click", arguments);
 			$("#char_table").toggle("slide", {direction : "up"}, "fast");
-			
+
 		});
 		$("#char_table td").click(function() {
 			$("#simple_text").val($("#simple_text").val() + $(this).text());
 		});
 	},
-	
+
 	isSearchPrefix : function() {
 		return $("#prefixChk").is(":checked");
 	},
 	isSearchSuffix : function() {
 		return $("#suffixChk").is(":checked");
 	},
-	
+
 	makeLemgramSelect : function(lemgram) {
 		var self = this;
-		
-		var promise = $("#simple_text").data("promise") 
-			|| lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), "Lemma"); 
-		
+
+		var promise = $("#simple_text").data("promise")
+			|| lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), false);
+
 		promise.done(function(lemgramArray) {
 			$("#lemgram_select").prev("label").andSelf().remove();
 			self.savedSelect = null;
@@ -310,18 +307,18 @@ var SimpleSearch = {
 				}
 				$(this).prev("label").andSelf().remove();
 			});
-			
+
 			select.get(0).selectedIndex = 0;
-			
+
 			var label = $("<label />", {"for" : "lemgram_select"})
-			.html($.format("<i>%s</i> <span rel='localize[autocomplete_header]'>%s</span>", 
+			.html($.format("<i>%s</i> <span rel='localize[autocomplete_header]'>%s</span>",
 					[$("#simple_text").val(), util.getLocaleString("autocomplete_header")]
 			))
 			.css("margin-right", 8);
 			select.before( label );
 		});
 	},
-	
+
 	onSubmit : function() {
 		this.parent();
 		$("#simple_text").korp_autocomplete("abort");
@@ -330,31 +327,31 @@ var SimpleSearch = {
 		else if($("#simple_text").attr("placeholder") != null)
 			this.selectLemgram($("#simple_text").data("lemgram"));
 	},
-	
+
 	selectLemgram : function(lemgram) {
 		if($("#search-tab").data("cover") != null) return;
 		this.refreshSearch();
 		util.searchHash("lemgram", lemgram);
 	},
-	
+
 	buildLemgramSelect : function(lemgrams) {
 		$("#lemgram_select").prev("label").andSelf().remove();
 		var optionElems = $.map(lemgrams, function(item) {
 			return $("<option>", {value : item.value}).html(item.label).get(0);
 		});
-		return $("<select id='lemgram_select' />").html(optionElems).data("dataprovider", lemgrams);; 
+		return $("<select id='lemgram_select' />").html(optionElems).data("dataprovider", lemgrams);;
 	},
-	
+
 	renderSimilarHeader : function(selectedItem, data) {
 		c.log("renderSimilarHeader");
 		var self = this;
-		
+
 		$("#similar_lemgrams").empty().append("<div id='similar_header' />");
 		$("<p/>")
 		.localeKey("similar_header")
 		.css("float", "left")
 		.appendTo("#similar_header");
-		
+
 		var lemgrams = self.savedSelect || $( "#simple_text" ).data("dataArray");
 		self.savedSelect = null;
 		if(lemgrams != null && lemgrams.length ) {
@@ -368,7 +365,7 @@ var SimpleSearch = {
 			$( "#simple_text" ).data("dataArray", null);
 		}
 		$("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
-		
+
 		// wordlist
 		data = $.grep(data, function(item) {
 			return !!item.rel.length;
@@ -387,18 +384,18 @@ var SimpleSearch = {
 			}
 			count += item.rel.length;
 		});
-		
+
 		var list = $("<ul />").appendTo("#similar_lemgrams");
 		$("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list)
 		.find("a")
 		.click(function() {
 			self.selectLemgram($(this).data("lemgram"));
 		});
-		
+
 		$("#show_more").remove();
-		
+
 		var div = $("#similar_lemgrams").show().height("auto").slideUp(0);
-		
+
 		if(isSliced) {
 			div.after(
 				$("<div id='show_more' />")
@@ -407,7 +404,7 @@ var SimpleSearch = {
 				.click(function() {
 					$(this).remove();
 					var h = $("#similar_lemgrams").outerHeight();
-					
+
 					list.html( $("#similarTmpl").tmpl(data) )
 					.find("a")
 					.click(function() {
@@ -416,27 +413,27 @@ var SimpleSearch = {
 					$("#similar_lemgrams").height("auto");
 					var newH = $("#similar_lemgrams").outerHeight();
 					$("#similar_lemgrams").height(h);
-					
+
 					$("#similar_lemgrams").animate({height : newH}, "fast");
 				})
 			);
 		}
 		div.slideDown("fast");
 	},
-	
+
 	removeSimilarHeader : function() {
 		$("#similar_lemgrams").slideUp(function() {
 			$(this).empty();
 		});
 	},
-	
+
 	onSimpleChange : function(event) {
 		$("#simple_text").data("promise", null);
 		if(event && event.keyCode == 27) { //escape
 			c.log("key", event.keyCode);
 			return;
 		}
-		
+
 		var currentText = $("#simple_text").val();
 		currentText = $.trim(currentText, '"');
 		var val;
@@ -453,7 +450,7 @@ var SimpleSearch = {
 					return $.format('word = "%s"%s', [q, suffix]);
 				}).join(" | ")  + "]";
 			}).join(" ");
-			
+
 		}
 		else {
 			var wordArray = currentText.split(" ");
@@ -469,7 +466,7 @@ var SimpleSearch = {
 			this.disableSubmit();
 		}
 	},
-	
+
 	resetView : function() {
 		$("#similar_lemgrams").empty().height("auto");
 		$("#show_more").remove();
@@ -477,20 +474,20 @@ var SimpleSearch = {
 //		$("#lemgram_select").prev("label").andSelf().remove();
 		return this;
 	},
-	
+
 	setPlaceholder : function(str, data) {
 		$("#simple_text").data("lemgram", data).attr("placeholder", str)
 		.placeholder();
 		return this;
 	},
-	
+
 	clear : function() {
 		$("#simple_text").val("")
         .get(0).blur();
 		this.disableSubmit();
 		return this;
 	}
-	
+
 };
 
 
@@ -505,15 +502,15 @@ var ExtendedSearch = {
 			}
 			return false;
 		});
-		
+
 		this.$main.find("#strict_chk").change(function() {
 			advancedSearch.updateCQP();
 		});
-		
+
 		this.setupContainer("#query_table");
-		
+
 	},
-	
+
 	setupContainer : function(selector) {
 		var self = this;
 		var insert_token_button = $('<img src="img/plus.png"/>')
@@ -522,7 +519,7 @@ var ExtendedSearch = {
 	    .click(function(){
 	    	self.insertToken(this);
 		});
-	    
+
 	    $(selector).append(insert_token_button).sortable({
 	    	items : ".query_token",
 	    	delay : 50,
@@ -530,17 +527,17 @@ var ExtendedSearch = {
 	    });
 	    insert_token_button.click();
 	},
-	
+
 	reset : function() {
 		//$("#search-tab ul li:nth(2)").click()
 		this.$main.find(".query_token").remove();
 		$(".insert_token").click();
 		advancedSearch.updateCQP();
 	},
-	
+
 	onentry : function() {
 	},
-	
+
 	onSubmit : function() {
 		this.parent();
 		if(this.$main.find(".query_token, .or_arg").length > 1) {
@@ -559,14 +556,14 @@ var ExtendedSearch = {
 			}
 		}
 	},
-	
+
 	setOneToken : function(key, val) {
 		$("#search-tab").find("a[href=#korp-extended]").click().end()
 		.find("select.arg_type:first").val(key)
 		.next().val(val);
 		advancedSearch.updateCQP();
 	},
-	
+
 	insertToken : function(button) {
 		var self = this;
 		try {
@@ -590,11 +587,11 @@ var ExtendedSearch = {
 //	    .quickLocalize();
 		util.localize();
 	},
-	
+
 	refreshTokens : function() {
 		$(".query_token").extendedToken("refresh");
 	}
-	
+
 };
 
 var AdvancedSearch = {
@@ -602,12 +599,12 @@ var AdvancedSearch = {
 	initialize : function(mainDivId) {
 		this.parent(mainDivId);
 	},
-	
+
 	setCQP : function(query) {
 		c.log("setCQP", query)
 		$("#cqp_string").val(query);
 	},
-	
+
 	updateCQP : function() {
 	    var query = $(".query_token").map(function() {
 	    	return $(this).extendedToken("getCQP", $("#strict_chk").is(":checked"));
@@ -615,7 +612,7 @@ var AdvancedSearch = {
 	    this.setCQP(query);
 	    return query;
 	},
-	
+
 	onSubmit : function() {
 		this.parent();
 		util.searchHash("cqp", $("#cqp_string").val());

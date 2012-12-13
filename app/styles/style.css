@@ -2,6 +2,7 @@
     font-family: "Source Sans Pro";
     src: url(SourceSansPro-Regular.otf);
 }
+/*
 @font-face {
   font-family: 'LigatureSymbols';
   src: url('LigatureSymbols-2.07.eot?') format('eot'), url('LigatureSymbols-2.07.woff') format('woff'), url('LigatureSymbols-2.07.ttf') format('truetype');
@@ -12,16 +13,17 @@
     text-rendering : optimizelegibility;
     font-size : 28px;
 }
+*/
 
 body {
 	font-family : 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
 	font-size: 13px;
 	margin : 0;
 	overflow-x : hidden;
-} 
+}
 
 ul, ol {
-	list-style: none;	
+	list-style: none;
 }
 
 h4 {
@@ -36,15 +38,15 @@ h4 {
 }
 
 .ui-widget {
-	font-family : inherit; 
+	font-family : inherit;
 }
 
 sup {
-	line-height : 0px;	
+	line-height : 0px;
 }
 
 img {
-	border : 0px;	
+	border : 0px;
 }
 
 a {
@@ -119,7 +121,7 @@ a:hover {color:indianred;}  /* mouse over link */
 	background-color : #fcece8;
 }
 .color_white {
-	background-color : white;	
+	background-color : white;
 }
 
 .color_unfocused {
@@ -129,10 +131,10 @@ a:hover {color:indianred;}  /* mouse over link */
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
 	font-size : 1em;
 	font-family : inherit;
-}	
+}
 
 #header_left {
-	float : left;	
+	float : left;
 }
 #header_left > a {
 	margin-right : 10px;
@@ -157,22 +159,22 @@ a:hover {color:indianred;}  /* mouse over link */
 #top_bar {
 	height : 30px;
 	width : 100%;
-	/* IE10 */ 
+	/* IE10 */
 	background-image: -ms-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-	
-	/* Mozilla Firefox */ 
+
+	/* Mozilla Firefox */
 	background-image: -moz-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-	
-	/* Opera */ 
+
+	/* Opera */
 	background-image: -o-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-	
-	/* Webkit (Safari/Chrome 10) */ 
+
+	/* Webkit (Safari/Chrome 10) */
 	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #FCFAFC), color-stop(1, #D9D9D9));
-	
-	/* Webkit (Chrome 11+) */ 
+
+	/* Webkit (Chrome 11+) */
 	background-image: -webkit-linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
-	
-	/* Proposed W3C Markup */ 
+
+	/* Proposed W3C Markup */
 	background-image: linear-gradient(bottom, #FCFAFC 0%, #D9D9D9 100%);
 }
 
@@ -230,7 +232,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .lang_selected {
-	color : black;	
+	color : black;
 }
 
 #languages {
@@ -239,7 +241,7 @@ input:placeholder, textarea:placeholder {
 }
 
 #query_table,.lang_row {
-	overflow : auto;	
+	overflow : auto;
 	white-space: nowrap;
 	margin-bottom : 15px;
 }
@@ -272,11 +274,11 @@ input:placeholder, textarea:placeholder {
 }
 
 .within_select ~ * {
-    display : none;   
+    display : none;
 }
 
 #removeLang, #linkedLang {
-    display : none;   
+    display : none;
 }
 
 .lang_row + #removeLang {
@@ -306,7 +308,7 @@ input:placeholder, textarea:placeholder {
 }
 
 .arg_selects {
-	
+
 }
 .arg_type {
 	display : inline-block;
@@ -321,7 +323,7 @@ input.arg_value {
 }
 .arg_value {
 	max-width : 300px;
-	
+
 }
 select.arg_value option {
 	padding-top: 1px;
@@ -346,11 +348,11 @@ select.arg_value option {
 .query_token .repeat {
     float : right;
     margin-right : 25px;
-    
+
 }
 .query_token .repeat input {
     max-width : 30px;
-    
+
 }
 
 .ui-icon-gear {
@@ -383,18 +385,19 @@ select.arg_value option {
     border : thin lightgrey solid;
     padding-left : 5px;
     padding-right : 1px;
-    cursor : default; 
+    cursor : default;
 }
 
 .lower_footer {
     text-align : right;
-    margin-top : 2px;    
+    margin-top : 2px;
 }
 
 #opt_menu {
     display : none;
     font-size : .8em;
     cursor : pointer;
+    width: 100px;
 }
 
 
@@ -488,14 +491,14 @@ select.arg_value option {
 .popupchecks .buttons a {
 	display : block;
 	margin-bottom : 5px;
-		
+
 }
 .popupchecks .header {
-    
+
 }
 
 .numberOfChildren {
-	color: #888888;	
+	color: #888888;
 }
 
 .hp_topframe {
@@ -514,15 +517,15 @@ select.arg_value option {
 }
 
 .corpusInfoSpace {
-    display: none; 
-    border: 1px solid #CCCCCC; 
-    z-index: 10000; 
-    min-width: 30px; 
-    min-height: 30px; 
-    max-width: 33%; 
-    position: absolute; 
-    left:615px; 
-    background-color: white; 
+    display: none;
+    border: 1px solid #CCCCCC;
+    z-index: 10000;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 33%;
+    position: absolute;
+    left:615px;
+    background-color: white;
     padding-right: 4px
 }
 
@@ -567,7 +570,7 @@ select.arg_value option {
 	width: 12px;
 	height: 12px;
     display : inline-block;
-	
+
 }
 .checkbox.checked {
     background-image : url("../img/checked.png");
@@ -605,11 +608,11 @@ select.arg_value option {
 }
 
 #similar_lemgrams:empty {
-	padding : 0;	
+	padding : 0;
 }
 
 #similar_lemgrams p {
-	margin-top : 2px;	
+	margin-top : 2px;
 	margin-bottom : 7px;
 }
 
@@ -630,7 +633,7 @@ select.arg_value option {
 	position : relative;
 	top : -3px;
 	padding : 2px 2px 0 2px;
-	
+
 }
 #show_more a {
 	font-size : 12px;
@@ -684,7 +687,7 @@ table {
 	*display : inline;
 	vertical-align: top;
 	padding: 5px;
-	
+
 	border : 1px solid #999;
 	cursor : move;
 	margin-left : 0;
@@ -694,7 +697,7 @@ table {
 }
 
 .query_token.ui-sortable-helper {
-	width : 275px !important;	
+	width : 275px !important;
 }
 
 .cqp_toggle {
@@ -759,7 +762,7 @@ table {
 	padding-bottom : 5px;
 	padding-left : 5px;
 	padding-right : 2px;
-	counter-reset: wordpic;	
+	counter-reset: wordpic;
 }
 
 .lemgram_result table{
@@ -769,12 +772,12 @@ table {
 
 
 .table_scrollarea {
-	
-	overflow: auto; 
+
+	overflow: auto;
 	clear: both;
 	overflow-y: hidden;
 	-ms-overflow-y: hidden;
-	
+
 }
 .results_table {
 	padding-left : 0;
@@ -783,7 +786,7 @@ table {
 
 .results_table td{
 	white-space : nowrap;
-	border : none;	
+	border : none;
 }
 
 #display_word {
@@ -820,7 +823,7 @@ table {
     display : inline;
 }
 
-.reading_mode .reading_btn.show, 
+.reading_mode .reading_btn.show,
 .reading_btn.hide,
 .zero_results .reading_btn {
     display : none;
@@ -829,9 +832,9 @@ table {
     display : inline;
 }
 
-.results_table.reading, 
+.results_table.reading,
 .reading_mode .results_table.kwic {
-    display : none;   
+    display : none;
 }
 .reading_mode .results_table.reading {
     display : block;
@@ -860,7 +863,7 @@ table {
 }
 
 .result_table td {
-	white-space: nowrap; 
+	white-space: nowrap;
 }
 
 .left {
@@ -880,8 +883,8 @@ table {
 	vertical-align: text-top;
 	text-align : center;
 	padding : 0 4px;
-	
-	
+
+
 	font-weight: normal;
 	font-variant: small-caps;
 	color : #666;
@@ -889,7 +892,7 @@ table {
 	border-top : 3px solid white;
 	border-bottom : 3px solid white;
 	border-width : 3px !important;
-	
+
 }
 
 .no_context .corpus_title_span {
@@ -899,7 +902,7 @@ table {
     left : 60px;
 }
 .reading .no_context .corpus_title_span {
-    left : 0;   
+    left : 0;
 }
 .corpus_title_warn {
     margin-right : -100px;
@@ -959,7 +962,7 @@ table {
 }
 
 .word {
-	cursor: pointer;	
+	cursor: pointer;
 }
 .reading_mode .word {
     color : #666;
@@ -974,12 +977,12 @@ table {
 .word_selected {
 	border-radius: 10px;
     -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;	
+    -khtml-border-radius: 10px;
 	padding-left: 3px;
 	padding-right: 3px;
 	margin-left: -3px;
 	margin-right: -3px;
-		
+
 }
 
 .token_selected {
@@ -1021,7 +1024,7 @@ table {
 	right: 0px;
 	width: 250px;
 	padding: 5px 0px 5px 5px;
-	
+
 }
 #sidebar.fixed {
 	right : 8px;
@@ -1033,8 +1036,8 @@ table {
 	padding : 0;
 	border : none;
 }
-.external_link { 
-    display : none;    
+.external_link {
+    display : none;
 }
 #sidebar li:hover .external_link {
     background-image: url("../img/fish_icon.png");
@@ -1079,7 +1082,7 @@ table {
 	margin-bottom : 2px;
 	padding-left : 20px;
 	list-style : none;
-	line-height: 16px;	
+	line-height: 16px;
 }
 
 #dialog ol {
@@ -1089,7 +1092,7 @@ table {
 }
 #dialog ol > li {
 	padding : 5px 0;
-	line-height : 18px;	
+	line-height : 18px;
 }
 
 #results-stats table {
@@ -1098,7 +1101,7 @@ table {
 	border-color: gray;
 	background-color: white;
 	border-spacing : 0;
-	
+
 }
 
 #results-stats th, #results-stats td {
@@ -1141,12 +1144,12 @@ a.relStat:hover {
 	font-weight: normal;
 	color : #999;
 	font-style: italic;
-	position : relative;	
+	position : relative;
 }
 
 .linked_sentence td {
 	/*text-align : center;*/
-}	
+}
 
 #about_content ul {
 	padding-left : 10px;
@@ -1161,10 +1164,10 @@ a.relStat:hover {
     display : none;
 }
 #login_popup * {
-    display : block;   
+    display : block;
 }
 #login_popup label {
-    margin-top : 5px;   
+    margin-top : 5px;
 }
 #login_popup .err_msg {
     display : none;
@@ -1197,8 +1200,8 @@ a.relStat:hover {
 #highlight {
 	position : absolute;
 	background-color : #FFF3D8;
-	
-	
+
+
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
@@ -1253,7 +1256,7 @@ a.relStat:hover {
 	right : 10px;
 	left : 280px;
 	top : -1px;
-	
+
 	-moz-transition: left 400ms ease;
 	-webkit-transition: left 400ms ease;
 	transition: left 400ms ease;
@@ -1278,11 +1281,11 @@ a.relStat:hover {
 
 .query_token:only-of-type .ui-icon-circle-close {
 	opacity : 0;
-	cursor : default; 
+	cursor : default;
 	-moz-transition: opacity 200ms ease;
 	-webkit-transition: opacity 200ms ease;
 	transition: opacity 200ms ease;
-	
+
 }
 
 .right_col {
@@ -1331,7 +1334,7 @@ a.relStat:hover {
 	-moz-transition: opacity 200ms ease;
 	-webkit-transition: opacity 200ms ease;
 	transition: opacity 200ms ease;
-	
+
 }
 
 .and:first-of-type {
@@ -1364,7 +1367,7 @@ a.relStat:hover {
 #time_inputs input {
     border : none;
     font-weight : bold;
-    width : 30px;   
+    width : 30px;
 }
 
 #time_graph {
@@ -1403,7 +1406,7 @@ a.relStat:hover {
 }
 
 .col_wrapper {
-}	
+}
 
 .sidebar_url {
 	white-space: nowrap;
@@ -1445,10 +1448,10 @@ a.relStat:hover {
 	margin-bottom : 15px;
 	display : inline-block;
 	padding : 10px;
-	
+
 	border : solid 1px lightgray;
 	margin-right : 20px;
-	
+
 }
 
 .tableContainer > .header {
@@ -1464,7 +1467,7 @@ a.relStat:hover {
 }
 
 .ui-dialog ul,ol {
-	padding-left : 0; 
+	padding-left : 0;
 }
 
 .ui-dialog li {
@@ -1481,7 +1484,7 @@ a.relStat:hover {
 	display: none;
 }
 .lab #showLineDiagram {
-	display : inline;	
+	display : inline;
 }
 #labs_logo {
 	display : none;
@@ -1495,7 +1498,7 @@ a.relStat:hover {
 }
 .lab #korplablink {
 	display : none;
-} 
+}
 .lab #korplink {
 	display : block;
 }
@@ -1524,7 +1527,7 @@ a.relStat:hover {
 	vertical-align: top;
 	font-family : Garamond,Cochin,Serif;
 	font-size : 1.3em;
-	
+
 }
 
 .error_msg ~ * {
@@ -1600,7 +1603,7 @@ a.relStat:hover {
 	height : 0;
 	overflow-y : hidden;
 	overflow-x : auto;
-	
+
 }
 #plot_popup .xAxis .tickLabel {
     -moz-transform: rotate(30deg);
@@ -1648,7 +1651,7 @@ a.relStat:hover {
 }
 #results-kwic.not_loading .progress {
 	width : 0;
-	
+
 	-moz-transition: width 400ms ease;
 	-webkit-transition: width 400ms ease;
 	transition: width 400ms ease;
@@ -1661,7 +1664,7 @@ a.relStat:hover {
 	transition: left 400ms ease;
 }
 
-#results-stats.not_loading .progress, 
+#results-stats.not_loading .progress,
 #results-lemgram.not_loading .progress {
 	display : none;
 }
@@ -1670,11 +1673,11 @@ a.relStat:hover {
     width : 50px;
 }
 .arg_value .from {
-    float : left;    
+    float : left;
 }
 .arg_value .to {
     float : right;
-    text-align: left;    
+    text-align: left;
 }
 
 .ui-autocomplete-category {
@@ -1682,7 +1685,7 @@ a.relStat:hover {
     text-transform: uppercase;
     color : grey;
     letter-spacing: 1.1;
-    
+
 }
 
 #keyboard {
@@ -1694,7 +1697,8 @@ a.relStat:hover {
     display : none;
 }
 .specialkey {
-    width: 12px; 
-    text-align: center; 
+    width: 12px;
+    text-align: center;
     cursor: pointer;
 }
+

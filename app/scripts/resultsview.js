@@ -12,8 +12,9 @@ var BaseResults = {
 		this.optionWidget = $("#search_options");
 		this.num_result = this.$result.find(".num-result");
 		this.$result.add(this.$tab).addClass("not_loading");
+
 	},
-	
+
 	onProgress : function(progressObj) {
 		// TODO: this item only exists in the kwic.
 		this.num_result.html(prettyNumbers(progressObj["total_results"]));
@@ -25,7 +26,7 @@ var BaseResults = {
 			}
 		this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
 	},
-	
+
 	renderResult : function(data) {
 //		this.resetView();
 		this.$result.find(".error_msg").remove();
@@ -39,13 +40,16 @@ var BaseResults = {
         	return item != self.index;
         });
         $("#result-container").korptabs("option", "disabled", newDisabled);
-        
+
         if(data.ERROR) {
 			this.resultError(data);
 			return false;
 		}
 	},
-	
+
+	renderCompleteResult : function() {
+	},
+
 	resultError : function(data) {
 		c.log("json fetch error: " + $.dump(data.ERROR));
 		this.hidePreloader();
@@ -56,11 +60,11 @@ var BaseResults = {
 		.addClass("inline_block")
 		.prependTo(this.$result)
 		.wrapAll("<div class='error_msg'>");
-		
-		
+
+
 		util.setJsonLink(this.proxy.prevRequest);
 	},
-	
+
 	showPreloader : function() {
 		this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
 		this.$tab.find(".tab_progress").css("width", 0); //.show();
@@ -69,11 +73,11 @@ var BaseResults = {
 	hidePreloader : function() {
 		this.$result.add(this.$tab).removeClass("loading").addClass("not_loading");
 	},
-	
+
 	resetView : function() {
 		this.$result.find(".error_msg").remove();
 	}
-	
+
 };
 
 view.BaseResults = new Class(BaseResults);
@@ -90,24 +94,24 @@ var KWICResults = {
 		this.readingProxy = new model.KWICProxy();
 		this.current_page = 0;
 		this.selectionManager = new util.SelectionManager();
-		
+
 		this.$result.click(function(){
 			if(!self.selectionManager.hasSelected()) return;
 			self.selectionManager.deselect();
 			$.sm.send("word.deselect");
 		});
-		
+
 		this.$result.find(".reading_btn").click(function() {
-			
+
 			var isReading = self.$result.is(".reading_mode");
-			
-			
+
+
 			if($.bbq.getState("reading_mode")) {
 				$.bbq.removeState("reading_mode");
 			} else {
 				$.bbq.pushState({"reading_mode" : true});
 			}
-			
+
 //			return false;
 		});
 		if($.bbq.getState("reading_mode")) {
@@ -118,26 +122,26 @@ var KWICResults = {
 		this.parent();
 		this.$result.find(".results_table,.pager-wrapper").empty();
 	},
-	
+
 	getProxy : function() {
 		if(this.$result.is(".reading_mode"))
 			return this.readingProxy;
 			return this.proxy;
 	},
-	
+
 	onentry : function() {
 		this.centerScrollbar();
 		$(document).keydown($.proxy(this.onKeydown, this));
 	},
-	
+
 	onexit : function() {
 		$(document).unbind("keydown", this.onKeydown);
 	},
-	
+
 	onKeydown : function(event) {
 		var isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
 		if(isSpecialKeyDown || $("input[type=text], textarea").is(":focus")) return;
-		
+
 		switch(event.which) {
 		case 78: // n
 			this.$result.find(".pager-wrapper .next").click();
@@ -146,7 +150,7 @@ var KWICResults = {
 			this.$result.find(".pager-wrapper .prev").click();
 			return false;
 		}
-		
+
 		if(!this.selectionManager.hasSelected()) return;
 	    switch(event.which) {
 			case 38: //up
@@ -163,7 +167,7 @@ var KWICResults = {
 				return false;
 	    }
 	},
-	
+
 	getPageInterval : function(page) {
 		var items_per_page = Number(this.optionWidget.find(".num_hits").val());
 		var output = {};
@@ -171,9 +175,9 @@ var KWICResults = {
 		output.end = (output.start + items_per_page) - 1;
 		return output;
 	},
-	
+
 	renderCompleteResult : function(data) {
-		
+		this.parent();
 		if(!data.hits) {
 			c.log("no kwic results");
 			this.showNoResults();
@@ -183,14 +187,14 @@ var KWICResults = {
 		this.$result.find('.num-result').html(prettyNumbers(data.hits));
 		this.renderHitsPicture(data);
 		this.buildPager(data.hits);
-		
-		
+
+
 		this.hidePreloader();
 	},
-	
+
 	renderContextResult : function(data, sourceCQP) {
 		this.$result.find(".results_table.kwic").empty();
-			
+
 		this.renderResult(".results_table.reading", data, sourceCQP).done(function() {
 			c.log('rendercontextresult', $(".results_table.reading"));
 			$(".results_table.reading .match .word").addClass("reading_match");
@@ -201,15 +205,16 @@ var KWICResults = {
 				$(this).prevUntil(open).add(open).add($(this).nextUntil(close).add(close))
 				.addClass("matching_sentence");
 			}).first().click();
+
 //			});
 		});
 	},
-	
+
 	renderKwicResult : function(data, sourceCQP) {
 		this.$result.find(".results_table.reading").empty();
 		this.renderResult(".results_table.kwic", data, sourceCQP);
 	},
-	
+
 	renderResult : function(drawtarget, data, sourceCQP, dfd) {
 		dfd = dfd || $.Deferred();
 		var resultError = this.parent(data);
@@ -218,7 +223,7 @@ var KWICResults = {
 		}
 		var self = this;
 //		this.prevCQP = sourceCQP;
-		
+
 		var effectSpeed = 100;
 		if($.trim(this.$result.find(drawtarget).html()).length) {
 			this.$result.fadeOut(effectSpeed, function() {
@@ -228,38 +233,38 @@ var KWICResults = {
 			return dfd;
 		}
 		c.log("corpus_results");
-		
+
 		var punctArray = [",", ".", ";", ":", "!", "?"];
 		var prevCorpus = "";
 		var table = self.$result.find(drawtarget);
 		$.each(data.kwic, function(i,sentence) {
-			var offset = 0; 
+			var offset = 0;
 		    var splitObj = {
             		"left" : self.selectLeft(sentence, offset),
             		"match" : self.selectMatch(sentence),
             		"right" : self.selectRight(sentence)
             };
-            
+
             if(prevCorpus != sentence.corpus) {
             	var corpus = settings.corpora[sentence.corpus.toLowerCase()];
             	if(currentMode == "parallel") {
             		corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
             	}
             	var title = $("<span class='corpus_title_span'>").text(corpus.title + " ");
-            	
+
             	var td = $("<td class='corpus_title' colspan='1'>").append(title);
             	var row = $("<tr>").append("<td>")
             	.append(td);
-            	
+
             	if(_.keys(corpus.context).length == 1) {
             		td.addClass("no_context");
             		title.append($("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>"));
             	} else {
-            		
+
             	}
             	row.appendTo(table).localize();
             }
-            
+
             prevCorpus = sentence.corpus;
 			var rows = $( "#sentenceTmpl" ).tmpl( splitObj, {rowIndex : i, aligned : sentence.aligned})
 					.appendTo( table )
@@ -273,9 +278,9 @@ var KWICResults = {
 						event.stopPropagation();
 						self.onWordClick($(this), sentence);
 						$.sm.send("word.select");
-						
+
 					}).end();
-			
+
 			var color = i % 2 == 0 ? settings.primaryColor : settings.primaryLight;
 //			if($.inArray(sentence.corpus, corpusOrderArray) % 2 != 0) {
 			if(i % 2 == 0) {
@@ -283,22 +288,22 @@ var KWICResults = {
 			} else {
 				rows.addClass("even_corpus");
 			}
-			 
+
 			rows.css("background-color", color);
 		});
-		
+
 		this.$result.find(".match").children().first().click();
 		this.$result.fadeIn(effectSpeed, function() {
 			dfd.resolve();
 			self.setupPagerMover();
 			self.centerScrollbar();
 		});
-		
+		$("#result-container").korptabs("refresh");
 		return dfd;
     },
-	
+
     showNoResults : function() {
-    	
+
     	this.$result.find(".results_table").empty();
 		this.$result.find(".pager-wrapper").empty();
 		this.hidePreloader();
@@ -307,7 +312,7 @@ var KWICResults = {
 //		this.$result.find(".sort_select").hide();
 		this.$result.find(".hits_picture").html("");
     },
-    
+
     renderHitsPicture : function(data) {
     	var self=this;
 		if (settings.corpusListing.selected.length > 1) {
@@ -327,7 +332,7 @@ var KWICResults = {
 			});
 			hits_picture_html += '</tr></table>';
 			this.$result.find(".hits_picture").html(hits_picture_html);
-                        
+
 			// Make sure that there is no mousover effect on touch screen devices:
 			if( navigator.userAgent.match(/Android/i) ||
 					navigator.userAgent.match(/webOS/i)   ||
@@ -345,11 +350,11 @@ var KWICResults = {
 			    	if(currentMode == "parallel") {
 			    		corpusObj = settings.corpora[corpus_name.split("|")[0].toLowerCase()];
 			    	}
-					
-					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' + 
-					corpusObj["title"] + 
-						' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) + 
-						' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' + 
+
+					return '<img src="img/korp_icon.png" style="vertical-align:middle"/> <b>' +
+					corpusObj["title"] +
+						' (' + prettyNumbers(data["corpus_hits"][corpus_name].toString()) +
+						' ' + util.getLocaleString("hitspicture_hits") + ')</b><br/><br/><i>' +
 						util.getLocaleString("hitspicture_gotocorpushits") + '</i>';
 					}
 				});
@@ -373,31 +378,31 @@ var KWICResults = {
 			this.$result.find(".hits_picture").html("");
 		}
     },
-    
+
 	scrollToShowWord : function(word) {
 		var offset = 200;
 		var wordTop = word.offset().top;
 		var newY = window.scrollY;
 		if(wordTop > $(window).height() + window.scrollY)
-			newY += offset; 
+			newY += offset;
 		else if(wordTop < window.scrollY) {
-			newY -= offset; 
+			newY -= offset;
 		}
 		$('html, body').stop(true, true).animate({"scrollTop" : newY});
-		
+
 		var wordLeft = word.offset().left;
 		var area = this.$result.find(".table_scrollarea");
 
 		var newX = Number(area.scrollLeft());
 		if(wordLeft > (area.offset().left + area.width())) {
-			newX += offset; 
+			newX += offset;
 		}
 		else if(wordLeft < area.offset().left) {
-			newX -= offset; 
+			newX -= offset;
 		}
 		area.stop(true, true).animate({"scrollLeft" : newX});
 	},
-	
+
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
 		$("#sidebar").sidebar("updateContent", sentence.structs, data, sentence.corpus.toLowerCase());
@@ -405,7 +410,7 @@ var KWICResults = {
 //		window.updateSidebar(data);
 		$("#columns").height($("#sidebar").height());
 		this.scrollToShowWord(word);
-		
+
 		if(data.dephead == null) {
 			this.selectionManager.select(word, null);
 			return;
@@ -424,7 +429,7 @@ var KWICResults = {
 		var aux = $(paragraph.get(sent_start + i - 1));
 		this.selectionManager.select(word, aux);
 	},
-	
+
 	selectLeft : function(sentence, offset) {
 		return sentence.tokens.slice(offset, sentence.match.start);
 	},
@@ -437,20 +442,20 @@ var KWICResults = {
 	selectRight : function(sentence) {
 		var from = sentence.match.end;
 		var len = sentence.tokens.length;
-		
+
 		return sentence.tokens.slice(from, len);
 	},
-	
+
 	buildPager : function(number_of_hits){
 		c.log("buildPager", this.current_page);
 		var items_per_page = this.optionWidget.find(".num_hits").val();
 		this.movePager("up");
 		$.onScrollOut("unbind");
 		this.$result.find('.pager-wrapper').unbind().empty();
-		
+
 		if(number_of_hits > items_per_page){
 			this.$result.find(".pager-wrapper").pagination(number_of_hits, {
-				items_per_page : items_per_page, 
+				items_per_page : items_per_page,
 				callback : $.proxy(this.handlePaginationClick, this),
 				next_text: util.getLocaleString("next"),
 				prev_text: util.getLocaleString("prev"),
@@ -461,10 +466,10 @@ var KWICResults = {
 			});
 			this.$result.find(".next").attr("rel", "localize[next]");
 			this.$result.find(".prev").attr("rel", "localize[prev]");
-			
+
 		}
 	},
-	
+
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		c.log("handlePaginationClick", new_page_index, this.current_page);
 		var self = this;
@@ -474,13 +479,13 @@ var KWICResults = {
 				this.$result.find(".results_table.kwic").empty();
 			else
 				this.$result.find(".results_table.reading").empty();
-				
+
 			var kwicCallback = isReading ? this.renderContextResult : this.renderKwicResult;
 //			this.showPreloader();
 			this.current_page = new_page_index;
 //			this.proxy.makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) {
 			this.getProxy().makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) {
-			
+
 				//progress
 				if(!isNaN(progressObj["stats"]))
 					self.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
@@ -493,49 +498,51 @@ var KWICResults = {
 			$.proxy(kwicCallback, this));
 			$.bbq.pushState({"page" : new_page_index});
 		}
-	    
+
 	   return false;
 	},
-	
+
 	buildQueryOptions : function() {
 		var opts = {};
 		opts.cqp = this.prevCQP;
 		opts.queryData = this.proxy.queryData;
 		opts.sort = $(".sort_select").val();
+		if(opts.sort == "random")
+			opts.random_seed = $.bbq.getState("random_seed");
 		if(this.$result.is(".reading_mode")) {
 			opts.context = settings.corpusListing.getContextQueryString();
 		}
 		return opts;
 	},
-	
+
 	makeRequest : function(page_num) {
 		var isReading = this.$result.is(".reading_mode");
 		var kwicCallback = isReading ? this.renderContextResult : this.renderKwicResult;
 	 	this.proxy.makeRequest(
-	 			this.buildQueryOptions(), 
-	 			page_num || this.current_page, 
+	 			this.buildQueryOptions(),
+	 			page_num || this.current_page,
 	 			isReading ? $.noop : $.proxy(this.onProgress, this),
-	 			
+
 	 			$.proxy(this.renderCompleteResult, this),
 	 			$.proxy(kwicCallback, this)
 	 			);
 //		this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.noop);
 	},
-	
+
 	setPage : function(page) {
 		this.$result.find(".pager-wrapper").trigger('setPage', [page]);
 	},
-		
+
 	centerScrollbar : function() {
-		var m = this.$result.find(".match:first"); 
+		var m = this.$result.find(".match:first");
 		if(!m.length) return;
 		var area = this.$result.find(".table_scrollarea").scrollLeft(0);
 		var match = m.first().position().left + m.width() / 2;
 		var sidebarWidth = $("#sidebar").outerWidth() || 0;
 		area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth ) / 2);
 	},
-		
-	
+
+
 	getCurrentRow : function() {
 		var tr = this.$result.find(".token_selected").closest("tr");
 		if(this.$result.find(".token_selected").parent().is("td")) {
@@ -544,7 +551,7 @@ var KWICResults = {
 			return tr.find("div > .word");
 		}
 	},
-	
+
 	selectNext : function() {
 		if(!this.$result.is(".reading_mode")) {
 			var i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
@@ -587,10 +594,10 @@ var KWICResults = {
 			this.getFirstAtCoor(current.offset().left + current.width()/2, searchwords, def).click();
 		}
 	},
-	
+
 	getFirstAtCoor : function(xCoor, wds, default_word) {
 		var output = null;
-		
+
 		wds.each(function(i, item) {
 			var thisLeft = $(this).offset().left;
 			var thisRight = $(this).offset().left + $(this).width();
@@ -599,14 +606,14 @@ var KWICResults = {
 				return false;
 			}
 		});
-		
+
 		return output || default_word;
 	},
-	
+
 	getWordAt : function(xCoor, $row) {
 		var output = $();
 		$row.find(".word").each(function() {
-			output = $(this); 
+			output = $(this);
 			var thisLeft = $(this).offset().left;
 			var thisRight = $(this).offset().left + $(this).width();
 			if((xCoor > thisLeft && xCoor < thisRight) || thisLeft > xCoor ) {
@@ -615,7 +622,7 @@ var KWICResults = {
 		});
 		return output;
 	},
-	
+
 	setupPagerMover : function() {
 		var self = this;
 		var pager = this.$result.find(".pager-wrapper");
@@ -636,7 +643,7 @@ var KWICResults = {
 		c.log("onscrollout", upOpts.point, downOpts.point);
 		$.onScrollOut(upOpts, downOpts);
 	},
-	
+
 	movePager : function(dir) {
 		var pager = this.$result.find(".pager-wrapper");
 		if(dir == "down") {
@@ -647,7 +654,7 @@ var KWICResults = {
 			}
 		}
 	}
-	
+
 };
 
 view.KWICResults = new Class(KWICResults);
@@ -656,7 +663,7 @@ delete KWICResults;
 
 var ExampleResults = {
 	Extends : view.KWICResults,
-	
+
 	initialize : function(tabSelector, resultSelector) {
 		this.parent(tabSelector, resultSelector);
 		this.proxy = new model.ExamplesProxy();
@@ -664,7 +671,7 @@ var ExampleResults = {
 		this.$result.add(this.$tab).addClass("not_loading customtab");
 		this.$result.removeClass("reading_mode");
 	},
-	
+
 	makeRequest : function(opts) {
 		var self = this;
 		this.resetView();
@@ -676,7 +683,7 @@ var ExampleResults = {
 				self.hidePreloader();
 				util.setJsonLink(self.proxy.prevRequest);
 				self.$result.find(".num-result").html(prettyNumbers(data.hits));
-				
+
 			},
 			error : function() {
 				self.hidePreloader();
@@ -687,31 +694,31 @@ var ExampleResults = {
 //		this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
 		this.proxy.makeRequest(opts, null, $.noop, $.noop, $.noop);
 	},
-	
+
 	onHpp : function() {
 		//refresh search
 		this.handlePaginationClick(0, null, true);
 		return false;
 	},
-	
+
 	handlePaginationClick : function(new_page_index, pagination_container, force_click) {
 		c.log("handlePaginationClick", new_page_index, this.current_page);
 		if(new_page_index != this.current_page || !!force_click) {
 			var items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
-			
+
 			var opts = {};
 			opts.cqp = this.prevCQP;
-			
+
 			opts.start = new_page_index*items_per_page;
 			opts.end = (opts.start + items_per_page);
 			opts.sort = $(".sort_select").val();
 			this.current_page = new_page_index;
 			this.makeRequest(opts);
 		}
-	    
+
 	   return false;
 	},
-	
+
 	onSortChange : function(event) {
 		var opt = $(event.currentTarget).find(":selected");
 		c.log("sort", opt);
@@ -723,13 +730,13 @@ var ExampleResults = {
 //			$.bbq.pushState({"sort" : opt.val()});
 		}
 	},
-	
+
 	showPreloader : function() {
 		this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
 		this.$tab.find(".spinner").remove();
 		$("<div class='spinner' />").appendTo(this.$tab)
 		.spinner({innerRadius: 5, outerRadius: 7, dashes: 8, strokeWidth: 3});
-		
+
 		this.$tab.find(".tabClose").hide();
 	},
 	hidePreloader : function() {
@@ -737,13 +744,14 @@ var ExampleResults = {
 		this.$tab.find(".spinner").remove();
 		this.$tab.find(".tabClose").show();
 	}
-	
+
 };
 
 
 var LemgramResults = {
 	Extends : view.BaseResults,
 	initialize : function(tabSelector, resultSelector) {
+		var self = this;
 		this.parent(tabSelector, resultSelector);
 //		TODO: figure out what I use this for.
 		this.resultDeferred = $.Deferred();
@@ -756,16 +764,25 @@ var LemgramResults = {
 			jj : [[], "_,AT_h".split(",")],
 			pp : [[], "_,PA_d".split(",")]
 		};
-		
-		
-		
+
+		this.$result.find("#wordclassChk")
+		.change(function() {
+			if($(this).is(":checked")) {
+				$(".lemgram_result .wordclass_suffix", self.$result).show();
+			}
+			else {
+				$(".lemgram_result .wordclass_suffix", self.$result).hide();
+			}
+
+		});
+
 	},
-	
+
 	resetView : function() {
 		this.parent();
 		$("#results-lemgram .content_target").empty();
 	},
-	
+
 	renderResult : function(data, query) {
 		var resultError = this.parent(data);
 		this.resetView();
@@ -782,23 +799,23 @@ var LemgramResults = {
 		else {
 			this.renderWordTables(query, data.relations);
 			this.resultDeferred.resolve();
-			
+
 		}
-		
+
 	},
-	
+
 	renderHeader : function(wordClass, sections) {
 		var colorMapping = {
-				SS : "color_blue", 
-				OBJ : "color_purple", 
-				ADV : "color_green", 
-				Head : "color_yellow", 
-				AT : "color_azure", 
+				SS : "color_blue",
+				OBJ : "color_purple",
+				ADV : "color_green",
+				Head : "color_yellow",
+				AT : "color_azure",
 				ET : "color_red",
 				PA : "color_green"};
 		$(".tableContainer:last .lemgram_section").each(function(i) {
 			var $parent = $(this).find(".lemgram_help");
-			
+
 			$(this).find(".lemgram_result").each(function() {
 				if($(this).data("rel")) {
 					var color = colorMapping[$(this).data("rel")];
@@ -811,8 +828,8 @@ var LemgramResults = {
 							"jj" : "nn",
 							"nn" : "vb",
 							"pp" : "nn"
-						}[wordClass]; 
-							
+						}[wordClass];
+
 						cell.attr("rel", altLabel).text(util.getLocaleString(altLabel).capitalize());
 					}
 					$(this).addClass(color)
@@ -822,34 +839,34 @@ var LemgramResults = {
 					$($.format("<span class='hit'><b>%s</b></span>", $(this).data("word")))
 					.appendTo($parent);
 				}
-					
+
 			});
 		}).append("<div style='clear:both;'/>");
-		
-		
+
+
 	},
-	
+
 	renderWordTables : function(word, data) {
 		var self = this;
-		
+
 		var wordlist = $.map(data, function(item) {
 			var output = [];
 			if(item.head.split("_")[0] == word) {
 				output.push(item.head);
-			} 
+			}
 			if(item.dep.split("_")[0] == word) {
 				output.push(item.dep);
 			}
 			return output;
 		});
-		
-		
+
+
 		var unique_words = [];
 		$.each(wordlist, function(i, word) {
 			if($.inArray(word, unique_words) == -1)
 				unique_words.push(word);
 		});
-		
+
 		$.each(unique_words, function(i, currentWd) {
 			var wordClass = currentWd.split("_")[1].toLowerCase();
 			function getRelType(item) {
@@ -861,33 +878,33 @@ var LemgramResults = {
 			self.renderHeader(wordClass);
 			$(".tableContainer:last").prepend($("<div>", {"class" : "header"}).html(util.lemgramToString(currentWd)))
 			.find(".hit .wordclass_suffix").hide();
-			
+
 		});
-		
-		
+
+
 		$(".lemgram_result .wordclass_suffix").hide();
-		
+
 		this.hidePreloader();
 	},
-	
+
 	renderTables : function (lemgram, data) {
 		var self = this;
-		
+
 		var wordClass = util.splitLemgram(lemgram).pos.slice(0, 2);
-		
+
 		function getRelType(item) {
 			if(item.dep == lemgram) return item.rel + "_h";
 			else return item.rel + "_d";
 		}
-		
+
 		this.drawTable(lemgram, wordClass, data, getRelType);
 		$(".lemgram_result .wordclass_suffix").hide();
-		
+
 		this.renderHeader(wordClass);
 		this.hidePreloader();
-		
+
 	},
-	
+
 	drawTable : function(token, wordClass, data, relTypeFunc) {
 		var self = this;
 		c.log("drawTable", wordClass, this.order[wordClass]);
@@ -895,16 +912,16 @@ var LemgramResults = {
 			this.showNoResults();
 			return;
 		}
-		
+
 		function inArray(rel, orderList) {
 			var i = $.inArray(rel, orderList);
 			var type = rel.slice(-1) == "h" ? "head" : "dep";
 			return {"i" : i, "type" : type};
 		}
-		
-		
+
+
 		var orderArrays = [[], [], []];
-		
+
 		$.each(data, function(index, item) {
 			$.each(self.order[wordClass], function(i, rel_type_list) {
 				var list = orderArrays[i];
@@ -916,11 +933,11 @@ var LemgramResults = {
 				}
 				if(!list[ret.i]) list[ret.i] = [];
 				item.show_rel = ret.type;
-				list[ret.i].push(item); 
+				list[ret.i].push(item);
 			});
 		});
 		$.each(orderArrays, function(i, unsortedList) {
-			
+
 			$.each(unsortedList, function(_, list) {
 				if(list) {
 					list.sort(function(first, second) {
@@ -939,7 +956,7 @@ var LemgramResults = {
 				return Boolean(item);
 			});
 			//c.log("unsortedList", unsortedList.length, unsortedList);
-			
+
 		});
 		var container = $("<div>", {"class" : "tableContainer radialBkg"})
 		.appendTo("#results-lemgram .content_target");
@@ -949,11 +966,11 @@ var LemgramResults = {
 		.click($.proxy(self.onClickExample, self)).end()
 		.appendTo(container);
 //		.appendTo("#results-lemgram");
-		
-		
+
+
 		$("#results-lemgram td:nth-child(2)").each(function() { // labels
 			var $siblings = $(this).parent().siblings().find("td:nth-child(2)");
-			
+
 			var siblingLemgrams = $.map($siblings, function(item) {
 				return $(item).data("lemgram").slice(0, -1);
 			});
@@ -962,12 +979,12 @@ var LemgramResults = {
 //				prefix = "";
 			var label = $(this).data("lemgram") != "" ? util.lemgramToString($(this).data("lemgram"), hasHomograph) : "&mdash;";
 			$(this).html(prefix + label);
-			
+
 		});
-		
+
 //		self.renderHeader(wordClass);
 	},
-	
+
 	onClickExample : function(event) {
 		var self = this;
 		var $target = $(event.currentTarget);
@@ -976,7 +993,7 @@ var LemgramResults = {
 		var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 		var opts = instance.getPageInterval();
 		opts.ajaxParams = {
-				head : data.head, 
+				head : data.head,
 				dep : data.dep,
 				rel : data.rel,
 				depextra : data.depextra,
@@ -985,7 +1002,7 @@ var LemgramResults = {
 		util.localize(instance.$result);
 		instance.makeRequest(opts);
 	},
-	
+
 	showWarning : function() {
 		var hasWarned = !!$.jStorage.get("lemgram_warning");
 //		var hasWarned = false;
@@ -997,44 +1014,44 @@ var LemgramResults = {
 			}, 5000);
 		}
 	},
-	
+
 	onentry : function() {
 		c.log("lemgramResults.onentry", $.sm.getConfiguration());
 		this.resultDeferred.done(this.showWarning);
 	},
-	
+
 	onexit : function() {
 		clearTimeout(self.timeout);
 		$("#sidebar").sidebar("hide");
 	},
-	
+
 	showNoResults : function() {
 		this.hidePreloader();
 		this.$result.find(".content_target").html($("<i />").localeKey("no_lemgram_results"));
 	},
-	
+
 	hideWordclass : function() {
 		$("#results-lemgram td:first-child").each(function() {
 			$(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")));
 		});
 	}
-	
+
 };
 
 
 
 function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 	var dataItems = new Array();
-	
+
 	var wordArray = [];
 	var corpusArray = [];
-	
-		
+
+
 	statsResults["lastDataName"] = dataName;
-	
-	
+
+
 	if (horizontalDiagram) { // hits/corpus
-		
+
 		$.each(statsResults.savedData["corpora"], function(corpus, obj) {
 			if(dataName == "SIGMA_ALL") {
 				// ∑ selected
@@ -1055,10 +1072,10 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 				}
 			}
 		});
-		
-		
+
+
 		$("#dialog").remove();
-		
+
 		var topheader;
 		var locstring;
 		if(dataName == "SIGMA_ALL") {
@@ -1068,7 +1085,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 			topheader = util.getLocaleString("statstable_hitsheader") + "<i>" + dataName + "</i>";
 			locstring = "statstable_hitsheader";
 		}
-		
+
 		var absString = util.getLocaleString("statstable_absfigures");
 		var relString = util.getLocaleString("statstable_relfigures");
 		var relHitsString = util.getLocaleString("statstable_relfigures_hits");
@@ -1093,7 +1110,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 				}
 				stats2Instance.pie_widget("resizeDiagram",$(this).width()-60);
 			}
-				
+
 
 		}).css("opacity", 0);
 		$("#ui-dialog-title-dialog").localeKey("statstable_hitsheader_lemgram");
@@ -1131,7 +1148,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 						} else {
 							dataItems.push({"value":0, "caption" : "", "shape_id" : dataName});
 						}
-					} 
+					}
 				});
 				stats2Instance.pie_widget("newData", dataItems);
 
@@ -1145,7 +1162,7 @@ function newDataInGraph(dataName, horizontalDiagram, targetDiv) {
 		});
 
 
-	} 
+	}
 }
 
 
@@ -1165,12 +1182,12 @@ var StatsResults = {
 			}
 
 		});
-		
+
 		$(".c0 .link").live("click", function() {
 			c.log("word click", $(this).data("context"), $(this).data("corpora"));
 			var instance = $("#result-container").korptabs("addTab", view.ExampleResults);
 			instance.proxy.command = "query";
-			
+
 			var query = $(this).data('query');
 			instance.makeRequest({
 				corpora : $(this).data("corpora").join(","),
@@ -1178,11 +1195,11 @@ var StatsResults = {
 			});
 			util.localize(instance.$result);
 		});
-		
+
 		$(window).resize(function() {
 			self.resizeGrid();
 		});
-		
+
 		$("#exportButton").unbind("click");
 		$("#exportButton").click(function() {
 			var selVal = $("#kindOfData option:selected").val();
@@ -1190,15 +1207,15 @@ var StatsResults = {
 			var dataDelimiter = ";";
 			if (selType == "TSV")
 				dataDelimiter = "\t";
-				
+
 			// Generate CSV from the data
-			
+
 			var output = "corpus" + dataDelimiter;
 			$.each(statsResults.savedWordArray, function(key, aword) {
 				output += aword + dataDelimiter;
 			});
 			output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A);
-			
+
 			$.each(statsResults.savedData["corpora"], function(key, acorpus) {
 				output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter;
 				$.each(statsResults.savedWordArray, function(wkey, aword) {
@@ -1215,47 +1232,38 @@ var StatsResults = {
 			else
 				window.open( "data:text/csv;charset=latin1," + escape(output));
 		});
-		this.$result.find("#wordclassChk")
-		.change(function() {
-			if($(this).find("#wordclassChk").is(":checked")) {
-				$(".lemgram_result .wordclass_suffix").show();
-			}
-			else {
-				$(".lemgram_result .wordclass_suffix").hide();
-			}
-			
-		});
-		
+
+
 	},
-	
+
 	renderResult : function(columns, data) {
 		this.resetView();
 		var resultError = this.parent(data);
 		if(resultError === false) {
 			return;
 		}
-		
+
 		if(data[0].total_value.absolute === 0) {
 			this.showNoResults();
 			return;
 		}
-		
+
 		grid = new Slick.Grid($("#myGrid"), data, columns, {
 			enableCellNavigation: false,
             enableColumnReorder: true
 		});
-		
+
 		this.grid = grid;
-		
+
 		this.resizeGrid();
-		
+
 		var sortCol = columns[1];
-		
+
 		window.data =data;
-		
+
 		grid.onSort.subscribe(function(e, args){
 			sortCol = args.sortCol;
-			
+
 			data.sort(function(a,b) {
 				if(sortCol.field == "hit_value")
 					var x = a[sortCol.field], y = b[sortCol.field];
@@ -1265,11 +1273,11 @@ var StatsResults = {
 				if(!args.sortAsc) ret *= -1;
 				return ret;
 			});
-			
+
 	        grid.setData(data);
 	        grid.updateRowCount();
-	        grid.render(); 
-			
+	        grid.render();
+
 		});
 		function refreshHeaders() {
 			$(".slick-header-column:nth(1)").click().click();
@@ -1277,17 +1285,17 @@ var StatsResults = {
 				$(this).localeKey($(this).text());
 			});
 		}
-		
-		grid.onHeaderCellRendered.subscribe(function(e, args) {
+
+		grid.onHeaderRendered.subscribe(function(e, args) {
 			refreshHeaders();
 		});
 		refreshHeaders();
-		
+
 		this.renderPlot();
-		
+
 		this.hidePreloader();
 	},
-	
+
 	renderPlot : function() {
 		var self = this;
 		var src;
@@ -1301,7 +1309,7 @@ var StatsResults = {
 		var paper = new Raphael(barElem, 33, 33);
 		paper.path("M21.25,8.375V28h6.5V8.375H21.25zM12.25,28h6.5V4.125h-6.5V28zM3.25,28h6.5V12.625h-6.5V28z")
 		.attr({fill: fill, stroke: "none", transform : "s0.6"});
-		
+
 		// Line Diagram
 		$("#showBarPlot")
 		.css(css)
@@ -1309,11 +1317,11 @@ var StatsResults = {
 		    $.bbq.pushState({"display" : "bar_plot"});
 		    return false;
 		});
-		
+
 		if($.bbq.getState("display") == "bar_plot")
 			this.drawBarPlot();
 	},
-	
+
 	drawBarPlot : function() {
 		var data = statsResults.savedData.corpora;
 		var display = [];
@@ -1345,12 +1353,12 @@ var StatsResults = {
 				return false;
 			}
 		}).css("opacity", 0);
-		
+
 		$("#ui-dialog-title-plot_popup").localeKey("hits_per_mil");
 		$("#plot_popup").fadeTo(400,1);
 //		$("#plot_popup").find("a").blur();
 	},
-	
+
 	resizeGrid : function() {
 		if(!this.grid) return;
 		var widthArray = $(".slick-header-column").map(function(item) {
@@ -1360,7 +1368,7 @@ var StatsResults = {
 			return a + b;
 		}, 100);
 //		tableWidth += 20;
-		
+
 		var parentWidth = $("body").width() - 65;
 		$("#myGrid").width(parentWidth);
 		if(tableWidth < parentWidth) {
@@ -1373,17 +1381,17 @@ var StatsResults = {
 				this.resizeHits();
 			}
 		}
-		
+
 		$(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
             $(this).localeKey($(this).text());
         });
-		
+
 	},
-	
+
 	resizeHits : function() {
 		this.setHitsWidth(this.getHitsWidth());
 	},
-	
+
 	getHitsWidth : function() {
 		// FIXME: not sure what's going on here.
 		var widthArray = $(".c0").map(function() {
@@ -1394,33 +1402,33 @@ var StatsResults = {
 		else
 			return $.reduce(widthArray, Math.max);
 	},
-	
+
 	setHitsWidth : function(w) {
 		if(!this.grid) return;
 		var data = this.grid.getColumns();
 		data[0].currentWidth = w;
 		this.grid.setColumns(data);
 	},
-	
-	
+
+
 //	showError : function() {
 //		this.hidePreloader();
 //		$("<i/>")
 //		.localeKey("error_occurred")
 //		.appendTo("#results-stats");
 //	},
-	
+
 	resetView : function() {
 		this.parent();
 		$("#exportStatsSection").show();
 	},
-	
+
 	showNoResults : function() {
 		this.hidePreloader();
 		$("#results-stats").prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
 		$("#exportStatsSection").hide();
 	}
-	
+
 };
 
 view.ExampleResults = new Class(ExampleResults);

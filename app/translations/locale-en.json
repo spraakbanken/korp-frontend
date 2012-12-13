@@ -22,7 +22,7 @@
 	"about_logo" : "Logotype by",
 	"warning_header" : "Please note",
 	"warning_body" : "The dependency relations illustrated herein are the result of automated parsing.",
-	"fail_text" : "An error has occurred.",  
+	"fail_text" : "An error has occurred.",
 	"corpus" : "Corpus",
 	"search_for" : "Search for ",
 	"show_more" : "Show more",
@@ -41,17 +41,18 @@
     "send" : "Send",
     "log_out" : "Log out",
     "strict" : "strict",
-	
-	"is" : "is", 
+    "import_chain" : "Annotation Lab",
+
+	"is" : "is",
 	"is_not" : "is not",
 	"starts_with" : "begins with",
 	"ends_with" : "ends with",
-	
+
 	"any_word_placeholder" : "<any word>",
 	"case_insensitive" : "case-insensitive",
 	"case_sensitive" : "case-sensitive",
 	"reduce_text" : "compile based on",
-	
+
 	"word_is" : "word is",
 	"word_is_not" : "word is not",
 	"word_beginswith" : "word begins with",
@@ -62,26 +63,26 @@
 	"wordclass_starts" : "word class begins with",
 	"interval" : "interval",
 	"matches" : "regexp",
-	
+
 	"repeat" : "Repeat",
 	"to" : "to",
 	"times" : "times",
-	
+
 	"sent_start" : "Sentence start",
     "sent_end" : "Sentence end",
-	
+
 	"none_selected" : "&lt;none selected&gt;",
-	
+
 	"any" : "any word",
 	"all" : "all",
 	"one_of" : "any",
 	"error_occurred" : "An error occurred",
-	
+
 	"following_text" : "Match any of the following rules:",
 	"stats_hit" : "Hit",
 	"stats_total" : "Total",
 	"options" : "Options",
-	
+
 	"simple" : "Simple",
 	"detailed" : "Extended",
 	"advanced" : "Advanced",
@@ -102,17 +103,18 @@
 	"appearance_context" : "not sorted",
 	"word_context" : "matched word(s)",
 	"left_context" : "left context",
-	"right_context" : "right context", 
+	"right_context" : "right context",
+	"random_context" : "random",
 	"loading" : "Searching...",
 	"autocomplete_header" : "is a word form in",
 	"no_lemgram_results" : "No examples found.",
 	"no_stats_results" : "The search generated no results.",
-    
-    
-    "word_insensitive" : "word (case insensitive)",	
+
+
+    "word_insensitive" : "word (case insensitive)",
 	"sentence_attr" : "text attributes",
 	"word_attr" : "word attributes",
-	
+
 	"similar_header" : "Related words",
 	"show_wordclass" : "Show word class",
 	"search" : "Search",
@@ -128,9 +130,9 @@
 	"link" : "link",
 	"text" : "text",
 	"word" : "word",
-	
+
 	"msd_long" : "Morphosyntactic description",
-	
+
 	"corpselector_allselected" : " corpora selected (all)",
 	"corpselector_noneselected" : "No corpus selected",
 	"corpselector_selectedone" : " selected",
@@ -151,7 +153,7 @@
 	"corpselector_rest_time" : "Undated material",
 	"corpselector_time_chosen" : "Selected material",
     "corpselector_of_total" : "of total",
-	
+
 	"statstable_allcorpora" : "All&nbsp;corpora",
 	"statstable_relfreq" : "relative frequency (per million words):",
 	"statstable_absfreq" : "absolute frequency:",
@@ -164,19 +166,19 @@
 	"statstable_exp_csv" : "CSV (comma separated values)",
 	"statstable_exp_tsv" : "TSV (tab separated values)",
 	"statstable_export" : "Export",
-	
+
 	"util_decimalseparator" : ".",
 	"util_numbergroupseparator" : ",",
-	
+
 	"hitspicture_hits" : "hits",
 	"hitspicture_gotocorpushits" : "Click to go to the first page with hits from this corpus.",
-	
+
 	"hits_per_mil" : "Hits per million tokens",
-	
+
 	"chapter" : "chapter",
 	"verse" : "verse",
 	"modern" : "modern",
-	
+
 	"saldom" : "modern",
     "dalinm" : "19th century",
     "swedbergm" : "17th century",

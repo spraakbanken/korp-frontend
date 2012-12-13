@@ -122,9 +122,12 @@
       if (attrs.type === "url") {
         return output.append("<a href='" + value + "' class='exturl sidebar_url'>" + (decodeURI(value)) + "</a>");
       } else if (key === "msd") {
-        return output.append("<span class='msd'>" + value + "</span>\n    <a href='markup/msdtags.html' target='_blank'>\n        <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n    </a> \n</span>  ");
+        return output.append("<span class='msd'>" + value + "</span>\n    <a href='markup/msdtags.html' target='_blank'>\n        <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n    </a>\n</span>");
       } else if (attrs.pattern) {
-        return output.append(_.template(attrs.pattern));
+        return output.append(_.template(attrs.pattern, {
+          key: key,
+          val: value
+        }));
       } else {
         if (attrs.translationKey) {
           return output.append("<span rel='localize[" + attrs.translationKey + value + "]'></span>");
@@ -237,6 +240,6 @@
     }
   };
 
-  $.widget("ui.sidebar", Sidebar);
+  $.widget("korp.sidebar", Sidebar);
 
 }).call(this);
