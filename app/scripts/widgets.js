@@ -251,7 +251,7 @@ var KorpTabs = {
     },
 
     getCurrentInstance : function() {
-        return this.tabs.filter(".ui-tabs-selected").data("instance") || null;
+        return this.tabs.filter(".ui-tabs-active").data("instance") || null;
     }
 
 };

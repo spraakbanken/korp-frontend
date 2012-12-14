@@ -7,7 +7,7 @@
 		}).join("\n");
 		if(lis.length)
 			return $($.format("<%s/>", listType)).append(lis);
-		else 
+		else
 			return $($.format("<i rel='localize[empty]' style='color : grey'>%s</i>", util.getLocaleString("empty")));
 	};
 
@@ -18,7 +18,7 @@
 		});
 		return output;
 	};
-	
+
 	$.keys = function(obj) {
 		var output = [];
 		$.each(obj, function(key, item) {
@@ -57,8 +57,7 @@
 						function() {
 							var r = Raphael(this, 20, 20), sectorsCount = 12, color = "#000", width = 15, r1 = 2, r2 = 4, cx = 10, cy = 10,
 
-							sectors = [], opacity = [], beta = 2 * Math.PI
-									/ sectorsCount,
+							sectors = [], opacity = [], beta = 2 * Math.PI / sectorsCount,
 
 							pathParams = {
 								stroke : color,
@@ -89,10 +88,10 @@
 
 /*
  * jQuery UI Autocomplete HTML Extension
- * 
+ *
  * Copyright 2010, Scott González (http://scottgonzalez.com) Dual licensed under
  * the MIT or GPL Version 2 licenses.
- * 
+ *
  * http://github.com/scottgonzalez/jquery-ui-extensions
  */
 (function($) {
@@ -142,7 +141,7 @@
  * This code is available under the terms of the MIT License
  */
 jQuery.reduce = function(array, fun /*, initial*/) {
-	
+
     var len = array.length >>> 0;
     if (typeof fun != "function") {
         throw new TypeError();
@@ -200,7 +199,7 @@ jQuery.fn.hoverIcon = function(icon) {
 		$("<span style='display : inline-block; margin-bottom : -4px;' class='ui-icon'/>")
 		.addClass(icon)
 		.appendTo($(this));
-		
+
 	}, function() {
 		$(this).find(".ui-icon").remove();
 	});
@@ -212,7 +211,7 @@ jQuery.fn.highlight = function(command) {
 		$("#highlight").data("abort", true);
 		return this;
 	}
-		
+
 	if($("#highlight:visible").length)
 		return this;
 	function show(what) {
@@ -220,7 +219,7 @@ jQuery.fn.highlight = function(command) {
 			hide($(this));
 		});
 	}
-	
+
 	function hide(what) {
 		what.fadeTo(700, 0.3, function() {
 			if(!$(this).data("abort")) {
@@ -233,7 +232,7 @@ jQuery.fn.highlight = function(command) {
 			}
 		});
 	}
-	
+
 	$("#highlight").remove();
 	var hl = $("<div id='highlight' />")
 	.css("position", "absolute")
@@ -258,13 +257,13 @@ jQuery.fn.highlight = function(command) {
 		.css("z-index", 1001 + n)
 		.addClass("_clone")
 		.appendTo($(item).parent());
-		
+
 		var offset = 6;
 		hl.css("left", $(item).offset().left - offset)
 		.css("top", $(item).offset().top - offset)
 		.width($(this).outerWidth() + offset*2)
 		.height($(this).outerHeight() + offset*2);
-		
+
 		n++;
 	});
 	return this;
@@ -288,11 +287,11 @@ $.trim = function(string, char) {
 $.grepObj = function(array, callback, invert) {
 	var output = {};
 	$.each(array, function(key, value) {
-		if(!!callback(value, key)) 
+		if(!!callback(value, key))
 			output[key] = value;
 	});
 	return output;
-	
+
 };
 // filters the object keys in the keys array from obj.
 $.exclude = function(obj, keys) {
@@ -308,15 +307,15 @@ $.onScrollOut = function(upOpts, downOpts) {
 		return;
 	}
 	var activePoint = upOpts.point;
-	
+
 	// for unbinding purposes
 	$.onScrollOut.prevScrollFunction = function() {
 		var screenTop = $(window).scrollTop();
 		var screenBottom = screenTop + $(window).height();
-		
+
 		var upPointInWindow = upOpts.point > screenTop && upOpts.point < screenBottom;
 		var downPointInWindow = downOpts.point > screenTop && downOpts.point < screenBottom;
-		
+
 //		c.log("scroll", upPointInWindow, downPointInWindow, screenTop, upOpts.point);
 		if(upPointInWindow && downPointInWindow) {
 			activePoint = upOpts.point;
@@ -327,13 +326,13 @@ $.onScrollOut = function(upOpts, downOpts) {
 			activePoint = downOpts.point;
 			downOpts.callback();
 		}
-		
+
 	};
 	$(window).scroll($.onScrollOut.prevScrollFunction);
 };
 
 $.fn.cover = function() {
-	
+
 	this.each(function() {
 		if($(this).data("cover") != null) return;
 		var pos = $(this).position();
@@ -363,33 +362,33 @@ $.fn.quickLocalize = function() {
 
 jQuery.sortedEach = function(obj, eachFunc, sortFunc) {
 	var keys = $.keys(obj);
-	
+
 	if(sortFunc) keys.sort(sortFunc);
 	else keys.sort();
-	
+
 	$.each(keys, function(i, key) {
 		return eachFunc(key, obj[key]);
 	});
-	
+
 };
 jQuery.fn.customSelect = function() {
-	
+
 	this.change(function() {
 		$("option", this).each(function() {
 			$(this).text($(this).val());
 			$(this).data("locPrefix", null);
 		});
-		
+
 //		var prefix = $(this).find("option:disabled").text() + ": ";
 		var selected = $(this).find("option:selected");
-		
+
 		selected.data("locPrefix", $(this).data("prefix"));
 		selected.data("locSuffix", $(this).data("suffix"));
 		$(this).localize();
 //		if($(this).find("option:not([rel])").length)
 //			selected.text(util.getLocaleString($(this).data("prefix")) + ": " + selected.text());
-		
-		
+
+
 	});
 	return this;
 };
@@ -398,7 +397,7 @@ jQuery.fn.customSelect = function() {
 /*!
  * jQuery ajaxProgress Plugin v0.5.0
  * Requires jQuery v1.5.0 or later
- * 
+ *
  * http://www.kpozin.net/ajaxprogress
  *
  * (c) 2011, Konstantin Pozin

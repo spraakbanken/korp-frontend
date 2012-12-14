@@ -204,7 +204,7 @@ var currentMode;
 		$("#result-container").korptabs({
 			event : "change",
 			activate : function(event, ui) {
-				if(ui.newTab.parent().is(".custom_tab")) {
+				if(ui.newTab.is(".custom_tab")) {
 					$.sm.send("resultstab.custom");
 				} else {
 					var currentId = ui.newPanel.attr("id");
@@ -695,8 +695,6 @@ var currentMode;
 
 //					var body = $("<span>");
 					c.log("output", timestruct[item.datapoint[0].toString()]);
-
-//					var firstrow = $("<p>").append($("<span>").html(prettyNumbers(total) + " " + util.getLocaleString("corpselector_tokens")))
 
 					var pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
 
