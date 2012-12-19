@@ -59,14 +59,25 @@ module.exports = function( grunt ) {
         watch: {
             coffee: {
                 files: ['app/*.coffee','app/scripts/**/*.coffee'],
-                tasks: 'coffee'
+                tasks: 'coffee reload'
             },
             compass: {
                 files: [
                     'app/styles/**/*.{scss,sass}'
                 ],
-                tasks: 'compass'
+                tasks: 'compass reload'
             }
+        },
+
+        reload: {
+            files: [
+                // 'app/**/*.{html|css|js}',
+                'app/**/*.html',
+                'app/styles/**/*.css',
+                'app/scripts/**/*.js',
+                'app/images/**/*'
+            ],
+            tasks: 'reload'
         },
 
         // default lint configuration, change this to match your setup:

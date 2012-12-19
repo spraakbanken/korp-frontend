@@ -76,20 +76,22 @@
 		<!-- build:js scripts/scripts.js -->
 
 		<script type="text/javascript" src="scripts/util.js"></script>
+		<script type="text/javascript" src="scripts/bin/util_coffee.js"></script>
 		<script type="text/javascript" src="scripts/bin/widgets_coffee.js"></script>
-		<script type="text/javascript" src="scripts/widgets.js"></script>
+		<!-- <script type="text/javascript" src="scripts/widgets.js"></script> -->
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
 		<script type="text/javascript" src="scripts/pie-widget.js"></script>
 		<script type="text/javascript" src="scripts/controller.js"></script>
-		<script type="text/javascript" src="scripts/searchview.js"></script>
-		<script type="text/javascript" src="scripts/resultsview.js"></script>
-		<script type="text/javascript" src="scripts/model.js"></script>
+		<script type="text/javascript" src="scripts/bin/search_coffee.js"></script>
+		<script type="text/javascript" src="scripts/bin/results_coffee.js"></script>
+		<script type="text/javascript" src="scripts/bin/model_coffee.js"></script>
+		<script type="text/javascript" src="scripts/bin/controllers/controllers.js"></script>
 		<script type="text/javascript" src="scripts/main.js"></script>
 		<!-- endbuild -->
-		<script>
+		<!--<script>
 			if(location.host == "localhost")
 				document.write('<script src="http://localhost:35729/livereload.js?snipver=1"></' + 'script>')
-		</script>
+		</script>-->
 	</head>
   	<body class="not_logged_in" ng-app="korpApp">
 	  	<noscript>
@@ -205,12 +207,6 @@
 					<span id="reduceSelect"></span>
 				</div>
 	   		</div>
-<!-- 			<div id="welcome" class="ui-widget ui-widget-content ui-corner-all"> -->
-<!-- 				<div class="welcome-header ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix "> -->
-<!-- 					<span class="ui-dialog-title">Välkommen</span> -->
-<!-- 				</div> -->
-<!-- 				<p>hej</p> -->
-<!-- 			</div> -->
 			<div id="results-wrapper">
 				<div id="columns" >
 					<div id="left-column" >
@@ -220,7 +216,7 @@
 								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a><div class="tab_progress" ></div></li>
 								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a><div class="tab_progress" ></div></li>
 							</ul>
-							<div id="results-kwic">
+							<div id="results-kwic" ng-controller="kwicCtrl">
 								<div class="result_controls">
 								   <div class="controls_n" >
 								   	<span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
@@ -237,7 +233,10 @@
 
 
 								<div class="table_scrollarea">
-									<table class="results_table kwic" cellspacing="0"></table>
+									<table class="results_table kwic" cellspacing="0">
+
+
+									</table>
 									<table class="results_table reading" cellspacing="0"></table>
 <!-- 									<table class="results_table cached_kwic" cellspacing="0"></table> -->
 								</div>

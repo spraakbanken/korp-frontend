@@ -3159,259 +3159,38 @@ delete context;
 delete ref;
 
 
-var CorpusListing = new Class({
-	initialize : function(corpora) {
-		this.struct = corpora;
-		this.corpora = _.values(corpora);
-		this.selected = [];
-	},
-
-	get : function(key) {
-		return this.struct[key];
-	},
-
-	list : function() {
-		return this.corpora;
-	},
-
-	map : function(func) {
-		return _.map(this.corpora, func);
-	},
-
-
-	/* Returns an array of all the selected corpora's IDs in uppercase */
-	getSelectedCorpora : function() {
-		return corpusChooserInstance.corpusChooser("selectedItems");
-	},
-
-	select : function(idArray) {
-		this.selected = _.values(_.pick.apply(this, [this.struct].concat(idArray)));
-	},
-
-	mapSelectedCorpora : function(f) {
-		return _.map(this.selected, f);
-	},
-	// takes an array of mapping objs and returns their intersection
-	_mapping_intersection : function(mappingArray) {
-		return _.reduce(mappingArray, function(a,b) {
-			var output = {};
-			$.each(b, function(key, value) {
-				if(b[key] != null)
-					output[key] = value;
-			});
-			return output;
-		}, {});
-	},
-
-	_mapping_union : function(mappingArray) {
-		return _.reduce(mappingArray, function(a, b) {
-			return $.extend({}, a, b);
-		}, {});
-	},
-
-	getCurrentAttributes : function() {
-		var attrs = this.mapSelectedCorpora(function(corpus) {
-			return corpus.attributes;
-		});
-
-		return this._invalidateAttrs(attrs);
-
-	},
-	getStructAttrs : function() {
-		var attrs = this.mapSelectedCorpora(function(corpus) {
-			$.each(corpus.struct_attributes, function(key, value) {
-				value["isStructAttr"] = true;
-			});
-			return corpus.struct_attributes;
-		});
-		var rest = this._invalidateAttrs(attrs);
-		// fix for combining dataset values
-		var withDataset = _.filter(_.pairs(rest), function(item) {
-			return item[1].dataset;
-		});
-
-		$.each(withDataset, function(i, item) {
-			var key = item[0];
-			var val = item[1];
-			$.each(attrs, function(j, origStruct) {
-
-				if(origStruct[key] && origStruct[key].dataset) {
-					var ds = origStruct[key].dataset;
-					if($.isArray(ds))
-						ds = _.object(ds, ds);
-					$.extend(val.dataset, ds);
-				}
-			});
-		});
-		return $.extend(rest, _.object(withDataset));
-	},
-
-	_invalidateAttrs : function(attrs) {
-		var union = this._mapping_union(attrs);
-		var intersection = this._mapping_intersection(attrs);
-		$.each(union, function(key, value) {
-			if(intersection[key] == null) {
-				value["disabled"] = true;
-			} else {
-				delete value["disabled"];
-			}
-		});
-		return union;
-	},
-
-	corpusHasAttr : function(corpus, attr) {
-		return attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].struct_attributes);
-	},
-
-	stringifySelected : function() {
-		return _.chain(this.selected)
-		.pluck("id")
-		.invoke("toUpperCase")
-		.value().join(",");
-	},
-
-	getAttrIntersection : function(attr) {
-
-		var struct = _.map(this.selected, function(corpus) {
-			return _.keys(corpus[attr]);
-		});
-		return _.intersection.apply(null, struct);
-	},
-
-	getAttrUnion : function(attr) {
-		var struct = _.map(this.selected, function(corpus) {
-			return _.keys(corpus[attr]);
-		});
-		return _.union.apply(null, struct);
-	},
-
-	getContextQueryString : function() {
-		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-			if(_.keys(settings.corpora[id].context)) {
-				return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1);
-			}
-			// if("1 paragraph" in settings.corpora[id].context)
-		}), Boolean).join();
-	},
-	getWithinQueryString : function() {
-		return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
-			if(_.keys(settings.corpora[id].within)) {
-				return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1);
-			}
-		}), Boolean).join();
-	},
-
-	getMorphology : function() {
-
-		return _.chain(this.selected)
-		.map(function(corpus) {
-			var morf = corpus.morf || "saldom";
-			return morf.split("|");
-		})
-		.flatten()
-		.unique()
-		.value()
-		.join("|");
-	}
-
-});
-
-
-
-
-var ParallelCorpusListing = new Class({
-	Extends : CorpusListing,
-	initialize : function(corpora) {
-		var self = this;
-		this.parallel_corpora = corpora;
-		this.corpora = [];
-		this.struct = {};
-		$.each(corpora, function(__, struct) {
-			$.each(struct, function(key, corp) {
-				if(key == "default") return;
-				self.corpora.push(corp);
-				self.struct[corp.id] = corp;
-			});
-		});
-
-	},
-
-	select : function(idArray) {
-		var self = this;
-		this.selected = [];
-		$.each(idArray, function(i, id) {
-			var corp = self.struct[id];
-			self.selected = self.selected.concat(self.getLinked(corp, true));
-		});
-	},
-
-	getCurrentAttributes : function(lang) {
-		var corpora = _.filter(this.selected, function(item) {
-			return item.lang == lang;
-		});
-		var struct = _.reduce(corpora, function(a, b) {
-			return $.extend({}, a.attributes, b.attributes);
-		},{});
-		return struct;
-	},
-
-	getStructAttrs : function(lang) {
-		var corpora = _.filter(this.selected, function(item) {
-			return item.lang == lang;
-		});
-		var struct = _.reduce(corpora, function(a, b) {
-			return $.extend({}, a.struct_attributes, b.struct_attributes);
-		},{});
-		$.each(struct, function(key, val) {
-			val["isStructAttr"] = true;
-		});
-		return struct;
-	},
-
-
-	getLinked : function(corp, andSelf) {
-		andSelf = andSelf || false;
-		var output = _.filter(this.corpora, function(item) {
-			return item.parent == corp.parent && item !== corp;
-		});
-		if(andSelf)
-			output.push(corp);
-		return output;
-	}
-
-});
 
 
 settings.posset = {
-       type : "set",
-       label : "pos",
-       displayType : "select",
-       translationKey : "pos_",
-       dataset :  {
-		"AB" : "AB",
-		"MID|MAD|PAD" : "DL",
-		"DT" : "DT",
-		"HA" : "HA",
-		"HD" : "HD",
-		"HP" : "HP",
-		"HS" : "HS",
-		"IE" : "IE",
-		"IN" : "IN",
-		"JJ" : "JJ",
-		"KN" : "KN",
-		"NN" : "NN",
-		"PC" : "PC",
-		"PL" : "PL",
-		"PM" : "PM",
-		"PN" : "PN",
-		"PP" : "PP",
-		"PS" : "PS",
-		"RG" : "RG",
-		"RO" : "RO",
-		"SN" : "SN",
-		"UO" : "UO",
-		"VB" : "VB"
-  			}
+   type : "set",
+   label : "pos",
+   displayType : "select",
+   translationKey : "pos_",
+   dataset :  {
+	"AB" : "AB",
+	"MID|MAD|PAD" : "DL",
+	"DT" : "DT",
+	"HA" : "HA",
+	"HD" : "HD",
+	"HP" : "HP",
+	"HS" : "HS",
+	"IE" : "IE",
+	"IN" : "IN",
+	"JJ" : "JJ",
+	"KN" : "KN",
+	"NN" : "NN",
+	"PC" : "PC",
+	"PL" : "PL",
+	"PM" : "PM",
+	"PN" : "PN",
+	"PP" : "PP",
+	"PS" : "PS",
+	"RG" : "RG",
+	"RO" : "RO",
+	"SN" : "SN",
+	"UO" : "UO",
+	"VB" : "VB"
+			}
 };
 settings.fsvlemma = {
 	//pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= key %>%22)+sortBy+wf'><%= val %></a>",
@@ -3529,5 +3308,5 @@ var fsv_aldrelagar = {
 };
 
 
-settings.corpusListing = new CorpusListing(settings.corpora);
+
 

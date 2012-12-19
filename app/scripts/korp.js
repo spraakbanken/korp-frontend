@@ -1,6 +1,6 @@
 'use strict';
 
-var korpApp = angular.module('korpApp', []);
+
 //  .config(['$routeProvider', function($routeProvider) {
 //    $routeProvider
 //      .when('/', {

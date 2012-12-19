@@ -396,6 +396,12 @@ select.arg_value option {
   padding-left: 5px;
   padding-right: 1px;
   cursor: default;
+  .ui-icon-close {
+    @include inline-block(inherit);
+    position: relative;
+    top: 3px;
+    cursor: pointer;
+  }
 }
 
 .lower_footer {
@@ -410,12 +416,6 @@ select.arg_value option {
   width: 100px;
 }
 
-.close_token .ui-icon-close {
-  @include inline-block();
-  position: relative;
-  top: 3px;
-  cursor: pointer;
-}
 
 .repeat, .lower_footer > * {
   display: none;
@@ -1275,10 +1275,8 @@ a {
 .or_arg {
   margin-bottom: 5px;
   .ui-icon-info {
-    @include inline-block();
+    @include inline-block(text-bottom);
     cursor: pointer;
-    position: relative;
-    top: 3px;
   }
 }
 

@@ -486,32 +486,31 @@ select.arg_value option {
   padding-right: 1px;
   cursor: default;
 }
-
-/* line 401, styles.scss */
-.lower_footer {
-  text-align: right;
-  margin-top: 2px;
-}
-
-/* line 406, styles.scss */
-#opt_menu {
-  display: none;
-  font-size: .8em;
-  cursor: pointer;
-  width: 100px;
-}
-
-/* line 413, styles.scss */
+/* line 399, styles.scss */
 .close_token .ui-icon-close {
   display: -moz-inline-stack;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: inherit;
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
   position: relative;
   top: 3px;
   cursor: pointer;
+}
+
+/* line 407, styles.scss */
+.lower_footer {
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* line 412, styles.scss */
+#opt_menu {
+  display: none;
+  font-size: .8em;
+  cursor: pointer;
+  width: 100px;
 }
 
 /* line 420, styles.scss */
@@ -1575,16 +1574,14 @@ a.relStat:hover {
 .or_arg .ui-icon-info {
   display: -moz-inline-stack;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: text-bottom;
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
   cursor: pointer;
-  position: relative;
-  top: 3px;
 }
 
-/* line 1285, styles.scss */
+/* line 1283, styles.scss */
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
   cursor: default;
   opacity: 0;
@@ -1594,7 +1591,7 @@ a.relStat:hover {
   transition: opacity 200ms ease;
 }
 
-/* line 1291, styles.scss */
+/* line 1289, styles.scss */
 .arg_header {
   opacity: 0;
   -webkit-transition: opacity 200ms ease;
@@ -1604,7 +1601,7 @@ a.relStat:hover {
   margin-bottom: 1px;
 }
 
-/* line 1297, styles.scss */
+/* line 1295, styles.scss */
 .or_arg:not(:only-child):first-child .arg_header {
   opacity: 1;
   -webkit-transition: opacity 200ms ease;
@@ -1613,17 +1610,17 @@ a.relStat:hover {
   transition: opacity 200ms ease;
 }
 
-/* line 1302, styles.scss */
+/* line 1300, styles.scss */
 .and:first-of-type {
   display: none !important;
 }
 
-/* line 1306, styles.scss */
+/* line 1304, styles.scss */
 .arg_header {
   font-size: 10px;
 }
 
-/* line 1312, styles.scss */
+/* line 1310, styles.scss */
 .insert_or {
   padding-top: 6px;
   right: 0;
@@ -1631,7 +1628,7 @@ a.relStat:hover {
   float: right;
 }
 
-/* line 1321, styles.scss */
+/* line 1319, styles.scss */
 #time {
   margin-top: 10px;
   display: -moz-inline-stack;
@@ -1642,14 +1639,14 @@ a.relStat:hover {
   *display: inline;
 }
 
-/* line 1327, styles.scss */
+/* line 1325, styles.scss */
 #time_inputs input {
   border: none;
   font-weight: bold;
   width: 30px;
 }
 
-/* line 1334, styles.scss */
+/* line 1332, styles.scss */
 #time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1661,7 +1658,7 @@ a.relStat:hover {
   height: 70px;
 }
 
-/* line 1340, styles.scss */
+/* line 1338, styles.scss */
 #rest_time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1675,7 +1672,7 @@ a.relStat:hover {
   bottom: 20px;
 }
 
-/* line 1348, styles.scss */
+/* line 1346, styles.scss */
 #time_slider {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1687,14 +1684,14 @@ a.relStat:hover {
   margin-right: 10px;
 }
 
-/* line 1354, styles.scss */
+/* line 1352, styles.scss */
 .query_arg .ui-slider {
   margin-right: 9px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-/* line 1360, styles.scss */
+/* line 1358, styles.scss */
 .ui-slider-handle {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -1703,7 +1700,7 @@ a.relStat:hover {
   border-radius: 20px;
 }
 
-/* line 1364, styles.scss */
+/* line 1362, styles.scss */
 .pager-wrapper {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1713,12 +1710,12 @@ a.relStat:hover {
   *display: inline;
 }
 
-/* line 1370, styles.scss */
+/* line 1368, styles.scss */
 .sidebar_url {
   white-space: nowrap;
 }
 
-/* line 1374, styles.scss */
+/* line 1372, styles.scss */
 .arcDiagramPicture {
   cursor: pointer;
   margin-bottom: -2px;
@@ -1726,18 +1723,18 @@ a.relStat:hover {
   padding-right: 5px;
 }
 
-/* line 1381, styles.scss */
+/* line 1379, styles.scss */
 .c0 {
   position: relative;
 }
 
-/* line 1385, styles.scss */
+/* line 1383, styles.scss */
 .arcDiagramPicture {
   position: absolute;
   right: 0;
 }
 
-/* line 1391, styles.scss */
+/* line 1389, styles.scss */
 .lemgram_section {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1748,7 +1745,7 @@ a.relStat:hover {
   margin-right: 30px;
 }
 
-/* line 1396, styles.scss */
+/* line 1394, styles.scss */
 .tableContainer {
   margin-bottom: 15px;
   display: -moz-inline-stack;
@@ -1761,7 +1758,7 @@ a.relStat:hover {
   border: solid 1px lightgray;
   margin-right: 20px;
 }
-/* line 1402, styles.scss */
+/* line 1400, styles.scss */
 .tableContainer > .header {
   color: #333;
   font-size: 1.1em;
@@ -1769,45 +1766,45 @@ a.relStat:hover {
   font-family: Lucida Grande, sans-serif;
 }
 
-/* line 1410, styles.scss */
+/* line 1408, styles.scss */
 .explanation {
   font-size: 12px;
   padding: 0 20px;
 }
 
-/* line 1415, styles.scss */
+/* line 1413, styles.scss */
 .ui-dialog ul, ol {
   padding-left: 0;
 }
 
-/* line 1419, styles.scss */
+/* line 1417, styles.scss */
 .ui-dialog li {
   margin-bottom: 3px;
 }
 
-/* line 1423, styles.scss */
+/* line 1421, styles.scss */
 .autocomplete-item-disabled a {
   font-style: italic;
   color: indianred;
   opacity: 0.7;
 }
 
-/* line 1429, styles.scss */
+/* line 1427, styles.scss */
 #showLineDiagram {
   display: none;
 }
 
-/* line 1433, styles.scss */
+/* line 1431, styles.scss */
 .lab #showLineDiagram {
   display: inline;
 }
 
-/* line 1437, styles.scss */
+/* line 1435, styles.scss */
 #labs_logo {
   display: none;
 }
 
-/* line 1441, styles.scss */
+/* line 1439, styles.scss */
 .lab #labs_logo {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1817,47 +1814,47 @@ a.relStat:hover {
   *display: inline;
 }
 
-/* line 1445, styles.scss */
+/* line 1443, styles.scss */
 #korplink {
   display: none;
 }
 
-/* line 1450, styles.scss */
+/* line 1448, styles.scss */
 .lab #korplablink {
   display: none;
 }
-/* line 1453, styles.scss */
+/* line 1451, styles.scss */
 .lab #korplink {
   display: block;
 }
 
-/* line 1458, styles.scss */
+/* line 1456, styles.scss */
 #cog {
   float: right;
   margin-top: -1px;
   cursor: pointer;
 }
 
-/* line 1464, styles.scss */
+/* line 1462, styles.scss */
 #cog_menu {
   position: absolute;
   font-size: inherit;
   text-align: right;
 }
 
-/* line 1470, styles.scss */
+/* line 1468, styles.scss */
 .ui-menu {
   box-shadow: 2px 2px 3px grey;
   z-index: 999;
 }
 
-/* line 1475, styles.scss */
+/* line 1473, styles.scss */
 .korp_fail {
   height: 146px;
   width: 290px;
 }
 
-/* line 1480, styles.scss */
+/* line 1478, styles.scss */
 .fail_text {
   margin: 1em 0 0 1em;
   vertical-align: top;
@@ -1865,32 +1862,32 @@ a.relStat:hover {
   font-size: 1.3em;
 }
 
-/* line 1487, styles.scss */
+/* line 1485, styles.scss */
 .error_msg ~ * {
   display: none !important;
 }
 
-/* line 1491, styles.scss */
+/* line 1489, styles.scss */
 .msd {
   font-size: 0.8em;
 }
 
-/* line 1495, styles.scss */
+/* line 1493, styles.scss */
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-/* line 1499, styles.scss */
+/* line 1497, styles.scss */
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-/* line 1503, styles.scss */
+/* line 1501, styles.scss */
 #mode_switch li:nth-child(5) ~ * {
   display: none;
 }
 
-/* line 1507, styles.scss */
+/* line 1505, styles.scss */
 .lab #mode_switch li {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1900,13 +1897,13 @@ a.relStat:hover {
   *display: inline;
 }
 
-/* line 1511, styles.scss */
+/* line 1509, styles.scss */
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 1516, styles.scss */
+/* line 1514, styles.scss */
 .val_mod {
   display: none;
   letter-spacing: 1px;
@@ -1915,17 +1912,17 @@ a.relStat:hover {
   margin-right: 1px;
 }
 
-/* line 1524, styles.scss */
+/* line 1522, styles.scss */
 .arg_value[type=text]:not(.ui-autocomplete-input) {
   width: 91%;
   margin-right: 3px;
 }
-/* line 1527, styles.scss */
+/* line 1525, styles.scss */
 .arg_value[type=text]:not(.ui-autocomplete-input) + .val_mod {
   display: inline;
 }
 
-/* line 1532, styles.scss */
+/* line 1530, styles.scss */
 #mod_menu {
   cursor: default;
   position: absolute;
@@ -1933,31 +1930,31 @@ a.relStat:hover {
   text-align: right;
 }
 
-/* line 1540, styles.scss */
+/* line 1538, styles.scss */
 .val_mod.insensitive {
   color: lightgrey;
 }
-/* line 1543, styles.scss */
+/* line 1541, styles.scss */
 .val_mod.sensitive {
   color: black;
 }
-/* line 1545, styles.scss */
+/* line 1543, styles.scss */
 .val_mod.sensitive + #mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-/* line 1549, styles.scss */
+/* line 1547, styles.scss */
 .val_mod.insensitive + #mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-/* line 1554, styles.scss */
+/* line 1552, styles.scss */
 #plot_popup {
   padding-top: 15px;
   height: 0;
   overflow-y: hidden;
   overflow-x: auto;
 }
-/* line 1559, styles.scss */
+/* line 1557, styles.scss */
 #plot_popup .xAxis .tickLabel {
   -webkit-transform: rotate(30deg);
   -moz-transform: rotate(30deg);
@@ -1969,21 +1966,21 @@ a.relStat:hover {
   margin-left: 10px;
 }
 
-/* line 1567, styles.scss */
+/* line 1565, styles.scss */
 .enumerate {
   counter-increment: wordpic;
 }
-/* line 1569, styles.scss */
+/* line 1567, styles.scss */
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-/* line 1574, styles.scss */
+/* line 1572, styles.scss */
 #showBarPlot {
   display: none;
 }
 
-/* line 1578, styles.scss */
+/* line 1576, styles.scss */
 .lab #showBarPlot {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1993,24 +1990,24 @@ a.relStat:hover {
   *display: inline;
 }
 
-/* line 1582, styles.scss */
+/* line 1580, styles.scss */
 #wordclassChkParent {
   float: right;
 }
 
-/* line 1588, styles.scss */
+/* line 1586, styles.scss */
 .tab_progress {
   height: 2px;
   background-color: darkblue;
   max-width: 100%;
 }
 
-/* line 1594, styles.scss */
+/* line 1592, styles.scss */
 .not_loading .tab_progress {
   display: none;
 }
 
-/* line 1598, styles.scss */
+/* line 1596, styles.scss */
 .progress {
   width: 143px;
   overflow-x: hidden;
@@ -2019,7 +2016,7 @@ a.relStat:hover {
   transition: width 400ms ease;
 }
 
-/* line 1606, styles.scss */
+/* line 1604, styles.scss */
 #results-kwic.not_loading .progress {
   width: 0;
   -moz-transition: width 400ms ease;
@@ -2027,7 +2024,7 @@ a.relStat:hover {
   transition: width 400ms ease;
 }
 
-/* line 1613, styles.scss */
+/* line 1611, styles.scss */
 .not_loading .hits_picture {
   left: 180px;
   -moz-transition: left 400ms ease;
@@ -2035,27 +2032,27 @@ a.relStat:hover {
   transition: left 400ms ease;
 }
 
-/* line 1621, styles.scss */
+/* line 1619, styles.scss */
 #results-stats.not_loading .progress,
 #results-lemgram.not_loading .progress {
   display: none;
 }
 
-/* line 1626, styles.scss */
+/* line 1624, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 1629, styles.scss */
+/* line 1627, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 1632, styles.scss */
+/* line 1630, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-/* line 1638, styles.scss */
+/* line 1636, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -2063,19 +2060,19 @@ a.relStat:hover {
   letter-spacing: 1.1;
 }
 
-/* line 1645, styles.scss */
+/* line 1643, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-/* line 1651, styles.scss */
+/* line 1649, styles.scss */
 #char_table {
   display: none;
 }
 
-/* line 1655, styles.scss */
+/* line 1653, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
