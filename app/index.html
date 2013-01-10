@@ -34,6 +34,7 @@
 		<!-- build:js scripts/korp_lib.js -->
 		<script type="text/javascript" src="components/jquery/jquery.js" ></script>
 		<script type="text/javascript" src="components/jquery-ui/ui/jquery-ui.js"></script>
+		<script type="text/javascript" src="components/angular/angular.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.localize.js"></script>
 		<script type="text/javascript" src="components/raphael/raphael.js"></script>
 		<script type="text/javascript" src="components/jReject/js/jquery.reject.js"></script>
@@ -129,7 +130,7 @@
 
   			</div>
   			<div id="header_left">
- 				<a href=""><img src="img/korplogo.png" /></a>
+ 				<a id="logo"><img src="img/korplogo.png" /></a>
  				<div id="labs_logo"></div>
 
 
@@ -216,11 +217,11 @@
 								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a><div class="tab_progress" ></div></li>
 								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a><div class="tab_progress" ></div></li>
 							</ul>
-							<div id="results-kwic" ng-controller="kwicCtrl">
+							<div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
 								<div class="result_controls">
-								   <div class="controls_n" >
-								   	<span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
-								   </div>
+								    <div class="controls_n" >
+										<span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
+								    </div>
 									<div class="progress">
 										<progress value="0" max="100"></progress>
 									</div>
@@ -234,10 +235,40 @@
 
 								<div class="table_scrollarea">
 									<table class="results_table kwic" cellspacing="0">
+										<tr class="sentence" ng-repeat="sentence in kwic" ng-class-even="'even'" ng-class-odd="'odd'"
+											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
+											<td class="empty_td"></td>
+											<td colspan="0" class="corpus_title">
+												{{sentence.newCorpus}}
+												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
+											</td>
 
+											<td class="left" ng-show="!sentence.newCorpus">
+												<span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
+											</td>
+											<td class="match" ng-show="!sentence.newCorpus">
+												<span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
+											</td>
+											<td class="right" ng-show="!sentence.newCorpus">
+												<span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
+											</td>
 
+										</tr>
 									</table>
-									<table class="results_table reading" cellspacing="0"></table>
+
+									<div class="results_table reading">
+
+										<p class="sentence" ng-repeat="sentence in contextKwic" ng-class-even="'even'" ng-class-odd="'odd'"
+											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
+											<span colspan="0" class="corpus_title">
+												{{sentence.newCorpus}}
+												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
+											</span>
+											<span ng-repeat="wd in sentence.tokens" kwic-word
+												></span>
+										</p>
+									</div>
+									<!-- <table class="results_table reading" cellspacing="0"></table> -->
 <!-- 									<table class="results_table cached_kwic" cellspacing="0"></table> -->
 								</div>
 
@@ -306,6 +337,14 @@
 			<li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
 		</ul>
 	</div>
+
+	<script type="text/ng-template" id="wordTemplate">
+		<span class="word"
+
+            ng-click="wordClick($event, wd, sentence)">{{wd.word}}</span>
+        <span class="word_gap"> </span>
+	</script>
+
 	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
 			{{if $item.translationKey}}
 				<li rel="localize[${$item.translationKey + $data}]">${$data}</li>

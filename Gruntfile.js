@@ -66,6 +66,10 @@ module.exports = function( grunt ) {
                     'app/styles/**/*.{scss,sass}'
                 ],
                 tasks: 'compass reload'
+            },
+            html : {
+                files : ['app/**/*.html'],
+                tasks : "reload"
             }
         },
 

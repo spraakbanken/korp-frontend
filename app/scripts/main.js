@@ -134,6 +134,11 @@ var currentMode;
 		.attr({fill: "#333", stroke: "none", transform : "t0,18s1.7"});
 
 
+		$("#logo").click(function() {
+			location = location.protocol + "//" + location.host + location.pathname
+			return false;
+		})
+
 		$("#cog_menu")
 		.menu({})
 		.hide()
@@ -412,12 +417,14 @@ var currentMode;
 
 				if(reading) {
 					kwicResults.$result.addClass("reading_mode");
-    				if(!isInit && kwicResults.$result.find(".results_table.reading").is(":empty")) {
+    				// if(!isInit && kwicResults.$result.find(".results_table.reading").is(":empty")) {
+    				if(!isInit) {
 						kwicResults.makeRequest();
 					}
 				} else {
 					kwicResults.$result.removeClass("reading_mode");
-					if(!isInit && kwicResults.$result.find(".results_table.kwic").is(":empty")) {
+					// if(!isInit && kwicResults.$result.find(".results_table.kwic").is(":empty")) {
+					if(!isInit) {
 						kwicResults.makeRequest();
 					} else {
 						kwicResults.centerScrollbar();

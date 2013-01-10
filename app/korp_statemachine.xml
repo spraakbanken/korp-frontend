@@ -8,7 +8,8 @@
         function kwicRequest(page, cqp) {
         	kwicResults.showPreloader();
         	var isReading = kwicResults.$result.is(".reading_mode");
-            var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
+            //var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
+            var kwicCallback = kwicResults.renderResult;
             var kwicopts = {"sort" : $.bbq.getState("sort")};
             if(kwicopts['sort'] == "random") {
                 var rnd;

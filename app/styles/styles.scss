@@ -24,6 +24,12 @@
 }
 */
 
+
+
+$primaryColor: rgb(221, 233, 255);
+$primaryLight: rgb(242, 247, 255);
+
+
 body {
   font-family: 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
   font-size: 13px;
@@ -634,10 +640,7 @@ select.arg_value option {
 
 .ui-tabs .ui-tabs-nav li a {
   float: left;
-  padding-bottom: 0.2em;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 0.2em;
+  padding : 0.2em 1em;
   text-decoration: none;
 }
 
@@ -810,7 +813,9 @@ table {
   display: inline;
 }
 
-.reading_mode .reading_btn.show, .reading_btn.hide, .zero_results .reading_btn {
+.reading_mode .reading_btn.show,
+.reading_btn.hide,
+.zero_results .reading_btn {
   display: none;
 }
 
@@ -818,11 +823,28 @@ table {
   display: inline;
 }
 
+.loading .table_scrollarea {
+  opacity : 0;
+  @include transition(opacity 200ms ease);
+}
+.not_loading .table_scrollarea {
+  opacity : 1;
+  @include transition(opacity 200ms ease);
+}
+
+
 .results_table.reading {
   display: none;
+  p {
+    display: block;
+    padding: 1em !important;
+    width: 510px;
+    margin : 0;
+  }
 }
 
 .reading_mode .results_table {
+  margin-left: 10%;
   &.kwic {
     display: none;
   }
@@ -831,8 +853,13 @@ table {
   }
 }
 
-.results_table.reading {
-  margin-left: 10%;
+.results_table {
+  .odd {
+    background-color : $primaryColor;
+  }
+  .even {
+    background-color : $primaryLight;
+  }
 }
 
 /*
@@ -847,12 +874,6 @@ table {
 .reading_match {
   font-weight: bold;
   color: black !important;
-}
-
-.results_table.reading tr {
-  display: block;
-  padding: 1em !important;
-  width: 510px;
 }
 
 .result_table td {
@@ -880,19 +901,27 @@ table {
   font-variant: small-caps;
   color: #666;
   font-size: 11px;
-  border-top: 3px solid white;
-  border-bottom: 3px solid white;
-  border-width: 3px !important;
+  display : block;
+  margin : 0 -100px;
 }
 
-.no_context .corpus_title_span {
+.not_corpus_info {
+  .corpus_title,.empty_td {
+    display : none;
+  }
+}
+.corpus_info {
+  background-color : white !important;
+}
+
+.reading_mode .corpus_title {
   margin-left: -200px;
   margin-right: 0;
-  position: relative;
-  left: 60px;
+
+  font-size: 3em;
 }
 
-.reading .no_context .corpus_title_span {
+.reading_mode .no_context .corpus_title {
   left: 0;
 }
 
@@ -903,12 +932,12 @@ table {
   font-variant: normal;
 }
 
-.reading .corpus_title_warn {
+.reading_mode .corpus_title_warn {
   font-size: 12px;
   display: block;
 }
 
-.webkit .reading .no_context .corpus_title_warn {
+.webkit .reading_mode .no_context .corpus_title_warn {
   margin-bottom: -40px;
 }
 
@@ -921,15 +950,6 @@ table {
   }
 }
 
-.reading_mode .corpus_title_span {
-  margin: 0;
-  margin-left: -21px;
-  font-size: 3em;
-}
-
-.corpus_title_span {
-  margin: 0 -100px;
-}
 
 .right {
   vertical-align: text-top;
@@ -958,6 +978,16 @@ table {
 
 .word {
   cursor: pointer;
+  &.punct {
+    margin-left : -3px;
+  }
+  &:hover {
+    color: indianred;
+  }
+}
+
+.match_sentence {
+  color: black !important;
 }
 
 .reading_mode .word {
@@ -968,16 +998,13 @@ table {
   color: black !important;
 }
 
-.word:hover {
-  color: indianred;
-}
-
 .word_selected {
   @include border-radius(10px);
   padding-left: 3px;
-  padding-right: 3px;
   margin-left: -3px;
-  margin-right: -3px;
+  &:hover {
+    color: indianred;
+  }
 }
 
 .token_selected {
@@ -1259,9 +1286,9 @@ a {
 
 .right_col {
   padding-right: 2px;
-  input {
-    *float: right;
-  }
+}
+.ie8 .right_col .input {
+    float: right;
 }
 
 .query_arg {
@@ -1305,7 +1332,6 @@ a {
   font-size: 10px;
 }
 
-//.arg_footer! {}
 
 .insert_or {
   padding-top: 6px;
@@ -1314,7 +1340,6 @@ a {
   float: right;
 }
 
-// .sort_select! {}
 
 #time {
   margin-top: 10px;
@@ -1596,23 +1621,17 @@ a {
 .progress {
   width: 143px;
   overflow-x: hidden;
-  -moz-transition: width 400ms ease;
-  -webkit-transition: width 400ms ease;
-  transition: width 400ms ease;
+  @include transition(width 400ms ease);
 }
 
 #results-kwic.not_loading .progress {
   width: 0;
-  -moz-transition: width 400ms ease;
-  -webkit-transition: width 400ms ease;
-  transition: width 400ms ease;
+  @include transition(width 400ms ease);
 }
 
 .not_loading .hits_picture {
   left: 180px;
-  -moz-transition: left 400ms ease;
-  -webkit-transition: left 400ms ease;
-  transition: left 400ms ease;
+  @include transition(width 400ms ease);
 }
 
 #results-stats.not_loading .progress,
@@ -1656,3 +1675,4 @@ a {
   cursor: pointer;
 
 }
+
