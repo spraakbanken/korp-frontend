@@ -262,7 +262,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.sweac = {
 	title : "Akademiska texter",
-	contents : ["sweachum"]
+	contents : ["sweachum", "sweacsam"]
 };
 
 settings.corporafolders.strindberg = {
@@ -353,12 +353,12 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "finsktidskrift", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+	contents : ["astranova", "bullen", "finsktidskrift", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.fisk.youthnovels = {
-    title : "Ungdomslitteratur",
-    contents : ["ungdomslitteratur"]
+	title : "Ungdomslitteratur",
+	contents : ["ungdomslitteratur"]
 };
 
 settings.corporafolders.medical = {
@@ -434,9 +434,9 @@ settings.corpora.magmakolumner = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "date"}
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "date"}
 	}
 };
 
@@ -489,10 +489,10 @@ settings.corpora.fsbskonlit = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"},
-	    text_publisher : {label : "publisher"}
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
 	}
 };
 
@@ -515,10 +515,10 @@ settings.corpora.fsbessaistik = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"},
-	    text_publisher : {label : "publisher"}
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
 	}
 };
 
@@ -541,10 +541,10 @@ settings.corpora.fsbsakprosa = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"},
-	    text_publisher : {label : "publisher"}
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
 	}
 };
 
@@ -567,10 +567,10 @@ settings.corpora.ungdomslitteratur = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"},
-	    text_publisher : {label : "publisher"}
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
 	}
 };
 
@@ -662,8 +662,8 @@ settings.corpora.finsktidskrift = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_date : {label : "year"},
-	    text_issue : {label : "issue"}
+		text_date : {label : "year"},
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -686,8 +686,8 @@ settings.corpora.hanken = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_date : {label : "year"},
-	    text_issue : {label : "issue"}
+		text_date : {label : "year"},
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -710,8 +710,8 @@ settings.corpora.svenskbygden = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_year : {label : "year"},
-	    text_issue : {label : "issue"}
+		text_year : {label : "year"},
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -734,8 +734,8 @@ settings.corpora.studentbladet = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_date : {label : "year"},
-	    text_issue : {label : "issue"}
+		text_date : {label : "year"},
+		text_issue : {label : "issue"}
 	}
 };
 
@@ -804,8 +804,67 @@ settings.corpora.sweachum = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_type : {label : "type"},
-	    text_subject : {label : "subject"}
+		text_type : {label : "type",
+			displayType : "select",
+			dataset : {
+				"Licentiat" : "Licentiat",
+				"PhD" : "PhD"
+			}
+		},
+		text_subject : {label : "subject",
+			displayType : "select",
+			dataset : {
+				"Etnologi" : "Etnologi",
+				"Filosofi" : "Filosofi",
+				"Historia" : "Historia",
+				"Jämförande språkvetenskap och lingvistik" : "Jämförande språkvetenskap och lingvistik",
+				"Konst" : "Konst",
+				"Litteraturvetenskap" : "Litteraturvetenskap",
+				"Religionsvetenskap" : "Religionsvetenskap"
+			}
+		}
+	}
+};
+
+settings.corpora.sweacsam = {
+	id : "sweacsam",
+	title : "Samhällsvetenskap",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_type : {label : "type",
+			displayType : "select",
+			dataset : {
+				"Licentiat" : "Licentiat",
+				"PhD" : "PhD"
+			}
+		},
+		text_subject : {label : "subject",
+			displayType : "select",
+			dataset : {
+				"Ekonomi och näringsliv" : "Ekonomi och näringsliv",
+				"Juridik" : "Juridik",
+				"Medie- och kommunikationsvetenskap" : "Medie- och kommunikationsvetenskap",
+				"Psykologi" : "Psykologi",
+				"Social och ekonomisk geografi" : "Social och ekonomisk geografi",
+				"Sociologi" : "Sociologi",
+				"Statsvetenskap" : "Statsvetenskap",
+				"Utbildningsvetenskap" : "Utbildningsvetenskap"
+			}
+		}
 	}
 };
 
@@ -1423,174 +1482,174 @@ settings.corpora.bloggmix = {
 			displayType : "select",
 			localize : false,
 			dataset : {
-            "Alingsås" : "Alingsås",
-            "Alnö" : "Alnö",
-            "Arboga" : "Arboga",
-            "Arild" : "Arild",
-            "Bankeryd" : "Bankeryd",
-            "Bergviken" : "Bergviken",
-            "Birsta" : "Birsta",
-            "Bjursås" : "Bjursås",
-            "Boden" : "Boden",
-            "Bohus" : "Bohus",
-            "Borgholm" : "Borgholm",
-            "Borlänge" : "Borlänge",
-            "Borås" : "Borås",
-            "Brunflo" : "Brunflo",
-            "Brynäs" : "Brynäs",
-            "Bygdeå" : "Bygdeå",
-            "Danholn" : "Danholn",
-            "Deje" : "Deje",
-            "Djurslöv" : "Djurslöv",
-            "Enköping" : "Enköping",
-            "Enskede" : "Enskede",
-            "Eriksberg" : "Eriksberg",
-            "Eskilstuna" : "Eskilstuna",
-            "Falun" : "Falun",
-            "Finspång" : "Finspång",
-            "Frösö" : "Frösö",
-            "Färjestaden" : "Färjestaden",
-            "Fårbo" : "Fårbo",
-            "Gimo" : "Gimo",
-            "Gnesta" : "Gnesta",
-            "Granlo" : "Granlo",
-            "Grebo" : "Grebo",
-            "Grums" : "Grums",
-            "Grycksbo" : "Grycksbo",
-            "Gryta" : "Gryta",
-            "Gränna" : "Gränna",
-            "Gustafs" : "Gustafs",
-            "Gävle" : "Gävle",
-            "Göteborg" : "Göteborg",
-            "Habo" : "Habo",
-            "Haga" : "Haga",
-            "Hallstahammar" : "Hallstahammar",
-            "Handen" : "Handen",
-            "Hedemora" : "Hedemora",
-            "Helsingborg" : "Helsingborg",
-            "Hillared" : "Hillared",
-            "Hille" : "Hille",
-            "Holmsund" : "Holmsund",
-            "Hortlax" : "Hortlax",
-            "Huddinge" : "Huddinge",
-            "Huskvarna" : "Huskvarna",
-            "Höganäs" : "Höganäs",
-            "Högsby" : "Högsby",
-            "Hönö" : "Hönö",
-            "Irsta" : "Irsta",
-            "Järna" : "Järna",
-            "Jönköping" : "Jönköping",
-            "Kalmar" : "Kalmar",
-            "Karlskoga" : "Karlskoga",
-            "Karlstad" : "Karlstad",
-            "Kimstad" : "Kimstad",
-            "Kinna" : "Kinna",
-            "Klippan" : "Klippan",
-            "Kristinehamn" : "Kristinehamn",
-            "Krokek" : "Krokek",
-            "Kumla" : "Kumla",
-            "Kungsbacka" : "Kungsbacka",
-            "Kungsholmen" : "Kungsholmen",
-            "Kungälv" : "Kungälv",
-            "Köping" : "Köping",
-            "Landskrona" : "Landskrona",
-            "Laxå" : "Laxå",
-            "Lerum" : "Lerum",
-            "Lidingö" : "Lidingö",
-            "Lilla Alby" : "Lilla Alby",
-            "Lillån" : "Lillån",
-            "Limhamn" : "Limhamn",
-            "Lindesberg" : "Lindesberg",
-            "Lindsdal" : "Lindsdal",
-            "Linköping" : "Linköping",
-            "Ljunga" : "Ljunga",
-            "Lomma" : "Lomma",
-            "Luleå" : "Luleå",
-            "Lund" : "Lund",
-            "Löberöd" : "Löberöd",
-            "Malmö" : "Malmö",
-            "Mariefred" : "Mariefred",
-            "Mjölby" : "Mjölby",
-            "Motala" : "Motala",
-            "Mullsjö" : "Mullsjö",
-            "Mölnbo" : "Mölnbo",
-            "Mönsterås" : "Mönsterås",
-            "Mörbylånga" : "Mörbylånga",
-            "Nacka" : "Nacka",
-            "Nacksta" : "Nacksta",
-            "Nolhaga" : "Nolhaga",
-            "Nora" : "Nora",
-            "Norrköping" : "Norrköping",
-            "Norrtälje" : "Norrtälje",
-            "Nässjö" : "Nässjö",
-            "Oskarshamn" : "Oskarshamn",
-            "Partille" : "Partille",
-            "Piteå" : "Piteå",
-            "Pålsjö" : "Pålsjö",
-            "Ransta" : "Ransta",
-            "Rosvik" : "Rosvik",
-            "Rutvik" : "Rutvik",
-            "Ryd" : "Ryd",
-            "Röbäck" : "Röbäck",
-            "Sala" : "Sala",
-            "Sandhult" : "Sandhult",
-            "Sandskogen" : "Sandskogen",
-            "Sandviken" : "Sandviken",
-            "Sigtuna" : "Sigtuna",
-            "Sjöbo" : "Sjöbo",
-            "Skanör med Falsterbo" : "Skanör med Falsterbo",
-            "Skellefteå" : "Skellefteå",
-            "Skeppsvik" : "Skeppsvik",
-            "Skurholmsstaden" : "Skurholmsstaden",
-            "Skönsmon" : "Skönsmon",
-            "Smedby" : "Smedby",
-            "Smedslätten" : "Smedslätten",
-            "Sollentuna" : "Sollentuna",
-            "Staffanstorp" : "Staffanstorp",
-            "Stockholm" : "Stockholm",
-            "Stora Vickleby" : "Stora Vickleby",
-            "Storvreta" : "Storvreta",
-            "Strålsnäs" : "Strålsnäs",
-            "Sundsvall" : "Sundsvall",
-            "Svedala" : "Svedala",
-            "Säffle" : "Säffle",
-            "Särö" : "Särö",
-            "Säter" : "Säter",
-            "Sävar" : "Sävar",
-            "Sävedalen" : "Sävedalen",
-            "Södermalm" : "Södermalm",
-            "Södertälje" : "Södertälje",
-            "Södra Möckleby" : "Södra Möckleby",
-            "Sörby" : "Sörby",
-            "Tallboda" : "Tallboda",
-            "Tierp" : "Tierp",
-            "Torvalla" : "Torvalla",
-            "Tranemo" : "Tranemo",
-            "Trelleborg" : "Trelleborg",
-            "Trollhättan" : "Trollhättan",
-            "Trosa" : "Trosa",
-            "Tuve" : "Tuve",
-            "Ulricehamn" : "Ulricehamn",
-            "Umeå" : "Umeå",
-            "Uppsala" : "Uppsala",
-            "Vadstena" : "Vadstena",
-            "Vagnhärad" : "Vagnhärad",
-            "Valbo" : "Valbo",
-            "Vaplan" : "Vaplan",
-            "Vasastaden" : "Vasastaden",
-            "Vejbystrand" : "Vejbystrand",
-            "Vellinge" : "Vellinge",
-            "Vimmerby" : "Vimmerby",
-            "Västerljung" : "Västerljung",
-            "Västerås" : "Västerås",
-            "Åre" : "Åre",
-            "Årsunda" : "Årsunda",
-            "Älvkarleby" : "Älvkarleby",
-            "Ängelholm" : "Ängelholm",
-            "Örebro" : "Örebro",
-            "Östermalm" : "Östermalm",
-            "Östersund" : "Östersund",
-            "Övre Ullerud" : "Övre Ullerud"
+			"Alingsås" : "Alingsås",
+			"Alnö" : "Alnö",
+			"Arboga" : "Arboga",
+			"Arild" : "Arild",
+			"Bankeryd" : "Bankeryd",
+			"Bergviken" : "Bergviken",
+			"Birsta" : "Birsta",
+			"Bjursås" : "Bjursås",
+			"Boden" : "Boden",
+			"Bohus" : "Bohus",
+			"Borgholm" : "Borgholm",
+			"Borlänge" : "Borlänge",
+			"Borås" : "Borås",
+			"Brunflo" : "Brunflo",
+			"Brynäs" : "Brynäs",
+			"Bygdeå" : "Bygdeå",
+			"Danholn" : "Danholn",
+			"Deje" : "Deje",
+			"Djurslöv" : "Djurslöv",
+			"Enköping" : "Enköping",
+			"Enskede" : "Enskede",
+			"Eriksberg" : "Eriksberg",
+			"Eskilstuna" : "Eskilstuna",
+			"Falun" : "Falun",
+			"Finspång" : "Finspång",
+			"Frösö" : "Frösö",
+			"Färjestaden" : "Färjestaden",
+			"Fårbo" : "Fårbo",
+			"Gimo" : "Gimo",
+			"Gnesta" : "Gnesta",
+			"Granlo" : "Granlo",
+			"Grebo" : "Grebo",
+			"Grums" : "Grums",
+			"Grycksbo" : "Grycksbo",
+			"Gryta" : "Gryta",
+			"Gränna" : "Gränna",
+			"Gustafs" : "Gustafs",
+			"Gävle" : "Gävle",
+			"Göteborg" : "Göteborg",
+			"Habo" : "Habo",
+			"Haga" : "Haga",
+			"Hallstahammar" : "Hallstahammar",
+			"Handen" : "Handen",
+			"Hedemora" : "Hedemora",
+			"Helsingborg" : "Helsingborg",
+			"Hillared" : "Hillared",
+			"Hille" : "Hille",
+			"Holmsund" : "Holmsund",
+			"Hortlax" : "Hortlax",
+			"Huddinge" : "Huddinge",
+			"Huskvarna" : "Huskvarna",
+			"Höganäs" : "Höganäs",
+			"Högsby" : "Högsby",
+			"Hönö" : "Hönö",
+			"Irsta" : "Irsta",
+			"Järna" : "Järna",
+			"Jönköping" : "Jönköping",
+			"Kalmar" : "Kalmar",
+			"Karlskoga" : "Karlskoga",
+			"Karlstad" : "Karlstad",
+			"Kimstad" : "Kimstad",
+			"Kinna" : "Kinna",
+			"Klippan" : "Klippan",
+			"Kristinehamn" : "Kristinehamn",
+			"Krokek" : "Krokek",
+			"Kumla" : "Kumla",
+			"Kungsbacka" : "Kungsbacka",
+			"Kungsholmen" : "Kungsholmen",
+			"Kungälv" : "Kungälv",
+			"Köping" : "Köping",
+			"Landskrona" : "Landskrona",
+			"Laxå" : "Laxå",
+			"Lerum" : "Lerum",
+			"Lidingö" : "Lidingö",
+			"Lilla Alby" : "Lilla Alby",
+			"Lillån" : "Lillån",
+			"Limhamn" : "Limhamn",
+			"Lindesberg" : "Lindesberg",
+			"Lindsdal" : "Lindsdal",
+			"Linköping" : "Linköping",
+			"Ljunga" : "Ljunga",
+			"Lomma" : "Lomma",
+			"Luleå" : "Luleå",
+			"Lund" : "Lund",
+			"Löberöd" : "Löberöd",
+			"Malmö" : "Malmö",
+			"Mariefred" : "Mariefred",
+			"Mjölby" : "Mjölby",
+			"Motala" : "Motala",
+			"Mullsjö" : "Mullsjö",
+			"Mölnbo" : "Mölnbo",
+			"Mönsterås" : "Mönsterås",
+			"Mörbylånga" : "Mörbylånga",
+			"Nacka" : "Nacka",
+			"Nacksta" : "Nacksta",
+			"Nolhaga" : "Nolhaga",
+			"Nora" : "Nora",
+			"Norrköping" : "Norrköping",
+			"Norrtälje" : "Norrtälje",
+			"Nässjö" : "Nässjö",
+			"Oskarshamn" : "Oskarshamn",
+			"Partille" : "Partille",
+			"Piteå" : "Piteå",
+			"Pålsjö" : "Pålsjö",
+			"Ransta" : "Ransta",
+			"Rosvik" : "Rosvik",
+			"Rutvik" : "Rutvik",
+			"Ryd" : "Ryd",
+			"Röbäck" : "Röbäck",
+			"Sala" : "Sala",
+			"Sandhult" : "Sandhult",
+			"Sandskogen" : "Sandskogen",
+			"Sandviken" : "Sandviken",
+			"Sigtuna" : "Sigtuna",
+			"Sjöbo" : "Sjöbo",
+			"Skanör med Falsterbo" : "Skanör med Falsterbo",
+			"Skellefteå" : "Skellefteå",
+			"Skeppsvik" : "Skeppsvik",
+			"Skurholmsstaden" : "Skurholmsstaden",
+			"Skönsmon" : "Skönsmon",
+			"Smedby" : "Smedby",
+			"Smedslätten" : "Smedslätten",
+			"Sollentuna" : "Sollentuna",
+			"Staffanstorp" : "Staffanstorp",
+			"Stockholm" : "Stockholm",
+			"Stora Vickleby" : "Stora Vickleby",
+			"Storvreta" : "Storvreta",
+			"Strålsnäs" : "Strålsnäs",
+			"Sundsvall" : "Sundsvall",
+			"Svedala" : "Svedala",
+			"Säffle" : "Säffle",
+			"Särö" : "Särö",
+			"Säter" : "Säter",
+			"Sävar" : "Sävar",
+			"Sävedalen" : "Sävedalen",
+			"Södermalm" : "Södermalm",
+			"Södertälje" : "Södertälje",
+			"Södra Möckleby" : "Södra Möckleby",
+			"Sörby" : "Sörby",
+			"Tallboda" : "Tallboda",
+			"Tierp" : "Tierp",
+			"Torvalla" : "Torvalla",
+			"Tranemo" : "Tranemo",
+			"Trelleborg" : "Trelleborg",
+			"Trollhättan" : "Trollhättan",
+			"Trosa" : "Trosa",
+			"Tuve" : "Tuve",
+			"Ulricehamn" : "Ulricehamn",
+			"Umeå" : "Umeå",
+			"Uppsala" : "Uppsala",
+			"Vadstena" : "Vadstena",
+			"Vagnhärad" : "Vagnhärad",
+			"Valbo" : "Valbo",
+			"Vaplan" : "Vaplan",
+			"Vasastaden" : "Vasastaden",
+			"Vejbystrand" : "Vejbystrand",
+			"Vellinge" : "Vellinge",
+			"Vimmerby" : "Vimmerby",
+			"Västerljung" : "Västerljung",
+			"Västerås" : "Västerås",
+			"Åre" : "Åre",
+			"Årsunda" : "Årsunda",
+			"Älvkarleby" : "Älvkarleby",
+			"Ängelholm" : "Ängelholm",
+			"Örebro" : "Örebro",
+			"Östermalm" : "Östermalm",
+			"Östersund" : "Östersund",
+			"Övre Ullerud" : "Övre Ullerud"
 		}},
 		//blog_categories : {label : "title", type : "set"},
 		text_title : {label : "post_title"},
@@ -1881,7 +1940,7 @@ settings.corpora.lt1996 = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
-	    text_year : {label : "year"},
+		text_year : {label : "year"},
 		text_article : {label : "article"},
 		text_id : {label : "text"}
 	}
@@ -2354,7 +2413,7 @@ settings.corpora.romg = {
 settings.corpora.rom99 = {
 	id : "rom99",
 	title : "Norstedtsromaner (1999)",
-    description : "23 romaner utgivna 1999 på Norstedts förlag.",
+	description : "23 romaner utgivna 1999 på Norstedts förlag.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {
@@ -2654,7 +2713,7 @@ settings.corpora.abounderrattelser2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_date : {label : "date"}
+		text_date : {label : "date"}
 	}
 };
 
@@ -2678,7 +2737,7 @@ settings.corpora.at2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_date : {label : "date"}
+		text_date : {label : "date"}
 	}
 };
 
@@ -2839,8 +2898,8 @@ settings.corpora.hbl1991 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_date : {label : "year"},
-	    text_type : {label : "section"}
+		text_date : {label : "year"},
+		text_type : {label : "section"}
 	}
 };
 
@@ -2863,7 +2922,7 @@ settings.corpora.hbl1998 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_year : {label : "year"}
+		text_year : {label : "year"}
 	}
 };
 
@@ -2886,7 +2945,7 @@ settings.corpora.hbl1999 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_year : {label : "year"}
+		text_year : {label : "year"}
 	}
 };
 
@@ -3032,7 +3091,6 @@ settings.corpora.soexempel = {
  */
 
 settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
-// settings.cgi_script = "http://demo.spraakdata.gu.se/dan/";
 
 // label values here represent translation keys.
 settings.arg_groups = {
@@ -3226,18 +3284,18 @@ settings.fsvvariants = {
 
 settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
 var fsv_yngrelagar = {
-    morf : 'fsvm',
+	morf : 'fsvm',
 	id : "fsv-yngrelagar",
 	title : "Yngre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
-        posset : settings.posset,
+		posset : settings.posset,
 		lemma : settings.fsvlemma,
 		lex : settings.fsvlex,
 		variants : settings.fsvvariants
-        },
+		},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -3255,7 +3313,7 @@ var fsv_yngrelagar = {
 };
 
 var fsv_aldrelagar = {
-    morf : 'fsvm',
+	morf : 'fsvm',
 	id : "fsv-aldrelagar",
 	title : "Äldre lagar – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -3266,7 +3324,7 @@ var fsv_aldrelagar = {
 		lemma : settings.fsvlemma,
 		lex : settings.fsvlex,
 		variants : settings.fsvvariants
-                },
+				},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -3302,7 +3360,7 @@ var fsv_aldrelagar = {
 				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
 				"Östgötalagen, fragment E, ur Ups B 22"
 			],
-        },
+		},
 		text_date : {label : "date"}
 	}
 };
