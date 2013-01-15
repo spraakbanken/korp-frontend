@@ -1915,7 +1915,7 @@ a.relStat:hover {
 }
 
 /* line 1526, styles.scss */
-#mode_switch li:nth-child(5) ~ * {
+#mode_switch li:nth-child(6) ~ * {
   display: none;
 }
 

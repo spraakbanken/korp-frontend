@@ -116,6 +116,7 @@ var currentMode;
                  {localekey : "modern_texts", mode : "default"},
                  {localekey : "parallel_texts", mode : "parallel"},
                  {localekey : "old_swedish_texts", mode : "old_swedish"},
+                 {localekey : "fisk1800_texts", mode : "fisk1800"},
                  {localekey : "faroese_texts", mode : "faroe"},
                  {localekey : "siberian_texts", mode : "siberian_german"},
                  {localekey : "1800_texts", mode : "1800"},
