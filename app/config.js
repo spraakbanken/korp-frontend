@@ -2996,10 +2996,9 @@ settings.corpora.talbanken = {
 	}
 };
 
-if(isLab)
 settings.corpora.twitter = {
 	id : "twitter",
-	title : "Twittermix (november 2012)",
+	title : "Twittermix",
 	description : "",
 	within : {
 		"sentence" : "sentence",
