@@ -32,7 +32,7 @@ settings.corpora.lb = {
 		"text_source" : {label : "source"},
 		"text_date" : {label : "imprintyear"},
 		"page_n" : {label : "page"},
-		"page_url" : {label : "page", type : "url"}
+		"page_url" : {label : "pagelink", type : "url"}
 	}
 };
 
