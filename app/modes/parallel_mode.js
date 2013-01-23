@@ -1,11 +1,3 @@
-var ParallelSimpleSearch = {
-	Extends : view.SimpleSearch,
-
-	initialize : function(mainDivId) {
-		this.parent(mainDivId);
-	}
-};
-
 
 settings.wordpicture = false;
 settings.showSimpleSearch = false;
@@ -13,37 +5,40 @@ $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
 $("#search_options > div:last").remove();
 
-var ParallelExtendedSearch = {
-	Extends : view.ExtendedSearch,
-	initialize : function(mainDivId) {
-		this.parent(mainDivId);
+
+var c1 = view.ExtendedSearch.prototype.constructor
+view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
+	c1.call(this, mainDivId);
+	c.log("parallel constructor")
+	// this.parent(mainDivId);
+	var self = this;
+	$("#linkedLang").click(function() {
+		self.makeLangRow();
+	});
+	$("#removeLang").click(function() {
+		$(".lang_row:last").remove();
+		$("#linkedLang").attr("disabled", null);
+		self.onUpdate();
+
+	});
+	var langsel = this.getLangSelect().prependTo("#query_table")
+	.change(function() {
+		self.onUpdate();
+		self.invalidate($(this));
+	});
+
+	var pc = $.bbq.getState("parallel_corpora");
+	if(pc) {
 		var self = this;
-		$("#linkedLang").click(function() {
-			self.makeLangRow();
+		pc = pc.split(",").reverse();
+		langsel.val(pc.pop());
+		$.each(pc, function(i, item) {
+			self.makeLangRow(item);
 		});
-		$("#removeLang").click(function() {
-			$(".lang_row:last").remove();
-			$("#linkedLang").attr("disabled", null);
-			self.onUpdate();
+	}
+	langsel.change();
+}, {
 
-		});
-		var langsel = this.getLangSelect().prependTo("#query_table")
-		.change(function() {
-			self.onUpdate();
-			self.invalidate($(this));
-		});
-
-		var pc = $.bbq.getState("parallel_corpora");
-		if(pc) {
-			var self = this;
-			pc = pc.split(",").reverse();
-			langsel.val(pc.pop());
-			$.each(pc, function(i, item) {
-				self.makeLangRow(item);
-			});
-		}
-		langsel.change();
-	},
 
 	invalidate : function(select) {
 		var index = select.closest(".lang_row,#query_table").index();
@@ -208,13 +203,12 @@ var ParallelExtendedSearch = {
 		.invoke("toUpperCase")
 		.value().join("|");
 	}
+});
 
-
-
-};
-
-var ParallelAdvancedSearch = {
-	Extends : view.AdvancedSearch,
+var c2 = view.AdvancedSearch.prototype.constructor
+view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
+	c2.apply(this, arguments);
+}, {
 
 	updateCQP : function() {
 
@@ -232,10 +226,12 @@ var ParallelAdvancedSearch = {
 	    this.setCQP(query);
 	    return query;
 	}
-};
+});
 
-var ParallelKWICResults = {
-	Extends : view.KWICResults,
+c3 = view.KWICResults.prototype.constructor
+view.KWICResults = Subclass(view.KWICResults, function() {
+	c3.apply(this, arguments);
+}, {
 
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
@@ -253,9 +249,6 @@ var ParallelKWICResults = {
 		$("#sidebar").sidebar("updateContent", isLinked ? {} : sentence.structs, data, corpus);
 	},
 
-//	renderResult : function(target, data, sourceCQP, pDef) {
-//	},
-
 	renderKwicResult : function(data, sourceCQP) {
 		var self = this;
 		this.renderResult(".results_table.kwic", data, sourceCQP).done(function() {
@@ -268,25 +261,9 @@ var ParallelKWICResults = {
 		});
 	}
 
-};
+});
 
-var ParallelStatsProxy = {
-	Extends : model.StatsProxy,
-	makeRequest : function() {}
-};
-
-
-view.SimpleSearch = new Class(ParallelSimpleSearch);
-view.ExtendedSearch = new Class(ParallelExtendedSearch);
-view.AdvancedSearch = new Class(ParallelAdvancedSearch);
-view.KWICResults = new Class(ParallelKWICResults);
-model.StatsProxy = new Class(ParallelStatsProxy);
-delete ParallelSimpleSearch;
-delete ParallelExtendedSearch;
-delete ParallelAdvancedSearch;
-delete ParallelKWICResults;
-delete ParallelStatsProxy;
-
+model.StatsProxy.prototype.makeRequest = function(){};
 
 settings.primaryColor = "#FFF3D8";
 settings.primaryLight = "#FFF9EE";
@@ -362,7 +339,7 @@ settings.parallel_corpora.salt = {
 		id : "saltnld_swe",
 		lang : "swe",
 		parent : "salt",
-		title: "Svenska-nederlÃ¤ndska",
+		title: "Svenska-nederländska",
 		context: context.defaultAligned,
 		context : settings.defaultContext,
 		within: {
@@ -394,7 +371,7 @@ settings.parallel_corpora.salt = {
 		id : "saltnld_nld",
 		parent : "salt",
 		lang : "nld",
-		title: "Svenska-nederlÃ¤ndska",
+		title: "Svenska-nederländska",
 		context: context.defaultAligned,
 		within: {
 			"link": "meningspar"

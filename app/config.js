@@ -8,6 +8,58 @@ var settings = {};
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
+
+settings.modeConfig = [
+    {
+        localekey: "modern_texts",
+        mode: "default"
+    },
+    {
+        localekey: "parallel_texts",
+        mode: "parallel"
+    },
+    {
+        localekey: "old_swedish_texts",
+        mode: "old_swedish"
+    },
+    {
+        localekey: "fisk1800_texts",
+        mode: "fisk1800"
+    },
+    {
+        localekey: "faroese_texts",
+        mode: "faroe"
+    },
+    {
+        localekey: "siberian_texts",
+        mode: "siberian_german",
+        labOnly : true
+    },
+    {
+        localekey: "1800_texts",
+        mode: "1800",
+        labOnly : true
+    },
+    {
+        localekey: "lb_texts",
+        mode: "lb",
+        labOnly : true
+    },
+    {
+        localekey: "lawroom",
+        mode: "law",
+        labOnly : true
+    },
+    {
+        localekey: "digidaily",
+        mode: "digidaily",
+        labOnly : true
+    }
+];
+
+
+
+
 var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
 
 settings.primaryColor = "rgb(221, 233, 255)";
@@ -148,78 +200,78 @@ attrs.dephead = {
 	displayType : "hidden"
 };
 attrs.deprel = {
-		label : "deprel",
-		displayType : "select",
-		translationKey : "deprel_",
-		dataset : {
-			"++" : "++",
-			"+A" : "+A",
-			"+F" : "+F",
-			"AA" : "AA",
-			"AG" : "AG",
-			"AN" : "AN",
-			"AT" : "AT",
-			"CA" : "CA",
-			"DB" : "DB",
-			"DT" : "DT",
-			"EF" : "EF",
-			"EO" : "EO",
-			"ES" : "ES",
-			"ET" : "ET",
-			"FO" : "FO",
-			"FP" : "FP",
-			"FS" : "FS",
-			"FV" : "FV",
-			"I?" : "I?",
-			"IC" : "IC",
-			"IG" : "IG",
-			"IK" : "IK",
-			"IM" : "IM",
-			"IO" : "IO",
-			"IP" : "IP",
-			"IQ" : "IQ",
-			"IR" : "IR",
-			"IS" : "IS",
-			"IT" : "IT",
-			"IU" : "IU",
-			"IV" : "IV",
-			"JC" : "JC",
-			"JG" : "JG",
-			"JR" : "JR",
-			"JT" : "JT",
-			"KA" : "KA",
-			"MA" : "MA",
-			"MS" : "MS",
-			"NA" : "NA",
-			"OA" : "OA",
-			"OO" : "OO",
-			"OP" : "OP",
-			"PL" : "PL",
-			"PR" : "PR",
-			"PT" : "PT",
-			"RA" : "RA",
-			"SP" : "SP",
-			"SS" : "SS",
-			"TA" : "TA",
-			"TT" : "TT",
-			"UK" : "UK",
-			"VA" : "VA",
-			"VO" : "VO",
-			"VS" : "VS",
-			"XA" : "XA",
-			"XF" : "XF",
-			"XT" : "XT",
-			"XX" : "XX",
-			"YY" : "YY",
-			"CJ" : "CJ",
-			"HD" : "HD",
-			"IF" : "IF",
-			"PA" : "PA",
-			"UA" : "UA",
-			"VG" : "VG"
-		},
-		opts : settings.liteOptions
-	};
+	label : "deprel",
+	displayType : "select",
+	translationKey : "deprel_",
+	dataset : {
+		"++" : "++",
+		"+A" : "+A",
+		"+F" : "+F",
+		"AA" : "AA",
+		"AG" : "AG",
+		"AN" : "AN",
+		"AT" : "AT",
+		"CA" : "CA",
+		"DB" : "DB",
+		"DT" : "DT",
+		"EF" : "EF",
+		"EO" : "EO",
+		"ES" : "ES",
+		"ET" : "ET",
+		"FO" : "FO",
+		"FP" : "FP",
+		"FS" : "FS",
+		"FV" : "FV",
+		"I?" : "I?",
+		"IC" : "IC",
+		"IG" : "IG",
+		"IK" : "IK",
+		"IM" : "IM",
+		"IO" : "IO",
+		"IP" : "IP",
+		"IQ" : "IQ",
+		"IR" : "IR",
+		"IS" : "IS",
+		"IT" : "IT",
+		"IU" : "IU",
+		"IV" : "IV",
+		"JC" : "JC",
+		"JG" : "JG",
+		"JR" : "JR",
+		"JT" : "JT",
+		"KA" : "KA",
+		"MA" : "MA",
+		"MS" : "MS",
+		"NA" : "NA",
+		"OA" : "OA",
+		"OO" : "OO",
+		"OP" : "OP",
+		"PL" : "PL",
+		"PR" : "PR",
+		"PT" : "PT",
+		"RA" : "RA",
+		"SP" : "SP",
+		"SS" : "SS",
+		"TA" : "TA",
+		"TT" : "TT",
+		"UK" : "UK",
+		"VA" : "VA",
+		"VO" : "VO",
+		"VS" : "VS",
+		"XA" : "XA",
+		"XF" : "XF",
+		"XT" : "XT",
+		"XX" : "XX",
+		"YY" : "YY",
+		"CJ" : "CJ",
+		"HD" : "HD",
+		"IF" : "IF",
+		"PA" : "PA",
+		"UA" : "UA",
+		"VG" : "VG"
+	},
+	opts : settings.liteOptions
+};
 attrs.prefix = {
 	label : "prefix",
 	type : "set",

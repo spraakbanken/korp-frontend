@@ -726,6 +726,7 @@ table {
 }
 
 .lemgram_help {
+  text-transform: capitalize;
   white-space: nowrap;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -1523,11 +1524,11 @@ a {
   display: inline;
 }
 
-#mode_switch li:nth-child(5) ~ * {
-  display: none;
-}
+// #mode_switch li:nth-child(5) ~ * {
+//   display: none;
+// }
 
-.lab #mode_switch li {
+#mode_switch li {
   @include inline-block();
 }
 
@@ -1676,3 +1677,14 @@ a {
 
 }
 
+#deptree_popup {
+  overflow-y : hidden;
+  iframe {
+    border : none;
+    height : 400px;
+  }
+  .info:empty {
+    display : block;
+    height : 1.3em;
+  }
+}

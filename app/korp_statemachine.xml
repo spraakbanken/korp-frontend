@@ -141,7 +141,7 @@
 
                         <onexit>
                             <script>
-                                $("#simple_text").autocomplete("close");
+                                $("#simple_text.ui-autocomplete-input").autocomplete("close");
                             </script>
                         </onexit>
                     </state>

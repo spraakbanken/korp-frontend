@@ -10,10 +10,13 @@ Sidebar =
         ].reverse()
     }
     _init: () ->
+        dfd = $.Deferred()
+        # $("#deptree_popup iframe").data("load", dfd).load _.once ->
+        #     dfd.resolve(this.contentWindow)
 
 
 
-    updateContent: (sentenceData, wordData, corpus) ->
+    updateContent: (sentenceData, wordData, corpus, tokens) ->
         @element.html '<div id="selected_sentence" /><div id="selected_word" />'
         corpusObj = settings.corpora[corpus]
         $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
@@ -28,6 +31,32 @@ Sidebar =
 
         @element.localize()
         @applyEllipse()
+        @renderGraph(tokens)
+
+    renderGraph : (tokens) ->
+        outerW = $(window).width() - 80
+
+        $("<span class='link'>Visa träd</button>").localeKey("show_deptree").click( ->
+            info = $("<span class='info' />")
+            iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load ->
+
+                wnd = this.contentWindow
+                tokens = tokens
+                wnd.draw_deptree.call wnd, tokens, (msg) ->
+                    [type, val] = _.head _.pairs msg
+                    info.empty().append $("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey("#{type}_#{val}")
+
+            $("#deptree_popup").empty().append(info, iframe).dialog(
+                height : 300
+                width : outerW
+
+            ).parent().find(".ui-dialog-title").localeKey("dep_tree")
+
+        ).appendTo(@element)
+
+
+
+
 
     renderContent: (wordData, corpus_attrs) ->
         pairs = _.pairs(wordData)
@@ -98,11 +127,11 @@ Sidebar =
 
         else if key == "msd"
             return output.append """<span class='msd'>#{value}</span>
-                                                                <a href='markup/msdtags.html' target='_blank'>
-                                                                    <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
-                                                                </a>
-                                                            </span>
-                                                        """
+                                        <a href='markup/msdtags.html' target='_blank'>
+                                            <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
+                                        </a>
+                                    </span>
+                                """
         else if attrs.pattern
             return output.append _.template(attrs.pattern, {key : key, val : value})
 
@@ -239,8 +268,10 @@ ModeSelector =
     _create: ->
         self = this
         $.each @options.modes, (i, item) ->
-            $("<a href='javascript:'>")
-            .localeKey(item.localekey).data("mode", item.mode).appendTo self.element
+            a = $("<a href='javascript:'>")
+            .localeKey(item.localekey).data("mode", item.mode)
+            if not item.labOnly or (isLab and item.labOnly)
+                a.appendTo self.element
 
         @_super()
 
@@ -329,7 +360,7 @@ $.fn.korp_autocomplete = (options) ->
                     selector.preloader "hide"
 
             ).fail ->
-                c.log "sblex fail", arguments_
+                c.log "sblex fail", arguments
                 selector.preloader "hide"
 
             selector.data "promise", promise
@@ -386,11 +417,28 @@ KorpTabs =
         @add url, "KWIC"
         li = @element.find("li:last")
         @redrawTabs()
+        newDiv = @element.children().last()
+        # angular.injector(['ng']).invoke ["$rootScope", "$compile", ($rootScope, $compile) ->
+        @element.injector().invoke ["$rootScope", "$compile", ($rootScope, $compile) ->
+            c.log "invoke", newDiv
+            cnf = $compile newDiv
+            cnf($rootScope)
+        ]
+
         instance = new klass(li, url)
         li.data "instance", instance
         @n++
         li.find("a").trigger "mouseup"
-        instance
+
+
+
+
+        # root = $("body").scope()
+        # newScope = root.$new()
+
+
+
+        return instance
 
     enableAll: ->
         $.each ".custom_tab", (i, elem) =>
@@ -766,7 +814,7 @@ ExtendedToken =
                             }[op]
 
                     stringify = (value) ->
-                        return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(getOp(value), [obj.case_sens]));
+                        return $.format('%s%s %s "%s%s%s"%s', [prefix, type].concat(getOp(value), [obj.case_sens]))
                     operator = (if obj.data.type is "set" then "contains" else "=")
                     not_operator = (if obj.data.type is "set" then "not contains" else "!=")
                     prefix = (if obj.data.isStructAttr then "_." else "")
@@ -786,6 +834,8 @@ ExtendedToken =
                 inner_query.push argFunc(obj.value, obj.opt or settings.defaultOptions)
 
         ), (a, b) -> # sort function for key order
+
+            # c.log ""
             return 1 if args[a][0].data.isStructAttr
             return -1 if args[b][0].data.isStructAttr
             1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio))

@@ -5,8 +5,11 @@
     options: {
       displayOrder: ["pos", "posset", "lemma", "lex", "saldo", "variants"].reverse()
     },
-    _init: function() {},
-    updateContent: function(sentenceData, wordData, corpus) {
+    _init: function() {
+      var dfd;
+      return dfd = $.Deferred();
+    },
+    updateContent: function(sentenceData, wordData, corpus, tokens) {
       var corpusObj;
       this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
       corpusObj = settings.corpora[corpus];
@@ -20,7 +23,30 @@
         this.renderContent(sentenceData, corpusObj.struct_attributes).appendTo("#selected_sentence");
       }
       this.element.localize();
-      return this.applyEllipse();
+      this.applyEllipse();
+      return this.renderGraph(tokens);
+    },
+    renderGraph: function(tokens) {
+      var outerW;
+      outerW = $(window).width() - 80;
+      return $("<span class='link'>Visa träd</button>").localeKey("show_deptree").click(function() {
+        var iframe, info;
+        info = $("<span class='info' />");
+        iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load(function() {
+          var wnd;
+          wnd = this.contentWindow;
+          tokens = tokens;
+          return wnd.draw_deptree.call(wnd, tokens, function(msg) {
+            var type, val, _ref;
+            _ref = _.head(_.pairs(msg)), type = _ref[0], val = _ref[1];
+            return info.empty().append($("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey("" + type + "_" + val));
+          });
+        });
+        return $("#deptree_popup").empty().append(info, iframe).dialog({
+          height: 300,
+          width: outerW
+        }).parent().find(".ui-dialog-title").localeKey("dep_tree");
+      }).appendTo(this.element);
     },
     renderContent: function(wordData, corpus_attrs) {
       var items, key, order, pairs, value;
@@ -286,7 +312,11 @@
       var self;
       self = this;
       $.each(this.options.modes, function(i, item) {
-        return $("<a href='javascript:'>").localeKey(item.localekey).data("mode", item.mode).appendTo(self.element);
+        var a;
+        a = $("<a href='javascript:'>").localeKey(item.localekey).data("mode", item.mode);
+        if (!item.labOnly || (isLab && item.labOnly)) {
+          return a.appendTo(self.element);
+        }
       });
       return this._super();
     }
@@ -389,7 +419,7 @@
             return selector.preloader("hide");
           });
         }).fail(function() {
-          c.log("sblex fail", arguments_);
+          c.log("sblex fail", arguments);
           return selector.preloader("hide");
         });
         return selector.data("promise", promise);
@@ -445,11 +475,20 @@
       return $(".custom_tab:first").css("margin-left", 8);
     },
     addTab: function(klass) {
-      var instance, li, url;
+      var instance, li, newDiv, url;
       url = this.urlPattern + this.n;
       this.add(url, "KWIC");
       li = this.element.find("li:last");
       this.redrawTabs();
+      newDiv = this.element.children().last();
+      this.element.injector().invoke([
+        "$rootScope", "$compile", function($rootScope, $compile) {
+          var cnf;
+          c.log("invoke", newDiv);
+          cnf = $compile(newDiv);
+          return cnf($rootScope);
+        }
+      ]);
       instance = new klass(li, url);
       li.data("instance", instance);
       this.n++;
