@@ -353,7 +353,7 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "bullen", "finsktidskrift", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+	contents : ["astranova", "bullen", "finsktidskrift", "forumfeot", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.fisk.youthnovels = {
@@ -664,6 +664,29 @@ settings.corpora.finsktidskrift = {
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.forumfeot = {
+	id : "forumfeot",
+	title : "Forum för ekonomi och teknik 2007–2012",
+	description : "<a href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : {label : "date"}
 	}
 };
 
