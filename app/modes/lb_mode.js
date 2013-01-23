@@ -10,7 +10,7 @@ settings.corporafolders = {};
 settings.corpora.lb = {
 	id : "lb",
 	title : "Litteraturbanken",
-	description : '',
+	description : 'Samtliga etexter och sökbara faksimiler från <a href="http://litteraturbanken.se/">Litteraturbanken.se</a>.',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {
@@ -29,6 +29,8 @@ settings.corpora.lb = {
 		"text_title" : {label : "title"},
 		"text_author" : {label : "author"},
 		"text_url" : {label : "verk", type : "url"},
+		"text_source" : {label : "source"},
+		"text_date" : {label : "imprintyear"},
 		"page_n" : {label : "page"},
 		"page_url" : {label : "page", type : "url"}
 	}

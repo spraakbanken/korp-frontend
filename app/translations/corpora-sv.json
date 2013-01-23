@@ -39,7 +39,9 @@
 	"description" : "beskrivning",
 	"tweets" : "tweets",
 	"website" : "webbsida",
-    
+
+    "imprintyear" : "tryckår",
+	
     "text_year" : "år",
     "text_party" : "parti",
     "date" : "datum",

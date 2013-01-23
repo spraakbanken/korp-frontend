@@ -23,6 +23,10 @@ settings.modeConfig = [
         mode: "old_swedish"
     },
     {
+        localekey: "lb_texts",
+        mode: "lb"
+    },
+    {
         localekey: "fisk1800_texts",
         mode: "fisk1800"
     },
@@ -38,11 +42,6 @@ settings.modeConfig = [
     {
         localekey: "1800_texts",
         mode: "1800",
-        labOnly : true
-    },
-    {
-        localekey: "lb_texts",
-        mode: "lb",
         labOnly : true
     },
     {
