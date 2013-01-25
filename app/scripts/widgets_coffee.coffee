@@ -690,22 +690,19 @@ ExtendedToken =
                         $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder()
 
                     "sw-forms": true
-                ).change((event) ->
-                    c.log "value null"
-                    $(this).attr("placeholder", null).data("value", null).placeholder()
                 ).blur(->
                     input = this
                     setTimeout (->
                         c.log "blur"
 
-                        #if($(this).autocomplete("widget").is(":visible")) return;
-                        if not util.isLemgramId($(input).val()) or $(input).data("value")?
+                        if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
                             $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
+                        else
+                            $(input).removeClass("invalid_input")
                         self._trigger "change"
                     ), 100
                 )
             when "date_interval"
-                c.log _.pluck(settings.corpusListing.selected, "time")
                 all_years = _.chain(settings.corpusListing.selected)
                             .pluck("time")
                             .map(_.pairs)
@@ -713,7 +710,7 @@ ExtendedToken =
                             .filter((tuple) ->
                                 tuple[0] and tuple[1]
                             ).map(_.compose(Number, _.head)).value()
-                c.log "all", all_years
+                # c.log "all", all_years
                 start = Math.min(all_years...)
                 end = Math.max(all_years...)
                 arg_value = $("<div>")
@@ -758,12 +755,12 @@ ExtendedToken =
                 $("<span class='ui-icon ui-icon-info' />").click(->
                     w = $("html").width() * 0.6
                     h = $("html").height()
-                    $("#msd_popup").fadeIn("fast").dialog
+                    $("#msd_popup").fadeIn("fast").dialog(
                         width: w
                         height: h
                         modal: true
+                    ).parent().find(".ui-dialog-title").localeKey("msd_long")
 
-                    $("#ui-dialog-title-msd_popup").localeKey "msd_long"
                     $(".ui-widget-overlay").one "click", (evt) ->
                         c.log "body click"
                         $("#msd_popup").dialog "close"
@@ -800,7 +797,7 @@ ExtendedToken =
 
 
         inner_query = []
-        $.sortedEach args, ((type, valueArray) ->
+        $.each args, (type, valueArray) ->
             $.each valueArray, (i, obj) ->
                 defaultArgsFunc = (s, op) ->
                     getOp = (value) ->
@@ -833,14 +830,7 @@ ExtendedToken =
                 argFunc = settings.getTransformFunc(type, obj.value, obj.opt) or defaultArgsFunc
                 inner_query.push argFunc(obj.value, obj.opt or settings.defaultOptions)
 
-        ), (a, b) -> # sort function for key order
-
-            # c.log ""
-            return 1 if args[a][0].data.isStructAttr
-            return -1 if args[b][0].data.isStructAttr
-            1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio))
-
-        c.log "inner_query", inner_query, expand
+        # c.log "inner_query", inner_query, expand
         if inner_query.length > 1
             output = "(#{inner_query.join(" | ")})"
         else
@@ -853,6 +843,12 @@ ExtendedToken =
         boundStr = (if bound.length then boundprefix + bound.join(" & ") else "")
         output + boundStr
 
+    sortAnd : (andBlock1, andBlock2) ->
+        min1 = _.min _.map $(andBlock1).find(".arg_type"), (item) -> _.indexOf settings.cqp_prio, $(item).val()
+        min2 = _.min _.map $(andBlock2).find(".arg_type"), (item) -> _.indexOf settings.cqp_prio, $(item).val()
+        return min2 - min1
+
+
     getCQP: (strict) ->
         minOfContainer = (or_container) ->
             types = _.invoke(_.map($(".arg_type", or_container).get(), $), "val")
@@ -863,7 +859,10 @@ ExtendedToken =
             # which or blocks must be expanded?
             totalMin = _.map($(".or_container").get(), minOfContainer)
             min = Math.min.apply(null, totalMin)
-        output = @element.find(".query_arg").map((item) ->
+
+        andList = @element.find(".query_arg").sort(@sortAnd)
+
+        output = $(andList).map((item) ->
             expand = false
             if not strict and currentMode is "law"
                 or_min = minOfContainer(this)

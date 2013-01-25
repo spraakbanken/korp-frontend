@@ -787,27 +787,24 @@
               return $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
             },
             "sw-forms": true
-          }).change(function(event) {
-            c.log("value null");
-            return $(this).attr("placeholder", null).data("value", null).placeholder();
           }).blur(function() {
             var input;
             input = this;
             return setTimeout((function() {
               c.log("blur");
-              if (!util.isLemgramId($(input).val()) || ($(input).data("value") != null)) {
+              if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
                 $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
+              } else {
+                $(input).removeClass("invalid_input");
               }
               return self._trigger("change");
             }), 100);
           });
           break;
         case "date_interval":
-          c.log(_.pluck(settings.corpusListing.selected, "time"));
           all_years = _.chain(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
             return tuple[0] && tuple[1];
           }).map(_.compose(Number, _.head)).value();
-          c.log("all", all_years);
           start = Math.min.apply(Math, all_years);
           end = Math.max.apply(Math, all_years);
           arg_value = $("<div>");
@@ -863,8 +860,7 @@
               width: w,
               height: h,
               modal: true
-            });
-            $("#ui-dialog-title-msd_popup").localeKey("msd_long");
+            }).parent().find(".ui-dialog-title").localeKey("msd_long");
             return $(".ui-widget-overlay").one("click", function(evt) {
               c.log("body click");
               return $("#msd_popup").dialog("close");
@@ -908,7 +904,7 @@
         });
       });
       inner_query = [];
-      $.sortedEach(args, (function(type, valueArray) {
+      $.each(args, function(type, valueArray) {
         return $.each(valueArray, function(i, obj) {
           var argFunc, defaultArgsFunc;
           defaultArgsFunc = function(s, op) {
@@ -947,16 +943,7 @@
           argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc;
           return inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
         });
-      }), function(a, b) {
-        if (args[a][0].data.isStructAttr) {
-          return 1;
-        }
-        if (args[b][0].data.isStructAttr) {
-          return -1;
-        }
-        return 1 - ($.inArray(a, settings.cqp_prio) - $.inArray(b, settings.cqp_prio));
       });
-      c.log("inner_query", inner_query, expand);
       if (inner_query.length > 1) {
         output = "(" + (inner_query.join(" | ")) + ")";
       } else {
@@ -976,8 +963,18 @@
       boundStr = (bound.length ? boundprefix + bound.join(" & ") : "");
       return output + boundStr;
     },
+    sortAnd: function(andBlock1, andBlock2) {
+      var min1, min2;
+      min1 = _.min(_.map($(andBlock1).find(".arg_type"), function(item) {
+        return _.indexOf(settings.cqp_prio, $(item).val());
+      }));
+      min2 = _.min(_.map($(andBlock2).find(".arg_type"), function(item) {
+        return _.indexOf(settings.cqp_prio, $(item).val());
+      }));
+      return min2 - min1;
+    },
     getCQP: function(strict) {
-      var min, minOfContainer, min_max, output, self, suffix, totalMin;
+      var andList, min, minOfContainer, min_max, output, self, suffix, totalMin;
       minOfContainer = function(or_container) {
         var types;
         types = _.invoke(_.map($(".arg_type", or_container).get(), $), "val");
@@ -988,7 +985,8 @@
         totalMin = _.map($(".or_container").get(), minOfContainer);
         min = Math.min.apply(null, totalMin);
       }
-      output = this.element.find(".query_arg").map(function(item) {
+      andList = this.element.find(".query_arg").sort(this.sortAnd);
+      output = $(andList).map(function(item) {
         var expand, or_min;
         expand = false;
         if (!strict && currentMode === "law") {

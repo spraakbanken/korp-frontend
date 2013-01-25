@@ -2,7 +2,7 @@
 ================================
 
 Created by Steven Bower
-TurnWheel Designs 2009-2011
+TurnWheel Designs (2009-2013)
 
 Concept based on "IE6 Upgrade Warning" library.
 
@@ -37,9 +37,10 @@ Default Options:
 			 */
 		},
 		display: [], // What browsers to display and their order (default set below)
+		browserShow: true, // Should the browser options be shown?
 		browserInfo: { // Settings for which browsers to display
 			firefox: {
-				text: 'Firefox 8', // Text below the icon
+				text: 'Mozilla Firefox', // Text below the icon
 				url: 'http://www.mozilla.com/firefox/' // URL For icon/text link
 			},
 			safari: {
@@ -47,11 +48,11 @@ Default Options:
 				url: 'http://www.apple.com/safari/download/'
 			},
 			opera: {
-				text: 'Opera 11',
+				text: 'Opera 12',
 				url: 'http://www.opera.com/download/'
 			},
 			chrome: {
-				text: 'Chrome 15',
+				text: 'Google Chrome',
 				url: 'http://www.google.com/chrome/'
 			},
 			msie: {
@@ -114,3 +115,7 @@ Run On load (Default Options):
 	$(function() {
 		$.reject();
 	});
+
+Licensing:
+-----------------
+This library is dual licensed under the MIT and GPLv2 licenses.

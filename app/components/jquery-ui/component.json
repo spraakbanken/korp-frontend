@@ -5,6 +5,7 @@
   "dependencies": {
     "jquery": "~1.8.1"
   },
+  "gitHead": "30701ef207fa3a71ab6ebfee6602759801c689f6",
   "_id": "jquery-ui@1.9.2",
   "readme": "ERROR: No README.md file found!",
   "description": "ERROR: No README.md file found!",
