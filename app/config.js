@@ -3070,6 +3070,41 @@ settings.corpora.talbanken = {
 	}
 };
 
+settings.corpora.tisus = {
+	id : "tisus",
+	title : "TISUS-korpus",
+	description : "",
+	limited_access : true,
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_id : {label : "id"},
+		text_age : {label : "age"},
+		text_gender : {label : "gender"},
+		text_residencetime : {label : "residencetime"},
+		text_education : {label : "education"},
+		text_l1 : {label : "tisus_l1"},
+		text_lf1 : {label : "tisus_lf1"},
+		text_lf2 : {label : "tisus_lf2"},
+		text_sum : {label : "sum"},
+		text_written : {label : "tisus_written"},
+		text_oral : {label : "tisus_oral"},
+		text_finalgrade : {label : "finalgrade"}
+	}
+};
+
 settings.corpora.twitter = {
 	id : "twitter",
 	title : "Twittermix",
@@ -3121,67 +3156,66 @@ settings.corpora.twitter = {
 
 if(isLab)
 settings.corpora.gslc = {
-		id : "gslc",
-		title : "Gothenburg Dialogue Corpus (GDC)",
-		description : '',
-		limited_access : true,
-		within : settings.defaultWithin,
-		context : settings.defaultContext,
-		attributes : {
-			pos : attrs.pos,
-			msd : attrs.msd,
-			lemma : attrs.baseform,
-			lex : attrs.lemgram,
-			saldo : attrs.saldo,
-			dephead : attrs.dephead,
-			deprel : attrs.deprel,
-			ref : attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-			"text_activity1" : {label : "activity1"},
-			"text_activity2" : {label : "activity2"},
-			"text_activity3" : {label : "activity3"},
-			"text_title" : {label : "title"},
-			"text_duration" : {label : "duration"},
-			"text_project" : {label : "project"},
-			"line_speaker" : {label : "speaker"},
-			"text_date" : {label : "date"},
-			"section_name" : {label : "section"}
-			// TODO: this gives some error, fix this.
-			//"meta_comment" : {label : "comment", type : "set"}
-		}
-	};
-
+	id : "gslc",
+	title : "Gothenburg Dialogue Corpus (GDC)",
+	description : 'För åtkomst kontakta <a href="mailto:cajsa.ottesjo@gu.se">Cajsa Ottesjö</a>.',
+	limited_access : true,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		"text_activity1" : {label : "activity1"},
+		"text_activity2" : {label : "activity2"},
+		"text_activity3" : {label : "activity3"},
+		"text_title" : {label : "title"},
+		"text_duration" : {label : "duration"},
+		"text_project" : {label : "project"},
+		"line_speaker" : {label : "speaker"},
+		"text_date" : {label : "date"},
+		"section_name" : {label : "section"}
+		// TODO: this gives some error, fix this.
+		//"meta_comment" : {label : "comment", type : "set"}
+	}
+};
 if(isLab)
 settings.corpora.soexempel = {
-		id : "soexempel",
-		title : "Språkprov SO 2009",
-		description : '',
-		limited_access : true,
-		within : settings.spWithin,
-		context : settings.spContext,
-		attributes : {
-			pos : attrs.pos,
-			msd : attrs.msd,
-			lemma : attrs.baseform,
-			lex : attrs.lemgram,
-			saldo : attrs.saldo,
-			dephead : attrs.dephead,
-			deprel : attrs.deprel,
-			ref : attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-			"text_date" : {label : "year"},
-			"entry_word" : {label : "entryword"},
-			"entry_entryno" : {label : "entryno"},
-			"entry_sense1" : {label : "sense1"},
-			"entry_sense2" : {label : "sense2"}
-		}
-	};
+	id : "soexempel",
+	title : "Språkprov SO 2009",
+	description : 'För åtkomst kontakta <a href="mailto:emma.skoldberg@svenska.gu.se">Emma Sköldberg</a>.',
+	limited_access : true,
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		"text_date" : {label : "year"},
+		"entry_word" : {label : "entryword"},
+		"entry_entryno" : {label : "entryno"},
+		"entry_sense1" : {label : "sense1"},
+		"entry_sense2" : {label : "sense2"}
+	}
+};
 
 
 /*

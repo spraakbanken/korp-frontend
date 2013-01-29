@@ -41,8 +41,20 @@
 	"tweets" : "tweets",
 	"website" : "website",
 	
+	"id" : "id",
+	
 	"imprintyear" : "imprint year",
 	"pagelink" : "page link",
+	
+    "tisus_l1" : "native language",
+    "tisus_lf1" : "reading comprehension, part 1",
+    "tisus_lf2" : "reading comprehension, part 2",
+    "tisus_written" : "written proficiency",
+    "tisus_oral" : "oral proficiency",
+    "residencetime" : "residence time",
+    "education" : "education",
+    "finalgrade" : "final grade",
+    "sum" : "sum",
     
     "text_year" : "year",
     "text_party" : "party",

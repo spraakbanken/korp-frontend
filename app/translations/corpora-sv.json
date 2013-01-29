@@ -39,9 +39,21 @@
 	"description" : "beskrivning",
 	"tweets" : "tweets",
 	"website" : "webbsida",
+	
+	"id" : "id",
 
     "imprintyear" : "tryckår",
     "pagelink" : "sidlänk",
+    
+    "tisus_l1" : "modersmål",
+    "tisus_lf1" : "läsförståelse, del 1",
+    "tisus_lf2" : "läsförståelse, del 2",
+    "tisus_written" : "skriftlig språkfärdighet",
+    "tisus_oral" : "muntlig språkfärdighet",
+    "residencetime" : "uppehållstid (månader)",
+    "education" : "utbildning",
+    "finalgrade" : "slutgiltigt betyg",
+    "sum" : "summa",
 	
     "text_year" : "år",
     "text_party" : "parti",
