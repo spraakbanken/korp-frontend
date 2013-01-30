@@ -2775,8 +2775,8 @@ settings.corpora.borgabladet = {
 	id : "borgabladet",
 	title : "Borgåbladet 2012–2013",
 	description : "<a href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2820,8 +2820,8 @@ settings.corpora.vastranyland = {
 	id : "vastranyland",
 	title : "Västra Nyland 2012–2013",
 	description : "<a href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -2843,8 +2843,8 @@ settings.corpora.ostranyland = {
 	id : "ostranyland",
 	title : "Östra Nyland 2012–2013",
 	description : "<a href=\"http://www.ostnyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
