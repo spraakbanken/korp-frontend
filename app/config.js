@@ -359,7 +359,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["sydosterbotten2012", "abounderrattelser2012", "at2012"]
+	contents : ["borgabladet", "sydosterbotten2012", "abounderrattelser2012", "at2012"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -2768,6 +2768,29 @@ settings.corpora.pargaskungorelser2012 = {
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.borgabladet = {
+	id : "borgabladet",
+	title : "Borgåbladet 2012–2013",
+	description : "<a href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+    	text_date : {label : "date"}
 	}
 };
 
