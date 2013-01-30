@@ -359,7 +359,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["borgabladet", "sydosterbotten2012", "abounderrattelser2012", "at2012"]
+	contents : ["borgabladet", "sydosterbotten2012", "vastranyland", "abounderrattelser2012", "at2012", "ostranyland"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -2813,6 +2813,52 @@ settings.corpora.sydosterbotten2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.vastranyland = {
+	id : "vastranyland",
+	title : "Västra Nyland 2012–2013",
+	description : "<a href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+    	text_date : {label : "date"}
+	}
+};
+
+settings.corpora.ostranyland = {
+	id : "ostranyland",
+	title : "Östra Nyland 2012–2013",
+	description : "<a href=\"http://www.ostnyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+    	text_date : {label : "date"}
 	}
 };
 
