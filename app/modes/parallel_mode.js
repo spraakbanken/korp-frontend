@@ -395,6 +395,7 @@ settings.parallel_corpora.espc = {
 		id : "espc_swe",
 		lang : "swe",
 		parent : "espc",
+		limited_access : true,
 		title: "ESPC svenska-engelska",
 		context: context.defaultAligned,
 		context : settings.defaultContext,
@@ -423,6 +424,7 @@ settings.parallel_corpora.espc = {
 		id : "espc_eng",
 		lang : "eng",
 		parent : "espc",
+		limited_access : true,
 		title: "ESPC svenska-engelska",
 		context: context.defaultAligned,
 		within: {
