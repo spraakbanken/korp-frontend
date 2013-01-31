@@ -903,7 +903,7 @@ table {
   color: #666;
   font-size: 11px;
   display : block;
-  margin : 0 -100px;
+  margin : 0 -150px;
 }
 
 .not_corpus_info {
@@ -916,10 +916,9 @@ table {
 }
 
 .reading_mode .corpus_title {
-  margin-left: -200px;
-  margin-right: 0;
-
+  margin : 0;
   font-size: 3em;
+  text-align : left;
 }
 
 .reading_mode .no_context .corpus_title {
@@ -1149,8 +1148,14 @@ a {
   color: #999;
   font-style: italic;
   position: relative;
-  td {
-    /*text-align : center;*/
+  .lnk {
+    // text-align : center;
+    // display : block;
+    // position : relative;
+  }
+  .left, .match, .right {
+    display : none;
+
   }
 }
 

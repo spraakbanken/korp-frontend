@@ -74,7 +74,7 @@
 		<!-- build:js scripts/scripts.js -->
 
 		<script type="text/javascript" src="scripts/util.js"></script>
-		<script type="text/javascript" src="scripts/bin/util.js"></script>
+		<script type="text/javascript" src="scripts/bin/util_coffee.js"></script>
 		<script type="text/javascript" src="scripts/bin/widgets.js"></script>
 		<script type="text/javascript" src="scripts/selector_widget.js"></script>
 		<script type="text/javascript" src="scripts/pie-widget.js"></script>
@@ -231,14 +231,19 @@
 
 								<div class="table_scrollarea">
 									<table class="results_table kwic" cellspacing="0">
-										<tr class="sentence" ng-repeat="sentence in kwic" ng-class-even="'even'" ng-class-odd="'odd'"
-											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
+
+										<tr class="sentence" ng-repeat="sentence in kwic" style="background-color: {{sentence._color}}"
+											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
+
 											<td class="empty_td"></td>
 											<td colspan="0" class="corpus_title">
 												{{sentence.newCorpus}}
 												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
 											</td>
 
+											<td colspan="3" ng-show="sentence.isLinked" class="lnk">
+												<span kwic-word ng-repeat="wd in sentence.tokens"></span>
+											</td>
 											<td class="left" ng-show="!sentence.newCorpus">
 												<span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
 											</td>
@@ -249,13 +254,20 @@
 												<span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
 											</td>
 
+
+
 										</tr>
+										<!-- <tr class="linked_sentence" ng-show="sentence.aligned">
+											<td colspan="3">
+												<span kwic-word ng-repeat="wd in sentence.aligned"></span>
+											</td>
+										</tr> -->
 									</table>
 
 									<div class="results_table reading">
 
-										<p class="sentence" ng-repeat="sentence in contextKwic" ng-class-even="'even'" ng-class-odd="'odd'"
-											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
+										<p class="sentence" ng-repeat="sentence in contextKwic" style="background-color: {{sentence._color}}"
+											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
 											<span colspan="0" class="corpus_title">
 												{{sentence.newCorpus}}
 												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>

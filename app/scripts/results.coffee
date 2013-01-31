@@ -115,17 +115,16 @@ class view.KWICResults extends BaseResults
         return unless @selectionManager.hasSelected()
         switch event.which
             when 38 #up
-                @selectUp()
-                false
+                next = @selectUp()
             when 39 # right
-                @selectNext()
-                false
+                next = @selectNext()
             when 37 #left
-                @selectPrev()
-                false
+                next = @selectPrev()
             when 40 # down
-                @selectDown()
-                false
+                next = @selectDown()
+        @scrollToShowWord($(next)) if next
+        return false
+
 
     getPageInterval: (page) ->
         items_per_page = Number(@optionWidget.find(".num_hits").val())
@@ -168,7 +167,13 @@ class view.KWICResults extends BaseResults
                 $scope.setContextData(data)
             else
                 $scope.setKwicData(data)
+                if currentMode == "parallel"
+                    for linked in $(".linked_sentence")
+                        mainrow = $(linked).prev()
+                        offset = mainrow.find(".left .word:first").position().left - 25
+                        $(linked).find(".lnk").css("padding-left", Math.round(offset))
                 # $scope.kwic = data.kwic
+
 
 
         @hidePreloader()
@@ -353,8 +358,10 @@ class view.KWICResults extends BaseResults
             next = @getCurrentRow().get(i + 1)
             return unless next?
             $(next).click()
+
         else
-            @$result.find(".token_selected").next().click()
+            next = @$result.find(".token_selected").next().click()
+        return next
 
     selectPrev: ->
         unless @$result.is(".reading_mode")
@@ -363,7 +370,8 @@ class view.KWICResults extends BaseResults
             prev = @getCurrentRow().get(i - 1)
             $(prev).click()
         else
-            @$result.find(".token_selected").prev().click()
+            prev = @$result.find(".token_selected").prev().click()
+        return prev
 
     selectUp: ->
         current = @selectionManager.selected
@@ -373,7 +381,9 @@ class view.KWICResults extends BaseResults
         else
             searchwords = current.prevAll(".word").get().concat(current.closest(".sentence").prev().find(".word").get().reverse())
             def = current.parent().prev().find(".word:last")
-            @getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
+            prevMatch = @getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
+
+        return prevMatch
 
     selectDown: ->
         current = @selectionManager.selected
@@ -383,7 +393,8 @@ class view.KWICResults extends BaseResults
         else
             searchwords = current.nextAll(".word").add(current.closest(".sentence").next().find(".word"))
             def = current.parent().next().find(".word:first")
-            @getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
+            nextMatch = @getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
+        return nextMatch
 
     getFirstAtCoor: (xCoor, wds, default_word) ->
         output = null

@@ -41,13 +41,7 @@ deferred_domReady = $.Deferred((dfd) ->
 
 ).promise()
 
-#  var deferred_mode = $.Deferred();
-#  var mode = $.deparam.querystring().mode;
-#  if(mode != null && mode != "default") {
-#      deferred_mode = $.getScript($.format("modes/%s_mode.js", mode));
-#  } else {
-#      deferred_mode.resolve();
-#  }
+
 chained = deferred_mode.pipe(->
     $.ajax
         url: settings.cgi_script
@@ -509,6 +503,7 @@ initTimeGraph = ->
 
         $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
     )
+
     $.when(time_comb, time).then (combdata, timedata) ->
         getValByDate = (date, struct) ->
             output = null

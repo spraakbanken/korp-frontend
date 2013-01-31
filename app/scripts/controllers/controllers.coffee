@@ -9,15 +9,16 @@ korpApp.controller "kwicCtrl", ($scope) ->
     massageData = (sentenceArray) ->
         currentStruct = []
         prevCorpus = ""
-        return _.flatten _.map sentenceArray, (sentence) ->
+        output = []
+        for sentence, i in sentenceArray
             [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
             {start, end} = sentence.match
 
-            for i in [0...sentence.tokens.length]
-                wd = sentence.tokens[i]
-                if start <= i < end
+            for j in [0...sentence.tokens.length]
+                wd = sentence.tokens[j]
+                if start <= j < end
                     _.extend wd, {_match : true}
-                if matchSentenceStart < i < matchSentenceEnd
+                if matchSentenceStart < j < matchSentenceEnd
                     _.extend wd, {_matchSentence : true}
                 if wd.word in punctArray
                     _.extend wd, {_punct : true}
@@ -30,18 +31,37 @@ korpApp.controller "kwicCtrl", ($scope) ->
 
 
                 _.extend wd, {_struct : currentStruct} if currentStruct.length
-            if prevCorpus != sentence.corpus
-                corpus = settings.corpora[sentence.corpus.toLowerCase()]
-                corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()]  if currentMode is "parallel"
-                    # td.addClass "no_context"
-                    # title.append $("<span class='corpus_title_warn' rel='localize[no_context_support]'></span>")
-                newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
-                prevCorpus = sentence.corpus
-                return [newSent, sentence]
 
-                # _.extend sentence, {_newCorpus : sentence.corpus}
+            if(currentMode == "parallel")
+                sentence.corpus = sentence.corpus.split("|")[0].toLowerCase()
+            else
+                sentence.corpus = sentence.corpus.toLowerCase()
+
+            if prevCorpus != sentence.corpus
+                corpus = settings.corpora[sentence.corpus]
+                newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
+                output.push newSent
+
+            if i % 2 == 0
+                sentence._color = settings.primaryColor
+            else
+                sentence._color = settings.primaryLight
+
+
+            output.push(sentence)
+            if sentence.aligned
+                [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
+                output.push
+                    tokens : tokens
+                    isLinked : true
+                    corpus : corpus_aligned
+                    _color : sentence._color
+
+
             prevCorpus = sentence.corpus
-            return sentence
+
+            # return sentence
+        return output
 
     findMatchSentence = (sentence) ->
         span = []
@@ -90,10 +110,13 @@ korpApp.controller "kwicCtrl", ($scope) ->
         sentence.tokens.slice from, len
 
     s.wordClick = (event, obj, sent) ->
-        c.log "click", obj, event
+        # c.log "click", obj, event
         event.stopPropagation()
         word = $(event.target)
         $.sm.send("word.select")
+
+
+
         $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
         if not obj.dephead?

@@ -1,9 +1,9 @@
 var hp_corpusChooser = {
-	
+
 	options: {
 		template : ''
 	},
-	
+
 	_create: function() {
 		this._transform();
 		var self = this;
@@ -19,7 +19,7 @@ var hp_corpusChooser = {
 		});
 
 		$('.buttonlink, ul#icons li').hover(
-			function() { $(this).addClass('ui-state-hover'); }, 
+			function() { $(this).addClass('ui-state-hover'); },
 			function() { $(this).removeClass('ui-state-hover'); }
 		);
 
@@ -50,7 +50,7 @@ var hp_corpusChooser = {
 		var allboxes = $(".checkbox");
 		allboxes.each(function() {
 			/* First clear all items */
-			hp_this.setStatus($(this),"unchecked");	
+			hp_this.setStatus($(this),"unchecked");
 		});
 //		var realboxes = $(".boxdiv label .checkbox");
 		var realboxes = $(".boxdiv");
@@ -82,7 +82,7 @@ var hp_corpusChooser = {
 					} else if( $(this).hasClass("unchecked") ) {
 						numbOfUnchecked++;
 					}
-				}	
+				}
 			});
 			var theBox = element.children('label').children('.checkbox');
 			if (numbOfUnchecked > 0 && numbOfChecked > 0) {
@@ -91,8 +91,8 @@ var hp_corpusChooser = {
 				this.setStatus(theBox,"unchecked"); // Unchecked
 			} else if (numbOfChecked > 0 && numbOfUnchecked == 0) {
 				this.setStatus(theBox,"checked"); // Checked
-			} 
-		
+			}
+
 	},
  	setStatus: function (obj, stat) { /* Change status of item */
  			obj.removeClass("intermediate unchecked checked");
@@ -103,7 +103,7 @@ var hp_corpusChooser = {
  				obj.addClass("intermediate");
 // 				obj.attr({src : "img/intermediate.png"});
  			} else {
- 				obj.addClass("unchecked");	
+ 				obj.addClass("unchecked");
 // 				obj.attr({src : "img/unchecked.png"});
  			}
  	},
@@ -130,7 +130,7 @@ var hp_corpusChooser = {
 			header_text = num_checked_checkboxes;
 			header_text_2 = "corpselector_selectedmultiple";
 		}
-		
+
 		// Number of tokens
 		var totNumberOfTokens = 0;
         var totNumberOfSentences = 0;
@@ -142,7 +142,7 @@ var hp_corpusChooser = {
 			if(!isNaN(numSen))
                 totNumberOfSentences += numSen;
 		});
-		
+
 		$("#hp_corpora_title1").text(header_text);
 		$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
@@ -152,12 +152,12 @@ var hp_corpusChooser = {
 	triggerChange : function() {
 		this._trigger("change", null, [this.selectedItems()]);
 	},
-	
+
 	redraw : function() {
 		this._transform();
 	},
-	
-	_transform: function() {	
+
+	_transform: function() {
 			var el = this.element;
 			hp_this = this;
 			var body;
@@ -166,26 +166,30 @@ var hp_corpusChooser = {
 			} else {
 				body = el.html();
 			}
-			
-			
+
+
 			var newHTML = recursive_transform(body,0);
 			$(".popupchecks .checks").html(newHTML);
-                        
+
 			el.addClass("scroll_checkboxes inline_block");
 			var pos = $(".scroll_checkboxes").offset().left + 434;
 			$(".corpusInfoSpace").css({"left": (pos.toString() + "px")})
-			.click(false);
-			
+			.click(function(event) {
+				var target = event.target;
+				if(!$(target).is("a"))
+					return false;
+			});
+
 			hp_this.countSelected();
 			// Update the number of children for all folders:
 			$(".tree").each(function() {
 				var noItems = $(this).find(".hplabel .checked").length;
 				$(this).children("label").children(".numberOfChildren").text("(" + noItems + ")");
 			});
-			
+
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
-			
-			
+
+
 			$(".scroll_checkboxes").unbind("mousedown");
 			$(".scroll_checkboxes").mousedown(function(e) {
 				$(this).disableSelection();
@@ -208,28 +212,28 @@ var hp_corpusChooser = {
 				}
 				e.stopPropagation();
 			});
-			
+
 			$(".scroll_checkboxes").unbind("click");
 			$(".scroll_checkboxes").click(function(e) {
 				e.stopPropagation();
 			});
-			
+
 			// Prevent clicking through the box
 			$(".popupchecks").unbind("click");
 			$(".popupchecks").click(function(e) {
 				e.stopPropagation();
 			});
-			
+
 			/* SELECT ALL BUTTON */
 			$(".selectall").unbind("click");
 			$(".selectall").click(function() {
-				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "checked"); 
+				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "checked");
 				hp_this.countSelected();
 				// Fire callback "change":
 				hp_this.triggerChange();
 				return false;
 			});
-			
+
 			/* SELECT NONE BUTTON */
 			$(".selectnone").unbind("click");
 			$(".selectnone").click(function() {
@@ -239,7 +243,7 @@ var hp_corpusChooser = {
 				hp_this.triggerChange();
 				return false;
 			});
-			
+
 		 	$(".ext")
 		 	.unbind("click")
 		 	.click(function() {
@@ -254,7 +258,7 @@ var hp_corpusChooser = {
 		 			$(this).attr({src : "img/collapsed.png"});
 		 		}
 			});
-			
+
 			$(".boxlabel")
 			.unbind("click") // "folders"
 			.click(function(event) {
@@ -288,8 +292,8 @@ var hp_corpusChooser = {
 		 		// Fire callback "change":
 		 		hp_this.triggerChange();
  			});
- 			
- 			var hoverConfig = {    
+
+ 			var hoverConfig = {
      			over: function() {
      				// Fire callback "infoPopup":
 					var callback = hp_this.options.infoPopup;
@@ -304,14 +308,14 @@ var hp_corpusChooser = {
  					$(".corpusInfoSpace").find("p").html(returnValue);
  					$(".corpusInfoSpace").fadeIn('fast');
  					//$(".corpusInfoSpace").css({"display": "block"});
- 				},  
-     			interval: 200, // number = milliseconds delay before onMouseOut    
+ 				},
+     			interval: 200, // number = milliseconds delay before onMouseOut
      			out: function() {
  					/*$(".corpusInfoSpace").fadeOut('fast');
  					//$(".corpusInfoSpace").css({"display": "none"});*/
  				}
 			};
-			
+
 			var hoverFolderConfig = {
 				over: function() {
 					var callback = hp_this.options.infoPopupFolder;
@@ -340,7 +344,7 @@ var hp_corpusChooser = {
 
  			$(".boxdiv").hoverIntent(hoverConfig);
  			$(".boxlabel").hoverIntent(hoverFolderConfig);
- 			
+
  			$(".boxdiv").unbind("click"); // "Non-folder items"
 			$(".boxdiv").click(function(event) {
 				if($(this).is(".disabled")) return;
@@ -349,7 +353,7 @@ var hp_corpusChooser = {
                         hp_this.setStatus($(this), "unchecked");
                     });
                 }
-			    
+
 				$(this).disableSelection();
 				hp_this.updateState($(this));
 	 			var childMan = $(this).children('label').children('.checkbox');
@@ -357,7 +361,7 @@ var hp_corpusChooser = {
 					hp_this.setStatus(childMan,"unchecked");
 				} else {
 					hp_this.setStatus(childMan,"checked");
-				}			
+				}
 				var ancestors = childMan.parents('.tree');
 		 		ancestors.each(function(){
 		 			hp_this.updateState($(this));
@@ -366,7 +370,7 @@ var hp_corpusChooser = {
 				// Fire callback "change":
 		 		hp_this.triggerChange();
  			});
-		
+
 		function recursive_transform(einHTML, levelindent) {
 			var outStr = "";
 			var ul = $(einHTML).children();
@@ -393,7 +397,7 @@ var hp_corpusChooser = {
 						if(folderdescription == "undefined")
 							folderdescription = "";
 						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="' + cssattrib + '" class="tree collapsed '+ levelindent +'"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
-						
+
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
 					} else {
@@ -410,7 +414,7 @@ var hp_corpusChooser = {
 						}
 					}
 				}
-	
+
 			});
 			if (!hasDirectCorporaChildren) {
 				outStr += '<div class="extra_fill" style="height:2px; display:none; visible:false"></div>';

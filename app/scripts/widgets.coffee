@@ -11,14 +11,12 @@ Sidebar =
     }
     _init: () ->
         dfd = $.Deferred()
-        # $("#deptree_popup iframe").data("load", dfd).load _.once ->
-        #     dfd.resolve(this.contentWindow)
-
 
 
     updateContent: (sentenceData, wordData, corpus, tokens) ->
         @element.html '<div id="selected_sentence" /><div id="selected_word" />'
         corpusObj = settings.corpora[corpus]
+
         $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
         unless $.isEmptyObject(corpusObj.attributes)
             $("#selected_word").append $("<h4>").localeKey("word_attr")
@@ -31,7 +29,8 @@ Sidebar =
 
         @element.localize()
         @applyEllipse()
-        @renderGraph(tokens)
+        if corpusObj.attributes.deprel
+            @renderGraph(tokens)
 
     renderGraph : (tokens) ->
         outerW = $(window).width() - 80
@@ -473,12 +472,12 @@ ExtendedToken =
             text: false
         ).click ->
             return  if $("#opt_menu").is(":visible")
-            $("#opt_menu").show().menu({}).one("click", (evt) =>
+            $("#opt_menu").show().menu({}).one("click", (evt) ->
                 c.log "click", evt.target
                 return  unless $(evt.target).is("a")
                 item = $(evt.target).data("item")
-                @element.toggleClass item
-                @_trigger "change"
+                self.element.toggleClass item
+                self._trigger "change"
             ).position
                 my: "right top"
                 at: "right bottom"
@@ -526,24 +525,30 @@ ExtendedToken =
 
 
             menuMarkup = """
-            <li>
-                <a data-val="sensitive" rel="localize[case_sensitive]">#{util.getLocaleString('case_sensitive')}</a>
+            <li data-val="sensitive">
+                <a rel="localize[case_sensitive]">#{util.getLocaleString('case_sensitive')}</a>
             </li>
-            <li>
-                <a data-val="insensitive" rel="localize[case_insensitive]">#{util.getLocaleString('case_insensitive')}</a>
+            <li data-val="insensitive">
+                <a rel="localize[case_insensitive]">#{util.getLocaleString('case_insensitive')}</a>
             </li>
             """
 
             $("<ul id='mod_menu'>")
             .append(menuMarkup)
-            .insertAfter(this).menu({}).position(
+            .insertAfter(this).menu({
+                select : (event, ui) ->
+                    c.log "set ui", this
+                    $(this).prev().removeClass("sensitive insensitive").addClass ui.item.data("val")
+                    self._trigger "change"
+                }).position(
                 my: "right top"
                 at: "right bottom"
                 of: this
-            ).find("a").click (event) ->
-                c.log "click", $(this).data("val")
-                $(this).removeClass("sensitive insensitive").addClass $(this).data("val")
-                self._trigger "change"
+                )
+            # ).find("a").click (event) ->
+            #     c.log "click", $(this).data("val")
+            #     $(this).removeClass("sensitive insensitive").addClass $(this).data("val")
+            #     self._trigger "change"
 
             $("body").one "click", ->
                 $("#mod_menu").remove()
@@ -638,6 +643,7 @@ ExtendedToken =
                 else
                     $(this).prev().find(".arg_opts").attr "disabled", null
             ).change(=>
+                c.log "change", @_trigger
                 @_trigger "change"
             ).keyup()
         return out

@@ -3284,7 +3284,9 @@ if(isLab)
 settings.corpora.soexempel = {
 	id : "soexempel",
 	title : "Språkprov SO 2009",
-	description : 'För åtkomst kontakta <a href="mailto:emma.skoldberg@svenska.gu.se">Emma Sköldberg</a>.',
+	description : 'De drygt 94 000 språkexemplen är hämtade ur Svensk ordbok utgiven av Svenska Akademien (2009). '+
+				  'Exemplens uppgift är att stödja ordboksdefinitionerna och att ge information om uppslagsordens fraseologi. ' +
+				  '<br><br>För åtkomst kontakta <a href="mailto:emma.skoldberg@svenska.gu.se">Emma Sköldberg</a>.',
 	limited_access : true,
 	within : settings.spWithin,
 	context : settings.spContext,

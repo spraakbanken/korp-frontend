@@ -534,6 +534,10 @@ class model.TimeProxy extends BaseProxy
         xhr = $.ajax(@req)
         if combined
             xhr.done (data, status, xhr) ->
+                if _.keys(data).length < 2
+                    dfd.reject()
+                    return
+
                 rest = data.combined[""]
                 delete data.combined[""]
 
@@ -543,6 +547,9 @@ class model.TimeProxy extends BaseProxy
 
         else
             xhr.done (data, status, xhr) ->
+                if _.keys(data).length < 2
+                    dfd.reject()
+                    return
                 self.corpusdata = data
                 dfd.resolve data
 

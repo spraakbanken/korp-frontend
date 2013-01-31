@@ -9,21 +9,22 @@
     s = $scope;
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
-      var currentStruct, prevCorpus;
+      var corpus, corpus_aligned, currentStruct, end, i, j, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       currentStruct = [];
       prevCorpus = "";
-      return _.flatten(_.map(sentenceArray, function(sentence) {
-        var corpus, end, i, matchSentenceEnd, matchSentenceStart, newSent, start, wd, _i, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+      output = [];
+      for (i = _i = 0, _len = sentenceArray.length; _i < _len; i = ++_i) {
+        sentence = sentenceArray[i];
         _ref = findMatchSentence(sentence), matchSentenceStart = _ref[0], matchSentenceEnd = _ref[1];
         _ref1 = sentence.match, start = _ref1.start, end = _ref1.end;
-        for (i = _i = 0, _ref2 = sentence.tokens.length; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
-          wd = sentence.tokens[i];
-          if ((start <= i && i < end)) {
+        for (j = _j = 0, _ref2 = sentence.tokens.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
+          wd = sentence.tokens[j];
+          if ((start <= j && j < end)) {
             _.extend(wd, {
               _match: true
             });
           }
-          if ((matchSentenceStart < i && i < matchSentenceEnd)) {
+          if ((matchSentenceStart < j && j < matchSentenceEnd)) {
             _.extend(wd, {
               _matchSentence: true
             });
@@ -46,21 +47,37 @@
             });
           }
         }
+        if (currentMode === "parallel") {
+          sentence.corpus = sentence.corpus.split("|")[0].toLowerCase();
+        } else {
+          sentence.corpus = sentence.corpus.toLowerCase();
+        }
         if (prevCorpus !== sentence.corpus) {
-          corpus = settings.corpora[sentence.corpus.toLowerCase()];
-          if (currentMode === "parallel") {
-            corpus = settings.corpora[sentence.corpus.split("|")[0].toLowerCase()];
-          }
+          corpus = settings.corpora[sentence.corpus];
           newSent = {
             newCorpus: corpus.title,
             noContext: _.keys(corpus.context).length === 1
           };
-          prevCorpus = sentence.corpus;
-          return [newSent, sentence];
+          output.push(newSent);
+        }
+        if (i % 2 === 0) {
+          sentence._color = settings.primaryColor;
+        } else {
+          sentence._color = settings.primaryLight;
+        }
+        output.push(sentence);
+        if (sentence.aligned) {
+          _ref6 = _.pairs(sentence.aligned)[0], corpus_aligned = _ref6[0], tokens = _ref6[1];
+          output.push({
+            tokens: tokens,
+            isLinked: true,
+            corpus: corpus_aligned,
+            _color: sentence._color
+          });
         }
         prevCorpus = sentence.corpus;
-        return sentence;
-      }));
+      }
+      return output;
     };
     findMatchSentence = function(sentence) {
       var decr, end, incr, span, start, _ref, _ref1, _ref2;
@@ -116,7 +133,6 @@
     };
     return s.wordClick = function(event, obj, sent) {
       var aux, i, l, paragraph, sent_start, word;
-      c.log("click", obj, event);
       event.stopPropagation();
       word = $(event.target);
       $.sm.send("word.select");

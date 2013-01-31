@@ -259,7 +259,7 @@ class view.SimpleSearch extends BaseSearch
 
     onSubmit: ->
         super()
-        $("#simple_text").korp_autocomplete "abort"
+        $("#simple_text.ui-autocomplete-input").korp_autocomplete "abort"
         unless $("#simple_text").val() is ""
             util.searchHash "word", $("#simple_text").val()
         else @selectLemgram $("#simple_text").data("lemgram")  if $("#simple_text").attr("placeholder")?
