@@ -363,21 +363,21 @@ settings.corporafolders.fisk.newspapertexts = {
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
-	title : "FNB 1999–2000",
+	title : "FNB",
 	contents : ["fnb1999", "fnb2000"],
 	description : "FNB är Finlands ledande nyhets- och bildbyrå."
 	// http://www.stt.fi/sv
 };
 
 settings.corporafolders.fisk.newspapertexts.hbl = {
-	title : "Hufvudstadsbladet 1991, 1998–1999",
-	contents : ["hbl1991", "hbl1998", "hbl1999"],
+	title : "Hufvudstadsbladet",
+	contents : ["hbl1991", "hbl1998", "hbl1999", "hbl20122013"],
 	description : "Hufvudstadsbladet är den största finlandssvenska dagstidningen i Finland."
 	//description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland."
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
-	title : "Jakobstads tidning 1999–2000",
+	title : "Jakobstads tidning",
 	contents : ["jakobstadstidning1999", "jakobstadstidning2000"],
 	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008."
 };
@@ -3114,6 +3114,29 @@ settings.corpora.hbl1999 = {
 	},
 	struct_attributes : {
 		text_year : {label : "year"}
+	}
+};
+
+settings.corpora.hbl20122013 = {
+	id : "hbl20122013",
+	title : "Hufvudstadsbladet (2012–)2013",
+	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"}
 	}
 };
 
