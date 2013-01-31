@@ -389,7 +389,6 @@ settings.parallel_corpora.salt = {
 	}
 };
 
-if(isLab)
 settings.parallel_corpora.espc = {
 	"default" : "espc_swe",
 	espc_swe : {
@@ -404,7 +403,7 @@ settings.parallel_corpora.espc = {
 		},
 		attributes: {
 			pos: attrs.pos,
-			msd: attrs.msd,
+			espcmsd: {label : "msd"},
 			lemma: attrs.baseform,
 			lex: attrs.lemgram,
 			saldo: attrs.saldo,
