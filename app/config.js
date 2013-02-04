@@ -2560,7 +2560,7 @@ settings.corpora.sfs = {
 
 settings.corpora["wikipedia-sv"] = {
 	id : "wikipedia-sv",
-	title : "Svenska Wikipedia (november 2012)",
+	title : "Svenska Wikipedia (januari 2013)",
 	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
 	within : settings.spWithin,
 	context : settings.spContext,
