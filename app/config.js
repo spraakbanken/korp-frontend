@@ -3224,7 +3224,7 @@ settings.corpora.tisus = {
 settings.corpora.twitter = {
 	id : "twitter",
 	title : "Twittermix",
-	description : "",
+	description : "Material från ett urval av svenska Twitteranvändare. Uppdateras regelbundet.",
 	within : {
 		"sentence" : "sentence",
 		"text" : "text"
@@ -3271,8 +3271,8 @@ settings.corpora.twitter = {
 };
 
 if(isLab)
-settings.corpora.gslc = {
-	id : "gslc",
+settings.corpora.gdc = {
+	id : "gdc",
 	title : "Gothenburg Dialogue Corpus (GDC)",
 	description : 'För åtkomst kontakta <a href="mailto:cajsa.ottesjo@gu.se">Cajsa Ottesjö</a>.',
 	limited_access : true,
