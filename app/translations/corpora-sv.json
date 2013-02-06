@@ -295,5 +295,8 @@
     "project": "projekt",
     "speaker": "talare",
     
-    "verk" : "länk till boken"
+    "verk" : "länk till boken",
+    "lang" : "språk",
+    
+    "fulltext" : "heltext"
 }

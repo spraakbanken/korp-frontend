@@ -3504,6 +3504,7 @@ settings.fsvlemma = {
 	//pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= key %>%22)+sortBy+wf'><%= val %></a>",
   	type : "set",
   	label : "baseform",
+  	displayType : "autocomplete",
   	stringify : function(baseform) {
 		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
 	}
@@ -3514,6 +3515,7 @@ settings.fsvlemma = {
 settings.fsvlex = {
   	type : "set",
   	label : "lemgram",
+  	displayType : "autocomplete",
   	stringify : function(str) {
   		return util.lemgramToString(str, true);
   	},
@@ -3551,12 +3553,12 @@ var fsv_yngrelagar = {
 			label : "title",
 			displayType : "select",
 			localize : false,
-			dataset : {
-				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL" : "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
-				"Kristoffers Landslag" : "Kristoffers Landslag",
-				"Kristoffers Landslag, flockar direkt hämtade från MEL" : "Kristoffers Landslag, flockar direkt hämtade från MEL",
-				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL"
-			},
+			dataset : [
+				"Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
+				"Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
+				"Kristoffers Landslag, flockar direkt hämtade från MEL",
+				"Kristoffers Landslag"
+				],
 		},
 		text_date : {label : "date"}
 	}
@@ -3582,6 +3584,7 @@ var fsv_aldrelagar = {
 			localize : false,
 			dataset : [
 				"Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
+				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
 				"Södermannalagen, enligt Codex iuris Sudermannici",
 				"Östgötalagen, fragment H, ur Kyrkobalken ur Skokloster Avdl I 145",
 				"Yngre Västmannalagen, enl Holm B 57",
@@ -3600,16 +3603,15 @@ var fsv_aldrelagar = {
 				"Östgötalagen, fragment M, ur Holm B 196",
 				"Gutalagen enligt Holm B 64",
 				"Upplandslagen enligt Codex Holm B 199, Schlyters hskr B",
-				"Gutalagens additamenta enligt AM 54",
 				"Smålandslagens kyrkobalk",
 				"Dalalagen (Äldre Västmannalagen)",
-				"Tillägg till Upplandslagen, hskr A (Ups B 12)",
+				"Gutalagens additamenta enligt AM 54",
 				"Bjärköarätten",
 				"Magnus Erikssons Landslag",
 				"Östgötalagen, fragment N, ur Köpenhamn AM 1056",
 				"Södermannalagen stadsfästelse - Confirmatio, enligt NKS 2237",
 				"Östgötalagen, fragment E, ur Ups B 22"
-			],
+							],
 		},
 		text_date : {label : "date"}
 	}

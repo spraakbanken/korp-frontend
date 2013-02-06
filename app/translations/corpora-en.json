@@ -298,6 +298,8 @@
     "project": "project",
     "speaker": "speaker",
     
-    "verk" : "book location"
+    "verk" : "book location",
+    "lang" : "language",
 			
+    "fulltext" : "full text"
 }
