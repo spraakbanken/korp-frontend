@@ -29,6 +29,7 @@
     BaseResults.prototype.renderResult = function(data) {
       var disabled, newDisabled,
         _this = this;
+      this.$result.find(".error_msg").remove();
       c.log("renderResults", this.proxy);
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
@@ -383,14 +384,18 @@
       var isReading, kwicCallback;
       isReading = this.$result.is(".reading_mode");
       this.showPreloader();
-      applyTo("kwicCtrl", function($scope) {
-        return function() {
-          if (isReading) {
-            return $scope.setContextData([]);
-          } else {
-            return $scope.setKwicData([]);
-          }
-        };
+      c.log("makeRequest", this.$result, this.$result.scope());
+      this.$result.scope().$apply(function($scope) {
+        c.log("apply", $scope, $scope.setContextData);
+        if (isReading) {
+          return $scope.setContextData({
+            kwic: []
+          });
+        } else {
+          return $scope.setKwicData({
+            kwic: []
+          });
+        }
       });
       kwicCallback = $.proxy(this.renderResult, this);
       return this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);

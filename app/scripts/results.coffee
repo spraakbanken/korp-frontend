@@ -21,7 +21,7 @@ class BaseResults
     renderResult: (data) ->
 
         #       this.resetView();
-        # @$result.find(".error_msg").remove()
+        @$result.find(".error_msg").remove()
         c.log "renderResults", @proxy
         util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
 
@@ -317,13 +317,15 @@ class view.KWICResults extends BaseResults
         isReading = @$result.is(".reading_mode")
         @showPreloader()
 
-        applyTo "kwicCtrl", ($scope) ->
-            ->
-                if isReading
-                    $scope.setContextData([])
-                else
-                    $scope.setKwicData([])
-                    # $scope.kwic = data.kwic
+        # applyTo "kwicCtrl", ($scope) ->
+        c.log "makeRequest", @$result, @$result.scope()
+        @$result.scope().$apply ($scope) ->
+            c.log "apply", $scope, $scope.setContextData
+            if isReading
+                $scope.setContextData({kwic:[]})
+            else
+                $scope.setKwicData({kwic:[]})
+                # $scope.kwic = data.kwic
 
         kwicCallback = $.proxy(@renderResult, this)
         @proxy.makeRequest @buildQueryOptions(),
