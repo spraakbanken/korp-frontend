@@ -474,7 +474,7 @@
   };
 
   initTimeGraph = function() {
-    var all_timestruct, opendfd, restdata, restyear, time, time_comb, timestruct;
+    var all_timestruct, getValByDate, opendfd, restdata, restyear, time, time_comb, timestruct;
     timestruct = null;
     all_timestruct = null;
     restdata = null;
@@ -498,19 +498,18 @@
       });
       return $("#corpusbox").trigger("corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]);
     });
+    getValByDate = function(date, struct) {
+      var output;
+      output = null;
+      $.each(struct, function(i, item) {
+        if (date === item[0]) {
+          output = item[1];
+          return false;
+        }
+      });
+      return output;
+    };
     $.when(time_comb, time).then(function(combdata, timedata) {
-      var getValByDate;
-      getValByDate = function(date, struct) {
-        var output;
-        output = null;
-        $.each(struct, function(i, item) {
-          if (date === item[0]) {
-            output = item[1];
-            return false;
-          }
-        });
-        return output;
-      };
       all_timestruct = combdata[0];
       return $("#corpusbox").bind("corpuschooserchange", function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;

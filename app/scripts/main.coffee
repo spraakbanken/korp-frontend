@@ -504,15 +504,15 @@ initTimeGraph = ->
         $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
     )
 
-    $.when(time_comb, time).then (combdata, timedata) ->
-        getValByDate = (date, struct) ->
-            output = null
-            $.each struct, (i, item) ->
-                if date is item[0]
-                    output = item[1]
-                    false
+    getValByDate = (date, struct) ->
+        output = null
+        $.each struct, (i, item) ->
+            if date is item[0]
+                output = item[1]
+                false
 
-            return output
+        return output
+    $.when(time_comb, time).then (combdata, timedata) ->
         all_timestruct = combdata[0]
 
 
