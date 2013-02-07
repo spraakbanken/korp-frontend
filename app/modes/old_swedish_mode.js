@@ -23,7 +23,8 @@ settings.sdhkstructs = {
 	text_date : { label : "date" },
 };
 
-settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/default.aspx?id=4044" target="_blank">Riksarkivet</a>';
+settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>';
+
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -36,7 +37,7 @@ settings.corporafolders = {};
 if(isLab){
 settings.corporafolders.fsvb = {
 	title : "Fornsvenska textbanken",
-	contents : ["fsv-aldrereligiosprosa","fsv-profanprosa","fsv-verser"],
+	contents : ["fsv-profanprosa","fsv-verser"],
 };
 
 
