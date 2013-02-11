@@ -54,6 +54,7 @@
     "education" : "utbildning",
     "finalgrade" : "slutgiltigt betyg",
     "sum" : "summa",
+    "proficiencylevel" : "kunskapsnivå",
 	
     "text_year" : "år",
     "text_party" : "parti",
