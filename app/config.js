@@ -3211,7 +3211,7 @@ settings.corpora.tisus = {
 		text_gender : {label : "gender"},
 		text_residencetime : {label : "residencetime"},
 		text_education : {label : "education"},
-		text_l1 : {label : "tisus_l1"},
+		text_l1 : {label : "tisus_l1", type : "set"},
 		text_lf1 : {label : "tisus_lf1"},
 		text_lf2 : {label : "tisus_lf2"},
 		text_sum : {label : "sum"},
