@@ -3188,7 +3188,7 @@ settings.corpora.talbanken = {
 
 settings.corpora.tisus = {
 	id : "tisus",
-	title : "TISUS-korpus",
+	title : "TISUS-texter",
 	description : "",
 	limited_access : true,
 	within : settings.spWithin,
@@ -3217,7 +3217,9 @@ settings.corpora.tisus = {
 		text_sum : {label : "sum"},
 		text_written : {label : "tisus_written"},
 		text_oral : {label : "tisus_oral"},
-		text_finalgrade : {label : "finalgrade"}
+		text_finalgrade : {label : "finalgrade"},
+		text_proficiencylevel : {label : "proficiencylevel"},
+		text_date : {label : "date"}
 	}
 };
 
