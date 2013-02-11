@@ -396,7 +396,7 @@ settings.parallel_corpora.espc = {
 		lang : "swe",
 		parent : "espc",
 		limited_access : true,
-		title: "ESPC svenska-engelska",
+		title: "The English-Swedish Parallel Corpus (ESPC) svenska-engelska",
 		context: context.defaultAligned,
 		context : settings.defaultContext,
 		within: {
