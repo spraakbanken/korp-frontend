@@ -299,5 +299,11 @@
     "verk" : "länk till boken",
     "lang" : "språk",
     
-    "fulltext" : "heltext"
+    "fulltext" : "heltext",
+	
+	"album" : "album",
+    "album_year" : "år (album)", 
+    "song_title" : "låttitel",
+    "song_year" : "år (låt)"
+    
 }
