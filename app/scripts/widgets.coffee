@@ -35,7 +35,7 @@ Sidebar =
     renderGraph : (tokens) ->
         outerW = $(window).width() - 80
 
-        $("<span class='link'>Visa träd</button>").localeKey("show_deptree").click( ->
+        $("<span class='link show_deptree'>Visa träd</button>").localeKey("show_deptree").click( ->
             info = $("<span class='info' />")
             iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load ->
 

@@ -602,7 +602,7 @@
       if (!value.relative && !value.absolute) {
         return "";
       }
-      return "<span>\n            <span class='relStat'>" + (util.formatDecimalString(value.relative.toFixed(1), true)) + "</span>\n            <span class='absStat'>(" + (prettyNumbers(String(value.absolute))) + ")</span>\n<span>";
+      return "<span>\n      <span class='relStat'>" + (util.formatDecimalString(value.relative.toFixed(1), true)) + "</span>\n      <span class='absStat'>(" + (prettyNumbers(String(value.absolute))) + ")</span>\n<span>";
     };
 
     return StatsProxy;

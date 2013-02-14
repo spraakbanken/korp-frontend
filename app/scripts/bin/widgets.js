@@ -31,7 +31,7 @@
     renderGraph: function(tokens) {
       var outerW;
       outerW = $(window).width() - 80;
-      return $("<span class='link'>Visa träd</button>").localeKey("show_deptree").click(function() {
+      return $("<span class='link show_deptree'>Visa träd</button>").localeKey("show_deptree").click(function() {
         var iframe, info;
         info = $("<span class='info' />");
         iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load(function() {

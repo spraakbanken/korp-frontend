@@ -2124,3 +2124,8 @@ a.relStat:hover {
   display: block;
   height: 1.3em;
 }
+
+/* line 1697, styles.scss */
+.reading_mode .show_deptree {
+  display: none;
+}

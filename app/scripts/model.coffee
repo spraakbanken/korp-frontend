@@ -474,9 +474,9 @@ class model.StatsProxy extends BaseProxy
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
         return ""  if not value.relative and not value.absolute
         return """<span>
-                                            <span class='relStat'>#{util.formatDecimalString(value.relative.toFixed(1), true)}</span>
-                                            <span class='absStat'>(#{prettyNumbers(String(value.absolute))})</span>
-                                <span>"""
+                        <span class='relStat'>#{util.formatDecimalString(value.relative.toFixed(1), true)}</span>
+                        <span class='absStat'>(#{prettyNumbers(String(value.absolute))})</span>
+                  <span>"""
 
 class model.AuthenticationProxy
     constructor: ->

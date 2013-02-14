@@ -3,7 +3,6 @@
  *
  */
 var settings = {};
-//var language = $.localize.data.locale;
 
 settings.lemgramSelect = true;
 settings.autocomplete = true;
@@ -3407,10 +3406,13 @@ settings.reduce_stringify = function(type) {
 					[query, $.toJSON(corpora), value, util.getLocaleString("pos_" + value)]);
 			return appendDiagram(output, corpora, value);
 		};
+	case "prefix":
+	case "suffix":
 	case "lex":
 		return function(row, cell, value, columnDef, dataContext) {
 		var corpora = getCorpora(dataContext);
 		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+		else if(value == "|") return "-";
 		output = _.chain(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
@@ -3419,12 +3421,11 @@ settings.reduce_stringify = function(type) {
 				.value().join(", ");
 		return appendDiagram(output, corpora, value);
 		};
-	case "prefix":
-	case "suffix":
 	case "saldo":
 		return function(row, cell, value, columnDef, dataContext) {
 		var corpora = getCorpora(dataContext);
 		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+		else if(value == "|") return "-";
 		output = _.chain(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
