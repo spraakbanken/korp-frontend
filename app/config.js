@@ -2865,7 +2865,7 @@ settings.corpora.vastranyland = {
 settings.corpora.ostranyland = {
 	id : "ostranyland",
 	title : "Östra Nyland 2012–2013",
-	description : "<a href=\"http://www.ostnyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
+	description : "<a href=\"http://www.ostnyland.fi\">Östra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
