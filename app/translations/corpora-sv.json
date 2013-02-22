@@ -242,7 +242,8 @@
     "deprel_UA" : "Underordnad sats (bisats), utom subjunktion",
     "deprel_VG" : "Verbgrupp",
     
-    "INFINIT" : "Infinit verb",
+    "INFINIT" : "Particip",
+    "INF" : "Infinitiv",
     "FINIT" : "Finit verb",
     
     "origlang" : "orginalspråk",

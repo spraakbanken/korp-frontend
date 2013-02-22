@@ -23,10 +23,11 @@ settings.corpora.siberiangermandialogs = {
 		sib_de_msd : {
 			label : "msd",
 			displayType : "select",
-			dataset : {
-				"INFINIT" : "INFINIT",
-				"FINIT" : "FINIT"
-			}
+			dataset : [
+				"INFINIT",
+				"INF",
+				"FINIT"
+			]
 			
 		}
 	},

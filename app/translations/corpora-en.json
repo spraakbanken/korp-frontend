@@ -244,7 +244,8 @@
     "deprel_UA" : "Subordinate clause minus subordinating conjunction",
     "deprel_VG" : "Verb group",
     
-    "INFINIT" : "Non-finite verb",
+    "INF" : "Non-finite verb",
+    "INFINIT" : "Participle",
     "FINIT" : "Finite verb",
     
     "origlang" : "original language",
