@@ -3278,7 +3278,10 @@ settings.corpora.gdc = {
 	description : 'För åtkomst kontakta <a href="mailto:cajsa.ottesjo@gu.se">Cajsa Ottesjö</a>.',
 	limited_access : true,
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : {
+	"1 sentence" : "1 sentence",
+	"3 sentence" : "3 sentences"
+	},
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
