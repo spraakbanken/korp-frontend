@@ -4,7 +4,7 @@ settings.showSimpleSearch = false;
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
 $("#search_options > div:last").remove();
-
+$("#num_hits").prepend("<option value='10'>10</option>");
 
 var c1 = view.ExtendedSearch.prototype.constructor
 view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
@@ -362,9 +362,15 @@ settings.parallel_corpora.salt = {
 		    text_title : {label : "title"},
 
 		    text_year : {label : "year"},
-			text_origlang : {label : "origlang"},
+			text_origlang : {
+			    label : "origlang",
+			    displayType : "select",
+    			dataset: {
+    			    "swe" : "swedish",
+    			    "nld" : "dutch"
+    			}
+			},
 			page_n : {label : "page_n"}
-
 		}
 	},
 	saltnld_nld : {
@@ -382,7 +388,14 @@ settings.parallel_corpora.salt = {
 		    text_title : {label : "title"},
 
 		    text_year : {label : "year"},
-			text_origlang : {label : "origlang"},
+			text_origlang : {
+			    label : "origlang",
+			    displayType : "select",
+    			dataset: {
+    			    "swe" : "swedish",
+    			    "nld" : "dutch"
+    			}
+			},
 			page_n : {label : "page_n"}
 		},
 		hide : true
