@@ -22,7 +22,7 @@ class BaseProxy
             # var suffix = data.slice(-1) == "}" ? "" : "}";
             # var json = prefix + data.slice(0,-2) + suffix;
             json = data
-            json = "{" + json.slice(0, -1) + "}"  if json.slice(-1) is ","
+            json = "{" + json.slice(0, -1) + "}" if json.slice(-1) is ","
 
             # c.log('json after', json)
             return JSON.parse(json)

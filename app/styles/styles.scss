@@ -1418,13 +1418,13 @@ a {
 
 
 .lemgram_section {
-  @include inline-block();
+  @include inline-block(top);
   margin-right: 30px;
 }
 
 .tableContainer {
   margin-bottom: 15px;
-  @include inline-block();
+  @include inline-block(top);
   padding: 10px;
   border: solid 1px lightgray;
   margin-right: 20px;

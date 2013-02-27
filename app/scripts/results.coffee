@@ -167,14 +167,12 @@ class view.KWICResults extends BaseResults
                 $scope.setContextData(data)
             else
                 $scope.setKwicData(data)
-                if currentMode == "parallel"
-                    for linked in $(".linked_sentence")
-                        mainrow = $(linked).prev()
-                        offset = mainrow.find(".left .word:first").position().left - 25
-                        $(linked).find(".lnk").css("padding-left", Math.round(offset))
-                # $scope.kwic = data.kwic
 
-
+        if currentMode == "parallel" and not isReading
+            for linked in $(".linked_sentence")
+                mainrow = $(linked).prev()
+                offset = mainrow.find(".left .word:first").position().left - 25
+                $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
         @hidePreloader()
         @$result.localize()

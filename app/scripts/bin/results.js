@@ -189,7 +189,7 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var isReading, resultError, self;
+      var isReading, linked, mainrow, offset, resultError, self, _i, _len, _ref;
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -198,24 +198,21 @@
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
       this.$result.scope().$apply(function($scope) {
-        var linked, mainrow, offset, _i, _len, _ref, _results;
         if (isReading) {
           return $scope.setContextData(data);
         } else {
-          $scope.setKwicData(data);
-          if (currentMode === "parallel") {
-            _ref = $(".linked_sentence");
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              linked = _ref[_i];
-              mainrow = $(linked).prev();
-              offset = mainrow.find(".left .word:first").position().left - 25;
-              _results.push($(linked).find(".lnk").css("padding-left", Math.round(offset)));
-            }
-            return _results;
-          }
+          return $scope.setKwicData(data);
         }
       });
+      if (currentMode === "parallel" && !isReading) {
+        _ref = $(".linked_sentence");
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          linked = _ref[_i];
+          mainrow = $(linked).prev();
+          offset = mainrow.find(".left .word:first").position().left - 25;
+          $(linked).find(".lnk").css("padding-left", Math.round(offset));
+        }
+      }
       this.hidePreloader();
       this.$result.localize();
       this.centerScrollbar();

@@ -206,11 +206,11 @@ class view.SimpleSearch extends BaseSearch
 
                 "sw-forms": false
 
-        $("#prefixChk, #suffixChk, #caseChk").click ->
+        $("#prefixChk, #suffixChk, #caseChk").click =>
             if $("#simple_text").attr("placeholder") and $("#simple_text").text() is ""
-                self.enableSubmit()
+                @enableSubmit()
             else
-                self.onSimpleChange()
+                @onSimpleChange()
 
         $("#keyboard").click ->
             c.log "click", arguments

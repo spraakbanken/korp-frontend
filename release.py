@@ -12,10 +12,16 @@ if not os.path.exists("dist") and not "no_build" in args:
     print check_output(["yeoman", "build"])
 else:
     print "build exists."
-print "syncing to server."
 
 # print check_output(["rsync", "-r", "dist/*", "johanrox@k2.spraakdata.gu.se:/var/www/html_sb/korp"], shell=True)
-print check_output("rsync -r dist/* johanrox@k2.spraakdata.gu.se:/var/www/html_sb/korp", shell=True)
+
+target = "korp"
+if "lab" in args or "labb" in args:
+    target = "korplabb"
+
+print "syncing to server, target: %s" % target
+
+print check_output("rsync -r dist/* johanrox@k2.spraakdata.gu.se:/var/www/html_sb/" + target, shell=True)
 
 if not "no_clean" in args:
     print check_output(["yeoman", "clean"])

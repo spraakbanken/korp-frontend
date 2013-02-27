@@ -1771,7 +1771,7 @@ a.relStat:hover {
 .lemgram_section {
   display: -moz-inline-stack;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
@@ -1783,7 +1783,7 @@ a.relStat:hover {
   margin-bottom: 15px;
   display: -moz-inline-stack;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
   *vertical-align: auto;
   zoom: 1;
   *display: inline;

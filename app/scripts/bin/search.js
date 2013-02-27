@@ -274,9 +274,9 @@
       }
       $("#prefixChk, #suffixChk, #caseChk").click(function() {
         if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
-          return self.enableSubmit();
+          return _this.enableSubmit();
         } else {
-          return self.onSimpleChange();
+          return _this.onSimpleChange();
         }
       });
       $("#keyboard").click(function() {
