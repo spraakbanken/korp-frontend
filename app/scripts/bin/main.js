@@ -418,12 +418,11 @@
     });
     $("#languages").radioList({
       change: function() {
-        c.log("this", $(this));
         return $.bbq.pushState({
           lang: $(this).radioList("getSelected").data("mode")
         });
       },
-      selected: "sv"
+      selected: settings.defaultLanguage
     }).vAlign();
     $("#sidebar").sidebar().sidebar("hide");
     $("#simple_text")[0].focus();

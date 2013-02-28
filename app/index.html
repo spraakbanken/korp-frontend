@@ -39,7 +39,7 @@
 		<script type="text/javascript" src="components/raphael/raphael.js"></script>
 		<script type="text/javascript" src="components/jReject/js/jquery.reject.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.raphael.spinner.js"></script>
-
+		<script type="text/javascript" src="lib/watch-fighters.js"></script>
 		<script type="text/javascript" src="common_lib/jquery.format.js"></script>
 		<script type="text/javascript" src="lib/scxml/require.js"></script>
 		<script type="text/javascript" src="lib/scxml/require/xml.js"></script>
@@ -67,6 +67,9 @@
 		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
+
+
+
 		<!-- endbuild -->
 
 		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
@@ -238,19 +241,19 @@
 											<td class="empty_td"></td>
 											<td colspan="0" class="corpus_title">
 												{{sentence.newCorpus}}
-												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
+												<span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
 											</td>
 
-											<td colspan="3" ng-show="sentence.isLinked" class="lnk">
+											<td colspan="3" set-if="sentence.isLinked" class="lnk">
 												<span kwic-word ng-repeat="wd in sentence.tokens"></span>
 											</td>
-											<td class="left" ng-show="!sentence.newCorpus">
+											<td class="left" set-if="!sentence.newCorpus">
 												<span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
 											</td>
-											<td class="match" ng-show="!sentence.newCorpus">
+											<td class="match" set-if="!sentence.newCorpus">
 												<span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
 											</td>
-											<td class="right" ng-show="!sentence.newCorpus">
+											<td class="right" set-if="!sentence.newCorpus">
 												<span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
 											</td>
 
@@ -270,7 +273,7 @@
 											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
 											<span colspan="0" class="corpus_title">
 												{{sentence.newCorpus}}
-												<span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
+												<span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
 											</span>
 											<span ng-repeat="wd in sentence.tokens" kwic-word></span>
 

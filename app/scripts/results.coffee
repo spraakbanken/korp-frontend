@@ -85,6 +85,42 @@ class view.KWICResults extends BaseResults
 
 
         @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
+        @$result.on "click", ".word", (event) ->
+            # c.log "click", obj, event
+            # c.log "word click", $(this).scope().wd, event.currentTarget
+            scope = $(this).scope()
+            obj = scope.wd
+            sent = scope.sentence
+            event.stopPropagation()
+            word = $(event.target)
+            $.sm.send("word.select")
+
+
+
+            $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
+
+            if not obj.dephead?
+                scope.selectionManager.select word, null
+                return
+
+            i = Number(obj.dephead)
+            paragraph = word.closest(".sentence").find(".word")
+            sent_start = 0
+            if word.is(".open_sentence")
+                sent_start = paragraph.index(word)
+            else
+
+                l = paragraph.filter((__, item) ->
+                    $(item).is(word) or $(item).is(".open_sentence")
+                )
+                sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            aux = $(paragraph.get(sent_start + i - 1))
+            scope.selectionManager.select word, aux
+
+
+
+
+
 
     resetView: ->
         super()
@@ -153,8 +189,6 @@ class view.KWICResults extends BaseResults
     renderResult: (data) ->
         resultError = super(data)
         return if resultError is false
-        self = this
-
         # this.prevCQP = sourceCQP;
         c.log "corpus_results"
         isReading = @$result.is(".reading_mode")
@@ -169,9 +203,10 @@ class view.KWICResults extends BaseResults
                 $scope.setKwicData(data)
 
         if currentMode == "parallel" and not isReading
+            scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
             for linked in $(".linked_sentence")
                 mainrow = $(linked).prev()
-                offset = mainrow.find(".left .word:first").position().left - 25
+                offset = (mainrow.find(".left .word:first").position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
         @hidePreloader()
@@ -244,6 +279,7 @@ class view.KWICResults extends BaseResults
             @$result.find(".hits_picture").html ""
 
     scrollToShowWord: (word) ->
+        unless word.length then return
         offset = 200
         wordTop = word.offset().top
         newY = window.scrollY

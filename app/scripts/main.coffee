@@ -354,7 +354,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
                 kwicResults.$result.addClass "reading_mode"
 
                 # if(!isInit && kwicResults.$result.find(".results_table.reading").is(":empty")) {
-                kwicResults.makeRequest()  unless isInit
+                kwicResults.makeRequest() unless isInit
             else
                 kwicResults.$result.removeClass "reading_mode"
 
@@ -422,10 +422,11 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
     $("#languages").radioList(
         change: ->
-            c.log "this", $(this)
             $.bbq.pushState lang: $(this).radioList("getSelected").data("mode")
+        # TODO: this does nothing?
+        selected: settings.defaultLanguage
 
-        selected: "sv"
+
     ).vAlign()
     $("#sidebar").sidebar().sidebar "hide"
     $("#simple_text")[0].focus()

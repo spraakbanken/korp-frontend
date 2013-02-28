@@ -107,6 +107,33 @@
       if ($.bbq.getState("reading_mode")) {
         this.$result.addClass("reading_mode");
       }
+      this.$result.on("click", ".word", function(event) {
+        var aux, i, l, obj, paragraph, scope, sent, sent_start, word;
+        scope = $(this).scope();
+        obj = scope.wd;
+        sent = scope.sentence;
+        event.stopPropagation();
+        word = $(event.target);
+        $.sm.send("word.select");
+        $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
+        if (!(obj.dephead != null)) {
+          scope.selectionManager.select(word, null);
+          return;
+        }
+        i = Number(obj.dephead);
+        paragraph = word.closest(".sentence").find(".word");
+        sent_start = 0;
+        if (word.is(".open_sentence")) {
+          sent_start = paragraph.index(word);
+        } else {
+          l = paragraph.filter(function(__, item) {
+            return $(item).is(word) || $(item).is(".open_sentence");
+          });
+          sent_start = paragraph.index(l.eq(l.index(word) - 1));
+        }
+        aux = $(paragraph.get(sent_start + i - 1));
+        return scope.selectionManager.select(word, aux);
+      });
     }
 
     KWICResults.prototype.resetView = function() {
@@ -189,12 +216,11 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var isReading, linked, mainrow, offset, resultError, self, _i, _len, _ref;
+      var isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
       }
-      self = this;
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
       this.$result.scope().$apply(function($scope) {
@@ -205,11 +231,12 @@
         }
       });
       if (currentMode === "parallel" && !isReading) {
+        scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
         _ref = $(".linked_sentence");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           linked = _ref[_i];
           mainrow = $(linked).prev();
-          offset = mainrow.find(".left .word:first").position().left - 25;
+          offset = (mainrow.find(".left .word:first").position().left + scrollLeft) - 25;
           $(linked).find(".lnk").css("padding-left", Math.round(offset));
         }
       }
@@ -287,6 +314,9 @@
 
     KWICResults.prototype.scrollToShowWord = function(word) {
       var area, newX, newY, offset, wordLeft, wordTop;
+      if (!word.length) {
+        return;
+      }
       offset = 200;
       wordTop = word.offset().top;
       newY = window.scrollY;

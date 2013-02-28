@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', []);
+  window.korpApp = angular.module('korpApp', ["watchFighters"]);
 
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
@@ -122,7 +122,7 @@
       from = sentence.match.start;
       return sentence.tokens.slice(from, sentence.match.end);
     };
-    s.selectRight = function(sentence) {
+    return s.selectRight = function(sentence) {
       var from, len;
       if (!sentence.match) {
         return;
@@ -131,39 +131,15 @@
       len = sentence.tokens.length;
       return sentence.tokens.slice(from, len);
     };
-    return s.wordClick = function(event, obj, sent) {
-      var aux, i, l, paragraph, sent_start, word;
-      event.stopPropagation();
-      word = $(event.target);
-      $.sm.send("word.select");
-      $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
-      if (!(obj.dephead != null)) {
-        s.selectionManager.select(word, null);
-        return;
-      }
-      i = Number(obj.dephead);
-      paragraph = word.closest(".sentence").find(".word");
-      sent_start = 0;
-      if (word.is(".open_sentence")) {
-        sent_start = paragraph.index(word);
-      } else {
-        l = paragraph.filter(function(__, item) {
-          return $(item).is(word) || $(item).is(".open_sentence");
-        });
-        sent_start = paragraph.index(l.eq(l.index(word) - 1));
-      }
-      aux = $(paragraph.get(sent_start + i - 1));
-      return s.selectionManager.select(word, aux);
-    };
   });
 
   korpApp.directive('kwicWord', function() {
     return {
       replace: true,
-      template: "<span class=\"word\" ng-class=\"getClassObj(wd)\"\nng-click=\"wordClick($event, wd, sentence)\" >{{wd.word}} </span>",
+      template: "<span class=\"word\" set-class=\"getClassObj(wd)\"\nset-text=\"wd.word + ' '\" ></span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
-          var output, struct, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+          var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
           output = {
             reading_match: wd._match,
             punct: wd._punct,
@@ -184,7 +160,18 @@
             struct = _ref2[_k];
             output["close_" + struct] = true;
           }
-          return output;
+          return ((function() {
+            var _l, _len3, _ref3, _ref4, _results;
+            _ref3 = _.pairs(output);
+            _results = [];
+            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+              _ref4 = _ref3[_l], x = _ref4[0], y = _ref4[1];
+              if (y) {
+                _results.push(x);
+              }
+            }
+            return _results;
+          })()).join(" ");
         };
       }
     };

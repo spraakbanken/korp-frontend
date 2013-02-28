@@ -79,7 +79,7 @@ settings.spWithin = {
 	"paragraph" : "paragraph"
 };
 
-settings.defaultLanguage = "sv";
+settings.defaultLanguage = "en";
 
 /*
  * ATTRIBUTES
