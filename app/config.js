@@ -79,7 +79,7 @@ settings.spWithin = {
 	"paragraph" : "paragraph"
 };
 
-settings.defaultLanguage = "en";
+settings.defaultLanguage = "sv";
 
 /*
  * ATTRIBUTES
@@ -358,7 +358,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["borgabladet", "sydosterbotten2012", "vastranyland", "abounderrattelser2012", "at2012", "ostranyland"]
+	contents : ["borgabladet", "sydosterbotten2012", "vastranyland", "abounderrattelser2012", "abounderrattelser2013", "at2012", "ostranyland"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -2913,6 +2913,29 @@ settings.corpora.ostranyland = {
 settings.corpora.abounderrattelser2012 = {
 	id : "abounderrattelser2012",
 	title : "Åbo Underrättelser 2012",
+	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "date"}
+	}
+};
+
+settings.corpora.abounderrattelser2013 = {
+	id : "abounderrattelser2013",
+	title : "Åbo Underrättelser 2013",
 	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
 	within : settings.spWithin,
 	context : settings.spContext,
