@@ -115,6 +115,14 @@
 	"no_lemgram_results" : "Hittade inga förekomster.",
 	"no_stats_results" : "Sökningen gav inga träffar.",
 
+	"graph" : "Trenddiagram",
+	"line" : "Linje",
+	"bar" : "Stapel",
+	"smoothing" : "Utjämna",
+	"show_diagram" : "Visa trenddiagram",
+	"non_time_before" : "Saknar tidsuppmärkning: ",
+	"non_time_after" : " av valt material",
+
 	"word_insensitive" : "ord (skiftlägesoberoende)",
 	"sentence_attr" : "textattribut",
 	"word_attr" : "ordattribut",

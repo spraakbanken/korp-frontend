@@ -2008,16 +2008,6 @@ a.relStat:hover {
   display: none;
 }
 
-/* line 1607, styles.scss */
-.lab #showBarPlot {
-  display: -moz-inline-stack;
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  zoom: 1;
-  *display: inline;
-}
-
 /* line 1611, styles.scss */
 #wordclassChkParent {
   float: right;
@@ -2063,27 +2053,26 @@ a.relStat:hover {
   transition: width 400ms ease;
 }
 
-/* line 1644, styles.scss */
-#results-stats.not_loading .progress,
-#results-lemgram.not_loading .progress {
+/* line 1643, styles.scss */
+.not_loading .progress {
   display: none;
 }
 
-/* line 1649, styles.scss */
+/* line 1648, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 1652, styles.scss */
+/* line 1651, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 1655, styles.scss */
+/* line 1654, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-/* line 1661, styles.scss */
+/* line 1660, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -2091,41 +2080,127 @@ a.relStat:hover {
   letter-spacing: 1.1;
 }
 
-/* line 1668, styles.scss */
+/* line 1667, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-/* line 1674, styles.scss */
+/* line 1673, styles.scss */
 #char_table {
   display: none;
 }
 
-/* line 1678, styles.scss */
+/* line 1677, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-/* line 1685, styles.scss */
+/* line 1684, styles.scss */
 #deptree_popup {
   overflow-y: hidden;
 }
-/* line 1687, styles.scss */
+/* line 1686, styles.scss */
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-/* line 1691, styles.scss */
+/* line 1690, styles.scss */
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-/* line 1697, styles.scss */
+/* line 1696, styles.scss */
+.smoother.ui-slider {
+  width: 200px;
+}
+
+/* line 1700, styles.scss */
+.legend {
+  float: right;
+}
+/* line 1702, styles.scss */
+.legend .action {
+  opacity: 0.5 !important;
+  color: white;
+}
+
+/* line 1708, styles.scss */
+.slick-viewport .slick-cell-checkboxsel input {
+  margin-left: 6px;
+}
+
+/* line 1712, styles.scss */
+.graph_btn_icon {
+  position: absolute;
+  left: 0;
+}
+
+/* line 1717, styles.scss */
+.graph_header .controls {
+  float: left;
+}
+
+/* line 1722, styles.scss */
+.stats_header {
+  margin-bottom: 1em;
+}
+/* line 1724, styles.scss */
+.stats_header > * {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1728, styles.scss */
 .reading_mode .show_deptree {
   display: none;
+}
+
+/* line 1732, styles.scss */
+.rickshaw_graph .x_tick .title {
+  bottom: -1.1em !important;
+  left: -3em;
+}
+
+/* line 1737, styles.scss */
+.form-bar .rickshaw_graph .x_tick .title {
+  left: 0;
+}
+
+/* line 1742, styles.scss */
+.y_ticks.plain g:first-of-type text {
+  display: none;
+}
+
+/* line 1746, styles.scss */
+.form-bar .legend li:last-child:not(:only-child) {
+  display: none;
+}
+
+/* line 1749, styles.scss */
+.form_switch {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: bottom;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+
+/* line 1753, styles.scss */
+line.tick {
+  display: none;
+}
+
+/* line 1757, styles.scss */
+.rickshaw_graph .x_tick {
+  border: none !important;
 }

@@ -1,5 +1,6 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   window.CorpusListing = (function() {
@@ -20,6 +21,14 @@
 
     CorpusListing.prototype.map = function(func) {
       return _.map(this.corpora, func);
+    };
+
+    CorpusListing.prototype.subsetFactory = function(idArray) {
+      var cl;
+      idArray = _.invoke(idArray, "toLowerCase");
+      cl = new CorpusListing(_.pick.apply(_, [this.struct].concat(__slice.call(idArray))));
+      cl.selected = cl.corpora;
+      return cl;
     };
 
     CorpusListing.prototype.getSelectedCorpora = function() {
@@ -151,6 +160,12 @@
         morf = corpus.morf || "saldom";
         return morf.split("|");
       }).flatten().unique().value().join("|");
+    };
+
+    CorpusListing.prototype.getTimeInterval = function() {
+      var all;
+      all = _.chain(settings.corpusListing.selected).pluck("time").map(_.keys).flatten().map(Number).sort().value();
+      return [_.first(all), _.last(all)];
     };
 
     return CorpusListing;

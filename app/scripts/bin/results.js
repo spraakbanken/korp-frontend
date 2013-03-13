@@ -1,7 +1,8 @@
 (function() {
   var BaseResults, newDataInGraph,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   BaseResults = (function() {
 
@@ -46,7 +47,7 @@
     };
 
     BaseResults.prototype.resultError = function(data) {
-      c.log("json fetch error: " + $.dump(data.ERROR));
+      c.log("json fetch error: ", data);
       this.hidePreloader();
       this.resetView();
       $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">').append("<img class='korp_fail' src='img/korp_fail.svg'>").add($("<div class='fail_text' />").localeKey("fail_text")).addClass("inline_block").prependTo(this.$result).wrapAll("<div class='error_msg'>");
@@ -587,7 +588,7 @@
     function ExampleResults(tabSelector, resultSelector) {
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.proxy = new model.ExamplesProxy();
-      this.$result.find(".progress").hide();
+      this.$result.find(".progress,.tab_progress").hide();
       this.$result.add(this.$tab).addClass("not_loading customtab");
       this.$result.removeClass("reading_mode");
     }
@@ -1094,9 +1095,11 @@
     __extends(StatsResults, _super);
 
     function StatsResults(tabSelector, resultSelector) {
-      var self;
+      var icon, paper, self,
+        _this = this;
       StatsResults.__super__.constructor.call(this, tabSelector, resultSelector);
       self = this;
+      this.gridData = null;
       this.proxy = statsProxy;
       $(".arcDiagramPicture").live("click", function() {
         var parts;
@@ -1155,17 +1158,52 @@
           return window.open("data:text/csv;charset=latin1," + escape(output));
         }
       });
+      icon = $("<span class='graph_btn_icon'>");
+      $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
+        var cl, cqp, elem, instance, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
+        instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
+        params = _this.proxy.prevParams;
+        cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
+        reduceVal = params.groupby;
+        isStructAttr = __indexOf.call(cl.getStructAttrs(), reduceVal) >= 0;
+        subExprs = [];
+        labelMapping = {};
+        showTotal = false;
+        mainCQP = params.cqp;
+        prefix = isStructAttr ? "_." : "";
+        _ref = _this.$result.find(".slick-cell-checkboxsel.selected");
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          elem = _ref[_i];
+          if ($(elem).is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
+            showTotal = true;
+            continue;
+          }
+          val = _this.gridData[$(elem).parent().index()].hit_value;
+          cqp = "[" + (prefix + reduceVal) + " = '" + (regescape(val)) + "']";
+          subExprs.push(cqp);
+          labelMapping[cqp] = $(elem).next().text();
+        }
+        return instance.makeRequest(mainCQP, subExprs, labelMapping, showTotal);
+      });
+      $("#showGraph .ui-button-text").localeKey("show_diagram");
+      paper = new Raphael(icon.get(0), 33, 33);
+      paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z").attr({
+        fill: "#666",
+        stroke: "none",
+        transform: "s0.6"
+      });
     }
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var grid, refreshHeaders, resultError, sortCol;
+      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
       refreshHeaders = function() {
-        $(".slick-header-column:nth(1)").click().click();
-        return $(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
+        $(".slick-header-column:nth(2)").click().click();
+        return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
           return $(this).localeKey($(this).text());
         });
       };
       this.resetView();
+      this.gridData = data;
       resultError = StatsResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -1174,13 +1212,21 @@
         this.showNoResults();
         return;
       }
+      checkboxSelector = new Slick.CheckboxSelectColumn({
+        cssClass: "slick-cell-checkboxsel"
+      });
+      columns = [checkboxSelector.getColumnDefinition()].concat(columns);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: true
       });
+      grid.setSelectionModel(new Slick.RowSelectionModel({
+        selectActiveRow: false
+      }));
+      grid.registerPlugin(checkboxSelector);
       this.grid = grid;
       this.resizeGrid();
-      sortCol = columns[1];
+      sortCol = columns[2];
       window.data = data;
       grid.onSort.subscribe(function(e, args) {
         sortCol = args.sortCol;
@@ -1207,14 +1253,13 @@
         return refreshHeaders();
       });
       refreshHeaders();
+      $(".slick-row:first input", this.$result).click();
       this.renderPlot();
       return this.hidePreloader();
     };
 
     StatsResults.prototype.renderPlot = function() {
-      var barElem, css, fill, paper, self, src;
-      self = this;
-      src = void 0;
+      var barElem, css, fill, paper;
       css = {
         cursor: "pointer"
       };
@@ -1305,7 +1350,7 @@
           this.resizeHits();
         }
       }
-      return $(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each(function() {
+      return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
         return $(this).localeKey($(this).text());
       });
     };
@@ -1348,6 +1393,325 @@
     };
 
     return StatsResults;
+
+  })(BaseResults);
+
+  view.GraphResults = (function(_super) {
+
+    __extends(GraphResults, _super);
+
+    function GraphResults(tabSelector, resultSelector) {
+      var n;
+      GraphResults.__super__.constructor.call(this, tabSelector, resultSelector);
+      $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
+      n = this.$result.index();
+      $(resultSelector).html("<div class=\"graph_header\">\n    <div class=\"progress\">\n        <progress value=\"0\" max=\"100\"></progress>\n    </div>\n    <div class=\"controls\">\n        <div class=\"form_switch\">\n            <input id=\"formswitch" + n + "1\" type=\"radio\" name=\"form_switch\" value=\"line\" checked><label for=\"formswitch" + n + "1\">Linje</label>\n            <input id=\"formswitch" + n + "2\" type=\"radio\" name=\"form_switch\" value=\"bar\"><label for=\"formswitch" + n + "2\">Stapel</label>\n        </div>\n        <label for=\"smoothing_switch\" class=\"smoothing_label\" rel=\"localize[smoothing]\">Utjämna</label> <input type=\"checkbox\" id=\"smoothing_switch\">\n        <div class=\"non_time_div\"><span rel=\"localize[non_time_before]\"></span><span class=\"non_time\"></span><span rel=\"localize[non_time_after]\"></div>\n    </div>\n    <div class=\"legend\"></div>\n    <div style=\"clear:both;\"></div>\n</div>\n<div class=\"chart\"></div>");
+      this.zoom = "year";
+      this.granularity = this.zoom[0];
+      this.proxy = new model.GraphProxy();
+    }
+
+    GraphResults.prototype.onentry = function() {};
+
+    GraphResults.prototype.onexit = function() {};
+
+    GraphResults.prototype.parseDate = function(granularity, time) {
+      var day, month, year, _ref;
+      _ref = [null, 0, 1], year = _ref[0], month = _ref[1], day = _ref[2];
+      switch (granularity) {
+        case "y":
+          year = time;
+          break;
+        case "m":
+          year = time.slice(0, 4);
+          month = time.slice(4, 6);
+          break;
+        case "d":
+          year = time.slice(0, 4);
+          month = time.slice(4, 6);
+          day = time.slice(6, 8);
+      }
+      return moment([Number(year), Number(month), Number(day)]);
+    };
+
+    GraphResults.prototype.fillMissingDate = function(data) {
+      var dateArray, diff, duration, exists, i, max, min, n_diff, newMoment, newMoments, _i;
+      dateArray = _.pluck(data, "x");
+      min = _.min(dateArray, function(mom) {
+        return mom.toDate();
+      });
+      max = _.max(dateArray, function(mom) {
+        return mom.toDate();
+      });
+      c.log("min", min, max);
+      duration = (function() {
+        switch (this.granularity) {
+          case "y":
+            duration = moment.duration({
+              year: 1
+            });
+            return diff = "year";
+          case "m":
+            duration = moment.duration({
+              month: 1
+            });
+            return diff = "month";
+          case "d":
+            duration = moment.duration({
+              day: 1
+            });
+            return diff = "day";
+        }
+      }).call(this);
+      n_diff = moment(max).diff(min, diff);
+      exists = function(mom) {
+        return _.any(_.map(dateArray, function(item) {
+          return item.isSame(mom, diff);
+        }));
+      };
+      newMoments = [];
+      for (i = _i = 0; 0 <= n_diff ? _i <= n_diff : _i >= n_diff; i = 0 <= n_diff ? ++_i : --_i) {
+        newMoment = moment(min).add(diff, i);
+        if (!exists(newMoment)) {
+          newMoments.push(newMoment);
+        }
+      }
+      newMoments = _.map(newMoments, function(item) {
+        return {
+          x: item,
+          y: 0
+        };
+      });
+      return [].concat(data, newMoments);
+    };
+
+    GraphResults.prototype.getSeriesData = function(data) {
+      var first, firstVal, hasFirstValue, hasLastValue, last, lastVal, mom, output, tuple, x, y, _i, _len, _ref;
+      _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
+      firstVal = this.parseDate("y", first);
+      lastVal = this.parseDate("y", last.toString());
+      hasFirstValue = false;
+      hasLastValue = false;
+      output = (function() {
+        var _i, _len, _ref1, _ref2, _results;
+        _ref1 = _.pairs(data);
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          _ref2 = _ref1[_i], x = _ref2[0], y = _ref2[1];
+          mom = this.parseDate(this.granularity, x);
+          if (mom.isSame(firstVal)) {
+            hasFirstValue = true;
+          }
+          if (mom.isSame(lastVal)) {
+            hasLastValue = true;
+          }
+          _results.push({
+            x: mom,
+            y: y
+          });
+        }
+        return _results;
+      }).call(this);
+      if (!hasFirstValue) {
+        output.push({
+          x: firstVal,
+          y: 0
+        });
+      }
+      output = this.fillMissingDate(output);
+      output = output.sort(function(a, b) {
+        return a.x.unix() - b.x.unix();
+      });
+      output.splice(output.length - 1, 1);
+      for (_i = 0, _len = output.length; _i < _len; _i++) {
+        tuple = output[_i];
+        tuple.x = tuple.x.unix();
+      }
+      return output;
+    };
+
+    GraphResults.prototype.hideNthTick = function(graphDiv) {
+      return $(".x_tick .title", graphDiv).hide().filter(function(n) {
+        return n % 2 === 0;
+      }).show();
+    };
+
+    GraphResults.prototype.updateTicks = function() {
+      var firstTick, secondTick;
+      firstTick = $(".title:nth(0)", $(".chart", this.$result));
+      secondTick = $(".title:nth(1)", $(".chart", this.$result));
+      if (!firstTick.length) {
+        return;
+      }
+      c.log("updateTicks", firstTick.offset().left + firstTick.width(), secondTick.offset().left);
+      if (firstTick.offset().left + firstTick.width() > secondTick.offset().left) {
+        return this.hideNthTick($(".chart", this.$result));
+      }
+    };
+
+    GraphResults.prototype.getNonTime = function() {
+      var non_time, sizelist, totalsize;
+      non_time = _.reduce(_.pluck(settings.corpusListing.selected, "non_time"), (function(a, b) {
+        return (a || 0) + (b || 0);
+      }), 0);
+      sizelist = _.map(settings.corpusListing.selected, function(item) {
+        return Number(item.info.Size);
+      });
+      totalsize = _.reduce(sizelist, function(a, b) {
+        return a + b;
+      });
+      return (non_time / totalsize) * 100;
+    };
+
+    GraphResults.prototype.makeRequest = function(cqp, subcqps, labelMapping, showTotal) {
+      var hidden,
+        _this = this;
+      hidden = $(".progress", this.$result).nextAll().hide();
+      this.showPreloader();
+      return this.proxy.makeRequest(cqp, subcqps).progress(function(data) {
+        return _this.onProgress(data);
+      }).fail(function(data) {
+        c.log("graph crash");
+        return _this.resultError(data);
+      }).done(function(data) {
+        var first, hoverDetail, last, legend, nontime, old_render, palette, series, shelving, smoother, time, timeunit, xAxis, yAxis, _ref;
+        c.log("data", data);
+        if (data.ERROR) {
+          _this.resultError(data);
+        }
+        nontime = _this.getNonTime();
+        if (nontime) {
+          $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
+        } else {
+          $(".non_time_div").hide();
+        }
+        palette = new Rickshaw.Color.Palette();
+        if (_.isArray(data.combined)) {
+          series = _.map(data.combined, function(item) {
+            return {
+              data: _this.getSeriesData(item.relative),
+              color: palette.color(),
+              name: item.cqp ? labelMapping[item.cqp] : "&Sigma;"
+            };
+          });
+        } else {
+          series = [
+            {
+              data: _this.getSeriesData(data.combined.relative),
+              color: 'steelblue',
+              name: "&Sigma;"
+            }
+          ];
+        }
+        Rickshaw.Series.zeroFill(series);
+        window.graph = new Rickshaw.Graph({
+          element: $(".chart", _this.$result).get(0),
+          renderer: 'line',
+          interpolation: "linear",
+          series: series,
+          padding: {
+            top: 0.1,
+            right: 0.01
+          },
+          min: "auto"
+        });
+        graph.render();
+        smoother = new Rickshaw.Graph.Smoother({
+          graph: graph
+        });
+        $("#smoothing_switch", _this.$result).change(function() {
+          if ($(this).is(":checked")) {
+            smoother.setScale(3);
+            graph.interpolation = "cardinal";
+          } else {
+            smoother.setScale(1);
+            graph.interpolation = "linear";
+          }
+          return graph.render();
+        });
+        $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
+          var cls, target, val, _i, _len, _ref;
+          target = event.currentTarget;
+          val = $(":checked", target).val();
+          _ref = _this.$result.attr("class").split(" ");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            cls = _ref[_i];
+            if (cls.match(/^form-/)) {
+              _this.$result.removeClass(cls);
+            }
+          }
+          _this.$result.addClass("form-" + val);
+          $("#smoothing_switch", _this.$result).attr("disabled", null);
+          if (val === "bar") {
+            if ($(".legend .line").length > 1) {
+              $(".legend li:last:not(.disabled) .action", _this.$result).click();
+              if (_.all(_.map($(".legend .line", _this.$result), function(item) {
+                return $(item).is(".disabled");
+              }))) {
+                $(".legend li:first .action", _this.$result).click();
+              }
+            }
+            $("#smoothing_switch:checked", _this.$result).click();
+            $("#smoothing_switch", _this.$result).attr("disabled", "true");
+          }
+          graph.setRenderer(val);
+          return graph.render();
+        });
+        $(".form_switch .ui-button:first .ui-button-text").localeKey("line");
+        $(".form_switch .ui-button:last .ui-button-text").localeKey("bar");
+        legend = new Rickshaw.Graph.Legend({
+          element: $(".legend", _this.$result).get(0),
+          graph: graph
+        });
+        shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+          graph: graph,
+          legend: legend
+        });
+        if (!showTotal && $(".legend .line").length > 1) {
+          $(".legend .line:last .action", _this.$result).click();
+        }
+        hoverDetail = new Rickshaw.Graph.HoverDetail({
+          graph: graph,
+          xFormatter: function(x) {
+            var d, output;
+            d = new Date(x * 1000);
+            output = ["År: " + d.getFullYear(), "Månad: " + d.getMonth(), "Dag: " + d.getDay()];
+            switch (_this.granularity) {
+              case "y":
+                return output[0];
+              case "m":
+                return output.slice(0, 2).join("\n");
+              case "d":
+                return output.join("\n");
+            }
+          },
+          yFormatter: function(y) {
+            return "<br>Rel. träffar " + y.toFixed(2);
+          }
+        });
+        _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
+        timeunit = last - first > 200 ? "decade" : _this.zoom;
+        time = new Rickshaw.Fixtures.Time();
+        xAxis = new Rickshaw.Graph.Axis.Time({
+          graph: graph,
+          timeUnit: time.unit(timeunit)
+        });
+        old_render = xAxis.render;
+        xAxis.render = function() {
+          old_render.call(xAxis);
+          return _this.updateTicks();
+        };
+        xAxis.render();
+        yAxis = new Rickshaw.Graph.Axis.Y({
+          graph: graph
+        });
+        yAxis.render();
+        hidden.fadeIn();
+        return _this.hidePreloader();
+      });
+    };
+
+    return GraphResults;
 
   })(BaseResults);
 

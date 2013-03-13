@@ -1604,9 +1604,9 @@ a {
   display: none;
 }
 
-.lab #showBarPlot {
-  @include inline-block();
-}
+// .lab #showBarPlot {
+//   @include inline-block();
+// }
 
 #wordclassChkParent {
   float: right;
@@ -1640,8 +1640,7 @@ a {
   @include transition(width 400ms ease);
 }
 
-#results-stats.not_loading .progress,
-#results-lemgram.not_loading .progress {
+.not_loading .progress {
   display: none;
 }
 
@@ -1694,6 +1693,67 @@ a {
   }
 }
 
+.smoother.ui-slider {
+  width : 200px;
+}
+
+.legend {
+  float : right;
+  .action {
+    opacity : 0.5 !important;
+    color : white;
+  }
+}
+
+.slick-viewport .slick-cell-checkboxsel input {
+  margin-left : 6px;
+}
+
+.graph_btn_icon {
+  position : absolute;
+  left : 0;
+}
+.graph_header {
+  .controls {
+    float : left;
+  }
+}
+
+.stats_header {
+  margin-bottom : 1em;
+  > * {
+    @include inline-block();
+  }
+}
 .reading_mode .show_deptree {
   display : none;
+}
+
+.rickshaw_graph .x_tick .title {
+  bottom : -1.1em !important;
+  // left : -1.3em;
+  left : -3em;
+}
+.form-bar .rickshaw_graph .x_tick .title {
+  left : 0;
+}
+
+// removes the first 0 y tick
+.y_ticks.plain g:first-of-type text {
+  display : none;
+}
+
+.form-bar .legend li:last-child:not(:only-child) {
+  display : none;
+}
+.form_switch {
+  @include inline-block(bottom);
+}
+
+line.tick {
+  display : none;
+}
+
+.rickshaw_graph .x_tick {
+  border : none !important;
 }

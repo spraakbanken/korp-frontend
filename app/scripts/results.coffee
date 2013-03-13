@@ -8,7 +8,7 @@ class BaseResults
         @$result.add(@$tab).addClass "not_loading"
 
     onProgress: (progressObj) ->
-
+        # c.log "onProgress", progressObj
         # TODO: this item only exists in the kwic.
         @num_result.html prettyNumbers(progressObj["total_results"])
         unless isNaN(progressObj["stats"])
@@ -36,7 +36,7 @@ class BaseResults
             false
 
     resultError: (data) ->
-        c.log "json fetch error: " + $.dump(data.ERROR)
+        c.log "json fetch error: ", data
         @hidePreloader()
         @resetView()
         $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">')
@@ -486,7 +486,7 @@ class view.ExampleResults extends view.KWICResults
     constructor: (tabSelector, resultSelector) ->
         super tabSelector, resultSelector
         @proxy = new model.ExamplesProxy()
-        @$result.find(".progress").hide()
+        @$result.find(".progress,.tab_progress").hide()
         @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
 
@@ -930,6 +930,7 @@ class view.StatsResults extends BaseResults
     constructor: (tabSelector, resultSelector) ->
         super tabSelector, resultSelector
         self = this
+        @gridData = null
         @proxy = statsProxy
         $(".arcDiagramPicture").live "click", ->
             parts = $(this).attr("id").split("__")
@@ -983,25 +984,72 @@ class view.StatsResults extends BaseResults
                 window.open "data:text/csv;charset=latin1," + escape(output)
 
 
+        icon = $("<span class='graph_btn_icon'>")
+
+        $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
+            instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
+
+            params = @proxy.prevParams
+            cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
+            reduceVal = params.groupby
+
+
+            isStructAttr = reduceVal in cl.getStructAttrs()
+            subExprs = []
+            labelMapping = {}
+            # TODO: doesn't work when reloading with extended tab showing.
+            showTotal = false
+            mainCQP = params.cqp
+            prefix = if isStructAttr then "_." else ""
+            for elem in @$result.find(".slick-cell-checkboxsel.selected")
+                if $(elem).is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
+                    showTotal = true
+                    continue
+                val = @gridData[$(elem).parent().index()].hit_value
+                cqp = "[#{prefix + reduceVal} = '#{regescape(val)}']"
+                subExprs.push cqp
+                labelMapping[cqp] = $(elem).next().text()
+
+            instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
+        $("#showGraph .ui-button-text").localeKey("show_diagram")
+
+        paper = new Raphael(icon.get(0), 33, 33)
+        paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z")
+            .attr
+                fill: "#666"
+                stroke: "none"
+                transform: "s0.6"
+
     renderResult: (columns, data) ->
         refreshHeaders = ->
-            $(".slick-header-column:nth(1)").click().click()
-            $(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each ->
+            $(".slick-header-column:nth(2)").click().click()
+            $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
 
         @resetView()
+        @gridData = data
         resultError = super(data)
-        return  if resultError is false
+        return if resultError is false
         if data[0].total_value.absolute is 0
             @showNoResults()
             return
-        grid = new Slick.Grid($("#myGrid"), data, columns,
+
+        checkboxSelector = new Slick.CheckboxSelectColumn
+            cssClass: "slick-cell-checkboxsel"
+
+        columns = [checkboxSelector.getColumnDefinition()].concat(columns)
+
+        grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: true
-        )
+
+        grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
+        grid.registerPlugin(checkboxSelector)
         @grid = grid
         @resizeGrid()
-        sortCol = columns[1]
+
+
+        sortCol = columns[2]
         window.data = data
         grid.onSort.subscribe (e, args) ->
             sortCol = args.sortCol
@@ -1023,13 +1071,14 @@ class view.StatsResults extends BaseResults
         grid.onHeaderRendered.subscribe (e, args) ->
             refreshHeaders()
 
+        # remove first checkbox
+        # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
+        $(".slick-row:first input", @$result).click()
         @renderPlot()
         @hidePreloader()
 
     renderPlot: ->
-        self = this
-        src = undefined
         css = cursor: "pointer"
         fill = "#666"
         if $.keys(statsResults.savedData.corpora).length < 2
@@ -1060,7 +1109,7 @@ class view.StatsResults extends BaseResults
         $.each $.keys(data).sort(), (i, corpus) ->
             ticks.push [accu + .5, settings.corpora[corpus.toLowerCase()].title]
             display.push [accu, data[corpus].sums.relative]
-            max = data[corpus].sums.relative  if max < data[corpus].sums.relative
+            max = data[corpus].sums.relative if max < data[corpus].sums.relative
             accu = accu + 1 + spacing
 
         width = display.length * 60
@@ -1108,7 +1157,7 @@ class view.StatsResults extends BaseResults
                 setTimeout $.proxy(@resizeHits, this), 1
             else
                 @resizeHits()
-        $(".slick-column-name:nth(0),.slick-column-name:nth(1)").not("[rel^=localize]").each ->
+        $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
             $(this).localeKey $(this).text()
 
 
@@ -1147,3 +1196,306 @@ class view.StatsResults extends BaseResults
         @hidePreloader()
         $("#results-stats").prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
         $("#exportStatsSection").hide()
+
+
+class view.GraphResults extends BaseResults
+    constructor : (tabSelector, resultSelector) ->
+        super(tabSelector, resultSelector)
+        $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
+        n = @$result.index()
+        $(resultSelector).html """
+            <div class="graph_header">
+                <div class="progress">
+                    <progress value="0" max="100"></progress>
+                </div>
+                <div class="controls">
+                    <div class="form_switch">
+                        <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
+                        <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
+                    </div>
+                    <label for="smoothing_switch" class="smoothing_label" rel="localize[smoothing]">Utjämna</label> <input type="checkbox" id="smoothing_switch">
+                    <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
+                </div>
+                <div class="legend"></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="chart"></div>
+        """
+            # Smoothing:
+            # <div class="smoother"></div>
+
+        @zoom = "year"
+        @granularity = @zoom[0]
+        @proxy = new model.GraphProxy()
+
+    onentry : ->
+    onexit : ->
+
+    parseDate : (granularity, time) ->
+        [year,month,day] = [null,0,1]
+        switch granularity
+            when "y" then year = time
+            when "m"
+                year = time[0...4]
+                month = time[4...6]
+            when "d"
+                year = time[0...4]
+                month = time[4...6]
+                day = time[6...8]
+
+        return moment([Number(year), Number(month), Number(day)])
+
+    # buildSeries : (cqpArray) ->
+
+    fillMissingDate : (data) ->
+        dateArray = _.pluck data, "x"
+        min = _.min dateArray, (mom) -> mom.toDate()
+        max = _.max dateArray, (mom) -> mom.toDate()
+        c.log "min", min, max
+
+
+        duration = switch @granularity
+            when "y"
+                duration = moment.duration year :  1
+                diff = "year"
+            when "m"
+                duration = moment.duration month :  1
+                diff = "month"
+            when "d"
+                duration = moment.duration day :  1
+                diff = "day"
+
+        n_diff = moment(max).diff min, diff
+
+        # c.log "ndiff", n_diff, [1..n_diff]
+        exists = (mom) ->
+            _.any _.map dateArray, (item) ->
+                item.isSame mom, diff
+        newMoments = []
+        for i in [0..n_diff]
+            newMoment = moment(min).add(diff, i)
+            newMoments.push newMoment if !exists newMoment
+
+
+
+        # c.log "newMoments", newMoments
+        newMoments = _.map newMoments, (item) -> x : item, y : 0
+        return [].concat data, newMoments
+
+
+
+
+    getSeriesData : (data) ->
+        [first, last] = settings.corpusListing.getTimeInterval()
+        firstVal = @parseDate "y", first
+        # c.log "firstVal", firstVal
+        lastVal = @parseDate "y", last.toString()
+        # c.log "lastVal", lastVal
+
+        hasFirstValue = false
+        hasLastValue = false
+        output = for [x, y] in (_.pairs data)
+            mom = (@parseDate @granularity, x)
+            if mom.isSame firstVal then hasFirstValue = true
+            if mom.isSame lastVal then hasLastValue = true
+            {x : mom, y : y}
+
+
+        unless hasFirstValue
+            output.push {x : firstVal, y:0}
+
+        output = @fillMissingDate output
+
+        # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
+
+        output =  output.sort (a, b) ->
+            a.x.unix() - b.x.unix()
+
+        #remove last element
+        output.splice(output.length-1, 1)
+
+        for tuple in output
+            tuple.x = tuple.x.unix()
+
+        return output
+
+
+    hideNthTick : (graphDiv) ->
+        $(".x_tick .title", graphDiv).hide()
+        .filter((n) ->
+            return n % 2 == 0
+            # return Number($(this).text()) % 5 == 0
+        ).show()
+
+    updateTicks : () ->
+        firstTick = $(".title:nth(0)", $(".chart", @$result))
+        # while Number(firstTick.text()) % 5 != 0
+        #     firstTick = firstTick.next()
+
+        secondTick = $(".title:nth(1)", $(".chart", @$result))
+        if not firstTick.length then return
+        c.log "updateTicks", firstTick.offset().left + firstTick.width(), secondTick.offset().left
+        if firstTick.offset().left + firstTick.width() > secondTick.offset().left
+            @hideNthTick $(".chart", @$result)
+
+
+    getNonTime : () ->
+        #TODO: move settings.corpusListing.selected to the subview
+        non_time = _.reduce (_.pluck settings.corpusListing.selected, "non_time"), ((a, b) -> (a or 0) + (b or 0)), 0
+        # c.log "non_time", non_time
+        sizelist = _.map settings.corpusListing.selected, (item) -> Number item.info.Size
+
+        totalsize = _.reduce sizelist, (a, b) -> a + b
+
+
+        return (non_time / totalsize) * 100
+
+
+
+    makeRequest : (cqp, subcqps, labelMapping, showTotal) ->
+        hidden = $(".progress", @$result).nextAll().hide()
+        @showPreloader()
+        @proxy.makeRequest(cqp, subcqps).progress( (data) =>
+            @onProgress(data)
+
+
+
+        ).fail( (data) =>
+            c.log "graph crash"
+            @resultError(data)
+
+
+        ).done (data) =>
+            c.log "data", data
+
+            if data.ERROR
+                @resultError data
+            nontime = @getNonTime()
+            if nontime
+                $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
+            else
+                $(".non_time_div").hide()
+
+            palette = new Rickshaw.Color.Palette()
+            if _.isArray data.combined
+                series = _.map data.combined, (item) =>
+                    return {
+                        data : @getSeriesData item.relative
+                        color : palette.color()
+                        # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
+                        name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
+                    }
+            else
+                series = [{
+                            data: @getSeriesData data.combined.relative
+                            color: 'steelblue'
+                            name : "&Sigma;"
+                        }]
+
+            Rickshaw.Series.zeroFill(series)
+            window.graph = new Rickshaw.Graph
+                element: $(".chart", @$result).get(0)
+                renderer: 'line'
+                interpolation : "linear"
+                series: series
+                padding :
+                    top : 0.1
+                    right : 0.01
+                min : "auto"
+            graph.render()
+
+            smoother = new Rickshaw.Graph.Smoother
+                graph: graph,
+                # element: $('.smoother', @$result)
+
+            # smoother.setScale(3)
+            # TODO: use class to live with other tabs
+            $("#smoothing_switch", @$result).change ->
+                if $(this).is(":checked")
+                    smoother.setScale(3)
+                    graph.interpolation = "cardinal"
+                else
+                    smoother.setScale(1)
+                    graph.interpolation = "linear"
+                graph.render()
+            $(".form_switch", @$result).buttonset().change (event, ui) =>
+                target = event.currentTarget
+                val = $(":checked", target).val()
+                for cls in @$result.attr("class").split(" ")
+                    if cls.match(/^form-/) then @$result.removeClass(cls)
+                @$result.addClass("form-" +val)
+
+                $("#smoothing_switch", @$result).attr("disabled", null)
+                if val == "bar"
+                    if $(".legend .line").length > 1
+                        $(".legend li:last:not(.disabled) .action", @$result).click()
+
+                        if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
+                            $(".legend li:first .action", @$result).click()
+
+                    $("#smoothing_switch:checked", @$result).click()
+                    $("#smoothing_switch", @$result).attr("disabled", "true")
+
+
+                graph.setRenderer val
+                graph.render()
+
+            $(".form_switch .ui-button:first .ui-button-text").localeKey("line")
+            $(".form_switch .ui-button:last .ui-button-text").localeKey("bar")
+            legend = new Rickshaw.Graph.Legend
+                element: $(".legend", @$result).get(0)
+                graph: graph
+
+            shelving = new Rickshaw.Graph.Behavior.Series.Toggle
+                graph: graph
+                legend: legend
+
+            if not showTotal and $(".legend .line").length > 1
+                $(".legend .line:last .action", @$result).click()
+
+            hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                graph: graph
+                xFormatter: (x) =>
+                    d = new Date(x * 1000)
+                    output = ["År: " + d.getFullYear(), "Månad: " + d.getMonth(), "Dag: " + d.getDay()]
+                    switch @granularity
+                        when "y" then return output[0]
+                        when "m" then return output[0..1].join("\n")
+                        when "d" then return output.join("\n")
+
+
+                yFormatter: (y) ->  "<br>Rel. träffar " + y.toFixed 2
+            } )
+            # if @granularity == "y"
+
+            [first, last] = settings.corpusListing.getTimeInterval()
+
+            timeunit = if last - first > 200 then "decade" else @zoom
+
+            time = new Rickshaw.Fixtures.Time()
+            xAxis = new Rickshaw.Graph.Axis.Time
+                graph: graph
+                timeUnit: time.unit(timeunit)
+
+
+            old_render = xAxis.render
+            xAxis.render = () =>
+                old_render.call xAxis
+                @updateTicks()
+
+            xAxis.render()
+
+            yAxis = new Rickshaw.Graph.Axis.Y
+                graph: graph
+
+            yAxis.render()
+            hidden.fadeIn()
+            @hidePreloader()
+
+
+
+
+
+
+
+

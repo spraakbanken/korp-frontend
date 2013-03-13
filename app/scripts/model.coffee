@@ -22,13 +22,19 @@ class BaseProxy
             # var suffix = data.slice(-1) == "}" ? "" : "}";
             # var json = prefix + data.slice(0,-2) + suffix;
             json = data
-            json = "{" + json.slice(0, -1) + "}" if json.slice(-1) is ","
+            # json = "{" + json.slice(0, -1) + "}" if json.slice(-1) is ","
+            if json[0] != "{" then json = "{" + json
+            if json.match(/,\s*$/)
+                json = json.replace(/,\s*$/, "") + "}"
+
 
             # c.log('json after', json)
-            return JSON.parse(json)
+            out = JSON.parse(json)
+            # c.log "json parsing success!", json
+            return out
         catch e
 
-            #         c.log("trying data", data);
+                    # c.log("trying data", data);
             return JSON.parse(data)
 
     addAuthorizationHeader: (req) ->
@@ -37,25 +43,24 @@ class BaseProxy
             req.setRequestHeader "Authorization", "Basic " + authenticationProxy.loginObj.auth
 
     calcProgress: (e) ->
-        self = this
         newText = e.target.responseText.slice(@prev.length)
+        # c.log "newText", newText
         struct = {}
         try
             struct = @parseJSON(newText)
-
         # c.log("json parse failed in ", newText);
-        $.each struct, (key, val) ->
+        $.each struct, (key, val) =>
             if key isnt "progress_corpora" and key.split("_")[0] is "progress"
                 currentCorpus = val.corpus or val
                 sum = _.chain(currentCorpus.split("|")).map((corpus) ->
-                    parseInt settings.corpora[corpus.toLowerCase()].info.Size
+                    Number settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
                 , 0).value()
-                self.progress += sum
-                self.total_results += parseInt(val.hits)
+                @progress += sum
+                @total_results += parseInt(val.hits)
 
-        stats = (self.progress / self.total) * 100
+        stats = (@progress / @total) * 100
         if not @total? and "progress_corpora" of struct
             @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
                 _.chain(corpus.split("|")).map((corpus) ->
@@ -66,7 +71,7 @@ class BaseProxy
             ), (val1, val2) ->
                 val1 + val2
             )
-        self.prev = e.target.responseText
+        @prev = e.target.responseText
         struct: struct
         stats: stats
         total_results: @total_results
@@ -371,16 +376,16 @@ class model.StatsProxy extends BaseProxy
     constructor: ->
         super()
         @prevRequest = null
+        @prevParams = null
         @currentPage = 0
         @page_incr = 25
 
     makeRequest: (cqp, callback) ->
-        c.log "statsproxy.makeRequest", callback
         self = this
         super()
         statsResults.showPreloader()
         reduceval = $.bbq.getState("stats_reduce") or "word"
-        reduceval = "word"  if reduceval is "word_insensitive"
+        reduceval = "word" if reduceval is "word_insensitive"
         data =
             command: "count"
             groupby: reduceval
@@ -393,11 +398,14 @@ class model.StatsProxy extends BaseProxy
             $.extend data,
                 ignore_case: "word"
 
-        data.within = settings.corpusListing.getWithinQueryString()  if $.sm.In("extended") and $(".within_select").val() is "paragraph"
+        data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
+        @prevParams = data
         $.ajax
             url: settings.cgi_script
             data: data
             beforeSend: (req, settings) ->
+                c.log "req", req
+
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
 
@@ -415,6 +423,7 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", $.dump(data.ERROR)
                     statsResults.resultError data
                     return
+
                 columns = [
                     id: "hit"
                     name: "stats_hit"
@@ -527,6 +536,7 @@ class model.TimeProxy extends BaseProxy
                 granularity: "y"
                 corpus: settings.corpusListing.stringifySelected()
 
+
     makeRequest: (combined) ->
         self = this
         dfd = $.Deferred()
@@ -588,3 +598,52 @@ class model.TimeProxy extends BaseProxy
             y++
 
 
+class model.GraphProxy extends BaseProxy
+    constructor: ->
+        super()
+
+    expandSubCqps : (subArray) ->
+        padding = _.map [0...subArray.length.toString().length], -> "0"
+        array = for cqp, i in subArray
+            p = padding[i.toString().length..].join("")
+            ["subcqp#{p}#{i}", cqp]
+        return _.object array
+
+    makeRequest: (cqp, subcqps) ->
+        super()
+        params =
+            command : "count_time"
+            cqp : cqp
+            corpus : settings.corpusListing.stringifySelected()
+            granularity : @granularity
+            incremental: $.support.ajaxProgress
+
+        #TODO: fix this for struct attrs
+        _.extend params, @expandSubCqps subcqps
+
+        def = $.Deferred()
+
+        $.ajax
+            url : "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi"
+            # url : "data.json"
+            dataType : "json"
+            data : params
+
+            beforeSend: (req, settings) =>
+                @prevRequest = settings
+                @addAuthorizationHeader req
+
+            progress: (data, e) =>
+                progressObj = @calcProgress(e)
+                return unless progressObj?
+                # callback progressObj
+                def.notify progressObj
+
+            error: (jqXHR, textStatus, errorThrown) ->
+                def.reject(textStatus)
+            success : (data) ->
+                def.resolve data
+            #     [first, last] = settings.corpusListing.getTimeInterval()
+            #     data
+
+        return def.promise()

@@ -186,7 +186,7 @@ Sidebar =
         else
             @element.removeClass("ui-state-highlight").addClass "kwic_sidebar"
             instance = $("#result-container").korptabs("getCurrentInstance")
-            instance.selectionManager.selected.click()  if instance and instance.selectionManager.selected
+            instance?.selectionManager?.selected?.click()
 
     updatePlacement: ->
         max = Math.round($("#columns").position().top)
@@ -411,10 +411,11 @@ KorpTabs =
         $(".custom_tab").css "margin-left", "auto"
         $(".custom_tab:first").css "margin-left", 8
 
-    addTab: (klass) ->
+    addTab: (klass, headerLabel = "KWIC") ->
         url = @urlPattern + @n
-        @add url, "KWIC"
-        li = @element.find("li:last")
+        @add url, headerLabel
+        c.log "@element", @element, @element.find("li:last")
+        li = $(".ui-tabs-nav > li:last", @element)
         @redrawTabs()
         newDiv = @element.children().last()
         # angular.injector(['ng']).invoke ["$rootScope", "$compile", ($rootScope, $compile) ->
@@ -427,7 +428,7 @@ KorpTabs =
         instance = new klass(li, url)
         li.data "instance", instance
         @n++
-        li.find("a").trigger "mouseup"
+        li.find("a.ui-tabs-anchor").trigger "mouseup"
 
 
 

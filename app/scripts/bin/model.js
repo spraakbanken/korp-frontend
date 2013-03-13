@@ -22,13 +22,17 @@
     };
 
     BaseProxy.prototype.parseJSON = function(data) {
-      var json;
+      var json, out;
       try {
         json = data;
-        if (json.slice(-1) === ",") {
-          json = "{" + json.slice(0, -1) + "}";
+        if (json[0] !== "{") {
+          json = "{" + json;
         }
-        return JSON.parse(json);
+        if (json.match(/,\s*$/)) {
+          json = json.replace(/,\s*$/, "") + "}";
+        }
+        out = JSON.parse(json);
+        return out;
       } catch (e) {
         return JSON.parse(data);
       }
@@ -42,8 +46,8 @@
     };
 
     BaseProxy.prototype.calcProgress = function(e) {
-      var newText, self, stats, struct;
-      self = this;
+      var newText, stats, struct,
+        _this = this;
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
@@ -54,15 +58,15 @@
         if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
           currentCorpus = val.corpus || val;
           sum = _.chain(currentCorpus.split("|")).map(function(corpus) {
-            return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
+            return Number(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
             return a + b;
           }, 0).value();
-          self.progress += sum;
-          return self.total_results += parseInt(val.hits);
+          _this.progress += sum;
+          return _this.total_results += parseInt(val.hits);
         }
       });
-      stats = (self.progress / self.total) * 100;
+      stats = (this.progress / this.total) * 100;
       if (!(this.total != null) && "progress_corpora" in struct) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
           return _.chain(corpus.split("|")).map(function(corpus) {
@@ -74,7 +78,7 @@
           return val1 + val2;
         });
       }
-      self.prev = e.target.responseText;
+      this.prev = e.target.responseText;
       return {
         struct: struct,
         stats: stats,
@@ -477,13 +481,13 @@
     function StatsProxy() {
       StatsProxy.__super__.constructor.call(this);
       this.prevRequest = null;
+      this.prevParams = null;
       this.currentPage = 0;
       this.page_incr = 25;
     }
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
       var data, reduceval, self;
-      c.log("statsproxy.makeRequest", callback);
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -507,10 +511,12 @@
       if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
         data.within = settings.corpusListing.getWithinQueryString();
       }
+      this.prevParams = data;
       return $.ajax({
         url: settings.cgi_script,
         data: data,
         beforeSend: function(req, settings) {
+          c.log("req", req);
           self.prevRequest = settings;
           return self.addAuthorizationHeader(req);
         },
@@ -748,6 +754,79 @@
     };
 
     return TimeProxy;
+
+  })(BaseProxy);
+
+  model.GraphProxy = (function(_super) {
+
+    __extends(GraphProxy, _super);
+
+    function GraphProxy() {
+      GraphProxy.__super__.constructor.call(this);
+    }
+
+    GraphProxy.prototype.expandSubCqps = function(subArray) {
+      var array, cqp, i, p, padding, _i, _ref, _results;
+      padding = _.map((function() {
+        _results = [];
+        for (var _i = 0, _ref = subArray.length.toString().length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this), function() {
+        return "0";
+      });
+      array = (function() {
+        var _j, _len, _results1;
+        _results1 = [];
+        for (i = _j = 0, _len = subArray.length; _j < _len; i = ++_j) {
+          cqp = subArray[i];
+          p = padding.slice(i.toString().length).join("");
+          _results1.push(["subcqp" + p + i, cqp]);
+        }
+        return _results1;
+      })();
+      return _.object(array);
+    };
+
+    GraphProxy.prototype.makeRequest = function(cqp, subcqps) {
+      var def, params,
+        _this = this;
+      GraphProxy.__super__.makeRequest.call(this);
+      params = {
+        command: "count_time",
+        cqp: cqp,
+        corpus: settings.corpusListing.stringifySelected(),
+        granularity: this.granularity,
+        incremental: $.support.ajaxProgress
+      };
+      _.extend(params, this.expandSubCqps(subcqps));
+      def = $.Deferred();
+      $.ajax({
+        url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi",
+        dataType: "json",
+        data: params,
+        beforeSend: function(req, settings) {
+          _this.prevRequest = settings;
+          return _this.addAuthorizationHeader(req);
+        },
+        progress: function(data, e) {
+          var progressObj;
+          progressObj = _this.calcProgress(e);
+          if (progressObj == null) {
+            return;
+          }
+          return def.notify(progressObj);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          return def.reject(textStatus);
+        },
+        success: function(data) {
+          return def.resolve(data);
+        }
+      });
+      return def.promise();
+    };
+
+    return GraphProxy;
 
   })(BaseProxy);
 

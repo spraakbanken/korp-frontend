@@ -209,7 +209,7 @@
       return $.arrayToHTMLList(seq).outerHTML();
     },
     refreshContent: function(mode) {
-      var instance,
+      var instance, _ref, _ref1,
         _this = this;
       if (mode === "lemgramWarning") {
         return $.Deferred(function(dfd) {
@@ -222,9 +222,7 @@
       } else {
         this.element.removeClass("ui-state-highlight").addClass("kwic_sidebar");
         instance = $("#result-container").korptabs("getCurrentInstance");
-        if (instance && instance.selectionManager.selected) {
-          return instance.selectionManager.selected.click();
-        }
+        return instance != null ? (_ref = instance.selectionManager) != null ? (_ref1 = _ref.selected) != null ? _ref1.click() : void 0 : void 0 : void 0;
       }
     },
     updatePlacement: function() {
@@ -476,11 +474,15 @@
       $(".custom_tab").css("margin-left", "auto");
       return $(".custom_tab:first").css("margin-left", 8);
     },
-    addTab: function(klass) {
+    addTab: function(klass, headerLabel) {
       var instance, li, newDiv, url;
+      if (headerLabel == null) {
+        headerLabel = "KWIC";
+      }
       url = this.urlPattern + this.n;
-      this.add(url, "KWIC");
-      li = this.element.find("li:last");
+      this.add(url, headerLabel);
+      c.log("@element", this.element, this.element.find("li:last"));
+      li = $(".ui-tabs-nav > li:last", this.element);
       this.redrawTabs();
       newDiv = this.element.children().last();
       this.element.injector().invoke([
@@ -494,7 +496,7 @@
       instance = new klass(li, url);
       li.data("instance", instance);
       this.n++;
-      li.find("a").trigger("mouseup");
+      li.find("a.ui-tabs-anchor").trigger("mouseup");
       return instance;
     },
     enableAll: function() {

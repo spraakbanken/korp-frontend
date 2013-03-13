@@ -164,7 +164,10 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         event: "change"
         activate: (event, ui) ->
             if ui.newTab.is(".custom_tab")
-                $.sm.send "resultstab.custom"
+                instance = $(this).korptabs("getCurrentInstance")
+                suffix = if instance instanceof view.GraphResults then ".graph" else ".kwic"
+                type = instance
+                $.sm.send "resultstab.custom" + suffix
             else
                 currentId = ui.newPanel.attr("id")
                 selected = currentId.split("-")[1]
@@ -221,6 +224,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
             <a class="tabClose" href="#">
                 <span class="ui-icon ui-icon-circle-close"></span>
             </a>
+            <div class="tab_progress"></div>
         </li>'''
 
     tabs = $(".ui-tabs")
@@ -379,7 +383,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
                     $("#simple_text").val value
                     simpleSearch.onSimpleChange()
                     simpleSearch.setPlaceholder null, null
-                    simpleSearch.makeLemgramSelect()  if settings.lemgramSelect
+                    simpleSearch.makeLemgramSelect() if settings.lemgramSelect
                     $.sm.send "submit.word", data
                 when "lemgram"
                     $.sm.send "submit.lemgram", data
@@ -495,6 +499,8 @@ initTimeGraph = ->
             if corpus isnt "time"
                 cor = settings.corpora[corpus.toLowerCase()]
                 timeProxy.expandTimeStruct struct
+                cor.non_time = struct[""]
+                struct = _.omit struct, ""
                 cor.time = struct
                 if _.keys(struct).length > 1
                     cor.struct_attributes.date_interval =
@@ -521,7 +527,7 @@ initTimeGraph = ->
             # the 46 here is the presumed value of
             # the height of the graph
             one_px = max / 46
-            c.log "one_px", one_px
+            # c.log "one_px", one_px
 
             normalize = (array) ->
                 _.map array, (item) ->
@@ -554,10 +560,11 @@ initTimeGraph = ->
             endyear = all_timestruct.slice(-1)[0][0]
             yeardiff = endyear - all_timestruct[0][0]
             restyear = endyear + (yeardiff / 25)
-            restdata = _.chain(settings.corpusListing.selected).filter((item) ->
+            restdata = _.chain(settings.corpusListing.selected)
+            .filter((item) ->
                 item.time
             ).reduce((accu, corp) ->
-                accu + parseInt(corp.time[""] or "0")
+                accu + parseInt(corp.non_time or "0")
             , 0).value()
             plots = [
                 data: normalize([].concat(all_timestruct, [[restyear, combdata[1]]]))

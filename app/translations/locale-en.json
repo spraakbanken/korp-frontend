@@ -114,6 +114,14 @@
 	"no_lemgram_results" : "No examples found.",
 	"no_stats_results" : "The search generated no results.",
 
+	"graph" : "Graph",
+	"line" : "Line",
+	"bar" : "Bar",
+	"smoothing" : "Smoothing",
+	"show_diagram" : "Show Trend Diagram",
+	"non_time_before" : "",
+	"non_time_after" : " of selected material lacks time data.",
+
 
     "word_insensitive" : "word (case insensitive)",
 	"sentence_attr" : "text attributes",

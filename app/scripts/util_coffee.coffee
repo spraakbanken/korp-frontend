@@ -13,6 +13,13 @@ class window.CorpusListing
     map: (func) ->
         _.map @corpora, func
 
+    subsetFactory : (idArray) ->
+        #returns a new CorpusListing instance from an id subset.
+        idArray = _.invoke(idArray, "toLowerCase")
+        cl = new CorpusListing _.pick @struct, idArray...
+        cl.selected = cl.corpora
+        return cl
+
 
     # Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora: ->
@@ -117,6 +124,19 @@ class window.CorpusListing
             morf = corpus.morf or "saldom"
             morf.split "|"
         ).flatten().unique().value().join "|"
+
+    getTimeInterval : ->
+        all = _.chain(settings.corpusListing.selected)
+            .pluck("time")
+            .map(_.keys)
+            .flatten()
+            .map(Number)
+            .sort()
+            .value()
+
+        return [_.first(all), _.last(all)]
+
+
 
 
 class window.ParallelCorpusListing extends CorpusListing
