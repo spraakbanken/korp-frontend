@@ -204,7 +204,8 @@
                     <transition event="resultstab.kwic" target="results_kwic" />
                     <transition event="resultstab.lemgram" target="results_lemgram" />
                     <transition event="resultstab.stats" target="results_stats" />
-                    <transition event="resultstab.custom" target="results_custom" />
+                    <transition event="resultstab.custom.kwic" target="results_custom_kwic" />
+                    <transition event="resultstab.custom.graph" target="results_custom_graph" />
 
                     <state id="results_kwic" initial="results_kwic_init">
 
@@ -305,7 +306,7 @@
                         </onexit>
                     </state>
 
-                    <state id="results_custom" initial="custom_entry">
+                    <state id="results_custom_kwic" initial="custom_entry">
 
                         <onentry>
                             <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
@@ -316,7 +317,7 @@
                         </onentry>
                         <state id="custom_entry">
                             <transition
-                                cond="currentCustom.selectionManager.hasSelected()"
+                                cond="currentCustom.selectionManager &amp;&amp; currentCustom.selectionManager.hasSelected()"
                                 target="custom_word_selected"></transition>
 
                             <transition target="custom_word_not_selected" />
@@ -351,6 +352,19 @@
                                 currentCustom.onexit();
                             </script>
                         </onexit>
+                    </state>
+
+                    <state id="results_custom_graph">
+                        <onentry>
+                            <assign location="currentCustom" expr="$('#result-container').korptabs('getCurrentInstance')" />
+                            <script>
+                                currentCustom.onentry();
+                                util.setJsonLink(currentCustom.proxy.prevRequest);
+                            </script>
+                        </onentry>
+
+
+
                     </state>
 
                 </state>

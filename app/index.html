@@ -11,8 +11,9 @@
 
 
 		<link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css" />
-		<link rel="stylesheet" type="text/css" href="styles/styles.css" />
 		<link rel="stylesheet" type="text/css" href="styles/pagination.css" />
+		<link rel="stylesheet" href="components/rickshaw/rickshaw.css">
+		<link rel="stylesheet" type="text/css" href="styles/styles.css" />
 
 		<!-- endbuild -->
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico" />
@@ -64,6 +65,8 @@
 		<script type="text/javascript" src="components/SlickGrid/slick.core.js"></script>
 		<script type="text/javascript" src="components/SlickGrid/lib/jquery.event.drag-2.0.min.js"></script>
 		<script type="text/javascript" src="components/SlickGrid/slick.grid.js"></script>
+		<script src="components/SlickGrid/plugins/slick.checkboxselectcolumn.js"></script>
+		<script src="components/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
 		<script type="text/javascript" src="lib/g.raphael-min.js"></script>
 		<script type="text/javascript" src="lib/g.line-min.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.pack.js"></script>
@@ -71,23 +74,26 @@
 
 
 		<!-- endbuild -->
+		<script src="components/moment/moment.js"></script>
+		<script src="components/d3/d3.js"></script>
+		<script src="components/rickshaw/rickshaw.js"></script>
 
-		<script type="text/javascript" src="scripts/jq_extensions.js"></script>
-		<script type="text/javascript" src="config.js"></script>
+		<script src="scripts/jq_extensions.js"></script>
+		<script src="config.js"></script>
 		<!-- build:js scripts/scripts.js -->
 
-		<script type="text/javascript" src="scripts/util.js"></script>
-		<script type="text/javascript" src="scripts/bin/util_coffee.js"></script>
-		<script type="text/javascript" src="scripts/bin/widgets.js"></script>
-		<script type="text/javascript" src="scripts/selector_widget.js"></script>
-		<script type="text/javascript" src="scripts/pie-widget.js"></script>
-		<script type="text/javascript" src="scripts/scxml.js"></script>
-		<script type="text/javascript" src="scripts/bin/search.js"></script>
-		<script type="text/javascript" src="scripts/bin/results.js"></script>
-		<script type="text/javascript" src="scripts/bin/model.js"></script>
-		<script type="text/javascript" src="scripts/bin/main.js"></script>
+		<script src="scripts/util.js"></script>
+		<script src="scripts/bin/util_coffee.js"></script>
+		<script src="scripts/bin/widgets.js"></script>
+		<script src="scripts/selector_widget.js"></script>
+		<script src="scripts/pie-widget.js"></script>
+		<script src="scripts/scxml.js"></script>
+		<script src="scripts/bin/search.js"></script>
+		<script src="scripts/bin/results.js"></script>
+		<script src="scripts/bin/model.js"></script>
+		<script src="scripts/bin/main.js"></script>
 		<!-- endbuild -->
-		<script type="text/javascript" src="scripts/bin/controllers/controllers.js"></script>
+		<script src="scripts/bin/controllers/controllers.js"></script>
 		<!--<script>
 			if(location.host == "localhost")
 				document.write('<script src="http://localhost:35729/livereload.js?snipver=1"></' + 'script>')
@@ -203,7 +209,7 @@
 
 				</div>
 				<div>
-					<span rel=localize[statistics]>Statistik</span>:
+					<span rel="localize[statistics]">Statistik</span>:
 					<span id="reduceSelect"></span>
 				</div>
 	   		</div>
@@ -285,10 +291,13 @@
 
 							</div>
 							<div id="results-stats">
-								<div class="progress">
-									<progress value="0" max="100"></progress>
+								<div class="stats_header">
+									<button id="showGraph">Visa trenddiagram</button>
+									<div class="progress">
+										<progress value="0" max="100"></progress>
+									</div>
+									<div id="showBarPlot"></div>
 								</div>
-								<div id="showBarPlot"></div>
 								<div id="myGrid" style="width:600px;height:500px;"></div>
 								<div id="exportStatsSection">
 									<br/><br/><select id="kindOfData">
