@@ -476,13 +476,14 @@
   };
 
   initTimeGraph = function() {
-    var all_timestruct, getValByDate, opendfd, restdata, restyear, time, time_comb, timestruct;
+    var all_timestruct, getValByDate, opendfd, restdata, restyear, time_comb, timestruct;
     timestruct = null;
     all_timestruct = null;
     restdata = null;
     restyear = null;
     time_comb = timeProxy.makeRequest(true);
-    time = timeProxy.makeRequest(false).done(function(data) {
+    window.timeDeferred = timeProxy.makeRequest(false).done(function(data) {
+      c.log("write time");
       $.each(data, function(corpus, struct) {
         var cor;
         if (corpus !== "time") {
@@ -513,7 +514,7 @@
       });
       return output;
     };
-    $.when(time_comb, time).then(function(combdata, timedata) {
+    $.when(time_comb, timeDeferred).then(function(combdata, timedata) {
       all_timestruct = combdata[0];
       $("#corpusbox").bind("corpuschooserchange", function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;
@@ -601,7 +602,7 @@
         });
       });
       return $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
-        var date, firstrow, header, pTmpl, secondrow, total, val;
+        var date, firstrow, header, pTmpl, secondrow, time, total, val;
         if (item) {
           date = item.datapoint[0];
           header = $("<h4>");

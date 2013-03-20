@@ -446,18 +446,18 @@ class view.ExtendedSearch extends BaseSearch
         advancedSearch.updateCQP()
 
     insertToken: (button) ->
-        try
-            $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
-                close: ->
-                    advancedSearch.updateCQP()
+        # try
+        $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
+            close: ->
+                advancedSearch.updateCQP()
 
-                change: =>
-                    advancedSearch.updateCQP()  if @$main.is(":visible")
+            change: =>
+                advancedSearch.updateCQP()  if @$main.is(":visible")
 
-        catch error
-            c.log "error creating extendedToken", error
-            @$main.find("*").remove()
-            $("<div>Extended search is broken on this browser.</div>").prependTo(@$main).nextAll().remove()
+        # catch error
+            # c.log "error creating extendedToken", error
+            # @$main.find("*").remove()
+            # $("<div>Extended search is broken on this browser.</div>").prependTo(@$main).nextAll().remove()
 
         util.localize()
 

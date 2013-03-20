@@ -244,7 +244,7 @@
           });
         }
       });
-      kwicResults.prevCQP = o.cqp;
+      this.prevCQP = o.cqp;
       data.show = data.show.join();
       data.show_struct = data.show_struct.join();
       this.prevRequest = data;
@@ -763,6 +763,7 @@
 
     function GraphProxy() {
       GraphProxy.__super__.constructor.call(this);
+      this.prevParams = null;
     }
 
     GraphProxy.prototype.expandSubCqps = function(subArray) {
@@ -787,21 +788,22 @@
       return _.object(array);
     };
 
-    GraphProxy.prototype.makeRequest = function(cqp, subcqps) {
+    GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
       var def, params,
         _this = this;
       GraphProxy.__super__.makeRequest.call(this);
       params = {
         command: "count_time",
         cqp: cqp,
-        corpus: settings.corpusListing.stringifySelected(),
+        corpus: corpora,
         granularity: this.granularity,
         incremental: $.support.ajaxProgress
       };
       _.extend(params, this.expandSubCqps(subcqps));
+      this.prevParams = params;
       def = $.Deferred();
       $.ajax({
-        url: "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi",
+        url: settings.cgi_script,
         dataType: "json",
         data: params,
         beforeSend: function(req, settings) {

@@ -12,10 +12,10 @@ var graph = new Rickshaw.Graph( {
   series: [
     {
       color: 'steelblue',
-      data: [ { x: 0, y: 23}, { x: 1, y: 15 }, { x: 2, y: 79 } ],
+      data: [ { x: 0, y: 23}, { x: 1, y: 15 }, { x: 2, y: 79 } ]
     }, {
       color: 'lightblue',
-      data: [ { x: 0, y: 30}, { x: 1, y: 20 }, { x: 2, y: 64 } ],
+      data: [ { x: 0, y: 30}, { x: 1, y: 20 }, { x: 2, y: 64 } ]
     }
   ]
 } );
@@ -89,7 +89,7 @@ Add a callback to run when the graph is rendered
 ## Extensions
 
 Once you have a basic graph, extensions let you add functionality.  See the [overview](http://code.shutterstock.com/rickshaw/) and [examples](http://shutterstock.github.com/rickshaw/examples/) listing for more.
- 
+
 * __Rickshaw.Graph.Legend__ - add a basic legend
 
 * __Rickshaw.Graph.HoverDetail__ - show details on hover
@@ -100,7 +100,11 @@ Once you have a basic graph, extensions let you add functionality.  See the [ove
 
 * __Rickshaw.Graph.RangeSlider__ - dynamically zoom on the x-axis with a slider
 
-* __Rickshaw.Graph.Axis.Time__ - add x-axis time labels
+* __Rickshaw.Graph.Axis.Time__ - add x-axis and grid lines with time labels
+
+* __Rickshaw.Graph.Axis.X__ - add an x-axis and grid lines with arbitrary labels
+
+* __Rickshaw.Graph.Axis.Y__ - add a y-axis and grid lines
 
 * __Rickshaw.Graph.Behavior.Series.Highlight__ - highlight series on legend hover
 
@@ -149,6 +153,15 @@ Some extensions require [jQuery](http://jquery.com) and [jQuery UI](http://jquer
 
 For building, we need [Node](http://nodejs.org) and [npm](http://npmjs.org).  Running 'make' should get you going with any luck.
 
+## Contributing
+
+Pull requests are always welcome!  Please follow a few guidelines:
+
+- Please don't include updated versions of `rickshaw.js` and `rickshaw.min.js`.  Just changes to the source files will suffice.
+- Add a unit test or two to cover the proposed changes
+- Do as the Romans do and stick with existing whitespace and formatting conventions (i.e., tabs instead of spaces, etc)
+- Consider adding a simple example under `examples/` that demonstrates any new functionality
+
 ## Authors
 
 This library was developed by David Chester, Douglas Hunter, and Silas Sewell at [Shutterstock](http://www.shutterstock.com)
@@ -156,7 +169,7 @@ This library was developed by David Chester, Douglas Hunter, and Silas Sewell at
 
 ## License
 
-Copyright (C) 2011 by Shutterstock Images, LLC
+Copyright (C) 2011-2012 by Shutterstock Images, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -164,7 +164,11 @@
 
     CorpusListing.prototype.getTimeInterval = function() {
       var all;
-      all = _.chain(settings.corpusListing.selected).pluck("time").map(_.keys).flatten().map(Number).sort().value();
+      all = _.chain(settings.corpusListing.selected).pluck("time").filter(function(item) {
+        return item != null;
+      }).map(_.keys).flatten().map(Number).sort(function(a, b) {
+        return a - b;
+      }).value();
       return [_.first(all), _.last(all)];
     };
 

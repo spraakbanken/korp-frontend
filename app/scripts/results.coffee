@@ -340,7 +340,7 @@ class view.KWICResults extends BaseResults
 
     buildQueryOptions: ->
         opts = {}
-        opts.cqp = @prevCQP
+        opts.cqp = @proxy.prevCQP
         opts.queryData = @proxy.queryData
         opts.sort = $(".sort_select").val()
         opts.random_seed = $.bbq.getState("random_seed") if opts.sort is "random"
@@ -522,7 +522,7 @@ class view.ExampleResults extends view.KWICResults
         if new_page_index isnt @current_page or !!force_click
             items_per_page = parseInt(@optionWidget.find(".num_hits").val())
             opts = {}
-            opts.cqp = @prevCQP
+            opts.cqp = @proxy.prevCQP
             opts.start = new_page_index * items_per_page
             opts.end = (opts.start + items_per_page)
             opts.sort = $(".sort_select").val()
@@ -991,6 +991,7 @@ class view.StatsResults extends BaseResults
 
             params = @proxy.prevParams
             cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
+            instance.corpora = cl
             reduceVal = params.groupby
 
 
@@ -1075,66 +1076,15 @@ class view.StatsResults extends BaseResults
         # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
         $(".slick-row:first input", @$result).click()
-        @renderPlot()
+
+        $.when(timeDeferred).then =>
+            $("#showGraph").button("enable")
+            cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
+
+            if (_.filter cl.getTimeInterval(), (item) -> item?).length < 2
+                $("#showGraph").button("disable")
+
         @hidePreloader()
-
-    renderPlot: ->
-        css = cursor: "pointer"
-        fill = "#666"
-        if $.keys(statsResults.savedData.corpora).length < 2
-            css["cursor"] = "normal"
-            fill = "lightgrey"
-        barElem = $("#showBarPlot").empty().get(0)
-        paper = new Raphael(barElem, 33, 33)
-        paper.path("M21.25,8.375V28h6.5V8.375H21.25zM12.25,28h6.5V4.125h-6.5V28zM3.25,28h6.5V12.625h-6.5V28z").attr
-            fill: fill
-            stroke: "none"
-            transform: "s0.6"
-
-
-        # Line Diagram
-        $("#showBarPlot").css(css).click ->
-            $.bbq.pushState display: "bar_plot"
-            false
-
-        @drawBarPlot()  if $.bbq.getState("display") is "bar_plot"
-
-    drawBarPlot: ->
-        data = statsResults.savedData.corpora
-        display = []
-        max = 0
-        ticks = []
-        spacing = .25
-        accu = 0
-        $.each $.keys(data).sort(), (i, corpus) ->
-            ticks.push [accu + .5, settings.corpora[corpus.toLowerCase()].title]
-            display.push [accu, data[corpus].sums.relative]
-            max = data[corpus].sums.relative if max < data[corpus].sums.relative
-            accu = accu + 1 + spacing
-
-        width = display.length * 60
-        $("#plot_canvas").width width
-        $.plot $("#plot_canvas"), [display],
-            yaxis:
-                max: max
-            xaxis:
-                ticks: ticks
-            bars:
-                show: true
-
-
-        #     lines : {show : true}
-        width = (if width > 1000 then 1000 else width + 40)
-        $("#plot_popup").dialog(
-            width: width + 40
-            height: 500
-            title: "Träffar per miljon token"
-            beforeClose: ->
-                $.bbq.removeState "display"
-                false
-        ).css("opacity", 0)
-        .parent().find(".ui-dialog-title").localeKey("hits_per_mil")
-        $("#plot_popup").fadeTo 400, 1
 
 
     #   $("#plot_popup").find("a").blur();
@@ -1226,7 +1176,31 @@ class view.GraphResults extends BaseResults
 
         @zoom = "year"
         @granularity = @zoom[0]
+        @corpora = null
         @proxy = new model.GraphProxy()
+
+        $(".chart", @$result).on "click", (event) =>
+            target = $(".chart", @$result)
+            val = $(".detail .x_label > span", target).data "val"
+            cqp = $(".detail .item.active > span", target).data("cqp")
+            c.log "chart click", cqp, target
+            # time =
+            if cqp
+                m = moment(val * 1000)
+
+                start = m.format("YYYYMMDD")
+                end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
+                timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
+                cqp = decodeURIComponent(cqp)[...-1] + " & #{timecqp}"
+                instance = $("#result-container").korptabs("addTab", view.ExampleResults)
+                instance.proxy.command = "query"
+                instance.makeRequest
+                    corpora: @corpora.stringifySelected()
+                    cqp: cqp
+
+                util.localize instance.$result
+
+
 
     onentry : ->
     onexit : ->
@@ -1286,6 +1260,7 @@ class view.GraphResults extends BaseResults
 
 
     getSeriesData : (data) ->
+        delete data[""]
         [first, last] = settings.corpusListing.getTimeInterval()
         firstVal = @parseDate "y", first
         # c.log "firstVal", firstVal
@@ -1300,7 +1275,7 @@ class view.GraphResults extends BaseResults
             if mom.isSame lastVal then hasLastValue = true
             {x : mom, y : y}
 
-
+        c.log "hasfirstvalue", hasFirstValue, firstVal, first
         unless hasFirstValue
             output.push {x : firstVal, y:0}
 
@@ -1355,7 +1330,7 @@ class view.GraphResults extends BaseResults
     makeRequest : (cqp, subcqps, labelMapping, showTotal) ->
         hidden = $(".progress", @$result).nextAll().hide()
         @showPreloader()
-        @proxy.makeRequest(cqp, subcqps).progress( (data) =>
+        @proxy.makeRequest(cqp, subcqps, @corpora.stringifySelected()).progress( (data) =>
             @onProgress(data)
 
 
@@ -1377,19 +1352,26 @@ class view.GraphResults extends BaseResults
                 $(".non_time_div").hide()
 
             palette = new Rickshaw.Color.Palette()
+            # @colorToCqp = {}
             if _.isArray data.combined
-                series = _.map data.combined, (item) =>
-                    return {
+                # series = _.map data.combined, (item) =>
+                series = for item in data.combined
+                    color = palette.color()
+                    # @colorToCqp[color] = item.cqp
+                    {
                         data : @getSeriesData item.relative
-                        color : palette.color()
+                        color : color
                         # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
                         name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
+                        cqp : item.cqp or cqp
                     }
             else
+                # @colorToCqp['steelblue'] = cqp
                 series = [{
                             data: @getSeriesData data.combined.relative
                             color: 'steelblue'
                             name : "&Sigma;"
+                            cqp : cqp
                         }]
 
             Rickshaw.Series.zeroFill(series)
@@ -1403,14 +1385,13 @@ class view.GraphResults extends BaseResults
                     right : 0.01
                 min : "auto"
             graph.render()
-
             smoother = new Rickshaw.Graph.Smoother
                 graph: graph,
                 # element: $('.smoother', @$result)
 
             # smoother.setScale(3)
             # TODO: use class to live with other tabs
-            $("#smoothing_switch", @$result).change ->
+            $("#smoothing_switch", @$result).button().change ->
                 if $(this).is(":checked")
                     smoother.setScale(3)
                     graph.interpolation = "cardinal"
@@ -1425,16 +1406,16 @@ class view.GraphResults extends BaseResults
                     if cls.match(/^form-/) then @$result.removeClass(cls)
                 @$result.addClass("form-" +val)
 
-                $("#smoothing_switch", @$result).attr("disabled", null)
+                $("#smoothing_switch", @$result).button("enable")
                 if val == "bar"
-                    if $(".legend .line").length > 1
+                    if $(".legend .line", @$result).length > 1
                         $(".legend li:last:not(.disabled) .action", @$result).click()
 
                         if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
                             $(".legend li:first .action", @$result).click()
 
                     $("#smoothing_switch:checked", @$result).click()
-                    $("#smoothing_switch", @$result).attr("disabled", "true")
+                    $("#smoothing_switch", @$result).button("disable")
 
 
                 graph.setRenderer val
@@ -1450,27 +1431,38 @@ class view.GraphResults extends BaseResults
                 graph: graph
                 legend: legend
 
-            if not showTotal and $(".legend .line").length > 1
+            if not showTotal and $(".legend .line", @$result).length > 1
                 $(".legend .line:last .action", @$result).click()
 
             hoverDetail = new Rickshaw.Graph.HoverDetail( {
                 graph: graph
                 xFormatter: (x) =>
                     d = new Date(x * 1000)
-                    output = ["År: " + d.getFullYear(), "Månad: " + d.getMonth(), "Dag: " + d.getDay()]
-                    switch @granularity
-                        when "y" then return output[0]
-                        when "m" then return output[0..1].join("\n")
-                        when "d" then return output.join("\n")
+                    output = ["<span rel='localize[year]'>#{util.getLocaleString('year')}</span>: <span class='currently'>#{d.getFullYear()}</span>",
+                              "<span rel='localize[month]'>#{util.getLocaleString('month')}</span>: <span class='currently'>#{d.getMonth()}</span>",
+                              "<span rel='localize[day]'>#{util.getLocaleString('day')}</span>: <span class='currently'>#{d.getDay()}</span>"
+                              ]
+                    out = switch @granularity
+                        when "y" then output[0]
+                        when "m" then output[0..1].join("\n")
+                        when "d" then output.join("\n")
+
+                    return "<span data-val='#{x}'>#{out}</span>"
 
 
-                yFormatter: (y) ->  "<br>Rel. träffar " + y.toFixed 2
+                yFormatter: (y) ->
+                    "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + y.toFixed 2
+                formatter : (series, x, y, formattedX, formattedY, d) ->
+                    content = series.name + ':&nbsp;' + formattedY
+                    return """<span data-cqp="#{encodeURIComponent(series.cqp)}">#{content}</span>"""
+                # onRender: (args) ->
+                #     c.log "onRender", args.detail.cqp
             } )
             # if @granularity == "y"
 
             [first, last] = settings.corpusListing.getTimeInterval()
 
-            timeunit = if last - first > 200 then "decade" else @zoom
+            timeunit = if last - first > 100 then "decade" else @zoom
 
             time = new Rickshaw.Fixtures.Time()
             xAxis = new Rickshaw.Graph.Axis.Time

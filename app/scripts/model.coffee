@@ -189,7 +189,7 @@ class model.KWICProxy extends BaseProxy
                     data.show_struct.push key  if $.inArray(key, data.show_struct) is -1
 
 
-        kwicResults.prevCQP = o.cqp
+        @prevCQP = o.cqp
         data.show = data.show.join()
         data.show_struct = data.show_struct.join()
         @prevRequest = data
@@ -601,6 +601,7 @@ class model.TimeProxy extends BaseProxy
 class model.GraphProxy extends BaseProxy
     constructor: ->
         super()
+        @prevParams = null
 
     expandSubCqps : (subArray) ->
         padding = _.map [0...subArray.length.toString().length], -> "0"
@@ -609,22 +610,22 @@ class model.GraphProxy extends BaseProxy
             ["subcqp#{p}#{i}", cqp]
         return _.object array
 
-    makeRequest: (cqp, subcqps) ->
+    makeRequest: (cqp, subcqps, corpora) ->
         super()
         params =
             command : "count_time"
             cqp : cqp
-            corpus : settings.corpusListing.stringifySelected()
+            corpus : corpora
             granularity : @granularity
             incremental: $.support.ajaxProgress
 
         #TODO: fix this for struct attrs
         _.extend params, @expandSubCqps subcqps
-
+        @prevParams = params
         def = $.Deferred()
 
         $.ajax
-            url : "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi"
+            url: settings.cgi_script
             # url : "data.json"
             dataType : "json"
             data : params

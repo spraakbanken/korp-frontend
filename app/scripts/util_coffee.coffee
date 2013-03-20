@@ -128,11 +128,14 @@ class window.CorpusListing
     getTimeInterval : ->
         all = _.chain(settings.corpusListing.selected)
             .pluck("time")
+            .filter((item) -> item?)
             .map(_.keys)
             .flatten()
             .map(Number)
-            .sort()
-            .value()
+            .sort((a, b) ->
+                a - b
+            ).value()
+
 
         return [_.first(all), _.last(all)]
 

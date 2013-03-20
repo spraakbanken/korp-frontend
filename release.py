@@ -9,7 +9,7 @@ print check_output(["svn", "up"])
 
 if not os.path.exists("dist") and not "no_build" in args:
     print "building..."
-    print check_output(["yeoman", "build"])
+    print check_output(["grunt", "build"])
 else:
     print "build exists."
 
@@ -24,7 +24,7 @@ print "syncing to server, target: %s" % target
 print check_output("rsync -r dist/* johanrox@k2.spraakdata.gu.se:/var/www/html_sb/" + target, shell=True)
 
 if not "no_clean" in args:
-    print check_output(["yeoman", "clean"])
+    print check_output(["grunt", "clean"])
 
 print
 print

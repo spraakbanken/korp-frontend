@@ -892,6 +892,9 @@
           var case_sens, data, opt, type, value;
           type = $(this).find(".arg_type").val();
           data = $(this).find(".arg_type :selected").data("dataProvider");
+          if (!data) {
+            return;
+          }
           value = $(this).find(".arg_value").val();
           opt = $(this).find(".arg_opts").val();
           case_sens = ($(this).find(".val_mod.sensitive").length === 0 ? " %c" : "");

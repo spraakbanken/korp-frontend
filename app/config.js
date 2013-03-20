@@ -3392,8 +3392,8 @@ settings.corpora.soexempel = {
  * MISC
  */
 
-// settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
+settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
+// settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
 
 // label values here represent translation keys.
 settings.arg_groups = {

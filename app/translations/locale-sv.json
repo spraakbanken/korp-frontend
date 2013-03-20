@@ -122,6 +122,7 @@
 	"show_diagram" : "Visa trenddiagram",
 	"non_time_before" : "Saknar tidsuppmärkning: ",
 	"non_time_after" : " av valt material",
+	"rel_hits_short" : "Rel. träffar",
 
 	"word_insensitive" : "ord (skiftlägesoberoende)",
 	"sentence_attr" : "textattribut",

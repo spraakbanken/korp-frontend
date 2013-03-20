@@ -711,7 +711,7 @@ select.arg_value option {
 
 /* line 584, styles.scss */
 .boxdiv.disabled .checkbox {
-  background-image: url("../common_lib/themes/base/images/ui-icons_222222_256x240.png");
+  background-image: url("images/ui-icons_222222_256x240.png");
   background-position: -192px -96px;
   height: 13px;
   width: 14px;
@@ -2201,6 +2201,11 @@ line.tick {
 }
 
 /* line 1757, styles.scss */
+.dot.active {
+  cursor: pointer;
+}
+
+/* line 1761, styles.scss */
 .rickshaw_graph .x_tick {
   border: none !important;
 }

@@ -494,7 +494,8 @@ initTimeGraph = ->
     restdata = null
     restyear = null
     time_comb = timeProxy.makeRequest(true)
-    time = timeProxy.makeRequest(false).done((data) ->
+    window.timeDeferred = timeProxy.makeRequest(false).done((data) ->
+        c.log "write time"
         $.each data, (corpus, struct) ->
             if corpus isnt "time"
                 cor = settings.corpora[corpus.toLowerCase()]
@@ -519,7 +520,7 @@ initTimeGraph = ->
                 false
 
         return output
-    $.when(time_comb, time).then (combdata, timedata) ->
+    $.when(time_comb, timeDeferred).then (combdata, timedata) ->
         all_timestruct = combdata[0]
 
 

@@ -396,7 +396,7 @@
     KWICResults.prototype.buildQueryOptions = function() {
       var opts;
       opts = {};
-      opts.cqp = this.prevCQP;
+      opts.cqp = this.proxy.prevCQP;
       opts.queryData = this.proxy.queryData;
       opts.sort = $(".sort_select").val();
       if (opts.sort === "random") {
@@ -625,7 +625,7 @@
       if (new_page_index !== this.current_page || !!force_click) {
         items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
         opts = {};
-        opts.cqp = this.prevCQP;
+        opts.cqp = this.proxy.prevCQP;
         opts.start = new_page_index * items_per_page;
         opts.end = opts.start + items_per_page;
         opts.sort = $(".sort_select").val();
@@ -1164,6 +1164,7 @@
         instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
+        instance.corpora = cl;
         reduceVal = params.groupby;
         isStructAttr = __indexOf.call(cl.getStructAttrs(), reduceVal) >= 0;
         subExprs = [];
@@ -1195,7 +1196,8 @@
     }
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
+      var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
+        _this = this;
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1254,78 +1256,17 @@
       });
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
-      this.renderPlot();
+      $.when(timeDeferred).then(function() {
+        var cl;
+        $("#showGraph").button("enable");
+        cl = settings.corpusListing.subsetFactory(_this.proxy.prevParams.corpus.split(","));
+        if ((_.filter(cl.getTimeInterval(), function(item) {
+          return item != null;
+        })).length < 2) {
+          return $("#showGraph").button("disable");
+        }
+      });
       return this.hidePreloader();
-    };
-
-    StatsResults.prototype.renderPlot = function() {
-      var barElem, css, fill, paper;
-      css = {
-        cursor: "pointer"
-      };
-      fill = "#666";
-      if ($.keys(statsResults.savedData.corpora).length < 2) {
-        css["cursor"] = "normal";
-        fill = "lightgrey";
-      }
-      barElem = $("#showBarPlot").empty().get(0);
-      paper = new Raphael(barElem, 33, 33);
-      paper.path("M21.25,8.375V28h6.5V8.375H21.25zM12.25,28h6.5V4.125h-6.5V28zM3.25,28h6.5V12.625h-6.5V28z").attr({
-        fill: fill,
-        stroke: "none",
-        transform: "s0.6"
-      });
-      $("#showBarPlot").css(css).click(function() {
-        $.bbq.pushState({
-          display: "bar_plot"
-        });
-        return false;
-      });
-      if ($.bbq.getState("display") === "bar_plot") {
-        return this.drawBarPlot();
-      }
-    };
-
-    StatsResults.prototype.drawBarPlot = function() {
-      var accu, data, display, max, spacing, ticks, width;
-      data = statsResults.savedData.corpora;
-      display = [];
-      max = 0;
-      ticks = [];
-      spacing = .25;
-      accu = 0;
-      $.each($.keys(data).sort(), function(i, corpus) {
-        ticks.push([accu + .5, settings.corpora[corpus.toLowerCase()].title]);
-        display.push([accu, data[corpus].sums.relative]);
-        if (max < data[corpus].sums.relative) {
-          max = data[corpus].sums.relative;
-        }
-        return accu = accu + 1 + spacing;
-      });
-      width = display.length * 60;
-      $("#plot_canvas").width(width);
-      $.plot($("#plot_canvas"), [display], {
-        yaxis: {
-          max: max
-        },
-        xaxis: {
-          ticks: ticks
-        },
-        bars: {
-          show: true
-        }
-      });
-      width = (width > 1000 ? 1000 : width + 40);
-      $("#plot_popup").dialog({
-        width: width + 40,
-        height: 500,
-        title: "Träffar per miljon token",
-        beforeClose: function() {
-          $.bbq.removeState("display");
-          return false;
-        }
-      }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("hits_per_mil");
-      return $("#plot_popup").fadeTo(400, 1);
     };
 
     StatsResults.prototype.resizeGrid = function() {
@@ -1401,14 +1342,37 @@
     __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector) {
-      var n;
+      var n,
+        _this = this;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector);
       $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
       n = this.$result.index();
       $(resultSelector).html("<div class=\"graph_header\">\n    <div class=\"progress\">\n        <progress value=\"0\" max=\"100\"></progress>\n    </div>\n    <div class=\"controls\">\n        <div class=\"form_switch\">\n            <input id=\"formswitch" + n + "1\" type=\"radio\" name=\"form_switch\" value=\"line\" checked><label for=\"formswitch" + n + "1\">Linje</label>\n            <input id=\"formswitch" + n + "2\" type=\"radio\" name=\"form_switch\" value=\"bar\"><label for=\"formswitch" + n + "2\">Stapel</label>\n        </div>\n        <label for=\"smoothing_switch\" class=\"smoothing_label\" rel=\"localize[smoothing]\">Utjämna</label> <input type=\"checkbox\" id=\"smoothing_switch\">\n        <div class=\"non_time_div\"><span rel=\"localize[non_time_before]\"></span><span class=\"non_time\"></span><span rel=\"localize[non_time_after]\"></div>\n    </div>\n    <div class=\"legend\"></div>\n    <div style=\"clear:both;\"></div>\n</div>\n<div class=\"chart\"></div>");
       this.zoom = "year";
       this.granularity = this.zoom[0];
+      this.corpora = null;
       this.proxy = new model.GraphProxy();
+      $(".chart", this.$result).on("click", function(event) {
+        var cqp, end, instance, m, start, target, timecqp, val;
+        target = $(".chart", _this.$result);
+        val = $(".detail .x_label > span", target).data("val");
+        cqp = $(".detail .item.active > span", target).data("cqp");
+        c.log("chart click", cqp, target);
+        if (cqp) {
+          m = moment(val * 1000);
+          start = m.format("YYYYMMDD");
+          end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
+          timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
+          cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
+          instance = $("#result-container").korptabs("addTab", view.ExampleResults);
+          instance.proxy.command = "query";
+          instance.makeRequest({
+            corpora: _this.corpora.stringifySelected(),
+            cqp: cqp
+          });
+          return util.localize(instance.$result);
+        }
+      });
     }
 
     GraphResults.prototype.onentry = function() {};
@@ -1487,6 +1451,7 @@
 
     GraphResults.prototype.getSeriesData = function(data) {
       var first, firstVal, hasFirstValue, hasLastValue, last, lastVal, mom, output, tuple, x, y, _i, _len, _ref;
+      delete data[""];
       _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
       firstVal = this.parseDate("y", first);
       lastVal = this.parseDate("y", last.toString());
@@ -1512,6 +1477,7 @@
         }
         return _results;
       }).call(this);
+      c.log("hasfirstvalue", hasFirstValue, firstVal, first);
       if (!hasFirstValue) {
         output.push({
           x: firstVal,
@@ -1568,13 +1534,13 @@
         _this = this;
       hidden = $(".progress", this.$result).nextAll().hide();
       this.showPreloader();
-      return this.proxy.makeRequest(cqp, subcqps).progress(function(data) {
+      return this.proxy.makeRequest(cqp, subcqps, this.corpora.stringifySelected()).progress(function(data) {
         return _this.onProgress(data);
       }).fail(function(data) {
         c.log("graph crash");
         return _this.resultError(data);
       }).done(function(data) {
-        var first, hoverDetail, last, legend, nontime, old_render, palette, series, shelving, smoother, time, timeunit, xAxis, yAxis, _ref;
+        var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, smoother, time, timeunit, xAxis, yAxis, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1587,19 +1553,29 @@
         }
         palette = new Rickshaw.Color.Palette();
         if (_.isArray(data.combined)) {
-          series = _.map(data.combined, function(item) {
-            return {
-              data: _this.getSeriesData(item.relative),
-              color: palette.color(),
-              name: item.cqp ? labelMapping[item.cqp] : "&Sigma;"
-            };
-          });
+          series = (function() {
+            var _i, _len, _ref, _results;
+            _ref = data.combined;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
+              color = palette.color();
+              _results.push({
+                data: this.getSeriesData(item.relative),
+                color: color,
+                name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
+                cqp: item.cqp || cqp
+              });
+            }
+            return _results;
+          }).call(_this);
         } else {
           series = [
             {
               data: _this.getSeriesData(data.combined.relative),
               color: 'steelblue',
-              name: "&Sigma;"
+              name: "&Sigma;",
+              cqp: cqp
             }
           ];
         }
@@ -1619,7 +1595,7 @@
         smoother = new Rickshaw.Graph.Smoother({
           graph: graph
         });
-        $("#smoothing_switch", _this.$result).change(function() {
+        $("#smoothing_switch", _this.$result).button().change(function() {
           if ($(this).is(":checked")) {
             smoother.setScale(3);
             graph.interpolation = "cardinal";
@@ -1641,9 +1617,9 @@
             }
           }
           _this.$result.addClass("form-" + val);
-          $("#smoothing_switch", _this.$result).attr("disabled", null);
+          $("#smoothing_switch", _this.$result).button("enable");
           if (val === "bar") {
-            if ($(".legend .line").length > 1) {
+            if ($(".legend .line", _this.$result).length > 1) {
               $(".legend li:last:not(.disabled) .action", _this.$result).click();
               if (_.all(_.map($(".legend .line", _this.$result), function(item) {
                 return $(item).is(".disabled");
@@ -1652,7 +1628,7 @@
               }
             }
             $("#smoothing_switch:checked", _this.$result).click();
-            $("#smoothing_switch", _this.$result).attr("disabled", "true");
+            $("#smoothing_switch", _this.$result).button("disable");
           }
           graph.setRenderer(val);
           return graph.render();
@@ -1667,30 +1643,38 @@
           graph: graph,
           legend: legend
         });
-        if (!showTotal && $(".legend .line").length > 1) {
+        if (!showTotal && $(".legend .line", _this.$result).length > 1) {
           $(".legend .line:last .action", _this.$result).click();
         }
         hoverDetail = new Rickshaw.Graph.HoverDetail({
           graph: graph,
           xFormatter: function(x) {
-            var d, output;
+            var d, out, output;
             d = new Date(x * 1000);
-            output = ["År: " + d.getFullYear(), "Månad: " + d.getMonth(), "Dag: " + d.getDay()];
-            switch (_this.granularity) {
-              case "y":
-                return output[0];
-              case "m":
-                return output.slice(0, 2).join("\n");
-              case "d":
-                return output.join("\n");
-            }
+            output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
+            out = (function() {
+              switch (this.granularity) {
+                case "y":
+                  return output[0];
+                case "m":
+                  return output.slice(0, 2).join("\n");
+                case "d":
+                  return output.join("\n");
+              }
+            }).call(_this);
+            return "<span data-val='" + x + "'>" + out + "</span>";
           },
           yFormatter: function(y) {
-            return "<br>Rel. träffar " + y.toFixed(2);
+            return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + y.toFixed(2);
+          },
+          formatter: function(series, x, y, formattedX, formattedY, d) {
+            var content;
+            content = series.name + ':&nbsp;' + formattedY;
+            return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">" + content + "</span>";
           }
         });
         _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
-        timeunit = last - first > 200 ? "decade" : _this.zoom;
+        timeunit = last - first > 100 ? "decade" : _this.zoom;
         time = new Rickshaw.Fixtures.Time();
         xAxis = new Rickshaw.Graph.Axis.Time({
           graph: graph,

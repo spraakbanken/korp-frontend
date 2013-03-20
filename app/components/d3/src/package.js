@@ -1,6 +1,6 @@
-require("./core/core");
+var d3 = require("../index");
 
-require("util").puts(JSON.stringify({
+console.log(JSON.stringify({
   "name": "d3",
   "version": d3.version,
   "description": "A small, free JavaScript library for manipulating documents based on data.",
@@ -17,11 +17,11 @@ require("util").puts(JSON.stringify({
     }
   },
   "dependencies": {
-    "jsdom": "0.3.4"
+    "jsdom": "0.3.x"
   },
   "devDependencies": {
-    "uglify-js": "2.2.3",
-    "vows": "0.7.0"
+    "uglify-js": "2.2.x",
+    "vows": "0.7.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));

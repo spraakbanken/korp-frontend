@@ -790,6 +790,7 @@ ExtendedToken =
             $(this).find(".or_arg").each ->
                 type = $(this).find(".arg_type").val()
                 data = $(this).find(".arg_type :selected").data("dataProvider")
+                if not data then return
                 value = $(this).find(".arg_value").val()
                 opt = $(this).find(".arg_opts").val()
                 case_sens = (if $(this).find(".val_mod.sensitive").length is 0 then " %c" else "")

@@ -27,10 +27,10 @@ all: \
 	src/end.js
 
 d3.core.js: \
+	src/core/core.js \
 	src/core/format-$(LOCALE).js \
 	src/compat/date.js \
 	src/compat/style.js \
-	src/core/core.js \
 	src/core/class.js \
 	src/core/array.js \
 	src/core/map.js \
@@ -198,6 +198,7 @@ d3.geo.js: \
 	src/geo/equirectangular.js \
 	src/geo/gnomonic.js \
 	src/geo/graticule.js \
+	src/geo/haversin.js \
 	src/geo/interpolate.js \
 	src/geo/greatArc.js \
 	src/geo/mercator.js \

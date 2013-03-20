@@ -121,6 +121,7 @@
 	"show_diagram" : "Show Trend Diagram",
 	"non_time_before" : "",
 	"non_time_after" : " of selected material lacks time data.",
+	"rel_hits_short" : "Rel. hits",
 
 
     "word_insensitive" : "word (case insensitive)",
