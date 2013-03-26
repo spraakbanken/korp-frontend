@@ -95,6 +95,7 @@
     "post_title" : "post title",
     "tags" : "tags",
     "post_url" : "post address",
+    "categories" : "categories",
     
     "page" : "page",
     "author_type" : "author type",

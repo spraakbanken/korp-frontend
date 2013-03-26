@@ -93,6 +93,7 @@
     "post_title" : "inläggets titel",
     "tags" : "nyckelord",
     "post_url" : "inläggsadress",
+    "categories" : "kategorier",
     
     "page" : "sida",
     "author_type" : "författartyp",
