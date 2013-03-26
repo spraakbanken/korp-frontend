@@ -319,6 +319,13 @@ settings.corporafolders.strindberg = {
 		title : "August Strindberg",
 		contents : ["strindbergromaner", "strindbergbrev"]
 };
+
+settings.corporafolders.bloggmix = {
+	title : "Bloggmix",
+	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmixodat"],
+	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
+};
+
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : ["magmakolumner"],
@@ -1553,10 +1560,21 @@ settings.corpora.strindbergbrev = {
 	}
 };
 
-settings.corpora.bloggmix = {
-	id : "bloggmix",
-	title : "Bloggmix (augusti 2012)",
-	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet.",
+var bloggmix_structs = {
+	blog_title : {label : "blog_title"},
+	blog_url : {label : "blog_url", type : "url"},
+	blog_age : {label : "author_age"},
+	blog_city : {label : "city"},
+	blog_categories : {label : "categories", type : "set"},
+	text_title : {label : "post_title"},
+	text_date : {label : "date"},
+	text_tags : {label : "tags", type : "set"},
+	text_url : {label : "post_url", type : "url"}
+}
+
+settings.corpora.bloggmix1998 = {
+	id : "bloggmix1998",
+	title : "Bloggmix 1998",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {
@@ -1571,191 +1589,349 @@ settings.corpora.bloggmix = {
 		deprel : attrs.deprel,
 		ref : attrs.ref
 	},
-	struct_attributes : {
-		blog_title : {label : "blog_title"},
-		blog_url : {label : "blog_url", type : "url"},
-		blog_age : {label : "author_age"},
-		blog_city : {
-			label : "city",
-			displayType : "select",
-			localize : false,
-			dataset : {
-			"Alingsås" : "Alingsås",
-			"Alnö" : "Alnö",
-			"Arboga" : "Arboga",
-			"Arild" : "Arild",
-			"Bankeryd" : "Bankeryd",
-			"Bergviken" : "Bergviken",
-			"Birsta" : "Birsta",
-			"Bjursås" : "Bjursås",
-			"Boden" : "Boden",
-			"Bohus" : "Bohus",
-			"Borgholm" : "Borgholm",
-			"Borlänge" : "Borlänge",
-			"Borås" : "Borås",
-			"Brunflo" : "Brunflo",
-			"Brynäs" : "Brynäs",
-			"Bygdeå" : "Bygdeå",
-			"Danholn" : "Danholn",
-			"Deje" : "Deje",
-			"Djurslöv" : "Djurslöv",
-			"Enköping" : "Enköping",
-			"Enskede" : "Enskede",
-			"Eriksberg" : "Eriksberg",
-			"Eskilstuna" : "Eskilstuna",
-			"Falun" : "Falun",
-			"Finspång" : "Finspång",
-			"Frösö" : "Frösö",
-			"Färjestaden" : "Färjestaden",
-			"Fårbo" : "Fårbo",
-			"Gimo" : "Gimo",
-			"Gnesta" : "Gnesta",
-			"Granlo" : "Granlo",
-			"Grebo" : "Grebo",
-			"Grums" : "Grums",
-			"Grycksbo" : "Grycksbo",
-			"Gryta" : "Gryta",
-			"Gränna" : "Gränna",
-			"Gustafs" : "Gustafs",
-			"Gävle" : "Gävle",
-			"Göteborg" : "Göteborg",
-			"Habo" : "Habo",
-			"Haga" : "Haga",
-			"Hallstahammar" : "Hallstahammar",
-			"Handen" : "Handen",
-			"Hedemora" : "Hedemora",
-			"Helsingborg" : "Helsingborg",
-			"Hillared" : "Hillared",
-			"Hille" : "Hille",
-			"Holmsund" : "Holmsund",
-			"Hortlax" : "Hortlax",
-			"Huddinge" : "Huddinge",
-			"Huskvarna" : "Huskvarna",
-			"Höganäs" : "Höganäs",
-			"Högsby" : "Högsby",
-			"Hönö" : "Hönö",
-			"Irsta" : "Irsta",
-			"Järna" : "Järna",
-			"Jönköping" : "Jönköping",
-			"Kalmar" : "Kalmar",
-			"Karlskoga" : "Karlskoga",
-			"Karlstad" : "Karlstad",
-			"Kimstad" : "Kimstad",
-			"Kinna" : "Kinna",
-			"Klippan" : "Klippan",
-			"Kristinehamn" : "Kristinehamn",
-			"Krokek" : "Krokek",
-			"Kumla" : "Kumla",
-			"Kungsbacka" : "Kungsbacka",
-			"Kungsholmen" : "Kungsholmen",
-			"Kungälv" : "Kungälv",
-			"Köping" : "Köping",
-			"Landskrona" : "Landskrona",
-			"Laxå" : "Laxå",
-			"Lerum" : "Lerum",
-			"Lidingö" : "Lidingö",
-			"Lilla Alby" : "Lilla Alby",
-			"Lillån" : "Lillån",
-			"Limhamn" : "Limhamn",
-			"Lindesberg" : "Lindesberg",
-			"Lindsdal" : "Lindsdal",
-			"Linköping" : "Linköping",
-			"Ljunga" : "Ljunga",
-			"Lomma" : "Lomma",
-			"Luleå" : "Luleå",
-			"Lund" : "Lund",
-			"Löberöd" : "Löberöd",
-			"Malmö" : "Malmö",
-			"Mariefred" : "Mariefred",
-			"Mjölby" : "Mjölby",
-			"Motala" : "Motala",
-			"Mullsjö" : "Mullsjö",
-			"Mölnbo" : "Mölnbo",
-			"Mönsterås" : "Mönsterås",
-			"Mörbylånga" : "Mörbylånga",
-			"Nacka" : "Nacka",
-			"Nacksta" : "Nacksta",
-			"Nolhaga" : "Nolhaga",
-			"Nora" : "Nora",
-			"Norrköping" : "Norrköping",
-			"Norrtälje" : "Norrtälje",
-			"Nässjö" : "Nässjö",
-			"Oskarshamn" : "Oskarshamn",
-			"Partille" : "Partille",
-			"Piteå" : "Piteå",
-			"Pålsjö" : "Pålsjö",
-			"Ransta" : "Ransta",
-			"Rosvik" : "Rosvik",
-			"Rutvik" : "Rutvik",
-			"Ryd" : "Ryd",
-			"Röbäck" : "Röbäck",
-			"Sala" : "Sala",
-			"Sandhult" : "Sandhult",
-			"Sandskogen" : "Sandskogen",
-			"Sandviken" : "Sandviken",
-			"Sigtuna" : "Sigtuna",
-			"Sjöbo" : "Sjöbo",
-			"Skanör med Falsterbo" : "Skanör med Falsterbo",
-			"Skellefteå" : "Skellefteå",
-			"Skeppsvik" : "Skeppsvik",
-			"Skurholmsstaden" : "Skurholmsstaden",
-			"Skönsmon" : "Skönsmon",
-			"Smedby" : "Smedby",
-			"Smedslätten" : "Smedslätten",
-			"Sollentuna" : "Sollentuna",
-			"Staffanstorp" : "Staffanstorp",
-			"Stockholm" : "Stockholm",
-			"Stora Vickleby" : "Stora Vickleby",
-			"Storvreta" : "Storvreta",
-			"Strålsnäs" : "Strålsnäs",
-			"Sundsvall" : "Sundsvall",
-			"Svedala" : "Svedala",
-			"Säffle" : "Säffle",
-			"Särö" : "Särö",
-			"Säter" : "Säter",
-			"Sävar" : "Sävar",
-			"Sävedalen" : "Sävedalen",
-			"Södermalm" : "Södermalm",
-			"Södertälje" : "Södertälje",
-			"Södra Möckleby" : "Södra Möckleby",
-			"Sörby" : "Sörby",
-			"Tallboda" : "Tallboda",
-			"Tierp" : "Tierp",
-			"Torvalla" : "Torvalla",
-			"Tranemo" : "Tranemo",
-			"Trelleborg" : "Trelleborg",
-			"Trollhättan" : "Trollhättan",
-			"Trosa" : "Trosa",
-			"Tuve" : "Tuve",
-			"Ulricehamn" : "Ulricehamn",
-			"Umeå" : "Umeå",
-			"Uppsala" : "Uppsala",
-			"Vadstena" : "Vadstena",
-			"Vagnhärad" : "Vagnhärad",
-			"Valbo" : "Valbo",
-			"Vaplan" : "Vaplan",
-			"Vasastaden" : "Vasastaden",
-			"Vejbystrand" : "Vejbystrand",
-			"Vellinge" : "Vellinge",
-			"Vimmerby" : "Vimmerby",
-			"Västerljung" : "Västerljung",
-			"Västerås" : "Västerås",
-			"Åre" : "Åre",
-			"Årsunda" : "Årsunda",
-			"Älvkarleby" : "Älvkarleby",
-			"Ängelholm" : "Ängelholm",
-			"Örebro" : "Örebro",
-			"Östermalm" : "Östermalm",
-			"Östersund" : "Östersund",
-			"Övre Ullerud" : "Övre Ullerud"
-		}},
-		//blog_categories : {label : "title", type : "set"},
-		text_title : {label : "post_title"},
-		text_date : {label : "date"},
-		text_tags : {label : "tags", type : "set"},
-		text_url : {label : "post_url", type : "url"}
-	}
+	struct_attributes : bloggmix_structs
 };
+
+settings.corpora.bloggmix1999 = {
+	id : "bloggmix1999",
+	title : "Bloggmix 1999",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2000 = {
+	id : "bloggmix2000",
+	title : "Bloggmix 2000",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2001 = {
+	id : "bloggmix2001",
+	title : "Bloggmix 2001",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2002 = {
+	id : "bloggmix2002",
+	title : "Bloggmix 2002",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2003 = {
+	id : "bloggmix2003",
+	title : "Bloggmix 2003",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2004 = {
+	id : "bloggmix2004",
+	title : "Bloggmix 2004",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2005 = {
+	id : "bloggmix2005",
+	title : "Bloggmix 2005",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2006 = {
+	id : "bloggmix2006",
+	title : "Bloggmix 2006",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2007 = {
+	id : "bloggmix2007",
+	title : "Bloggmix 2007",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2008 = {
+	id : "bloggmix2008",
+	title : "Bloggmix 2008",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2009 = {
+	id : "bloggmix2009",
+	title : "Bloggmix 2009",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2009 = {
+	id : "bloggmix2009",
+	title : "Bloggmix 2009",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2010 = {
+	id : "bloggmix2010",
+	title : "Bloggmix 2010",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2011 = {
+	id : "bloggmix2011",
+	title : "Bloggmix 2011",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2012 = {
+	id : "bloggmix2012",
+	title : "Bloggmix 2012",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2013 = {
+	id : "bloggmix2013",
+	title : "Bloggmix 2013",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmixodat = {
+	id : "bloggmixodat",
+	title : "Bloggmix okänt datum",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : bloggmix_structs
+};
+
 
 settings.corpora.drama = {
 	id : "drama",
