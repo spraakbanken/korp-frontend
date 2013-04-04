@@ -163,12 +163,13 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 			return {"not_linked" : output};
 		} else {
 			function countParentsForLang(corp) {
-				return _.chain(_.values(parents))
+				return _(parents)
+				.values
 				.reduce(function(memo, p) {
 					var langs = _.pluck(_.values(p), "lang");
 					if(langs.contains(corp.lang)) memo++;
 					return memo;
-				}, 0).value();
+				}, 0);
 			}
 			var childWithLeastParents = _.min(children, countParentsForLang);
 			var output = _.filter(children, function(item) {
@@ -188,20 +189,20 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 //				c.log("inarray", $.inArray(currentLangList, a.lang), $.inArray(currentLangList, b.lang))
 				return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
 			});
-			return _.chain(struct)
+			return _(struct)
 				.pluck("id")
 				.invoke("toUpperCase")
-				.value().join("|");
+				.join("|");
 		} else {
 			return _.map(struct.not_linked, this.stringifyCorporaSet).join(",");
 		}
 	},
 
 	stringifyCorporaSet : function(corpusList) {
-		return _.chain(corpusList)
+		return _(corpusList)
 		.pluck("id")
 		.invoke("toUpperCase")
-		.value().join("|");
+		.join("|");
 	}
 });
 

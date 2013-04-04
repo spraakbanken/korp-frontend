@@ -172,6 +172,12 @@
       return [_.first(all), _.last(all)];
     };
 
+    CorpusListing.prototype.getNonProtected = function() {
+      return _.filter(this.corpora, function(item) {
+        return !item.limited_access;
+      });
+    };
+
     return CorpusListing;
 
   })();

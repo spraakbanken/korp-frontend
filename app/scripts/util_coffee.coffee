@@ -139,9 +139,11 @@ class window.CorpusListing
 
         return [_.first(all), _.last(all)]
 
-
-
-
+    getNonProtected : () ->
+        _.filter @corpora, (item) ->
+            not item.limited_access
+            
+    
 class window.ParallelCorpusListing extends CorpusListing
     constructor: (corpora) ->
         @parallel_corpora = corpora

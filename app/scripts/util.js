@@ -296,8 +296,15 @@ function loadCorpora() {
     }).bind("corpuschooserchange", function(evt, corpora) {
     	c.log("corpus changed", corpora);
 		settings.corpusListing.select(corpora);
-		if(_.keys(corpora).length < _.keys(settings.corpora).length) {
-			$.bbq.pushState({"corpus" : corpora.join(",")});
+		// if(_.keys(corpora).length < _.keys(settings.corpora).length) {
+		// 	$.bbq.pushState({"corpus" : corpora.join(",")});
+		// }
+		var nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
+		if(_.intersection(corpora, nonprotected).length != nonprotected.length) {
+	        $.bbq.pushState({"corpus" : corpora.join(",")})
+	        // search({"corpus" : corpora.join(",")})
+		} else {
+	        $.bbq.removeState("corpus")
 		}
 		if(corpora.length) {
 			extendedSearch.refreshTokens();
