@@ -110,7 +110,7 @@
     };
 
     CorpusListing.prototype.stringifySelected = function() {
-      return _(this.selected).pluck("id").invoke("toUpperCase").value().join(",");
+      return _(this.selected).pluck("id").invoke("toUpperCase").join(",");
     };
 
     CorpusListing.prototype.getAttrIntersection = function(attr) {
@@ -150,7 +150,7 @@
         var morf;
         morf = corpus.morf || "saldom";
         return morf.split("|");
-      }).flatten().unique().value().join("|");
+      }).flatten().unique().join("|");
     };
 
     return CorpusListing;

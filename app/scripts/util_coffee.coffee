@@ -44,7 +44,7 @@ class window.CorpusListing
 
     _mapping_union: (mappingArray) ->
         _.reduce mappingArray, ((a, b) ->
-            $.extend {}, a, b
+            _.merge a, b
         ), {}
 
     getCurrentAttributes: ->
@@ -70,9 +70,9 @@ class window.CorpusListing
             key = item[0]
             val = item[1]
             $.each attrs, (j, origStruct) ->
-                if origStruct[key] and origStruct[key].dataset
+                if origStruct[key]?.dataset
                     ds = origStruct[key].dataset
-                    ds = _.object(ds, ds)  if $.isArray(ds)
+                    ds = _.object(ds, ds) if $.isArray(ds)
                     $.extend val.dataset, ds
 
 
@@ -93,7 +93,7 @@ class window.CorpusListing
         attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].struct_attributes)
 
     stringifySelected: ->
-        _(@selected).pluck("id").invoke("toUpperCase").value().join ","
+        _(@selected).pluck("id").invoke("toUpperCase").join ","
 
     getAttrIntersection: (attr) ->
         struct = _.map(@selected, (corpus) ->
@@ -123,7 +123,7 @@ class window.CorpusListing
         _(@selected).map((corpus) ->
             morf = corpus.morf or "saldom"
             morf.split "|"
-        ).flatten().unique().value().join "|"
+        ).flatten().unique().join "|"
 
     getTimeInterval : ->
         all = _(settings.corpusListing.selected)

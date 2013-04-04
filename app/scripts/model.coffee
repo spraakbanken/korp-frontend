@@ -56,7 +56,7 @@ class BaseProxy
                     Number settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
-                , 0).value()
+                , 0)
                 @progress += sum
                 @total_results += parseInt(val.hits)
 
@@ -67,7 +67,7 @@ class BaseProxy
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
-                , 0).value()
+                , 0)
             ), (val1, val2) ->
                 val1 + val2
             )

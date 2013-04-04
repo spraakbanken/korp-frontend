@@ -158,7 +158,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         $("#korp-simple").hide()
         $(".ui-tabs-nav a").eq(1).localeKey "parallel"
         $("#korp-advanced").hide()
-        $("#search-tab").tabs "select", 1
+        $("#search-tab").tabs "option", "active", 1
         $("#result-container > ul li:last ").hide()
     $("#result-container").korptabs
         event: "change"
@@ -541,15 +541,14 @@ initTimeGraph = ->
                 .filter(Boolean)
                 .map(_.pairs)
                 .flatten(true)
-                .reduce((memo, val) ->
-                    a = val[0]
-                    b = val[1]
+                .reduce((memo, [a, b]) ->
                     if typeof memo[a] is "undefined"
                         memo[a] = b
                     else
                         memo[a] += b
                     memo
-                , {}).value()
+                , {})
+
             max = _.reduce(all_timestruct, (accu, item) ->
                 return item[1] if item[1] > accu
                 return accu
@@ -562,11 +561,11 @@ initTimeGraph = ->
             yeardiff = endyear - all_timestruct[0][0]
             restyear = endyear + (yeardiff / 25)
             restdata = _(settings.corpusListing.selected)
-            .filter((item) ->
-                item.time
-            ).reduce((accu, corp) ->
-                accu + parseInt(corp.non_time or "0")
-            , 0).value()
+                .filter((item) ->
+                    item.time
+                ).reduce((accu, corp) ->
+                    accu + parseInt(corp.non_time or "0")
+                , 0)
             plots = [
                 data: normalize([].concat(all_timestruct, [[restyear, combdata[1]]]))
                 bars:

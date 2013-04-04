@@ -178,7 +178,7 @@
       $("#korp-simple").hide();
       $(".ui-tabs-nav a").eq(1).localeKey("parallel");
       $("#korp-advanced").hide();
-      $("#search-tab").tabs("select", 1);
+      $("#search-tab").tabs("option", "active", 1);
       $("#result-container > ul li:last ").hide();
     }
     $("#result-container").korptabs({
@@ -529,17 +529,16 @@
             return out;
           });
         };
-        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, val) {
+        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg) {
           var a, b;
-          a = val[0];
-          b = val[1];
+          a = _arg[0], b = _arg[1];
           if (typeof memo[a] === "undefined") {
             memo[a] = b;
           } else {
             memo[a] += b;
           }
           return memo;
-        }, {}).value();
+        }, {});
         max = _.reduce(all_timestruct, function(accu, item) {
           if (item[1] > accu) {
             return item[1];
@@ -554,7 +553,7 @@
           return item.time;
         }).reduce(function(accu, corp) {
           return accu + parseInt(corp.non_time || "0");
-        }, 0).value();
+        }, 0);
         plots = [
           {
             data: normalize([].concat(all_timestruct, [[restyear, combdata[1]]])),

@@ -61,7 +61,7 @@
             return Number(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
             return a + b;
-          }, 0).value();
+          }, 0);
           _this.progress += sum;
           return _this.total_results += parseInt(val.hits);
         }
@@ -73,7 +73,7 @@
             return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
             return a + b;
-          }, 0).value();
+          }, 0);
         }), function(val1, val2) {
           return val1 + val2;
         });

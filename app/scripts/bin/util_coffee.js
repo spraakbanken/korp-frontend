@@ -58,7 +58,7 @@
 
     CorpusListing.prototype._mapping_union = function(mappingArray) {
       return _.reduce(mappingArray, (function(a, b) {
-        return $.extend({}, a, b);
+        return _.merge(a, b);
       }), {});
     };
 
@@ -87,8 +87,8 @@
         key = item[0];
         val = item[1];
         return $.each(attrs, function(j, origStruct) {
-          var ds;
-          if (origStruct[key] && origStruct[key].dataset) {
+          var ds, _ref;
+          if ((_ref = origStruct[key]) != null ? _ref.dataset : void 0) {
             ds = origStruct[key].dataset;
             if ($.isArray(ds)) {
               ds = _.object(ds, ds);
@@ -119,7 +119,7 @@
     };
 
     CorpusListing.prototype.stringifySelected = function() {
-      return _(this.selected).pluck("id").invoke("toUpperCase").value().join(",");
+      return _(this.selected).pluck("id").invoke("toUpperCase").join(",");
     };
 
     CorpusListing.prototype.getAttrIntersection = function(attr) {
@@ -159,7 +159,7 @@
         var morf;
         morf = corpus.morf || "saldom";
         return morf.split("|");
-      }).flatten().unique().value().join("|");
+      }).flatten().unique().join("|");
     };
 
     CorpusListing.prototype.getTimeInterval = function() {

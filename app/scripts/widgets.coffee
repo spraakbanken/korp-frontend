@@ -717,7 +717,8 @@ ExtendedToken =
                             .flatten(true)
                             .filter((tuple) ->
                                 tuple[0] and tuple[1]
-                            ).map(_.compose(Number, _.head)).value()
+                            ).map(_.compose(Number, _.head))
+                            .value()
                 # c.log "all", all_years
                 start = Math.min(all_years...)
                 end = Math.max(all_years...)
