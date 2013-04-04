@@ -241,7 +241,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         $.bbq.pushState state
         false
 
-    $(".custom_anchor").live "mouseup", ->
+    $(".custom_anchor").on "mouseup", ->
         c.log "custom click"
         $.bbq.removeState "result-container"
         $(this).triggerHandler "change"

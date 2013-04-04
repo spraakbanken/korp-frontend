@@ -1101,7 +1101,7 @@
       self = this;
       this.gridData = null;
       this.proxy = statsProxy;
-      $(".arcDiagramPicture").live("click", function() {
+      $(".arcDiagramPicture").on("click", function() {
         var parts;
         parts = $(this).attr("id").split("__");
         if (parts[1] !== "Σ") {
@@ -1110,7 +1110,7 @@
           return newDataInGraph("SIGMA_ALL", true);
         }
       });
-      $(".slick-cell.l0.r0 .link").live("click", function() {
+      $(".slick-cell.l0.r0 .link").on("click", function() {
         var instance, query;
         c.log("word click", $(this).data("context"), $(this).data("corpora"));
         instance = $("#result-container").korptabs("addTab", view.ExampleResults);

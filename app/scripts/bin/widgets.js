@@ -451,7 +451,7 @@
       self = this;
       this.n = 0;
       this.urlPattern = "#custom-tab-";
-      $(".tabClose").live("click", function() {
+      $(".tabClose").on("click", function() {
         var index;
         if (!$(this).parent().is(".ui-state-disabled")) {
           index = self.tabs.index($(this).parent());

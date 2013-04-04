@@ -932,7 +932,7 @@ class view.StatsResults extends BaseResults
         self = this
         @gridData = null
         @proxy = statsProxy
-        $(".arcDiagramPicture").live "click", ->
+        $(".arcDiagramPicture").on "click", ->
             parts = $(this).attr("id").split("__")
 
             if parts[1] != "Σ"
@@ -940,7 +940,7 @@ class view.StatsResults extends BaseResults
             else # The ∑ row
                 newDataInGraph("SIGMA_ALL",true)
 
-        $(".slick-cell.l0.r0 .link").live "click", ->
+        $(".slick-cell.l0.r0 .link").on "click", ->
             c.log "word click", $(this).data("context"), $(this).data("corpora")
             instance = $("#result-container").korptabs("addTab", view.ExampleResults)
             instance.proxy.command = "query"

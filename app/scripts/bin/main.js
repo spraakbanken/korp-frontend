@@ -213,7 +213,7 @@
       $.bbq.pushState(state);
       return false;
     });
-    $(".custom_anchor").live("mouseup", function() {
+    $(".custom_anchor").on("mouseup", function() {
       c.log("custom click");
       $.bbq.removeState("result-container");
       return $(this).triggerHandler("change");

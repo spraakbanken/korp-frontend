@@ -387,7 +387,7 @@ KorpTabs =
         self = this
         @n = 0
         @urlPattern = "#custom-tab-"
-        $(".tabClose").live "click", ->
+        $(".tabClose").on "click", ->
             unless $(this).parent().is(".ui-state-disabled")
                 index = self.tabs.index($(this).parent())
                 if index > -1
