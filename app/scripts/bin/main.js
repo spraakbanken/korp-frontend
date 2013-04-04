@@ -529,7 +529,7 @@
             return out;
           });
         };
-        output = _.chain(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, val) {
+        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, val) {
           var a, b;
           a = val[0];
           b = val[1];
@@ -550,7 +550,7 @@
         endyear = all_timestruct.slice(-1)[0][0];
         yeardiff = endyear - all_timestruct[0][0];
         restyear = endyear + (yeardiff / 25);
-        restdata = _.chain(settings.corpusListing.selected).filter(function(item) {
+        restdata = _(settings.corpusListing.selected).filter(function(item) {
           return item.time;
         }).reduce(function(accu, corp) {
           return accu + parseInt(corp.non_time || "0");

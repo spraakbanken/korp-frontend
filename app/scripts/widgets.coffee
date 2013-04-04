@@ -584,6 +584,7 @@ ExtendedToken =
             word_attr: settings.corpusListing.getCurrentAttributes(lang)
             sentence_attr: settings.corpusListing.getStructAttrs(lang)
         )
+        c.log "groups", groups
         $.each groups, (lbl, group) ->
             return  if $.isEmptyObject(group)
             optgroup = $("<optgroup/>",
@@ -710,7 +711,7 @@ ExtendedToken =
                     ), 100
                 )
             when "date_interval"
-                all_years = _.chain(settings.corpusListing.selected)
+                all_years = _(settings.corpusListing.selected)
                             .pluck("time")
                             .map(_.pairs)
                             .flatten(true)

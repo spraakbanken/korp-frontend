@@ -93,7 +93,7 @@ class window.CorpusListing
         attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].struct_attributes)
 
     stringifySelected: ->
-        _.chain(@selected).pluck("id").invoke("toUpperCase").value().join ","
+        _(@selected).pluck("id").invoke("toUpperCase").value().join ","
 
     getAttrIntersection: (attr) ->
         struct = _.map(@selected, (corpus) ->
@@ -120,13 +120,13 @@ class window.CorpusListing
         ), Boolean).join()
 
     getMorphology: ->
-        _.chain(@selected).map((corpus) ->
+        _(@selected).map((corpus) ->
             morf = corpus.morf or "saldom"
             morf.split "|"
         ).flatten().unique().value().join "|"
 
     getTimeInterval : ->
-        all = _.chain(settings.corpusListing.selected)
+        all = _(settings.corpusListing.selected)
             .pluck("time")
             .filter((item) -> item?)
             .map(_.keys)

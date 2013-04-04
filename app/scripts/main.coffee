@@ -536,7 +536,7 @@ initTimeGraph = ->
                     out[1] = one_px  if out[1] < one_px and out[1] > 0
                     out
 
-            output = _.chain(settings.corpusListing.selected)
+            output = _(settings.corpusListing.selected)
                 .pluck("time")
                 .filter(Boolean)
                 .map(_.pairs)
@@ -561,7 +561,7 @@ initTimeGraph = ->
             endyear = all_timestruct.slice(-1)[0][0]
             yeardiff = endyear - all_timestruct[0][0]
             restyear = endyear + (yeardiff / 25)
-            restdata = _.chain(settings.corpusListing.selected)
+            restdata = _(settings.corpusListing.selected)
             .filter((item) ->
                 item.time
             ).reduce((accu, corp) ->

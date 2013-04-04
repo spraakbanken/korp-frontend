@@ -57,7 +57,7 @@
         var currentCorpus, sum;
         if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
           currentCorpus = val.corpus || val;
-          sum = _.chain(currentCorpus.split("|")).map(function(corpus) {
+          sum = _(currentCorpus.split("|")).map(function(corpus) {
             return Number(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
             return a + b;
@@ -69,7 +69,7 @@
       stats = (this.progress / this.total) * 100;
       if (!(this.total != null) && "progress_corpora" in struct) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
-          return _.chain(corpus.split("|")).map(function(corpus) {
+          return _(corpus.split("|")).map(function(corpus) {
             return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
             return a + b;

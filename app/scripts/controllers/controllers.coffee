@@ -32,7 +32,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
 
                 _.extend wd, {_struct : currentStruct} if currentStruct.length
 
-            if(currentMode == "parallel")
+            if currentMode == "parallel"
                 sentence.corpus = sentence.corpus.split("|")[0].toLowerCase()
             else
                 sentence.corpus = sentence.corpus.toLowerCase()

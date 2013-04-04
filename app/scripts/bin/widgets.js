@@ -650,6 +650,7 @@
         word_attr: settings.corpusListing.getCurrentAttributes(lang),
         sentence_attr: settings.corpusListing.getStructAttrs(lang)
       });
+      c.log("groups", groups);
       $.each(groups, function(lbl, group) {
         var optgroup;
         if ($.isEmptyObject(group)) {
@@ -808,7 +809,7 @@
           });
           break;
         case "date_interval":
-          all_years = _.chain(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
+          all_years = _(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
             return tuple[0] && tuple[1];
           }).map(_.compose(Number, _.head)).value();
           start = Math.min.apply(Math, all_years);

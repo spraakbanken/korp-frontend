@@ -52,7 +52,7 @@ class BaseProxy
         $.each struct, (key, val) =>
             if key isnt "progress_corpora" and key.split("_")[0] is "progress"
                 currentCorpus = val.corpus or val
-                sum = _.chain(currentCorpus.split("|")).map((corpus) ->
+                sum = _(currentCorpus.split("|")).map((corpus) ->
                     Number settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
@@ -63,7 +63,7 @@ class BaseProxy
         stats = (@progress / @total) * 100
         if not @total? and "progress_corpora" of struct
             @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
-                _.chain(corpus.split("|")).map((corpus) ->
+                _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b

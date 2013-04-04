@@ -119,7 +119,7 @@
     };
 
     CorpusListing.prototype.stringifySelected = function() {
-      return _.chain(this.selected).pluck("id").invoke("toUpperCase").value().join(",");
+      return _(this.selected).pluck("id").invoke("toUpperCase").value().join(",");
     };
 
     CorpusListing.prototype.getAttrIntersection = function(attr) {
@@ -155,7 +155,7 @@
     };
 
     CorpusListing.prototype.getMorphology = function() {
-      return _.chain(this.selected).map(function(corpus) {
+      return _(this.selected).map(function(corpus) {
         var morf;
         morf = corpus.morf || "saldom";
         return morf.split("|");
@@ -164,7 +164,7 @@
 
     CorpusListing.prototype.getTimeInterval = function() {
       var all;
-      all = _.chain(settings.corpusListing.selected).pluck("time").filter(function(item) {
+      all = _(settings.corpusListing.selected).pluck("time").filter(function(item) {
         return item != null;
       }).map(_.keys).flatten().map(Number).sort(function(a, b) {
         return a - b;
