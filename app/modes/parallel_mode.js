@@ -290,6 +290,97 @@ settings.corporafolders.salt = {
 settings.corpora = {};
 settings.parallel_corpora = {};
 
+/*
+// Nya EUROPARL, fungerar inte
+settings.parallel_corpora.europarlda = {
+	"default" : "europarl-sv",
+	"europarl-sv" : {
+		id : "europarl-sv",
+		lang : "swe",
+		parent : "europarlda",
+		title: "Svenska-danska",
+		context: context.defaultAligned,
+		within: {
+			"linkda": "meningspar"
+		},
+		attributes: {
+			pos: attrs.pos,
+			msd: attrs.msd,
+			lemma: attrs.baseform,
+			lex: attrs.lemgram,
+			saldo: attrs.saldo,
+			dephead: attrs.dephead,
+			deprel: attrs.deprel,
+			ref: attrs.ref,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix
+		},
+		struct_attributes : {
+		}
+	},
+	"europarl-da" : {
+		id : "europarl-da",
+		lang : "dan",
+		parent : "europarlda",
+		title: "Svenska-danska",
+		context: context.defaultAligned,
+		within: {
+			"linkda": "meningspar"
+		},
+		attributes: {
+		},
+		struct_attributes : {
+		},
+		hide : true
+	}
+};
+
+settings.parallel_corpora.europarlen = {
+	"default" : "europarl-sv",
+	"europarl-sv" : {
+		id : "europarl-sv",
+		lang : "swe",
+		parent : "europarlen",
+		title: "Svenska-engelska",
+		context: context.defaultAligned,
+		within: {
+			"linken": "meningspar"
+		},
+		attributes: {
+			pos: attrs.pos,
+			msd: attrs.msd,
+			lemma: attrs.baseform,
+			lex: attrs.lemgram,
+			saldo: attrs.saldo,
+			dephead: attrs.dephead,
+			deprel: attrs.deprel,
+			ref: attrs.ref,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix
+		},
+		struct_attributes : {
+		}
+	},
+	"europarl-en" : {
+		id : "europarl-en",
+		lang : "eng",
+		parent : "europarlen",
+		title: "Svenska-engelska",
+		context: context.defaultAligned,
+		within: {
+			"linken": "meningspar"
+		},
+		attributes: {
+		},
+		struct_attributes : {
+		},
+		hide : true
+	}
+};
+*/
+
+
+// Gamla EUROPARL, ska bort
 settings.parallel_corpora.europarl = {
 	"default" : "europarlda_sv",
 	europarlda_sv : {
