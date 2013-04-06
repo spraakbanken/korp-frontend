@@ -2,3 +2,4 @@
 .sass-cache
 app/components
 node_modules
+dist
