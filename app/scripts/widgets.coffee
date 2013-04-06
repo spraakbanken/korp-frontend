@@ -403,24 +403,84 @@ KorpTabs =
 
         @tabs.first().data "instance", kwicResults
 
+    getPanelTemplate : () ->
+        """ <div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
+                <div class="result_controls">
+                    <div class="controls_n" >
+                        <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
+                    </div>
+                    <div class="progress">
+                        <progress value="0" max="100"></progress>
+                    </div>
+                   <div class="hits_picture" ></div>
+               </div>
+
+                <div class="pager-wrapper"></div>
+                <span class="reading_btn show link" rel="localize[show_reading]">Visa läsläge</span>
+                <span class="reading_btn hide link" rel="localize[show_kwic]">Visa kwic</span>
+
+
+                <div class="table_scrollarea">
+                    <table class="results_table kwic" cellspacing="0">
+                        <tr class="sentence" ng-repeat="sentence in kwic" ng-class-even="'even'" ng-class-odd="'odd'"
+                            ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
+                            <td class="empty_td"></td>
+                            <td colspan="0" class="corpus_title">
+                                {{sentence.newCorpus}}
+                                <span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
+                            </td>
+
+                            <td class="left" ng-show="!sentence.newCorpus">
+                                <span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
+                            </td>
+                            <td class="match" ng-show="!sentence.newCorpus">
+                                <span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
+                            </td>
+                            <td class="right" ng-show="!sentence.newCorpus">
+                                <span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
+            </div>"""
+    getTabTemplate: (href, label) ->
+        """
+        <li class="custom_tab">
+            <a class="custom_anchor" href="#{href}">
+                <span rel="localize[example]">#{label}</span>
+            </a>
+            <a class="tabClose" href="#">
+                <span class="ui-icon ui-icon-circle-close"></span>
+            </a>
+            <div class="tab_progress"></div>
+        </li>"""
+
+
     _tabify: (init) ->
         @_super init
         @redrawTabs()
 
     redrawTabs: ->
+        this.refresh()
         $(".custom_tab").css "margin-left", "auto"
         $(".custom_tab:first").css "margin-left", 8
 
     addTab: (klass, headerLabel = "KWIC") ->
         url = @urlPattern + @n
-        @add url, headerLabel
-        c.log "@element", @element, @element.find("li:last")
+        # @add url, headerLabel
+        tabs = $(".ui-tabs-nav", this.element).append(@getTabTemplate(url, headerLabel))
+
+        # c.log "@element", @element, @element.find("li:last")
         li = $(".ui-tabs-nav > li:last", @element)
+        panel = $("<div id='#{url[1..]}'>").append @getPanelTemplate()
+
+        @element.append panel
         @redrawTabs()
         newDiv = @element.children().last()
         # angular.injector(['ng']).invoke ["$rootScope", "$compile", ($rootScope, $compile) ->
         @element.injector().invoke ["$rootScope", "$compile", ($rootScope, $compile) ->
-            c.log "invoke", newDiv
             cnf = $compile newDiv
             cnf($rootScope)
         ]
@@ -428,14 +488,7 @@ KorpTabs =
         instance = new klass(li, url)
         li.data "instance", instance
         @n++
-        li.find("a.ui-tabs-anchor").trigger "mouseup"
-
-
-
-
-        # root = $("body").scope()
-        # newScope = root.$new()
-
+        li.find("a.ui-tabs-anchor").trigger "change"
 
 
         return instance
@@ -759,7 +812,7 @@ ExtendedToken =
                 $("#msd_popup").load "markup/msd.html", ->
                     $(this).find("a").click ->
                         arg_value.val $(this).parent().data("value")
-                        $("#msd_popup").dialog "close"
+                        $("#msd_popup").dialog("close")
 
                 $("<span class='ui-icon ui-icon-info' />").click(->
                     w = $("html").width() * 0.6
@@ -772,7 +825,7 @@ ExtendedToken =
 
                     $(".ui-widget-overlay").one "click", (evt) ->
                         c.log "body click"
-                        $("#msd_popup").dialog "close"
+                        $("#msd_popup").dialog("close")
 
                 ).insertAfter arg_value
                 arg_value.css "width", "93%"

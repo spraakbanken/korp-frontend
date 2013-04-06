@@ -1746,3 +1746,8 @@ line.tick {
 .rickshaw_graph .x_tick {
   border : none !important;
 }
+
+#main > #msd_popup, 
+#main > #plot_popup {
+  display : none !important;
+}

@@ -193,15 +193,12 @@
         } else {
           currentId = ui.newPanel.attr("id");
           selected = currentId.split("-")[1];
-          c.log("send ", "resultstab." + selected);
           return $.sm.send("resultstab." + selected);
         }
-      },
-      panelTemplate: '                          <div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>\n    <div class="result_controls">\n        <div class="controls_n" >\n            <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>\n        </div>\n        <div class="progress">\n            <progress value="0" max="100"></progress>\n        </div>\n       <div class="hits_picture" ></div>\n   </div>\n\n    <div class="pager-wrapper"></div>\n    <span class="reading_btn show link" rel="localize[show_reading]">Visa läsläge</span>\n    <span class="reading_btn hide link" rel="localize[show_kwic]">Visa kwic</span>\n\n\n    <div class="table_scrollarea">\n        <table class="results_table kwic" cellspacing="0">\n            <tr class="sentence" ng-repeat="sentence in kwic" ng-class-even="\'even\'" ng-class-odd="\'odd\'"\n                ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">\n                <td class="empty_td"></td>\n                <td colspan="0" class="corpus_title">\n                    {{sentence.newCorpus}}\n                    <span class=\'corpus_title_warn\' rel=\'localize[no_context_support]\' ng-show="sentence.noContext"></span>\n                </td>\n\n                <td class="left" ng-show="!sentence.newCorpus">\n                    <span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>\n                </td>\n                <td class="match" ng-show="!sentence.newCorpus">\n                    <span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>\n                </td>\n                <td class="right" ng-show="!sentence.newCorpus">\n                    <span kwic-word ng-repeat="wd in selectRight(sentence)"></span>\n                </td>\n\n            </tr>\n        </table>\n    </div>\n\n</div>',
-      tabTemplate: '<li class="custom_tab">\n    <a class="custom_anchor" href="#{href}">\n        <span rel="localize[example]">#{label}</span>\n    </a>\n    <a class="tabClose" href="#">\n        <span class="ui-icon ui-icon-circle-close"></span>\n    </a>\n    <div class="tab_progress"></div>\n</li>'
+      }
     });
     tabs = $(".ui-tabs");
-    tabs.find(tab_a_selector).click(function() {
+    tabs.on("click", tab_a_selector, function() {
       var id, idx, state;
       if ($(this).parent().is(".ui-state-disabled")) {
         return;

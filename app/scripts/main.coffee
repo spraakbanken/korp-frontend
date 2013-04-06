@@ -171,64 +171,12 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
             else
                 currentId = ui.newPanel.attr("id")
                 selected = currentId.split("-")[1]
-                c.log "send ", "resultstab." + selected
+                # c.log "send ", "resultstab." + selected
                 $.sm.send "resultstab." + selected
 
-        # panelTemplate: "<div ng-controller='kwicCtrl'>" + kwicResults.initHTML + "</div>"
-        panelTemplate: '''                          <div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
-                                <div class="result_controls">
-                                    <div class="controls_n" >
-                                        <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
-                                    </div>
-                                    <div class="progress">
-                                        <progress value="0" max="100"></progress>
-                                    </div>
-                                   <div class="hits_picture" ></div>
-                               </div>
-
-                                <div class="pager-wrapper"></div>
-                                <span class="reading_btn show link" rel="localize[show_reading]">Visa läsläge</span>
-                                <span class="reading_btn hide link" rel="localize[show_kwic]">Visa kwic</span>
-
-
-                                <div class="table_scrollarea">
-                                    <table class="results_table kwic" cellspacing="0">
-                                        <tr class="sentence" ng-repeat="sentence in kwic" ng-class-even="'even'" ng-class-odd="'odd'"
-                                            ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}">
-                                            <td class="empty_td"></td>
-                                            <td colspan="0" class="corpus_title">
-                                                {{sentence.newCorpus}}
-                                                <span class='corpus_title_warn' rel='localize[no_context_support]' ng-show="sentence.noContext"></span>
-                                            </td>
-
-                                            <td class="left" ng-show="!sentence.newCorpus">
-                                                <span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
-                                            </td>
-                                            <td class="match" ng-show="!sentence.newCorpus">
-                                                <span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
-                                            </td>
-                                            <td class="right" ng-show="!sentence.newCorpus">
-                                                <span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
-                                            </td>
-
-                                        </tr>
-                                    </table>
-                                </div>
-
-                            </div>'''
-        tabTemplate: '''
-        <li class="custom_tab">
-            <a class="custom_anchor" href="#{href}">
-                <span rel="localize[example]">#{label}</span>
-            </a>
-            <a class="tabClose" href="#">
-                <span class="ui-icon ui-icon-circle-close"></span>
-            </a>
-            <div class="tab_progress"></div>
-        </li>'''
 
     tabs = $(".ui-tabs")
-    tabs.find(tab_a_selector).click ->
+    tabs.on "click", tab_a_selector, () ->
         return  if $(this).parent().is(".ui-state-disabled")
         state = {}
         id = $(this).closest(".ui-tabs").attr("id")

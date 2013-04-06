@@ -466,29 +466,36 @@
       });
       return this.tabs.first().data("instance", kwicResults);
     },
+    getPanelTemplate: function() {
+      return " <div id=\"results-kwic\" ng-controller=\"kwicCtrl\" ng-cloak>\n    <div class=\"result_controls\">\n        <div class=\"controls_n\" >\n            <span rel=\"localize[num_results]\">Antal träffar</span>: <span class=\"num-result\">0</span>\n        </div>\n        <div class=\"progress\">\n            <progress value=\"0\" max=\"100\"></progress>\n        </div>\n       <div class=\"hits_picture\" ></div>\n   </div>\n\n    <div class=\"pager-wrapper\"></div>\n    <span class=\"reading_btn show link\" rel=\"localize[show_reading]\">Visa läsläge</span>\n    <span class=\"reading_btn hide link\" rel=\"localize[show_kwic]\">Visa kwic</span>\n\n\n    <div class=\"table_scrollarea\">\n        <table class=\"results_table kwic\" cellspacing=\"0\">\n            <tr class=\"sentence\" ng-repeat=\"sentence in kwic\" ng-class-even=\"'even'\" ng-class-odd=\"'odd'\"\n                ng-class=\"{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus}\">\n                <td class=\"empty_td\"></td>\n                <td colspan=\"0\" class=\"corpus_title\">\n                    {{sentence.newCorpus}}\n                    <span class='corpus_title_warn' rel='localize[no_context_support]' ng-show=\"sentence.noContext\"></span>\n                </td>\n\n                <td class=\"left\" ng-show=\"!sentence.newCorpus\">\n                    <span kwic-word ng-repeat=\"wd in selectLeft(sentence)\"></span>\n                </td>\n                <td class=\"match\" ng-show=\"!sentence.newCorpus\">\n                    <span kwic-word ng-repeat=\"wd in selectMatch(sentence)\"></span>\n                </td>\n                <td class=\"right\" ng-show=\"!sentence.newCorpus\">\n                    <span kwic-word ng-repeat=\"wd in selectRight(sentence)\"></span>\n                </td>\n\n            </tr>\n        </table>\n    </div>\n\n</div>";
+    },
+    getTabTemplate: function(href, label) {
+      return "<li class=\"custom_tab\">\n    <a class=\"custom_anchor\" href=\"" + href + "\">\n        <span rel=\"localize[example]\">" + label + "</span>\n    </a>\n    <a class=\"tabClose\" href=\"#\">\n        <span class=\"ui-icon ui-icon-circle-close\"></span>\n    </a>\n    <div class=\"tab_progress\"></div>\n</li>";
+    },
     _tabify: function(init) {
       this._super(init);
       return this.redrawTabs();
     },
     redrawTabs: function() {
+      this.refresh();
       $(".custom_tab").css("margin-left", "auto");
       return $(".custom_tab:first").css("margin-left", 8);
     },
     addTab: function(klass, headerLabel) {
-      var instance, li, newDiv, url;
+      var instance, li, newDiv, panel, tabs, url;
       if (headerLabel == null) {
         headerLabel = "KWIC";
       }
       url = this.urlPattern + this.n;
-      this.add(url, headerLabel);
-      c.log("@element", this.element, this.element.find("li:last"));
+      tabs = $(".ui-tabs-nav", this.element).append(this.getTabTemplate(url, headerLabel));
       li = $(".ui-tabs-nav > li:last", this.element);
+      panel = $("<div id='" + url.slice(1) + "'>").append(this.getPanelTemplate());
+      this.element.append(panel);
       this.redrawTabs();
       newDiv = this.element.children().last();
       this.element.injector().invoke([
         "$rootScope", "$compile", function($rootScope, $compile) {
           var cnf;
-          c.log("invoke", newDiv);
           cnf = $compile(newDiv);
           return cnf($rootScope);
         }
@@ -496,7 +503,7 @@
       instance = new klass(li, url);
       li.data("instance", instance);
       this.n++;
-      li.find("a.ui-tabs-anchor").trigger("mouseup");
+      li.find("a.ui-tabs-anchor").trigger("change");
       return instance;
     },
     enableAll: function() {

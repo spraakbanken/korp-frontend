@@ -46,31 +46,41 @@ module.exports = function (grunt) {
       }
     },
     connect: {
-      livereload: {
         options: {
-          port: 9000,
-          // Change this to '0.0.0.0' to access the server from outside.
-          hostname: 'localhost',
-          middleware: function (connect) {
-            return [
-              lrSnippet,
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
-            ];
-          }
+            port: 9000,
+            // change this to '0.0.0.0' to access the server from outside
+            hostname: 'localhost'
+        },
+        livereload: {
+            options: {
+                middleware: function (connect) {
+                    return [
+                        lrSnippet,
+                        mountFolder(connect, '.tmp'),
+                        mountFolder(connect, 'app')
+                    ];
+                }
+            }
+        },
+        test: {
+            options: {
+                middleware: function (connect) {
+                    return [
+                        mountFolder(connect, '.tmp'),
+                        mountFolder(connect, 'test')
+                    ];
+                }
+            }
+        },
+        dist: {
+            options: {
+                middleware: function (connect) {
+                    return [
+                        mountFolder(connect, 'dist')
+                    ];
+                }
+            }
         }
-      },
-      test: {
-        options: {
-          port: 9000,
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test')
-            ];
-          }
-        }
-      }
     },
     open: {
       server: {
@@ -254,15 +264,22 @@ module.exports = function (grunt) {
   // remove when mincss task is renamed
   grunt.renameTask('mincss', 'cssmin');
 
-  grunt.registerTask('server', [
-    'clean:server',
-    'coffee:dist',
-    'compass:server',
-    'livereload-start',
-    'connect:livereload',
-    // 'open',
-    'watch'
-  ]);
+
+  grunt.registerTask('server', function (target) {
+      if (target === 'dist') {
+          return grunt.task.run(['build', 'connect:dist:keepalive']);
+      }
+
+      grunt.task.run([
+          'clean:server',
+          'coffee:dist',
+          'compass:server',
+          'livereload-start',
+          'connect:livereload',
+          // 'open',
+          'watch'
+      ]);
+  });
 
   grunt.registerTask('test', [
     'clean:server',
