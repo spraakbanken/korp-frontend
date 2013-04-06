@@ -3641,14 +3641,14 @@ settings.reduce_stringify = function(type) {
 		var corpora = getCorpora(dataContext);
 		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
 		else if(value == "|") return "-";
-		output = _.chain(value.split("|"))
+		output = _(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
 					var wrapper = $("<div>");
 					$("<span>").html(util.lemgramToString(item, true)).attr("data-cqp", '[lex contains "' + item + '"]').appendTo(wrapper);
 					return wrapper.html();
 				})
-				.value().join(", ");
+				.join(", ");
 		return appendDiagram(output, corpora, value);
 		};
 	case "saldo":
@@ -3656,12 +3656,12 @@ settings.reduce_stringify = function(type) {
 		var corpora = getCorpora(dataContext);
 		if(value == "&Sigma;") return appendDiagram(value, corpora, value);
 		else if(value == "|") return "-";
-		output = _.chain(value.split("|"))
+		output = _(value.split("|"))
 				.filter(Boolean)
 				.map(function(item) {
 					return util.saldoToString(item, true);
 				})
-				.value().join(", ");
+				.join(", ");
 		return appendDiagram(output, corpora, value);
 		};
 	case "deprel":
