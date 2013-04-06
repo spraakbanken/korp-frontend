@@ -446,23 +446,25 @@
 
   KorpTabs = {
     _init: function() {
-      var self;
+      var _this = this;
       this._super();
-      self = this;
       this.n = 0;
       this.urlPattern = "#custom-tab-";
-      $(".tabClose").on("click", function() {
-        var index;
-        if (!$(this).parent().is(".ui-state-disabled")) {
-          index = self.tabs.index($(this).parent());
-          if (index > -1) {
-            if (false === self._trigger("closableClick", null, self._ui($(self.tabs[index]).find("a")[0], self.panels[index]))) {
-              return;
-            }
-            self.remove(index);
-          }
-          return false;
+      this.element.on("click", ".tabClose", function(event) {
+        var closebtn, href, li, prevLi;
+        closebtn = $(event.currentTarget);
+        if (!closebtn.parent().is(".ui-state-disabled")) {
+          c.log("href", closebtn.prev().attr("href"));
+          href = closebtn.prev().attr("href");
+          li = closebtn.closest(".custom_tab");
+          prevLi = li.prev();
+          li.remove();
+          $(href, _this.element).remove();
+          _this.refresh();
+          prevLi.find("a:first").click();
         }
+        event.stopImmediatePropagation();
+        return event.preventDefault();
       });
       return this.tabs.first().data("instance", kwicResults);
     },
@@ -489,7 +491,7 @@
       url = this.urlPattern + this.n;
       tabs = $(".ui-tabs-nav", this.element).append(this.getTabTemplate(url, headerLabel));
       li = $(".ui-tabs-nav > li:last", this.element);
-      panel = $("<div id='" + url.slice(1) + "'>").append(this.getPanelTemplate());
+      panel = $("<div>").append(this.getPanelTemplate()).children().first().attr("id", url.slice(1)).unwrap();
       this.element.append(panel);
       this.redrawTabs();
       newDiv = this.element.children().last();
@@ -503,7 +505,7 @@
       instance = new klass(li, url);
       li.data("instance", instance);
       this.n++;
-      li.find("a.ui-tabs-anchor").trigger("change");
+      li.find("a.ui-tabs-anchor").trigger("click");
       return instance;
     },
     enableAll: function() {

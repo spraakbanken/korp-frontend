@@ -205,8 +205,12 @@
       }
       state = {};
       id = $(this).closest(".ui-tabs").attr("id");
+      if (!id) {
+        return false;
+      }
       idx = $(this).parent().prevAll().length;
       state[id] = idx;
+      c.log("pushstate", state, id);
       $.bbq.pushState(state);
       return false;
     });

@@ -58,7 +58,7 @@ settings.modeConfig = [
 
 
 
-var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
+var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(lemgram+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";

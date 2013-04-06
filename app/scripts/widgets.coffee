@@ -384,22 +384,23 @@ $.fn.korp_autocomplete = (options) ->
 KorpTabs =
     _init: ->
         @_super()
-        self = this
         @n = 0
         @urlPattern = "#custom-tab-"
-        $(".tabClose").on "click", ->
-            unless $(this).parent().is(".ui-state-disabled")
-                index = self.tabs.index($(this).parent())
-                if index > -1
+        @element.on "click", ".tabClose", (event) =>
+            closebtn = $(event.currentTarget)
 
-                    # call _trigger to see if remove is allowed
-                    return  if false is self._trigger("closableClick", null, self._ui($(self.tabs[index]).find("a")[0], self.panels[index]))
-
-                    # remove this tab
-                    self.remove index
-
+            unless closebtn.parent().is(".ui-state-disabled")
+                c.log "href", closebtn.prev().attr("href")
+                href = closebtn.prev().attr("href")
+                li = closebtn.closest(".custom_tab")
+                prevLi = li.prev()
+                li.remove()
+                $(href, @element).remove()
+                this.refresh()
+                prevLi.find("a:first").click()
                 # don't follow the link
-                false
+            event.stopImmediatePropagation()
+            event.preventDefault()
 
         @tabs.first().data "instance", kwicResults
 
@@ -474,7 +475,8 @@ KorpTabs =
 
         # c.log "@element", @element, @element.find("li:last")
         li = $(".ui-tabs-nav > li:last", @element)
-        panel = $("<div id='#{url[1..]}'>").append @getPanelTemplate()
+        panel = $("<div>").append(@getPanelTemplate()).children().first().attr("id", url[1..]).unwrap()
+
 
         @element.append panel
         @redrawTabs()
@@ -488,7 +490,7 @@ KorpTabs =
         instance = new klass(li, url)
         li.data "instance", instance
         @n++
-        li.find("a.ui-tabs-anchor").trigger "change"
+        li.find("a.ui-tabs-anchor").trigger "click"
 
 
         return instance

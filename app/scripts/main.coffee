@@ -180,12 +180,14 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         return  if $(this).parent().is(".ui-state-disabled")
         state = {}
         id = $(this).closest(".ui-tabs").attr("id")
+        unless id then return false
 
         # Get the index of this tab.
         idx = $(this).parent().prevAll().length
 
         # Set the state!
         state[id] = idx
+        c.log "pushstate", state, id
         $.bbq.pushState state
         false
 
