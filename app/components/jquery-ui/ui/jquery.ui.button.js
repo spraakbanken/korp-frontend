@@ -1,8 +1,8 @@
 /*!
- * jQuery UI Button 1.10.2
+ * jQuery UI Button 1.9.2
  * http://jqueryui.com
  *
- * Copyright 2013 jQuery Foundation and other contributors
+ * Copyright 2012 jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -29,7 +29,6 @@ var lastActive, startXPos, startYPos, clickDragged,
 			form = radio.form,
 			radios = $( [] );
 		if ( name ) {
-			name = name.replace( /'/g, "\\'" );
 			if ( form ) {
 				radios = $( form ).find( "[name='" + name + "']" );
 			} else {
@@ -43,7 +42,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 	};
 
 $.widget( "ui.button", {
-	version: "1.10.2",
+	version: "1.9.2",
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
@@ -147,6 +146,8 @@ $.widget( "ui.button", {
 				if ( options.disabled || clickDragged ) {
 					return false;
 				}
+				$( this ).toggleClass( "ui-state-active" );
+				that.buttonElement.attr( "aria-pressed", that.element[0].checked );
 			});
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click" + this.eventNamespace, function() {
@@ -191,9 +192,7 @@ $.widget( "ui.button", {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
-				// see #8559, we bind to blur here in case the button element loses
-				// focus between keydown and keyup, it would be left in an "active" state
-				.bind( "keyup" + this.eventNamespace + " blur" + this.eventNamespace, function() {
+				.bind( "keyup" + this.eventNamespace, function() {
 					$( this ).removeClass( "ui-state-active" );
 				});
 
@@ -360,9 +359,9 @@ $.widget( "ui.button", {
 });
 
 $.widget( "ui.buttonset", {
-	version: "1.10.2",
+	version: "1.9.2",
 	options: {
-		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(ui-button)"
+		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(button)"
 	},
 
 	_create: function() {

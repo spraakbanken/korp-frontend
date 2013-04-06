@@ -541,7 +541,7 @@ initTimeGraph = ->
                 .filter(Boolean)
                 .map(_.pairs)
                 .flatten(true)
-                .reduce((memo, [a, b]) ->
+                .reduce((memo, [a, b]) -> 
                     if typeof memo[a] is "undefined"
                         memo[a] = b
                     else
