@@ -1,6 +1,6 @@
 {
-  "name": "yo4",
-  "version": "0.0.0",
+  "name": "Korp",
+  "version": "2.0",
   "dependencies": {
     "angular": "~1.0.5",
     "json3": "~3.2.4",

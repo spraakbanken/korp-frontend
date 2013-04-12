@@ -146,22 +146,26 @@ class window.CorpusListing
     
 class window.ParallelCorpusListing extends CorpusListing
     constructor: (corpora) ->
-        @parallel_corpora = corpora
-        @corpora = []
-        @struct = {}
-        $.each corpora, (__, struct) =>
-            $.each struct, (key, corp) =>
-                return  if key is "default"
-                @corpora.push corp
-                @struct[corp.id] = corp
+        super(corpora)
+        # @parallel_corpora = corpora
+        # @corpora = _.values struct
+        # @struct = corpora
+        # $.each corpora, (__, struct) =>
+        #     $.each struct, (key, corp) =>
+        #         return if key is "default"
+        #         @corpora.push corp
+        #         @struct[corp.id] = corp
 
 
 
     select: (idArray) ->
+        c.log "idArray", idArray
         @selected = []
         $.each idArray, (i, id) =>
             corp = @struct[id]
-            @selected = @selected.concat(@getLinked(corp, true))
+            @selected = @selected.concat(@getLinked(corp, true, false))
+
+        @selected = _.unique @selected
 
 
     getCurrentAttributes: (lang) ->
@@ -185,12 +189,54 @@ class window.ParallelCorpusListing extends CorpusListing
 
         struct
 
-    getLinked: (corp, andSelf=false) ->
-        output = _.filter(@corpora, (item) ->
-            item.parent is corp.parent and item isnt corp
-        )
-        output.push corp  if andSelf
+    getLinked : (corp, andSelf=false, only_selected=true) ->
+        target = if only_selected then @selected else @struct
+        output = _.filter target, (item) ->
+            item.id in (corp.linked_to or [])
+        output = [corp].concat output if andSelf
         output
+
+    getEnabledByLang : (lang, andSelf=false) ->
+        corps = _.filter @selected, (item) ->
+            item["lang"] == lang
+        # c.log "corps", corps
+        # window.crp = corps
+        _(corps).map((item) =>
+            @getLinked item, andSelf
+        ).flatten().value()
+
+
+    # getParentCorpora : () ->
+    #     output = []
+    #     $.each @selected, (i, corp) =>
+    #         childCorpora = $.grepObj(@parallel_corpora[corp.parent], (val, key) ->
+    #             key isnt "default"
+    #         )
+    #         output = output.concat(childCorpora)
+
+    #     output
+
+    getCorporaByLangs : (currentLangList) ->
+        # parents = @getParentCorpora()
+        
+        # remove corpora for lang not used
+        enabledForLangs = _.filter @selected, (corp) ->
+            corp.lang in currentLangList
+
+        if currentLangList.length is 1
+            output = for child in enabledForLangs
+                @getLinked child, true
+
+            return not_linked: output
+        else
+
+            linkedSets = _.map enabledForLangs, (lang) =>
+                @getLinked lang
+            output = _.filter _.flatten(linkedSets), (item) =>
+                item.lang in currentLangList
+
+
+            return linked: output
 
 settings.corpusListing = new CorpusListing(settings.corpora)
 

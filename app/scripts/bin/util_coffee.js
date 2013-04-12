@@ -1,7 +1,8 @@
 (function() {
   var __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.CorpusListing = (function() {
 
@@ -187,29 +188,19 @@
     __extends(ParallelCorpusListing, _super);
 
     function ParallelCorpusListing(corpora) {
-      var _this = this;
-      this.parallel_corpora = corpora;
-      this.corpora = [];
-      this.struct = {};
-      $.each(corpora, function(__, struct) {
-        return $.each(struct, function(key, corp) {
-          if (key === "default") {
-            return;
-          }
-          _this.corpora.push(corp);
-          return _this.struct[corp.id] = corp;
-        });
-      });
+      ParallelCorpusListing.__super__.constructor.call(this, corpora);
     }
 
     ParallelCorpusListing.prototype.select = function(idArray) {
       var _this = this;
+      c.log("idArray", idArray);
       this.selected = [];
-      return $.each(idArray, function(i, id) {
+      $.each(idArray, function(i, id) {
         var corp;
         corp = _this.struct[id];
-        return _this.selected = _this.selected.concat(_this.getLinked(corp, true));
+        return _this.selected = _this.selected.concat(_this.getLinked(corp, true, false));
       });
+      return this.selected = _.unique(this.selected);
     };
 
     ParallelCorpusListing.prototype.getCurrentAttributes = function(lang) {
@@ -237,18 +228,71 @@
       return struct;
     };
 
-    ParallelCorpusListing.prototype.getLinked = function(corp, andSelf) {
-      var output;
+    ParallelCorpusListing.prototype.getLinked = function(corp, andSelf, only_selected) {
+      var output, target;
       if (andSelf == null) {
         andSelf = false;
       }
-      output = _.filter(this.corpora, function(item) {
-        return item.parent === corp.parent && item !== corp;
+      if (only_selected == null) {
+        only_selected = true;
+      }
+      target = only_selected ? this.selected : this.struct;
+      output = _.filter(target, function(item) {
+        var _ref;
+        return _ref = item.id, __indexOf.call(corp.linked_to || [], _ref) >= 0;
       });
       if (andSelf) {
-        output.push(corp);
+        output = [corp].concat(output);
       }
       return output;
+    };
+
+    ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf) {
+      var corps,
+        _this = this;
+      if (andSelf == null) {
+        andSelf = false;
+      }
+      corps = _.filter(this.selected, function(item) {
+        return item["lang"] === lang;
+      });
+      return _(corps).map(function(item) {
+        return _this.getLinked(item, andSelf);
+      }).flatten().value();
+    };
+
+    ParallelCorpusListing.prototype.getCorporaByLangs = function(currentLangList) {
+      var child, enabledForLangs, linkedSets, output,
+        _this = this;
+      enabledForLangs = _.filter(this.selected, function(corp) {
+        var _ref;
+        return _ref = corp.lang, __indexOf.call(currentLangList, _ref) >= 0;
+      });
+      if (currentLangList.length === 1) {
+        output = (function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
+            child = enabledForLangs[_i];
+            _results.push(this.getLinked(child, true));
+          }
+          return _results;
+        }).call(this);
+        return {
+          not_linked: output
+        };
+      } else {
+        linkedSets = _.map(enabledForLangs, function(lang) {
+          return _this.getLinked(lang);
+        });
+        output = _.filter(_.flatten(linkedSets), function(item) {
+          var _ref;
+          return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
+        });
+        return {
+          linked: output
+        };
+      }
     };
 
     return ParallelCorpusListing;

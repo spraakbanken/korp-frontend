@@ -45,6 +45,15 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		$(".lang_row,#query_table").filter($.format(":gt(%s)", index)).each(function() {
 			$("#removeLang").click();
 		});
+		var activeLangs = _.map($(".lang_select").get(), function(item) {
+			return $(item).val();
+		});
+		var langs = this.getEnabledLangs(activeLangs);
+		if(!langs.length)
+			$("#linkedLang").attr("disabled", "disabled");
+		else
+			$("#linkedLang").attr("disabled", null);
+
 		this.refreshTokens();
 	},
 
@@ -70,131 +79,82 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		this.onUpdate();
 	},
 
-	getParentCorpora : function() {
-		var output = [];
-		$.each(settings.corpusListing.selected, function(i, corp) {
-			var childCorpora = $.grepObj(settings.parallel_corpora[corp.parent], function(val, key) {
-				return key != "default";
+	getEnabledLangs : function(activeLangs) {
+		// get the languages that are enabled given a list of active languages
+		if(activeLangs.length) {
+
+			var enabled = settings.corpusListing.getEnabledByLang(activeLangs[0])
+			$.each(activeLangs, function(i, lang) {
+				// debugger;
+				var set = _(settings.corpusListing.getEnabledByLang(lang, true))
+					.map(function(item) {
+						return settings.corpusListing.getLinked(item);
+					})
+					.flatten()
+					.filter(function(item) {
+						c.log("item", item, item.lang)
+						return $.inArray(item.lang, activeLangs) == -1;
+					})
+					.unique()
+					.value()
+
+				enabled = _.intersection(enabled, set)
+
+				c.log("loop", lang, enabled)
 			});
-			output = output.concat(childCorpora);
-		});
-		return output;
+			
+			return _.pluck(enabled , "lang");
+		} else {
+			return _(settings.corpusListing.selected).map(function(item) {
+				return settings.corpusListing.getLinked(item, true);
+			})
+			.flatten()
+			.pluck("lang")
+			.unique()
+			.value()
 
-	},
-
-	getLinkedTo : function(lang) {
-		var corps = _.filter(settings.corpusListing.selected, function(item) {
-			return item["lang"] == lang;
-		});
-
-		return _.flatten(_.map(corps, function(item) {
-			return settings.corpusListing.getLinked(item);
-		}));
-	},
-
-	getSiblingCorpora : function(corp) {
-
-		var childCorpora = $.grepObj(settings.parallel_corpora[corp.parent], function(val, key) {
-			return key !== "default";
-		});
-		delete childCorpora[corp.id];
-		return _.values(childCorpora);
+		}
 	},
 
 	getLangSelect : function() {
 		var ul = $("<select/>").addClass("lang_select");
-		var langs = [];
 
-		var prevLang = $(".lang_select:last").val();
-
-		if(prevLang) {
-			other_corp = this.getLinkedTo(prevLang);
-			langs = _.pluck(other_corp , "lang");
-		} else {
-			$.each(settings.corpusListing.selected, function(i, corp) {
-				var childCorpora = $.grepObj(settings.parallel_corpora[corp.parent], function(val, key) {
-					return key !== "default";
-				});
-				langs = langs.concat(_.pluck(childCorpora, "lang"));
-
-			});
-
-			langs = _.uniq(langs);
-		}
-
-		var currentLangList = _.map($(".lang_select").get(), function(item) {
+		// var prevLang = $(".lang_select:last").val();
+		var activeLangs = _.map($(".lang_select").get(), function(item) {
 			return $(item).val();
 		});
-		if(currentLangList.length + 1 >= langs.length)
-			$("#linkedLang").attr("disabled", "disabled");
-		else
-			$("#linkedLang").attr("disabled", null);
 
-
-
+		var langs = this.getEnabledLangs(activeLangs);
+		
 		ul.append($.map(langs, function(item) {
 			return $("<option />", {"val" : item}).localeKey(item).get(0);
 		}));
 		return ul;
 	},
 
-	getCorporaByLang : function() {
-		var parents = this.getParentCorpora();
-
-		var currentLangList = _.map($(".lang_select").get(), function(item) {
-			return $(item).val();
-		});
-		// remove corpora for lang not used
-		var children = _.flatten(_.map(parents, function(p) {
-			var children = _.values(p);
-			children = _.filter(children, function(item) {
-				return $.inArray(item.lang, currentLangList) != -1;
-			});
-			return children;
-		}));
-
-		if(currentLangList.length == 1) {
-			var self = this;
-			var output = [];
-			$.each(children, function(i, item) {
-				output.push([item].concat(self.getSiblingCorpora(item)));
-			});
-
-			return {"not_linked" : output};
-		} else {
-			function countParentsForLang(corp) {
-				return _(parents)
-				.values
-				.reduce(function(memo, p) {
-					var langs = _.pluck(_.values(p), "lang");
-					if(langs.contains(corp.lang)) memo++;
-					return memo;
-				}, 0);
-			}
-			var childWithLeastParents = _.min(children, countParentsForLang);
-			var output = _.filter(children, function(item) {
-				return item.parent == childWithLeastParents.parent;
-			});
-			return {"linked" : _.uniq(output)};
-		}
-	},
-
 	getCorporaQuery : function() {
 		var currentLangList = _.map($(".lang_select").get(), function(item) {
 			return $(item).val();
 		});
-		var struct = this.getCorporaByLang();
+		var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
 		if(struct.linked) {
-			var struct = struct.linked.sort(function(a,b) {
-//				c.log("inarray", $.inArray(currentLangList, a.lang), $.inArray(currentLangList, b.lang))
-				return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
-			});
-			return _(struct)
+			
+			return _(struct.linked)
+				.sort(function(a,b) {
+					return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
+				})
 				.pluck("id")
 				.invoke("toUpperCase")
 				.join("|");
 		} else {
-			return _.map(struct.not_linked, this.stringifyCorporaSet).join(",");
+			return _(struct.not_linked)
+				.sort(function(a,b) {
+			//				c.log("inarray", $.inArray(currentLangList, a.lang), $.inArray(currentLangList, b.lang))
+					return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
+				})
+				.map(this.stringifyCorporaSet)
+				.join(",");
+			 
 		}
 	},
 
@@ -229,7 +189,7 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 	}
 });
 
-c3 = view.KWICResults.prototype.constructor
+var c3 = view.KWICResults.prototype.constructor
 view.KWICResults = Subclass(view.KWICResults, function() {
 	c3.apply(this, arguments);
 }, {
@@ -279,7 +239,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.europarl = {
 	title : "Europarl3",
-		contents : ["europarlda_sv"]
+		contents : ["europarl-da", "europarl-en"]
 };
 
 settings.corporafolders.salt = {
@@ -290,281 +250,180 @@ settings.corporafolders.salt = {
 settings.corpora = {};
 settings.parallel_corpora = {};
 
-/*
-// Nya EUROPARL, fungerar inte
-settings.parallel_corpora.europarlda = {
-	"default" : "europarl-sv",
-	"europarl-sv" : {
-		id : "europarl-sv",
-		lang : "swe",
-		parent : "europarlda",
-		title: "Svenska-danska",
-		context: context.defaultAligned,
-		within: {
-			"linkda": "meningspar"
-		},
-		attributes: {
-			pos: attrs.pos,
-			msd: attrs.msd,
-			lemma: attrs.baseform,
-			lex: attrs.lemgram,
-			saldo: attrs.saldo,
-			dephead: attrs.dephead,
-			deprel: attrs.deprel,
-			ref: attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-		}
+settings.corpora["europarl-sv"] = {
+	id : "europarl-sv",
+	lang : "swe",
+	linked_to : ["europarl-en", "europarl-da"],
+	title: "Svenska-danska",
+	context: context.defaultAligned,
+	within: {
+		"linkda": "meningspar"
 	},
-	"europarl-da" : {
-		id : "europarl-da",
-		lang : "dan",
-		parent : "europarlda",
-		title: "Svenska-danska",
-		context: context.defaultAligned,
-		within: {
-			"linkda": "meningspar"
-		},
-		attributes: {
-		},
-		struct_attributes : {
-		},
-		hide : true
-	}
-};
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	},
+	hide : true
+}
 
-settings.parallel_corpora.europarlen = {
-	"default" : "europarl-sv",
-	"europarl-sv" : {
-		id : "europarl-sv",
-		lang : "swe",
-		parent : "europarlen",
-		title: "Svenska-engelska",
-		context: context.defaultAligned,
-		within: {
-			"linken": "meningspar"
-		},
-		attributes: {
-			pos: attrs.pos,
-			msd: attrs.msd,
-			lemma: attrs.baseform,
-			lex: attrs.lemgram,
-			saldo: attrs.saldo,
-			dephead: attrs.dephead,
-			deprel: attrs.deprel,
-			ref: attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-		}
+settings.corpora["europarl-da"] = {
+	id : "europarl-da",
+	lang : "dan",
+	linked_to : ["europarl-sv"],
+	title: "Svenska-danska",
+	context: context.defaultAligned,
+	within: {
+		"linkda": "meningspar"
 	},
-	"europarl-en" : {
-		id : "europarl-en",
-		lang : "eng",
-		parent : "europarlen",
-		title: "Svenska-engelska",
-		context: context.defaultAligned,
-		within: {
-			"linken": "meningspar"
-		},
-		attributes: {
-		},
-		struct_attributes : {
-		},
-		hide : true
+	attributes: {
+	},
+	struct_attributes : {
 	}
+	// hide : true
+}
+
+settings.corpora["europarl-en"] = {
+	id : "europarl-en",
+	lang : "eng",
+	linked_to : ["europarl-sv"],
+	title: "Svenska-engelska",
+	context: context.defaultAligned,
+	within: {
+		"linken": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+	// hide : true
 };
+/*
 */
 
 
-// Gamla EUROPARL, ska bort
-settings.parallel_corpora.europarl = {
-	"default" : "europarlda_sv",
-	europarlda_sv : {
-		id : "europarlda_sv",
-		lang : "swe",
-		parent : "europarl",
-		title: "Svenska-danska",
-		context: context.defaultAligned,
-		within: {
-			"link": "meningspar"
-		},
-		attributes: {
-			pos: attrs.pos,
-			msd: attrs.msd,
-			lemma: attrs.baseform,
-			lex: attrs.lemgram,
-			saldo: attrs.saldo,
-			dephead: attrs.dephead,
-			deprel: attrs.deprel,
-			ref: attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-		}
+settings.corpora.saltnld_swe = {
+	id : "saltnld_swe",
+	lang : "swe",
+	linked_to : ["saltnld_nld"],
+	title: "Svenska-nederländska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
 	},
-	europarlda_da : {
-		id : "europarlda_da",
-		lang : "dan",
-		parent : "europarl",
-		title: "Svenska-danska",
-		context: context.defaultAligned,
-		within: {
-			"link": "meningspar"
-		},
-		attributes: {
-		},
-		struct_attributes : {
-		},
-		hide : true
-	}
-};
-
-
-settings.parallel_corpora.salt = {
-	"default" : "saltnld_swe",
-	saltnld_swe : {
-		id : "saltnld_swe",
-		lang : "swe",
-		parent : "salt",
-		title: "Svenska-nederländska",
-		context: context.defaultAligned,
-		context : settings.defaultContext,
-		within: {
-			"link": "meningspar"
-		},
-		attributes: {
-			pos: attrs.pos,
-			msd: attrs.msd,
-			lemma: attrs.baseform,
-			lex: attrs.lemgram,
-			saldo: attrs.saldo,
-			dephead: attrs.dephead,
-			deprel: attrs.deprel,
-			ref: attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-			text_author : {label : "author"},
-		    text_title : {label : "title"},
-
-		    text_year : {label : "year"},
-			text_origlang : {
-			    label : "origlang",
-			    displayType : "select",
-    			dataset: {
-    			    "swe" : "swedish",
-    			    "nld" : "dutch"
-    			}
-			},
-			page_n : {label : "page_n"}
-		}
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
 	},
-	saltnld_nld : {
-		id : "saltnld_nld",
-		parent : "salt",
-		lang : "nld",
-		title: "Svenska-nederländska",
-		context: context.defaultAligned,
-		within: {
-			"link": "meningspar"
-		},
-		attributes: {},
-		struct_attributes : {
-			text_author : {label : "author"},
-		    text_title : {label : "title"},
+	struct_attributes : {
+		text_author : {label : "author"},
+	    text_title : {label : "title"},
 
-		    text_year : {label : "year"},
-			text_origlang : {
-			    label : "origlang",
-			    displayType : "select",
-    			dataset: {
-    			    "swe" : "swedish",
-    			    "nld" : "dutch"
-    			}
-			},
-			page_n : {label : "page_n"}
+	    text_year : {label : "year"},
+		text_origlang : {
+		    label : "origlang",
+		    displayType : "select",
+			dataset: {
+			    "swe" : "swedish",
+			    "nld" : "dutch"
+			}
 		},
-		hide : true
+		page_n : {label : "page_n"}
 	}
-};
-
-settings.parallel_corpora.espc = {
-	"default" : "espc_swe",
-	espc_swe : {
-		id : "espc_swe",
-		lang : "swe",
-		parent : "espc",
-		limited_access : true,
-		title: "The English-Swedish Parallel Corpus (ESPC) svenska-engelska",
-		context: context.defaultAligned,
-		context : settings.defaultContext,
-		within: {
-			"link": "meningspar"
-		},
-		attributes: {
-			pos: attrs.pos,
-			espcmsd: {label : "msd"},
-			lemma: attrs.baseform,
-			lex: attrs.lemgram,
-			saldo: attrs.saldo,
-			dephead: attrs.dephead,
-			deprel: attrs.deprel,
-			ref: attrs.ref,
-			prefix : attrs.prefix,
-			suffix : attrs.suffix
-		},
-		struct_attributes : {
-			text_author : {label : "author"},
-		    text_title : {label : "title"},
-		    text_date : {label : "year"}
-		}
+}
+settings.corpora.saltnld_nld = {
+	id : "saltnld_nld",
+	lang : "nld",
+	linked_to : ["saltnld_swe"],
+	title: "Svenska-nederländska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
 	},
-	espc_eng : {
-		id : "espc_eng",
-		lang : "eng",
-		parent : "espc",
-		limited_access : true,
-		title: "ESPC svenska-engelska",
-		context: context.defaultAligned,
-		within: {
-			"link": "meningspar"
+	attributes: {},
+	struct_attributes : {
+		text_author : {label : "author"},
+	    text_title : {label : "title"},
+
+	    text_year : {label : "year"},
+		text_origlang : {
+		    label : "origlang",
+		    displayType : "select",
+			dataset: {
+			    "swe" : "swedish",
+			    "nld" : "dutch"
+			}
 		},
-		attributes: {},
-		struct_attributes : {
-			text_author : {label : "author"},
-		    text_title : {label : "title"},
-		    text_date : {label : "year"}
-		},
-		hide : true
+		page_n : {label : "page_n"}
+	},
+	hide : true
+}
+
+settings.corpora.espc_swe = {
+	id : "espc_swe",
+	lang : "swe",
+	limited_access : true,
+	title: "The English-Swedish Parallel Corpus (ESPC) svenska-engelska",
+	context: context.defaultAligned,
+	context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		espcmsd: {label : "msd"},
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_date : {label : "year"}
 	}
-};
+}
+settings.corpora.espc_eng = {
+	id : "espc_eng",
+	lang : "eng",
+	limited_access : true,
+	title: "ESPC svenska-engelska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {},
+	struct_attributes : {
+		text_author : {label : "author"},
+	    text_title : {label : "title"},
+	    text_date : {label : "year"}
+	},
+	hide : true
+}
 
-$.each(settings.parallel_corpora, function(corpora, struct) {
-	$.each(struct, function(key, corp) {
-		if(key == "default") return;
 
-		settings.corpora[corp.id] = corp;
-	});
-});
-
-
-$.each(settings.parallel_corpora, function(corpora, struct) {
-	$.each(struct, function(key, corp) {
-		if(key == "default") return;
-
-		settings.corpora[corp.id] = corp;
-	});
-});
-
-
-
-settings.corpusListing = new ParallelCorpusListing(settings.parallel_corpora);
+settings.corpusListing = new ParallelCorpusListing(settings.corpora);
 delete ParallelCorpusListing;
 delete context;
-$.extend(settings.corpora, settings.corpusListing.struct);

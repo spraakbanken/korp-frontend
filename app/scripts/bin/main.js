@@ -1,5 +1,5 @@
 (function() {
-  var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, getAllCorporaInFolders, initTimeGraph, isDev, loc_dfd, t;
+  var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t;
 
   t = $.now();
 
@@ -210,7 +210,6 @@
       }
       idx = $(this).parent().prevAll().length;
       state[id] = idx;
-      c.log("pushstate", state, id);
       $.bbq.pushState(state);
       return false;
     });
@@ -263,10 +262,9 @@
       corpus = e.getState("corpus");
       if (isInit && corpus && corpus.length !== 0 && hasChanged("corpus")) {
         corp_array = corpus.split(",");
-        processed_corp_array = [];
-        $.each(corp_array, function(key, val) {
-          return processed_corp_array.extend(getAllCorporaInFolders(settings.corporafolders, val));
-        });
+        processed_corp_array = _(corp_array).map(function(val) {
+          return getAllCorporaInFolders(settings.corporafolders, val);
+        }).flatten().value();
         corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
         $("#select_corpus").val(corpus);
         simpleSearch.enableSubmit();
@@ -449,7 +447,7 @@
     }).html('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">').append("<p>The server failed to respond, please try again later.</p>");
   });
 
-  getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
+  window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     var leftPart, outCorpora, posOfPeriod, rightPart;
     outCorpora = [];
     while (folderOrCorpus.contains(".")) {

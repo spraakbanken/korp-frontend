@@ -187,7 +187,6 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
         # Set the state!
         state[id] = idx
-        c.log "pushstate", state, id
         $.bbq.pushState state
         false
 
@@ -232,9 +231,10 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         corpus = e.getState("corpus")
         if isInit and corpus and corpus.length isnt 0 and hasChanged("corpus")
             corp_array = corpus.split(",")
-            processed_corp_array = []
-            $.each corp_array, (key, val) ->
-                processed_corp_array.extend getAllCorporaInFolders(settings.corporafolders, val)
+            processed_corp_array = _(corp_array)
+                .map((val) -> getAllCorporaInFolders(settings.corporafolders, val))
+                .flatten()
+                .value()
 
             corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
             $("#select_corpus").val corpus
@@ -406,7 +406,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
 
 
-getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
+window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
     outCorpora = []
 
     # Go down the alley to the last subfolder
@@ -424,7 +424,7 @@ getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
         # Folder
         # Continue to go through any subfolders
         $.each lastLevel[folderOrCorpus], (key, val) ->
-            outCorpora.extend getAllCorporaInFolders(lastLevel[folderOrCorpus], key)  if key not in ["title", "contents", "description"]
+            outCorpora.extend getAllCorporaInFolders(lastLevel[folderOrCorpus], key) if key not in ["title", "contents", "description"]
 
 
         # And add the corpora in this folder level

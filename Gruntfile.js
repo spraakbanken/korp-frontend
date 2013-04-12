@@ -8,7 +8,7 @@ var mountFolder = function (connect, dir) {
 
 module.exports = function (grunt) {
   // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').concat(['gruntacular']).forEach(grunt.loadNpmTasks);
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // configurable paths
   var yeomanConfig = {
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/{,*/}*.html',
           '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg}'
+          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         tasks: ['livereload']
       }
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                     return [
                         lrSnippet,
                         mountFolder(connect, '.tmp'),
-                        mountFolder(connect, 'app')
+                        mountFolder(connect, yeomanConfig.app)
                     ];
                 }
             }
@@ -88,9 +88,18 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      dist: ['.tmp', '<%= yeoman.dist %>/*'],
-      server: '.tmp'
-    },
+          dist: {
+            files: [{
+              dot: true,
+              src: [
+                '.tmp',
+                '<%= yeoman.dist %>/*',
+                '!<%= yeoman.dist %>/.git*'
+              ]
+            }]
+          },
+          server: '.tmp'
+        },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -100,9 +109,9 @@ module.exports = function (grunt) {
         '<%= yeoman.app %>/scripts/{,*/}*.js'
       ]
     },
-    testacular: {
+    karma: {
       unit: {
-        configFile: 'testacular.conf.js',
+        configFile: 'karma.conf.js',
         singleRun: true
       }
     },
@@ -123,12 +132,14 @@ module.exports = function (grunt) {
       test: {
         files: [{
           expand: true,
-          cwd: '.tmp/spec',
-          src: '*.coffee',
-          dest: 'test/spec'
+          cwd: 'test/spec',
+          src: '{,*/}*.coffee',
+          dest: '.tmp/spec',
+          ext: '.js'
         }]
       }
     },
+
     compass: {
       options: {
         sassDir: '<%= yeoman.app %>/styles',
@@ -150,8 +161,8 @@ module.exports = function (grunt) {
       dist: {
         files: {
           '<%= yeoman.dist %>/scripts/scripts.js': [
-            '.tmp/scripts/*.js',
-            '<%= yeoman.app %>/scripts/*.js'
+            '.tmp/scripts/{,*/}*.js',
+            '<%= yeoman.app %>/scripts/{,*/}*.js'
           ]
         }
       }
@@ -234,6 +245,19 @@ module.exports = function (grunt) {
         }
       }
     },
+    rev: {
+      dist: {
+        files: {
+          src: [
+            '<%= yeoman.dist %>/scripts/{,*/}*.js',
+            '<%= yeoman.dist %>/styles/{,*/}*.css',
+            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
+            '<%= yeoman.dist %>/styles/fonts/*'
+          ]
+        }
+      }
+    },
+
     copy: {
       dist: {
         files: [{
@@ -286,7 +310,7 @@ module.exports = function (grunt) {
     'coffee',
     'compass',
     'connect:test',
-    'testacular'
+    'karma'
   ]);
 
   grunt.registerTask('build', [
@@ -302,9 +326,10 @@ module.exports = function (grunt) {
     'concat',
     'copy',
     'cdnify',
-    'usemin',
     'ngmin',
-    // 'uglify'
+    'uglify'
+    'rev',
+    'usemin',
   ]);
 
   grunt.registerTask('default', ['build']);
