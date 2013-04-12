@@ -285,9 +285,6 @@ module.exports = function (grunt) {
   });
 
   grunt.renameTask('regarde', 'watch');
-  // remove when mincss task is renamed
-  grunt.renameTask('mincss', 'cssmin');
-
 
   grunt.registerTask('server', function (target) {
       if (target === 'dist') {
@@ -327,7 +324,7 @@ module.exports = function (grunt) {
     'copy',
     'cdnify',
     'ngmin',
-    'uglify'
+    'uglify',
     'rev',
     'usemin',
   ]);

@@ -31,6 +31,7 @@
   deferred_domReady = $.Deferred(function(dfd) {
     return $(function() {
       var mode;
+
       mode = $.deparam.querystring().mode;
       if ((mode != null) && mode !== "default") {
         c.log("fetchin mode", mode);
@@ -74,6 +75,7 @@
 
   $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then((function(searchbar_html) {
     var creds, end, from, labs, onHashChange, paper, start, tab_a_selector, tabs, to;
+
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     if (isLab) {
@@ -103,6 +105,7 @@
     $("#mode_switch").modeSelector({
       change: function() {
         var mode;
+
         mode = $(this).modeSelector("option", "selected");
         $.bbq.removeState("corpus");
         if (mode === "default") {
@@ -165,6 +168,7 @@
       event: "change",
       activate: function(event, ui) {
         var selected;
+
         if ($("#columns").position().top > 0) {
           $("#sidebar").sidebar("updatePlacement");
         }
@@ -185,6 +189,7 @@
       event: "change",
       activate: function(event, ui) {
         var currentId, instance, selected, suffix, type;
+
         if (ui.newTab.is(".custom_tab")) {
           instance = $(this).korptabs("getCurrentInstance");
           suffix = instance instanceof view.GraphResults ? ".graph" : ".kwic";
@@ -200,6 +205,7 @@
     tabs = $(".ui-tabs");
     tabs.on("click", tab_a_selector, function() {
       var id, idx, state;
+
       if ($(this).parent().is(".ui-state-disabled")) {
         return;
       }
@@ -230,6 +236,7 @@
     });
     onHashChange = function(event, isInit) {
       var corp_array, corpus, data, display, e, hasChanged, page, prevFragment, processed_corp_array, reading, search, showAbout, type, value;
+
       hasChanged = function(key) {
         return prevFragment[key] !== e.getState(key);
       };
@@ -308,6 +315,7 @@
           }
         }).show().unbind("submit").submit(function() {
           var self;
+
           self = this;
           authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done(function(data) {
             util.setLogin();
@@ -387,6 +395,7 @@
       }
       tabs.each(function() {
         var idx, self;
+
         self = this;
         idx = e.getState(this.id, true);
         if (idx === null) {
@@ -449,6 +458,7 @@
 
   window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     var leftPart, outCorpora, posOfPeriod, rightPart;
+
     outCorpora = [];
     while (folderOrCorpus.contains(".")) {
       posOfPeriod = folderOrCorpus.indexOf(".");
@@ -476,6 +486,7 @@
 
   initTimeGraph = function() {
     var all_timestruct, getValByDate, opendfd, restdata, restyear, time_comb, timestruct;
+
     timestruct = null;
     all_timestruct = null;
     restdata = null;
@@ -485,6 +496,7 @@
       c.log("write time");
       $.each(data, function(corpus, struct) {
         var cor;
+
         if (corpus !== "time") {
           cor = settings.corpora[corpus.toLowerCase()];
           timeProxy.expandTimeStruct(struct);
@@ -504,6 +516,7 @@
     });
     getValByDate = function(date, struct) {
       var output;
+
       output = null;
       $.each(struct, function(i, item) {
         if (date === item[0]) {
@@ -517,10 +530,12 @@
       all_timestruct = combdata[0];
       $("#corpusbox").bind("corpuschooserchange", function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;
+
         one_px = max / 46;
         normalize = function(array) {
           return _.map(array, function(item) {
             var out;
+
             out = [].concat(item);
             if (out[1] < one_px && out[1] > 0) {
               out[1] = one_px;
@@ -530,6 +545,7 @@
         };
         output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg) {
           var a, b;
+
           a = _arg[0], b = _arg[1];
           if (typeof memo[a] === "undefined") {
             memo[a] = b;
@@ -601,6 +617,7 @@
       });
       return $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
         var date, firstrow, header, pTmpl, secondrow, time, total, val;
+
         if (item) {
           date = item.datapoint[0];
           header = $("<h4>");

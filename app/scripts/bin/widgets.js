@@ -7,10 +7,12 @@
     },
     _init: function() {
       var dfd;
+
       return dfd = $.Deferred();
     },
     updateContent: function(sentenceData, wordData, corpus, tokens) {
       var corpusObj;
+
       this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
       corpusObj = settings.corpora[corpus];
       $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>" + corpusObj.title + "</p>").prependTo("#selected_sentence");
@@ -30,16 +32,20 @@
     },
     renderGraph: function(tokens) {
       var outerW;
+
       outerW = $(window).width() - 80;
       return $("<span class='link show_deptree'>Visa träd</button>").localeKey("show_deptree").click(function() {
         var iframe, info;
+
         info = $("<span class='info' />");
         iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load(function() {
           var wnd;
+
           wnd = this.contentWindow;
           tokens = tokens;
           return wnd.draw_deptree.call(wnd, tokens, function(msg) {
             var type, val, _ref;
+
             _ref = _.head(_.pairs(msg)), type = _ref[0], val = _ref[1];
             return info.empty().append($("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey("" + type + "_" + val));
           });
@@ -52,16 +58,19 @@
     },
     renderContent: function(wordData, corpus_attrs) {
       var items, key, order, pairs, value;
+
       pairs = _.pairs(wordData);
       order = this.options.displayOrder;
       pairs.sort(function(_arg, _arg1) {
         var a, b;
+
         a = _arg[0];
         b = _arg1[0];
         return $.inArray(b, order) - $.inArray(a, order);
       });
       items = (function() {
         var _i, _len, _ref, _results;
+
         _results = [];
         for (_i = 0, _len = pairs.length; _i < _len; _i++) {
           _ref = pairs[_i], key = _ref[0], value = _ref[1];
@@ -75,6 +84,7 @@
     },
     renderItem: function(key, value, attrs) {
       var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, ul, val, valueArray, x;
+
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }
@@ -95,6 +105,7 @@
         if (key === "variants") {
           valueArray.sort(function(a, b) {
             var splita, splitb, strvala, strvalb;
+
             splita = util.splitLemgram(a);
             splitb = util.splitLemgram(b);
             strvala = getStringVal(splita.form) + splita.index + getStringVal(splita.pos);
@@ -105,6 +116,7 @@
         itr = _.isArray(valueArray) ? valueArray : _.values(valueArray);
         lis = (function() {
           var _i, _len, _results;
+
           _results = [];
           for (_i = 0, _len = itr.length; _i < _len; _i++) {
             x = itr[_i];
@@ -132,6 +144,7 @@
             if (attrs.internalSearch) {
               li.addClass("link").click(function() {
                 var cqpVal;
+
                 cqpVal = $(this).data("key");
                 return $.bbq.pushState({
                   "search": "cqp|[" + key + " contains '" + cqpVal + "']"
@@ -166,11 +179,13 @@
     },
     applyEllipse: function() {
       var oldDisplay, totalWidth;
+
       oldDisplay = this.element.css("display");
       this.element.css("display", "block");
       totalWidth = this.element.width();
       this.element.find(".sidebar_url").css("white-space", "nowrap").each(function() {
         var a, domain, midsection, oldtext, _results;
+
         _results = [];
         while ($(this).width() > totalWidth) {
           oldtext = $(this).text();
@@ -191,10 +206,12 @@
     },
     _parseLemma: function(attr, tmplVal) {
       var seq;
+
       seq = [];
       if (attr != null) {
         seq = $.map(attr.split("|"), function(item) {
           var lemma;
+
           lemma = item.split(":")[0];
           if (tmplVal.pattern) {
             return $.format(tmplVal.pattern, [lemma, lemma]);
@@ -211,6 +228,7 @@
     refreshContent: function(mode) {
       var instance, _ref, _ref1,
         _this = this;
+
       if (mode === "lemgramWarning") {
         return $.Deferred(function(dfd) {
           return _this.element.load("markup/parse_warning.html", function() {
@@ -227,6 +245,7 @@
     },
     updatePlacement: function() {
       var max;
+
       max = Math.round($("#columns").position().top);
       if ($(window).scrollTop() < max) {
         return this.element.removeClass("fixed");
@@ -238,6 +257,7 @@
     },
     show: function(mode) {
       var _this = this;
+
       return $.when(this.element).pipe(function() {
         return _this.refreshContent(mode);
       }).done(function() {
@@ -276,6 +296,7 @@
     },
     _create: function() {
       var self;
+
       this._super();
       self = this;
       $.each(this.element, function() {
@@ -291,6 +312,7 @@
     },
     select: function(mode) {
       var target;
+
       this.options.selected = mode;
       target = this.element.find("a").filter(function() {
         return $(this).data("mode") === mode;
@@ -310,9 +332,11 @@
     },
     _create: function() {
       var self;
+
       self = this;
       $.each(this.options.modes, function(i, item) {
         var a;
+
         a = $("<a href='javascript:'>").localeKey(item.localekey).data("mode", item.mode);
         if (!item.labOnly || (isLab && item.labOnly)) {
           return a.appendTo(self.element);
@@ -327,6 +351,7 @@
   $.extend($.ui.autocomplete.prototype, {
     _renderItem: function(ul, item) {
       var li;
+
       li = $("<li></li>").data("item.autocomplete", item).append($("<a></a>")[(this.options.html ? "html" : "text")](item.label)).appendTo(ul);
       if (!item["enabled"]) {
         li.addClass("autocomplete-item-disabled");
@@ -335,6 +360,7 @@
     },
     _renderMenu: function(ul, items) {
       var currentCategory, that;
+
       that = this;
       currentCategory = "";
       return $.each(items, function(index, item) {
@@ -349,6 +375,7 @@
 
   $.fn.korp_autocomplete = function(options) {
     var selector;
+
     selector = $(this);
     if (typeof options === "string" && options === "abort") {
       lemgramProxy.abort();
@@ -361,11 +388,13 @@
       labelFunction: util.lemgramToString,
       middleware: function(request, idArray) {
         var dfd, has_morphs, labelArray, listItems;
+
         dfd = $.Deferred();
         has_morphs = settings.corpusListing.getMorphology().split("|").length > 1;
         if (has_morphs) {
           idArray.sort(function(a, b) {
             var first, second;
+
             first = (a.split("--").length > 1 ? a.split("--")[0] : "saldom");
             second = (b.split("--").length > 1 ? b.split("--")[0] : "saldom");
             return second < first;
@@ -376,6 +405,7 @@
         labelArray = util.sblexArraytoString(idArray, options.labelFunction);
         listItems = $.map(idArray, function(item, i) {
           var out;
+
           out = {
             label: labelArray[i],
             value: item,
@@ -403,6 +433,7 @@
       html: true,
       source: function(request, response) {
         var promise;
+
         c.log("autocomplete request", request);
         c.log("autocomplete type", options.type);
         promise = options.type === "saldo" ? lemgramProxy.saldoSearch(request.term, options["sw-forms"]) : lemgramProxy.karpSearch(request.term, options["sw-forms"]);
@@ -430,6 +461,7 @@
       minLength: 1,
       select: function(event, ui) {
         var selectedItem;
+
         event.preventDefault();
         selectedItem = ui.item.value;
         return $.proxy(options.select, selector)(selectedItem);
@@ -447,11 +479,13 @@
   KorpTabs = {
     _init: function() {
       var _this = this;
+
       this._super();
       this.n = 0;
       this.urlPattern = "#custom-tab-";
       this.element.on("click", ".tabClose", function(event) {
         var closebtn, href, li, prevLi;
+
         closebtn = $(event.currentTarget);
         if (!closebtn.parent().is(".ui-state-disabled")) {
           c.log("href", closebtn.prev().attr("href"));
@@ -485,6 +519,7 @@
     },
     addTab: function(klass, headerLabel) {
       var instance, li, newDiv, panel, tabs, url;
+
       if (headerLabel == null) {
         headerLabel = "KWIC";
       }
@@ -498,6 +533,7 @@
       this.element.injector().invoke([
         "$rootScope", "$compile", function($rootScope, $compile) {
           var cnf;
+
           cnf = $compile(newDiv);
           return cnf($rootScope);
         }
@@ -510,6 +546,7 @@
     },
     enableAll: function() {
       var _this = this;
+
       return $.each(".custom_tab", function(i, elem) {
         return _this.enable(i);
       });
@@ -526,6 +563,7 @@
     _init: function() {
       var repeat, self,
         _this = this;
+
       self = this;
       this.table = this.element;
       this.element.find(".ui-icon-circle-close").click(function() {
@@ -552,6 +590,7 @@
         }
         $("#opt_menu").show().menu({}).one("click", function(evt) {
           var item;
+
           c.log("click", evt.target);
           if (!$(evt.target).is("a")) {
             return;
@@ -571,6 +610,7 @@
       });
       this.element.find(".close_token .ui-icon").click(function() {
         var item;
+
         item = $(this).closest(".close_token").data("item");
         self.element.toggleClass(item);
         return self._trigger("change");
@@ -581,10 +621,12 @@
     },
     insertArg: function(animate) {
       var arg, self;
+
       c.log("insertArg");
       self = this;
       arg = $("#argTmpl").tmpl().find(".or_container").append(this.insertOr()).end().find(".insert_or").click(function() {
         var lastVal, thisarg;
+
         thisarg = $(this).closest(".query_arg").find(".or_container");
         lastVal = thisarg.find(".arg_type:last").val();
         self.insertOr(true).appendTo($(this).closest(".query_arg").find(".or_container")).hide().slideDown();
@@ -601,12 +643,14 @@
     },
     insertOr: function(usePrev) {
       var arg_select, arg_value, link_mod, orElem, self;
+
       self = this;
       arg_select = this.makeSelect();
       arg_value = this.makeWordArgValue();
       arg_value.attr("data-placeholder", "any_word_placeholder");
       link_mod = $("<span class='val_mod sensitive'>").text("Aa").click(function() {
         var menuMarkup;
+
         if ($("#mod_menu").length) {
           $("#mod_menu").remove();
           return;
@@ -630,6 +674,7 @@
       });
       orElem = $("#orTmpl").tmpl().find(".right_col").append(arg_select, arg_value, link_mod).end().find(".remove_arg").click(function() {
         var arg;
+
         if ($(this).css("opacity") === "0") {
           return;
         }
@@ -651,6 +696,7 @@
     },
     makeSelect: function() {
       var arg_opts, arg_select, groups, lang;
+
       arg_select = $("<select/>").addClass("arg_type").change($.proxy(this.onArgTypeChange, this));
       if (currentMode === "parallel") {
         lang = this.element.closest(".lang_row,#query_table").find(".lang_select").val();
@@ -662,6 +708,7 @@
       c.log("groups", groups);
       $.each(groups, function(lbl, group) {
         var optgroup;
+
         if ($.isEmptyObject(group)) {
           return;
         }
@@ -686,6 +733,7 @@
     },
     makeOptsSelect: function(groups) {
       var self;
+
       self = this;
       if ($.isEmptyObject(groups)) {
         return $("<span>", {
@@ -704,9 +752,11 @@
     },
     refresh: function() {
       var self;
+
       self = this;
       return this.table.find(".or_arg").each(function() {
         var newSelects, oldLower, oldVal, old_data, old_ph, optVal;
+
         oldVal = $(this).find(".arg_type").val();
         optVal = $(this).find(".arg_opts").val();
         oldLower = $(this).find(".arg_value");
@@ -726,6 +776,7 @@
     makeWordArgValue: function(label) {
       var out, self,
         _this = this;
+
       self = this;
       out = $("<input type='text'/>").addClass("arg_value");
       if (label === "word") {
@@ -744,6 +795,7 @@
     },
     onArgTypeChange: function(event) {
       var all_years, arg_value, data, end, from, keys, labelFunc, newSelect, oldOptVal, oldVal, self, slider, sortFunc, sorter, start, target, to, type;
+
       self = this;
       target = $(event.currentTarget);
       oldVal = target.parent().siblings(".arg_value:input[type=text]").val() || "";
@@ -755,6 +807,7 @@
         case "select":
           sorter = function(a, b) {
             var prefix;
+
             if (data.localize === false) {
               return a > b;
             }
@@ -774,6 +827,7 @@
           keys.sort(sorter);
           $.each(keys, function(_, key) {
             var opt;
+
             opt = $("<option />").val(regescape(key)).appendTo(arg_value);
             if (data.localize === false) {
               return opt.text(key);
@@ -805,6 +859,7 @@
             "sw-forms": true
           }).blur(function() {
             var input;
+
             input = this;
             return setTimeout((function() {
               c.log("blur");
@@ -870,6 +925,7 @@
           });
           $("<span class='ui-icon ui-icon-info' />").click(function() {
             var h, w;
+
             w = $("html").width() * 0.6;
             h = $("html").height();
             $("#msd_popup").fadeIn("fast").dialog({
@@ -894,12 +950,14 @@
     },
     getOrCQP: function(andSection, expand) {
       var args, bound, boundStr, boundprefix, inner_query, output, self;
+
       self = this;
       output = "";
       args = {};
       $(".or_container", andSection).each(function(i, item) {
         return $(this).find(".or_arg").each(function() {
           var case_sens, data, opt, type, value;
+
           type = $(this).find(".arg_type").val();
           data = $(this).find(".arg_type :selected").data("dataProvider");
           if (!data) {
@@ -926,8 +984,10 @@
       $.each(args, function(type, valueArray) {
         return $.each(valueArray, function(i, obj) {
           var argFunc, defaultArgsFunc;
+
           defaultArgsFunc = function(s, op) {
             var expandToNonStrict, formatter, getOp, not_operator, operator, prefix, stringify, value;
+
             getOp = function(value) {
               return {
                 is: [operator, "", value, ""],
@@ -949,6 +1009,7 @@
             if (currentMode === "law") {
               expandToNonStrict = function(value) {
                 var undef;
+
                 prefix = (obj.data.isStructAttr !== null ? "_." : "");
                 undef = $.format("%s%s = '__UNDEF__'", [prefix, type]);
                 return $.format("(%s | %s)", [stringify(value), undef]);
@@ -984,6 +1045,7 @@
     },
     sortAnd: function(andBlock1, andBlock2) {
       var min1, min2;
+
       min1 = _.min(_.map($(andBlock1).find(".arg_type"), function(item) {
         return _.indexOf(settings.cqp_prio, $(item).val());
       }));
@@ -994,8 +1056,10 @@
     },
     getCQP: function(strict) {
       var andList, min, minOfContainer, min_max, output, self, suffix, totalMin;
+
       minOfContainer = function(or_container) {
         var types;
+
         types = _.invoke(_.map($(".arg_type", or_container).get(), $), "val");
         return Math.min.apply(null, _.map(types, getAnnotationRank));
       };
@@ -1007,6 +1071,7 @@
       andList = this.element.find(".query_arg").sort(this.sortAnd);
       output = $(andList).map(function(item) {
         var expand, or_min;
+
         expand = false;
         if (!strict && currentMode === "law") {
           or_min = minOfContainer(this);

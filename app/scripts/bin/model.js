@@ -6,7 +6,6 @@
   window.model = {};
 
   BaseProxy = (function() {
-
     function BaseProxy() {
       this.prev = "";
       this.progress = 0;
@@ -22,7 +21,8 @@
     };
 
     BaseProxy.prototype.parseJSON = function(data) {
-      var json, out;
+      var e, json, out;
+
       try {
         json = data;
         if (json[0] !== "{") {
@@ -33,7 +33,8 @@
         }
         out = JSON.parse(json);
         return out;
-      } catch (e) {
+      } catch (_error) {
+        e = _error;
         return JSON.parse(data);
       }
     };
@@ -48,6 +49,7 @@
     BaseProxy.prototype.calcProgress = function(e) {
       var newText, stats, struct,
         _this = this;
+
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
@@ -55,6 +57,7 @@
       } catch (_error) {}
       $.each(struct, function(key, val) {
         var currentCorpus, sum;
+
         if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
           currentCorpus = val.corpus || val;
           sum = _(currentCorpus.split("|")).map(function(corpus) {
@@ -67,7 +70,7 @@
         }
       });
       stats = (this.progress / this.total) * 100;
-      if (!(this.total != null) && "progress_corpora" in struct) {
+      if ((this.total == null) && "progress_corpora" in struct) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
           return _(corpus.split("|")).map(function(corpus) {
             return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
@@ -91,7 +94,6 @@
   })();
 
   model.SearchProxy = (function(_super) {
-
     __extends(SearchProxy, _super);
 
     function SearchProxy() {}
@@ -101,6 +103,7 @@
         url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
         success: function(data) {
           var hasAnyFreq, lemgrams;
+
           c.log("related words success");
           lemgrams = [];
           $.each(data, function(i, item) {
@@ -131,7 +134,6 @@
   })(BaseProxy);
 
   model.KWICProxy = (function(_super) {
-
     __extends(KWICProxy, _super);
 
     function KWICProxy() {
@@ -153,6 +155,7 @@
 
     KWICProxy.prototype.popXhr = function(xhr) {
       var i;
+
       i = $.inArray(this.pendingRequests, xhr);
       if (i !== -1) {
         return this.pendingRequests.pop(i);
@@ -161,6 +164,7 @@
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
       var corpus, data, o, self;
+
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
@@ -186,6 +190,7 @@
         },
         progress: function(data, e) {
           var progressObj;
+
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -272,7 +277,6 @@
   })(BaseProxy);
 
   model.ExamplesProxy = (function(_super) {
-
     __extends(ExamplesProxy, _super);
 
     function ExamplesProxy() {
@@ -285,7 +289,6 @@
   })(model.KWICProxy);
 
   model.LemgramProxy = (function(_super) {
-
     __extends(LemgramProxy, _super);
 
     function LemgramProxy() {
@@ -304,12 +307,14 @@
 
     LemgramProxy.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
       var cqp;
+
       cqp = $.format("[(lex contains \"%s\")%s%s]", [lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram)]);
       return cqp;
     };
 
     LemgramProxy.prototype.makeRequest = function(word, type, callback) {
       var data, self;
+
       LemgramProxy.__super__.makeRequest.call(this);
       self = this;
       data = {
@@ -332,6 +337,7 @@
         },
         progress: function(data, e) {
           var progressObj;
+
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -344,6 +350,7 @@
 
     LemgramProxy.prototype.relationsWordSearch = function(word) {
       var data, self;
+
       self = this;
       data = {
         command: "relations",
@@ -378,6 +385,7 @@
 
     LemgramProxy.prototype.karpSearch = function(word, sw_forms) {
       var deferred, self;
+
       self = this;
       deferred = $.Deferred(function(dfd) {
         return self.pendingRequest = $.ajax({
@@ -391,6 +399,7 @@
           },
           success: function(data, textStatus, xhr) {
             var div, output;
+
             if (data.count === 0) {
               dfd.reject();
               return;
@@ -414,6 +423,7 @@
 
     LemgramProxy.prototype.saldoSearch = function(word, sw_forms) {
       var dfd;
+
       dfd = $.Deferred();
       this.karpSearch(word, sw_forms).done(function(lemgramArray) {
         return $.ajax({
@@ -425,6 +435,7 @@
           }
         }).done(function(data, textStatus, xhr) {
           var div, output;
+
           if (data.count === 0) {
             dfd.reject();
             c.log("saldo search 0 results");
@@ -433,6 +444,7 @@
           div = ($.isPlainObject(data.div) ? [data.div] : data.div);
           output = $.map(div.slice(0, Number(data.count)), function(item) {
             var sense;
+
             sense = item.LexicalEntry.Sense;
             if (!$.isArray(sense)) {
               sense = [sense];
@@ -453,6 +465,7 @@
 
     LemgramProxy.prototype.lemgramCount = function(lemgrams, findPrefix, findSuffix) {
       var count, self;
+
       self = this;
       count = $.grep(["lemgram", (findPrefix ? "prefix" : ""), (findSuffix ? "suffix" : "")], Boolean);
       return $.ajax({
@@ -475,7 +488,6 @@
   })(BaseProxy);
 
   model.StatsProxy = (function(_super) {
-
     __extends(StatsProxy, _super);
 
     function StatsProxy() {
@@ -488,6 +500,7 @@
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
       var data, reduceval, self;
+
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -526,6 +539,7 @@
         },
         progress: function(data, e) {
           var progressObj;
+
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -534,6 +548,7 @@
         },
         success: function(data) {
           var columns, dataset, totalRow, wordArray;
+
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -581,6 +596,7 @@
           wordArray = $.keys(data.total.absolute);
           $.each(wordArray, function(i, word) {
             var row;
+
             row = {
               id: "row" + i,
               hit_value: word,
@@ -616,13 +632,13 @@
   })(BaseProxy);
 
   model.AuthenticationProxy = (function() {
-
     function AuthenticationProxy() {
       this.loginObj = {};
     }
 
     AuthenticationProxy.prototype.makeRequest = function(usr, pass) {
       var auth, dfd, self;
+
       self = this;
       if (window.btoa) {
         auth = window.btoa(usr + ":" + pass);
@@ -664,7 +680,6 @@
   })();
 
   model.TimeProxy = (function(_super) {
-
     __extends(TimeProxy, _super);
 
     function TimeProxy() {
@@ -682,6 +697,7 @@
 
     TimeProxy.prototype.makeRequest = function(combined) {
       var dfd, self, xhr;
+
       self = this;
       dfd = $.Deferred();
       this.req.data.combined = combined;
@@ -689,6 +705,7 @@
       if (combined) {
         xhr.done(function(data, status, xhr) {
           var output, rest;
+
           if (_.keys(data).length < 2) {
             dfd.reject();
             return;
@@ -718,6 +735,7 @@
 
     TimeProxy.prototype.compilePlotArray = function(dataStruct) {
       var output;
+
       output = [];
       $.each(dataStruct, function(key, val) {
         if (!key || !val) {
@@ -733,6 +751,7 @@
 
     TimeProxy.prototype.expandTimeStruct = function(struct) {
       var maxYear, minYear, output, prevVal, thisVal, y, years, _results;
+
       years = _.map(_.pairs(_.omit(struct, "")), function(item) {
         return Number(item[0]);
       });
@@ -758,7 +777,6 @@
   })(BaseProxy);
 
   model.GraphProxy = (function(_super) {
-
     __extends(GraphProxy, _super);
 
     function GraphProxy() {
@@ -768,6 +786,7 @@
 
     GraphProxy.prototype.expandSubCqps = function(subArray) {
       var array, cqp, i, p, padding, _i, _ref, _results;
+
       padding = _.map((function() {
         _results = [];
         for (var _i = 0, _ref = subArray.length.toString().length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
@@ -777,6 +796,7 @@
       });
       array = (function() {
         var _j, _len, _results1;
+
         _results1 = [];
         for (i = _j = 0, _len = subArray.length; _j < _len; i = ++_j) {
           cqp = subArray[i];
@@ -791,6 +811,7 @@
     GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
       var def, params,
         _this = this;
+
       GraphProxy.__super__.makeRequest.call(this);
       params = {
         command: "count_time",
@@ -812,6 +833,7 @@
         },
         progress: function(data, e) {
           var progressObj;
+
           progressObj = _this.calcProgress(e);
           if (progressObj == null) {
             return;

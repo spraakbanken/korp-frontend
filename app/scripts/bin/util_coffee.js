@@ -5,7 +5,6 @@
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.CorpusListing = (function() {
-
     function CorpusListing(corpora) {
       this.struct = corpora;
       this.corpora = _.values(corpora);
@@ -26,6 +25,7 @@
 
     CorpusListing.prototype.subsetFactory = function(idArray) {
       var cl;
+
       idArray = _.invoke(idArray, "toLowerCase");
       cl = new CorpusListing(_.pick.apply(_, [this.struct].concat(__slice.call(idArray))));
       cl.selected = cl.corpora;
@@ -47,6 +47,7 @@
     CorpusListing.prototype._mapping_intersection = function(mappingArray) {
       return _.reduce(mappingArray, (function(a, b) {
         var output;
+
         output = {};
         $.each(b, function(key, value) {
           if (b[key] != null) {
@@ -65,6 +66,7 @@
 
     CorpusListing.prototype.getCurrentAttributes = function() {
       var attrs;
+
       attrs = this.mapSelectedCorpora(function(corpus) {
         return corpus.attributes;
       });
@@ -73,6 +75,7 @@
 
     CorpusListing.prototype.getStructAttrs = function() {
       var attrs, rest, withDataset;
+
       attrs = this.mapSelectedCorpora(function(corpus) {
         $.each(corpus.struct_attributes, function(key, value) {
           return value["isStructAttr"] = true;
@@ -85,10 +88,12 @@
       });
       $.each(withDataset, function(i, item) {
         var key, val;
+
         key = item[0];
         val = item[1];
         return $.each(attrs, function(j, origStruct) {
           var ds, _ref;
+
           if ((_ref = origStruct[key]) != null ? _ref.dataset : void 0) {
             ds = origStruct[key].dataset;
             if ($.isArray(ds)) {
@@ -103,6 +108,7 @@
 
     CorpusListing.prototype._invalidateAttrs = function(attrs) {
       var intersection, union;
+
       union = this._mapping_union(attrs);
       intersection = this._mapping_intersection(attrs);
       $.each(union, function(key, value) {
@@ -125,6 +131,7 @@
 
     CorpusListing.prototype.getAttrIntersection = function(attr) {
       var struct;
+
       struct = _.map(this.selected, function(corpus) {
         return _.keys(corpus[attr]);
       });
@@ -133,6 +140,7 @@
 
     CorpusListing.prototype.getAttrUnion = function(attr) {
       var struct;
+
       struct = _.map(this.selected, function(corpus) {
         return _.keys(corpus[attr]);
       });
@@ -158,6 +166,7 @@
     CorpusListing.prototype.getMorphology = function() {
       return _(this.selected).map(function(corpus) {
         var morf;
+
         morf = corpus.morf || "saldom";
         return morf.split("|");
       }).flatten().unique().join("|");
@@ -165,6 +174,7 @@
 
     CorpusListing.prototype.getTimeInterval = function() {
       var all;
+
       all = _(settings.corpusListing.selected).pluck("time").filter(function(item) {
         return item != null;
       }).map(_.keys).flatten().map(Number).sort(function(a, b) {
@@ -184,7 +194,6 @@
   })();
 
   window.ParallelCorpusListing = (function(_super) {
-
     __extends(ParallelCorpusListing, _super);
 
     function ParallelCorpusListing(corpora) {
@@ -193,10 +202,12 @@
 
     ParallelCorpusListing.prototype.select = function(idArray) {
       var _this = this;
+
       c.log("idArray", idArray);
       this.selected = [];
       $.each(idArray, function(i, id) {
         var corp;
+
         corp = _this.struct[id];
         return _this.selected = _this.selected.concat(_this.getLinked(corp, true, false));
       });
@@ -205,6 +216,7 @@
 
     ParallelCorpusListing.prototype.getCurrentAttributes = function(lang) {
       var corpora, struct;
+
       corpora = _.filter(this.selected, function(item) {
         return item.lang === lang;
       });
@@ -216,6 +228,7 @@
 
     ParallelCorpusListing.prototype.getStructAttrs = function(lang) {
       var corpora, struct;
+
       corpora = _.filter(this.selected, function(item) {
         return item.lang === lang;
       });
@@ -230,6 +243,7 @@
 
     ParallelCorpusListing.prototype.getLinked = function(corp, andSelf, only_selected) {
       var output, target;
+
       if (andSelf == null) {
         andSelf = false;
       }
@@ -239,6 +253,7 @@
       target = only_selected ? this.selected : this.struct;
       output = _.filter(target, function(item) {
         var _ref;
+
         return _ref = item.id, __indexOf.call(corp.linked_to || [], _ref) >= 0;
       });
       if (andSelf) {
@@ -250,6 +265,7 @@
     ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf) {
       var corps,
         _this = this;
+
       if (andSelf == null) {
         andSelf = false;
       }
@@ -264,13 +280,16 @@
     ParallelCorpusListing.prototype.getCorporaByLangs = function(currentLangList) {
       var child, enabledForLangs, linkedSets, output,
         _this = this;
+
       enabledForLangs = _.filter(this.selected, function(corp) {
         var _ref;
+
         return _ref = corp.lang, __indexOf.call(currentLangList, _ref) >= 0;
       });
       if (currentLangList.length === 1) {
         output = (function() {
           var _i, _len, _results;
+
           _results = [];
           for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
             child = enabledForLangs[_i];
@@ -287,6 +306,7 @@
         });
         output = _.filter(_.flatten(linkedSets), function(item) {
           var _ref;
+
           return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
         });
         return {
@@ -307,6 +327,7 @@
 
   window.applyTo = function(ctrl, f) {
     var s;
+
     s = getScope(ctrl);
     return s.$apply(f(s));
   };

@@ -5,7 +5,6 @@
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   BaseResults = (function() {
-
     function BaseResults(tabSelector, resultSelector) {
       this.$tab = $(tabSelector);
       this.$result = $(resultSelector);
@@ -16,11 +15,14 @@
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
+      var e;
+
       this.num_result.html(prettyNumbers(progressObj["total_results"]));
       if (!isNaN(progressObj["stats"])) {
         try {
           this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
-        } catch (e) {
+        } catch (_error) {
+          e = _error;
           c.log("onprogress error", e);
         }
       }
@@ -30,6 +32,7 @@
     BaseResults.prototype.renderResult = function(data) {
       var disabled, newDisabled,
         _this = this;
+
       this.$result.find(".error_msg").remove();
       c.log("renderResults", this.proxy);
       if (this.$result.is(":visible")) {
@@ -73,12 +76,12 @@
   })();
 
   view.KWICResults = (function(_super) {
-
     __extends(KWICResults, _super);
 
     function KWICResults(tabSelector, resultSelector) {
       var self,
         _this = this;
+
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector);
@@ -96,6 +99,7 @@
       });
       this.$result.find(".reading_btn").click(function() {
         var isReading;
+
         isReading = _this.$result.is(".reading_mode");
         if ($.bbq.getState("reading_mode")) {
           return $.bbq.removeState("reading_mode");
@@ -110,6 +114,7 @@
       }
       this.$result.on("click", ".word", function(event) {
         var aux, i, l, obj, paragraph, scope, sent, sent_start, word;
+
         scope = $(this).scope();
         obj = scope.wd;
         sent = scope.sentence;
@@ -117,7 +122,7 @@
         word = $(event.target);
         $.sm.send("word.select");
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
-        if (!(obj.dephead != null)) {
+        if (obj.dephead == null) {
           scope.selectionManager.select(word, null);
           return;
         }
@@ -160,6 +165,7 @@
 
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
+
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
       if (isSpecialKeyDown || $("input[type=text], textarea").is(":focus")) {
         return;
@@ -196,6 +202,7 @@
 
     KWICResults.prototype.getPageInterval = function(page) {
       var items_per_page, output;
+
       items_per_page = Number(this.optionWidget.find(".num_hits").val());
       output = {};
       output.start = (page || 0) * items_per_page;
@@ -218,6 +225,7 @@
 
     KWICResults.prototype.renderResult = function(data) {
       var isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
+
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -257,6 +265,7 @@
 
     KWICResults.prototype.renderHitsPicture = function(data) {
       var barcolors, ccounter, corpusOrderArray, hits_picture_html, self, totalhits, ua;
+
       self = this;
       if (settings.corpusListing.selected.length > 1) {
         totalhits = data["hits"];
@@ -268,6 +277,7 @@
         });
         $.each(corpusOrderArray, function(index, corp) {
           var color, hits;
+
           hits = data["corpus_hits"][corp];
           color = (index % 2 === 0 ? settings.primaryColor : settings.primaryLight);
           return hits_picture_html += "<td class=\"hits_picture_corp\" data=\"" + corp + "\"\nstyle=\"width:" + (hits / totalhits * 100) + "%;background-color : " + color + "\"></td>";
@@ -280,11 +290,13 @@
         }
         this.$result.find(".hits_picture_corp").each(function() {
           var corpus_name;
+
           corpus_name = $(this).attr("data");
           return $(this).tooltip({
             delay: 0,
             bodyHandler: function() {
               var corpusObj, nHits;
+
               corpusObj = settings.corpora[corpus_name.toLowerCase()];
               if (currentMode === "parallel") {
                 corpusObj = settings.corpora[corpus_name.split("|")[0].toLowerCase()];
@@ -296,6 +308,7 @@
         });
         return this.$result.find(".hits_picture_corp").click(function(event) {
           var firstHitPage, firstIndex, theCorpus;
+
           theCorpus = $(this).attr("data");
           firstIndex = 0;
           $.each(data["corpus_order"], function(index, corp) {
@@ -315,6 +328,7 @@
 
     KWICResults.prototype.scrollToShowWord = function(word) {
       var area, newX, newY, offset, wordLeft, wordTop;
+
       if (!word.length) {
         return;
       }
@@ -348,6 +362,7 @@
 
     KWICResults.prototype.buildPager = function(number_of_hits) {
       var items_per_page;
+
       c.log("buildPager", this.current_page);
       items_per_page = this.optionWidget.find(".num_hits").val();
       this.movePager("up");
@@ -371,6 +386,7 @@
 
     KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
       var isReading, kwicCallback, self;
+
       c.log("handlePaginationClick", new_page_index, this.current_page);
       self = this;
       if (new_page_index !== this.current_page || !!force_click) {
@@ -395,6 +411,7 @@
 
     KWICResults.prototype.buildQueryOptions = function() {
       var opts;
+
       opts = {};
       opts.cqp = this.proxy.prevCQP;
       opts.queryData = this.proxy.queryData;
@@ -410,6 +427,7 @@
 
     KWICResults.prototype.makeRequest = function(page_num) {
       var isReading, kwicCallback;
+
       isReading = this.$result.is(".reading_mode");
       this.showPreloader();
       c.log("makeRequest", this.$result, this.$result.scope());
@@ -435,6 +453,7 @@
 
     KWICResults.prototype.centerScrollbar = function() {
       var area, m, match, sidebarWidth;
+
       m = this.$result.find(".match:visible:first");
       if (!m.length) {
         return;
@@ -447,6 +466,7 @@
 
     KWICResults.prototype.getCurrentRow = function() {
       var tr;
+
       tr = this.$result.find(".token_selected").closest("tr");
       if (this.$result.find(".token_selected").parent().is("td")) {
         return tr.find("td > .word");
@@ -457,6 +477,7 @@
 
     KWICResults.prototype.selectNext = function() {
       var i, next;
+
       if (!this.$result.is(".reading_mode")) {
         i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
         next = this.getCurrentRow().get(i + 1);
@@ -472,6 +493,7 @@
 
     KWICResults.prototype.selectPrev = function() {
       var i, prev;
+
       if (!this.$result.is(".reading_mode")) {
         i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
         if (i === 0) {
@@ -487,6 +509,7 @@
 
     KWICResults.prototype.selectUp = function() {
       var current, def, prevMatch, searchwords;
+
       current = this.selectionManager.selected;
       if (!this.$result.is(".reading_mode")) {
         prevMatch = this.getWordAt(current.offset().left + current.width() / 2, current.closest("tr").prevAll(".sentence").first());
@@ -501,6 +524,7 @@
 
     KWICResults.prototype.selectDown = function() {
       var current, def, nextMatch, searchwords;
+
       current = this.selectionManager.selected;
       if (!this.$result.is(".reading_mode")) {
         nextMatch = this.getWordAt(current.offset().left + current.width() / 2, current.closest("tr").nextAll(".sentence").first());
@@ -515,9 +539,11 @@
 
     KWICResults.prototype.getFirstAtCoor = function(xCoor, wds, default_word) {
       var output;
+
       output = null;
       wds.each(function(i, item) {
         var thisLeft, thisRight;
+
         thisLeft = $(this).offset().left;
         thisRight = $(this).offset().left + $(this).width();
         if (xCoor > thisLeft && xCoor < thisRight) {
@@ -530,9 +556,11 @@
 
     KWICResults.prototype.getWordAt = function(xCoor, $row) {
       var output;
+
       output = $();
       $row.find(".word").each(function() {
         var thisLeft, thisRight;
+
         output = $(this);
         thisLeft = $(this).offset().left;
         thisRight = $(this).offset().left + $(this).width();
@@ -545,6 +573,7 @@
 
     KWICResults.prototype.setupPagerMover = function() {
       var downOpts, pager, self, upOpts;
+
       self = this;
       pager = this.$result.find(".pager-wrapper");
       upOpts = {
@@ -567,6 +596,7 @@
 
     KWICResults.prototype.movePager = function(dir) {
       var pager;
+
       pager = this.$result.find(".pager-wrapper");
       if (dir === "down") {
         return pager.data("prevPos", pager.prev()).appendTo(this.$result);
@@ -582,7 +612,6 @@
   })(BaseResults);
 
   view.ExampleResults = (function(_super) {
-
     __extends(ExampleResults, _super);
 
     function ExampleResults(tabSelector, resultSelector) {
@@ -595,6 +624,7 @@
 
     ExampleResults.prototype.makeRequest = function(opts) {
       var _this = this;
+
       this.resetView();
       $.extend(opts, {
         success: function(data) {
@@ -621,6 +651,7 @@
 
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
       var items_per_page, opts;
+
       c.log("handlePaginationClick", new_page_index, this.current_page);
       if (new_page_index !== this.current_page || !!force_click) {
         items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
@@ -637,6 +668,7 @@
 
     ExampleResults.prototype.onSortChange = function(event) {
       var opt;
+
       opt = $(event.currentTarget).find(":selected");
       c.log("sort", opt);
       if (opt.is(":first-child")) {
@@ -670,11 +702,11 @@
   })(view.KWICResults);
 
   view.LemgramResults = (function(_super) {
-
     __extends(LemgramResults, _super);
 
     function LemgramResults(tabSelector, resultSelector) {
       var self;
+
       self = this;
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.resultDeferred = $.Deferred();
@@ -702,6 +734,7 @@
 
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError;
+
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
       if (resultError === false) {
@@ -721,6 +754,7 @@
 
     LemgramResults.prototype.renderHeader = function(wordClass, sections) {
       var colorMapping;
+
       colorMapping = {
         SS: "color_blue",
         OBJ: "color_purple",
@@ -732,9 +766,11 @@
       };
       return $(".tableContainer:last .lemgram_section").each(function(i) {
         var $parent;
+
         $parent = $(this).find(".lemgram_help");
         return $(this).find(".lemgram_result").each(function() {
           var altLabel, cell, color;
+
           if ($(this).data("rel")) {
             color = colorMapping[$(this).data("rel")];
             cell = $("<span />", {
@@ -760,9 +796,11 @@
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
       var self, unique_words, wordlist;
+
       self = this;
       wordlist = $.map(data, function(item) {
         var output;
+
         output = [];
         if (item.head.split("_")[0] === word) {
           output.push(item.head);
@@ -780,6 +818,7 @@
       });
       $.each(unique_words, function(i, currentWd) {
         var getRelType, wordClass;
+
         getRelType = function(item) {
           if (item.dep === currentWd) {
             return item.rel + "_h";
@@ -802,6 +841,7 @@
 
     LemgramResults.prototype.renderTables = function(lemgram, data) {
       var getRelType, wordClass;
+
       getRelType = function(item) {
         if (item.dep === lemgram) {
           return item.rel + "_h";
@@ -818,8 +858,10 @@
 
     LemgramResults.prototype.drawTable = function(token, wordClass, data, relTypeFunc) {
       var container, inArray, orderArrays, self;
+
       inArray = function(rel, orderList) {
         var i, type;
+
         i = $.inArray(rel, orderList);
         type = (rel.slice(-1) === "h" ? "head" : "dep");
         return {
@@ -837,6 +879,7 @@
       $.each(data, function(index, item) {
         return $.each(self.order[wordClass], function(i, rel_type_list) {
           var list, rel, ret;
+
           list = orderArrays[i];
           rel = relTypeFunc(item);
           if (rel === false) {
@@ -855,6 +898,7 @@
       });
       $.each(orderArrays, function(i, unsortedList) {
         var toIndex;
+
         $.each(unsortedList, function(_, list) {
           if (list) {
             return list.sort(function(first, second) {
@@ -886,6 +930,7 @@
       }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click($.proxy(self.onClickExample, self)).end().appendTo(container);
       return $("#results-lemgram td:nth-child(2)").each(function() {
         var $siblings, hasHomograph, label, prefix, siblingLemgrams;
+
         $siblings = $(this).parent().siblings().find("td:nth-child(2)");
         siblingLemgrams = $.map($siblings, function(item) {
           return $(item).data("lemgram").slice(0, -1);
@@ -899,6 +944,7 @@
 
     LemgramResults.prototype.onClickExample = function(event) {
       var $target, data, instance, opts, self;
+
       self = this;
       $target = $(event.currentTarget);
       c.log("onClickExample", $target);
@@ -918,6 +964,7 @@
 
     LemgramResults.prototype.showWarning = function() {
       var hasWarned;
+
       hasWarned = !!$.jStorage.get("lemgram_warning");
       if (!hasWarned) {
         $.jStorage.set("lemgram_warning", true);
@@ -955,6 +1002,7 @@
 
   newDataInGraph = function(dataName, horizontalDiagram, targetDiv) {
     var corpusArray, dataItems, locstring, relHitsString, stats2Instance, statsSwitchInstance, topheader, wordArray;
+
     dataItems = [];
     wordArray = [];
     corpusArray = [];
@@ -962,10 +1010,12 @@
     if (horizontalDiagram) {
       $.each(statsResults.savedData["corpora"], function(corpus, obj) {
         var freq, totfreq;
+
         if (dataName === "SIGMA_ALL") {
           totfreq = 0;
           $.each(obj["relative"], function(wordform, freq) {
             var numFreq;
+
             numFreq = parseFloat(freq);
             if (numFreq) {
               return totfreq += numFreq;
@@ -1012,6 +1062,7 @@
         },
         resizeStop: function(event, ui) {
           var h, w;
+
           w = $(this).dialog("option", "width");
           h = $(this).dialog("option", "height");
           if (this.width * 1.25 > this.height) {
@@ -1033,15 +1084,18 @@
       return statsSwitchInstance = $("#statistics_switch").radioList({
         change: function() {
           var loc, typestring;
+
           typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
           dataItems = new Array();
           dataName = statsResults["lastDataName"];
           $.each(statsResults.savedData["corpora"], function(corpus, obj) {
             var freq, totfreq;
+
             if (dataName === "SIGMA_ALL") {
               totfreq = 0;
               $.each(obj[typestring], function(wordform, freq) {
                 var numFreq;
+
                 if (typestring === "absolute") {
                   numFreq = parseInt(freq);
                 } else {
@@ -1091,18 +1145,19 @@
   };
 
   view.StatsResults = (function(_super) {
-
     __extends(StatsResults, _super);
 
     function StatsResults(tabSelector, resultSelector) {
       var icon, paper, self,
         _this = this;
+
       StatsResults.__super__.constructor.call(this, tabSelector, resultSelector);
       self = this;
       this.gridData = null;
       this.proxy = statsProxy;
       $(".arcDiagramPicture").on("click", function() {
         var parts;
+
         parts = $(this).attr("id").split("__");
         if (parts[1] !== "Σ") {
           return newDataInGraph(parts[1], true);
@@ -1112,6 +1167,7 @@
       });
       $(".slick-cell.l0.r0 .link").on("click", function() {
         var instance, query;
+
         c.log("word click", $(this).data("context"), $(this).data("corpora"));
         instance = $("#result-container").korptabs("addTab", view.ExampleResults);
         instance.proxy.command = "query";
@@ -1128,6 +1184,7 @@
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
         var dataDelimiter, output, selType, selVal;
+
         selVal = $("#kindOfData option:selected").val();
         selType = $("#kindOfFormat option:selected").val();
         dataDelimiter = ";";
@@ -1143,6 +1200,7 @@
           output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter;
           $.each(statsResults.savedWordArray, function(wkey, aword) {
             var amount;
+
             amount = acorpus[selVal][aword];
             if (amount) {
               return output += util.formatDecimalString(amount.toString(), false, true) + dataDelimiter;
@@ -1161,6 +1219,7 @@
       icon = $("<span class='graph_btn_icon'>");
       $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
         var cl, cqp, elem, instance, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
+
         instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
@@ -1198,6 +1257,7 @@
     StatsResults.prototype.renderResult = function(columns, data) {
       var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
         _this = this;
+
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1234,6 +1294,7 @@
         sortCol = args.sortCol;
         data.sort(function(a, b) {
           var ret, x, y;
+
           if (sortCol.field === "hit_value") {
             x = a[sortCol.field];
             y = b[sortCol.field];
@@ -1258,6 +1319,7 @@
       $(".slick-row:first input", this.$result).click();
       $.when(timeDeferred).then(function() {
         var cl;
+
         $("#showGraph").button("enable");
         cl = settings.corpusListing.subsetFactory(_this.proxy.prevParams.corpus.split(","));
         if ((_.filter(cl.getTimeInterval(), function(item) {
@@ -1271,6 +1333,7 @@
 
     StatsResults.prototype.resizeGrid = function() {
       var parentWidth, tableWidth, widthArray;
+
       if (!this.grid) {
         return;
       }
@@ -1302,6 +1365,7 @@
 
     StatsResults.prototype.getHitsWidth = function() {
       var widthArray;
+
       widthArray = $(".c0").map(function() {
         return $(this).find(":nth-child(1)").outerWidth() + ($(this).find(":nth-child(2)").outerWidth() || 0);
       });
@@ -1314,6 +1378,7 @@
 
     StatsResults.prototype.setHitsWidth = function(w) {
       var data;
+
       if (!this.grid) {
         return;
       }
@@ -1338,12 +1403,12 @@
   })(BaseResults);
 
   view.GraphResults = (function(_super) {
-
     __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector) {
       var n,
         _this = this;
+
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector);
       $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
       n = this.$result.index();
@@ -1354,6 +1419,7 @@
       this.proxy = new model.GraphProxy();
       $(".chart", this.$result).on("click", function(event) {
         var cqp, end, instance, m, start, target, timecqp, val;
+
         target = $(".chart", _this.$result);
         val = $(".detail .x_label > span", target).data("val");
         cqp = $(".detail .item.active > span", target).data("cqp");
@@ -1381,6 +1447,7 @@
 
     GraphResults.prototype.parseDate = function(granularity, time) {
       var day, month, year, _ref;
+
       _ref = [null, 0, 1], year = _ref[0], month = _ref[1], day = _ref[2];
       switch (granularity) {
         case "y":
@@ -1400,6 +1467,7 @@
 
     GraphResults.prototype.fillMissingDate = function(data) {
       var dateArray, diff, duration, exists, i, max, min, n_diff, newMoment, newMoments, _i;
+
       dateArray = _.pluck(data, "x");
       min = _.min(dateArray, function(mom) {
         return mom.toDate();
@@ -1451,6 +1519,7 @@
 
     GraphResults.prototype.getSeriesData = function(data) {
       var first, firstVal, hasFirstValue, hasLastValue, last, lastVal, mom, output, tuple, x, y, _i, _len, _ref;
+
       delete data[""];
       _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
       firstVal = this.parseDate("y", first);
@@ -1459,6 +1528,7 @@
       hasLastValue = false;
       output = (function() {
         var _i, _len, _ref1, _ref2, _results;
+
         _ref1 = _.pairs(data);
         _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -1504,6 +1574,7 @@
 
     GraphResults.prototype.updateTicks = function() {
       var firstTick, secondTick;
+
       firstTick = $(".title:nth(0)", $(".chart", this.$result));
       secondTick = $(".title:nth(1)", $(".chart", this.$result));
       if (!firstTick.length) {
@@ -1517,6 +1588,7 @@
 
     GraphResults.prototype.getNonTime = function() {
       var non_time, sizelist, totalsize;
+
       non_time = _.reduce(_.pluck(settings.corpusListing.selected, "non_time"), (function(a, b) {
         return (a || 0) + (b || 0);
       }), 0);
@@ -1532,6 +1604,7 @@
     GraphResults.prototype.makeRequest = function(cqp, subcqps, labelMapping, showTotal) {
       var hidden,
         _this = this;
+
       hidden = $(".progress", this.$result).nextAll().hide();
       this.showPreloader();
       return this.proxy.makeRequest(cqp, subcqps, this.corpora.stringifySelected()).progress(function(data) {
@@ -1541,6 +1614,7 @@
         return _this.resultError(data);
       }).done(function(data) {
         var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, smoother, time, timeunit, xAxis, yAxis, _ref;
+
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1555,6 +1629,7 @@
         if (_.isArray(data.combined)) {
           series = (function() {
             var _i, _len, _ref, _results;
+
             _ref = data.combined;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1607,6 +1682,7 @@
         });
         $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
           var cls, target, val, _i, _len, _ref;
+
           target = event.currentTarget;
           val = $(":checked", target).val();
           _ref = _this.$result.attr("class").split(" ");
@@ -1650,6 +1726,7 @@
           graph: graph,
           xFormatter: function(x) {
             var d, out, output;
+
             d = new Date(x * 1000);
             output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
             out = (function() {
@@ -1669,6 +1746,7 @@
           },
           formatter: function(series, x, y, formattedX, formattedY, d) {
             var content;
+
             content = series.name + ':&nbsp;' + formattedY;
             return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">" + content + "</span>";
           }
