@@ -293,7 +293,7 @@
           _results = [];
           for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
             child = enabledForLangs[_i];
-            _results.push(this.getLinked(child, true));
+            _results.push([child].concat(this.getLinked(child)));
           }
           return _results;
         }).call(this);

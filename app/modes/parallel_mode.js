@@ -138,8 +138,8 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		});
 		var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
 		if(struct.linked) {
-			
 			return _(struct.linked)
+				.flatten()
 				.sort(function(a,b) {
 					return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
 				})
@@ -147,23 +147,26 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 				.invoke("toUpperCase")
 				.join("|");
 		} else {
-			return _(struct.not_linked)
-				.sort(function(a,b) {
-			//				c.log("inarray", $.inArray(currentLangList, a.lang), $.inArray(currentLangList, b.lang))
-					return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
-				})
-				.map(this.stringifyCorporaSet)
-				.join(",");
-			 
+			
+			var output = [];
+			$.each(struct.not_linked, function(i, item) {
+				main = item[0]
+
+				var pair = _.map(item.slice(1), function(corp) {
+					return main.id + "|" + corp.id;
+				});
+				output.push(pair);
+			});
+			return output.join(",")
 		}
 	},
 
-	stringifyCorporaSet : function(corpusList) {
-		return _(corpusList)
-		.pluck("id")
-		.invoke("toUpperCase")
-		.join("|");
-	}
+	// stringifyCorporaSet : function(corpusList) {
+	// 	return _(corpusList)
+	// 	.pluck("id")
+	// 	.invoke("toUpperCase")
+	// 	.join("|");
+	// }
 });
 
 var c2 = view.AdvancedSearch.prototype.constructor

@@ -9,9 +9,13 @@ files = [
   JASMINE_ADAPTER,
   'app/components/angular/angular.js',
   'app/components/angular-mocks/angular-mocks.js',
-  'app/scripts/*.js',
-  'app/scripts/**/*.js',
+  // 'app/components/jquery/jquery.js',
+  // 'app/scripts/*.js',
+  // 'app/scripts/**/*.js',
   'test/mock/**/*.js',
+  'app/components/lodash/lodash.js',
+  'app/config.js',
+  'app/scripts/bin/util_coffee.js',
   'test/spec/**/*.js'
 ];
 
@@ -46,11 +50,11 @@ autoWatch = false;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['Chrome'];
+browsers = ['PhantomJS'];
 
 // If browser does not capture in given timeout [ms], kill it
 captureTimeout = 5000;
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit
-singleRun = false;
+singleRun = true;

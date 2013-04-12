@@ -225,7 +225,7 @@ class window.ParallelCorpusListing extends CorpusListing
 
         if currentLangList.length is 1
             output = for child in enabledForLangs
-                @getLinked child, true
+                [child].concat @getLinked child
 
             return not_linked: output
         else
