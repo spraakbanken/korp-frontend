@@ -244,7 +244,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.europarl = {
 	title : "Europarl3",
-		contents : ["europarl-da", "europarl-en"]
+		contents : ["europarl-da", "europarl-en", "europarl-de"]
 };
 
 settings.corporafolders.salt = {
@@ -286,7 +286,9 @@ settings.corpora["europarl-da"] = {
 	lang : "dan",
 	linked_to : ["europarl-sv"],
 	title: "Svenska-danska",
-	context: context.defaultAligned,
+	context: {
+		"1 linkda" : "1 linkda"
+	},
 	within: {
 		"linkda": "meningspar"
 	},
@@ -294,7 +296,6 @@ settings.corpora["europarl-da"] = {
 	},
 	struct_attributes : {
 	}
-	// hide : true
 }
 
 settings.corpora["europarl-en"] = {
@@ -302,7 +303,9 @@ settings.corpora["europarl-en"] = {
 	lang : "eng",
 	linked_to : ["europarl-sv"],
 	title: "Svenska-engelska",
-	context: context.defaultAligned,
+	context: {
+		"1 linken" : "1 linken"
+	},
 	within: {
 		"linken": "meningspar"
 	},
@@ -310,10 +313,24 @@ settings.corpora["europarl-en"] = {
 	},
 	struct_attributes : {
 	}
-	// hide : true
 };
-/*
-*/
+
+settings.corpora["europarl-de"] = {
+	id : "europarl-de",
+	lang : "deu",
+	linked_to : ["europarl-de"],
+	title: "Svenska-tyska",
+	context: {
+		"1 linkde" : "1 linkde"
+	},
+	within: {
+		"linkde": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
 
 
 settings.corpora.saltnld_swe = {
