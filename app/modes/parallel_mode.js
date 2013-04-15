@@ -1,15 +1,19 @@
 
 settings.wordpicture = false;
 settings.showSimpleSearch = false;
+
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
 $("#search_options > div:last").remove();
 $("#num_hits").prepend("<option value='10'>10</option>");
 
+// for the language selects
+var lang_prio = ["swe"].reverse();
+
 var c1 = view.ExtendedSearch.prototype.constructor
 view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 	c1.call(this, mainDivId);
-	c.log("parallel constructor")
+	// c.log("parallel constructor")
 	// this.parent(mainDivId);
 	var self = this;
 	$("#linkedLang").click(function() {
@@ -80,19 +84,18 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 	},
 
 	getEnabledLangs : function(activeLangs) {
+		var output = [];
 		// get the languages that are enabled given a list of active languages
 		if(activeLangs.length) {
 
 			var enabled = settings.corpusListing.getEnabledByLang(activeLangs[0])
 			$.each(activeLangs, function(i, lang) {
-				// debugger;
 				var set = _(settings.corpusListing.getEnabledByLang(lang, true))
 					.map(function(item) {
 						return settings.corpusListing.getLinked(item);
 					})
 					.flatten()
 					.filter(function(item) {
-						c.log("item", item, item.lang)
 						return $.inArray(item.lang, activeLangs) == -1;
 					})
 					.unique()
@@ -100,20 +103,25 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 
 				enabled = _.intersection(enabled, set)
 
-				c.log("loop", lang, enabled)
 			});
 			
-			return _.pluck(enabled , "lang");
+			output = _.pluck(enabled , "lang");
 		} else {
-			return _(settings.corpusListing.selected).map(function(item) {
+			output = _(settings.corpusListing.selected).map(function(item) {
 				return settings.corpusListing.getLinked(item, true);
 			})
 			.flatten()
 			.pluck("lang")
 			.unique()
 			.value()
-
 		}
+
+		output = output.sort(function(a, b) {
+		    return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+		});
+
+		return output;
+
 	},
 
 	getLangSelect : function() {
@@ -153,7 +161,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 				main = item[0]
 
 				var pair = _.map(item.slice(1), function(corp) {
-					return main.id + "|" + corp.id;
+					return main.id.toUpperCase() + "|" + corp.id.toUpperCase();
 				});
 				output.push(pair);
 			});
@@ -161,12 +169,6 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		}
 	},
 
-	// stringifyCorporaSet : function(corpusList) {
-	// 	return _(corpusList)
-	// 	.pluck("id")
-	// 	.invoke("toUpperCase")
-	// 	.join("|");
-	// }
 });
 
 var c2 = view.AdvancedSearch.prototype.constructor

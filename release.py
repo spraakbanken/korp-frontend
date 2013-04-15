@@ -5,7 +5,7 @@ import os, sys
 
 args = sys.argv[1:]
 
-print check_output(["git", "svn", "rebase"])
+# print check_output(["git", "svn", "rebase"])
 
 if not os.path.exists("dist") and not "no_build" in args:
     print "building..."

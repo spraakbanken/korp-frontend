@@ -147,16 +147,6 @@ class window.CorpusListing
 class window.ParallelCorpusListing extends CorpusListing
     constructor: (corpora) ->
         super(corpora)
-        # @parallel_corpora = corpora
-        # @corpora = _.values struct
-        # @struct = corpora
-        # $.each corpora, (__, struct) =>
-        #     $.each struct, (key, corp) =>
-        #         return if key is "default"
-        #         @corpora.push corp
-        #         @struct[corp.id] = corp
-
-
 
     select: (idArray) ->
         c.log "idArray", idArray
@@ -206,19 +196,7 @@ class window.ParallelCorpusListing extends CorpusListing
         ).flatten().value()
 
 
-    # getParentCorpora : () ->
-    #     output = []
-    #     $.each @selected, (i, corp) =>
-    #         childCorpora = $.grepObj(@parallel_corpora[corp.parent], (val, key) ->
-    #             key isnt "default"
-    #         )
-    #         output = output.concat(childCorpora)
-
-    #     output
-
     getCorporaByLangs : (currentLangList) ->
-        # parents = @getParentCorpora()
-        
         # remove corpora for lang not used
         enabledForLangs = _.filter @selected, (corp) ->
             corp.lang in currentLangList
