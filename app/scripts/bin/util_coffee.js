@@ -203,7 +203,6 @@
     ParallelCorpusListing.prototype.select = function(idArray) {
       var _this = this;
 
-      c.log("idArray", idArray);
       this.selected = [];
       $.each(idArray, function(i, id) {
         var corp;
@@ -297,9 +296,7 @@
           }
           return _results;
         }).call(this);
-        return {
-          not_linked: output
-        };
+        return output;
       } else {
         linkedSets = _.map(enabledForLangs, function(lang) {
           return _this.getLinked(lang);
@@ -309,10 +306,39 @@
 
           return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
         });
-        return {
-          linked: output
-        };
+        return [output];
       }
+    };
+
+    ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
+      var currentLangList, output, struct;
+
+      currentLangList = _.map($(".lang_select").get(), function(item) {
+        return $(item).val();
+      });
+      struct = settings.corpusListing.getCorporaByLangs(currentLangList);
+      output = [];
+      $.each(struct, function(i, item) {
+        var main, pair;
+
+        main = item[0];
+        pair = _.map(item.slice(1), function(corp) {
+          var a;
+
+          a = _.keys(corp[attr])[0];
+          return main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a;
+        });
+        return output.push(pair);
+      });
+      return output.join(",");
+    };
+
+    ParallelCorpusListing.prototype.getContextQueryString = function() {
+      return this.getAttributeQuery("context");
+    };
+
+    ParallelCorpusListing.prototype.getWithinQueryString = function() {
+      return this.getAttributeQuery("within");
     };
 
     return ParallelCorpusListing;

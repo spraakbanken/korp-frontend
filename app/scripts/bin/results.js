@@ -224,7 +224,7 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
 
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -245,7 +245,11 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           linked = _ref[_i];
           mainrow = $(linked).prev();
-          offset = (mainrow.find(".left .word:first").position().left + scrollLeft) - 25;
+          firstWord = mainrow.find(".left .word:first");
+          if (!firstWord.length) {
+            return;
+          }
+          offset = (firstWord.position().left + scrollLeft) - 25;
           $(linked).find(".lnk").css("padding-left", Math.round(offset));
         }
       }
@@ -299,7 +303,7 @@
 
               corpusObj = settings.corpora[corpus_name.toLowerCase()];
               if (currentMode === "parallel") {
-                corpusObj = settings.corpora[corpus_name.split("|")[0].toLowerCase()];
+                corpusObj = settings.corpora[corpus_name.split("|")[1].toLowerCase()];
               }
               nHits = prettyNumbers(data["corpus_hits"][corpus_name].toString());
               return "<img src=\"img/korp_icon.png\" style=\"vertical-align:middle\"/>\n<b>" + corpusObj["title"] + " (" + nHits + ") " + (util.getLocaleString("hitspicture_hits")) + ")</b>\n<br/><br/><i>" + (util.getLocaleString("hitspicture_gotocorpushits")) + "</i>";

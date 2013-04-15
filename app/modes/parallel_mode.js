@@ -145,29 +145,37 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 			return $(item).val();
 		});
 		var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
-		if(struct.linked) {
-			return _(struct.linked)
-				.flatten()
-				.sort(function(a,b) {
-					return $.inArray(a.lang, currentLangList) - $.inArray(b.lang, currentLangList);
-				})
-				.pluck("id")
-				.invoke("toUpperCase")
-				.join("|");
-		} else {
-			
-			var output = [];
-			$.each(struct.not_linked, function(i, item) {
-				main = item[0]
+		var output = [];
+		$.each(struct, function(i, item) {
+			main = item[0]
 
-				var pair = _.map(item.slice(1), function(corp) {
-					return main.id.toUpperCase() + "|" + corp.id.toUpperCase();
-				});
-				output.push(pair);
+			var pair = _.map(item.slice(1), function(corp) {
+				return main.id.toUpperCase() + "|" + corp.id.toUpperCase();
 			});
-			return output.join(",")
-		}
+			output.push(pair);
+		});
+		return output.join(",")
 	},
+
+	// getAttributeQuery : function(attr) {
+	// 	//gets the within and context queries
+	// 	var currentLangList = _.map($(".lang_select").get(), function(item) {
+	// 		return $(item).val();
+	// 	});
+	// 	var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
+			
+	// 	var output = [];
+	// 	$.each(struct, function(i, item) {
+	// 		var main = item[0];
+
+	// 		var pair = _.map(item.slice(1), function(corp) {
+	// 			var a = _.keys(corp[attr])[0];
+	// 			return main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a;
+	// 		});
+	// 		output.push(pair);
+	// 	});
+	// 	return output.join(",")
+	// }
 
 });
 
@@ -258,7 +266,7 @@ settings.parallel_corpora = {};
 settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
 	lang : "swe",
-	linked_to : ["europarl-en", "europarl-da"],
+	linked_to : ["europarl-en", "europarl-da", "europarl-de"],
 	title: "Svenska-danska",
 	context: context.defaultAligned,
 	within: {
@@ -318,7 +326,7 @@ settings.corpora["europarl-en"] = {
 settings.corpora["europarl-de"] = {
 	id : "europarl-de",
 	lang : "deu",
-	linked_to : ["europarl-de"],
+	linked_to : ["europarl-sv"],
 	title: "Svenska-tyska",
 	context: {
 		"1 linkde" : "1 linkde"

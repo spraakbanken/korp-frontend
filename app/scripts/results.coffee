@@ -206,7 +206,9 @@ class view.KWICResults extends BaseResults
             scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
             for linked in $(".linked_sentence")
                 mainrow = $(linked).prev()
-                offset = (mainrow.find(".left .word:first").position().left + scrollLeft) - 25
+                firstWord = mainrow.find(".left .word:first")
+                if not firstWord.length then return
+                offset = (firstWord.position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
         @hidePreloader()
@@ -253,7 +255,7 @@ class view.KWICResults extends BaseResults
                     delay: 0
                     bodyHandler: ->
                         corpusObj = settings.corpora[corpus_name.toLowerCase()]
-                        corpusObj = settings.corpora[corpus_name.split("|")[0].toLowerCase()]  if currentMode is "parallel"
+                        corpusObj = settings.corpora[corpus_name.split("|")[1].toLowerCase()]  if currentMode is "parallel"
                         nHits = prettyNumbers(data["corpus_hits"][corpus_name].toString())
                         return """<img src="img/korp_icon.png" style="vertical-align:middle"/>
                                   <b>#{corpusObj["title"]} (#{nHits}) #{util.getLocaleString("hitspicture_hits")})</b>

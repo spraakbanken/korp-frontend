@@ -222,6 +222,9 @@
       if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
         data.within = settings.corpusListing.getWithinQueryString();
       }
+      if (currentMode === "parallel") {
+        data.within = settings.corpusListing.getWithinQueryString();
+      }
       if (o.context != null) {
         data.context = o.context;
       }

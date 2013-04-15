@@ -108,8 +108,6 @@ class window.CorpusListing
         _.union struct...
 
     getContextQueryString: ->
-
-        # if("1 paragraph" in settings.corpora[id].context)
         $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), (id) ->
             id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1)  if _.keys(settings.corpora[id].context)
         ), Boolean).join()
@@ -149,7 +147,6 @@ class window.ParallelCorpusListing extends CorpusListing
         super(corpora)
 
     select: (idArray) ->
-        c.log "idArray", idArray
         @selected = []
         $.each idArray, (i, id) =>
             corp = @struct[id]
@@ -205,7 +202,7 @@ class window.ParallelCorpusListing extends CorpusListing
             output = for child in enabledForLangs
                 [child].concat @getLinked child
 
-            return not_linked: output
+            return output
         else
 
             linkedSets = _.map enabledForLangs, (lang) =>
@@ -213,8 +210,31 @@ class window.ParallelCorpusListing extends CorpusListing
             output = _.filter _.flatten(linkedSets), (item) =>
                 item.lang in currentLangList
 
+            return [output]
 
-            return linked: output
+    getAttributeQuery : (attr) ->
+      
+      #gets the within and context queries
+      currentLangList = _.map($(".lang_select").get(), (item) ->
+        $(item).val()
+      )
+      struct = settings.corpusListing.getCorporaByLangs(currentLangList)
+      output = []
+      $.each struct, (i, item) ->
+        main = item[0]
+        pair = _.map(item.slice(1), (corp) ->
+          a = _.keys(corp[attr])[0]
+          main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a
+        )
+        output.push pair
+
+      output.join ","
+
+    getContextQueryString: ->
+        @getAttributeQuery("context")
+
+    getWithinQueryString: ->
+        @getAttributeQuery("within")
 
 settings.corpusListing = new CorpusListing(settings.corpora)
 

@@ -174,19 +174,20 @@ class model.KWICProxy extends BaseProxy
             sort: o.sort
             incremental: o.incremental
 
-        data.within = settings.corpusListing.getWithinQueryString()  if $.sm.In("extended") and $(".within_select").val() is "paragraph"
-        data.context = o.context  if o.context?
-        data.within = o.within  if o.within?
-        data.random_seed = o.random_seed  if o.random_seed?
+        data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
+        data.within = settings.corpusListing.getWithinQueryString() if currentMode == "parallel"
+        data.context = o.context if o.context?
+        data.within = o.within if o.within?
+        data.random_seed = o.random_seed if o.random_seed?
         $.extend data, o.ajaxParams
-        data.querydata = o.queryData  if o.queryData?
+        data.querydata = o.queryData if o.queryData?
         $.each settings.corpusListing.selected, (_, corpus) ->
             $.each corpus.attributes, (key, val) ->
-                data.show.push key  if $.inArray(key, data.show) is -1
+                data.show.push key if $.inArray(key, data.show) is -1
 
             if corpus.struct_attributes?
                 $.each corpus.struct_attributes, (key, val) ->
-                    data.show_struct.push key  if $.inArray(key, data.show_struct) is -1
+                    data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
 
         @prevCQP = o.cqp

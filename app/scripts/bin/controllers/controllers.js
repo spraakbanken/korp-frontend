@@ -10,7 +10,7 @@
     s = $scope;
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
-      var corpus, corpus_aligned, currentStruct, end, i, j, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+      var corpus, corpus_aligned, currentStruct, end, i, id, j, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
 
       currentStruct = [];
       prevCorpus = "";
@@ -50,12 +50,16 @@
           }
         }
         if (currentMode === "parallel") {
-          sentence.corpus = sentence.corpus.split("|")[0].toLowerCase();
+          mainCorpusId = sentence.corpus.split("|")[0].toLowerCase();
         } else {
-          sentence.corpus = sentence.corpus.toLowerCase();
+          mainCorpusId = sentence.corpus.toLowerCase();
         }
-        if (prevCorpus !== sentence.corpus) {
-          corpus = settings.corpora[sentence.corpus];
+        if (prevCorpus !== mainCorpusId) {
+          id = mainCorpusId;
+          if (currentMode === "parallel") {
+            id = sentence.corpus.split("|")[1].toLowerCase();
+          }
+          corpus = settings.corpora[id];
           newSent = {
             newCorpus: corpus.title,
             noContext: _.keys(corpus.context).length === 1
@@ -67,6 +71,7 @@
         } else {
           sentence._color = settings.primaryLight;
         }
+        sentence.corpus = mainCorpusId;
         output.push(sentence);
         if (sentence.aligned) {
           _ref6 = _.pairs(sentence.aligned)[0], corpus_aligned = _ref6[0], tokens = _ref6[1];
