@@ -412,7 +412,7 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
-	contents : ["astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+	contents : ["astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.fisk.youthnovels = {
@@ -2905,6 +2905,30 @@ settings.corpora.meddelanden = {
 	id : "meddelanden",
 	title : "Meddelanden från Åbo Akademi 2002–2010",
 	description : "<a href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "year"},
+		text_issue : {label : "issue"}
+	}
+};
+
+settings.corpora.hankeiten = {
+	id : "hankeiten",
+	title : "Hankeiten 2006–2012",
+	description : "<a href=\"http://www.shsweb.fi/shs/arkiv/hankeiten1\">Hankeiten</a> är Svenska Handelshögskolans Studentkårs tidskrift.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
