@@ -252,7 +252,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.europarl = {
 	title : "Europarl3",
-		contents : ["europarl-da", "europarl-en", "europarl-de"]
+		contents : ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"]
 };
 
 settings.corporafolders.salt = {
@@ -266,7 +266,7 @@ settings.parallel_corpora = {};
 settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
 	lang : "swe",
-	linked_to : ["europarl-en", "europarl-da", "europarl-de"],
+	linked_to : ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
 	title: "EUROPARL svenska",
 	context: context.defaultAligned,
 	within: {
