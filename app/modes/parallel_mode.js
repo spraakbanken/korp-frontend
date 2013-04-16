@@ -267,7 +267,7 @@ settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
 	lang : "swe",
 	linked_to : ["europarl-en", "europarl-da", "europarl-de"],
-	title: "Svenska-danska",
+	title: "EUROPARL svenska",
 	context: context.defaultAligned,
 	within: {
 		"linkda": "meningspar"
@@ -293,9 +293,9 @@ settings.corpora["europarl-da"] = {
 	id : "europarl-da",
 	lang : "dan",
 	linked_to : ["europarl-sv"],
-	title: "Svenska-danska",
+	title: "EUROPARL svenska-danska",
 	context: {
-		"1 linkda" : "1 linkda"
+		"1 linkda" : "1 link"
 	},
 	within: {
 		"linkda": "meningspar"
@@ -306,30 +306,13 @@ settings.corpora["europarl-da"] = {
 	}
 }
 
-settings.corpora["europarl-en"] = {
-	id : "europarl-en",
-	lang : "eng",
-	linked_to : ["europarl-sv"],
-	title: "Svenska-engelska",
-	context: {
-		"1 linken" : "1 linken"
-	},
-	within: {
-		"linken": "meningspar"
-	},
-	attributes: {
-	},
-	struct_attributes : {
-	}
-};
-
 settings.corpora["europarl-de"] = {
 	id : "europarl-de",
 	lang : "deu",
 	linked_to : ["europarl-sv"],
-	title: "Svenska-tyska",
+	title: "EUROPARL svenska-tyska",
 	context: {
-		"1 linkde" : "1 linkde"
+		"1 linkde" : "1 link"
 	},
 	within: {
 		"linkde": "meningspar"
@@ -340,6 +323,141 @@ settings.corpora["europarl-de"] = {
 	}
 };
 
+settings.corpora["europarl-el"] = {
+	id : "europarl-el",
+	lang : "ell",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-grekiska",
+	context: {
+		"1 linkel" : "1 link"
+	},
+	within: {
+		"linkel": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-en"] = {
+	id : "europarl-en",
+	lang : "eng",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-engelska",
+	context: {
+		"1 linken" : "1 link"
+	},
+	within: {
+		"linken": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-es"] = {
+	id : "europarl-es",
+	lang : "spa",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-spanska",
+	context: {
+		"1 linkes" : "1 link"
+	},
+	within: {
+		"linkes": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-fi"] = {
+	id : "europarl-fi",
+	lang : "fin",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-finska",
+	context: {
+		"1 linkfi" : "1 link"
+	},
+	within: {
+		"linkfi": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-fr"] = {
+	id : "europarl-fr",
+	lang : "fra",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-franska",
+	context: {
+		"1 linkfr" : "1 link"
+	},
+	within: {
+		"linkfr": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-it"] = {
+	id : "europarl-it",
+	lang : "ita",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-italienska",
+	context: {
+		"1 linkit" : "1 link"
+	},
+	within: {
+		"linkit": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-nl"] = {
+	id : "europarl-nl",
+	lang : "nld",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-nederländska",
+	context: {
+		"1 linknl" : "1 link"
+	},
+	within: {
+		"linknl": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
+
+settings.corpora["europarl-pt"] = {
+	id : "europarl-pt",
+	lang : "por",
+	linked_to : ["europarl-sv"],
+	title: "EUROPARL svenska-portugisiska",
+	context: {
+		"1 linkpt" : "1 link"
+	},
+	within: {
+		"linkpt": "meningspar"
+	},
+	attributes: {
+	},
+	struct_attributes : {
+	}
+};
 
 settings.corpora.saltnld_swe = {
 	id : "saltnld_swe",
