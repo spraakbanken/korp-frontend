@@ -423,9 +423,7 @@
       if (opts.sort === "random") {
         opts.random_seed = $.bbq.getState("random_seed");
       }
-      if (this.$result.is(".reading_mode")) {
-        opts.context = settings.corpusListing.getContextQueryString();
-      }
+      opts.context = settings.corpusListing.getContextQueryString();
       return opts;
     };
 

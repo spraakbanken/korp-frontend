@@ -21,8 +21,8 @@
                 }
                 kwicopts['random_seed'] = rnd;
             }
-            if(isReading) {
-				kwicopts.context = settings.corpusListing.getContextQueryString();
+            if(isReading || currentMode == "parallel") {
+			 kwicopts.context = settings.corpusListing.getContextQueryString();
 			}
 			if(cqp)
 				kwicopts.cqp = cqp;

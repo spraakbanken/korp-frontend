@@ -10,9 +10,10 @@ $("#num_hits").prepend("<option value='10'>10</option>");
 // for the language selects
 var lang_prio = ["swe"].reverse();
 
-var c1 = view.ExtendedSearch.prototype.constructor
+// var c1 = view.ExtendedSearch.prototype.constructor
+var ext = view.ExtendedSearch.prototype
 view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
-	c1.call(this, mainDivId);
+	ext.constructor.call(this, mainDivId);
 	// c.log("parallel constructor")
 	// this.parent(mainDivId);
 	var self = this;
@@ -61,6 +62,13 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		this.refreshTokens();
 	},
 
+	reset : function() {
+		// ext.refreshTokens.call(this);
+		$(".lang_row", this.main).remove()
+		$("#query_table .lang_select", this.main).remove();
+		this.getLangSelect().prependTo("#query_table");
+	},
+
 	onUpdate : function() {
 		var corps = _.map($(".lang_select").get(), function(item) {
 			return $(item).val();
@@ -98,7 +106,6 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 					.filter(function(item) {
 						return $.inArray(item.lang, activeLangs) == -1;
 					})
-					.unique()
 					.value()
 
 				enabled = _.intersection(enabled, set)
@@ -112,7 +119,6 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 			})
 			.flatten()
 			.pluck("lang")
-			.unique()
 			.value()
 		}
 
@@ -120,7 +126,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		    return lang_prio.indexOf(b) - lang_prio.indexOf(a)
 		});
 
-		return output;
+		return _.uniq(output);
 
 	},
 
@@ -133,7 +139,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		});
 
 		var langs = this.getEnabledLangs(activeLangs);
-		
+
 		ul.append($.map(langs, function(item) {
 			return $("<option />", {"val" : item}).localeKey(item).get(0);
 		}));

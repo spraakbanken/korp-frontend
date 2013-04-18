@@ -148,7 +148,7 @@
     };
 
     CorpusListing.prototype.getContextQueryString = function() {
-      return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
+      return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
         if (_.keys(settings.corpora[id].context)) {
           return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1);
         }
@@ -156,7 +156,7 @@
     };
 
     CorpusListing.prototype.getWithinQueryString = function() {
-      return $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), function(id) {
+      return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
         if (_.keys(settings.corpora[id].within)) {
           return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1);
         }
@@ -175,7 +175,7 @@
     CorpusListing.prototype.getTimeInterval = function() {
       var all;
 
-      all = _(settings.corpusListing.selected).pluck("time").filter(function(item) {
+      all = _(this.selected).pluck("time").filter(function(item) {
         return item != null;
       }).map(_.keys).flatten().map(Number).sort(function(a, b) {
         return a - b;
@@ -277,7 +277,7 @@
     };
 
     ParallelCorpusListing.prototype.getCorporaByLangs = function(currentLangList) {
-      var child, enabledForLangs, linkedSets, output,
+      var child, enabledForLangs, joinCorps, lang, linked, output, _i, _len, _ref,
         _this = this;
 
       enabledForLangs = _.filter(this.selected, function(corp) {
@@ -285,6 +285,9 @@
 
         return _ref = corp.lang, __indexOf.call(currentLangList, _ref) >= 0;
       });
+      joinCorps = function(corps) {
+        return _(corps).pluck("id").join("");
+      };
       if (currentLangList.length === 1) {
         output = (function() {
           var _i, _len, _results;
@@ -298,15 +301,23 @@
         }).call(this);
         return output;
       } else {
-        linkedSets = _.map(enabledForLangs, function(lang) {
-          return _this.getLinked(lang);
-        });
-        output = _.filter(_.flatten(linkedSets), function(item) {
-          var _ref;
+        output = [];
+        for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
+          lang = enabledForLangs[_i];
+          linked = this.getLinked(lang, true);
+          linked = _.filter(linked, function(item) {
+            var _ref;
 
-          return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
-        });
-        return [output];
+            return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
+          });
+          linked.sort(function(a, b) {
+            return (_.indexOf(currentLangList, a.lang)) - (_.indexOf(currentLangList, b.lang));
+          });
+          if (_ref = joinCorps(linked), __indexOf.call(_.map(output, joinCorps), _ref) < 0) {
+            output.push(linked);
+          }
+        }
+        return output;
       }
     };
 
@@ -316,17 +327,18 @@
       currentLangList = _.map($(".lang_select").get(), function(item) {
         return $(item).val();
       });
-      struct = settings.corpusListing.getCorporaByLangs(currentLangList);
+      struct = this.getCorporaByLangs(currentLangList);
       output = [];
-      $.each(struct, function(i, item) {
-        var main, pair;
+      $.each(struct, function(i, corps) {
+        var mainId, other, pair;
 
-        main = item[0];
-        pair = _.map(item.slice(1), function(corp) {
+        mainId = corps[0].id.toUpperCase();
+        other = corps.slice(1);
+        pair = _.map(other, function(corp) {
           var a;
 
           a = _.keys(corp[attr])[0];
-          return main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a;
+          return mainId + "|" + corp.id.toUpperCase() + ":" + a;
         });
         return output.push(pair);
       });

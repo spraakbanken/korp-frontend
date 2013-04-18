@@ -36,7 +36,6 @@ korpApp.controller "kwicCtrl", ($scope) ->
             if currentMode == "parallel"
                 mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
                 linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
-                c.log "mainCorpusId", mainCorpusId
             else
                 mainCorpusId = sentence.corpus.toLowerCase()
 

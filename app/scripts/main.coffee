@@ -110,7 +110,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         transform: "t0,18s1.7"
     )
     $("#logo").click ->
-        window.location = window.location.protocol + "//" + window.location.host + window.location.pathname
+        window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search
         false
 
 
@@ -410,8 +410,8 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
     outCorpora = []
 
     # Go down the alley to the last subfolder
-    while folderOrCorpus.contains(".")
-        posOfPeriod = folderOrCorpus.indexOf(".")
+    while "." in folderOrCorpus
+        posOfPeriod = _.indexOf folderOrCorpus, "."
         leftPart = folderOrCorpus.substr(0, posOfPeriod)
         rightPart = folderOrCorpus.substr(posOfPeriod + 1)
         if lastLevel[leftPart]

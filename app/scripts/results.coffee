@@ -346,7 +346,8 @@ class view.KWICResults extends BaseResults
         opts.queryData = @proxy.queryData
         opts.sort = $(".sort_select").val()
         opts.random_seed = $.bbq.getState("random_seed") if opts.sort is "random"
-        opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
+        # opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
+        opts.context = settings.corpusListing.getContextQueryString()
         return opts
 
     makeRequest: (page_num) ->

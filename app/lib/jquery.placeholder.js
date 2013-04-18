@@ -118,9 +118,9 @@ Thanks to...
 
 		//prepare live bindings if not already done.
 		$('.' + ph)
-			.live('click',itemIn)
-			.live('focusin',itemIn)
-			.live('focusout',itemOut);
+			.on('click',itemIn)
+			.on('focusin',itemIn)
+			.on('focusout',itemOut);
 		bound = true;
 
 		boundEvents = true;

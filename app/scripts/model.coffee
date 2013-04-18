@@ -177,6 +177,7 @@ class model.KWICProxy extends BaseProxy
         data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
         data.within = settings.corpusListing.getWithinQueryString() if currentMode == "parallel"
         data.context = o.context if o.context?
+        c.log "data.context", data.context
         data.within = o.within if o.within?
         data.random_seed = o.random_seed if o.random_seed?
         $.extend data, o.ajaxParams

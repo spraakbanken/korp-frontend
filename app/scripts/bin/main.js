@@ -1,5 +1,6 @@
 (function() {
-  var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t;
+  var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   t = $.now();
 
@@ -130,7 +131,7 @@
       transform: "t0,18s1.7"
     });
     $("#logo").click(function() {
-      window.location = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search;
       return false;
     });
     $("#cog_menu").menu({}).hide().find(".follow_link").click(function() {
@@ -460,8 +461,8 @@
     var leftPart, outCorpora, posOfPeriod, rightPart;
 
     outCorpora = [];
-    while (folderOrCorpus.contains(".")) {
-      posOfPeriod = folderOrCorpus.indexOf(".");
+    while (__indexOf.call(folderOrCorpus, ".") >= 0) {
+      posOfPeriod = _.indexOf(folderOrCorpus, ".");
       leftPart = folderOrCorpus.substr(0, posOfPeriod);
       rightPart = folderOrCorpus.substr(posOfPeriod + 1);
       if (lastLevel[leftPart]) {

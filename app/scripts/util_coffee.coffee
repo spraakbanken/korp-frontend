@@ -108,12 +108,12 @@ class window.CorpusListing
         _.union struct...
 
     getContextQueryString: ->
-        $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), (id) ->
+        $.grep($.map(_.pluck(@selected, "id"), (id) ->
             id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1)  if _.keys(settings.corpora[id].context)
         ), Boolean).join()
 
     getWithinQueryString: ->
-        $.grep($.map(_.pluck(settings.corpusListing.selected, "id"), (id) ->
+        $.grep($.map(_.pluck(@selected, "id"), (id) ->
             id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1)  if _.keys(settings.corpora[id].within)
         ), Boolean).join()
 
@@ -124,7 +124,7 @@ class window.CorpusListing
         ).flatten().unique().join "|"
 
     getTimeInterval : ->
-        all = _(settings.corpusListing.selected)
+        all = _(@selected)
             .pluck("time")
             .filter((item) -> item?)
             .map(_.keys)
@@ -198,19 +198,42 @@ class window.ParallelCorpusListing extends CorpusListing
         enabledForLangs = _.filter @selected, (corp) ->
             corp.lang in currentLangList
 
+        joinCorps = (corps) ->
+            _(corps)
+                .pluck("id")
+                .join("")
+
+
         if currentLangList.length is 1
+        # if false
             output = for child in enabledForLangs
                 [child].concat @getLinked child
 
             return output
         else
+            output = []
+            for lang in enabledForLangs
+                linked = @getLinked lang, true
 
-            linkedSets = _.map enabledForLangs, (lang) =>
-                @getLinked lang
-            output = _.filter _.flatten(linkedSets), (item) =>
-                item.lang in currentLangList
+                linked = _.filter linked, (item) =>
+                    item.lang in currentLangList    
 
-            return [output]
+                linked.sort (a, b) ->
+                    (_.indexOf currentLangList, a.lang ) - (_.indexOf currentLangList, b.lang)
+
+                if joinCorps(linked) not in (_.map output, joinCorps)
+                    output.push linked
+
+
+
+
+            
+            # linkedSets = _.map enabledForLangs, (lang) =>
+            #     @getLinked lang
+            # output = _.filter linkedSets, (item) =>
+            #     item.lang in currentLangList
+
+            return output
 
     getAttributeQuery : (attr) ->
       
@@ -218,13 +241,17 @@ class window.ParallelCorpusListing extends CorpusListing
       currentLangList = _.map($(".lang_select").get(), (item) ->
         $(item).val()
       )
-      struct = settings.corpusListing.getCorporaByLangs(currentLangList)
+
+      struct = @getCorporaByLangs(currentLangList)
       output = []
-      $.each struct, (i, item) ->
-        main = item[0]
-        pair = _.map(item.slice(1), (corp) ->
-          a = _.keys(corp[attr])[0]
-          main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a
+      $.each struct, (i, corps) ->
+
+        mainId = corps[0].id.toUpperCase()
+        other = corps.slice(1)
+
+        pair = _.map(other, (corp) ->
+            a = _.keys(corp[attr])[0]
+            mainId + "|" + corp.id.toUpperCase() + ":" + a
         )
         output.push pair
 

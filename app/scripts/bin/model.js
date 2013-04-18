@@ -228,6 +228,7 @@
       if (o.context != null) {
         data.context = o.context;
       }
+      c.log("data.context", data.context);
       if (o.within != null) {
         data.within = o.within;
       }

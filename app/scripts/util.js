@@ -197,7 +197,7 @@ util.localizeFloat = function(float, nDec) {
 
 util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
-	if(x.contains(".")) {
+	if(_.contains(x, ".")) {
     	var parts = x.split(".");
     	var decimalSeparator = util.getLocaleString("util_decimalseparator");
     	if(mode)
@@ -308,7 +308,10 @@ function loadCorpora() {
 	        $.bbq.removeState("corpus")
 		}
 		if(corpora.length) {
-			extendedSearch.refreshTokens();
+			if(currentMode == "parallel")
+				extendedSearch.reset();
+			else 
+				extendedSearch.refreshTokens();
 			view.updateReduceSelect();
 			view.updateContextSelect("within");
 //			view.updateContextSelect("context");
