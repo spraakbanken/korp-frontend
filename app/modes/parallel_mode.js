@@ -155,27 +155,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 			output.push(pair);
 		});
 		return output.join(",")
-	},
-
-	// getAttributeQuery : function(attr) {
-	// 	//gets the within and context queries
-	// 	var currentLangList = _.map($(".lang_select").get(), function(item) {
-	// 		return $(item).val();
-	// 	});
-	// 	var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
-			
-	// 	var output = [];
-	// 	$.each(struct, function(i, item) {
-	// 		var main = item[0];
-
-	// 		var pair = _.map(item.slice(1), function(corp) {
-	// 			var a = _.keys(corp[attr])[0];
-	// 			return main.id.toUpperCase() + "|" + corp.id.toUpperCase() + ":" + a;
-	// 		});
-	// 		output.push(pair);
-	// 	});
-	// 	return output.join(",")
-	// }
+	}
 
 });
 

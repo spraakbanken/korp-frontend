@@ -35,15 +35,17 @@ korpApp.controller "kwicCtrl", ($scope) ->
             
             if currentMode == "parallel"
                 mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
+                linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
+                c.log "mainCorpusId", mainCorpusId
             else
                 mainCorpusId = sentence.corpus.toLowerCase()
 
+            id = (linkCorpusId or mainCorpusId)
 
-
-            if prevCorpus != mainCorpusId
-                id = mainCorpusId
-                if currentMode == "parallel"
-                    id = sentence.corpus.split("|")[1].toLowerCase()
+            if prevCorpus != id
+                # id = mainCorpusId
+                # if currentMode == "parallel"
+                #     id = sentence.corpus.split("|")[1].toLowerCase()
 
                 corpus = settings.corpora[id]
                 newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
@@ -55,6 +57,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
                 sentence._color = settings.primaryLight
 
             sentence.corpus = mainCorpusId
+
             output.push(sentence)
             if sentence.aligned
                 [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
@@ -65,7 +68,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
                     _color : sentence._color
 
 
-            prevCorpus = sentence.corpus
+            prevCorpus = id
 
             # return sentence
         return output

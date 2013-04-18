@@ -10,7 +10,7 @@
     s = $scope;
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
-      var corpus, corpus_aligned, currentStruct, end, i, id, j, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+      var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
 
       currentStruct = [];
       prevCorpus = "";
@@ -51,14 +51,13 @@
         }
         if (currentMode === "parallel") {
           mainCorpusId = sentence.corpus.split("|")[0].toLowerCase();
+          linkCorpusId = sentence.corpus.split("|")[1].toLowerCase();
+          c.log("mainCorpusId", mainCorpusId);
         } else {
           mainCorpusId = sentence.corpus.toLowerCase();
         }
-        if (prevCorpus !== mainCorpusId) {
-          id = mainCorpusId;
-          if (currentMode === "parallel") {
-            id = sentence.corpus.split("|")[1].toLowerCase();
-          }
+        id = linkCorpusId || mainCorpusId;
+        if (prevCorpus !== id) {
           corpus = settings.corpora[id];
           newSent = {
             newCorpus: corpus.title,
@@ -82,7 +81,7 @@
             _color: sentence._color
           });
         }
-        prevCorpus = sentence.corpus;
+        prevCorpus = id;
       }
       return output;
     };
