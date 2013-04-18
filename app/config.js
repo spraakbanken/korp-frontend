@@ -362,7 +362,7 @@ settings.corporafolders.fisk.governmental = {
 
 settings.corporafolders.fisk.novels = {
 	title : "Skönlitteratur",
-	contents : ["fsbskonlit"]
+	contents : ["fsbskonlit1960-1999", "fsbskonlit2000tal"]
 };
 
 settings.corporafolders.fisk.newspapertexts = {
@@ -529,10 +529,36 @@ settings.corpora.fsbbloggvuxna = {
 	}
 };
 
-settings.corpora.fsbskonlit = {
-	id : "fsbskonlit",
-	title : "Skönlitteratur 1970–2011",
-	description : "Material ur skönlitterära verk publicerade under 1970–2011 av Söderströms förlag.",
+settings.corpora["fsbskonlit1960-1999"] = {
+	id : "fsbskonlit1960-1999",
+	title : "Skönlitteratur 1960–1999",
+	description : "Material ur skönlitterära verk publicerade under 1960–1999 av Söderströms förlag.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.fsbskonlit2000tal = {
+	id : "fsbskonlit2000tal",
+	title : "Skönlitteratur 2000-tal",
+	description : "Material ur skönlitterära verk publicerade under 2000-talet av Söderströms förlag.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
