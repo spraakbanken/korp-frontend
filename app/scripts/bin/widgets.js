@@ -352,7 +352,7 @@
     _renderItem: function(ul, item) {
       var li;
 
-      li = $("<li></li>").data("item.autocomplete", item).append($("<a></a>")[(this.options.html ? "html" : "text")](item.label)).appendTo(ul);
+      li = $("<li></li>").data("ui-autocomplete-item", item).append($("<a></a>")[(this.options.html ? "html" : "text")](item.label)).appendTo(ul);
       if (!item["enabled"]) {
         li.addClass("autocomplete-item-disabled");
       }
@@ -801,7 +801,6 @@
       oldVal = target.parent().siblings(".arg_value:input[type=text]").val() || "";
       oldOptVal = target.next().val();
       data = target.find(":selected").data("dataProvider");
-      c.log("didSelectArgtype ", data);
       arg_value = null;
       switch (data.displayType) {
         case "select":

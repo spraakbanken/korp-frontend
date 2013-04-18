@@ -277,7 +277,7 @@ ModeSelector =
 $.widget "korp.modeSelector", $.korp.radioList, ModeSelector
 $.extend $.ui.autocomplete.prototype,
     _renderItem: (ul, item) ->
-        li = $("<li></li>").data("item.autocomplete", item)
+        li = $("<li></li>").data("ui-autocomplete-item", item)
             .append($("<a></a>")[(if @options.html then "html" else "text")](item.label))
             .appendTo(ul)
         li.addClass "autocomplete-item-disabled"  unless item["enabled"]
@@ -712,7 +712,7 @@ ExtendedToken =
         oldVal = target.parent().siblings(".arg_value:input[type=text]").val() or ""
         oldOptVal = target.next().val()
         data = target.find(":selected").data("dataProvider")
-        c.log "didSelectArgtype ", data
+        # c.log "didSelectArgtype ", data
         arg_value = null
         switch data.displayType
             when "select"

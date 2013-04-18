@@ -9,6 +9,7 @@ $("#num_hits").prepend("<option value='10'>10</option>");
 
 // for the language selects
 var lang_prio = ["swe"].reverse();
+var start_lang = "swe";
 
 // var c1 = view.ExtendedSearch.prototype.constructor
 var ext = view.ExtendedSearch.prototype
@@ -50,10 +51,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		$(".lang_row,#query_table").filter($.format(":gt(%s)", index)).each(function() {
 			$("#removeLang").click();
 		});
-		var activeLangs = _.map($(".lang_select").get(), function(item) {
-			return $(item).val();
-		});
-		var langs = this.getEnabledLangs(activeLangs);
+		var langs = this.getEnabledLangs($(".lang_select").first().val());
 		if(!langs.length)
 			$("#linkedLang").attr("disabled", "disabled");
 		else
@@ -67,6 +65,8 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		$(".lang_row", this.main).remove()
 		$("#query_table .lang_select", this.main).remove();
 		this.getLangSelect().prependTo("#query_table");
+
+		this.invalidate($(".lang_select", this.main).first())
 	},
 
 	onUpdate : function() {
@@ -79,7 +79,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 	makeLangRow : function(start_val) {
 		var self = this;
 		var newRow = $("<div class='lang_row' />");
-		$("#removeLang").before(newRow);
+		$("#linkedLang").before(newRow);
 		this.setupContainer(newRow);
 		this.getLangSelect()
 		.prependTo(".lang_row:last")
@@ -91,42 +91,73 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		this.onUpdate();
 	},
 
-	getEnabledLangs : function(activeLangs) {
-		var output = [];
-		// get the languages that are enabled given a list of active languages
-		if(activeLangs.length) {
-
-			var enabled = settings.corpusListing.getEnabledByLang(activeLangs[0])
-			$.each(activeLangs, function(i, lang) {
-				var set = _(settings.corpusListing.getEnabledByLang(lang, true))
-					.map(function(item) {
-						return settings.corpusListing.getLinked(item);
-					})
-					.flatten()
-					.filter(function(item) {
-						return $.inArray(item.lang, activeLangs) == -1;
-					})
-					.value()
-
-				enabled = _.intersection(enabled, set)
-
-			});
-			
-			output = _.pluck(enabled , "lang");
-		} else {
-			output = _(settings.corpusListing.selected).map(function(item) {
-				return settings.corpusListing.getLinked(item, true);
-			})
-			.flatten()
-			.pluck("lang")
-			.value()
-		}
-
-		output = output.sort(function(a, b) {
-		    return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+	getEnabledLangs : function(mainLang) {
+		var currentLangList = _.map($(".lang_select").get(), function(item) {
+			return $(item).val();
 		});
+		var other =  _(settings.corpusListing.getLinksFromLangs([mainLang || start_lang]))
+			.flatten()
+			.pluck("lang").unique().value();
 
-		return _.uniq(output);
+		return _.difference(other, currentLangList);
+
+
+
+		// if(activeLangs.length) {
+		// 	var links = settings.corpusListing.getLinksFromLangs(activeLangs);
+		// 	output = _(links).flatten().pluck("lang").unique().value();
+		// } else {
+		// 	output = _(settings.corpusListing.selected).map(function(item) {
+		// 		return settings.corpusListing.getLinked(item, true);
+		// 	})
+		// 	.flatten()
+		// 	.pluck("lang")
+		// 	.unique()
+		// 	.value()
+		// }
+		// c.log ("output, activeLangs", output, activeLangs)
+		// output = _.difference(output, activeLangs);
+		// output = output.sort(function(a, b) {
+		//     return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+		// });
+
+		// return output;
+
+		// var output = [];
+		// // get the languages that are enabled given a list of active languages
+		// if(activeLangs.length) {
+
+		// 	var enabled = settings.corpusListing.getEnabledByLang(activeLangs[0])
+		// 	$.each(activeLangs, function(i, lang) {
+		// 		var set = _(settings.corpusListing.getEnabledByLang(lang, true))
+		// 			.map(function(item) {
+		// 				return settings.corpusListing.getLinked(item);
+		// 			})
+		// 			.flatten()
+		// 			.filter(function(item) {
+		// 				return $.inArray(item.lang, activeLangs) == -1;
+		// 			})
+		// 			.value()
+
+		// 		enabled = _.intersection(enabled, set)
+
+		// 	});
+			
+		// 	output = _.pluck(enabled , "lang");
+		// } else {
+		// 	output = _(settings.corpusListing.selected).map(function(item) {
+		// 		return settings.corpusListing.getLinked(item, true);
+		// 	})
+		// 	.flatten()
+		// 	.pluck("lang")
+		// 	.value()
+		// }
+
+		// output = output.sort(function(a, b) {
+		//     return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+		// });
+
+		// return _.uniq(output);
 
 	},
 
@@ -134,11 +165,9 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		var ul = $("<select/>").addClass("lang_select");
 
 		// var prevLang = $(".lang_select:last").val();
-		var activeLangs = _.map($(".lang_select").get(), function(item) {
-			return $(item).val();
-		});
 
-		var langs = this.getEnabledLangs(activeLangs);
+		var langs = this.getEnabledLangs($(".lang_select").first().val());
+
 
 		ul.append($.map(langs, function(item) {
 			return $("<option />", {"val" : item}).localeKey(item).get(0);
@@ -150,7 +179,8 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		var currentLangList = _.map($(".lang_select").get(), function(item) {
 			return $(item).val();
 		});
-		var struct = settings.corpusListing.getCorporaByLangs(currentLangList);
+
+		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
 		var output = [];
 		$.each(struct, function(i, item) {
 			main = item[0]
@@ -171,17 +201,57 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 }, {
 
 	updateCQP : function() {
+		var currentLangList = _.map($(".lang_select").get(), function(item) {
+			return $(item).val();
+		});
 
+		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
+
+		function getLangMapping(excludeLangs) {
+			return _(struct)
+				.flatten()
+				.filter(function(item) {
+					return !_.contains(excludeLangs, item.lang);
+				}).groupBy("lang").value()
+		}
 		var query = $("#query_table .query_token").map(function() {
 	    	return $(this).extendedToken("getCQP");
 	    }).get().join(" ");
+		if(currentLangList.length == 1) {
+			var langMapping = getLangMapping([currentLangList[0]]);
 
-		$(".lang_row").each(function(i, item) {
-			query += ": <LINKED_CORPUS> ";
-			query += $(this).find(".query_token").map(function() {
-		    	return $(this).extendedToken("getCQP");
-		    }).get().join(" ");
-		});
+			_.each(langMapping, function(corps, lang) {
+				query += ":LINKED_CORPUS:" + _(corps).pluck("id").invoke("toUpperCase").join("|") + "[]";
+			});
+
+		} else {
+			
+			$(".lang_row").each(function(i, item) {			
+				cqp = $(this).find(".query_token").map(function() {
+			    	return $(this).extendedToken("getCQP");
+			    }).get().join(" ");
+
+				var lang = $(".lang_select", this).val();
+				var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
+				// c.log ("langMapping", langMapping)
+				query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
+
+			});
+		}
+
+		// var query = $("#query_table .query_token").map(function() {
+	 //    	return $(this).extendedToken("getCQP");
+	 //    }).get().join(" ");
+
+		// $(".lang_row").each(function(i, item) {
+		// 	var lang = $(".lang_select", this).val();
+		// 	c.log("lang", lang);
+		// 	query += ":LINKED_CORPUS ";
+		// 	// settings.corpusListing.getLinked()
+		// 	query += $(this).find(".query_token").map(function() {
+		//     	return $(this).extendedToken("getCQP");
+		//     }).get().join(" ");
+		// });
 
 	    this.setCQP(query);
 	    return query;
@@ -558,6 +628,6 @@ settings.corpora.espc_eng = {
 }
 
 
-settings.corpusListing = new ParallelCorpusListing(settings.corpora);
+window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora);
 delete ParallelCorpusListing;
 delete context;

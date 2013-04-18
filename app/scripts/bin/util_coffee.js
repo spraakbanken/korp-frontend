@@ -261,64 +261,58 @@
       return output;
     };
 
-    ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf) {
-      var corps,
+    ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf, flatten) {
+      var corps, output,
         _this = this;
 
       if (andSelf == null) {
         andSelf = false;
       }
+      if (flatten == null) {
+        flatten = true;
+      }
       corps = _.filter(this.selected, function(item) {
         return item["lang"] === lang;
       });
-      return _(corps).map(function(item) {
+      output = _(corps).map(function(item) {
         return _this.getLinked(item, andSelf);
-      }).flatten().value();
-    };
-
-    ParallelCorpusListing.prototype.getCorporaByLangs = function(currentLangList) {
-      var child, enabledForLangs, joinCorps, lang, linked, output, _i, _len, _ref,
-        _this = this;
-
-      enabledForLangs = _.filter(this.selected, function(corp) {
-        var _ref;
-
-        return _ref = corp.lang, __indexOf.call(currentLangList, _ref) >= 0;
-      });
-      joinCorps = function(corps) {
-        return _(corps).pluck("id").join("");
-      };
-      if (currentLangList.length === 1) {
-        output = (function() {
-          var _i, _len, _results;
-
-          _results = [];
-          for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
-            child = enabledForLangs[_i];
-            _results.push([child].concat(this.getLinked(child)));
-          }
-          return _results;
-        }).call(this);
-        return output;
+      }).value();
+      if (flatten) {
+        return _.flatten(output);
       } else {
-        output = [];
-        for (_i = 0, _len = enabledForLangs.length; _i < _len; _i++) {
-          lang = enabledForLangs[_i];
-          linked = this.getLinked(lang, true);
-          linked = _.filter(linked, function(item) {
-            var _ref;
-
-            return _ref = item.lang, __indexOf.call(currentLangList, _ref) >= 0;
-          });
-          linked.sort(function(a, b) {
-            return (_.indexOf(currentLangList, a.lang)) - (_.indexOf(currentLangList, b.lang));
-          });
-          if (_ref = joinCorps(linked), __indexOf.call(_.map(output, joinCorps), _ref) < 0) {
-            output.push(linked);
-          }
-        }
         return output;
       }
+    };
+
+    ParallelCorpusListing.prototype.getLinksFromLangs = function(activeLangs) {
+      var cps, lang, linked, main, other, output, _i, _j, _len, _len1, _ref;
+
+      if (activeLangs.length === 1) {
+        return this.getEnabledByLang(activeLangs[0], true, false);
+      }
+      main = _.filter(this.selected, function(corp) {
+        return corp.lang === activeLangs[0];
+      });
+      output = [];
+      _ref = activeLangs.slice(1);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        lang = _ref[_i];
+        other = _.filter(this.selected, function(corp) {
+          return corp.lang === lang;
+        });
+        for (_j = 0, _len1 = other.length; _j < _len1; _j++) {
+          cps = other[_j];
+          linked = _(main).filter(function(mainCorpus) {
+            var _ref1;
+
+            return _ref1 = cps.id, __indexOf.call(mainCorpus.linked_to, _ref1) >= 0;
+          }).value();
+          output = output.concat(_.map(linked, function(item) {
+            return [item, cps];
+          }));
+        }
+      }
+      return output;
     };
 
     ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
@@ -327,7 +321,7 @@
       currentLangList = _.map($(".lang_select").get(), function(item) {
         return $(item).val();
       });
-      struct = this.getCorporaByLangs(currentLangList);
+      struct = this.getLinksFromLangs(currentLangList);
       output = [];
       $.each(struct, function(i, corps) {
         var mainId, other, pair;

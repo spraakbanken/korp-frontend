@@ -164,14 +164,16 @@
       authenticationProxy.loginObj = creds;
       util.setLogin();
     }
-    tab_a_selector = "ul.ui-tabs-nav a";
+    tab_a_selector = "ul .ui-tabs-anchor";
     $("#search-tab").tabs({
       event: "change",
       activate: function(event, ui) {
         var selected;
 
-        if ($("#columns").position().top > 0) {
-          $("#sidebar").sidebar("updatePlacement");
+        if ($("#sidebar").data("korpSidebar")) {
+          if ($("#columns").position().top > 0) {
+            $("#sidebar").sidebar("updatePlacement");
+          }
         }
         selected = ui.newPanel.attr("id").split("-")[1];
         return $.sm.send("searchtab." + selected);
@@ -334,17 +336,6 @@
           return $(".ui-dialog-content", this).dialog("destroy");
         });
       }
-      if (!isInit && hasChanged("display")) {
-        if (e.getState("display") === "bar_plot") {
-          statsResults.drawBarPlot();
-        } else {
-          $("#plot_popup.ui-dialog-content").dialog("destroy").css({
-            opacity: 0,
-            display: "block",
-            height: 0
-          });
-        }
-      }
       reading = e.getState("reading_mode");
       if (hasChanged("reading_mode")) {
         if (reading) {
@@ -395,14 +386,13 @@
         }
       }
       tabs.each(function() {
-        var idx, self;
+        var idx;
 
-        self = this;
         idx = e.getState(this.id, true);
         if (idx === null) {
           return;
         }
-        return $(self).find(tab_a_selector).eq(idx).triggerHandler("change");
+        return $(this).find(tab_a_selector).eq(idx).triggerHandler("change");
       });
       return $.bbq.prevFragment = $.deparam.fragment();
     };
@@ -486,16 +476,29 @@
   };
 
   initTimeGraph = function() {
-    var all_timestruct, getValByDate, opendfd, restdata, restyear, time_comb, timestruct;
+    var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
 
     timestruct = null;
     all_timestruct = null;
     restdata = null;
     restyear = null;
     time_comb = timeProxy.makeRequest(true);
+    onTimeGraphChange = function() {};
+    getValByDate = function(date, struct) {
+      var output;
+
+      output = null;
+      $.each(struct, function(i, item) {
+        if (date === item[0]) {
+          output = item[1];
+          return false;
+        }
+      });
+      return output;
+    };
     window.timeDeferred = timeProxy.makeRequest(false).done(function(data) {
       c.log("write time");
-      $.each(data, function(corpus, struct) {
+      return $.each(data, function(corpus, struct) {
         var cor;
 
         if (corpus !== "time") {
@@ -513,23 +516,10 @@
           }
         }
       });
-      return $("#corpusbox").trigger("corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]);
     });
-    getValByDate = function(date, struct) {
-      var output;
-
-      output = null;
-      $.each(struct, function(i, item) {
-        if (date === item[0]) {
-          output = item[1];
-          return false;
-        }
-      });
-      return output;
-    };
     $.when(time_comb, timeDeferred).then(function(combdata, timedata) {
       all_timestruct = combdata[0];
-      $("#corpusbox").bind("corpuschooserchange", function(evt, data) {
+      onTimeGraphChange = function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;
 
         one_px = max / 46;
@@ -615,7 +605,7 @@
             return $(this).hide();
           }
         });
-      });
+      };
       return $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
         var date, firstrow, header, pTmpl, secondrow, time, total, val;
 
@@ -656,7 +646,8 @@
       return opendfd.resolve();
     });
     return $.when(time_comb, time, opendfd).then(function() {
-      return $("#corpusbox").trigger("corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]);
+      $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange);
+      return onTimeGraphChange();
     });
   };
 

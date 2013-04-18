@@ -274,15 +274,22 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   .context_select, .within_select {
     display: none;
   }
+  #query_table ~ #removeLang {
+    display: none;
+  }
+  .lang_row ~ #removeLang {
+   display : inline !important;  
+  }
 }
 
 .mode-law .within_select ~ * {
   display: inline;
 }
 
-.within_select ~ *, #removeLang, #linkedLang {
-  display: none;
-}
+// .within_select ~ *, #removeLang, #linkedLang {
+//   display: none;
+// }
+
 
 .lang_row + #removeLang {
   display: inline;
@@ -1571,19 +1578,6 @@ a {
   }
 }
 
-#plot_popup {
-  padding-top: 15px;
-  height: 0;
-  overflow-y: hidden;
-  overflow-x: auto;
-  .xAxis .tickLabel {
-    @include transform(rotate(30deg));
-    position: relative;
-    margin-top: 6px;
-    margin-left: 10px;
-  }
-}
-
 .enumerate {
   counter-increment: wordpic;
   &:before {
@@ -1753,7 +1747,6 @@ line.tick {
   border : none !important;
 }
 
-#main > #msd_popup, 
-#main > #plot_popup {
+#main > #msd_popup {
   display : none !important;
 }

@@ -183,57 +183,79 @@ class window.ParallelCorpusListing extends CorpusListing
         output = [corp].concat output if andSelf
         output
 
-    getEnabledByLang : (lang, andSelf=false) ->
+    getEnabledByLang : (lang, andSelf=false, flatten=true) ->
         corps = _.filter @selected, (item) ->
             item["lang"] == lang
         # c.log "corps", corps
         # window.crp = corps
-        _(corps).map((item) =>
+        output = _(corps).map((item) =>
             @getLinked item, andSelf
-        ).flatten().value()
+        ).value()
+
+        if flatten then (_.flatten output) else output
 
 
-    getCorporaByLangs : (currentLangList) ->
-        # remove corpora for lang not used
-        enabledForLangs = _.filter @selected, (corp) ->
-            corp.lang in currentLangList
+    getLinksFromLangs : (activeLangs) ->
+        if activeLangs.length == 1
+            return @getEnabledByLang(activeLangs[0], true, false)
+        # get the languages that are enabled given a list of active languages
+        main = _.filter @selected, (corp) ->
+            corp.lang == activeLangs[0]
 
-        joinCorps = (corps) ->
-            _(corps)
-                .pluck("id")
-                .join("")
+        output = []
+        for lang in activeLangs[1..]
+            other = _.filter @selected, (corp) ->
+                corp.lang == lang
+
+            for cps in other
+                linked = _(main).filter((mainCorpus) ->
+                    cps.id in mainCorpus.linked_to
+                ).value()
+
+                output = output.concat _.map linked, (item) -> [item, cps]
+
+        output
+
+    # getCorporaByLangs : (currentLangList) ->
+    #     # remove corpora for lang not used
+    #     all = @getEnabledByLang(currentLangList[0], true)
+    #     enabledForLangs = _.filter all, (corp) ->
+    #         corp.lang in currentLangList
+    #     window.enabledForLangs = enabledForLangs
+    #     c.log "enabledForLangs", enabledForLangs
+
+    #     # joinCorps = (corps) ->
+    #     #     _(corps)
+    #     #         .pluck("id")
+    #     #         .join("")
 
 
-        if currentLangList.length is 1
-        # if false
-            output = for child in enabledForLangs
-                [child].concat @getLinked child
+    #     if currentLangList.length is 1
+    #     # if false
+    #         output = for child in enabledForLangs
+    #             [child].concat @getLinked child
 
-            return output
-        else
-            output = []
-            for lang in enabledForLangs
-                linked = @getLinked lang, true
+    #         return output
+    #     else
+    #         output = []
+    #         for corp in enabledForLangs
+    #             linked = @getLinked corp, true
 
-                linked = _.filter linked, (item) =>
-                    item.lang in currentLangList    
+    #             linked = _.filter linked, (item) =>
+    #                 item.lang in currentLangList    
 
-                linked.sort (a, b) ->
-                    (_.indexOf currentLangList, a.lang ) - (_.indexOf currentLangList, b.lang)
+    #             linked.sort (a, b) ->
+    #                 (_.indexOf currentLangList, a.lang ) - (_.indexOf currentLangList, b.lang)
 
-                if joinCorps(linked) not in (_.map output, joinCorps)
-                    output.push linked
-
-
+    #             if _.union(linked, output...).length == linked.length
+    #                 output.push linked
 
 
-            
-            # linkedSets = _.map enabledForLangs, (lang) =>
-            #     @getLinked lang
-            # output = _.filter linkedSets, (item) =>
-            #     item.lang in currentLangList
+    #             # if joinCorps(linked) not in (_.map output, joinCorps)
+    #             #     output.push linked
 
-            return output
+
+    #         return output
 
     getAttributeQuery : (attr) ->
       
@@ -242,7 +264,7 @@ class window.ParallelCorpusListing extends CorpusListing
         $(item).val()
       )
 
-      struct = @getCorporaByLangs(currentLangList)
+      struct = @getLinksFromLangs(currentLangList)
       output = []
       $.each struct, (i, corps) ->
 

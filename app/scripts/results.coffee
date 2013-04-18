@@ -1090,7 +1090,6 @@ class view.StatsResults extends BaseResults
         @hidePreloader()
 
 
-    #   $("#plot_popup").find("a").blur();
     resizeGrid: ->
         return unless @grid
         widthArray = $(".slick-header-column").map((item) ->
