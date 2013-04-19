@@ -323,7 +323,7 @@ settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
 	lang : "swe",
 	linked_to : ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
-	title: "EUROPARL svenska",
+	title: "Europarl svenska",
 	context: context.defaultAligned,
 	within: {
 		"linkda": "meningspar"
@@ -349,7 +349,7 @@ settings.corpora["europarl-da"] = {
 	id : "europarl-da",
 	lang : "dan",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-danska",
+	title: "Europarl svenska-danska",
 	context: {
 		"1 linkda" : "1 link"
 	},
@@ -366,7 +366,7 @@ settings.corpora["europarl-de"] = {
 	id : "europarl-de",
 	lang : "deu",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-tyska",
+	title: "Europarl svenska-tyska",
 	context: {
 		"1 linkde" : "1 link"
 	},
@@ -383,7 +383,7 @@ settings.corpora["europarl-el"] = {
 	id : "europarl-el",
 	lang : "ell",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-grekiska",
+	title: "Europarl svenska-grekiska",
 	context: {
 		"1 linkel" : "1 link"
 	},
@@ -400,7 +400,7 @@ settings.corpora["europarl-en"] = {
 	id : "europarl-en",
 	lang : "eng",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-engelska",
+	title: "Europarl svenska-engelska",
 	context: {
 		"1 linken" : "1 link"
 	},
@@ -417,7 +417,7 @@ settings.corpora["europarl-es"] = {
 	id : "europarl-es",
 	lang : "spa",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-spanska",
+	title: "Europarl svenska-spanska",
 	context: {
 		"1 linkes" : "1 link"
 	},
@@ -434,7 +434,7 @@ settings.corpora["europarl-fi"] = {
 	id : "europarl-fi",
 	lang : "fin",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-finska",
+	title: "Europarl svenska-finska",
 	context: {
 		"1 linkfi" : "1 link"
 	},
@@ -451,7 +451,7 @@ settings.corpora["europarl-fr"] = {
 	id : "europarl-fr",
 	lang : "fra",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-franska",
+	title: "Europarl svenska-franska",
 	context: {
 		"1 linkfr" : "1 link"
 	},
@@ -468,7 +468,7 @@ settings.corpora["europarl-it"] = {
 	id : "europarl-it",
 	lang : "ita",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-italienska",
+	title: "Europarl svenska-italienska",
 	context: {
 		"1 linkit" : "1 link"
 	},
@@ -485,7 +485,7 @@ settings.corpora["europarl-nl"] = {
 	id : "europarl-nl",
 	lang : "nld",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-nederländska",
+	title: "Europarl svenska-nederländska",
 	context: {
 		"1 linknl" : "1 link"
 	},
@@ -502,7 +502,7 @@ settings.corpora["europarl-pt"] = {
 	id : "europarl-pt",
 	lang : "por",
 	linked_to : ["europarl-sv"],
-	title: "EUROPARL svenska-portugisiska",
+	title: "Europarl svenska-portugisiska",
 	context: {
 		"1 linkpt" : "1 link"
 	},
