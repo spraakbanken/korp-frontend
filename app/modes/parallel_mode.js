@@ -519,7 +519,7 @@ settings.corpora.saltnld_swe = {
 	id : "saltnld_swe",
 	lang : "swe",
 	linked_to : ["saltnld_nld"],
-	title: "Svenska-nederländska",
+	title: "SALT svenska-nederländska",
 	context: context.defaultAligned,
 	// context : settings.defaultContext,
 	within: {
@@ -557,7 +557,7 @@ settings.corpora.saltnld_nld = {
 	id : "saltnld_nld",
 	lang : "nld",
 	linked_to : ["saltnld_swe"],
-	title: "Svenska-nederländska",
+	title: "SALT svenska-nederländska",
 	context: context.defaultAligned,
 	within: {
 		"link": "meningspar"
@@ -585,7 +585,7 @@ settings.corpora.espc_swe = {
 	id : "espc_swe",
 	lang : "swe",
 	limited_access : true,
-	title: "The English-Swedish Parallel Corpus (ESPC) svenska-engelska",
+	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,
 	context : settings.defaultContext,
 	within: {
@@ -613,7 +613,7 @@ settings.corpora.espc_eng = {
 	id : "espc_eng",
 	lang : "eng",
 	limited_access : true,
-	title: "ESPC svenska-engelska",
+	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,
 	within: {
 		"link": "meningspar"
