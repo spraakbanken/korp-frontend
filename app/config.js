@@ -430,21 +430,6 @@ settings.corporafolders.medical.ltd = {
 	contents : ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001", "lt2002", "lt2003", "lt2004", "lt2005"]
 };
 
-settings.corporafolders.parallel = {
-	title : "Parallella material",
-	contents : []
-};
-
-settings.corporafolders.parallel.europarl = {
-	title : "Europarl",
-	contents : ["europarlda_sv"]
-};
-
-settings.corporafolders.parallel.salt = {
-	title : "SALT",
-	contents : ["saltnld_swe"]
-};
-
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
 	contents : ["romi", "romii", "rom99", "storsuc", "romg"]
@@ -2158,7 +2143,7 @@ settings.corpora.storsuc = {
 
 settings.corpora.saltnld_swe = {
 	id : "saltnld_swe",
-	title: "Svenska-nederländska",
+	title: "SALT svenska-nederländska",
 	description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
 <ul>\
 <li>Bergman, Ingmar: Laterna magica</li>\
@@ -2197,9 +2182,9 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
 	}
 };
 
-settings.corpora.europarlda_sv = {
-	id : "europarlda_sv",
-	title: "Svenska-danska",
+settings.corpora["europarl-sv"] = {
+	id : "europarl-sv",
+	title: "Europarl svenska",
 	description : "Texter från Europaparlamentets webbsida.",
 	context: settings.defaultContext,
 	within: settings.defaultWithin,
@@ -2214,9 +2199,8 @@ settings.corpora.europarlda_sv = {
 		ref: attrs.ref,
 	},
 	struct_attributes : {
-//		text_origlang : {
-//			label : "original_language"
-//		}
+		text_date : {label : "date"},
+		text_speaker : {label : "speaker"}
 	}
 };
 
