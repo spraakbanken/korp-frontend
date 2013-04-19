@@ -308,7 +308,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.europarl = {
 	title : "Europarl3",
-		contents : ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"]
+		contents : ["europarl-da", "europarl-en", "europarl-fi", "europarl-fr", "europarl-el", "europarl-it", "europarl-nl", "europarl-pt", "europarl-es", "europarl-de"]
 };
 
 settings.corporafolders.salt = {
@@ -341,6 +341,8 @@ settings.corpora["europarl-sv"] = {
 		suffix : attrs.suffix
 	},
 	struct_attributes : {
+		text_date : {label : "date"},
+		text_speaker : {label : "speaker"}
 	},
 	hide : true
 }
