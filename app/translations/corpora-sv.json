@@ -98,6 +98,7 @@
     "page" : "sida",
     "author_type" : "författartyp",
     "gender" : "kön",
+    "birthyear" : "födelseår",
     "journalist" : "journalist",
     "reader" : "läsare",
     "male" : "man",
