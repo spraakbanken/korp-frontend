@@ -247,7 +247,7 @@
           mainrow = $(linked).prev();
           firstWord = mainrow.find(".left .word:first");
           if (!firstWord.length) {
-            return;
+            firstWord = mainrow.find(".match .word:first");
           }
           offset = (firstWord.position().left + scrollLeft) - 25;
           $(linked).find(".lnk").css("padding-left", Math.round(offset));

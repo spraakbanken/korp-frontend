@@ -217,15 +217,7 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 		var query = $("#query_table .query_token").map(function() {
 	    	return $(this).extendedToken("getCQP");
 	    }).get().join(" ");
-		if(currentLangList.length == 1) {
-			var langMapping = getLangMapping([currentLangList[0]]);
-
-			_.each(langMapping, function(corps, lang) {
-				query += ":LINKED_CORPUS:" + _(corps).pluck("id").invoke("toUpperCase").join("|") + "[]";
-			});
-
-		} else {
-			
+		if(currentLangList.length > 1) {
 			$(".lang_row").each(function(i, item) {			
 				cqp = $(this).find(".query_token").map(function() {
 			    	return $(this).extendedToken("getCQP");
@@ -238,21 +230,6 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 
 			});
 		}
-
-		// var query = $("#query_table .query_token").map(function() {
-	 //    	return $(this).extendedToken("getCQP");
-	 //    }).get().join(" ");
-
-		// $(".lang_row").each(function(i, item) {
-		// 	var lang = $(".lang_select", this).val();
-		// 	c.log("lang", lang);
-		// 	query += ":LINKED_CORPUS ";
-		// 	// settings.corpusListing.getLinked()
-		// 	query += $(this).find(".query_token").map(function() {
-		//     	return $(this).extendedToken("getCQP");
-		//     }).get().join(" ");
-		// });
-
 	    this.setCQP(query);
 	    return query;
 	}

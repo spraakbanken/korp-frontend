@@ -264,6 +264,11 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   }
 }
 
+#removeLang, #linkedLang {
+  display : none;
+}
+
+
 .mode-parallel {
   #korp-extended #sendBtn ~ * {
     display: none;
@@ -281,6 +286,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
    display : inline !important;  
   }
 }
+
+
 
 .mode-law .within_select ~ * {
   display: inline;

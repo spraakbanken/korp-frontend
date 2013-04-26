@@ -207,7 +207,7 @@ class view.KWICResults extends BaseResults
             for linked in $(".linked_sentence")
                 mainrow = $(linked).prev()
                 firstWord = mainrow.find(".left .word:first")
-                if not firstWord.length then return
+                if not firstWord.length then firstWord = mainrow.find(".match .word:first")
                 offset = (firstWord.position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
