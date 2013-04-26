@@ -14,12 +14,16 @@
 $primaryColor: rgb(221, 233, 255);
 $primaryLight: rgb(242, 247, 255);
 
+html {
+  background-color: white;
+}
 
 body {
   font-family: 'Source Sans Pro',Helvetica, Arial, Verdana, sans-serif;
   font-size: 13px;
   margin: 0;
   overflow-x: hidden;
+  background-color: white;
 }
 
 ul, ol {
@@ -1756,4 +1760,8 @@ line.tick {
 
 #main > #msd_popup {
   display : none !important;
+}
+
+.popupchecks .header {
+  white-space : nowrap;
 }

@@ -1220,6 +1220,10 @@
           return window.open("data:text/csv;charset=latin1," + escape(output));
         }
       });
+      if ($("html.msie7,html.msie8").length) {
+        $("#showGraph").hide();
+        return;
+      }
       icon = $("<span class='graph_btn_icon'>");
       $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
         var cl, cqp, elem, instance, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
