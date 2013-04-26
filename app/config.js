@@ -367,7 +367,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["borgabladet", "sydosterbotten2012", "vastranyland", "abounderrattelser2012", "abounderrattelser2013", "at2012", "ostranyland"]
+	contents : ["borgabladet", "vastranyland", "abounderrattelser2012", "abounderrattelser2013", "at2012", "ostranyland"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -395,6 +395,13 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 	contents : ["pargaskungorelser2011", "pargaskungorelser2012"],
 	description : "Pargas Kungörelser är en regional svenskspråkig tidning i Pargas med omnejd."
 	// http://www.pku.fi
+};
+
+settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
+	title : "Syd-Österbotten",
+	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
+	description : "FNB är Finlands ledande nyhets- och bildbyrå."
+	// http://www.stt.fi/sv
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
@@ -3085,6 +3092,52 @@ settings.corpora.borgabladet = {
 	}
 };
 
+settings.corpora.sydosterbotten2010 = {
+	id : "sydosterbotten2010",
+	title : "Syd-Österbotten 2010",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
+settings.corpora.sydosterbotten2011 = {
+	id : "sydosterbotten2011",
+	title : "Syd-Österbotten 2011",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
 settings.corpora.sydosterbotten2012 = {
 	id : "sydosterbotten2012",
 	title : "Syd-Österbotten 2012",
@@ -3104,6 +3157,29 @@ settings.corpora.sydosterbotten2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.sydosterbotten2013 = {
+	id : "sydosterbotten2013",
+	title : "Syd-Österbotten 2013",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
 	}
 };
 
@@ -3944,7 +4020,4 @@ var fsv_aldrelagar = {
 		text_date : {label : "date"}
 	}
 };
-
-
-
 
