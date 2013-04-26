@@ -330,7 +330,7 @@ settings.corporafolders.bloggmix = {
 
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
-	contents : ["magmakolumner"],
+	contents : ["barnlitteratur", "magmakolumner"],
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
 			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
 			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
@@ -418,6 +418,11 @@ settings.corporafolders.fisk.magazines = {
 settings.corporafolders.fisk.youthnovels = {
 	title : "Ungdomslitteratur",
 	contents : ["ungdomslitteratur"]
+};
+
+settings.corporafolders.protected = {
+	title : "Skyddade korpusar",
+	contents : ["ansokningar", "soexempel", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -544,6 +549,32 @@ settings.corpora.fsbskonlit2000tal = {
 	id : "fsbskonlit2000tal",
 	title : "Skönlitteratur 2000-tal",
 	description : "Material ur skönlitterära verk publicerade under 2000-talet av Söderströms förlag.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "year"},
+		text_publisher : {label : "publisher"}
+	}
+};
+
+settings.corpora.barnlitteratur = {
+	id : "barnlitteratur",
+	title : "Barnlitteratur 2000–",
+	description : "Material ur barnlitterära verk publicerade under 2000-talet.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3482,6 +3513,32 @@ settings.corpora.tisus = {
 	}
 };
 
+settings.corpora.ansokningar = {
+	id : "ansokningar",
+	title : "Ansökningar",
+	description : "",
+	limited_access : true,
+	context : settings.defaultContext,
+	within : settings.defaultWithin,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_id : {label : "id"},
+		text_gender : {label : "gender"},
+		text_birthyear : {label : "birthyear"}
+	}
+};
+
 settings.corpora.twitter = {
 	id : "twitter",
 	title : "Twittermix",
@@ -3531,7 +3588,8 @@ settings.corpora.twitter = {
 	}
 };
 
-if(isLab)
+if(isLab) {
+settings.corporafolders.protected.contents.splice(1, 0, "gdc");
 settings.corpora.gdc = {
 	id : "gdc",
 	title : "Gothenburg Dialogue Corpus (GDC)",
@@ -3568,7 +3626,8 @@ settings.corpora.gdc = {
 		//"meta_comment" : {label : "comment", type : "set"}
 	}
 };
-if(isLab)
+}
+
 settings.corpora.soexempel = {
 	id : "soexempel",
 	title : "Språkprov SO 2009",
@@ -3604,8 +3663,8 @@ settings.corpora.soexempel = {
  * MISC
  */
 
-// settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
-settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
+settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
+//settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
 
 // label values here represent translation keys.
 settings.arg_groups = {
