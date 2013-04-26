@@ -3096,8 +3096,8 @@ settings.corpora.sydosterbotten2010 = {
 	id : "sydosterbotten2010",
 	title : "Syd-Österbotten 2010",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -3119,8 +3119,8 @@ settings.corpora.sydosterbotten2011 = {
 	id : "sydosterbotten2011",
 	title : "Syd-Österbotten 2011",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -3164,8 +3164,8 @@ settings.corpora.sydosterbotten2013 = {
 	id : "sydosterbotten2013",
 	title : "Syd-Österbotten 2013",
 	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -4020,4 +4020,3 @@ var fsv_aldrelagar = {
 		text_date : {label : "date"}
 	}
 };
-
