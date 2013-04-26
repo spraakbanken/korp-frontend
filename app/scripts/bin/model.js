@@ -551,26 +551,29 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, dataset, totalRow, wordArray;
+          var columns, dataset, minWidth, totalRow, wordArray;
 
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
             return;
           }
+          minWidth = 100;
           columns = [
             {
               id: "hit",
               name: "stats_hit",
               field: "hit_value",
               sortable: true,
-              formatter: settings.reduce_stringify(reduceval)
+              formatter: settings.reduce_stringify(reduceval),
+              minWidth: minWidth
             }, {
               id: "total",
               name: "stats_total",
               field: "total_value",
               sortable: true,
-              formatter: self.valueFormatter
+              formatter: self.valueFormatter,
+              minWidth: minWidth
             }
           ];
           $.each($.keys(data.corpora).sort(), function(i, corpus) {
@@ -579,7 +582,8 @@
               name: settings.corpora[corpus.toLowerCase()].title,
               field: corpus + "_value",
               sortable: true,
-              formatter: self.valueFormatter
+              formatter: self.valueFormatter,
+              minWidth: minWidth
             });
           });
           totalRow = {

@@ -347,7 +347,7 @@ class view.KWICResults extends BaseResults
         opts.sort = $(".sort_select").val()
         opts.random_seed = $.bbq.getState("random_seed") if opts.sort is "random"
         # opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
-        opts.context = settings.corpusListing.getContextQueryString()
+        opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
         return opts
 
     makeRequest: (page_num) ->
@@ -935,7 +935,7 @@ class view.StatsResults extends BaseResults
         self = this
         @gridData = null
         @proxy = statsProxy
-        $(".arcDiagramPicture").on "click", ->
+        @$result.on "click", ".arcDiagramPicture", ->
             parts = $(this).attr("id").split("__")
 
             if parts[1] != "Σ"

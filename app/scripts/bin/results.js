@@ -423,7 +423,9 @@
       if (opts.sort === "random") {
         opts.random_seed = $.bbq.getState("random_seed");
       }
-      opts.context = settings.corpusListing.getContextQueryString();
+      if (this.$result.is(".reading_mode") || currentMode === "parallel") {
+        opts.context = settings.corpusListing.getContextQueryString();
+      }
       return opts;
     };
 
@@ -1157,7 +1159,7 @@
       self = this;
       this.gridData = null;
       this.proxy = statsProxy;
-      $(".arcDiagramPicture").on("click", function() {
+      this.$result.on("click", ".arcDiagramPicture", function() {
         var parts;
 
         parts = $(this).attr("id").split("__");

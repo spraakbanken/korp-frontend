@@ -300,6 +300,7 @@ settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
 	lang : "swe",
 	linked_to : ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
+	pivot : true,
 	title: "Europarl svenska",
 	context: context.defaultAligned,
 	within: {

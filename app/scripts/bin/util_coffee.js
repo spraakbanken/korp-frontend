@@ -324,14 +324,19 @@
       struct = this.getLinksFromLangs(currentLangList);
       output = [];
       $.each(struct, function(i, corps) {
-        var mainId, other, pair;
+        var mainId, mainIsPivot, other, pair;
 
         mainId = corps[0].id.toUpperCase();
+        mainIsPivot = !!corps[0].pivot;
         other = corps.slice(1);
         pair = _.map(other, function(corp) {
           var a;
 
-          a = _.keys(corp[attr])[0];
+          if (mainIsPivot) {
+            a = _.keys(corp[attr])[0];
+          } else {
+            a = _.keys(corps[0][attr])[0];
+          }
           return mainId + "|" + corp.id.toUpperCase() + ":" + a;
         });
         return output.push(pair);

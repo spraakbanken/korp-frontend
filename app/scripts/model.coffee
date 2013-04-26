@@ -425,19 +425,21 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", $.dump(data.ERROR)
                     statsResults.resultError data
                     return
-
+                minWidth = 100
                 columns = [
                     id: "hit"
                     name: "stats_hit"
                     field: "hit_value"
                     sortable: true
                     formatter: settings.reduce_stringify(reduceval)
+                    minWidth : minWidth
                 ,
                     id: "total"
                     name: "stats_total"
                     field: "total_value"
                     sortable: true
                     formatter: self.valueFormatter
+                    minWidth : minWidth
                 ]
                 $.each $.keys(data.corpora).sort(), (i, corpus) ->
                     columns.push
@@ -446,6 +448,7 @@ class model.StatsProxy extends BaseProxy
                         field: corpus + "_value"
                         sortable: true
                         formatter: self.valueFormatter
+                        minWidth : minWidth
 
 
                 totalRow =

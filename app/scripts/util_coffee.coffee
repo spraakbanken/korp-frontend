@@ -216,46 +216,6 @@ class window.ParallelCorpusListing extends CorpusListing
 
         output
 
-    # getCorporaByLangs : (currentLangList) ->
-    #     # remove corpora for lang not used
-    #     all = @getEnabledByLang(currentLangList[0], true)
-    #     enabledForLangs = _.filter all, (corp) ->
-    #         corp.lang in currentLangList
-    #     window.enabledForLangs = enabledForLangs
-    #     c.log "enabledForLangs", enabledForLangs
-
-    #     # joinCorps = (corps) ->
-    #     #     _(corps)
-    #     #         .pluck("id")
-    #     #         .join("")
-
-
-    #     if currentLangList.length is 1
-    #     # if false
-    #         output = for child in enabledForLangs
-    #             [child].concat @getLinked child
-
-    #         return output
-    #     else
-    #         output = []
-    #         for corp in enabledForLangs
-    #             linked = @getLinked corp, true
-
-    #             linked = _.filter linked, (item) =>
-    #                 item.lang in currentLangList    
-
-    #             linked.sort (a, b) ->
-    #                 (_.indexOf currentLangList, a.lang ) - (_.indexOf currentLangList, b.lang)
-
-    #             if _.union(linked, output...).length == linked.length
-    #                 output.push linked
-
-
-    #             # if joinCorps(linked) not in (_.map output, joinCorps)
-    #             #     output.push linked
-
-
-    #         return output
 
     getAttributeQuery : (attr) ->
       
@@ -269,10 +229,15 @@ class window.ParallelCorpusListing extends CorpusListing
       $.each struct, (i, corps) ->
 
         mainId = corps[0].id.toUpperCase()
+        mainIsPivot = !!corps[0].pivot
+
         other = corps.slice(1)
 
         pair = _.map(other, (corp) ->
-            a = _.keys(corp[attr])[0]
+            if mainIsPivot
+                a = _.keys(corp[attr])[0]
+            else
+                a = _.keys(corps[0][attr])[0]
             mainId + "|" + corp.id.toUpperCase() + ":" + a
         )
         output.push pair
