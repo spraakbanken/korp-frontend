@@ -399,7 +399,7 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
 	title : "Syd-Österbotten",
-	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
+	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012"],
 	description : "FNB är Finlands ledande nyhets- och bildbyrå."
 	// http://www.stt.fi/sv
 };
@@ -3157,28 +3157,6 @@ settings.corpora.sydosterbotten2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	}
-};
-
-settings.corpora.sydosterbotten2013 = {
-	id : "sydosterbotten2013",
-	title : "Syd-Österbotten 2013",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
 	    text_date : {label : "date"}
 	}
 };
@@ -3364,6 +3342,7 @@ settings.corpora.osterbottenstidning2011 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	    text_date : {label : "date"}
 	}
 };
 
@@ -3386,6 +3365,7 @@ settings.corpora.osterbottenstidning2012 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	    text_date : {label : "date"}
 	}
 };
 
@@ -4020,3 +4000,7 @@ var fsv_aldrelagar = {
 		text_date : {label : "date"}
 	}
 };
+
+
+
+
