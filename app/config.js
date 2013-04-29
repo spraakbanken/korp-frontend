@@ -429,7 +429,7 @@ settings.corporafolders.fisk.youthnovels = {
 
 settings.corporafolders.protected = {
 	title : "Skyddade korpusar",
-	contents : ["ansokningar", "soexempel", "tisus"]
+	contents : ["ansokningar", "gdc", "soexempel", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -3645,7 +3645,7 @@ settings.corpora.twitter = {
 };
 
 if(isLab) {
-settings.corporafolders.protected.contents.splice(1, 0, "gdc");
+//settings.corporafolders.protected.contents.splice(1, 0, "gdc");
 settings.corpora.gdc = {
 	id : "gdc",
 	title : "Gothenburg Dialogue Corpus (GDC)",
