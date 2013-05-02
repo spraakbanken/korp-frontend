@@ -89,18 +89,18 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-          dist: {
-            files: [{
-              dot: true,
-              src: [
-                '.tmp',
-                '<%= yeoman.dist %>',
-                // '!<%= yeoman.dist %>/.git*'
-              ]
-            }]
-          },
-          server: '.tmp'
-        },
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '<%= yeoman.dist %>',
+            // '!<%= yeoman.dist %>/.git*'
+          ]
+        }]
+      },
+      server: '.tmp'
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -117,11 +117,6 @@ module.exports = function (grunt) {
       }
     },
     coffee: {
-      // dist: {
-      //   files: {
-      //     '.tmp/scripts/coffee.js': '<%= yeoman.app %>/scripts/*.coffee'
-      //   }
-      // },
       dist: {
           expand: true,
           cwd: '<%= yeoman.app %>/scripts',
