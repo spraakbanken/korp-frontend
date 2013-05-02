@@ -571,7 +571,12 @@ ExtendedToken =
 
     insertOr: (usePrev) ->
         self = this
-        arg_select = @makeSelect()
+        try
+            arg_select = @makeSelect()
+        catch e
+            c.log "error", e
+            return
+
         arg_value = @makeWordArgValue()
         arg_value.attr "data-placeholder", "any_word_placeholder"
         link_mod = $("<span class='val_mod sensitive'>").text("Aa").click(->

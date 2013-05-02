@@ -1328,12 +1328,12 @@
       $.when(timeDeferred).then(function() {
         var cl;
 
-        $("#showGraph").button("enable");
+        $("#showGraph:visible").button("enable");
         cl = settings.corpusListing.subsetFactory(_this.proxy.prevParams.corpus.split(","));
         if ((_.filter(cl.getTimeInterval(), function(item) {
           return item != null;
         })).length < 2) {
-          return $("#showGraph").button("disable");
+          return $("#showGraph:visible").button("disable");
         }
       });
       return this.hidePreloader();

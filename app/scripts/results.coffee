@@ -1084,11 +1084,11 @@ class view.StatsResults extends BaseResults
         $(".slick-row:first input", @$result).click()
 
         $.when(timeDeferred).then =>
-            $("#showGraph").button("enable")
+            $("#showGraph:visible").button("enable")
             cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
 
             if (_.filter cl.getTimeInterval(), (item) -> item?).length < 2
-                $("#showGraph").button("disable")
+                $("#showGraph:visible").button("disable")
 
         @hidePreloader()
 

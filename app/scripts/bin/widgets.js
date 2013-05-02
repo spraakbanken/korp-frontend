@@ -642,10 +642,16 @@
       return self._trigger("change");
     },
     insertOr: function(usePrev) {
-      var arg_select, arg_value, link_mod, orElem, self;
+      var arg_select, arg_value, e, link_mod, orElem, self;
 
       self = this;
-      arg_select = this.makeSelect();
+      try {
+        arg_select = this.makeSelect();
+      } catch (_error) {
+        e = _error;
+        c.log("error", e);
+        return;
+      }
       arg_value = this.makeWordArgValue();
       arg_value.attr("data-placeholder", "any_word_placeholder");
       link_mod = $("<span class='val_mod sensitive'>").text("Aa").click(function() {
