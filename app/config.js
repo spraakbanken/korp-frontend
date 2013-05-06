@@ -3644,8 +3644,6 @@ settings.corpora.twitter = {
 	}
 };
 
-if(isLab) {
-//settings.corporafolders.protected.contents.splice(1, 0, "gdc");
 settings.corpora.gdc = {
 	id : "gdc",
 	title : "Gothenburg Dialogue Corpus (GDC)",
@@ -3682,7 +3680,6 @@ settings.corpora.gdc = {
 		//"meta_comment" : {label : "comment", type : "set"}
 	}
 };
-}
 
 settings.corpora.soexempel = {
 	id : "soexempel",
