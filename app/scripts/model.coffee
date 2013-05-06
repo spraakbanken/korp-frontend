@@ -574,10 +574,12 @@ class model.TimeProxy extends BaseProxy
 
         dfd
 
+
+
     compilePlotArray: (dataStruct) ->
         output = []
         $.each dataStruct, (key, val) ->
-            return  if not key or not val
+            return if not key or not val
             output.push [parseInt(key), val]
 
         output = output.sort((a, b) ->
@@ -586,21 +588,23 @@ class model.TimeProxy extends BaseProxy
         output
 
     expandTimeStruct: (struct) ->
+        # c.log "struct", struct
         years = _.map(_.pairs(_.omit(struct, "")), (item) ->
             Number item[0]
         )
-        minYear = Math.min.apply(null, years)
-        maxYear = Math.max.apply(null, years)
-        output = {} #, prevYear = minYear
-        prevVal = struct[minYear]
-        y = minYear
+        unless years.length then return
+        minYear = _.min years
+        maxYear = _.max years
 
-        while y < maxYear
+        # while y < maxYear
+        # c.log "years", minYear, maxYear
+        for y in [minYear..maxYear]
             thisVal = struct[y]
-            unless typeof thisVal is "undefined"
-                struct[y] = thisVal
+            if typeof thisVal is "undefined"
+                struct[y] = prevVal
+            else
                 prevVal = thisVal
-            y++
+        # c.log "after", struct
 
 
 class model.GraphProxy extends BaseProxy

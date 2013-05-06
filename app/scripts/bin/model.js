@@ -758,24 +758,24 @@
     };
 
     TimeProxy.prototype.expandTimeStruct = function(struct) {
-      var maxYear, minYear, output, prevVal, thisVal, y, years, _results;
+      var maxYear, minYear, prevVal, thisVal, y, years, _i, _results;
 
       years = _.map(_.pairs(_.omit(struct, "")), function(item) {
         return Number(item[0]);
       });
-      minYear = Math.min.apply(null, years);
-      maxYear = Math.max.apply(null, years);
-      output = {};
-      prevVal = struct[minYear];
-      y = minYear;
+      if (!years.length) {
+        return;
+      }
+      minYear = _.min(years);
+      maxYear = _.max(years);
       _results = [];
-      while (y < maxYear) {
+      for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
         thisVal = struct[y];
-        if (typeof thisVal !== "undefined") {
-          struct[y] = thisVal;
-          prevVal = thisVal;
+        if (typeof thisVal === "undefined") {
+          _results.push(struct[y] = prevVal);
+        } else {
+          _results.push(prevVal = thisVal);
         }
-        _results.push(y++);
       }
       return _results;
     };

@@ -502,6 +502,8 @@ initTimeGraph = ->
 
 
             timestruct = timeProxy.compilePlotArray(output)
+            # c.log "output", output
+            # c.log "timestruct", timestruct
             endyear = all_timestruct.slice(-1)[0][0]
             yeardiff = endyear - all_timestruct[0][0]
             restyear = endyear + (yeardiff / 25)

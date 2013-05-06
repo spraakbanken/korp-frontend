@@ -74,7 +74,7 @@
 							}, function(scArr){
 								var transformedJs = scArr[0];
 								
-								$.jStorage.set("compiled_scxml_" + $.trim(window.location.pathname, "/"), $.toJSON({data : transformedJs, time : $.now()}));
+								$.jStorage.set("compiled_scxml_" + $.trim(window.location.pathname, "/"), JSON.stringify({data : transformedJs, time : $.now()}));
 								
 								c.log("statechart compiled and started: ");
 								c.log("compile time", new Date().getTime() - t );
