@@ -399,21 +399,21 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
 	title : "Syd-Österbotten",
-	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012"],
+	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
 	description : "FNB är Finlands ledande nyhets- och bildbyrå."
 	// http://www.stt.fi/sv
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
 	title : "Vasabladet",
-	contents : ["vasabladet1991", "vasabladet2012"],
+	contents : ["vasabladet1991", "vasabladet2012", "vasabladet2013"],
 	description : "Vasabladet är en regional svenskspråkig dagstidning i Österbotten."
 	//description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
 settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 	title : "Österbottens tidning",
-	contents : ["osterbottenstidning2011", "osterbottenstidning2012"],
+	contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013"],
 	description : ""
 };
 
@@ -3161,6 +3161,29 @@ settings.corpora.sydosterbotten2012 = {
 	}
 };
 
+settings.corpora.sydosterbotten2013 = {
+	id : "sydosterbotten2013",
+	title : "Syd-Österbotten 2013",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
 settings.corpora.vastranyland = {
 	id : "vastranyland",
 	title : "Västra Nyland 2012–2013",
@@ -3323,6 +3346,29 @@ settings.corpora.vasabladet2012 = {
 	}
 };
 
+settings.corpora.vasabladet2013 = {
+	id : "vasabladet2013",
+	title : "Vasabladet 2013",
+	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
 settings.corpora.osterbottenstidning2011 = {
 	id : "osterbottenstidning2011",
 	title : "Österbottens tidning 2011",
@@ -3352,6 +3398,29 @@ settings.corpora.osterbottenstidning2012 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_date : {label : "date"}
+	}
+};
+
+settings.corpora.osterbottenstidning2013 = {
+	id : "osterbottenstidning2013",
+	title : "Österbottens tidning 2013",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
