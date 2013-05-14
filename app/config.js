@@ -429,7 +429,7 @@ settings.corporafolders.fisk.youthnovels = {
 
 settings.corporafolders.protected = {
 	title : "Skyddade korpusar",
-	contents : ["ansokningar", "gdc", "soexempel", "tisus"]
+	contents : ["ansokningar", "cefr", "gdc", "soexempel", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -3661,6 +3661,32 @@ settings.corpora.ansokningar = {
 		text_id : {label : "id"},
 		text_gender : {label : "gender"},
 		text_birthyear : {label : "birthyear"}
+	}
+};
+
+settings.corpora.cefr = {
+	id : "cefr",
+	title : "CEFR",
+	description : "",
+	limited_access : true,
+	context : settings.spContext,
+	within : settings.spWithin,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_date : {label : "date"}
 	}
 };
 
