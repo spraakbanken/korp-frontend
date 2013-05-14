@@ -102,9 +102,10 @@ view.updateReduceSelect = ->
                 label: "word_insensitive"
     ,
         word_attr: settings.corpusListing.getCurrentAttributes()
-        sentence_attr: $.grepObj(settings.corpusListing.getStructAttrs(), (val, key) ->
-            return false  if val.displayType is "date_interval"
-            val.disabled isnt true
+        sentence_attr: $.grepObj(settings.corpusListing.getStructAttrsIntersection(), (val, key) ->
+            return false if val.displayType is "date_interval"
+            return true
+            # val.disabled isnt true
         )
     )
     prevVal = $("#reduceSelect select").val()

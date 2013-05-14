@@ -23,8 +23,17 @@
     var cl;
 
     cl = settings.corpusListing;
-    return it('has the same number of corpora as the config', function() {
+    it('has the same number of corpora as the config', function() {
       return expect(cl.corpora.length).toEqual(_.keys(settings.corpora).length);
+    });
+    it('gives no struct attrs intersection with all corpora chosen', function() {
+      return expect(_.isEmpty(cl.getStructAttrsIntersection())).toBe(true);
+    });
+    return it('gives a common attribute from vivill and gp2012', function() {
+      var attrs;
+
+      attrs = cl.subsetFactory(["romi", "romii"]).getStructAttrsIntersection();
+      return expect("text_title" in attrs && "text_author" in attrs).toBe(true);
     });
   });
 

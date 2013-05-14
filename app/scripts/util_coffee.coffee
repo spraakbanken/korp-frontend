@@ -34,13 +34,13 @@ class window.CorpusListing
 
     # takes an array of mapping objs and returns their intersection
     _mapping_intersection: (mappingArray) ->
-        _.reduce mappingArray, ((a, b) ->
-            output = {}
-            $.each b, (key, value) ->
-                output[key] = value  if b[key]?
 
-            output
-        ), {}
+        _.reduce mappingArray, ((a, b) ->
+            keys_intersect = _.intersection (_.keys a), (_.keys b)
+            to_mergea = _.pick a, keys_intersect...
+            to_mergeb = _.pick b, keys_intersect...
+            _.merge {}, to_mergea, to_mergeb
+        )
 
     _mapping_union: (mappingArray) ->
         _.reduce mappingArray, ((a, b) ->
@@ -53,14 +53,26 @@ class window.CorpusListing
         )
         @_invalidateAttrs attrs
 
+    getStructAttrsIntersection: () ->
+        attrs = @mapSelectedCorpora((corpus) ->
+            for key, value of corpus.struct_attributes
+                value["isStructAttr"] = true
+
+            corpus.struct_attributes
+        )
+        @_mapping_intersection attrs
+
+    
     getStructAttrs: ->
         attrs = @mapSelectedCorpora((corpus) ->
-            $.each corpus.struct_attributes, (key, value) ->
+            for key, value of corpus.struct_attributes
                 value["isStructAttr"] = true
 
             corpus.struct_attributes
         )
         rest = @_invalidateAttrs(attrs)
+
+        # rest = attrs
 
         # fix for combining dataset values
         withDataset = _.filter(_.pairs(rest), (item) ->

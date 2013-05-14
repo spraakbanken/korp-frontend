@@ -2207,3 +2207,18 @@ line.tick {
 .popupchecks .header {
   white-space: nowrap;
 }
+
+/* line 1769, styles.scss */
+.ui-button-text-only .ui-button-text {
+  padding: 0;
+}
+
+/* line 1772, styles.scss */
+.ui-button-text-only > .ui-button-text {
+  padding: 0.4em 1em;
+}
+
+/* line 1775, styles.scss */
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
+  padding: 0.4em 1em 0.4em 2.1em;
+}

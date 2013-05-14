@@ -395,6 +395,9 @@ class model.StatsProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
+            # split :   # lista, csv, av attribut som sammanställs
+
+
 
         if $("#reduceSelect select").val() is "word_insensitive"
             $.extend data,

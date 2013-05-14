@@ -141,11 +141,11 @@
       }
     }, {
       word_attr: settings.corpusListing.getCurrentAttributes(),
-      sentence_attr: $.grepObj(settings.corpusListing.getStructAttrs(), function(val, key) {
+      sentence_attr: $.grepObj(settings.corpusListing.getStructAttrsIntersection(), function(val, key) {
         if (val.displayType === "date_interval") {
           return false;
         }
-        return val.disabled !== true;
+        return true;
       })
     });
     prevVal = $("#reduceSelect select").val();

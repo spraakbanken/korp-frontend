@@ -37,4 +37,10 @@ describe "settings.corpusListing", () ->
     it 'has the same number of corpora as the config', () ->
         expect(cl.corpora.length).toEqual(_.keys(settings.corpora).length)
 
-    # it 
+    it 'gives no struct attrs intersection with all corpora chosen', () ->
+        expect(_.isEmpty cl.getStructAttrsIntersection()).toBe(true)
+
+    it 'gives a common attribute from vivill and gp2012', () ->
+        attrs = cl.subsetFactory(["romi", "romii"]).getStructAttrsIntersection()
+        expect("text_title" of attrs and "text_author" of attrs).toBe(true)
+

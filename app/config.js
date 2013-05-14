@@ -3834,7 +3834,7 @@ settings.reduce_stringify = function(type) {
 					{
 					"class" : "link",
 					"data-query" : encodeURIComponent(query),
-					"data-corpora" : $.toJSON(corpora)
+					"data-corpora" : JSON.stringify(corpora)
 					}).text(value).outerHTML();
 			return appendDiagram(output, corpora, value);
 
@@ -3848,7 +3848,7 @@ settings.reduce_stringify = function(type) {
 				return $.format('[pos="%s"]', item);
 			}).join(" ");
 			output =  $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
-					[query, $.toJSON(corpora), value, util.getLocaleString("pos_" + value)]);
+					[query, JSON.stringify(corpora), value, util.getLocaleString("pos_" + value)]);
 			return appendDiagram(output, corpora, value);
 		};
 	case "prefix":
@@ -3889,7 +3889,7 @@ settings.reduce_stringify = function(type) {
 				return $.format('[deprel="%s"]', item);
 			}).join(" ");
 			output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
-					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
+					[query, JSON.stringify(corpora),"deprel_" + value, util.getLocaleString("deprel_" + value)]);
 			return appendDiagram(output, corpora, value);
 
 		};

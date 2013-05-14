@@ -1018,7 +1018,7 @@ class view.StatsResults extends BaseResults
                 labelMapping[cqp] = $(elem).next().text()
 
             instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
-        $("#showGraph .ui-button-text").localeKey("show_diagram")
+        $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
 
         paper = new Raphael(icon.get(0), 33, 33)
         paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z")
@@ -1168,7 +1168,7 @@ class view.GraphResults extends BaseResults
                         <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
                         <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
                     </div>
-                    <label for="smoothing_switch" class="smoothing_label" rel="localize[smoothing]">Utjämna</label> <input type="checkbox" id="smoothing_switch">
+                    <label for="smoothing_switch" class="smoothing_label" >Utjämna</label> <input type="checkbox" id="smoothing_switch" class="smoothing_switch">
                     <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
                 </div>
                 <div class="legend"></div>
@@ -1396,7 +1396,8 @@ class view.GraphResults extends BaseResults
 
             # smoother.setScale(3)
             # TODO: use class to live with other tabs
-            $("#smoothing_switch", @$result).button().change ->
+            c.log $(".smoothing_switch", @$result)
+            $(".smoothing_switch", @$result).button().change ->
                 if $(this).is(":checked")
                     smoother.setScale(3)
                     graph.interpolation = "cardinal"
@@ -1411,7 +1412,7 @@ class view.GraphResults extends BaseResults
                     if cls.match(/^form-/) then @$result.removeClass(cls)
                 @$result.addClass("form-" +val)
 
-                $("#smoothing_switch", @$result).button("enable")
+                $(".smoothing_switch", @$result).button("enable")
                 if val == "bar"
                     if $(".legend .line", @$result).length > 1
                         $(".legend li:last:not(.disabled) .action", @$result).click()
@@ -1419,15 +1420,15 @@ class view.GraphResults extends BaseResults
                         if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
                             $(".legend li:first .action", @$result).click()
 
-                    $("#smoothing_switch:checked", @$result).click()
-                    $("#smoothing_switch", @$result).button("disable")
+                    $(".smoothing_switch:checked", @$result).click()
+                    $(".smoothing_switch", @$result).button("disable")
 
 
                 graph.setRenderer val
                 graph.render()
-
-            $(".form_switch .ui-button:first .ui-button-text").localeKey("line")
-            $(".form_switch .ui-button:last .ui-button-text").localeKey("bar")
+            $(".smoothing_label .ui-button-text", @$result).localeKey("smoothing")
+            $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
+            $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("bar")
             legend = new Rickshaw.Graph.Legend
                 element: $(".legend", @$result).get(0)
                 graph: graph

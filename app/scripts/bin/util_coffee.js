@@ -46,16 +46,13 @@
 
     CorpusListing.prototype._mapping_intersection = function(mappingArray) {
       return _.reduce(mappingArray, (function(a, b) {
-        var output;
+        var keys_intersect, to_mergea, to_mergeb;
 
-        output = {};
-        $.each(b, function(key, value) {
-          if (b[key] != null) {
-            return output[key] = value;
-          }
-        });
-        return output;
-      }), {});
+        keys_intersect = _.intersection(_.keys(a), _.keys(b));
+        to_mergea = _.pick.apply(_, [a].concat(__slice.call(keys_intersect)));
+        to_mergeb = _.pick.apply(_, [b].concat(__slice.call(keys_intersect)));
+        return _.merge({}, to_mergea, to_mergeb);
+      }));
     };
 
     CorpusListing.prototype._mapping_union = function(mappingArray) {
@@ -73,13 +70,33 @@
       return this._invalidateAttrs(attrs);
     };
 
+    CorpusListing.prototype.getStructAttrsIntersection = function() {
+      var attrs;
+
+      attrs = this.mapSelectedCorpora(function(corpus) {
+        var key, value, _ref;
+
+        _ref = corpus.struct_attributes;
+        for (key in _ref) {
+          value = _ref[key];
+          value["isStructAttr"] = true;
+        }
+        return corpus.struct_attributes;
+      });
+      return this._mapping_intersection(attrs);
+    };
+
     CorpusListing.prototype.getStructAttrs = function() {
       var attrs, rest, withDataset;
 
       attrs = this.mapSelectedCorpora(function(corpus) {
-        $.each(corpus.struct_attributes, function(key, value) {
-          return value["isStructAttr"] = true;
-        });
+        var key, value, _ref;
+
+        _ref = corpus.struct_attributes;
+        for (key in _ref) {
+          value = _ref[key];
+          value["isStructAttr"] = true;
+        }
         return corpus.struct_attributes;
       });
       rest = this._invalidateAttrs(attrs);
