@@ -1678,7 +1678,7 @@
         });
         graph.render();
         $(window).on("resize", _.throttle(function() {
-          if (this.$result.is(":visible")) {
+          if (_this.$result.is(":visible")) {
             graph.setSize();
             return graph.render();
           }

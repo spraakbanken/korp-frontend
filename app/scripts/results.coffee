@@ -1393,7 +1393,7 @@ class view.GraphResults extends BaseResults
                 min : "auto"
             graph.render()
 
-            $(window).on "resize", _.throttle(() ->
+            $(window).on "resize", _.throttle(() =>
                 if @$result.is(":visible")
                     graph.setSize()
                     graph.render()
