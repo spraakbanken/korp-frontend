@@ -1320,7 +1320,7 @@
         grid.updateRowCount();
         return grid.render();
       });
-      grid.onHeaderRendered.subscribe(function(e, args) {
+      grid.onHeaderCellRendered.subscribe(function(e, args) {
         return refreshHeaders();
       });
       refreshHeaders();

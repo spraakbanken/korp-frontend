@@ -1075,7 +1075,7 @@ class view.StatsResults extends BaseResults
             grid.updateRowCount()
             grid.render()
 
-        grid.onHeaderRendered.subscribe (e, args) ->
+        grid.onHeaderCellRendered.subscribe (e, args) ->
             refreshHeaders()
 
         # remove first checkbox
