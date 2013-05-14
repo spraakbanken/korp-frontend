@@ -119,7 +119,7 @@ settings.corpora["lag1800"] = {
     morf : 'saldom|dalinm',
 	id : "lag1800",
 	title : "Lagar från 1800-talet",
-	description : "Östgötalagen 1895, Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
+	description : "Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
@@ -137,7 +137,6 @@ settings.corpora["lag1800"] = {
 			displayType : "select",
 			dataset : [
 				"Författningssamling 1800 Låssa kyrkas arkiv",
-				"Östgötalagen",
 				"Regeringsformen 1809 "
 			],
             opts : settings.liteOptions
