@@ -961,7 +961,7 @@
       args = {};
       $(".or_container", andSection).each(function(i, item) {
         return $(this).find(".or_arg").each(function() {
-          var case_sens, data, opt, type, value;
+          var case_sens, data, opt, type, value, _ref;
 
           type = $(this).find(".arg_type").val();
           data = $(this).find(".arg_type :selected").data("dataProvider");
@@ -971,7 +971,7 @@
           value = $(this).find(".arg_value").val();
           opt = $(this).find(".arg_opts").val();
           case_sens = ($(this).find(".val_mod.sensitive").length === 0 ? " %c" : "");
-          if (data.displayType === "autocomplete") {
+          if ((_ref = data.displayType) === "autocomplete" || _ref === "date_interval") {
             value = null;
           }
           if (!args[type]) {
@@ -988,7 +988,7 @@
       inner_query = [];
       $.each(args, function(type, valueArray) {
         return $.each(valueArray, function(i, obj) {
-          var argFunc, defaultArgsFunc;
+          var defaultArgsFunc;
 
           defaultArgsFunc = function(s, op) {
             var expandToNonStrict, formatter, getOp, not_operator, operator, prefix, stringify, value;
@@ -1025,8 +1025,13 @@
             }
             return stringify(value);
           };
-          argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc;
-          return inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
+          return (function(type, obj, defaultArgsFunc) {
+            var argFunc;
+
+            c.log("type, obj.value", type, obj);
+            argFunc = settings.getTransformFunc(type, obj.value, obj.opt) || defaultArgsFunc;
+            return inner_query.push(argFunc(obj.value, obj.opt || settings.defaultOptions));
+          })(type, obj, defaultArgsFunc);
         });
       });
       if (inner_query.length > 1) {

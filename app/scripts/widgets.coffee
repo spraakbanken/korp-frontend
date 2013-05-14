@@ -856,7 +856,7 @@ ExtendedToken =
                 value = $(this).find(".arg_value").val()
                 opt = $(this).find(".arg_opts").val()
                 case_sens = (if $(this).find(".val_mod.sensitive").length is 0 then " %c" else "")
-                value = null if data.displayType is "autocomplete"
+                value = null if data.displayType in ["autocomplete", "date_interval"]
                 args[type] = [] unless args[type]
                 args[type].push
                     data: data
@@ -897,8 +897,10 @@ ExtendedToken =
 
                         return expandToNonStrict(value)  if expand
                     stringify value
-                argFunc = settings.getTransformFunc(type, obj.value, obj.opt) or defaultArgsFunc
-                inner_query.push argFunc(obj.value, obj.opt or settings.defaultOptions)
+                do (type, obj, defaultArgsFunc) ->
+                    c.log "type, obj.value", type, obj
+                    argFunc = settings.getTransformFunc(type, obj.value, obj.opt) or defaultArgsFunc
+                    inner_query.push argFunc(obj.value, obj.opt or settings.defaultOptions)
 
         # c.log "inner_query", inner_query, expand
         if inner_query.length > 1

@@ -2198,27 +2198,33 @@ line.tick {
   border: none !important;
 }
 
-/* line 1761, styles.scss */
+/* line 1760, styles.scss */
+.zoom_slider {
+  margin-top: 30px;
+  width: 100% !important;
+}
+
+/* line 1765, styles.scss */
 #main > #msd_popup {
   display: none !important;
 }
 
-/* line 1765, styles.scss */
+/* line 1769, styles.scss */
 .popupchecks .header {
   white-space: nowrap;
 }
 
-/* line 1769, styles.scss */
+/* line 1773, styles.scss */
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-/* line 1772, styles.scss */
+/* line 1776, styles.scss */
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-/* line 1775, styles.scss */
+/* line 1779, styles.scss */
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }

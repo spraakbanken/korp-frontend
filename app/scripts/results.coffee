@@ -1175,6 +1175,7 @@ class view.GraphResults extends BaseResults
                 <div style="clear:both;"></div>
             </div>
             <div class="chart"></div>
+            <div class="zoom_slider"></div>
         """
             # Smoothing:
             # <div class="smoother"></div>
@@ -1301,22 +1302,23 @@ class view.GraphResults extends BaseResults
 
 
     hideNthTick : (graphDiv) ->
-        $(".x_tick .title", graphDiv).hide()
+        $(".x_tick .title:visible", graphDiv).hide()
         .filter((n) ->
             return n % 2 == 0
             # return Number($(this).text()) % 5 == 0
         ).show()
 
     updateTicks : () ->
-        firstTick = $(".title:nth(0)", $(".chart", @$result))
-        # while Number(firstTick.text()) % 5 != 0
-        #     firstTick = firstTick.next()
+        ticks = $(".chart .title:visible", @$result)
+        firstTick = ticks.eq(0)
+        secondTick = ticks.eq(1)
 
-        secondTick = $(".title:nth(1)", $(".chart", @$result))
-        if not firstTick.length then return
-        c.log "updateTicks", firstTick.offset().left + firstTick.width(), secondTick.offset().left
-        if firstTick.offset().left + firstTick.width() > secondTick.offset().left
+        margin = 5
+        
+        if not firstTick.length or not secondTick.length then return
+        if firstTick.offset().left + firstTick.width() + margin > secondTick.offset().left
             @hideNthTick $(".chart", @$result)
+            @updateTicks()  
 
 
     getNonTime : () ->
@@ -1390,6 +1392,13 @@ class view.GraphResults extends BaseResults
                     right : 0.01
                 min : "auto"
             graph.render()
+
+            $(window).on "resize", _.throttle(() ->
+                if @$result.is(":visible")
+                    graph.setSize()
+                    graph.render()
+            , 200)
+
             smoother = new Rickshaw.Graph.Smoother
                 graph: graph,
                 # element: $('.smoother', @$result)
@@ -1475,6 +1484,9 @@ class view.GraphResults extends BaseResults
                 graph: graph
                 timeUnit: time.unit(timeunit)
 
+            slider = new Rickshaw.Graph.RangeSlider
+                graph: graph,
+                element: $('.zoom_slider', @$result)
 
             old_render = xAxis.render
             xAxis.render = () =>

@@ -1420,7 +1420,7 @@
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector);
       $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
       n = this.$result.index();
-      $(resultSelector).html("<div class=\"graph_header\">\n    <div class=\"progress\">\n        <progress value=\"0\" max=\"100\"></progress>\n    </div>\n    <div class=\"controls\">\n        <div class=\"form_switch\">\n            <input id=\"formswitch" + n + "1\" type=\"radio\" name=\"form_switch\" value=\"line\" checked><label for=\"formswitch" + n + "1\">Linje</label>\n            <input id=\"formswitch" + n + "2\" type=\"radio\" name=\"form_switch\" value=\"bar\"><label for=\"formswitch" + n + "2\">Stapel</label>\n        </div>\n        <label for=\"smoothing_switch\" class=\"smoothing_label\" >Utjämna</label> <input type=\"checkbox\" id=\"smoothing_switch\" class=\"smoothing_switch\">\n        <div class=\"non_time_div\"><span rel=\"localize[non_time_before]\"></span><span class=\"non_time\"></span><span rel=\"localize[non_time_after]\"></div>\n    </div>\n    <div class=\"legend\"></div>\n    <div style=\"clear:both;\"></div>\n</div>\n<div class=\"chart\"></div>");
+      $(resultSelector).html("<div class=\"graph_header\">\n    <div class=\"progress\">\n        <progress value=\"0\" max=\"100\"></progress>\n    </div>\n    <div class=\"controls\">\n        <div class=\"form_switch\">\n            <input id=\"formswitch" + n + "1\" type=\"radio\" name=\"form_switch\" value=\"line\" checked><label for=\"formswitch" + n + "1\">Linje</label>\n            <input id=\"formswitch" + n + "2\" type=\"radio\" name=\"form_switch\" value=\"bar\"><label for=\"formswitch" + n + "2\">Stapel</label>\n        </div>\n        <label for=\"smoothing_switch\" class=\"smoothing_label\" >Utjämna</label> <input type=\"checkbox\" id=\"smoothing_switch\" class=\"smoothing_switch\">\n        <div class=\"non_time_div\"><span rel=\"localize[non_time_before]\"></span><span class=\"non_time\"></span><span rel=\"localize[non_time_after]\"></div>\n    </div>\n    <div class=\"legend\"></div>\n    <div style=\"clear:both;\"></div>\n</div>\n<div class=\"chart\"></div>\n<div class=\"zoom_slider\"></div>");
       this.zoom = "year";
       this.granularity = this.zoom[0];
       this.corpora = null;
@@ -1575,22 +1575,24 @@
     };
 
     GraphResults.prototype.hideNthTick = function(graphDiv) {
-      return $(".x_tick .title", graphDiv).hide().filter(function(n) {
+      return $(".x_tick .title:visible", graphDiv).hide().filter(function(n) {
         return n % 2 === 0;
       }).show();
     };
 
     GraphResults.prototype.updateTicks = function() {
-      var firstTick, secondTick;
+      var firstTick, margin, secondTick, ticks;
 
-      firstTick = $(".title:nth(0)", $(".chart", this.$result));
-      secondTick = $(".title:nth(1)", $(".chart", this.$result));
-      if (!firstTick.length) {
+      ticks = $(".chart .title:visible", this.$result);
+      firstTick = ticks.eq(0);
+      secondTick = ticks.eq(1);
+      margin = 5;
+      if (!firstTick.length || !secondTick.length) {
         return;
       }
-      c.log("updateTicks", firstTick.offset().left + firstTick.width(), secondTick.offset().left);
-      if (firstTick.offset().left + firstTick.width() > secondTick.offset().left) {
-        return this.hideNthTick($(".chart", this.$result));
+      if (firstTick.offset().left + firstTick.width() + margin > secondTick.offset().left) {
+        this.hideNthTick($(".chart", this.$result));
+        return this.updateTicks();
       }
     };
 
@@ -1621,7 +1623,7 @@
         c.log("graph crash");
         return _this.resultError(data);
       }).done(function(data) {
-        var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, smoother, time, timeunit, xAxis, yAxis, _ref;
+        var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, slider, smoother, time, timeunit, xAxis, yAxis, _ref;
 
         c.log("data", data);
         if (data.ERROR) {
@@ -1675,6 +1677,12 @@
           min: "auto"
         });
         graph.render();
+        $(window).on("resize", _.throttle(function() {
+          if (this.$result.is(":visible")) {
+            graph.setSize();
+            return graph.render();
+          }
+        }, 200));
         smoother = new Rickshaw.Graph.Smoother({
           graph: graph
         });
@@ -1767,6 +1775,10 @@
         xAxis = new Rickshaw.Graph.Axis.Time({
           graph: graph,
           timeUnit: time.unit(timeunit)
+        });
+        slider = new Rickshaw.Graph.RangeSlider({
+          graph: graph,
+          element: $('.zoom_slider', _this.$result)
         });
         old_render = xAxis.render;
         xAxis.render = function() {
