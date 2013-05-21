@@ -330,7 +330,7 @@ settings.corporafolders.bloggmix = {
 
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
-	contents : ["barnlitteratur", "magmakolumner"],
+	contents : ["barnlitteratur", "fsbessaistik", "fsbsakprosa"],
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
 			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
 			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
@@ -340,19 +340,9 @@ settings.corporafolders.fisk = {
 			"Institutet för de inhemska språken och Göteborgs universitet."
 };
 
-settings.corporafolders.fisk.blogs = {
-	title : "Bloggtexter",
-	contents : ["fsbbloggvuxna"]
-};
-
-settings.corporafolders.fisk.essayistic = {
-	title : "Essäistisk litteratur",
-	contents : ["fsbessaistik"]
-};
-
-settings.corporafolders.fisk.articles = {
-	title : "Sakprosa",
-	contents : ["fsbsakprosa"]
+settings.corporafolders.fisk.webtexts = {
+	title : "Webbtexter",
+	contents : ["fsbbloggvuxna", "magmakolumner"]
 };
 
 settings.corporafolders.fisk.governmental = {
@@ -367,7 +357,7 @@ settings.corporafolders.fisk.novels = {
 
 settings.corporafolders.fisk.newspapertexts = {
 	title : "Tidningstexter",
-	contents : ["borgabladet", "vastranyland", "abounderrattelser2012", "abounderrattelser2013", "at2012", "ostranyland"]
+	contents : ["borgabladet", "vastranyland", "at2012", "ostranyland"]
 };
 
 settings.corporafolders.fisk.newspapertexts.fnb = {
@@ -400,8 +390,8 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
 	title : "Syd-Österbotten",
 	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
-	description : "FNB är Finlands ledande nyhets- och bildbyrå."
-	// http://www.stt.fi/sv
+	description : "Syd-Österbotten är en regional svenskspråkig dagstidning i Österbotten."
+	// http://www.sydin.fi
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
@@ -411,10 +401,17 @@ settings.corporafolders.fisk.newspapertexts.vasab = {
 	//description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
-settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
-	title : "Österbottens tidning",
-	contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013"],
+settings.corporafolders.fisk.newspapertexts.abounderrattelser = {
+	title : "Åbo Underrättelser",
+	contents : ["abounderrattelser2012", "abounderrattelser2013"],
 	description : ""
+};
+
+settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
+	title : "Österbottens Tidning",
+	contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013"],
+	description : "Österbottens Tidning är en regional svenskspråkig tidning i Österbotten."
+	// http://www.ot.fi
 };
 
 settings.corporafolders.fisk.magazines = {
@@ -498,7 +495,7 @@ settings.corpora.magmakolumner = {
 
 settings.corpora.fsbbloggvuxna = {
 	id : "fsbbloggvuxna",
-	title : "Vuxna bloggare",
+	title : "Bloggtexter",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -529,7 +526,7 @@ settings.corpora.fsbbloggvuxna = {
 settings.corpora["fsbskonlit1960-1999"] = {
 	id : "fsbskonlit1960-1999",
 	title : "Skönlitteratur 1960–1999",
-	description : "Material ur skönlitterära verk publicerade under 1960–1999 av Söderströms förlag.",
+	description : "Material ur skönlitterära verk publicerade under 1960–1999.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -554,8 +551,8 @@ settings.corpora["fsbskonlit1960-1999"] = {
 
 settings.corpora.fsbskonlit2000tal = {
 	id : "fsbskonlit2000tal",
-	title : "Skönlitteratur 2000-tal",
-	description : "Material ur skönlitterära verk publicerade under 2000-talet av Söderströms förlag.",
+	title : "Skönlitteratur 2000–2013",
+	description : "Material ur skönlitterära verk publicerade under 2000–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -580,8 +577,8 @@ settings.corpora.fsbskonlit2000tal = {
 
 settings.corpora.barnlitteratur = {
 	id : "barnlitteratur",
-	title : "Barnlitteratur 2000–",
-	description : "Material ur barnlitterära verk publicerade under 2000-talet.",
+	title : "Barnlitteratur 2000–2013",
+	description : "Material ur barnlitterära verk publicerade under 2000–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -606,8 +603,8 @@ settings.corpora.barnlitteratur = {
 
 settings.corpora.fsbessaistik = {
 	id : "fsbessaistik",
-	title : "Essäistisk litteratur 1970–2011",
-	description : "Material ur essäistiska verk publicerade under 1970–2011 av Söderströms förlag.",
+	title : "Essäistisk litteratur 1992–2013",
+	description : "Material ur essäistiska verk publicerade under 1992–2013",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -632,8 +629,8 @@ settings.corpora.fsbessaistik = {
 
 settings.corpora.fsbsakprosa = {
 	id : "fsbsakprosa",
-	title : "Sakprosa 2006–2011",
-	description : "Material ur facklitterära verk publicerade under 2006–2011 av Söderströms förlag och Svenska litteratursällskapets förlag.",
+	title : "Sakprosa 2006–2013",
+	description : "Material ur facklitterära verk publicerade under 2006–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3371,7 +3368,7 @@ settings.corpora.vasabladet2013 = {
 
 settings.corpora.osterbottenstidning2011 = {
 	id : "osterbottenstidning2011",
-	title : "Österbottens tidning 2011",
+	title : "Österbottens Tidning 2011",
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -3394,7 +3391,7 @@ settings.corpora.osterbottenstidning2011 = {
 
 settings.corpora.osterbottenstidning2012 = {
 	id : "osterbottenstidning2012",
-	title : "Österbottens tidning 2012",
+	title : "Österbottens Tidning 2012",
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -3417,7 +3414,7 @@ settings.corpora.osterbottenstidning2012 = {
 
 settings.corpora.osterbottenstidning2013 = {
 	id : "osterbottenstidning2013",
-	title : "Österbottens tidning 2013",
+	title : "Österbottens Tidning 2013",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
