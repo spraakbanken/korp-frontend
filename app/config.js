@@ -363,15 +363,13 @@ settings.corporafolders.fisk.newspapertexts = {
 settings.corporafolders.fisk.newspapertexts.fnb = {
 	title : "FNB",
 	contents : ["fnb1999", "fnb2000"],
-	description : "FNB är Finlands ledande nyhets- och bildbyrå."
-	// http://www.stt.fi/sv
+	description : "<a href=\"http://www.stt.fi/sv\" target=\"_blank\">FNB</a> är Finlands ledande nyhets- och bildbyrå."
 };
 
 settings.corporafolders.fisk.newspapertexts.hbl = {
 	title : "Hufvudstadsbladet",
 	contents : ["hbl1991", "hbl1998", "hbl1999", "hbl20122013"],
-	description : "Hufvudstadsbladet är den största finlandssvenska dagstidningen i Finland."
-	//description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland."
+	description : "<a href=\"http://www.hbl.fi\" target=\"_blank\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland."
 };
 
 settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
@@ -383,35 +381,32 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 	title : "Pargas kungörelser",
 	contents : ["pargaskungorelser2011", "pargaskungorelser2012"],
-	description : "Pargas Kungörelser är en regional svenskspråkig tidning i Pargas med omnejd."
-	// http://www.pku.fi
+	description : "<a href=\"http://www.pku.fi\" target=\"_blank\">Pargas Kungörelser</a> är en regional svenskspråkig tidning i Pargas med omnejd."
 };
 
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
 	title : "Syd-Österbotten",
 	contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
-	description : "Syd-Österbotten är en regional svenskspråkig dagstidning i Österbotten."
-	// http://www.sydin.fi
+	description : "<a href=\"http://www.sydin.fi\" target=\"_blank\">Syd-Österbotten</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
 	title : "Vasabladet",
 	contents : ["vasabladet1991", "vasabladet2012", "vasabladet2013"],
-	description : "Vasabladet är en regional svenskspråkig dagstidning i Österbotten."
-	//description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
+	description : "<a href=\"http://www.vasabladet.fi\" target=\"_blank\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
 settings.corporafolders.fisk.newspapertexts.abounderrattelser = {
 	title : "Åbo Underrättelser",
 	contents : ["abounderrattelser2012", "abounderrattelser2013"],
-	description : ""
+	description : "<a href=\"www.abounderrattelser.fi\" target=\"_blank\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten."
 };
 
 settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 	title : "Österbottens Tidning",
 	contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013"],
-	description : "Österbottens Tidning är en regional svenskspråkig tidning i Österbotten."
-	// http://www.ot.fi
+	description : "<a href=\"http://www.ot.fi\" target=\"_blank\">Österbottens Tidning</a> är en regional svenskspråkig tidning i Österbotten."
+	// 
 };
 
 settings.corporafolders.fisk.magazines = {
@@ -870,7 +865,7 @@ settings.corpora.studentbladet = {
 settings.corpora.jakobstadstidning1999 = {
 	id : "jakobstadstidning1999",
 	title : "Jakobstads tidning 1999",
-	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -893,7 +888,7 @@ settings.corpora.jakobstadstidning1999 = {
 settings.corpora.jakobstadstidning2000 = {
 	id : "jakobstadstidning2000",
 	title : "Jakobstads tidning 2000",
-	description : "Jakobstads Tidning var en lokal dagstidning i Österbotten som gavs ut under perioden 1898–2008.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3230,7 +3225,7 @@ settings.corpora.ostranyland = {
 settings.corpora.abounderrattelser2012 = {
 	id : "abounderrattelser2012",
 	title : "Åbo Underrättelser 2012",
-	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3253,7 +3248,7 @@ settings.corpora.abounderrattelser2012 = {
 settings.corpora.abounderrattelser2013 = {
 	id : "abounderrattelser2013",
 	title : "Åbo Underrättelser 2013",
-	description : "<a href=\"www.abounderrattelser.fi\">Åbo Underrättelser</a> är en regional svenskspråkig dagstidning i Åbotrakten.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3300,7 +3295,7 @@ settings.corpora.at2012 = {
 settings.corpora.vasabladet1991 = {
 	id : "vasabladet1991",
 	title : "Vasabladet 1991",
-	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3324,7 +3319,7 @@ settings.corpora.vasabladet1991 = {
 settings.corpora.vasabladet2012 = {
 	id : "vasabladet2012",
 	title : "Vasabladet 2012",
-	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {
@@ -3346,7 +3341,7 @@ settings.corpora.vasabladet2012 = {
 settings.corpora.vasabladet2013 = {
 	id : "vasabladet2013",
 	title : "Vasabladet 2013",
-	description : "<a href=\"http://www.vasabladet.fi\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3438,7 +3433,7 @@ settings.corpora.osterbottenstidning2013 = {
 settings.corpora.fnb1999 = {
 	id : "fnb1999",
 	title : "FNB 1999",
-	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3462,7 +3457,7 @@ settings.corpora.fnb1999 = {
 settings.corpora.fnb2000 = {
 	id : "fnb2000",
 	title : "FNB 2000",
-	description : "<a href=\"http://www.stt.fi/sv\">FNB</a> är Finlands ledande nyhets- och bildbyrå.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3486,7 +3481,7 @@ settings.corpora.fnb2000 = {
 settings.corpora.hbl1991 = {
 	id : "hbl1991",
 	title : "Hufvudstadsbladet 1991",
-	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3510,7 +3505,7 @@ settings.corpora.hbl1991 = {
 settings.corpora.hbl1998 = {
 	id : "hbl1998",
 	title : "Hufvudstadsbladet 1998",
-	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3533,7 +3528,7 @@ settings.corpora.hbl1998 = {
 settings.corpora.hbl1999 = {
 	id : "hbl1999",
 	title : "Hufvudstadsbladet 1999",
-	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -3556,7 +3551,7 @@ settings.corpora.hbl1999 = {
 settings.corpora.hbl20122013 = {
 	id : "hbl20122013",
 	title : "Hufvudstadsbladet (2012–)2013",
-	description : "<a href=\"http://www.hbl.fi\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland.",
+	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
