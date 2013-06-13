@@ -1320,7 +1320,7 @@
         grid.updateRowCount();
         return grid.render();
       });
-      grid.onHeaderCellRendered.subscribe(function(e, args) {
+      grid.onHeaderRendered.subscribe(function(e, args) {
         return refreshHeaders();
       });
       refreshHeaders();
@@ -1483,7 +1483,6 @@
       max = _.max(dateArray, function(mom) {
         return mom.toDate();
       });
-      c.log("min", min, max);
       duration = (function() {
         switch (this.granularity) {
           case "y":
@@ -1555,7 +1554,6 @@
         }
         return _results;
       }).call(this);
-      c.log("hasfirstvalue", hasFirstValue, firstVal, first);
       if (!hasFirstValue) {
         output.push({
           x: firstVal,

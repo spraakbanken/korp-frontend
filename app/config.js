@@ -3918,7 +3918,7 @@ settings.reduce_stringify = function(type) {
 				return $.format('[%s="%s"]', [value, item]);
 			}).join(" ");
 			output = $.format("<span data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
-					[query, $.toJSON(corpora),"deprel_" + value, util.getLocaleString(value)]);
+					[query, JSON.stringify(corpora),"deprel_" + value, util.getLocaleString(value)]);
 			if(value == "&Sigma;") return appendDiagram(output, corpora, value);
 
 			return appendDiagram(output, corpora, value);

@@ -93,8 +93,8 @@
       options = $.extend(true, {}, _defaults, options);
       _grid = grid;
       _handler
-        .subscribe(_grid.onHeaderCellRendered, handleHeaderCellRendered)
-        .subscribe(_grid.onBeforeHeaderCellDestroy, handleBeforeHeaderCellDestroy);
+        .subscribe(_grid.onHeaderRendered, handleHeaderRendered)
+        .subscribe(_grid.onBeforeHeaderDestroy, handleBeforeHeaderDestroy);
 
       // Force the grid to re-render the header now that the events are hooked up.
       _grid.setColumns(_grid.getColumns());
@@ -111,7 +111,7 @@
 
 
     function handleBodyMouseDown(e) {
-      if ($menu && $menu[0] != e.target && !$.contains($menu[0], e.target)) {
+      if ($menu && !$.contains($menu[0], e.target)) {
         hideMenu();
       }
     }
@@ -126,7 +126,7 @@
       }
     }
 
-    function handleHeaderCellRendered(e, args) {
+    function handleHeaderRendered(e, args) {
       var column = args.column;
       var menu = column.header && column.header.menu;
 
@@ -150,16 +150,16 @@
 
         $el
           .bind("click", showMenu)
-          .appendTo(args.node);
+          .appendTo(args.headerNode);
       }
     }
 
 
-    function handleBeforeHeaderCellDestroy(e, args) {
+    function handleBeforeHeaderDestroy(e, args) {
       var column = args.column;
 
       if (column.header && column.header.menu) {
-        $(args.node).find(".slick-header-menubutton").remove();
+        $(args.headerNode).find(".slick-header-menubutton").remove();
       }
     }
 

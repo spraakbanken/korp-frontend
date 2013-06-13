@@ -1075,7 +1075,7 @@ class view.StatsResults extends BaseResults
             grid.updateRowCount()
             grid.render()
 
-        grid.onHeaderCellRendered.subscribe (e, args) ->
+        grid.onHeaderRendered.subscribe (e, args) ->
             refreshHeaders()
 
         # remove first checkbox
@@ -1231,7 +1231,6 @@ class view.GraphResults extends BaseResults
         dateArray = _.pluck data, "x"
         min = _.min dateArray, (mom) -> mom.toDate()
         max = _.max dateArray, (mom) -> mom.toDate()
-        c.log "min", min, max
 
 
         duration = switch @granularity
@@ -1281,7 +1280,6 @@ class view.GraphResults extends BaseResults
             if mom.isSame lastVal then hasLastValue = true
             {x : mom, y : y}
 
-        c.log "hasfirstvalue", hasFirstValue, firstVal, first
         unless hasFirstValue
             output.push {x : firstVal, y:0}
 

@@ -148,7 +148,7 @@ function loadCorporaFolderRecursive(first_level, folder) {
 	if (first_level) 
 		outHTML = '<ul>';
 	else {
-		outHTML = '<ul title="' + folder.title + '" description="' + folder.description + '">';
+		outHTML = '<ul title="' + folder.title + '" description="' + escape(folder.description) + '">';
 	}
 	if(folder) { //This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
 		// Folders
@@ -197,7 +197,7 @@ util.localizeFloat = function(float, nDec) {
 
 util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
-	if(_.contains(x, ".")) {
+	if(x.contains(".")) {
     	var parts = x.split(".");
     	var decimalSeparator = util.getLocaleString("util_decimalseparator");
     	if(mode)
@@ -294,24 +294,13 @@ function loadCorpora() {
 	    	"</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
 	    }
     }).bind("corpuschooserchange", function(evt, corpora) {
-    	c.log("corpuschooserchange", corpora)
-    	// c.log("corpus changed", corpora);
+    	c.log("corpus changed", corpora);
 		settings.corpusListing.select(corpora);
-		// if(_.keys(corpora).length < _.keys(settings.corpora).length) {
-		// 	$.bbq.pushState({"corpus" : corpora.join(",")});
-		// }
-		var nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
-		if(corpora.length && _.intersection(corpora, nonprotected).length != nonprotected.length) {
-	        $.bbq.pushState({"corpus" : corpora.join(",")})
-	        // search({"corpus" : corpora.join(",")})
-		} else {
-	        $.bbq.removeState("corpus")
+		if(_.keys(corpora).length < _.keys(settings.corpora).length) {
+			$.bbq.pushState({"corpus" : corpora.join(",")});
 		}
 		if(corpora.length) {
-			if(currentMode == "parallel")
-				extendedSearch.reset();
-			else 
-				extendedSearch.refreshTokens();
+			extendedSearch.refreshTokens();
 			view.updateReduceSelect();
 			view.updateContextSelect("within");
 //			view.updateContextSelect("context");

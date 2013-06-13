@@ -950,7 +950,11 @@ ExtendedToken =
             min_max[0] = Number(min_max[0]) or 0
             min_max[1] = Number(min_max[1]) or ""
             suffix = $.format("{%s}", min_max.join(", "))
+        output = _.map output, (item) ->
+            "(" + item + ")"
+            
         "[" + output.join(" & ") + "]" + suffix
+        # "[(#{output.join(" & ") + suffix})]"
 
 $.widget "korp.extendedToken", ExtendedToken
 

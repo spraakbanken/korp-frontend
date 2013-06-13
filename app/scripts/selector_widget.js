@@ -331,7 +331,7 @@ var hp_corpusChooser = {
 					if(!desc) {
 						desc = "";
 					}
-					indata["description"] = desc;
+					indata["description"] = unescape(desc);
 					indata["title"] = $(this).parent().attr("data").split("___")[0];
 					if ($.isFunction(callback)) returnValue = callback(indata);
 					$(".corpusInfoSpace").css({"top": $(this).parent().offset().top});

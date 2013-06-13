@@ -1101,6 +1101,9 @@
         min_max[1] = Number(min_max[1]) || "";
         suffix = $.format("{%s}", min_max.join(", "));
       }
+      output = _.map(output, function(item) {
+        return "(" + item + ")";
+      });
       return "[" + output.join(" & ") + "]" + suffix;
     }
   };
