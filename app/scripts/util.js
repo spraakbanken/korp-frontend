@@ -197,7 +197,7 @@ util.localizeFloat = function(float, nDec) {
 
 util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
-	if(x.contains(".")) {
+	if(_.contains(x, ".")) {
     	var parts = x.split(".");
     	var decimalSeparator = util.getLocaleString("util_decimalseparator");
     	if(mode)
@@ -294,13 +294,24 @@ function loadCorpora() {
 	    	"</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
 	    }
     }).bind("corpuschooserchange", function(evt, corpora) {
-    	c.log("corpus changed", corpora);
+    	c.log("corpuschooserchange", corpora)
+    	// c.log("corpus changed", corpora);
 		settings.corpusListing.select(corpora);
-		if(_.keys(corpora).length < _.keys(settings.corpora).length) {
-			$.bbq.pushState({"corpus" : corpora.join(",")});
+		// if(_.keys(corpora).length < _.keys(settings.corpora).length) {
+		// 	$.bbq.pushState({"corpus" : corpora.join(",")});
+		// }
+		var nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
+		if(corpora.length && _.intersection(corpora, nonprotected).length != nonprotected.length) {
+	        $.bbq.pushState({"corpus" : corpora.join(",")})
+	        // search({"corpus" : corpora.join(",")})
+		} else {
+	        $.bbq.removeState("corpus")
 		}
 		if(corpora.length) {
-			extendedSearch.refreshTokens();
+			if(currentMode == "parallel")
+				extendedSearch.reset();
+			else 
+				extendedSearch.refreshTokens();
 			view.updateReduceSelect();
 			view.updateContextSelect("within");
 //			view.updateContextSelect("context");

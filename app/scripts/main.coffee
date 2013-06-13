@@ -416,11 +416,11 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
         # Folder
         # Continue to go through any subfolders
         $.each lastLevel[folderOrCorpus], (key, val) ->
-            outCorpora.extend getAllCorporaInFolders(lastLevel[folderOrCorpus], key) if key not in ["title", "contents", "description"]
+            outCorpora = outCorpora.concat getAllCorporaInFolders(lastLevel[folderOrCorpus], key) if key not in ["title", "contents", "description"]
 
 
         # And add the corpora in this folder level
-        outCorpora.extend lastLevel[folderOrCorpus]["contents"]
+        outCorpora = outCorpora.concat lastLevel[folderOrCorpus]["contents"]
     else
 
         # Corpus

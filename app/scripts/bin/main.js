@@ -465,10 +465,10 @@
     if (lastLevel[folderOrCorpus]) {
       $.each(lastLevel[folderOrCorpus], function(key, val) {
         if (key !== "title" && key !== "contents" && key !== "description") {
-          return outCorpora.extend(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
+          return outCorpora = outCorpora.concat(getAllCorporaInFolders(lastLevel[folderOrCorpus], key));
         }
       });
-      outCorpora.extend(lastLevel[folderOrCorpus]["contents"]);
+      outCorpora = outCorpora.concat(lastLevel[folderOrCorpus]["contents"]);
     } else {
       outCorpora.push(folderOrCorpus);
     }
