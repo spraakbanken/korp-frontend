@@ -9,9 +9,13 @@ var isLab = window.isLab || false;
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
-settings.struct_attribute_selector = "intersection" // can be 'union' or 'intersection'
-settings.word_attribute_selector = "intersection" // can be 'union' or 'intersection'
+// for extended search dropdown, can be 'union' or 'intersection'
+settings.word_attribute_selector = "union"
+settings.struct_attribute_selector = "union"
 
+// for 'compile statistics by' selector, can be 'union' or 'intersection'
+settings.reduce_word_attribute_selector = "union" 
+settings.reduce_struct_attribute_selector = "intersection"
 
 settings.modeConfig = [
     {

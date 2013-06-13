@@ -8,7 +8,6 @@
 
   view.lemgramSort = function(first, second) {
     var match1, match2;
-
     match1 = util.splitLemgram(first);
     match2 = util.splitLemgram(second);
     if (match1.form === match2.form) {
@@ -19,7 +18,6 @@
 
   view.saldoSort = function(first, second) {
     var match1, match2;
-
     match1 = util.splitSaldo(first);
     match2 = util.splitSaldo(second);
     if (match1[1] === match2[1]) {
@@ -30,7 +28,6 @@
 
   view.updateSearchHistory = function(value) {
     var filterParam, opts, placeholder, searchLocations, searches, _ref;
-
     filterParam = function(url) {
       return $.grep($.param.fragment(url).split("&"), function(item) {
         return item.split("=")[0] === "search" || item.split("=")[0] === "corpus";
@@ -52,7 +49,6 @@
     }
     opts = $.map(searches, function(item) {
       var output;
-
       output = $("<option />", {
         value: item.location
       }).text(item.label).get(0);
@@ -72,12 +68,10 @@
 
   view.initSearchOptions = function() {
     var selects;
-
     selects = $("#search_options > div:first select").customSelect();
     view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
-
       state = $.bbq.getState($(this).data("history"));
       if (!!state) {
         return $(this).val(state).change();
@@ -87,7 +81,6 @@
     });
     return $("#search_options").css("background-color", settings.primaryLight).change(function(event) {
       var state, target;
-
       simpleSearch.enableSubmit();
       extendedSearch.enableSubmit();
       advancedSearch.enableSubmit();
@@ -104,7 +97,6 @@
 
   view.updateContextSelect = function(withinOrContext) {
     var intersect, opts, union;
-
     intersect = settings.corpusListing.getAttrIntersection(withinOrContext);
     union = settings.corpusListing.getAttrUnion(withinOrContext);
     opts = $("." + withinOrContext + "_select option");
@@ -129,7 +121,6 @@
 
   view.updateReduceSelect = function() {
     var groups, prevVal, select;
-
     groups = $.extend({
       word: {
         word: {
@@ -204,7 +195,6 @@
     function SimpleSearch(mainDivId) {
       var textinput,
         _this = this;
-
       SimpleSearch.__super__.constructor.call(this, mainDivId);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
       $("#simple_text").keyup($.proxy(this.onSimpleChange, this));
@@ -213,7 +203,6 @@
       this.savedSelect = null;
       textinput = $("#simple_text").bind("keydown.autocomplete", function(event) {
         var keyCode;
-
         keyCode = $.ui.keyCode;
         if (!_this.isVisible() || $("#ui-active-menuitem").length !== 0) {
           return;
@@ -231,11 +220,9 @@
           select: $.proxy(this.selectLemgram, this),
           middleware: function(request, idArray) {
             var dfd;
-
             dfd = $.Deferred();
             lemgramProxy.lemgramCount(idArray, _this.isSearchPrefix(), _this.isSearchSuffix()).done(function(freqs) {
               var has_morphs, labelArray, listItems;
-
               delete freqs["time"];
               if (currentMode === "law") {
                 idArray = _.filter(idArray, function(item) {
@@ -246,7 +233,6 @@
               if (has_morphs) {
                 idArray.sort(function(a, b) {
                   var first, second;
-
                   first = (a.split("--").length > 1 ? a.split("--")[0] : "saldom");
                   second = (b.split("--").length > 1 ? b.split("--")[0] : "saldom");
                   if (first === second) {
@@ -262,7 +248,6 @@
               labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
               listItems = $.map(idArray, function(item, i) {
                 var out;
-
                 out = {
                   label: labelArray[i],
                   value: item,
@@ -314,12 +299,10 @@
     SimpleSearch.prototype.makeLemgramSelect = function(lemgram) {
       var promise, self,
         _this = this;
-
       self = this;
       promise = $("#simple_text").data("promise") || lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), false);
       return promise.done(function(lemgramArray) {
         var label, select;
-
         $("#lemgram_select").prev("label").andSelf().remove();
         _this.savedSelect = null;
         if (lemgramArray.length === 0) {
@@ -369,7 +352,6 @@
 
     SimpleSearch.prototype.buildLemgramSelect = function(lemgrams) {
       var optionElems;
-
       $("#lemgram_select").prev("label").andSelf().remove();
       optionElems = $.map(lemgrams, function(item) {
         return $("<option>", {
@@ -381,7 +363,6 @@
 
     SimpleSearch.prototype.renderSimilarHeader = function(selectedItem, data) {
       var count, div, index, isSliced, lemgrams, list, self, sliced;
-
       c.log("renderSimilarHeader");
       self = this;
       $("#similar_lemgrams").empty().append("<div id='similar_header' />");
@@ -421,7 +402,6 @@
       if (isSliced) {
         div.after($("<div id='show_more' />").css("background-color", settings.primaryColor).append($("<a href='javascript:' />").localeKey("show_more")).click(function() {
           var h, newH;
-
           $(this).remove();
           h = $("#similar_lemgrams").outerHeight();
           list.html($("#similarTmpl").tmpl(data)).find("a").click(function() {
@@ -446,7 +426,6 @@
 
     SimpleSearch.prototype.onSimpleChange = function(event) {
       var cqp, currentText, query, suffix, val, wordArray;
-
       $("#simple_text").data("promise", null);
       if (event && event.keyCode === 27) {
         c.log("key", event.keyCode);
@@ -508,7 +487,6 @@
 
     function ExtendedSearch(mainDivId) {
       var _this = this;
-
       ExtendedSearch.__super__.constructor.call(this, mainDivId);
       c.log("extendedsearch constructor");
       $("#korp-extended").keyup(function(event) {
@@ -525,7 +503,6 @@
 
     ExtendedSearch.prototype.setupContainer = function(selector) {
       var insert_token_button, self;
-
       self = this;
       insert_token_button = $('<img src="img/plus.png"/>').addClass("image_button insert_token").click(function() {
         return self.insertToken(this);
@@ -548,7 +525,6 @@
 
     ExtendedSearch.prototype.onSubmit = function() {
       var $select, query, searchType;
-
       ExtendedSearch.__super__.onSubmit.call(this);
       if (this.$main.find(".query_token, .or_arg").length > 1) {
         query = advancedSearch.updateCQP();
@@ -573,7 +549,6 @@
 
     ExtendedSearch.prototype.insertToken = function(button) {
       var _this = this;
-
       $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken({
         close: function() {
           return advancedSearch.updateCQP();
@@ -609,7 +584,6 @@
 
     AdvancedSearch.prototype.updateCQP = function() {
       var query;
-
       query = $(".query_token").map(function() {
         return $(this).extendedToken("getCQP", $("#strict_chk").is(":checked"));
       }).get().join(" ");

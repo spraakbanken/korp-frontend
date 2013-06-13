@@ -93,6 +93,17 @@ view.updateContextSelect = (withinOrContext) ->
     $(".#{withinOrContext}_select").localize()
 
 view.updateReduceSelect = ->
+    cl = settings.corpusListing
+    if (settings.reduce_word_attribute_selector or "union") == "union"
+        word_attr = cl.getCurrentAttributes(lang)
+    else if settings.reduce_word_attribute_selector == "intersection"
+        word_attr = cl.getCurrentAttributesIntersection(lang)
+    
+    if (settings.reduce_struct_attribute_selector or "union") == "union"
+        sentence_attr = cl.getStructAttrs(lang)
+    else if settings.reduce_struct_attribute_selector == "intersection"
+        sentence_attr = cl.getStructAttrsIntersection(lang)
+
     groups = $.extend(
         word:
             word:
@@ -101,8 +112,8 @@ view.updateReduceSelect = ->
             word_insensitive:
                 label: "word_insensitive"
     ,
-        word_attr: settings.corpusListing.getCurrentAttributes()
-        sentence_attr: $.grepObj(settings.corpusListing.getStructAttrsIntersection(), (val, key) ->
+        word_attr: word_attr
+        sentence_attr: $.grepObj(sentence_attr, (val, key) ->
             return false if val.displayType is "date_interval"
             return true
             # val.disabled isnt true

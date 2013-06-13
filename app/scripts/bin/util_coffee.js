@@ -25,7 +25,6 @@
 
     CorpusListing.prototype.subsetFactory = function(idArray) {
       var cl;
-
       idArray = _.invoke(idArray, "toLowerCase");
       cl = new CorpusListing(_.pick.apply(_, [this.struct].concat(__slice.call(idArray))));
       cl.selected = cl.corpora;
@@ -47,7 +46,6 @@
     CorpusListing.prototype._mapping_intersection = function(mappingArray) {
       return _.reduce(mappingArray, (function(a, b) {
         var keys_intersect, to_mergea, to_mergeb;
-
         keys_intersect = _.intersection(_.keys(a), _.keys(b));
         to_mergea = _.pick.apply(_, [a].concat(__slice.call(keys_intersect)));
         to_mergeb = _.pick.apply(_, [b].concat(__slice.call(keys_intersect)));
@@ -63,7 +61,6 @@
 
     CorpusListing.prototype.getCurrentAttributes = function() {
       var attrs;
-
       attrs = this.mapSelectedCorpora(function(corpus) {
         return corpus.attributes;
       });
@@ -72,7 +69,6 @@
 
     CorpusListing.prototype.getCurrentAttributesIntersection = function() {
       var attrs;
-
       attrs = this.mapSelectedCorpora(function(corpus) {
         return corpus.attributes;
       });
@@ -81,10 +77,8 @@
 
     CorpusListing.prototype.getStructAttrsIntersection = function() {
       var attrs;
-
       attrs = this.mapSelectedCorpora(function(corpus) {
         var key, value, _ref;
-
         _ref = corpus.struct_attributes;
         for (key in _ref) {
           value = _ref[key];
@@ -97,10 +91,8 @@
 
     CorpusListing.prototype.getStructAttrs = function() {
       var attrs, rest, withDataset;
-
       attrs = this.mapSelectedCorpora(function(corpus) {
         var key, value, _ref;
-
         _ref = corpus.struct_attributes;
         for (key in _ref) {
           value = _ref[key];
@@ -114,12 +106,10 @@
       });
       $.each(withDataset, function(i, item) {
         var key, val;
-
         key = item[0];
         val = item[1];
         return $.each(attrs, function(j, origStruct) {
           var ds, _ref;
-
           if ((_ref = origStruct[key]) != null ? _ref.dataset : void 0) {
             ds = origStruct[key].dataset;
             if ($.isArray(ds)) {
@@ -134,7 +124,6 @@
 
     CorpusListing.prototype._invalidateAttrs = function(attrs) {
       var intersection, union;
-
       union = this._mapping_union(attrs);
       intersection = this._mapping_intersection(attrs);
       $.each(union, function(key, value) {
@@ -157,7 +146,6 @@
 
     CorpusListing.prototype.getAttrIntersection = function(attr) {
       var struct;
-
       struct = _.map(this.selected, function(corpus) {
         return _.keys(corpus[attr]);
       });
@@ -166,7 +154,6 @@
 
     CorpusListing.prototype.getAttrUnion = function(attr) {
       var struct;
-
       struct = _.map(this.selected, function(corpus) {
         return _.keys(corpus[attr]);
       });
@@ -192,7 +179,6 @@
     CorpusListing.prototype.getMorphology = function() {
       return _(this.selected).map(function(corpus) {
         var morf;
-
         morf = corpus.morf || "saldom";
         return morf.split("|");
       }).flatten().unique().join("|");
@@ -200,7 +186,6 @@
 
     CorpusListing.prototype.getTimeInterval = function() {
       var all;
-
       all = _(this.selected).pluck("time").filter(function(item) {
         return item != null;
       }).map(_.keys).flatten().map(Number).sort(function(a, b) {
@@ -228,11 +213,9 @@
 
     ParallelCorpusListing.prototype.select = function(idArray) {
       var _this = this;
-
       this.selected = [];
       $.each(idArray, function(i, id) {
         var corp;
-
         corp = _this.struct[id];
         return _this.selected = _this.selected.concat(_this.getLinked(corp, true, false));
       });
@@ -241,7 +224,6 @@
 
     ParallelCorpusListing.prototype.getCurrentAttributes = function(lang) {
       var corpora, struct;
-
       corpora = _.filter(this.selected, function(item) {
         return item.lang === lang;
       });
@@ -253,7 +235,6 @@
 
     ParallelCorpusListing.prototype.getStructAttrs = function(lang) {
       var corpora, struct;
-
       corpora = _.filter(this.selected, function(item) {
         return item.lang === lang;
       });
@@ -268,7 +249,6 @@
 
     ParallelCorpusListing.prototype.getLinked = function(corp, andSelf, only_selected) {
       var output, target;
-
       if (andSelf == null) {
         andSelf = false;
       }
@@ -278,7 +258,6 @@
       target = only_selected ? this.selected : this.struct;
       output = _.filter(target, function(item) {
         var _ref;
-
         return _ref = item.id, __indexOf.call(corp.linked_to || [], _ref) >= 0;
       });
       if (andSelf) {
@@ -290,7 +269,6 @@
     ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf, flatten) {
       var corps, output,
         _this = this;
-
       if (andSelf == null) {
         andSelf = false;
       }
@@ -312,7 +290,6 @@
 
     ParallelCorpusListing.prototype.getLinksFromLangs = function(activeLangs) {
       var cps, lang, linked, main, other, output, _i, _j, _len, _len1, _ref;
-
       if (activeLangs.length === 1) {
         return this.getEnabledByLang(activeLangs[0], true, false);
       }
@@ -330,7 +307,6 @@
           cps = other[_j];
           linked = _(main).filter(function(mainCorpus) {
             var _ref1;
-
             return _ref1 = cps.id, __indexOf.call(mainCorpus.linked_to, _ref1) >= 0;
           }).value();
           output = output.concat(_.map(linked, function(item) {
@@ -343,7 +319,6 @@
 
     ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
       var currentLangList, output, struct;
-
       currentLangList = _.map($(".lang_select").get(), function(item) {
         return $(item).val();
       });
@@ -351,13 +326,11 @@
       output = [];
       $.each(struct, function(i, corps) {
         var mainId, mainIsPivot, other, pair;
-
         mainId = corps[0].id.toUpperCase();
         mainIsPivot = !!corps[0].pivot;
         other = corps.slice(1);
         pair = _.map(other, function(corp) {
           var a;
-
           if (mainIsPivot) {
             a = _.keys(corp[attr])[0];
           } else {
@@ -390,7 +363,6 @@
 
   window.applyTo = function(ctrl, f) {
     var s;
-
     s = getScope(ctrl);
     return s.$apply(f(s));
   };

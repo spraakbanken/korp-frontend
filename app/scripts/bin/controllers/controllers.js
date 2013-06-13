@@ -6,12 +6,10 @@
 
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
-
     s = $scope;
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
-
       currentStruct = [];
       prevCorpus = "";
       output = [];
@@ -86,7 +84,6 @@
     };
     findMatchSentence = function(sentence) {
       var decr, end, incr, span, start, _ref, _ref1, _ref2;
-
       span = [];
       _ref = sentence.match, start = _ref.start, end = _ref.end;
       decr = start;
@@ -122,7 +119,6 @@
     };
     s.selectMatch = function(sentence) {
       var from;
-
       if (!sentence.match) {
         return;
       }
@@ -131,7 +127,6 @@
     };
     return s.selectRight = function(sentence) {
       var from, len;
-
       if (!sentence.match) {
         return;
       }
@@ -148,7 +143,6 @@
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
           var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-
           output = {
             reading_match: wd._match,
             punct: wd._punct,
@@ -171,7 +165,6 @@
           }
           return ((function() {
             var _l, _len3, _ref3, _ref4, _results;
-
             _ref3 = _.pairs(output);
             _results = [];
             for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {

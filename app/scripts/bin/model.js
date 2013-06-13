@@ -22,7 +22,6 @@
 
     BaseProxy.prototype.parseJSON = function(data) {
       var e, json, out;
-
       try {
         json = data;
         if (json[0] !== "{") {
@@ -49,7 +48,6 @@
     BaseProxy.prototype.calcProgress = function(e) {
       var newText, stats, struct,
         _this = this;
-
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
@@ -57,7 +55,6 @@
       } catch (_error) {}
       $.each(struct, function(key, val) {
         var currentCorpus, sum;
-
         if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
           currentCorpus = val.corpus || val;
           sum = _(currentCorpus.split("|")).map(function(corpus) {
@@ -103,7 +100,6 @@
         url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
         success: function(data) {
           var hasAnyFreq, lemgrams;
-
           c.log("related words success");
           lemgrams = [];
           $.each(data, function(i, item) {
@@ -155,7 +151,6 @@
 
     KWICProxy.prototype.popXhr = function(xhr) {
       var i;
-
       i = $.inArray(this.pendingRequests, xhr);
       if (i !== -1) {
         return this.pendingRequests.pop(i);
@@ -164,7 +159,6 @@
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
       var corpus, data, o, self;
-
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
@@ -190,7 +184,6 @@
         },
         progress: function(data, e) {
           var progressObj;
-
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -311,14 +304,12 @@
 
     LemgramProxy.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
       var cqp;
-
       cqp = $.format("[(lex contains \"%s\")%s%s]", [lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram)]);
       return cqp;
     };
 
     LemgramProxy.prototype.makeRequest = function(word, type, callback) {
       var data, self;
-
       LemgramProxy.__super__.makeRequest.call(this);
       self = this;
       data = {
@@ -341,7 +332,6 @@
         },
         progress: function(data, e) {
           var progressObj;
-
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -354,7 +344,6 @@
 
     LemgramProxy.prototype.relationsWordSearch = function(word) {
       var data, self;
-
       self = this;
       data = {
         command: "relations",
@@ -389,7 +378,6 @@
 
     LemgramProxy.prototype.karpSearch = function(word, sw_forms) {
       var deferred, self;
-
       self = this;
       deferred = $.Deferred(function(dfd) {
         return self.pendingRequest = $.ajax({
@@ -403,7 +391,6 @@
           },
           success: function(data, textStatus, xhr) {
             var div, output;
-
             if (data.count === 0) {
               dfd.reject();
               return;
@@ -427,7 +414,6 @@
 
     LemgramProxy.prototype.saldoSearch = function(word, sw_forms) {
       var dfd;
-
       dfd = $.Deferred();
       this.karpSearch(word, sw_forms).done(function(lemgramArray) {
         return $.ajax({
@@ -439,7 +425,6 @@
           }
         }).done(function(data, textStatus, xhr) {
           var div, output;
-
           if (data.count === 0) {
             dfd.reject();
             c.log("saldo search 0 results");
@@ -448,7 +433,6 @@
           div = ($.isPlainObject(data.div) ? [data.div] : data.div);
           output = $.map(div.slice(0, Number(data.count)), function(item) {
             var sense;
-
             sense = item.LexicalEntry.Sense;
             if (!$.isArray(sense)) {
               sense = [sense];
@@ -469,7 +453,6 @@
 
     LemgramProxy.prototype.lemgramCount = function(lemgrams, findPrefix, findSuffix) {
       var count, self;
-
       self = this;
       count = $.grep(["lemgram", (findPrefix ? "prefix" : ""), (findSuffix ? "suffix" : "")], Boolean);
       return $.ajax({
@@ -504,7 +487,6 @@
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
       var data, reduceval, self;
-
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -543,7 +525,6 @@
         },
         progress: function(data, e) {
           var progressObj;
-
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
@@ -552,7 +533,6 @@
         },
         success: function(data) {
           var columns, dataset, minWidth, totalRow, wordArray;
-
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -604,7 +584,6 @@
           wordArray = $.keys(data.total.absolute);
           $.each(wordArray, function(i, word) {
             var row;
-
             row = {
               id: "row" + i,
               hit_value: word,
@@ -646,7 +625,6 @@
 
     AuthenticationProxy.prototype.makeRequest = function(usr, pass) {
       var auth, dfd, self;
-
       self = this;
       if (window.btoa) {
         auth = window.btoa(usr + ":" + pass);
@@ -705,7 +683,6 @@
 
     TimeProxy.prototype.makeRequest = function(combined) {
       var dfd, self, xhr;
-
       self = this;
       dfd = $.Deferred();
       this.req.data.combined = combined;
@@ -713,7 +690,6 @@
       if (combined) {
         xhr.done(function(data, status, xhr) {
           var output, rest;
-
           if (_.keys(data).length < 2) {
             dfd.reject();
             return;
@@ -743,7 +719,6 @@
 
     TimeProxy.prototype.compilePlotArray = function(dataStruct) {
       var output;
-
       output = [];
       $.each(dataStruct, function(key, val) {
         if (!key || !val) {
@@ -759,7 +734,6 @@
 
     TimeProxy.prototype.expandTimeStruct = function(struct) {
       var maxYear, minYear, prevVal, thisVal, y, years, _i, _results;
-
       years = _.map(_.pairs(_.omit(struct, "")), function(item) {
         return Number(item[0]);
       });
@@ -794,7 +768,6 @@
 
     GraphProxy.prototype.expandSubCqps = function(subArray) {
       var array, cqp, i, p, padding, _i, _ref, _results;
-
       padding = _.map((function() {
         _results = [];
         for (var _i = 0, _ref = subArray.length.toString().length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
@@ -804,7 +777,6 @@
       });
       array = (function() {
         var _j, _len, _results1;
-
         _results1 = [];
         for (i = _j = 0, _len = subArray.length; _j < _len; i = ++_j) {
           cqp = subArray[i];
@@ -819,7 +791,6 @@
     GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
       var def, params,
         _this = this;
-
       GraphProxy.__super__.makeRequest.call(this);
       params = {
         command: "count_time",
@@ -841,7 +812,6 @@
         },
         progress: function(data, e) {
           var progressObj;
-
           progressObj = _this.calcProgress(e);
           if (progressObj == null) {
             return;
