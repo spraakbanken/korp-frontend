@@ -9,6 +9,9 @@ var isLab = window.isLab || false;
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 
+settings.struct_attribute_selector = "intersection" // can be 'union' or 'intersection'
+settings.word_attribute_selector = "intersection" // can be 'union' or 'intersection'
+
 
 settings.modeConfig = [
     {

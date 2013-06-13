@@ -70,6 +70,15 @@
       return this._invalidateAttrs(attrs);
     };
 
+    CorpusListing.prototype.getCurrentAttributesIntersection = function() {
+      var attrs;
+
+      attrs = this.mapSelectedCorpora(function(corpus) {
+        return corpus.attributes;
+      });
+      return this._mapping_intersection(attrs);
+    };
+
     CorpusListing.prototype.getStructAttrsIntersection = function() {
       var attrs;
 

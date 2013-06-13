@@ -53,6 +53,13 @@ class window.CorpusListing
         )
         @_invalidateAttrs attrs
 
+    getCurrentAttributesIntersection : () ->
+        attrs = @mapSelectedCorpora((corpus) ->
+            corpus.attributes
+        )
+
+        @_mapping_intersection attrs
+
     getStructAttrsIntersection: () ->
         attrs = @mapSelectedCorpora((corpus) ->
             for key, value of corpus.struct_attributes

@@ -701,15 +701,25 @@
       return orElem;
     },
     makeSelect: function() {
-      var arg_opts, arg_select, groups, lang;
+      var arg_opts, arg_select, groups, lang, sentence_attr, word_attr;
 
       arg_select = $("<select/>").addClass("arg_type").change($.proxy(this.onArgTypeChange, this));
       if (currentMode === "parallel") {
         lang = this.element.closest(".lang_row,#query_table").find(".lang_select").val();
       }
+      if ((settings.word_attribute_selector || "union") === "union") {
+        word_attr = settings.corpusListing.getCurrentAttributes(lang);
+      } else if (settings.word_attribute_selector === "intersection") {
+        word_attr = settings.corpusListing.getCurrentAttributesIntersection(lang);
+      }
+      if ((settings.struct_attribute_selector || "union") === "union") {
+        sentence_attr = settings.corpusListing.getStructAttrs(lang);
+      } else if (settings.struct_attribute_selector === "intersection") {
+        sentence_attr = settings.corpusListing.getStructAttrsIntersection(lang);
+      }
       groups = $.extend({}, settings.arg_groups, {
-        word_attr: settings.corpusListing.getCurrentAttributes(lang),
-        sentence_attr: settings.corpusListing.getStructAttrs(lang)
+        word_attr: word_attr,
+        sentence_attr: sentence_attr
       });
       c.log("groups", groups);
       $.each(groups, function(lbl, group) {

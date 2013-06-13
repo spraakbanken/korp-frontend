@@ -640,9 +640,20 @@ ExtendedToken =
     makeSelect: ->
         arg_select = $("<select/>").addClass("arg_type").change($.proxy(@onArgTypeChange, this))
         lang = @element.closest(".lang_row,#query_table").find(".lang_select").val() if currentMode is "parallel"
+        
+        if (settings.word_attribute_selector or "union") == "union"
+            word_attr = settings.corpusListing.getCurrentAttributes(lang)
+        else if settings.word_attribute_selector == "intersection"
+            word_attr = settings.corpusListing.getCurrentAttributesIntersection(lang)
+        
+        if (settings.struct_attribute_selector or "union") == "union"
+            sentence_attr = settings.corpusListing.getStructAttrs(lang)
+        else if settings.struct_attribute_selector == "intersection"
+            sentence_attr = settings.corpusListing.getStructAttrsIntersection(lang)
+        
         groups = $.extend({}, settings.arg_groups,
-            word_attr: settings.corpusListing.getCurrentAttributes(lang)
-            sentence_attr: settings.corpusListing.getStructAttrs(lang)
+            word_attr: word_attr
+            sentence_attr: sentence_attr
         )
         c.log "groups", groups
         $.each groups, (lbl, group) ->
