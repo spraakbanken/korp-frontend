@@ -278,8 +278,7 @@
                     <state id="results_stats">
                         <onentry>
                             <script>
-                                if(statsResults.grid)
-                                    statsResults.grid.render();
+                                //$(window).resize()
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>

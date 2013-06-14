@@ -1223,7 +1223,7 @@
         cssClass: "slick-cell-checkboxsel"
       });
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
-      $("#myGrid").width($("#myGrid").parent().width());
+      $("#myGrid").width($(document).width());
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: true
