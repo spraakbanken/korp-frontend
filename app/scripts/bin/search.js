@@ -120,7 +120,18 @@
   };
 
   view.updateReduceSelect = function() {
-    var groups, prevVal, select;
+    var cl, groups, prevVal, select, sentence_attr, word_attr;
+    cl = settings.corpusListing;
+    if ((settings.reduce_word_attribute_selector || "union") === "union") {
+      word_attr = cl.getCurrentAttributes(lang);
+    } else if (settings.reduce_word_attribute_selector === "intersection") {
+      word_attr = cl.getCurrentAttributesIntersection(lang);
+    }
+    if ((settings.reduce_struct_attribute_selector || "union") === "union") {
+      sentence_attr = cl.getStructAttrs(lang);
+    } else if (settings.reduce_struct_attribute_selector === "intersection") {
+      sentence_attr = cl.getStructAttrsIntersection(lang);
+    }
     groups = $.extend({
       word: {
         word: {
@@ -131,8 +142,8 @@
         }
       }
     }, {
-      word_attr: settings.corpusListing.getCurrentAttributes(),
-      sentence_attr: $.grepObj(settings.corpusListing.getStructAttrsIntersection(), function(val, key) {
+      word_attr: word_attr,
+      sentence_attr: $.grepObj(sentence_attr, function(val, key) {
         if (val.displayType === "date_interval") {
           return false;
         }
