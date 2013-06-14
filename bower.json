@@ -18,9 +18,8 @@
     "jReject": "https://github.com/TurnWheel/jReject.git#1.0.2",
     "jquery-bbq": "https://github.com/cowboy/jquery-bbq.git#1.2.1",
     "modernizr": "~2.6.2",
-    "yepnope": "~1.5.4",
-    "slickgrid": "~2.0.2"
-  },
+    "yepnope": "~1.5.4"
+  }
   "devDependencies": {
     "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.0.6",
     "angular-scenario": "git://github.com/angular/bower-angular-scenario.git#1.0.6"

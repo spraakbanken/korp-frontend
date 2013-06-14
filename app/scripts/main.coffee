@@ -175,6 +175,8 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
                 # c.log "send ", "resultstab." + selected
                 $.sm.send "resultstab." + selected
 
+                
+
 
     tabs = $(".ui-tabs")
     tabs.on "click", tab_a_selector, () ->

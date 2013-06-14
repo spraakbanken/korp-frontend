@@ -278,7 +278,8 @@
                     <state id="results_stats">
                         <onentry>
                             <script>
-                                statsResults.resizeGrid();
+                                if(statsResults.grid)
+                                    statsResults.grid.render();
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>

@@ -51,7 +51,7 @@
       _selectedRowsLookup = lookup;
       _grid.render();
 
-      if (selectedRows.length == _grid.getDataLength()) {
+      if (selectedRows.length && selectedRows.length == _grid.getDataLength()) {
         _grid.updateColumnHeader(_options.columnId, "<input type='checkbox' checked='checked'>", _options.toolTip);
       } else {
         _grid.updateColumnHeader(_options.columnId, "<input type='checkbox'>", _options.toolTip);
@@ -80,8 +80,8 @@
           e.stopImmediatePropagation();
           return;
         }
-
-        toggleRowSelection(args.row);
+        // # breaks row order in webkit
+        // toggleRowSelection(args.row);
         e.stopPropagation();
         e.stopImmediatePropagation();
       }

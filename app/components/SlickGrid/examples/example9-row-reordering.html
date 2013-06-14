@@ -7,10 +7,6 @@
   <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
   <link rel="stylesheet" href="examples.css" type="text/css"/>
   <style>
-    .cell-title {
-      zfont-weight: bold;
-    }
-
     .cell-effort-driven {
       text-align: center;
     }
@@ -84,8 +80,8 @@
 
 <script src="../lib/jquery-1.7.min.js"></script>
 <script src="../lib/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="../lib/jquery.event.drag-2.0.min.js"></script>
-<script src="../lib/jquery.event.drop-2.0.min.js"></script>
+<script src="../lib/jquery.event.drag-2.2.js"></script>
+<script src="../lib/jquery.event.drop-2.2.js"></script>
 
 <script src="../slick.core.js"></script>
 <script src="../plugins/slick.cellrangeselector.js"></script>
@@ -133,7 +129,6 @@ var columns = [
 var options = {
   editable: true,
   enableAddRow: true,
-  enableRowReordering: true,
   enableCellNavigation: true,
   forceFitColumns: true,
   autoEdit: false
@@ -159,7 +154,9 @@ $(function () {
 
   grid.setSelectionModel(new Slick.RowSelectionModel());
 
-  var moveRowsPlugin = new Slick.RowMoveManager();
+  var moveRowsPlugin = new Slick.RowMoveManager({
+    cancelEditOnDrag: true
+  });
 
   moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
     for (var i = 0; i < data.rows.length; i++) {
@@ -268,7 +265,6 @@ $(function () {
     if (dd.mode != "recycle") {
       return;
     }
-    e.stopImmediatePropagation();
     dd.helper.css({top: e.pageY + 5, left: e.pageX + 5});
   });
 
@@ -276,7 +272,6 @@ $(function () {
     if (dd.mode != "recycle") {
       return;
     }
-    e.stopImmediatePropagation();
     dd.helper.remove();
     $(dd.available).css("background", "beige");
   });
@@ -284,12 +279,21 @@ $(function () {
   $.drop({mode: "mouse"});
   $("#dropzone")
       .bind("dropstart", function (e, dd) {
+        if (dd.mode != "recycle") {
+          return;
+        }
         $(this).css("background", "yellow");
       })
       .bind("dropend", function (e, dd) {
+        if (dd.mode != "recycle") {
+          return;
+        }
         $(dd.available).css("background", "pink");
       })
       .bind("drop", function (e, dd) {
+        if (dd.mode != "recycle") {
+          return;
+        }
         var rowsToDelete = dd.rows.sort().reverse();
         for (var i = 0; i < rowsToDelete.length; i++) {
           data.splice(rowsToDelete[i], 1);

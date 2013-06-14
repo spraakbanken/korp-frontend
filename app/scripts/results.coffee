@@ -954,8 +954,9 @@ class view.StatsResults extends BaseResults
 
             util.localize instance.$result
 
-        $(window).resize ->
-            self.resizeGrid()
+        $(window).resize _.debounce( () ->
+            $("#myGrid").width($("#myGrid").parent().width())
+        , 100)
 
         $("#exportButton").unbind "click"
         $("#exportButton").click ->
@@ -1045,7 +1046,7 @@ class view.StatsResults extends BaseResults
             cssClass: "slick-cell-checkboxsel"
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
-
+        $("#myGrid").width($("#myGrid").parent().width())
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: true
@@ -1053,11 +1054,10 @@ class view.StatsResults extends BaseResults
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
         @grid = grid
-        @resizeGrid()
 
+        @grid.autosizeColumns()
 
         sortCol = columns[2]
-        window.data = data
         grid.onSort.subscribe (e, args) ->
             sortCol = args.sortCol
             data.sort (a, b) ->
@@ -1075,7 +1075,7 @@ class view.StatsResults extends BaseResults
             grid.updateRowCount()
             grid.render()
 
-        grid.onHeaderRendered.subscribe (e, args) ->
+        grid.onHeaderCellRendered.subscribe (e, args) ->
             refreshHeaders()
 
         # remove first checkbox
@@ -1091,50 +1091,6 @@ class view.StatsResults extends BaseResults
                 $("#showGraph:visible").button("disable")
 
         @hidePreloader()
-
-
-    resizeGrid: ->
-        return unless @grid
-        widthArray = $(".slick-header-column").map((item) ->
-            $(this).width()
-        )
-        tableWidth = $.reduce(widthArray, (a, b) ->
-            a + b
-        , 100)
-
-        #   tableWidth += 20;
-        parentWidth = $("body").width() - 65
-        $("#myGrid").width parentWidth
-        if tableWidth < parentWidth
-            @grid.autosizeColumns()
-        else
-            unless $(".c0").length
-                setTimeout $.proxy(@resizeHits, this), 1
-            else
-                @resizeHits()
-        $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
-            $(this).localeKey $(this).text()
-
-
-    resizeHits: ->
-        @setHitsWidth @getHitsWidth()
-
-    getHitsWidth: ->
-
-        # FIXME: not sure what's going on here.
-        widthArray = $(".c0").map(->
-            $(this).find(":nth-child(1)").outerWidth() + ($(this).find(":nth-child(2)").outerWidth() or 0)
-        )
-        unless widthArray.length
-            400
-        else
-            $.reduce widthArray, Math.max
-
-    setHitsWidth: (w) ->
-        return unless @grid
-        data = @grid.getColumns()
-        data[0].currentWidth = w
-        @grid.setColumns data
 
 
     # showError : function() {

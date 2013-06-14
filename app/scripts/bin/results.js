@@ -1123,9 +1123,9 @@
         });
         return util.localize(instance.$result);
       });
-      $(window).resize(function() {
-        return self.resizeGrid();
-      });
+      $(window).resize(_.debounce(function() {
+        return $("#myGrid").width($("#myGrid").parent().width());
+      }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
         var dataDelimiter, output, selType, selVal;
@@ -1223,6 +1223,7 @@
         cssClass: "slick-cell-checkboxsel"
       });
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
+      $("#myGrid").width($("#myGrid").parent().width());
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: true
@@ -1232,9 +1233,8 @@
       }));
       grid.registerPlugin(checkboxSelector);
       this.grid = grid;
-      this.resizeGrid();
+      this.grid.autosizeColumns();
       sortCol = columns[2];
-      window.data = data;
       grid.onSort.subscribe(function(e, args) {
         sortCol = args.sortCol;
         data.sort(function(a, b) {
@@ -1256,7 +1256,7 @@
         grid.updateRowCount();
         return grid.render();
       });
-      grid.onHeaderRendered.subscribe(function(e, args) {
+      grid.onHeaderCellRendered.subscribe(function(e, args) {
         return refreshHeaders();
       });
       refreshHeaders();
@@ -1272,59 +1272,6 @@
         }
       });
       return this.hidePreloader();
-    };
-
-    StatsResults.prototype.resizeGrid = function() {
-      var parentWidth, tableWidth, widthArray;
-      if (!this.grid) {
-        return;
-      }
-      widthArray = $(".slick-header-column").map(function(item) {
-        return $(this).width();
-      });
-      tableWidth = $.reduce(widthArray, function(a, b) {
-        return a + b;
-      }, 100);
-      parentWidth = $("body").width() - 65;
-      $("#myGrid").width(parentWidth);
-      if (tableWidth < parentWidth) {
-        this.grid.autosizeColumns();
-      } else {
-        if (!$(".c0").length) {
-          setTimeout($.proxy(this.resizeHits, this), 1);
-        } else {
-          this.resizeHits();
-        }
-      }
-      return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
-        return $(this).localeKey($(this).text());
-      });
-    };
-
-    StatsResults.prototype.resizeHits = function() {
-      return this.setHitsWidth(this.getHitsWidth());
-    };
-
-    StatsResults.prototype.getHitsWidth = function() {
-      var widthArray;
-      widthArray = $(".c0").map(function() {
-        return $(this).find(":nth-child(1)").outerWidth() + ($(this).find(":nth-child(2)").outerWidth() || 0);
-      });
-      if (!widthArray.length) {
-        return 400;
-      } else {
-        return $.reduce(widthArray, Math.max);
-      }
-    };
-
-    StatsResults.prototype.setHitsWidth = function(w) {
-      var data;
-      if (!this.grid) {
-        return;
-      }
-      data = this.grid.getColumns();
-      data[0].currentWidth = w;
-      return this.grid.setColumns(data);
     };
 
     StatsResults.prototype.resetView = function() {

@@ -95,14 +95,14 @@ view.updateContextSelect = (withinOrContext) ->
 view.updateReduceSelect = ->
     cl = settings.corpusListing
     if (settings.reduce_word_attribute_selector or "union") == "union"
-        word_attr = cl.getCurrentAttributes(lang)
+        word_attr = cl.getCurrentAttributes()
     else if settings.reduce_word_attribute_selector == "intersection"
-        word_attr = cl.getCurrentAttributesIntersection(lang)
+        word_attr = cl.getCurrentAttributesIntersection()
     
     if (settings.reduce_struct_attribute_selector or "union") == "union"
-        sentence_attr = cl.getStructAttrs(lang)
+        sentence_attr = cl.getStructAttrs()
     else if settings.reduce_struct_attribute_selector == "intersection"
-        sentence_attr = cl.getStructAttrsIntersection(lang)
+        sentence_attr = cl.getStructAttrsIntersection()
 
     groups = $.extend(
         word:
