@@ -343,7 +343,7 @@ settings.corporafolders.bloggmix = {
 
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
-	contents : ["barnlitteratur", "fsbessaistik", "fsbsakprosa"],
+	contents : ["barnlitteratur", "fsbessaistik", "fsbsakprosa", "ungdomslitteratur"],
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
 			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
 			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
@@ -425,11 +425,6 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 settings.corporafolders.fisk.magazines = {
 	title : "Tidskrifter",
 	contents : ["astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
-};
-
-settings.corporafolders.fisk.youthnovels = {
-	title : "Ungdomslitteratur",
-	contents : ["ungdomslitteratur"]
 };
 
 settings.corporafolders.protected = {
@@ -663,8 +658,8 @@ settings.corpora.fsbsakprosa = {
 
 settings.corpora.ungdomslitteratur = {
 	id : "ungdomslitteratur",
-	title : "Ungdomslitteratur",
-	description : "",
+	title : "Ungdomslitteratur 2000–2013",
+	description : "Material ur ungdomslitterära verk publicerade under 2000–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
