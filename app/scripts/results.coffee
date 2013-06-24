@@ -1009,14 +1009,15 @@ class view.StatsResults extends BaseResults
             showTotal = false
             mainCQP = params.cqp
             prefix = if isStructAttr then "_." else ""
-            for elem in @$result.find(".slick-cell-checkboxsel.selected")
-                if $(elem).is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
+            for chk in @$result.find(".slick-cell-checkboxsel :checked")
+                cell = $(chk).parent()
+                if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
-                val = @gridData[$(elem).parent().index()].hit_value
+                val = @gridData[cell.parent().index()].hit_value
                 cqp = "[#{prefix + reduceVal} = '#{regescape(val)}']"
                 subExprs.push cqp
-                labelMapping[cqp] = $(elem).next().text()
+                labelMapping[cqp] = cell.next().text()
 
             instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
         $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
