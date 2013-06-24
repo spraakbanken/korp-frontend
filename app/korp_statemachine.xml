@@ -279,6 +279,12 @@
                         <onentry>
                             <script>
                                 //$(window).resize()
+                                if(statsResults.grid) {
+                                    statsResults.grid.resizeCanvas()
+                                    statsResults.grid.invalidate()
+
+                                
+                                }
                                 util.setJsonLink(statsProxy.prevRequest);
                             </script>
                         </onentry>

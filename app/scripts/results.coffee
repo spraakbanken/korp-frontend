@@ -1054,12 +1054,13 @@ class view.StatsResults extends BaseResults
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
         @grid = grid
-
         @grid.autosizeColumns()
+        $("#myGrid").width("100%")
 
         sortCol = columns[2]
+
         grid.onSort.subscribe (e, args) ->
-            sortCol = args.sortCol
+            sortCol = args.sortCol  
             data.sort (a, b) ->
                 if sortCol.field is "hit_value"
                     x = a[sortCol.field]

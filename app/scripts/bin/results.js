@@ -1234,6 +1234,7 @@
       grid.registerPlugin(checkboxSelector);
       this.grid = grid;
       this.grid.autosizeColumns();
+      $("#myGrid").width("100%");
       sortCol = columns[2];
       grid.onSort.subscribe(function(e, args) {
         sortCol = args.sortCol;
