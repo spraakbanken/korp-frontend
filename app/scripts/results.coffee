@@ -959,33 +959,72 @@ class view.StatsResults extends BaseResults
         , 100)
 
         $("#exportButton").unbind "click"
-        $("#exportButton").click ->
+        $("#exportButton").click =>
             selVal = $("#kindOfData option:selected").val()
             selType = $("#kindOfFormat option:selected").val()
             dataDelimiter = ";"
-            dataDelimiter = "\t"  if selType is "TSV"
+            dataDelimiter = "%09" if selType is "TSV"
+            cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
+
+            header = [
+                util.getLocaleString("stats_hit"), 
+                util.getLocaleString("stats_total")
+            ]
+            header = header.concat _.pluck cl.corpora, "title"
+            fmt = (what) ->
+                util.formatDecimalString(what.toString(), false, true, true)
+
+            total = ["Σ", fmt @savedData.total.sums[selVal]]
+
+            total = total.concat (fmt @savedData.corpora[corp.toUpperCase()].sums[selVal] for corp in _.pluck cl.corpora, "id")
+
+
+
+            output = [
+                header
+                total
+            ]
+
+            for wd in @savedWordArray
+                row = [wd, fmt @savedData.total[selVal][wd]]
+                values = for corp in _.pluck cl.corpora, "id"
+                    val = @savedData.corpora[corp.toUpperCase()][selVal][wd]
+                    if val 
+                        val = fmt val
+                    else 
+                        val = "0"
+
+                
+                output.push row.concat values
+
+
+
+            output = _.invoke output, "join", dataDelimiter
+            output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
+
+
 
             # Generate CSV from the data
-            output = "corpus" + dataDelimiter
-            $.each statsResults.savedWordArray, (key, aword) ->
-                output += aword + dataDelimiter
+            # output = "corpus" + dataDelimiter
+            # $.each statsResults.savedWordArray, (key, aword) ->
+            #     output += aword + dataDelimiter
 
-            output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
-            $.each statsResults.savedData["corpora"], (key, acorpus) ->
-                output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter
-                $.each statsResults.savedWordArray, (wkey, aword) ->
-                    amount = acorpus[selVal][aword]
-                    if amount
-                        output += util.formatDecimalString(amount.toString(), false, true) + dataDelimiter
-                    else
-                        output += "0" + dataDelimiter
+            # output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
+            # $.each statsResults.savedData["corpora"], (key, acorpus) ->
+            #     output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter
+            #     $.each statsResults.savedWordArray, (wkey, aword) ->
+            #         amount = acorpus[selVal][aword]
+            #         if amount
+            #             output += util.formatDecimalString(amount.toString(), false, true) + dataDelimiter
+            #         else
+            #             output += "0" + dataDelimiter
 
-                output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
+            #     output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
 
             if selType is "TSV"
-                window.open "data:text/tsv;charset=latin1," + escape(output)
+                window.open "data:text/tsv;charset=utf-8," + (output)
             else
-                window.open "data:text/csv;charset=latin1," + escape(output)
+                window.open "data:text/csv;charset=utf-8," + (output)
 
 
         if $("html.msie7,html.msie8").length

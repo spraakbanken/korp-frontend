@@ -195,11 +195,14 @@ util.localizeFloat = function(float, nDec) {
 	return $.format("%." + nDec + "f", float).replace(".", sep);
 };
 
-util.formatDecimalString = function(x, mode, statsmode) { // Use "," instead of "." if Swedish, if mode is
+util.formatDecimalString = function(x, mode, statsmode, stringOnly) { // Use "," instead of "." if Swedish, if mode is
 	// Split the string into two parts
 	if(_.contains(x, ".")) {
     	var parts = x.split(".");
     	var decimalSeparator = util.getLocaleString("util_decimalseparator");
+    	if(stringOnly) {
+    		return parts[0] + decimalSeparator + parts[1]
+    	}
     	if(mode)
     		return prettyNumbers(parts[0]) + '<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>' + parts[1];
     		//return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
