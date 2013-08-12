@@ -3857,7 +3857,7 @@ settings.corpora.soexempel = {
 if (isLab)
 settings.corpora.swefn = {
 	id : "swefn",
-	title : "Svenskt frasnät++ (SweFN++)",
+	title : "Svenskt frasnät (SweFN)",
 	description : '',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
