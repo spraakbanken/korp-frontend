@@ -658,8 +658,8 @@ settings.corpora.fsbsakprosa = {
 
 settings.corpora.ungdomslitteratur = {
 	id : "ungdomslitteratur",
-	title : "Ungdomslitteratur 2000–2013",
-	description : "Material ur ungdomslitterära verk publicerade under 2000–2013.",
+	title : "Ungdomslitteratur 1992–2013",
+	description : "Material ur ungdomslitterära verk publicerade under 1992–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
