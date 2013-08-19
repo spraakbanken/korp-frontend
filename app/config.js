@@ -35,6 +35,10 @@ settings.modeConfig = [
         mode: "lb"
     },
     {
+        localekey: "spf_texts",
+        mode: "spf"
+    },
+    {
         localekey: "fisk1800_texts",
         mode: "fisk1800"
     },
