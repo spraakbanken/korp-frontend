@@ -258,6 +258,7 @@
     "variants" : "närliggande lemgram",
 
     "typography" : "typografisk information",
+    "fab_texttype" : "texttyp",
     "fab_footnote" : "fotnot",
     "fab_marginal" : "marginalnoter",
     "fab_bold" : "fetstilt",
@@ -265,6 +266,7 @@
     "fab_headline" : "rubrik",
     "fab_smallcaps" : "kapitäler",
     "fab_italic" : "kursivt",
+    "fab_info" : "hänvisning",
     
 
 

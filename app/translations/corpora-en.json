@@ -263,6 +263,7 @@
     "variants" : "similar lemgram",
 
     "typography" : "typographic information",
+    "fab_texttype" : "text type",
     "fab_footnote" : "footnote",
     "fab_marginal" : "margin notes",
     "fab_bold" : "bold text",
@@ -270,6 +271,7 @@
     "fab_headline" : "header",
     "fab_smallcaps" : "small caps",
     "fab_italic" : "italics",
+    "fab_info" : "reference",
     
      "sst_koncept" : "Stockholms stads tänkebok - Koncept",
      "sst_notariat" : "Stockholms stads tänkebok - Notariat",
