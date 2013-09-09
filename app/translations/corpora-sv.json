@@ -78,6 +78,9 @@
     
     "sentence_link" : "meningslänk",
     "text_issue" : "utgåva",
+    
+    "sender" : "avsändare",
+    "archivecode" : "arkivkod",
     "text_recipient" : "mottagare",
     "text_sv" : "verksnummer",
     
