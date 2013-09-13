@@ -347,7 +347,7 @@ settings.corporafolders.bloggmix = {
 
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
-	contents : ["barnlitteratur", "fsbessaistik", "fsbsakprosa", "ungdomslitteratur"],
+	contents : [],
 	description : "Det första steget för att skapa en finlandssvensk korpus togs redan " +
 			"på 1990-talet (Institutionen för nordiska språk vid Helsingfors universitet) " +
 			"och under åren 1999–2000 fortsatte arbetet (ett samarbetsprojekt mellan " +
@@ -367,9 +367,9 @@ settings.corporafolders.fisk.governmental = {
 	contents : ["informationstidningar", "lagtexter", "myndighet", "myndighet2"]
 };
 
-settings.corporafolders.fisk.novels = {
-	title : "Skönlitteratur",
-	contents : ["fsbskonlit1960-1999", "fsbskonlit2000tal"]
+settings.corporafolders.fisk.literature = {
+	title : "Skön- och facklitteratur",
+	contents : ["barnlitteratur", "fsbessaistik", "fsbsakprosa", "fsbskonlit1960-1999", "fsbskonlit2000tal", "ungdomslitteratur"]
 };
 
 settings.corporafolders.fisk.newspapertexts = {
