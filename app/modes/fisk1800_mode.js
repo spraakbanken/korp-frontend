@@ -109,4 +109,31 @@ settings.corpora.fsbskonlit1800tal = {
 	}
 };
 
+settings.corpora["fsbskonlit1900-1959"] = {
+	id : "fsbskonlit1900-1959",
+	title : "Skönlitteratur 1900–1959",
+	description : "Material ur skönlitterära verk publicerade under 1900–1959.",
+	morf : 'saldom|dalinm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_author" : {label : "author"},
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"},
+		"text_publisher" : {label : "publisher"}
+	}
+};
+
 settings.corpusListing = new CorpusListing(settings.corpora);
