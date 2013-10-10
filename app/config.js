@@ -471,6 +471,11 @@ settings.corporafolders.magazines = {
 	contents : ["fof"]
 };
 
+settings.corporafolders.twitter = {
+	title : "Twitter",
+	contents : ["twitter", "twitter-pldebatt", "twitter-pldebatt-131006"]
+};
+
 /*
  * CORPORA
  */
@@ -3796,6 +3801,54 @@ settings.corpora["twitter-pldebatt"] = {
 	id : "twitter-pldebatt",
 	title : "Twitter - Partiledardebatt juni 2013",
 	description : "Material från Twitter, insamlat under partiledardebatten 12 juni 2013 samt några dagar före och efter.",
+	within : {
+		"sentence" : "sentence",
+		"text" : "text"
+	},
+	context : {
+		"1 sentence" : "1 sentence",
+		"1 text" : "1 text"
+	},
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		user_username : {label : "username2"},
+		user_name : {label : "name"},
+		text_datetime : {label : "date"},
+		text_weekday : {label : "weekday"},
+		text_hashtags : {label : "hashtags", type : "set"},
+		text_mentions : {label : "mentions", type : "set"},
+		text_retweets : {label : "retweets"},
+		text_location : {label : "location"},
+		text_coordinates : {label : "coordinates"},
+		text_replytouser : {label : "replytouser"},
+		user_location : {label : "user_location"},
+		user_followers : {label : "followers"},
+		user_following : {label : "following"},
+		user_tweets : {label : "tweets"},
+		user_description : {
+					label : "description",
+					pattern : '<p style="margin-left: 5px;"><%=val%></p>'
+			},
+		user_url : {label : "website", type : "url"},
+		user_created : {label : "user_since"}
+	}
+};
+
+settings.corpora["twitter-pldebatt-131006"] = {
+	id : "twitter-pldebatt-131006",
+	title : "Twitter - Partiledardebatt oktober 2013",
+	description : "Material från Twitter, insamlat under partiledardebatten 6 oktober 2013 samt några dagar före och efter.",
 	within : {
 		"sentence" : "sentence",
 		"text" : "text"
