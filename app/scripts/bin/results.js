@@ -1188,7 +1188,7 @@
       }
       icon = $("<span class='graph_btn_icon'>");
       $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
-        var cell, chk, cl, cqp, instance, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
+        var attrs, cell, chk, cl, cqp, instance, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
         instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
@@ -1200,6 +1200,8 @@
         showTotal = false;
         mainCQP = params.cqp;
         prefix = isStructAttr ? "_." : "";
+        attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
+        op = attrs[reduceVal].type === "set" ? "contains" : "=";
         _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           chk = _ref[_i];
@@ -1209,7 +1211,7 @@
             continue;
           }
           val = _this.gridData[cell.parent().index()].hit_value;
-          cqp = "[" + (prefix + reduceVal) + " = '" + (regescape(val)) + "']";
+          cqp = "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(val)) + "']";
           subExprs.push(cqp);
           labelMapping[cqp] = cell.next().text();
         }

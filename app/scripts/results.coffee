@@ -1048,13 +1048,18 @@ class view.StatsResults extends BaseResults
             showTotal = false
             mainCQP = params.cqp
             prefix = if isStructAttr then "_." else ""
+            attrs = _.extend {}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector),
+                 cl.getStructAttrs(settings.reduce_word_attribute_selector)
+
+            op = if attrs[reduceVal].type == "set" then "contains" else "="
+
             for chk in @$result.find(".slick-cell-checkboxsel :checked")
                 cell = $(chk).parent()
                 if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
                 val = @gridData[cell.parent().index()].hit_value
-                cqp = "[#{prefix + reduceVal} = '#{regescape(val)}']"
+                cqp = "[#{prefix + reduceVal} #{op} '#{regescape(val)}']"
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 
