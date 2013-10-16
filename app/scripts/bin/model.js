@@ -486,7 +486,7 @@
     }
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, reduceval, self;
+      var data, reduceval, self, _ref;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -502,7 +502,7 @@
         incremental: $.support.ajaxProgress,
         defaultwithin: "sentence"
       };
-      if (settings.corpusListing.getCurrentAttributes()[reduceval].type === "set") {
+      if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
         data.split = reduceval;
       }
       if ($("#reduceSelect select").val() === "word_insensitive") {
@@ -693,7 +693,8 @@
       if (combined) {
         xhr.done(function(data, status, xhr) {
           var output, rest;
-          if (_.keys(data).length < 2) {
+          if (_.keys(data).length < 2 || data.ERROR) {
+            c.log("timespan error:", data.ERROR);
             dfd.reject();
             return;
           }

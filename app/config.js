@@ -3722,31 +3722,34 @@ settings.corpora.ansokningar = {
 	}
 };
 
-settings.corpora.cefr = {
-	id : "cefr",
-	title : "CEFR",
-	description : "",
-	limited_access : true,
-	context : settings.spContext,
-	within : settings.spWithin,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
-	struct_attributes : {
-		text_author : {label : "author"},
-		text_title : {label : "title"},
-		text_date : {label : "date"}
-	}
-};
+// for(var i = 0; i < 100; i++) {
+	settings.corpora["cerf"] = {
+		id : "cefr",
+		title : "CEFR",
+		description : "",
+		limited_access : false,
+		context : settings.spContext,
+		within : settings.spWithin,
+		attributes : {
+			pos : attrs.pos,
+			msd : attrs.msd,
+			lemma : attrs.baseform,
+			lex : attrs.lemgram,
+			saldo : attrs.saldo,
+			prefix : attrs.prefix,
+			suffix : attrs.suffix,
+			dephead : attrs.dephead,
+			deprel : attrs.deprel,
+			ref : attrs.ref
+		},
+		struct_attributes : {
+			text_author : {label : "author"},
+			text_title : {label : "title"},
+			text_date : {label : "date"}
+		}
+	};
+	
+// }
 
 settings.corpora.twitter = {
 	id : "twitter",

@@ -399,7 +399,7 @@ class model.StatsProxy extends BaseProxy
             # split : "lex"
             # split :   # lista, csv, av attribut som sammanställs
 
-        if settings.corpusListing.getCurrentAttributes()[reduceval].type == "set"
+        if settings.corpusListing.getCurrentAttributes()[reduceval]?.type == "set"
             data.split = reduceval
 
         if $("#reduceSelect select").val() is "word_insensitive"
@@ -555,7 +555,8 @@ class model.TimeProxy extends BaseProxy
         xhr = $.ajax(@req)
         if combined
             xhr.done (data, status, xhr) ->
-                if _.keys(data).length < 2
+                if _.keys(data).length < 2 or data.ERROR
+                    c.log "timespan error:", data.ERROR
                     dfd.reject()
                     return
 
