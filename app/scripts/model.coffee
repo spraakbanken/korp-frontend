@@ -168,29 +168,34 @@ class model.KWICProxy extends BaseProxy
             start: o.start or 0
             end: o.end
             defaultcontext: $.keys(settings.defaultContext)[0]
-            defaultwithin: "sentence"
-            show: ["sentence"]
+            defaultwithin: $.keys(settings.defaultWithin)[0]
+            show: []
             show_struct: []
             sort: o.sort
             incremental: o.incremental
 
-        data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
-        data.within = settings.corpusListing.getWithinQueryString() if currentMode == "parallel"
+        data.within = settings.corpusListing.getWithinQueryString()
+        data.context = settings.corpusListing.getContextQueryString()
         data.context = o.context if o.context?
         c.log "data.context", data.context
         data.within = o.within if o.within?
         data.random_seed = o.random_seed if o.random_seed?
         $.extend data, o.ajaxParams
         data.querydata = o.queryData if o.queryData?
-        $.each settings.corpusListing.selected, (_, corpus) ->
-            $.each corpus.attributes, (key, val) ->
-                data.show.push key if $.inArray(key, data.show) is -1
+        for corpus in settings.corpusListing.selected
+            c.log "corpus", corpus.within
+            for key, val of corpus.within
+                data.show.push key
+            for key, val of corpus.attributes
+                data.show.push key
+
 
             if corpus.struct_attributes?
                 $.each corpus.struct_attributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
 
+        data.show = _.uniq = data.show
         @prevCQP = o.cqp
         data.show = data.show.join()
         data.show_struct = data.show_struct.join()

@@ -128,12 +128,12 @@ class window.CorpusListing
 
     getContextQueryString: ->
         $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1)  if _.keys(settings.corpora[id].context)
+            id.toUpperCase() + ":" + _.keys(settings.corpora[id].context)[0] if _.keys(settings.corpora[id].context)
         ), Boolean).join()
 
     getWithinQueryString: ->
         $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1)  if _.keys(settings.corpora[id].within)
+            id.toUpperCase() + ":" + _.keys(settings.corpora[id].within)[0] if _.keys(settings.corpora[id].within)
         ), Boolean).join()
 
     getMorphology: ->

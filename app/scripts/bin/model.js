@@ -158,7 +158,7 @@
     };
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
-      var corpus, data, o, self;
+      var corpus, data, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
@@ -206,18 +206,14 @@
         start: o.start || 0,
         end: o.end,
         defaultcontext: $.keys(settings.defaultContext)[0],
-        defaultwithin: "sentence",
-        show: ["sentence"],
+        defaultwithin: $.keys(settings.defaultWithin)[0],
+        show: [],
         show_struct: [],
         sort: o.sort,
         incremental: o.incremental
       };
-      if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
-        data.within = settings.corpusListing.getWithinQueryString();
-      }
-      if (currentMode === "parallel") {
-        data.within = settings.corpusListing.getWithinQueryString();
-      }
+      data.within = settings.corpusListing.getWithinQueryString();
+      data.context = settings.corpusListing.getContextQueryString();
       if (o.context != null) {
         data.context = o.context;
       }
@@ -232,20 +228,29 @@
       if (o.queryData != null) {
         data.querydata = o.queryData;
       }
-      $.each(settings.corpusListing.selected, function(_, corpus) {
-        $.each(corpus.attributes, function(key, val) {
-          if ($.inArray(key, data.show) === -1) {
-            return data.show.push(key);
-          }
-        });
+      _ref = settings.corpusListing.selected;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        corpus = _ref[_i];
+        c.log("corpus", corpus.within);
+        _ref1 = corpus.within;
+        for (key in _ref1) {
+          val = _ref1[key];
+          data.show.push(key);
+        }
+        _ref2 = corpus.attributes;
+        for (key in _ref2) {
+          val = _ref2[key];
+          data.show.push(key);
+        }
         if (corpus.struct_attributes != null) {
-          return $.each(corpus.struct_attributes, function(key, val) {
+          $.each(corpus.struct_attributes, function(key, val) {
             if ($.inArray(key, data.show_struct) === -1) {
               return data.show_struct.push(key);
             }
           });
         }
-      });
+      }
+      data.show = _.uniq = data.show;
       this.prevCQP = o.cqp;
       data.show = data.show.join();
       data.show_struct = data.show_struct.join();

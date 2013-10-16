@@ -163,7 +163,7 @@
     CorpusListing.prototype.getContextQueryString = function() {
       return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
         if (_.keys(settings.corpora[id].context)) {
-          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context).slice(-1);
+          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context)[0];
         }
       }), Boolean).join();
     };
@@ -171,7 +171,7 @@
     CorpusListing.prototype.getWithinQueryString = function() {
       return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
         if (_.keys(settings.corpora[id].within)) {
-          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within).slice(-1);
+          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within)[0];
         }
       }), Boolean).join();
     };

@@ -7,6 +7,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
     massageData = (sentenceArray) ->
+        unless sentenceArray then return
         currentStruct = []
         prevCorpus = ""
         output = []

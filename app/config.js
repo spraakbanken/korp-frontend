@@ -2039,6 +2039,26 @@ settings.corpora.drama = {
 	struct_attributes : {}
 };
 
+if(location.port == "9000")
+settings.corpora.minisuc = {
+	id : "minisuc",
+	title : "Minisuc",
+	description : "",
+	within : {
+		"s" : "s",
+		"p" : "p"
+	},
+	context : {
+		"1 s" : "1 s",
+		"1 p" : "1 p"
+	},
+	attributes : {
+		msd : attrs.msd,
+		lex : attrs.lemgram,
+	},
+	struct_attributes : {}
+};
+
 
 settings.corpora.lasbart = {
 	id : "lasbart",
