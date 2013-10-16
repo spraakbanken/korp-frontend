@@ -502,6 +502,9 @@
         incremental: $.support.ajaxProgress,
         defaultwithin: "sentence"
       };
+      if (settings.corpusListing.getCurrentAttributes()[reduceval].type === "set") {
+        data.split = reduceval;
+      }
       if ($("#reduceSelect select").val() === "word_insensitive") {
         $.extend(data, {
           ignore_case: "word"

@@ -388,6 +388,7 @@ class model.StatsProxy extends BaseProxy
         statsResults.showPreloader()
         reduceval = $.bbq.getState("stats_reduce") or "word"
         reduceval = "word" if reduceval is "word_insensitive"
+
         data =
             command: "count"
             groupby: reduceval
@@ -395,9 +396,11 @@ class model.StatsProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
+            # split : "lex"
             # split :   # lista, csv, av attribut som sammanställs
 
-
+        if settings.corpusListing.getCurrentAttributes()[reduceval].type == "set"
+            data.split = reduceval
 
         if $("#reduceSelect select").val() is "word_insensitive"
             $.extend data,
