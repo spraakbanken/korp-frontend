@@ -63,8 +63,7 @@ settings.modeConfig = [
     },
     {
         localekey: "digidaily",
-        mode: "digidaily",
-        labOnly : true
+        mode: "digidaily"
     },
     {
         localekey: "all_hist",
