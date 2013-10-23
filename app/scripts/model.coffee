@@ -195,10 +195,9 @@ class model.KWICProxy extends BaseProxy
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
 
-        data.show = _.uniq = data.show
         @prevCQP = o.cqp
-        data.show = data.show.join()
-        data.show_struct = data.show_struct.join()
+        data.show = (_.uniq data.show).join(",")
+        data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
         @pendingRequests.push $.ajax(
             url: settings.cgi_script
@@ -574,7 +573,7 @@ class model.TimeProxy extends BaseProxy
 
         else
             xhr.done (data, status, xhr) ->
-                if _.keys(data).length < 2
+                if _.keys(data).length < 2 or data.ERROR
                     dfd.reject()
                     return
                 self.corpusdata = data
@@ -607,6 +606,10 @@ class model.TimeProxy extends BaseProxy
         unless years.length then return
         minYear = _.min years
         maxYear = _.max years
+
+        c.log "min", minYear, maxYear, years
+
+        return
 
         # while y < maxYear
         # c.log "years", minYear, maxYear

@@ -50,7 +50,7 @@
         to_mergea = _.pick.apply(_, [a].concat(__slice.call(keys_intersect)));
         to_mergeb = _.pick.apply(_, [b].concat(__slice.call(keys_intersect)));
         return _.merge({}, to_mergea, to_mergeb);
-      }));
+      }), {});
     };
 
     CorpusListing.prototype._mapping_union = function(mappingArray) {
@@ -162,16 +162,24 @@
 
     CorpusListing.prototype.getContextQueryString = function() {
       return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
-        if (_.keys(settings.corpora[id].context)) {
-          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].context)[0];
+        var context, _ref;
+        context = (_ref = _.keys(settings.corpora[id].context)) != null ? _ref[0] : void 0;
+        if (context && !(context in settings.defaultContext)) {
+          return id.toUpperCase() + ":" + context;
+        } else {
+          return false;
         }
       }), Boolean).join();
     };
 
     CorpusListing.prototype.getWithinQueryString = function() {
       return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
-        if (_.keys(settings.corpora[id].within)) {
-          return id.toUpperCase() + ":" + _.keys(settings.corpora[id].within)[0];
+        var within, _ref;
+        within = (_ref = _.keys(settings.corpora[id].within)) != null ? _ref[0] : void 0;
+        if (within && !(within in settings.defaultWithin)) {
+          return id.toUpperCase() + ":" + within;
+        } else {
+          return false;
         }
       }), Boolean).join();
     };

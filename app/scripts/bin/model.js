@@ -250,10 +250,9 @@
           });
         }
       }
-      data.show = _.uniq = data.show;
       this.prevCQP = o.cqp;
-      data.show = data.show.join();
-      data.show_struct = data.show_struct.join();
+      data.show = (_.uniq(data.show)).join(",");
+      data.show_struct = (_.uniq(data.show_struct)).join(",");
       this.prevRequest = data;
       return this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
@@ -711,7 +710,7 @@
         });
       } else {
         xhr.done(function(data, status, xhr) {
-          if (_.keys(data).length < 2) {
+          if (_.keys(data).length < 2 || data.ERROR) {
             dfd.reject();
             return;
           }
@@ -751,6 +750,8 @@
       }
       minYear = _.min(years);
       maxYear = _.max(years);
+      c.log("min", minYear, maxYear, years);
+      return;
       _results = [];
       for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
         thisVal = struct[y];

@@ -57,6 +57,11 @@ settings.modeConfig = [
         labOnly : true
     },
     {
+        localekey: "kioping",
+        mode: "kioping",
+        labOnly : true
+    },
+    {
         localekey: "lawroom",
         mode: "law",
         labOnly : true

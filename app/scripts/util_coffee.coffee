@@ -40,7 +40,7 @@ class window.CorpusListing
             to_mergea = _.pick a, keys_intersect...
             to_mergeb = _.pick b, keys_intersect...
             _.merge {}, to_mergea, to_mergeb
-        )
+        ), {}
 
     _mapping_union: (mappingArray) ->
         _.reduce mappingArray, ((a, b) ->
@@ -128,12 +128,20 @@ class window.CorpusListing
 
     getContextQueryString: ->
         $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            id.toUpperCase() + ":" + _.keys(settings.corpora[id].context)[0] if _.keys(settings.corpora[id].context)
+            context = _.keys(settings.corpora[id].context)?[0]
+            if context and context not of settings.defaultContext
+                return id.toUpperCase() + ":" + context
+            else
+                return false
         ), Boolean).join()
 
     getWithinQueryString: ->
         $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            id.toUpperCase() + ":" + _.keys(settings.corpora[id].within)[0] if _.keys(settings.corpora[id].within)
+            within = _.keys(settings.corpora[id].within)?[0]
+            if within and within not of settings.defaultWithin
+                return id.toUpperCase() + ":" + within
+            else 
+                return false
         ), Boolean).join()
 
     getMorphology: ->
