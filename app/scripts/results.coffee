@@ -1051,7 +1051,7 @@ class view.StatsResults extends BaseResults
             attrs = _.extend {}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector),
                  cl.getStructAttrs(settings.reduce_word_attribute_selector)
 
-            op = if attrs[reduceVal].type == "set" then "contains" else "="
+            op = if attrs[reduceVal]?.type == "set" then "contains" else "="
 
             for chk in @$result.find(".slick-cell-checkboxsel :checked")
                 cell = $(chk).parent()

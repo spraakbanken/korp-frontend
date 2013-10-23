@@ -1188,7 +1188,7 @@
       }
       icon = $("<span class='graph_btn_icon'>");
       $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
-        var attrs, cell, chk, cl, cqp, instance, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
+        var attrs, cell, chk, cl, cqp, instance, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
         instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
@@ -1201,10 +1201,10 @@
         mainCQP = params.cqp;
         prefix = isStructAttr ? "_." : "";
         attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
-        op = attrs[reduceVal].type === "set" ? "contains" : "=";
-        _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          chk = _ref[_i];
+        op = ((_ref = attrs[reduceVal]) != null ? _ref.type : void 0) === "set" ? "contains" : "=";
+        _ref1 = _this.$result.find(".slick-cell-checkboxsel :checked");
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          chk = _ref1[_i];
           cell = $(chk).parent();
           if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
             showTotal = true;
