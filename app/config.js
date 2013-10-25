@@ -57,11 +57,6 @@ settings.modeConfig = [
         labOnly : true
     },
     {
-        localekey: "kioping",
-        mode: "kioping",
-        labOnly : true
-    },
-    {
         localekey: "lawroom",
         mode: "law",
         labOnly : true
@@ -468,6 +463,11 @@ settings.corporafolders.newspapertexts.gp = {
 settings.corporafolders.newspapertexts.press = {
 	title : "Press",
 	contents : ["press65", "press76", "press95", "press96", "press97", "press98"]
+};
+
+settings.corporafolders.newspapertexts.webnews = {
+	title : "Webbnyheter",
+	contents : ["webbnyheter2001", "webbnyheter2002", "webbnyheter2003", "webbnyheter2004", "webbnyheter2005", "webbnyheter2006", "webbnyheter2007", "webbnyheter2008", "webbnyheter2009", "webbnyheter2010", "webbnyheter2011", "webbnyheter2012", "webbnyheter2013"]
 };
 
 settings.corporafolders.magazines = {
@@ -1082,6 +1082,331 @@ settings.corpora.dn1987 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
+	}
+};
+
+settings.corpora.webbnyheter2001 = {
+	id : "webbnyheter2001",
+	title : "Webbnyheter 2001",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2002 = {
+	id : "webbnyheter2002",
+	title : "Webbnyheter 2002",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2003 = {
+	id : "webbnyheter2003",
+	title : "Webbnyheter 2003",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2004 = {
+	id : "webbnyheter2004",
+	title : "Webbnyheter 2004",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2005 = {
+	id : "webbnyheter2005",
+	title : "Webbnyheter 2005",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2006 = {
+	id : "webbnyheter2006",
+	title : "Webbnyheter 2006",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2007 = {
+	id : "webbnyheter2007",
+	title : "Webbnyheter 2007",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2008 = {
+	id : "webbnyheter2008",
+	title : "Webbnyheter 2008",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2009 = {
+	id : "webbnyheter2009",
+	title : "Webbnyheter 2009",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2010 = {
+	id : "webbnyheter2010",
+	title : "Webbnyheter 2010",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2011 = {
+	id : "webbnyheter2011",
+	title : "Webbnyheter 2011",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2012 = {
+	id : "webbnyheter2012",
+	title : "Webbnyheter 2012",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
+	}
+};
+
+settings.corpora.webbnyheter2013 = {
+	id : "webbnyheter2013",
+	title : "Webbnyheter 2013",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		text_date : sattrs.date,
+		text_title : {label : "title"},
+		text_url : {label : "url" , type : "url"}
 	}
 };
 
