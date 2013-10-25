@@ -543,8 +543,8 @@ settings.corpora["fsbskonlit1960-1999"] = {
 	id : "fsbskonlit1960-1999",
 	title : "Skönlitteratur 1960–1999",
 	description : "Material ur skönlitterära verk publicerade under 1960–1999.",
-	within : settings.spWithin,
-	context : settings.spContext,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
@@ -569,8 +569,8 @@ settings.corpora.fsbskonlit2000tal = {
 	id : "fsbskonlit2000tal",
 	title : "Skönlitteratur 2000–2013",
 	description : "Material ur skönlitterära verk publicerade under 2000–2013.",
-	within : settings.spWithin,
-	context : settings.spContext,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
