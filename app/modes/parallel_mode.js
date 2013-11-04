@@ -118,7 +118,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		// c.log ("output, activeLangs", output, activeLangs)
 		// output = _.difference(output, activeLangs);
 		// output = output.sort(function(a, b) {
-		//     return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+		//	 return lang_prio.indexOf(b) - lang_prio.indexOf(a)
 		// });
 
 		// return output;
@@ -154,7 +154,7 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		// }
 
 		// output = output.sort(function(a, b) {
-		//     return lang_prio.indexOf(b) - lang_prio.indexOf(a)
+		//	 return lang_prio.indexOf(b) - lang_prio.indexOf(a)
 		// });
 
 		// return _.uniq(output);
@@ -215,13 +215,13 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 				}).groupBy("lang").value()
 		}
 		var query = $("#query_table .query_token").map(function() {
-	    	return $(this).extendedToken("getCQP");
-	    }).get().join(" ");
+			return $(this).extendedToken("getCQP");
+		}).get().join(" ");
 		if(currentLangList.length > 1) {
 			$(".lang_row").each(function(i, item) {			
 				cqp = $(this).find(".query_token").map(function() {
-			    	return $(this).extendedToken("getCQP");
-			    }).get().join(" ");
+					return $(this).extendedToken("getCQP");
+				}).get().join(" ");
 
 				var lang = $(".lang_select", this).val();
 				var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
@@ -230,8 +230,8 @@ view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
 
 			});
 		}
-	    this.setCQP(query);
-	    return query;
+		this.setCQP(query);
+		return query;
 	}
 });
 
@@ -320,7 +320,33 @@ settings.corpora["europarl-sv"] = {
 	},
 	struct_attributes : {
 		text_date : {label : "date"},
-		text_speaker : {label : "speaker"}
+		text_speaker : {label : "speaker"},
+		text_speakerlang : {
+			label : "lang",
+			displayType : "select",
+			dataset : {
+				"EN" : "engelska",
+				"FI" : "finska",
+				"FR" : "franska",
+				"NL" : "nederländska",
+				"IT" : "italienska",
+				"DE" : "tyska",
+				"ES" : "spanska",
+				"EL" : "grekiska",
+				"PT" : "portugisiska",
+				"DA" : "danska",
+				"HU" : "ungerska",
+				"PL" : "polska",
+				"MT" : "maltesiska",
+				"LT" : "litauiska",
+				"SL" : "slovenska",
+				"CS" : "tjeckiska",
+				"LV" : "lettiska",
+				"SV" : "svenska",
+				"SK" : "slovakiska",
+				"ET" : "estniska"
+			}
+		}
 	},
 	hide : true
 }
@@ -519,15 +545,15 @@ settings.corpora.saltnld_swe = {
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
-	    text_title : {label : "title"},
+		text_title : {label : "title"},
 
-	    text_year : {label : "year"},
+		text_year : {label : "year"},
 		text_origlang : {
-		    label : "origlang",
-		    displayType : "select",
+			label : "origlang",
+			displayType : "select",
 			dataset: {
-			    "swe" : "swedish",
-			    "nld" : "dutch"
+				"swe" : "swedish",
+				"nld" : "dutch"
 			}
 		},
 		page_n : {label : "page_n"}
@@ -545,15 +571,15 @@ settings.corpora.saltnld_nld = {
 	attributes: {},
 	struct_attributes : {
 		text_author : {label : "author"},
-	    text_title : {label : "title"},
+		text_title : {label : "title"},
 
-	    text_year : {label : "year"},
+		text_year : {label : "year"},
 		text_origlang : {
-		    label : "origlang",
-		    displayType : "select",
+			label : "origlang",
+			displayType : "select",
 			dataset: {
-			    "swe" : "swedish",
-			    "nld" : "dutch"
+				"swe" : "swedish",
+				"nld" : "dutch"
 			}
 		},
 		page_n : {label : "page_n"}
@@ -585,8 +611,8 @@ settings.corpora.espc_swe = {
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"}
+		text_title : {label : "title"},
+		text_date : {label : "year"}
 	}
 }
 settings.corpora.espc_eng = {
@@ -601,8 +627,8 @@ settings.corpora.espc_eng = {
 	attributes: {},
 	struct_attributes : {
 		text_author : {label : "author"},
-	    text_title : {label : "title"},
-	    text_date : {label : "year"}
+		text_title : {label : "title"},
+		text_date : {label : "year"}
 	},
 	hide : true
 }
