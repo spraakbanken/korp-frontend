@@ -1,4 +1,27 @@
 {
+
+"EN" : "engelska",
+"FI" : "finska",
+"FR" : "franska",
+"NL" : "nederländska",
+"IT" : "italienska",
+"DE" : "tyska",
+"ES" : "spanska",
+"EL" : "grekiska",
+"PT" : "portugisiska",
+"DA" : "danska",
+"HU" : "ungerska",
+"PL" : "polska",
+"MT" : "maltesiska",
+"LT" : "litauiska",
+"SL" : "slovenska",
+"CS" : "tjeckiska",
+"LV" : "lettiska",
+"SV" : "svenska",
+"SK" : "slovakiska",
+"ET" : "estniska",
+
+
 	"docs" : "Användarhandledning",
 	"swedish" : "Svenska",
 	"english" : "English",
