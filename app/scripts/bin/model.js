@@ -212,8 +212,6 @@
         sort: o.sort,
         incremental: o.incremental
       };
-      data.within = settings.corpusListing.getWithinQueryString();
-      data.context = settings.corpusListing.getContextQueryString();
       if (o.context != null) {
         data.context = o.context;
       }
@@ -750,8 +748,10 @@
       }
       minYear = _.min(years);
       maxYear = _.max(years);
-      c.log("min", minYear, maxYear, years);
-      return;
+      if (_.isNaN(maxYear) || _.isNaN(minYear)) {
+        c.log("expandTimestruct broken, years:", years);
+        return;
+      }
       _results = [];
       for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
         thisVal = struct[y];

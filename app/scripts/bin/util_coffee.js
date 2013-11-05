@@ -50,7 +50,7 @@
         to_mergea = _.pick.apply(_, [a].concat(__slice.call(keys_intersect)));
         to_mergeb = _.pick.apply(_, [b].concat(__slice.call(keys_intersect)));
         return _.merge({}, to_mergea, to_mergeb);
-      }), {});
+      }) || {});
     };
 
     CorpusListing.prototype._mapping_union = function(mappingArray) {
@@ -161,27 +161,59 @@
     };
 
     CorpusListing.prototype.getContextQueryString = function() {
-      return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
-        var context, _ref;
-        context = (_ref = _.keys(settings.corpora[id].context)) != null ? _ref[0] : void 0;
-        if (context && !(context in settings.defaultContext)) {
-          return id.toUpperCase() + ":" + context;
-        } else {
-          return false;
+      var context, contexts, corpus, output;
+      output = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.selected;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          corpus = _ref[_i];
+          contexts = _.keys(corpus.context);
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (_j = 0, _len1 = contexts.length; _j < _len1; _j++) {
+              context = contexts[_j];
+              if (context && !(context in settings.defaultContext)) {
+                _results1.push(corpus.id.toUpperCase() + ":" + context);
+              } else {
+                _results1.push(false);
+              }
+            }
+            return _results1;
+          })());
         }
-      }), Boolean).join();
+        return _results;
+      }).call(this);
+      return _(output).flatten().compact().join();
     };
 
     CorpusListing.prototype.getWithinQueryString = function() {
-      return $.grep($.map(_.pluck(this.selected, "id"), function(id) {
-        var within, _ref;
-        within = (_ref = _.keys(settings.corpora[id].within)) != null ? _ref[0] : void 0;
-        if (within && !(within in settings.defaultWithin)) {
-          return id.toUpperCase() + ":" + within;
-        } else {
-          return false;
+      var corpus, output, within, withins;
+      output = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.selected;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          corpus = _ref[_i];
+          withins = _.keys(corpus.within);
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (_j = 0, _len1 = withins.length; _j < _len1; _j++) {
+              within = withins[_j];
+              if (within && !(within in settings.defaultWithin)) {
+                _results1.push(corpus.id.toUpperCase() + ":" + within);
+              } else {
+                _results1.push(false);
+              }
+            }
+            return _results1;
+          })());
         }
-      }), Boolean).join();
+        return _results;
+      }).call(this);
+      return _(output).flatten().compact().join();
     };
 
     CorpusListing.prototype.getMorphology = function() {

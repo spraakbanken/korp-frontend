@@ -114,12 +114,12 @@ class model.KWICProxy extends BaseProxy
         @foundKwic = false
 
     abort: ->
-        _.invoke @pendingRequests, "abort"  if @pendingRequests.length
+        _.invoke @pendingRequests, "abort" if @pendingRequests.length
         @pendingRequests = []
 
     popXhr: (xhr) ->
         i = $.inArray(@pendingRequests, xhr)
-        @pendingRequests.pop i  unless i is -1
+        @pendingRequests.pop i unless i is -1
 
     makeRequest: (options, page, callback, successCallback, kwicCallback) ->
         self = this
@@ -174,8 +174,8 @@ class model.KWICProxy extends BaseProxy
             sort: o.sort
             incremental: o.incremental
 
-        data.within = settings.corpusListing.getWithinQueryString()
-        data.context = settings.corpusListing.getContextQueryString()
+        # data.within = settings.corpusListing.getWithinQueryString()
+        # data.context = settings.corpusListing.getContextQueryString()
         data.context = o.context if o.context?
         c.log "data.context", data.context
         data.within = o.within if o.within?
@@ -607,10 +607,9 @@ class model.TimeProxy extends BaseProxy
         minYear = _.min years
         maxYear = _.max years
 
-        c.log "min", minYear, maxYear, years
-
-        return
-
+        if _.isNaN(maxYear) or _.isNaN(minYear)
+            c.log "expandTimestruct broken, years:", years
+            return
         # while y < maxYear
         # c.log "years", minYear, maxYear
         for y in [minYear..maxYear]

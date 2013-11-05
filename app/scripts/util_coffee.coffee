@@ -40,7 +40,7 @@ class window.CorpusListing
             to_mergea = _.pick a, keys_intersect...
             to_mergeb = _.pick b, keys_intersect...
             _.merge {}, to_mergea, to_mergeb
-        ), {}
+        ) or {}
 
     _mapping_union: (mappingArray) ->
         _.reduce mappingArray, ((a, b) ->
@@ -127,22 +127,28 @@ class window.CorpusListing
         _.union struct...
 
     getContextQueryString: ->
-        $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            context = _.keys(settings.corpora[id].context)?[0]
-            if context and context not of settings.defaultContext
-                return id.toUpperCase() + ":" + context
-            else
-                return false
-        ), Boolean).join()
+        output = for corpus in @selected
+            contexts = _.keys(corpus.context)
+            for context in contexts
+                if context and context not of settings.defaultContext
+                    corpus.id.toUpperCase() + ":" + context
+                else
+                    false
+
+        _(output).flatten().compact().join()
+
+
 
     getWithinQueryString: ->
-        $.grep($.map(_.pluck(@selected, "id"), (id) ->
-            within = _.keys(settings.corpora[id].within)?[0]
-            if within and within not of settings.defaultWithin
-                return id.toUpperCase() + ":" + within
-            else 
-                return false
-        ), Boolean).join()
+        output = for corpus in @selected
+            withins = _.keys(corpus.within)
+            for within in withins
+                if within and within not of settings.defaultWithin
+                    corpus.id.toUpperCase() + ":" + within
+                else
+                    false
+
+        _(output).flatten().compact().join()
 
     getMorphology: ->
         _(@selected).map((corpus) ->
