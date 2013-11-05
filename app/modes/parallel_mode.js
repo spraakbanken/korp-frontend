@@ -181,9 +181,11 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 		});
 
 		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
+		c.log ("struct", struct)
 		var output = [];
 		$.each(struct, function(i, item) {
-			main = item[0]
+			var main = item[0]
+			c.log ("main", item)
 
 			var pair = _.map(item.slice(1), function(corp) {
 				return main.id.toUpperCase() + "|" + corp.id.toUpperCase();
@@ -590,6 +592,7 @@ settings.corpora.saltnld_nld = {
 settings.corpora.espc_swe = {
 	id : "espc_swe",
 	lang : "swe",
+	linked_to : ["espc_eng"],
 	limited_access : true,
 	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,
@@ -618,6 +621,7 @@ settings.corpora.espc_swe = {
 settings.corpora.espc_eng = {
 	id : "espc_eng",
 	lang : "eng",
+	linked_to : ["espc_swe"],
 	limited_access : true,
 	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,

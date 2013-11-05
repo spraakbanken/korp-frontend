@@ -140,7 +140,7 @@ class view.KWICResults extends BaseResults
 
     onKeydown: (event) ->
         isSpecialKeyDown = event.shiftKey or event.ctrlKey or event.metaKey
-        return if isSpecialKeyDown or $("input[type=text], textarea").is(":focus")
+        return if isSpecialKeyDown or $("input[type=text], input[type=password], textarea").is(":focus")
         switch event.which
             when 78 # n
                 @$result.find(".pager-wrapper .next").click()

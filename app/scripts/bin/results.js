@@ -161,7 +161,7 @@
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
-      if (isSpecialKeyDown || $("input[type=text], textarea").is(":focus")) {
+      if (isSpecialKeyDown || $("input[type=text], input[type=password], textarea").is(":focus")) {
         return;
       }
       switch (event.which) {
