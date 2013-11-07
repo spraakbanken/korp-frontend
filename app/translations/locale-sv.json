@@ -225,8 +225,9 @@
 	"chapter" : "kapitel",
 	"verse" : "vers",
 	"saldom" : "moderna",
-    "dalinm" : "1800-tal",
-    "swedbergm" : "1600-tal",
-    "fsvm" : "fornsvenska"
-
+ 	"dalinm" : "1800-tal",
+ 	"swedbergm" : "1600-tal",
+ 	"fsvm" : "fornsvenska",
+        "kioping_texts" : "Kiöpings resor",
+         "runeberg" : "Runebergtidskrifter"
 }

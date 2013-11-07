@@ -52,6 +52,17 @@ settings.modeConfig = [
         labOnly : true
     },
     {
+        localekey: "kioping_texts",
+        mode: "kioping_books",
+        labOnly : true
+    },
+    {
+        localekey: "runeberg",
+        mode: "runeberg",
+        labOnly : true
+    },
+ 
+    {
         localekey: "1800_texts",
         mode: "1800",
         labOnly : true

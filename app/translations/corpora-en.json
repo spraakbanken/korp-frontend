@@ -270,6 +270,10 @@
     "fab_smallcaps" : "small caps",
     "fab_italic" : "italics",
     "fab_info" : "reference",
+    "fab_antikva" : "antiqua",
+    "fab_gap" : "missing text",
+    "fab_kustod" : "catchword",
+    "fab_unclear" : "unreadable",
     
     "sst_koncept" : "Stockholms stads tänkebok - Koncept",
     "sst_notariat" : "Stockholms stads tänkebok - Notariat",

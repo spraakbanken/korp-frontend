@@ -270,6 +270,10 @@
     "fab_smallcaps" : "kapitäler",
     "fab_italic" : "kursivt",
     "fab_info" : "hänvisning",
+    "fab_antikva" : "antikva",
+    "fab_gap" : "saknad text",
+    "fab_kustod" : "kustod",
+    "fab_unclear" : "oläsligt",
     
     "sst_koncept" : "Stockholms stads tänkebok - Koncept",
     "sst_notariat" : "Stockholms stads tänkebok - Notariat",

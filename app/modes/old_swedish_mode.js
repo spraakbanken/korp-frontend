@@ -408,7 +408,9 @@ settings.corpora["fsv-nysvensklagar"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : { lemma : settings.fsvlemma,
+	            lex : settings.fsvlex,
+        },
 	struct_attributes : {
 		text_title : {
 			label : "title",

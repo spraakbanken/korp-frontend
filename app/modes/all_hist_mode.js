@@ -54,6 +54,42 @@ settings.digidailystruct_attributes = {
 };
 settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>';
 
+//RUNEBERG
+
+settings.runebergattributes = {
+	msd : attrs.msd,
+	lemma : attrs.baseform,
+	lex : attrs.lemgram,
+	saldo : attrs.saldo,
+	prefix : attrs.prefix,
+	suffix : attrs.suffix,
+	dephead : attrs.dephead,
+	deprel : attrs.deprel,
+	ref : attrs.ref,
+	typograph : {
+        	label : "typography",
+        	type : "set",
+		displayType : "select",
+		translationKey : "fab_",
+		dataset : [
+			"footnote",
+			"small",
+			"headline",
+			"italic"
+			],
+		opts : settings.liteOptions
+        }
+};
+settings.runebergstruct_attributes = {
+	text_title : {
+		label : "title",
+		displayType : "select",
+		localize : false,
+ 		opts : settings.liteOptions
+	},
+	text_date : {label : "date"}
+};
+
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -115,6 +151,11 @@ settings.corporafolders.lag = {
         description : "Bibeln, 1873 och 1917 års utgåvor"
 };
 
+settings.corporafolders.runeberg = {
+	title : "Runeberg",
+	contents : ["runeberg-diverse", "runeberg-rost", "runeberg-svtidskr", "runeberg-urdagkron", "runeberg-tiden"],
+        description : "Tidskrifter från Projekt Runeberg"
+}
 
 
 settings.corpora.lb = {
@@ -961,6 +1002,120 @@ settings.corpora.bibel1873dalin = {
 		"verse_name" : {label : "verse"},
 		"text_date" : {label : "year"}
 	}
+};
+
+
+settings.corpora["runeberg-diverse"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-diverse",
+	title : "Diverse tidningar",
+	description : "Brand, De ungas tidning, Det nya Sverige, Elegant, Hvar 8 dag, Nyare Conversations-Bladet, Sundsvalls tidning, Varia",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
+};
+
+settings.corpora["runeberg-rost"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-rost",
+	title : "Rösträtt för kvinnor",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
+};
+
+settings.corpora["runeberg-svtidskr"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-svtidskr",
+	title : "Svensk Tidskrift",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
+};
+settings.corpora["runeberg-tiden"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-tiden",
+	title : "Tiden",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
+};
+
+settings.corpora["runeberg-urdagkron"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-urdagkron",
+	title : "Ur Dagens Krönika",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+};
+
+
+settings.corpora.kioping = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "kioping",
+	title : "Nils Matsson Kiöpings resor",
+	description : "Reseskildringar från 1674 och 1743",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+     		lemma : attrs.baseform,
+     		lex : attrs.lemgram,
+     		saldo : attrs.saldo,
+     		prefix : attrs.prefix,
+     		suffix : attrs.suffix,
+     		dephead : attrs.dephead,
+     		deprel : attrs.deprel,
+     		ref : attrs.ref,
+		typograph : {
+        	    label : "typography",
+        	    type : "set",
+				displayType : "select",
+				translationKey : "fab_",
+				dataset : [
+					"antikva",
+					"smallcaps",
+					"headline",
+					"italic",
+					"unclear",
+					"gap"
+					//"kustod"
+				],
+				opts : settings.liteOptions
+        	
+                }
+	},
+
+	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+				"Een kort Beskriffning Uppå Trenne Reesor och Peregrinationer, sampt Konungarijket Japan",
+				"BESKRIFNING Om En RESA GENOM ASIA, AFRICA Och många andra HEDNA LÄNDER "
+			],
+			opts : settings.liteOptions
+		},
+                "chapter_name" : {label : "chapter"},
+	}
+
+
 };
 
 

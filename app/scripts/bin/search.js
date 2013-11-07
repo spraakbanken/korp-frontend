@@ -143,7 +143,7 @@
       }
     }, {
       word_attr: word_attr,
-      sentence_attr: $.grepObj(sentence_attr, function(val, key) {
+      sentence_attr: $.grepObj(sentence_attr||{}, function(val, key) {
         if (val.displayType === "date_interval") {
           return false;
         }

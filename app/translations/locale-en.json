@@ -226,5 +226,7 @@
 	"saldom" : "modern",
     "dalinm" : "19th century",
     "swedbergm" : "17th century",
-    "fsvm" : "old swedish"
+    "fsvm" : "old swedish",
+    "kioping_texts" : "Kiöping's book of travel",
+    "runeberg" : "Runeberg journal"
 }
