@@ -488,7 +488,7 @@ settings.corporafolders.magazines = {
 
 settings.corporafolders.twitter = {
 	title : "Twitter",
-	contents : ["twitter", "twitter-pldebatt", "twitter-pldebatt-131006"]
+	contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006"]
 };
 
 /*
@@ -4157,8 +4157,8 @@ settings.corpora.twitter = {
 	}
 };
 
-settings.corpora["twitter-pldebatt"] = {
-	id : "twitter-pldebatt",
+settings.corpora["twitter-pldebatt-130612"] = {
+	id : "twitter-pldebatt-130612",
 	title : "Twitter - Partiledardebatt juni 2013",
 	description : "Material från Twitter, insamlat under partiledardebatten 12 juni 2013 samt några dagar före och efter.",
 	within : {
