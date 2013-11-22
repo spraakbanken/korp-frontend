@@ -374,7 +374,7 @@ settings.corporafolders.fisk.webtexts = {
 
 settings.corporafolders.fisk.governmental = {
 	title : "Myndighetstexter",
-	contents : ["informationstidningar", "lagtexter", "myndighet", "myndighet2"]
+	contents : ["informationstidningar", "lagtexter", "myndighet", "myndighet2", "propositioner"]
 };
 
 settings.corporafolders.fisk.literature = {
@@ -796,6 +796,30 @@ settings.corpora.myndighet2 = {
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_publisher : {label : "publisher"},
+		text_title : {label : "title"}
+	}
+};
+
+settings.corpora.propositioner = {
+	id : "propositioner",
+	title : "Propositioner 1993–2013",
+	description : 'Material ur <a href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_date : {label : "year"},
 		text_title : {label : "title"}
 	}
 };
@@ -2378,27 +2402,6 @@ settings.corpora.drama = {
 	},
 	struct_attributes : {}
 };
-
-if(location.port == "9000")
-settings.corpora.minisuc = {
-	id : "minisuc",
-	title : "Minisuc",
-	description : "",
-	within : {
-		"s" : "s",
-		"p" : "p"
-	},
-	context : {
-		"1 s" : "1 s",
-		"1 p" : "1 p"
-	},
-	attributes : {
-		msd : attrs.msd,
-		lex : attrs.lemgram,
-	},
-	struct_attributes : {}
-};
-
 
 settings.corpora.lasbart = {
 	id : "lasbart",
