@@ -4286,6 +4286,7 @@ settings.corpora.gdc = {
 		"text_duration" : {label : "duration"},
 		"text_project" : {label : "project"},
 		"line_speaker" : {label : "speaker"},
+		"line_speakergender" : {label : "gender"},
 		"text_date" : {label : "date"},
 		"section_name" : {label : "section"}
 		// TODO: this gives some error, fix this.
