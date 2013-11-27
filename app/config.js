@@ -1141,7 +1141,8 @@ settings.corpora.webbnyheter2001 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url", type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1166,7 +1167,8 @@ settings.corpora.webbnyheter2002 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1191,7 +1193,8 @@ settings.corpora.webbnyheter2003 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1216,7 +1219,8 @@ settings.corpora.webbnyheter2004 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1241,7 +1245,8 @@ settings.corpora.webbnyheter2005 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1266,7 +1271,8 @@ settings.corpora.webbnyheter2006 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1291,7 +1297,8 @@ settings.corpora.webbnyheter2007 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1316,7 +1323,8 @@ settings.corpora.webbnyheter2008 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1341,7 +1349,8 @@ settings.corpora.webbnyheter2009 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1366,7 +1375,8 @@ settings.corpora.webbnyheter2010 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1391,7 +1401,8 @@ settings.corpora.webbnyheter2011 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1416,7 +1427,8 @@ settings.corpora.webbnyheter2012 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 
@@ -1441,7 +1453,8 @@ settings.corpora.webbnyheter2013 = {
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"},
-		text_url : {label : "url" , type : "url"}
+		text_url : {label : "url" , type : "url"},
+		text_newspaper : {label : "newspaper"}
 	}
 };
 

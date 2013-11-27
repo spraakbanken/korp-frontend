@@ -314,5 +314,6 @@
     "album" : "album",
     "album_year" : "album year", 
     "song_title" : "song title",
-    "song_year" : "song year"
+    "song_year" : "song year",
+    "newspaper" : "newspaper"
 }

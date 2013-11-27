@@ -314,5 +314,7 @@
     "album" : "album",
     "album_year" : "år (album)", 
     "song_title" : "låttitel",
-    "song_year" : "år (låt)"
+    "song_year" : "år (låt)",
+    "newspaper" : "tidning"
+
 }
