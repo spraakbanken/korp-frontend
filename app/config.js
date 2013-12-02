@@ -3218,6 +3218,45 @@ settings.corpora.sfs = {
 	}
 };
 
+settings.corpora.swefn = {
+	id : "swefn",
+	title : "Svenskt frasnät (SweFN)",
+	description : '',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+	    "text_created_by" : {label : "created_by"},
+/*	    "element_name" : {label : "element"},
+	    "lu_n" : {label : ""},
+	    "supp_n" : {label : ""},
+	    "copula_n" : {label : ""},
+	    "sentence_id" : {label : ""},*/
+	    "example_source" : {label : "source"},
+	    "text_frame" : {label : "frame"},
+	    "text_domain" : {label : "domain"},
+	    "text_semantic_type" : {label : "semantic_type"},
+	    "text_core_elements" : {label : "core_elements"},
+	    "text_peripheral_elements" : {label : "peripheral_elements"},
+	    "text_compound_patterns" : {label : "compound_patterns"},
+	    "text_compound_pattern_examples" : {label : "compound_pattern_examples"},
+/*	    "text_lexical_units_saldo" : {label : "lexical_units_saldo"},
+	    "text_lexical_units_new" : {label : "lexical_units_new"},*/
+	    "text_notes" : {label : "notes"}
+	}
+};
+
 settings.corpora["wikipedia-sv"] = {
 	id : "wikipedia-sv",
 	title : "Svenska Wikipedia (november 2013)",
