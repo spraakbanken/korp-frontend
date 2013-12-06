@@ -408,7 +408,7 @@ settings.corporafolders.fisk.newspapertexts.jakobstadstidning = {
 settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 	title : "Pargas kungörelser",
 	contents : ["pargaskungorelser2011", "pargaskungorelser2012"],
-	description : "<a href=\"http://www.pku.fi\" target=\"_blank\">Pargas Kungörelser</a> är en regional svenskspråkig tidning i Pargas med omnejd."
+	description : "<a href=\"http://www.pku.fi\" target=\"_blank\">Pargas Kungörelser</a> är en regional tvåspråkig (svenska och finska) tidning med spridning i Pargas med omnejd. I korpusen är endast den svenskspråkiga delen av tidningen med."
 };
 
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
@@ -497,7 +497,7 @@ settings.corporafolders.twitter = {
 
 settings.corpora.magmakolumner = {
 	id : "magmakolumner",
-	title : "Magma kolumner",
+	title : "Magma kolumner 2009–2012",
 	description : "Material ur kolumner publicerade av <a href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -522,7 +522,7 @@ settings.corpora.magmakolumner = {
 
 settings.corpora.fsbbloggvuxna = {
 	id : "fsbbloggvuxna",
-	title : "Bloggtexter",
+	title : "Bloggtexter 2006–2013",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -604,7 +604,7 @@ settings.corpora.fsbskonlit2000tal = {
 
 settings.corpora.barnlitteratur = {
 	id : "barnlitteratur",
-	title : "Barnlitteratur 2000–2013",
+	title : "Barnlitteratur 1988–2013",
 	description : "Material ur barnlitterära verk publicerade under 2000–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -630,7 +630,7 @@ settings.corpora.barnlitteratur = {
 
 settings.corpora.fsbessaistik = {
 	id : "fsbessaistik",
-	title : "Essäistisk litteratur 1992–2013",
+	title : "Essäistisk litteratur 1963–2010",
 	description : "Material ur essäistiska verk publicerade under 1992–2013",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -682,7 +682,7 @@ settings.corpora.fsbsakprosa = {
 
 settings.corpora.ungdomslitteratur = {
 	id : "ungdomslitteratur",
-	title : "Ungdomslitteratur 1992–2013",
+	title : "Ungdomslitteratur 1992–2011",
 	description : "Material ur ungdomslitterära verk publicerade under 1992–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -777,7 +777,7 @@ settings.corpora.myndighet = {
 
 settings.corpora.myndighet2 = {
 	id : "myndighet2",
-	title : "Myndighetsprosa 2001–2012",
+	title : "Myndighetsprosa 2001–2013",
 	description : "Material utgivet av offentliga myndigheter.",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -850,7 +850,7 @@ settings.corpora.finsktidskrift = {
 
 settings.corpora.forumfeot = {
 	id : "forumfeot",
-	title : "Forum för ekonomi och teknik 2007–2012",
+	title : "Forum för ekonomi och teknik 2008–2012",
 	description : "<a href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
 	within : settings.spWithin,
 	context : settings.spContext,
