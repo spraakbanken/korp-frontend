@@ -475,7 +475,6 @@ class model.StatsProxy extends BaseProxy
                         relative: obj.sums.relative
 
                 wordArray = $.keys(data.total.absolute)
-                c.log "wordArray length", wordArray.length
                 t = $.now()
                 # $.each wordArray, (i, word) ->
                 for word, i in wordArray
@@ -493,7 +492,6 @@ class model.StatsProxy extends BaseProxy
                             relative: obj.relative[word]
 
                     dataset.push row
-                c.log "dataset calculated", $.now() - t
                 statsResults.savedData = data
                 statsResults.savedWordArray = wordArray
                 statsResults.renderResult columns, dataset
