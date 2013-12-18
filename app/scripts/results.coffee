@@ -415,10 +415,10 @@ class view.KWICResults extends BaseResults
     selectUp: ->
         current = @selectionManager.selected
         unless @$result.is(".reading_mode")
-            prevMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").prevAll(".sentence").first())
+            prevMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").prevAll(".not_corpus_info").first())
             prevMatch.click()
         else
-            searchwords = current.prevAll(".word").get().concat(current.closest(".sentence").prev().find(".word").get().reverse())
+            searchwords = current.prevAll(".word").get().concat(current.closest(".not_corpus_info").prevAll(".not_corpus_info").first().find(".word").get().reverse())
             def = current.parent().prev().find(".word:last")
             prevMatch = @getFirstAtCoor(current.offset().left + current.width() / 2, $(searchwords), def).click()
 
@@ -427,10 +427,10 @@ class view.KWICResults extends BaseResults
     selectDown: ->
         current = @selectionManager.selected
         unless @$result.is(".reading_mode")
-            nextMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").nextAll(".sentence").first())
+            nextMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").nextAll(".not_corpus_info").first())
             nextMatch.click()
         else
-            searchwords = current.nextAll(".word").add(current.closest(".sentence").next().find(".word"))
+            searchwords = current.nextAll(".word").add(current.closest(".not_corpus_info").nextAll(".not_corpus_info").first().find(".word"))
             def = current.parent().next().find(".word:first")
             nextMatch = @getFirstAtCoor(current.offset().left + current.width() / 2, searchwords, def).click()
         return nextMatch
@@ -604,9 +604,12 @@ class view.LemgramResults extends BaseResults
         $(".tableContainer:last .lemgram_section").each((i) ->
             $parent = $(this).find(".lemgram_help")
             $(this).find(".lemgram_result").each (j) ->
-                if $(this).data("rel")
+                confObj = settings.wordPictureConf[wordClass][i][j]
+                if confObj != "_"
 
-                    confObj = settings.wordPictureConf[wordClass][i][j]
+                    unless $(this).find("table").length then return
+                    c.log "header confObj", wordClass, confObj
+
                     if confObj.alt_label
                         label = confObj.alt_label
                     else
@@ -616,7 +619,9 @@ class view.LemgramResults extends BaseResults
                         .addClass(confObj.css_class or "").appendTo($parent)
                     $(this).addClass(confObj.css_class).css "border-color", $(this).css("background-color")
                 else
-                    $("<span class='hit'><b>#{$(this).data("word")}</b></span>").appendTo $parent
+                    c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
+                    label = $(this).data("word") or $(this).tmplItem().lemgram
+                    $("<span class='hit'><b>#{label}</b></span>").appendTo $parent
 
         ).append "<div style='clear:both;'/>"
 
@@ -636,17 +641,24 @@ class view.LemgramResults extends BaseResults
         $.each unique_words, (i, [currentWd, pos]) =>
             self.drawTable currentWd, pos, data
             self.renderHeader pos
-                
+            content = """
+                #{currentWd} (<span rel="localize[pos]">#{util.getLocaleString(pos)}</span>)
+            """
             $(".tableContainer:last").prepend($("<div>",
                 class: "header"
-            ).html("")).find(".hit .wordclass_suffix").hide()
+            ).html(content)).find(".hit .wordclass_suffix").hide()
 
         $(".lemgram_result .wordclass_suffix").hide()
         @hidePreloader()
 
 
     renderTables: (lemgram, data) ->
-        wordClass = util.splitLemgram(lemgram).pos.slice(0, 2)
+        # wordClass = util.splitLemgram(lemgram).pos.slice(0, 2)
+        if data[0].head == lemgram
+            wordClass = data[0].headpos
+        else
+            wordClass = data[0].deppos
+
         @drawTable lemgram, wordClass, data #, getRelType
         $(".lemgram_result .wordclass_suffix").hide()
         @renderHeader wordClass
@@ -714,6 +726,7 @@ class view.LemgramResults extends BaseResults
         container = $("<div>", class: "tableContainer radialBkg")
         .appendTo("#results-lemgram .content_target")
 
+        c.log "orderArrays", orderArrays
         $("#lemgramResultsTmpl").tmpl(orderArrays,
             lemgram: token
         ).find(".example_link")
@@ -731,8 +744,8 @@ class view.LemgramResults extends BaseResults
             )
             hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) isnt -1
             prefix = (if $(this).data("depextra").length then $(this).data("depextra") + " " else "")
-
-            if $(this).data("lemgram") == "--"
+            data = $(this).tmplItem().data
+            if not data.dep
                 label = "&mdash;"
             else 
                 label = util.lemgramToString($(this).data("lemgram"), hasHomograph)

@@ -178,13 +178,11 @@ class model.KWICProxy extends BaseProxy
         # data.within = settings.corpusListing.getWithinQueryString()
         # data.context = settings.corpusListing.getContextQueryString()
         data.context = o.context if o.context?
-        c.log "data.context", data.context
         data.within = o.within if o.within?
         data.random_seed = o.random_seed if o.random_seed?
         $.extend data, o.ajaxParams
         data.querydata = o.queryData if o.queryData?
         for corpus in settings.corpusListing.selected
-            c.log "corpus", corpus.within
             for key, val of corpus.within
                 data.show.push key
             for key, val of corpus.attributes
@@ -243,7 +241,6 @@ class model.LemgramProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             type: type
-            cache : false
 
         $.ajax
             url: settings.cgi_script

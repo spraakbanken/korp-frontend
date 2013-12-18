@@ -218,7 +218,6 @@
       if (o.context != null) {
         data.context = o.context;
       }
-      c.log("data.context", data.context);
       if (o.within != null) {
         data.within = o.within;
       }
@@ -232,7 +231,6 @@
       _ref = settings.corpusListing.selected;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         corpus = _ref[_i];
-        c.log("corpus", corpus.within);
         _ref1 = corpus.within;
         for (key in _ref1) {
           val = _ref1[key];
@@ -322,8 +320,7 @@
         word: word,
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
-        type: type,
-        cache: false
+        type: type
       };
       return $.ajax({
         url: settings.cgi_script,
