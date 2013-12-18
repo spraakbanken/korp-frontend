@@ -16,7 +16,7 @@
     "month" : "month",
     "day" : "day",
     "party" : "party",
-    "normalized_wordform" : "normalized wordform",
+    "normalized_wordform" : "normalized word form",
     
     "year_from" : "starting year",
     "year_to" : "ending year",
