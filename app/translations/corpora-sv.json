@@ -16,6 +16,7 @@
     "month" : "månad",
     "day" : "dag",
     "party" : "parti",
+    "normalized_wordform" : "normaliserad ordform",
     
     "year_from" : "startår",
     "year_to" : "slutår",
