@@ -69,6 +69,9 @@
       stats = (this.progress / this.total) * 100;
       if ((this.total == null) && "progress_corpora" in struct) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
+          if (!corpus.length) {
+            return;
+          }
           return _(corpus.split("|")).map(function(corpus) {
             return parseInt(settings.corpora[corpus.toLowerCase()].info.Size);
           }).reduce(function(a, b) {
@@ -76,7 +79,7 @@
           }, 0);
         }), function(val1, val2) {
           return val1 + val2;
-        });
+        }, 0);
       }
       this.prev = e.target.responseText;
       return {
@@ -311,25 +314,27 @@
     };
 
     LemgramProxy.prototype.makeRequest = function(word, type, callback) {
-      var data, self;
+      var params, self;
       LemgramProxy.__super__.makeRequest.call(this);
       self = this;
-      data = {
+      params = {
         command: "relations",
         word: word,
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
-        type: type
+        type: type,
+        cache: false
       };
       return $.ajax({
         url: settings.cgi_script,
-        data: data,
+        data: params,
         error: function(data) {
           c.log("relationsearch abort", arguments);
           return lemgramResults.hidePreloader();
         },
         success: function(data) {
           c.log("relations success", data);
+          self.prevRequest = params;
           return lemgramResults.renderResult(data, word);
         },
         progress: function(data, e) {
@@ -340,7 +345,10 @@
           }
           return callback(progressObj);
         },
-        beforeSend: this.addAuthorizationHeader
+        beforeSend: function(req, settings) {
+          self.prevRequest = settings;
+          return self.addAuthorizationHeader(req);
+        }
       });
     };
 
@@ -587,7 +595,6 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
-          c.log("wordArray length", wordArray.length);
           t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
@@ -609,7 +616,6 @@
             }
             dataset.push(row);
           }
-          c.log("dataset calculated", $.now() - t);
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);

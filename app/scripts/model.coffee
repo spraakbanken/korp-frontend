@@ -63,6 +63,7 @@ class BaseProxy
         stats = (@progress / @total) * 100
         if not @total? and "progress_corpora" of struct
             @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
+                return if not corpus.length 
                 _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
@@ -70,7 +71,7 @@ class BaseProxy
                 , 0)
             ), (val1, val2) ->
                 val1 + val2
-            )
+            , 0)
         @prev = e.target.responseText
         struct: struct
         stats: stats
@@ -236,19 +237,20 @@ class model.LemgramProxy extends BaseProxy
     makeRequest: (word, type, callback) ->
         super()
         self = this
-        data =
+        params =
             command: "relations"
             word: word
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             type: type
+            cache : false
 
         $.ajax
             url: settings.cgi_script
-            data: data
+            data: params
             # beforeSend: (jqXHR, settings) ->
             #   c.log "before relations send", settings
-            #   self.prevRequest = settings
+            #   # self.prevRequest = settings
 
             error: (data) ->
                 c.log "relationsearch abort", arguments
@@ -256,6 +258,7 @@ class model.LemgramProxy extends BaseProxy
 
             success: (data) ->
                 c.log "relations success", data
+                self.prevRequest = params
                 lemgramResults.renderResult data, word
 
             progress: (data, e) ->
@@ -263,7 +266,9 @@ class model.LemgramProxy extends BaseProxy
                 return  unless progressObj?
                 callback progressObj
 
-            beforeSend: @addAuthorizationHeader
+            beforeSend: (req, settings) ->
+                self.prevRequest = settings
+                self.addAuthorizationHeader req
 
 
     relationsWordSearch: (word) ->

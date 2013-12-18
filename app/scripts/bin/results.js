@@ -681,13 +681,6 @@
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.resultDeferred = $.Deferred();
       this.proxy = lemgramProxy;
-      this.order = {
-        vb: ["SS_d,_,OBJ_d,ADV_d".split(",")],
-        nn: ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
-        av: [[], "_,AT_h".split(",")],
-        jj: [[], "_,AT_h".split(",")],
-        pp: [[], "_,PA_d".split(",")]
-      };
       this.$result.find("#wordclassChk").change(function() {
         if ($(this).is(":checked")) {
           return $(".lemgram_result .wordclass_suffix", self.$result).show();
@@ -722,126 +715,110 @@
     };
 
     LemgramResults.prototype.renderHeader = function(wordClass, sections) {
-      var colorMapping;
-      colorMapping = {
-        SS: "color_blue",
-        OBJ: "color_purple",
-        ADV: "color_green",
-        Head: "color_yellow",
-        AT: "color_azure",
-        ET: "color_red",
-        PA: "color_green"
-      };
+      wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
       return $(".tableContainer:last .lemgram_section").each(function(i) {
         var $parent;
         $parent = $(this).find(".lemgram_help");
-        return $(this).find(".lemgram_result").each(function() {
-          var altLabel, cell, color;
+        return $(this).find(".lemgram_result").each(function(j) {
+          var cell, confObj, label;
           if ($(this).data("rel")) {
-            color = colorMapping[$(this).data("rel")];
+            confObj = settings.wordPictureConf[wordClass][i][j];
+            if (confObj.alt_label) {
+              label = confObj.alt_label;
+            } else {
+              label = "rel_" + $(this).data("rel");
+            }
             cell = $("<span />", {
               "class": "lemgram_header_item"
-            }).localeKey(i === 1 ? altLabel : "malt_" + $(this).data("rel")).addClass(color).appendTo($parent);
-            if (i > 0) {
-              altLabel = {
-                av: "nn",
-                jj: "nn",
-                nn: "vb",
-                pp: "nn"
-              }[wordClass];
-              c.log("altLabel", altLabel, wordClass);
-              cell.localeKey(altLabel);
-            }
-            return $(this).addClass(color).css("border-color", $(this).css("background-color"));
+            }).localeKey(label).addClass(confObj.css_class || "").appendTo($parent);
+            return $(this).addClass(confObj.css_class).css("border-color", $(this).css("background-color"));
           } else {
-            return $($.format("<span class='hit'><b>%s</b></span>", $(this).data("word"))).appendTo($parent);
+            return $("<span class='hit'><b>" + ($(this).data("word")) + "</b></span>").appendTo($parent);
           }
         });
       }).append("<div style='clear:both;'/>");
     };
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
-      var self, unique_words, wordlist;
+      var self, tagsetTrans, unique_words, wordlist,
+        _this = this;
       self = this;
+      c.log("renderWordTables");
       wordlist = $.map(data, function(item) {
         var output;
         output = [];
         if (item.head.split("_")[0] === word) {
-          output.push(item.head);
+          output.push([item.head, item.headpos.toLowerCase()]);
         }
         if (item.dep.split("_")[0] === word) {
-          output.push(item.dep);
+          output.push([item.dep, item.deppos.toLowerCase()]);
         }
         return output;
       });
-      unique_words = [];
-      $.each(wordlist, function(i, word) {
-        if ($.inArray(word, unique_words) === -1) {
-          return unique_words.push(word);
-        }
+      unique_words = _.uniq(wordlist, function(_arg) {
+        var pos, word;
+        word = _arg[0], pos = _arg[1];
+        return word + pos;
       });
-      $.each(unique_words, function(i, currentWd) {
-        var getRelType, wordClass;
-        getRelType = function(item) {
-          if (item.dep === currentWd) {
-            return item.rel + "_h";
-          } else if (item.head === currentWd) {
-            return item.rel + "_d";
-          } else {
-            return false;
-          }
-        };
-        wordClass = currentWd.split("_")[1].toLowerCase();
-        self.drawTable(currentWd, wordClass, data, getRelType);
-        self.renderHeader(wordClass);
+      tagsetTrans = _.invert(settings.wordpictureTagset);
+      $.each(unique_words, function(i, _arg) {
+        var currentWd, pos;
+        currentWd = _arg[0], pos = _arg[1];
+        self.drawTable(currentWd, pos, data);
+        self.renderHeader(pos);
         return $(".tableContainer:last").prepend($("<div>", {
           "class": "header"
-        }).html(util.lemgramToString(currentWd))).find(".hit .wordclass_suffix").hide();
+        }).html("")).find(".hit .wordclass_suffix").hide();
       });
       $(".lemgram_result .wordclass_suffix").hide();
       return this.hidePreloader();
     };
 
     LemgramResults.prototype.renderTables = function(lemgram, data) {
-      var getRelType, wordClass;
-      getRelType = function(item) {
-        if (item.dep === lemgram) {
-          return item.rel + "_h";
-        } else {
-          return item.rel + "_d";
-        }
-      };
+      var wordClass;
       wordClass = util.splitLemgram(lemgram).pos.slice(0, 2);
-      this.drawTable(lemgram, wordClass, data, getRelType);
+      this.drawTable(lemgram, wordClass, data);
       $(".lemgram_result .wordclass_suffix").hide();
       this.renderHeader(wordClass);
       return this.hidePreloader();
     };
 
-    LemgramResults.prototype.drawTable = function(token, wordClass, data, relTypeFunc) {
-      var container, inArray, orderArrays, self;
+    LemgramResults.prototype.drawTable = function(token, wordClass, data) {
+      var container, getRelType, inArray, orderArrays, self, tagsetTrans,
+        _this = this;
+      c.log("token, wordClass", token, wordClass);
       inArray = function(rel, orderList) {
         var i, type;
-        i = $.inArray(rel, orderList);
-        type = (rel.slice(-1) === "h" ? "head" : "dep");
+        i = _.findIndex(orderList, function(item) {
+          return (item.field_reverse || false) === (rel.field_reverse || false) && item.rel === rel.rel;
+        });
+        type = (rel.field_reverse ? "head" : "dep");
         return {
           i: i,
           type: type
         };
       };
+      tagsetTrans = _.invert(settings.wordpictureTagset);
+      getRelType = function(item) {
+        return {
+          rel: tagsetTrans[item.rel.toLowerCase()],
+          field_reverse: item.dep === token
+        };
+      };
       self = this;
-      c.log("drawTable", wordClass, this.order[wordClass]);
-      if (this.order[wordClass] == null) {
+      wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
+      c.log("drawTable", wordClass);
+      if (settings.wordPictureConf[wordClass] == null) {
         this.showNoResults();
         return;
       }
       orderArrays = [[], [], []];
       $.each(data, function(index, item) {
-        return $.each(self.order[wordClass], function(i, rel_type_list) {
+        return $.each(settings.wordPictureConf[wordClass], function(i, rel_type_list) {
           var list, rel, ret;
           list = orderArrays[i];
-          rel = relTypeFunc(item);
-          if (rel === false) {
+          rel = getRelType(item);
+          if (!rel) {
             return;
           }
           ret = inArray(rel, rel_type_list);
@@ -864,8 +841,8 @@
             });
           }
         });
-        if (self.order[wordClass][i] && unsortedList.length) {
-          toIndex = $.inArray("_", self.order[wordClass][i]);
+        if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
+          toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i]);
           if (util.isLemgramId(token)) {
             unsortedList.splice(toIndex, 0, {
               word: token.split("..")[0].replace(/_/g, " ")
@@ -894,7 +871,11 @@
         });
         hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) !== -1;
         prefix = ($(this).data("depextra").length ? $(this).data("depextra") + " " : "");
-        label = ($(this).data("lemgram") !== "" ? util.lemgramToString($(this).data("lemgram"), hasHomograph) : "&mdash;");
+        if ($(this).data("lemgram") === "--") {
+          label = "&mdash;";
+        } else {
+          label = util.lemgramToString($(this).data("lemgram"), hasHomograph);
+        }
         return $(this).html(prefix + label);
       });
     };

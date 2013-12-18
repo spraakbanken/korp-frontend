@@ -17,6 +17,49 @@ settings.struct_attribute_selector = "union"
 settings.reduce_word_attribute_selector = "union" 
 settings.reduce_struct_attribute_selector = "intersection"
 
+
+settings.wordpictureTagset = {
+	// supported pos-tags
+	verb : "vb",
+	noun : "nn",
+	adjective : "jj",
+	adverb : "ab",
+	preposition : "pp",
+
+	// dependency releations
+	subject : "ss",
+	object : "obj",
+	adverbial : "adv",
+	preposition_rel : "pa",
+	pre_modifier : "at",
+	post_modifier : "et"
+
+}
+
+
+settings.wordPictureConf = {
+	verb : [[
+		{rel : "subject", css_class : "color_blue"}, 
+		"_",
+		{rel : "object", css_class : "color_purple"},
+		{rel : "adverbial", css_class : "color_green"}
+	]],
+	noun : [
+	    [{rel : "preposition_rel", css_class : "color_yellow", field_reverse: true}, 
+	     {rel : "pre_modifier", css_class : "color_azure"}, 
+	     "_", 
+	     {rel : "post_modifier", css_class : "color_red"}], 
+
+	    ["_", {rel : "subject", css_class : "color_blue", field_reverse: true, alt_label : "vb"}], 
+	    [{rel : "object", css_class : "color_purple", field_reverse: true, alt_label : "vb"}, "_"]
+	],
+	adjective : [["_", {rel: "pre_modifier", css_class : "color_yellow", field_reverse : true}]],
+	adverb : [["_", {rel: "adverbial", css_class : "color_yellow", field_reverse : true}]],
+	preposition : [["_", {rel: "preposition_rel", css_class : "color_green"}]]
+	
+}
+
+
 settings.modeConfig = [
     {
         localekey: "modern_texts",
@@ -2416,6 +2459,46 @@ settings.corpora.drama = {
 	struct_attributes : {}
 };
 
+if(location.port == "9000") {
+
+settings.corpora.minisuc = {
+	id : "minisuc",
+	title : "Minisuc",
+	description : "",
+	within : {
+		"s" : "s",
+		"p" : "p"
+	},
+	context : {
+		"1 s" : "1 s",
+		"1 p" : "1 p"
+	},
+	attributes : {
+		msd : attrs.msd,
+		lex : attrs.lemgram,
+	},
+	struct_attributes : {}
+};
+settings.corpora.smetest = {
+	id : "smetest",
+	title : "smetest",
+	description : "",
+	within : {
+		"sentence" : "sentence",
+	},
+	context : {
+		"1 sentence" : "1 sentence",
+	},
+	attributes : {
+		// msd : attrs.msd,
+		// lex : attrs.lemgram,
+	},
+	struct_attributes : {}
+};
+}
+
+
+>>>>>>> fixed word picture distro
 settings.corpora.lasbart = {
 	id : "lasbart",
 	title : "LäSBarT – Lättläst svenska och barnbokstext",
@@ -4384,6 +4467,8 @@ settings.corpora.soexempel = {
 
 settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 // settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp2.cgi";
+// settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
+// settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_sme.cgi";
 
 // label values here represent translation keys.
 settings.arg_groups = {
