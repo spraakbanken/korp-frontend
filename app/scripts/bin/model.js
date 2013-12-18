@@ -537,7 +537,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, dataset, minWidth, totalRow, wordArray;
+          var columns, corpus, dataset, i, minWidth, obj, row, t, totalRow, word, wordArray, _i, _len, _ref1;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -587,8 +587,10 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
-          $.each(wordArray, function(i, word) {
-            var row;
+          c.log("wordArray length", wordArray.length);
+          t = $.now();
+          for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
+            word = wordArray[i];
             row = {
               id: "row" + i,
               hit_value: word,
@@ -597,14 +599,17 @@
                 relative: data.total.relative[word]
               }
             };
-            $.each(data.corpora, function(corpus, obj) {
-              return row[corpus + "_value"] = {
+            _ref1 = data.corpora;
+            for (corpus in _ref1) {
+              obj = _ref1[corpus];
+              row[corpus + "_value"] = {
                 absolute: obj.absolute[word],
                 relative: obj.relative[word]
               };
-            });
-            return dataset.push(row);
-          });
+            }
+            dataset.push(row);
+          }
+          c.log("dataset calculated", $.now() - t);
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);
