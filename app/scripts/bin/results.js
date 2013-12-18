@@ -1280,16 +1280,19 @@
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
       $.when(timeDeferred).then(function() {
-        var cl;
-        $("#showGraph:visible").button("enable");
-        cl = settings.corpusListing.subsetFactory(_this.proxy.prevParams.corpus.split(","));
-        if ((_.filter(cl.getTimeInterval(), function(item) {
-          return item != null;
-        })).length < 2) {
-          return $("#showGraph:visible").button("disable");
-        }
+        return _this.updateGraphBtnState();
       });
       return this.hidePreloader();
+    };
+
+    StatsResults.prototype.updateGraphBtnState = function() {
+      var cl;
+      c.log("updateGraphBtnState", $("#showGraph"));
+      $("#showGraph").button("enable");
+      cl = settings.corpusListing.subsetFactory(this.proxy.prevParams.corpus.split(","));
+      if (!(_.compact(cl.getTimeInterval())).length) {
+        return $("#showGraph").button("disable");
+      }
     };
 
     StatsResults.prototype.resetView = function() {

@@ -1137,15 +1137,18 @@ class view.StatsResults extends BaseResults
         $(".slick-row:first input", @$result).click()
 
         $.when(timeDeferred).then =>
-            $("#showGraph:visible").button("enable")
-            cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
-
-            if (_.filter cl.getTimeInterval(), (item) -> item?).length < 2
-                $("#showGraph:visible").button("disable")
+            @updateGraphBtnState()            
 
         @hidePreloader()
 
+    updateGraphBtnState : () ->
+        c.log "updateGraphBtnState", $("#showGraph")
 
+        $("#showGraph").button("enable")
+        cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
+
+        if not (_.compact cl.getTimeInterval()).length
+            $("#showGraph").button("disable")
     # showError : function() {
     #   this.hidePreloader();
     #   $("<i/>")
