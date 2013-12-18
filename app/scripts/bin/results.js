@@ -86,7 +86,7 @@
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
       this.current_page = 0;
-      this.selectionManager = getScope("kwicCtrl").selectionManager;
+      this.selectionManager = this.$result.scope().selectionManager;
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
@@ -889,11 +889,8 @@
       instance = $("#result-container").korptabs("addTab", view.ExampleResults);
       opts = instance.getPageInterval();
       opts.ajaxParams = {
-        head: data.head,
-        dep: data.dep,
-        rel: data.rel,
-        depextra: data.depextra,
-        corpus: data.corpus
+        source: data.source.join(","),
+        corpus: null
       };
       util.localize(instance.$result);
       return instance.makeRequest(opts);

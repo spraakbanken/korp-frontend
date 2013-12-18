@@ -69,8 +69,8 @@ class view.KWICResults extends BaseResults
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
         @current_page = 0
-        # @selectionManager = @$result.scope().selectionManager
-        @selectionManager = getScope("kwicCtrl").selectionManager
+        @selectionManager = @$result.scope().selectionManager
+        # @selectionManager = getScope("kwicCtrl").selectionManager
         @$result.click =>
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
@@ -749,11 +749,13 @@ class view.LemgramResults extends BaseResults
         instance = $("#result-container").korptabs("addTab", view.ExampleResults)
         opts = instance.getPageInterval()
         opts.ajaxParams =
-            head: data.head
-            dep: data.dep
-            rel: data.rel
-            depextra: data.depextra
-            corpus: data.corpus
+            source : data.source.join(",")
+            corpus : null
+            # head: data.head
+            # dep: data.dep
+            # rel: data.rel
+            # depextra: data.depextra
+            # corpus: data.corpus
 
         util.localize instance.$result
         instance.makeRequest opts

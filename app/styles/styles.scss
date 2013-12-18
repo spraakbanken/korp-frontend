@@ -1259,6 +1259,13 @@ a {
   padding-right: 8px !important;
 }
 
+.ui-tabs .ui-tabs-nav li.custom_tab.loading {
+  padding-right : 18px;
+  .tab_progress {
+    display : none;
+  }
+}
+
 .tabClose {
   padding: 0 !important;
   margin-right: 6px;
