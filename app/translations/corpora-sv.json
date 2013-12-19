@@ -317,6 +317,17 @@
     "album_year" : "år (album)", 
     "song_title" : "låttitel",
     "song_year" : "år (låt)",
-    "newspaper" : "tidning"
+    "newspaper" : "tidning",
 
+    "created_by" : "skapad av",
+    "element" : "element",
+    "lexical_unit": "lexikal enhet",
+    "frame": "ram",
+    "domain": "domän",
+    "semantic_type": "semantisk typ",
+    "core_elements": "kärnelement",
+    "peripheral_elements": "periferielement",
+    "compound_patterns": "compound patterns",
+    "compound_pattern_examples": "compound pattern examples",
+    "notes": "anteckningar"
 }

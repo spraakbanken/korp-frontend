@@ -316,5 +316,17 @@
     "album_year" : "album year", 
     "song_title" : "song title",
     "song_year" : "song year",
-    "newspaper" : "newspaper"
+    "newspaper" : "newspaper",
+    
+    "created_by" : "created by",
+    "element" : "element",
+    "lexical_unit": "lexical unit",
+    "frame": "frame",
+    "domain": "domain",
+    "semantic_type": "semantic type",
+    "core_elements": "core elements",
+    "peripheral_elements": "peripheral elements",
+    "compound_patterns": "compound patterns",
+    "compound_pattern_examples": "compound pattern examples",
+    "notes": "notes"
 }
