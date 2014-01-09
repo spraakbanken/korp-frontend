@@ -589,10 +589,10 @@ settings.corpora.saltnld_nld = {
 	hide : true
 }
 
-settings.corpora.espc_swe = {
-	id : "espc_swe",
+settings.corpora["espc-sv"] = {
+	id : "espc-sv",
 	lang : "swe",
-	linked_to : ["espc_eng"],
+	linked_to : ["espc-en"],
 	limited_access : true,
 	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,
@@ -618,10 +618,10 @@ settings.corpora.espc_swe = {
 		text_date : {label : "year"}
 	}
 }
-settings.corpora.espc_eng = {
-	id : "espc_eng",
+settings.corpora["espc-en"] = {
+	id : "espc-en",
 	lang : "eng",
-	linked_to : ["espc_swe"],
+	linked_to : ["espc-en"],
 	limited_access : true,
 	title: "The English-Swedish Parallel Corpus (ESPC)",
 	context: context.defaultAligned,
