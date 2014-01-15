@@ -1123,7 +1123,7 @@ settings.corpora['akerbruk'] = {
 	morf : 'swedbergm|dalinm|saldom',
 	id : "akerbruk",
 	title : "Åkerbruk",
-	description : "Texter från 1700-talet",
+	description : "Texter om jordbruk från 1700-talet. Engelska Åkermannen och Svenskt Jordbruk är inskrivna av Serenius och Stridsberg, övriga texter är hämtade ur Kungliga vetenskapsakademiens handlingar.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
