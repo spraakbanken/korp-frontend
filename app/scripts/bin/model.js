@@ -592,10 +592,6 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
-<<<<<<< HEAD
-=======
-          c.log("wordArray length", wordArray.length);
->>>>>>> no clue
           t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
@@ -617,10 +613,6 @@
             }
             dataset.push(row);
           }
-<<<<<<< HEAD
-=======
-          c.log("dataset calculated", $.now() - t);
->>>>>>> no clue
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);
