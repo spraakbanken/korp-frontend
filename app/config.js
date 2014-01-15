@@ -2498,7 +2498,6 @@ settings.corpora.smetest = {
 }
 
 
->>>>>>> fixed word picture distro
 settings.corpora.lasbart = {
 	id : "lasbart",
 	title : "LäSBarT – Lättläst svenska och barnbokstext",
