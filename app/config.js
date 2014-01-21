@@ -392,12 +392,6 @@ settings.corporafolders.strindberg = {
 		contents : ["strindbergromaner", "strindbergbrev"]
 };
 
-settings.corporafolders.bloggmix = {
-	title : "Bloggmix",
-	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmixodat"],
-	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
-};
-
 settings.corporafolders.fisk = {
 	title : "Finlandssvenska texter",
 	contents : [],
@@ -486,7 +480,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
 	title : "Skyddade korpusar",
-	contents : ["ansokningar", "cefr", "gdc", "soexempel", "tisus"]
+	contents : ["ansokningar", "cefr", "forhor", "gdc", "soexempel", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -502,6 +496,33 @@ settings.corporafolders.medical.ltd = {
 settings.corporafolders.novels = {
 	title : "Skönlitteratur",
 	contents : ["romi", "romii", "rom99", "storsuc", "romg"]
+};
+
+settings.corporafolders.socialmedia = {
+	title : "Sociala medier",
+	contents : []
+};
+
+settings.corporafolders.socialmedia.bloggmix = {
+	title : "Bloggmix",
+	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmixodat"],
+	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
+};
+
+settings.corporafolders.socialmedia.forum = {
+	title : "Diskussionsforum",
+	contents : []
+};
+
+settings.corporafolders.socialmedia.forum.flashback = {
+	title : "Flashback",
+	contents : ["flashback-resor"],
+	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>. Materialet är under uppbyggnad."
+};
+
+settings.corporafolders.socialmedia.twitter = {
+	title : "Twitter",
+	contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006"]
 };
 
 settings.corporafolders.newspapertexts = {
@@ -527,11 +548,6 @@ settings.corporafolders.newspapertexts.webnews = {
 settings.corporafolders.magazines = {
 	title : "Tidskrifter",
 	contents : ["fof"]
-};
-
-settings.corporafolders.twitter = {
-	title : "Twitter",
-	contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006"]
 };
 
 /*
@@ -2065,6 +2081,38 @@ settings.corpora.strindbergbrev = {
 	}
 };
 
+settings.corpora["flashback-resor"] = {
+	id : "flashback-resor",
+	title : "Flashback: Resor",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
 var bloggmix_structs = {
 	blog_title : {label : "blog_title"},
 	blog_url : {label : "blog_url", type : "url"},
@@ -2458,45 +2506,6 @@ settings.corpora.drama = {
 	},
 	struct_attributes : {}
 };
-
-if(location.port == "9000") {
-
-settings.corpora.minisuc = {
-	id : "minisuc",
-	title : "Minisuc",
-	description : "",
-	within : {
-		"s" : "s",
-		"p" : "p"
-	},
-	context : {
-		"1 s" : "1 s",
-		"1 p" : "1 p"
-	},
-	attributes : {
-		msd : attrs.msd,
-		lex : attrs.lemgram,
-	},
-	struct_attributes : {}
-};
-settings.corpora.smetest = {
-	id : "smetest",
-	title : "smetest",
-	description : "",
-	within : {
-		"sentence" : "sentence",
-	},
-	context : {
-		"1 sentence" : "1 sentence",
-	},
-	attributes : {
-		// msd : attrs.msd,
-		// lex : attrs.lemgram,
-	},
-	struct_attributes : {}
-};
-}
-
 
 settings.corpora.lasbart = {
 	id : "lasbart",
@@ -4426,6 +4435,37 @@ settings.corpora.gdc = {
 		"section_name" : {label : "section"}
 		// TODO: this gives some error, fix this.
 		//"meta_comment" : {label : "comment", type : "set"}
+	}
+};
+
+settings.corpora.forhor = {
+	id : "forhor",
+	title : "Förhör",
+	description : '',
+	limited_access : true,
+	context : settings.spContext,
+	within : settings.spWithin,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+		"text_fall" : {label : "fall"},
+		"text_hord" : {label : "hord"},
+		"text_fl1" : {label : "fl1"},
+		"text_fl2" : {label : "fl2"},
+		"text_telefon" : {label : "telefon"},
+		"text_bandat" : {label : "bandat"},
+		"text_samtycke" : {label : "samtycke"},
+		"text_forsvarare" : {label : "forsvarare"}
 	}
 };
 
