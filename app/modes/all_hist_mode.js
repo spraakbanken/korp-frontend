@@ -135,17 +135,16 @@ settings.corporafolders.digidaily = {
                     "digidaily-lindesbergsallehanda","digidaily-blekingsposten","digidaily-postochinrikestidning",
                     "digidaily-stockholmsposten","digidaily-kalmar","digidaily-wernamotidning",
                     "digidaily-gotheborgsweckolista","digidaily-ostgotaposten","digidaily-ostergotlandsveckoblad",
-                    "digidaily-wermlandslanstidning","digidaily-tidningforwenersborgsstadochlan"],
+                    "digidaily-wermlandslanstidning","digidaily-tidningforwenersborgsstadochlan"].sort(),
         description : digidailydescription
 };
 
-settings.corporafolders.bibel = {
+settings.corporafolders.lag = {
 	title : "Äldre lagtexter",
-	contents : ["tankebok", "lag1734", "lag1800"],
+	contents : ["tankebok", "lag1734","forarbeten1734", "lag1800"],
         description : "Lagtexter från 1600- ,1700- och 1800-talet."
 };
-
-settings.corporafolders.lag = {
+settings.corporafolders.bibel = {
 	title : "Äldre biblar",
 	contents : ["bibel1917", "bibel1873dalin"],
         description : "Bibeln, 1873 och 1917 års utgåvor"
@@ -155,6 +154,13 @@ settings.corporafolders.runeberg = {
 	title : "Runeberg",
 	contents : ["runeberg-diverse", "runeberg-rost", "runeberg-svtidskr", "runeberg-urdagkron", "runeberg-tiden"],
         description : "Tidskrifter från Projekt Runeberg"
+}
+
+
+settings.corporafolders.akerbruk1700 = {
+	title : "Åkerbruk och gödsel",
+	contents : ["akerbruk", "kvah"],
+        description : "Texter om jordbruk från 1700-talet."
 }
 
 
@@ -868,7 +874,7 @@ settings.corpora["lag1734"] = {
     morf : 'swedbergm|dalinm',
 	id : "lag1734",
 	title : "1734 års lag",
-	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk, Giftermålsbalk",
+	description : "Materialet utgörs av balkarna i själva lagtexten, förordet samt domarreglerna. Materialet är inskrivet för hand och korrekturläst, men en del fel finns fortfarande kvar.",
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
@@ -903,6 +909,48 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förord",
 				"1734 års lag Domareregler",
 				"1734 års lag Lagtext",
+			],
+            opts : settings.liteOptions
+		}
+	}
+};
+
+settings.corpora["forarbeten1734"] = {
+    morf : 'swedbergm|dalinm',
+	id : "forarbeten1734",
+	title : "1734 års förarbeten",
+	description : "Förarbetena till 1734 års lag utgörs av material från lagkommissionen till 1734 års lag. Materialet är från 1686–1735, utgivet av Vilhelsm Sjögren 1900–1909. Materialet utgörs av protokoll från sammanträdena (vol. 1–3); lagkommissionens förslag (vol. 4 –6); utlåtanden över lagkommissionens förslag (vol. 7) samt riksdagshandlingar angående lagkommissionens förslag (vol. 8). Materialet är OCR-skannat med manuell efterarbetning.",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+        typograph : {
+            label : "typography",
+            type : "set",
+			displayType : "select",
+			translationKey : "fab_",
+			dataset : [
+				"bold",
+				"smallcaps",
+				"headline",
+				"marginal",
+				"footnote",
+				"italic",
+				"emphasis"
+			],
+			opts : settings.liteOptions
+
+        },
+    },
+	struct_attributes : {
+		//paragraph_marginal : {label : "paragraph_marginal"},
+		text_date : {label : "date"},
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
 				"1734 års lag Förarbeten vol 1",
 				"1734 års lag Förarbeten vol 2",
 				"1734 års lag Förarbeten vol 3",
@@ -910,9 +958,7 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förarbeten vol 5",
 				"1734 års lag Förarbeten vol 6",
 				"1734 års lag Förarbeten vol 7",
-				"1734 års lag Förarbeten vol 8",
-				"Giftermåls balk \(1734\)",
-				"Missgierningsbalk"
+				"1734 års lag Förarbeten vol 8"
 			],
             opts : settings.liteOptions
 		}
@@ -1123,7 +1169,46 @@ settings.corpora['akerbruk'] = {
 	morf : 'swedbergm|dalinm|saldom',
 	id : "akerbruk",
 	title : "Åkerbruk",
-	description : "Texter om jordbruk från 1700-talet. Engelska Åkermannen och Svenskt Jordbruk är inskrivna av Serenius och Stridsberg, övriga texter är hämtade ur Kungliga vetenskapsakademiens handlingar.",
+	description : "Den Engelska åker-mannen och fåra-herden är översatt från engelska av Jacob Serenius 1727, och är en handbok i åkerbruk och fårskötsel.  En grundelig kundskap om svenska åkerbruket är skriven av Magnus Stridsberg 1727, och är en handbok om åkerbruk.",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+     		lemma : attrs.baseform,
+     		lex : attrs.lemgram,
+     		saldo : attrs.saldo,
+     		prefix : attrs.prefix,
+     		suffix : attrs.suffix,
+     		dephead : attrs.dephead,
+     		deprel : attrs.deprel,
+     		ref : attrs.ref,
+	},
+
+	struct_attributes : {
+		text_date : {label : "date"},
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
+                                "Engelska Åker-Mannen.",
+                                "En kort beskrifning om jordförbättring med gräsfröen.",
+                                "En Grundelig Kundskap Om Swenska Åkerbruket / Först I Gemen."
+	
+		],
+			opts : settings.liteOptions
+		},
+                "chapter_name" : {label : "chapter"},
+	}
+
+
+};
+
+settings.corpora['kvah'] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "kvah",
+	title : "KVAH",
+	description : "18 artiklar från kungliga vetenskapsakademiens handlingar. Alla artiklarna handlar om åkerbruk och gödsel. De är från 1740–1778.",
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -1150,15 +1235,12 @@ settings.corpora['akerbruk'] = {
 				"BESKRIFNING På En ny Sånings-Machine, påfunnen och til Kongl. Vetensk. Academien ingifven, Af DANIEL THUNBERG. ",
 				"BESKRIFNING på Tork-Häsjor och Trösk-vagnar, som brukas i Wäster-Norrland, Ingifven af NILS GISSLER, M. D. Lector vid Hernösands Gymnasium.",
 				"Tankar om Landtbrukets upodlande genom ymnig ock god Gödsels samlande i Städerna.",
-				"Engelska Åker-Mannen.",
 				"Skolmästaren Herr ANDERS HELLSTRÖMS FÖRSÖK at förbättra Sånings-Machiner",
 				"ÅKER-REDSKAP Af Järn, inrättade af H. Baron. J.BRAUNER." ,
 				"Påminnelse vid sättet at göda åkrar; af JOH. J. HAARTMAN, M.D. med. Professor i Åbo, Ridd. af K. Wasa Orden.",
 				"Om obrunnen gödsels förmån på åkrar, framför den som är brunnen. af PEHR WASSTRÖM",
 				" BESKRIFNING På de i Norrland brukelige Trösk-vältar, af PEHR HELLZÉN, lector vid Hernösands Gymnasium.",
-				"En kort beskrifning om jordförbättring med gräsfröen.",
 				"Om Sånings-Machins förbättring ock nytta",
-				"En Grundelig Kundskap Om Swenska Åkerbruket / Först I Gemen.",
 				"Et sätt at göda och så vigare, än med Sånings Machin Af SACHAR. WESTBCK ",
 				"Et ankommit Bref om Sånings- under Namn af  .",
 				"Rön om Åkerbrukets nyttiga främjande medelst Utsädets och Gödslens wissa besparning. Framgifwit af SACHARIAS WESTBECK, Kyrkoherde uti Öst-Löfsta Församling i .",
@@ -1173,6 +1255,7 @@ settings.corpora['akerbruk'] = {
 
 
 };
+
 
 
 

@@ -17,6 +17,11 @@ settings.corporafolders.modern = {
 	contents : ["sfs", "moderntdv"]
 };
 
+settings.corporafolders.lag1700 = {
+	title : "1734 års lag och förarbeten",
+	contents : ["lag1734", "forarbeten1734"]
+};
+
 settings.corporafolders.fsvlagar = {
 	title : "Fornsvenska textbankens lagtexter",
 	contents : ["fsv-aldrelagar", "fsv-yngrelagar"]
@@ -63,7 +68,7 @@ settings.corpora["lag1734"] = {
     morf : 'swedbergm|dalinm',
 	id : "lag1734",
 	title : "1734 års lag",
-	description : "Förord, Lagtext, Domarregler, Förarbeten volym 1-8, Missgierningsbalk, Giftermålsbalk",
+	description : "Materialet utgörs av balkarna i själva lagtexten, förordet samt domarreglerna. Materialet är inskrivet för hand och korrekturläst, men en del fel finns fortfarande kvar.",
 	within : settings.defaultWithin,
 	context : settings.spContext,
 	attributes : {
@@ -98,6 +103,48 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förord",
 				"1734 års lag Domareregler",
 				"1734 års lag Lagtext",
+			],
+            opts : settings.liteOptions
+		}
+	}
+};
+
+settings.corpora["forarbeten1734"] = {
+    morf : 'swedbergm|dalinm',
+	id : "forarbeten1734",
+	title : "Förarbeten",
+	description : "Förarbetena till 1734 års lag utgörs av material från lagkommissionen till 1734 års lag. Materialet är från 1686–1735, utgivet av Vilhelsm Sjögren 1900–1909. Materialet utgörs av protokoll från sammanträdena (vol. 1–3); lagkommissionens förslag (vol. 4 –6); utlåtanden över lagkommissionens förslag (vol. 7) samt riksdagshandlingar angående lagkommissionens förslag (vol. 8). Materialet är OCR-skannat med manuell efterarbetning.",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+        typograph : {
+            label : "typography",
+            type : "set",
+			displayType : "select",
+			translationKey : "fab_",
+			dataset : [
+				"bold",
+				"smallcaps",
+				"headline",
+				"marginal",
+				"footnote",
+				"italic",
+				"emphasis"
+			],
+			opts : settings.liteOptions
+
+        },
+    },
+	struct_attributes : {
+		//paragraph_marginal : {label : "paragraph_marginal"},
+		text_date : {label : "date"},
+		text_title : {
+			label : "title",
+			displayType : "select",
+			localize : false,
+			dataset : [
 				"1734 års lag Förarbeten vol 1",
 				"1734 års lag Förarbeten vol 2",
 				"1734 års lag Förarbeten vol 3",
@@ -105,15 +152,12 @@ settings.corpora["lag1734"] = {
 				"1734 års lag Förarbeten vol 5",
 				"1734 års lag Förarbeten vol 6",
 				"1734 års lag Förarbeten vol 7",
-				"1734 års lag Förarbeten vol 8",
-				"Giftermåls balk \(1734\)",
-				"Missgierningsbalk"
+				"1734 års lag Förarbeten vol 8"
 			],
             opts : settings.liteOptions
 		}
 	}
 };
-
 
 settings.corpora["lag1800"] = {
     morf : 'saldom|dalinm',
