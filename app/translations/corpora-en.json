@@ -328,5 +328,21 @@
     "peripheral_elements": "peripheral elements",
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
-    "notes": "notes"
+    "notes": "notes",
+    
+    "thread" : "thread",
+    "forum" : "forum",
+    "postlinks" : "links in post",
+    "posturl" : "post",
+    "threadpostcount" : "number of posts in thread",
+    "threadlastpost" : "most recent post in thread",
+    
+	"fall": "case",
+	"hord": "questioned",
+	"fl1": "interrogator 1",
+	"fl2": "interrogator 2",
+	"telefon": "telephone",
+	"bandat": "taped",
+	"samtycke": "consent",
+	"forsvarare": "defender"
 }

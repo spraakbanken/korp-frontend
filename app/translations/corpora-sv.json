@@ -329,5 +329,22 @@
     "peripheral_elements": "periferielement",
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
-    "notes": "anteckningar"
+    "notes": "anteckningar",
+    
+    "thread" : "tråd",
+    "forum" : "forum",
+    "postlinks" : "länkar i inlägg",
+    "posturl" : "inlägg",
+    "threadpostcount" : "antal inlägg i tråd",
+    "threadlastpost" : "senaste inlägg i tråd",
+
+	"fall": "fall",
+	"hord": "hörd",
+	"fl1": "förhörsledare 1",
+	"fl2": "förhörsledare 2",
+	"telefon": "telefon",
+	"bandat": "bandat",
+	"samtycke": "samtycke",
+	"forsvarare": "försvarare"
+
 }
