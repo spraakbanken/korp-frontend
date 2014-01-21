@@ -35,7 +35,12 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 
-settings.corpora["digidaily-dalpilen"] = {
+/* All corpora are added to this unsorted dictionary, instead of settings.corpora
+   Before setting corpusListing (at the end of the file), settings.corpora will
+   be filled. */
+var unsorted_corpora = {}; 
+
+unsorted_corpora["digidaily-dalpilen"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-dalpilen",
 	title : "Dalpilen",
@@ -47,7 +52,7 @@ settings.corpora["digidaily-dalpilen"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-goteborgsweckoblad"] = {
+unsorted_corpora["digidaily-goteborgsweckoblad"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-goteborgsweckoblad",
 	title : "Göteborgs weckoblad",
@@ -59,7 +64,7 @@ settings.corpora["digidaily-goteborgsweckoblad"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 	
-settings.corpora["digidaily-gotlandstidning"] = {
+unsorted_corpora["digidaily-gotlandstidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-gotlandstidning",
 	title : "Gotlands tidning",
@@ -72,7 +77,7 @@ settings.corpora["digidaily-gotlandstidning"] = {
 };
 
 
-settings.corpora["digidaily-faluposten"] = {
+unsorted_corpora["digidaily-faluposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-faluposten",
 	title : "Faluposten",
@@ -84,7 +89,7 @@ settings.corpora["digidaily-faluposten"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-fahluweckoblad"] = {
+unsorted_corpora["digidaily-fahluweckoblad"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-fahluweckoblad",
 	title : "Fahlu weckoblad",
@@ -96,7 +101,7 @@ settings.corpora["digidaily-fahluweckoblad"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-jonkopingsbladet"] = {
+unsorted_corpora["digidaily-jonkopingsbladet"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-jonkopingsbladet",
 	title : "Jönköpingsbladet",
@@ -109,7 +114,7 @@ settings.corpora["digidaily-jonkopingsbladet"] = {
 };
 
 
-settings.corpora["digidaily-folketsrost"] = {
+unsorted_corpora["digidaily-folketsrost"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-folketsrost",
 	title : "Folkets röst",
@@ -121,7 +126,7 @@ settings.corpora["digidaily-folketsrost"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-bollnastidning"] = {
+unsorted_corpora["digidaily-bollnastidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-bollnastidning",
 	title : "Bollnäs tidning",
@@ -134,7 +139,7 @@ settings.corpora["digidaily-bollnastidning"] = {
 };
 		
 
-settings.corpora["digidaily-norraskane"] = {
+unsorted_corpora["digidaily-norraskane"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-norraskane",
 	title : "Norra Skåne",
@@ -146,7 +151,7 @@ settings.corpora["digidaily-norraskane"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-lindesbergsallehanda"] = {
+unsorted_corpora["digidaily-lindesbergsallehanda"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-lindesbergsallehanda",
 	title : "Lindesbergs allehanda",
@@ -158,7 +163,7 @@ settings.corpora["digidaily-lindesbergsallehanda"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-blekingsposten"] = {
+unsorted_corpora["digidaily-blekingsposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-blekingsposten",
 	title : "Blekingsposten",
@@ -171,7 +176,7 @@ settings.corpora["digidaily-blekingsposten"] = {
 };
 
 
-settings.corpora["digidaily-postochinrikestidning"] = {
+unsorted_corpora["digidaily-postochinrikestidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-postochinrikestidning",
 	title : "Post- och Inrikes Tidningar",
@@ -183,7 +188,7 @@ settings.corpora["digidaily-postochinrikestidning"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-stockholmsposten"] = {
+unsorted_corpora["digidaily-stockholmsposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-stockholmsposten",
 	title : "Stockholmsposten",
@@ -196,7 +201,7 @@ settings.corpora["digidaily-stockholmsposten"] = {
 };
 
 
-settings.corpora["digidaily-kalmar"] = {
+unsorted_corpora["digidaily-kalmar"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-kalmar",
 	title : "Kalmar",
@@ -208,7 +213,7 @@ settings.corpora["digidaily-kalmar"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-wernamotidning"] = {
+unsorted_corpora["digidaily-wernamotidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-wernamotidning",
 	title : "Wernamo tidning",
@@ -220,7 +225,7 @@ settings.corpora["digidaily-wernamotidning"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-gotheborgsweckolista"] = {
+unsorted_corpora["digidaily-gotheborgsweckolista"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-gotheborgsweckolista",
 	title : "Götheborgs weckolista",
@@ -233,7 +238,7 @@ settings.corpora["digidaily-gotheborgsweckolista"] = {
 };
 
 
-settings.corpora["digidaily-ostgotaposten"] = {
+unsorted_corpora["digidaily-ostgotaposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-ostgotaposten",
 	title : "Östgötaposten",
@@ -245,7 +250,7 @@ settings.corpora["digidaily-ostgotaposten"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-ostergotlandsveckoblad"] = {
+unsorted_corpora["digidaily-ostergotlandsveckoblad"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-ostergotlandsveckoblad",
 	title : "Östergötlands veckoblad",
@@ -257,7 +262,7 @@ settings.corpora["digidaily-ostergotlandsveckoblad"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-wermlandslanstidning"] = {
+unsorted_corpora["digidaily-wermlandslanstidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-wermlandslanstidning",
 	title : "Wermlands läns tidning",
@@ -269,7 +274,7 @@ settings.corpora["digidaily-wermlandslanstidning"] = {
 	struct_attributes : settings.digidailystruct_attributes,
 };
 
-settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
+unsorted_corpora["digidaily-tidningforwenersborgsstadochlan"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-tidningforwenersborgsstadochlan",
 	title : "Tidning för Wenersborgs stad och län",
@@ -282,6 +287,16 @@ settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
 };
 
 
+/* This code sorts the corpora alphabeticaly */
+var keys = Object.keys(unsorted_corpora);
+keys.sort();
+
+for (var i=0; i<keys.length; i++) { // now lets iterate in sort order
+    var key = keys[i];
+    var value = unsorted_corpora[key];
+    settings.corpora[key] = value;
+}
+/* settings.corpora now contains all the corpora defined above */
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 
