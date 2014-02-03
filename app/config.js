@@ -4185,6 +4185,7 @@ settings.corpora.sw1203 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	    text_type : {label : "type"},
 	    text_student : {label : "student"},
 	    text_l1 : {label : "tisus_l1"},
 	    text_gender : {label : "gender"},
