@@ -344,5 +344,11 @@
 	"telefon": "telephone",
 	"bandat": "taped",
 	"samtycke": "consent",
-	"forsvarare": "defender"
+	"forsvarare": "defender",
+	
+	"student" : "student",
+	"a" : "A",
+	"b" : "B",
+	"c/d" : "C/D",
+	"semester" : "semester"
 }

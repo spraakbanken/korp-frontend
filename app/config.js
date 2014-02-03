@@ -480,7 +480,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
 	title : "Skyddade korpusar",
-	contents : ["ansokningar", "cefr", "forhor", "gdc", "soexempel", "tisus"]
+	contents : ["ansokningar", "cefr", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -4162,6 +4162,37 @@ settings.corpora.talbanken = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
+	}
+};
+
+settings.corpora.sw1203 = {
+	id : "sw1203",
+	title : "SW1203-uppsatser",
+	description : "",
+	limited_access : true,
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref
+	},
+	struct_attributes : {
+	    text_student : {label : "student"},
+	    text_l1 : {label : "tisus_l1"},
+	    text_gender : {label : "gender"},
+	    text_birthyear : {label : "birthyear"},
+	    text_a : {label : "a"},
+	    text_b : {label : "b"},
+	    text_cd : {label : "c/d"},
+	    text_semester : {label : "semester"}
 	}
 };
 

@@ -345,6 +345,12 @@
 	"telefon": "telefon",
 	"bandat": "bandat",
 	"samtycke": "samtycke",
-	"forsvarare": "försvarare"
+	"forsvarare": "försvarare",
+	
+	"student" : "student",
+	"a" : "A",
+	"b" : "B",
+	"c/d" : "C/D",
+	"semester" : "termin"
 
 }
