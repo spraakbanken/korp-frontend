@@ -296,7 +296,6 @@ settings.corporafolders.salt = {
 };
 
 settings.corpora = {};
-settings.parallel_corpora = {};
 
 settings.corpora["europarl-sv"] = {
 	id : "europarl-sv",
