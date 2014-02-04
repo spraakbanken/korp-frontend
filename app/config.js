@@ -3372,28 +3372,6 @@ settings.corpora["wikipedia-sv"] = {
 	}
 };
 
-settings.corpora.swewac = {
-	id : "swewac",
-	title : "SweWaC – Swedish Web as Corpus",
-	description : "",
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
-	struct_attributes : {
-	}
-};
-
 settings.corpora.astranova = {
 	id : "astranova",
 	title : "Astra Nova 2008–2010",
