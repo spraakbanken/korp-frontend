@@ -33,7 +33,7 @@ settings.corporafolders.sakprosa = {
 
 settings.corporafolders.tidskrifter = {
 	title : "Tidskrifter",
-	contents : ["filosofia1850-1899", "filosofia1900-1959"],
+	contents : ["filosofia1850-1899", "filosofia1900-1959", "spanskaflugan"],
 	description : ""
 };
 
@@ -317,6 +317,31 @@ settings.corpora["sakprosa1900-1959"] = {
 		"text_publisher" : {label : "publisher"},
 		"text_url" : {label : "url", type : "url"},
 		"text_pages" : {label : "page"}
+	}
+};
+
+settings.corpora.spanskaflugan = {
+	id : "spanskaflugan",
+	title : "Spanska Flugan 1839–1841",
+	description : "Spanska Flugan är en polemisk tidskrift, vars redaktör var J.V. Snellman.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"}
 	}
 };
 
