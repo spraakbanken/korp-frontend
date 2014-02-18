@@ -3,7 +3,7 @@
 
 
 
-    <div class="token query_token" ng-repeat="token in data" ng-controller="ExtendedToken">
+    <div class="token query_token" ng-repeat="token in data track by $index" ng-controller="ExtendedToken">
         <div class="token_header">
             <span class="ui-icon ui-icon-circle-close btn-icon"
                   ng-click="removeToken($index)"></span>

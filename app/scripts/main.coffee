@@ -239,27 +239,9 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
             $("#languages").radioList "select", $.localize("getLang")
         page = Number(search().page)
         kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
-# <<<<<<< HEAD
-#         kwicResults.current_page = page  if isInit
-#         corpus = e.getState("corpus")
-#         if isInit and corpus and corpus.length isnt 0 and hasChanged("corpus")
-#             corp_array = corpus.split(",")
-#             processed_corp_array = _(corp_array)
-#                 .map((val) -> getAllCorporaInFolders(settings.corporafolders, val))
-#                 .flatten()
-#                 .value()
-
-#             corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-#             $("#select_corpus").val corpus
-#             simpleSearch.enableSubmit()
-#         display = e.getState("display")
-# =======
         kwicResults.current_page = page if isInit
 
-
-
         display = search().display
-# >>>>>>> remade search tabs
         if display is "about"
             if $("#about_content").is(":empty")
                 $("#about_content").load "markup/about.html", ->
@@ -359,7 +341,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                     $.sm.send "submit.cqp", data
 
         # if(!isInit)
-        tabs.each ->
+        tabs.each =>
             self = this
             idx = Number(search()[@id])
             return if idx is null

@@ -1,10 +1,6 @@
 (function() {
-<<<<<<< HEAD
-  var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
+  var chained, deferred_domReady, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-=======
-  var chained, deferred_domReady, deferred_mode, deferred_sm, getAllCorporaInFolders, initTimeGraph, isDev, loc_dfd, t;
->>>>>>> remade search tabs
 
   t = $.now();
 
@@ -74,6 +70,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then((function(searchbar_html) {
     var creds, end, from, labs, onHashChange, paper, start, tab_a_selector, tabs, to;
 <<<<<<< HEAD
@@ -82,11 +79,16 @@
 =======
   $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then((function() {
 =======
+=======
+>>>>>>> updated libs, continued with extended
   $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then((function(loc_data) {
->>>>>>> fixed localization
     var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
+<<<<<<< HEAD
 >>>>>>> remade search tabs
 >>>>>>> remade search tabs
+=======
+
+>>>>>>> updated libs, continued with extended
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     if (isLab) {
@@ -224,16 +226,6 @@
       }
       idx = $(this).parent().prevAll().length;
       state[id] = idx;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-      c.log("pushstate", state, id);
->>>>>>> remade search tabs
-      $.bbq.pushState(state);
-=======
-=======
->>>>>>> fixed localization
       search(state);
       return false;
     });
@@ -253,12 +245,15 @@
       return $("#corpusbox").corpusChooser("redraw");
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
     onHashChange = function(event, isInit) {
       var corp_array, corpus, data, display, e, hasChanged, page, prevFragment, processed_corp_array, reading, search, showAbout, type, value;
 <<<<<<< HEAD
 =======
 
 =======
+=======
+>>>>>>> updated libs, continued with extended
     corpus = search()["corpus"];
     if (corpus) {
       corp_array = corpus.split(",");
@@ -272,10 +267,15 @@
       simpleSearch.enableSubmit();
     }
     window.onHashChange = function(event, isInit) {
-      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value;
+      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value,
+        _this = this;
+
       c.log("onHashChange");
+<<<<<<< HEAD
 >>>>>>> remade search tabs
 >>>>>>> remade search tabs
+=======
+>>>>>>> updated libs, continued with extended
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
       };
@@ -302,21 +302,7 @@
       if (isInit) {
         kwicResults.current_page = page;
       }
-<<<<<<< HEAD
-      corpus = e.getState("corpus");
-      if (isInit && corpus && corpus.length !== 0 && hasChanged("corpus")) {
-        corp_array = corpus.split(",");
-        processed_corp_array = _(corp_array).map(function(val) {
-          return getAllCorporaInFolders(settings.corporafolders, val);
-        }).flatten().value();
-        corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
-        $("#select_corpus").val(corpus);
-        simpleSearch.enableSubmit();
-      }
-      display = e.getState("display");
-=======
       display = search().display;
->>>>>>> remade search tabs
       if (display === "about") {
         if ($("#about_content").is(":empty")) {
           $("#about_content").load("markup/about.html", function() {
@@ -372,22 +358,14 @@
           return $(".ui-dialog-content", this).dialog("destroy");
         });
       }
-<<<<<<< HEAD
-      reading = e.getState("reading_mode");
-=======
       if (!isInit && hasChanged("display")) {
-        if (search().display === "bar_plot") {
-          statsResults.drawBarPlot();
-        } else {
-          $("#plot_popup.ui-dialog-content").dialog("destroy").css({
-            opacity: 0,
-            display: "block",
-            height: 0
-          });
-        }
+        $("#plot_popup.ui-dialog-content").dialog("destroy").css({
+          opacity: 0,
+          display: "block",
+          height: 0
+        });
       }
       reading = search().reading_mode;
->>>>>>> remade search tabs
       if (hasChanged("reading_mode")) {
         if (reading) {
           kwicResults.$result.addClass("reading_mode");
@@ -438,17 +416,20 @@
       }
       tabs.each(function() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         var idx;
         idx = e.getState(this.id, true);
 =======
+=======
+>>>>>>> updated libs, continued with extended
         var idx, self;
-        self = this;
-        idx = Number(search()[this.id]);
->>>>>>> remade search tabs
+
+        self = _this;
+        idx = Number(search()[_this.id]);
         if (idx === null) {
           return;
         }
-        return $(this).find(tab_a_selector).eq(idx).triggerHandler("change");
+        return $(self).find(tab_a_selector).eq(idx).triggerHandler("change");
       });
       return $.bbq.prevFragment = _.extend({}, search());
     };

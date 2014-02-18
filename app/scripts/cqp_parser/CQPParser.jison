@@ -37,7 +37,7 @@
 
 expressions
     : tokens EOF
-        { typeof console !== 'undefined' ? console.log(JSON.stringify($1, null, 4)) : print($1);
+        { /*typeof console !== 'undefined' ? console.log(JSON.stringify($1, null, 4)) : print($1);*/
           return $1; }
     ;
 

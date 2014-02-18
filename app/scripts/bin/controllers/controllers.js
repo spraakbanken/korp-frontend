@@ -205,13 +205,14 @@
   });
 
   korpApp.controller("TokenList", function($scope, $location) {
-    var cqp, error, output, s, token, tokenObj, _i, _len, _ref;
+    var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
 
     s = $scope;
     cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
     s.data = [];
     try {
       s.data = CQP.parse(cqp);
+      c.log("s.data", s.data);
     } catch (_error) {
       error = _error;
       output = [];
@@ -237,20 +238,23 @@
       s.data = output;
       c.log("crash", s.data);
     }
+    c.log("s.data", s.data);
     if ($location.search().cqp) {
-      s.data = CQP.parse(decodeURI($location.search().cqp));
+      s.data = CQP.parse(decodeURIComponent($location.search().cqp));
     } else {
       s.data = CQP.parse(cqp);
+    }
+    _ref1 = s.data;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      token = _ref1[_j];
+      if (!("and_block" in token)) {
+        token.and_block = CQP.parse('[word = ""]')[0].and_block;
+      }
     }
     s.$watch('getCQPString()', function() {
       var cqpstr;
 
-      cqpstr = CQP.stringify(s.data);
-      return $location.search({
-        cqp: $.param({
-          _: cqpstr
-        }).slice(2)
-      });
+      return cqpstr = CQP.stringify(s.data);
     });
     s.getCQPString = function() {
       return (CQP.stringify(s.data)) || "";
@@ -278,10 +282,11 @@
       return and_array;
     };
     s.removeOr = function(and_array, i) {
+      c.log("removeOr", and_array, i);
       if (and_array.length > 1) {
         return and_array.splice(i, 1);
       } else {
-        return s.token.and_block.splice(s.$parent.$index, 1);
+        return s.token.and_block.splice(s.$parent.$index + 1, 1);
       }
     };
     s.addAnd = function() {
@@ -329,7 +334,7 @@
           _results.push(scope.$watch(watch || obj.key, (function(obj) {
             return function(val) {
               val = (obj.val_out || _.identity)(val);
-              $location.search(obj.key, val || null);
+              $location.search(obj.key, val != null ? val : null);
               return typeof obj.post_change === "function" ? obj.post_change(val) : void 0;
             };
           })(obj)));
@@ -339,17 +344,21 @@
     };
   });
 
-  korpApp.controller("SearchPaneCtrl", function($scope, util) {
+  korpApp.controller("SearchPaneCtrl", function($scope, util, $location) {
     var s;
 
     s = $scope;
-    s.search_tab = 0;
+    s.search_tab = parseInt($location.search()["search_tab"]) || 0;
+    c.log("search_tab init", s.search_tab);
     s.getSelected = function() {
-      var i, p, _i, _len, _ref;
+      var i, p, _i, _len, _ref, _ref1;
 
-      _ref = s.panes;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        p = _ref[i];
+      if (!((_ref = s.panes) != null ? _ref.length : void 0)) {
+        return s.search_tab;
+      }
+      _ref1 = s.panes;
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        p = _ref1[i];
         if (p.selected) {
           return i;
         }
@@ -363,16 +372,21 @@
         p = _ref[_i];
         p.selected = false;
       }
-      return s.panes[index].selected = true;
+      if (s.panes[index]) {
+        return s.panes[index].selected = true;
+      }
     };
     return util.setupHash(s, [
       {
         expr: "getSelected()",
         val_out: function(val) {
+          c.log("val out", val);
           return val;
         },
         val_in: function(val) {
-          return s.setSelected(val);
+          c.log("val_in", typeof val);
+          s.setSelected(parseInt(val));
+          return parseInt(val);
         },
         key: "search_tab"
       }

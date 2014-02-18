@@ -190,9 +190,11 @@ korpApp.directive 'kwicWord', ->
 korpApp.controller "TokenList", ($scope, $location) ->
     s = $scope
     cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
+    # cqp = '[word = "value"] []{1,2}'
     s.data = []
     try
         s.data = CQP.parse(cqp)
+        c.log "s.data", s.data
     catch error
         output = []
         for token in cqp.split("[")
@@ -207,16 +209,23 @@ korpApp.controller "TokenList", ($scope, $location) ->
 
         s.data = output
         c.log "crash", s.data
+
+
+    c.log "s.data", s.data
+
     if $location.search().cqp
-        s.data = CQP.parse(decodeURI($location.search().cqp))
+        s.data = CQP.parse(decodeURIComponent($location.search().cqp))
     else
         s.data = CQP.parse(cqp)
 
+    # expand [] to [word = '']
+    for token in s.data
+        if "and_block" not of token
+            token.and_block = CQP.parse('[word = ""]')[0].and_block
+
     s.$watch 'getCQPString()', () ->
         cqpstr = CQP.stringify(s.data)
-        # cqpstr = encodeURIComponent(cqpstr).replace("%20", "+")
-        # $location.search($.param({cqp : CQP.stringify(s.data)}))
-        $location.search({cqp : $.param({_ : cqpstr})[2..]})
+        # $location.search({cqp : encodeURIComponent(cqpstr)})
 
     s.getCQPString = ->
         return (CQP.stringify s.data) or ""
@@ -241,11 +250,12 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
             val : ""
         return and_array
     s.removeOr = (and_array, i) ->
+        c.log "removeOr", and_array, i
         if and_array.length > 1
             and_array.splice(i, 1)
         else
 
-            s.token.and_block.splice s.$parent.$index, 1
+            s.token.and_block.splice s.$parent.$index + 1, 1
 
 
     s.addAnd = () ->
@@ -292,36 +302,44 @@ korpApp.factory "util", ($location) ->
             scope.$watch watch or obj.key, do (obj) ->
                 (val) ->
                     val = (obj.val_out or _.identity)(val)
-                    $location.search obj.key, val or null
+                    $location.search obj.key, if val? then val else null
                     obj.post_change?(val)
 
 
-korpApp.controller "SearchPaneCtrl", ($scope, util) ->
+korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
     s = $scope
-    s.search_tab = 0
+    # $location.search()["search_tab"]
+    # s.search_tab = Number($location.search()["search_tab"]) or 0
+    s.search_tab = parseInt($location.search()["search_tab"]) or 0
+    c.log "search_tab init", s.search_tab
+
     s.getSelected = () ->
+        unless s.panes?.length then return s.search_tab
         for p, i in s.panes
             return i if p.selected
     s.setSelected = (index) ->
+        # unless s.panes then return
         for p in s.panes
             p.selected = false
-        s.panes[index].selected = true
-    # s.setPane
+        if s.panes[index]
+            s.panes[index].selected = true
+
     util.setupHash s,[
         expr : "getSelected()"
     #     # scope_name : "sortVal"
         val_out : (val) ->
+            c.log "val out", val
             return val
     #         # s.select
         val_in : (val) ->
-            s.setSelected val
+            c.log "val_in", typeof val
+            # return parseInt(val)
+            s.setSelected parseInt(val)
+            return parseInt(val)
     #     # scope_func : "select"
         key : "search_tab"
     ]
 
-
-
-# korpApp.controller "SimpleSearchCtrl", ($scope, util) ->
 
 
 

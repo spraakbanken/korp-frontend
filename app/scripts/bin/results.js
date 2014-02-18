@@ -634,6 +634,7 @@
     };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     ExampleResults.prototype.onSortChange = function(event) {
       var opt;
       opt = $(event.currentTarget).find(":selected");
@@ -648,6 +649,8 @@
 
 =======
 >>>>>>> remade search tabs
+=======
+>>>>>>> updated libs, continued with extended
     ExampleResults.prototype.showPreloader = function() {
       this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
       this.$tab.find(".spinner").remove();

@@ -4,8 +4,6 @@
 @import "compass/css3/inline-block";
 @import "compass/css3/border-radius";
 
-@import "_compass_twitter_bootstrap.scss";
-
 
 
 @font-face {
@@ -1349,9 +1347,9 @@ a {
   @include transition(opacity 200ms ease);
 }
 
-.and:first-of-type {
-  display: none !important;
-}
+// .and:first-of-type {
+//   display: none !important;
+// }
 
 .arg_header {
   font-size: 10px;

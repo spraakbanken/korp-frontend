@@ -73,14 +73,17 @@
     $("#search_options select").each(function() {
       var state;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 
 >>>>>>> remade search tabs
       state = $.bbq.getState($(this).data("history"));
 =======
+=======
+
+>>>>>>> updated libs, continued with extended
       state = search()[$(this).data("history")];
->>>>>>> remade search tabs
       if (!!state) {
         return $(this).val(state).change();
       } else {
@@ -526,6 +529,7 @@
 
     ExtendedSearch.prototype.setupContainer = function(selector) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       var insert_token_button, self;
 <<<<<<< HEAD
 =======
@@ -534,6 +538,10 @@
       var self;
 >>>>>>> remade search tabs
 >>>>>>> remade search tabs
+=======
+      var self;
+
+>>>>>>> updated libs, continued with extended
       self = this;
       return $(selector).sortable({
         items: ".query_token",
@@ -576,6 +584,7 @@
 
     ExtendedSearch.prototype.insertToken = function(button) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       var _this = this;
       $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken({
         close: function() {
@@ -589,6 +598,8 @@
       });
 =======
 >>>>>>> remade search tabs
+=======
+>>>>>>> updated libs, continued with extended
       return util.localize();
     };
 
@@ -611,6 +622,7 @@
     };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     AdvancedSearch.prototype.updateCQP = function() {
       var query;
       query = $(".query_token").map(function() {
@@ -620,8 +632,9 @@
       return query;
     };
 =======
+=======
+>>>>>>> updated libs, continued with extended
     AdvancedSearch.prototype.updateCQP = function() {};
->>>>>>> remade search tabs
 
     AdvancedSearch.prototype.onSubmit = function() {
       AdvancedSearch.__super__.onSubmit.call(this);
