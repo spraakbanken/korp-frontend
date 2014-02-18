@@ -13,23 +13,6 @@
       c.log("val", val);
       return s.$root.result_tab = val;
     });
-    /*
-    s.onClick = (event, num) ->
-        i = $(event.target).parent().index()
-        i = num if num?
-    
-        # hack time
-        switch i
-            when 0 then kwicResults.onentry()
-            # when 1 then statsResults.onentry()
-            when 2 then lemgramResults.onentry()
-    
-        if prev == 0
-            kwicResults.onexit()
-    
-        prev = i
-    */
-
   });
 
   korpApp.controller("resultContainerCtrl", function($scope, searches) {
@@ -193,27 +176,11 @@
   korpApp.controller("compareCtrl", function($scope, $rootScope) {
     var s;
     s = $scope;
+    s.loading = true;
     return s.promise.then(function(_arg) {
-      var cl, cmp1, cmp2, cmps, data, pairs, reduce, _ref;
+      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, _ref, _ref1;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
-      cmps = [cmp1, cmp2];
-      s.rowClick = function(data, cmp_index) {
-        var cmp, opts;
-        cmp = cmps[cmp_index];
-        _.extend(cmp, {
-          command: "query"
-        });
-        cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");
-        opts = {
-          start: 0,
-          end: 24,
-          ajaxParams: cmp
-        };
-        c.log("cmp", cmp);
-        $rootScope.kwicTabs.push(opts);
-        return c.log("opts", opts);
-      };
-      s.$parent.loading = false;
+      s.loading = false;
       pairs = _.pairs(data.loglike);
       s.tables = _.groupBy(pairs, function(_arg1) {
         var val, word;
@@ -243,14 +210,35 @@
       s.reduce = reduce;
       cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
       c.log("_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()));
-      s.stringify = ((_ref = (_.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()))[_.str.strip(reduce, "_.")]) != null ? _ref.stringify : void 0) || angular.identity;
+      attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
+      s.stringify = ((_ref = attributes[_.str.strip(reduce, "_.")]) != null ? _ref.stringify : void 0) || angular.identity;
       s.max = _.max(pairs, function(_arg1) {
         var val, word;
         word = _arg1[0], val = _arg1[1];
         return Math.abs(val);
       });
       s.cmp1 = cmp1;
-      return s.cmp2 = cmp2;
+      s.cmp2 = cmp2;
+      op = ((_ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? _ref1.type : void 0) === "set" ? "contains" : "=";
+      cmps = [cmp1, cmp2];
+      return s.rowClick = function(triple, cmp_index) {
+        var cmp, cqpobj, opts;
+        c.log("triple", triple);
+        cmp = cmps[cmp_index];
+        _.extend(cmp, {
+          command: "query"
+        });
+        cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");
+        cqpobj = CQP.parse(cmp.cqp);
+        cqpobj[0].and_block.push(CQP.parse("[" + reduce + " " + op + " '" + triple[0] + "']")[0].and_block[0]);
+        cmp.cqp = CQP.stringify(cqpobj);
+        opts = {
+          start: 0,
+          end: 24,
+          ajaxParams: cmp
+        };
+        return $rootScope.kwicTabs.push(opts);
+      };
     });
   });
 

@@ -215,21 +215,29 @@
 
   korpApp.directive("searchSubmit", function($window, $document, $rootElement) {
     return {
-      template: '<div class="search_submit">\n    <div class="btn-group">\n        <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">Sök</button>\n        <button class="btn btn-small opener" ng-click="togglePopover()">\n            <span class="caret"></span>\n        </button>\n    </div>\n    <div class="popover compare {{pos}}">\n        <div class="arrow"></div>\n        <h3 class="popover-title">Spara för jämförelse</h3>\n        <form class="popover-content" ng-submit="onSubmit()">\n            <div>\n                <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">\n            </div>\n            <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>\n        </form>\n    </div>\n</div>',
+      template: '<div class="search_submit">\n    <div class="btn-group">\n        <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">Sök</button>\n        <button class="btn btn-small opener" ng-click="togglePopover($event)">\n            <span class="caret"></span>\n        </button>\n    </div>\n    <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">\n        <div class="arrow"></div>\n        <h3 class="popover-title">Spara för jämförelse</h3>\n        <form class="popover-content" ng-submit="onSubmit()">\n            <div>\n                <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">\n            </div>\n            <div class="btn_container">\n                <button class="btn btn-primary btn-small">Spara</button>\n            </div>\n        </form>\n    </div>\n</div>',
       restrict: "E",
       replace: true,
       link: function(scope, elem, attr) {
         var at, horizontal, my, onEscape, popover, s, trans, _ref;
         s = scope;
         s.pos = attr.pos || "bottom";
-        s.togglePopover = function() {
+        s.togglePopover = function(event) {
           if (s.isPopoverVisible) {
             s.popHide();
           } else {
             s.popShow();
           }
+          event.preventDefault();
+          return event.stopPropagation();
         };
         popover = elem.find(".popover");
+        s.onPopoverClick = function(event) {
+          if (event.target !== popover.find(".btn")[0]) {
+            event.preventDefault();
+            return event.stopPropagation();
+          }
+        };
         s.isPopoverVisible = false;
         trans = {
           bottom: "top",
@@ -259,11 +267,13 @@
             of: elem.find(".opener")
           });
           $rootElement.on("keydown", onEscape);
+          $rootElement.on("click", s.popHide);
         };
         s.popHide = function() {
           s.isPopoverVisible = false;
           popover.hide("fade", "fast");
           $rootElement.off("keydown", onEscape);
+          $rootElement.off("click", s.popHide);
         };
         s.onSubmit = function() {
           s.popHide();
@@ -278,7 +288,8 @@
 
   korpApp.directive("meter", function() {
     return {
-      template: '<div class="meter">\n    <div class="background"></div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
+      template: '<div>\n    <div class="background">{{displayWd}}</div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
+      replace: true,
       scope: {
         meter: "=",
         max: "=",
@@ -288,7 +299,7 @@
         var bkg, part, w, wds;
         wds = scope.meter[0];
         bkg = elem.find(".background");
-        bkg.html((_.map(_.compact(wds.split("|")), scope.stringify)).join(", "));
+        scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
         w = elem.parent().width();
         part = (Math.abs(scope.meter[1])) / (Math.abs(scope.max));
         return bkg.width(Math.round(part * w));
@@ -298,6 +309,7 @@
 
   korpApp.directive("popper", function($rootElement) {
     return {
+      scope: {},
       link: function(scope, elem, attrs) {
         var closePopup, popup;
         popup = elem.next();
@@ -310,16 +322,22 @@
           return false;
         });
         elem.on("click", function(event) {
+          var pos;
           if (popup.is(":visible")) {
             closePopup();
           } else {
             popup.show();
           }
-          popup.position({
-            my: "right top",
-            at: "bottom right",
+          pos = {
+            my: attrs.my || "right top",
+            at: attrs.at || "bottom right",
             of: elem
-          });
+          };
+          c.log("pos", pos);
+          if (scope.offset) {
+            pos.offset = scope.offset;
+          }
+          popup.position(pos);
           return false;
         });
         return $rootElement.on("click", function() {

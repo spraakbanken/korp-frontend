@@ -1,6 +1,18 @@
-#top_bar
-  #mode_switch
+#top_bar(ng-controller="headerCtrl")
+  ul#mode_switch
+    li(ng-repeat="mode in visible", class="visible", ng-class="{selected: mode.selected}")
+      a(href="javascript:", ng-click="onSelect(mode.mode)") 
+        | {{mode.localekey | loc}}
+    li.menu_more.visible(ng-if="menu.length") 
+      a.dropdown-toggle(popper, my="right+15% top+10", at="bottom right", href="javascript:") Fler
+        i.fa.fa-angle-double-down
+      ul.dropdown-menu.popper_menu
+         li(ng-repeat="mode in menu")
+           a(href="javascript:", ng-click="onSelect(mode.mode)") 
+             | {{mode.localekey | loc}}
+      
   #cog
+
   ul#cog_menu
     li
       a#about(href='javascript:', rel='localize[about]') About Korp
@@ -20,6 +32,10 @@
   #languages
     a(href='javascript:', rel='localize[swedish]', data-mode='sv', ng-click='lang = \'sv\'') Svenska
     a(href='javascript:', rel='localize[english]', data-mode='en', ng-click='lang = \'en\'') Engelska
+  #cite
+    a(href="javascript:", ng-click="citeClick()") {{"about_cite_header" | loc}}
+
+  .clearfix
 #header_left
   a#logo
     img(src='img/korplogo.png')

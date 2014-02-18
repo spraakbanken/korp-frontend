@@ -338,10 +338,11 @@
   });
 
   $.fn.korp_autocomplete = function(options) {
-    var selector;
+    var proxy, selector;
     selector = $(this);
+    proxy = new model.LemgramProxy();
     if (typeof options === "string" && options === "abort") {
-      lemgramProxy.abort();
+      proxy.abort();
       selector.preloader("hide");
       return;
     }
@@ -395,7 +396,7 @@
         var promise;
         c.log("autocomplete request", request);
         c.log("autocomplete type", options.type);
-        promise = options.type === "saldo" ? lemgramProxy.saldoSearch(request.term, options["sw-forms"]) : lemgramProxy.karpSearch(request.term, options["sw-forms"]);
+        promise = options.type === "saldo" ? proxy.saldoSearch(request.term, options["sw-forms"]) : proxy.karpSearch(request.term, options["sw-forms"]);
         promise.done(function(idArray, textstatus, xhr) {
           idArray = $.unique(idArray);
           return options.middleware(request, idArray).done(function(listItems) {

@@ -35,98 +35,7 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 
-/* All corpora are added to this unsorted dictionary, instead of settings.corpora
-   Before setting corpusListing (at the end of the file), settings.corpora will
-   be filled. */
-var unsorted_corpora = {}; 
-
-unsorted_corpora["digidaily-dalpilen"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-dalpilen",
-	title : "Dalpilen",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-unsorted_corpora["digidaily-goteborgsweckoblad"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-goteborgsweckoblad",
-	title : "Göteborgs weckoblad",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-	
-unsorted_corpora["digidaily-gotlandstidning"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-gotlandstidning",
-	title : "Gotlands tidning",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-
-unsorted_corpora["digidaily-faluposten"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-faluposten",
-	title : "Faluposten",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-unsorted_corpora["digidaily-fahluweckoblad"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-fahluweckoblad",
-	title : "Fahlu weckoblad",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-unsorted_corpora["digidaily-jonkopingsbladet"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-jonkopingsbladet",
-	title : "Jönköpingsbladet",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-
-unsorted_corpora["digidaily-folketsrost"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-folketsrost",
-	title : "Folkets röst",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-       
-	struct_attributes : settings.digidailystruct_attributes,
-};
-
-unsorted_corpora["digidaily-bollnastidning"] = {
+settings.corpora["digidaily-bollnastidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-bollnastidning",
 	title : "Bollnäs tidning",
@@ -135,11 +44,97 @@ unsorted_corpora["digidaily-bollnastidning"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
+settings.corpora["digidaily-dalpilen"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-dalpilen",
+	title : "Dalpilen",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+settings.corpora["digidaily-fahluweckoblad"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-fahluweckoblad",
+	title : "Fahlu weckoblad",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+settings.corpora["digidaily-faluposten"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-faluposten",
+	title : "Faluposten",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+settings.corpora["digidaily-gotlandstidning"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-gotlandstidning",
+	title : "Gotlands tidning",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+
+settings.corpora["digidaily-goteborgsweckoblad"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-goteborgsweckoblad",
+	title : "Göteborgs weckoblad",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+	
+
+
+
+
+settings.corpora["digidaily-jonkopingsbladet"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-jonkopingsbladet",
+	title : "Jönköpingsbladet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+
+
+settings.corpora["digidaily-folketsrost"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "digidaily-folketsrost",
+	title : "Folkets röst",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.digidailyattributes,
+       
+	struct_attributes : settings.digidailystruct_attributes
+};
+
 		
 
-unsorted_corpora["digidaily-norraskane"] = {
+settings.corpora["digidaily-norraskane"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-norraskane",
 	title : "Norra Skåne",
@@ -148,10 +143,10 @@ unsorted_corpora["digidaily-norraskane"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-lindesbergsallehanda"] = {
+settings.corpora["digidaily-lindesbergsallehanda"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-lindesbergsallehanda",
 	title : "Lindesbergs allehanda",
@@ -160,10 +155,10 @@ unsorted_corpora["digidaily-lindesbergsallehanda"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-blekingsposten"] = {
+settings.corpora["digidaily-blekingsposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-blekingsposten",
 	title : "Blekingsposten",
@@ -172,11 +167,11 @@ unsorted_corpora["digidaily-blekingsposten"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
 
-unsorted_corpora["digidaily-postochinrikestidning"] = {
+settings.corpora["digidaily-postochinrikestidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-postochinrikestidning",
 	title : "Post- och Inrikes Tidningar",
@@ -185,10 +180,10 @@ unsorted_corpora["digidaily-postochinrikestidning"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-stockholmsposten"] = {
+settings.corpora["digidaily-stockholmsposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-stockholmsposten",
 	title : "Stockholmsposten",
@@ -197,11 +192,11 @@ unsorted_corpora["digidaily-stockholmsposten"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
 
-unsorted_corpora["digidaily-kalmar"] = {
+settings.corpora["digidaily-kalmar"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-kalmar",
 	title : "Kalmar",
@@ -210,10 +205,10 @@ unsorted_corpora["digidaily-kalmar"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-wernamotidning"] = {
+settings.corpora["digidaily-wernamotidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-wernamotidning",
 	title : "Wernamo tidning",
@@ -222,10 +217,10 @@ unsorted_corpora["digidaily-wernamotidning"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-gotheborgsweckolista"] = {
+settings.corpora["digidaily-gotheborgsweckolista"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-gotheborgsweckolista",
 	title : "Götheborgs weckolista",
@@ -234,11 +229,11 @@ unsorted_corpora["digidaily-gotheborgsweckolista"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
 
-unsorted_corpora["digidaily-ostgotaposten"] = {
+settings.corpora["digidaily-ostgotaposten"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-ostgotaposten",
 	title : "Östgötaposten",
@@ -247,10 +242,10 @@ unsorted_corpora["digidaily-ostgotaposten"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-ostergotlandsveckoblad"] = {
+settings.corpora["digidaily-ostergotlandsveckoblad"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-ostergotlandsveckoblad",
 	title : "Östergötlands veckoblad",
@@ -259,10 +254,10 @@ unsorted_corpora["digidaily-ostergotlandsveckoblad"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-wermlandslanstidning"] = {
+settings.corpora["digidaily-wermlandslanstidning"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-wermlandslanstidning",
 	title : "Wermlands läns tidning",
@@ -271,10 +266,10 @@ unsorted_corpora["digidaily-wermlandslanstidning"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
-unsorted_corpora["digidaily-tidningforwenersborgsstadochlan"] = {
+settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "digidaily-tidningforwenersborgsstadochlan",
 	title : "Tidning för Wenersborgs stad och län",
@@ -283,20 +278,15 @@ unsorted_corpora["digidaily-tidningforwenersborgsstadochlan"] = {
 	context : settings.spContext,
 	attributes : settings.digidailyattributes,
        
-	struct_attributes : settings.digidailystruct_attributes,
+	struct_attributes : settings.digidailystruct_attributes
 };
 
 
-/* This code sorts the corpora alphabeticaly */
-var keys = Object.keys(unsorted_corpora);
-keys.sort();
-
-for (var i=0; i<keys.length; i++) { // now lets iterate in sort order
-    var key = keys[i];
-    var value = unsorted_corpora[key];
-    settings.corpora[key] = value;
-}
-/* settings.corpora now contains all the corpora defined above */
+settings.corpora = _(settings.corpora)
+						.sortBy("title")
+						.map(function(item) {return [item.id, item]})
+						.object()
+						.value()
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 

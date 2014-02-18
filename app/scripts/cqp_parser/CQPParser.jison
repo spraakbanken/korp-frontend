@@ -21,14 +21,14 @@
 \s+                 /* skip whitespace */
 \%[cd]+             return "FLAG"
 'not'               return 'not'
-(_.)?[A-Za-z_]+      return 'TYPE'
 '!='                return '!='
 '^='                return '^='
 '&='                return '&='
 '_='                return '_='
 '*='                return '*='
 '='                 return '='
-'"'\S*'"'           return 'VALUE'
+(_.)?[A-Za-z_]+      return 'TYPE'
+["']\S*['"]           return 'VALUE'
 "["\s*"]"           return 'EMPTY'
 "["                 return '['
 "]"                 return ']'

@@ -1,8 +1,7 @@
 
 .result_controls
   .controls_n
-    span(rel='localize[num_results]') Antal träffar
-    | :
+    span {{'num_results' | loc}}:
     span.num-result 0
   .progress_container
     progress(value='{{progress || 0}}', max='100')

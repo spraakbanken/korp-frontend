@@ -146,9 +146,16 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         kwicSearch : (cqp, page) ->
             # simpleSearch.resetView()
             @kwicRequest cqp, page
-            statsProxy.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
+            statsProxy?.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
 
         lemgramSearch : (lemgram, searchPrefix, searchSuffix, page) ->
+            cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
+            statsProxy?.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
+            @kwicRequest cqp, page
+            
+            if settings.wordpicture == false then return
+            
+            searchProxy.relatedWordSearch lemgram
             c.log "lemgramSearch", lemgram
             lemgramResults.showPreloader()
             
@@ -156,10 +163,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             #.clear();
             #.setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
             type = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))
-            searchProxy.relatedWordSearch lemgram
-            cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix)
-            statsProxy.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
-            @kwicRequest cqp, page
+            # cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix)
             
             #kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page, $.proxy(kwicResults.onProgress, kwicResults));
             # $("#cqp_string").val cqp
@@ -247,7 +251,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     # advancedSearch.setCQP value
                     c.log "cqp search"
 
-                    if not value then value = $location.search().cqp
+                    if not value then value = CQP.expandOperators $location.search().cqp
                     searches.activeSearch = 
                         type : type
                         val : value

@@ -1,0 +1,37 @@
+#korp-simple(constr='SimpleSearch', constr-name='simpleSearch', ng-controller='SimpleCtrl')
+  form
+    label(for='simple_text') {{'search_for' | loc}}
+    input#simple_text(type='text', ng-model='simple_text', placeholder='{{lemgramToString(placeholder)}}')
+    // <span id="keyboard" class="lig">&#xe07d;</span>
+    span#keyboard.ui-state-default.specialkey ð
+    // <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />
+    search-submit
+    span 
+        |  {{'and_include' | loc}} 
+    input#prefixChk(type='checkbox') 
+    label(for='prefixChk')  {{'prefix' | loc}} 
+    input#suffixChk(type='checkbox') 
+    label(for='suffixChk')  {{'suffix' | loc}} 
+    span  {{'and' | loc}} 
+    input#caseChk(type='checkbox') 
+    label(for='caseChk')  {{'case_insensitive' | loc}}  
+  table#char_table
+    tbody
+      tr
+        td.ui-state-default.specialkey å
+        td.ui-state-default.specialkey ä
+        td.ui-state-default.specialkey ö
+        td.ui-state-default.specialkey æ
+        td.ui-state-default.specialkey œ
+        td.ui-state-default.specialkey ð
+        td.ui-state-default.specialkey þ
+        td.ui-state-default.specialkey Å
+        td.ui-state-default.specialkey Ä
+        td.ui-state-default.specialkey Ö
+        td.ui-state-default.specialkey Æ
+        td.ui-state-default.specialkey Œ
+        td.ui-state-default.specialkey Ð
+        td.ui-state-default.specialkey Þ
+  #similar_wrapper
+    #similar_lemgrams
+  .clearfix

@@ -1,20 +1,28 @@
 window.c = console
+regescape = (s) ->
+    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
 
 
 stringifyCqp = (cqp_obj, translate_ops = false) ->
     output = []
-
+    valTransform = 
+        word : (val) -> 
+            regescape(val)
     for token in cqp_obj
         or_array = []
         or_array = for and_array in token.and_block
             for {type, op, val, flags} in and_array
                 if translate_ops
+                    if op != "*="
+                        val = regescape val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
                     }[op] or [val, op]
+                # else 
+                #     val = regescape
 
                 flagstr = ""
                 if flags and _.keys(flags).length
@@ -73,6 +81,8 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
 window.CQP =
     parse : => CQPParser.parse arguments...
     stringify : stringifyCqp
+    expandOperators : (cqpstr) ->
+        CQP.stringify CQP.parse(cqpstr), true
 
 
 # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "b" | word = "a")]'

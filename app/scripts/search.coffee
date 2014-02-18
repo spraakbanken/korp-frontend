@@ -46,7 +46,6 @@ view.enableSearch = (bool) ->
         $("#search-tab").tabs("disable").addClass("ui-state-disabled").cover()
 
 view.initSearchOptions = ->
-    # TODO: unbreak this function
     selects = $("#search_options > div:first select").customSelect()
     # c.log "selects", selects
     view.updateReduceSelect()
@@ -60,8 +59,6 @@ view.initSearchOptions = ->
 
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         simpleSearch.enableSubmit()
-        # extendedSearch.enableSubmit()
-        advancedSearch.enableSubmit()
         target = $(event.target)
         state = {}
         state[target.data("history")] = target.val()
@@ -177,39 +174,11 @@ class view.SimpleSearch extends BaseSearch
         # @onSimpleChange()
         $("#similar_lemgrams").hide()
         @savedSelect = null
-        
-        # $("#sendBtn", @$main).
-        # scope.onsubmit = () ->
-        #     c.log "onsubmit"
 
+        @lemgramProxy = new model.LemgramProxy()
         
-
 
         textinput = $("#simple_text")
-        # textinput = $("#simple_text").bind("keydown.autocomplete", (event) =>
-        #     keyCode = $.ui.keyCode
-        #     return if not @isVisible() or $("#ui-active-menuitem").length isnt 0
-            # return false
-            # switch event.keyCode
-            #     when keyCode.ENTER
-                    # @onSubmit() unless $("#search-tab").data("cover")?
-        # )
-
-        # setLemgram = (lemgram) =>
-        #     label = util.lemgramToString(lemgram).replace(/<.*?>/g, "")
-        #     @setPlaceholder(label, lemgram)
-        #     $("#simple_text").val("")
-            
-
-
-
-                
-        # [type, search_val] = search()["search"].split("|")
-        # [type, search_val] = @s.$root._search
-
-        # if type == "lemgram"
-            # setLemgram(search_val)
-            # @s.$root.activeCQP = "[lex contains \"#{search_val}\"]"
         
         if settings.autocomplete
             textinput.korp_autocomplete
@@ -227,7 +196,7 @@ class view.SimpleSearch extends BaseSearch
                     # return false
                 middleware: (request, idArray) =>
                     dfd = $.Deferred()
-                    lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
+                    @lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
                         delete freqs["time"]
 
                         if currentMode is "law"
@@ -291,7 +260,7 @@ class view.SimpleSearch extends BaseSearch
 
     makeLemgramSelect: (lemgram) ->
         self = this
-        promise = $("#simple_text").data("promise") or lemgramProxy.karpSearch(lemgram or $("#simple_text").val(), false)
+        promise = $("#simple_text").data("promise") or @lemgramProxy.karpSearch(lemgram or $("#simple_text").val(), false)
         promise.done (lemgramArray) =>
             $("#lemgram_select").prev("label").andSelf().remove()
             @savedSelect = null
@@ -409,8 +378,19 @@ class view.SimpleSearch extends BaseSearch
     getCQP : (word) ->
         currentText = $.trim(word or $("#simple_text").val() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
-        if util.isLemgramId(currentText) # if the input is a lemgram, do semantic search.
+        if util.isLemgramId(currentText) # if the input is a lemgram, do lemgram search.
             val = $.format("[lex contains \"%s\"]", currentText)
+        else if @s.placeholder
+            #TODO: expand depending on prefix / suffix checks
+            val = "[lex contains '#{regescape @s.placeholder}'"
+
+            if @isSearchPrefix()
+                val += " | prefix contains #{regescape @s.placeholder} "
+            if @isSearchSuffix()
+                val += " | suffix contains #{regescape @s.placeholder}"
+
+            val += "]"
+
         else if @isSearchPrefix() or @isSearchSuffix()
             query = []
             @isSearchPrefix() and query.push("%s.*")
@@ -436,15 +416,7 @@ class view.SimpleSearch extends BaseSearch
             return
         
         val = @getCQP()
-        # $("#cqp_string").val val
-        # @s.$apply () ->
-        # safeApply @s.$root, () ->
         @s.$root.activeCQP = val
-        # unless currentText is ""
-        #     @enableSubmit()
-
-        # else
-        #     @disableSubmit()
 
     resetView: ->
         $("#similar_lemgrams").empty().height "auto"
@@ -454,109 +426,7 @@ class view.SimpleSearch extends BaseSearch
 
         this
 
-    # setPlaceholder: (str, data) ->
-    #     $("#simple_text").data("lemgram", data).attr("placeholder", str).placeholder()
-    #     this
-
     clear: ->
         $("#simple_text").val("").get(0).blur()
         # @disableSubmit()
         this
-
-###
-class view.ExtendedSearch extends BaseSearch
-    constructor: (mainDivId) ->
-        super mainDivId
-        $("#korp-extended").keyup (event) =>
-            @onSubmit()  if event.keyCode is "13" and $("#search-tab").data("cover")?
-            false
-
-        @$main.find("#strict_chk").change ->
-            # advancedSearch.updateCQP()
-
-        # @setupContainer "#query_table"
-
-    setupContainer: (selector) ->
-        self = this
-        
-        
-        # insert_token_button = $('<img src="img/plus.png"/>')
-        # .addClass("image_button insert_token")
-        # .click ->
-        #     self.insertToken this
-
-        # $(selector).append(insert_token_button).sortable
-        # $(selector).sortable
-        #     items: ".query_token"
-        #     delay: 50
-        #     tolerance: "pointer"
-
-        # insert_token_button.click()
-
-    reset: ->
-
-        #$("#search-tab ul li:nth(2)").click()
-        @$main.find(".query_token").remove()
-        $(".insert_token").click()
-        # advancedSearch.updateCQP()
-
-    onentry: ->
-
-    onSubmit: ->
-        super()
-        if @$main.find(".query_token, .or_arg").length > 1
-            # query = advancedSearch.updateCQP()
-            util.searchHash "cqp", @s.$root.activeCQP
-        else
-            $select = @$main.find("select.arg_type")
-            switch $select.val()
-                when "lex"
-                    searchType = (if $select.val() is "lex" then "lemgram" else $select.val())
-                    util.searchHash searchType, $select.parent().next().data("value")
-                else
-                    util.searchHash "cqp", @s.$root.activeCQP
-    # setOneToken: (key, val) ->
-    #     $("#search-tab").find("a[href=#korp-extended]").click().end()
-    #         .find("select.arg_type:first").val(key).next().val val
-    #     advancedSearch.updateCQP()
-
-    insertToken: (button) ->
-        # try
-        # $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
-        #     close: ->
-        #         advancedSearch.updateCQP()
-
-        #     change: =>
-        #         advancedSearch.updateCQP()  if @$main.is(":visible")
-
-
-        # catch error
-            # c.log "error creating extendedToken", error
-            # @$main.find("*").remove()
-            # $("<div>Extended search is broken on this browser.</div>").prependTo(@$main).nextAll().remove()
-
-        util.localize()
-
-    refreshTokens: ->
-        # $(".query_token").extendedToken "refresh"
-
-###
-
-class view.AdvancedSearch extends BaseSearch
-    constructor: (mainDivId) ->
-        super mainDivId
-
-    setCQP: (query) ->
-        c.log "setCQP", query
-        $("#cqp_string").val query
-
-    updateCQP: ->
-        # query = $(".query_token").map(->
-        #     $(this).extendedToken "getCQP", $("#strict_chk").is(":checked")
-        # ).get().join(" ")
-        # @setCQP query
-        # return query
-
-    onSubmit: ->
-        super()
-        util.searchHash "cqp", $("#cqp_string").val()

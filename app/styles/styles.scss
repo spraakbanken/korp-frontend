@@ -184,9 +184,11 @@ a {
 }
 
 #top_bar {
-  height: 30px;
+  // height: 30px;
   width: 100%;
   @include background-image(linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%));
+  padding : 5px;
+  padding-left: 8px;
 }
 
 /*match placeholder/watermark padding to border+padding for input element*/
@@ -240,7 +242,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   color: black;
 }
 
-#languages {
+#cite {
+  margin-top: 1px;
+}
+#languages, #cite {
   float: right;
   margin-right: 8px;
 }
@@ -277,6 +282,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 //   display : none;
 // }
 
+.extended .search_submit {
+  display: inline;
+  .btn-group {
+    display: inline;
+  }
+}
+
 
 .mode-parallel {
   #linkedLang {
@@ -298,9 +310,9 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 
 
 
-.mode-law .within_select ~ * {
-  display: inline;
-}
+// .mode-law .within_select ~ * {
+//   display: inline;
+// }
 
 // .within_select ~ *, #removeLang, #linkedLang {
 //   display: none;
@@ -1269,8 +1281,34 @@ label[for=lemgram_select]:before {
 }
 
 #mode_switch {
-  margin-left: 8px;
+  margin : 0;
+  margin-right: 10px;
   float: left;
+  padding-left: 0;
+
+  li {
+    &.visible {
+      @include inline-block();
+    }
+    &.selected a {
+      color : black;
+    }
+    &.visible:after {
+      content: "|";
+      margin : 0 0.3em;
+    }
+    &:last-child:after {
+      content: "";
+    }
+    &.menu_more {
+      a {
+        background: rgba(0,0,0,0);
+      }
+      i {
+        margin-left: 5px;
+      }
+    }
+  }
 }
 
 .radioList_selected {
@@ -1523,8 +1561,9 @@ label[for=lemgram_select]:before {
 
 #cog {
   float: right;
-  margin-top: -1px;
+  margin-top: -6px;
   cursor: pointer;
+  height: 26px;
 }
 
 #cog_menu {
@@ -1584,6 +1623,9 @@ label[for=lemgram_select]:before {
       margin-top : 2em;
       display : block;
     }
+    select {
+      margin: 0 5px;
+    }
   }
 }
 
@@ -1607,9 +1649,6 @@ label[for=lemgram_select]:before {
 //   display: none;
 // }
 
-#mode_switch li {
-  @include inline-block();
-}
 
 #search-tab {
   border-bottom-right-radius: 0;
@@ -2043,16 +2082,33 @@ line.tick {
     @include inline-block(top);
   }
   .meter {
+    cursor: pointer;
     position: relative;
+    // box-shadow: none;
+    border: 1px solid rgba($primaryColor, 0);
+    @include transition(all 200ms ease);
+    // -webkit-transform: scale(1,1);
+    &:hover {
+      color : navy;
+      // @include box-shadow(4px 4px 7px 1px grey);
+      border: 1px solid rgba(darken($primaryColor, 10%), 1);
+      // @include transition(all 200ms ease);
+      // -webkit-transform: scale(1.05,1.05);
+      // -webkit-transform-origin: 5px 0 0;
+      .background {
+        // @include transition(all 400ms ease);
+        // padding: 10px 0; 
+      }
+    }
   }
   .badge {
     position: absolute;
     right : 0;
     top : 4px;
-    cursor : pointer;
   }
   .background {
     padding: 5px 0;
+    // @include transition(all 400ms ease);
   }
   .column_1 ul {
     background-color: lighten($primaryColor, 4%);
@@ -2129,4 +2185,42 @@ line.tick {
 
 .popper_menu {
   width : 130px;
+}
+
+
+
+ 
+ 
+/* Side notes for calling out things
+-------------------------------------------------- */
+ 
+/* Base styles (regardless of theme) */
+.bs-callout {
+  margin: 20px 0;
+  padding: 15px 30px 15px 15px;
+  border-left: 5px solid #eee;
+}
+.bs-callout h4 {
+  margin-top: 0;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout code,
+.bs-callout .highlight {
+  background-color: #fff;
+}
+ 
+/* Themes for different contexts */
+.bs-callout-danger {
+  background-color: #fcf2f2;
+  border-color: #dFb5b4;
+}
+.bs-callout-warning {
+  background-color: #fefbed;
+  border-color: #f1e7bc;
+}
+.bs-callout-info {
+  background-color: #f0f7fd;
+  border-color: #d0e3f0;
 }

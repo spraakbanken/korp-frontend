@@ -120,7 +120,9 @@
         sent = scope.sentence;
         event.stopPropagation();
         word = $(event.target);
-        $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
+        if ($("#sidebar").data().korpSidebar != null) {
+          $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
+        }
         if (obj.dephead == null) {
           scope.selectionManager.select(word, null);
           safeApply(_this.s.$root, function(s) {
@@ -177,7 +179,7 @@
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
-      if (isSpecialKeyDown || $("input[type=text], input[type=password], textarea").is(":focus") || !this.$result.is(":visible")) {
+      if (isSpecialKeyDown || $("input, textarea, select").is(":focus") || !this.$result.is(":visible")) {
         return;
       }
       switch (event.which) {
@@ -913,7 +915,7 @@
         end: 24
       };
       opts.ajaxParams = {
-        command: "relation_sentences",
+        command: "relations_sentences",
         source: data.source.join(","),
         corpus: null,
         head: data.head,
@@ -1117,8 +1119,21 @@
           return newDataInGraph("SIGMA_ALL", true);
         }
       });
-      $(".slick-cell.l0.r0 .link").on("click", function() {
-        return c.log("word click", $(this).data("context"), $(this).data("corpora"));
+      this.$result.on("click", ".slick-cell.l1.r1 .link", function() {
+        var opts, query;
+        query = $(this).data("query");
+        opts = {
+          start: 0,
+          end: 24
+        };
+        opts.ajaxParams = {
+          command: "query",
+          corpus: $(this).data("corpora").join(",").toUpperCase(),
+          cqp: decodeURIComponent(query)
+        };
+        return safeApply(scope.$root, function() {
+          return scope.$root.kwicTabs.push(opts);
+        });
       });
       $(window).resize(_.debounce(function() {
         return $("#myGrid:visible").width($("#myGrid").parent().width());

@@ -29,13 +29,6 @@ class BaseResults
         #       this.resetView();
         @$result.find(".error_msg").remove()
         util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
-
-        #$("#result-container").tabs("select", 0);
-        # disabled = $("#result-container").korptabs("option", "disabled")
-        # newDisabled = $.grep(disabled, (item) =>
-        #     item isnt @index
-        # )
-        # $("#result-container").korptabs "option", "disabled", newDisabled
         if data.ERROR
             @resultError data
             return false
@@ -116,7 +109,8 @@ class view.KWICResults extends BaseResults
 
 
 
-            $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
+            if $("#sidebar").data().korpSidebar?
+                $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
             if not obj.dephead?
                 scope.selectionManager.select word, null
@@ -172,7 +166,7 @@ class view.KWICResults extends BaseResults
 
     onKeydown: (event) ->
         isSpecialKeyDown = event.shiftKey or event.ctrlKey or event.metaKey
-        return if isSpecialKeyDown or $("input[type=text], input[type=password], textarea").is(":focus") or
+        return if isSpecialKeyDown or $("input, textarea, select").is(":focus") or
             not @$result.is(":visible")
         switch event.which
             when 78 # n
@@ -793,7 +787,7 @@ class view.LemgramResults extends BaseResults
             end : 24
         }
         opts.ajaxParams =
-            command : "relation_sentences"
+            command : "relations_sentences"
             source : data.source.join(",")
             corpus : null
             head: data.head
@@ -990,16 +984,21 @@ class view.StatsResults extends BaseResults
             else # The ∑ row
                 newDataInGraph("SIGMA_ALL",true)
 
-        $(".slick-cell.l0.r0 .link").on "click", ->
-            c.log "word click", $(this).data("context"), $(this).data("corpora")
-            # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-            # instance.proxy.command = "query"
-            # query = $(this).data("query")
-            # instance.makeRequest
-            #     corpora: $(this).data("corpora").join(",")
-            #     cqp: decodeURIComponent(query)
+        @$result.on "click", ".slick-cell.l1.r1 .link", () ->
+            query = $(this).data("query")
+            
+            opts = {
+                start : 0
+                end : 24
+            }
+            opts.ajaxParams =
+                command : "query"
+                corpus : $(this).data("corpora").join(",").toUpperCase()
+                cqp: decodeURIComponent(query)
+            
+            safeApply scope.$root, () ->
+                scope.$root.kwicTabs.push opts
 
-            # util.localize instance.$result
 
         $(window).resize _.debounce( () ->
             $("#myGrid:visible").width($("#myGrid").parent().width())
@@ -1203,27 +1202,6 @@ class view.GraphResults extends BaseResults
         super(tabSelector, resultSelector, scope)
         # $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
         n = @$result.index()
-        # $(resultSelector).html """
-        #     <div class="graph_header">
-        #         <div class="progress">
-        #             <progress value="0" max="100"></progress>
-        #         </div>
-        #         <div class="controls">
-        #             <div class="form_switch">
-        #                 <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
-        #                 <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
-        #             </div>
-        #             <label for="smoothing_switch" class="smoothing_label" >Utjämna</label> <input type="checkbox" id="smoothing_switch" class="smoothing_switch">
-        #             <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
-        #         </div>
-        #         <div class="legend"></div>
-        #         <div style="clear:both;"></div>
-        #     </div>
-        #     <div class="chart"></div>
-        #     <div class="zoom_slider"></div>
-        # """
-            # Smoothing:
-            # <div class="smoother"></div>
 
         @zoom = "year"
         @granularity = @zoom[0]

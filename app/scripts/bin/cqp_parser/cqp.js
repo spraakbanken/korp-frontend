@@ -1,15 +1,24 @@
 (function() {
-  var stringifyCqp,
+  var regescape, stringifyCqp,
     _this = this;
 
   window.c = console;
 
+  regescape = function(s) {
+    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
+  };
+
   stringifyCqp = function(cqp_obj, translate_ops) {
-    var and_array, bool, bound, flags, flagstr, from, op, operator1, operator2, or_array, or_out, out, out_token, output, tmpl, to, token, type, val, x, _i, _j, _len, _len1, _ref;
+    var and_array, bool, bound, flags, flagstr, from, op, operator1, operator2, or_array, or_out, out, out_token, output, tmpl, to, token, type, val, valTransform, x, _i, _j, _len, _len1, _ref;
     if (translate_ops == null) {
       translate_ops = false;
     }
     output = [];
+    valTransform = {
+      word: function(val) {
+        return regescape(val);
+      }
+    };
     for (_i = 0, _len = cqp_obj.length; _i < _len; _i++) {
       token = cqp_obj[_i];
       or_array = [];
@@ -25,6 +34,9 @@
             for (_k = 0, _len2 = and_array.length; _k < _len2; _k++) {
               _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val, flags = _ref1.flags;
               if (translate_ops) {
+                if (op !== "*=") {
+                  val = regescape(val);
+                }
                 _ref2 = {
                   "^=": [val + ".*", "="],
                   "_=": [".*" + val + ".*", "="],
@@ -100,7 +112,10 @@
     parse: function() {
       return CQPParser.parse.apply(CQPParser, arguments);
     },
-    stringify: stringifyCqp
+    stringify: stringifyCqp,
+    expandOperators: function(cqpstr) {
+      return CQP.stringify(CQP.parse(cqpstr), true);
+    }
   };
 
   c.log(CQP.stringify(CQP.parse('[(word &= "ge" | pos = "JJ")]'), true));

@@ -82,7 +82,6 @@
     return $("#search_options").css("background-color", settings.primaryLight).change(function(event, isInit) {
       var state, target;
       simpleSearch.enableSubmit();
-      advancedSearch.enableSubmit();
       target = $(event.target);
       state = {};
       state[target.data("history")] = target.val();
@@ -220,6 +219,7 @@
       });
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
+      this.lemgramProxy = new model.LemgramProxy();
       textinput = $("#simple_text");
       if (settings.autocomplete) {
         textinput.korp_autocomplete({
@@ -233,7 +233,7 @@
           middleware: function(request, idArray) {
             var dfd;
             dfd = $.Deferred();
-            lemgramProxy.lemgramCount(idArray, _this.isSearchPrefix(), _this.isSearchSuffix()).done(function(freqs) {
+            _this.lemgramProxy.lemgramCount(idArray, _this.isSearchPrefix(), _this.isSearchSuffix()).done(function(freqs) {
               var has_morphs, labelArray, listItems;
               delete freqs["time"];
               if (currentMode === "law") {
@@ -312,7 +312,7 @@
       var promise, self,
         _this = this;
       self = this;
-      promise = $("#simple_text").data("promise") || lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), false);
+      promise = $("#simple_text").data("promise") || this.lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), false);
       return promise.done(function(lemgramArray) {
         var label, select;
         $("#lemgram_select").prev("label").andSelf().remove();
@@ -440,6 +440,15 @@
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
         return val = $.format("[lex contains \"%s\"]", currentText);
+      } else if (this.s.placeholder) {
+        val = "[lex contains '" + (regescape(this.s.placeholder)) + "'";
+        if (this.isSearchPrefix()) {
+          val += " | prefix contains " + (regescape(this.s.placeholder)) + " ";
+        }
+        if (this.isSearchSuffix()) {
+          val += " | suffix contains " + (regescape(this.s.placeholder));
+        }
+        return val += "]";
       } else if (this.isSearchPrefix() || this.isSearchSuffix()) {
         query = [];
         this.isSearchPrefix() && query.push("%s.*");
@@ -484,108 +493,6 @@
     };
 
     return SimpleSearch;
-
-  })(BaseSearch);
-
-  /*
-  class view.ExtendedSearch extends BaseSearch
-      constructor: (mainDivId) ->
-          super mainDivId
-          $("#korp-extended").keyup (event) =>
-              @onSubmit()  if event.keyCode is "13" and $("#search-tab").data("cover")?
-              false
-  
-          @$main.find("#strict_chk").change ->
-              # advancedSearch.updateCQP()
-  
-          # @setupContainer "#query_table"
-  
-      setupContainer: (selector) ->
-          self = this
-          
-          
-          # insert_token_button = $('<img src="img/plus.png"/>')
-          # .addClass("image_button insert_token")
-          # .click ->
-          #     self.insertToken this
-  
-          # $(selector).append(insert_token_button).sortable
-          # $(selector).sortable
-          #     items: ".query_token"
-          #     delay: 50
-          #     tolerance: "pointer"
-  
-          # insert_token_button.click()
-  
-      reset: ->
-  
-          #$("#search-tab ul li:nth(2)").click()
-          @$main.find(".query_token").remove()
-          $(".insert_token").click()
-          # advancedSearch.updateCQP()
-  
-      onentry: ->
-  
-      onSubmit: ->
-          super()
-          if @$main.find(".query_token, .or_arg").length > 1
-              # query = advancedSearch.updateCQP()
-              util.searchHash "cqp", @s.$root.activeCQP
-          else
-              $select = @$main.find("select.arg_type")
-              switch $select.val()
-                  when "lex"
-                      searchType = (if $select.val() is "lex" then "lemgram" else $select.val())
-                      util.searchHash searchType, $select.parent().next().data("value")
-                  else
-                      util.searchHash "cqp", @s.$root.activeCQP
-      # setOneToken: (key, val) ->
-      #     $("#search-tab").find("a[href=#korp-extended]").click().end()
-      #         .find("select.arg_type:first").val(key).next().val val
-      #     advancedSearch.updateCQP()
-  
-      insertToken: (button) ->
-          # try
-          # $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
-          #     close: ->
-          #         advancedSearch.updateCQP()
-  
-          #     change: =>
-          #         advancedSearch.updateCQP()  if @$main.is(":visible")
-  
-  
-          # catch error
-              # c.log "error creating extendedToken", error
-              # @$main.find("*").remove()
-              # $("<div>Extended search is broken on this browser.</div>").prependTo(@$main).nextAll().remove()
-  
-          util.localize()
-  
-      refreshTokens: ->
-          # $(".query_token").extendedToken "refresh"
-  */
-
-
-  view.AdvancedSearch = (function(_super) {
-    __extends(AdvancedSearch, _super);
-
-    function AdvancedSearch(mainDivId) {
-      AdvancedSearch.__super__.constructor.call(this, mainDivId);
-    }
-
-    AdvancedSearch.prototype.setCQP = function(query) {
-      c.log("setCQP", query);
-      return $("#cqp_string").val(query);
-    };
-
-    AdvancedSearch.prototype.updateCQP = function() {};
-
-    AdvancedSearch.prototype.onSubmit = function() {
-      AdvancedSearch.__super__.onSubmit.call(this);
-      return util.searchHash("cqp", $("#cqp_string").val());
-    };
-
-    return AdvancedSearch;
 
   })(BaseSearch);
 

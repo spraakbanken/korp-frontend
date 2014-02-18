@@ -1,97 +1,3 @@
-window.korpApp = angular.module('korpApp', ["watchFighters"
-                                            'ui.bootstrap',
-                                            "template/tabs/tabset.html"
-                                            "template/tabs/tab.html"
-                                            "template/modal/backdrop.html"
-                                            "template/modal/window.html"
-                                            "template/typeahead/typeahead-match.html",
-                                            "template/typeahead/typeahead-popup.html"
-                                            "angularSpinner"
-                                            "uiSlider"
-                                            "ui.sortable"
-                                        ])
-
-# korpApp.controller "kwicCtrl", ($scope) ->
-
-korpApp.run ($rootScope, $location, utils, searches) ->
-    s = $rootScope
-    s.lang = "sv"
-    s.word_selected = null
-
-    # s.$watch "word_selected", (val) ->
-    #     c.log "word_selected", val
-        # unless $("#sidebar").data("korpSidebar") then return
-        # if val 
-        #     $("#sidebar").sidebar("show")
-        # else
-        #     $("#sidebar").sidebar("hide")
-
-    s.sidebar_visible = false
-
-    s.activeCQP = "[]"
-    s.search = () -> $location.search arguments...
-
-
-
-    s._loc = $location
-    s.$watch "_loc.search()", () ->
-        c.log "loc.search() change", $location.search()
-        _.defer () -> window.onHashChange?()
-
-
-    # $rootScope.savedSearches = []
-
-    # $rootScope.saveSearch = (searchObj) ->
-    #     $rootScope.savedSearches.push searchObj
-
-
-    $rootScope.kwicTabs = []
-    $rootScope.compareTabs = []
-    $rootScope.graphTabs = []
-    isInit = true
-    s.$on "corpuschooserchange", (event, corpora) ->
-        c.log "corpuschooserchange", corpora
-        settings.corpusListing.select corpora
-        nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
-        c.log "corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length
-        if corpora.length and _.intersection(corpora, nonprotected).length isnt nonprotected.length
-            # $.bbq.pushState({"corpus" : corpora.join(",")})
-            # search corpus: corpora.join(",")
-            $location.search "corpus", corpora.join(",")
-        else
-            $location.search "corpus", null
-        if corpora.length
-          
-            # if(currentMode == "parallel")
-            #     extendedSearch.reset();
-            # else 
-            #     extendedSearch.refreshTokens();
-            view.updateReduceSelect()
-            view.updateContextSelect "within"
-
-        #           view.updateContextSelect("context");
-        enableSearch = !!corpora.length
-        view.enableSearch enableSearch
-
-
-        # unless isInit
-        #     $location.search("search", null).replace()
-        isInit = false
-
-
-    # corpus = search()["corpus"]
-    searches.infoDef.then () ->
-        corpus = $location.search().corpus
-        if corpus
-            corp_array = corpus.split(",")
-            processed_corp_array = []
-            settings.corpusListing.select(corp_array)
-            $.each corp_array, (key, val) ->
-                processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
-            corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-            $("#select_corpus").val corpus
-        #     simpleSearch.enableSubmit()
-        
 
 
 
@@ -102,12 +8,12 @@ korpApp.controller "SearchCtrl", ($scope) ->
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope
-    c.log "SimpleCtrl"  
     
     s.$on "popover_submit", (event, name) ->
+        cqp = s.instance.getCQP()
         compareSearches.saveSearch {
-            label : name or $rootScope.activeCQP
-            cqp : $rootScope.activeCQP
+            label : name or cqp
+            cqp : cqp
             corpora : settings.corpusListing.getSelectedCorpora()
         }
 
@@ -153,14 +59,6 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         }
 
     s.searches = searches
-    # s.$watch "searches.activeSearch", (search) ->
-    #     unless search then return
-
-        #TODO: keep compat with old cqp|expr hash var, but move to plain cqp 
-        # and use cqp=expr hash var to keep updating when extended changes
-
-        # if search.type == "cqp"
-        #     expr = 
     s.$on "btn_submit", () ->
         c.log "extended submit"
         $location.search("search", "cqp")
@@ -171,8 +69,8 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
 
     s.$watch "cqp", (val) ->
         c.log "cqp change", val
-
-        $rootScope.activeCQP = val
+        unless val then return
+        $rootScope.activeCQP = CQP.expandOperators(val)
         $location.search("cqp", val)
 
 
@@ -278,88 +176,20 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         c.log "change_case", val, s
 
 
-# korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
-    # s = $scope
-    # # s.defaultOptions = settings.defaultOptions
+korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location) ->
+    $scope.cqp = "[]"
+    $scope.$on "popover_submit", (event, name) ->
+        compareSearches.saveSearch {
+            label : name or $rootScope.activeCQP
+            cqp : $scope.cqp
+            corpora : settings.corpusListing.getSelectedCorpora()
+
+        }
+
+    $scope.$on "btn_submit", () ->
+        $location.search("search", "cqp|" + $scope.cqp)
 
 
-    # # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
-    # # cqp = '[lex contains "ge..vb.1"]'
-    # s.cqp = '[]'
-
-
-    # s.data = []
-
-    # # s.$watch "activeCQP", (cqp) ->
-    # try
-    #     s.data = CQP.parse(s.cqp)
-    #     c.log "s.data", s.data
-    # catch error
-    #     output = []
-    #     for token in s.cqp.split("[")
-    #         if not token
-    #             continue
-    #         token = "[" + token
-    #         try
-    #             tokenObj = CQP.parse(token)
-    #         catch error
-    #             tokenObj = [{cqp : token}]
-    #         output = output.concat(tokenObj)
-
-    #     s.data = output
-    #     c.log "crash", s.data
-
-
-    # if $location.search().cqp
-    #     try
-    #         s.data = CQP.parse($location.search().cqp)
-    #     catch e
-    #         # TODO: we could traverse the token list, trying to repair parsing, se above
-    #         s.data = CQP.parse("[]")
-        
-    # else
-    #     s.data = CQP.parse(s.cqp)
-
-    # for token in s.data
-    #     if "and_block" not of token or not token.and_block.length
-    #         token.and_block = CQP.parse('[word = ""]')[0].and_block
-
-
-    # # c.log "s.data", s.data
-
-
-    # # expand [] to [word = '']
-    
-
-    # s.$watch 'getCQPString()', (val) ->
-    #     c.log "getCQPString", val
-    #     cqpstr = CQP.stringify(s.data)
-    #     $rootScope.activeCQP = cqpstr
-    #     # $location.search({cqp : encodeURIComponent(cqpstr)})
-    #     $location.search("cqp", cqpstr)
-        
-        
-
-    # s.getCQPString = ->
-    #     return (CQP.stringify s.data) or ""
-
-
-    # s.addOr = (and_array) ->
-    #     and_array.push
-    #         type : "word"
-    #         op : "="
-    #         val : ""
-    #     return and_array
-
-
-    # s.addToken = ->
-    #     token = {and_block : [[]]}
-    #     s.data.push token
-    #     s.addOr token.and_block[0]
-
-    # s.removeToken = (i) ->
-    #     unless s.data.length > 1 then return
-    #     s.data.splice(i, 1)
 
 korpApp.filter "mapper", () ->
     return (item, f) ->
@@ -372,26 +202,28 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     s = $scope
     s.valfilter = utils.valfilter
 
-    compareSearches.saveSearch {
-        label : "frihet"
-        cqp : "[lex contains 'frihet..nn.1']"
-        corpora : ["VIVILL"]
-    }
-    compareSearches.saveSearch {
-        label : "jämlikhet"
-        cqp : "[lex contains 'jämlikhet..nn.1']"
-        corpora : ["VIVILL"]
-    }
+    # compareSearches.saveSearch {
+    #     label : "frihet"
+    #     cqp : "[lex contains 'frihet..nn.1']"
+    #     corpora : ["VIVILL"]
+    # }
+    # compareSearches.saveSearch {
+    #     label : "jämlikhet"
+    #     cqp : "[lex contains 'jämlikhet..nn.1']"
+    #     corpora : ["VIVILL"]
+    # }
 
     s.savedSearches = compareSearches.savedSearches
-    s.cmp1 = compareSearches.savedSearches[0]
-    s.cmp2 = compareSearches.savedSearches[1]
+    s.$watch "savedSearches.length", () ->
+        s.cmp1 = compareSearches.savedSearches[0]
+        s.cmp2 = compareSearches.savedSearches[1]
+        
+
 
     s.reduce = 'word'
-    # s.reduce = '_.text_parti'
 
     s.getAttrs = () ->
-        unless s.cmp1 then return
+        unless s.cmp1 and s.cmp2 then return
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
         return utils.getAttributeGroups(listing)
 

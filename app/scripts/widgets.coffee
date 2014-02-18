@@ -296,8 +296,9 @@ $.extend $.ui.autocomplete.prototype,
 
 $.fn.korp_autocomplete = (options) ->
     selector = $(this)
+    proxy = new model.LemgramProxy()
     if typeof options is "string" and options is "abort"
-        lemgramProxy.abort()
+        proxy.abort()
         selector.preloader "hide"
         return
     options = $.extend(
@@ -342,8 +343,8 @@ $.fn.korp_autocomplete = (options) ->
             c.log "autocomplete request", request
             c.log "autocomplete type", options.type
             promise = if options.type is "saldo"
-            then lemgramProxy.saldoSearch(request.term, options["sw-forms"])
-            else lemgramProxy.karpSearch(request.term, options["sw-forms"])
+            then proxy.saldoSearch(request.term, options["sw-forms"])
+            else proxy.karpSearch(request.term, options["sw-forms"])
             promise.done((idArray, textstatus, xhr) ->
                 idArray = $.unique(idArray)
                 options.middleware(request, idArray).done (listItems) ->

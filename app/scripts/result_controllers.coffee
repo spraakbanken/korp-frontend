@@ -10,33 +10,6 @@ korpApp.controller "resultTabCtrl", ($scope) ->
     s.$watch "getSelected()", (val) ->
         c.log "val", val
         s.$root.result_tab = val
-        # selectedScope = s.tabs[s.$root.result_tab]
-        # c.log "selectedScope", selectedScope
-        # instance = selectedScope.$parent.instance
-        # c.log "instance", instance
-        # switch val
-            # when 0 then kwicResults?.onentry()
-            # when 1 then statsResults.onentry()
-            # when 2 then lemgramResults.onentry()
-
-    # prev = 0
-    # c.log "tabs", s
-    ###
-    s.onClick = (event, num) ->
-        i = $(event.target).parent().index()
-        i = num if num?
-
-        # hack time
-        switch i
-            when 0 then kwicResults.onentry()
-            # when 1 then statsResults.onentry()
-            when 2 then lemgramResults.onentry()
-
-        if prev == 0
-            kwicResults.onexit()
-
-        prev = i
-    ###
 
 
 korpApp.controller "resultContainerCtrl", ($scope, searches) ->
@@ -188,7 +161,7 @@ korpApp.controller "graphCtrl", ($scope) ->
 
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->
     s = $scope
-    # s.$parent.loading = true
+    s.loading = true
     #active must always be true to make new tab active
     # s.$parent.active = true
 
@@ -196,27 +169,9 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
     s.promise.then ([data, cmp1, cmp2, reduce]) ->
         # c.log "compare promise", _.pairs data.loglike
-        cmps = [cmp1, cmp2]
-        s.rowClick = (data, cmp_index) ->
-            cmp = cmps[cmp_index]
-            _.extend cmp, 
-                command: "query"
-            cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
-            opts = {
-                start : 0
-                end : 24
-                ajaxParams : cmp
-            }
-            c.log "cmp", cmp
-            $rootScope.kwicTabs.push opts
-            c.log "opts", opts
-
-                
 
 
-
-
-        s.$parent.loading = false
+        s.loading = false
         pairs = _.pairs data.loglike
         s.tables = _.groupBy  (pairs), ([word, val]) ->
             if val > 0 then "positive" else "negative"
@@ -228,8 +183,6 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
 
 
-
-
         s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1] * -1
         s.tables.negative = _.sortBy s.tables.negative, (tuple) -> (Math.abs tuple[1]) * -1
         s.reduce = reduce
@@ -237,10 +190,34 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
         # stringify = settings.corpusListing.
         c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
-        s.stringify = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())[_.str.strip(reduce, "_.")]?.stringify or angular.identity
+        attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
+        s.stringify = attributes[_.str.strip(reduce, "_.")]?.stringify or angular.identity
 
         s.max = _.max pairs, ([word, val]) ->
             Math.abs val
 
         s.cmp1 = cmp1
         s.cmp2 = cmp2
+
+
+
+        op = if attributes[_.str.strip(reduce, "_.")]?.type == "set" then "contains" else "="
+        cmps = [cmp1, cmp2]
+        s.rowClick = (triple, cmp_index) ->
+            c.log "triple", triple
+            cmp = cmps[cmp_index]
+            _.extend cmp, 
+                command: "query"
+            cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
+
+            cqpobj = CQP.parse(cmp.cqp)
+
+            cqpobj[0].and_block.push CQP.parse("[#{reduce} #{op} '#{triple[0]}']")[0].and_block[0]
+            
+            cmp.cqp = CQP.stringify cqpobj
+            opts = {
+                start : 0
+                end : 24
+                ajaxParams : cmp
+            }
+            $rootScope.kwicTabs.push opts

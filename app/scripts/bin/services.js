@@ -182,18 +182,23 @@
 
       Searches.prototype.kwicSearch = function(cqp, page) {
         this.kwicRequest(cqp, page);
-        return statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
+        return typeof statsProxy !== "undefined" && statsProxy !== null ? statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults)) : void 0;
       };
 
       Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, page) {
         var cqp, type;
+        cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
+        if (typeof statsProxy !== "undefined" && statsProxy !== null) {
+          statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
+        }
+        this.kwicRequest(cqp, page);
+        if (settings.wordpicture === false) {
+          return;
+        }
+        searchProxy.relatedWordSearch(lemgram);
         c.log("lemgramSearch", lemgram);
         lemgramResults.showPreloader();
-        type = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults));
-        searchProxy.relatedWordSearch(lemgram);
-        cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix);
-        statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
-        return this.kwicRequest(cqp, page);
+        return type = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults));
       };
 
       Searches.prototype.getMode = function() {
@@ -273,7 +278,7 @@
           case "cqp":
             c.log("cqp search");
             if (!value) {
-              value = $location.search().cqp;
+              value = CQP.expandOperators($location.search().cqp);
             }
             searches.activeSearch = {
               type: type,

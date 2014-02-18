@@ -650,19 +650,19 @@ case 14:return "FLAG"
 break;
 case 15:return 36
 break;
-case 16:return 23
+case 16:return 34
 break;
-case 17:return 34
+case 17:return 37
 break;
-case 18:return 37
+case 18:return 38
 break;
-case 19:return 38
+case 19:return 40
 break;
-case 20:return 40
+case 20:return 39
 break;
-case 21:return 39
+case 21:return 33
 break;
-case 22:return 33
+case 22:return 23
 break;
 case 23:return 25
 break;
@@ -690,7 +690,7 @@ case 34:return 5
 break;
 }
 },
-rules: [/^(?:int\(_\.text_datefrom\))/,/^(?:int\(_\.text_dateto\))/,/^(?:\d{8})/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?: contains )/,/^(?:lbound\b)/,/^(?:rbound\b)/,/^(?:sentence\b)/,/^(?:\()/,/^(?:\))/,/^(?:\s+)/,/^(?:%[cd]+)/,/^(?:not\b)/,/^(?:(_.)?[A-Za-z_]+)/,/^(?:!=)/,/^(?:\^=)/,/^(?:&=)/,/^(?:_=)/,/^(?:\*=)/,/^(?:=)/,/^(?:"\S*")/,/^(?:\[\s*\])/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:&)/,/^(?:\{)/,/^(?:\})/,/^(?:\d+)/,/^(?:,)/,/^(?:%)/,/^(?:$)/],
+rules: [/^(?:int\(_\.text_datefrom\))/,/^(?:int\(_\.text_dateto\))/,/^(?:\d{8})/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?: contains )/,/^(?:lbound\b)/,/^(?:rbound\b)/,/^(?:sentence\b)/,/^(?:\()/,/^(?:\))/,/^(?:\s+)/,/^(?:%[cd]+)/,/^(?:not\b)/,/^(?:!=)/,/^(?:\^=)/,/^(?:&=)/,/^(?:_=)/,/^(?:\*=)/,/^(?:=)/,/^(?:(_.)?[A-Za-z_]+)/,/^(?:["']\S*['"])/,/^(?:\[\s*\])/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:&)/,/^(?:\{)/,/^(?:\})/,/^(?:\d+)/,/^(?:,)/,/^(?:%)/,/^(?:$)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34],"inclusive":true}}
 };
 return lexer;

@@ -59,6 +59,7 @@ html
     script(src='lib/g.line-min.js')
     script(src='lib/jquery.tooltip.pack.js')
 
+    script(src='components/angular-bindonce/bindonce.js')
     script(src='components/angular-slider/angular-slider.js')
     script(src='lib/angular-sortable.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap.js')
@@ -89,15 +90,16 @@ html
     script(src='scripts/bin/cqp_parser/cqp.js')
     script(src='scripts/util.js')
     script(src='scripts/bin/util_coffee.js')
-    script(src='scripts/bin/widgets.js')
-    script(src='scripts/selector_widget.js')
     script(src='scripts/pie-widget.js')
     script(src='scripts/bin/search.js')
     script(src='scripts/bin/results.js')
     script(src='scripts/bin/model.js')
+    script(src='scripts/bin/widgets.js')
+    script(src='scripts/selector_widget.js')
     script(src='scripts/bin/main.js')
     // endbuild 
        
+    script(src='scripts/bin/app.js')
     script(src='scripts/bin/search_controllers.js')
     script(src='scripts/bin/result_controllers.js')
     script(src='scripts/bin/services.js')
@@ -126,9 +128,9 @@ html
                     .tab_progress(style="width:{{progress || 0}}%")
                   #results-kwic(constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
-                tab(disabled="!instance.hasData", ng-controller='StatsResultCtrl')
+                tab(disabled="!instance.hasData", ng-controller='StatsResultCtrl', ng-if="_settings.statistics != false")
                   tab-heading(ng-class="{not_loading: progress > 99}")
-                    | Statistik
+                    | {{'statistics' | loc}}
                     .tab_progress(style="width:{{progress || 0}}%")
                   div(constr='StatsResults', constr-name='statsResults')
                     .stats_header
@@ -147,9 +149,9 @@ html
                         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
-                tab(disabled="!instance.hasData", heading='Ordbild')
+                tab(disabled="!instance.hasData", ng-if="_settings.wordpicture != false")
                   tab-heading(ng-class="{not_loading: progress > 99}")
-                    | Ordbild
+                    | {{'word_picture' | loc}}
                     .tab_progress(style="width:{{progress || 0}}%")
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent
@@ -180,15 +182,6 @@ html
           input#pass(type='password')
           p.err_msg(rel='localize[login_fail_msg]') Login misslyckades, kontrollera användarnamn och lösenord och försök igen.
           input(type='submit', value='Skicka', rel='localize[send]')
-      //
-         extendedtoken options menu. 
-      //- ul#opt_menu
-      //-   li
-      //-     a(data-item='repeat_item', rel='localize[repeat]') Upprepa
-      //-   li
-      //-     a(data-item='lbound_item', rel='localize[sent_start]') Meningsbörjan
-      //-   li
-      //-     a(data-item='rbound_item', rel='localize[sent_end]') Meningsslut
     
 
     script#lemgramResultsTmpl(type='text/x-jquery-tmpl').

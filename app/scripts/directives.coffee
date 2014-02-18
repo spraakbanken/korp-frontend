@@ -193,18 +193,20 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     <div class="search_submit">
         <div class="btn-group">
             <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">Sök</button>
-            <button class="btn btn-small opener" ng-click="togglePopover()">
+            <button class="btn btn-small opener" ng-click="togglePopover($event)">
                 <span class="caret"></span>
             </button>
         </div>
-        <div class="popover compare {{pos}}">
+        <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
             <h3 class="popover-title">Spara för jämförelse</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
                     <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">
                 </div>
-                <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>
+                <div class="btn_container">
+                    <button class="btn btn-primary btn-small">Spara</button>
+                </div>
             </form>
         </div>
     </div>
@@ -214,14 +216,19 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     link : (scope, elem, attr) ->
         s = scope
         s.pos = attr.pos or "bottom"
-        s.togglePopover = () ->
+        s.togglePopover = (event) ->
             if s.isPopoverVisible
                 s.popHide()
             else
                 s.popShow()
-            return
+            event.preventDefault()
+            event.stopPropagation()
 
         popover = elem.find(".popover")
+        s.onPopoverClick = (event) ->
+            unless event.target == popover.find(".btn")[0]
+                event.preventDefault()
+                event.stopPropagation()            
         s.isPopoverVisible = false
         trans = 
             bottom : "top"
@@ -250,12 +257,14 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                 of : elem.find(".opener")
 
             $rootElement.on "keydown", onEscape
+            $rootElement.on "click", s.popHide
             return
 
         s.popHide = () ->
             s.isPopoverVisible = false
             popover.hide("fade", "fast")
             $rootElement.off "keydown", onEscape
+            $rootElement.off "click", s.popHide
             return
 
 
@@ -269,11 +278,12 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
 korpApp.directive "meter", () ->
     template: '''
-        <div class="meter">
-            <div class="background"></div>
+        <div>
+            <div class="background">{{displayWd}}</div>
             <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>
         </div>
     '''
+    replace: true
     scope :
         meter : "="
         max : "="
@@ -281,11 +291,9 @@ korpApp.directive "meter", () ->
     link : (scope, elem, attr) ->
         wds = scope.meter[0]
 
-        # for wd in _.compact wds.split("|")
-        #     c.log "wd", wd
-        #     elem.html scope.stringify wd
         bkg = elem.find(".background")
-        bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        # bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
 
         w = elem.parent().width()
         part = ((Math.abs scope.meter[1]) / (Math.abs scope.max))
@@ -295,6 +303,7 @@ korpApp.directive "meter", () ->
 
 
 korpApp.directive "popper", ($rootElement) ->
+    scope: {}
     link : (scope, elem, attrs) ->
         popup = elem.next()
         popup.appendTo("body").hide()
@@ -305,16 +314,19 @@ korpApp.directive "popper", ($rootElement) ->
             closePopup()
             return false
 
-
-
         elem.on "click", (event) ->
             if popup.is(":visible") then closePopup()
             else popup.show()
 
-            popup.position
-                my : "right top"
-                at : "bottom right"
+            pos = 
+                my : attrs.my or "right top"
+                at : attrs.at or "bottom right"
                 of : elem
+            c.log "pos", pos
+            if scope.offset
+                pos.offset = scope.offset
+
+            popup.position pos
 
             return false
 

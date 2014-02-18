@@ -1,62 +1,4 @@
 (function() {
-  window.korpApp = angular.module('korpApp', ["watchFighters", 'ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "angularSpinner", "uiSlider", "ui.sortable"]);
-
-  korpApp.run(function($rootScope, $location, utils, searches) {
-    var isInit, s;
-    s = $rootScope;
-    s.lang = "sv";
-    s.word_selected = null;
-    s.sidebar_visible = false;
-    s.activeCQP = "[]";
-    s.search = function() {
-      return $location.search.apply($location, arguments);
-    };
-    s._loc = $location;
-    s.$watch("_loc.search()", function() {
-      c.log("loc.search() change", $location.search());
-      return _.defer(function() {
-        return typeof window.onHashChange === "function" ? window.onHashChange() : void 0;
-      });
-    });
-    $rootScope.kwicTabs = [];
-    $rootScope.compareTabs = [];
-    $rootScope.graphTabs = [];
-    isInit = true;
-    s.$on("corpuschooserchange", function(event, corpora) {
-      var enableSearch, nonprotected;
-      c.log("corpuschooserchange", corpora);
-      settings.corpusListing.select(corpora);
-      nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id");
-      c.log("corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length);
-      if (corpora.length && _.intersection(corpora, nonprotected).length !== nonprotected.length) {
-        $location.search("corpus", corpora.join(","));
-      } else {
-        $location.search("corpus", null);
-      }
-      if (corpora.length) {
-        view.updateReduceSelect();
-        view.updateContextSelect("within");
-      }
-      enableSearch = !!corpora.length;
-      view.enableSearch(enableSearch);
-      return isInit = false;
-    });
-    return searches.infoDef.then(function() {
-      var corp_array, corpus, processed_corp_array;
-      corpus = $location.search().corpus;
-      if (corpus) {
-        corp_array = corpus.split(",");
-        processed_corp_array = [];
-        settings.corpusListing.select(corp_array);
-        $.each(corp_array, function(key, val) {
-          return processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val));
-        });
-        corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
-        return $("#select_corpus").val(corpus);
-      }
-    });
-  });
-
   korpApp.controller("SearchCtrl", function($scope) {
     c.log("searchctrl original", $scope);
     $scope.visibleTabs = [true, true, true, true];
@@ -66,11 +8,12 @@
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
     var s;
     s = $scope;
-    c.log("SimpleCtrl");
     s.$on("popover_submit", function(event, name) {
+      var cqp;
+      cqp = s.instance.getCQP();
       return compareSearches.saveSearch({
-        label: name || $rootScope.activeCQP,
-        cqp: $rootScope.activeCQP,
+        label: name || cqp,
+        cqp: cqp,
         corpora: settings.corpusListing.getSelectedCorpora()
       });
     });
@@ -126,7 +69,10 @@
     }
     return s.$watch("cqp", function(val) {
       c.log("cqp change", val);
-      $rootScope.activeCQP = val;
+      if (!val) {
+        return;
+      }
+      $rootScope.activeCQP = CQP.expandOperators(val);
       return $location.search("cqp", val);
     });
   });
@@ -204,6 +150,20 @@
     });
   });
 
+  korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location) {
+    $scope.cqp = "[]";
+    $scope.$on("popover_submit", function(event, name) {
+      return compareSearches.saveSearch({
+        label: name || $rootScope.activeCQP,
+        cqp: $scope.cqp,
+        corpora: settings.corpusListing.getSelectedCorpora()
+      });
+    });
+    return $scope.$on("btn_submit", function() {
+      return $location.search("search", "cqp|" + $scope.cqp);
+    });
+  });
+
   korpApp.filter("mapper", function() {
     return function(item, f) {
       return f(item);
@@ -214,23 +174,15 @@
     var s;
     s = $scope;
     s.valfilter = utils.valfilter;
-    compareSearches.saveSearch({
-      label: "frihet",
-      cqp: "[lex contains 'frihet..nn.1']",
-      corpora: ["VIVILL"]
-    });
-    compareSearches.saveSearch({
-      label: "jämlikhet",
-      cqp: "[lex contains 'jämlikhet..nn.1']",
-      corpora: ["VIVILL"]
-    });
     s.savedSearches = compareSearches.savedSearches;
-    s.cmp1 = compareSearches.savedSearches[0];
-    s.cmp2 = compareSearches.savedSearches[1];
+    s.$watch("savedSearches.length", function() {
+      s.cmp1 = compareSearches.savedSearches[0];
+      return s.cmp2 = compareSearches.savedSearches[1];
+    });
     s.reduce = 'word';
     s.getAttrs = function() {
       var listing;
-      if (!s.cmp1) {
+      if (!(s.cmp1 && s.cmp2)) {
         return;
       }
       listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
