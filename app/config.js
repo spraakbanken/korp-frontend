@@ -1994,8 +1994,6 @@ settings.corpora.drama = {
     struct_attributes : {}
 };
 
-<<<<<<< HEAD
-=======
 if(location.port == "9000") {
 
 settings.corpora.minisuc = {
@@ -2035,7 +2033,6 @@ settings.corpora.smetest = {
 }
 
 
->>>>>>> preparing for release
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
