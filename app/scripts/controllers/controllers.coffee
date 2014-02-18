@@ -16,6 +16,7 @@ korpApp.run ($rootScope, $location, $route, $routeParams) ->
     s = $rootScope
     s.lang = "sv"
 
+    s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
 
     s.searchDef = $.Deferred()
@@ -31,7 +32,17 @@ korpApp.run ($rootScope, $location, $route, $routeParams) ->
         _.defer () -> window.onHashChange?()
 
 
+    $rootScope.savedSearches = []
+
+    $rootScope.saveSearch = (searchObj) ->
+        $rootScope.savedSearches.push searchObj
+
+
+    $rootScope.compareTabs = []
+
+
 korpApp.controller "kwicCtrl", ($scope) ->
+    c.log "kwicCtrl init"
     s = $scope
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
@@ -150,44 +161,22 @@ korpApp.controller "kwicCtrl", ($scope) ->
         sentence.tokens.slice from, len
 
 
+korpApp.controller "compareCtrl", ($scope) ->
+    s = $scope
 
+    s.promise.then (data) ->
+        # c.log "compare promise", _.pairs data.loglike
+        s.tables = _.groupBy  (_.pairs data.loglike), ([word, val]) ->
+            if val > 0 then "positive" else "negative"
 
-korpApp.directive 'kwicWord', ->
-    replace: true
-    template : """<span class="word" set-class="getClassObj(wd)"
-                    set-text="wd.word + ' '" ></span>
-                """ #ng-click="wordClick($event, wd, sentence)"
-    link : (scope, element) ->
-        # scope.getClassObj = (wd) ->
-        #     output =
-        #         reading_match : wd._match
-        #         punct : wd._punct
-        #         match_sentence : wd._matchSentence
-
-        #     for struct in (wd._struct or [])
-        #         output["struct_" + struct] = true
-
-        #     for struct in (wd._open or [])
-        #         output["open_" + struct] = true
-        #     for struct in (wd._close or [])
-        #         output["close_" + struct] = true
-        scope.getClassObj = (wd) ->
-            output =
-                reading_match : wd._match
-                punct : wd._punct
-                match_sentence : wd._matchSentence
-
-            for struct in (wd._struct or [])
-                output["struct_" + struct] = true
-
-            for struct in (wd._open or [])
-                output["open_" + struct] = true
-            for struct in (wd._close or [])
-                output["close_" + struct] = true
+        s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1]
+        s.tables.negative = _.sortBy s.tables.negative, (tuple) -> Math.abs tuple[1]
 
 
 
-            return (x for [x, y] in _.pairs output when y).join " "
+
+
+
 
 
 
@@ -325,13 +314,16 @@ korpApp.factory "util", ($location) ->
         #     default : [val : valval]
 
         # ]
-        scope.loc = $location
-        scope.$watch 'loc.search()', ->
+        onWatch = () ->
             for obj in config
                 val = $location.search()[obj.key]
-                unless val then continue
+                unless val 
+                    if obj.default then val = obj.default else continue
+                
 
                 val = (obj.val_in or _.identity)(val)
+                # c.log "obj.val_in", obj.val_in
+                
 
                 if "scope_name" of obj
                     scope[obj.scope_name] = val
@@ -339,51 +331,109 @@ korpApp.factory "util", ($location) ->
                     scope[obj.scope_func](val)
                 else
                     scope[obj.key] = val
+        onWatch()
+        scope.loc = $location
+        scope.$watch 'loc.search()', ->
+            onWatch()
 
         for obj in config
             watch = obj.expr or obj.scope_name or obj.key
-            scope.$watch watch or obj.key, do (obj) ->
+            scope.$watch watch, do (obj, watch) ->
                 (val) ->
+                    # c.log "before val", scope.$eval watch
                     val = (obj.val_out or _.identity)(val)
-                    $location.search obj.key, if val? then val else null
+                    if val == obj.default then val = null
+                    $location.search obj.key, val or null
+                    # c.log "post change", watch, val
                     obj.post_change?(val)
 
 
-korpApp.controller "ResultsTabCtrl", ($scope, util, $location) ->
-    s = $scope
+
     
-korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
+
+        
+
+
+
+korpApp.controller "SimpleCtrl", ($scope, util, $location, backend, $rootScope) ->
     s = $scope
-    # $location.search()["search_tab"]
-    s.search_tab = parseInt($location.search()["search_tab"]) or 0
-    c.log "search_tab init", s.search_tab
+    c.log "SimpleCtrl"  
+    s.isShowing = true
 
-    s.getSelected = () ->
-        unless s.tabs?.length then return s.search_tab
-        for p, i in s.tabs
-            return i if p.active
-    s.setSelected = (index) ->
-        # unless s.tabs then return
-        for p in s.tabs
-            p.active = false
-        if s.tabs[index]
-            s.tabs[index].active = true
+    s.togglePopover = () ->
+        if s.isPopoverVisible
+            s.popHide()
+        else
+            s.popShow()
 
-    util.setupHash s,[
-        expr : "getSelected()"
-    #     # scope_name : "sortVal"
-        val_out : (val) ->
-            c.log "val out", val
-            return val
-    #         # s.select
-        val_in : (val) ->
-            c.log "val_in", typeof val
-            # return parseInt(val)
-            s.setSelected parseInt(val)
-            return parseInt(val)
-    #     # scope_func : "select"
-        key : "search_tab"
-    ]
+    s.saveSearch = (name) ->
+        c.log "savesearch", name
+        s.popHide()
+        $rootScope.saveSearch {
+            label : name or $rootScope.activeCQP
+            cqp : $rootScope.activeCQP
+            corpora : settings.corpusListing.stringifySelected()
+
+        }        
+        
+
+
+
+
+korpApp.controller "CompareSearchCtrl", ($scope, util, $location, backend, $rootScope) ->
+    s = $scope
+
+    $rootScope.saveSearch {
+        label : "första"
+        cqp : "[pos='NN']"
+        corpora : settings.corpusListing.subsetFactory(["ROMI"]).stringifySelected()
+    }
+    $rootScope.saveSearch {
+        label : "andra"
+        cqp : "[pos='NN']"
+        corpora : settings.corpusListing.subsetFactory(["ROMII"]).stringifySelected()
+    }
+
+
+    s.cmp1 = $rootScope.savedSearches[0]
+    s.cmp2 = $rootScope.savedSearches[1]
+
+    
+
+    s.sendCompare = () ->
+        $rootScope.compareTabs.push backend.requestCompare(s.cmp1.corpora,
+                                  s.cmp1.cqp,
+                                  s.cmp2.corpora,
+                                  s.cmp2.cqp)
+
+
+
+
+
+korpApp.factory 'backend', ($http, $q, util) ->
+    requestCompare : (corpus1, cqp1, corpus2, cqp2) ->
+        def = $q.defer()
+        params = 
+            command : "loglike"
+            groupby : "word" #TODO: parametrize
+            set1_corpus : corpus1
+            set1_cqp : cqp1
+            set2_corpus : corpus2
+            set2_cqp : cqp2
+            max : 50
+
+
+        $http(
+            url : settings.cgi_script
+            params : params
+            method : "GET"
+        ).success (data) ->
+            def.resolve data
+
+
+
+        return def.promise
+
 
 
 
@@ -393,117 +443,3 @@ korpApp.filter "loc", ($rootScope) ->
         return util.getLocaleString translationKey
 
 
-korpApp.directive "tokenValue", ($compile, $controller) ->
-    defaultTmpl = "<input ng-model='model'>"
-
-    # require:'ngModel',
-    scope :
-        tokenValue : "="
-        model : "=ngModel"
-    template : """
-        <div class="arg_value">{{tokenValue.label}}</div>
-    """
-    link : (scope, elem, attr, ngModelCtrl) ->
-        scope.$watch "tokenValue", (valueObj) ->
-            c.log "watch value", valueObj
-            unless valueObj then return
-
-            
-
-            # _.extend scope, (_.pick valueObj, "dataset", "translationKey")
-            if valueObj.controller
-                locals = {$scope : _.extend scope, valueObj} 
-
-                $controller(valueObj.controller, locals)
-            # valueObj.controller?(scope, _.omit valueObj)
-
-            tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
-            elem.html(tmplElem)
-
-
-korpApp.directive "korpAutocomplete", () ->
-    scope : 
-        model : "="
-        stringify : "="
-        sorter : "="
-        type : "@"
-    link : (scope, elem, attr) ->
-        
-        c.log "scope.model", scope.model, scope.type
-        setVal = (lemgram) ->
-            $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
-                .val("").blur().placeholder()
-        if scope.model
-            setVal(scope.model)
-        arg_value = elem.korp_autocomplete(
-            labelFunction: scope.stringify
-            sortFunction: scope.sorter
-            type: scope.type
-            select: (lemgram) ->
-                c.log "extended lemgram", lemgram, $(this)
-                # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
-                setVal(lemgram)
-                scope.$apply () ->
-                    if scope.type == "baseform"
-                        scope.model = lemgram.split(".")[0]
-                    else 
-                        scope.model = lemgram
-
-            "sw-forms": true
-        )
-        .blur(->
-            input = this
-            setTimeout (->
-                c.log "blur"
-
-                if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
-                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
-                else
-                    $(input).removeClass("invalid_input")
-                # self._trigger "change"
-            ), 100
-        )
-
-
-korpApp.directive "slider", () ->
-    template : """
-        
-    """
-    link : () ->
-        all_years = _(settings.corpusListing.selected)
-                    .pluck("time")
-                    .map(_.pairs)
-                    .flatten(true)
-                    .filter((tuple) ->
-                        tuple[0] and tuple[1]
-                    ).map(_.compose(Number, _.head))
-                    .value()
-        # c.log "all", all_years
-        start = Math.min(all_years...)
-        end = Math.max(all_years...)
-        # arg_value = $("<div>")
-        arg_value.data "value", [start, end]
-        from = $("<input type='text' class='from'>").val(start)
-        to = $("<input type='text' class='to'>").val(end)
-        slider = $("<div />").slider(
-            range: true
-            min: start
-            max: end
-            values: [start, end]
-            slide: (event, ui) ->
-                from.val ui.values[0]
-                to.val ui.values[1]
-
-            change: (event, ui) ->
-                $(this).data "value", ui.values
-                arg_value.data "value", ui.values
-                self._trigger "change"
-        )
-        from.add(to).keyup ->
-            self._trigger "change"
-
-        arg_value.append slider, from, to
-
-korpApp.directive "constr", ($window) ->
-    link : (scope, elem, attr) ->
-        instance = new $window.view[attr.constr](elem)

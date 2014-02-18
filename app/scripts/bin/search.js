@@ -205,10 +205,11 @@
   view.SimpleSearch = (function(_super) {
     __extends(SimpleSearch, _super);
 
-    function SimpleSearch(mainDivId) {
+    function SimpleSearch(mainDivId, _mainDiv, scope) {
       var textinput,
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId);
+      this.s = scope;
       c.log("simplesearch", mainDivId, $(mainDivId));
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
       $("#simple_text").keyup($.proxy(this.onSimpleChange, this));
@@ -336,7 +337,6 @@
           }
           return $(this).prev("label").andSelf().remove();
         });
-        select.get(0).selectedIndex = 0;
         label = $("<label />", {
           "for": "lemgram_select"
         }).html("<i>" + ($("#simple_text").val()) + "</i> <span rel='localize[autocomplete_header]'>" + (util.getLocaleString("autocomplete_header")) + "</span>").css("margin-right", 8);
@@ -468,6 +468,7 @@
         val = cqp.join(" ");
       }
       $("#cqp_string").val(val);
+      this.s.$root.activeCQP = val;
       if (currentText !== "") {
         return this.enableSubmit();
       } else {

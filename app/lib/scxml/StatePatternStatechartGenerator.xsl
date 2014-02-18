@@ -359,7 +359,6 @@
 
 				this.enterAction = function(){
 					<if test="$log">
-						console.log("entering <value-of select="$stateName"/>");
 					</if>
 
 					<apply-templates select="$state/s:onentry/*[self::s:if or self::s:raise or self::s:log or self::s:script or self::s:send or self::s:cancel or self::s:invoke or self::s:finalize or self::s:datamodel or self::s:data or self::s:assign or self::s:validate or self::s:param]"/>
@@ -378,7 +377,6 @@
 
 				this.exitAction = function(){
 					<if test="$log">
-						console.log("exiting <value-of select="$stateName"/>" );
 					</if>
 
 					<if test="$historyState">

@@ -560,6 +560,7 @@ class model.TimeProxy extends BaseProxy
     makeRequest: (combined) ->
         self = this
         dfd = $.Deferred()
+
         @req.data.combined = combined
         xhr = $.ajax(@req)
         if combined

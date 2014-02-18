@@ -161,7 +161,7 @@
     };
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
-      var corpus, data, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
+      var corpus, data, o, self;
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
@@ -209,12 +209,18 @@
         start: o.start || 0,
         end: o.end,
         defaultcontext: $.keys(settings.defaultContext)[0],
-        defaultwithin: $.keys(settings.defaultWithin)[0],
-        show: [],
+        defaultwithin: "sentence",
+        show: ["sentence"],
         show_struct: [],
         sort: o.sort,
         incremental: o.incremental
       };
+      if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
+        data.within = settings.corpusListing.getWithinQueryString();
+      }
+      if (currentMode === "parallel") {
+        data.within = settings.corpusListing.getWithinQueryString();
+      }
       if (o.context != null) {
         data.context = o.context;
       }
@@ -228,6 +234,7 @@
       if (o.queryData != null) {
         data.querydata = o.queryData;
       }
+<<<<<<< HEAD
       _ref = settings.corpusListing.selected;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         corpus = _ref[_i];
@@ -241,17 +248,25 @@
           val = _ref2[key];
           data.show.push(key);
         }
+=======
+      $.each(settings.corpusListing.selected, function(_, corpus) {
+        $.each(corpus.attributes, function(key, val) {
+          if ($.inArray(key, data.show) === -1) {
+            return data.show.push(key);
+          }
+        });
+>>>>>>> got somewhere with compare function
         if (corpus.struct_attributes != null) {
-          $.each(corpus.struct_attributes, function(key, val) {
+          return $.each(corpus.struct_attributes, function(key, val) {
             if ($.inArray(key, data.show_struct) === -1) {
               return data.show_struct.push(key);
             }
           });
         }
-      }
+      });
       this.prevCQP = o.cqp;
-      data.show = (_.uniq(data.show)).join(",");
-      data.show_struct = (_.uniq(data.show_struct)).join(",");
+      data.show = data.show.join();
+      data.show_struct = data.show_struct.join();
       this.prevRequest = data;
       return this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
@@ -493,7 +508,7 @@
     }
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, reduceval, self, _ref;
+      var data, reduceval, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -510,9 +525,6 @@
         defaultwithin: "sentence",
         split: "lex"
       };
-      if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
-        data.split = reduceval;
-      }
       if ($("#reduceSelect select").val() === "word_insensitive") {
         $.extend(data, {
           ignore_case: "word"
@@ -543,7 +555,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, corpus, dataset, i, minWidth, obj, row, t, totalRow, word, wordArray, _i, _len, _ref1;
+          var columns, dataset, minWidth, totalRow, wordArray;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -593,9 +605,14 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
+<<<<<<< HEAD
           t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
+=======
+          $.each(wordArray, function(i, word) {
+            var row;
+>>>>>>> got somewhere with compare function
             row = {
               id: "row" + i,
               hit_value: word,
@@ -604,16 +621,20 @@
                 relative: data.total.relative[word]
               }
             };
-            _ref1 = data.corpora;
-            for (corpus in _ref1) {
-              obj = _ref1[corpus];
-              row[corpus + "_value"] = {
+            $.each(data.corpora, function(corpus, obj) {
+              return row[corpus + "_value"] = {
                 absolute: obj.absolute[word],
                 relative: obj.relative[word]
               };
+<<<<<<< HEAD
             }
             dataset.push(row);
           }
+=======
+            });
+            return dataset.push(row);
+          });
+>>>>>>> got somewhere with compare function
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);
@@ -705,7 +726,6 @@
         xhr.done(function(data, status, xhr) {
           var output, rest;
           if (_.keys(data).length < 2 || data.ERROR) {
-            c.log("timespan error:", data.ERROR);
             dfd.reject();
             return;
           }
@@ -717,7 +737,7 @@
         });
       } else {
         xhr.done(function(data, status, xhr) {
-          if (_.keys(data).length < 2 || data.ERROR) {
+          if (_.keys(data).length < 2) {
             dfd.reject();
             return;
           }
@@ -757,10 +777,6 @@
       }
       minYear = _.min(years);
       maxYear = _.max(years);
-      if (_.isNaN(maxYear) || _.isNaN(minYear)) {
-        c.log("expandTimestruct broken, years:", years);
-        return;
-      }
       _results = [];
       for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
         thisVal = struct[y];

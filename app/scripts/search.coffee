@@ -163,8 +163,9 @@ class BaseSearch
 
 
 class view.SimpleSearch extends BaseSearch
-    constructor: (mainDivId) ->
+    constructor: (mainDivId, _mainDiv, scope) ->
         super mainDivId
+        @s = scope
         c.log "simplesearch", mainDivId, $(mainDivId)
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         $("#simple_text").keyup $.proxy(@onSimpleChange, this)
@@ -268,7 +269,7 @@ class view.SimpleSearch extends BaseSearch
                     self.selectLemgram $(this).val()
                 $(this).prev("label").andSelf().remove()
 
-            select.get(0).selectedIndex = 0
+            # select.get(0).selectedIndex = 0
             label = $("<label />", for: "lemgram_select")
             .html("<i>#{$("#simple_text").val()}</i> <span rel='localize[autocomplete_header]'>#{util.getLocaleString("autocomplete_header")}</span>")
             .css("margin-right", 8)
@@ -388,6 +389,8 @@ class view.SimpleSearch extends BaseSearch
             )
             val = cqp.join(" ")
         $("#cqp_string").val val
+        # @s.$apply () ->
+        @s.$root.activeCQP = val
         unless currentText is ""
             @enableSubmit()
         else

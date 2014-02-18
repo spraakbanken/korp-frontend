@@ -1218,6 +1218,12 @@ a {
   margin-top: 8px;
 }
 
+label[for=lemgram_select]:before {
+  display : block;
+}
+
+
+
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
@@ -1538,6 +1544,31 @@ a {
   font-size: 0.8em;
 }
 
+#korp-simple {
+  .btn-group {
+    display : inline;
+  }
+
+  .popover.compare {
+    .btn_container {
+      margin-top : 1em;
+      text-align : right;
+    }
+  }
+}
+
+
+.search_tabs {
+  .tab-content {
+    overflow : visible;
+  }
+  .search_compare {
+    button {
+      margin-top : 1em;
+    }
+  }
+}
+
 #korp-extended .within_select ~ * {
   display: none;
 }
@@ -1848,4 +1879,17 @@ line.tick {
 .modal {
   max-height : 600px;
   overflow-y : auto;
+}
+
+.compare_result {
+  ul {
+    @include inline-block(top);
+  }
+}
+
+.popover {
+  @include border-radius(2px);
+  .popover-content {
+    padding : 5px;
+  }
 }

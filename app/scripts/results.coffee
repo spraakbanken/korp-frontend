@@ -61,17 +61,20 @@ class BaseResults
 
 
 class view.KWICResults extends BaseResults
-    constructor : (tabSelector, resultSelector) ->
+    constructor : (tabSelector, resultSelector, scope) ->
         c.log "kwicresults constructor", tabSelector, resultSelector
         self = this
         @prevCQP = null
         super tabSelector, resultSelector
         @initHTML = @$result.html()
+        window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
         @current_page = 0
-        @selectionManager = @$result.scope().selectionManager
-        # @selectionManager = getScope("kwicCtrl").selectionManager
+
+        @scope = scope
+        @selectionManager = scope.selectionManager
+
         @$result.click =>
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
@@ -199,7 +202,8 @@ class view.KWICResults extends BaseResults
 
 
         # applyTo "kwicCtrl", ($scope) ->
-        @$result.scope().$apply ($scope) ->
+        @scope.$apply ($scope) ->
+            c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
             else
@@ -559,8 +563,8 @@ class view.LemgramResults extends BaseResults
 
         #   TODO: figure out what I use this for.
         @resultDeferred = $.Deferred()
-        @proxy = lemgramProxy
-
+        @proxy = new model.LemgramProxy()
+        window.lemgramProxy = @proxy
         @$result.find("#wordclassChk").change ->
             if $(this).is(":checked")
                 $(".lemgram_result .wordclass_suffix", self.$result).show()
@@ -572,9 +576,10 @@ class view.LemgramResults extends BaseResults
 
     resetView: ->
         super()
-        $("#results-lemgram .content_target").empty()
+        $(".content_target", @$result).empty()
 
     renderResult: (data, query) ->
+        c.log "lemgramResults.renderResult", data, query
         resultError = super(data)
         @resetView()
         return  if resultError is false
@@ -615,6 +620,7 @@ class view.LemgramResults extends BaseResults
         ).append "<div style='clear:both;'/>"
 
     renderWordTables: (word, data) ->
+        c.log "lemgramResults.renderWordTables", word
         self = this
         c.log "renderWordTables"
         wordlist = $.map(data, (item) ->
@@ -724,7 +730,7 @@ class view.LemgramResults extends BaseResults
 
 
         container = $("<div>", class: "tableContainer radialBkg")
-        .appendTo("#results-lemgram .content_target")
+        .appendTo(".content_target", @$result)
 
         c.log "orderArrays", orderArrays
         $("#lemgramResultsTmpl").tmpl(orderArrays,
@@ -737,7 +743,7 @@ class view.LemgramResults extends BaseResults
         ).end()
         .appendTo container
 
-        $("#results-lemgram td:nth-child(2)").each -> # labels
+        $("td:nth-child(2)", @$result).each -> # labels
             $siblings = $(this).parent().siblings().find("td:nth-child(2)")
             siblingLemgrams = $.map($siblings, (item) ->
                 $(item).data("lemgram").slice 0, -1
@@ -797,7 +803,7 @@ class view.LemgramResults extends BaseResults
         @$result.find(".content_target").html $("<i />").localeKey("no_lemgram_results")
 
     hideWordclass: ->
-        $("#results-lemgram td:first-child").each ->
+        $("td:first-child", @$result).each ->
             $(this).html $.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" "))
 
 
@@ -941,7 +947,8 @@ class view.StatsResults extends BaseResults
         super tabSelector, resultSelector
         self = this
         @gridData = null
-        @proxy = statsProxy
+        @proxy = new model.StatsProxy()
+        window.statsProxy = @proxy
         @$result.on "click", ".arcDiagramPicture", ->
             parts = $(this).attr("id").split("__")
 
@@ -1138,11 +1145,9 @@ class view.StatsResults extends BaseResults
 
         $.when(timeDeferred).then =>
             @updateGraphBtnState()            
-
         @hidePreloader()
 
     updateGraphBtnState : () ->
-        c.log "updateGraphBtnState", $("#showGraph")
 
         $("#showGraph").button("enable")
         cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))

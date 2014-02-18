@@ -2,24 +2,6 @@
   var chained, deferred_domReady, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  window.searchProxy = new model.SearchProxy();
-
-  window.kwicProxy = new model.KWICProxy();
-
-  window.statsProxy = new model.StatsProxy();
-
-  window.lemgramProxy = new model.LemgramProxy();
-
-  window.authenticationProxy = new model.AuthenticationProxy();
-
-  window.timeProxy = new model.TimeProxy();
-
-  window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
-
-  window.extendedSearch = new view.ExtendedSearch('#korp-extended');
-
-  window.simpleSearch = new view.SimpleSearch('#korp-simple');
-
   t = $.now();
 
   isDev = window.location.host === "localhost";
@@ -90,6 +72,11 @@
     var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
+    window.searchProxy = new model.SearchProxy();
+    window.authenticationProxy = new model.AuthenticationProxy();
+    window.timeProxy = new model.TimeProxy();
+    window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
+    window.extendedSearch = new view.ExtendedSearch('#korp-extended');
     if (isLab) {
       $("body").addClass("lab");
     }
@@ -256,7 +243,7 @@
       simpleSearch.enableSubmit();
     }
     window.onHashChange = function(event, isInit) {
-      var data, display, e, hasChanged, prevFragment, reading, searchval, showAbout, type, value,
+      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value,
         _this = this;
       c.log("onHashChange");
       hasChanged = function(key) {
@@ -278,6 +265,7 @@
         util.localize();
         $("#languages").radioList("select", $.localize("getLang"));
       }
+      page = Number(search().page);
       display = search().display;
       if (display === "about") {
         if ($("#about_content").is(":empty")) {
@@ -359,7 +347,6 @@
       }
       searchval = search().search;
       if ((searchval != null) && searchval !== prevFragment["search"]) {
-        kwicResults.current_page = page || 0;
         type = searchval.split("|")[0];
         value = searchval.split("|").slice(1).join("|");
         view.updateSearchHistory(value);
@@ -480,6 +467,7 @@
 
   initTimeGraph = function() {
     var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
+    return;
     timestruct = null;
     all_timestruct = null;
     restdata = null;

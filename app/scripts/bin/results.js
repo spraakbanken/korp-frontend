@@ -76,7 +76,7 @@
   view.KWICResults = (function(_super) {
     __extends(KWICResults, _super);
 
-    function KWICResults(tabSelector, resultSelector) {
+    function KWICResults(tabSelector, resultSelector, scope) {
       var self,
         _this = this;
       c.log("kwicresults constructor", tabSelector, resultSelector);
@@ -84,10 +84,16 @@
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.initHTML = this.$result.html();
+      window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
       this.current_page = 0;
+<<<<<<< HEAD
       this.selectionManager = this.$result.scope().selectionManager;
+=======
+      this.scope = scope;
+      this.selectionManager = scope.selectionManager;
+>>>>>>> got somewhere with compare function
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
@@ -110,7 +116,7 @@
         this.$result.addClass("reading_mode");
       }
       this.$result.on("click", ".word", function(event) {
-        var aux, i, l, obj, paragraph, scope, sent, sent_start, word;
+        var aux, i, l, obj, paragraph, sent, sent_start, word;
         scope = $(this).scope();
         obj = scope.wd;
         sent = scope.sentence;
@@ -225,7 +231,8 @@
       }
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
-      this.$result.scope().$apply(function($scope) {
+      this.scope.$apply(function($scope) {
+        c.log("apply kwic search data", data);
         if (isReading) {
           return $scope.setContextData(data);
         } else {
@@ -664,7 +671,19 @@
       self = this;
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.resultDeferred = $.Deferred();
+<<<<<<< HEAD
       this.proxy = lemgramProxy;
+=======
+      this.proxy = new model.LemgramProxy();
+      window.lemgramProxy = this.proxy;
+      this.order = {
+        vb: ["SS_d,_,OBJ_d,ADV_d".split(",")],
+        nn: ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
+        av: [[], "_,AT_h".split(",")],
+        jj: [[], "_,AT_h".split(",")],
+        pp: [[], "_,PA_d".split(",")]
+      };
+>>>>>>> got somewhere with compare function
       this.$result.find("#wordclassChk").change(function() {
         if ($(this).is(":checked")) {
           return $(".lemgram_result .wordclass_suffix", self.$result).show();
@@ -676,11 +695,12 @@
 
     LemgramResults.prototype.resetView = function() {
       LemgramResults.__super__.resetView.call(this);
-      return $("#results-lemgram .content_target").empty();
+      return $(".content_target", this.$result).empty();
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError;
+      c.log("lemgramResults.renderResult", data, query);
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
       if (resultError === false) {
@@ -730,8 +750,13 @@
     };
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
+<<<<<<< HEAD
       var self, tagsetTrans, unique_words, wordlist,
         _this = this;
+=======
+      var self, unique_words, wordlist;
+      c.log("lemgramResults.renderWordTables", word);
+>>>>>>> got somewhere with compare function
       self = this;
       c.log("renderWordTables");
       wordlist = $.map(data, function(item) {
@@ -854,12 +879,16 @@
       });
       container = $("<div>", {
         "class": "tableContainer radialBkg"
+<<<<<<< HEAD
       }).appendTo("#results-lemgram .content_target");
       c.log("orderArrays", orderArrays);
+=======
+      }).appendTo(".content_target", this.$result);
+>>>>>>> got somewhere with compare function
       $("#lemgramResultsTmpl").tmpl(orderArrays, {
         lemgram: token
       }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click($.proxy(self.onClickExample, self)).end().appendTo(container);
-      return $("#results-lemgram td:nth-child(2)").each(function() {
+      return $("td:nth-child(2)", this.$result).each(function() {
         var $siblings, hasHomograph, label, prefix, siblingLemgrams;
         $siblings = $(this).parent().siblings().find("td:nth-child(2)");
         siblingLemgrams = $.map($siblings, function(item) {
@@ -921,7 +950,7 @@
     };
 
     LemgramResults.prototype.hideWordclass = function() {
-      return $("#results-lemgram td:first-child").each(function() {
+      return $("td:first-child", this.$result).each(function() {
         return $(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")));
       });
     };
@@ -1076,7 +1105,8 @@
       StatsResults.__super__.constructor.call(this, tabSelector, resultSelector);
       self = this;
       this.gridData = null;
-      this.proxy = statsProxy;
+      this.proxy = new model.StatsProxy();
+      window.statsProxy = this.proxy;
       this.$result.on("click", ".arcDiagramPicture", function() {
         var parts;
         parts = $(this).attr("id").split("__");
@@ -1202,8 +1232,7 @@
     }
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
-        _this = this;
+      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1263,9 +1292,12 @@
       });
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
+<<<<<<< HEAD
       $.when(timeDeferred).then(function() {
         return _this.updateGraphBtnState();
       });
+=======
+>>>>>>> got somewhere with compare function
       return this.hidePreloader();
     };
 

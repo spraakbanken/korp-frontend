@@ -1,12 +1,4 @@
-window.searchProxy = new model.SearchProxy()
-window.kwicProxy = new model.KWICProxy()
-window.statsProxy = new model.StatsProxy()
-window.lemgramProxy = new model.LemgramProxy()
-window.authenticationProxy = new model.AuthenticationProxy()
-window.timeProxy = new model.TimeProxy()
-window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
-window.extendedSearch = new view.ExtendedSearch('#korp-extended')
-window.simpleSearch = new view.SimpleSearch('#korp-simple')
+
 
 
 
@@ -74,6 +66,16 @@ loc_dfd = initLocales()
 $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
+
+    window.searchProxy = new model.SearchProxy()
+    
+    
+    window.authenticationProxy = new model.AuthenticationProxy()
+    window.timeProxy = new model.TimeProxy()
+    window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
+    window.extendedSearch = new view.ExtendedSearch('#korp-extended')
+    # window.simpleSearch = new view.SimpleSearch('#korp-simple')
+
     $("body").addClass "lab"  if isLab
     window.currentMode = $.deparam.querystring().mode or "default"
     $("body").addClass "mode-" + currentMode
@@ -250,7 +252,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
             util.localize()
 
             $("#languages").radioList "select", $.localize("getLang")
-        # page = Number(search().page)
+        page = Number(search().page)
         # kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
         # kwicResults.current_page = page if isInit
 
@@ -328,7 +330,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                     kwicResults.centerScrollbar()
         searchval = search().search
         if searchval? and searchval isnt prevFragment["search"]
-            kwicResults.current_page = page or 0
+            # kwicResults.current_page = page or 0
             type = searchval.split("|")[0]
             value = searchval.split("|").slice(1).join("|")
             view.updateSearchHistory value
@@ -454,6 +456,8 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
 
 
 initTimeGraph = ->
+    # TODO: crashing now, fix later
+    return 
     timestruct = null
     all_timestruct = null
     restdata = null

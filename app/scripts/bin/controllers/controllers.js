@@ -8,6 +8,7 @@
     var s;
     s = $rootScope;
     s.lang = "sv";
+    s.activeCQP = "[]";
     s.search = function() {
       return $location.search.apply($location, arguments);
     };
@@ -16,16 +17,22 @@
       return s.searchDef.resolve();
     };
     s._loc = $location;
-    return s.$watch("_loc.search()", function() {
+    s.$watch("_loc.search()", function() {
       c.log("loc.search() change", $location.search());
       return _.defer(function() {
         return typeof window.onHashChange === "function" ? window.onHashChange() : void 0;
       });
     });
+    $rootScope.savedSearches = [];
+    $rootScope.saveSearch = function(searchObj) {
+      return $rootScope.savedSearches.push(searchObj);
+    };
+    return $rootScope.compareTabs = [];
   });
 
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
+    c.log("kwicCtrl init");
     s = $scope;
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
@@ -159,48 +166,26 @@
     };
   });
 
-  korpApp.directive('kwicWord', function() {
-    return {
-      replace: true,
-      template: "<span class=\"word\" set-class=\"getClassObj(wd)\"\nset-text=\"wd.word + ' '\" ></span>",
-      link: function(scope, element) {
-        return scope.getClassObj = function(wd) {
-          var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
-          output = {
-            reading_match: wd._match,
-            punct: wd._punct,
-            match_sentence: wd._matchSentence
-          };
-          _ref = wd._struct || [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            struct = _ref[_i];
-            output["struct_" + struct] = true;
-          }
-          _ref1 = wd._open || [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            struct = _ref1[_j];
-            output["open_" + struct] = true;
-          }
-          _ref2 = wd._close || [];
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            struct = _ref2[_k];
-            output["close_" + struct] = true;
-          }
-          return ((function() {
-            var _l, _len3, _ref3, _ref4, _results;
-            _ref3 = _.pairs(output);
-            _results = [];
-            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-              _ref4 = _ref3[_l], x = _ref4[0], y = _ref4[1];
-              if (y) {
-                _results.push(x);
-              }
-            }
-            return _results;
-          })()).join(" ");
-        };
-      }
-    };
+  korpApp.controller("compareCtrl", function($scope) {
+    var s;
+    s = $scope;
+    return s.promise.then(function(data) {
+      s.tables = _.groupBy(_.pairs(data.loglike), function(_arg) {
+        var val, word;
+        word = _arg[0], val = _arg[1];
+        if (val > 0) {
+          return "positive";
+        } else {
+          return "negative";
+        }
+      });
+      s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
+        return tuple[1];
+      });
+      return s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
+        return Math.abs(tuple[1]);
+      });
+    });
   });
 
   korpApp.controller("TokenList", function($scope, $location) {
@@ -358,16 +343,19 @@
   korpApp.factory("util", function($location) {
     return {
       setupHash: function(scope, config) {
-        var obj, watch, _i, _len, _results;
-        scope.loc = $location;
-        scope.$watch('loc.search()', function() {
+        var obj, onWatch, watch, _i, _len, _results;
+        onWatch = function() {
           var obj, val, _i, _len, _results;
           _results = [];
           for (_i = 0, _len = config.length; _i < _len; _i++) {
             obj = config[_i];
             val = $location.search()[obj.key];
             if (!val) {
-              continue;
+              if (obj["default"]) {
+                val = obj["default"];
+              } else {
+                continue;
+              }
             }
             val = (obj.val_in || _.identity)(val);
             if ("scope_name" in obj) {
@@ -379,201 +367,104 @@
             }
           }
           return _results;
+        };
+        onWatch();
+        scope.loc = $location;
+        scope.$watch('loc.search()', function() {
+          return onWatch();
         });
         _results = [];
         for (_i = 0, _len = config.length; _i < _len; _i++) {
           obj = config[_i];
           watch = obj.expr || obj.scope_name || obj.key;
-          _results.push(scope.$watch(watch || obj.key, (function(obj) {
+          _results.push(scope.$watch(watch, (function(obj, watch) {
             return function(val) {
               val = (obj.val_out || _.identity)(val);
-              $location.search(obj.key, val != null ? val : null);
+              if (val === obj["default"]) {
+                val = null;
+              }
+              $location.search(obj.key, val || null);
               return typeof obj.post_change === "function" ? obj.post_change(val) : void 0;
             };
-          })(obj)));
+          })(obj, watch)));
         }
         return _results;
       }
     };
   });
 
-  korpApp.controller("ResultsTabCtrl", function($scope, util, $location) {
-    var s;
-    return s = $scope;
-  });
-
-  korpApp.controller("SearchPaneCtrl", function($scope, util, $location) {
+  korpApp.controller("SimpleCtrl", function($scope, util, $location, backend, $rootScope) {
     var s;
     s = $scope;
-    s.search_tab = parseInt($location.search()["search_tab"]) || 0;
-    c.log("search_tab init", s.search_tab);
-    s.getSelected = function() {
-      var i, p, _i, _len, _ref, _ref1;
-      if (!((_ref = s.tabs) != null ? _ref.length : void 0)) {
-        return s.search_tab;
-      }
-      _ref1 = s.tabs;
-      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-        p = _ref1[i];
-        if (p.active) {
-          return i;
-        }
+    c.log("SimpleCtrl");
+    s.isShowing = true;
+    s.togglePopover = function() {
+      if (s.isPopoverVisible) {
+        return s.popHide();
+      } else {
+        return s.popShow();
       }
     };
-    s.setSelected = function(index) {
-      var p, _i, _len, _ref;
-      _ref = s.tabs;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        p = _ref[_i];
-        p.active = false;
-      }
-      if (s.tabs[index]) {
-        return s.tabs[index].active = true;
+    return s.saveSearch = function(name) {
+      c.log("savesearch", name);
+      s.popHide();
+      return $rootScope.saveSearch({
+        label: name || $rootScope.activeCQP,
+        cqp: $rootScope.activeCQP,
+        corpora: settings.corpusListing.stringifySelected()
+      });
+    };
+  });
+
+  korpApp.controller("CompareSearchCtrl", function($scope, util, $location, backend, $rootScope) {
+    var s;
+    s = $scope;
+    $rootScope.saveSearch({
+      label: "första",
+      cqp: "[pos='NN']",
+      corpora: settings.corpusListing.subsetFactory(["ROMI"]).stringifySelected()
+    });
+    $rootScope.saveSearch({
+      label: "andra",
+      cqp: "[pos='NN']",
+      corpora: settings.corpusListing.subsetFactory(["ROMII"]).stringifySelected()
+    });
+    s.cmp1 = $rootScope.savedSearches[0];
+    s.cmp2 = $rootScope.savedSearches[1];
+    return s.sendCompare = function() {
+      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora, s.cmp1.cqp, s.cmp2.corpora, s.cmp2.cqp));
+    };
+  });
+
+  korpApp.factory('backend', function($http, $q, util) {
+    return {
+      requestCompare: function(corpus1, cqp1, corpus2, cqp2) {
+        var def, params;
+        def = $q.defer();
+        params = {
+          command: "loglike",
+          groupby: "word",
+          set1_corpus: corpus1,
+          set1_cqp: cqp1,
+          set2_corpus: corpus2,
+          set2_cqp: cqp2,
+          max: 50
+        };
+        $http({
+          url: settings.cgi_script,
+          params: params,
+          method: "GET"
+        }).success(function(data) {
+          return def.resolve(data);
+        });
+        return def.promise;
       }
     };
-    return util.setupHash(s, [
-      {
-        expr: "getSelected()",
-        val_out: function(val) {
-          c.log("val out", val);
-          return val;
-        },
-        val_in: function(val) {
-          c.log("val_in", typeof val);
-          s.setSelected(parseInt(val));
-          return parseInt(val);
-        },
-        key: "search_tab"
-      }
-    ]);
   });
 
   korpApp.filter("loc", function($rootScope) {
     return function(translationKey) {
       return util.getLocaleString(translationKey);
-    };
-  });
-
-  korpApp.directive("tokenValue", function($compile, $controller) {
-    var defaultTmpl;
-    defaultTmpl = "<input ng-model='model'>";
-    return {
-      scope: {
-        tokenValue: "=",
-        model: "=ngModel"
-      },
-      template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
-      link: function(scope, elem, attr, ngModelCtrl) {
-        return scope.$watch("tokenValue", function(valueObj) {
-          var locals, tmplElem;
-          c.log("watch value", valueObj);
-          if (!valueObj) {
-            return;
-          }
-          if (valueObj.controller) {
-            locals = {
-              $scope: _.extend(scope, valueObj)
-            };
-            $controller(valueObj.controller, locals);
-          }
-          tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
-          return elem.html(tmplElem);
-        });
-      }
-    };
-  });
-
-  korpApp.directive("korpAutocomplete", function() {
-    return {
-      scope: {
-        model: "=",
-        stringify: "=",
-        sorter: "=",
-        type: "@"
-      },
-      link: function(scope, elem, attr) {
-        var arg_value, setVal;
-        c.log("scope.model", scope.model, scope.type);
-        setVal = function(lemgram) {
-          return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
-        };
-        if (scope.model) {
-          setVal(scope.model);
-        }
-        return arg_value = elem.korp_autocomplete({
-          labelFunction: scope.stringify,
-          sortFunction: scope.sorter,
-          type: scope.type,
-          select: function(lemgram) {
-            c.log("extended lemgram", lemgram, $(this));
-            setVal(lemgram);
-            return scope.$apply(function() {
-              if (scope.type === "baseform") {
-                return scope.model = lemgram.split(".")[0];
-              } else {
-                return scope.model = lemgram;
-              }
-            });
-          },
-          "sw-forms": true
-        }).blur(function() {
-          var input;
-          input = this;
-          return setTimeout((function() {
-            c.log("blur");
-            if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
-              return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
-            } else {
-              return $(input).removeClass("invalid_input");
-            }
-          }), 100);
-        });
-      }
-    };
-  });
-
-  korpApp.directive("slider", function() {
-    return {
-      template: "",
-      link: function() {
-        var all_years, end, from, slider, start, to;
-        all_years = _(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
-          return tuple[0] && tuple[1];
-        }).map(_.compose(Number, _.head)).value();
-        start = Math.min.apply(Math, all_years);
-        end = Math.max.apply(Math, all_years);
-        arg_value.data("value", [start, end]);
-        from = $("<input type='text' class='from'>").val(start);
-        to = $("<input type='text' class='to'>").val(end);
-        slider = $("<div />").slider({
-          range: true,
-          min: start,
-          max: end,
-          values: [start, end],
-          slide: function(event, ui) {
-            from.val(ui.values[0]);
-            return to.val(ui.values[1]);
-          },
-          change: function(event, ui) {
-            $(this).data("value", ui.values);
-            arg_value.data("value", ui.values);
-            return self._trigger("change");
-          }
-        });
-        from.add(to).keyup(function() {
-          return self._trigger("change");
-        });
-        return arg_value.append(slider, from, to);
-      }
-    };
-  });
-
-  korpApp.directive("constr", function($window) {
-    return {
-      link: function(scope, elem, attr) {
-        var instance;
-        return instance = new $window.view[attr.constr](elem);
-      }
     };
   });
 

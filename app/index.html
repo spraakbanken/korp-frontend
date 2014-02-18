@@ -114,6 +114,7 @@
 		<script src="scripts/bin/main.js"></script>
 		<!-- endbuild -->
 		<script src="scripts/bin/controllers/controllers.js"></script>
+		<script src="scripts/bin/directives.js"></script>
 	</head>
   	<body class="not_logged_in" ng-app="korpApp">
 	  	<noscript>
@@ -204,7 +205,7 @@
 
 	   		<!-- <div id="searchbar" ng-include="'markup/searchbar.html'" ></div> -->
 
-	   		<tabset ng-controller="SearchPaneCtrl">
+	   		<tabset tab-hash="search_tab" class="search_tabs" >  
    		        <tab heading="{{'simple' | loc}}">
    		        	<div ng-include="'views/simple.html'" onload="$root.onSearchLoad()"></div>
 		        </tab>
@@ -222,6 +223,19 @@
 						<input id="sendBtn" value="  Sök  " type="submit"
 							rel="localize[search]" />
 
+					</div>
+   		        </tab>
+   		        <tab>
+   		        	<tab-heading>
+						Jämförelse <span ng-if="savedSearches.length" class="badge badge-info">{{savedSearches.length}}</span>
+   		        	</tab-heading>
+					<div ng-controller="CompareSearchCtrl" class="search_compare">
+						<div ng-show="savedSearches.length < 2">Du måste spara minst två sökningar för att kunna jämföra.</div>
+						<div ng-show="savedSearches.length > 1">
+							Jämför <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>
+							med <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>
+						</div>
+						<button ng-click="sendCompare()" class="btn-primary btn-small">Jämför</button>
 					</div>
    		        </tab>
    		    </tabset>
@@ -254,9 +268,9 @@
 			<div id="results-wrapper">
 				<div id="columns" >
 					<div id="left-column" >
-						<tabset ng-controller="ResultsTabCtrl" >
-							<tab heading="KWIC" >
-								<div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
+						<tabset tab-hash="result_tab">
+							<tab heading="KWIC"  >
+								<div id="results-kwic" constr="KWICResults" constr-name="kwicResults" ng-controller="kwicCtrl">
 								    <div class="result_controls">
 								        <div class="controls_n" >
 								            <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
@@ -325,7 +339,7 @@
 
 								</div>
 							</tab>
-							<tab heading="Statistik">
+							<tab heading="Statistik" constr="StatsResults" constr-name="statsResults">
 								<div class="stats_header">
 									<button id="showGraph">Visa trenddiagram</button>
 									<div class="progress">
@@ -347,15 +361,32 @@
 								</div>
 							</tab>
 							<tab heading="Ordbild">
-								<div id="wordclassChkParent">
-									<input id='wordclassChk' type='checkbox'>
-									<label for="wordclassChk" rel="localize[show_wordclass]"></label>
-								</div>
-								<div class="progress">
-									<progress value="0" max="100"></progress>
-								</div>
+								<div constr="LemgramResults" constr-name="lemgramResults">
+									
+									<div id="wordclassChkParent">
+										<input id='wordclassChk' type='checkbox'>
+										<label for="wordclassChk" rel="localize[show_wordclass]"></label>
+									</div>
+									<div class="progress">
+										<progress value="0" max="100"></progress>
+									</div>
 
-								<div class="content_target"></div>
+									<div class="content_target"></div>
+								</div>
+							</tab>
+							<tab ng-repeat="promise in compareTabs" heading="Jämför {{$index}}">
+									<div class="compare_result" ng-controller="compareCtrl">
+										<ul>
+											<li ng-repeat="tuple in tables.positive">
+												{{tuple[0]}}: {{tuple[1]}}
+											</li>
+										</ul>
+										<ul>
+											<li ng-repeat="tuple in tables.negative">
+												{{tuple[0]}}: {{tuple[1]}}
+											</li>
+										</ul>
+									</div>
 							</tab>
 						</tabset>
 						<!-- <div id="result-container"> -->
