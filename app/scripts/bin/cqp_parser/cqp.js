@@ -5,7 +5,7 @@
   window.c = console;
 
   stringifyCqp = function(cqp_obj, translate_ops) {
-    var and_array, flags, op, or_array, or_out, out_token, output, token, type, val, x, _i, _len;
+    var and_array, bound, flags, flagstr, op, or_array, or_out, out, out_token, output, token, type, val, x, _i, _j, _len, _len1, _ref;
     if (translate_ops == null) {
       translate_ops = false;
     }
@@ -23,7 +23,7 @@
             var _k, _len2, _ref1, _ref2, _results1;
             _results1 = [];
             for (_k = 0, _len2 = and_array.length; _k < _len2; _k++) {
-              _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val;
+              _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val, flags = _ref1.flags;
               if (translate_ops) {
                 _ref2 = {
                   "^=": [val + ".*", "="],
@@ -32,11 +32,17 @@
                   "*=": [val, "="]
                 }[op] || [val, op], val = _ref2[0], op = _ref2[1];
               }
-              if (type === "word" && val === "") {
-                _results1.push("");
-              } else {
-                _results1.push("" + type + " " + op + " \"" + val + "\"");
+              flagstr = "";
+              if (flags) {
+                flagstr = " %" + flags.join("");
               }
+              if (type === "word" && val === "") {
+                out = "";
+              } else {
+                out = "" + type + " " + op + " \"" + val + "\"";
+              }
+              c.log("out", out + " " + flagstr);
+              _results1.push(out + flagstr);
             }
             return _results1;
           })());
@@ -52,11 +58,15 @@
         }
         return _results;
       })();
-      flags = "";
-      if (token.flags) {
-        flags = " %" + token.flags.join("");
+      if (token.bound) {
+        or_out = _.compact(or_out);
+        _ref = _.keys(token.bound);
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          bound = _ref[_j];
+          or_out.push("" + bound + "(sentence)");
+        }
       }
-      out_token = "[" + (or_out.join(' & ')) + flags + "]";
+      out_token = "[" + (or_out.join(' & ')) + "]";
       if (token.repeat) {
         out_token += "{" + (token.repeat.join(',')) + "}";
       }

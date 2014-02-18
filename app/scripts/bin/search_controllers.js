@@ -229,7 +229,7 @@
   });
 
   korpApp.controller("ExtendedToken", function($scope, utils, $location) {
-    var onCorpusChange, s;
+    var onCorpusChange, s, toggleBound;
     s = $scope;
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
@@ -262,6 +262,29 @@
     };
     s.addAnd = function() {
       return s.token.and_block.push(s.addOr([]));
+    };
+    toggleBound = function(token, bnd) {
+      var boundObj, _ref, _ref1;
+      if (!((_ref = token.bound) != null ? _ref[bnd] : void 0)) {
+        boundObj = {};
+        boundObj[bnd] = true;
+        return token.bound = _.extend(token.bound || {}, boundObj);
+      } else {
+        return (_ref1 = token.bound) != null ? delete _ref1[bnd] : void 0;
+      }
+    };
+    s.toggleStart = function(token) {
+      return toggleBound(token, "lbound");
+    };
+    s.toggleEnd = function(token) {
+      return toggleBound(token, "rbound");
+    };
+    s.toggleRepeat = function(token) {
+      if (!token.repeat) {
+        return token.repeat = [1, 1];
+      } else {
+        return delete token.repeat;
+      }
     };
     return s.getTokenCqp = function() {
       if (!s.token.cqp) {

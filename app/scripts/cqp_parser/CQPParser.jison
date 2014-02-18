@@ -65,16 +65,10 @@ token
     : 'EMPTY'
         {$$ = {"and_block":[[{type:"word",op:"=",val:""}]]}}
     | '[' and_block ']'
-        {$$ = {"and_block" : $2}}
-    | '[' and_block flag ']'
-        {$$ = {"and_block" : $2, "flags" : $3}}
+        {$$ = $2}
+        
     | token repeat
         {$$ = $1; $1.repeat = $2}
-    ;
-
-flag
-    : 'FLAG'
-        {$$ = $1.slice(1).split("")}
     ;
 
 repeat
@@ -86,10 +80,19 @@ repeat
 
 and_block
     : or_block
-        {$$ = [$1]}
-
+        {$$ = {"and_block" : [$1]}
+    | bound_block
+        {$$ = {"bound" : $1, "and_block" : []}
     | or_block '&' and_block
-        {$$ = [].concat([$1], $3)}
+        {$$ = [].concat([$1], $3.and_block)}
+    ;
+
+
+bound_block
+    : bound
+        {$$ = {}; $$[$1] = true}
+    | bound '&' bound_block
+        {$$ = $3; $3[$1] = true}
     ;
 
 
@@ -103,10 +106,17 @@ or_block
 
 
 or 
-    : FUNC FUNCVAL
-        { var obj = {}; obj[$1] = true; $$ = obj}
-    | TYPE infix_op VALUE
+    : TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
+    | or 'FLAG'
+        {$1.flags = $2.slice(1).split(""); $$ = $1}
+    ;
+
+
+
+bound
+    : FUNC FUNCVAL
+        { $$ = $1}
     ;
 
 infix_op

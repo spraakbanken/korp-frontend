@@ -1,6 +1,6 @@
 <div ng-controller="ExtendedSearch">
     <div id="query_table" ng-controller="TokenList">
-        <!-- <div class="cqp">cqp: {{getCQPString(data)}}</div> -->
+        <div class="cqp">cqp: {{getCQPString(data)}}</div>
     
     
     
@@ -48,10 +48,10 @@
                     <button popper class="btn btn-mini"><i class="icon-cog"></i></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
-                            <a ng-click="showRepeat = !showRepeat" rel="localize[repeat]">Upprepa</a>
+                            <a ng-click="toggleRepeat(token)" rel="localize[repeat]">Upprepa</a>
                         </li>
-                        <li><a data-item="lbound_item" rel="localize[sent_start]">Meningsbörjan</a></li>
-                        <li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
+                        <li><a ng-click="toggleStart(token)" rel="localize[sent_start]">Meningsbörjan</a></li>
+                        <li><a ng-click="toggleEnd(token)" rel="localize[sent_end]">Meningsslut</a></li>
                     </ul>
 
 
@@ -62,7 +62,7 @@
                         <li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
                     </ul> -->
     
-                    <div class="repeat" ng-show="showRepeat">
+                    <div class="repeat" ng-show="token.repeat">
                         <span rel="localize[repeat]">Upprepa</span>
                         <input type="number" ng-model="token.repeat[0]" >
                         <span rel="localize[to]">till</span>
@@ -75,13 +75,13 @@
                 </div>
     
                 <div class="lower_footer">
-                    <span  class="lbound close_token" data-item="lbound_item">
+                    <span  class="lbound close_token" ng-show="token.bound.lbound">
                         <span rel="localize[sent_start]">Meningsbörjan</span>
-                        <span class="ui-icon ui-icon-close"></span>
+                        <span class="ui-icon ui-icon-close" ng-click="toggleStart(token)"></span>
                     </span>
-                    <span class="rbound close_token" data-item="rbound_item">
+                    <span class="rbound close_token" ng-show="token.bound.rbound">
                         <span rel="localize[sent_end]">Meningsslut</span>
-                        <span class="ui-icon ui-icon-close"></span>
+                        <span class="ui-icon ui-icon-close" ng-click="toggleEnd(token)"></span>
                     </span>
                 </div>
     

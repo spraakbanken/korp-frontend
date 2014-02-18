@@ -318,6 +318,25 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s.addAnd = () ->
         s.token.and_block.push s.addOr([])
 
+    toggleBound = (token, bnd) ->
+        unless token.bound?[bnd]
+            boundObj = {}
+            boundObj[bnd] = true
+            token.bound = _.extend (token.bound or {}), boundObj
+        else 
+            delete token.bound?[bnd]
+
+    s.toggleStart = (token) ->
+        toggleBound(token, "lbound")
+    s.toggleEnd = (token) ->
+        toggleBound(token, "rbound")
+
+    s.toggleRepeat = (token) ->
+        unless token.repeat
+            token.repeat = [1,1]
+        else 
+            delete token.repeat
+
 
     s.getTokenCqp = ->
         if not s.token.cqp

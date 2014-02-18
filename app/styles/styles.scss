@@ -428,13 +428,13 @@ select.arg_value option {
 }
 
 
-.repeat, .lower_footer > * {
-  display: none;
-}
+// .repeat, .lower_footer > * {
+//   display: none;
+// }
 
-.repeat_item .repeat, .lbound_item .lbound, .rbound_item .rbound {
-  display: inline;
-}
+// .repeat_item .repeat, .lbound_item .lbound, .rbound_item .rbound {
+//   display: inline;
+// }
 
 .statisticWords {
   border-style: hidden;

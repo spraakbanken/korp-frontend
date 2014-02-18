@@ -508,16 +508,6 @@ select.arg_value option {
   width: 100px;
 }
 
-/* line 431, styles.scss */
-.repeat, .lower_footer > * {
-  display: none;
-}
-
-/* line 435, styles.scss */
-.repeat_item .repeat, .lbound_item .lbound, .rbound_item .rbound {
-  display: inline;
-}
-
 /* line 439, styles.scss */
 .statisticWords {
   border-style: hidden;

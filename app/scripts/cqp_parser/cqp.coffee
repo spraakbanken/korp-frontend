@@ -7,7 +7,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
     for token in cqp_obj
         or_array = []
         or_array = for and_array in token.and_block
-            for {type, op, val} in and_array
+            for {type, op, val, flags} in and_array
                 if translate_ops
                     [val, op] = {
                         "^=" : [val + ".*", "="]
@@ -15,20 +15,34 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
                     }[op] or [val, op]
+
+                flagstr = ""
+                if flags
+                    flagstr = " %" + flags.join("")
+
                 if type == "word" and val == ""
-                    ""
+                    out = ""
                 else 
-                    "#{type} #{op} \"#{val}\"" 
+                    out = "#{type} #{op} \"#{val}\"" 
+
+                c.log "out", out + " " + flagstr
+                out + flagstr
 
 
         or_out = (x.join(" | ") for x in or_array)
+        if token.bound
+            #TODO: broken here?
+            or_out = _.compact or_out
+            for bound in _.keys (token.bound)
+                or_out.push "#{bound}(sentence)"
 
-        flags = ""
-        if token.flags
-            flags = " %" + token.flags.join("")
-        out_token = "[#{or_out.join(' & ')}#{flags}]"
+
+        
+        out_token = "[#{or_out.join(' & ')}]"
         if token.repeat
             out_token += "{#{token.repeat.join(',')}}"
+
+
         
         output.push out_token
 
