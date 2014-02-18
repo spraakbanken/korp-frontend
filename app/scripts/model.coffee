@@ -109,7 +109,6 @@ class model.KWICProxy extends BaseProxy
         super()
         @prevRequest = null
         @queryData = null
-        @command = "query"
         @prevAjaxParams = null
         @pendingRequests = []
         @foundKwic = false
@@ -168,7 +167,7 @@ class model.KWICProxy extends BaseProxy
         #       kwicResults.num_result = 0;
         c.log "kwicProxy.makeRequest", o.cqp
         data =
-            command: @command
+            command: o.command
             corpus: corpus
             cqp: o.cqp
             start: o.start or 0
@@ -221,10 +220,10 @@ class model.KWICProxy extends BaseProxy
             progress: o.progress
         )
 
-class model.ExamplesProxy extends model.KWICProxy
-    constructor: ->
-        super()
-        @command = "relations_sentences"
+# class model.ExamplesProxy extends model.KWICProxy
+#     constructor: ->
+#         super()
+#         @command = "relations_sentences"
 
 class model.LemgramProxy extends BaseProxy
     constructor: ->
@@ -232,7 +231,7 @@ class model.LemgramProxy extends BaseProxy
         @pendingRequest = abort: $.noop
 
     buildAffixQuery: (isValid, key, value) ->
-        return ""  unless isValid
+        return "" unless isValid
         $.format "| (%s contains \"%s\")", [key, value]
 
     lemgramSearch: (lemgram, searchPrefix, searchSuffix) ->
@@ -269,7 +268,7 @@ class model.LemgramProxy extends BaseProxy
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
-                return  unless progressObj?
+                return unless progressObj?
                 callback progressObj
 
             beforeSend: (req, settings) ->

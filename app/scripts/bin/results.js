@@ -33,6 +33,7 @@
     };
 
     BaseResults.prototype.renderResult = function(data) {
+      var _this = this;
       this.$result.find(".error_msg").remove();
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
@@ -40,6 +41,10 @@
       if (data.ERROR) {
         this.resultError(data);
         return false;
+      } else {
+        return safeApply(this.s, function() {
+          return _this.hasData = true;
+        });
       }
     };
 
@@ -78,7 +83,6 @@
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
-      this.initHTML = this.$result.html();
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
@@ -601,19 +605,21 @@
 
     function ExampleResults(tabSelector, resultSelector, scope) {
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
-      this.proxy = new model.ExamplesProxy();
+      this.proxy = new model.KWICProxy();
       this.$result.find(".progress_container,.tab_progress").hide();
       this.$result.add(this.$tab).addClass("not_loading customtab");
       this.$result.removeClass("reading_mode");
       if (this.s.$parent.queryParams) {
         this.makeRequest(this.s.$parent.queryParams);
+        this.onentry();
       }
-      this.s.$parent.active = true;
     }
 
     ExampleResults.prototype.makeRequest = function(opts) {
-      var _this = this;
+      var incr, progress,
+        _this = this;
       this.resetView();
+      incr = opts.command === "query";
       $.extend(opts, {
         success: function(data) {
           c.log("ExampleResults success", data, opts);
@@ -626,10 +632,11 @@
         error: function() {
           return this.hidePreloader();
         },
-        incremental: false
+        incremental: incr
       });
       this.showPreloader();
-      return this.proxy.makeRequest(opts, null, $.noop, $.noop, $.noop);
+      progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
+      return this.proxy.makeRequest(opts, null, $.noop, $.noop, progress);
     };
 
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
@@ -688,13 +695,11 @@
           return $(".lemgram_result .wordclass_suffix", self.$result).hide();
         }
       });
-      this.disabled = true;
     }
 
     LemgramResults.prototype.resetView = function() {
       LemgramResults.__super__.resetView.call(this);
-      $(".content_target", this.$result).empty();
-      return this.disabled = true;
+      return $(".content_target", this.$result).empty();
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
@@ -706,7 +711,6 @@
       if (resultError === false) {
         return;
       }
-      this.disabled = false;
       if (!data.relations) {
         this.showNoResults();
         return this.resultDeferred.reject();
@@ -909,6 +913,7 @@
         end: 24
       };
       opts.ajaxParams = {
+        command: "relation_sentences",
         source: data.source.join(","),
         corpus: null,
         head: data.head,
@@ -1310,10 +1315,6 @@
       this.hidePreloader();
       $("#results-stats").prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
       return $("#exportStatsSection").hide();
-    };
-
-    StatsResults.prototype.onProgress = function(progressObj) {
-      return StatsResults.__super__.onProgress.call(this, progressObj);
     };
 
     return StatsResults;

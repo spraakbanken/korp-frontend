@@ -139,7 +139,6 @@
       KWICProxy.__super__.constructor.call(this);
       this.prevRequest = null;
       this.queryData = null;
-      this.command = "query";
       this.prevAjaxParams = null;
       this.pendingRequests = [];
       this.foundKwic = false;
@@ -200,7 +199,7 @@
       this.prevAjaxParams = o.ajaxParams;
       c.log("kwicProxy.makeRequest", o.cqp);
       data = {
-        command: this.command,
+        command: o.command,
         corpus: corpus,
         cqp: o.cqp,
         start: o.start || 0,
@@ -274,18 +273,6 @@
     return KWICProxy;
 
   })(BaseProxy);
-
-  model.ExamplesProxy = (function(_super) {
-    __extends(ExamplesProxy, _super);
-
-    function ExamplesProxy() {
-      ExamplesProxy.__super__.constructor.call(this);
-      this.command = "relations_sentences";
-    }
-
-    return ExamplesProxy;
-
-  })(model.KWICProxy);
 
   model.LemgramProxy = (function(_super) {
     __extends(LemgramProxy, _super);

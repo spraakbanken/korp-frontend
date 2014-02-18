@@ -186,17 +186,49 @@ korpApp.controller "graphCtrl", ($scope) ->
     $scope.$parent.active = true
 
 
-korpApp.controller "compareCtrl", ($scope) ->
+korpApp.controller "compareCtrl", ($scope, $rootScope) ->
     s = $scope
     # s.$parent.loading = true
     #active must always be true to make new tab active
     # s.$parent.active = true
+
+
+
     s.promise.then ([data, cmp1, cmp2, reduce]) ->
         # c.log "compare promise", _.pairs data.loglike
+        cmps = [cmp1, cmp2]
+        s.rowClick = (data, cmp_index) ->
+            cmp = cmps[cmp_index]
+            _.extend cmp, 
+                command: "query"
+            cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
+            opts = {
+                start : 0
+                end : 24
+                ajaxParams : cmp
+            }
+            c.log "cmp", cmp
+            $rootScope.kwicTabs.push opts
+            c.log "opts", opts
+
+                
+
+
+
+
         s.$parent.loading = false
         pairs = _.pairs data.loglike
         s.tables = _.groupBy  (pairs), ([word, val]) ->
             if val > 0 then "positive" else "negative"
+
+        s.tables.negative = _.map s.tables.negative, ([word, val]) ->
+            [word, val, data.set1[word]]
+        s.tables.positive = _.map s.tables.positive, ([word, val]) ->
+            [word, val, data.set2[word]]
+
+
+
+
 
         s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1] * -1
         s.tables.negative = _.sortBy s.tables.negative, (tuple) -> (Math.abs tuple[1]) * -1
@@ -204,8 +236,8 @@ korpApp.controller "compareCtrl", ($scope) ->
 
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
         # stringify = settings.corpusListing.
-        c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
-        s.stringify = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())[reduce]?.stringify or angular.identity
+        c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
+        s.stringify = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())[_.str.strip(reduce, "_.")]?.stringify or angular.identity
 
         s.max = _.max pairs, ([word, val]) ->
             Math.abs val

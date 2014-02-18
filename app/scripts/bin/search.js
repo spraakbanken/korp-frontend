@@ -213,7 +213,7 @@
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keypress(function() {
+      $("#simple_text").change(function() {
         return _this.s.$apply(function() {
           return _this.onSimpleChange();
         });
@@ -468,7 +468,6 @@
         return;
       }
       val = this.getCQP();
-      $("#cqp_string").val(val);
       return this.s.$root.activeCQP = val;
     };
 

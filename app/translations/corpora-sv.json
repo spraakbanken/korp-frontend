@@ -353,4 +353,28 @@
 	"c/d" : "C/D",
 	"semester" : "termin"
 
+    "party_all" : "Alliansen",
+    "party_c" : "Centerpartiet",
+    "party_rg" : "De rödgröna",
+    "party_fi" : "Feministiskt initiativ",
+    "party_fp" : "Folkpartiet liberalerna",
+    "party_jr" : "Jordbrukarnas riksförbund",
+    "party_kd" : "Kristdemokraterna",
+    "party_la" : "Lantmannapartiet",
+    "party_labp" : "Lantmanna- och borgarepartiet",
+    "party_lisp" : "Liberala samlingspartiet",
+    "party_mp" : "Miljöpartiet de gröna",
+    "party_m" : "Moderata samlingspartiet",
+    "party_npf" : "Nationella framstegspartiet",
+    "party_nyd" : "Ny demokrati",
+    "party_pp" : "Piratpartiet",
+    "party_sd" : "Sverigedemokraterna",
+    "party_k_h" : "Sveriges kommunistiska parti, Höglundarna",
+    "party_k_k" : "Sverges kommunistiska parti, Kilbommarna",
+    "party_svp" : "Sverges socialdemokratiska vänsterparti",
+    "party_lp" : "Sveriges liberala parti",
+    "party_s" : "Sveriges socialdemokratiska arbetareparti",
+    "party_v" : "Vänsterpartiet"
+
+
 }

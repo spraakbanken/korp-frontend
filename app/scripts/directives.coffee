@@ -268,6 +268,12 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
 
 korpApp.directive "meter", () ->
+    template: '''
+        <div class="meter">
+            <div class="background"></div>
+            <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>
+        </div>
+    '''
     scope :
         meter : "="
         max : "="
@@ -278,12 +284,13 @@ korpApp.directive "meter", () ->
         # for wd in _.compact wds.split("|")
         #     c.log "wd", wd
         #     elem.html scope.stringify wd
-        elem.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        bkg = elem.find(".background")
+        bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
 
         w = elem.parent().width()
         part = ((Math.abs scope.meter[1]) / (Math.abs scope.max))
 
-        elem.width Math.round (part * w)
+        bkg.width Math.round (part * w)
 
 
 

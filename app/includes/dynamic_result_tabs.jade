@@ -1,7 +1,7 @@
-tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="onexit()")
+tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
   tab-heading(ng-class="{not_loading: progress == 100}")
     | KWIC
-    .tab_progress(style="width:{{progress || 0}}%")
+    //- .tab_progress(style="width:{{progress || 0}}%")
 
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(constr='ExampleResults' )
@@ -30,7 +30,7 @@ tab(ng-repeat='data in graphTabs')
       div(style='clear: both;')
     .chart
     .zoom_slider
-tab(ng-repeat='promise in compareTabs')
+tab(active="[true][0]", ng-repeat='promise in compareTabs')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | Jämför
     span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')
@@ -40,12 +40,12 @@ tab(ng-repeat='promise in compareTabs')
         | Utmärkande för 
         em {{cmp1.label}}
       ul
-        li(ng-repeat='tuple in tables.negative')
+        li(ng-repeat='tuple in tables.negative', ng-click="rowClick(tuple, 0)")
           .meter(meter='tuple', max='max[1]', stringify='stringify')
     .column.column_2
       h2
         | Utmärkande för 
         em {{cmp2.label}}
       ul
-        li(ng-repeat='tuple in tables.positive')
+        li(ng-repeat='tuple in tables.positive', ng-click="rowClick(tuple, 1)")
           .meter(meter='tuple', max='max[1]', stringify='stringify')

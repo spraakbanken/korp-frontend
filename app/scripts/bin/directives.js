@@ -278,18 +278,20 @@
 
   korpApp.directive("meter", function() {
     return {
+      template: '<div class="meter">\n    <div class="background"></div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
       scope: {
         meter: "=",
         max: "=",
         stringify: "="
       },
       link: function(scope, elem, attr) {
-        var part, w, wds;
+        var bkg, part, w, wds;
         wds = scope.meter[0];
-        elem.html((_.map(_.compact(wds.split("|")), scope.stringify)).join(", "));
+        bkg = elem.find(".background");
+        bkg.html((_.map(_.compact(wds.split("|")), scope.stringify)).join(", "));
         w = elem.parent().width();
         part = (Math.abs(scope.meter[1])) / (Math.abs(scope.max));
-        return elem.width(Math.round(part * w));
+        return bkg.width(Math.round(part * w));
       }
     };
   });

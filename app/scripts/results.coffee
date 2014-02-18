@@ -38,7 +38,10 @@ class BaseResults
         # $("#result-container").korptabs "option", "disabled", newDisabled
         if data.ERROR
             @resultError data
-            false
+            return false
+        else
+            safeApply @s, () =>
+                @hasData = true
 
     resultError: (data) ->
         c.log "json fetch error: ", data
@@ -72,7 +75,7 @@ class view.KWICResults extends BaseResults
         self = this
         @prevCQP = null
         super tabSelector, resultSelector, scope
-        @initHTML = @$result.html()
+        # @initHTML = @$result.html()
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
@@ -519,17 +522,19 @@ class view.KWICResults extends BaseResults
 class view.ExampleResults extends view.KWICResults
     constructor: (tabSelector, resultSelector, scope) ->
         super tabSelector, resultSelector, scope
-        @proxy = new model.ExamplesProxy()
+        @proxy = new model.KWICProxy()
         @$result.find(".progress_container,.tab_progress").hide()
         @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
 
         if @s.$parent.queryParams
             @makeRequest @s.$parent.queryParams
-        @s.$parent.active = true
+            @onentry()
+        # @s.$parent.active = true
 
     makeRequest: (opts) ->
         @resetView()
+        incr = opts.command == "query"
         $.extend opts,
             success: (data) =>
                 c.log "ExampleResults success", data, opts
@@ -542,12 +547,13 @@ class view.ExampleResults extends view.KWICResults
             error: ->
                 @hidePreloader()
 
-            incremental: false
+            incremental: incr
 
         @showPreloader()
 
         #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
-        @proxy.makeRequest opts, null, $.noop, $.noop, $.noop
+        progress = if opts.command == "query" then $.proxy(this.onProgress, this) else $.noop
+        @proxy.makeRequest opts, null, $.noop, $.noop, progress
 
 
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
@@ -599,12 +605,10 @@ class view.LemgramResults extends BaseResults
                 $(".lemgram_result .wordclass_suffix", self.$result).hide()
 
         
-        @disabled = true
 
     resetView: ->
         super()
         $(".content_target", @$result).empty()
-        @disabled = true
 
     renderResult: (data, query) ->
         c.log "lemgramResults.renderResult", data, query
@@ -612,7 +616,6 @@ class view.LemgramResults extends BaseResults
         @resetView()
         @s.$parent.progress = 100
         return if resultError is false
-        @disabled = false
         unless data.relations
             @showNoResults()
             @resultDeferred.reject()
@@ -790,6 +793,7 @@ class view.LemgramResults extends BaseResults
             end : 24
         }
         opts.ajaxParams =
+            command : "relation_sentences"
             source : data.source.join(",")
             corpus : null
             head: data.head
@@ -1046,24 +1050,6 @@ class view.StatsResults extends BaseResults
             output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
 
 
-
-            # Generate CSV from the data
-            # output = "corpus" + dataDelimiter
-            # $.each statsResults.savedWordArray, (key, aword) ->
-            #     output += aword + dataDelimiter
-
-            # output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
-            # $.each statsResults.savedData["corpora"], (key, acorpus) ->
-            #     output += settings.corpora[key.toLowerCase()]["title"] + dataDelimiter
-            #     $.each statsResults.savedWordArray, (wkey, aword) ->
-            #         amount = acorpus[selVal][aword]
-            #         if amount
-            #             output += util.formatDecimalString(amount.toString(), false, true) + dataDelimiter
-            #         else
-            #             output += "0" + dataDelimiter
-
-            #     output += String.fromCharCode(0x0D) + String.fromCharCode(0x0A)
-
             if selType is "TSV"
                 window.open "data:text/tsv;charset=utf-8," + (output)
             else
@@ -1206,8 +1192,8 @@ class view.StatsResults extends BaseResults
         $("#results-stats").prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
         $("#exportStatsSection").hide()
 
-    onProgress : (progressObj) ->
-        super(progressObj)
+    # onProgress : (progressObj) ->
+    #     super(progressObj)
         # c.log "onProgress", progressObj.stats
 
 

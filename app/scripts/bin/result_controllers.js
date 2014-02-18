@@ -190,12 +190,29 @@
     return $scope.$parent.active = true;
   });
 
-  korpApp.controller("compareCtrl", function($scope) {
+  korpApp.controller("compareCtrl", function($scope, $rootScope) {
     var s;
     s = $scope;
     return s.promise.then(function(_arg) {
-      var cl, cmp1, cmp2, data, pairs, reduce, _ref;
+      var cl, cmp1, cmp2, cmps, data, pairs, reduce, _ref;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
+      cmps = [cmp1, cmp2];
+      s.rowClick = function(data, cmp_index) {
+        var cmp, opts;
+        cmp = cmps[cmp_index];
+        _.extend(cmp, {
+          command: "query"
+        });
+        cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");
+        opts = {
+          start: 0,
+          end: 24,
+          ajaxParams: cmp
+        };
+        c.log("cmp", cmp);
+        $rootScope.kwicTabs.push(opts);
+        return c.log("opts", opts);
+      };
       s.$parent.loading = false;
       pairs = _.pairs(data.loglike);
       s.tables = _.groupBy(pairs, function(_arg1) {
@@ -207,6 +224,16 @@
           return "negative";
         }
       });
+      s.tables.negative = _.map(s.tables.negative, function(_arg1) {
+        var val, word;
+        word = _arg1[0], val = _arg1[1];
+        return [word, val, data.set1[word]];
+      });
+      s.tables.positive = _.map(s.tables.positive, function(_arg1) {
+        var val, word;
+        word = _arg1[0], val = _arg1[1];
+        return [word, val, data.set2[word]];
+      });
       s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
         return tuple[1] * -1;
       });
@@ -215,8 +242,8 @@
       });
       s.reduce = reduce;
       cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
-      c.log("_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()));
-      s.stringify = ((_ref = (_.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()))[reduce]) != null ? _ref.stringify : void 0) || angular.identity;
+      c.log("_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()));
+      s.stringify = ((_ref = (_.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()))[_.str.strip(reduce, "_.")]) != null ? _ref.stringify : void 0) || angular.identity;
       s.max = _.max(pairs, function(_arg1) {
         var val, word;
         word = _arg1[0], val = _arg1[1];

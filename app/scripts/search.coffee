@@ -171,7 +171,7 @@ class view.SimpleSearch extends BaseSearch
         super mainDivId, scope
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         # $("#simple_text").keyup $.proxy(@onSimpleChange, this)
-        $("#simple_text").keypress () =>
+        $("#simple_text").change () =>
             @s.$apply () =>
                 @onSimpleChange()
         # @onSimpleChange()
@@ -436,8 +436,9 @@ class view.SimpleSearch extends BaseSearch
             return
         
         val = @getCQP()
-        $("#cqp_string").val val
+        # $("#cqp_string").val val
         # @s.$apply () ->
+        # safeApply @s.$root, () ->
         @s.$root.activeCQP = val
         # unless currentText is ""
         #     @enableSubmit()
