@@ -75,7 +75,6 @@
     function KWICResults(tabSelector, resultSelector, scope) {
       var self,
         _this = this;
-      c.log("kwicresults constructor", tabSelector, resultSelector);
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);

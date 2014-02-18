@@ -1,7 +1,7 @@
 <div>
 
 
-  <div ng-controller="ParallelSearch" constr="ExtendedSearch" constr-name="extendedSearch">
+  <div ng-controller="ParallelSearch">
     <div ng-repeat="l in langs" >
       <select ng-model="l.lang" ng-options="langstr as (langstr | loc) for langstr in getEnabledLangs($index)" >
         
@@ -9,14 +9,13 @@
       <div id="query_table" extended_list cqp="l.cqp"></div>
       
     </div>
-    <input id="linkedLang" ng-disabled="!getEnabledLangs(langs.length).length" ng-click="addLangRow()" type="submit" value="Fler språk"><span rel="localize[within]"></span>
-    <input id="removeLang" ng-if="langs.length > 1" ng-click="removeLangRow($index)" type="submit" value="Färre språk">
-    <select class="within_select"></select>
-    <option value="sentence" rel="localize[within_sentence]">Mening</option>
-    <option value="paragraph" rel="localize[within_paragraph]">Stycke</option>
-    <input id="strict_chk" type="checkbox"/>
-    <label for="strict_chk">{{'strict' | loc}}</label>
-    <search-submit pos="right"></search-submit>
+    <input id="linkedLang" class="btn btn-small" ng-disabled="!getEnabledLangs(langs.length).length" ng-click="addLangRow()" type="submit" value="{{'add_lang' | loc}}">
+    <!-- <span rel="localize[within]"></span> -->
+    <input id="removeLang" class="btn btn-small" ng-if="langs.length > 1" ng-click="removeLangRow($index)" type="submit" value="{{'remove_lang' | loc}}">
+    <!-- <option value="sentence" rel="localize[within_sentence]">Mening</option> -->
+    <!-- <option value="paragraph" rel="localize[within_paragraph]">Stycke</option> -->
+    <!-- <search-submit pos="right"></search-submit> -->
+    <button ng-click="onSubmit()" class="btn btn-small">{{'search' | loc}}</button> 
   </div>
 
 

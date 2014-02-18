@@ -39,6 +39,8 @@
 	"lawroom" : "Habeas Corpus",
 	"all_hist" : "Old texts",
 	"search_history" : "Search history",
+	"add_lang" : "Add lang",
+	"remove_lang" : "Remove lang",
 	"about" : "About Korp",
 	"about_body" : "Korp is the concordance search tool of Språkbanken (The Swedish Language Bank). For more information, comments or suggestions, <a href='mailto:sb-info@svenska.gu.se'>contact us</a>.",
 	"about_man" : "Project Managers",

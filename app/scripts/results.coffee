@@ -69,7 +69,6 @@ class BaseResults
 
 class view.KWICResults extends BaseResults
     constructor : (tabSelector, resultSelector, scope) ->
-        c.log "kwicresults constructor", tabSelector, resultSelector
         self = this
         @prevCQP = null
         super tabSelector, resultSelector, scope

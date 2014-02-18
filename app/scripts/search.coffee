@@ -60,7 +60,7 @@ view.initSearchOptions = ->
 
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         simpleSearch.enableSubmit()
-        extendedSearch.enableSubmit()
+        # extendedSearch.enableSubmit()
         advancedSearch.enableSubmit()
         target = $(event.target)
         state = {}
@@ -462,6 +462,7 @@ class view.SimpleSearch extends BaseSearch
         # @disableSubmit()
         this
 
+###
 class view.ExtendedSearch extends BaseSearch
     constructor: (mainDivId) ->
         super mainDivId
@@ -537,6 +538,8 @@ class view.ExtendedSearch extends BaseSearch
 
     refreshTokens: ->
         # $(".query_token").extendedToken "refresh"
+
+###
 
 class view.AdvancedSearch extends BaseSearch
     constructor: (mainDivId) ->

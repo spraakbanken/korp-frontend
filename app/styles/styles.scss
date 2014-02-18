@@ -15,6 +15,9 @@
 $primaryColor: rgb(221, 233, 255);
 $primaryLight: rgb(242, 247, 255);
 
+$color_yellow: #FFF3D8;
+
+
 html {
   background-color: white;
 }
@@ -121,7 +124,7 @@ a {
 }
 
 .color_yellow {
-  background-color: #FFF3D8;
+  background-color: $color_yellow;
 }
 
 .color_yellow_light {
@@ -276,21 +279,21 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 
 
 .mode-parallel {
-  #korp-extended #sendBtn ~ * {
-    display: none;
-  }
   #linkedLang {
     display: inline;
   }
   .context_select, .within_select {
     display: none;
   }
-  // #query_table ~ #removeLang {
-  //   display: none;
-  // }
-  // .lang_row ~ #removeLang {
-  //  display : inline !important;  
-  // }
+
+  .results_table {
+    .odd {
+      background-color : $color_yellow;
+    }
+    .even {
+      background-color : lighten($color_yellow, 4%);
+    }
+  }
 }
 
 
@@ -870,6 +873,7 @@ table {
     background-color : $primaryLight;
   }
 }
+
 
 /*
 .customtab .results_table.kwic {

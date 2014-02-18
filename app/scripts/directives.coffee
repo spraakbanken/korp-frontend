@@ -27,7 +27,6 @@ korpApp.directive "tabHash", (utils, $location) ->
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()
-        c.log "contentScope", contentScope
 
 
         watchHash = () ->
@@ -176,7 +175,6 @@ korpApp.directive "constr", ($window, searches) ->
 
     link : (scope, elem, attr) ->
         # searches.modeDef.then () ->
-        c.warn "constr scope", attr.constrName, scope.$id, scope.$parent.$id
         instance = new $window.view[attr.constr](elem, elem, scope)
         if attr.constrName
             $window[attr.constrName] = instance
@@ -335,14 +333,9 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
     }, 
     link : ($scope, elem, attr) ->
         s = $scope
-        # s.defaultOptions = settings.defaultOptions
 
-        # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
-        # cqp = '[lex contains "ge..vb.1"]'
-        s.cqp = '[]'
+        s.cqp ?= '[]'
 
-
-        s.data = []
 
         try
             s.data = CQP.parse(s.cqp)

@@ -10,16 +10,24 @@ korpApp.controller("SearchCtrl", function($scope) {
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 	var s = $scope;
 
-	s.$on("btn_submit", function() {
+	// s.$on("btn_submit", function() {
+	s.onSubmit = function() {
 	    $location.search("search", "cqp");
-	});
+	}
+	// });
 
 	if($location.search().parallel_corpora)
 		s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
-			return {lang : lang};
+			var obj = {lang : lang};
+			if(search()["cqp_" + lang])
+				obj.cqp = search()["cqp_" + lang];
+			return obj;
 		})
+
 	else
+		// s.langs = [{lang : "swe", cqp : '[word = "apa"]'}];
 		s.langs = [{lang : "swe"}];
+	c.log ("s.langs", s.langs)
 
 	s.$watch("langs", function() {
 		var currentLangList = _.pluck(s.langs, "lang");
@@ -38,7 +46,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 		// c.log ("langMapping", langMapping)
 		// query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
 
-		
+		// TODO: remove LINKED_CORPUS crap from lang.cqp, only apply when searching. 
 		var output = s.langs[0].cqp;
 		output += _.map(s.langs.slice(1), function(langobj, i) {
 			var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
@@ -47,7 +55,9 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 		}).join("");
 
 		c.log("langs cqp", output);
-		search("cqp", output);
+		_.each(s.langs, function(langobj, i) {
+			search("cqp_" + langobj.lang , langobj.cqp);
+		})
 		$rootScope.activeCQP = output;
 	}, true);
 

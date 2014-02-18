@@ -50,7 +50,6 @@
         var contentScope, init_tab, s, w, watchHash;
         s = scope;
         contentScope = elem.find(".tab-content").scope();
-        c.log("contentScope", contentScope);
         watchHash = function() {
           return utils.setupHash(s, [
             {
@@ -204,7 +203,6 @@
       scope: true,
       link: function(scope, elem, attr) {
         var instance;
-        c.warn("constr scope", attr.constrName, scope.$id, scope.$parent.$id);
         instance = new $window.view[attr.constr](elem, elem, scope);
         if (attr.constrName) {
           $window[attr.constrName] = instance;
@@ -344,8 +342,9 @@
       link: function($scope, elem, attr) {
         var e, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
         s = $scope;
-        s.cqp = '[]';
-        s.data = [];
+        if (s.cqp == null) {
+          s.cqp = '[]';
+        }
         try {
           s.data = CQP.parse(s.cqp);
           c.log("s.data", s.data);

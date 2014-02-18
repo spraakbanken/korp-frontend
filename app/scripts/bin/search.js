@@ -82,7 +82,6 @@
     return $("#search_options").css("background-color", settings.primaryLight).change(function(event, isInit) {
       var state, target;
       simpleSearch.enableSubmit();
-      extendedSearch.enableSubmit();
       advancedSearch.enableSubmit();
       target = $(event.target);
       state = {};
@@ -489,59 +488,84 @@
 
   })(BaseSearch);
 
-  view.ExtendedSearch = (function(_super) {
-    __extends(ExtendedSearch, _super);
+  /*
+  class view.ExtendedSearch extends BaseSearch
+      constructor: (mainDivId) ->
+          super mainDivId
+          $("#korp-extended").keyup (event) =>
+              @onSubmit()  if event.keyCode is "13" and $("#search-tab").data("cover")?
+              false
+  
+          @$main.find("#strict_chk").change ->
+              # advancedSearch.updateCQP()
+  
+          # @setupContainer "#query_table"
+  
+      setupContainer: (selector) ->
+          self = this
+          
+          
+          # insert_token_button = $('<img src="img/plus.png"/>')
+          # .addClass("image_button insert_token")
+          # .click ->
+          #     self.insertToken this
+  
+          # $(selector).append(insert_token_button).sortable
+          # $(selector).sortable
+          #     items: ".query_token"
+          #     delay: 50
+          #     tolerance: "pointer"
+  
+          # insert_token_button.click()
+  
+      reset: ->
+  
+          #$("#search-tab ul li:nth(2)").click()
+          @$main.find(".query_token").remove()
+          $(".insert_token").click()
+          # advancedSearch.updateCQP()
+  
+      onentry: ->
+  
+      onSubmit: ->
+          super()
+          if @$main.find(".query_token, .or_arg").length > 1
+              # query = advancedSearch.updateCQP()
+              util.searchHash "cqp", @s.$root.activeCQP
+          else
+              $select = @$main.find("select.arg_type")
+              switch $select.val()
+                  when "lex"
+                      searchType = (if $select.val() is "lex" then "lemgram" else $select.val())
+                      util.searchHash searchType, $select.parent().next().data("value")
+                  else
+                      util.searchHash "cqp", @s.$root.activeCQP
+      # setOneToken: (key, val) ->
+      #     $("#search-tab").find("a[href=#korp-extended]").click().end()
+      #         .find("select.arg_type:first").val(key).next().val val
+      #     advancedSearch.updateCQP()
+  
+      insertToken: (button) ->
+          # try
+          # $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
+          #     close: ->
+          #         advancedSearch.updateCQP()
+  
+          #     change: =>
+          #         advancedSearch.updateCQP()  if @$main.is(":visible")
+  
+  
+          # catch error
+              # c.log "error creating extendedToken", error
+              # @$main.find("*").remove()
+              # $("<div>Extended search is broken on this browser.</div>").prependTo(@$main).nextAll().remove()
+  
+          util.localize()
+  
+      refreshTokens: ->
+          # $(".query_token").extendedToken "refresh"
+  */
 
-    function ExtendedSearch(mainDivId) {
-      var _this = this;
-      ExtendedSearch.__super__.constructor.call(this, mainDivId);
-      $("#korp-extended").keyup(function(event) {
-        if (event.keyCode === "13" && ($("#search-tab").data("cover") != null)) {
-          _this.onSubmit();
-        }
-        return false;
-      });
-      this.$main.find("#strict_chk").change(function() {});
-    }
-
-    ExtendedSearch.prototype.setupContainer = function(selector) {
-      var self;
-      return self = this;
-    };
-
-    ExtendedSearch.prototype.reset = function() {
-      this.$main.find(".query_token").remove();
-      return $(".insert_token").click();
-    };
-
-    ExtendedSearch.prototype.onentry = function() {};
-
-    ExtendedSearch.prototype.onSubmit = function() {
-      var $select, searchType;
-      ExtendedSearch.__super__.onSubmit.call(this);
-      if (this.$main.find(".query_token, .or_arg").length > 1) {
-        return util.searchHash("cqp", this.s.$root.activeCQP);
-      } else {
-        $select = this.$main.find("select.arg_type");
-        switch ($select.val()) {
-          case "lex":
-            searchType = ($select.val() === "lex" ? "lemgram" : $select.val());
-            return util.searchHash(searchType, $select.parent().next().data("value"));
-          default:
-            return util.searchHash("cqp", this.s.$root.activeCQP);
-        }
-      }
-    };
-
-    ExtendedSearch.prototype.insertToken = function(button) {
-      return util.localize();
-    };
-
-    ExtendedSearch.prototype.refreshTokens = function() {};
-
-    return ExtendedSearch;
-
-  })(BaseSearch);
 
   view.AdvancedSearch = (function(_super) {
     __extends(AdvancedSearch, _super);

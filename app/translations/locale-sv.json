@@ -41,6 +41,8 @@
 	"lawroom" : "Lagrummet",
 	"all_hist" : "Historiskt",
 	"search_history" : "Sökhistorik",
+	"add_lang" : "Fler språk",
+	"remove_lang" : "Färre språk",
 	"about" : "Om Korp",
 	"about_body" : "Korp är Språkbankens konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
 	"about_man" : "Projektledning",
