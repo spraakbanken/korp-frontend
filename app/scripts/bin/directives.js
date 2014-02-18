@@ -349,4 +349,10 @@
     };
   });
 
+  korpApp.directive("tabSpinner", function($rootElement) {
+    return {
+      template: "<i class=\"fa fa-times-circle close_icon\"></i> \n    <span class=\"tab_spinner\" \n        us-spinner=\"{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}\"></span>"
+    };
+  });
+
 }).call(this);

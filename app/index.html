@@ -257,7 +257,7 @@
 					</div>
    		        </tab>
    		    </tabset>
-	   		<div id="search_options" class="ui-widget-content ui-corner-bottom">
+	   		<div id="search_options" class="ui-widget-content ui-corner-bottom" ng-controller="SearchOptsCtrl">
 	   			<div>
 		   			<span style="font-size:.9em">KWIC:</span>
 		   			<select id="num_hits" class="num_hits" data-history="hpp" data-prefix="hits_per_page" rel="localize[hits_per_page]" >
@@ -268,14 +268,17 @@
 				   		<option value="500">500</option>
 				   		<option value="1000">1000</option>
 				   </select>
+					
 
-				   <select class="sort_select" data-history="sort" data-prefix="sort_default">
+
+				   <select class="sort_select" data-history="sort" data-prefix="sort_default"
+				   >
 						<option value="" rel="localize[appearance_context]">Förekomst</option>
 						<option value="keyword" rel="localize[word_context]">Ordkontext</option>
 						<option value="left" rel="localize[left_context]">Vänsterkontext</option>
 						<option value="right" rel="localize[right_context]">Högerkontext</option>
 						<option value="random" rel="localize[random_context]">Slumpvis</option>
-					</select>
+					 </select>
 
 				</div>
 				<div>
@@ -395,7 +398,19 @@
 									<div class="content_target"></div>
 								</div>
 							</tab>
-							<tab ng-repeat="data in graphTabs" heading="{{'graph' | loc}}" active="active">
+							<tab ng-repeat="data in kwicTabs" active="active">
+								<tab ng-repeat="data in graphTabs" active="active">
+									<tab-heading>
+										{{'graph' | loc}} 
+										<span ng-click="graphTabs.splice($index, 1)" tab-spinner></span>
+									<div ng-controller="kwicCtrl" constr="KWICResults">	
+
+									</div>
+							</tab>
+							<tab ng-repeat="data in graphTabs" active="active">
+								<tab-heading>
+									{{'graph' | loc}} 
+									<span ng-click="graphTabs.splice($index, 1)" tab-spinner></span>
 								<div ng-controller="graphCtrl" constr="GraphResults">
 									<div class="graph_header">
 									    <div class="progress_container">
@@ -419,8 +434,9 @@
 
 							<tab ng-repeat="promise in compareTabs" active="active">
 								<tab-heading class="compare_tab" ng-class="{loading : loading}">
-									Jämför <span  class="tab_spinner" 
-										us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
+										
+									Jämför 
+									<span tab-spinner ng-click="compareTabs.splice($index, 1)"></span>
 								</tab-heading>
 								<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
 

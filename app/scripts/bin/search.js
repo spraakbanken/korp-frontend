@@ -69,17 +69,15 @@
   view.initSearchOptions = function() {
     var selects;
     selects = $("#search_options > div:first select").customSelect();
-    c.log("selects", selects);
     view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
       state = search()[$(this).data("history")];
-      if (!!state) {
-        $(this).val(state).change(null, true);
+      if (state) {
+        return $(this).val(state).change();
       } else {
-        $(this).prop("selectedIndex", 0).change(null, true);
+        return $(this).prop("selectedIndex", 0).change();
       }
-      return $(this).prop("selectedIndex", 0).change(null, true);
     });
     return $("#search_options").css("background-color", settings.primaryLight).change(function(event, isInit) {
       var state, target;

@@ -2430,18 +2430,23 @@ line.tick {
   display: none;
 }
 
-/* line 1996, styles.scss */
+/* line 1999, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }
 
-/* line 2001, styles.scss */
+/* line 2002, styles.scss */
+.loading .close_icon {
+  display: none;
+}
+
+/* line 2007, styles.scss */
 .badge {
   padding-right: 5px;
   padding-left: 6px;
 }
 
-/* line 2006, styles.scss */
+/* line 2012, styles.scss */
 .popper_menu {
   width: 130px;
 }

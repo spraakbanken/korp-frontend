@@ -24,6 +24,7 @@
     $rootScope.saveSearch = function(searchObj) {
       return $rootScope.savedSearches.push(searchObj);
     };
+    $rootScope.kwicTabs = [];
     $rootScope.compareTabs = [];
     $rootScope.graphTabs = [];
     isInit = true;
@@ -64,6 +65,8 @@
       }
     });
   });
+
+  korpApp.controller("SearchOptsCtrl", function($scope) {});
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches) {
     var findMatchSentence, massageData, punctArray, s;

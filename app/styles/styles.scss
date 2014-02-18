@@ -1999,9 +1999,15 @@ line.tick {
   width : 9px;
   display : none;
 }
+.close_icon {
+  // display : inline;
+}
 
 .loading .tab_spinner {
   display : inline-block;
+}
+.loading .close_icon {
+  display : none;
 }
 
 

@@ -48,17 +48,15 @@ view.enableSearch = (bool) ->
 view.initSearchOptions = ->
     # TODO: unbreak this function
     selects = $("#search_options > div:first select").customSelect()
-    c.log "selects", selects
+    # c.log "selects", selects
     view.updateReduceSelect()
     $("#search_options select").each ->
-        # state = $.bbq.getState($(this).data("history"))
         state = search()[$(this).data("history")]
 
-        unless not state
-            $(this).val(state).change(null, true)
+        if state
+            $(this).val(state).change()
         else
-            $(this).prop("selectedIndex", 0).change(null, true)
-        $(this).prop("selectedIndex", 0).change(null, true)
+            $(this).prop("selectedIndex", 0).change()
 
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         simpleSearch.enableSubmit()

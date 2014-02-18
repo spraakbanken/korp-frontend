@@ -48,6 +48,7 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
         $rootScope.savedSearches.push searchObj
 
 
+    $rootScope.kwicTabs = []
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
     isInit = true
@@ -97,6 +98,8 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
 
 
 
+korpApp.controller "SearchOptsCtrl", ($scope) ->
+    
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches) ->
     s = $scope

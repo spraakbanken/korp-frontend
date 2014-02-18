@@ -352,6 +352,10 @@ korpApp.directive "popper", ($rootElement) ->
 
 
 
-
-
+korpApp.directive "tabSpinner", ($rootElement) ->
+    template : """
+    <i class="fa fa-times-circle close_icon"></i> 
+        <span class="tab_spinner" 
+            us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
+    """
 

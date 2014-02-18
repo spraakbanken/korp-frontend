@@ -372,7 +372,7 @@ jQuery.sortedEach = function(obj, eachFunc, sortFunc) {
 
 };
 jQuery.fn.customSelect = function() {
-
+    
 	this.change(function() {
 		$("option", this).each(function() {
 			$(this).text($(this).val());
