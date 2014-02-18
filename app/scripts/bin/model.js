@@ -322,7 +322,8 @@
         word: word,
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
-        type: type
+        type: type,
+        cache: false
       };
       return $.ajax({
         url: settings.cgi_script,
