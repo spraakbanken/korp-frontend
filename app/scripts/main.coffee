@@ -311,17 +311,11 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
             $(".ui-dialog").fadeTo 400, 0, ->
                 $(".ui-dialog-content", this).dialog "destroy"
 
-<<<<<<< HEAD
-=======
         if not isInit and hasChanged("display")
-            if search().display is "bar_plot"
-                statsResults.drawBarPlot()
-            else
-                $("#plot_popup.ui-dialog-content").dialog("destroy").css
-                    opacity: 0
-                    display: "block"
-                    height: 0
->>>>>>> remade search tabs
+            $("#plot_popup.ui-dialog-content").dialog("destroy").css
+                opacity: 0
+                display: "block"
+                height: 0
 
         reading = search().reading_mode
         if hasChanged("reading_mode")
@@ -366,17 +360,10 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
 
         # if(!isInit)
         tabs.each ->
-<<<<<<< HEAD
-            idx = e.getState(@id, true)
-            return if idx is null
-            $(this).find(tab_a_selector).eq(idx).triggerHandler "change"
-=======
             self = this
             idx = Number(search()[@id])
-            return  if idx is null
+            return if idx is null
             $(self).find(tab_a_selector).eq(idx).triggerHandler "change"
->>>>>>> remade search tabs
-
 
         # else
         $.bbq.prevFragment = _.extend {}, search()

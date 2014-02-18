@@ -6,6 +6,7 @@
 
   korpApp.run(function($rootScope, $location, $route, $routeParams) {
     var s;
+
     s = $rootScope;
     s.lang = "sv";
     s.search = function() {
@@ -204,13 +205,15 @@
   });
 
   korpApp.controller("TokenList", function($scope, $location) {
-    var cqp, output, s, token, tokenObj, _i, _len, _ref;
+    var cqp, error, output, s, token, tokenObj, _i, _len, _ref;
+
     s = $scope;
     cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
     s.data = [];
     try {
       s.data = CQP.parse(cqp);
-    } catch (error) {
+    } catch (_error) {
+      error = _error;
       output = [];
       _ref = cqp.split("[");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -221,7 +224,8 @@
         token = "[" + token;
         try {
           tokenObj = CQP.parse(token);
-        } catch (error) {
+        } catch (_error) {
+          error = _error;
           tokenObj = [
             {
               cqp: token
@@ -240,6 +244,7 @@
     }
     s.$watch('getCQPString()', function() {
       var cqpstr;
+
       cqpstr = CQP.stringify(s.data);
       return $location.search({
         cqp: $.param({
@@ -261,6 +266,7 @@
 
   korpApp.controller("ExtendedToken", function($scope, $location) {
     var s;
+
     s = $scope;
     s.types = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",");
     s.addOr = function(and_array) {
@@ -293,9 +299,11 @@
     return {
       setupHash: function(scope, config) {
         var obj, watch, _i, _len, _results;
+
         scope.loc = $location;
         scope.$watch('loc.search()', function() {
           var obj, val, _i, _len, _results;
+
           _results = [];
           for (_i = 0, _len = config.length; _i < _len; _i++) {
             obj = config[_i];
@@ -333,10 +341,12 @@
 
   korpApp.controller("SearchPaneCtrl", function($scope, util) {
     var s;
+
     s = $scope;
     s.search_tab = 0;
     s.getSelected = function() {
       var i, p, _i, _len, _ref;
+
       _ref = s.panes;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
         p = _ref[i];
@@ -347,6 +357,7 @@
     };
     s.setSelected = function(index) {
       var p, _i, _len, _ref;
+
       _ref = s.panes;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         p = _ref[_i];
