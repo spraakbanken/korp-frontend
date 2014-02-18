@@ -106,6 +106,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             label : name or $rootScope.activeCQP
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.getSelectedCorpora()
+        }
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 

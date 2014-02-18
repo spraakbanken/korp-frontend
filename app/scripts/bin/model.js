@@ -161,7 +161,7 @@
     };
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
-      var corpus, data, o, self;
+      var corpus, data, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
@@ -209,16 +209,14 @@
         start: o.start || 0,
         end: o.end,
         defaultcontext: $.keys(settings.defaultContext)[0],
-        defaultwithin: "sentence",
-        show: ["sentence"],
+        defaultwithin: $.keys(settings.defaultWithin)[0],
+        show: [],
         show_struct: [],
         sort: o.sort,
         incremental: o.incremental
       };
       data.within = settings.corpusListing.getWithinQueryString();
-      if (currentMode === "parallel") {
-        data.within = settings.corpusListing.getWithinQueryString();
-      }
+      data.context = settings.corpusListing.getContextQueryString();
       if (o.context != null) {
         data.context = o.context;
       }
@@ -233,9 +231,16 @@
         data.querydata = o.queryData;
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
       _ref = settings.corpusListing.selected;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         corpus = _ref[_i];
+=======
+      _ref = settings.corpusListing.selected;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        corpus = _ref[_i];
+        c.log("corpus", corpus.within);
+>>>>>>> after rebase
         _ref1 = corpus.within;
         for (key in _ref1) {
           val = _ref1[key];
@@ -246,6 +251,7 @@
           val = _ref2[key];
           data.show.push(key);
         }
+<<<<<<< HEAD
 =======
       $.each(settings.corpusListing.selected, function(_, corpus) {
         $.each(corpus.attributes, function(key, val) {
@@ -254,14 +260,17 @@
           }
         });
 >>>>>>> got somewhere with compare function
+=======
+>>>>>>> after rebase
         if (corpus.struct_attributes != null) {
-          return $.each(corpus.struct_attributes, function(key, val) {
+          $.each(corpus.struct_attributes, function(key, val) {
             if ($.inArray(key, data.show_struct) === -1) {
               return data.show_struct.push(key);
             }
           });
         }
-      });
+      }
+      data.show = _.uniq = data.show;
       this.prevCQP = o.cqp;
       data.show = data.show.join();
       data.show_struct = data.show_struct.join();
@@ -506,7 +515,7 @@
     }
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, reduceval, self;
+      var data, reduceval, self, _ref;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -520,9 +529,11 @@
         cqp: cqp,
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
-        defaultwithin: "sentence",
-        split: "lex"
+        defaultwithin: "sentence"
       };
+      if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
+        data.split = reduceval;
+      }
       if ($("#reduceSelect select").val() === "word_insensitive") {
         $.extend(data, {
           ignore_case: "word"
@@ -722,6 +733,7 @@
         xhr.done(function(data, status, xhr) {
           var output, rest;
           if (_.keys(data).length < 2 || data.ERROR) {
+            c.log("timespan error:", data.ERROR);
             dfd.reject();
             return;
           }
