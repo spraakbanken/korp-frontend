@@ -134,13 +134,14 @@
     onCorpusChange = function(event, selected) {
       c.log("onCorpusChange", selected);
       s.types = utils.getAttributeGroups(settings.corpusListing);
-      return s.typeMapping = _.object(_.map(s.types, function(item) {
+      s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
           return ["_." + item.value, item];
         } else {
           return [item.value, item];
         }
       }));
+      return c.log("typeMapping", s.typeMapping);
     };
     s.$on("corpuschooserchange", onCorpusChange);
     onCorpusChange();
@@ -189,7 +190,7 @@
   });
 
   korpApp.controller("TokenList", function($scope, $location, $rootScope) {
-    var error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
+    var e, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
     s.cqp = '[]';
     s.data = [];
@@ -222,7 +223,12 @@
       c.log("crash", s.data);
     }
     if ($location.search().cqp) {
-      s.data = CQP.parse($location.search().cqp);
+      try {
+        s.data = CQP.parse($location.search().cqp);
+      } catch (_error) {
+        e = _error;
+        s.data = CQP.parse("[]");
+      }
     } else {
       s.data = CQP.parse(s.cqp);
     }

@@ -34,7 +34,7 @@
         })();
         sent_attrs = (function() {
           var _ref, _results;
-          _ref = _.extend(settings.common_struct_types, corpusListing.getStructAttrs());
+          _ref = _.extend({}, settings.common_struct_types, corpusListing.getStructAttrs());
           _results = [];
           for (key in _ref) {
             obj = _ref[key];

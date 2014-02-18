@@ -10,7 +10,7 @@ korpApp.factory "utils", ($location) ->
         attrs = for key, obj of corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
             _.extend({group : "word_attr", value : key}, obj)
 
-        sent_attrs = for key, obj of (_.extend settings.common_struct_types, corpusListing.getStructAttrs()) when obj.displayType != "hidden"
+        sent_attrs = for key, obj of (_.extend {}, settings.common_struct_types, corpusListing.getStructAttrs()) when obj.displayType != "hidden"
             _.extend({group : "sentence_attr", value : key}, obj)
 
         sent_attrs = _.sortBy sent_attrs, (item) ->

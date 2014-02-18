@@ -5,7 +5,13 @@
 %lex
 %%
 
-
+"int(_.text_datefrom)"  return "DATE_FROM"
+"int(_.text_dateto)"  return "DATE_TO"
+\d{8}               return "DATE_VAL"
+"<="                 return "DATE_OP"
+">="                 return "DATE_OP"
+"<"                 return "DATE_OP"
+">"                 return "DATE_OP"
 ' contains '        return 'contains'
 'lbound'            return "FUNC"
 'rbound'            return "FUNC"
@@ -33,6 +39,7 @@
 \d+                 return "INT"
 ","                 return ','
 "%"                 return "%"
+
 
 <<EOF>>             return 'EOF'
 
@@ -105,10 +112,17 @@ or_block
         {$$ = [].concat([$1], $3)}
     ;
 
+bool
+    : "&"
+        {$$ = $1}
+    | "|"
+        {$$ = $1}
+    ;
 
 or 
     : TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
+
     | or 'FLAG'
         {
             var chars = $2.slice(1).split("");
@@ -118,6 +132,13 @@ or
                 
             $$ = $1;
         }
+    | DATE_FROM DATE_OP DATE_VAL bool DATE_TO DATE_OP DATE_VAL
+        {
+            var op = $2 == '<' ? "=" : "!=";
+
+            $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
+        }
+
     ;
 
 

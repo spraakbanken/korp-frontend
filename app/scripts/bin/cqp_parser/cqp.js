@@ -5,7 +5,7 @@
   window.c = console;
 
   stringifyCqp = function(cqp_obj, translate_ops) {
-    var and_array, bound, flags, flagstr, op, or_array, or_out, out, out_token, output, token, type, val, x, _i, _j, _len, _len1, _ref;
+    var and_array, bool, bound, flags, flagstr, from, op, operator1, operator2, or_array, or_out, out, out_token, output, tmpl, to, token, type, val, x, _i, _j, _len, _len1, _ref;
     if (translate_ops == null) {
       translate_ops = false;
     }
@@ -20,7 +20,7 @@
         for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
           and_array = _ref[_j];
           _results.push((function() {
-            var _k, _len2, _ref1, _ref2, _results1;
+            var _k, _len2, _ref1, _ref2, _ref3, _results1;
             _results1 = [];
             for (_k = 0, _len2 = and_array.length; _k < _len2; _k++) {
               _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val, flags = _ref1.flags;
@@ -38,6 +38,24 @@
               }
               if (type === "word" && val === "") {
                 out = "";
+              } else if (type === "date_interval") {
+                _ref3 = val.split(","), from = _ref3[0], to = _ref3[1];
+                operator1 = ">=";
+                operator2 = "<=";
+                bool = "&";
+                if (op === "!=") {
+                  operator1 = "<";
+                  operator2 = ">";
+                  bool = "|";
+                }
+                tmpl = _.template("(int(_.text_datefrom) <%= op1 %> <%= from %> <%= bool %> int(_.text_dateto) <%= op2 %> <%= to %>)");
+                out = tmpl({
+                  op1: operator1,
+                  op2: operator2,
+                  bool: bool,
+                  from: from,
+                  to: to
+                });
               } else {
                 out = "" + type + " " + op + " \"" + val + "\"";
               }
@@ -92,6 +110,10 @@
       "and_block": [
         [
           {
+            "type": "date_interval",
+            "op": "!=",
+            "val": "18870101,20101231"
+          }, {
             "type": "word",
             "op": "!=",
             "val": "value"

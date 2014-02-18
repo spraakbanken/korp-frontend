@@ -22,6 +22,23 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
 
                 if type == "word" and val == ""
                     out = ""
+                else if type == "date_interval"
+                    [from, to] = val.split(",")
+                    operator1 = ">="
+                    operator2 = "<="
+                    bool = "&"
+                    if op == "!="
+                        operator1 = "<"
+                        operator2 = ">"
+                        bool = "|"
+
+                    tmpl = _.template("(int(_.text_datefrom) <%= op1 %> <%= from %> <%= bool %> int(_.text_dateto) <%= op2 %> <%= to %>)")
+                    out = tmpl
+                         op1 : operator1,
+                         op2 : operator2,
+                         bool : bool,
+                         from : from,
+                         to : to
                 else 
                     out = "#{type} #{op} \"#{val}\"" 
 
@@ -71,6 +88,11 @@ c.log CQP.stringify [
     {
         "and_block": [
             [
+                {
+                    "type": "date_interval",
+                    "op" : "!="
+                    "val" : "18870101,20101231"
+                },
                 {
                     "type": "word",
                     "op": "!=",

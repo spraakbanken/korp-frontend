@@ -214,6 +214,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
                 [item.value, item]
 
 
+        c.log "typeMapping", s.typeMapping
         # s.types = _.sortBy s.types, "label"
 
 
@@ -296,7 +297,12 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
 
 
     if $location.search().cqp
-        s.data = CQP.parse($location.search().cqp)
+        try
+            s.data = CQP.parse($location.search().cqp)
+        catch e
+            # TODO: we could traverse the token list, trying to repair parsing, se above
+            s.data = CQP.parse("[]")
+        
     else
         s.data = CQP.parse(s.cqp)
 

@@ -485,11 +485,11 @@ settings.common_struct_types = {
 
         opts: settings.liteOptions,
         extended_template : '<slider floor="{{floor}}" ceiling="{{ceiling}}" ' +
-                                'ng-model-low="lowVal" ng-model-high="highVal"></slider>',
-        controller : function($scope, searches) {
+                                'ng-model-low="values.low" ng-model-high="values.high"></slider>',
+        controller : function($scope, searches, $timeout) {
             c.log( "searches", searches)
             var s = $scope
-            
+        	
             searches.timeDef.then(function() {
                 var all_years = _(settings.corpusListing.selected)
                             .pluck("time")
@@ -498,16 +498,37 @@ settings.common_struct_types = {
                             .filter(function(tuple) {
                                 return tuple[0] && tuple[1];
                             }).map(_.compose(Number, _.head))
-                            .value()
+                            .value();
 
-                s.lowVal = s.floor = Math.min.apply(null, all_years)
-                c.log ("s.lowVal", s.lowVal, typeof s.lowVal)
-                s.highVal = s.ceiling = Math.max.apply(null, all_years)
+                s.values = {}
 
-                s.$watch("lowVal.toString() + highVal.toString()", function() {
-                    c.log ("low", s.lowVal, "high", s.highVal)
-                    s.model = s.lowVal + s.highVal
+                c.log ("init date_interval", s.model)
+                $timeout(function() {
+            		s.floor = Math.min.apply(null, all_years)
+            		s.ceiling = Math.max.apply(null, all_years)	
+            		if(!s.model) {
+            			s.values.low = s.floor;
+            			s.values.high = s.ceiling;
+            		} else {
+            			s.values.low = s.model.split(",")[0].slice(0, 4);
+            			s.values.high = s.model.split(",")[1].slice(0, 4);
+            		}
+                }, 0)
+                w = s.$watch("values.low.toString() + values.high.toString()", function() {
+                    c.log ("low", s.values.low, "high", s.values.high, s.floor, s.ceiling)
+                    if(isNaN(s.values.low) || isNaN(s.values.high))
+                    	return
+
+	               	// s.model = s.values.low.toString() + s.values.high.toString()
+	               	s.model = [
+	               		s.values.low.toString() + "0101",
+	               		s.values.high.toString() + "1231"
+               	 	].join(",")
                 })
+				
+				s.$on("$destroy", function() {
+					w();
+				})
                 
             })
                 

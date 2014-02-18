@@ -4,19 +4,6 @@ korpApp.directive 'kwicWord', ->
                     set-text="wd.word + ' '" ></span>
                 """ #ng-click="wordClick($event, wd, sentence)"
     link : (scope, element) ->
-        # scope.getClassObj = (wd) ->
-        #     output =
-        #         reading_match : wd._match
-        #         punct : wd._punct
-        #         match_sentence : wd._matchSentence
-
-        #     for struct in (wd._struct or [])
-        #         output["struct_" + struct] = true
-
-        #     for struct in (wd._open or [])
-        #         output["open_" + struct] = true
-        #     for struct in (wd._close or [])
-        #         output["close_" + struct] = true
         scope.getClassObj = (wd) ->
             output =
                 reading_match : wd._match
