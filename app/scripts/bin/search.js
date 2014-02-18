@@ -206,33 +206,41 @@
     __extends(SimpleSearch, _super);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var textinput,
+      var search_val, setLemgram, textinput, type, _ref,
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId);
       this.s = scope;
       c.log("simplesearch", mainDivId, $(mainDivId));
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keyup($.proxy(this.onSimpleChange, this));
-      this.onSimpleChange();
+      $("#simple_text").keypress(function() {
+        return _this.s.$apply(function() {
+          return _this.onSimpleChange();
+        });
+      });
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
-      textinput = $("#simple_text").bind("keydown.autocomplete", function(event) {
-        var keyCode;
-        keyCode = $.ui.keyCode;
-        if (!_this.isVisible() || $("#ui-active-menuitem").length !== 0) {
-          return;
-        }
-        switch (event.keyCode) {
-          case keyCode.ENTER:
-            if ($("#search-tab").data("cover") == null) {
-              return _this.onSubmit();
-            }
-        }
-      });
+      textinput = $("#simple_text");
+      setLemgram = function(lemgram) {
+        var label;
+        label = util.lemgramToString(lemgram).replace(/<.*?>/g, "");
+        _this.setPlaceholder(label, lemgram);
+        return $("#simple_text").val("");
+      };
+      _ref = this.s.$root._search, type = _ref[0], search_val = _ref[1];
+      if (type === "lemgram") {
+        setLemgram(search_val);
+        this.s.$root.activeCQP = "[lex contains \"" + search_val + "\"]";
+      }
       if (settings.autocomplete) {
         textinput.korp_autocomplete({
           type: "lem",
-          select: $.proxy(this.selectLemgram, this),
+          select: function(lemgram) {
+            setLemgram(lemgram);
+            _this.s.$apply(function() {
+              return _this.s.$root.activeCQP = "[lex contains \"" + lemgram + "\"]";
+            });
+            return false;
+          },
           middleware: function(request, idArray) {
             var dfd;
             dfd = $.Deferred();
@@ -441,6 +449,7 @@
 
     SimpleSearch.prototype.onSimpleChange = function(event) {
       var cqp, currentText, query, suffix, val, wordArray;
+      c.log("onSimpleChange");
       $("#simple_text").data("promise", null);
       if (event && event.keyCode === 27) {
         c.log("key", event.keyCode);
@@ -471,8 +480,6 @@
       this.s.$root.activeCQP = val;
       if (currentText !== "") {
         return this.enableSubmit();
-      } else {
-        return this.disableSubmit();
       }
     };
 
@@ -490,7 +497,6 @@
 
     SimpleSearch.prototype.clear = function() {
       $("#simple_text").val("").get(0).blur();
-      this.disableSubmit();
       return this;
     };
 

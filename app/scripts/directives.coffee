@@ -198,20 +198,80 @@ korpApp.directive "constr", ($window) ->
         # c.log "$window[attr.constrName]", $window[attr.constrName], elem
 
 
-korpApp.directive "korpPopover", ($window) ->
+
+
+korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
+    template : '''
+    <div class="search_submit">
+        <div class="btn-group">
+            <button class="btn btn-small" id="sendBtn">Sök</button>
+            <button class="btn btn-small opener" ng-click="togglePopover()">
+                <span class="caret"></span>
+            </button>
+        </div>
+        <div class="popover compare {{pos}}">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Spara för jämförelse</h3>
+            <form class="popover-content" ng-submit="onSubmit()">
+                <div>
+                    <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">
+                </div>
+                <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>
+            </form>
+        </div>
+    </div>
+    '''
+    restrict : "E"
+    replace : true
     link : (scope, elem, attr) ->
-        popover = elem.parent().next()
+        s = scope
+        s.pos = attr.pos or "bottom"
+        s.togglePopover = () ->
+            if s.isPopoverVisible
+                s.popHide()
+            else
+                s.popShow()
+
+        popover = elem.find(".popover")
         scope.isPopoverVisible = false
+        trans = 
+            bottom : "top"
+            top : "bottom"
+            right : "left"
+            left : "right"
+        horizontal = s.pos in ["top", "bottom"]
+        if horizontal
+            my = "center " + trans[s.pos]
+            at = "center " + s.pos + "+10"
+        else
+            my = trans[s.pos] + " center"
+            at = s.pos + "+10 center"
+
+
+        onEscape = (event) ->
+            c.log "keydown", event.which
+            if event.which == 27 #escape
+                scope.popHide()
+                return false
+
         scope.popShow = () ->
             scope.isPopoverVisible = true
-            popover.show("fade", "fast").position
-                my : "center top"
-                at : "center bottom+10"
-                of : elem
+            popover.show("fade", "fast").focus().position
+                my : my
+                at : at
+                of : elem.find(".opener")
+
+            c.log "popShow", $rootElement
+            $rootElement.on "keydown", onEscape
+
         scope.popHide = () ->
             scope.isPopoverVisible = false
             popover.hide("fade", "fast")
+            $rootElement.off "keydown", onEscape
 
 
+        scope.onSubmit = () ->
+            s.popHide()
+            s.$broadcast('popover_submit', s.name)
 
-    
+

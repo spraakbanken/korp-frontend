@@ -69,7 +69,7 @@
   loc_dfd = initLocales();
 
   $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then((function(loc_data) {
-    var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
+    var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, to;
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     window.searchProxy = new model.SearchProxy();
@@ -199,22 +199,6 @@
         }
       }
     });
-    tabs = $(".ui-tabs");
-    tabs.on("click", tab_a_selector, function() {
-      var id, idx, state;
-      if ($(this).parent().is(".ui-state-disabled")) {
-        return;
-      }
-      state = {};
-      id = $(this).closest(".ui-tabs").attr("id");
-      if (!id) {
-        return false;
-      }
-      idx = $(this).parent().prevAll().length;
-      state[id] = idx;
-      search(state);
-      return false;
-    });
     $(".custom_anchor").on("mouseup", function() {
       c.log("custom click");
       search("result-container", null);
@@ -243,8 +227,7 @@
       simpleSearch.enableSubmit();
     }
     window.onHashChange = function(event, isInit) {
-      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value,
-        _this = this;
+      var display, e, hasChanged, page, prevFragment, reading, showAbout;
       c.log("onHashChange");
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
@@ -345,47 +328,35 @@
           }
         }
       }
-      searchval = search().search;
-      if ((searchval != null) && searchval !== prevFragment["search"]) {
-        type = searchval.split("|")[0];
-        value = searchval.split("|").slice(1).join("|");
-        view.updateSearchHistory(value);
-        data = {
-          value: value,
-          page: page,
-          isInit: isInit
-        };
-        switch (type) {
-          case "word":
-            $("#simple_text").val(value);
-            simpleSearch.onSimpleChange();
-            simpleSearch.setPlaceholder(null, null);
-            if (settings.lemgramSelect) {
-              simpleSearch.makeLemgramSelect();
-            }
-            $.sm.send("submit.word", data);
-            break;
-          case "lemgram":
-            $.sm.send("submit.lemgram", data);
-            break;
-          case "saldo":
-            extendedSearch.setOneToken("saldo", value);
-            $.sm.send("submit.cqp", data);
-            break;
-          case "cqp":
-            advancedSearch.setCQP(value);
-            $.sm.send("submit.cqp", data);
-        }
-      }
-      tabs.each(function() {
-        var idx, self;
-        self = _this;
-        idx = Number(search()[_this.id]);
-        if (idx === null) {
-          return;
-        }
-        return $(self).find(tab_a_selector).eq(idx).triggerHandler("change");
-      });
+      /*
+      searchval = search().search
+      if searchval? and searchval isnt prevFragment["search"]
+          # kwicResults.current_page = page or 0
+          type = searchval.split("|")[0]
+          value = searchval.split("|").slice(1).join("|")
+          view.updateSearchHistory value
+          data =
+              value: value
+              page: page
+              isInit: isInit
+      
+          switch type
+              when "word"
+                  $("#simple_text").val value
+                  simpleSearch.onSimpleChange()
+                  simpleSearch.setPlaceholder null, null
+                  simpleSearch.makeLemgramSelect() if settings.lemgramSelect
+                  $.sm.send "submit.word", data
+              when "lemgram"
+                  $.sm.send "submit.lemgram", data
+              when "saldo"
+                  extendedSearch.setOneToken "saldo", value
+                  $.sm.send "submit.cqp", data
+              when "cqp"
+                  advancedSearch.setCQP value
+                  $.sm.send "submit.cqp", data
+      */
+
       return $.bbq.prevFragment = _.extend({}, search());
     };
     $(window).scroll(function() {

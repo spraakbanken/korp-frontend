@@ -190,20 +190,20 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                 
 
 
-    tabs = $(".ui-tabs")
-    tabs.on "click", tab_a_selector, () ->
-        return  if $(this).parent().is(".ui-state-disabled")
-        state = {}
-        id = $(this).closest(".ui-tabs").attr("id")
-        unless id then return false
+    # tabs = $(".ui-tabs")
+    # tabs.on "click", tab_a_selector, () ->
+    #     return  if $(this).parent().is(".ui-state-disabled")
+    #     state = {}
+    #     id = $(this).closest(".ui-tabs").attr("id")
+    #     unless id then return false
 
-        # Get the index of this tab.
-        idx = $(this).parent().prevAll().length
+    #     # Get the index of this tab.
+    #     idx = $(this).parent().prevAll().length
 
-        # Set the state!
-        state[id] = idx
-        search state
-        false
+    #     # Set the state!
+    #     state[id] = idx
+    #     search state
+    #     false
 
     $(".custom_anchor").on "mouseup", ->
         c.log "custom click"
@@ -328,6 +328,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                     kwicResults.makeRequest()
                 else
                     kwicResults.centerScrollbar()
+        ###
         searchval = search().search
         if searchval? and searchval isnt prevFragment["search"]
             # kwicResults.current_page = page or 0
@@ -354,13 +355,13 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                 when "cqp"
                     advancedSearch.setCQP value
                     $.sm.send "submit.cqp", data
-
+        ###
         # if(!isInit)
-        tabs.each =>
-            self = this
-            idx = Number(search()[@id])
-            return if idx is null
-            $(self).find(tab_a_selector).eq(idx).triggerHandler "change"
+        # tabs.each =>
+        #     self = this
+        #     idx = Number(search()[@id])
+        #     return if idx is null
+        #     $(self).find(tab_a_selector).eq(idx).triggerHandler "change"
 
         # else
         $.bbq.prevFragment = _.extend {}, search()

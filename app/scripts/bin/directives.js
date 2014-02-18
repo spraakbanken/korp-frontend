@@ -223,23 +223,63 @@
     };
   });
 
-  korpApp.directive("korpPopover", function($window) {
+  korpApp.directive("searchSubmit", function($window, $document, $rootElement) {
     return {
+      template: '<div class="search_submit">\n    <div class="btn-group">\n        <button class="btn btn-small" id="sendBtn">Sök</button>\n        <button class="btn btn-small opener" ng-click="togglePopover()">\n            <span class="caret"></span>\n        </button>\n    </div>\n    <div class="popover compare {{pos}}">\n        <div class="arrow"></div>\n        <h3 class="popover-title">Spara för jämförelse</h3>\n        <form class="popover-content" ng-submit="onSubmit()">\n            <div>\n                <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">\n            </div>\n            <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>\n        </form>\n    </div>\n</div>',
+      restrict: "E",
+      replace: true,
       link: function(scope, elem, attr) {
-        var popover;
-        popover = elem.parent().next();
+        var at, horizontal, my, onEscape, popover, s, trans, _ref;
+        s = scope;
+        s.pos = attr.pos || "bottom";
+        s.togglePopover = function() {
+          if (s.isPopoverVisible) {
+            return s.popHide();
+          } else {
+            return s.popShow();
+          }
+        };
+        popover = elem.find(".popover");
         scope.isPopoverVisible = false;
+        trans = {
+          bottom: "top",
+          top: "bottom",
+          right: "left",
+          left: "right"
+        };
+        horizontal = (_ref = s.pos) === "top" || _ref === "bottom";
+        if (horizontal) {
+          my = "center " + trans[s.pos];
+          at = "center " + s.pos + "+10";
+        } else {
+          my = trans[s.pos] + " center";
+          at = s.pos + "+10 center";
+        }
+        onEscape = function(event) {
+          c.log("keydown", event.which);
+          if (event.which === 27) {
+            scope.popHide();
+            return false;
+          }
+        };
         scope.popShow = function() {
           scope.isPopoverVisible = true;
-          return popover.show("fade", "fast").position({
-            my: "center top",
-            at: "center bottom+10",
-            of: elem
+          popover.show("fade", "fast").focus().position({
+            my: my,
+            at: at,
+            of: elem.find(".opener")
           });
+          c.log("popShow", $rootElement);
+          return $rootElement.on("keydown", onEscape);
         };
-        return scope.popHide = function() {
+        scope.popHide = function() {
           scope.isPopoverVisible = false;
-          return popover.hide("fade", "fast");
+          popover.hide("fade", "fast");
+          return $rootElement.off("keydown", onEscape);
+        };
+        return scope.onSubmit = function() {
+          s.popHide();
+          return s.$broadcast('popover_submit', s.name);
         };
       }
     };

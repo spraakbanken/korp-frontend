@@ -40,9 +40,9 @@
         function lemgramSearch(lemgram, searchPrefix, searchSuffix, page) {
             c.log("lemgramSearch", lemgram);
             lemgramResults.showPreloader();
-            simpleSearch
-            .setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
-            .clear();
+            //simpleSearch
+            //.clear();
+            //.setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
             var type =
             lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults));
             searchProxy.relatedWordSearch(lemgram);
@@ -116,6 +116,7 @@
                     <transition event="searchtab.advanced" target="advanced" />
 
                     <state id="simple">
+                        <onentry><script>console.log("on simple entry")</script></onentry>
                         <transition event="submit.word" target="simple">
                             <script><![CDATA[
                                 $("#simple_text").get(0).blur();

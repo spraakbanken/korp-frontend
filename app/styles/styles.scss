@@ -748,10 +748,10 @@ table {
   padding-bottom: 0.3em !important;
 }
 
-.spinner {
-  @include inline-block();
-  margin: 3px 2px -2px -4px;
-}
+// .spinner {
+//   @include inline-block();
+//   margin: 3px 2px -2px -4px;
+// }
 
 .lemgram_result {
   float: left;
@@ -1549,14 +1549,12 @@ label[for=lemgram_select]:before {
     display : inline;
   }
 
-  .popover.compare {
-    .btn_container {
-      margin-top : 1em;
-      text-align : right;
-    }
-  }
 }
 
+.search_submit {
+  display : inline;
+  margin-right : 5px;
+}
 
 .search_tabs {
   .tab-content {
@@ -1892,4 +1890,22 @@ line.tick {
   .popover-content {
     padding : 5px;
   }
+  .btn_container {
+    margin-top : 1em;
+    text-align : right;
+  }
+}
+
+
+
+.tab_spinner {
+  // position: relative;
+  // top: 21px;
+  // left: 38px;
+  width : 9px;
+  display : none;
+}
+
+.loading .tab_spinner {
+  display : inline-block;
 }

@@ -4,15 +4,18 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/tabs/tabset.html"
                                             "template/tabs/tab.html"
                                             "template/tabs/tabset-titles.html"
-                                            "ui.bootstrap.modal",
+                                            "ui.bootstrap.modal"
+                                            "template/modal/backdrop.html"
+                                            "template/modal/window.html"
                                             "ui.bootstrap.typeahead"
                                             "template/typeahead/typeahead.html"
                                             "template/typeahead/typeahead-popup.html"
+                                            "angularSpinner"
                                         ])
 
 # korpApp.controller "kwicCtrl", ($scope) ->
 
-korpApp.run ($rootScope, $location, $route, $routeParams) ->
+korpApp.run ($rootScope, $location, $route, $routeParams, util) ->
     s = $rootScope
     s.lang = "sv"
 
@@ -39,6 +42,49 @@ korpApp.run ($rootScope, $location, $route, $routeParams) ->
 
 
     $rootScope.compareTabs = []
+
+
+
+    util.setupHash s, [
+        key : "search"
+        scope_name : "_search"
+        val_in : (val) ->
+            c.log "search hash", val
+            [type, value] = val.split("|")
+        val_out : (val) ->
+            val.join("|")
+        
+        post_change : () ->
+            [type, value] = s._search
+            c.log "post_change", type, value
+            page = s.search()["page"] or 0
+
+            view.updateSearchHistory value
+            data =
+                value: value
+                page: page
+
+            switch type
+                when "word"
+                    $("#simple_text").val value
+                    simpleSearch.onSimpleChange()
+                    simpleSearch.setPlaceholder null, null
+                    simpleSearch.makeLemgramSelect() if settings.lemgramSelect
+                    $.sm.send "submit.word", data
+                when "lemgram"
+                    $.sm.send "submit.lemgram", data
+                when "saldo"
+                    extendedSearch.setOneToken "saldo", value
+                    $.sm.send "submit.cqp", data
+                when "cqp"
+                    advancedSearch.setCQP value
+                    $.sm.send "submit.cqp", data
+
+
+    ]
+
+
+
 
 
 korpApp.controller "kwicCtrl", ($scope) ->
@@ -163,9 +209,10 @@ korpApp.controller "kwicCtrl", ($scope) ->
 
 korpApp.controller "compareCtrl", ($scope) ->
     s = $scope
-
+    s.$parent.loading = true
     s.promise.then (data) ->
         # c.log "compare promise", _.pairs data.loglike
+        s.$parent.loading = false
         s.tables = _.groupBy  (_.pairs data.loglike), ([word, val]) ->
             if val > 0 then "positive" else "negative"
 
@@ -180,7 +227,7 @@ korpApp.controller "compareCtrl", ($scope) ->
 
 
 
-korpApp.controller "TokenList", ($scope, $location) ->
+korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
     s = $scope
     # s.defaultOptions = settings.defaultOptions
 
@@ -221,6 +268,7 @@ korpApp.controller "TokenList", ($scope, $location) ->
 
     s.$watch 'getCQPString()', () ->
         cqpstr = CQP.stringify(s.data)
+        $rootScope.activeCQP = cqpstr
         # $location.search({cqp : encodeURIComponent(cqpstr)})
 
     s.getCQPString = ->
@@ -235,21 +283,20 @@ korpApp.filter "mapper", () ->
     return (item, f) ->
         return f(item)
 
-korpApp.controller "ExtendedToken", ($scope, $location) ->
+korpApp.controller "ExtendedToken", ($scope, util, $location) ->
     s = $scope
     # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
     # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
 
-    s.valfilter = (attrobj) ->
-        return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
+    # s.valfilter = (attrobj) ->
+    #     return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
 
+    s.valfilter = util.valfilter
     # words = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",")
-    word =
-        group : "word"
-        value : "word"
-        label : "word"
-
-
+    # word =
+    #     group : "word"
+    #     value : "word"
+    #     label : "word"
     
 
     s.setDefault = (or_obj) ->
@@ -264,14 +311,14 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
 
     s.$on "corpuschooserchange", (selected) ->
         # TODO: respece the setting 'word_attribute_selector' and similar
-        attrs = for key, obj of settings.corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
-            _.extend({group : "word_attr", value : key}, obj)
+        # attrs = for key, obj of settings.corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
+        #     _.extend({group : "word_attr", value : key}, obj)
 
-        sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
-            _.extend({group : "sentence_attr", value : key}, obj)
+        # sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
+        #     _.extend({group : "sentence_attr", value : key}, obj)
 
 
-        s.types = [word].concat(attrs, sent_attrs)
+        s.types = util.getAttributeGroups(settings.corpusListing)
         s.typeMapping = _.object _.map s.types, (item) -> [item.value, item]
 
 
@@ -283,6 +330,7 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
             op : "="
             val : ""
         return and_array
+    
     s.removeOr = (and_array, i) ->
         if and_array.length > 1
             and_array.splice(i, 1)
@@ -300,6 +348,24 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
         s.token.cqp.match(/\[(.*)]/)[1]
 
 korpApp.factory "util", ($location) ->
+    valfilter : (attrobj) ->
+        return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
+    getAttributeGroups : (corpusListing) ->
+        word =
+            group : "word"
+            value : "word"
+            label : "word"
+        
+        attrs = for key, obj of corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
+            _.extend({group : "word_attr", value : key}, obj)
+
+        sent_attrs = for key, obj of corpusListing.getStructAttrs() when obj.displayType != "hidden"
+            _.extend({group : "sentence_attr", value : key}, obj)
+
+
+        return [word].concat(attrs, sent_attrs)
+        
+
     setupHash : (scope, config) ->
         # config = [
         #     expr : "sorttuple[0]"
@@ -331,6 +397,7 @@ korpApp.factory "util", ($location) ->
                     scope[obj.scope_func](val)
                 else
                     scope[obj.key] = val
+                # obj.post_change?(val)
         onWatch()
         scope.loc = $location
         scope.$watch 'loc.search()', ->
@@ -358,64 +425,74 @@ korpApp.factory "util", ($location) ->
 korpApp.controller "SimpleCtrl", ($scope, util, $location, backend, $rootScope) ->
     s = $scope
     c.log "SimpleCtrl"  
-    s.isShowing = true
-
-    s.togglePopover = () ->
-        if s.isPopoverVisible
-            s.popHide()
-        else
-            s.popShow()
-
-    s.saveSearch = (name) ->
-        c.log "savesearch", name
-        s.popHide()
+    
+    s.$on "popover_submit", (event, name) ->
         $rootScope.saveSearch {
             label : name or $rootScope.activeCQP
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.stringifySelected()
 
         }        
-        
 
+
+
+
+korpApp.controller "ExtendedSearch", ($scope, util, $location, backend, $rootScope) ->
+    s = $scope
+    s.$on "popover_submit", (event, name) ->
+        $rootScope.saveSearch {
+            label : name or $rootScope.activeCQP
+            cqp : $rootScope.activeCQP
+            corpora : settings.corpusListing.getSelectedCorpora()
+
+        }
 
 
 
 korpApp.controller "CompareSearchCtrl", ($scope, util, $location, backend, $rootScope) ->
     s = $scope
+    cl = settings.corpusListing
+    s.valfilter = util.valfilter
 
     $rootScope.saveSearch {
         label : "första"
         cqp : "[pos='NN']"
-        corpora : settings.corpusListing.subsetFactory(["ROMI"]).stringifySelected()
+        corpora : ["ROMI"]
     }
     $rootScope.saveSearch {
         label : "andra"
         cqp : "[pos='NN']"
-        corpora : settings.corpusListing.subsetFactory(["ROMII"]).stringifySelected()
+        corpora : ["ROMII"]
     }
 
 
     s.cmp1 = $rootScope.savedSearches[0]
     s.cmp2 = $rootScope.savedSearches[1]
 
-    
+    s.reduce = 'word'
+
+    s.getAttrs = () ->
+        listing = cl.subsetFactory(_.uniq [].concat s.cmp1.corpora, s.cmp2.corpora)
+        return util.getAttributeGroups(listing)
+
 
     s.sendCompare = () ->
-        $rootScope.compareTabs.push backend.requestCompare(s.cmp1.corpora,
+        $rootScope.compareTabs.push backend.requestCompare(s.cmp1.corpora.join(","),
                                   s.cmp1.cqp,
-                                  s.cmp2.corpora,
-                                  s.cmp2.cqp)
+                                  s.cmp2.corpora.join(","),
+                                  s.cmp2.cqp,
+                                  s.reduce)
 
 
 
 
 
 korpApp.factory 'backend', ($http, $q, util) ->
-    requestCompare : (corpus1, cqp1, corpus2, cqp2) ->
+    requestCompare : (corpus1, cqp1, corpus2, cqp2, reduce) ->
         def = $q.defer()
         params = 
             command : "loglike"
-            groupby : "word" #TODO: parametrize
+            groupby : reduce
             set1_corpus : corpus1
             set1_cqp : cqp1
             set2_corpus : corpus2

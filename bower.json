@@ -19,7 +19,8 @@
     "modernizr": "~2.6.2",
     "yepnope": "~1.5.4",
     "angular-bootstrap": "~0.6.0",
-    "ui-slider": "https://github.com/angular-ui/ui-slider.git"
+    "ui-slider": "https://github.com/angular-ui/ui-slider.git",
+    "angular-spinner": "~0.2.1"
   },
   "devDependencies": {
     "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.0.6",

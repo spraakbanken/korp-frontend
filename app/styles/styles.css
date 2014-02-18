@@ -894,17 +894,6 @@ table {
   padding-bottom: 0.3em !important;
 }
 
-/* line 751, styles.scss */
-.spinner {
-  display: -moz-inline-stack;
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  zoom: 1;
-  *display: inline;
-  margin: 3px 2px -2px -4px;
-}
-
 /* line 756, styles.scss */
 .lemgram_result {
   float: left;
@@ -1902,32 +1891,33 @@ label[for=lemgram_select]:before {
 #korp-simple .btn-group {
   display: inline;
 }
-/* line 1546, styles.scss */
-#korp-simple .popover.compare .btn_container {
-  margin-top: 1em;
-  text-align: right;
+
+/* line 1547, styles.scss */
+.search_submit {
+  display: inline;
+  margin-right: 5px;
 }
 
-/* line 1555, styles.scss */
+/* line 1553, styles.scss */
 .search_tabs .tab-content {
   overflow: visible;
 }
-/* line 1559, styles.scss */
+/* line 1557, styles.scss */
 .search_tabs .search_compare button {
   margin-top: 1em;
 }
 
-/* line 1565, styles.scss */
+/* line 1563, styles.scss */
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-/* line 1569, styles.scss */
+/* line 1567, styles.scss */
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-/* line 1577, styles.scss */
+/* line 1575, styles.scss */
 #mode_switch li {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1937,13 +1927,13 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1581, styles.scss */
+/* line 1579, styles.scss */
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 1586, styles.scss */
+/* line 1584, styles.scss */
 .val_mod {
   display: none;
   letter-spacing: 1px;
@@ -1952,17 +1942,17 @@ label[for=lemgram_select]:before {
   margin-right: 1px;
 }
 
-/* line 1594, styles.scss */
+/* line 1592, styles.scss */
 .arg_value[type=text]:not(.ui-autocomplete-input) {
   width: 91%;
   margin-right: 3px;
 }
-/* line 1597, styles.scss */
+/* line 1595, styles.scss */
 .arg_value[type=text]:not(.ui-autocomplete-input) + .val_mod {
   display: inline;
 }
 
-/* line 1602, styles.scss */
+/* line 1600, styles.scss */
 #mod_menu {
   cursor: default;
   position: absolute;
@@ -1970,55 +1960,55 @@ label[for=lemgram_select]:before {
   text-align: right;
 }
 
-/* line 1610, styles.scss */
+/* line 1608, styles.scss */
 .val_mod.insensitive {
   color: lightgrey;
 }
-/* line 1613, styles.scss */
+/* line 1611, styles.scss */
 .val_mod.sensitive {
   color: black;
 }
-/* line 1615, styles.scss */
+/* line 1613, styles.scss */
 .val_mod.sensitive + #mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-/* line 1619, styles.scss */
+/* line 1617, styles.scss */
 .val_mod.insensitive + #mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-/* line 1624, styles.scss */
+/* line 1622, styles.scss */
 .enumerate {
   counter-increment: wordpic;
 }
-/* line 1626, styles.scss */
+/* line 1624, styles.scss */
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-/* line 1631, styles.scss */
+/* line 1629, styles.scss */
 #showBarPlot {
   display: none;
 }
 
-/* line 1639, styles.scss */
+/* line 1637, styles.scss */
 #wordclassChkParent {
   float: right;
 }
 
-/* line 1645, styles.scss */
+/* line 1643, styles.scss */
 .tab_progress {
   height: 2px;
   background-color: darkblue;
   max-width: 100%;
 }
 
-/* line 1651, styles.scss */
+/* line 1649, styles.scss */
 .not_loading .tab_progress {
   display: none;
 }
 
-/* line 1655, styles.scss */
+/* line 1653, styles.scss */
 .progress {
   width: 143px;
   overflow-x: hidden;
@@ -2028,7 +2018,7 @@ label[for=lemgram_select]:before {
   transition: width 400ms ease;
 }
 
-/* line 1661, styles.scss */
+/* line 1659, styles.scss */
 #results-kwic.not_loading .progress {
   width: 0;
   -webkit-transition: width 400ms ease;
@@ -2037,7 +2027,7 @@ label[for=lemgram_select]:before {
   transition: width 400ms ease;
 }
 
-/* line 1666, styles.scss */
+/* line 1664, styles.scss */
 .not_loading .hits_picture {
   left: 180px;
   -webkit-transition: width 400ms ease;
@@ -2046,26 +2036,26 @@ label[for=lemgram_select]:before {
   transition: width 400ms ease;
 }
 
-/* line 1671, styles.scss */
+/* line 1669, styles.scss */
 .not_loading .progress {
   display: none;
 }
 
-/* line 1676, styles.scss */
+/* line 1674, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 1679, styles.scss */
+/* line 1677, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 1682, styles.scss */
+/* line 1680, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-/* line 1688, styles.scss */
+/* line 1686, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -2073,76 +2063,76 @@ label[for=lemgram_select]:before {
   letter-spacing: 1.1;
 }
 
-/* line 1695, styles.scss */
+/* line 1693, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-/* line 1701, styles.scss */
+/* line 1699, styles.scss */
 #char_table {
   display: none;
 }
 
-/* line 1705, styles.scss */
+/* line 1703, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-/* line 1712, styles.scss */
+/* line 1710, styles.scss */
 #deptree_popup {
   overflow-y: hidden;
 }
-/* line 1714, styles.scss */
+/* line 1712, styles.scss */
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-/* line 1718, styles.scss */
+/* line 1716, styles.scss */
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-/* line 1724, styles.scss */
+/* line 1722, styles.scss */
 .smoother.ui-slider {
   width: 200px;
 }
 
-/* line 1728, styles.scss */
+/* line 1726, styles.scss */
 .legend {
   float: right;
 }
-/* line 1730, styles.scss */
+/* line 1728, styles.scss */
 .legend .action {
   opacity: 0.5 !important;
   color: white;
 }
 
-/* line 1736, styles.scss */
+/* line 1734, styles.scss */
 .slick-viewport .slick-cell-checkboxsel input {
   margin-left: 6px;
 }
 
-/* line 1740, styles.scss */
+/* line 1738, styles.scss */
 .graph_btn_icon {
   position: absolute;
   left: 0;
 }
 
-/* line 1745, styles.scss */
+/* line 1743, styles.scss */
 .graph_header .controls {
   float: left;
 }
 
-/* line 1750, styles.scss */
+/* line 1748, styles.scss */
 .stats_header {
   margin-bottom: 1em;
 }
-/* line 1752, styles.scss */
+/* line 1750, styles.scss */
 .stats_header > * {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2152,33 +2142,33 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1756, styles.scss */
+/* line 1754, styles.scss */
 .reading_mode .show_deptree {
   display: none;
 }
 
-/* line 1760, styles.scss */
+/* line 1758, styles.scss */
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
   left: -3em;
 }
 
-/* line 1765, styles.scss */
+/* line 1763, styles.scss */
 .form-bar .rickshaw_graph .x_tick .title {
   left: 0;
 }
 
-/* line 1770, styles.scss */
+/* line 1768, styles.scss */
 .y_ticks.plain g:first-of-type text {
   display: none;
 }
 
-/* line 1774, styles.scss */
+/* line 1772, styles.scss */
 .form-bar .legend li:last-child:not(:only-child) {
   display: none;
 }
 
-/* line 1777, styles.scss */
+/* line 1775, styles.scss */
 .form_switch {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2188,86 +2178,86 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1781, styles.scss */
+/* line 1779, styles.scss */
 line.tick {
   display: none;
 }
 
-/* line 1785, styles.scss */
+/* line 1783, styles.scss */
 .dot.active {
   cursor: pointer;
 }
 
-/* line 1789, styles.scss */
+/* line 1787, styles.scss */
 .rickshaw_graph .x_tick {
   border: none !important;
 }
 
-/* line 1792, styles.scss */
+/* line 1790, styles.scss */
 .zoom_slider {
   margin-top: 30px;
   width: 100% !important;
 }
 
-/* line 1797, styles.scss */
+/* line 1795, styles.scss */
 #main > #msd_popup {
   display: none !important;
 }
 
-/* line 1801, styles.scss */
+/* line 1799, styles.scss */
 .popupchecks .header {
   white-space: nowrap;
 }
 
-/* line 1805, styles.scss */
+/* line 1803, styles.scss */
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-/* line 1808, styles.scss */
+/* line 1806, styles.scss */
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-/* line 1811, styles.scss */
+/* line 1809, styles.scss */
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
 
-/* line 1815, styles.scss */
+/* line 1813, styles.scss */
 #myGrid {
   width: 100%;
   height: 500px;
 }
 
-/* line 1819, styles.scss */
+/* line 1817, styles.scss */
 .loading .exportStatsSection {
   display: none;
 }
 
-/* line 1823, styles.scss */
+/* line 1821, styles.scss */
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #cccccc;
   border: 1px solid #AAAAAA;
   color: #222222;
 }
 
-/* line 1829, styles.scss */
+/* line 1827, styles.scss */
 .tabbable {
   border: 1px solid #AAAAAA;
   color: #222222;
   padding: 3px;
 }
-/* line 1833, styles.scss */
+/* line 1831, styles.scss */
 .tabbable .tab-content {
   padding: 1em;
 }
-/* line 1836, styles.scss */
+/* line 1834, styles.scss */
 .tabbable .nav.nav-tabs {
   margin: 0;
   padding-left: 0;
 }
-/* line 1839, styles.scss */
+/* line 1837, styles.scss */
 .tabbable .nav.nav-tabs li {
   background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
   border: 1px solid #D3D3D3;
@@ -2275,7 +2265,7 @@ line.tick {
   font-weight: normal;
   margin-bottom: -1px;
 }
-/* line 1845, styles.scss */
+/* line 1843, styles.scss */
 .tabbable .nav.nav-tabs li a {
   padding-bottom: 0.3em !important;
   padding-top: 0.3em !important;
@@ -2283,36 +2273,36 @@ line.tick {
   color: #555555;
 }
 
-/* line 1855, styles.scss */
+/* line 1853, styles.scss */
 .pagination {
   height: 20px;
   margin: 0;
 }
 
-/* line 1859, styles.scss */
+/* line 1857, styles.scss */
 .pagination a, .pagination span {
   border-width: 1px;
   line-height: 18px;
   padding: 0 8px;
 }
 
-/* line 1865, styles.scss */
+/* line 1863, styles.scss */
 .modal-header {
   display: none;
 }
 
-/* line 1868, styles.scss */
+/* line 1866, styles.scss */
 .modal .modal-header {
   display: block;
 }
 
-/* line 1872, styles.scss */
+/* line 1870, styles.scss */
 .modal {
   max-height: 600px;
   overflow-y: auto;
 }
 
-/* line 1878, styles.scss */
+/* line 1876, styles.scss */
 .compare_result ul {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2322,7 +2312,7 @@ line.tick {
   *display: inline;
 }
 
-/* line 1883, styles.scss */
+/* line 1881, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2330,7 +2320,23 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 1885, styles.scss */
+/* line 1883, styles.scss */
 .popover .popover-content {
   padding: 5px;
+}
+/* line 1886, styles.scss */
+.popover .btn_container {
+  margin-top: 1em;
+  text-align: right;
+}
+
+/* line 1894, styles.scss */
+.tab_spinner {
+  width: 9px;
+  display: none;
+}
+
+/* line 1902, styles.scss */
+.loading .tab_spinner {
+  display: inline-block;
 }

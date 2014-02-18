@@ -80,7 +80,10 @@
 		<script src="components/ui-slider/src/slider.js"></script>
 		<script src="components/angular-bootstrap/ui-bootstrap.js"></script>
 		<script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-		<script src="components/lodash/dist/lodash.compat.js"
+		<script src="components/lodash/dist/lodash.compat.js"></script>
+		<script src="components/spin.js/dist/spin.js"></script>
+		<script src="components/angular-spinner/angular-spinner.js"></script>
+
 
 		<!-- endbuild -->
 		<!-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.0/lodash.compat.js"></script> -->
@@ -234,6 +237,17 @@
 						<div ng-show="savedSearches.length > 1">
 							Jämför <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>
 							med <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>
+							och sammanställ på
+							<select ng-model="reduce" 
+							    ng-options="obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in getAttrs()"></select>
+						</div>
+					    
+
+						<div>
+							1: {{cmp1 | json}}
+						</div>
+						<div>
+							2: {{cmp2 | json}}
 						</div>
 						<button ng-click="sendCompare()" class="btn-primary btn-small">Jämför</button>
 					</div>
@@ -374,8 +388,12 @@
 									<div class="content_target"></div>
 								</div>
 							</tab>
-							<tab ng-repeat="promise in compareTabs" heading="Jämför {{$index}}">
-									<div class="compare_result" ng-controller="compareCtrl">
+							<tab ng-repeat="promise in compareTabs">
+									<tab-heading ng-class="{loading : loading}">
+										Jämför <span  class="tab_spinner" 
+										us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
+									</tab-heading>
+									<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
 										<ul>
 											<li ng-repeat="tuple in tables.positive">
 												{{tuple[0]}}: {{tuple[1]}}

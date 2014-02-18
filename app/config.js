@@ -278,27 +278,28 @@ attrs.msd = {
 	label : "msd",
 	opts : settings.defaultOptions,
 	extended_template : '<input class="arg_value" ng-model="model">' +
-	'<span ng-click="onIconClick()" class="ui-icon ui-icon-info"></span>' +
-	'<div modal="showmodal" options="opts">' +
-		'<div class="modal-header">' +
-    		'<h4>{{\'msd_long\' | loc}}</h4>' +
-		'</div>' +
-		'<div ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
-	'</div>',
-	
-	controller : function($scope) {
-		$scope.opts = {
-		    backdropFade: true,
-		    dialogFade:true,
-		}
+	'<span ng-click="onIconClick()" class="ui-icon ui-icon-info"></span>',
+	controller : function($scope, $modal) {
+
+
+		var modal = null;
+
 		$scope.onIconClick = function() {
-			$scope.showmodal = true;
+			modal = $modal.open({
+			    template : '<div>' +
+								'<div class="modal-header">' +
+						    		'<h4>{{\'msd_long\' | loc}}</h4>' +
+								'</div>' +
+								'<div ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
+							'</div>',
+			    scope : $scope
+	    	})
 		}
 		$scope.msdClick = function(event) {
 			c.log(event, arguments)
 			val = $(event.target).parent().data("value")
 			$scope.model = val
-			$scope.showmodal = false;
+			modal.close();
 		}
 	}
 };

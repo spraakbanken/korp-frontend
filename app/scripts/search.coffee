@@ -168,21 +168,53 @@ class view.SimpleSearch extends BaseSearch
         @s = scope
         c.log "simplesearch", mainDivId, $(mainDivId)
         $("#similar_lemgrams").css "background-color", settings.primaryColor
-        $("#simple_text").keyup $.proxy(@onSimpleChange, this)
-        @onSimpleChange()
+        # $("#simple_text").keyup $.proxy(@onSimpleChange, this)
+        $("#simple_text").keypress () =>
+            @s.$apply () =>
+                @onSimpleChange()
+        # @onSimpleChange()
         $("#similar_lemgrams").hide()
         @savedSelect = null
-        textinput = $("#simple_text").bind("keydown.autocomplete", (event) =>
-            keyCode = $.ui.keyCode
-            return  if not @isVisible() or $("#ui-active-menuitem").length isnt 0
-            switch event.keyCode
-                when keyCode.ENTER
-                    @onSubmit()  unless $("#search-tab").data("cover")?
-        )
+        # $("#sendBtn", @$main).
+        # scope.onsubmit = () ->
+        #     c.log "onsubmit"
+
+        
+
+
+        textinput = $("#simple_text")
+        # textinput = $("#simple_text").bind("keydown.autocomplete", (event) =>
+        #     keyCode = $.ui.keyCode
+        #     return if not @isVisible() or $("#ui-active-menuitem").length isnt 0
+            # return false
+            # switch event.keyCode
+            #     when keyCode.ENTER
+                    # @onSubmit() unless $("#search-tab").data("cover")?
+        # )
+
+        setLemgram = (lemgram) =>
+            label = util.lemgramToString(lemgram).replace(/<.*?>/g, "")
+            @setPlaceholder(label, lemgram)
+            $("#simple_text").val("")
+            
+
+                
+        # [type, search_val] = search()["search"].split("|")
+        [type, search_val] = @s.$root._search
+
+        if type == "lemgram"
+            setLemgram(search_val)
+            @s.$root.activeCQP = "[lex contains \"#{search_val}\"]"
+        
         if settings.autocomplete
             textinput.korp_autocomplete
                 type: "lem"
-                select: $.proxy(@selectLemgram, this)
+                # select: $.proxy(@selectLemgram, this)
+                select: (lemgram) =>
+                    setLemgram(lemgram)
+                    @s.$apply () =>
+                        @s.$root.activeCQP = "[lex contains \"#{lemgram}\"]"
+                    return false
                 middleware: (request, idArray) =>
                     dfd = $.Deferred()
                     lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
@@ -283,10 +315,10 @@ class view.SimpleSearch extends BaseSearch
         unless $("#simple_text").val() is ""
             util.searchHash "word", $("#simple_text").val()
         else
-            @selectLemgram $("#simple_text").data("lemgram")  if $("#simple_text").attr("placeholder")?
+            @selectLemgram $("#simple_text").data("lemgram") if $("#simple_text").attr("placeholder")?
 
     selectLemgram: (lemgram) ->
-        return  if $("#search-tab").data("cover")?
+        return if $("#search-tab").data("cover")?
         @refreshSearch()
         util.searchHash "lemgram", lemgram
 
@@ -364,6 +396,7 @@ class view.SimpleSearch extends BaseSearch
 
 
     onSimpleChange: (event) ->
+        c.log "onSimpleChange"
         $("#simple_text").data "promise", null
         if event and event.keyCode is 27 #escape
             c.log "key", event.keyCode
@@ -393,8 +426,8 @@ class view.SimpleSearch extends BaseSearch
         @s.$root.activeCQP = val
         unless currentText is ""
             @enableSubmit()
-        else
-            @disableSubmit()
+        # else
+        #     @disableSubmit()
 
     resetView: ->
         $("#similar_lemgrams").empty().height "auto"
@@ -409,7 +442,7 @@ class view.SimpleSearch extends BaseSearch
 
     clear: ->
         $("#simple_text").val("").get(0).blur()
-        @disableSubmit()
+        # @disableSubmit()
         this
 
 class view.ExtendedSearch extends BaseSearch

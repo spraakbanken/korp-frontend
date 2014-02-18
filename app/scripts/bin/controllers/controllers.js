@@ -2,9 +2,9 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
 
-  korpApp.run(function($rootScope, $location, $route, $routeParams) {
+  korpApp.run(function($rootScope, $location, $route, $routeParams, util) {
     var s;
     s = $rootScope;
     s.lang = "sv";
@@ -27,7 +27,50 @@
     $rootScope.saveSearch = function(searchObj) {
       return $rootScope.savedSearches.push(searchObj);
     };
-    return $rootScope.compareTabs = [];
+    $rootScope.compareTabs = [];
+    return util.setupHash(s, [
+      {
+        key: "search",
+        scope_name: "_search",
+        val_in: function(val) {
+          var type, value, _ref;
+          c.log("search hash", val);
+          return _ref = val.split("|"), type = _ref[0], value = _ref[1], _ref;
+        },
+        val_out: function(val) {
+          return val.join("|");
+        },
+        post_change: function() {
+          var data, page, type, value, _ref;
+          _ref = s._search, type = _ref[0], value = _ref[1];
+          c.log("post_change", type, value);
+          page = s.search()["page"] || 0;
+          view.updateSearchHistory(value);
+          data = {
+            value: value,
+            page: page
+          };
+          switch (type) {
+            case "word":
+              $("#simple_text").val(value);
+              simpleSearch.onSimpleChange();
+              simpleSearch.setPlaceholder(null, null);
+              if (settings.lemgramSelect) {
+                simpleSearch.makeLemgramSelect();
+              }
+              return $.sm.send("submit.word", data);
+            case "lemgram":
+              return $.sm.send("submit.lemgram", data);
+            case "saldo":
+              extendedSearch.setOneToken("saldo", value);
+              return $.sm.send("submit.cqp", data);
+            case "cqp":
+              advancedSearch.setCQP(value);
+              return $.sm.send("submit.cqp", data);
+          }
+        }
+      }
+    ]);
   });
 
   korpApp.controller("kwicCtrl", function($scope) {
@@ -169,7 +212,9 @@
   korpApp.controller("compareCtrl", function($scope) {
     var s;
     s = $scope;
+    s.$parent.loading = true;
     return s.promise.then(function(data) {
+      s.$parent.loading = false;
       s.tables = _.groupBy(_.pairs(data.loglike), function(_arg) {
         var val, word;
         word = _arg[0], val = _arg[1];
@@ -188,7 +233,7 @@
     });
   });
 
-  korpApp.controller("TokenList", function($scope, $location) {
+  korpApp.controller("TokenList", function($scope, $location, $rootScope) {
     var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
     cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
@@ -235,7 +280,8 @@
     }
     s.$watch('getCQPString()', function() {
       var cqpstr;
-      return cqpstr = CQP.stringify(s.data);
+      cqpstr = CQP.stringify(s.data);
+      return $rootScope.activeCQP = cqpstr;
     });
     s.getCQPString = function() {
       return (CQP.stringify(s.data)) || "";
@@ -254,21 +300,10 @@
     };
   });
 
-  korpApp.controller("ExtendedToken", function($scope, $location) {
-    var s, word;
+  korpApp.controller("ExtendedToken", function($scope, util, $location) {
+    var s;
     s = $scope;
-    s.valfilter = function(attrobj) {
-      if (attrobj.isStructAttr) {
-        return "_." + attrobj.value;
-      } else {
-        return attrobj.value;
-      }
-    };
-    word = {
-      group: "word",
-      value: "word",
-      label: "word"
-    };
+    s.valfilter = util.valfilter;
     s.setDefault = function(or_obj) {
       or_obj.op = _.values(s.getOpts(or_obj.type))[0];
       return or_obj.val = "";
@@ -278,38 +313,7 @@
       return ((_ref = s.typeMapping) != null ? _ref[type].opts : void 0) || settings.defaultOptions;
     };
     s.$on("corpuschooserchange", function(selected) {
-      var attrs, key, obj, sent_attrs;
-      attrs = (function() {
-        var _ref, _results;
-        _ref = settings.corpusListing.getCurrentAttributes();
-        _results = [];
-        for (key in _ref) {
-          obj = _ref[key];
-          if (obj.displayType !== "hidden") {
-            _results.push(_.extend({
-              group: "word_attr",
-              value: key
-            }, obj));
-          }
-        }
-        return _results;
-      })();
-      sent_attrs = (function() {
-        var _ref, _results;
-        _ref = settings.corpusListing.getStructAttrs();
-        _results = [];
-        for (key in _ref) {
-          obj = _ref[key];
-          if (obj.displayType !== "hidden") {
-            _results.push(_.extend({
-              group: "sentence_attr",
-              value: key
-            }, obj));
-          }
-        }
-        return _results;
-      })();
-      s.types = [word].concat(attrs, sent_attrs);
+      s.types = util.getAttributeGroups(settings.corpusListing);
       return s.typeMapping = _.object(_.map(s.types, function(item) {
         return [item.value, item];
       }));
@@ -342,6 +346,52 @@
 
   korpApp.factory("util", function($location) {
     return {
+      valfilter: function(attrobj) {
+        if (attrobj.isStructAttr) {
+          return "_." + attrobj.value;
+        } else {
+          return attrobj.value;
+        }
+      },
+      getAttributeGroups: function(corpusListing) {
+        var attrs, key, obj, sent_attrs, word;
+        word = {
+          group: "word",
+          value: "word",
+          label: "word"
+        };
+        attrs = (function() {
+          var _ref, _results;
+          _ref = corpusListing.getCurrentAttributes();
+          _results = [];
+          for (key in _ref) {
+            obj = _ref[key];
+            if (obj.displayType !== "hidden") {
+              _results.push(_.extend({
+                group: "word_attr",
+                value: key
+              }, obj));
+            }
+          }
+          return _results;
+        })();
+        sent_attrs = (function() {
+          var _ref, _results;
+          _ref = corpusListing.getStructAttrs();
+          _results = [];
+          for (key in _ref) {
+            obj = _ref[key];
+            if (obj.displayType !== "hidden") {
+              _results.push(_.extend({
+                group: "sentence_attr",
+                value: key
+              }, obj));
+            }
+          }
+          return _results;
+        })();
+        return [word].concat(attrs, sent_attrs);
+      },
       setupHash: function(scope, config) {
         var obj, onWatch, watch, _i, _len, _results;
         onWatch = function() {
@@ -397,53 +447,63 @@
     var s;
     s = $scope;
     c.log("SimpleCtrl");
-    s.isShowing = true;
-    s.togglePopover = function() {
-      if (s.isPopoverVisible) {
-        return s.popHide();
-      } else {
-        return s.popShow();
-      }
-    };
-    return s.saveSearch = function(name) {
-      c.log("savesearch", name);
-      s.popHide();
+    return s.$on("popover_submit", function(event, name) {
       return $rootScope.saveSearch({
         label: name || $rootScope.activeCQP,
         cqp: $rootScope.activeCQP,
         corpora: settings.corpusListing.stringifySelected()
       });
-    };
+    });
+  });
+
+  korpApp.controller("ExtendedSearch", function($scope, util, $location, backend, $rootScope) {
+    var s;
+    s = $scope;
+    return s.$on("popover_submit", function(event, name) {
+      return $rootScope.saveSearch({
+        label: name || $rootScope.activeCQP,
+        cqp: $rootScope.activeCQP,
+        corpora: settings.corpusListing.getSelectedCorpora()
+      });
+    });
   });
 
   korpApp.controller("CompareSearchCtrl", function($scope, util, $location, backend, $rootScope) {
-    var s;
+    var cl, s;
     s = $scope;
+    cl = settings.corpusListing;
+    s.valfilter = util.valfilter;
     $rootScope.saveSearch({
       label: "första",
       cqp: "[pos='NN']",
-      corpora: settings.corpusListing.subsetFactory(["ROMI"]).stringifySelected()
+      corpora: ["ROMI"]
     });
     $rootScope.saveSearch({
       label: "andra",
       cqp: "[pos='NN']",
-      corpora: settings.corpusListing.subsetFactory(["ROMII"]).stringifySelected()
+      corpora: ["ROMII"]
     });
     s.cmp1 = $rootScope.savedSearches[0];
     s.cmp2 = $rootScope.savedSearches[1];
+    s.reduce = 'word';
+    s.getAttrs = function() {
+      var listing;
+      listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
+      return util.getAttributeGroups(listing);
+    };
     return s.sendCompare = function() {
-      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora, s.cmp1.cqp, s.cmp2.corpora, s.cmp2.cqp));
+      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora.join(","), s.cmp1.cqp, s.cmp2.corpora.join(","), s.cmp2.cqp, s.reduce));
     };
   });
 
   korpApp.factory('backend', function($http, $q, util) {
     return {
-      requestCompare: function(corpus1, cqp1, corpus2, cqp2) {
+      requestCompare: function(corpus1, cqp1, corpus2, cqp2, reduce) {
         var def, params;
         def = $q.defer();
         params = {
           command: "loglike",
-          groupby: "word",
+          groupby: reduce,
           set1_corpus: corpus1,
           set1_cqp: cqp1,
           set2_corpus: corpus2,

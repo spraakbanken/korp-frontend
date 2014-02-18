@@ -1,11 +1,15 @@
 <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl" >
-    <label for="simple_text" rel="localize[search_for]">Sök efter</label>
-    <input id="simple_text" type="text" />
-    <!--            <span id="keyboard" class="lig">&#xe07d;</span> -->
-    <span id="keyboard" class="ui-state-default specialkey">ð</span>
+    <form >
+        <label for="simple_text" rel="localize[search_for]">Sök efter</label>
+        <input id="simple_text" type="text" ng-model="simple_text" />
+        <!--            <span id="keyboard" class="lig">&#xe07d;</span> -->
+        <span id="keyboard" class="ui-state-default specialkey">ð</span>
 
-    <!-- <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" /> -->
-    <div class="btn-group">
+        <!-- <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" /> -->
+     
+        <search-submit></search-submit>
+    </form>
+    <!-- <div class="btn-group">
         <button class="btn btn-small" id="sendBtn">Sök</button>
         <button class="btn btn-small" korp-popover ng-click="togglePopover()">
             <span class="caret"></span>
@@ -21,7 +25,7 @@
             <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>
         </form>
     </div>
-
+ -->
 
     <span rel="localize[and_include]">och inkludera</span>
     <input id="prefixChk" type="checkbox">
