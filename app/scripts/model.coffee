@@ -241,6 +241,7 @@ class model.LemgramProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             type: type
+            cache : false
 
         $.ajax
             url: settings.cgi_script

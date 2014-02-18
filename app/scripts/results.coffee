@@ -622,7 +622,6 @@ class view.LemgramResults extends BaseResults
                     c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
                     label = $(this).data("word") or $(this).tmplItem().lemgram
                     $("<span class='hit'><b>#{label}</b></span>").appendTo $parent
-
         ).append "<div style='clear:both;'/>"
 
     renderWordTables: (word, data) ->
@@ -641,24 +640,35 @@ class view.LemgramResults extends BaseResults
         $.each unique_words, (i, [currentWd, pos]) =>
             self.drawTable currentWd, pos, data
             self.renderHeader pos
+<<<<<<< HEAD
             content = """
                 #{currentWd} (<span rel="localize[pos]">#{util.getLocaleString(pos)}</span>)
             """
             $(".tableContainer:last").prepend($("<div>",
                 class: "header"
             ).html(content)).find(".hit .wordclass_suffix").hide()
+=======
+                
+            $(".tableContainer:last").prepend($("<div>",
+                class: "header"
+            ).html("")).find(".hit .wordclass_suffix").hide()
+>>>>>>> fixed word picture distro
 
         $(".lemgram_result .wordclass_suffix").hide()
         @hidePreloader()
 
 
     renderTables: (lemgram, data) ->
+<<<<<<< HEAD
         # wordClass = util.splitLemgram(lemgram).pos.slice(0, 2)
         if data[0].head == lemgram
             wordClass = data[0].headpos
         else
             wordClass = data[0].deppos
 
+=======
+        wordClass = util.splitLemgram(lemgram).pos.slice(0, 2)
+>>>>>>> fixed word picture distro
         @drawTable lemgram, wordClass, data #, getRelType
         $(".lemgram_result .wordclass_suffix").hide()
         @renderHeader wordClass
