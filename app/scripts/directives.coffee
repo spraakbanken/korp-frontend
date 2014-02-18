@@ -23,6 +23,7 @@ korpApp.directive 'kwicWord', ->
 
 
 korpApp.directive "tabHash", (utils, $location) ->
+    scope : true
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()
@@ -171,8 +172,10 @@ korpApp.directive "korpAutocomplete", () ->
 
 
 korpApp.directive "constr", ($window) ->
+    scope : true
     link : (scope, elem, attr) ->
-        c.log "constr scope", scope
+        c.warn "constr scope", attr.constrName, scope.$id, scope.$parent.$id
+
         instance = new $window.view[attr.constr](elem, elem, scope)
         if attr.constrName
             $window[attr.constrName] = instance

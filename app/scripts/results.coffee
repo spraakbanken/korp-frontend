@@ -17,7 +17,11 @@ class BaseResults
                 @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
             catch e
                 c.log "onprogress error", e
-        @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
+        # @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
+
+        safeApply @s, () =>
+            @s.$parent.progress = Math.round(progressObj["stats"])
+
 
     renderResult: (data) ->
 
@@ -1211,6 +1215,11 @@ class view.StatsResults extends BaseResults
         @hidePreloader()
         $("#results-stats").prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
         $("#exportStatsSection").hide()
+
+    onProgress : (progressObj) ->
+        super(progressObj)
+        # c.log "onProgress", progressObj.stats
+
 
 
 class view.GraphResults extends BaseResults

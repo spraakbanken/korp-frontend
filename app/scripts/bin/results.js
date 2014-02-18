@@ -16,7 +16,8 @@
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
-      var e;
+      var e,
+        _this = this;
       this.num_result.html(prettyNumbers(progressObj["total_results"]));
       if (!isNaN(progressObj["stats"])) {
         try {
@@ -26,7 +27,9 @@
           c.log("onprogress error", e);
         }
       }
-      return this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
+      return safeApply(this.s, function() {
+        return _this.s.$parent.progress = Math.round(progressObj["stats"]);
+      });
     };
 
     BaseResults.prototype.renderResult = function(data) {
@@ -1307,6 +1310,10 @@
       this.hidePreloader();
       $("#results-stats").prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
       return $("#exportStatsSection").hide();
+    };
+
+    StatsResults.prototype.onProgress = function(progressObj) {
+      return StatsResults.__super__.onProgress.call(this, progressObj);
     };
 
     return StatsResults;

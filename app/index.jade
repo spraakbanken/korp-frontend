@@ -117,14 +117,18 @@ html
           #columns
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
-              tabset(tab-hash='result_tab', ng-click='onClick($event)', ng-controller="resultTabCtrl")
+              tabset(tab-hash='result_tab', ng-click='onClick($event)')
                 tab(select="instance.onentry()", deselect="instance.onexit()", ng-controller='kwicCtrl')
-                  tab-heading
+                  tab-heading(ng-class="{not_loading: progress == 100}")
                     | KWIC
+                    .tab_progress(style="width:{{progress || 0}}%")
                   #results-kwic(constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
-                tab(heading='Statistik', select="selectTab(1)")
-                  div(ng-controller='StatsResultCtrl', constr='StatsResults', constr-name='statsResults')
+                tab(select="selectTab(1)", ng-controller='StatsResultCtrl')
+                  tab-heading(ng-class="{not_loading: progress == 100}")
+                    | Statistik
+                    .tab_progress(style="width:{{progress || 0}}%")
+                  div(constr='StatsResults', constr-name='statsResults')
                     .stats_header
                       button#showGraph Visa trenddiagram
                       .progress_container
@@ -142,6 +146,9 @@ html
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
                 tab(heading='Ordbild', disabled="instance.disabled")
+                  tab-heading(ng-class="{not_loading: progress == 100}")
+                    | Ordbild
+                    .tab_progress(style="width:{{progress || 0}}%")
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent
                       input#wordclassChk(type='checkbox')

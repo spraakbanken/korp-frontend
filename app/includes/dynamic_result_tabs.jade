@@ -1,6 +1,8 @@
 tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="onexit()")
-  tab-heading
+  tab-heading(ng-class="{not_loading: progress == 100}")
     | KWIC
+    .tab_progress(style="width:{{progress || 0}}%")
+
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(constr='ExampleResults' )
     include kwicresult
