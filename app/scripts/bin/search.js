@@ -465,8 +465,9 @@
       $("#cqp_string").val(val);
       this.s.$root.activeCQP = val;
       if (currentText !== "") {
-        return this.enableSubmit();
+        this.enableSubmit();
       }
+      return val;
     };
 
     SimpleSearch.prototype.resetView = function() {

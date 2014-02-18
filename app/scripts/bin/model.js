@@ -46,7 +46,7 @@
     };
 
     BaseProxy.prototype.calcProgress = function(e) {
-      var newText, stats, struct,
+      var newText, stats, struct, _ref,
         _this = this;
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
@@ -67,7 +67,7 @@
         }
       });
       stats = (this.progress / this.total) * 100;
-      if ((this.total == null) && "progress_corpora" in struct) {
+      if ((this.total == null) && ((_ref = struct.progress_corpora) != null ? _ref.length : void 0)) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
           if (!corpus.length) {
             return;

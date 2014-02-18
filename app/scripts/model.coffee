@@ -61,7 +61,7 @@ class BaseProxy
                 @total_results += parseInt(val.hits)
 
         stats = (@progress / @total) * 100
-        if not @total? and "progress_corpora" of struct
+        if not @total? and struct.progress_corpora?.length
             @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
                 return if not corpus.length 
                 _(corpus.split("|")).map((corpus) ->

@@ -11,35 +11,18 @@
         <!-- <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" /> -->
      
         <search-submit></search-submit>
+    
+
+        <span rel="localize[and_include]">och inkludera</span>
+        <input id="prefixChk" type="checkbox">
+        <label rel="localize[prefix]" for="prefixChk">förled</label>
+        <input id="suffixChk" type="checkbox">
+        <label rel="localize[suffix]" for="suffixChk">efterled</label>
+        &nbsp;
+        <span rel="localize[and]">och</span>
+        <input id="caseChk" type="checkbox">
+        <label for="caseChk" rel="localize[case_insensitive]">shiftlägesoberoende</label>
     </form>
-    <!-- <div class="btn-group">
-        <button class="btn btn-small" id="sendBtn">Sök</button>
-        <button class="btn btn-small" korp-popover ng-click="togglePopover()">
-            <span class="caret"></span>
-        </button>
-    </div>
-    <div class="popover bottom compare">
-        <div class="arrow"></div>
-        <h3 class="popover-title">Spara för jämförelse</h3>
-        <form class="popover-content" ng-submit="saveSearch(name)">
-            <div>
-                <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">
-            </div>
-            <div class="btn_container"><button class="btn btn-primary btn-small">Spara</button></div>
-        </form>
-    </div>
- -->
-
-    <span rel="localize[and_include]">och inkludera</span>
-    <input id="prefixChk" type="checkbox">
-    <label rel="localize[prefix]" for="prefixChk">förled</label>
-    <input id="suffixChk" type="checkbox">
-    <label rel="localize[suffix]" for="suffixChk">efterled</label>
-    &nbsp;
-    <span rel="localize[and]">och</span>
-    <input id="caseChk" type="checkbox">
-    <label for="caseChk" rel="localize[case_insensitive]">shiftlägesoberoende</label>
-
     <table id="char_table">
         <tbody>
             <tr>

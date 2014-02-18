@@ -1,7 +1,4 @@
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __slice = [].slice;
-
   window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
 
   korpApp.run(function($rootScope, $location, $route, $routeParams, utils) {
@@ -30,10 +27,10 @@
     return $rootScope.compareTabs = [];
   });
 
-  korpApp.controller("kwicCtrl", function($scope) {
-    var findMatchSentence, massageData, punctArray, s;
-    c.log("kwicCtrl init");
+  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches) {
+    var s;
     s = $scope;
+<<<<<<< HEAD
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
@@ -143,64 +140,100 @@
     s.selectionManager = new util.SelectionManager();
     s.selectLeft = function(sentence) {
       if (!sentence.match) {
+=======
+    c.log("SimpleCtrl");
+    s.$on("popover_submit", function(event, name) {
+      return $rootScope.saveSearch({
+        label: name || $rootScope.activeCQP,
+        cqp: $rootScope.activeCQP,
+        corpora: settings.corpusListing.getSelectedCorpora()
+      });
+    });
+    s.searches = searches;
+    s.$watch("searches.activeSearch", function(search) {
+      if (!search) {
+>>>>>>> everything totally broken
         return;
       }
-      return sentence.tokens.slice(0, sentence.match.start);
-    };
-    s.selectMatch = function(sentence) {
-      var from;
-      if (!sentence.match) {
+      c.log("searches.activeSearch", search);
+      if (search.type === "word") {
+        s.placeholder = null;
+        return s.simple_text = search.val;
+      } else if (search.type === "lemgram") {
+        s.placeholder = search.val;
+        return s.simple_text = "";
+      } else {
+        s.placeholder = null;
+        return s.simple_text = "";
+      }
+    });
+    return s.lemgramToString = function(lemgram) {
+      if (!lemgram) {
         return;
       }
-      from = sentence.match.start;
-      return sentence.tokens.slice(from, sentence.match.end);
-    };
-    return s.selectRight = function(sentence) {
-      var from, len;
-      if (!sentence.match) {
-        return;
-      }
-      from = sentence.match.end;
-      len = sentence.tokens.length;
-      return sentence.tokens.slice(from, len);
+      return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
     };
   });
 
-  korpApp.controller("compareCtrl", function($scope) {
+  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches) {
     var s;
     s = $scope;
-    s.$parent.loading = true;
-    return s.promise.then(function(data) {
-      var pairs;
-      s.$parent.loading = false;
-      pairs = _.pairs(data.loglike);
-      s.tables = _.groupBy(pairs, function(_arg) {
-        var val, word;
-        word = _arg[0], val = _arg[1];
-        if (val > 0) {
-          return "positive";
-        } else {
-          return "negative";
-        }
-      });
-      s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
-        return tuple[1];
-      });
-      s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
-        return Math.abs(tuple[1]);
-      });
-      return s.max = _.max(pairs, function(_arg) {
-        var val, word;
-        word = _arg[0], val = _arg[1];
-        return Math.abs(val);
+    s.$on("popover_submit", function(event, name) {
+      return $rootScope.saveSearch({
+        label: name || $rootScope.activeCQP,
+        cqp: $rootScope.activeCQP,
+        corpora: settings.corpusListing.getSelectedCorpora()
       });
     });
+    s.searches = searches;
+    return s.submit = function() {
+      c.log("extended submit");
+      return $location.search("search", "cqp");
+    };
+  });
+
+  korpApp.controller("ExtendedToken", function($scope, utils, $location) {
+    var onCorpusChange, s;
+    s = $scope;
+    s.valfilter = utils.valfilter;
+    s.setDefault = function(or_obj) {
+      or_obj.op = _.values(s.getOpts(or_obj.type))[0];
+      return or_obj.val = "";
+    };
+    s.getOpts = function(type) {
+      var _ref;
+      return ((_ref = s.typeMapping) != null ? _ref[type].opts : void 0) || settings.defaultOptions;
+    };
+    onCorpusChange = function(selected) {
+      s.types = utils.getAttributeGroups(settings.corpusListing);
+      return s.typeMapping = _.object(_.map(s.types, function(item) {
+        return [item.value, item];
+      }));
+    };
+    s.$on("corpuschooserchange", onCorpusChange);
+    onCorpusChange();
+    s.removeOr = function(and_array, i) {
+      if (and_array.length > 1) {
+        return and_array.splice(i, 1);
+      } else {
+        return s.token.and_block.splice(_.indexOf(and_array, 1));
+      }
+    };
+    s.addAnd = function() {
+      return s.token.and_block.push(s.addOr([]));
+    };
+    return s.getTokenCqp = function() {
+      if (!s.token.cqp) {
+        return "";
+      }
+      return s.token.cqp.match(/\[(.*)]/)[1];
+    };
   });
 
   korpApp.controller("TokenList", function($scope, $location, $rootScope) {
     var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
-    cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
+    cqp = '[lex contains "ge..vb.1"]';
     s.data = [];
     try {
       s.data = CQP.parse(cqp);
@@ -230,11 +263,6 @@
       s.data = output;
       c.log("crash", s.data);
     }
-    if ($location.search().cqp) {
-      s.data = CQP.parse(decodeURIComponent($location.search().cqp));
-    } else {
-      s.data = CQP.parse(cqp);
-    }
     _ref1 = s.data;
     for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
       token = _ref1[_j];
@@ -245,42 +273,10 @@
     s.$watch('getCQPString()', function() {
       var cqpstr;
       cqpstr = CQP.stringify(s.data);
-      return $rootScope.activeCQP = cqpstr;
-    });
-    s.getCQPString = function() {
-      return (CQP.stringify(s.data)) || "";
-    };
-    s.addToken = function() {
-      return s.data.push(JSON.parse(JSON.stringify(s.data.slice(0)[0])));
-    };
-    return s.removeToken = function(i) {
-      return s.data.splice(i, 1);
-    };
-  });
-
-  korpApp.filter("mapper", function() {
-    return function(item, f) {
-      return f(item);
-    };
-  });
-
-  korpApp.controller("ExtendedToken", function($scope, utils, $location) {
-    var s;
-    s = $scope;
-    s.valfilter = utils.valfilter;
-    s.setDefault = function(or_obj) {
-      or_obj.op = _.values(s.getOpts(or_obj.type))[0];
-      return or_obj.val = "";
-    };
-    s.getOpts = function(type) {
-      var _ref;
-      return ((_ref = s.typeMapping) != null ? _ref[type].opts : void 0) || settings.defaultOptions;
-    };
-    s.$on("corpuschooserchange", function(selected) {
-      s.types = utils.getAttributeGroups(settings.corpusListing);
-      return s.typeMapping = _.object(_.map(s.types, function(item) {
-        return [item.value, item];
-      }));
+      $rootScope.activeCQP = cqpstr;
+      return $location.search({
+        cqp: encodeURIComponent(cqpstr)
+      });
     });
     s.addOr = function(and_array) {
       and_array.push({
@@ -290,67 +286,25 @@
       });
       return and_array;
     };
-    s.removeOr = function(and_array, i) {
-      if (and_array.length > 1) {
-        return and_array.splice(i, 1);
-      } else {
-        return s.token.and_block.splice(_.indexOf(and_array, 1));
-      }
+    s.addToken = function() {
+      token = {
+        and_array: []
+      };
+      s.data.push(token);
+      return s.addOr(token.and_array);
     };
-    s.addAnd = function() {
-      return s.token.and_block.push(s.addOr([]));
+    s.removeToken = function(i) {
+      return s.data.splice(i, 1);
     };
-    return s.getTokenCqp = function() {
-      if (!s.token.cqp) {
-        return "";
-      }
-      return s.token.cqp.match(/\[(.*)]/)[1];
+    return s.getCQPString = function() {
+      return (CQP.stringify(s.data)) || "";
     };
   });
 
-  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches) {
-    var s;
-    s = $scope;
-    c.log("SimpleCtrl");
-    s.$on("popover_submit", function(event, name) {
-      return $rootScope.saveSearch({
-        label: name || $rootScope.activeCQP,
-        cqp: $rootScope.activeCQP,
-        corpora: settings.corpusListing.stringifySelected()
-      });
-    });
-    s.searches = searches;
-    s.$watch("searches.activeSearch", function(search) {
-      if (!search) {
-        return;
-      }
-      c.log("searches.activeSearch", search);
-      if (search.type === "word") {
-        s.placeholder = null;
-        return s.simple_text = search.val;
-      } else if (search.type === "lemgram") {
-        s.placeholder = search.val;
-        return s.simple_text = "";
-      }
-    });
-    return s.lemgramToString = function(lemgram) {
-      if (!lemgram) {
-        return;
-      }
-      return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
+  korpApp.filter("mapper", function() {
+    return function(item, f) {
+      return f(item);
     };
-  });
-
-  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope) {
-    var s;
-    s = $scope;
-    return s.$on("popover_submit", function(event, name) {
-      return $rootScope.saveSearch({
-        label: name || $rootScope.activeCQP,
-        cqp: $rootScope.activeCQP,
-        corpora: settings.corpusListing.getSelectedCorpora()
-      });
-    });
   });
 
   korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope) {
@@ -376,10 +330,9 @@
       listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);
     };
-    s.sendCompare = function() {
-      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora.join(","), s.cmp1.cqp, s.cmp2.corpora.join(","), s.cmp2.cqp, s.reduce));
+    return s.sendCompare = function() {
+      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, s.reduce));
     };
-    return s.sendCompare();
   });
 
   korpApp.filter("loc", function($rootScope) {

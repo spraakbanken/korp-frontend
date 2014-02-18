@@ -2303,27 +2303,49 @@ line.tick {
 }
 
 /* line 1876, styles.scss */
-.compare_result ul {
+.compare_result .column {
   display: -moz-inline-stack;
   display: inline-block;
   vertical-align: top;
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
+}
+/* line 1879, styles.scss */
+.compare_result .column_1 ul {
+  background-color: #f1f6ff;
+  border: 1px solid #dde9ff;
+}
+/* line 1882, styles.scss */
+.compare_result .column_1 ul .meter {
+  background-color: #dde9ff;
+}
+/* line 1886, styles.scss */
+.compare_result .column_2 ul {
+  background-color: #fff9ec;
+  border: 1px solid #FFF3D8;
+}
+/* line 1889, styles.scss */
+.compare_result .column_2 ul .meter {
+  background-color: #FFF3D8;
+}
+/* line 1893, styles.scss */
+.compare_result ul {
+  padding: 2px;
+  margin-right: 2em;
   min-width: 300px;
   font-size: 1.1em;
 }
-/* line 1880, styles.scss */
+/* line 1899, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
 }
-/* line 1883, styles.scss */
+/* line 1902, styles.scss */
 .compare_result ul li .meter {
-  background-color: #dde9ff;
-  padding: 5px 0;
+  padding: 3px 0;
 }
 
-/* line 1897, styles.scss */
+/* line 1915, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2331,23 +2353,23 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 1899, styles.scss */
+/* line 1917, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 1902, styles.scss */
+/* line 1920, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 1910, styles.scss */
+/* line 1928, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-/* line 1918, styles.scss */
+/* line 1936, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }

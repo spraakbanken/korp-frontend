@@ -46,8 +46,9 @@ deferred_domReady = $.Deferred((dfd) ->
 
 ).promise()
 
-
+###
 chained = deferred_mode.pipe(->
+    c.log "info send"
     $.ajax
         url: settings.cgi_script
         data:
@@ -59,16 +60,17 @@ chained = deferred_mode.pipe(->
 
 )
 chained.done (info_data) ->
+    c.log "info done"
     $.each settings.corpora, (key) ->
         settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"]
-
+###
 
 # loc_dfd = util.initLocalize()
 loc_dfd = initLocales()
 
 
 
-$.when(loc_dfd, chained, deferred_domReady).then ((loc_data) ->
+$.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
 
@@ -149,7 +151,7 @@ $.when(loc_dfd, chained, deferred_domReady).then ((loc_data) ->
         c.log "select", $(this).find(":selected")
         location.href = $(this).find(":selected").val()
 
-    loadCorpora()
+    
     creds = $.jStorage.get("creds")
     # $.sm.start()
     if creds
@@ -222,16 +224,18 @@ $.when(loc_dfd, chained, deferred_domReady).then ((loc_data) ->
         $("#corpusbox").corpusChooser "redraw"
 
 
-    corpus = search()["corpus"]
-    if corpus
-        corp_array = corpus.split(",")
-        processed_corp_array = []
-        settings.corpusListing.select(corp_array)
-        $.each corp_array, (key, val) ->
-            processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
-        corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-        $("#select_corpus").val corpus
-        simpleSearch.enableSubmit()
+    # corpus = search()["corpus"]
+    # if corpus
+    #     corp_array = corpus.split(",")
+    #     processed_corp_array = []
+    #     settings.corpusListing.select(corp_array)
+    #     $.each corp_array, (key, val) ->
+    #         processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
+    #     corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
+    #     $("#select_corpus").val corpus
+    #     simpleSearch.enableSubmit()
+
+
 
     window.onHashChange = (event, isInit) ->
         c.log "onHashChange"
@@ -329,6 +333,10 @@ $.when(loc_dfd, chained, deferred_domReady).then ((loc_data) ->
                     kwicResults.makeRequest()
                 else
                     kwicResults.centerScrollbar()
+
+        if isInit
+            util.localize()
+
         ###
         searchval = search().search
         if searchval? and searchval isnt prevFragment["search"]
@@ -459,7 +467,7 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
 
 initTimeGraph = ->
     # TODO: crashing now, fix later
-    return 
+    # return 
     timestruct = null
     all_timestruct = null
     restdata = null

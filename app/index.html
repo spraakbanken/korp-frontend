@@ -116,7 +116,8 @@
 		<script src="scripts/bin/model.js"></script>
 		<script src="scripts/bin/main.js"></script>
 		<!-- endbuild -->
-		<script src="scripts/bin/controllers/controllers.js"></script>
+		<script src="scripts/bin/search_controllers.js"></script>
+		<script src="scripts/bin/result_controllers.js"></script>
 		<script src="scripts/bin/services.js"></script>
 		<script src="scripts/bin/directives.js"></script>
 	</head>
@@ -396,19 +397,22 @@
 									</tab-heading>
 									<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
 
-										<div>
-											Fler i {{}}
+										<div class="column column_1">
+											<h2>Fler i {{cmp1.label}}</h2>
+											<ul>
+												<li ng-repeat="tuple in tables.negative">
+													<div class="meter" meter="tuple" max="max[1]" ></div>
+												</li>
+											</ul>
+										</div>
+										<div class="column column_2">
+											<h2>Fler i {{cmp2.label}}</h2>
 											<ul>
 												<li ng-repeat="tuple in tables.positive">
 													<div class="meter" meter="tuple" max="max[1]" ></div>
 												</li>
 											</ul>
 										</div>
-										<ul>
-											<li ng-repeat="tuple in tables.negative">
-												<div class="meter" meter="tuple" max="max[1]" ></div>
-											</li>
-										</ul>
 									</div>
 							</tab>
 						</tabset>

@@ -1,5 +1,5 @@
 (function() {
-  var chained, deferred_domReady, deferred_mode, initTimeGraph, isDev, loc_dfd, t,
+  var deferred_domReady, deferred_mode, initTimeGraph, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.currentMode = $.deparam.querystring().mode || "default";
@@ -51,29 +51,30 @@
     });
   }).promise();
 
-  chained = deferred_mode.pipe(function() {
-    return $.ajax({
-      url: settings.cgi_script,
-      data: {
-        command: "info",
-        corpus: $.map($.keys(settings.corpora), function(item) {
-          return item.toUpperCase();
-        }).join(),
-        log: 1
-      }
-    });
-  });
+  /*
+  chained = deferred_mode.pipe(->
+      c.log "info send"
+      $.ajax
+          url: settings.cgi_script
+          data:
+              command: "info"
+              corpus: $.map($.keys(settings.corpora), (item) ->
+                  item.toUpperCase()
+              ).join()
+              log: 1
+  
+  )
+  chained.done (info_data) ->
+      c.log "info done"
+      $.each settings.corpora, (key) ->
+          settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"]
+  */
 
-  chained.done(function(info_data) {
-    return $.each(settings.corpora, function(key) {
-      return settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"];
-    });
-  });
 
   loc_dfd = initLocales();
 
-  $.when(loc_dfd, chained, deferred_domReady).then((function(loc_data) {
-    var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, to;
+  $.when(loc_dfd, deferred_mode, deferred_domReady).then((function(loc_data) {
+    var creds, end, from, labs, paper, start, tab_a_selector, to;
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
@@ -153,7 +154,6 @@
       c.log("select", $(this).find(":selected"));
       return location.href = $(this).find(":selected").val();
     });
-    loadCorpora();
     creds = $.jStorage.get("creds");
     if (creds) {
       authenticationProxy.loginObj = creds;
@@ -210,18 +210,6 @@
       $("#pass").val("");
       return $("#corpusbox").corpusChooser("redraw");
     });
-    corpus = search()["corpus"];
-    if (corpus) {
-      corp_array = corpus.split(",");
-      processed_corp_array = [];
-      settings.corpusListing.select(corp_array);
-      $.each(corp_array, function(key, val) {
-        return processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val));
-      });
-      corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
-      $("#select_corpus").val(corpus);
-      simpleSearch.enableSubmit();
-    }
     window.onHashChange = function(event, isInit) {
       var display, e, hasChanged, page, prevFragment, reading, showAbout;
       c.log("onHashChange");
@@ -323,6 +311,9 @@
             kwicResults.centerScrollbar();
           }
         }
+      }
+      if (isInit) {
+        util.localize();
       }
       /*
       searchval = search().search
@@ -434,7 +425,6 @@
 
   initTimeGraph = function() {
     var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
-    return;
     timestruct = null;
     all_timestruct = null;
     restdata = null;

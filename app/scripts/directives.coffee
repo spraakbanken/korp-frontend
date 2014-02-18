@@ -204,7 +204,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     template : '''
     <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-small" id="sendBtn">Sök</button>
+            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">Sök</button>
             <button class="btn btn-small opener" ng-click="togglePopover()">
                 <span class="caret"></span>
             </button>
@@ -233,7 +233,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                 s.popShow()
 
         popover = elem.find(".popover")
-        scope.isPopoverVisible = false
+        s.isPopoverVisible = false
         trans = 
             bottom : "top"
             top : "bottom"
@@ -251,11 +251,11 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
         onEscape = (event) ->
             c.log "keydown", event.which
             if event.which == 27 #escape
-                scope.popHide()
+                s.popHide()
                 return false
 
-        scope.popShow = () ->
-            scope.isPopoverVisible = true
+        s.popShow = () ->
+            s.isPopoverVisible = true
             popover.show("fade", "fast").focus().position
                 my : my
                 at : at
@@ -264,15 +264,18 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
             c.log "popShow", $rootElement
             $rootElement.on "keydown", onEscape
 
-        scope.popHide = () ->
-            scope.isPopoverVisible = false
+        s.popHide = () ->
+            s.isPopoverVisible = false
             popover.hide("fade", "fast")
             $rootElement.off "keydown", onEscape
 
 
-        scope.onSubmit = () ->
+        s.onSubmit = () ->
             s.popHide()
             s.$broadcast('popover_submit', s.name)
+
+        s.onSendClick = () ->
+            s.$broadcast('btn_submit')
 
 
 korpApp.directive "meter", () ->

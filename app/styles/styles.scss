@@ -1880,16 +1880,34 @@ line.tick {
 }
 
 .compare_result {
-  ul {
+  .column {
     @include inline-block(top);
+  }
+  .column_1 ul {
+    background-color: lighten($primaryColor, 4%);
+    border : 1px solid $primaryColor;
+    .meter {
+      background-color: $primaryColor;
+    }
+  }
+  .column_2 ul {
+    background-color: lighten(#FFF3D8, 4%);
+    border : 1px solid #FFF3D8;
+    .meter {
+      background-color: #FFF3D8;
+    }
+  }
+  ul {
+    // border : 1px solid $primaryColor;
+    padding : 2px;
+    margin-right : 2em;
     min-width : 300px;
     font-size : 1.1em;
     li {
       margin-bottom : 0.5em;
 
       .meter {
-        background-color : $primaryColor;
-        padding : 5px 0;
+        padding : 3px 0;
       }
       .content {
         // z-index : 2;

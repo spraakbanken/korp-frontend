@@ -175,6 +175,7 @@ class view.SimpleSearch extends BaseSearch
         # @onSimpleChange()
         $("#similar_lemgrams").hide()
         @savedSelect = null
+        
         # $("#sendBtn", @$main).
         # scope.onsubmit = () ->
         #     c.log "onsubmit"
@@ -199,7 +200,7 @@ class view.SimpleSearch extends BaseSearch
             
 
 
-        
+
                 
         # [type, search_val] = search()["search"].split("|")
         # [type, search_val] = @s.$root._search
@@ -434,6 +435,8 @@ class view.SimpleSearch extends BaseSearch
         @s.$root.activeCQP = val
         unless currentText is ""
             @enableSubmit()
+
+        return val
         # else
         #     @disableSubmit()
 
