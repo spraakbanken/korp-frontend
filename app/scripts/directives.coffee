@@ -294,3 +294,32 @@ korpApp.directive "meter", () ->
 
         elem.width Math.round (part * w)
 
+
+
+korpApp.directive "popper", () ->
+    link : (scope, elem, attrs) ->
+        popup = elem.next()
+        popup.appendTo("body").hide()
+        closePopup = () ->
+            popup.hide()
+        
+        popup.on "click", (event) ->
+            closePopup()
+
+
+
+        elem.on "click", (event) ->
+            if popup.is(":visible") then closePopup()
+            else popup.show()
+
+            popup.position
+                my : "right top"
+                at : "bottom right"
+                of : elem
+
+
+
+
+
+
+

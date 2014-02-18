@@ -359,12 +359,12 @@
     $rootScope.saveSearch({
       label: "frihet",
       cqp: "[lex contains 'frihet..nn.1']",
-      corpora: ["LB"]
+      corpora: ["VIVILL"]
     });
     $rootScope.saveSearch({
       label: "jämlikhet",
       cqp: "[lex contains 'jämlikhet..nn.1']",
-      corpora: ["LB"]
+      corpora: ["VIVILL"]
     });
     s.cmp1 = $rootScope.savedSearches[0];
     s.cmp2 = $rootScope.savedSearches[1];
@@ -372,7 +372,7 @@
     s.getAttrs = function() {
       var listing;
       if (!s.cmp1) {
-        return null;
+        return;
       }
       listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);

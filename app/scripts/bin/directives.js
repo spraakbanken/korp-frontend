@@ -302,4 +302,32 @@
     };
   });
 
+  korpApp.directive("popper", function() {
+    return {
+      link: function(scope, elem, attrs) {
+        var closePopup, popup;
+        popup = elem.next();
+        popup.appendTo("body").hide();
+        closePopup = function() {
+          return popup.hide();
+        };
+        popup.on("click", function(event) {
+          return closePopup();
+        });
+        return elem.on("click", function(event) {
+          if (popup.is(":visible")) {
+            closePopup();
+          } else {
+            popup.show();
+          }
+          return popup.position({
+            my: "right top",
+            at: "bottom right",
+            of: elem
+          });
+        });
+      }
+    };
+  });
+
 }).call(this);

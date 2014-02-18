@@ -7,6 +7,9 @@
 
 
 ' contains '        return 'contains'
+'lbound'            return "FUNC"
+'rbound'            return "FUNC"
+'sentence'          return "FUNCVAL"
 "("                 /* skip */
 ")"                 /* skip */
 \s+                 /* skip whitespace */
@@ -99,8 +102,10 @@ or_block
     ;
 
 
-or
-    : TYPE infix_op VALUE
+or 
+    : FUNC FUNCVAL
+        { var obj = {}; obj[$1] = true; $$ = obj}
+    | TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
     ;
 

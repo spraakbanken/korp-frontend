@@ -414,12 +414,12 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     $rootScope.saveSearch {
         label : "frihet"
         cqp : "[lex contains 'frihet..nn.1']"
-        corpora : ["LB"]
+        corpora : ["VIVILL"]
     }
     $rootScope.saveSearch {
         label : "jämlikhet"
         cqp : "[lex contains 'jämlikhet..nn.1']"
-        corpora : ["LB"]
+        corpora : ["VIVILL"]
     }
 
 
@@ -430,7 +430,7 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     # s.reduce = '_.text_parti'
 
     s.getAttrs = () ->
-        unless s.cmp1 then return null
+        unless s.cmp1 then return
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
         return utils.getAttributeGroups(listing)
 

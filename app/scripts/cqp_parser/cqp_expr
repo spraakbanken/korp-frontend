@@ -1,1 +1,1 @@
-[word="value" | word &= "value2" & word contains "ge..vb.1"] []{1,2}
+[word="value" | word &= "value2" & word contains "ge..vb.1"] []
