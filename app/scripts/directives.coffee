@@ -36,12 +36,12 @@ korpApp.directive 'kwicWord', ->
             return (x for [x, y] in _.pairs output when y).join " "
 
 
-korpApp.directive "tabHash", (util, $location) ->
+korpApp.directive "tabHash", (utils, $location) ->
     link : (scope, elem, attr) ->
         s = scope
 
         watchHash = () ->
-            util.setupHash s,[
+            utils.setupHash s,[
                 expr : "getSelected()"
                 val_out : (val) ->
                     c.log "val out", val

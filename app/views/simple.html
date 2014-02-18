@@ -1,7 +1,10 @@
 <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl" >
     <form >
         <label for="simple_text" rel="localize[search_for]">Sök efter</label>
-        <input id="simple_text" type="text" ng-model="simple_text" />
+        <input id="simple_text" type="text" ng-model="simple_text" 
+            placeholder="{{lemgramToString(placeholder)}}" 
+
+             />
         <!--            <span id="keyboard" class="lig">&#xe07d;</span> -->
         <span id="keyboard" class="ui-state-default specialkey">ð</span>
 

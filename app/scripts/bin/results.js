@@ -98,8 +98,7 @@
         if (!_this.selectionManager.hasSelected()) {
           return;
         }
-        _this.selectionManager.deselect();
-        return $.sm.send("word.deselect");
+        return _this.selectionManager.deselect();
       });
       this.$result.find(".reading_btn").click(function() {
         var isReading;
@@ -122,7 +121,6 @@
         sent = scope.sentence;
         event.stopPropagation();
         word = $(event.target);
-        $.sm.send("word.select");
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
         if (obj.dephead == null) {
           scope.selectionManager.select(word, null);

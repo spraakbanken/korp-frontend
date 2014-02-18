@@ -15,9 +15,13 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
 
 # korpApp.controller "kwicCtrl", ($scope) ->
 
-korpApp.run ($rootScope, $location, $route, $routeParams, util) ->
+korpApp.run ($rootScope, $location, $route, $routeParams, utils) ->
     s = $rootScope
     s.lang = "sv"
+
+    corpus = search()["corpus"]
+    if corpus
+        settings.corpusListing.select corpus.split(",")
 
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
@@ -42,46 +46,6 @@ korpApp.run ($rootScope, $location, $route, $routeParams, util) ->
 
 
     $rootScope.compareTabs = []
-
-
-
-    util.setupHash s, [
-        key : "search"
-        scope_name : "_search"
-        val_in : (val) ->
-            c.log "search hash", val
-            [type, value] = val.split("|")
-        val_out : (val) ->
-            val.join("|")
-        
-        post_change : () ->
-            [type, value] = s._search
-            c.log "post_change", type, value
-            page = s.search()["page"] or 0
-
-            view.updateSearchHistory value
-            data =
-                value: value
-                page: page
-
-            switch type
-                when "word"
-                    $("#simple_text").val value
-                    simpleSearch.onSimpleChange()
-                    simpleSearch.setPlaceholder null, null
-                    simpleSearch.makeLemgramSelect() if settings.lemgramSelect
-                    $.sm.send "submit.word", data
-                when "lemgram"
-                    $.sm.send "submit.lemgram", data
-                when "saldo"
-                    extendedSearch.setOneToken "saldo", value
-                    $.sm.send "submit.cqp", data
-                when "cqp"
-                    advancedSearch.setCQP value
-                    $.sm.send "submit.cqp", data
-
-
-    ]
 
 
 
@@ -283,7 +247,7 @@ korpApp.filter "mapper", () ->
     return (item, f) ->
         return f(item)
 
-korpApp.controller "ExtendedToken", ($scope, util, $location) ->
+korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s = $scope
     # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
     # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
@@ -291,7 +255,7 @@ korpApp.controller "ExtendedToken", ($scope, util, $location) ->
     # s.valfilter = (attrobj) ->
     #     return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
 
-    s.valfilter = util.valfilter
+    s.valfilter = utils.valfilter
     # words = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",")
     # word =
     #     group : "word"
@@ -318,7 +282,7 @@ korpApp.controller "ExtendedToken", ($scope, util, $location) ->
         #     _.extend({group : "sentence_attr", value : key}, obj)
 
 
-        s.types = util.getAttributeGroups(settings.corpusListing)
+        s.types = utils.getAttributeGroups(settings.corpusListing)
         s.typeMapping = _.object _.map s.types, (item) -> [item.value, item]
 
 
@@ -347,82 +311,13 @@ korpApp.controller "ExtendedToken", ($scope, util, $location) ->
             return ""
         s.token.cqp.match(/\[(.*)]/)[1]
 
-korpApp.factory "util", ($location) ->
-    valfilter : (attrobj) ->
-        return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
-    getAttributeGroups : (corpusListing) ->
-        word =
-            group : "word"
-            value : "word"
-            label : "word"
-        
-        attrs = for key, obj of corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
-            _.extend({group : "word_attr", value : key}, obj)
 
-        sent_attrs = for key, obj of corpusListing.getStructAttrs() when obj.displayType != "hidden"
-            _.extend({group : "sentence_attr", value : key}, obj)
-
-
-        return [word].concat(attrs, sent_attrs)
-        
-
-    setupHash : (scope, config) ->
-        # config = [
-        #     expr : "sorttuple[0]"
-        #     scope_name : "sortVal"
-        #     scope_func : "locChange"
-        #     key : "sortering"
-        #     val_in : (val) ->
-        #         newVal
-        #     val_out : (val) ->
-        #         newVal
-        #     post_change : () ->
-        #     default : [val : valval]
-
-        # ]
-        onWatch = () ->
-            for obj in config
-                val = $location.search()[obj.key]
-                unless val 
-                    if obj.default then val = obj.default else continue
-                
-
-                val = (obj.val_in or _.identity)(val)
-                # c.log "obj.val_in", obj.val_in
-                
-
-                if "scope_name" of obj
-                    scope[obj.scope_name] = val
-                else if "scope_func" of obj
-                    scope[obj.scope_func](val)
-                else
-                    scope[obj.key] = val
-                # obj.post_change?(val)
-        onWatch()
-        scope.loc = $location
-        scope.$watch 'loc.search()', ->
-            onWatch()
-
-        for obj in config
-            watch = obj.expr or obj.scope_name or obj.key
-            scope.$watch watch, do (obj, watch) ->
-                (val) ->
-                    # c.log "before val", scope.$eval watch
-                    val = (obj.val_out or _.identity)(val)
-                    if val == obj.default then val = null
-                    $location.search obj.key, val or null
-                    # c.log "post change", watch, val
-                    obj.post_change?(val)
-
-
-
-    
 
         
 
 
 
-korpApp.controller "SimpleCtrl", ($scope, util, $location, backend, $rootScope) ->
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches) ->
     s = $scope
     c.log "SimpleCtrl"  
     
@@ -432,12 +327,31 @@ korpApp.controller "SimpleCtrl", ($scope, util, $location, backend, $rootScope) 
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.stringifySelected()
 
-        }        
+        }     
+
+    s.searches = searches
+    s.$watch "searches.activeSearch", (search) ->
+        # if search.type in ["word", "lemgram"]
+        unless search then return 
+        c.log "searches.activeSearch", search
+        if search.type == "word"
+            s.placeholder = null
+            s.simple_text = search.val
+        else if search.type == "lemgram"
+            s.placeholder = search.val
+            s.simple_text = ""
+
+    s.lemgramToString = (lemgram) ->
+        unless lemgram then return
+        util.lemgramToString(lemgram).replace(/<.*?>/g, "")
 
 
 
 
-korpApp.controller "ExtendedSearch", ($scope, util, $location, backend, $rootScope) ->
+
+
+
+korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope) ->
     s = $scope
     s.$on "popover_submit", (event, name) ->
         $rootScope.saveSearch {
@@ -449,10 +363,10 @@ korpApp.controller "ExtendedSearch", ($scope, util, $location, backend, $rootSco
 
 
 
-korpApp.controller "CompareSearchCtrl", ($scope, util, $location, backend, $rootScope) ->
+korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope) ->
     s = $scope
     cl = settings.corpusListing
-    s.valfilter = util.valfilter
+    s.valfilter = utils.valfilter
 
     $rootScope.saveSearch {
         label : "första"
@@ -473,7 +387,7 @@ korpApp.controller "CompareSearchCtrl", ($scope, util, $location, backend, $root
 
     s.getAttrs = () ->
         listing = cl.subsetFactory(_.uniq [].concat s.cmp1.corpora, s.cmp2.corpora)
-        return util.getAttributeGroups(listing)
+        return utils.getAttributeGroups(listing)
 
 
     s.sendCompare = () ->
@@ -483,33 +397,6 @@ korpApp.controller "CompareSearchCtrl", ($scope, util, $location, backend, $root
                                   s.cmp2.cqp,
                                   s.reduce)
 
-
-
-
-
-korpApp.factory 'backend', ($http, $q, util) ->
-    requestCompare : (corpus1, cqp1, corpus2, cqp2, reduce) ->
-        def = $q.defer()
-        params = 
-            command : "loglike"
-            groupby : reduce
-            set1_corpus : corpus1
-            set1_cqp : cqp1
-            set2_corpus : corpus2
-            set2_cqp : cqp2
-            max : 50
-
-
-        $http(
-            url : settings.cgi_script
-            params : params
-            method : "GET"
-        ).success (data) ->
-            def.resolve data
-
-
-
-        return def.promise
 
 
 

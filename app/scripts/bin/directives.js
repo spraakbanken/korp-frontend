@@ -43,13 +43,13 @@
     };
   });
 
-  korpApp.directive("tabHash", function(util, $location) {
+  korpApp.directive("tabHash", function(utils, $location) {
     return {
       link: function(scope, elem, attr) {
         var init_tab, s, w, watchHash;
         s = scope;
         watchHash = function() {
-          return util.setupHash(s, [
+          return utils.setupHash(s, [
             {
               expr: "getSelected()",
               val_out: function(val) {

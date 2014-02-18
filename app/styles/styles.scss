@@ -1882,6 +1882,10 @@ line.tick {
 .compare_result {
   ul {
     @include inline-block(top);
+
+    li {
+      margin-bottom : 0.5em;
+    }
   }
 }
 

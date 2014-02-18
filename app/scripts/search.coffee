@@ -192,29 +192,36 @@ class view.SimpleSearch extends BaseSearch
                     # @onSubmit() unless $("#search-tab").data("cover")?
         # )
 
-        setLemgram = (lemgram) =>
-            label = util.lemgramToString(lemgram).replace(/<.*?>/g, "")
-            @setPlaceholder(label, lemgram)
-            $("#simple_text").val("")
+        # setLemgram = (lemgram) =>
+        #     label = util.lemgramToString(lemgram).replace(/<.*?>/g, "")
+        #     @setPlaceholder(label, lemgram)
+        #     $("#simple_text").val("")
             
 
+
+        
                 
         # [type, search_val] = search()["search"].split("|")
         [type, search_val] = @s.$root._search
 
-        if type == "lemgram"
-            setLemgram(search_val)
-            @s.$root.activeCQP = "[lex contains \"#{search_val}\"]"
+        # if type == "lemgram"
+            # setLemgram(search_val)
+            # @s.$root.activeCQP = "[lex contains \"#{search_val}\"]"
         
         if settings.autocomplete
             textinput.korp_autocomplete
                 type: "lem"
                 # select: $.proxy(@selectLemgram, this)
                 select: (lemgram) =>
-                    setLemgram(lemgram)
                     @s.$apply () =>
-                        @s.$root.activeCQP = "[lex contains \"#{lemgram}\"]"
-                    return false
+                        @s.placeholder = lemgram
+                        @s.simple_text = ""
+
+                    # search("search", "lemgram|" + lemgram)
+                    # setLemgram(lemgram)
+                    # @s.$apply () =>
+                        # @s.$root.activeCQP = "[lex contains \"#{lemgram}\"]"
+                    # return false
                 middleware: (request, idArray) =>
                     dfd = $.Deferred()
                     lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
@@ -315,7 +322,7 @@ class view.SimpleSearch extends BaseSearch
         unless $("#simple_text").val() is ""
             util.searchHash "word", $("#simple_text").val()
         else
-            @selectLemgram $("#simple_text").data("lemgram") if $("#simple_text").attr("placeholder")?
+            @selectLemgram @s.placeholder
 
     selectLemgram: (lemgram) ->
         return if $("#search-tab").data("cover")?
@@ -379,6 +386,7 @@ class view.SimpleSearch extends BaseSearch
                 $(this).remove()
                 h = $("#similar_lemgrams").outerHeight()
                 list.html($("#similarTmpl").tmpl(data)).find("a").click ->
+                    #TODO: what does the lemgram data do?
                     self.selectLemgram $(this).data("lemgram")
 
                 $("#similar_lemgrams").height "auto"
@@ -432,13 +440,14 @@ class view.SimpleSearch extends BaseSearch
     resetView: ->
         $("#similar_lemgrams").empty().height "auto"
         $("#show_more").remove()
-        @setPlaceholder null, null
+        # @setPlaceholder null, null
+        @s.placeholder = null
 
         this
 
-    setPlaceholder: (str, data) ->
-        $("#simple_text").data("lemgram", data).attr("placeholder", str).placeholder()
-        this
+    # setPlaceholder: (str, data) ->
+    #     $("#simple_text").data("lemgram", data).attr("placeholder", str).placeholder()
+    #     this
 
     clear: ->
         $("#simple_text").val("").get(0).blur()

@@ -206,7 +206,7 @@ Sidebar =
             $("#left-column").animate
                 right: 265
             , null, null, ->
-                $.sm.send "sidebar.show.end"
+                # $.sm.send "sidebar.show.end"
 
 
 
@@ -218,7 +218,7 @@ Sidebar =
         $("#left-column").animate
             right: 0
         , null, null, ->
-            $.sm.send "sidebar.hide.end"
+            # $.sm.send "sidebar.hide.end"
 
 
 

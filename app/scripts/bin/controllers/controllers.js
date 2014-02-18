@@ -4,10 +4,14 @@
 
   window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
 
-  korpApp.run(function($rootScope, $location, $route, $routeParams, util) {
-    var s;
+  korpApp.run(function($rootScope, $location, $route, $routeParams, utils) {
+    var corpus, s;
     s = $rootScope;
     s.lang = "sv";
+    corpus = search()["corpus"];
+    if (corpus) {
+      settings.corpusListing.select(corpus.split(","));
+    }
     s.activeCQP = "[]";
     s.search = function() {
       return $location.search.apply($location, arguments);
@@ -27,50 +31,7 @@
     $rootScope.saveSearch = function(searchObj) {
       return $rootScope.savedSearches.push(searchObj);
     };
-    $rootScope.compareTabs = [];
-    return util.setupHash(s, [
-      {
-        key: "search",
-        scope_name: "_search",
-        val_in: function(val) {
-          var type, value, _ref;
-          c.log("search hash", val);
-          return _ref = val.split("|"), type = _ref[0], value = _ref[1], _ref;
-        },
-        val_out: function(val) {
-          return val.join("|");
-        },
-        post_change: function() {
-          var data, page, type, value, _ref;
-          _ref = s._search, type = _ref[0], value = _ref[1];
-          c.log("post_change", type, value);
-          page = s.search()["page"] || 0;
-          view.updateSearchHistory(value);
-          data = {
-            value: value,
-            page: page
-          };
-          switch (type) {
-            case "word":
-              $("#simple_text").val(value);
-              simpleSearch.onSimpleChange();
-              simpleSearch.setPlaceholder(null, null);
-              if (settings.lemgramSelect) {
-                simpleSearch.makeLemgramSelect();
-              }
-              return $.sm.send("submit.word", data);
-            case "lemgram":
-              return $.sm.send("submit.lemgram", data);
-            case "saldo":
-              extendedSearch.setOneToken("saldo", value);
-              return $.sm.send("submit.cqp", data);
-            case "cqp":
-              advancedSearch.setCQP(value);
-              return $.sm.send("submit.cqp", data);
-          }
-        }
-      }
-    ]);
+    return $rootScope.compareTabs = [];
   });
 
   korpApp.controller("kwicCtrl", function($scope) {
@@ -300,10 +261,10 @@
     };
   });
 
-  korpApp.controller("ExtendedToken", function($scope, util, $location) {
+  korpApp.controller("ExtendedToken", function($scope, utils, $location) {
     var s;
     s = $scope;
-    s.valfilter = util.valfilter;
+    s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
       or_obj.op = _.values(s.getOpts(or_obj.type))[0];
       return or_obj.val = "";
@@ -313,7 +274,7 @@
       return ((_ref = s.typeMapping) != null ? _ref[type].opts : void 0) || settings.defaultOptions;
     };
     s.$on("corpuschooserchange", function(selected) {
-      s.types = util.getAttributeGroups(settings.corpusListing);
+      s.types = utils.getAttributeGroups(settings.corpusListing);
       return s.typeMapping = _.object(_.map(s.types, function(item) {
         return [item.value, item];
       }));
@@ -344,119 +305,40 @@
     };
   });
 
-  korpApp.factory("util", function($location) {
-    return {
-      valfilter: function(attrobj) {
-        if (attrobj.isStructAttr) {
-          return "_." + attrobj.value;
-        } else {
-          return attrobj.value;
-        }
-      },
-      getAttributeGroups: function(corpusListing) {
-        var attrs, key, obj, sent_attrs, word;
-        word = {
-          group: "word",
-          value: "word",
-          label: "word"
-        };
-        attrs = (function() {
-          var _ref, _results;
-          _ref = corpusListing.getCurrentAttributes();
-          _results = [];
-          for (key in _ref) {
-            obj = _ref[key];
-            if (obj.displayType !== "hidden") {
-              _results.push(_.extend({
-                group: "word_attr",
-                value: key
-              }, obj));
-            }
-          }
-          return _results;
-        })();
-        sent_attrs = (function() {
-          var _ref, _results;
-          _ref = corpusListing.getStructAttrs();
-          _results = [];
-          for (key in _ref) {
-            obj = _ref[key];
-            if (obj.displayType !== "hidden") {
-              _results.push(_.extend({
-                group: "sentence_attr",
-                value: key
-              }, obj));
-            }
-          }
-          return _results;
-        })();
-        return [word].concat(attrs, sent_attrs);
-      },
-      setupHash: function(scope, config) {
-        var obj, onWatch, watch, _i, _len, _results;
-        onWatch = function() {
-          var obj, val, _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = config.length; _i < _len; _i++) {
-            obj = config[_i];
-            val = $location.search()[obj.key];
-            if (!val) {
-              if (obj["default"]) {
-                val = obj["default"];
-              } else {
-                continue;
-              }
-            }
-            val = (obj.val_in || _.identity)(val);
-            if ("scope_name" in obj) {
-              _results.push(scope[obj.scope_name] = val);
-            } else if ("scope_func" in obj) {
-              _results.push(scope[obj.scope_func](val));
-            } else {
-              _results.push(scope[obj.key] = val);
-            }
-          }
-          return _results;
-        };
-        onWatch();
-        scope.loc = $location;
-        scope.$watch('loc.search()', function() {
-          return onWatch();
-        });
-        _results = [];
-        for (_i = 0, _len = config.length; _i < _len; _i++) {
-          obj = config[_i];
-          watch = obj.expr || obj.scope_name || obj.key;
-          _results.push(scope.$watch(watch, (function(obj, watch) {
-            return function(val) {
-              val = (obj.val_out || _.identity)(val);
-              if (val === obj["default"]) {
-                val = null;
-              }
-              $location.search(obj.key, val || null);
-              return typeof obj.post_change === "function" ? obj.post_change(val) : void 0;
-            };
-          })(obj, watch)));
-        }
-        return _results;
-      }
-    };
-  });
-
-  korpApp.controller("SimpleCtrl", function($scope, util, $location, backend, $rootScope) {
+  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches) {
     var s;
     s = $scope;
     c.log("SimpleCtrl");
-    return s.$on("popover_submit", function(event, name) {
+    s.$on("popover_submit", function(event, name) {
       return $rootScope.saveSearch({
         label: name || $rootScope.activeCQP,
         cqp: $rootScope.activeCQP,
         corpora: settings.corpusListing.stringifySelected()
       });
     });
+    s.searches = searches;
+    s.$watch("searches.activeSearch", function(search) {
+      if (!search) {
+        return;
+      }
+      c.log("searches.activeSearch", search);
+      if (search.type === "word") {
+        s.placeholder = null;
+        return s.simple_text = search.val;
+      } else if (search.type === "lemgram") {
+        s.placeholder = search.val;
+        return s.simple_text = "";
+      }
+    });
+    return s.lemgramToString = function(lemgram) {
+      if (!lemgram) {
+        return;
+      }
+      return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
+    };
   });
 
-  korpApp.controller("ExtendedSearch", function($scope, util, $location, backend, $rootScope) {
+  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope) {
     var s;
     s = $scope;
     return s.$on("popover_submit", function(event, name) {
@@ -468,11 +350,11 @@
     });
   });
 
-  korpApp.controller("CompareSearchCtrl", function($scope, util, $location, backend, $rootScope) {
+  korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope) {
     var cl, s;
     s = $scope;
     cl = settings.corpusListing;
-    s.valfilter = util.valfilter;
+    s.valfilter = utils.valfilter;
     $rootScope.saveSearch({
       label: "första",
       cqp: "[pos='NN']",
@@ -489,36 +371,10 @@
     s.getAttrs = function() {
       var listing;
       listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
-      return util.getAttributeGroups(listing);
+      return utils.getAttributeGroups(listing);
     };
     return s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora.join(","), s.cmp1.cqp, s.cmp2.corpora.join(","), s.cmp2.cqp, s.reduce));
-    };
-  });
-
-  korpApp.factory('backend', function($http, $q, util) {
-    return {
-      requestCompare: function(corpus1, cqp1, corpus2, cqp2, reduce) {
-        var def, params;
-        def = $q.defer();
-        params = {
-          command: "loglike",
-          groupby: reduce,
-          set1_corpus: corpus1,
-          set1_cqp: cqp1,
-          set2_corpus: corpus2,
-          set2_cqp: cqp2,
-          max: 50
-        };
-        $http({
-          url: settings.cgi_script,
-          params: params,
-          method: "GET"
-        }).success(function(data) {
-          return def.resolve(data);
-        });
-        return def.promise;
-      }
     };
   });
 

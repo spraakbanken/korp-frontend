@@ -215,9 +215,7 @@
         sort: o.sort,
         incremental: o.incremental
       };
-      if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
-        data.within = settings.corpusListing.getWithinQueryString();
-      }
+      data.within = settings.corpusListing.getWithinQueryString();
       if (currentMode === "parallel") {
         data.within = settings.corpusListing.getWithinQueryString();
       }
@@ -530,9 +528,7 @@
           ignore_case: "word"
         });
       }
-      if ($.sm.In("extended") && $(".within_select").val() === "paragraph") {
-        data.within = settings.corpusListing.getWithinQueryString();
-      }
+      data.within = settings.corpusListing.getWithinQueryString();
       this.prevParams = data;
       return $.ajax({
         url: settings.cgi_script,

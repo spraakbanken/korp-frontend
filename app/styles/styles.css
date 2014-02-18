@@ -2311,8 +2311,12 @@ line.tick {
   zoom: 1;
   *display: inline;
 }
+/* line 1879, styles.scss */
+.compare_result ul li {
+  margin-bottom: 0.5em;
+}
 
-/* line 1881, styles.scss */
+/* line 1885, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2320,23 +2324,23 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 1883, styles.scss */
+/* line 1887, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 1886, styles.scss */
+/* line 1890, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 1894, styles.scss */
+/* line 1898, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-/* line 1902, styles.scss */
+/* line 1906, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }

@@ -246,9 +246,7 @@
         });
         return $("#left-column").animate({
           right: 265
-        }, null, null, function() {
-          return $.sm.send("sidebar.show.end");
-        });
+        }, null, null, function() {});
       });
     },
     hide: function() {
@@ -260,9 +258,7 @@
       });
       return $("#left-column").animate({
         right: 0
-      }, null, null, function() {
-        return $.sm.send("sidebar.hide.end");
-      });
+      }, null, null, function() {});
     }
   };
 

@@ -1,6 +1,8 @@
 
-
-
+window.currentMode = $.deparam.querystring().mode or "default"
+window.searchProxy = new model.SearchProxy()
+window.authenticationProxy = new model.AuthenticationProxy()
+window.timeProxy = new model.TimeProxy()
 
 
 t = $.now()
@@ -15,12 +17,12 @@ $.ajaxSetup
 $.ajaxPrefilter "json", (options, orig, jqXHR) ->
     "jsonp"  if options.crossDomain and not $.support.cors
 
-deferred_sm = $.Deferred((dfd) ->
-    if navigator.userAgent.match(/Android/i) and not window.XSLTProcessor
-        alert "Använd Firefox eller Opera för att köra Korp i Android."
-        return
-    $.sm "korp_statemachine.xml", dfd.resolve
-).promise()
+# deferred_sm = $.Deferred((dfd) ->
+#     if navigator.userAgent.match(/Android/i) and not window.XSLTProcessor
+#         alert "Använd Firefox eller Opera för att köra Korp i Android."
+#         return
+#     $.sm "korp_statemachine.xml", dfd.resolve
+# ).promise()
 deferred_mode = $.Deferred()
 deferred_domReady = $.Deferred((dfd) ->
     $ ->
@@ -63,21 +65,17 @@ loc_dfd = initLocales()
 
 
 
-$.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
+$.when(loc_dfd, chained, deferred_domReady).then ((loc_data) ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
 
-    window.searchProxy = new model.SearchProxy()
     
-    
-    window.authenticationProxy = new model.AuthenticationProxy()
-    window.timeProxy = new model.TimeProxy()
     window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
     window.extendedSearch = new view.ExtendedSearch('#korp-extended')
     # window.simpleSearch = new view.SimpleSearch('#korp-simple')
 
     $("body").addClass "lab"  if isLab
-    window.currentMode = $.deparam.querystring().mode or "default"
+    
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
     view.updateSearchHistory()
@@ -150,7 +148,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
 
     loadCorpora()
     creds = $.jStorage.get("creds")
-    $.sm.start()
+    # $.sm.start()
     if creds
         authenticationProxy.loginObj = creds
         util.setLogin()
@@ -163,7 +161,7 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
             if $("#sidebar").data("korpSidebar")
                 $("#sidebar").sidebar "updatePlacement" if $("#columns").position().top > 0 #place sidebar
             selected = ui.newPanel.attr("id").split("-")[1]
-            $.sm.send "searchtab." + selected
+            # $.sm.send "searchtab." + selected
 
     if currentMode is "parallel"
         $(".ui-tabs-nav li").first().hide()
@@ -180,12 +178,12 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
                 instance = $(this).korptabs("getCurrentInstance")
                 suffix = if instance instanceof view.GraphResults then ".graph" else ".kwic"
                 type = instance
-                $.sm.send "resultstab.custom" + suffix
+                # $.sm.send "resultstab.custom" + suffix
             else
                 currentId = ui.newPanel.attr("id")
                 selected = currentId.split("-")[1]
                 # c.log "send ", "resultstab." + selected
-                $.sm.send "resultstab." + selected
+                # $.sm.send "resultstab." + selected
 
                 
 

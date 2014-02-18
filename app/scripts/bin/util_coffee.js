@@ -8,7 +8,9 @@
     function CorpusListing(corpora) {
       this.struct = corpora;
       this.corpora = _.values(corpora);
-      this.selected = [];
+      this.selected = _.filter(this.corpora, function(corp) {
+        return !corp.limited_access;
+      });
     }
 
     CorpusListing.prototype.get = function(key) {

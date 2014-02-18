@@ -2,7 +2,7 @@ class window.CorpusListing
     constructor: (corpora) ->
         @struct = corpora
         @corpora = _.values(corpora)
-        @selected = []
+        @selected = _.filter @corpora, (corp) -> not corp.limited_access
 
     get: (key) ->
         @struct[key]

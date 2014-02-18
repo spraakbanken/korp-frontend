@@ -131,7 +131,7 @@ class model.KWICProxy extends BaseProxy
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
         corpus = settings.corpusListing.stringifySelected()
-        corpus = extendedSearch.getCorporaQuery()  if currentMode is "parallel"
+        corpus = extendedSearch.getCorporaQuery() if currentMode is "parallel"
         o = $.extend(
             cqp: $("#cqp_string").val()
             queryData: null
@@ -411,7 +411,8 @@ class model.StatsProxy extends BaseProxy
             $.extend data,
                 ignore_case: "word"
 
-        data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
+        # data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
+        data.within = settings.corpusListing.getWithinQueryString()
         @prevParams = data
         $.ajax
             url: settings.cgi_script

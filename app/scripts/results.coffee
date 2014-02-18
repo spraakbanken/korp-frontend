@@ -78,7 +78,7 @@ class view.KWICResults extends BaseResults
         @$result.click =>
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
-            $.sm.send "word.deselect"
+            # $.sm.send "word.deselect"
 
         @$result.find(".reading_btn").click =>
             isReading = @$result.is(".reading_mode")
@@ -99,7 +99,7 @@ class view.KWICResults extends BaseResults
             sent = scope.sentence
             event.stopPropagation()
             word = $(event.target)
-            $.sm.send("word.select")
+            # $.sm.send("word.select")
 
 
 

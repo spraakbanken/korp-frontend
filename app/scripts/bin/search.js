@@ -206,7 +206,7 @@
     __extends(SimpleSearch, _super);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var search_val, setLemgram, textinput, type, _ref,
+      var search_val, textinput, type, _ref,
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId);
       this.s = scope;
@@ -220,26 +220,15 @@
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       textinput = $("#simple_text");
-      setLemgram = function(lemgram) {
-        var label;
-        label = util.lemgramToString(lemgram).replace(/<.*?>/g, "");
-        _this.setPlaceholder(label, lemgram);
-        return $("#simple_text").val("");
-      };
       _ref = this.s.$root._search, type = _ref[0], search_val = _ref[1];
-      if (type === "lemgram") {
-        setLemgram(search_val);
-        this.s.$root.activeCQP = "[lex contains \"" + search_val + "\"]";
-      }
       if (settings.autocomplete) {
         textinput.korp_autocomplete({
           type: "lem",
           select: function(lemgram) {
-            setLemgram(lemgram);
-            _this.s.$apply(function() {
-              return _this.s.$root.activeCQP = "[lex contains \"" + lemgram + "\"]";
+            return _this.s.$apply(function() {
+              _this.s.placeholder = lemgram;
+              return _this.s.simple_text = "";
             });
-            return false;
           },
           middleware: function(request, idArray) {
             var dfd;
@@ -359,9 +348,7 @@
       if ($("#simple_text").val() !== "") {
         return util.searchHash("word", $("#simple_text").val());
       } else {
-        if ($("#simple_text").attr("placeholder") != null) {
-          return this.selectLemgram($("#simple_text").data("lemgram"));
-        }
+        return this.selectLemgram(this.s.placeholder);
       }
     };
 
@@ -486,12 +473,7 @@
     SimpleSearch.prototype.resetView = function() {
       $("#similar_lemgrams").empty().height("auto");
       $("#show_more").remove();
-      this.setPlaceholder(null, null);
-      return this;
-    };
-
-    SimpleSearch.prototype.setPlaceholder = function(str, data) {
-      $("#simple_text").data("lemgram", data).attr("placeholder", str).placeholder();
+      this.s.placeholder = null;
       return this;
     };
 
