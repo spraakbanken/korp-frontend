@@ -72,17 +72,6 @@
     view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
->>>>>>> remade search tabs
-      state = $.bbq.getState($(this).data("history"));
-=======
-=======
-
->>>>>>> updated libs, continued with extended
       state = search()[$(this).data("history")];
       if (!!state) {
         return $(this).val(state).change();
@@ -528,20 +517,7 @@
     }
 
     ExtendedSearch.prototype.setupContainer = function(selector) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      var insert_token_button, self;
-<<<<<<< HEAD
-=======
-
-=======
       var self;
->>>>>>> remade search tabs
->>>>>>> remade search tabs
-=======
-      var self;
-
->>>>>>> updated libs, continued with extended
       self = this;
       return $(selector).sortable({
         items: ".query_token",
@@ -583,23 +559,6 @@
     };
 
     ExtendedSearch.prototype.insertToken = function(button) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      var _this = this;
-      $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken({
-        close: function() {
-          return advancedSearch.updateCQP();
-        },
-        change: function() {
-          if (_this.$main.is(":visible")) {
-            return advancedSearch.updateCQP();
-          }
-        }
-      });
-=======
->>>>>>> remade search tabs
-=======
->>>>>>> updated libs, continued with extended
       return util.localize();
     };
 
@@ -621,19 +580,6 @@
       return $("#cqp_string").val(query);
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    AdvancedSearch.prototype.updateCQP = function() {
-      var query;
-      query = $(".query_token").map(function() {
-        return $(this).extendedToken("getCQP", $("#strict_chk").is(":checked"));
-      }).get().join(" ");
-      this.setCQP(query);
-      return query;
-    };
-=======
-=======
->>>>>>> updated libs, continued with extended
     AdvancedSearch.prototype.updateCQP = function() {};
 
     AdvancedSearch.prototype.onSubmit = function() {

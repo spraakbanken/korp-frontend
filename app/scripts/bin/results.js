@@ -633,24 +633,6 @@
       return false;
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    ExampleResults.prototype.onSortChange = function(event) {
-      var opt;
-      opt = $(event.currentTarget).find(":selected");
-      c.log("sort", opt);
-      if (opt.is(":first-child")) {
-        return $.bbq.removeState("sort");
-      } else {
-        c.log("sort", opt.val());
-        return this.handlePaginationClick(0, null, true);
-      }
-    };
-
-=======
->>>>>>> remade search tabs
-=======
->>>>>>> updated libs, continued with extended
     ExampleResults.prototype.showPreloader = function() {
       this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
       this.$tab.find(".spinner").remove();

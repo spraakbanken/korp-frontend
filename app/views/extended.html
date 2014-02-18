@@ -21,8 +21,12 @@
                         </div>
                         <div class="right_col inline_block" style="margin-left: 5px;">
                             <div class="arg_selects">
-                                <select class="arg_type" ng-options="value for value in types" ng-model="or.type"></select>
-                                <select class="arg_opts"></select>
+                                <select class="arg_type" 
+                                    ng-options="value as value | loc for value in types" ng-model="or.type"></select>
+                                
+                                <select class="arg_opts" 
+                                    ng-options="value as key | loc for (key, value) in getOpts(or.type)" 
+                                    ng-model="or.op" ></select>
                             </div>
                             <input class="arg_value" ng-model="or.val">
                         </div>

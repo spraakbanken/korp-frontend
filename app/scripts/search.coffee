@@ -83,7 +83,7 @@ view.updateContextSelect = (withinOrContext) ->
 
         # partial support for enhanced context
         opts.each ->
-            $(this).addClass("limited").data "locSuffix", "asterix"  if $.inArray($(this).attr("value"), intersect) is -1
+            $(this).addClass("limited").data "locSuffix", "asterix" if $.inArray($(this).attr("value"), intersect) is -1
 
     else if union.length is 1 and intersect.length is 1
 

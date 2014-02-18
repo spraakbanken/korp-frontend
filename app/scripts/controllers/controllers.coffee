@@ -189,6 +189,26 @@ korpApp.directive 'kwicWord', ->
 
 korpApp.controller "TokenList", ($scope, $location) ->
     s = $scope
+    # s.defaultOptions = settings.defaultOptions
+
+    defaultOptions = 
+        "is" : "=" 
+        "is_not" : "!="
+        "starts_with" : "^="
+        "contains" : "_="
+        "ends_with" : "&="
+        "matches" : "*=" 
+
+    lexOpts =
+        "is" : "contains"
+        "is_not" : "not contains"
+
+    s.getOpts = (type) ->
+        {
+            lex : lexOpts
+        }[type] or defaultOptions
+
+
     cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
     # cqp = '[word = "value"] []{1,2}'
     s.data = []
@@ -231,7 +251,6 @@ korpApp.controller "TokenList", ($scope, $location) ->
         return (CQP.stringify s.data) or ""
 
     s.addToken = ->
-        c.log s.data[..-1][0]
         s.data.push(JSON.parse(JSON.stringify(s.data[..-1][0])))
     s.removeToken = (i) ->
         s.data.splice(i, 1)
@@ -250,12 +269,12 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
             val : ""
         return and_array
     s.removeOr = (and_array, i) ->
-        c.log "removeOr", and_array, i
+        c.log "removeOr", and_array, i, s.$parent.$index
         if and_array.length > 1
             and_array.splice(i, 1)
         else
-
-            s.token.and_block.splice s.$parent.$index + 1, 1
+            c.log "s.token.and_block", _.indexOf and_array
+            s.token.and_block.splice _.indexOf and_array, 1
 
 
     s.addAnd = () ->
@@ -309,7 +328,6 @@ korpApp.factory "util", ($location) ->
 korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
     s = $scope
     # $location.search()["search_tab"]
-    # s.search_tab = Number($location.search()["search_tab"]) or 0
     s.search_tab = parseInt($location.search()["search_tab"]) or 0
     c.log "search_tab init", s.search_tab
 

@@ -5,12 +5,19 @@
 %lex
 %%
 
+
 ' contains '        return 'contains'
 "("                 /* skip */
 ")"                 /* skip */
 \s+                 /* skip whitespace */
 \%[cd]+             return "FLAG"
+'not'               return 'not'
 (_.)?[A-Za-z]+      return 'TYPE'
+'!='                return '!='
+'^='                return '^='
+'&='                return '&='
+'_='                return '_='
+'*='                return '*='
 '='                 return '='
 '"'\S*'"'           return 'VALUE'
 "["\s*"]"           return 'EMPTY'
@@ -93,13 +100,27 @@ or_block
 
 
 or
-    : TYPE infix VALUE
+    : TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
     ;
 
-infix
+infix_op
     : "="
         {$$ = "="}
+    | "!="
+        {$$ = "!="}
     | " contains "
         {$$ = "contains"}
+    | " not contains "
+        {$$ = "not contains"}
+    | "^="
+        {$$ = "^="}
+    | "&="
+        {$$ = "&="}
+    | "*="
+        {$$ = "*="}
+    | "_="
+        {$$ = "_="}
     ;
+
+

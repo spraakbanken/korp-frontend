@@ -68,27 +68,8 @@
 
   loc_dfd = initLocales();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then((function(searchbar_html) {
-    var creds, end, from, labs, onHashChange, paper, start, tab_a_selector, tabs, to;
-<<<<<<< HEAD
-=======
-
-=======
-  $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then((function() {
-=======
-=======
->>>>>>> updated libs, continued with extended
   $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then((function(loc_data) {
     var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
-<<<<<<< HEAD
->>>>>>> remade search tabs
->>>>>>> remade search tabs
-=======
-
->>>>>>> updated libs, continued with extended
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     if (isLab) {
@@ -244,16 +225,6 @@
       $("#pass").val("");
       return $("#corpusbox").corpusChooser("redraw");
     });
-<<<<<<< HEAD
-<<<<<<< HEAD
-    onHashChange = function(event, isInit) {
-      var corp_array, corpus, data, display, e, hasChanged, page, prevFragment, processed_corp_array, reading, search, showAbout, type, value;
-<<<<<<< HEAD
-=======
-
-=======
-=======
->>>>>>> updated libs, continued with extended
     corpus = search()["corpus"];
     if (corpus) {
       corp_array = corpus.split(",");
@@ -269,13 +240,7 @@
     window.onHashChange = function(event, isInit) {
       var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value,
         _this = this;
-
       c.log("onHashChange");
-<<<<<<< HEAD
->>>>>>> remade search tabs
->>>>>>> remade search tabs
-=======
->>>>>>> updated libs, continued with extended
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
       };
@@ -415,15 +380,7 @@
         }
       }
       tabs.each(function() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        var idx;
-        idx = e.getState(this.id, true);
-=======
-=======
->>>>>>> updated libs, continued with extended
         var idx, self;
-
         self = _this;
         idx = Number(search()[_this.id]);
         if (idx === null) {

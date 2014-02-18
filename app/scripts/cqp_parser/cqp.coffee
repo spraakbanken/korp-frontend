@@ -1,12 +1,20 @@
 window.c = console
 
 
-stringifyCqp = (cqp_obj) ->
+stringifyCqp = (cqp_obj, translate_ops = false) ->
     output = []
 
     for token in cqp_obj
         or_array = for and_array in token.and_block or []
-            ("#{type} #{op.replace(/^\s+|\s+$/g, '')} \"#{val}\"" for {type, op, val} in and_array)
+            for {type, op, val} in and_array
+                if translate_ops
+                    [val, op] = {
+                        "^=" : [val + ".*", "="]
+                        "_=" : [".*" + val + ".*", "="]
+                        "&=" : [".*" + val, "="]
+                        "*=" : [val, "="]
+                    }[op] or [val, op]
+                "#{type} #{op} \"#{val}\"" 
 
         or_out = (x.join(" | ") for x in or_array)
 
@@ -16,6 +24,7 @@ stringifyCqp = (cqp_obj) ->
         out_token = "[#{or_out.join(' & ')}#{flags}]"
         if token.repeat
             out_token += "{#{token.repeat.join(',')}}"
+        
         output.push out_token
 
 
@@ -28,7 +37,7 @@ window.CQP =
 
 
 # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "b" | word = "a")]'
-# c.log CQP.stringify( CQP.parse('[(word = "ge" | pos = "JJ")]'))
+c.log CQP.stringify( CQP.parse('[(word &= "ge" | pos = "JJ")]'), true)
 # c.log JSON.stringify (CQP.parse '[word = "apa"'), null, 2
 
 
@@ -36,29 +45,27 @@ window.CQP =
 
 
 
-tst = [
+c.log CQP.stringify [
     {
         "and_block": [
             [
                 {
                     "type": "word",
-                    "op": "=",
+                    "op": "!=",
                     "val": "value"
                 },
                 {
                     "type": "word",
-                    "op": "=",
-                    "val": "value2"
+                    "op": "&=",
+                    "val": "value2",
                 }
             ],
             [
-                [
-                    {
-                        "type": "word",
-                        "op": " contains ",
-                        "val": "ge..vb.1"
-                    }
-                ]
+                {
+                    "type": "word",
+                    "op": "not contains",
+                    "val": "ge..vb.1"
+                }
             ]
         ]
     },

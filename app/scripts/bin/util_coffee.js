@@ -409,7 +409,6 @@
 
   window.search = function(obj, val) {
     var ret, s;
-
     s = $("body").scope();
     ret = s.$root.$apply(function() {
       if (_.isObject(obj)) {
@@ -425,7 +424,6 @@
 
   window.initLocales = function() {
     var def, defs, lang, packages, pkg, prefix, _fn, _i, _j, _len, _len1, _ref;
-
     packages = ["locale", "corpora"];
     prefix = "translations";
     defs = [];
@@ -437,7 +435,6 @@
       loc_data[lang] = {};
       _fn = function(lang, pkg) {
         var file;
-
         file = pkg + "-" + lang + '.json';
         file = prefix + "/" + file;
         return defs.push($.ajax({
