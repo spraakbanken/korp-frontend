@@ -415,8 +415,10 @@
     ret = safeApply(s.$root, function() {
       if (_.isObject(obj)) {
         obj = _.extend({}, s.$root.search(), obj);
+        return s.$root.search(obj);
+      } else {
+        return s.$root.search(obj, val);
       }
-      return s.$root.search(obj, val);
     });
     if (val === null) {
       onHashChange();

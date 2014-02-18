@@ -2,7 +2,7 @@
   "name": "Korp",
   "version": "2.0",
   "dependencies": {
-    "angular": "git://github.com/angular/bower-angular.git#1.0.6",
+    "angular": "~1.2.7",
     "json3": "git://github.com/bestiejs/json3.git#3.2.4",
     "es5-shim": "git://github.com/kriskowal/es5-shim#2.0.8",
     "jquery-ui": "git://github.com/components/jqueryui#1.10.2",
@@ -26,5 +26,8 @@
   "devDependencies": {
     "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.0.6",
     "angular-scenario": "git://github.com/angular/bower-angular-scenario.git#1.0.6"
+  },
+  "resolutions": {
+    "angular": "~1.2.7"
   }
 }

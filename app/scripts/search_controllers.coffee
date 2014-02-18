@@ -16,7 +16,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
 
 # korpApp.controller "kwicCtrl", ($scope) ->
 
-korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
+korpApp.run ($rootScope, $location, utils, searches) ->
     s = $rootScope
     s.lang = "sv"
     s.word_selected = null

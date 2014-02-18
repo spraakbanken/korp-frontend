@@ -301,7 +301,9 @@ window.search = (obj, val) ->
     ret = safeApply s.$root, () ->
         if _.isObject obj
             obj = _.extend {}, s.$root.search(), obj
-        s.$root.search(obj, val)
+            s.$root.search(obj)
+        else
+            s.$root.search(obj, val)
 
     onHashChange() if val == null
     return ret

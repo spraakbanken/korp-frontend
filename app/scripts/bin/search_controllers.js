@@ -4,7 +4,7 @@
 
   window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner", "uiSlider"]);
 
-  korpApp.run(function($rootScope, $location, $route, $routeParams, utils, searches) {
+  korpApp.run(function($rootScope, $location, utils, searches) {
     var isInit, s;
     s = $rootScope;
     s.lang = "sv";
