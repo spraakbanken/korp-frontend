@@ -1,6 +1,9 @@
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+  var korpApp,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
+
+  korpApp = angular.module("korpApp");
 
   korpApp.controller("resultTabCtrl", function($scope) {
     var s;

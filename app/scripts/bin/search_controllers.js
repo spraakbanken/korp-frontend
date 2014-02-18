@@ -1,4 +1,8 @@
 (function() {
+  var korpApp;
+
+  korpApp = angular.module("korpApp");
+
   korpApp.controller("SearchCtrl", function($scope) {
     c.log("searchctrl original", $scope);
     $scope.visibleTabs = [true, true, true, true];

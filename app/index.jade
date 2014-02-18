@@ -25,16 +25,19 @@ html
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
       window.c = window.console;
+
     // build:js scripts/korp_lib.js 
     script(src='components/json3/lib/json3.js')
     script(src='components/jquery/jquery.js')
     script(src='components/jquery-ui/ui/jquery-ui.custom.js')
+
     script(src='components/angular/angular.js')
+
     script(src='lib/jquery.localize.js')
     script(src='components/raphael/raphael.js')
     script(src='components/jReject/js/jquery.reject.js')
     script(src='lib/jquery.raphael.spinner.js')
-    script(src='lib/watch-fighters.js')
+    //- script(src='lib/watch-fighters.js')
     script(src='lib/jquery.format.js')
 
     script(src='components/modernizr/modernizr.js')
@@ -49,6 +52,7 @@ html
     script(src='lib/jquery.pagination.js')
     script(src='lib/flot/jquery.flot.min.js')
     script(src='lib/flot/jquery.flot.stack.js')
+    //- here
     script(src='components/SlickGrid/slick.core.js')
     script(src='lib/jquery.event.drag-2.2.js')
     script(src='components/SlickGrid/slick.grid.js')
@@ -57,17 +61,19 @@ html
     script(src='lib/g.line-min.js')
     script(src='lib/jquery.tooltip.pack.js')
 
-    script(src='components/angular-bindonce/bindonce.js')
-    script(src='components/angular-slider/angular-slider.js')
-    script(src='lib/angular-sortable.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    
     script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js')
     script(src='components/lodash/dist/lodash.compat.js')
     script(src="components/underscore.string/lib/underscore.string.js")
     script(src='components/spin.js/dist/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')
+
+    script(src='components/angular-bindonce/bindonce.js')
+    script(src='components/angular-slider/angular-slider.js')
+    script(src='lib/angular-sortable.js')
     // endbuild  
+    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
+    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
     script.
       yepnope({
       test: $("html.msie7,html.msie8").length,
@@ -90,13 +96,13 @@ html
     script(src='scripts/bin/widgets.js')
     script(src='scripts/selector_widget.js')
     script(src='scripts/bin/main.js')
-    // endbuild 
-       
     script(src='scripts/bin/app.js')
     script(src='scripts/bin/search_controllers.js')
     script(src='scripts/bin/result_controllers.js')
     script(src='scripts/bin/services.js')
     script(src='scripts/bin/directives.js')
+    // endbuild 
+       
   //- body.not_logged_in(ng-app='korpApp')
   body.not_logged_in
     noscript

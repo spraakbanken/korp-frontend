@@ -1,6 +1,8 @@
 (function() {
-  var CompareSearches,
+  var CompareSearches, korpApp,
     __slice = [].slice;
+
+  korpApp = angular.module("korpApp");
 
   korpApp.factory("utils", function($location) {
     return {

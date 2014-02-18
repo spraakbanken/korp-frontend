@@ -1,3 +1,4 @@
+korpApp = angular.module("korpApp")
 korpApp.factory "utils", ($location) ->
     valfilter : (attrobj) ->
         return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value

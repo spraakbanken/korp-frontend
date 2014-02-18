@@ -1298,7 +1298,8 @@ label[for=lemgram_select]:before {
       margin : 0 0.3em;
     }
     &:last-child:after {
-      content: "";
+      // content: "";
+      display: none;
     }
     &.menu_more {
       a {

@@ -1,4 +1,4 @@
-
+korpApp = angular.module("korpApp")
 
 
 korpApp.controller "SearchCtrl", ($scope) ->

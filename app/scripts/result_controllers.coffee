@@ -1,3 +1,4 @@
+korpApp = angular.module("korpApp")
 korpApp.controller "resultTabCtrl", ($scope) ->
     s = $scope
     

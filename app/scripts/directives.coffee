@@ -1,3 +1,5 @@
+korpApp = angular.module("korpApp")
+
 korpApp.directive 'kwicWord', ->
     replace: true
     template : """<span class="word" ng-class="getClassObj(wd)"
@@ -79,7 +81,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
                     <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>
                 </ul>
                 """
-    defaultController = ($scope) ->
+    defaultController = ["$scope", ($scope) ->
         $scope.case = "sensitive"
         $scope.makeSensitive = () ->
             $scope.case = "sensitive"
@@ -93,7 +95,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             $scope.case = "insensitive"
             # $scope.$emit("change_case", "insensitive")
-            
+    ]
 
 
 

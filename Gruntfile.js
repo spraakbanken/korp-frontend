@@ -146,16 +146,18 @@ module.exports = function (grunt) {
         options: {
           data: {
             debug: false
-          }
+          },
+          pretty: true
+
         },
         files: [{'<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.jade"]},
-                {
-                  expand: true,
-                  cwd: 'app/views',
-                  src: '{,*/}*.jade',
-                  dest: 'app/views',
-                  ext: '.html'
-                }
+              {
+                expand: true,
+                cwd: 'app/views',
+                src: '{,*/}*.jade',
+                dest: 'app/views',
+                ext: '.html'
+              }
           ]
       }
     },
@@ -212,14 +214,14 @@ module.exports = function (grunt) {
       }
     },
     cssmin: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/styles/main.css': [
-            '.tmp/styles/{,*/}*.css',
-            '<%= yeoman.app %>/styles/{,*/}*.css'
-          ]
-        }
-      }
+      // dist: {
+      //   files: {
+      //     '<%= yeoman.dist %>/styles/main.css': [
+      //       '.tmp/styles/{,*/}*.css',
+      //       '<%= yeoman.app %>/styles/{,*/}*.css'
+      //     ]
+      //   }
+      // }
     },
     htmlmin: {
       dist: {
@@ -281,7 +283,15 @@ module.exports = function (grunt) {
 
     copy: {
       dist: {
-        files: [{
+        files: [
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: ['components/font-awesome/fonts/*'],
+          dest: '<%= yeoman.dist %>/fonts',
+          flatten: true
+        },
+        {
           expand: true,
           dot: true,
           cwd: '<%= yeoman.app %>',
@@ -294,11 +304,10 @@ module.exports = function (grunt) {
             'markup/*',
             'modes/*',
             'img/*',
+            'lib/*',
             'styles/**/*.{png,otf,gif}',
             'scripts/jq_extensions.js',
             'scripts/bin/controllers/controllers.js',
-            'lib/scxml/**/*',
-            'common_lib/themes/base/images/'
           ]
         }]
       }
@@ -337,10 +346,10 @@ module.exports = function (grunt) {
     // 'jshint',
     'test',
     'coffee',
+    "jade",
     'compass:dist',
     'useminPrepare',
     // 'imagemin',
-    'cssmin',
     'htmlmin',
     'concat',
     'copy',
