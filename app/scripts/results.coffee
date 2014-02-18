@@ -973,13 +973,13 @@ class view.StatsResults extends BaseResults
         $(".slick-cell.l0.r0 .link").on "click", ->
             c.log "word click", $(this).data("context"), $(this).data("corpora")
             # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-            instance.proxy.command = "query"
-            query = $(this).data("query")
-            instance.makeRequest
-                corpora: $(this).data("corpora").join(",")
-                cqp: decodeURIComponent(query)
+            # instance.proxy.command = "query"
+            # query = $(this).data("query")
+            # instance.makeRequest
+            #     corpora: $(this).data("corpora").join(",")
+            #     cqp: decodeURIComponent(query)
 
-            util.localize instance.$result
+            # util.localize instance.$result
 
         $(window).resize _.debounce( () ->
             $("#myGrid:visible").width($("#myGrid").parent().width())
