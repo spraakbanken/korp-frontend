@@ -40,6 +40,7 @@ module.exports = function (grunt) {
           '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
           '{.tmp,<%= yeoman.app %>}/modes/{,*/}*.js',
+          '{.tmp,<%= yeoman.app %>}/config.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         tasks: ['livereload']

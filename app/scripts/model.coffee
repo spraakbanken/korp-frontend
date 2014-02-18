@@ -403,8 +403,6 @@ class model.StatsProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
-            # split : "lex"
-            # split :   # lista, csv, av attribut som sammanställs
 
         if settings.corpusListing.getCurrentAttributes()[reduceval]?.type == "set"
             data.split = reduceval

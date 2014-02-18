@@ -1,9 +1,13 @@
 window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "ui.bootstrap.dropdownToggle",
                                             "ui.bootstrap.tabs",
-                                            "template/tabs/pane.html"
-                                            "template/tabs/tabs.html"
+                                            "template/tabs/tabset.html"
+                                            "template/tabs/tab.html"
+                                            "template/tabs/tabset-titles.html"
 
+                                            "ui.bootstrap.typeahead"
+                                            "template/typeahead/typeahead.html"
+                                            "template/typeahead/typeahead-popup.html"
                                         ])
 
 # korpApp.controller "kwicCtrl", ($scope) ->
@@ -191,25 +195,8 @@ korpApp.controller "TokenList", ($scope, $location) ->
     s = $scope
     # s.defaultOptions = settings.defaultOptions
 
-    defaultOptions = 
-        "is" : "=" 
-        "is_not" : "!="
-        "starts_with" : "^="
-        "contains" : "_="
-        "ends_with" : "&="
-        "matches" : "*=" 
 
-    lexOpts =
-        "is" : "contains"
-        "is_not" : "not contains"
-
-    s.getOpts = (type) ->
-        {
-            lex : lexOpts
-        }[type] or defaultOptions
-
-
-    cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
+    cqp = '[pos = "NN" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
     # cqp = '[word = "value"] []{1,2}'
     s.data = []
     try
@@ -231,7 +218,7 @@ korpApp.controller "TokenList", ($scope, $location) ->
         c.log "crash", s.data
 
 
-    c.log "s.data", s.data
+    # c.log "s.data", s.data
 
     if $location.search().cqp
         s.data = CQP.parse(decodeURIComponent($location.search().cqp))
@@ -255,13 +242,50 @@ korpApp.controller "TokenList", ($scope, $location) ->
     s.removeToken = (i) ->
         s.data.splice(i, 1)
 
+korpApp.filter "mapper", () ->
+    return (item, f) ->
+        return f(item)
+
 korpApp.controller "ExtendedToken", ($scope, $location) ->
     s = $scope
     # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
     # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
 
+    s.valfilter = (attrobj) ->
+        return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
 
-    s.types = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",")
+    # words = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",")
+    word =
+        group : "word"
+        value : "word"
+        label : "word"
+
+
+    
+
+    s.setDefault = (or_obj) ->
+        # assign the first value from the opts 
+        or_obj.op = _.values(s.getOpts(or_obj.type))[0]
+
+    s.getOpts = (type) ->
+        s.typeMapping?[type].opts or settings.defaultOptions
+
+
+    s.$on "corpuschooserchange", (selected) ->
+        # TODO: respece the setting 'word_attribute_selector' and similar
+        attrs = for key, obj of settings.corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
+            _.extend({group : "word_attr", value : key}, obj)
+
+        sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
+            _.extend({group : "sentence_attr", value : key}, obj)
+
+
+        s.types = [word].concat(attrs, sent_attrs)
+        s.typeMapping = _.object _.map s.types, (item) -> [item.value, item]
+
+
+
+        
     s.addOr = (and_array) ->
         and_array.push
             type : "word"
@@ -269,11 +293,9 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
             val : ""
         return and_array
     s.removeOr = (and_array, i) ->
-        c.log "removeOr", and_array, i, s.$parent.$index
         if and_array.length > 1
             and_array.splice(i, 1)
         else
-            c.log "s.token.and_block", _.indexOf and_array
             s.token.and_block.splice _.indexOf and_array, 1
 
 
@@ -332,15 +354,15 @@ korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
     c.log "search_tab init", s.search_tab
 
     s.getSelected = () ->
-        unless s.panes?.length then return s.search_tab
-        for p, i in s.panes
-            return i if p.selected
+        unless s.tabs?.length then return s.search_tab
+        for p, i in s.tabs
+            return i if p.active
     s.setSelected = (index) ->
-        # unless s.panes then return
-        for p in s.panes
-            p.selected = false
-        if s.panes[index]
-            s.panes[index].selected = true
+        # unless s.tabs then return
+        for p in s.tabs
+            p.active = false
+        if s.tabs[index]
+            s.tabs[index].active = true
 
     util.setupHash s,[
         expr : "getSelected()"
@@ -363,5 +385,64 @@ korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
 
 korpApp.filter "loc", ($rootScope) ->
     (translationKey) ->
-        # c.log "loc", $rootScope.lang, (util.getLocaleString translationKey), $.localize("getLang")
         return util.getLocaleString translationKey
+
+
+korpApp.directive "tokenValue", ($compile, $controller) ->
+    defaultTmpl = "<input ng-model='model'>"
+
+    # require:'ngModel',
+    scope :
+        tokenValue : "="
+        model : "=ngModel"
+    template : """
+        <div class="arg_value">{{tokenValue.label}}</div>
+    """
+    link : (scope, elem, attr, ngModelCtrl) ->
+        scope.$watch "tokenValue", (valueObj) ->
+            c.log "watch value", valueObj
+            unless valueObj then return
+
+            
+
+            # _.extend scope, (_.pick valueObj, "dataset", "translationKey")
+            if valueObj.controller
+                locals = {$scope : _.extend scope, valueObj} 
+
+                $controller(valueObj.controller, locals)
+            # valueObj.controller?(scope, _.omit valueObj)
+
+            tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
+            elem.html(tmplElem)
+
+
+korpApp.directive "korpAutocomplete", () ->
+
+    link : (scope, elem, attr) ->
+        type = "lem"
+        # parametrize.
+        labelFunc = util.lemgramToString
+        sortFunc = view.lemgramSort
+        arg_value = $("<input type='text'/>").korp_autocomplete(
+            labelFunction: labelFunc
+            sortFunction: sortFunc
+            type: type
+            select: (lemgram) ->
+                c.log "extended lemgram", lemgram, $(this)
+                $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
+                $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder()
+
+            "sw-forms": true
+        ).blur(->
+            input = this
+            setTimeout (->
+                c.log "blur"
+
+                if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
+                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
+                else
+                    $(input).removeClass("invalid_input")
+                self._trigger "change"
+            ), 100
+        )
+

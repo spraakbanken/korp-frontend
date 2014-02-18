@@ -7,7 +7,7 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
-/* line 18, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000318}}
 article,
 aside,
 details,
@@ -21,7 +21,7 @@ section {
   display: block;
 }
 
-/* line 27, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000327}}
 audio,
 canvas,
 video {
@@ -30,32 +30,32 @@ video {
   *zoom: 1;
 }
 
-/* line 36, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000336}}
 audio:not([controls]) {
   display: none;
 }
 
-/* line 43, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000343}}
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 
-/* line 49, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000349}}
 a:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
-/* line 54, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000354}}
 a:hover,
 a:active {
   outline: 0;
 }
 
-/* line 62, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000362}}
 sub,
 sup {
   position: relative;
@@ -64,17 +64,17 @@ sup {
   vertical-align: baseline;
 }
 
-/* line 68, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000368}}
 sup {
   top: -0.5em;
 }
 
-/* line 71, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000371}}
 sub {
   bottom: -0.25em;
 }
 
-/* line 78, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000378}}
 img {
   max-width: 100%;
   height: auto;
@@ -83,18 +83,18 @@ img {
   -ms-interpolation-mode: bicubic;
 }
 
-/* line 87, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000387}}
 #mapCanvas label {
   width: auto;
   display: inline;
 }
 
-/* line 88, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000388}}
 #mapCanvas img {
   max-width: none;
 }
 
-/* line 97, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\0000397}}
 button,
 input,
 select,
@@ -104,21 +104,21 @@ textarea {
   vertical-align: middle;
 }
 
-/* line 103, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003103}}
 button,
 input {
   *overflow: visible;
   line-height: normal;
 }
 
-/* line 108, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003108}}
 button::-moz-focus-inner,
 input::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
 
-/* line 115, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003115}}
 button,
 input[type="button"],
 input[type="reset"],
@@ -127,7 +127,7 @@ input[type="submit"] {
   -webkit-appearance: button;
 }
 
-/* line 119, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003119}}
 input[type="search"] {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -135,36 +135,36 @@ input[type="search"] {
   -webkit-appearance: textfield;
 }
 
-/* line 126, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003126}}
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 
-/* line 129, compass_twitter_bootstrap/_reset.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003129}}
 textarea {
   overflow: auto;
   vertical-align: top;
 }
 
-/* line 8, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\000038}}
 .dropup,
 .dropdown {
   position: relative;
 }
 
-/* line 11, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000311}}
 .dropdown-toggle {
   *margin-bottom: -3px;
 }
 
-/* line 16, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000316}}
 .dropdown-toggle:active,
 .open .dropdown-toggle {
   outline: 0;
 }
 
-/* line 22, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000322}}
 .caret {
   display: inline-block;
   width: 0;
@@ -176,13 +176,13 @@ textarea {
   content: "";
 }
 
-/* line 34, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000334}}
 .dropdown .caret {
   margin-top: 8px;
   margin-left: 2px;
 }
 
-/* line 41, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000341}}
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -209,12 +209,12 @@ textarea {
   -moz-background-clip: padding;
   background-clip: padding-box;
 }
-/* line 64, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000364}}
 .dropdown-menu.pull-right {
   right: 0;
   left: auto;
 }
-/* line 70, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000370}}
 .dropdown-menu .divider {
   *width: 100%;
   height: 1px;
@@ -224,7 +224,7 @@ textarea {
   background-color: #e5e5e5;
   border-bottom: 1px solid white;
 }
-/* line 75, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000375}}
 .dropdown-menu a {
   display: block;
   padding: 3px 20px;
@@ -235,7 +235,7 @@ textarea {
   white-space: nowrap;
 }
 
-/* line 90, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\0000390}}
 .dropdown-menu li > a:hover,
 .dropdown-menu li > a:focus,
 .dropdown-submenu:hover > a {
@@ -252,7 +252,7 @@ textarea {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085c7', endColorstr='#0074ad', GradientType=0);
 }
 
-/* line 100, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003100}}
 .dropdown-menu .active > a,
 .dropdown-menu .active > a:hover {
   color: white;
@@ -269,42 +269,42 @@ textarea {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085c7', endColorstr='#0074ad', GradientType=0);
 }
 
-/* line 112, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003112}}
 .dropdown-menu .disabled > a,
 .dropdown-menu .disabled > a:hover {
   color: #999999;
 }
 
-/* line 116, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003116}}
 .dropdown-menu .disabled > a:hover {
   text-decoration: none;
   background-color: transparent;
   cursor: default;
 }
 
-/* line 124, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003124}}
 .open {
   *z-index: 1000;
 }
-/* line 129, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003129}}
 .open > .dropdown-menu {
   display: block;
 }
 
-/* line 136, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003136}}
 .pull-right > .dropdown-menu {
   right: 0;
   left: auto;
 }
 
-/* line 148, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003148}}
 .dropup .caret,
 .navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
   border-bottom: 4px solid black;
   content: "\2191";
 }
-/* line 154, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003154}}
 .dropup .dropdown-menu,
 .navbar-fixed-bottom .dropdown .dropdown-menu {
   top: auto;
@@ -312,12 +312,12 @@ textarea {
   margin-bottom: 1px;
 }
 
-/* line 163, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003163}}
 .dropdown-submenu {
   position: relative;
 }
 
-/* line 166, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003166}}
 .dropdown-submenu > .dropdown-menu {
   top: 0;
   left: 100%;
@@ -328,12 +328,12 @@ textarea {
   border-radius: 0 6px 6px 6px;
 }
 
-/* line 175, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003175}}
 .dropdown-submenu:hover .dropdown-menu {
   display: block;
 }
 
-/* line 179, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003179}}
 .dropdown-submenu > a:after {
   display: block;
   content: " ";
@@ -348,18 +348,18 @@ textarea {
   margin-right: -10px;
 }
 
-/* line 192, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003192}}
 .dropdown-submenu:hover > a:after {
   border-left-color: white;
 }
 
-/* line 200, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003200}}
 .dropdown .dropdown-menu .nav-header {
   padding-left: 20px;
   padding-right: 20px;
 }
 
-/* line 207, compass_twitter_bootstrap/_dropdowns.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_dropdowns\.scss}line{font-family:\00003207}}
 .typeahead {
   margin-top: 2px;
   -webkit-border-radius: 4px;
@@ -367,7 +367,7 @@ textarea {
   border-radius: 4px;
 }
 
-/* line 7, compass_twitter_bootstrap/_wells.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_wells\.scss}line{font-family:\000037}}
 .well {
   min-height: 20px;
   padding: 19px;
@@ -381,13 +381,13 @@ textarea {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-/* line 15, compass_twitter_bootstrap/_wells.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_wells\.scss}line{font-family:\0000315}}
 .well blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
 
-/* line 22, compass_twitter_bootstrap/_wells.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_wells\.scss}line{font-family:\0000322}}
 .well-large {
   padding: 24px;
   -webkit-border-radius: 6px;
@@ -395,7 +395,7 @@ textarea {
   border-radius: 6px;
 }
 
-/* line 26, compass_twitter_bootstrap/_wells.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_wells\.scss}line{font-family:\0000326}}
 .well-small {
   padding: 9px;
   -webkit-border-radius: 3px;
@@ -403,7 +403,7 @@ textarea {
   border-radius: 3px;
 }
 
-/* line 6, compass_twitter_bootstrap/_component-animations.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_component-animations\.scss}line{font-family:\000036}}
 .fade {
   opacity: 0;
   filter: alpha(opacity=0);
@@ -412,13 +412,13 @@ textarea {
   -o-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
-/* line 9, compass_twitter_bootstrap/_component-animations.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_component-animations\.scss}line{font-family:\000039}}
 .fade.in {
   opacity: 1;
   filter: alpha(opacity=100);
 }
 
-/* line 14, compass_twitter_bootstrap/_component-animations.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_component-animations\.scss}line{font-family:\0000314}}
 .collapse {
   position: relative;
   height: 0;
@@ -429,12 +429,12 @@ textarea {
   -o-transition: height 0.35s ease;
   transition: height 0.35s ease;
 }
-/* line 20, compass_twitter_bootstrap/_component-animations.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_component-animations\.scss}line{font-family:\0000320}}
 .collapse.in {
   height: auto;
 }
 
-/* line 6, compass_twitter_bootstrap/_close.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_close\.scss}line{font-family:\000036}}
 .close {
   float: right;
   font-size: 20px;
@@ -445,7 +445,7 @@ textarea {
   opacity: 0.2;
   filter: alpha(opacity=20);
 }
-/* line 14, compass_twitter_bootstrap/_close.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_close\.scss}line{font-family:\0000314}}
 .close:hover {
   color: black;
   text-decoration: none;
@@ -454,7 +454,7 @@ textarea {
   filter: alpha(opacity=40);
 }
 
-/* line 25, compass_twitter_bootstrap/_close.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_close\.scss}line{font-family:\0000325}}
 button.close {
   padding: 0;
   cursor: pointer;
@@ -463,7 +463,7 @@ button.close {
   -webkit-appearance: none;
 }
 
-/* line 10, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000310}}
 .btn {
   display: inline-block;
   *display: inline;
@@ -502,21 +502,21 @@ button.close {
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn:hover, .btn:active, .btn.active, .btn.disabled, .btn[disabled] {
   color: #333333;
   background-color: #e6e6e6;
   *background-color: #d9d9d9;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn:active, .btn.active {
   background-color: #cccccc \9;
 }
-/* line 61, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000361}}
 .btn:first-child {
   *margin-left: 0;
 }
-/* line 30, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000330}}
 .btn:hover {
   color: #333333;
   text-decoration: none;
@@ -529,13 +529,13 @@ button.close {
   -o-transition: background-position 0.1s linear;
   transition: background-position 0.1s linear;
 }
-/* line 43, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000343}}
 .btn:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-/* line 49, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000349}}
 .btn.active, .btn:active {
   background-color: #e6e6e6;
   background-color: #d9d9d9 \9;
@@ -545,7 +545,7 @@ button.close {
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 59, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000359}}
 .btn.disabled, .btn[disabled] {
   cursor: default;
   background-color: #e6e6e6;
@@ -557,7 +557,7 @@ button.close {
   box-shadow: none;
 }
 
-/* line 75, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000375}}
 .btn-large {
   padding: 9px 14px;
   font-size: 16px;
@@ -567,31 +567,31 @@ button.close {
   border-radius: 5px;
 }
 
-/* line 81, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000381}}
 .btn-large [class^="icon-"] {
   margin-top: 2px;
 }
 
-/* line 86, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000386}}
 .btn-small {
   padding: 3px 9px;
   font-size: 12px;
   line-height: 18px;
 }
 
-/* line 91, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000391}}
 .btn-small [class^="icon-"] {
   margin-top: 0px;
 }
 
-/* line 96, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\0000396}}
 .btn-mini {
   padding: 2px 6px;
   font-size: 11px;
   line-height: 16px;
 }
 
-/* line 103, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003103}}
 .btn-block {
   display: block;
   width: 100%;
@@ -602,12 +602,12 @@ button.close {
   box-sizing: border-box;
 }
 
-/* line 110, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003110}}
 .btn-block + .btn-block {
   margin-top: 5px;
 }
 
-/* line 124, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003124}}
 .btn-primary.active,
 .btn-warning.active,
 .btn-danger.active,
@@ -617,13 +617,13 @@ button.close {
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* line 130, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003130}}
 .btn {
   border-color: #c5c5c5;
   border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
 }
 
-/* line 135, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003135}}
 .btn-primary {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -641,18 +641,18 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-primary:hover, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
   color: white;
   background-color: #0044cc;
   *background-color: #003bb3;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-primary:active, .btn-primary.active {
   background-color: #003399 \9;
 }
 
-/* line 139, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003139}}
 .btn-warning {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -670,18 +670,18 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-warning:hover, .btn-warning:active, .btn-warning.active, .btn-warning.disabled, .btn-warning[disabled] {
   color: white;
   background-color: #f89406;
   *background-color: #df8505;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-warning:active, .btn-warning.active {
   background-color: #c67605 \9;
 }
 
-/* line 143, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003143}}
 .btn-danger {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -699,18 +699,18 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-danger:hover, .btn-danger:active, .btn-danger.active, .btn-danger.disabled, .btn-danger[disabled] {
   color: white;
   background-color: #bd362f;
   *background-color: #a9302a;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-danger:active, .btn-danger.active {
   background-color: #942a25 \9;
 }
 
-/* line 147, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003147}}
 .btn-success {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -728,18 +728,18 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-success:hover, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled] {
   color: white;
   background-color: #51a351;
   *background-color: #499249;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-success:active, .btn-success.active {
   background-color: #408140 \9;
 }
 
-/* line 151, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003151}}
 .btn-info {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -757,18 +757,18 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-info:hover, .btn-info:active, .btn-info.active, .btn-info.disabled, .btn-info[disabled] {
   color: white;
   background-color: #2f96b4;
   *background-color: #2a85a0;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-info:active, .btn-info.active {
   background-color: #24748c \9;
 }
 
-/* line 155, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003155}}
 .btn-inverse {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -786,49 +786,49 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .btn-inverse:hover, .btn-inverse:active, .btn-inverse.active, .btn-inverse.disabled, .btn-inverse[disabled] {
   color: white;
   background-color: #222222;
   *background-color: #151515;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .btn-inverse:active, .btn-inverse.active {
   background-color: #090909 \9;
 }
 
-/* line 164, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003164}}
 button.btn,
 input[type="submit"].btn {
   *padding-top: 3px;
   *padding-bottom: 3px;
 }
-/* line 167, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003167}}
 button.btn::-moz-focus-inner,
 input[type="submit"].btn::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
-/* line 175, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003175}}
 button.btn.btn-large,
 input[type="submit"].btn.btn-large {
   *padding-top: 7px;
   *padding-bottom: 7px;
 }
-/* line 179, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003179}}
 button.btn.btn-small,
 input[type="submit"].btn.btn-small {
   *padding-top: 3px;
   *padding-bottom: 3px;
 }
-/* line 183, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003183}}
 button.btn.btn-mini,
 input[type="submit"].btn.btn-mini {
   *padding-top: 1px;
   *padding-bottom: 1px;
 }
 
-/* line 195, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003195}}
 .btn-link,
 .btn-link:active {
   background-color: transparent;
@@ -838,7 +838,7 @@ input[type="submit"].btn.btn-mini {
   box-shadow: none;
 }
 
-/* line 200, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003200}}
 .btn-link {
   border-color: transparent;
   cursor: pointer;
@@ -848,50 +848,50 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-/* line 206, compass_twitter_bootstrap/_buttons.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_buttons\.scss}line{font-family:\00003206}}
 .btn-link:hover {
   color: #005580;
   text-decoration: underline;
   background-color: transparent;
 }
 
-/* line 7, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\000037}}
 .btn-group {
   position: relative;
   font-size: 0;
   white-space: nowrap;
   *margin-left: .3em;
 }
-/* line 61, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000361}}
 .btn-group:first-child {
   *margin-left: 0;
 }
 
-/* line 15, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000315}}
 .btn-group + .btn-group {
   margin-left: 5px;
 }
 
-/* line 20, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000320}}
 .btn-toolbar {
   font-size: 0;
   margin-top: 10px;
   margin-bottom: 10px;
 }
-/* line 24, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000324}}
 .btn-toolbar .btn-group {
   display: inline-block;
   *display: inline;
   *zoom: 1;
 }
-/* line 30, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000330}}
 .btn-toolbar .btn + .btn,
 .btn-toolbar .btn-group + .btn,
 .btn-toolbar .btn + .btn-group {
   margin-left: 5px;
 }
 
-/* line 36, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000336}}
 .btn-group > .btn {
   position: relative;
   -webkit-border-radius: 0;
@@ -899,33 +899,33 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-/* line 40, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000340}}
 .btn-group > .btn + .btn {
   margin-left: -1px;
 }
 
-/* line 44, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000344}}
 .btn-group > .btn,
 .btn-group > .dropdown-menu {
   font-size: 14px;
 }
 
-/* line 49, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000349}}
 .btn-group > .btn-mini {
   font-size: 11px;
 }
 
-/* line 52, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000352}}
 .btn-group > .btn-small {
   font-size: 12px;
 }
 
-/* line 55, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000355}}
 .btn-group > .btn-large {
   font-size: 16px;
 }
 
-/* line 60, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000360}}
 .btn-group > .btn:first-child {
   margin-left: 0;
   -webkit-border-top-left-radius: 4px;
@@ -936,7 +936,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-left-radius: 4px;
 }
 
-/* line 71, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000371}}
 .btn-group > .btn:last-child,
 .btn-group > .dropdown-toggle {
   -webkit-border-top-right-radius: 4px;
@@ -947,7 +947,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-right-radius: 4px;
 }
 
-/* line 80, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000380}}
 .btn-group > .btn.large:first-child {
   margin-left: 0;
   -webkit-border-top-left-radius: 6px;
@@ -958,7 +958,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-left-radius: 6px;
 }
 
-/* line 90, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\0000390}}
 .btn-group > .btn.large:last-child,
 .btn-group > .large.dropdown-toggle {
   -webkit-border-top-right-radius: 6px;
@@ -969,7 +969,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-right-radius: 6px;
 }
 
-/* line 103, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003103}}
 .btn-group > .btn:hover,
 .btn-group > .btn:focus,
 .btn-group > .btn:active,
@@ -977,13 +977,13 @@ input[type="submit"].btn.btn-mini {
   z-index: 2;
 }
 
-/* line 109, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003109}}
 .btn-group .dropdown-toggle:active,
 .btn-group.open .dropdown-toggle {
   outline: 0;
 }
 
-/* line 119, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003119}}
 .btn-group > .btn + .dropdown-toggle {
   padding-left: 8px;
   padding-right: 8px;
@@ -994,87 +994,87 @@ input[type="submit"].btn.btn-mini {
   *padding-bottom: 5px;
 }
 
-/* line 126, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003126}}
 .btn-group > .btn-mini + .dropdown-toggle {
   *padding-left: 2px;
   *padding-right: 2px;
 }
 
-/* line 130, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003130}}
 .btn-group > .btn-small + .dropdown-toggle {
   *padding-top: 5px;
   *padding-bottom: 4px;
 }
 
-/* line 134, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003134}}
 .btn-group > .btn-large + .dropdown-toggle {
   *padding-left: 7px;
   *padding-right: 7px;
 }
 
-/* line 143, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003143}}
 .btn-group.open .dropdown-toggle {
   background-image: none;
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 149, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003149}}
 .btn-group.open .btn.dropdown-toggle {
   background-color: #e6e6e6;
 }
-/* line 152, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003152}}
 .btn-group.open .btn-primary.dropdown-toggle {
   background-color: #0044cc;
 }
-/* line 155, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003155}}
 .btn-group.open .btn-warning.dropdown-toggle {
   background-color: #f89406;
 }
-/* line 158, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003158}}
 .btn-group.open .btn-danger.dropdown-toggle {
   background-color: #bd362f;
 }
-/* line 161, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003161}}
 .btn-group.open .btn-success.dropdown-toggle {
   background-color: #51a351;
 }
-/* line 164, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003164}}
 .btn-group.open .btn-info.dropdown-toggle {
   background-color: #2f96b4;
 }
-/* line 167, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003167}}
 .btn-group.open .btn-inverse.dropdown-toggle {
   background-color: #222222;
 }
 
-/* line 174, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003174}}
 .btn .caret {
   margin-top: 8px;
   margin-left: 0;
 }
 
-/* line 181, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003181}}
 .btn-mini .caret,
 .btn-small .caret,
 .btn-large .caret {
   margin-top: 6px;
 }
 
-/* line 184, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003184}}
 .btn-large .caret {
   border-left-width: 5px;
   border-right-width: 5px;
   border-top-width: 5px;
 }
 
-/* line 190, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003190}}
 .dropup .btn-large .caret {
   border-bottom: 5px solid black;
   border-top: 0;
 }
 
-/* line 204, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003204}}
 .btn-primary .caret,
 .btn-warning .caret,
 .btn-danger .caret,
@@ -1085,14 +1085,14 @@ input[type="submit"].btn.btn-mini {
   border-bottom-color: white;
 }
 
-/* line 215, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003215}}
 .btn-group-vertical {
   display: inline-block;
   *display: inline;
   *zoom: 1;
 }
 
-/* line 219, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003219}}
 .btn-group-vertical .btn {
   display: block;
   float: none;
@@ -1102,41 +1102,41 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-/* line 225, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003225}}
 .btn-group-vertical .btn + .btn {
   margin-left: 0;
   margin-top: -1px;
 }
 
-/* line 229, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003229}}
 .btn-group-vertical .btn:first-child {
   -webkit-border-radius: 4px 4px 0 0;
   -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 }
 
-/* line 232, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003232}}
 .btn-group-vertical .btn:last-child {
   -webkit-border-radius: 0 0 4px 4px;
   -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
 }
 
-/* line 235, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003235}}
 .btn-group-vertical .btn-large:first-child {
   -webkit-border-radius: 6px 6px 0 0;
   -moz-border-radius: 6px 6px 0 0;
   border-radius: 6px 6px 0 0;
 }
 
-/* line 238, compass_twitter_bootstrap/_button-groups.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_button-groups\.scss}line{font-family:\00003238}}
 .btn-group-vertical .btn-large:last-child {
   -webkit-border-radius: 0 0 6px 6px;
   -moz-border-radius: 0 0 6px 6px;
   border-radius: 0 0 6px 6px;
 }
 
-/* line 8, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\000038}}
 .alert {
   padding: 8px 35px 8px 14px;
   margin-bottom: 20px;
@@ -1149,12 +1149,12 @@ input[type="submit"].btn.btn-mini {
   color: #c09853;
 }
 
-/* line 17, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000317}}
 .alert h4 {
   margin: 0;
 }
 
-/* line 22, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000322}}
 .alert .close {
   position: relative;
   top: -2px;
@@ -1162,14 +1162,14 @@ input[type="submit"].btn.btn-mini {
   line-height: 20px;
 }
 
-/* line 32, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000332}}
 .alert-success {
   background-color: #dff0d8;
   border-color: #d6e9c6;
   color: #468847;
 }
 
-/* line 38, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000338}}
 .alert-danger,
 .alert-error {
   background-color: #f2dede;
@@ -1177,54 +1177,54 @@ input[type="submit"].btn.btn-mini {
   color: #b94a48;
 }
 
-/* line 43, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000343}}
 .alert-info {
   background-color: #d9edf7;
   border-color: #bce8f1;
   color: #3a87ad;
 }
 
-/* line 51, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000351}}
 .alert-block {
   padding-top: 14px;
   padding-bottom: 14px;
 }
 
-/* line 56, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000356}}
 .alert-block > p,
 .alert-block > ul {
   margin-bottom: 0;
 }
 
-/* line 59, compass_twitter_bootstrap/_alerts.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_alerts\.scss}line{font-family:\0000359}}
 .alert-block p + p {
   margin-top: 5px;
 }
 
-/* line 9, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\000039}}
 .nav {
   margin-left: 0;
   margin-bottom: 20px;
   list-style: none;
 }
 
-/* line 16, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000316}}
 .nav > li > a {
   display: block;
 }
 
-/* line 19, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000319}}
 .nav > li > a:hover {
   text-decoration: none;
   background-color: #eeeeee;
 }
 
-/* line 25, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000325}}
 .nav > .pull-right {
   float: right;
 }
 
-/* line 30, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000330}}
 .nav-header {
   display: block;
   padding: 3px 15px;
@@ -1236,19 +1236,19 @@ input[type="submit"].btn.btn-mini {
   text-transform: uppercase;
 }
 
-/* line 41, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000341}}
 .nav li + .nav-header {
   margin-top: 9px;
 }
 
-/* line 50, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000350}}
 .nav-list {
   padding-left: 15px;
   padding-right: 15px;
   margin-bottom: 0;
 }
 
-/* line 56, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000356}}
 .nav-list > li > a,
 .nav-list .nav-header {
   margin-left: -15px;
@@ -1256,12 +1256,12 @@ input[type="submit"].btn.btn-mini {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* line 61, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000361}}
 .nav-list > li > a {
   padding: 3px 15px;
 }
 
-/* line 65, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000365}}
 .nav-list > .active > a,
 .nav-list > .active > a:hover {
   color: white;
@@ -1269,12 +1269,12 @@ input[type="submit"].btn.btn-mini {
   background-color: #0088cc;
 }
 
-/* line 70, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000370}}
 .nav-list [class^="icon-"] {
   margin-right: 2px;
 }
 
-/* line 74, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000374}}
 .nav-list .divider {
   *width: 100%;
   height: 1px;
@@ -1285,12 +1285,12 @@ input[type="submit"].btn.btn-mini {
   border-bottom: 1px solid white;
 }
 
-/* line 85, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000385}}
 .nav-tabs,
 .nav-pills {
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .nav-tabs:before, .nav-tabs:after,
 .nav-pills:before,
 .nav-pills:after {
@@ -1298,19 +1298,19 @@ input[type="submit"].btn.btn-mini {
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .nav-tabs:after,
 .nav-pills:after {
   clear: both;
 }
 
-/* line 89, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000389}}
 .nav-tabs > li,
 .nav-pills > li {
   float: left;
 }
 
-/* line 93, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\0000393}}
 .nav-tabs > li > a,
 .nav-pills > li > a {
   padding-right: 12px;
@@ -1319,17 +1319,17 @@ input[type="submit"].btn.btn-mini {
   line-height: 14px;
 }
 
-/* line 104, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003104}}
 .nav-tabs {
   border-bottom: 1px solid #ddd;
 }
 
-/* line 108, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003108}}
 .nav-tabs > li {
   margin-bottom: -1px;
 }
 
-/* line 112, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003112}}
 .nav-tabs > li > a {
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1339,12 +1339,12 @@ input[type="submit"].btn.btn-mini {
   -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 }
-/* line 118, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003118}}
 .nav-tabs > li > a:hover {
   border-color: #eeeeee #eeeeee #dddddd;
 }
 
-/* line 124, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003124}}
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   color: #555555;
@@ -1354,7 +1354,7 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 
-/* line 137, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003137}}
 .nav-pills > li > a {
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1365,29 +1365,29 @@ input[type="submit"].btn.btn-mini {
   border-radius: 5px;
 }
 
-/* line 147, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003147}}
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover {
   color: white;
   background-color: #0088cc;
 }
 
-/* line 158, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003158}}
 .nav-stacked > li {
   float: none;
 }
 
-/* line 161, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003161}}
 .nav-stacked > li > a {
   margin-right: 0;
 }
 
-/* line 166, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003166}}
 .nav-tabs.nav-stacked {
   border-bottom: 0;
 }
 
-/* line 169, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003169}}
 .nav-tabs.nav-stacked > li > a {
   border: 1px solid #ddd;
   -webkit-border-radius: 0;
@@ -1395,7 +1395,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-/* line 173, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003173}}
 .nav-tabs.nav-stacked > li:first-child > a {
   -webkit-border-top-right-radius: 4px;
   -moz-border-radius-topright: 4px;
@@ -1405,7 +1405,7 @@ input[type="submit"].btn.btn-mini {
   border-top-left-radius: 4px;
 }
 
-/* line 176, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003176}}
 .nav-tabs.nav-stacked > li:last-child > a {
   -webkit-border-bottom-right-radius: 4px;
   -moz-border-radius-bottomright: 4px;
@@ -1415,73 +1415,73 @@ input[type="submit"].btn.btn-mini {
   border-bottom-left-radius: 4px;
 }
 
-/* line 179, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003179}}
 .nav-tabs.nav-stacked > li > a:hover {
   border-color: #ddd;
   z-index: 2;
 }
 
-/* line 185, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003185}}
 .nav-pills.nav-stacked > li > a {
   margin-bottom: 3px;
 }
 
-/* line 188, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003188}}
 .nav-pills.nav-stacked > li:last-child > a {
   margin-bottom: 1px;
 }
 
-/* line 197, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003197}}
 .nav-tabs .dropdown-menu {
   -webkit-border-radius: 0 0 6px 6px;
   -moz-border-radius: 0 0 6px 6px;
   border-radius: 0 0 6px 6px;
 }
 
-/* line 200, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003200}}
 .nav-pills .dropdown-menu {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
 
-/* line 207, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003207}}
 .nav .dropdown-toggle .caret {
   border-top-color: #0088cc;
   border-bottom-color: #0088cc;
   margin-top: 6px;
 }
 
-/* line 212, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003212}}
 .nav .dropdown-toggle:hover .caret {
   border-top-color: #005580;
   border-bottom-color: #005580;
 }
 
 /* move down carets for tabs */
-/* line 217, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003217}}
 .nav-tabs .dropdown-toggle .caret {
   margin-top: 8px;
 }
 
-/* line 223, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003223}}
 .nav .active .dropdown-toggle .caret {
   border-top-color: #333333;
   border-bottom-color: #333333;
 }
 
-/* line 227, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003227}}
 .nav-tabs .active .dropdown-toggle .caret {
   border-top-color: #555555;
   border-bottom-color: #555555;
 }
 
-/* line 234, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003234}}
 .nav > .dropdown.active > a:hover {
   cursor: pointer;
 }
 
-/* line 242, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003242}}
 .nav-tabs .open .dropdown-toggle,
 .nav-pills .open .dropdown-toggle,
 .nav > li.dropdown.open.active > a:hover {
@@ -1490,7 +1490,7 @@ input[type="submit"].btn.btn-mini {
   border-color: #999999;
 }
 
-/* line 249, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003249}}
 .nav li.dropdown.open .caret,
 .nav li.dropdown.open.active .caret,
 .nav li.dropdown.open a:hover .caret {
@@ -1500,86 +1500,86 @@ input[type="submit"].btn.btn-mini {
   filter: alpha(opacity=100);
 }
 
-/* line 256, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003256}}
 .tabs-stacked .open > a:hover {
   border-color: #999999;
 }
 
-/* line 270, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003270}}
 .tabbable {
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .tabbable:before, .tabbable:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .tabbable:after {
   clear: both;
 }
 
-/* line 273, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003273}}
 .tab-content {
   overflow: auto;
 }
 
-/* line 280, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003280}}
 .tabs-below > .nav-tabs,
 .tabs-right > .nav-tabs,
 .tabs-left > .nav-tabs {
   border-bottom: 0;
 }
 
-/* line 286, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003286}}
 .tab-content > .tab-pane,
 .pill-content > .pill-pane {
   display: none;
 }
 
-/* line 290, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003290}}
 .tab-content > .active,
 .pill-content > .active {
   display: block;
 }
 
-/* line 298, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003298}}
 .tabs-below > .nav-tabs {
   border-top: 1px solid #ddd;
 }
 
-/* line 301, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003301}}
 .tabs-below > .nav-tabs > li {
   margin-top: -1px;
   margin-bottom: 0;
 }
 
-/* line 305, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003305}}
 .tabs-below > .nav-tabs > li > a {
   -webkit-border-radius: 0 0 4px 4px;
   -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
 }
-/* line 307, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003307}}
 .tabs-below > .nav-tabs > li > a:hover {
   border-bottom-color: transparent;
   border-top-color: #ddd;
 }
 
-/* line 313, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003313}}
 .tabs-below > .nav-tabs > .active > a,
 .tabs-below > .nav-tabs > .active > a:hover {
   border-color: transparent #ddd #ddd #ddd;
 }
 
-/* line 322, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003322}}
 .tabs-left > .nav-tabs > li,
 .tabs-right > .nav-tabs > li {
   float: none;
 }
 
-/* line 326, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003326}}
 .tabs-left > .nav-tabs > li > a,
 .tabs-right > .nav-tabs > li > a {
   min-width: 74px;
@@ -1587,14 +1587,14 @@ input[type="submit"].btn.btn-mini {
   margin-bottom: 3px;
 }
 
-/* line 333, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003333}}
 .tabs-left > .nav-tabs {
   float: left;
   margin-right: 19px;
   border-right: 1px solid #ddd;
 }
 
-/* line 338, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003338}}
 .tabs-left > .nav-tabs > li > a {
   margin-right: -1px;
   -webkit-border-radius: 4px 0 0 4px;
@@ -1602,26 +1602,26 @@ input[type="submit"].btn.btn-mini {
   border-radius: 4px 0 0 4px;
 }
 
-/* line 342, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003342}}
 .tabs-left > .nav-tabs > li > a:hover {
   border-color: #eeeeee #dddddd #eeeeee #eeeeee;
 }
 
-/* line 346, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003346}}
 .tabs-left > .nav-tabs .active > a,
 .tabs-left > .nav-tabs .active > a:hover {
   border-color: #ddd transparent #ddd #ddd;
   *border-right-color: white;
 }
 
-/* line 352, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003352}}
 .tabs-right > .nav-tabs {
   float: right;
   margin-left: 19px;
   border-left: 1px solid #ddd;
 }
 
-/* line 357, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003357}}
 .tabs-right > .nav-tabs > li > a {
   margin-left: -1px;
   -webkit-border-radius: 0 4px 4px 0;
@@ -1629,31 +1629,31 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0 4px 4px 0;
 }
 
-/* line 361, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003361}}
 .tabs-right > .nav-tabs > li > a:hover {
   border-color: #eeeeee #eeeeee #eeeeee #dddddd;
 }
 
-/* line 365, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003365}}
 .tabs-right > .nav-tabs .active > a,
 .tabs-right > .nav-tabs .active > a:hover {
   border-color: #ddd #ddd #ddd transparent;
   *border-left-color: white;
 }
 
-/* line 376, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003376}}
 .nav > .disabled > a {
   color: #999999;
 }
 
-/* line 380, compass_twitter_bootstrap/_navs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navs\.scss}line{font-family:\00003380}}
 .nav > .disabled > a:hover {
   text-decoration: none;
   background-color: transparent;
   cursor: default;
 }
 
-/* line 10, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000310}}
 .navbar {
   overflow: visible;
   margin-bottom: 20px;
@@ -1662,7 +1662,7 @@ input[type="submit"].btn.btn-mini {
   *z-index: 2;
 }
 
-/* line 22, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000322}}
 .navbar-inner {
   min-height: 40px;
   padding-left: 20px;
@@ -1684,17 +1684,17 @@ input[type="submit"].btn.btn-mini {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 }
 
-/* line 34, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000334}}
 .navbar .container {
   width: auto;
 }
 
-/* line 39, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000339}}
 .nav-collapse.collapse {
   height: auto;
 }
 
-/* line 46, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000346}}
 .navbar .brand {
   float: left;
   display: block;
@@ -1705,27 +1705,27 @@ input[type="submit"].btn.btn-mini {
   color: #555555;
   text-shadow: 0 1px 0 white;
 }
-/* line 56, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000356}}
 .navbar .brand:hover {
   text-decoration: none;
 }
 
-/* line 63, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000363}}
 .navbar-text {
   margin-bottom: 0;
   line-height: 40px;
 }
 
-/* line 70, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000370}}
 .navbar-link {
   color: #555555;
 }
-/* line 72, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000372}}
 .navbar-link:hover {
   color: #333333;
 }
 
-/* line 79, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000379}}
 .navbar .divider-vertical {
   height: 40px;
   margin: 0 9px;
@@ -1733,72 +1733,72 @@ input[type="submit"].btn.btn-mini {
   border-right: 1px solid white;
 }
 
-/* line 89, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000389}}
 .navbar .btn,
 .navbar .btn-group {
   margin-top: 6px;
 }
 
-/* line 92, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000392}}
 .navbar .btn-group .btn {
   margin: 0;
 }
 
-/* line 97, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\0000397}}
 .navbar-form {
   margin-bottom: 0;
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .navbar-form:before, .navbar-form:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .navbar-form:after {
   clear: both;
 }
-/* line 103, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003103}}
 .navbar-form input,
 .navbar-form select,
 .navbar-form .radio,
 .navbar-form .checkbox {
   margin-top: 5px;
 }
-/* line 108, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003108}}
 .navbar-form input,
 .navbar-form select,
 .navbar-form .btn {
   display: inline-block;
   margin-bottom: 0;
 }
-/* line 114, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003114}}
 .navbar-form input[type="image"],
 .navbar-form input[type="checkbox"],
 .navbar-form input[type="radio"] {
   margin-top: 3px;
 }
-/* line 118, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003118}}
 .navbar-form .input-append,
 .navbar-form .input-prepend {
   margin-top: 6px;
   white-space: nowrap;
 }
-/* line 121, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003121}}
 .navbar-form .input-append input,
 .navbar-form .input-prepend input {
   margin-top: 0;
 }
 
-/* line 128, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003128}}
 .navbar-search {
   position: relative;
   float: left;
   margin-top: 5px;
   margin-bottom: 0;
 }
-/* line 133, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003133}}
 .navbar-search .search-query {
   margin-bottom: 0;
   padding: 4px 14px;
@@ -1811,20 +1811,20 @@ input[type="submit"].btn.btn-mini {
   border-radius: 15px;
 }
 
-/* line 146, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003146}}
 .navbar-static-top {
   position: static;
   width: 100%;
   margin-bottom: 0;
 }
-/* line 150, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003150}}
 .navbar-static-top .navbar-inner {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
 }
 
-/* line 162, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003162}}
 .navbar-fixed-top,
 .navbar-fixed-bottom {
   position: fixed;
@@ -1834,14 +1834,14 @@ input[type="submit"].btn.btn-mini {
   margin-bottom: 0;
 }
 
-/* line 172, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003172}}
 .navbar-fixed-top .navbar-inner,
 .navbar-fixed-bottom .navbar-inner,
 .navbar-static-top .navbar-inner {
   border: 0;
 }
 
-/* line 177, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003177}}
 .navbar-fixed-top .navbar-inner,
 .navbar-fixed-bottom .navbar-inner {
   padding-left: 0;
@@ -1851,19 +1851,19 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-/* line 187, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003187}}
 .navbar-static-top .container,
 .navbar-fixed-top .container,
 .navbar-fixed-bottom .container {
   width: 940px;
 }
 
-/* line 192, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003192}}
 .navbar-fixed-top {
   top: 0;
 }
 
-/* line 197, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003197}}
 .navbar-fixed-top .navbar-inner,
 .navbar-static-top .navbar-inner {
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 1px 10px rgba(0, 0, 0, 0.1);
@@ -1871,18 +1871,18 @@ input[type="submit"].btn.btn-mini {
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 1px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* line 203, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003203}}
 .navbar-fixed-bottom {
   bottom: 0;
 }
-/* line 205, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003205}}
 .navbar-fixed-bottom .navbar-inner {
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 1px 10px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 1px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* line 215, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003215}}
 .navbar .nav {
   position: relative;
   left: 0;
@@ -1891,17 +1891,17 @@ input[type="submit"].btn.btn-mini {
   margin: 0 10px 0 0;
 }
 
-/* line 222, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003222}}
 .navbar .nav.pull-right {
   float: right;
 }
 
-/* line 225, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003225}}
 .navbar .nav > li {
   float: left;
 }
 
-/* line 230, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003230}}
 .navbar .nav > li > a {
   float: none;
   padding: 10px 15px 10px;
@@ -1910,12 +1910,12 @@ input[type="submit"].btn.btn-mini {
   text-shadow: 0 1px 0 white;
 }
 
-/* line 238, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003238}}
 .navbar .nav .dropdown-toggle .caret {
   margin-top: 8px;
 }
 
-/* line 244, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003244}}
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
   background-color: transparent;
@@ -1923,7 +1923,7 @@ input[type="submit"].btn.btn-mini {
   text-decoration: none;
 }
 
-/* line 253, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003253}}
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
@@ -1935,7 +1935,7 @@ input[type="submit"].btn.btn-mini {
   box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
 }
 
-/* line 264, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003264}}
 .navbar .btn-navbar {
   display: none;
   float: right;
@@ -1961,18 +1961,18 @@ input[type="submit"].btn.btn-mini {
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .navbar .btn-navbar:hover, .navbar .btn-navbar:active, .navbar .btn-navbar.active, .navbar .btn-navbar.disabled, .navbar .btn-navbar[disabled] {
   color: white;
   background-color: #e5e5e5;
   *background-color: #d8d8d8;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .navbar .btn-navbar:active, .navbar .btn-navbar.active {
   background-color: #cbcbcb \9;
 }
 
-/* line 273, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003273}}
 .navbar .btn-navbar .icon-bar {
   display: block;
   width: 18px;
@@ -1986,12 +1986,12 @@ input[type="submit"].btn.btn-mini {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* line 281, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003281}}
 .btn-navbar .icon-bar + .icon-bar {
   margin-top: 3px;
 }
 
-/* line 292, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003292}}
 .navbar .nav > li > .dropdown-menu:before {
   content: '';
   display: inline-block;
@@ -2003,7 +2003,7 @@ input[type="submit"].btn.btn-mini {
   top: -7px;
   left: 9px;
 }
-/* line 303, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003303}}
 .navbar .nav > li > .dropdown-menu:after {
   content: '';
   display: inline-block;
@@ -2015,7 +2015,7 @@ input[type="submit"].btn.btn-mini {
   left: 10px;
 }
 
-/* line 316, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003316}}
 .navbar-fixed-bottom .dropdown-menu:before {
   border-top: 7px solid #ccc;
   border-top-color: rgba(0, 0, 0, 0.2);
@@ -2023,7 +2023,7 @@ input[type="submit"].btn.btn-mini {
   bottom: -7px;
   top: auto;
 }
-/* line 323, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003323}}
 .navbar-fixed-bottom .dropdown-menu:after {
   border-top: 6px solid white;
   border-bottom: 0;
@@ -2031,7 +2031,7 @@ input[type="submit"].btn.btn-mini {
   top: auto;
 }
 
-/* line 334, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003334}}
 .navbar .nav li.dropdown.open > .dropdown-toggle,
 .navbar .nav li.dropdown.active > .dropdown-toggle,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
@@ -2039,13 +2039,13 @@ input[type="submit"].btn.btn-mini {
   color: #555555;
 }
 
-/* line 338, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003338}}
 .navbar .nav li.dropdown > .dropdown-toggle .caret {
   border-top-color: #555555;
   border-bottom-color: #555555;
 }
 
-/* line 344, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003344}}
 .navbar .nav li.dropdown.open > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.active > .dropdown-toggle .caret,
 .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
@@ -2053,25 +2053,25 @@ input[type="submit"].btn.btn-mini {
   border-bottom-color: #555555;
 }
 
-/* line 351, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003351}}
 .navbar .pull-right > li > .dropdown-menu,
 .navbar .nav > li > .dropdown-menu.pull-right {
   left: auto;
   right: 0;
 }
-/* line 354, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003354}}
 .navbar .pull-right > li > .dropdown-menu:before,
 .navbar .nav > li > .dropdown-menu.pull-right:before {
   left: auto;
   right: 12px;
 }
-/* line 358, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003358}}
 .navbar .pull-right > li > .dropdown-menu:after,
 .navbar .nav > li > .dropdown-menu.pull-right:after {
   left: auto;
   right: 13px;
 }
-/* line 362, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003362}}
 .navbar .pull-right > li > .dropdown-menu .dropdown-menu,
 .navbar .nav > li > .dropdown-menu.pull-right .dropdown-menu {
   left: auto;
@@ -2083,11 +2083,11 @@ input[type="submit"].btn.btn-mini {
   border-radius: 6px 0 6px 6px;
 }
 
-/* line 375, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003375}}
 .navbar-inverse {
   color: #999999;
 }
-/* line 378, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003378}}
 .navbar-inverse .navbar-inner {
   background-color: #1b1b1b;
   background-image: -moz-linear-gradient(top, #222222, #111111);
@@ -2099,63 +2099,63 @@ input[type="submit"].btn.btn-mini {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1f1f1f', endColorstr='#0e0e0e', GradientType=0);
   border-color: #252525;
 }
-/* line 384, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003384}}
 .navbar-inverse .brand,
 .navbar-inverse .nav > li > a {
   color: #999999;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
-/* line 387, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003387}}
 .navbar-inverse .brand:hover,
 .navbar-inverse .nav > li > a:hover {
   color: white;
 }
-/* line 393, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003393}}
 .navbar-inverse .nav > li > a:focus,
 .navbar-inverse .nav > li > a:hover {
   background-color: transparent;
   color: white;
 }
-/* line 400, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003400}}
 .navbar-inverse .nav .active > a,
 .navbar-inverse .nav .active > a:hover,
 .navbar-inverse .nav .active > a:focus {
   color: white;
   background-color: #111111;
 }
-/* line 406, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003406}}
 .navbar-inverse .navbar-link {
   color: #999999;
 }
-/* line 408, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003408}}
 .navbar-inverse .navbar-link:hover {
   color: white;
 }
-/* line 414, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003414}}
 .navbar-inverse .divider-vertical {
   border-left-color: #111111;
   border-right-color: #222222;
 }
-/* line 422, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003422}}
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
   background-color: #111111;
   color: white;
 }
-/* line 426, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003426}}
 .navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
   border-top-color: #999999;
   border-bottom-color: #999999;
 }
-/* line 432, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003432}}
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle .caret,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle .caret,
 .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle .caret {
   border-top-color: white;
   border-bottom-color: white;
 }
-/* line 439, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003439}}
 .navbar-inverse .navbar-search .search-query {
   color: white;
   background-color: #515151;
@@ -2168,19 +2168,19 @@ input[type="submit"].btn.btn-mini {
   -o-transition: none;
   transition: none;
 }
-/* line 83, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000383}}
 .navbar-inverse .navbar-search .search-query:-moz-placeholder {
   color: #cccccc;
 }
-/* line 86, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000386}}
 .navbar-inverse .navbar-search .search-query:-ms-input-placeholder {
   color: #cccccc;
 }
-/* line 89, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000389}}
 .navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
   color: #cccccc;
 }
-/* line 449, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003449}}
 .navbar-inverse .navbar-search .search-query:focus, .navbar-inverse .navbar-search .search-query.focused {
   padding: 5px 15px;
   color: #333333;
@@ -2192,7 +2192,7 @@ input[type="submit"].btn.btn-mini {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
   outline: 0;
 }
-/* line 462, compass_twitter_bootstrap/_navbar.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_navbar\.scss}line{font-family:\00003462}}
 .navbar-inverse .btn-navbar {
   color: white;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -2210,18 +2210,18 @@ input[type="submit"].btn.btn-mini {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-/* line 489, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003489}}
 .navbar-inverse .btn-navbar:hover, .navbar-inverse .btn-navbar:active, .navbar-inverse .btn-navbar.active, .navbar-inverse .btn-navbar.disabled, .navbar-inverse .btn-navbar[disabled] {
   color: white;
   background-color: #040404;
   *background-color: black;
 }
-/* line 497, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\00003497}}
 .navbar-inverse .btn-navbar:active, .navbar-inverse .btn-navbar.active {
   background-color: black \9;
 }
 
-/* line 5, compass_twitter_bootstrap/_breadcrumbs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_breadcrumbs\.scss}line{font-family:\000035}}
 .breadcrumb {
   padding: 8px 15px;
   margin: 0 0 20px;
@@ -2234,30 +2234,30 @@ input[type="submit"].btn.btn-mini {
   -moz-box-shadow: inset 0 1px 0 white;
   box-shadow: inset 0 1px 0 white;
 }
-/* line 12, compass_twitter_bootstrap/_breadcrumbs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_breadcrumbs\.scss}line{font-family:\0000312}}
 .breadcrumb li {
   display: inline-block;
   *display: inline;
   *zoom: 1;
   text-shadow: 0 1px 0 white;
 }
-/* line 17, compass_twitter_bootstrap/_breadcrumbs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_breadcrumbs\.scss}line{font-family:\0000317}}
 .breadcrumb .divider {
   padding: 0 5px;
   color: #ccc;
 }
-/* line 21, compass_twitter_bootstrap/_breadcrumbs.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_breadcrumbs\.scss}line{font-family:\0000321}}
 .breadcrumb .active a {
   color: #999999;
 }
 
-/* line 6, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\000036}}
 .pagination {
   height: 40px;
   margin: 20px 0;
 }
 
-/* line 10, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000310}}
 .pagination ul {
   display: inline-block;
   *display: inline;
@@ -2272,12 +2272,12 @@ input[type="submit"].btn.btn-mini {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* line 18, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000318}}
 .pagination li {
   display: inline;
 }
 
-/* line 22, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000322}}
 .pagination a,
 .pagination span {
   float: left;
@@ -2289,21 +2289,21 @@ input[type="submit"].btn.btn-mini {
   border-left-width: 0;
 }
 
-/* line 33, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000333}}
 .pagination a:hover,
 .pagination .active a,
 .pagination .active span {
   background-color: #f5f5f5;
 }
 
-/* line 37, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000337}}
 .pagination .active a,
 .pagination .active span {
   color: #999999;
   cursor: default;
 }
 
-/* line 43, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000343}}
 .pagination .disabled span,
 .pagination .disabled a,
 .pagination .disabled a:hover {
@@ -2312,7 +2312,7 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 
-/* line 49, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000349}}
 .pagination li:first-child a,
 .pagination li:first-child span {
   border-left-width: 1px;
@@ -2321,7 +2321,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 3px 0 0 3px;
 }
 
-/* line 54, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000354}}
 .pagination li:last-child a,
 .pagination li:last-child span {
   -webkit-border-radius: 0 3px 3px 0;
@@ -2329,40 +2329,40 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0 3px 3px 0;
 }
 
-/* line 59, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000359}}
 .pagination-centered {
   text-align: center;
 }
 
-/* line 62, compass_twitter_bootstrap/_pagination.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pagination\.scss}line{font-family:\0000362}}
 .pagination-right {
   text-align: right;
 }
 
-/* line 6, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\000036}}
 .pager {
   margin: 20px 0;
   list-style: none;
   text-align: center;
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .pager:before, .pager:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .pager:after {
   clear: both;
 }
 
-/* line 12, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000312}}
 .pager li {
   display: inline;
 }
 
-/* line 15, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000315}}
 .pager a {
   display: inline-block;
   padding: 5px 14px;
@@ -2373,23 +2373,23 @@ input[type="submit"].btn.btn-mini {
   border-radius: 15px;
 }
 
-/* line 22, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000322}}
 .pager a:hover {
   text-decoration: none;
   background-color: #f5f5f5;
 }
 
-/* line 26, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000326}}
 .pager .next a {
   float: right;
 }
 
-/* line 29, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000329}}
 .pager .previous a {
   float: left;
 }
 
-/* line 33, compass_twitter_bootstrap/_pager.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_pager\.scss}line{font-family:\0000333}}
 .pager .disabled a,
 .pager .disabled a:hover {
   color: #999999;
@@ -2397,24 +2397,24 @@ input[type="submit"].btn.btn-mini {
   cursor: default;
 }
 
-/* line 8, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\000038}}
 .modal-open .dropdown-menu {
   z-index: 2050;
 }
-/* line 9, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\000039}}
 .modal-open .dropdown.open {
   *z-index: 2050;
 }
-/* line 10, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000310}}
 .modal-open .popover {
   z-index: 2060;
 }
-/* line 11, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000311}}
 .modal-open .tooltip {
   z-index: 2080;
 }
 
-/* line 15, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000315}}
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -2424,19 +2424,19 @@ input[type="submit"].btn.btn-mini {
   z-index: 1040;
   background-color: black;
 }
-/* line 24, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000324}}
 .modal-backdrop.fade {
   opacity: 0;
 }
 
-/* line 28, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000328}}
 .modal-backdrop,
 .modal-backdrop.fade.in {
   opacity: 0.8;
   filter: alpha(opacity=80);
 }
 
-/* line 33, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000333}}
 .modal {
   position: fixed;
   top: 50%;
@@ -2460,7 +2460,7 @@ input[type="submit"].btn.btn-mini {
   -moz-background-clip: padding-box;
   background-clip: padding-box;
 }
-/* line 48, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000348}}
 .modal.fade {
   -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
   -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
@@ -2468,39 +2468,39 @@ input[type="submit"].btn.btn-mini {
   transition: opacity 0.3s linear, top 0.3s ease-out;
   top: -25%;
 }
-/* line 52, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000352}}
 .modal.fade.in {
   top: 50%;
 }
 
-/* line 54, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000354}}
 .modal-header {
   padding: 9px 15px;
   border-bottom: 1px solid #eee;
 }
-/* line 58, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000358}}
 .modal-header .close {
   margin-top: 2px;
 }
-/* line 60, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000360}}
 .modal-header h3 {
   margin: 0;
   line-height: 30px;
 }
 
-/* line 67, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000367}}
 .modal-body {
   overflow-y: auto;
   max-height: 400px;
   padding: 15px;
 }
 
-/* line 73, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000373}}
 .modal-form {
   margin-bottom: 0;
 }
 
-/* line 78, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000378}}
 .modal-footer {
   padding: 14px 15px 15px;
   margin-bottom: 0;
@@ -2515,27 +2515,27 @@ input[type="submit"].btn.btn-mini {
   box-shadow: inset 0 1px 0 white;
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .modal-footer:before, .modal-footer:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .modal-footer:after {
   clear: both;
 }
-/* line 89, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000389}}
 .modal-footer .btn + .btn {
   margin-left: 5px;
   margin-bottom: 0;
 }
-/* line 94, compass_twitter_bootstrap/_modals.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_modals\.scss}line{font-family:\0000394}}
 .modal-footer .btn-group .btn + .btn {
   margin-left: -1px;
 }
 
-/* line 7, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\000037}}
 .tooltip {
   position: absolute;
   z-index: 1030;
@@ -2546,29 +2546,29 @@ input[type="submit"].btn.btn-mini {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-/* line 15, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000315}}
 .tooltip.in {
   opacity: 0.8;
   filter: alpha(opacity=80);
 }
-/* line 16, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000316}}
 .tooltip.top {
   margin-top: -3px;
 }
-/* line 17, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000317}}
 .tooltip.right {
   margin-left: 3px;
 }
-/* line 18, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000318}}
 .tooltip.bottom {
   margin-top: 3px;
 }
-/* line 19, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000319}}
 .tooltip.left {
   margin-left: -3px;
 }
 
-/* line 23, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000323}}
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
@@ -2581,7 +2581,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 4px;
 }
 
-/* line 34, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000334}}
 .tooltip-arrow {
   position: absolute;
   width: 0;
@@ -2590,7 +2590,7 @@ input[type="submit"].btn.btn-mini {
   border-style: solid;
 }
 
-/* line 42, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000342}}
 .tooltip.top .tooltip-arrow {
   bottom: 0;
   left: 50%;
@@ -2598,7 +2598,7 @@ input[type="submit"].btn.btn-mini {
   border-width: 5px 5px 0;
   border-top-color: black;
 }
-/* line 49, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000349}}
 .tooltip.right .tooltip-arrow {
   top: 50%;
   left: 0;
@@ -2606,7 +2606,7 @@ input[type="submit"].btn.btn-mini {
   border-width: 5px 5px 5px 0;
   border-right-color: black;
 }
-/* line 56, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000356}}
 .tooltip.left .tooltip-arrow {
   top: 50%;
   right: 0;
@@ -2614,7 +2614,7 @@ input[type="submit"].btn.btn-mini {
   border-width: 5px 0 5px 5px;
   border-left-color: black;
 }
-/* line 63, compass_twitter_bootstrap/_tooltip.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_tooltip\.scss}line{font-family:\0000363}}
 .tooltip.bottom .tooltip-arrow {
   top: 0;
   left: 50%;
@@ -2623,7 +2623,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-color: black;
 }
 
-/* line 6, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\000036}}
 .popover {
   position: absolute;
   top: 0;
@@ -2645,24 +2645,24 @@ input[type="submit"].btn.btn-mini {
   -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
-/* line 24, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000324}}
 .popover.top {
   margin-bottom: 10px;
 }
-/* line 25, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000325}}
 .popover.right {
   margin-left: 10px;
 }
-/* line 26, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000326}}
 .popover.bottom {
   margin-top: 10px;
 }
-/* line 27, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000327}}
 .popover.left {
   margin-right: 10px;
 }
 
-/* line 31, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000331}}
 .popover-title {
   margin: 0;
   padding: 8px 14px;
@@ -2676,16 +2676,16 @@ input[type="submit"].btn.btn-mini {
   border-radius: 5px 5px 0 0;
 }
 
-/* line 42, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000342}}
 .popover-content {
   padding: 9px 14px;
 }
-/* line 44, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000344}}
 .popover-content p, .popover-content ul, .popover-content ol {
   margin-bottom: 0;
 }
 
-/* line 51, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000351}}
 .popover .arrow,
 .popover .arrow:after {
   position: absolute;
@@ -2696,13 +2696,13 @@ input[type="submit"].btn.btn-mini {
   border-style: solid;
 }
 
-/* line 59, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000359}}
 .popover .arrow:after {
   content: "";
   z-index: -1;
 }
 
-/* line 65, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000365}}
 .popover.top .arrow {
   bottom: -10px;
   left: 50%;
@@ -2710,14 +2710,14 @@ input[type="submit"].btn.btn-mini {
   border-width: 10px 10px 0;
   border-top-color: white;
 }
-/* line 71, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000371}}
 .popover.top .arrow:after {
   border-width: 11px 11px 0;
   border-top-color: rgba(0, 0, 0, 0.25);
   bottom: -1px;
   left: -11px;
 }
-/* line 78, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000378}}
 .popover.right .arrow {
   top: 50%;
   left: -10px;
@@ -2725,14 +2725,14 @@ input[type="submit"].btn.btn-mini {
   border-width: 10px 10px 10px 0;
   border-right-color: white;
 }
-/* line 84, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000384}}
 .popover.right .arrow:after {
   border-width: 11px 11px 11px 0;
   border-right-color: rgba(0, 0, 0, 0.25);
   bottom: -11px;
   left: -1px;
 }
-/* line 91, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000391}}
 .popover.bottom .arrow {
   top: -10px;
   left: 50%;
@@ -2740,14 +2740,14 @@ input[type="submit"].btn.btn-mini {
   border-width: 0 10px 10px;
   border-bottom-color: white;
 }
-/* line 97, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\0000397}}
 .popover.bottom .arrow:after {
   border-width: 0 11px 11px;
   border-bottom-color: rgba(0, 0, 0, 0.25);
   top: -1px;
   left: -11px;
 }
-/* line 104, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\00003104}}
 .popover.left .arrow {
   top: 50%;
   right: -10px;
@@ -2755,7 +2755,7 @@ input[type="submit"].btn.btn-mini {
   border-width: 10px 0 10px 10px;
   border-left-color: white;
 }
-/* line 110, compass_twitter_bootstrap/_popovers.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_popovers\.scss}line{font-family:\00003110}}
 .popover.left .arrow:after {
   border-width: 11px 0 11px 11px;
   border-left-color: rgba(0, 0, 0, 0.25);
@@ -2763,36 +2763,36 @@ input[type="submit"].btn.btn-mini {
   right: -1px;
 }
 
-/* line 9, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\000039}}
 .thumbnails {
   margin-left: -20px;
   list-style: none;
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .thumbnails:before, .thumbnails:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .thumbnails:after {
   clear: both;
 }
 
-/* line 15, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000315}}
 .row-fluid .thumbnails {
   margin-left: 0;
 }
 
-/* line 20, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000320}}
 .thumbnails > li {
   float: left;
   margin-bottom: 20px;
   margin-left: 20px;
 }
 
-/* line 27, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000327}}
 .thumbnail {
   display: block;
   padding: 4px;
@@ -2810,7 +2810,7 @@ input[type="submit"].btn.btn-mini {
   transition: all 0.2s ease-in-out;
 }
 
-/* line 37, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000337}}
 a.thumbnail:hover {
   border-color: #0088cc;
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
@@ -2818,7 +2818,7 @@ a.thumbnail:hover {
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
 
-/* line 43, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000343}}
 .thumbnail > img {
   display: block;
   max-width: 100%;
@@ -2826,13 +2826,13 @@ a.thumbnail:hover {
   margin-right: auto;
 }
 
-/* line 49, compass_twitter_bootstrap/_thumbnails.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_thumbnails\.scss}line{font-family:\0000349}}
 .thumbnail .caption {
   padding: 9px;
   color: #555555;
 }
 
-/* line 8, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\000038}}
 .label,
 .badge {
   font-size: 11.844px;
@@ -2845,7 +2845,7 @@ a.thumbnail:hover {
   background-color: #999999;
 }
 
-/* line 19, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000319}}
 .label {
   padding: 1px 4px 2px;
   -webkit-border-radius: 3px;
@@ -2853,7 +2853,7 @@ a.thumbnail:hover {
   border-radius: 3px;
 }
 
-/* line 23, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000323}}
 .badge {
   padding: 1px 9px 2px;
   -webkit-border-radius: 9px;
@@ -2861,137 +2861,137 @@ a.thumbnail:hover {
   border-radius: 9px;
 }
 
-/* line 31, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000331}}
 a.label:hover, a.badge:hover {
   color: white;
   text-decoration: none;
   cursor: pointer;
 }
 
-/* line 41, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000341}}
 .label-important, .badge-important {
   background-color: #b94a48;
 }
 
-/* line 42, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000342}}
 .label-important[href], .badge-important[href] {
   background-color: #953b39;
 }
 
-/* line 44, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000344}}
 .label-warning, .badge-warning {
   background-color: #f89406;
 }
 
-/* line 45, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000345}}
 .label-warning[href], .badge-warning[href] {
   background-color: #c67605;
 }
 
-/* line 47, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000347}}
 .label-success, .badge-success {
   background-color: #468847;
 }
 
-/* line 48, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000348}}
 .label-success[href], .badge-success[href] {
   background-color: #356635;
 }
 
-/* line 50, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000350}}
 .label-info, .badge-info {
   background-color: #3a87ad;
 }
 
-/* line 51, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000351}}
 .label-info[href], .badge-info[href] {
   background-color: #2d6987;
 }
 
-/* line 53, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000353}}
 .label-inverse, .badge-inverse {
   background-color: #333333;
 }
 
-/* line 54, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000354}}
 .label-inverse[href], .badge-inverse[href] {
   background-color: #1a1a1a;
 }
 
-/* line 59, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000359}}
 .btn .label,
 .btn .badge {
   position: relative;
   top: -1px;
 }
 
-/* line 66, compass_twitter_bootstrap/_labels-badges.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_labels-badges\.scss}line{font-family:\0000366}}
 .btn-mini .label,
 .btn-mini .badge {
   top: 0;
 }
 
 @-webkit-keyframes progress-bar-stripes {
-  /* line 11, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 11, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
 
-  /* line 12, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 12, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
 
 @-moz-keyframes progress-bar-stripes {
-  /* line 17, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 17, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
 
-  /* line 18, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 18, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
 
 @-ms-keyframes progress-bar-stripes {
-  /* line 23, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 23, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
 
-  /* line 24, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 24, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
 
 @-o-keyframes progress-bar-stripes {
-  /* line 29, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 29, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   from {
     background-position: 0 0;
   }
 
-  /* line 30, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 30, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   to {
     background-position: 40px 0;
   }
 }
 
 @keyframes progress-bar-stripes {
-  /* line 35, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 35, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
 
-  /* line 36, compass_twitter_bootstrap/_progress-bars.scss */
+  /* line 36, /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/compass_twitter_bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
 
-/* line 45, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000345}}
 .progress {
   overflow: hidden;
   height: 20px;
@@ -3012,7 +3012,7 @@ a.label:hover, a.badge:hover {
   border-radius: 4px;
 }
 
-/* line 55, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000355}}
 .progress .bar {
   width: 0%;
   height: 100%;
@@ -3041,14 +3041,14 @@ a.label:hover, a.badge:hover {
   transition: width 0.6s ease;
 }
 
-/* line 68, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000368}}
 .progress .bar + .bar {
   -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -moz-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
-/* line 73, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000373}}
 .progress-striped .bar {
   background-color: #149bdf;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -3062,7 +3062,7 @@ a.label:hover, a.badge:hover {
   background-size: 40px 40px;
 }
 
-/* line 79, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000379}}
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   -moz-animation: progress-bar-stripes 2s linear infinite;
@@ -3071,7 +3071,7 @@ a.label:hover, a.badge:hover {
   animation: progress-bar-stripes 2s linear infinite;
 }
 
-/* line 93, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000393}}
 .progress-danger .bar, .progress .bar-danger {
   background-color: #de514c;
   background-image: -moz-linear-gradient(top, #ee5f5b, #c43c35);
@@ -3083,7 +3083,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5a56', endColorstr='#c03b34', GradientType=0);
 }
 
-/* line 96, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000396}}
 .progress-danger.progress-striped .bar, .progress-striped .bar-danger {
   background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -3093,7 +3093,7 @@ a.label:hover, a.badge:hover {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 101, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003101}}
 .progress-success .bar, .progress .bar-success {
   background-color: #5db95d;
   background-image: -moz-linear-gradient(top, #62c462, #57a957);
@@ -3105,7 +3105,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5ec35e', endColorstr='#55a655', GradientType=0);
 }
 
-/* line 104, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003104}}
 .progress-success.progress-striped .bar, .progress-striped .bar-success {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -3115,7 +3115,7 @@ a.label:hover, a.badge:hover {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 109, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003109}}
 .progress-info .bar, .progress .bar-info {
   background-color: #4cb2d0;
   background-image: -moz-linear-gradient(top, #5bc0de, #339bb9);
@@ -3127,7 +3127,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#57bedd', endColorstr='#3298b5', GradientType=0);
 }
 
-/* line 112, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003112}}
 .progress-info.progress-striped .bar, .progress-striped .bar-info {
   background-color: #5bc0de;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -3137,7 +3137,7 @@ a.label:hover, a.badge:hover {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 117, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003117}}
 .progress-warning .bar, .progress .bar-warning {
   background-color: #f9a834;
   background-image: -moz-linear-gradient(top, #fbb450, #f89406);
@@ -3149,7 +3149,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb24b', endColorstr='#f39106', GradientType=0);
 }
 
-/* line 120, compass_twitter_bootstrap/_progress-bars.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\00003120}}
 .progress-warning.progress-striped .bar, .progress-striped .bar-warning {
   background-color: #fbb450;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
@@ -3159,12 +3159,12 @@ a.label:hover, a.badge:hover {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-/* line 7, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\000037}}
 .accordion {
   margin-bottom: 20px;
 }
 
-/* line 12, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\0000312}}
 .accordion-group {
   margin-bottom: 2px;
   border: 1px solid #e5e5e5;
@@ -3173,74 +3173,74 @@ a.label:hover, a.badge:hover {
   border-radius: 4px;
 }
 
-/* line 17, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\0000317}}
 .accordion-heading {
   border-bottom: 0;
 }
 
-/* line 20, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\0000320}}
 .accordion-heading .accordion-toggle {
   display: block;
   padding: 8px 15px;
 }
 
-/* line 26, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\0000326}}
 .accordion-toggle {
   cursor: pointer;
 }
 
-/* line 31, compass_twitter_bootstrap/_accordion.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_accordion\.scss}line{font-family:\0000331}}
 .accordion-inner {
   padding: 9px 15px;
   border-top: 1px solid #e5e5e5;
 }
 
-/* line 7, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\000037}}
 .pull-right {
   float: right;
 }
 
-/* line 10, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000310}}
 .pull-left {
   float: left;
 }
 
-/* line 15, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000315}}
 .hide {
   display: none;
 }
 
-/* line 18, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000318}}
 .show {
   display: block;
 }
 
-/* line 23, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000323}}
 .invisible {
   visibility: hidden;
 }
 
-/* line 28, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000328}}
 .affix {
   position: fixed;
 }
 
-/* line 33, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000333}}
 .clearfix {
   *zoom: 1;
 }
-/* line 15, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000315}}
 .clearfix:before, .clearfix:after {
   display: table;
   content: "";
   line-height: 0;
 }
-/* line 22, compass_twitter_bootstrap/_mixins.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_mixins\.scss}line{font-family:\0000322}}
 .clearfix:after {
   clear: both;
 }
 
-/* line 38, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000338}}
 .hide-text {
   font: 0/0 a;
   color: transparent;
@@ -3249,7 +3249,7 @@ a.label:hover, a.badge:hover {
   border: 0;
 }
 
-/* line 43, compass_twitter_bootstrap/_utilities.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/compass_twitter_bootstrap\/_utilities\.scss}line{font-family:\0000343}}
 .input-block-level {
   display: block;
   width: 100%;

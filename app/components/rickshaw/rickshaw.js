@@ -178,8 +178,7 @@ var Class = (function() {
     if (parent) {
       subclass.prototype = parent.prototype;
       klass.prototype = new subclass;
-      if(parent.subclasses && parent.subclasses.push) 
-        parent.subclasses.push(klass)
+      try { parent.subclasses.push(klass) } catch(e) {}
     }
 
     for (var i = 0, length = properties.length; i < length; i++)

@@ -231,7 +231,7 @@
       processed_corp_array = [];
       settings.corpusListing.select(corp_array);
       $.each(corp_array, function(key, val) {
-        return processed_corp_array.extend(getAllCorporaInFolders(settings.corporafolders, val));
+        return processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val));
       });
       corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
       $("#select_corpus").val(corpus);

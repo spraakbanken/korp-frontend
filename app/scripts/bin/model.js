@@ -507,7 +507,8 @@
         cqp: cqp,
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
-        defaultwithin: "sentence"
+        defaultwithin: "sentence",
+        split: "lex"
       };
       if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
         data.split = reduceval;

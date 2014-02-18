@@ -331,7 +331,13 @@ function loadCorpora() {
 		var enableSearch = !!corpora.length;
 		view.enableSearch(enableSearch);
     });
-	settings.corpusListing.select(corpusChooserInstance.corpusChooser("selectedItems"));
+    var selected = corpusChooserInstance.corpusChooser("selectedItems");
+	settings.corpusListing.select(selected);
+	$("body").scope().$apply(function(scope) {
+		scope.$broadcast("corpuschooserchange", selected)
+	});
+
+
 }
 
 

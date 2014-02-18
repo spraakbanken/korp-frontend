@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/pane.html", "template/tabs/tabs.html"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html"]);
 
   korpApp.run(function($rootScope, $location, $route, $routeParams) {
     var s;
@@ -204,26 +204,9 @@
   });
 
   korpApp.controller("TokenList", function($scope, $location) {
-    var cqp, defaultOptions, error, lexOpts, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
+    var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
-    defaultOptions = {
-      "is": "=",
-      "is_not": "!=",
-      "starts_with": "^=",
-      "contains": "_=",
-      "ends_with": "&=",
-      "matches": "*="
-    };
-    lexOpts = {
-      "is": "contains",
-      "is_not": "not contains"
-    };
-    s.getOpts = function(type) {
-      return {
-        lex: lexOpts
-      }[type] || defaultOptions;
-    };
-    cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
+    cqp = '[pos = "NN" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
     s.data = [];
     try {
       s.data = CQP.parse(cqp);
@@ -253,7 +236,6 @@
       s.data = output;
       c.log("crash", s.data);
     }
-    c.log("s.data", s.data);
     if ($location.search().cqp) {
       s.data = CQP.parse(decodeURIComponent($location.search().cqp));
     } else {
@@ -281,10 +263,71 @@
     };
   });
 
+  korpApp.filter("mapper", function() {
+    return function(item, f) {
+      return f(item);
+    };
+  });
+
   korpApp.controller("ExtendedToken", function($scope, $location) {
-    var s;
+    var s, word;
     s = $scope;
-    s.types = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",");
+    s.valfilter = function(attrobj) {
+      if (attrobj.isStructAttr) {
+        return "_." + attrobj.value;
+      } else {
+        return attrobj.value;
+      }
+    };
+    word = {
+      group: "word",
+      value: "word",
+      label: "word"
+    };
+    s.setDefault = function(or_obj) {
+      return or_obj.op = _.values(s.getOpts(or_obj.type))[0];
+    };
+    s.getOpts = function(type) {
+      var _ref;
+      return ((_ref = s.typeMapping) != null ? _ref[type].opts : void 0) || settings.defaultOptions;
+    };
+    s.$on("corpuschooserchange", function(selected) {
+      var attrs, key, obj, sent_attrs;
+      attrs = (function() {
+        var _ref, _results;
+        _ref = settings.corpusListing.getCurrentAttributes();
+        _results = [];
+        for (key in _ref) {
+          obj = _ref[key];
+          if (obj.displayType !== "hidden") {
+            _results.push(_.extend({
+              group: "word_attr",
+              value: key
+            }, obj));
+          }
+        }
+        return _results;
+      })();
+      sent_attrs = (function() {
+        var _ref, _results;
+        _ref = settings.corpusListing.getStructAttrs();
+        _results = [];
+        for (key in _ref) {
+          obj = _ref[key];
+          if (obj.displayType !== "hidden") {
+            _results.push(_.extend({
+              group: "sentence_attr",
+              value: key
+            }, obj));
+          }
+        }
+        return _results;
+      })();
+      s.types = [word].concat(attrs, sent_attrs);
+      return s.typeMapping = _.object(_.map(s.types, function(item) {
+        return [item.value, item];
+      }));
+    });
     s.addOr = function(and_array) {
       and_array.push({
         type: "word",
@@ -294,11 +337,9 @@
       return and_array;
     };
     s.removeOr = function(and_array, i) {
-      c.log("removeOr", and_array, i, s.$parent.$index);
       if (and_array.length > 1) {
         return and_array.splice(i, 1);
       } else {
-        c.log("s.token.and_block", _.indexOf(and_array));
         return s.token.and_block.splice(_.indexOf(and_array, 1));
       }
     };
@@ -362,26 +403,26 @@
     c.log("search_tab init", s.search_tab);
     s.getSelected = function() {
       var i, p, _i, _len, _ref, _ref1;
-      if (!((_ref = s.panes) != null ? _ref.length : void 0)) {
+      if (!((_ref = s.tabs) != null ? _ref.length : void 0)) {
         return s.search_tab;
       }
-      _ref1 = s.panes;
+      _ref1 = s.tabs;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         p = _ref1[i];
-        if (p.selected) {
+        if (p.active) {
           return i;
         }
       }
     };
     s.setSelected = function(index) {
       var p, _i, _len, _ref;
-      _ref = s.panes;
+      _ref = s.tabs;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         p = _ref[_i];
-        p.selected = false;
+        p.active = false;
       }
-      if (s.panes[index]) {
-        return s.panes[index].selected = true;
+      if (s.tabs[index]) {
+        return s.tabs[index].active = true;
       }
     };
     return util.setupHash(s, [
@@ -404,6 +445,69 @@
   korpApp.filter("loc", function($rootScope) {
     return function(translationKey) {
       return util.getLocaleString(translationKey);
+    };
+  });
+
+  korpApp.directive("tokenValue", function($compile, $controller) {
+    var defaultTmpl;
+    defaultTmpl = "<input ng-model='model'>";
+    return {
+      scope: {
+        tokenValue: "=",
+        model: "=ngModel"
+      },
+      template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
+      link: function(scope, elem, attr, ngModelCtrl) {
+        return scope.$watch("tokenValue", function(valueObj) {
+          var locals, tmplElem;
+          c.log("watch value", valueObj);
+          if (!valueObj) {
+            return;
+          }
+          if (valueObj.controller) {
+            locals = {
+              $scope: _.extend(scope, valueObj)
+            };
+            $controller(valueObj.controller, locals);
+          }
+          tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
+          return elem.html(tmplElem);
+        });
+      }
+    };
+  });
+
+  korpApp.directive("korpAutocomplete", function() {
+    return {
+      link: function(scope, elem, attr) {
+        var arg_value, labelFunc, sortFunc, type;
+        type = "lem";
+        labelFunc = util.lemgramToString;
+        sortFunc = view.lemgramSort;
+        return arg_value = $("<input type='text'/>").korp_autocomplete({
+          labelFunction: labelFunc,
+          sortFunction: sortFunc,
+          type: type,
+          select: function(lemgram) {
+            c.log("extended lemgram", lemgram, $(this));
+            $(this).data("value", (data.label === "baseform" ? lemgram.split(".")[0] : lemgram));
+            return $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
+          },
+          "sw-forms": true
+        }).blur(function() {
+          var input;
+          input = this;
+          return setTimeout((function() {
+            c.log("blur");
+            if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
+              $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
+            } else {
+              $(input).removeClass("invalid_input");
+            }
+            return self._trigger("change");
+          }), 100);
+        });
+      }
     };
   });
 

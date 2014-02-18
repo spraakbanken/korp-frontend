@@ -77,12 +77,12 @@
 		<script src="lib/g.line-min.js"></script>
 		<script src="lib/jquery.tooltip.pack.js"></script>
 
-		<script src="components/angular-ui-bootstrap-bower/ui-bootstrap.js"></script>
-		<script src="components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
-
+		<script src="components/angular-bootstrap/ui-bootstrap.js"></script>
+		<script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+		<script src="components/lodash/dist/lodash.compat.js"
 
 		<!-- endbuild -->
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.0/lodash.compat.js"></script>
+		<!-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.0/lodash.compat.js"></script> -->
 		<script>
 			yepnope({
 			  test: $("html.msie7,html.msie8").length,
@@ -203,11 +203,15 @@
 
 	   		<!-- <div id="searchbar" ng-include="'markup/searchbar.html'" ></div> -->
 
-	   		<tabs ng-controller="SearchPaneCtrl">
-   		        <pane heading="{{'simple' | loc}}" ng-include="'views/simple.html'" onload="$root.onSearchLoad()"></pane>
+	   		<tabset ng-controller="SearchPaneCtrl">
+   		        <tab heading="{{'simple' | loc}}">
+   		        	<div ng-include="'views/simple.html'" onload="$root.onSearchLoad()"></div>
+		        </tab>
 
-   		        <pane heading="{{'detailed' | loc}}" ng-include="'views/extended.html'"></pane>
-   		        <pane heading="{{'advanced' | loc}}">
+   		        <tab heading="{{'detailed' | loc}}">
+   		        	<div ng-include="'views/extended.html'"></div>
+   		        </tab>
+   		        <tab heading="{{'advanced' | loc}}">
 					<div id="advanced">
 						<div class="query_footer ui-corner-all ui-state-default">
 							<span class="cqp_toggle" rel="localize[cqp_query]">
@@ -218,8 +222,8 @@
 							rel="localize[search]" />
 
 					</div>
-   		        </pane>
-   		    </tabs>
+   		        </tab>
+   		    </tabset>
 	   		<div id="search_options" class="ui-widget-content ui-corner-bottom">
 	   			<div>
 		   			<span style="font-size:.9em">KWIC:</span>

@@ -159,14 +159,31 @@ settings.defaultLanguage = "sv";
 // for optimization purposes
 settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
 
+// settings.defaultOptions = {
+// 	"is" : "is",
+// 	"is_not" : "is_not",
+// 	"starts_with" : "starts_with",
+// 	"contains" : "contains",
+// 	"ends_with" : "ends_with",
+// 	"matches" : "matches"
+// };
+
 settings.defaultOptions = {
-	"is" : "is",
-	"is_not" : "is_not",
-	"starts_with" : "starts_with",
-	"contains" : "contains",
-	"ends_with" : "ends_with",
-	"matches" : "matches"
-};
+    "is" : "=",
+    "is_not" : "!=",
+    "starts_with" : "^=",
+    "contains" : "_=",
+    "ends_with" : "&=",
+    "matches" : "*=",
+}
+settings.liteOptions = {
+	"is" : "=",
+    "is_not" : "!="
+}
+settings.setOptions = {
+    "is" : "contains",
+    "is_not" : "not contains"
+}
 
 settings.getTransformFunc = function(type, value, opt) {
 
@@ -193,8 +210,41 @@ settings.getTransformFunc = function(type, value, opt) {
 };
 
 // settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "contains", "ends_with", "matches"]);
-settings.liteOptions = _.omit.apply(null, [settings.defaultOptions, "starts_with", "contains", "ends_with", "matches"]);
+// settings.liteOptions = _.omit.apply(null, [settings.defaultOptions, "starts_with", "contains", "ends_with", "matches"]);
 
+
+var selectType = {
+	extended_template : "<select ng-model='model' "
+	 + "ng-options='key as localize(val) | loc for (key, val) in dataset' ></select>",
+ 	controller : function($scope) {
+ 		$scope.localize = function(str) {
+ 			if($scope.localize === false) {
+ 				return str;
+ 			} else {
+ 				return util.getLocaleString( ($scope.translationKey || "") + str);
+ 			}
+ 		}
+
+ 		$scope.translationKey = $scope.translationKey || "";
+ 		var dataset;
+ 		if(_.isArray($scope.dataset)) {
+ 			// convert array datasets into objects 
+ 		    dataset = _.object(_.map($scope.dataset, function(item) {
+ 		    	return [item, item];
+ 		    }));
+ 		}
+		$scope.dataset = dataset || $scope.dataset;
+ 	}
+}
+// TODO: trying to rewrite korp_autocomplete, see directive in controllers.coffee
+var setType = {
+	extended_template : "<input>",
+	controller : function() {
+
+	}
+
+
+}
 
 var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes
@@ -228,7 +278,9 @@ attrs.pos = {
 		"UO" : "UO",
 		"VB" : "VB"
 	},
-	opts : settings.liteOptions
+	opts : settings.liteOptions,
+	extended_template : selectType.extended_template,
+	controller : selectType.controller
 };
 attrs.msd = {
 	label : "msd",
@@ -241,13 +293,13 @@ attrs.baseform = {
 	stringify : function(baseform) {
 		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
 	},
-	opts : settings.liteOptions
+	opts : settings.setOptions
 };
 attrs.lemgram = {
 	label : "lemgram",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions,
+	opts : settings.setOptions,
 	stringify : function(lemgram) {
 		return util.lemgramToString(lemgram, true);
 	},
@@ -258,7 +310,7 @@ attrs.saldo = {
 	label : "saldo",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions,
+	opts : settings.setOptions,
 	stringify : function(saldo) {
 		return util.saldoToString(saldo, true);
 	},
@@ -346,7 +398,7 @@ attrs.prefix = {
 	label : "prefix",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions,
+	opts : settings.setOptions,
 	stringify : function(lemgram) {
 		return util.lemgramToString(lemgram, true);
 	},
@@ -357,7 +409,7 @@ attrs.suffix = {
 	label : "suffix",
 	type : "set",
 	displayType : "autocomplete",
-	opts : settings.liteOptions,
+	opts : settings.setOptions,
 	stringify : function(lemgram) {
 		return util.lemgramToString(lemgram, true);
 	},
@@ -4654,6 +4706,7 @@ settings.posset = {
    type : "set",
    label : "pos",
    displayType : "select",
+   opts : settings.setOptions,
    translationKey : "pos_",
    dataset :  {
 	"AB" : "AB",
@@ -4686,6 +4739,7 @@ settings.fsvlemma = {
   	type : "set",
   	label : "baseform",
   	displayType : "autocomplete",
+  	opts : settings.setOptions,
   	stringify : function(baseform) {
 		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
 	}
@@ -4697,6 +4751,7 @@ settings.fsvlex = {
   	type : "set",
   	label : "lemgram",
   	displayType : "autocomplete",
+  	opts : settings.setOptions,
   	stringify : function(str) {
   		return util.lemgramToString(str, true);
   	},
@@ -4710,7 +4765,7 @@ settings.fsvvariants = {
   		return util.lemgramToString(str, true);
   	},
   	displayType : "autocomplete",
-  	opts : settings.liteOptions,
+  	opts : settings.setOptions,
   	externalSearch : karpLemgramLink,
 	internalSearch : true
 };
