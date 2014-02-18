@@ -18,7 +18,8 @@
     "jquery-bbq": "https://github.com/cowboy/jquery-bbq.git#1.2.1",
     "modernizr": "~2.6.2",
     "yepnope": "~1.5.4",
-    "angular-bootstrap": "~0.5.0"
+    "angular-bootstrap": "~0.5.0",
+    "ui-slider": "https://github.com/angular-ui/ui-slider.git"
   },
   "devDependencies": {
     "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.0.6",

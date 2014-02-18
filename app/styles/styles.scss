@@ -1837,3 +1837,15 @@ line.tick {
   line-height: 18px;
   padding : 0 8px;
 }
+
+.modal-header {
+  display : none;
+}
+.modal .modal-header {
+  display : block;
+}
+
+.modal {
+  max-height : 600px;
+  overflow-y : auto;
+}

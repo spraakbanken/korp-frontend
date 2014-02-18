@@ -4,7 +4,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/tabs/tabset.html"
                                             "template/tabs/tab.html"
                                             "template/tabs/tabset-titles.html"
-
+                                            "ui.bootstrap.modal",
                                             "ui.bootstrap.typeahead"
                                             "template/typeahead/typeahead.html"
                                             "template/typeahead/typeahead-popup.html"
@@ -196,7 +196,7 @@ korpApp.controller "TokenList", ($scope, $location) ->
     # s.defaultOptions = settings.defaultOptions
 
 
-    cqp = '[pos = "NN" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
+    cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
     # cqp = '[word = "value"] []{1,2}'
     s.data = []
     try
@@ -441,7 +441,11 @@ korpApp.directive "korpAutocomplete", () ->
                 # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
                 setVal(lemgram)
                 scope.$apply () ->
-                    scope.model = lemgram
+                    if scope.type == "baseform"
+                        scope.model = lemgram.split(".")[0]
+                    else 
+                        scope.model = lemgram
+
             "sw-forms": true
         )
         .blur(->
@@ -458,4 +462,42 @@ korpApp.directive "korpAutocomplete", () ->
         )
 
 
+korpApp.directive "slider", () ->
+    template : """
+        
+    """
+    link : () ->
+        all_years = _(settings.corpusListing.selected)
+                    .pluck("time")
+                    .map(_.pairs)
+                    .flatten(true)
+                    .filter((tuple) ->
+                        tuple[0] and tuple[1]
+                    ).map(_.compose(Number, _.head))
+                    .value()
+        # c.log "all", all_years
+        start = Math.min(all_years...)
+        end = Math.max(all_years...)
+        # arg_value = $("<div>")
+        arg_value.data "value", [start, end]
+        from = $("<input type='text' class='from'>").val(start)
+        to = $("<input type='text' class='to'>").val(end)
+        slider = $("<div />").slider(
+            range: true
+            min: start
+            max: end
+            values: [start, end]
+            slide: (event, ui) ->
+                from.val ui.values[0]
+                to.val ui.values[1]
+
+            change: (event, ui) ->
+                $(this).data "value", ui.values
+                arg_value.data "value", ui.values
+                self._trigger "change"
+        )
+        from.add(to).keyup ->
+            self._trigger "change"
+
+        arg_value.append slider, from, to
 

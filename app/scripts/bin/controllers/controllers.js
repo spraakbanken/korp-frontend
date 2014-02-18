@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html"]);
 
   korpApp.run(function($rootScope, $location, $route, $routeParams) {
     var s;
@@ -206,7 +206,7 @@
   korpApp.controller("TokenList", function($scope, $location) {
     var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
-    cqp = '[pos = "NN" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
+    cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
     s.data = [];
     try {
       s.data = CQP.parse(cqp);
@@ -503,7 +503,11 @@
             c.log("extended lemgram", lemgram, $(this));
             setVal(lemgram);
             return scope.$apply(function() {
-              return scope.model = lemgram;
+              if (scope.type === "baseform") {
+                return scope.model = lemgram.split(".")[0];
+              } else {
+                return scope.model = lemgram;
+              }
             });
           },
           "sw-forms": true
@@ -519,6 +523,42 @@
             }
           }), 100);
         });
+      }
+    };
+  });
+
+  korpApp.directive("slider", function() {
+    return {
+      template: "",
+      link: function() {
+        var all_years, end, from, slider, start, to;
+        all_years = _(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
+          return tuple[0] && tuple[1];
+        }).map(_.compose(Number, _.head)).value();
+        start = Math.min.apply(Math, all_years);
+        end = Math.max.apply(Math, all_years);
+        arg_value.data("value", [start, end]);
+        from = $("<input type='text' class='from'>").val(start);
+        to = $("<input type='text' class='to'>").val(end);
+        slider = $("<div />").slider({
+          range: true,
+          min: start,
+          max: end,
+          values: [start, end],
+          slide: function(event, ui) {
+            from.val(ui.values[0]);
+            return to.val(ui.values[1]);
+          },
+          change: function(event, ui) {
+            $(this).data("value", ui.values);
+            arg_value.data("value", ui.values);
+            return self._trigger("change");
+          }
+        });
+        from.add(to).keyup(function() {
+          return self._trigger("change");
+        });
+        return arg_value.append(slider, from, to);
       }
     };
   });

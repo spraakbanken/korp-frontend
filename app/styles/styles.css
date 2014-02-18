@@ -2271,3 +2271,19 @@ line.tick {
   line-height: 18px;
   padding: 0 8px;
 }
+
+/* line 1834, styles.scss */
+.modal-header {
+  display: none;
+}
+
+/* line 1837, styles.scss */
+.modal .modal-header {
+  display: block;
+}
+
+/* line 1841, styles.scss */
+.modal {
+  max-height: 600px;
+  overflow-y: auto;
+}

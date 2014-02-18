@@ -234,20 +234,8 @@ var selectType = {
  		    }));
  		}
 		$scope.dataset = dataset || $scope.dataset;
+		$scope.model = _.keys($scope.dataset)[0]
  	}
-}
-// TODO: trying to rewrite korp_autocomplete, see directive in controllers.coffee
-var setType = {
-	extended_template : "<input korp-autocomplete>",
-
-
-	controller : function($scope, $q) {
-		// $scope.saldoSearch = function(word) {
-			// lemgramProxy.saldoSearch(word)
-		// }
-	}
-
-
 }
 
 var attrs = {};  // positional attributes
@@ -288,7 +276,31 @@ attrs.pos = {
 };
 attrs.msd = {
 	label : "msd",
-	opts : settings.defaultOptions
+	opts : settings.defaultOptions,
+	extended_template : '<input class="arg_value" ng-model="model">' +
+	'<span ng-click="onIconClick()" class="ui-icon ui-icon-info"></span>' +
+	'<div modal="showmodal" options="opts">' +
+		'<div class="modal-header">' +
+    		'<h4>{{\'msd_long\' | loc}}</h4>' +
+		'</div>' +
+		'<div ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
+	'</div>',
+	
+	controller : function($scope) {
+		$scope.opts = {
+		    backdropFade: true,
+		    dialogFade:true,
+		}
+		$scope.onIconClick = function() {
+			$scope.showmodal = true;
+		}
+		$scope.msdClick = function(event) {
+			c.log(event, arguments)
+			val = $(event.target).parent().data("value")
+			$scope.model = val
+			$scope.showmodal = false;
+		}
+	}
 };
 attrs.baseform = {
 	label : "baseform",
@@ -297,7 +309,13 @@ attrs.baseform = {
 	stringify : function(baseform) {
 		return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
 	},
-	opts : settings.setOptions
+	opts : settings.setOptions,
+	extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='baseform' >",
+	controller : function($scope) {
+		$scope.stringify = util.lemgramToString;
+		$scope.sorter = view.lemgramSort;
+	}
+
 };
 attrs.lemgram = {
 	label : "lemgram",
@@ -339,6 +357,8 @@ attrs.deprel = {
 	label : "deprel",
 	displayType : "select",
 	translationKey : "deprel_",
+	extended_template : selectType.extended_template,
+	controller : selectType.controller,
 	dataset : {
 		"++" : "++",
 		"+A" : "+A",
@@ -417,7 +437,12 @@ attrs.prefix = {
 		return util.lemgramToString(lemgram, true);
 	},
 	externalSearch : karpLemgramLink,
-	internalSearch : true
+	internalSearch : true,
+	extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
+	controller : function($scope) {
+		$scope.stringify = util.lemgramToString;
+		$scope.sorter = view.lemgramSort;
+	}
 };
 attrs.suffix = {
 	label : "suffix",
@@ -428,7 +453,12 @@ attrs.suffix = {
 		return util.lemgramToString(lemgram, true);
 	},
 	externalSearch : karpLemgramLink,
-	internalSearch : true
+	internalSearch : true,
+	extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
+	controller : function($scope) {
+		$scope.stringify = util.lemgramToString;
+		$scope.sorter = view.lemgramSort;
+	}
 };
 attrs.ref = {
 	label : "ref",
@@ -440,6 +470,19 @@ attrs.link = {
 sattrs.date = {
 	label : "date",
 	displayType : "date"
+};
+
+var modernAttrs = {
+    pos : attrs.pos,
+    msd : attrs.msd,
+    lemma : attrs.baseform,
+    lex : attrs.lemgram,
+    saldo : attrs.saldo,
+    dephead : attrs.dephead,
+    deprel : attrs.deprel,
+    ref : attrs.ref,
+    prefix : attrs.prefix,
+    suffix : attrs.suffix
 };
 
 /*
@@ -626,18 +669,7 @@ settings.corpora.magmakolumner = {
 	description : "Material ur kolumner publicerade av <a href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -651,18 +683,7 @@ settings.corpora.fsbbloggvuxna = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		blog_title : {label : "blog_title"},
 		blog_url : {label : "blog_url", type : "url"},
@@ -681,18 +702,7 @@ settings.corpora["fsbskonlit1960-1999"] = {
 	description : "Material ur skönlitterära verk publicerade under 1960–1999.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -707,18 +717,7 @@ settings.corpora.fsbskonlit2000tal = {
 	description : "Material ur skönlitterära verk publicerade under 2000–2013.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -733,18 +732,7 @@ settings.corpora.barnlitteratur = {
 	description : "Material ur barnlitterära verk publicerade under 2000–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -759,18 +747,7 @@ settings.corpora.fsbessaistik = {
 	description : "Material ur essäistiska verk publicerade under 1992–2013",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -785,18 +762,7 @@ settings.corpora.fsbsakprosa = {
 	description : "Material ur facklitterära verk publicerade under 2006–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -811,18 +777,7 @@ settings.corpora.ungdomslitteratur = {
 	description : "Material ur ungdomslitterära verk publicerade under 1992–2013.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -862,18 +817,7 @@ settings.corpora.lagtexter = {
 	description : "Material ur Finlands lag.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	}
 };
@@ -884,18 +828,7 @@ settings.corpora.myndighet = {
 	description : "Material ur bland annat Utbildningsstyrelsens, Undervisningsministeriets och Länsstyrelsens publikationer.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	}
 };
@@ -906,18 +839,7 @@ settings.corpora.myndighet2 = {
 	description : "Material utgivet av offentliga myndigheter.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_publisher : {label : "publisher"},
@@ -955,18 +877,7 @@ settings.corpora.finsktidskrift = {
 	description : "<a href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -979,18 +890,7 @@ settings.corpora.forumfeot = {
 	description : "<a href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -1002,18 +902,7 @@ settings.corpora.hanken = {
 	description : "Tidningen <a href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -1026,18 +915,7 @@ settings.corpora.svenskbygden = {
 	description : "<a href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"},
 		text_issue : {label : "issue"}
@@ -1050,18 +928,7 @@ settings.corpora.studentbladet = {
 	description : "<a href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -1074,18 +941,7 @@ settings.corpora.jakobstadstidning1999 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -1097,18 +953,7 @@ settings.corpora.jakobstadstidning2000 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -1120,18 +965,7 @@ settings.corpora.sweachum = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_type : {label : "type",
 			displayType : "select",
@@ -1161,18 +995,7 @@ settings.corpora.sweacsam = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_type : {label : "type",
 			displayType : "select",
@@ -1203,18 +1026,7 @@ settings.corpora.attasidor = {
 	description : "<a href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_title : {label : "title"}
@@ -1227,18 +1039,7 @@ settings.corpora.dn1987 = {
 	description : "Dagens Nyheter 1987.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1589,18 +1390,7 @@ settings.corpora.gp1994 = {
 	description : "Göteborgs-Posten 1994.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_section : {label : "section"}
@@ -1613,18 +1403,7 @@ settings.corpora.gp2001 = {
 	description : "Göteborgs-Posten 2001.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1637,18 +1416,7 @@ settings.corpora.gp2002 = {
 	description : "Göteborgs-Posten 2002.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1661,18 +1429,7 @@ settings.corpora.gp2003 = {
 	description : "Göteborgs-Posten 2003.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1685,18 +1442,7 @@ settings.corpora.gp2004 = {
 	description : "Göteborgs-Posten 2004.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1709,18 +1455,7 @@ settings.corpora.gp2005 = {
 	description : "Göteborgs-Posten 2005.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1733,18 +1468,7 @@ settings.corpora.gp2006 = {
 	description : "Göteborgs-Posten 2006.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1757,18 +1481,7 @@ settings.corpora.gp2007 = {
 	description : "Göteborgs-Posten 2007.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1781,18 +1494,7 @@ settings.corpora.gp2008 = {
 	description : "Göteborgs-Posten 2008.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_sectionshort : {label : "section"}
@@ -1805,18 +1507,7 @@ settings.corpora.gp2009 = {
 	description : "Göteborgs-Posten 2009.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_author : {label : "article_author"},
@@ -1830,18 +1521,7 @@ settings.corpora.gp2010 = {
 	description : "Göteborgs-Posten 2010.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_author : {label : "article_author"},
@@ -1855,18 +1535,7 @@ settings.corpora.gp2011 = {
 	description : "Göteborgs-Posten 2011.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_author : {label : "article_author"},
@@ -1880,18 +1549,7 @@ settings.corpora.gp2012 = {
 	description : "Göteborgs-Posten 2012.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : sattrs.date,
 		text_author : {label : "article_author"},
@@ -1905,18 +1563,7 @@ settings.corpora.gp2d = {
 	description : "Helgbilaga till Göteborgs-Posten.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_issue : {label : "issue"}
 	}
@@ -1928,18 +1575,7 @@ settings.corpora.ordat = {
 	description : "25 årgångar av Svenska Dagbladets årsbok, 1923–45, 1948 och 1958.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "text_year"},
 		text_volume : {label : "text_volume"}
@@ -1952,18 +1588,7 @@ settings.corpora.fof = {
 	description : "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_issue : {label : "issue"}
 	}
@@ -1975,18 +1600,7 @@ settings.corpora.press65 = {
 	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_publisher : {label : "article_publisher"},
@@ -2001,18 +1615,7 @@ settings.corpora.press76 = {
 	description : "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"},
 		text_publisher : {label : "article_publisher"}
@@ -2025,18 +1628,7 @@ settings.corpora.press95 = {
 	description : "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_publisher : {label : "article_publisher"},
@@ -2050,18 +1642,7 @@ settings.corpora.press96 = {
 	description : "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_publisher : {label : "article_publisher"},
@@ -2075,18 +1656,7 @@ settings.corpora.press97 = {
 	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_publisher : {label : "publisher"},
@@ -2100,18 +1670,7 @@ settings.corpora.press98 = {
 	description : "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_publisher : {label : "article_publisher"},
@@ -2125,18 +1684,7 @@ settings.corpora.strindbergbrev = {
 	description : "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_recipient : {label : "text_recipient"},
@@ -2196,18 +1744,7 @@ settings.corpora.bloggmix1998 = {
 	title : "Bloggmix 1998",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2216,18 +1753,7 @@ settings.corpora.bloggmix1999 = {
 	title : "Bloggmix 1999",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2236,18 +1762,7 @@ settings.corpora.bloggmix2000 = {
 	title : "Bloggmix 2000",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2256,18 +1771,7 @@ settings.corpora.bloggmix2001 = {
 	title : "Bloggmix 2001",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2276,18 +1780,7 @@ settings.corpora.bloggmix2002 = {
 	title : "Bloggmix 2002",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2296,18 +1789,7 @@ settings.corpora.bloggmix2003 = {
 	title : "Bloggmix 2003",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2316,18 +1798,7 @@ settings.corpora.bloggmix2004 = {
 	title : "Bloggmix 2004",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2336,18 +1807,7 @@ settings.corpora.bloggmix2005 = {
 	title : "Bloggmix 2005",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2356,18 +1816,7 @@ settings.corpora.bloggmix2006 = {
 	title : "Bloggmix 2006",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2376,18 +1825,7 @@ settings.corpora.bloggmix2007 = {
 	title : "Bloggmix 2007",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2396,18 +1834,7 @@ settings.corpora.bloggmix2008 = {
 	title : "Bloggmix 2008",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2416,18 +1843,7 @@ settings.corpora.bloggmix2009 = {
 	title : "Bloggmix 2009",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2436,18 +1852,7 @@ settings.corpora.bloggmix2009 = {
 	title : "Bloggmix 2009",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2456,18 +1861,7 @@ settings.corpora.bloggmix2010 = {
 	title : "Bloggmix 2010",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2476,18 +1870,7 @@ settings.corpora.bloggmix2011 = {
 	title : "Bloggmix 2011",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2496,18 +1879,7 @@ settings.corpora.bloggmix2012 = {
 	title : "Bloggmix 2012",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2516,18 +1888,7 @@ settings.corpora.bloggmix2013 = {
 	title : "Bloggmix 2013",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2536,18 +1897,7 @@ settings.corpora.bloggmixodat = {
 	title : "Bloggmix okänt datum",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : bloggmix_structs
 };
 
@@ -2558,18 +1908,7 @@ settings.corpora.drama = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {}
 };
 
@@ -2579,18 +1918,7 @@ settings.corpora.lasbart = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_source : {label : "source"},
 		text_type : {label : "type"},
@@ -2607,18 +1935,7 @@ settings.corpora.parole = {
 	description : "Material insamlat inom ramen för EU-projektet PAROLE. Innehåller romaner, dagstidningar, tidskrifter och webbtexter.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_id : {label : "text"},
 		text_date : {label : "date"},
@@ -2633,18 +1950,7 @@ settings.corpora.psalmboken = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"}
 	}
@@ -2656,18 +1962,7 @@ settings.corpora.snp7879 = {
 	description : "Riksdagens snabbprotokoll 1978–1979.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {}
 };
 
@@ -2679,18 +1974,7 @@ settings.corpora.suc2 = {
 	context : {
 		"1 sentence" : "1 sentence"
 	},
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_id : {label : "text"}
 	}
@@ -2704,18 +1988,7 @@ settings.corpora.suc3 = {
 	context : {
 		"1 sentence" : "1 sentence"
 	},
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_id : {label : "text"}
 	}
@@ -2815,18 +2088,7 @@ settings.corpora.diabetolog = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"},
 		text_title : {label : "title"},
@@ -2868,18 +2130,7 @@ settings.corpora.lt1997 = {
 	description : "Läkartidningens publicerade artiklar under 1997.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -2893,18 +2144,7 @@ settings.corpora.lt1998 = {
 	description : "Läkartidningens publicerade artiklar under 1998.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -2918,18 +2158,7 @@ settings.corpora.lt1999 = {
 	description : "Läkartidningens publicerade artiklar under 1999.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -2943,18 +2172,7 @@ settings.corpora.lt2000 = {
 	description : "Läkartidningens publicerade artiklar under 2000.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -2968,18 +2186,7 @@ settings.corpora.lt2001 = {
 	description : "Läkartidningens publicerade artiklar under 2001.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -2993,18 +2200,7 @@ settings.corpora.lt2002 = {
 	description : "Läkartidningens publicerade artiklar under 2002.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -3018,18 +2214,7 @@ settings.corpora.lt2003 = {
 	description : "Läkartidningens publicerade artiklar under 2003.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -3043,18 +2228,7 @@ settings.corpora.lt2004 = {
 	description : "Läkartidningens publicerade artiklar under 2004.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -3068,18 +2242,7 @@ settings.corpora.lt2005 = {
 	description : "Läkartidningens publicerade artiklar under 2005.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"},
@@ -3093,18 +2256,7 @@ settings.corpora.smittskydd = {
 	description : "Smittskyddsinstitutets tidskrift, årgångarna 2002–2010.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"},
 		text_issue : {label : "issue"},
@@ -3118,18 +2270,7 @@ settings.corpora.vivill = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year", displayType : "select",
 					dataset : {
@@ -3232,18 +2373,7 @@ settings.corpora.strindbergromaner = {
 	description : "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -3259,18 +2389,7 @@ settings.corpora.romi = {
 	description : "69 romaner utgivna 1976–77.",
 	context : settings.spContext,
 	within : settings.spWithin,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"}
@@ -3283,18 +2402,7 @@ settings.corpora.romii = {
 	description : "60 romaner från 1980–81.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"}
@@ -3307,18 +2415,7 @@ settings.corpora.romg = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -3332,18 +2429,7 @@ settings.corpora.rom99 = {
 	description : "23 romaner utgivna 1999 på Norstedts förlag.",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -3357,18 +2443,7 @@ settings.corpora.sfs = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_title : {label : "title"},
 		text_date : {label : "date"}
@@ -3420,18 +2495,7 @@ settings.corpora["wikipedia-sv"] = {
 	description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_title : {label : "article"},
 		text_url : {label : "url", type : "url"}
@@ -3444,18 +2508,7 @@ settings.corpora.astranova = {
 	description : "<a href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3468,18 +2521,7 @@ settings.corpora.bullen = {
 	description : "<a href=\"http://www.karen.abo.fi/index.php?u[2]=0&u[3]=70\">Bullen</a> är Åbo Akademis Studentkårs informationsbulletin.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -3491,18 +2533,7 @@ settings.corpora.fanbararen = {
 	description : "<a href=\"http://www.nylandsbrigadsgille.fi/sidor/?page_id=813\">Fanbäraren</a> är en tidskrift som utges gemensamt av Nylands brigad och Nylands Brigads Gille, med syfte att öka kännedomen om utbildningen vid Nylands Brigad och öka sammanhållningen mellan Gillets medlemmar.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3515,18 +2546,7 @@ settings.corpora.kallan = {
 	description : "<a href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3563,18 +2583,7 @@ settings.corpora.meddelanden = {
 	description : "<a href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3587,18 +2596,7 @@ settings.corpora.hankeiten = {
 	description : "<a href=\"http://www.shsweb.fi/shs/arkiv/hankeiten1\">Hankeiten</a> är Svenska Handelshögskolans Studentkårs tidskrift.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3611,18 +2609,7 @@ settings.corpora.nyaargus = {
 	description : "<a href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3635,18 +2622,7 @@ settings.corpora.pargaskungorelser2011 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3659,18 +2635,7 @@ settings.corpora.pargaskungorelser2012 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_issue : {label : "issue"}
@@ -3683,18 +2648,7 @@ settings.corpora.borgabladet = {
 	description : "<a href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
     	text_date : {label : "date"}
 	}
@@ -3706,18 +2660,7 @@ settings.corpora.sydosterbotten2010 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -3729,18 +2672,7 @@ settings.corpora.sydosterbotten2011 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -3752,18 +2684,7 @@ settings.corpora.sydosterbotten2012 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -3775,18 +2696,7 @@ settings.corpora.sydosterbotten2013 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -3798,18 +2708,7 @@ settings.corpora.vastranyland = {
 	description : "<a href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
     	text_date : {label : "date"}
 	}
@@ -3821,18 +2720,7 @@ settings.corpora.ostranyland = {
 	description : "<a href=\"http://www.ostnyland.fi\">Östra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
     	text_date : {label : "date"}
 	}
@@ -3844,18 +2732,7 @@ settings.corpora.abounderrattelser2012 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -3867,18 +2744,7 @@ settings.corpora.abounderrattelser2013 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -3891,18 +2757,7 @@ settings.corpora.at2012 = {
 	description : "<a href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -3914,18 +2769,7 @@ settings.corpora.vasabladet1991 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_type : {label : "section"}
@@ -3938,18 +2782,7 @@ settings.corpora.vasabladet2012 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	}
 };
@@ -3960,18 +2793,7 @@ settings.corpora.vasabladet2013 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -3983,18 +2805,7 @@ settings.corpora.osterbottenstidning2011 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -4006,18 +2817,7 @@ settings.corpora.osterbottenstidning2012 = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -4029,18 +2829,7 @@ settings.corpora.osterbottenstidning2013 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_date : {label : "date"}
 	}
@@ -4052,18 +2841,7 @@ settings.corpora.fnb1999 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_title : {label : "title"}
@@ -4076,18 +2854,7 @@ settings.corpora.fnb2000 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"},
 		text_title : {label : "title"}
@@ -4100,18 +2867,7 @@ settings.corpora.hbl1991 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "year"},
 		text_type : {label : "section"}
@@ -4124,18 +2880,7 @@ settings.corpora.hbl1998 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"}
 	}
@@ -4147,18 +2892,7 @@ settings.corpora.hbl1999 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_year : {label : "year"}
 	}
@@ -4170,18 +2904,7 @@ settings.corpora.hbl20122013 = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_date : {label : "date"}
 	}
@@ -4193,18 +2916,7 @@ settings.corpora.talbanken = {
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	}
 };
@@ -4248,18 +2960,7 @@ settings.corpora.tisus = {
 	limited_access : true,
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_id : {label : "id"},
 		text_age : {label : "age"},
@@ -4285,18 +2986,7 @@ settings.corpora.ansokningar = {
 	limited_access : true,
 	context : settings.defaultContext,
 	within : settings.defaultWithin,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_id : {label : "id"},
 		text_gender : {label : "gender"},
@@ -4311,18 +3001,7 @@ settings.corpora.cefr = {
 	limited_access : true,
 	context : settings.spContext,
 	within : settings.spWithin,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
@@ -4342,18 +3021,7 @@ settings.corpora.twitter = {
 		"1 sentence" : "1 sentence",
 		"1 text" : "1 text"
 	},
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		user_username : {label : "username2"},
 		user_name : {label : "name"},
@@ -4554,18 +3222,7 @@ settings.corpora.soexempel = {
 	limited_access : true,
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		"text_date" : {label : "year"},
 		"entry_word" : {label : "entryword"},
