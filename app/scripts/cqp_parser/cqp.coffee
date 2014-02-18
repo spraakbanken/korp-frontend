@@ -28,7 +28,12 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                 out + flagstr
 
 
-        or_out = (x.join(" | ") for x in or_array)
+        or_out = for x in or_array
+            if x.length > 1
+                "(#{x.join(' | ')})"
+            else
+                x.join(' | ')
+                
         if token.bound
             or_out = _.compact or_out
             for bound in _.keys (token.bound)

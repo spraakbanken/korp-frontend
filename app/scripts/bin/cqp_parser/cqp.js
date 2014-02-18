@@ -53,7 +53,11 @@
         _results = [];
         for (_j = 0, _len1 = or_array.length; _j < _len1; _j++) {
           x = or_array[_j];
-          _results.push(x.join(" | "));
+          if (x.length > 1) {
+            _results.push("(" + (x.join(' | ')) + ")");
+          } else {
+            _results.push(x.join(' | '));
+          }
         }
         return _results;
       })();
