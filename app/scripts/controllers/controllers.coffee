@@ -267,6 +267,8 @@ korpApp.controller "ExtendedToken", ($scope, $location) ->
         # assign the first value from the opts 
         or_obj.op = _.values(s.getOpts(or_obj.type))[0]
 
+        or_obj.val = ""
+
     s.getOpts = (type) ->
         s.typeMapping?[type].opts or settings.defaultOptions
 
@@ -417,23 +419,32 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
 
 korpApp.directive "korpAutocomplete", () ->
-
+    scope : 
+        model : "="
+        stringify : "="
+        sorter : "="
+        type : "@"
     link : (scope, elem, attr) ->
-        type = "lem"
-        # parametrize.
-        labelFunc = util.lemgramToString
-        sortFunc = view.lemgramSort
-        arg_value = $("<input type='text'/>").korp_autocomplete(
-            labelFunction: labelFunc
-            sortFunction: sortFunc
-            type: type
+        
+        c.log "scope.model", scope.model, scope.type
+        setVal = (lemgram) ->
+            $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
+                .val("").blur().placeholder()
+        if scope.model
+            setVal(scope.model)
+        arg_value = elem.korp_autocomplete(
+            labelFunction: scope.stringify
+            sortFunction: scope.sorter
+            type: scope.type
             select: (lemgram) ->
                 c.log "extended lemgram", lemgram, $(this)
-                $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
-                $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder()
-
+                # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
+                setVal(lemgram)
+                scope.$apply () ->
+                    scope.model = lemgram
             "sw-forms": true
-        ).blur(->
+        )
+        .blur(->
             input = this
             setTimeout (->
                 c.log "blur"
@@ -442,7 +453,9 @@ korpApp.directive "korpAutocomplete", () ->
                     $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
                 else
                     $(input).removeClass("invalid_input")
-                self._trigger "change"
+                # self._trigger "change"
             ), 100
         )
+
+
 

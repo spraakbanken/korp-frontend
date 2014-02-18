@@ -285,7 +285,8 @@
       label: "word"
     };
     s.setDefault = function(or_obj) {
-      return or_obj.op = _.values(s.getOpts(or_obj.type))[0];
+      or_obj.op = _.values(s.getOpts(or_obj.type))[0];
+      return or_obj.val = "";
     };
     s.getOpts = function(type) {
       var _ref;
@@ -479,19 +480,31 @@
 
   korpApp.directive("korpAutocomplete", function() {
     return {
+      scope: {
+        model: "=",
+        stringify: "=",
+        sorter: "=",
+        type: "@"
+      },
       link: function(scope, elem, attr) {
-        var arg_value, labelFunc, sortFunc, type;
-        type = "lem";
-        labelFunc = util.lemgramToString;
-        sortFunc = view.lemgramSort;
-        return arg_value = $("<input type='text'/>").korp_autocomplete({
-          labelFunction: labelFunc,
-          sortFunction: sortFunc,
-          type: type,
+        var arg_value, setVal;
+        c.log("scope.model", scope.model, scope.type);
+        setVal = function(lemgram) {
+          return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
+        };
+        if (scope.model) {
+          setVal(scope.model);
+        }
+        return arg_value = elem.korp_autocomplete({
+          labelFunction: scope.stringify,
+          sortFunction: scope.sorter,
+          type: scope.type,
           select: function(lemgram) {
             c.log("extended lemgram", lemgram, $(this));
-            $(this).data("value", (data.label === "baseform" ? lemgram.split(".")[0] : lemgram));
-            return $(this).attr("placeholder", labelFunc(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
+            setVal(lemgram);
+            return scope.$apply(function() {
+              return scope.model = lemgram;
+            });
           },
           "sw-forms": true
         }).blur(function() {
@@ -500,11 +513,10 @@
           return setTimeout((function() {
             c.log("blur");
             if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
-              $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
+              return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
             } else {
-              $(input).removeClass("invalid_input");
+              return $(input).removeClass("invalid_input");
             }
-            return self._trigger("change");
           }), 100);
         });
       }

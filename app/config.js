@@ -238,9 +238,13 @@ var selectType = {
 }
 // TODO: trying to rewrite korp_autocomplete, see directive in controllers.coffee
 var setType = {
-	extended_template : "<input>",
-	controller : function() {
+	extended_template : "<input korp-autocomplete>",
 
+
+	controller : function($scope, $q) {
+		// $scope.saldoSearch = function(word) {
+			// lemgramProxy.saldoSearch(word)
+		// }
 	}
 
 
@@ -304,7 +308,12 @@ attrs.lemgram = {
 		return util.lemgramToString(lemgram, true);
 	},
 	externalSearch : karpLemgramLink,
-	internalSearch : true
+	internalSearch : true,
+	extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
+	controller : function($scope) {
+		$scope.stringify = util.lemgramToString;
+		$scope.sorter = view.lemgramSort;
+	}
 };
 attrs.saldo = {
 	label : "saldo",
@@ -315,7 +324,12 @@ attrs.saldo = {
 		return util.saldoToString(saldo, true);
 	},
 	externalSearch : "http://spraakbanken.gu.se/karp/#search-tab-1&search=cql|(saldo+%3D+<%= val %>)",
-	internalSearch : true
+	internalSearch : true,
+	extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='saldo' >",
+	controller : function($scope) {
+		$scope.stringify = util.saldoToString;
+		$scope.sorter = view.saldoSort;
+	}
 };
 attrs.dephead = {
 	label : "dephead",
