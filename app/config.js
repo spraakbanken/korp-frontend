@@ -561,12 +561,6 @@ settings.corporafolders.strindberg = {
         contents : ["strindbergromaner", "strindbergbrev"]
 };
 
-settings.corporafolders.bloggmix = {
-    title : "Bloggmix",
-    contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmixodat"],
-    description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
-};
-
 settings.corporafolders.fisk = {
     title : "Finlandssvenska texter",
     contents : [],
@@ -725,14 +719,7 @@ settings.corporafolders.magazines = {
     contents : ["fof"]
 };
 
-<<<<<<< HEAD
-=======
-settings.corporafolders.twitter = {
-    title : "Twitter",
-    contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006"]
-};
 
->>>>>>> preparing for release
 /*
  * CORPORA
  */
@@ -2631,20 +2618,6 @@ settings.corpora["wikipedia-sv"] = {
     }
 };
 
-<<<<<<< HEAD
-=======
-settings.corpora.swewac = {
-    id : "swewac",
-    title : "SweWaC – Swedish Web as Corpus",
-    description : "",
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : modernAttrs,
-    struct_attributes : {
-    }
-};
-
->>>>>>> preparing for release
 settings.corpora.astranova = {
     id : "astranova",
     title : "Astra Nova 2008–2010",
