@@ -22,6 +22,10 @@ module.exports = function (grunt) {
   grunt.initConfig({
     yeoman: yeomanConfig,
     watch: {
+      jade : {
+        files : ["<%= yeoman.app %>/index.jade", "<%= yeoman.app %>/includes/*.jade"],
+        tasks : ['jade:compile']
+      },
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
         tasks: ['coffee:dist']
@@ -134,6 +138,19 @@ module.exports = function (grunt) {
           dest: 'test/spec',
           ext: '.js'
         }]
+      }
+    },
+
+    jade: {
+      compile: {
+        options: {
+          data: {
+            debug: false
+          }
+        },
+        files: {
+          '<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.jade"]
+        }
       }
     },
 
@@ -291,6 +308,7 @@ module.exports = function (grunt) {
       grunt.task.run([
           'clean:server',
           'coffee:dist',
+          'jade',
           'compass:server',
           'livereload-start',
           'connect:livereload',

@@ -42,10 +42,10 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
         _.defer () -> window.onHashChange?()
 
 
-    $rootScope.savedSearches = []
+    # $rootScope.savedSearches = []
 
-    $rootScope.saveSearch = (searchObj) ->
-        $rootScope.savedSearches.push searchObj
+    # $rootScope.saveSearch = (searchObj) ->
+    #     $rootScope.savedSearches.push searchObj
 
 
     $rootScope.kwicTabs = []
@@ -98,15 +98,13 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
 
 
 
-korpApp.controller "SearchOptsCtrl", ($scope) ->
-    
 
-korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches) ->
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope
     c.log "SimpleCtrl"  
     
     s.$on "popover_submit", (event, name) ->
-        $rootScope.saveSearch {
+        compareSearches.saveSearch {
             label : name or $rootScope.activeCQP
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.getSelectedCorpora()
@@ -237,10 +235,10 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
 
 
-korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches) ->
+korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope
     s.$on "popover_submit", (event, name) ->
-        $rootScope.saveSearch {
+        compareSearches.saveSearch {
             label : name or $rootScope.activeCQP
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.getSelectedCorpora()
@@ -442,24 +440,24 @@ korpApp.filter "mapper", () ->
 
 
 
-korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope) ->
+korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope, compareSearches) ->
     s = $scope
     s.valfilter = utils.valfilter
 
-    $rootScope.saveSearch {
+    compareSearches.saveSearch {
         label : "frihet"
         cqp : "[lex contains 'frihet..nn.1']"
         corpora : ["VIVILL"]
     }
-    $rootScope.saveSearch {
+    compareSearches.saveSearch {
         label : "jämlikhet"
         cqp : "[lex contains 'jämlikhet..nn.1']"
         corpora : ["VIVILL"]
     }
 
-
-    s.cmp1 = $rootScope.savedSearches[0]
-    s.cmp2 = $rootScope.savedSearches[1]
+    s.savedSearches = compareSearches.savedSearches
+    s.cmp1 = compareSearches.savedSearches[0]
+    s.cmp2 = compareSearches.savedSearches[1]
 
     s.reduce = 'word'
     # s.reduce = '_.text_parti'

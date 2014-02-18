@@ -1,4 +1,6 @@
 (function() {
+  var CompareSearches;
+
   korpApp.factory("utils", function($location) {
     return {
       valfilter: function(attrobj) {
@@ -277,5 +279,18 @@
     });
     return searches;
   });
+
+  korpApp.service("compareSearches", CompareSearches = (function() {
+    function CompareSearches() {
+      this.savedSearches = [];
+    }
+
+    CompareSearches.prototype.saveSearch = function(searchObj) {
+      return this.savedSearches.push(searchObj);
+    };
+
+    return CompareSearches;
+
+  })());
 
 }).call(this);

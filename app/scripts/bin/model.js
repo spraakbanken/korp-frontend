@@ -228,17 +228,9 @@
       if (o.queryData != null) {
         data.querydata = o.queryData;
       }
-<<<<<<< HEAD
-<<<<<<< HEAD
       _ref = settings.corpusListing.selected;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         corpus = _ref[_i];
-=======
-      _ref = settings.corpusListing.selected;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        corpus = _ref[_i];
-        c.log("corpus", corpus.within);
->>>>>>> after rebase
         _ref1 = corpus.within;
         for (key in _ref1) {
           val = _ref1[key];
@@ -249,17 +241,6 @@
           val = _ref2[key];
           data.show.push(key);
         }
-<<<<<<< HEAD
-=======
-      $.each(settings.corpusListing.selected, function(_, corpus) {
-        $.each(corpus.attributes, function(key, val) {
-          if ($.inArray(key, data.show) === -1) {
-            return data.show.push(key);
-          }
-        });
->>>>>>> got somewhere with compare function
-=======
->>>>>>> after rebase
         if (corpus.struct_attributes != null) {
           $.each(corpus.struct_attributes, function(key, val) {
             if ($.inArray(key, data.show_struct) === -1) {
@@ -610,20 +591,9 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
-<<<<<<< HEAD
-<<<<<<< HEAD
           t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
-=======
-          $.each(wordArray, function(i, word) {
-            var row;
->>>>>>> got somewhere with compare function
-=======
-          t = $.now();
-          for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
-            word = wordArray[i];
->>>>>>> trying to get the date slider to work
             row = {
               id: "row" + i,
               hit_value: word,
@@ -639,21 +609,9 @@
                 absolute: obj.absolute[word],
                 relative: obj.relative[word]
               };
-<<<<<<< HEAD
-<<<<<<< HEAD
             }
             dataset.push(row);
           }
-=======
-            });
-            return dataset.push(row);
-          });
->>>>>>> got somewhere with compare function
-=======
-            }
-            dataset.push(row);
-          }
->>>>>>> trying to get the date slider to work
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);

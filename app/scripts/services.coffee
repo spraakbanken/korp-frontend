@@ -268,3 +268,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
     return searches
 
 
+korpApp.service "compareSearches",
+    class CompareSearches
+        constructor : () ->
+            @savedSearches = []
+        saveSearch : (searchObj) ->
+            @savedSearches.push searchObj

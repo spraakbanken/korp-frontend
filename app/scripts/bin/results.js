@@ -82,16 +82,8 @@
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
       this.current_page = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-      this.selectionManager = this.$result.scope().selectionManager;
-=======
-      this.scope = scope;
-=======
       this.s = scope;
->>>>>>> trying to get the date slider to work
       this.selectionManager = scope.selectionManager;
->>>>>>> got somewhere with compare function
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
@@ -671,24 +663,14 @@
   view.LemgramResults = (function(_super) {
     __extends(LemgramResults, _super);
 
-    function LemgramResults(tabSelector, resultSelector) {
+    function LemgramResults(tabSelector, resultSelector, scope) {
       var self;
       self = this;
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector);
+      this.s = scope;
       this.resultDeferred = $.Deferred();
-<<<<<<< HEAD
-      this.proxy = lemgramProxy;
-=======
       this.proxy = new model.LemgramProxy();
       window.lemgramProxy = this.proxy;
-      this.order = {
-        vb: ["SS_d,_,OBJ_d,ADV_d".split(",")],
-        nn: ["PA_h,AT_d,_,ET_d".split(","), "_,SS_h".split(","), "OBJ_h,_".split(",")],
-        av: [[], "_,AT_h".split(",")],
-        jj: [[], "_,AT_h".split(",")],
-        pp: [[], "_,PA_d".split(",")]
-      };
->>>>>>> got somewhere with compare function
       this.$result.find("#wordclassChk").change(function() {
         if ($(this).is(":checked")) {
           return $(".lemgram_result .wordclass_suffix", self.$result).show();
@@ -755,13 +737,9 @@
     };
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
-<<<<<<< HEAD
       var self, tagsetTrans, unique_words, wordlist,
         _this = this;
-=======
-      var self, unique_words, wordlist;
       c.log("lemgramResults.renderWordTables", word);
->>>>>>> got somewhere with compare function
       self = this;
       c.log("renderWordTables");
       wordlist = $.map(data, function(item) {
@@ -884,12 +862,8 @@
       });
       container = $("<div>", {
         "class": "tableContainer radialBkg"
-<<<<<<< HEAD
-      }).appendTo("#results-lemgram .content_target");
-      c.log("orderArrays", orderArrays);
-=======
       }).appendTo(".content_target", this.$result);
->>>>>>> got somewhere with compare function
+      c.log("orderArrays", orderArrays);
       $("#lemgramResultsTmpl").tmpl(orderArrays, {
         lemgram: token
       }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click($.proxy(self.onClickExample, self)).end().appendTo(container);
@@ -912,18 +886,12 @@
     };
 
     LemgramResults.prototype.onClickExample = function(event) {
-      var $target, data, opts, self;
+      var $target, data, self;
       self = this;
       $target = $(event.currentTarget);
       c.log("onClickExample", $target);
       data = $target.parent().tmplItem().data;
-      opts = instance.getPageInterval();
-      opts.ajaxParams = {
-        source: data.source.join(","),
-        corpus: null
-      };
-      util.localize(instance.$result);
-      return instance.makeRequest(opts);
+      return this.s.$root.kwicTabs.push(null);
     };
 
     LemgramResults.prototype.showWarning = function() {
@@ -1231,7 +1199,8 @@
     }
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
+      var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
+        _this = this;
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1291,18 +1260,14 @@
       });
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
-<<<<<<< HEAD
       $.when(timeDeferred).then(function() {
         return _this.updateGraphBtnState();
       });
-=======
->>>>>>> got somewhere with compare function
       return this.hidePreloader();
     };
 
     StatsResults.prototype.updateGraphBtnState = function() {
       var cl;
-      c.log("updateGraphBtnState", $("#showGraph"));
       $("#showGraph").button("enable");
       cl = settings.corpusListing.subsetFactory(this.proxy.prevParams.corpus.split(","));
       if (!(_.compact(cl.getTimeInterval())).length) {

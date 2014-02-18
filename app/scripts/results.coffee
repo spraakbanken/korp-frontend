@@ -571,10 +571,10 @@ class view.ExampleResults extends view.KWICResults
 
 
 class view.LemgramResults extends BaseResults
-    constructor: (tabSelector, resultSelector) ->
+    constructor: (tabSelector, resultSelector, scope) ->
         self = this
         super tabSelector, resultSelector
-
+        @s = scope
         #   TODO: figure out what I use this for.
         @resultDeferred = $.Deferred()
         @proxy = new model.LemgramProxy()
@@ -779,19 +779,20 @@ class view.LemgramResults extends BaseResults
         $target = $(event.currentTarget)
         c.log "onClickExample", $target
         data = $target.parent().tmplItem().data
+        @s.$root.kwicTabs.push null
         # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-        opts = instance.getPageInterval()
-        opts.ajaxParams =
-            source : data.source.join(",")
-            corpus : null
+        # opts = instance.getPageInterval()
+        # opts.ajaxParams =
+        #     source : data.source.join(",")
+        #     corpus : null
             # head: data.head
             # dep: data.dep
             # rel: data.rel
             # depextra: data.depextra
             # corpus: data.corpus
 
-        util.localize instance.$result
-        instance.makeRequest opts
+        # util.localize instance.$result
+        # instance.makeRequest opts
 
     showWarning: ->
         hasWarned = !!$.jStorage.get("lemgram_warning")

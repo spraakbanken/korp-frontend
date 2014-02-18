@@ -20,10 +20,6 @@
         return typeof window.onHashChange === "function" ? window.onHashChange() : void 0;
       });
     });
-    $rootScope.savedSearches = [];
-    $rootScope.saveSearch = function(searchObj) {
-      return $rootScope.savedSearches.push(searchObj);
-    };
     $rootScope.kwicTabs = [];
     $rootScope.compareTabs = [];
     $rootScope.graphTabs = [];
@@ -66,14 +62,12 @@
     });
   });
 
-  korpApp.controller("SearchOptsCtrl", function($scope) {});
-
-  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches) {
+  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
     var findMatchSentence, massageData, punctArray, s;
     s = $scope;
     c.log("SimpleCtrl");
     s.$on("popover_submit", function(event, name) {
-      return $rootScope.saveSearch({
+      return compareSearches.saveSearch({
         label: name || $rootScope.activeCQP,
         cqp: $rootScope.activeCQP,
         corpora: settings.corpusListing.getSelectedCorpora()
@@ -214,11 +208,11 @@
     };
   });
 
-  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches) {
+  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
     var s;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
-      return $rootScope.saveSearch({
+      return compareSearches.saveSearch({
         label: name || $rootScope.activeCQP,
         cqp: $rootScope.activeCQP,
         corpora: settings.corpusListing.getSelectedCorpora()
@@ -386,22 +380,23 @@
     };
   });
 
-  korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope) {
+  korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope, compareSearches) {
     var s;
     s = $scope;
     s.valfilter = utils.valfilter;
-    $rootScope.saveSearch({
+    compareSearches.saveSearch({
       label: "frihet",
       cqp: "[lex contains 'frihet..nn.1']",
       corpora: ["VIVILL"]
     });
-    $rootScope.saveSearch({
+    compareSearches.saveSearch({
       label: "jämlikhet",
       cqp: "[lex contains 'jämlikhet..nn.1']",
       corpora: ["VIVILL"]
     });
-    s.cmp1 = $rootScope.savedSearches[0];
-    s.cmp2 = $rootScope.savedSearches[1];
+    s.savedSearches = compareSearches.savedSearches;
+    s.cmp1 = compareSearches.savedSearches[0];
+    s.cmp2 = compareSearches.savedSearches[1];
     s.reduce = 'word';
     s.getAttrs = function() {
       var listing;
