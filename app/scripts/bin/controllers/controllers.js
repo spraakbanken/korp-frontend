@@ -238,7 +238,15 @@
     } else {
       s.data = CQP.parse(cqp);
     }
-    s.$watch('getCQPString()', function() {});
+    s.$watch('getCQPString()', function() {
+      var cqpstr;
+      cqpstr = CQP.stringify(s.data);
+      return $location.search({
+        cqp: $.param({
+          _: cqpstr
+        }).slice(2)
+      });
+    });
     s.getCQPString = function() {
       return (CQP.stringify(s.data)) || "";
     };

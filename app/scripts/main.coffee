@@ -53,10 +53,12 @@ chained.done (info_data) ->
         settings.corpora[key]["info"] = info_data["corpora"][key.toUpperCase()]["info"]
 
 
-loc_dfd = util.initLocalize()
+# loc_dfd = util.initLocalize()
+loc_dfd = initLocales()
 
 
-$.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
+
+$.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
     $("body").addClass "lab"  if isLab
@@ -83,7 +85,6 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
     $("#mode_switch").modeSelector(
         change: ->
             mode = $(this).modeSelector("option", "selected")
-            # $.bbq.removeState "corpus"
             search("corpus", null)
             if mode is "default"
                 location.href = location.pathname
@@ -191,7 +192,6 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
 
     $(".custom_anchor").on "mouseup", ->
         c.log "custom click"
-        # $.bbq.removeState "result-container"
         search "result-container", null
         $(this).triggerHandler "change"
 
@@ -223,7 +223,6 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
             prevFragment[key] isnt search()[key]
         showAbout = ->
             $("#about_content").dialog(beforeClose: ->
-                # $.bbq.removeState "display"
                 search "display", null
                 false
             ).css("opacity", 0)
@@ -233,9 +232,9 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
         prevFragment = $.bbq.prevFragment or {}
         e = $.bbq
         if hasChanged("lang")
-            loc_dfd = util.initLocalize()
-            loc_dfd.done ->
-                util.localize()
+            # loc_dfd = util.initLocalize()
+            # loc_dfd.done ->
+            util.localize()
 
             $("#languages").radioList "select", $.localize("getLang")
         page = Number(search().page)
@@ -293,14 +292,12 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
                     ).appendTo("body").fadeOut ->
                         $(this).remove()
 
-                    # $.bbq.removeState "display"
                     search "display", null
                     false
             ).show().unbind("submit").submit ->
                 self = this
                 authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done((data) ->
                     util.setLogin()
-                    # $.bbq.removeState "display"
                     search "display", null
                 ).fail ->
                     c.log "login fail"
@@ -399,10 +396,8 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
     #setup about link
     $("#about").click ->
         unless search().display?
-            # $.bbq.pushState display: "about"
             search display: "about"
         else
-            # $.bbq.removeState "display"
             search "about", null
 
     $("#login").click ->
@@ -413,6 +408,7 @@ $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
 
     $("#languages").radioList(
         change: ->
+            c.log "lang change", $(this).radioList("getSelected").data("mode")
             search lang: $(this).radioList("getSelected").data("mode")
         # TODO: this does nothing?
         selected: settings.defaultLanguage

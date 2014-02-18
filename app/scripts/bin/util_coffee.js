@@ -422,4 +422,39 @@
     return ret;
   };
 
+  window.initLocales = function() {
+    var def, defs, lang, packages, pkg, prefix, _fn, _i, _j, _len, _len1, _ref;
+    packages = ["locale", "corpora"];
+    prefix = "translations";
+    defs = [];
+    window.loc_data = {};
+    def = $.Deferred();
+    _ref = settings.languages;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      lang = _ref[_i];
+      loc_data[lang] = {};
+      _fn = function(lang, pkg) {
+        var file;
+        file = pkg + "-" + lang + '.json';
+        file = prefix + "/" + file;
+        return defs.push($.ajax({
+          url: file,
+          dataType: "json",
+          cache: false,
+          success: function(data) {
+            return _.extend(loc_data[lang], data);
+          }
+        }));
+      };
+      for (_j = 0, _len1 = packages.length; _j < _len1; _j++) {
+        pkg = packages[_j];
+        _fn(lang, pkg);
+      }
+    }
+    $.when.apply($, defs).then(function() {
+      return def.resolve(loc_data);
+    });
+    return def;
+  };
+
 }).call(this);

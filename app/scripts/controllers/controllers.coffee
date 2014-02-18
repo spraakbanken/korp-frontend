@@ -213,8 +213,10 @@ korpApp.controller "TokenList", ($scope, $location) ->
         s.data = CQP.parse(cqp)
 
     s.$watch 'getCQPString()', () ->
+        cqpstr = CQP.stringify(s.data)
+        # cqpstr = encodeURIComponent(cqpstr).replace("%20", "+")
         # $location.search($.param({cqp : CQP.stringify(s.data)}))
-        # $location.search({cqp : encodeURI(CQP.stringify(s.data))})
+        $location.search({cqp : $.param({_ : cqpstr})[2..]})
 
     s.getCQPString = ->
         return (CQP.stringify s.data) or ""
@@ -325,5 +327,5 @@ korpApp.controller "SearchPaneCtrl", ($scope, util) ->
 
 korpApp.filter "loc", ($rootScope) ->
     (translationKey) ->
-        # c.log "loc", $rootScope.lang, util.getLocaleString translationKey
+        # c.log "loc", $rootScope.lang, (util.getLocaleString translationKey), $.localize("getLang")
         return util.getLocaleString translationKey

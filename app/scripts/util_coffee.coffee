@@ -306,3 +306,29 @@ window.search = (obj, val) ->
     return ret
 
 
+
+window.initLocales = () ->
+    packages = ["locale", "corpora"]
+    prefix = "translations"
+    defs = []
+    window.loc_data = {}
+    def = $.Deferred()
+    for lang in settings.languages
+        loc_data[lang] = {}
+        for pkg in packages
+            do (lang, pkg) ->
+                file = pkg + "-" + lang + '.json'
+                file = prefix + "/" + file
+                defs.push $.ajax
+                    url : file,
+                    dataType : "json",
+                    cache : false,
+                    success : (data) -> 
+                        _.extend loc_data[lang], data
+                        # $.localize.data[lang][pkg] = data;
+                        # $.extend($.localize.data[lang]["_all"], data);
+
+    $.when.apply($, defs).then () ->
+        def.resolve loc_data
+
+    return def

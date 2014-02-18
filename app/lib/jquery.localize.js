@@ -1,12 +1,11 @@
 (function($) {
+	dl_cache = {}
 	$.localize = function(cmd, o) {
 		if(!$.localize.data)
-			$.localize.data = {"_all" : {}};
+			$.localize.data = {};
 		if (cmd == "init") {
+			return 
 			$.localize.options = o;
-			var hasPkgs = $.any($.map(o.packages, function(item) {
-				return !!$.localize.data[item]; 
-			}));
 			var dfds = [];
 			// some language identifyer aliases
 			var trans = {
@@ -18,21 +17,29 @@
 			var lang = o.language;
 			if(lang in trans)
 				lang = trans[o.language];
+			
 			$.localize.data.lang = lang;
+			if(!$.localize.data[lang])
+				$.localize.data[lang] = {_all : {}};
+
 			$.each(o.packages, function(i, pkg) {
 				var file = pkg + "-" + lang + '.json';
-				$.localize.data[pkg] = {};
 				if (o.pathPrefix)
 					file = o.pathPrefix + "/" + file;
-				dfds.push($.ajax({
-					url : file,
-					dataType : "json",
-					cache : false,
-					success : function(data) {
-						$.extend($.localize.data[pkg], data);
-						$.extend($.localize.data["_all"], data);
-					}
-				}));
+
+				if(!dl_cache[pkg + lang])
+					dl_cache[pkg + lang] = $.ajax({
+						url : file,
+						dataType : "json",
+						cache : false,
+						success : function(data) {
+							$.localize.data[lang][pkg] = data;
+							$.extend($.localize.data[lang]["_all"], data);
+						}
+					});
+
+				dfds.push(dl_cache[pkg + lang]);
+
 
 			});
 			return $.when.apply($, dfds);
@@ -42,7 +49,8 @@
 
 	$.fn.localize = function() {
 		//TODO: make this less slow.
-		var data = $.localize.data["_all"];
+		var lang = $("body").scope() ? $("body").scope().lang || "sv" : "sv";
+		var data = loc_data[lang];
 		this.find("[rel^=localize]").each(function(i, elem) {
 			var elem = $(elem);
 			var key = elem.attr("rel").match(/localize\[(.*?)\]/)[1];

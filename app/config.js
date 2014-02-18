@@ -127,7 +127,7 @@ settings.modeConfig = [
  
 ];
 
-
+settings.languages = ["sv", "en"];
 
 
 var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(lemgram+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";

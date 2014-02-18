@@ -31,11 +31,18 @@ util.SelectionManager.prototype.hasSelected = function() {
 // SelectionManager -->
 
 util.getLocaleString = function(key) {
-	if(!$.localize.data) {
-		c.error("Locale string cannot be found because no data file has been read.");
-		return;
-	}
-	var output = $.localize.data.locale[key] || $.localize.data.corpora[key];
+	// if(!$.localize.data) {
+		// c.error("Locale string cannot be found because no data file has been read.");
+		// return;
+	// }
+
+	var lang = $("body").scope() ? $("body").scope().lang || "sv" : "sv";
+	// var output = $.localize.data[lang]["_all"][key];
+	if(loc_data && loc_data[lang])
+		var output = loc_data[lang][key]
+
+	// var output = $.localize("getLocaleString", key);
+	// var output = $.localize.data.locale[key] || $.localize.data.corpora[key];
 	if(output == null && key != null)
 		return key;
 //		$.error("Could not find translation key " + key);
@@ -45,7 +52,9 @@ util.initLocalize = function() {
 	return $.localize("init", {
 		packages : ["locale", "corpora"],
 		pathPrefix : "translations",
-		language : settings.defaultLanguage,
+		// language : settings.defaultLanguage,
+		language : $("body").scope() ? $("body").scope().lang || "sv" : "sv",
+
 		callback : function() {
 			if(this.is(".num_hits")) {
 				var selected = this.find("option:selected");

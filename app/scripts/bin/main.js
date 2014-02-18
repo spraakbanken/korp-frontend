@@ -70,8 +70,9 @@
     });
   });
 
-  loc_dfd = util.initLocalize();
+  loc_dfd = initLocales();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then((function(searchbar_html) {
     var creds, end, from, labs, onHashChange, paper, start, tab_a_selector, tabs, to;
@@ -80,6 +81,9 @@
 
 =======
   $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then((function() {
+=======
+  $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then((function(loc_data) {
+>>>>>>> fixed localization
     var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
 >>>>>>> remade search tabs
 >>>>>>> remade search tabs
@@ -221,14 +225,16 @@
       idx = $(this).parent().prevAll().length;
       state[id] = idx;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
       c.log("pushstate", state, id);
 >>>>>>> remade search tabs
       $.bbq.pushState(state);
 =======
+=======
+>>>>>>> fixed localization
       search(state);
->>>>>>> remade search tabs
       return false;
     });
     $(".custom_anchor").on("mouseup", function() {
@@ -286,10 +292,7 @@
       prevFragment = $.bbq.prevFragment || {};
       e = $.bbq;
       if (hasChanged("lang")) {
-        loc_dfd = util.initLocalize();
-        loc_dfd.done(function() {
-          return util.localize();
-        });
+        util.localize();
         $("#languages").radioList("select", $.localize("getLang"));
       }
       page = Number(search().page);
@@ -472,6 +475,7 @@
     });
     $("#languages").radioList({
       change: function() {
+        c.log("lang change", $(this).radioList("getSelected").data("mode"));
         return search({
           lang: $(this).radioList("getSelected").data("mode")
         });

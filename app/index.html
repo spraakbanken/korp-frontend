@@ -205,8 +205,8 @@
 	   		<tabs ng-controller="SearchPaneCtrl">
    		        <pane heading="{{'simple' | loc}}" ng-include="'views/simple.html'" onload="$root.onSearchLoad()"></pane>
 
-   		        <pane heading="Utökad" ng-include="'views/extended.html'"></pane>
-   		        <pane heading="Avancerad">
+   		        <pane heading="{{'detailed' | loc}}" ng-include="'views/extended.html'"></pane>
+   		        <pane heading="{{'advanced' | loc}}">
 					<div id="advanced">
 						<div class="query_footer ui-corner-all ui-state-default">
 							<span class="cqp_toggle" rel="localize[cqp_query]">
