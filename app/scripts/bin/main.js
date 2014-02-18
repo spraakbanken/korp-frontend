@@ -2,6 +2,24 @@
   var chained, deferred_domReady, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
+  window.searchProxy = new model.SearchProxy();
+
+  window.kwicProxy = new model.KWICProxy();
+
+  window.statsProxy = new model.StatsProxy();
+
+  window.lemgramProxy = new model.LemgramProxy();
+
+  window.authenticationProxy = new model.AuthenticationProxy();
+
+  window.timeProxy = new model.TimeProxy();
+
+  window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
+
+  window.extendedSearch = new view.ExtendedSearch('#korp-extended');
+
+  window.simpleSearch = new view.SimpleSearch('#korp-simple');
+
   t = $.now();
 
   isDev = window.location.host === "localhost";
@@ -238,7 +256,7 @@
       simpleSearch.enableSubmit();
     }
     window.onHashChange = function(event, isInit) {
-      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value,
+      var data, display, e, hasChanged, prevFragment, reading, searchval, showAbout, type, value,
         _this = this;
       c.log("onHashChange");
       hasChanged = function(key) {
@@ -259,13 +277,6 @@
       if (hasChanged("lang")) {
         util.localize();
         $("#languages").radioList("select", $.localize("getLang"));
-      }
-      page = Number(search().page);
-      if (hasChanged("page") && !hasChanged("search")) {
-        kwicResults.setPage(page);
-      }
-      if (isInit) {
-        kwicResults.current_page = page;
       }
       display = search().display;
       if (display === "about") {

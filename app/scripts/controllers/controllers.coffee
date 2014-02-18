@@ -349,6 +349,9 @@ korpApp.factory "util", ($location) ->
                     obj.post_change?(val)
 
 
+korpApp.controller "ResultsTabCtrl", ($scope, util, $location) ->
+    s = $scope
+    
 korpApp.controller "SearchPaneCtrl", ($scope, util, $location) ->
     s = $scope
     # $location.search()["search_tab"]
@@ -501,3 +504,6 @@ korpApp.directive "slider", () ->
 
         arg_value.append slider, from, to
 
+korpApp.directive "constr", ($window) ->
+    link : (scope, elem, attr) ->
+        instance = new $window.view[attr.constr](elem)

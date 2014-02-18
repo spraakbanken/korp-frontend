@@ -397,6 +397,11 @@
     };
   });
 
+  korpApp.controller("ResultsTabCtrl", function($scope, util, $location) {
+    var s;
+    return s = $scope;
+  });
+
   korpApp.controller("SearchPaneCtrl", function($scope, util, $location) {
     var s;
     s = $scope;
@@ -559,6 +564,15 @@
           return self._trigger("change");
         });
         return arg_value.append(slider, from, to);
+      }
+    };
+  });
+
+  korpApp.directive("constr", function($window) {
+    return {
+      link: function(scope, elem, attr) {
+        var instance;
+        return instance = new $window.view[attr.constr](elem);
       }
     };
   });

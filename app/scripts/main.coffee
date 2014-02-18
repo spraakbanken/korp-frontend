@@ -1,3 +1,16 @@
+window.searchProxy = new model.SearchProxy()
+window.kwicProxy = new model.KWICProxy()
+window.statsProxy = new model.StatsProxy()
+window.lemgramProxy = new model.LemgramProxy()
+window.authenticationProxy = new model.AuthenticationProxy()
+window.timeProxy = new model.TimeProxy()
+window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
+window.extendedSearch = new view.ExtendedSearch('#korp-extended')
+window.simpleSearch = new view.SimpleSearch('#korp-simple')
+
+
+
+
 t = $.now()
 #  if(window.console == null) window.console = {"log" : $.noop};
 
@@ -237,9 +250,9 @@ $.when(loc_dfd, chained, deferred_domReady, deferred_sm).then ((loc_data) ->
             util.localize()
 
             $("#languages").radioList "select", $.localize("getLang")
-        page = Number(search().page)
-        kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
-        kwicResults.current_page = page if isInit
+        # page = Number(search().page)
+        # kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
+        # kwicResults.current_page = page if isInit
 
         display = search().display
         if display is "about"

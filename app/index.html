@@ -254,81 +254,78 @@
 			<div id="results-wrapper">
 				<div id="columns" >
 					<div id="left-column" >
-						<div id="result-container">
-							<ul>
-								<li class="on"><a href="#results-kwic">KWIC</a><div class="tab_progress" ></div></li>
-								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a><div class="tab_progress" ></div></li>
-								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a><div class="tab_progress" ></div></li>
-							</ul>
-							<div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
-								<div class="result_controls">
-								    <div class="controls_n" >
-										<span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
+						<tabset ng-controller="ResultsTabCtrl" >
+							<tab heading="KWIC" >
+								<div id="results-kwic" ng-controller="kwicCtrl" ng-cloak>
+								    <div class="result_controls">
+								        <div class="controls_n" >
+								            <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
+								        </div>
+								        <div class="progress">
+								            <progress value="0" max="100"></progress>
+								        </div>
+								       <div class="hits_picture" ></div>
+								   </div>
+
+								    <div class="pager-wrapper"></div>
+								    <span class="reading_btn show link" rel="localize[show_reading]">Visa läsläge</span>
+								    <span class="reading_btn hide link" rel="localize[show_kwic]">Visa kwic</span>
+
+
+								    <div class="table_scrollarea">
+								        <table class="results_table kwic" cellspacing="0">
+
+								            <tr class="sentence" ng-repeat="sentence in kwic" style="background-color: {{sentence._color}}"
+								                ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
+
+								                <td class="empty_td"></td>
+								                <td colspan="0" class="corpus_title">
+								                    {{sentence.newCorpus}}
+								                    <span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
+								                </td>
+
+								                <td colspan="3" set-if="sentence.isLinked" class="lnk">
+								                    <span kwic-word ng-repeat="wd in sentence.tokens"></span>
+								                </td>
+								                <td class="left" set-if="!sentence.newCorpus">
+								                    <span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
+								                </td>
+								                <td class="match" set-if="!sentence.newCorpus">
+								                    <span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
+								                </td>
+								                <td class="right" set-if="!sentence.newCorpus">
+								                    <span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
+								                </td>
+
+
+
+								            </tr>
+								            <!-- <tr class="linked_sentence" ng-show="sentence.aligned">
+								                <td colspan="3">
+								                    <span kwic-word ng-repeat="wd in sentence.aligned"></span>
+								                </td>
+								            </tr> -->
+								        </table>
+
+								        <div class="results_table reading">
+
+								            <p class="sentence" ng-repeat="sentence in contextKwic" style="background-color: {{sentence._color}}"
+								                ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
+								                <span colspan="0" class="corpus_title">
+								                    {{sentence.newCorpus}}
+								                    <span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
+								                </span>
+								                <span ng-repeat="wd in sentence.tokens" kwic-word></span>
+
+								            </p>
+								        </div>
+								        <!-- <table class="results_table reading" cellspacing="0"></table> -->
+								<!--                                    <table class="results_table cached_kwic" cellspacing="0"></table> -->
 								    </div>
-									<div class="progress">
-										<progress value="0" max="100"></progress>
-									</div>
-								   <div class="hits_picture" ></div>
-							   </div>
 
-								<div class="pager-wrapper"></div>
-								<span class="reading_btn show link" rel="localize[show_reading]">Visa läsläge</span>
-								<span class="reading_btn hide link" rel="localize[show_kwic]">Visa kwic</span>
-
-
-								<div class="table_scrollarea">
-									<table class="results_table kwic" cellspacing="0">
-
-										<tr class="sentence" ng-repeat="sentence in kwic" style="background-color: {{sentence._color}}"
-											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
-
-											<td class="empty_td"></td>
-											<td colspan="0" class="corpus_title">
-												{{sentence.newCorpus}}
-												<span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
-											</td>
-
-											<td colspan="3" set-if="sentence.isLinked" class="lnk">
-												<span kwic-word ng-repeat="wd in sentence.tokens"></span>
-											</td>
-											<td class="left" set-if="!sentence.newCorpus">
-												<span kwic-word ng-repeat="wd in selectLeft(sentence)"></span>
-											</td>
-											<td class="match" set-if="!sentence.newCorpus">
-												<span kwic-word ng-repeat="wd in selectMatch(sentence)"></span>
-											</td>
-											<td class="right" set-if="!sentence.newCorpus">
-												<span kwic-word ng-repeat="wd in selectRight(sentence)"></span>
-											</td>
-
-
-
-										</tr>
-										<!-- <tr class="linked_sentence" ng-show="sentence.aligned">
-											<td colspan="3">
-												<span kwic-word ng-repeat="wd in sentence.aligned"></span>
-											</td>
-										</tr> -->
-									</table>
-
-									<div class="results_table reading">
-
-										<p class="sentence" ng-repeat="sentence in contextKwic" style="background-color: {{sentence._color}}"
-											ng-class="{corpus_info : sentence.newCorpus, not_corpus_info : !sentence.newCorpus, linked_sentence : sentence.isLinked}">
-											<span colspan="0" class="corpus_title">
-												{{sentence.newCorpus}}
-												<span class='corpus_title_warn' rel='localize[no_context_support]' set-if="sentence.noContext"></span>
-											</span>
-											<span ng-repeat="wd in sentence.tokens" kwic-word></span>
-
-										</p>
-									</div>
-									<!-- <table class="results_table reading" cellspacing="0"></table> -->
-<!-- 									<table class="results_table cached_kwic" cellspacing="0"></table> -->
 								</div>
-
-							</div>
-							<div id="results-stats">
+							</tab>
+							<tab heading="Statistik">
 								<div class="stats_header">
 									<button id="showGraph">Visa trenddiagram</button>
 									<div class="progress">
@@ -348,8 +345,8 @@
 									</select>
 									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
 								</div>
-							</div>
-							<div id="results-lemgram">
+							</tab>
+							<tab heading="Ordbild">
 								<div id="wordclassChkParent">
 									<input id='wordclassChk' type='checkbox'>
 									<label for="wordclassChk" rel="localize[show_wordclass]"></label>
@@ -359,8 +356,16 @@
 								</div>
 
 								<div class="content_target"></div>
-							</div>
-						</div>
+							</tab>
+						</tabset>
+						<!-- <div id="result-container"> -->
+							<!-- <ul>
+								<li class="on"><a href="#results-kwic">KWIC</a><div class="tab_progress" ></div></li>
+								<li><a href="#results-stats" rel="localize[statistics]">Statistik</a><div class="tab_progress" ></div></li>
+								<li id="lemgram_list_item"><a href="#results-lemgram" rel="localize[lemgram_results]" >Ordbild</a><div class="tab_progress" ></div></li>
+							</ul> -->
+							
+						<!-- </div> -->
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
 					<div id="sidebar" class="ui-corner-all kwic_sidebar"></div>
