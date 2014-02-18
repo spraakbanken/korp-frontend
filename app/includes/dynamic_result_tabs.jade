@@ -1,10 +1,10 @@
-tab(ng-repeat='queryParams in kwicTabs', active='active')
+tab(ng-repeat='queryParams in kwicTabs', active='active', select="selectTab(2 + ($index + 1))" )
   tab-heading
     | KWIC
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(ng-controller='kwicCtrl', constr='ExampleResults')
     include kwicresult
-tab(ng-repeat='data in graphTabs', active='active')
+tab(ng-repeat='data in graphTabs', active='active', select="selectTab(2 + ($index + kwicTabs.length))")
   tab-heading
     | {{'graph' | loc}}
     span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
@@ -28,7 +28,7 @@ tab(ng-repeat='data in graphTabs', active='active')
       div(style='clear: both;')
     .chart
     .zoom_slider
-tab(ng-repeat='promise in compareTabs', active='active')
+tab(ng-repeat='promise in compareTabs', active='active', select="selectTab(2 + ($index + kwicTabs.length +  graphTabs.length))")
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | Jämför
     span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')

@@ -1,13 +1,25 @@
 korpApp.controller "resultTabCtrl", ($scope) ->
     s = $scope
+    
+    # c.log "selectTab", s
+    s.selectTab = (i) ->
+        c.log "selectTab", i
+        s.$broadcast "tabselect", i
+        # tab = 
 
+    ###
     s.$watch "getSelected()", (val) ->
+        c.log "val", val
         s.$root.result_tab = val
+        selectedScope = s.tabs[s.$root.result_tab]
+        c.log "selectedScope", selectedScope
+        instance = selectedScope.$parent.instance
+        c.log "instance", instance
         switch val
             when 0 then kwicResults?.onentry()
             # when 1 then statsResults.onentry()
             when 2 then lemgramResults.onentry()
-
+    ###
     # prev = 0
     # c.log "tabs", s
     ###
@@ -33,8 +45,12 @@ korpApp.controller "resultContainerCtrl", ($scope, searches) ->
 
 
 korpApp.controller "kwicCtrl", ($scope) ->
-    c.log "kwicCtrl init"
+    c.log "kwicCtrl init", $scope.$parent
     s = $scope
+
+    s.$on "tabselect", ($event) ->
+        c.log "tabselect", arguments
+
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 

@@ -84,6 +84,7 @@
       this.current_page = 0;
       this.s = scope;
       this.selectionManager = scope.selectionManager;
+      c.log("selectionManager", this.selectionManager);
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
@@ -1314,7 +1315,6 @@
       var n,
         _this = this;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
-      $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
       n = this.$result.index();
       this.zoom = "year";
       this.granularity = this.zoom[0];

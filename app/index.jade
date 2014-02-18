@@ -113,12 +113,12 @@ html
         
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length', ng-controller='resultContainerCtrl')
           #columns
-            #left-column(ng-class='{sidebar_visible : word_selected && result_tab == 0}')
-              tabset(tab-hash='result_tab', ng-controller='resultTabCtrl', ng-click='onClick($event)')
-                tab(heading='KWIC')
+            #left-column(ng-class='{sidebar_visible : word_selected && result_tab == 0}', ng-controller="resultTabCtrl")
+              tabset(tab-hash='result_tab', ng-click='onClick($event)')
+                tab(heading='KWIC', select="selectTab(0)")
                   #results-kwic(constr='KWICResults', constr-name='kwicResults', ng-controller='kwicCtrl')
                     include includes/kwicresult
-                tab(heading='Statistik')
+                tab(heading='Statistik', select="selectTab(1)")
                   div(ng-controller='StatsResultCtrl', constr='StatsResults', constr-name='statsResults')
                     .stats_header
                       button#showGraph Visa trenddiagram
@@ -136,7 +136,7 @@ html
                         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
-                tab(heading='Ordbild')
+                tab(heading='Ordbild', select="selectTab(2)")
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent
                       input#wordclassChk(type='checkbox')

@@ -75,6 +75,7 @@ class view.KWICResults extends BaseResults
 
         @s = scope
         @selectionManager = scope.selectionManager
+        c.log "selectionManager", @selectionManager
 
         @$result.click =>
             return unless @selectionManager.hasSelected()
@@ -1211,7 +1212,7 @@ class view.StatsResults extends BaseResults
 class view.GraphResults extends BaseResults
     constructor : (tabSelector, resultSelector, scope) ->
         super(tabSelector, resultSelector, scope)
-        $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
+        # $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
         n = @$result.index()
         # $(resultSelector).html """
         #     <div class="graph_header">

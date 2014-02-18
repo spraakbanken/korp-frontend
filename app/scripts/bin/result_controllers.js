@@ -5,15 +5,24 @@
   korpApp.controller("resultTabCtrl", function($scope) {
     var s;
     s = $scope;
-    return s.$watch("getSelected()", function(val) {
-      s.$root.result_tab = val;
-      switch (val) {
-        case 0:
-          return typeof kwicResults !== "undefined" && kwicResults !== null ? kwicResults.onentry() : void 0;
-        case 2:
-          return lemgramResults.onentry();
-      }
-    });
+    return s.selectTab = function(i) {
+      c.log("selectTab", i);
+      return s.$broadcast("tabselect", i);
+    };
+    /*
+    s.$watch "getSelected()", (val) ->
+        c.log "val", val
+        s.$root.result_tab = val
+        selectedScope = s.tabs[s.$root.result_tab]
+        c.log "selectedScope", selectedScope
+        instance = selectedScope.$parent.instance
+        c.log "instance", instance
+        switch val
+            when 0 then kwicResults?.onentry()
+            # when 1 then statsResults.onentry()
+            when 2 then lemgramResults.onentry()
+    */
+
     /*
     s.onClick = (event, num) ->
         i = $(event.target).parent().index()
@@ -39,8 +48,11 @@
 
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
-    c.log("kwicCtrl init");
+    c.log("kwicCtrl init", $scope.$parent);
     s = $scope;
+    s.$on("tabselect", function($event) {
+      return c.log("tabselect", arguments);
+    });
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;

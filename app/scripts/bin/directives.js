@@ -226,6 +226,7 @@
     return {
       link: function(scope, elem, attr) {
         var instance;
+        c.log("constr scope", scope);
         instance = new $window.view[attr.constr](elem, elem, scope);
         if (attr.constrName) {
           $window[attr.constrName] = instance;
