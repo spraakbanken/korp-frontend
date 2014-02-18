@@ -14,20 +14,18 @@ html
     link(rel='stylesheet', type='text/css', href='styles/jquery.tooltip.css')
     link(rel='stylesheet', href='components/rickshaw/rickshaw.css')
     link(rel='stylesheet', type='text/css', href='components/font-awesome/css/font-awesome.css')
-    //- link(rel='stylesheet', type='text/css', href='components/angular-slider/angular-slider.css')
     link(rel='stylesheet', type='text/css', href='styles/styles.css')
     
     // endbuild 
     link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
+    title Korp
+    //if lte IE 8
+      script(language='javascript', src='lib/flot/excanvas.min.js')
     script.
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
       window.c = window.console;
-    title Korp
-    //if lte IE 8
-      script(language='javascript', src='lib/flot/excanvas.min.js')
-    //
-       build:js scripts/korp_lib.js 
+    // build:js scripts/korp_lib.js 
     script(src='components/json3/lib/json3.js')
     script(src='components/jquery/jquery.js')
     script(src='components/jquery-ui/ui/jquery-ui.custom.js')
@@ -69,18 +67,13 @@ html
     script(src="components/underscore.string/lib/underscore.string.js")
     script(src='components/spin.js/dist/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')
-    //
-       endbuild 
-    //
+    // endbuild  
     script.
       yepnope({
       test: $("html.msie7,html.msie8").length,
-      // yep : 'geo.js',
       nope: 'components/d3/d3.js'
       });
     script(src='components/moment/moment.js')
-    //
-    // <script src="components/d3/d3.js"></script> 
     script(src='components/rickshaw/rickshaw.js')
     script(src='scripts/jq_extensions.js')
     script(src='config.js')
