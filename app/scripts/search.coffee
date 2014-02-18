@@ -49,7 +49,9 @@ view.initSearchOptions = ->
     selects = $("#search_options > div:first select").customSelect()
     view.updateReduceSelect()
     $("#search_options select").each ->
-        state = $.bbq.getState($(this).data("history"))
+        # state = $.bbq.getState($(this).data("history"))
+        state = search()[$(this).data("history")]
+
         unless not state
             $(this).val(state).change()
         else
@@ -63,9 +65,11 @@ view.initSearchOptions = ->
         state = {}
         state[target.data("history")] = target.val()
         unless target.prop("selectedIndex") is 0
-            $.bbq.pushState state
+            search state
         else
-            $.bbq.removeState target.data("history")
+            if search()[target.data("history")]
+                search target.data("history"), null
+            # $.bbq.removeState target.data("history")
 
 
 view.updateContextSelect = (withinOrContext) ->
@@ -136,7 +140,8 @@ class BaseSearch
         @_enabled = true
 
     refreshSearch: ->
-        $.bbq.removeState "search"
+        # $.bbq.removeState "search"
+        search "search", null
         $(window).trigger "hashchange"
 
     onSubmit: ->
@@ -160,6 +165,7 @@ class BaseSearch
 class view.SimpleSearch extends BaseSearch
     constructor: (mainDivId) ->
         super mainDivId
+        c.log "simplesearch", mainDivId, $(mainDivId)
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         $("#simple_text").keyup $.proxy(@onSimpleChange, this)
         @onSimpleChange()
@@ -271,10 +277,12 @@ class view.SimpleSearch extends BaseSearch
 
     onSubmit: ->
         super()
+        c.log "onSubmit"
         $("#simple_text.ui-autocomplete-input").korp_autocomplete "abort"
         unless $("#simple_text").val() is ""
             util.searchHash "word", $("#simple_text").val()
-        else @selectLemgram $("#simple_text").data("lemgram")  if $("#simple_text").attr("placeholder")?
+        else
+            @selectLemgram $("#simple_text").data("lemgram")  if $("#simple_text").attr("placeholder")?
 
     selectLemgram: (lemgram) ->
         return  if $("#search-tab").data("cover")?
@@ -416,17 +424,18 @@ class view.ExtendedSearch extends BaseSearch
 
     setupContainer: (selector) ->
         self = this
-        insert_token_button = $('<img src="img/plus.png"/>')
-        .addClass("image_button insert_token")
-        .click ->
-            self.insertToken this
+        # insert_token_button = $('<img src="img/plus.png"/>')
+        # .addClass("image_button insert_token")
+        # .click ->
+        #     self.insertToken this
 
-        $(selector).append(insert_token_button).sortable
+        # $(selector).append(insert_token_button).sortable
+        $(selector).sortable
             items: ".query_token"
             delay: 50
             tolerance: "pointer"
 
-        insert_token_button.click()
+        # insert_token_button.click()
 
     reset: ->
 
@@ -459,12 +468,13 @@ class view.ExtendedSearch extends BaseSearch
 
     insertToken: (button) ->
         # try
-        $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
-            close: ->
-                advancedSearch.updateCQP()
+        # $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken
+        #     close: ->
+        #         advancedSearch.updateCQP()
 
-            change: =>
-                advancedSearch.updateCQP()  if @$main.is(":visible")
+        #     change: =>
+        #         advancedSearch.updateCQP()  if @$main.is(":visible")
+
 
         # catch error
             # c.log "error creating extendedToken", error
@@ -474,7 +484,7 @@ class view.ExtendedSearch extends BaseSearch
         util.localize()
 
     refreshTokens: ->
-        $(".query_token").extendedToken "refresh"
+        # $(".query_token").extendedToken "refresh"
 
 class view.AdvancedSearch extends BaseSearch
     constructor: (mainDivId) ->
@@ -485,11 +495,11 @@ class view.AdvancedSearch extends BaseSearch
         $("#cqp_string").val query
 
     updateCQP: ->
-        query = $(".query_token").map(->
-            $(this).extendedToken "getCQP", $("#strict_chk").is(":checked")
-        ).get().join(" ")
-        @setCQP query
-        return query
+        # query = $(".query_token").map(->
+        #     $(this).extendedToken "getCQP", $("#strict_chk").is(":checked")
+        # ).get().join(" ")
+        # @setCQP query
+        # return query
 
     onSubmit: ->
         super()

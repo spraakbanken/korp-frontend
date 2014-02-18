@@ -17,7 +17,7 @@
                     rnd = $.bbq.getState("random_seed");
                 } else {
                     rnd = Math.ceil(Math.random() * 10000000);
-                    $.bbq.pushState({"random_seed" : rnd});
+                    search({"random_seed" : rnd});
                 }
                 kwicopts['random_seed'] = rnd;
             }

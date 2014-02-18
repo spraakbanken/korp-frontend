@@ -72,7 +72,15 @@
     view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+>>>>>>> remade search tabs
       state = $.bbq.getState($(this).data("history"));
+=======
+      state = search()[$(this).data("history")];
+>>>>>>> remade search tabs
       if (!!state) {
         return $(this).val(state).change();
       } else {
@@ -88,9 +96,11 @@
       state = {};
       state[target.data("history")] = target.val();
       if (target.prop("selectedIndex") !== 0) {
-        return $.bbq.pushState(state);
+        return search(state);
       } else {
-        return $.bbq.removeState(target.data("history"));
+        if (search()[target.data("history")]) {
+          return search(target.data("history"), null);
+        }
       }
     });
   };
@@ -170,7 +180,7 @@
     }
 
     BaseSearch.prototype.refreshSearch = function() {
-      $.bbq.removeState("search");
+      search("search", null);
       return $(window).trigger("hashchange");
     };
 
@@ -207,6 +217,7 @@
       var textinput,
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId);
+      c.log("simplesearch", mainDivId, $(mainDivId));
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
       $("#simple_text").keyup($.proxy(this.onSimpleChange, this));
       this.onSimpleChange();
@@ -343,6 +354,7 @@
 
     SimpleSearch.prototype.onSubmit = function() {
       SimpleSearch.__super__.onSubmit.call(this);
+      c.log("onSubmit");
       $("#simple_text.ui-autocomplete-input").korp_autocomplete("abort");
       if ($("#simple_text").val() !== "") {
         return util.searchHash("word", $("#simple_text").val());
@@ -513,17 +525,21 @@
     }
 
     ExtendedSearch.prototype.setupContainer = function(selector) {
+<<<<<<< HEAD
       var insert_token_button, self;
+<<<<<<< HEAD
+=======
+
+=======
+      var self;
+>>>>>>> remade search tabs
+>>>>>>> remade search tabs
       self = this;
-      insert_token_button = $('<img src="img/plus.png"/>').addClass("image_button insert_token").click(function() {
-        return self.insertToken(this);
-      });
-      $(selector).append(insert_token_button).sortable({
+      return $(selector).sortable({
         items: ".query_token",
         delay: 50,
         tolerance: "pointer"
       });
-      return insert_token_button.click();
     };
 
     ExtendedSearch.prototype.reset = function() {
@@ -559,6 +575,7 @@
     };
 
     ExtendedSearch.prototype.insertToken = function(button) {
+<<<<<<< HEAD
       var _this = this;
       $.tmpl($("#tokenTmpl")).insertBefore(button).extendedToken({
         close: function() {
@@ -570,12 +587,12 @@
           }
         }
       });
+=======
+>>>>>>> remade search tabs
       return util.localize();
     };
 
-    ExtendedSearch.prototype.refreshTokens = function() {
-      return $(".query_token").extendedToken("refresh");
-    };
+    ExtendedSearch.prototype.refreshTokens = function() {};
 
     return ExtendedSearch;
 
@@ -593,6 +610,7 @@
       return $("#cqp_string").val(query);
     };
 
+<<<<<<< HEAD
     AdvancedSearch.prototype.updateCQP = function() {
       var query;
       query = $(".query_token").map(function() {
@@ -601,6 +619,9 @@
       this.setCQP(query);
       return query;
     };
+=======
+    AdvancedSearch.prototype.updateCQP = function() {};
+>>>>>>> remade search tabs
 
     AdvancedSearch.prototype.onSubmit = function() {
       AdvancedSearch.__super__.onSubmit.call(this);

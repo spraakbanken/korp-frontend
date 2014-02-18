@@ -3,7 +3,7 @@
 	<ul>
 		<li><a href="#korp-simple" rel="localize[simple]">Enkel</a>
 		</li>
-		<li><a href="#korp-extended" rel="localize[detailed]">Detaljerad</a>
+		<li><a href="#korp-extended" rel="localize[detailed]">Utökad</a>
 		</li>
 		<li><a href="#korp-advanced" rel="localize[advanced]">Avancerad</a>
 		</li>
@@ -57,7 +57,87 @@
 	</div>
 
 	<div id="korp-extended">
-		<div id="query_table"></div>
+
+		<div id="query_table" ng-controller="TokenList">
+		    <div class="cqp">cqp: {{getCQPString(data)}}</div>
+
+
+
+		    <div class="token query_token" ng-repeat="token in data" ng-controller="ExtendedToken">
+		        <div class="token_header">
+		        	<span class="ui-icon ui-icon-circle-close btn-icon"
+		        		  ng-click="removeToken($index)"></span>
+		        	<div style="clear:both;"></div>
+		        </div>
+
+		        <div class="args">
+		        	<div class="and query_arg" ng-repeat="and in token.and_block">
+		        	    <span ng-show="$index">och</span>
+
+		        	    <div class="or_container">
+		        	    	<div class="or or_arg" ng-repeat="or in and">
+		        	    		<div style="vertical-align: top;" class="left_col inline_block">
+		        	    			<img class="image_button remove_arg" src="img/minus.png" ng-click="removeOr(and, $index)">
+	        	    			</div>
+	        	    			<div class="right_col inline_block" style="margin-left: 5px;">
+			        	    	    <div class="arg_selects">
+			        	    	    	<select class="arg_type" ng-options="value for value in types" ng-model="or.type"></select>
+			        	    	    	<select class="arg_opts"></select>
+			        	    	    </div>
+			        	    	    <input class="arg_value" ng-model="or.val">
+	        	    			</div>
+		        	    	</div>
+		        	    </div>
+		        	    <div class="arg_footer">
+		        	    	<span class="link" ng-click="addOr(and)">eller</span>
+		        	    	<div style="clear:both;"></div>
+	        	    	</div>
+		        	</div>
+		        </div>
+
+		        <div class="token_footer">
+		        	<div>
+		        		<img src="img/plus.png" class="image_button insert_arg" ng-click="addAnd()">
+		        		<button class="dropdown-toggle btn btn-mini" data-toggle="dropdown"><i class="icon-cog"></i></button>
+		        		<ul class="dropdown-menu">
+		        			<li><a data-item="repeat_item" rel="localize[repeat]">Upprepa</a></li>
+		        			<li><a data-item="lbound_item" rel="localize[sent_start]">Meningsbörjan</a></li>
+		        			<li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
+		        		</ul>
+
+		        		<div class="repeat">
+		        			<span rel="localize[repeat]">Upprepa</span>
+		        			<input type="number" ng-model="token.repeat[0]" >
+		        			<span rel="localize[to]">till</span>
+		        			<input type="number" ng-model="token.repeat[1]">
+		        			<span rel="localize[times]">gånger</span>
+		        <!-- <div class="repeat">repeat : <input ng-model="token.repeat[0]"> <input ng-model="token.repeat[1]"></div> -->
+		        		</div>
+
+		        		<div style="clear:both;"></div>
+		        	</div>
+
+			        <div class="lower_footer">
+			        	<span class="lbound close_token" data-item="lbound_item">
+			        		<span rel="localize[sent_start]">Meningsbörjan</span>
+			        		<span class="ui-icon ui-icon-close"></span>
+			        	</span>
+			        	<span class="rbound close_token" data-item="rbound_item">
+			        		<span rel="localize[sent_end]">Meningsslut</span>
+			        		<span class="ui-icon ui-icon-close"></span>
+			        	</span>
+			        </div>
+
+			        <!-- <button  ng-click="addAnd()">and</button> -->
+			    </div>
+		    <!-- <button ng-click="addToken()">+</button> -->
+			</div>
+			<img src="img/plus.png" class="image_button insert_token" ng-click="addToken()">
+		</div>
+
+
+
+		<!-- <div id="query_table"></div>
 
 		<input id="linkedLang" type="submit" value="Fler språk">
 		<input id="removeLang" type="submit" value="Färre språk">
@@ -67,7 +147,7 @@
 			<option value="sentence" rel="localize[within_sentence]">Mening</option>
 			<option value="paragraph" rel="localize[within_paragraph]">Stycke</option>
 		</select>
-		<input id="strict_chk" type="checkbox"><label for="strict_chk" rel="localize[strict]"></label>
+		<input id="strict_chk" type="checkbox"><label for="strict_chk" rel="localize[strict]"></label> -->
 	</div>
 
 	<div id="korp-advanced">

@@ -1,12 +1,14 @@
 (function() {
+<<<<<<< HEAD
   var chained, deferred_domReady, deferred_load, deferred_mode, deferred_sm, initTimeGraph, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+=======
+  var chained, deferred_domReady, deferred_mode, deferred_sm, getAllCorporaInFolders, initTimeGraph, isDev, loc_dfd, t;
+>>>>>>> remade search tabs
 
   t = $.now();
 
   isDev = window.location.host === "localhost";
-
-  deferred_load = $.get("markup/searchbar.html");
 
   $.ajaxSetup({
     dataType: "json",
@@ -34,21 +36,18 @@
       var mode;
       mode = $.deparam.querystring().mode;
       if ((mode != null) && mode !== "default") {
-        c.log("fetchin mode", mode);
-        return $.getScript("modes/" + mode + "_mode.js").done(function() {
-          c.log("got mode", mode);
-          deferred_mode.resolve();
-          return dfd.resolve();
+        $.getScript("modes/" + mode + "_mode.js").done(function() {
+          return deferred_mode.resolve();
         }).fail(function(args, msg, e) {
-          c.log("mode fail", arguments);
-          window.args = arguments;
-          deferred_mode.reject();
-          return dfd.reject();
+          return deferred_mode.reject();
         });
       } else {
         deferred_mode.resolve();
-        return dfd.resolve();
       }
+      return $.when($("body").scope().searchDef).then(function() {
+        dfd.resolve();
+        return c.log("searchdeferred!");
+      });
     });
   }).promise();
 
@@ -73,8 +72,17 @@
 
   loc_dfd = util.initLocalize();
 
+<<<<<<< HEAD
   $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then((function(searchbar_html) {
     var creds, end, from, labs, onHashChange, paper, start, tab_a_selector, tabs, to;
+<<<<<<< HEAD
+=======
+
+=======
+  $.when(chained, deferred_domReady, deferred_sm, loc_dfd).then((function() {
+    var corp_array, corpus, creds, end, from, labs, paper, processed_corp_array, start, tab_a_selector, tabs, to;
+>>>>>>> remade search tabs
+>>>>>>> remade search tabs
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     if (isLab) {
@@ -105,7 +113,7 @@
       change: function() {
         var mode;
         mode = $(this).modeSelector("option", "selected");
-        $.bbq.removeState("corpus");
+        search("corpus", null);
         if (mode === "default") {
           return location.href = location.pathname;
         } else {
@@ -149,7 +157,6 @@
       });
       return false;
     });
-    $("#searchbar").html(searchbar_html[0]);
     $("#search_history").change(function(event) {
       c.log("select", $(this).find(":selected"));
       return location.href = $(this).find(":selected").val();
@@ -213,12 +220,20 @@
       }
       idx = $(this).parent().prevAll().length;
       state[id] = idx;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      c.log("pushstate", state, id);
+>>>>>>> remade search tabs
       $.bbq.pushState(state);
+=======
+      search(state);
+>>>>>>> remade search tabs
       return false;
     });
     $(".custom_anchor").on("mouseup", function() {
       c.log("custom click");
-      $.bbq.removeState("result-container");
+      search("result-container", null);
       return $(this).triggerHandler("change");
     });
     $("#log_out").click(function() {
@@ -231,15 +246,37 @@
       $("#pass").val("");
       return $("#corpusbox").corpusChooser("redraw");
     });
+<<<<<<< HEAD
     onHashChange = function(event, isInit) {
       var corp_array, corpus, data, display, e, hasChanged, page, prevFragment, processed_corp_array, reading, search, showAbout, type, value;
+<<<<<<< HEAD
+=======
+
+=======
+    corpus = search()["corpus"];
+    if (corpus) {
+      corp_array = corpus.split(",");
+      processed_corp_array = [];
+      settings.corpusListing.select(corp_array);
+      $.each(corp_array, function(key, val) {
+        return processed_corp_array.extend(getAllCorporaInFolders(settings.corporafolders, val));
+      });
+      corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
+      $("#select_corpus").val(corpus);
+      simpleSearch.enableSubmit();
+    }
+    window.onHashChange = function(event, isInit) {
+      var data, display, e, hasChanged, page, prevFragment, reading, searchval, showAbout, type, value;
+      c.log("onHashChange");
+>>>>>>> remade search tabs
+>>>>>>> remade search tabs
       hasChanged = function(key) {
-        return prevFragment[key] !== e.getState(key);
+        return prevFragment[key] !== search()[key];
       };
       showAbout = function() {
         $("#about_content").dialog({
           beforeClose: function() {
-            $.bbq.removeState("display");
+            search("display", null);
             return false;
           }
         }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("about");
@@ -255,13 +292,14 @@
         });
         $("#languages").radioList("select", $.localize("getLang"));
       }
-      page = e.getState("page", true);
+      page = Number(search().page);
       if (hasChanged("page") && !hasChanged("search")) {
         kwicResults.setPage(page);
       }
       if (isInit) {
         kwicResults.current_page = page;
       }
+<<<<<<< HEAD
       corpus = e.getState("corpus");
       if (isInit && corpus && corpus.length !== 0 && hasChanged("corpus")) {
         corp_array = corpus.split(",");
@@ -273,6 +311,9 @@
         simpleSearch.enableSubmit();
       }
       display = e.getState("display");
+=======
+      display = search().display;
+>>>>>>> remade search tabs
       if (display === "about") {
         if ($("#about_content").is(":empty")) {
           $("#about_content").load("markup/about.html", function() {
@@ -306,7 +347,7 @@
             }).appendTo("body").fadeOut(function() {
               return $(this).remove();
             });
-            $.bbq.removeState("display");
+            search("display", null);
             return false;
           }
         }).show().unbind("submit").submit(function() {
@@ -314,7 +355,7 @@
           self = this;
           authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done(function(data) {
             util.setLogin();
-            return $.bbq.removeState("display");
+            return search("display", null);
           }).fail(function() {
             c.log("login fail");
             $("#pass", self).val("");
@@ -328,7 +369,22 @@
           return $(".ui-dialog-content", this).dialog("destroy");
         });
       }
+<<<<<<< HEAD
       reading = e.getState("reading_mode");
+=======
+      if (!isInit && hasChanged("display")) {
+        if (search().display === "bar_plot") {
+          statsResults.drawBarPlot();
+        } else {
+          $("#plot_popup.ui-dialog-content").dialog("destroy").css({
+            opacity: 0,
+            display: "block",
+            height: 0
+          });
+        }
+      }
+      reading = search().reading_mode;
+>>>>>>> remade search tabs
       if (hasChanged("reading_mode")) {
         if (reading) {
           kwicResults.$result.addClass("reading_mode");
@@ -344,11 +400,11 @@
           }
         }
       }
-      search = e.getState("search");
-      if ((search != null) && search !== prevFragment["search"]) {
+      searchval = search().search;
+      if ((searchval != null) && searchval !== prevFragment["search"]) {
         kwicResults.current_page = page || 0;
-        type = search.split("|")[0];
-        value = search.split("|").slice(1).join("|");
+        type = searchval.split("|")[0];
+        value = searchval.split("|").slice(1).join("|");
         view.updateSearchHistory(value);
         data = {
           value: value,
@@ -378,47 +434,51 @@
         }
       }
       tabs.each(function() {
+<<<<<<< HEAD
         var idx;
         idx = e.getState(this.id, true);
+=======
+        var idx, self;
+        self = this;
+        idx = Number(search()[this.id]);
+>>>>>>> remade search tabs
         if (idx === null) {
           return;
         }
         return $(this).find(tab_a_selector).eq(idx).triggerHandler("change");
       });
-      return $.bbq.prevFragment = $.deparam.fragment();
+      return $.bbq.prevFragment = _.extend({}, search());
     };
-    $(window).bind("hashchange", onHashChange);
     $(window).scroll(function() {
       return $("#sidebar").sidebar("updatePlacement");
     });
     $("#about").click(function() {
-      if ($.bbq.getState("display") == null) {
-        return $.bbq.pushState({
+      if (search().display == null) {
+        return search({
           display: "about"
         });
       } else {
-        return $.bbq.removeState("display");
+        return search("about", null);
       }
     });
     $("#login").click(function() {
-      if ($.bbq.getState("display") == null) {
-        return $.bbq.pushState({
+      if (search().display == null) {
+        return search({
           display: "login"
         });
       } else {
-        return $.bbq.removeState("display");
+        return search("login", null);
       }
     });
     $("#languages").radioList({
       change: function() {
-        return $.bbq.pushState({
+        return search({
           lang: $(this).radioList("getSelected").data("mode")
         });
       },
       selected: settings.defaultLanguage
     }).vAlign();
     $("#sidebar").sidebar().sidebar("hide");
-    $("#simple_text")[0].focus();
     $(document).click(function() {
       return $("#simple_text.ui-autocomplete-input").autocomplete("close");
     });

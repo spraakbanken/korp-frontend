@@ -108,7 +108,7 @@ Sidebar =
                 if attrs.internalSearch
                     li.addClass("link").click ->
                         cqpVal = $(this).data("key")
-                        $.bbq.pushState({"search": "cqp|[#{key} contains '#{cqpVal}']"})
+                        search({"search": "cqp|[#{key} contains '#{cqpVal}']"})
 
 
                 li

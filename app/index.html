@@ -5,6 +5,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 		<meta name="description"
 		content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text." />
+		<!-- <link rel="stylesheet" type="text/css" href="styles/bootstrap/css/bootstrap.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="styles/bootstrap_dropdowns.css" /> -->
 		<!-- build:css styles/korp.css -->
 		<link type="text/css" href="components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet" />
 		<!-- <link type="text/css" href="components/jquery-ui/themes/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet" /> -->
@@ -15,7 +17,9 @@
 		<link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css" />
 		<link rel="stylesheet" type="text/css" href="styles/pagination.css" />
 		<link rel="stylesheet" href="components/rickshaw/rickshaw.css">
+		<link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="styles/styles.css" />
+
 
 		<!-- endbuild -->
 		<link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico" />
@@ -72,6 +76,10 @@
 		<script src="lib/g.line-min.js"></script>
 		<script src="lib/jquery.tooltip.pack.js"></script>
 
+		<script src="components/angular-ui-bootstrap-bower/ui-bootstrap.js"></script>
+		<script src="components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+
+
 		<!-- endbuild -->
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.0/lodash.compat.js"></script>
 		<script>
@@ -88,6 +96,9 @@
 		<script src="scripts/jq_extensions.js"></script>
 		<script src="config.js"></script>
 		<!-- build:js scripts/scripts.js -->
+
+		<script src="scripts/cqp_parser/CQPParser.js"></script>
+		<script src="scripts/bin/cqp_parser/cqp.js"></script>
 
 		<script src="scripts/util.js"></script>
 		<script src="scripts/bin/util_coffee.js"></script>
@@ -131,8 +142,8 @@
 					<span rel="localize[log_out]">Logga ut</span> <span class="usrname"></span>
 				</div>
 				<div id="languages">
-	  				<a href="javascript:" rel="localize[swedish]" data-mode="sv">Svenska</a>
-	  				<a href="javascript:" rel="localize[english]" data-mode="en">Engelska</a>
+	  				<a href="javascript:" rel="localize[swedish]" data-mode="sv" ng-click="lang = 'sv'">Svenska</a>
+	  				<a href="javascript:" rel="localize[english]" data-mode="en" ng-click="lang = 'en'">Engelska</a>
 	  			</div>
 
 
@@ -189,7 +200,25 @@
 
 		<div id="content">
 
-	   		<div id="searchbar" ></div>
+	   		<!-- <div id="searchbar" ng-include="'markup/searchbar.html'" ></div> -->
+
+	   		<tabs ng-controller="SearchPaneCtrl">
+   		        <pane heading="{{'simple' | loc}}" ng-include="'views/simple.html'" onload="$root.onSearchLoad()"></pane>
+
+   		        <pane heading="Utökad" ng-include="'views/extended.html'"></pane>
+   		        <pane heading="Avancerad">
+					<div id="advanced">
+						<div class="query_footer ui-corner-all ui-state-default">
+							<span class="cqp_toggle" rel="localize[cqp_query]">
+								Fullständig CQP-fråga </span>:
+							<textarea id="cqp_string">[]</textarea>
+						</div>
+						<input id="sendBtn" value="  Sök  " type="submit"
+							rel="localize[search]" />
+
+					</div>
+   		        </pane>
+   		    </tabs>
 	   		<div id="search_options" class="ui-widget-content ui-corner-bottom">
 	   			<div>
 		   			<span style="font-size:.9em">KWIC:</span>
@@ -363,13 +392,6 @@
 		</ul>
 	</div>
 
-	<script type="text/ng-template" id="wordTemplate">
-		<span class="word"
-
-            ng-click="wordClick($event, wd, sentence)">{{wd.word}}</span>
-        <span class="word_gap"> </span>
-	</script>
-
 	<script id="defaultSetTmpl" type="text/x-jquery-tmpl">
 			{{if $item.translationKey}}
 				<li rel="localize[${$item.translationKey + $data}]">${$data}</li>
@@ -378,32 +400,6 @@
 			{{/if}}
 	</script>
 
-	<script id="sentenceTmpl" type="text/x-jquery-tmpl">
-		<tr class="sentence">
-		  	<td class="left">
-			{{tmpl(left) '#wordTmpl'}}
-		  	</td>
-		  	<td class="match">
-				{{tmpl(match) '#wordTmpl'}}
-		  	</td>
-		  	<td class="right">
-			{{tmpl(right) '#wordTmpl'}}
-		  	</td>
-	    </tr>
-		{{if $item.aligned != null}}
-		<tr class="linked_sentence">
-			<td colspan="3">
-				{{each(corpus, sentence) $item.aligned}}
-				{{tmpl(sentence) '#wordTmpl'}}
-				{{/each}}
-			</td>
-		</tr>
-		{{/if}}
-	</script>
-
-	<script id="wordTmpl" type="text/x-jquery-tmpl">
-		<span class="word${((typeof structs != 'undefined') && (' sent_' + _.keys(structs)[0])) || ''}">${word}</span><span class="word_gap"> </span>
-	</script>
 
 	<script id="lemgramResultsTmpl" type="text/x-jquery-tmpl">
 		<div class="lemgram_section">
@@ -436,16 +432,17 @@
 				<td class="example_link"></td>
 		    </tr>
 	</script>
-
 	<script id="similarTmpl" type="text/x-jquery-tmpl">
 	<li>
 		{{each rel}}
 			<a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
 		{{/each}}
 	</li>
-
 	</script>
-
-
 	</body>
+
+
+
+
  </html>
+

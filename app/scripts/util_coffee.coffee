@@ -173,8 +173,9 @@ class window.CorpusListing
     getNonProtected : () ->
         _.filter @corpora, (item) ->
             not item.limited_access
-            
-    
+
+
+
 class window.ParallelCorpusListing extends CorpusListing
     constructor: (corpora) ->
         super(corpora)
@@ -292,3 +293,16 @@ window.getScope = (ctrl) ->
 window.applyTo = (ctrl, f) ->
     s = getScope(ctrl)
     s.$apply f(s)
+
+window.search = (obj, val) ->
+    s = $("body").scope()
+
+    ret = s.$root.$apply () ->
+        if _.isObject obj
+            obj = _.extend {}, s.$root.search(), obj
+        s.$root.search(obj, val)
+
+    onHashChange() if val == null
+    return ret
+
+

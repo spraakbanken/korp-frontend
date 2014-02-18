@@ -2,7 +2,27 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', ["watchFighters"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/pane.html", "template/tabs/tabs.html"]);
+
+  korpApp.run(function($rootScope, $location, $route, $routeParams) {
+    var s;
+    s = $rootScope;
+    s.lang = "sv";
+    s.search = function() {
+      return $location.search.apply($location, arguments);
+    };
+    s.searchDef = $.Deferred();
+    s.onSearchLoad = function() {
+      return s.searchDef.resolve();
+    };
+    s._loc = $location;
+    return s.$watch("_loc.search()", function() {
+      c.log("loc.search() change", $location.search());
+      return _.defer(function() {
+        return typeof window.onHashChange === "function" ? window.onHashChange() : void 0;
+      });
+    });
+  });
 
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
@@ -180,6 +200,169 @@
           })()).join(" ");
         };
       }
+    };
+  });
+
+  korpApp.controller("TokenList", function($scope, $location) {
+    var cqp, output, s, token, tokenObj, _i, _len, _ref;
+    s = $scope;
+    cqp = '[word = "value" | word = "value2" & lex contains "ge..vb.1"] []{1,2}';
+    s.data = [];
+    try {
+      s.data = CQP.parse(cqp);
+    } catch (error) {
+      output = [];
+      _ref = cqp.split("[");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        token = _ref[_i];
+        if (!token) {
+          continue;
+        }
+        token = "[" + token;
+        try {
+          tokenObj = CQP.parse(token);
+        } catch (error) {
+          tokenObj = [
+            {
+              cqp: token
+            }
+          ];
+        }
+        output = output.concat(tokenObj);
+      }
+      s.data = output;
+      c.log("crash", s.data);
+    }
+    if ($location.search().cqp) {
+      s.data = CQP.parse(decodeURI($location.search().cqp));
+    } else {
+      s.data = CQP.parse(cqp);
+    }
+    s.$watch('getCQPString()', function() {});
+    s.getCQPString = function() {
+      return (CQP.stringify(s.data)) || "";
+    };
+    s.addToken = function() {
+      c.log(s.data.slice(0)[0]);
+      return s.data.push(JSON.parse(JSON.stringify(s.data.slice(0)[0])));
+    };
+    return s.removeToken = function(i) {
+      return s.data.splice(i, 1);
+    };
+  });
+
+  korpApp.controller("ExtendedToken", function($scope, $location) {
+    var s;
+    s = $scope;
+    s.types = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",");
+    s.addOr = function(and_array) {
+      and_array.push({
+        type: "word",
+        op: "=",
+        val: ""
+      });
+      return and_array;
+    };
+    s.removeOr = function(and_array, i) {
+      if (and_array.length > 1) {
+        return and_array.splice(i, 1);
+      } else {
+        return s.token.and_block.splice(s.$parent.$index, 1);
+      }
+    };
+    s.addAnd = function() {
+      return s.token.and_block.push(s.addOr([]));
+    };
+    return s.getTokenCqp = function() {
+      if (!s.token.cqp) {
+        return "";
+      }
+      return s.token.cqp.match(/\[(.*)]/)[1];
+    };
+  });
+
+  korpApp.factory("util", function($location) {
+    return {
+      setupHash: function(scope, config) {
+        var obj, watch, _i, _len, _results;
+        scope.loc = $location;
+        scope.$watch('loc.search()', function() {
+          var obj, val, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = config.length; _i < _len; _i++) {
+            obj = config[_i];
+            val = $location.search()[obj.key];
+            if (!val) {
+              continue;
+            }
+            val = (obj.val_in || _.identity)(val);
+            if ("scope_name" in obj) {
+              _results.push(scope[obj.scope_name] = val);
+            } else if ("scope_func" in obj) {
+              _results.push(scope[obj.scope_func](val));
+            } else {
+              _results.push(scope[obj.key] = val);
+            }
+          }
+          return _results;
+        });
+        _results = [];
+        for (_i = 0, _len = config.length; _i < _len; _i++) {
+          obj = config[_i];
+          watch = obj.expr || obj.scope_name || obj.key;
+          _results.push(scope.$watch(watch || obj.key, (function(obj) {
+            return function(val) {
+              val = (obj.val_out || _.identity)(val);
+              $location.search(obj.key, val || null);
+              return typeof obj.post_change === "function" ? obj.post_change(val) : void 0;
+            };
+          })(obj)));
+        }
+        return _results;
+      }
+    };
+  });
+
+  korpApp.controller("SearchPaneCtrl", function($scope, util) {
+    var s;
+    s = $scope;
+    s.search_tab = 0;
+    s.getSelected = function() {
+      var i, p, _i, _len, _ref;
+      _ref = s.panes;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        p = _ref[i];
+        if (p.selected) {
+          return i;
+        }
+      }
+    };
+    s.setSelected = function(index) {
+      var p, _i, _len, _ref;
+      _ref = s.panes;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        p = _ref[_i];
+        p.selected = false;
+      }
+      return s.panes[index].selected = true;
+    };
+    return util.setupHash(s, [
+      {
+        expr: "getSelected()",
+        val_out: function(val) {
+          return val;
+        },
+        val_in: function(val) {
+          return s.setSelected(val);
+        },
+        key: "search_tab"
+      }
+    ]);
+  });
+
+  korpApp.filter("loc", function($rootScope) {
+    return function(translationKey) {
+      return util.getLocaleString(translationKey);
     };
   });
 

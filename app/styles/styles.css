@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @font-face {
   font-family: "Source Sans Pro";
   src: url(SourceSansPro-Regular.otf);
@@ -1065,15 +1066,69 @@ table {
   background-color: #f2f7ff;
 }
 
+=======
+>>>>>>> remade search tabs
 /*
-.customtab .results_table.kwic {
-    display : block;
-}
-.customtab .results_table.reading {
-    display : none;
-}
+Syntax error: File to import not found or unreadable: _compass_twitter_bootstrap.scss.
+              Load paths:
+                /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles
+                /usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/blueprint/stylesheets
+                /usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets
+                /Users/johan/Dropbox/Development/workspace_juno/korp/app/components
+                Compass::SpriteImporter
+        on line 7 of /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/styles.scss
+
+Backtrace:
+/Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/styles.scss:7
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/import_node.rb:67:in `rescue in import'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/import_node.rb:45:in `import'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/import_node.rb:28:in `imported_file'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/import_node.rb:37:in `css_import?'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:217:in `visit_import'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:37:in `visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:100:in `visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:53:in `map'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:53:in `visit_children'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:109:in `block in visit_children'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:121:in `with_environment'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:108:in `visit_children'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:37:in `block in visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:128:in `visit_root'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/base.rb:37:in `visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:100:in `visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/visitors/perform.rb:7:in `visit'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/tree/root_node.rb:20:in `render'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/engine.rb:315:in `_render'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/sass-3.2.7/lib/sass/engine.rb:262:in `render'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:140:in `block (2 levels) in compile'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:126:in `timed'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:139:in `block in compile'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/logger.rb:45:in `red'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:138:in `compile'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:118:in `compile_if_required'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:103:in `block (2 levels) in run'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:101:in `each'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:101:in `block in run'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:126:in `timed'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/compiler.rb:100:in `run'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/commands/update_project.rb:45:in `perform'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/commands/base.rb:18:in `execute'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/commands/project_base.rb:19:in `execute'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/exec/sub_command_ui.rb:43:in `perform!'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/lib/compass/exec/sub_command_ui.rb:15:in `run!'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/bin/compass:30:in `block in <top (required)>'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/bin/compass:44:in `call'
+/usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/bin/compass:44:in `<top (required)>'
+/usr/local/opt/ruby/bin/compass:23:in `load'
+/usr/local/opt/ruby/bin/compass:23:in `<main>'
 */
+<<<<<<< HEAD
 /* line 882, styles.scss */
+=======
+<<<<<<< HEAD
+/* line 878, styles.scss */
+>>>>>>> remade search tabs
 .reading_match {
   font-weight: bold;
   color: black !important;
@@ -2227,6 +2282,7 @@ line.tick {
 .popupchecks .header {
   white-space: nowrap;
 }
+<<<<<<< HEAD
 
 /* line 1784, styles.scss */
 .ui-button-text-only .ui-button-text {
@@ -2242,6 +2298,7 @@ line.tick {
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
+<<<<<<< HEAD
 
 /* line 1794, styles.scss */
 #myGrid {
@@ -2253,3 +2310,13 @@ line.tick {
 .loading .exportStatsSection {
   display: none;
 }
+=======
+=======
+=======
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: File to import not found or unreadable: _compass_twitter_bootstrap.scss.\A               Load paths:\A                 /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles\A                 /usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/blueprint/stylesheets\A                 /usr/local/Cellar/ruby/2.0.0-p0/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets\A                 /Users/johan/Dropbox/Development/workspace_juno/korp/app/components\A                 Compass::SpriteImporter\A         on line 7 of /Users/johan/Dropbox/Development/workspace_juno/korp/app/styles/styles.scss"; }
+>>>>>>> remade search tabs
+>>>>>>> remade search tabs
+>>>>>>> remade search tabs

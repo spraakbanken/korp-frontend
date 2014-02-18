@@ -133,7 +133,7 @@
               li.addClass("link").click(function() {
                 var cqpVal;
                 cqpVal = $(this).data("key");
-                return $.bbq.pushState({
+                return search({
                   "search": "cqp|[" + key + " contains '" + cqpVal + "']"
                 });
               });

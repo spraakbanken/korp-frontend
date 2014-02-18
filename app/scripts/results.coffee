@@ -78,10 +78,12 @@ class view.KWICResults extends BaseResults
 
         @$result.find(".reading_btn").click =>
             isReading = @$result.is(".reading_mode")
-            if $.bbq.getState("reading_mode")
-                $.bbq.removeState "reading_mode"
+            if search().reading_mode
+                # $.bbq.removeState "reading_mode"
+                search("reading_mode", null).replace()
             else
-                $.bbq.pushState reading_mode: true
+                # $.bbq.pushState reading_mode: true
+                search reading_mode: "yes"
 
 
         @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
@@ -337,7 +339,8 @@ class view.KWICResults extends BaseResults
                 #success
                 self.buildPager data.hits
             ), $.proxy(kwicCallback, this)
-            $.bbq.pushState page: new_page_index
+            # $.bbq.pushState page: new_page_index
+            search page: new_page_index
         false
 
     buildQueryOptions: ->
@@ -514,11 +517,6 @@ class view.ExampleResults extends view.KWICResults
         #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
         @proxy.makeRequest opts, null, $.noop, $.noop, $.noop
 
-    onHpp: ->
-
-        #refresh search
-        @handlePaginationClick 0, null, true
-        false
 
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
         c.log "handlePaginationClick", new_page_index, @current_page
@@ -532,15 +530,6 @@ class view.ExampleResults extends view.KWICResults
             @current_page = new_page_index
             @makeRequest opts
         false
-
-    onSortChange: (event) ->
-        opt = $(event.currentTarget).find(":selected")
-        c.log "sort", opt
-        if opt.is(":first-child")
-            $.bbq.removeState "sort"
-        else
-            c.log "sort", opt.val()
-            @handlePaginationClick 0, null, true
 
 
     #     $.bbq.pushState({"sort" : opt.val()});

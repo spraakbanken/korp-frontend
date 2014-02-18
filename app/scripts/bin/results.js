@@ -97,11 +97,11 @@
       this.$result.find(".reading_btn").click(function() {
         var isReading;
         isReading = _this.$result.is(".reading_mode");
-        if ($.bbq.getState("reading_mode")) {
-          return $.bbq.removeState("reading_mode");
+        if (search().reading_mode) {
+          return search("reading_mode", null).replace();
         } else {
-          return $.bbq.pushState({
-            reading_mode: true
+          return search({
+            reading_mode: "yes"
           });
         }
       });
@@ -390,7 +390,7 @@
         }), (function(data) {
           return self.buildPager(data.hits);
         }), $.proxy(kwicCallback, this));
-        $.bbq.pushState({
+        search({
           page: new_page_index
         });
       }
@@ -617,11 +617,6 @@
       return this.proxy.makeRequest(opts, null, $.noop, $.noop, $.noop);
     };
 
-    ExampleResults.prototype.onHpp = function() {
-      this.handlePaginationClick(0, null, true);
-      return false;
-    };
-
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
       var items_per_page, opts;
       c.log("handlePaginationClick", new_page_index, this.current_page);
@@ -638,6 +633,7 @@
       return false;
     };
 
+<<<<<<< HEAD
     ExampleResults.prototype.onSortChange = function(event) {
       var opt;
       opt = $(event.currentTarget).find(":selected");
@@ -650,6 +646,8 @@
       }
     };
 
+=======
+>>>>>>> remade search tabs
     ExampleResults.prototype.showPreloader = function() {
       this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
       this.$tab.find(".spinner").remove();

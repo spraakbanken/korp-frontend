@@ -1,8 +1,8 @@
 t = $.now()
-
 #  if(window.console == null) window.console = {"log" : $.noop};
+
 isDev = window.location.host is "localhost"
-deferred_load = $.get("markup/searchbar.html")
+# deferred_load = $.get("markup/searchbar.html")
 $.ajaxSetup
     dataType: "json"
     traditional: true
@@ -21,23 +21,18 @@ deferred_domReady = $.Deferred((dfd) ->
     $ ->
         mode = $.deparam.querystring().mode
         if mode? and mode isnt "default"
-            c.log "fetchin mode", mode
-            # $.getScript "modes/#{mode}_mode.js", ->
             $.getScript("modes/#{mode}_mode.js").done(->
-                c.log "got mode", mode
                 deferred_mode.resolve()
-                dfd.resolve()
             ).fail (args, msg, e) ->
-                c.log "mode fail", arguments
-                # c.log e.stack
-                window.args = arguments
                 deferred_mode.reject()
-                dfd.reject()
 
 
         else
             deferred_mode.resolve()
+
+        $.when($("body").scope().searchDef).then () ->
             dfd.resolve()
+            c.log "searchdeferred!"
 
 ).promise()
 
@@ -61,7 +56,7 @@ chained.done (info_data) ->
 loc_dfd = util.initLocalize()
 
 
-$.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((searchbar_html) ->
+$.when(chained, deferred_domReady, deferred_sm, loc_dfd).then (() ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
     $("body").addClass "lab"  if isLab
@@ -88,7 +83,8 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
     $("#mode_switch").modeSelector(
         change: ->
             mode = $(this).modeSelector("option", "selected")
-            $.bbq.removeState "corpus"
+            # $.bbq.removeState "corpus"
+            search("corpus", null)
             if mode is "default"
                 location.href = location.pathname
             else
@@ -131,7 +127,7 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
         false
 
-    $("#searchbar").html searchbar_html[0]
+    # $("#searchbar").html searchbar_html[0]
     $("#search_history").change (event) ->
         c.log "select", $(this).find(":selected")
         location.href = $(this).find(":selected").val()
@@ -190,12 +186,13 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
         # Set the state!
         state[id] = idx
-        $.bbq.pushState state
+        search state
         false
 
     $(".custom_anchor").on "mouseup", ->
         c.log "custom click"
-        $.bbq.removeState "result-container"
+        # $.bbq.removeState "result-container"
+        search "result-container", null
         $(this).triggerHandler "change"
 
     $("#log_out").click ->
@@ -209,12 +206,25 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
         $("#corpusbox").corpusChooser "redraw"
 
 
-    onHashChange = (event, isInit) ->
+    corpus = search()["corpus"]
+    if corpus
+        corp_array = corpus.split(",")
+        processed_corp_array = []
+        settings.corpusListing.select(corp_array)
+        $.each corp_array, (key, val) ->
+            processed_corp_array.extend getAllCorporaInFolders(settings.corporafolders, val)
+        corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
+        $("#select_corpus").val corpus
+        simpleSearch.enableSubmit()
+
+    window.onHashChange = (event, isInit) ->
+        c.log "onHashChange"
         hasChanged = (key) ->
-            prevFragment[key] isnt e.getState(key)
+            prevFragment[key] isnt search()[key]
         showAbout = ->
             $("#about_content").dialog(beforeClose: ->
-                $.bbq.removeState "display"
+                # $.bbq.removeState "display"
+                search "display", null
                 false
             ).css("opacity", 0)
             .parent().find(".ui-dialog-title").localeKey("about")
@@ -228,21 +238,29 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
                 util.localize()
 
             $("#languages").radioList "select", $.localize("getLang")
-        page = e.getState("page", true)
+        page = Number(search().page)
         kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
-        kwicResults.current_page = page  if isInit
-        corpus = e.getState("corpus")
-        if isInit and corpus and corpus.length isnt 0 and hasChanged("corpus")
-            corp_array = corpus.split(",")
-            processed_corp_array = _(corp_array)
-                .map((val) -> getAllCorporaInFolders(settings.corporafolders, val))
-                .flatten()
-                .value()
+# <<<<<<< HEAD
+#         kwicResults.current_page = page  if isInit
+#         corpus = e.getState("corpus")
+#         if isInit and corpus and corpus.length isnt 0 and hasChanged("corpus")
+#             corp_array = corpus.split(",")
+#             processed_corp_array = _(corp_array)
+#                 .map((val) -> getAllCorporaInFolders(settings.corporafolders, val))
+#                 .flatten()
+#                 .value()
 
-            corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-            $("#select_corpus").val corpus
-            simpleSearch.enableSubmit()
-        display = e.getState("display")
+#             corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
+#             $("#select_corpus").val corpus
+#             simpleSearch.enableSubmit()
+#         display = e.getState("display")
+# =======
+        kwicResults.current_page = page if isInit
+
+
+
+        display = search().display
+# >>>>>>> remade search tabs
         if display is "about"
             if $("#about_content").is(":empty")
                 $("#about_content").load "markup/about.html", ->
@@ -275,13 +293,15 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
                     ).appendTo("body").fadeOut ->
                         $(this).remove()
 
-                    $.bbq.removeState "display"
+                    # $.bbq.removeState "display"
+                    search "display", null
                     false
             ).show().unbind("submit").submit ->
                 self = this
                 authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done((data) ->
                     util.setLogin()
-                    $.bbq.removeState "display"
+                    # $.bbq.removeState "display"
+                    search "display", null
                 ).fail ->
                     c.log "login fail"
                     $("#pass", self).val ""
@@ -294,29 +314,37 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
             $(".ui-dialog").fadeTo 400, 0, ->
                 $(".ui-dialog-content", this).dialog "destroy"
 
+<<<<<<< HEAD
+=======
+        if not isInit and hasChanged("display")
+            if search().display is "bar_plot"
+                statsResults.drawBarPlot()
+            else
+                $("#plot_popup.ui-dialog-content").dialog("destroy").css
+                    opacity: 0
+                    display: "block"
+                    height: 0
+>>>>>>> remade search tabs
 
-        reading = e.getState("reading_mode")
+        reading = search().reading_mode
         if hasChanged("reading_mode")
 
-            #              $.sm.send("display_change");
             if reading
                 kwicResults.$result.addClass "reading_mode"
 
-                # if(!isInit && kwicResults.$result.find(".results_table.reading").is(":empty")) {
                 kwicResults.makeRequest() unless isInit
             else
                 kwicResults.$result.removeClass "reading_mode"
 
-                # if(!isInit && kwicResults.$result.find(".results_table.kwic").is(":empty")) {
                 unless isInit
                     kwicResults.makeRequest()
                 else
                     kwicResults.centerScrollbar()
-        search = e.getState("search")
-        if search? and search isnt prevFragment["search"]
+        searchval = search().search
+        if searchval? and searchval isnt prevFragment["search"]
             kwicResults.current_page = page or 0
-            type = search.split("|")[0]
-            value = search.split("|").slice(1).join("|")
+            type = searchval.split("|")[0]
+            value = searchval.split("|").slice(1).join("|")
             view.updateSearchHistory value
             data =
                 value: value
@@ -341,43 +369,58 @@ $.when(deferred_load, chained, deferred_domReady, deferred_sm, loc_dfd).then ((s
 
         # if(!isInit)
         tabs.each ->
+<<<<<<< HEAD
             idx = e.getState(@id, true)
             return if idx is null
             $(this).find(tab_a_selector).eq(idx).triggerHandler "change"
+=======
+            self = this
+            idx = Number(search()[@id])
+            return  if idx is null
+            $(self).find(tab_a_selector).eq(idx).triggerHandler "change"
+>>>>>>> remade search tabs
 
 
         # else
-        $.bbq.prevFragment = $.deparam.fragment()
+        $.bbq.prevFragment = _.extend {}, search()
+
+    # // end hashchange
 
 
-    $(window).bind "hashchange", onHashChange
+    # $(window).bind "hashchange", onHashChange
+
+    # $("body").scope().$root.$apply () ->
+
+
     $(window).scroll ->
         $("#sidebar").sidebar "updatePlacement"
 
 
     #setup about link
     $("#about").click ->
-        unless $.bbq.getState("display")?
-            $.bbq.pushState display: "about"
+        unless search().display?
+            # $.bbq.pushState display: "about"
+            search display: "about"
         else
-            $.bbq.removeState "display"
+            # $.bbq.removeState "display"
+            search "about", null
 
     $("#login").click ->
-        unless $.bbq.getState("display")?
-            $.bbq.pushState display: "login"
+        unless search().display?
+            search display: "login"
         else
-            $.bbq.removeState "display"
+            search "login", null
 
     $("#languages").radioList(
         change: ->
-            $.bbq.pushState lang: $(this).radioList("getSelected").data("mode")
+            search lang: $(this).radioList("getSelected").data("mode")
         # TODO: this does nothing?
         selected: settings.defaultLanguage
 
 
     ).vAlign()
     $("#sidebar").sidebar().sidebar "hide"
-    $("#simple_text")[0].focus()
+    # $("#simple_text")[0].focus()
     $(document).click ->
         $("#simple_text.ui-autocomplete-input").autocomplete "close"
 

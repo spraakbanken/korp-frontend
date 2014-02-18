@@ -407,4 +407,19 @@
     return s.$apply(f(s));
   };
 
+  window.search = function(obj, val) {
+    var ret, s;
+    s = $("body").scope();
+    ret = s.$root.$apply(function() {
+      if (_.isObject(obj)) {
+        obj = _.extend({}, s.$root.search(), obj);
+      }
+      return s.$root.search(obj, val);
+    });
+    if (val === null) {
+      onHashChange();
+    }
+    return ret;
+  };
+
 }).call(this);

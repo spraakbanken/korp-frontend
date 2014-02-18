@@ -11,9 +11,9 @@ util.SelectionManager.prototype.select = function(word, aux) {
 		this.selected.removeClass("word_selected token_selected");
 		this.aux.removeClass("word_selected aux_selected");
 	}
-		
+
 	this.selected = word;
-	
+
 	this.aux = aux || $();
 	this.aux.addClass("word_selected aux_selected");
 	return word.addClass("word_selected token_selected");
@@ -45,7 +45,7 @@ util.initLocalize = function() {
 	return $.localize("init", {
 		packages : ["locale", "corpora"],
 		pathPrefix : "translations",
-		language : $.bbq.getState("lang") || settings.defaultLanguage,
+		language : settings.defaultLanguage,
 		callback : function() {
 			if(this.is(".num_hits")) {
 				var selected = this.find("option:selected");
@@ -60,7 +60,7 @@ util.initLocalize = function() {
 };
 //TODO: get rid of this
 util.localize = function(root) {
-	root = root || "body"; 
+	root = root || "body";
 	$(root).localize();
 };
 
@@ -84,7 +84,7 @@ util.lemgramToString = function(lemgram, appendIndex) {
 			c.log("lemgramToString broken for ", lemgram);
 		}
 	}
-	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", 
+	return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>",
 			[concept, infixIndex, type, util.getLocaleString(type)]);
 };
 
@@ -120,7 +120,7 @@ util.splitLemgram = function(lemgram) {
 	}
 	var keys = ["morph", "form", "pos", "index", "startIndex"];
 	var splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2);
-	
+
 	return _.object(keys, splitArray);
 };
 
@@ -138,14 +138,15 @@ util.setJsonLink = function(settings){
 };
 
 util.searchHash = function(type, value) {
-	$.bbq.pushState({search: type + "|" + value, page : 0});
+	search({search: type + "|" + value, page : 0});
+	// $(window).trigger("hashchange")
 };
 
 
 
 function loadCorporaFolderRecursive(first_level, folder) {
 	var outHTML;
-	if (first_level) 
+	if (first_level)
 		outHTML = '<ul>';
 	else {
 		outHTML = '<ul title="' + folder.title + '" description="' + escape(folder.description) + '">';
@@ -161,11 +162,11 @@ function loadCorporaFolderRecursive(first_level, folder) {
 			$.each(folder.contents, function(key, value) {
 				outHTML += '<li id="' + value + '">' + settings.corpora[value]["title"] + '</li>';
 				added_corpora_ids.push(value);
-				
+
 			});
 		}
 	}
-	
+
 	if(first_level) {
 		// Add all corpora which have not been added to a corpus
 		searchloop: for (var val in settings.corpora) {
@@ -186,7 +187,7 @@ util.localizeFloat = function(float, nDec) {
 	var lang = $("#languages").radioList("getSelected").data("lang");
 	var sep = null;
 	nDec = nDec || float.toString().split(".")[1].length;
-	
+
 	if(lang == "sv") {
 		sep = ",";
 	} else if(lang == "en") {
@@ -235,7 +236,7 @@ function loadCorpora() {
 	var outStr = loadCorporaFolderRecursive(true, settings.corporafolders);
 	corpusChooserInstance = $('#corpusbox')
 	.corpusChooser({
-		template: outStr, 
+		template: outStr,
 	    infoPopup: function(corpusID) {
 	    	var corpusObj = settings.corpora[corpusID];
 	    	var maybeInfo = "";
@@ -251,22 +252,22 @@ function loadCorpora() {
 	    	if (numSentences)
 	    		sentenceString = prettyNumbers(numSentences.toString());
 	    	var output = '<b><img src="img/korp_icon.png" style="margin-right:4px; width:24px; height:24px; vertical-align:middle; margin-top:-1px"/>' +
-	    	corpusObj.title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") + 
-	    	": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString + 
+	    	corpusObj.title + "</b>" + maybeInfo + "<br/><br/>" + util.getLocaleString("corpselector_numberoftokens") +
+	    	": <b>" + prettyNumbers(numTokens) + "</b><br/>" + util.getLocaleString("corpselector_numberofsentences") + ": <b>" + sentenceString +
 	    	"</b><br/>" + util.getLocaleString("corpselector_lastupdate") + ": <b>" + lastUpdate + "</b><br/><br/>";
-	    	
+
 	    	var supportsContext = _.keys(corpusObj.context).length > 1;
 	    	if(supportsContext)
 	    		output += $("<div>").localeKey("corpselector_supports").html() + "<br>";
 	    	
 	    	if(corpusObj.limited_access)
 	    		output += $("<div>").localeKey("corpselector_limited").html();
-	    	
+
 	    	return output;
-	    	
-	    	
-	    	
-	    }, 
+
+
+
+	    },
 	    infoPopupFolder: function(indata) {
 	    	var corporaID = indata.corporaID;
 	    	var desc = indata.description;
@@ -292,24 +293,23 @@ function loadCorpora() {
 	    		glueString = util.getLocaleString("corpselector_corporawith_sing");
 	    	else
 	    		glueString = util.getLocaleString("corpselector_corporawith_plur");
-	    	return '<b><img src="img/folder.png" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>' + indata.title + 
-	    	"</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) + 
+	    	return '<b><img src="img/folder.png" style="margin-right:4px; vertical-align:middle; margin-top:-1px"/>' + indata.title +
+	    	"</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + prettyNumbers(totalTokens.toString()) +
 	    	"</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
 	    }
     }).bind("corpuschooserchange", function(evt, corpora) {
     	c.log("corpuschooserchange", corpora)
     	// c.log("corpus changed", corpora);
 		settings.corpusListing.select(corpora);
-		// if(_.keys(corpora).length < _.keys(settings.corpora).length) {
-		// 	$.bbq.pushState({"corpus" : corpora.join(",")});
-		// }
+
 		var nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
 		if(corpora.length && _.intersection(corpora, nonprotected).length != nonprotected.length) {
-	        $.bbq.pushState({"corpus" : corpora.join(",")})
-	        // search({"corpus" : corpora.join(",")})
+	        // $.bbq.pushState({"corpus" : corpora.join(",")})
+	        search({"corpus" : corpora.join(",")})
 		} else {
-	        $.bbq.removeState("corpus")
+			search("corpus", null)
 		}
+
 		if(corpora.length) {
 			if(currentMode == "parallel")
 				extendedSearch.reset();
@@ -337,7 +337,7 @@ util.makeAttrSelect = function(groups) {
 		$.each(group, function(key, val) {
 			if(val.displayType == "hidden")
 				return;
-			
+
 			$('<option/>',{rel : $.format("localize[%s]", val.label)})
 			.val(key).text(util.getLocaleString(val.label) || "")
 			.appendTo(optgroup)
@@ -360,45 +360,45 @@ util.browserWarn = function() {
 		},
 		imagePath : "img/browsers/",
 		display: ['firefox','chrome','safari','opera'],
-		browserInfo: { // Settings for which browsers to display   
-	        firefox: {   
-	            text: 'Firefox', // Text below the icon   
-	            url: 'http://www.mozilla.com/firefox/' // URL For icon/text link   
-	        },   
-	        safari: {   
-	            text: 'Safari',   
-	            url: 'http://www.apple.com/safari/download/'   
-	        },   
-	        opera: {   
-	            text: 'Opera',   
-	            url: 'http://www.opera.com/download/'   
-	        },   
-	        chrome: {   
-	            text: 'Chrome',   
-	            url: 'http://www.google.com/chrome/'   
+		browserInfo: { // Settings for which browsers to display
+	        firefox: {
+	            text: 'Firefox', // Text below the icon
+	            url: 'http://www.mozilla.com/firefox/' // URL For icon/text link
+	        },
+	        safari: {
+	            text: 'Safari',
+	            url: 'http://www.apple.com/safari/download/'
+	        },
+	        opera: {
+	            text: 'Opera',
+	            url: 'http://www.opera.com/download/'
+	        },
+	        chrome: {
+	            text: 'Chrome',
+	            url: 'http://www.google.com/chrome/'
 	        }
-	        ,   
-	        msie: {   
-	            text: 'Internet Explorer',   
-	            url: 'http://www.microsoft.com/windows/Internet-explorer/'   
+	        ,
+	        msie: {
+	            text: 'Internet Explorer',
+	            url: 'http://www.microsoft.com/windows/Internet-explorer/'
 	        }
 		},
-		header: 'Du använder en omodern webbläsare', // Header of pop-up window   
-	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1   
+		header: 'Du använder en omodern webbläsare', // Header of pop-up window
+	    paragraph1: 'Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.', // Paragraph 1
 	    paragraph2: '', // Paragraph 2
-	    closeMessage: 'Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut.', // Message displayed below closing link   
-	    closeLink: 'Stäng varningen', // Text for closing link   
-//		header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window   
-//	    paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1   
+	    closeMessage: 'Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut.', // Message displayed below closing link
+	    closeLink: 'Stäng varningen', // Text for closing link
+//		header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window
+//	    paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1
 //	    paragraph2: 'Just click on the icons to get to the download page', // Paragraph 2
-//	    closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link   
+//	    closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link
 //	    closeLink: 'Close This Window', // Text for closing link
-    	closeCookie: true, // If cookies should be used to remmember if the window was closed (see cookieSettings for more options)   
-        // Cookie settings are only used if closeCookie is true   
-        cookieSettings: {   
-            path: '/', // Path for the cookie to be saved on (should be root domain in most cases)   
-            expires: 100000 // Expiration Date (in seconds), 0 (default) means it ends with the current session   
-        }   
+    	closeCookie: true, // If cookies should be used to remmember if the window was closed (see cookieSettings for more options)
+        // Cookie settings are only used if closeCookie is true
+        cookieSettings: {
+            path: '/', // Path for the cookie to be saved on (should be root domain in most cases)
+            expires: 100000 // Expiration Date (in seconds), 0 (default) means it ends with the current session
+        }
 	});
 };
 // singleton for getting colors. use syntax util.colors.getNext()

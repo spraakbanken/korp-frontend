@@ -4,6 +4,9 @@
 @import "compass/css3/inline-block";
 @import "compass/css3/border-radius";
 
+@import "_compass_twitter_bootstrap.scss";
+
+
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -377,24 +380,24 @@ select.arg_value option {
 }
 
 .token_footer {
-  position: relative;
+  // position: relative;
   font-size: .8em;
-  ul {
-    margin-top: -5px;
-    background-color: white;
-    position: absolute;
-    display: none;
-  }
+  // ul {
+  //   margin-top: -5px;
+  //   background-color: white;
+  //   position: absolute;
+  //   display: none;
+  // }
 }
 
 .query_token button .ui-button-text {
   height: 0;
 }
 
-.token_footer ul, li {
-  margin: 0;
-  padding: 0;
-}
+// .token_footer ul, li {
+//   margin: 0;
+//   padding: 0;
+// }
 
 .close_token {
 
@@ -787,10 +790,6 @@ table {
 
 .table_scrollarea + .pager-wrapper {
   margin-top: 15px;
-}
-
-.pagination {
-  height: 20px;
 }
 
 /* removing context for custom tab */
@@ -1797,4 +1796,46 @@ line.tick {
 }
 .loading .exportStatsSection {
   display : none;
+}
+
+.nav.nav-tabs {
+  background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+  border: 1px solid #AAAAAA;
+  color: #222222;
+}
+
+.tabbable {
+  border : 1px solid #AAAAAA;
+  color : #222222;
+  padding : 3px;
+  .tab-content {
+    padding : 1em;
+  }
+  .nav.nav-tabs {
+    margin : 0;
+    padding-left : 0;
+    li {
+      background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
+      border: 1px solid #D3D3D3;
+      color: #555555;
+      font-weight: normal;
+      margin-bottom : -1px;
+      a {
+          padding-bottom: 0.3em !important;
+          padding-top: 0.3em !important;
+          padding: 0.2em 1em;
+          color : #555555;
+      }
+    }
+  }
+}
+
+.pagination {
+  height: 20px;
+  margin : 0;
+}
+.pagination a, .pagination span {
+  border-width : 1px;
+  line-height: 18px;
+  padding : 0 8px;
 }
