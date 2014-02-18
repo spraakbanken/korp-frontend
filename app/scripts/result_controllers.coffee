@@ -132,6 +132,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
     s.setKwicData = (data) ->
         s.kwic = massageData(data.kwic)
 
+    c.log "selectionManager"
     s.selectionManager = new util.SelectionManager()
 
     s.selectLeft = (sentence) ->

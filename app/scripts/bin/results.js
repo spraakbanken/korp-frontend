@@ -421,7 +421,7 @@
       isReading = this.$result.is(".reading_mode");
       this.showPreloader();
       c.log("makeRequest", this.$result, this.$result.scope());
-      this.$result.scope().$apply(function($scope) {
+      safeApply(this.$result.scope(), function($scope) {
         c.log("apply", $scope, $scope.setContextData);
         if (isReading) {
           return $scope.setContextData({
@@ -593,12 +593,16 @@
   view.ExampleResults = (function(_super) {
     __extends(ExampleResults, _super);
 
-    function ExampleResults(tabSelector, resultSelector) {
-      ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector);
+    function ExampleResults(tabSelector, resultSelector, scope) {
+      ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.ExamplesProxy();
       this.$result.find(".progress_container,.tab_progress").hide();
       this.$result.add(this.$tab).addClass("not_loading customtab");
       this.$result.removeClass("reading_mode");
+      if (this.s.$parent.queryParams) {
+        this.makeRequest(this.s.$parent.queryParams);
+      }
+      this.s.$parent.active = true;
     }
 
     ExampleResults.prototype.makeRequest = function(opts) {
@@ -886,12 +890,25 @@
     };
 
     LemgramResults.prototype.onClickExample = function(event) {
-      var $target, data, self;
+      var $target, data, opts, self;
       self = this;
       $target = $(event.currentTarget);
       c.log("onClickExample", $target);
       data = $target.parent().tmplItem().data;
-      return this.s.$root.kwicTabs.push(null);
+      opts = {
+        start: 0,
+        end: 24
+      };
+      opts.ajaxParams = {
+        source: data.source.join(","),
+        corpus: null,
+        head: data.head,
+        dep: data.dep,
+        rel: data.rel,
+        depextra: data.depextra,
+        corpus: data.corpus
+      };
+      return this.s.$root.kwicTabs.push(opts);
     };
 
     LemgramResults.prototype.showWarning = function() {

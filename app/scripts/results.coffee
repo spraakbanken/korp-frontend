@@ -377,7 +377,8 @@ class view.KWICResults extends BaseResults
 
         # applyTo "kwicCtrl", ($scope) ->
         c.log "makeRequest", @$result, @$result.scope()
-        @$result.scope().$apply ($scope) ->
+        # @$result.scope().$apply ($scope) ->
+        safeApply @$result.scope(), ($scope) ->
             c.log "apply", $scope, $scope.setContextData
             if isReading
                 $scope.setContextData({kwic:[]})
@@ -508,12 +509,16 @@ class view.KWICResults extends BaseResults
 
 
 class view.ExampleResults extends view.KWICResults
-    constructor: (tabSelector, resultSelector) ->
-        super tabSelector, resultSelector
+    constructor: (tabSelector, resultSelector, scope) ->
+        super tabSelector, resultSelector, scope
         @proxy = new model.ExamplesProxy()
         @$result.find(".progress_container,.tab_progress").hide()
         @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
+
+        if @s.$parent.queryParams
+            @makeRequest @s.$parent.queryParams
+        @s.$parent.active = true
 
     makeRequest: (opts) ->
         @resetView()
@@ -779,20 +784,30 @@ class view.LemgramResults extends BaseResults
         $target = $(event.currentTarget)
         c.log "onClickExample", $target
         data = $target.parent().tmplItem().data
-        @s.$root.kwicTabs.push null
         # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
         # opts = instance.getPageInterval()
-        # opts.ajaxParams =
-        #     source : data.source.join(",")
-        #     corpus : null
-            # head: data.head
-            # dep: data.dep
-            # rel: data.rel
-            # depextra: data.depextra
-            # corpus: data.corpus
+        opts = {
+            start : 0
+            end : 24
+        }
+        opts.ajaxParams =
+            source : data.source.join(",")
+            corpus : null
+            head: data.head
+            dep: data.dep
+            rel: data.rel
+            depextra: data.depextra
+            corpus: data.corpus
 
         # util.localize instance.$result
         # instance.makeRequest opts
+        
+        # injector = @$result.injector()
+        # c.log "injector", injector, injector.get("compareSearches")
+        # @s.$parent.queryParams
+
+
+        @s.$root.kwicTabs.push opts
 
     showWarning: ->
         hasWarned = !!$.jStorage.get("lemgram_warning")

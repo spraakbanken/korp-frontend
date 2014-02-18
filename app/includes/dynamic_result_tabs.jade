@@ -1,0 +1,49 @@
+tab(ng-repeat='queryParams in kwicTabs', active='active')
+  tab-heading
+    | KWIC
+    span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
+  div(ng-controller='kwicCtrl', constr='ExampleResults')
+    include kwicresult
+tab(ng-repeat='data in graphTabs', active='active')
+  tab-heading
+    | {{'graph' | loc}}
+    span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
+  div(ng-controller='graphCtrl', constr='GraphResults')
+    .graph_header
+      .progress_container
+        progress(value='0', max='100')
+      .controls
+        .form_switch
+          input#line_input(type='radio', name='form_switch', value='line', checked='checked')
+          label(for='line_input') Linje
+          input#bar_input(type='radio', name='form_switch', value='bar')
+          label(for="bar_input") Stapel
+        label.smoothing_label(for='smoothing_switch') Utjämna
+        input#smoothing_switch.smoothing_switch(type='checkbox')
+        .non_time_div
+          span(rel='localize[non_time_before]')
+          span.non_time
+          span(rel='localize[non_time_after]')
+      .legend
+      div(style='clear: both;')
+    .chart
+    .zoom_slider
+tab(ng-repeat='promise in compareTabs', active='active')
+  tab-heading.compare_tab(ng-class='{loading : loading}')
+    | Jämför
+    span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')
+  .compare_result(ng-class='loading', ng-controller='compareCtrl')
+    .column.column_1
+      h2
+        | Utmärkande för
+        em {{cmp1.label}}
+      ul
+        li(ng-repeat='tuple in tables.negative')
+          .meter(meter='tuple', max='max[1]', stringify='stringify')
+    .column.column_2
+      h2
+        | Utmärkande för
+        em {{cmp2.label}}
+      ul
+        li(ng-repeat='tuple in tables.positive')
+          .meter(meter='tuple', max='max[1]', stringify='stringify')

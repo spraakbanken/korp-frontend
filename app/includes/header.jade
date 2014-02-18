@@ -1,0 +1,56 @@
+#top_bar
+  #mode_switch
+  #cog
+  ul#cog_menu
+    li
+      a#about(href='javascript:', rel='localize[about]') About Korp
+    li
+      a#docs.follow_link(href='http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning', target='_blank', rel='localize[docs]')
+    li#korplink
+      a.follow_link(href='/korp', rel='localize[korp]')
+    li#korplablink
+      a.follow_link(href='/korplabb', rel='localize[korp_lab]')
+    li#import
+      a.follow_link(href='http://spraakbanken.gu.se/korp/annoteringslabbet', rel='localize[import_chain]')
+    li#login
+      a(href='javascript:', rel='localize[log_in]')
+  #log_out.link
+    span(rel='localize[log_out]') Logga ut
+    span.usrname
+  #languages
+    a(href='javascript:', rel='localize[swedish]', data-mode='sv', ng-click='lang = \'sv\'') Svenska
+    a(href='javascript:', rel='localize[english]', data-mode='en', ng-click='lang = \'en\'') Engelska
+#header_left
+  a#logo
+    img(src='img/korplogo.png')
+  #labs_logo
+  #corpusbox
+    .hp_topframe.buttonlink.ui-state-default.ui-corner-all
+      div
+        span#hp_corpora_title1
+        span#hp_corpora_title2(rel='localize[corpselector_allselected]')
+        span#hp_corpora_title3(style='color: #888888;')
+      div(style='float: right; width: 16px;')
+        span.ui-icon.ui-icon-triangle-2-n-s(style='text-align: right; left: auto;')
+  .popupchecks.ui-corner-bottom
+    .header
+      #time
+        #time_graph
+        #rest_time_graph
+      .buttons
+        a.buttonlink.ui-state-default.ui-corner-all.selectall(href='javascript:')
+          span.ui-icon.ui-icon-check
+          span(rel='localize[corpselector_buttonselectall]')
+          span(data-loc='corpselector_buttonselectall')
+        a.selectnone.buttonlink.ui-state-default.ui-corner-all(href='javascript:')
+          span.ui-icon.ui-icon-closethick
+          span(rel='localize[corpselector_buttonselectnone]')
+      div(style='clear: both;')
+    .checks
+    br
+    p#sentenceCounter(style='font-size: 85%;')
+  .corpusInfoSpace.ui-corner-all
+    div
+      p(style='padding: 10px; margin: 0px;')
+select#search_history
+div(style='clear: both;')

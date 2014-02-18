@@ -1,0 +1,52 @@
+tabset.search_tabs(tab-hash='search_tab')
+  tab(heading='{{"simple" | loc}}')
+    div(ng-include='"views/simple.html"', onload='$root.onSearchLoad()')
+  tab(heading='{{"detailed" | loc}}')
+    div(ng-include='"views/extended.html"')
+  tab(heading='{{"advanced" | loc}}')
+    #advanced
+      .query_footer.ui-corner-all.ui-state-default
+        span.cqp_toggle(rel='localize[cqp_query]')
+          | Fullständig CQP-fråga
+        | :
+        textarea#cqp_string []
+      input#sendBtn(value='  Sök  ', type='submit', rel='localize[search]')
+  tab
+    tab-heading
+      | Jämförelse
+      span.badge(ng-if='savedSearches.length') {{savedSearches.length}}
+    .search_compare(ng-controller='CompareSearchCtrl')
+      div(ng-show='savedSearches.length < 2')
+        | Du måste spara minst två sökningar för att kunna jämföra.
+      div(ng-show='savedSearches.length > 1')
+        | Jämför
+        select(ng-options='search.label for search in savedSearches', ng-model='cmp1')
+        | med
+        select(ng-options='search.label for search in savedSearches', ng-model='cmp2')
+        | och sammanställ på
+        select(ng-model='reduce', 
+          ng-options='obj | \
+           mapper:valfilter as obj.label | \
+           loc group by obj.group | \
+           loc for obj in getAttrs()')
+        button.btn.btn-small(ng-click='sendCompare()') Jämför
+#search_options.ui-widget-content.ui-corner-bottom
+  div
+    span(style='font-size: .9em;') KWIC:
+    select#num_hits.num_hits(data-history='hpp', data-prefix='hits_per_page', rel='localize[hits_per_page]')
+      option(value='25') 25
+      option(value='50') 50
+      option(value='75') 75
+      option(value='100') 100
+      option(value='500') 500
+      option(value='1000') 1000
+    select.sort_select(data-history='sort', data-prefix='sort_default')
+      option(value='', rel='localize[appearance_context]') Förekomst
+      option(value='keyword', rel='localize[word_context]') Ordkontext
+      option(value='left', rel='localize[left_context]') Vänsterkontext
+      option(value='right', rel='localize[right_context]') Högerkontext
+      option(value='random', rel='localize[random_context]') Slumpvis
+  div
+    span(rel='localize[statistics]') Statistik
+    | :
+    span#reduceSelect

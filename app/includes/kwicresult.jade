@@ -1,0 +1,40 @@
+
+.result_controls
+  .controls_n
+    span(rel='localize[num_results]') Antal träffar
+    | :
+    span.num-result 0
+  .progress_container
+    progress(value='0', max='100')
+  .hits_picture
+.pager-wrapper
+span.reading_btn.show.link(rel='localize[show_reading]') Visa läsläge
+span.reading_btn.hide.link(rel='localize[show_kwic]') Visa kwic
+.table_scrollarea
+  table.results_table.kwic(cellspacing='0')
+    tr.sentence(ng-repeat='sentence in kwic'
+      ng-class='{corpus_info : sentence.newCorpus, \
+        not_corpus_info : !sentence.newCorpus, \
+        linked_sentence : sentence.isLinked, \
+        odd : $index % 2 != 0}')
+      td.empty_td
+      td.corpus_title(colspan='0')
+        | {{sentence.newCorpus}}
+        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
+      td.lnk(colspan='3', set-if='sentence.isLinked')
+        span(kwic-word='kwic-word', ng-repeat='wd in sentence.tokens')
+      td.left(set-if='!sentence.newCorpus')
+        span(kwic-word='kwic-word', ng-repeat='wd in selectLeft(sentence)')
+      td.match(set-if='!sentence.newCorpus')
+        span(kwic-word='kwic-word', ng-repeat='wd in selectMatch(sentence)')
+      td.right(set-if='!sentence.newCorpus')
+        span(kwic-word='kwic-word', ng-repeat='wd in selectRight(sentence)')
+  .results_table.reading
+    p.sentence(ng-repeat='sentence in contextKwic'
+      ng-class='{corpus_info : sentence.newCorpus, \
+        not_corpus_info : !sentence.newCorpus, \
+        linked_sentence : sentence.isLinked}')
+      span.corpus_title(colspan='0')
+        | {{sentence.newCorpus}}
+        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
+      span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')

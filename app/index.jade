@@ -1,0 +1,211 @@
+!!! 5
+html
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    meta(name='description', content='Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text.')
+    
+    // build:css styles/korp.css 
+    link(rel='stylesheet', type='text/css', href='styles/pagination.css')
+    link(rel='stylesheet', type='text/css', href='styles/bootstrap.css')
+    link(type='text/css', href='components/jquery-ui/themes/smoothness/jquery-ui.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='components/SlickGrid/slick.grid.css', type='text/css', media='screen', charset='utf-8')
+    link(type='text/css', href='styles/ui_mods.css', rel='stylesheet')
+    link(rel='stylesheet', type='text/css', href='styles/jquery.tooltip.css')
+    link(rel='stylesheet', href='components/rickshaw/rickshaw.css')
+    link(rel='stylesheet', type='text/css', href='components/font-awesome/css/font-awesome.css')
+    link(rel='stylesheet', type='text/css', href='components/angular-slider/angular-slider.css')
+    link(rel='stylesheet', type='text/css', href='styles/styles.css')
+    
+    // endbuild 
+    link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
+    script.
+      var isLab = window.location.pathname.split("/")[1] == "korplabb";
+      if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
+      window.c = window.console;
+    title Korp
+    //if lte IE 8
+      script(language='javascript', src='lib/flot/excanvas.min.js')
+    //
+       build:js scripts/korp_lib.js 
+    script(src='components/json3/lib/json3.js')
+    script(src='components/jquery/jquery.js')
+    script(src='components/jquery-ui/ui/jquery-ui.custom.js')
+    script(src='components/unstable-angular-complete/angular.js')
+    script(src='lib/jquery.localize.js')
+    script(src='components/raphael/raphael.js')
+    script(src='components/jReject/js/jquery.reject.js')
+    script(src='lib/jquery.raphael.spinner.js')
+    script(src='lib/watch-fighters.js')
+    script(src='lib/jquery.format.js')
+
+    script(src='components/modernizr/modernizr.js')
+    script(src='components/yepnope/yepnope.js')
+    script(src='components/jquery-bbq/jquery.ba-bbq.js')
+    script(src='lib/jstorage.js')
+    script(src='lib/jquery.hoverIntent.js')
+    script(src='lib/jquery.ui.preloader.min.js')
+    script(src='lib/jquery.tmpl.js')
+    script(src='lib/jquery.dump.js')
+    script(src='lib/jquery.placeholder.js')
+    script(src='lib/jquery.pagination.js')
+    script(src='lib/flot/jquery.flot.min.js')
+    script(src='lib/flot/jquery.flot.stack.js')
+    script(src='components/SlickGrid/slick.core.js')
+    script(src='lib/jquery.event.drag-2.2.js')
+    script(src='components/SlickGrid/slick.grid.js')
+    script(src='components/SlickGrid/plugins/slick.checkboxselectcolumn.js')
+    script(src='components/SlickGrid/plugins/slick.rowselectionmodel.js')
+    script(src='lib/g.line-min.js')
+    script(src='lib/jquery.tooltip.pack.js')
+
+    script(src='components/angular-slider/angular-slider.js')
+    script(src='components/angular-bootstrap/ui-bootstrap.js')
+    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/lodash/dist/lodash.compat.js')
+    script(src='components/spin.js/dist/spin.js')
+    script(src='components/angular-spinner/angular-spinner.js')
+    //
+       endbuild 
+    //
+    script.
+      yepnope({
+      test: $("html.msie7,html.msie8").length,
+      // yep : 'geo.js',
+      nope: 'components/d3/d3.js'
+      });
+    script(src='components/moment/moment.js')
+    //
+    // <script src="components/d3/d3.js"></script> 
+    script(src='components/rickshaw/rickshaw.js')
+    script(src='scripts/jq_extensions.js')
+    script(src='config.js')
+    // build:js scripts/scripts.js 
+       
+    script(src='scripts/cqp_parser/CQPParser.js')
+    script(src='scripts/bin/cqp_parser/cqp.js')
+    script(src='scripts/util.js')
+    script(src='scripts/bin/util_coffee.js')
+    script(src='scripts/bin/widgets.js')
+    script(src='scripts/selector_widget.js')
+    script(src='scripts/pie-widget.js')
+    script(src='scripts/bin/search.js')
+    script(src='scripts/bin/results.js')
+    script(src='scripts/bin/model.js')
+    script(src='scripts/bin/main.js')
+    // endbuild 
+       
+    script(src='scripts/bin/search_controllers.js')
+    script(src='scripts/bin/result_controllers.js')
+    script(src='scripts/bin/services.js')
+    script(src='scripts/bin/directives.js')
+  body.not_logged_in(ng-app='korpApp')
+    noscript
+      h2 You need JavaScript to run Korp.
+    script.
+      $("body").css("opacity", 0);
+    #main
+      #header
+        include includes/header
+      #content
+
+        include includes/searchtabs
+        
+        #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length', ng-controller='resultContainerCtrl')
+          #columns
+            #left-column(ng-class='{sidebar_visible : word_selected && result_tab == 0}')
+              tabset(tab-hash='result_tab', ng-controller='resultTabCtrl', ng-click='onClick($event)')
+                tab(heading='KWIC')
+                  #results-kwic(constr='KWICResults', constr-name='kwicResults', ng-controller='kwicCtrl')
+                    include includes/kwicresult
+                tab(heading='Statistik')
+                  div(ng-controller='StatsResultCtrl', constr='StatsResults', constr-name='statsResults')
+                    .stats_header
+                      button#showGraph Visa trenddiagram
+                      .progress_container
+                        progress(value='0', max='100')
+                      #showBarPlot
+                    #myGrid
+                    #exportStatsSection
+                      br
+                      br
+                      select#kindOfData
+                        option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
+                        option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
+                      select#kindOfFormat
+                        option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
+                        option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+                      input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
+                tab(heading='Ordbild')
+                  div(constr='LemgramResults', constr-name='lemgramResults')
+                    #wordclassChkParent
+                      input#wordclassChk(type='checkbox')
+                      label(for='wordclassChk', rel='localize[show_wordclass]')
+                    .progress_container
+                      progress(value='0', max='100')
+                    .content_target
+
+                include includes/dynamic_result_tabs
+                
+              a#json-link(href='#')
+                img(src='img/json.png')
+            #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && result_tab == 0}')
+            div(style='clear: both; float: none;')
+      #click_cover
+      #about_content(title='Om Korp', style='display: none;')
+      #msd_popup(title='Morfosyntaktisk beskrivning', style='display: none;')
+      #deptree_popup(title='Dependensträd', style='display: none;')
+      #plot_popup
+        #plot_canvas(style='width: 470px; height: 400px;')
+      #login_popup(title='Logga in')
+        form
+          label(for='usrname', rel='localize[username]') E-postadress
+          input#usrname(type='text')
+          label(for='pass', rel='localize[password]') Lösenord
+          input#pass(type='password')
+          p.err_msg(rel='localize[login_fail_msg]') Login misslyckades, kontrollera användarnamn och lösenord och försök igen.
+          input(type='submit', value='Skicka', rel='localize[send]')
+      //
+         extendedtoken options menu. 
+      ul#opt_menu
+        li
+          a(data-item='repeat_item', rel='localize[repeat]') Upprepa
+        li
+          a(data-item='lbound_item', rel='localize[sent_start]') Meningsbörjan
+        li
+          a(data-item='rbound_item', rel='localize[sent_end]') Meningsslut
+    
+
+    script#lemgramResultsTmpl(type='text/x-jquery-tmpl').
+      <div class="lemgram_section">
+      {{if $data.length}}
+      <div class='lemgram_help' />
+      {{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramTableTmpl'}}
+      {{/if}}
+      </div>
+    script#lemgramTableTmpl(type='text/x-jquery-tmpl').
+      <div class="lemgram_result"
+      {{if word}}
+      data-word="${word}">
+      <h3 id="display_word"></h3>
+      {{else}}
+      data-rel="${$data[0].rel}"
+      data-show_rel="${$data[0].show_rel}">
+      <table>
+      {{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramRowTmpl'}}
+      </table>
+      {{/if}}
+      </div>
+    script#lemgramRowTmpl(type='text/x-jquery-tmpl').
+      <tr>
+      <td><span class="enumerate"/></td>
+      <td data-lemgram="${$.grep($item.data[show_rel].split("|"), Boolean)[0]}" data-depextra="${depextra}"></td>
+      <td title="${$.format("mi: %.2f", mi)}">${freq}</td>
+      <td class="example_link"></td>
+      </tr>
+    script#similarTmpl(type='text/x-jquery-tmpl').
+      <li>
+      {{each rel}}
+      <a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
+      {{/each}}
+      </li>

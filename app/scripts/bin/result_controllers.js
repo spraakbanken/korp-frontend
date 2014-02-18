@@ -144,6 +144,7 @@
     s.setKwicData = function(data) {
       return s.kwic = massageData(data.kwic);
     };
+    c.log("selectionManager");
     s.selectionManager = new util.SelectionManager();
     s.selectLeft = function(sentence) {
       if (!sentence.match) {
