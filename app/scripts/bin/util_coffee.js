@@ -264,6 +264,10 @@
       return this.selected = _.unique(this.selected);
     };
 
+    ParallelCorpusListing.prototype.setActiveLangs = function(langlist) {
+      return this.activeLangs = langlist;
+    };
+
     ParallelCorpusListing.prototype.getCurrentAttributes = function(lang) {
       var corpora, struct;
       corpora = _.filter(this.selected, function(item) {
@@ -360,11 +364,8 @@
     };
 
     ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
-      var currentLangList, output, struct;
-      currentLangList = _.map($(".lang_select").get(), function(item) {
-        return $(item).val();
-      });
-      struct = this.getLinksFromLangs(currentLangList);
+      var output, struct;
+      struct = this.getLinksFromLangs(this.activeLangs);
       output = [];
       $.each(struct, function(i, corps) {
         var mainId, mainIsPivot, other, pair;
@@ -391,6 +392,21 @@
 
     ParallelCorpusListing.prototype.getWithinQueryString = function() {
       return this.getAttributeQuery("within");
+    };
+
+    ParallelCorpusListing.prototype.stringifySelected = function() {
+      var i, item, main, output, pair, struct, _i, _len;
+      struct = settings.corpusListing.getLinksFromLangs(this.activeLangs);
+      output = [];
+      for (i = _i = 0, _len = struct.length; _i < _len; i = ++_i) {
+        item = struct[i];
+        main = item[0];
+        pair = _.map(item.slice(1), function(corp) {
+          return main.id.toUpperCase() + "|" + corp.id.toUpperCase();
+        });
+        output.push(pair);
+      }
+      return output.join(",");
     };
 
     return ParallelCorpusListing;

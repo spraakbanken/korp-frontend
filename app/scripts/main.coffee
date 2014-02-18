@@ -24,19 +24,37 @@ $.ajaxPrefilter "json", (options, orig, jqXHR) ->
 #     $.sm "korp_statemachine.xml", dfd.resolve
 # ).promise()
 # deferred_mode = $.Deferred()
+
+# mode_def = $.Deferred((def) ->
+#     mode = $.deparam.querystring().mode
+#     if mode? and mode isnt "default"
+#         $.getScript("modes/#{mode}_mode.js").done(->
+#             def.resolve()
+
+#         ).fail (args, msg, e) ->
+#             def.reject()
+#     else
+#         def.resolve()
+
+#     return def.promise
+# ).promise()
+
 deferred_domReady = $.Deferred((dfd) ->
     $ ->
-        corpus = search()["corpus"]
-        if corpus
-            settings.corpusListing.select corpus.split(",")
-        dfd.resolve()
-        
+        mode = $.deparam.querystring().mode
+        if mode? and mode isnt "default"
+            $.getScript("modes/#{mode}_mode.js").done () ->
+                dfd.resolve()
+        else
+            dfd.resolve()
+                
+            
 
     return dfd
 ).promise()
 
 ###
-chained = deferred_mode.pipe(->
+chained = mode_def.pipe(->
     c.log "info send"
     $.ajax
         url: settings.cgi_script
@@ -60,12 +78,17 @@ loc_dfd = initLocales()
 
 
 $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
-    $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
 
+    # angular.element(document).ready () ->
+    angular.bootstrap(document, ['korpApp'])
+
+    corpus = search()["corpus"]
+    if corpus
+        settings.corpusListing.select corpus.split(",")
     
     window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
-    window.extendedSearch = new view.ExtendedSearch('#korp-extended')
+    # window.extendedSearch = new view.ExtendedSearch('#korp-extended')
     # window.simpleSearch = new view.SimpleSearch('#korp-simple')
 
     $("body").addClass "lab"  if isLab
@@ -243,7 +266,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
         if display is "about"
             if $("#about_content").is(":empty")
                 $("#about_content").load "markup/about.html", ->
-                    $("#revision").text $.revision
                     util.localize this
                     showAbout()
 

@@ -169,11 +169,8 @@
       kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
       self.progress = 0;
       corpus = settings.corpusListing.stringifySelected();
-      if (currentMode === "parallel") {
-        corpus = extendedSearch.getCorporaQuery();
-      }
       o = $.extend({
-        cqp: $("#cqp_string").val(),
+        cqp: $("body").scope().activeCQP || search().cqp,
         queryData: null,
         ajaxParams: this.prevAjaxParams,
         success: function(data, status, xhr) {

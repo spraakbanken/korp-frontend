@@ -501,36 +501,26 @@
         }
         return false;
       });
-      this.$main.find("#strict_chk").change(function() {
-        return advancedSearch.updateCQP();
-      });
-      this.setupContainer("#query_table");
+      this.$main.find("#strict_chk").change(function() {});
     }
 
     ExtendedSearch.prototype.setupContainer = function(selector) {
       var self;
-      self = this;
-      return $(selector).sortable({
-        items: ".query_token",
-        delay: 50,
-        tolerance: "pointer"
-      });
+      return self = this;
     };
 
     ExtendedSearch.prototype.reset = function() {
       this.$main.find(".query_token").remove();
-      $(".insert_token").click();
-      return advancedSearch.updateCQP();
+      return $(".insert_token").click();
     };
 
     ExtendedSearch.prototype.onentry = function() {};
 
     ExtendedSearch.prototype.onSubmit = function() {
-      var $select, query, searchType;
+      var $select, searchType;
       ExtendedSearch.__super__.onSubmit.call(this);
       if (this.$main.find(".query_token, .or_arg").length > 1) {
-        query = advancedSearch.updateCQP();
-        return util.searchHash("cqp", query);
+        return util.searchHash("cqp", this.s.$root.activeCQP);
       } else {
         $select = this.$main.find("select.arg_type");
         switch ($select.val()) {
@@ -538,15 +528,9 @@
             searchType = ($select.val() === "lex" ? "lemgram" : $select.val());
             return util.searchHash(searchType, $select.parent().next().data("value"));
           default:
-            query = advancedSearch.updateCQP();
-            return util.searchHash("cqp", query);
+            return util.searchHash("cqp", this.s.$root.activeCQP);
         }
       }
-    };
-
-    ExtendedSearch.prototype.setOneToken = function(key, val) {
-      $("#search-tab").find("a[href=#korp-extended]").click().end().find("select.arg_type:first").val(key).next().val(val);
-      return advancedSearch.updateCQP();
     };
 
     ExtendedSearch.prototype.insertToken = function(button) {

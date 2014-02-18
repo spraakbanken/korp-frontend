@@ -199,7 +199,7 @@
     };
   });
 
-  korpApp.directive("constr", function($window) {
+  korpApp.directive("constr", function($window, searches) {
     return {
       scope: true,
       link: function(scope, elem, attr) {
@@ -332,6 +332,93 @@
   korpApp.directive("tabSpinner", function($rootElement) {
     return {
       template: "<i class=\"fa fa-times-circle close_icon\"></i> \n    <span class=\"tab_spinner\" \n        us-spinner=\"{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}\"></span>"
+    };
+  });
+
+  korpApp.directive("extendedList", function($location, $rootScope) {
+    return {
+      templateUrl: "views/extendedlist.html",
+      scope: {
+        cqp: "="
+      },
+      link: function($scope, elem, attr) {
+        var e, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
+        s = $scope;
+        s.cqp = '[]';
+        s.data = [];
+        try {
+          s.data = CQP.parse(s.cqp);
+          c.log("s.data", s.data);
+        } catch (_error) {
+          error = _error;
+          output = [];
+          _ref = s.cqp.split("[");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            token = _ref[_i];
+            if (!token) {
+              continue;
+            }
+            token = "[" + token;
+            try {
+              tokenObj = CQP.parse(token);
+            } catch (_error) {
+              error = _error;
+              tokenObj = [
+                {
+                  cqp: token
+                }
+              ];
+            }
+            output = output.concat(tokenObj);
+          }
+          s.data = output;
+          c.log("crash", s.data);
+        }
+        if ($location.search().cqp) {
+          try {
+            s.data = CQP.parse($location.search().cqp);
+          } catch (_error) {
+            e = _error;
+            s.data = CQP.parse("[]");
+          }
+        } else {
+          s.data = CQP.parse(s.cqp);
+        }
+        _ref1 = s.data;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          token = _ref1[_j];
+          if (!("and_block" in token) || !token.and_block.length) {
+            token.and_block = CQP.parse('[word = ""]')[0].and_block;
+          }
+        }
+        s.$watch('getCQPString()', function(val) {
+          return s.cqp = CQP.stringify(s.data);
+        });
+        s.getCQPString = function() {
+          return (CQP.stringify(s.data)) || "";
+        };
+        s.addOr = function(and_array) {
+          and_array.push({
+            type: "word",
+            op: "=",
+            val: ""
+          });
+          return and_array;
+        };
+        s.addToken = function() {
+          token = {
+            and_block: [[]]
+          };
+          s.data.push(token);
+          return s.addOr(token.and_block[0]);
+        };
+        return s.removeToken = function(i) {
+          if (!(s.data.length > 1)) {
+            return;
+          }
+          return s.data.splice(i, 1);
+        };
+      }
     };
   });
 

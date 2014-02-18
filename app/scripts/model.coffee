@@ -131,9 +131,14 @@ class model.KWICProxy extends BaseProxy
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
         corpus = settings.corpusListing.stringifySelected()
-        corpus = extendedSearch.getCorporaQuery() if currentMode is "parallel"
+        # corpus = extendedSearch.getCorporaQuery() if currentMode is "parallel"
+        # if currentMode is "parallel"
+
+
+
+
         o = $.extend(
-            cqp: $("#cqp_string").val()
+            cqp: $("body").scope().activeCQP || search().cqp
             queryData: null
             ajaxParams: @prevAjaxParams
             success: (data, status, xhr) ->

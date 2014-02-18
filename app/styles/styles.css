@@ -329,11 +329,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   background-color: #F5F5F5;
 }
 
-/* line 273, styles.scss */
-#removeLang, #linkedLang {
-  display: none;
-}
-
 /* line 279, styles.scss */
 .mode-parallel #korp-extended #sendBtn ~ * {
   display: none;
@@ -345,14 +340,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 /* line 285, styles.scss */
 .mode-parallel .context_select, .mode-parallel .within_select {
   display: none;
-}
-/* line 288, styles.scss */
-.mode-parallel #query_table ~ #removeLang {
-  display: none;
-}
-/* line 291, styles.scss */
-.mode-parallel .lang_row ~ #removeLang {
-  display: inline !important;
 }
 
 /* line 298, styles.scss */

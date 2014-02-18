@@ -1,0 +1,16 @@
+div(ng-controller='ExtendedSearch')
+  #query_table(extended-list, cqp="cqp")
+
+  | cqp: {{cqp}}
+
+          
+  //- input#removeLang(type='submit', value='Färre språk')
+  //- input#linkedLang(type='submit', value='Fler språk')
+  span(rel='localize[within]')
+  select.within_select
+    option(value='sentence', rel='localize[within_sentence]') Mening
+    option(value='paragraph', rel='localize[within_paragraph]') Stycke
+  input#strict_chk(type='checkbox')
+  label(for='strict_chk') {{'strict' | loc}}
+             
+  search-submit(pos='right')

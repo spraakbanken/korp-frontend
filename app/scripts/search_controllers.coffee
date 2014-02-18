@@ -95,6 +95,10 @@ korpApp.run ($rootScope, $location, utils, searches) ->
 
 
 
+korpApp.controller "SearchCtrl", ($scope) ->
+    c.log "searchctrl original", $scope
+    $scope.visibleTabs = [true, true, true, true]
+    $scope.extendedTmpl = "views/extended_tmpl.html";
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope
@@ -162,10 +166,21 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         $location.search("search", "cqp")
 
 
+    if $location.search().cqp
+        s.cqp = $location.search().cqp
+
+    s.$watch "cqp", (val) ->
+        c.log "cqp change", val
+
+        $rootScope.activeCQP = val
+        $location.search("cqp", val)
+
+
 
 
 korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s = $scope
+    c.log "ExtendedToken", s
     # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
     # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
     cqp = '[]'
@@ -222,15 +237,16 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     onCorpusChange()
 
         
-    s.removeOr = (and_array, i) ->
+    s.removeOr = (token, and_array, i) ->
         if and_array.length > 1
             and_array.splice(i, 1)
         else
-            s.token.and_block.splice _.indexOf and_array, 1
+            token.and_block.splice _.indexOf and_array, 1
 
 
-    s.addAnd = () ->
-        s.token.and_block.push s.addOr([])
+    s.addAnd = (token) ->
+        # c.log "s", s, s.token, 
+        token.and_block.push s.addOr([])
 
     toggleBound = (token, bnd) ->
         unless token.bound?[bnd]
@@ -262,88 +278,88 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         c.log "change_case", val, s
 
 
-korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
-    s = $scope
-    # s.defaultOptions = settings.defaultOptions
+# korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
+    # s = $scope
+    # # s.defaultOptions = settings.defaultOptions
 
 
-    # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
-    # cqp = '[lex contains "ge..vb.1"]'
-    s.cqp = '[]'
+    # # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
+    # # cqp = '[lex contains "ge..vb.1"]'
+    # s.cqp = '[]'
 
 
-    s.data = []
+    # s.data = []
 
-    # s.$watch "activeCQP", (cqp) ->
-    try
-        s.data = CQP.parse(s.cqp)
-        c.log "s.data", s.data
-    catch error
-        output = []
-        for token in s.cqp.split("[")
-            if not token
-                continue
-            token = "[" + token
-            try
-                tokenObj = CQP.parse(token)
-            catch error
-                tokenObj = [{cqp : token}]
-            output = output.concat(tokenObj)
+    # # s.$watch "activeCQP", (cqp) ->
+    # try
+    #     s.data = CQP.parse(s.cqp)
+    #     c.log "s.data", s.data
+    # catch error
+    #     output = []
+    #     for token in s.cqp.split("[")
+    #         if not token
+    #             continue
+    #         token = "[" + token
+    #         try
+    #             tokenObj = CQP.parse(token)
+    #         catch error
+    #             tokenObj = [{cqp : token}]
+    #         output = output.concat(tokenObj)
 
-        s.data = output
-        c.log "crash", s.data
+    #     s.data = output
+    #     c.log "crash", s.data
 
 
-    if $location.search().cqp
-        try
-            s.data = CQP.parse($location.search().cqp)
-        catch e
-            # TODO: we could traverse the token list, trying to repair parsing, se above
-            s.data = CQP.parse("[]")
+    # if $location.search().cqp
+    #     try
+    #         s.data = CQP.parse($location.search().cqp)
+    #     catch e
+    #         # TODO: we could traverse the token list, trying to repair parsing, se above
+    #         s.data = CQP.parse("[]")
         
-    else
-        s.data = CQP.parse(s.cqp)
+    # else
+    #     s.data = CQP.parse(s.cqp)
 
-    for token in s.data
-        if "and_block" not of token or not token.and_block.length
-            token.and_block = CQP.parse('[word = ""]')[0].and_block
-
-
-    # c.log "s.data", s.data
+    # for token in s.data
+    #     if "and_block" not of token or not token.and_block.length
+    #         token.and_block = CQP.parse('[word = ""]')[0].and_block
 
 
-    # expand [] to [word = '']
+    # # c.log "s.data", s.data
+
+
+    # # expand [] to [word = '']
     
 
-    s.$watch 'getCQPString()', (val) ->
-        c.log "getCQPString", val
-        cqpstr = CQP.stringify(s.data)
-        $rootScope.activeCQP = cqpstr
-        # $location.search({cqp : encodeURIComponent(cqpstr)})
-        $location.search("cqp", cqpstr)
+    # s.$watch 'getCQPString()', (val) ->
+    #     c.log "getCQPString", val
+    #     cqpstr = CQP.stringify(s.data)
+    #     $rootScope.activeCQP = cqpstr
+    #     # $location.search({cqp : encodeURIComponent(cqpstr)})
+    #     $location.search("cqp", cqpstr)
         
         
 
-    s.getCQPString = ->
-        return (CQP.stringify s.data) or ""
+    # s.getCQPString = ->
+    #     return (CQP.stringify s.data) or ""
 
 
-    s.addOr = (and_array) ->
-        and_array.push
-            type : "word"
-            op : "="
-            val : ""
-        return and_array
+    # s.addOr = (and_array) ->
+    #     and_array.push
+    #         type : "word"
+    #         op : "="
+    #         val : ""
+    #     return and_array
 
 
-    s.addToken = ->
-        token = {and_block : [[]]}
-        s.data.push token
-        s.addOr token.and_block[0]
+    # s.addToken = ->
+    #     token = {and_block : [[]]}
+    #     s.data.push token
+    #     s.addOr token.and_block[0]
 
-    s.removeToken = (i) ->
-        unless s.data.length > 1 then return
-        s.data.splice(i, 1)
+    # s.removeToken = (i) ->
+    #     unless s.data.length > 1 then return
+    #     s.data.splice(i, 1)
 
 korpApp.filter "mapper", () ->
     return (item, f) ->

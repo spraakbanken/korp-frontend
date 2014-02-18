@@ -139,18 +139,15 @@
       _this = this;
     Searches = (function() {
       function Searches() {
-        var def, timedef,
-          _this = this;
+        var def, timedef;
         this.activeSearch = null;
         def = $q.defer();
         timedef = $q.defer();
         this.infoDef = def.promise;
         this.timeDef = timedef.promise;
-        this.getMode().then(function() {
-          return _this.getInfoData().then(function() {
-            def.resolve();
-            return initTimeGraph(timedef);
-          });
+        this.getInfoData().then(function() {
+          def.resolve();
+          return initTimeGraph(timedef);
         });
       }
 
@@ -204,7 +201,7 @@
         def = $q.defer();
         mode = $.deparam.querystring().mode;
         if ((mode != null) && mode !== "default") {
-          return $.getScript("modes/" + mode + "_mode.js").done(function() {
+          $.getScript("modes/" + mode + "_mode.js").done(function() {
             return $rootScope.$apply(function() {
               return def.resolve();
             });
@@ -215,8 +212,8 @@
           });
         } else {
           def.resolve();
-          return def.promise;
         }
+        return def.promise;
       };
 
       Searches.prototype.getInfoData = function() {

@@ -57,6 +57,12 @@
     });
   });
 
+  korpApp.controller("SearchCtrl", function($scope) {
+    c.log("searchctrl original", $scope);
+    $scope.visibleTabs = [true, true, true, true];
+    return $scope.extendedTmpl = "views/extended_tmpl.html";
+  });
+
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
     var s;
     s = $scope;
@@ -111,15 +117,24 @@
       });
     });
     s.searches = searches;
-    return s.$on("btn_submit", function() {
+    s.$on("btn_submit", function() {
       c.log("extended submit");
       return $location.search("search", "cqp");
+    });
+    if ($location.search().cqp) {
+      s.cqp = $location.search().cqp;
+    }
+    return s.$watch("cqp", function(val) {
+      c.log("cqp change", val);
+      $rootScope.activeCQP = val;
+      return $location.search("cqp", val);
     });
   });
 
   korpApp.controller("ExtendedToken", function($scope, utils, $location) {
     var cqp, onCorpusChange, s, toggleBound;
     s = $scope;
+    c.log("ExtendedToken", s);
     cqp = '[]';
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
@@ -145,15 +160,15 @@
     };
     s.$on("corpuschooserchange", onCorpusChange);
     onCorpusChange();
-    s.removeOr = function(and_array, i) {
+    s.removeOr = function(token, and_array, i) {
       if (and_array.length > 1) {
         return and_array.splice(i, 1);
       } else {
-        return s.token.and_block.splice(_.indexOf(and_array, 1));
+        return token.and_block.splice(_.indexOf(and_array, 1));
       }
     };
-    s.addAnd = function() {
-      return s.token.and_block.push(s.addOr([]));
+    s.addAnd = function(token) {
+      return token.and_block.push(s.addOr([]));
     };
     toggleBound = function(token, bnd) {
       var boundObj, _ref, _ref1;
@@ -187,89 +202,6 @@
     return s.$on("change_case", function(event, val) {
       return c.log("change_case", val, s);
     });
-  });
-
-  korpApp.controller("TokenList", function($scope, $location, $rootScope) {
-    var e, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
-    s = $scope;
-    s.cqp = '[]';
-    s.data = [];
-    try {
-      s.data = CQP.parse(s.cqp);
-      c.log("s.data", s.data);
-    } catch (_error) {
-      error = _error;
-      output = [];
-      _ref = s.cqp.split("[");
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        token = _ref[_i];
-        if (!token) {
-          continue;
-        }
-        token = "[" + token;
-        try {
-          tokenObj = CQP.parse(token);
-        } catch (_error) {
-          error = _error;
-          tokenObj = [
-            {
-              cqp: token
-            }
-          ];
-        }
-        output = output.concat(tokenObj);
-      }
-      s.data = output;
-      c.log("crash", s.data);
-    }
-    if ($location.search().cqp) {
-      try {
-        s.data = CQP.parse($location.search().cqp);
-      } catch (_error) {
-        e = _error;
-        s.data = CQP.parse("[]");
-      }
-    } else {
-      s.data = CQP.parse(s.cqp);
-    }
-    _ref1 = s.data;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      token = _ref1[_j];
-      if (!("and_block" in token) || !token.and_block.length) {
-        token.and_block = CQP.parse('[word = ""]')[0].and_block;
-      }
-    }
-    s.$watch('getCQPString()', function(val) {
-      var cqpstr;
-      c.log("getCQPString", val);
-      cqpstr = CQP.stringify(s.data);
-      $rootScope.activeCQP = cqpstr;
-      return $location.search("cqp", cqpstr);
-    });
-    s.getCQPString = function() {
-      return (CQP.stringify(s.data)) || "";
-    };
-    s.addOr = function(and_array) {
-      and_array.push({
-        type: "word",
-        op: "=",
-        val: ""
-      });
-      return and_array;
-    };
-    s.addToken = function() {
-      token = {
-        and_block: [[]]
-      };
-      s.data.push(token);
-      return s.addOr(token.and_block[0]);
-    };
-    return s.removeToken = function(i) {
-      if (!(s.data.length > 1)) {
-        return;
-      }
-      return s.data.splice(i, 1);
-    };
   });
 
   korpApp.filter("mapper", function() {

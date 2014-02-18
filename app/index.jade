@@ -101,7 +101,8 @@ html
     script(src='scripts/bin/result_controllers.js')
     script(src='scripts/bin/services.js')
     script(src='scripts/bin/directives.js')
-  body.not_logged_in(ng-app='korpApp')
+  //- body.not_logged_in(ng-app='korpApp')
+  body.not_logged_in
     noscript
       h2 You need JavaScript to run Korp.
     script.
@@ -180,13 +181,13 @@ html
           input(type='submit', value='Skicka', rel='localize[send]')
       //
          extendedtoken options menu. 
-      ul#opt_menu
-        li
-          a(data-item='repeat_item', rel='localize[repeat]') Upprepa
-        li
-          a(data-item='lbound_item', rel='localize[sent_start]') Meningsbörjan
-        li
-          a(data-item='rbound_item', rel='localize[sent_end]') Meningsslut
+      //- ul#opt_menu
+      //-   li
+      //-     a(data-item='repeat_item', rel='localize[repeat]') Upprepa
+      //-   li
+      //-     a(data-item='lbound_item', rel='localize[sent_start]') Meningsbörjan
+      //-   li
+      //-     a(data-item='rbound_item', rel='localize[sent_end]') Meningsslut
     
 
     script#lemgramResultsTmpl(type='text/x-jquery-tmpl').

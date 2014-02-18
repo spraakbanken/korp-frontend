@@ -188,6 +188,9 @@ class window.ParallelCorpusListing extends CorpusListing
 
         @selected = _.unique @selected
 
+    setActiveLangs : (langlist) ->
+        @activeLangs = langlist
+
 
     getCurrentAttributes: (lang) ->
         corpora = _.filter(@selected, (item) ->
@@ -254,11 +257,8 @@ class window.ParallelCorpusListing extends CorpusListing
     getAttributeQuery : (attr) ->
       
       #gets the within and context queries
-      currentLangList = _.map($(".lang_select").get(), (item) ->
-        $(item).val()
-      )
 
-      struct = @getLinksFromLangs(currentLangList)
+      struct = @getLinksFromLangs(@activeLangs)
       output = []
       $.each struct, (i, corps) ->
 
@@ -283,6 +283,26 @@ class window.ParallelCorpusListing extends CorpusListing
 
     getWithinQueryString: ->
         @getAttributeQuery("within")
+
+
+    stringifySelected : () ->
+        # currentLangList = _.map($(".lang_select").get(), function(item) {
+        #     return $(item).val();
+        # });
+
+        struct = settings.corpusListing.getLinksFromLangs(@activeLangs)
+        # c.log ("struct", struct)
+        output = []
+        # $.each(struct, function(i, item) {
+        for item, i in struct
+            main = item[0]
+
+            pair = _.map item.slice(1), (corp) ->
+                main.id.toUpperCase() + "|" + corp.id.toUpperCase()
+
+            output.push(pair)
+        return output.join(",")
+
 
 settings.corpusListing = new CorpusListing(settings.corpora)
 

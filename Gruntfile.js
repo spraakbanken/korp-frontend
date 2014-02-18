@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     yeoman: yeomanConfig,
     watch: {
       jade : {
-        files : ["<%= yeoman.app %>/index.jade", "<%= yeoman.app %>/includes/*.jade"],
+        files : ["<%= yeoman.app %>/index.jade", "<%= yeoman.app %>/{includes,views}/*.jade", ],
         tasks : ['jade:compile']
       },
       coffee: {
@@ -148,9 +148,15 @@ module.exports = function (grunt) {
             debug: false
           }
         },
-        files: {
-          '<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.jade"]
-        }
+        files: [{'<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.jade"]},
+                {
+                  expand: true,
+                  cwd: 'app/views',
+                  src: '{,*/}*.jade',
+                  dest: 'app/views',
+                  ext: '.html'
+                }
+          ]
       }
     },
 

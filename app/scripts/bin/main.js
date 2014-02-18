@@ -27,18 +27,21 @@
 
   deferred_domReady = $.Deferred(function(dfd) {
     $(function() {
-      var corpus;
-      corpus = search()["corpus"];
-      if (corpus) {
-        settings.corpusListing.select(corpus.split(","));
+      var mode;
+      mode = $.deparam.querystring().mode;
+      if ((mode != null) && mode !== "default") {
+        return $.getScript("modes/" + mode + "_mode.js").done(function() {
+          return dfd.resolve();
+        });
+      } else {
+        return dfd.resolve();
       }
-      return dfd.resolve();
     });
     return dfd;
   }).promise();
 
   /*
-  chained = deferred_mode.pipe(->
+  chained = mode_def.pipe(->
       c.log "info send"
       $.ajax
           url: settings.cgi_script
@@ -60,11 +63,14 @@
   loc_dfd = initLocales();
 
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
-    var creds, labs, paper, tab_a_selector;
-    $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
+    var corpus, creds, labs, paper, tab_a_selector;
     c.log("preloading done, t = ", $.now() - t);
+    angular.bootstrap(document, ['korpApp']);
+    corpus = search()["corpus"];
+    if (corpus) {
+      settings.corpusListing.select(corpus.split(","));
+    }
     window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
-    window.extendedSearch = new view.ExtendedSearch('#korp-extended');
     if (isLab) {
       $("body").addClass("lab");
     }
@@ -175,7 +181,6 @@
       if (display === "about") {
         if ($("#about_content").is(":empty")) {
           $("#about_content").load("markup/about.html", function() {
-            $("#revision").text($.revision);
             util.localize(this);
             return showAbout();
           });

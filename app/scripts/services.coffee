@@ -113,10 +113,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             timedef = $q.defer()
             @infoDef = def.promise
             @timeDef = timedef.promise
-            @getMode().then () =>
-                @getInfoData().then () ->
-                    def.resolve()
-                    initTimeGraph(timedef)
+            # @modeDef = @getMode()
+            # @modeDef.then () =>
+            @getInfoData().then () ->
+                def.resolve()
+                initTimeGraph(timedef)
 
 
             
@@ -177,7 +178,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             else
                 def.resolve()
 
-                return def.promise
+            return def.promise
 
         getInfoData : () ->
             def = $q.defer()

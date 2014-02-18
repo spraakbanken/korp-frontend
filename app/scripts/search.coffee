@@ -470,22 +470,24 @@ class view.ExtendedSearch extends BaseSearch
             false
 
         @$main.find("#strict_chk").change ->
-            advancedSearch.updateCQP()
+            # advancedSearch.updateCQP()
 
-        @setupContainer "#query_table"
+        # @setupContainer "#query_table"
 
     setupContainer: (selector) ->
         self = this
+        
+        
         # insert_token_button = $('<img src="img/plus.png"/>')
         # .addClass("image_button insert_token")
         # .click ->
         #     self.insertToken this
 
         # $(selector).append(insert_token_button).sortable
-        $(selector).sortable
-            items: ".query_token"
-            delay: 50
-            tolerance: "pointer"
+        # $(selector).sortable
+        #     items: ".query_token"
+        #     delay: 50
+        #     tolerance: "pointer"
 
         # insert_token_button.click()
 
@@ -494,15 +496,15 @@ class view.ExtendedSearch extends BaseSearch
         #$("#search-tab ul li:nth(2)").click()
         @$main.find(".query_token").remove()
         $(".insert_token").click()
-        advancedSearch.updateCQP()
+        # advancedSearch.updateCQP()
 
     onentry: ->
 
     onSubmit: ->
         super()
         if @$main.find(".query_token, .or_arg").length > 1
-            query = advancedSearch.updateCQP()
-            util.searchHash "cqp", query
+            # query = advancedSearch.updateCQP()
+            util.searchHash "cqp", @s.$root.activeCQP
         else
             $select = @$main.find("select.arg_type")
             switch $select.val()
@@ -510,13 +512,11 @@ class view.ExtendedSearch extends BaseSearch
                     searchType = (if $select.val() is "lex" then "lemgram" else $select.val())
                     util.searchHash searchType, $select.parent().next().data("value")
                 else
-                    query = advancedSearch.updateCQP()
-                    util.searchHash "cqp", query
-
-    setOneToken: (key, val) ->
-        $("#search-tab").find("a[href=#korp-extended]").click().end()
-            .find("select.arg_type:first").val(key).next().val val
-        advancedSearch.updateCQP()
+                    util.searchHash "cqp", @s.$root.activeCQP
+    # setOneToken: (key, val) ->
+    #     $("#search-tab").find("a[href=#korp-extended]").click().end()
+    #         .find("select.arg_type:first").val(key).next().val val
+    #     advancedSearch.updateCQP()
 
     insertToken: (button) ->
         # try

@@ -171,18 +171,19 @@ korpApp.directive "korpAutocomplete", () ->
 
 
 
-korpApp.directive "constr", ($window) ->
+korpApp.directive "constr", ($window, searches) ->
     scope : true
 
     link : (scope, elem, attr) ->
+        # searches.modeDef.then () ->
         c.warn "constr scope", attr.constrName, scope.$id, scope.$parent.$id
-
         instance = new $window.view[attr.constr](elem, elem, scope)
         if attr.constrName
             $window[attr.constrName] = instance
 
         scope.instance = instance
         scope.$parent.instance = instance
+            
 
         # c.log "$window[attr.constrName]", $window[attr.constrName], elem
 
@@ -325,3 +326,91 @@ korpApp.directive "tabSpinner", ($rootElement) ->
             us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
     """
 
+
+korpApp.directive "extendedList", ($location, $rootScope) ->
+    templateUrl : "views/extendedlist.html"
+    # scope : true
+    scope : {
+        cqp : "="
+    }, 
+    link : ($scope, elem, attr) ->
+        s = $scope
+        # s.defaultOptions = settings.defaultOptions
+
+        # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
+        # cqp = '[lex contains "ge..vb.1"]'
+        s.cqp = '[]'
+
+
+        s.data = []
+
+        try
+            s.data = CQP.parse(s.cqp)
+            c.log "s.data", s.data
+        catch error
+            output = []
+            for token in s.cqp.split("[")
+                if not token
+                    continue
+                token = "[" + token
+                try
+                    tokenObj = CQP.parse(token)
+                catch error
+                    tokenObj = [{cqp : token}]
+                output = output.concat(tokenObj)
+
+            s.data = output
+            c.log "crash", s.data
+
+
+        if $location.search().cqp
+            try
+                s.data = CQP.parse($location.search().cqp)
+            catch e
+                # TODO: we could traverse the token list, trying to repair parsing, se above
+                s.data = CQP.parse("[]")
+            
+        else
+            s.data = CQP.parse(s.cqp)
+
+        for token in s.data
+            if "and_block" not of token or not token.and_block.length
+                token.and_block = CQP.parse('[word = ""]')[0].and_block
+
+
+        # c.log "s.data", s.data
+
+
+        # expand [] to [word = '']
+        
+
+        s.$watch 'getCQPString()', (val) ->
+            # c.log "getCQPString", val
+            s.cqp = CQP.stringify(s.data)
+            
+            # $rootScope.activeCQP = cqpstr
+            # $location.search("cqp", s.cqp)
+            
+
+        s.getCQPString = ->
+            return (CQP.stringify s.data) or ""
+
+
+        s.addOr = (and_array) ->
+            and_array.push
+                type : "word"
+                op : "="
+                val : ""
+            return and_array
+
+
+        s.addToken = ->
+            token = {and_block : [[]]}
+            s.data.push token
+            s.addOr token.and_block[0]
+
+        s.removeToken = (i) ->
+            unless s.data.length > 1 then return
+            s.data.splice(i, 1)
+
+  

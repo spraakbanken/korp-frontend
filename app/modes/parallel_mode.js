@@ -1,6 +1,82 @@
 
 settings.wordpicture = false;
-settings.showSimpleSearch = false;
+var start_lang = "swe";
+
+korpApp.controller("SearchCtrl", function($scope) {
+	c.log("searchctrl", $scope);
+    $scope.visibleTabs = [false, true, false, false];
+    $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
+});
+korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
+	var s = $scope;
+
+	s.$on("btn_submit", function() {
+	    $location.search("search", "cqp");
+	});
+
+	if($location.search().parallel_corpora)
+		s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
+			return {lang : lang};
+		})
+	else
+		s.langs = [{lang : "swe"}];
+
+	s.$watch("langs", function() {
+		var currentLangList = _.pluck(s.langs, "lang");
+		settings.corpusListing.setActiveLangs(currentLangList);
+		$location.search("parallel_corpora", currentLangList.join(","))
+		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
+		function getLangMapping(excludeLangs) {
+			return _(struct)
+				.flatten()
+				.filter(function(item) {
+					return !_.contains(excludeLangs, item.lang);
+				}).groupBy("lang").value()
+		}
+
+
+		// c.log ("langMapping", langMapping)
+		// query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
+
+		
+		var output = s.langs[0].cqp;
+		output += _.map(s.langs.slice(1), function(langobj, i) {
+			var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
+			var linkedCorpus = _(langMapping[langobj.lang]).pluck("id").invoke("toUpperCase").join("|");
+			return ":LINKED_CORPUS:" + linkedCorpus + " " + langobj.cqp;
+		}).join("");
+
+		c.log("langs cqp", output);
+		search("cqp", output);
+		$rootScope.activeCQP = output;
+	}, true);
+
+	s.getEnabledLangs = function(i) {
+		if(i === 0) {
+			return _(settings.corpusListing.getLinksFromLangs([start_lang])).flatten()
+			.pluck("lang").unique().value();
+			
+		}
+		var currentLangList = _.pluck(s.langs, "lang");
+		delete currentLangList[i];
+		var firstlang;
+		if(s.langs.length)
+			 firstlang = s.langs[0].lang
+		var other =  _(settings.corpusListing.getLinksFromLangs([firstlang || start_lang]))
+			.flatten()
+			.pluck("lang").unique().value();
+
+		return _.difference(other, currentLangList);
+
+	};
+	s.addLangRow = function() {
+		s.langs.push({lang : s.getEnabledLangs()[0]})
+	}
+	s.removeLangRow = function(i) {
+		s.langs.pop();
+	}
+
+});
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();
@@ -8,25 +84,28 @@ $("#search_options > div:last").remove();
 $("#num_hits").prepend("<option value='10'>10</option>");
 
 // for the language selects
-var lang_prio = ["swe"].reverse();
-var start_lang = "swe";
-
-// var c1 = view.ExtendedSearch.prototype.constructor
+// var lang_prio = ["swe"].reverse();
+/*
+c.log("before parallel constructor")
 var ext = view.ExtendedSearch.prototype
-view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
-	ext.constructor.call(this, mainDivId);
-	// c.log("parallel constructor")
+view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId, tabDiv, scope) {
+	ext.constructor.call(this, mainDivId, scope);
+	c.log("parallel constructor", scope)
 	// this.parent(mainDivId);
 	var self = this;
-	$("#linkedLang").click(function() {
-		self.makeLangRow();
-	});
-	$("#removeLang").click(function() {
-		$(".lang_row:last").remove();
-		$("#linkedLang").attr("disabled", null);
-		self.onUpdate();
+	// $("#linkedLang").click(function() {
+	// 	// self.makeLangRow();
+	// 	scope.$apply(function() {
+	// 		scope.langs.push({lang : "lol"})
+	// 	})
 
-	});
+	// });
+	// $("#removeLang").click(function() {
+	// 	$(".lang_row:last").remove();
+	// 	$("#linkedLang").attr("disabled", null);
+	// 	self.onUpdate();
+
+	// });
 	var langsel = this.getLangSelect().prependTo("#query_table")
 	.change(function() {
 		self.onUpdate();
@@ -44,6 +123,8 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 	}
 	langsel.change();
 }, {
+
+	onSubmit : $.noop,
 
 
 	invalidate : function(select) {
@@ -101,64 +182,6 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 
 		return _.difference(other, currentLangList);
 
-
-
-		// if(activeLangs.length) {
-		// 	var links = settings.corpusListing.getLinksFromLangs(activeLangs);
-		// 	output = _(links).flatten().pluck("lang").unique().value();
-		// } else {
-		// 	output = _(settings.corpusListing.selected).map(function(item) {
-		// 		return settings.corpusListing.getLinked(item, true);
-		// 	})
-		// 	.flatten()
-		// 	.pluck("lang")
-		// 	.unique()
-		// 	.value()
-		// }
-		// c.log ("output, activeLangs", output, activeLangs)
-		// output = _.difference(output, activeLangs);
-		// output = output.sort(function(a, b) {
-		//	 return lang_prio.indexOf(b) - lang_prio.indexOf(a)
-		// });
-
-		// return output;
-
-		// var output = [];
-		// // get the languages that are enabled given a list of active languages
-		// if(activeLangs.length) {
-
-		// 	var enabled = settings.corpusListing.getEnabledByLang(activeLangs[0])
-		// 	$.each(activeLangs, function(i, lang) {
-		// 		var set = _(settings.corpusListing.getEnabledByLang(lang, true))
-		// 			.map(function(item) {
-		// 				return settings.corpusListing.getLinked(item);
-		// 			})
-		// 			.flatten()
-		// 			.filter(function(item) {
-		// 				return $.inArray(item.lang, activeLangs) == -1;
-		// 			})
-		// 			.value()
-
-		// 		enabled = _.intersection(enabled, set)
-
-		// 	});
-			
-		// 	output = _.pluck(enabled , "lang");
-		// } else {
-		// 	output = _(settings.corpusListing.selected).map(function(item) {
-		// 		return settings.corpusListing.getLinked(item, true);
-		// 	})
-		// 	.flatten()
-		// 	.pluck("lang")
-		// 	.value()
-		// }
-
-		// output = output.sort(function(a, b) {
-		//	 return lang_prio.indexOf(b) - lang_prio.indexOf(a)
-		// });
-
-		// return _.uniq(output);
-
 	},
 
 	getLangSelect : function() {
@@ -196,46 +219,49 @@ view.ExtendedSearch = Subclass(view.ExtendedSearch, function(mainDivId) {
 	}
 
 });
+*/
+// var c2 = view.AdvancedSearch.prototype.constructor
+// view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
+// 	c2.apply(this, arguments);
+// }, {
 
-var c2 = view.AdvancedSearch.prototype.constructor
-view.AdvancedSearch = Subclass(view.AdvancedSearch, function() {
-	c2.apply(this, arguments);
-}, {
+// 	updateCQP : function() {
+// 		c.log("updateCQP", this.s)
 
-	updateCQP : function() {
-		var currentLangList = _.map($(".lang_select").get(), function(item) {
-			return $(item).val();
-		});
+// 		return;
+// 		var currentLangList = _.map($(".lang_select").get(), function(item) {
+// 			return $(item).val();
+// 		});
 
-		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
+// 		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
 
-		function getLangMapping(excludeLangs) {
-			return _(struct)
-				.flatten()
-				.filter(function(item) {
-					return !_.contains(excludeLangs, item.lang);
-				}).groupBy("lang").value()
-		}
-		var query = $("#query_table .query_token").map(function() {
-			return $(this).extendedToken("getCQP");
-		}).get().join(" ");
-		if(currentLangList.length > 1) {
-			$(".lang_row").each(function(i, item) {			
-				cqp = $(this).find(".query_token").map(function() {
-					return $(this).extendedToken("getCQP");
-				}).get().join(" ");
+// 		function getLangMapping(excludeLangs) {
+// 			return _(struct)
+// 				.flatten()
+// 				.filter(function(item) {
+// 					return !_.contains(excludeLangs, item.lang);
+// 				}).groupBy("lang").value()
+// 		}
+// 		var query = $("#query_table .query_token").map(function() {
+// 			return $(this).extendedToken("getCQP");
+// 		}).get().join(" ");
+// 		if(currentLangList.length > 1) {
+// 			$(".lang_row").each(function(i, item) {			
+// 				cqp = $(this).find(".query_token").map(function() {
+// 					return $(this).extendedToken("getCQP");
+// 				}).get().join(" ");
 
-				var lang = $(".lang_select", this).val();
-				var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
-				// c.log ("langMapping", langMapping)
-				query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
+// 				var lang = $(".lang_select", this).val();
+// 				var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
+// 				// c.log ("langMapping", langMapping)
+// 				query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
 
-			});
-		}
-		this.setCQP(query);
-		return query;
-	}
-});
+// 			});
+// 		}
+// 		this.setCQP(query);
+// 		return query;
+// 	}
+// });
 
 var c3 = view.KWICResults.prototype.constructor
 view.KWICResults = Subclass(view.KWICResults, function() {
