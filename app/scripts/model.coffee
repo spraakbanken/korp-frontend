@@ -194,6 +194,7 @@ class model.KWICProxy extends BaseProxy
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
 
+        data.show = _.uniq data.show
         @prevCQP = o.cqp
         data.show = (_.uniq data.show).join(",")
         data.show_struct = (_.uniq data.show_struct).join(",")

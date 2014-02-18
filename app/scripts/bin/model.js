@@ -270,7 +270,7 @@
           });
         }
       }
-      data.show = _.uniq = data.show;
+      data.show = _.uniq(data.show);
       this.prevCQP = o.cqp;
       data.show = data.show.join();
       data.show_struct = data.show_struct.join();

@@ -387,7 +387,7 @@ jQuery.fn.customSelect = function() {
 		$(this).localize();
 //		if($(this).find("option:not([rel])").length)
 //			selected.text(util.getLocaleString($(this).data("prefix")) + ": " + selected.text());
-
+        
 
 	});
 	return this;
