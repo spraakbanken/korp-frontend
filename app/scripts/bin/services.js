@@ -1,5 +1,6 @@
 (function() {
-  var CompareSearches;
+  var CompareSearches,
+    __slice = [].slice;
 
   korpApp.factory("utils", function($location) {
     return {
@@ -11,7 +12,7 @@
         }
       },
       getAttributeGroups: function(corpusListing) {
-        var attrs, key, obj, sent_attrs, word;
+        var attrs, common, common_keys, key, obj, sent_attrs, word;
         word = {
           group: "word",
           value: "word",
@@ -32,9 +33,13 @@
           }
           return _results;
         })();
+        common_keys = _.compact(_.flatten(_.map(corpusListing.selected, function(corp) {
+          return _.keys(corp.common_attributes);
+        })));
+        common = _.pick.apply(_, [settings.common_struct_types].concat(__slice.call(common_keys)));
         sent_attrs = (function() {
           var _ref, _results;
-          _ref = _.extend({}, settings.common_struct_types, corpusListing.getStructAttrs());
+          _ref = _.extend({}, common, corpusListing.getStructAttrs());
           _results = [];
           for (key in _ref) {
             obj = _ref[key];

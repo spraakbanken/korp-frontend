@@ -11,6 +11,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/typeahead/typeahead-popup.html"
                                             "angularSpinner"
                                             "uiSlider"
+                                            "ui.sortable"
                                         ])
 
 # korpApp.controller "kwicCtrl", ($scope) ->

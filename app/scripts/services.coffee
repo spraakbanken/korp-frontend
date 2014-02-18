@@ -10,7 +10,10 @@ korpApp.factory "utils", ($location) ->
         attrs = for key, obj of corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
             _.extend({group : "word_attr", value : key}, obj)
 
-        sent_attrs = for key, obj of (_.extend {}, settings.common_struct_types, corpusListing.getStructAttrs()) when obj.displayType != "hidden"
+        common_keys = _.compact _.flatten _.map corpusListing.selected, (corp) -> _.keys corp.common_attributes
+        common = _.pick settings.common_struct_types, common_keys...
+
+        sent_attrs = for key, obj of (_.extend {}, common, corpusListing.getStructAttrs()) when obj.displayType != "hidden"
             _.extend({group : "sentence_attr", value : key}, obj)
 
         sent_attrs = _.sortBy sent_attrs, (item) ->

@@ -123,7 +123,7 @@
         model: "=ngModel",
         orObj: "=orObj"
       },
-      template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
+      template: "<div>{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
         return scope.$watch("tokenValue", function(valueObj) {
           var defaultTmpl, locals, tmplElem, tmplObj;
@@ -146,7 +146,7 @@
           }
           defaultTmpl = getDefaultTmpl(tmplObj);
           tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
-          return elem.html(tmplElem);
+          return elem.html(tmplElem).addClass("arg_value");
         });
       }
     };
@@ -194,42 +194,6 @@
             }
           }), 100);
         });
-      }
-    };
-  });
-
-  korpApp.directive("slider", function() {
-    return {
-      template: "",
-      link: function() {
-        var all_years, end, from, slider, start, to;
-        all_years = _(settings.corpusListing.selected).pluck("time").map(_.pairs).flatten(true).filter(function(tuple) {
-          return tuple[0] && tuple[1];
-        }).map(_.compose(Number, _.head)).value();
-        start = Math.min.apply(Math, all_years);
-        end = Math.max.apply(Math, all_years);
-        arg_value.data("value", [start, end]);
-        from = $("<input type='text' class='from'>").val(start);
-        to = $("<input type='text' class='to'>").val(end);
-        slider = $("<div />").slider({
-          range: true,
-          min: start,
-          max: end,
-          values: [start, end],
-          slide: function(event, ui) {
-            from.val(ui.values[0]);
-            return to.val(ui.values[1]);
-          },
-          change: function(event, ui) {
-            $(this).data("value", ui.values);
-            arg_value.data("value", ui.values);
-            return self._trigger("change");
-          }
-        });
-        from.add(to).keyup(function() {
-          return self._trigger("change");
-        });
-        return arg_value.append(slider, from, to);
       }
     };
   });

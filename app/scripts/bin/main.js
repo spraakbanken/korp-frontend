@@ -60,7 +60,7 @@
   loc_dfd = initLocales();
 
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
-    var creds, end, from, labs, paper, start, tab_a_selector, to;
+    var creds, labs, paper, tab_a_selector;
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
     window.advancedSearch = new view.AdvancedSearch('#korp-advanced');
@@ -71,23 +71,6 @@
     $("body").addClass("mode-" + currentMode);
     util.browserWarn();
     view.updateSearchHistory();
-    from = $("#time_from");
-    to = $("#time_to");
-    start = 1900;
-    end = new Date().getFullYear();
-    $("#time_slider").slider({
-      range: true,
-      min: start,
-      max: end,
-      values: [1982, end],
-      slide: function(event, ui) {
-        from.val(ui.values[0]);
-        return to.val(ui.values[1]);
-      },
-      change: function(event, ui) {
-        return $(this).data("value", ui.values);
-      }
-    });
     $("#mode_switch").modeSelector({
       change: function() {
         var mode;
@@ -407,7 +390,13 @@
           timeProxy.expandTimeStruct(struct);
           cor.non_time = struct[""];
           struct = _.omit(struct, "");
-          return cor.time = struct;
+          cor.time = struct;
+          if (_.keys(struct).length > 1) {
+            if (cor.common_attributes == null) {
+              cor.common_attributes = {};
+            }
+            return cor.common_attributes.date_interval = true;
+          }
         }
       });
       return safeApply($("body").scope(), function(scope) {

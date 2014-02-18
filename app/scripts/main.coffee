@@ -73,21 +73,21 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
     view.updateSearchHistory()
-    from = $("#time_from")
-    to = $("#time_to")
-    start = 1900
-    end = new Date().getFullYear()
-    $("#time_slider").slider
-        range: true
-        min: start
-        max: end
-        values: [1982, end]
-        slide: (event, ui) ->
-            from.val ui.values[0]
-            to.val ui.values[1]
+    # from = $("#time_from")
+    # to = $("#time_to")
+    # start = 1900
+    # end = new Date().getFullYear()
+    # $("#time_slider").slider
+    #     range: true
+    #     min: start
+    #     max: end
+    #     values: [1982, end]
+    #     slide: (event, ui) ->
+    #         from.val ui.values[0]
+    #         to.val ui.values[1]
 
-        change: (event, ui) ->
-            $(this).data "value", ui.values
+    #     change: (event, ui) ->
+    #         $(this).data "value", ui.values
 
     $("#mode_switch").modeSelector(
         change: ->
@@ -471,7 +471,11 @@ window.initTimeGraph = (def) ->
                 cor.non_time = struct[""]
                 struct = _.omit struct, ""
                 cor.time = struct
-                # if _.keys(struct).length > 1
+                if _.keys(struct).length > 1
+                    cor.common_attributes ?= {}
+                    cor.common_attributes.date_interval = true
+
+                    
                 #     cor.struct_attributes.date_interval =
                 #         label: "date_interval"
                 #         displayType: "date_interval"

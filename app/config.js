@@ -186,29 +186,29 @@ settings.setOptions = {
 }
 
 
-settings.getTransformFunc = function(type, value, opt) {
+// settings.getTransformFunc = function(type, value, opt) {
 
-	if(type == "word" && !value) return function() {return "";};
+// 	if(type == "word" && !value) return function() {return "";};
 
-	if(type == "date_interval") {
-		c.log("date_interval", arguments)
-		var from = value[0].toString() + "0101";
-		var to = value[1].toString() + "1231";
+// 	if(type == "date_interval") {
+// 		c.log("date_interval", arguments)
+// 		var from = value[0].toString() + "0101";
+// 		var to = value[1].toString() + "1231";
 
-		var operator1 = ">=", operator2 = "<=", bool = "&";
-		if(opt == "is_not") {
-			operator1 = "<";
-			operator2 = ">";
-			bool = "|";
-		}
+// 		var operator1 = ">=", operator2 = "<=", bool = "&";
+// 		if(opt == "is_not") {
+// 			operator1 = "<";
+// 			operator2 = ">";
+// 			bool = "|";
+// 		}
 
-		return function() {
-			return $.format("(int(_.text_datefrom) %s %s %s int(_.text_dateto) %s %s)",
-					[operator1, from, bool, operator2, to]);
-		};
+// 		return function() {
+// 			return $.format("(int(_.text_datefrom) %s %s %s int(_.text_dateto) %s %s)",
+// 					[operator1, from, bool, operator2, to]);
+// 		};
 
-	}
-};
+// 	}
+// };
 
 // settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "contains", "ends_with", "matches"]);
 // settings.liteOptions = _.omit.apply(null, [settings.defaultOptions, "starts_with", "contains", "ends_with", "matches"]);
@@ -485,7 +485,8 @@ settings.common_struct_types = {
 
         opts: settings.liteOptions,
         extended_template : '<slider floor="{{floor}}" ceiling="{{ceiling}}" ' +
-                                'ng-model-low="values.low" ng-model-high="values.high"></slider>',
+                                'ng-model-low="values.low" ng-model-high="values.high"></slider>' +
+                                '<div><input ng-model="values.low" class="from"> <input class="to" ng-model="values.high"></div>',
         controller : function($scope, searches, $timeout) {
             c.log( "searches", searches)
             var s = $scope
@@ -502,7 +503,6 @@ settings.common_struct_types = {
 
                 s.values = {}
 
-                c.log ("init date_interval", s.model)
                 $timeout(function() {
             		s.floor = Math.min.apply(null, all_years)
             		s.ceiling = Math.max.apply(null, all_years)	
@@ -515,6 +515,7 @@ settings.common_struct_types = {
             		}
                 }, 0)
                 w = s.$watch("values.low.toString() + values.high.toString()", function() {
+                	// TODO: seems to be be running too much
                     c.log ("low", s.values.low, "high", s.values.high, s.floor, s.ceiling)
                     if(isNaN(s.values.low) || isNaN(s.values.high))
                     	return

@@ -103,7 +103,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         model : "=ngModel"
         orObj : "=orObj"
     template : """
-        <div class="arg_value">{{tokenValue.label}}</div>
+        <div>{{tokenValue.label}}</div>
     """
     link : (scope, elem, attr) ->
         scope.$watch "tokenValue", (valueObj) ->
@@ -124,7 +124,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             defaultTmpl = getDefaultTmpl(tmplObj)
             tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
-            elem.html(tmplElem)
+            elem.html(tmplElem).addClass("arg_value")
 
 
 korpApp.directive "korpAutocomplete", () ->
@@ -167,45 +167,6 @@ korpApp.directive "korpAutocomplete", () ->
             ), 100
         )
 
-
-korpApp.directive "slider", () ->
-    template : """
-        
-    """
-    link : () ->
-        all_years = _(settings.corpusListing.selected)
-                    .pluck("time")
-                    .map(_.pairs)
-                    .flatten(true)
-                    .filter((tuple) ->
-                        tuple[0] and tuple[1]
-                    ).map(_.compose(Number, _.head))
-                    .value()
-        # c.log "all", all_years
-        start = Math.min(all_years...)
-        end = Math.max(all_years...)
-        # arg_value = $("<div>")
-        arg_value.data "value", [start, end]
-        from = $("<input type='text' class='from'>").val(start)
-        to = $("<input type='text' class='to'>").val(end)
-        slider = $("<div />").slider(
-            range: true
-            min: start
-            max: end
-            values: [start, end]
-            slide: (event, ui) ->
-                from.val ui.values[0]
-                to.val ui.values[1]
-
-            change: (event, ui) ->
-                $(this).data "value", ui.values
-                arg_value.data "value", ui.values
-                self._trigger "change"
-        )
-        from.add(to).keyup ->
-            self._trigger "change"
-
-        arg_value.append slider, from, to
 
 
 

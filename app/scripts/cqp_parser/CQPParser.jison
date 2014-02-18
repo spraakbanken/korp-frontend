@@ -134,7 +134,7 @@ or
         }
     | DATE_FROM DATE_OP DATE_VAL bool DATE_TO DATE_OP DATE_VAL
         {
-            var op = $2 == '<' ? "=" : "!=";
+            var op = $2 == '<' ? "!=" : "=";
 
             $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
         }

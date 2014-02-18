@@ -129,7 +129,7 @@ case 19:
         
 break;
 case 20:
-            var op = $$[$0-5] == '<' ? "=" : "!=";
+            var op = $$[$0-5] == '<' ? "!=" : "=";
 
             this.$ =  {type : "date_interval", op : op, val: $$[$0-4] + "," + $$[$0]}
         
