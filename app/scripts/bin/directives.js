@@ -215,7 +215,6 @@
         if (attr.constrName) {
           $window[attr.constrName] = instance;
         }
-        c.log("constr", scope, instance);
         return scope.instance = instance;
       }
     };
@@ -294,7 +293,7 @@
         var part, w;
         elem.text(scope.meter[0]);
         w = elem.parent().width();
-        part = 1 - ((Math.abs(scope.meter[1])) / scope.max);
+        part = (Math.abs(scope.meter[1])) / (Math.abs(scope.max));
         return elem.width(Math.round(part * w));
       }
     };

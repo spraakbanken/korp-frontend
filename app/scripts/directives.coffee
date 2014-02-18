@@ -193,7 +193,6 @@ korpApp.directive "constr", ($window) ->
         if attr.constrName
             $window[attr.constrName] = instance
 
-        c.log "constr", scope, instance
         scope.instance = instance
 
         # c.log "$window[attr.constrName]", $window[attr.constrName], elem
@@ -284,7 +283,7 @@ korpApp.directive "meter", () ->
     link : (scope, elem, attr) ->
         elem.text(scope.meter[0])
         w = elem.parent().width()
-        part = 1 -((Math.abs scope.meter[1]) / scope.max)
+        part = ((Math.abs scope.meter[1]) / (Math.abs scope.max))
 
         elem.width Math.round (part * w)
 

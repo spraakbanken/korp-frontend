@@ -33,11 +33,6 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
 
-    s.searchDef = $.Deferred()
-
-
-    s.onSearchLoad = () ->
-        s.searchDef.resolve()
 
 
     s._loc = $location

@@ -129,8 +129,17 @@
       _this = this;
     Searches = (function() {
       function Searches() {
+        var def,
+          _this = this;
         this.activeSearch = null;
-        this.infoDef = this.getInfoData();
+        def = $q.defer();
+        this.infoDef = def.promise;
+        this.getMode().then(function() {
+          return _this.getInfoData().then(function() {
+            def.resolve();
+            return initTimeGraph();
+          });
+        });
       }
 
       Searches.prototype.kwicRequest = function(cqp, page) {
@@ -178,10 +187,30 @@
         return this.kwicRequest(cqp, page);
       };
 
+      Searches.prototype.getMode = function() {
+        var def, mode;
+        def = $q.defer();
+        mode = $.deparam.querystring().mode;
+        if ((mode != null) && mode !== "default") {
+          return $.getScript("modes/" + mode + "_mode.js").done(function() {
+            return $rootScope.$apply(function() {
+              return def.resolve();
+            });
+          }).fail(function(args, msg, e) {
+            return $rootScope.$apply(function() {
+              return def.reject();
+            });
+          });
+        } else {
+          def.resolve();
+          return def.promise;
+        }
+      };
+
       Searches.prototype.getInfoData = function() {
         var def;
         def = $q.defer();
-        return $http({
+        $http({
           method: "GET",
           url: settings.cgi_script,
           params: {

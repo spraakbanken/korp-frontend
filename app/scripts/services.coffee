@@ -104,7 +104,14 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
     class Searches
         constructor : () ->
             @activeSearch = null
-            @infoDef = @getInfoData()
+            def = $q.defer()
+            @infoDef = def.promise
+            @getMode().then () =>
+                @getInfoData().then () ->
+                    def.resolve()
+                    initTimeGraph()
+
+            
 
 
 
@@ -148,10 +155,25 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             #kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page, $.proxy(kwicResults.onProgress, kwicResults));
             # $("#cqp_string").val cqp
 
+        getMode : () ->
+            def = $q.defer()
+            mode = $.deparam.querystring().mode
+            if mode? and mode isnt "default"
+                $.getScript("modes/#{mode}_mode.js").done(->
+                    $rootScope.$apply () ->
+                        def.resolve()
+
+                ).fail (args, msg, e) ->
+                    $rootScope.$apply () ->
+                        def.reject()
+            else
+                def.resolve()
+
+                return def.promise
 
         getInfoData : () ->
             def = $q.defer()
-            return $http(
+            $http(
                 method : "GET"
                 url : settings.cgi_script
                 params:

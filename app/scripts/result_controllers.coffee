@@ -179,8 +179,8 @@ korpApp.controller "compareCtrl", ($scope) ->
         s.tables = _.groupBy  (pairs), ([word, val]) ->
             if val > 0 then "positive" else "negative"
 
-        s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1]
-        s.tables.negative = _.sortBy s.tables.negative, (tuple) -> Math.abs tuple[1]
+        s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1] * -1
+        s.tables.negative = _.sortBy s.tables.negative, (tuple) -> (Math.abs tuple[1]) * -1
 
         s.max = _.max pairs, ([word, val]) ->
             Math.abs val

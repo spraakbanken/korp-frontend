@@ -1251,12 +1251,12 @@ table {
   position: absolute;
   left: 0px;
   right: 0;
-  transition: right 500ms;
+  transition: right 300ms;
 }
 /* line 1050, styles.scss */
 #left-column.sidebar_visible {
-  right: 265px;
-  transition: right 500ms;
+  right: 258px;
+  transition: right 300ms;
 }
 
 /* line 1056, styles.scss */
@@ -1266,15 +1266,15 @@ table {
   width: 250px;
   padding: 5px 0px 5px 5px;
   right: -268px;
-  transition: right 500ms;
+  transition: right 300ms;
 }
 /* line 1063, styles.scss */
 #sidebar.visible {
-  transition: right 500ms;
+  transition: right 300ms;
   right: 0;
 }
 /* line 1068, styles.scss */
-#sidebar.fixed {
+#sidebar.visible.fixed {
   right: 8px;
   position: fixed;
   top: 8px;
@@ -2409,19 +2409,19 @@ line.tick {
 .compare_result ul {
   padding: 2px;
   margin-right: 2em;
-  min-width: 300px;
+  width: 400px;
   font-size: 1.1em;
 }
-/* line 1961, styles.scss */
+/* line 1962, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
 }
-/* line 1964, styles.scss */
+/* line 1965, styles.scss */
 .compare_result ul li .meter {
   padding: 3px 0;
 }
 
-/* line 1977, styles.scss */
+/* line 1978, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2429,28 +2429,28 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 1979, styles.scss */
+/* line 1980, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 1982, styles.scss */
+/* line 1983, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 1990, styles.scss */
+/* line 1991, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-/* line 1998, styles.scss */
+/* line 1999, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }
 
-/* line 2003, styles.scss */
+/* line 2004, styles.scss */
 .badge {
   padding-right: 5px;
   padding-left: 6px;

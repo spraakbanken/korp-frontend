@@ -701,22 +701,22 @@
 
     function TimeProxy() {
       this.data = [];
-      this.req = {
-        url: settings.cgi_script,
-        type: "GET",
-        data: {
-          command: "timespan",
-          granularity: "y",
-          corpus: settings.corpusListing.stringifySelected()
-        }
-      };
     }
 
     TimeProxy.prototype.makeRequest = function(combined) {
       var dfd, self, xhr;
       self = this;
       dfd = $.Deferred();
-      this.req.data.combined = combined;
+      this.req = {
+        url: settings.cgi_script,
+        type: "GET",
+        data: {
+          command: "timespan",
+          granularity: "y",
+          corpus: settings.corpusListing.stringifySelected(),
+          combined: combined
+        }
+      };
       xhr = $.ajax(this.req);
       if (combined) {
         xhr.done(function(data, status, xhr) {

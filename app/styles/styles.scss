@@ -1046,10 +1046,10 @@ table {
   position: absolute;
   left: 0px;
   right : 0;
-  transition : right 500ms;
+  transition : right 300ms;
   &.sidebar_visible {
-    right : 265px;
-    transition : right 500ms;
+    right : 258px;
+    transition : right 300ms;
   }
 }
 
@@ -1059,13 +1059,13 @@ table {
   width: 250px;
   padding: 5px 0px 5px 5px;
   right : -268px;
-  transition : right 500ms;
+  transition : right 300ms;
   &.visible {
-    transition : right 500ms;
+    transition : right 300ms;
     // display : block;
     right : 0;
   }
-  &.fixed {
+  &.visible.fixed {
     right: 8px;
     position: fixed;
     top: 8px;
@@ -1963,7 +1963,8 @@ line.tick {
     // border : 1px solid $primaryColor;
     padding : 2px;
     margin-right : 2em;
-    min-width : 300px;
+    // min-width : 300px;
+    width : 400px;
     font-size : 1.1em;
     li {
       margin-bottom : 0.5em;

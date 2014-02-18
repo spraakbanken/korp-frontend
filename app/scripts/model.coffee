@@ -550,6 +550,12 @@ class model.AuthenticationProxy
 class model.TimeProxy extends BaseProxy
     constructor: ->
         @data = []
+
+
+    makeRequest: (combined) ->
+        self = this
+        dfd = $.Deferred()
+
         @req =
             url: settings.cgi_script
             type: "GET"
@@ -557,13 +563,8 @@ class model.TimeProxy extends BaseProxy
                 command: "timespan"
                 granularity: "y"
                 corpus: settings.corpusListing.stringifySelected()
+                combined : combined
 
-
-    makeRequest: (combined) ->
-        self = this
-        dfd = $.Deferred()
-
-        @req.data.combined = combined
         xhr = $.ajax(@req)
         if combined
             xhr.done (data, status, xhr) ->

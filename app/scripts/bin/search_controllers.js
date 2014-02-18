@@ -10,10 +10,6 @@
     s.search = function() {
       return $location.search.apply($location, arguments);
     };
-    s.searchDef = $.Deferred();
-    s.onSearchLoad = function() {
-      return s.searchDef.resolve();
-    };
     s._loc = $location;
     s.$watch("_loc.search()", function() {
       c.log("loc.search() change", $location.search());

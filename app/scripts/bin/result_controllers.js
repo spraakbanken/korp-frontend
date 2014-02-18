@@ -203,10 +203,10 @@
         }
       });
       s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
-        return tuple[1];
+        return tuple[1] * -1;
       });
       s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
-        return Math.abs(tuple[1]);
+        return (Math.abs(tuple[1])) * -1;
       });
       s.max = _.max(pairs, function(_arg1) {
         var val, word;

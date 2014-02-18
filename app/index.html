@@ -423,7 +423,7 @@
 								<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
 
 									<div class="column column_1">
-										<h2>Fler i {{cmp1.label}}</h2>
+										<h2>Utmärkande för <em>{{cmp1.label}}</em></h2>
 										<ul>
 											<li ng-repeat="tuple in tables.negative">
 												<div class="meter" meter="tuple" max="max[1]" ></div>
@@ -431,7 +431,7 @@
 										</ul>
 									</div>
 									<div class="column column_2">
-										<h2>Fler i {{cmp2.label}}</h2>
+										<h2>Utmärkande för <em>{{cmp2.label}}</em></h2>
 										<ul>
 											<li ng-repeat="tuple in tables.positive">
 												<div class="meter" meter="tuple" max="max[1]" ></div>

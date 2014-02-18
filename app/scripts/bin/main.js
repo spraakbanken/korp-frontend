@@ -1,5 +1,5 @@
 (function() {
-  var deferred_domReady, deferred_mode, initTimeGraph, isDev, loc_dfd, t,
+  var deferred_domReady, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.currentMode = $.deparam.querystring().mode || "default";
@@ -25,30 +25,16 @@
     }
   });
 
-  deferred_mode = $.Deferred();
-
   deferred_domReady = $.Deferred(function(dfd) {
-    return $(function() {
-      var corpus, mode;
+    $(function() {
+      var corpus;
       corpus = search()["corpus"];
       if (corpus) {
         settings.corpusListing.select(corpus.split(","));
       }
-      mode = $.deparam.querystring().mode;
-      if ((mode != null) && mode !== "default") {
-        $.getScript("modes/" + mode + "_mode.js").done(function() {
-          return deferred_mode.resolve();
-        }).fail(function(args, msg, e) {
-          return deferred_mode.reject();
-        });
-      } else {
-        deferred_mode.resolve();
-      }
-      return $.when($("body").scope().searchDef).then(function() {
-        dfd.resolve();
-        return c.log("searchdeferred!");
-      });
+      return dfd.resolve();
     });
+    return dfd;
   }).promise();
 
   /*
@@ -73,7 +59,7 @@
 
   loc_dfd = initLocales();
 
-  $.when(loc_dfd, deferred_mode, deferred_domReady).then((function(loc_data) {
+  $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
     var creds, end, from, labs, paper, start, tab_a_selector, to;
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1]);
     c.log("preloading done, t = ", $.now() - t);
@@ -353,12 +339,11 @@
       view.initSearchOptions();
       return onHashChange(null, true);
     }, 0);
-    $("body").animate({
+    return $("body").animate({
       opacity: 1
     }, function() {
       return $(this).css("opacity", "");
     });
-    return initTimeGraph();
   }), function() {
     c.log("failed to load some resource at startup.", arguments);
     return $("body").css({
@@ -394,7 +379,7 @@
     return outCorpora;
   };
 
-  initTimeGraph = function() {
+  window.initTimeGraph = function() {
     var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
     timestruct = null;
     all_timestruct = null;

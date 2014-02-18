@@ -23,27 +23,16 @@ $.ajaxPrefilter "json", (options, orig, jqXHR) ->
 #         return
 #     $.sm "korp_statemachine.xml", dfd.resolve
 # ).promise()
-deferred_mode = $.Deferred()
+# deferred_mode = $.Deferred()
 deferred_domReady = $.Deferred((dfd) ->
     $ ->
         corpus = search()["corpus"]
         if corpus
             settings.corpusListing.select corpus.split(",")
-        mode = $.deparam.querystring().mode
-        if mode? and mode isnt "default"
-            $.getScript("modes/#{mode}_mode.js").done(->
-                deferred_mode.resolve()
-            ).fail (args, msg, e) ->
-                deferred_mode.reject()
+        dfd.resolve()
+        
 
-
-        else
-            deferred_mode.resolve()
-
-        $.when($("body").scope().searchDef).then () ->
-            dfd.resolve()
-            c.log "searchdeferred!"
-
+    return dfd
 ).promise()
 
 ###
@@ -70,7 +59,7 @@ loc_dfd = initLocales()
 
 
 
-$.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
+$.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $.revision = parseInt("$Rev: 65085 $".split(" ")[1])
     c.log "preloading done, t = ", $.now() - t
 
@@ -412,7 +401,7 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
     , ->
         $(this).css "opacity", ""
 
-    initTimeGraph()
+    # initTimeGraph()
 ), ->
     c.log "failed to load some resource at startup.", arguments
     $("body").css(
@@ -456,9 +445,7 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
 
 
 
-initTimeGraph = ->
-    # TODO: crashing now, fix later
-    # return 
+window.initTimeGraph = ->
     timestruct = null
     all_timestruct = null
     restdata = null
