@@ -172,7 +172,7 @@ korpApp.controller "compareCtrl", ($scope) ->
     s.$parent.loading = true
     #active must always be true to make new tab active
     s.$parent.active = true
-    s.promise.then ([data, cmp1, cmp2]) ->
+    s.promise.then ([data, cmp1, cmp2, reduce]) ->
         # c.log "compare promise", _.pairs data.loglike
         s.$parent.loading = false
         pairs = _.pairs data.loglike
@@ -181,6 +181,12 @@ korpApp.controller "compareCtrl", ($scope) ->
 
         s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1] * -1
         s.tables.negative = _.sortBy s.tables.negative, (tuple) -> (Math.abs tuple[1]) * -1
+        s.reduce = reduce
+
+        cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
+        # stringify = settings.corpusListing.
+        c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
+        s.stringify = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())[reduce]?.stringify or angular.identity
 
         s.max = _.max pairs, ([word, val]) ->
             Math.abs val

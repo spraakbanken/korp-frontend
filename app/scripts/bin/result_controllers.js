@@ -189,8 +189,8 @@
     s.$parent.loading = true;
     s.$parent.active = true;
     return s.promise.then(function(_arg) {
-      var cmp1, cmp2, data, pairs;
-      data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2];
+      var cl, cmp1, cmp2, data, pairs, reduce, _ref;
+      data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
       s.$parent.loading = false;
       pairs = _.pairs(data.loglike);
       s.tables = _.groupBy(pairs, function(_arg1) {
@@ -208,6 +208,10 @@
       s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
         return (Math.abs(tuple[1])) * -1;
       });
+      s.reduce = reduce;
+      cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
+      c.log("_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()));
+      s.stringify = ((_ref = (_.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()))[reduce]) != null ? _ref.stringify : void 0) || angular.identity;
       s.max = _.max(pairs, function(_arg1) {
         var val, word;
         word = _arg1[0], val = _arg1[1];

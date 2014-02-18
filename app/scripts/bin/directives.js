@@ -287,11 +287,13 @@
     return {
       scope: {
         meter: "=",
-        max: "="
+        max: "=",
+        stringify: "="
       },
       link: function(scope, elem, attr) {
-        var part, w;
-        elem.text(scope.meter[0]);
+        var part, w, wds;
+        wds = scope.meter[0];
+        elem.html((_.map(_.compact(wds.split("|")), scope.stringify)).join(", "));
         w = elem.parent().width();
         part = (Math.abs(scope.meter[1])) / (Math.abs(scope.max));
         return elem.width(Math.round(part * w));

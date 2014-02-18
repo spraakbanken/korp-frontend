@@ -280,8 +280,15 @@ korpApp.directive "meter", () ->
     scope :
         meter : "="
         max : "="
+        stringify : "="
     link : (scope, elem, attr) ->
-        elem.text(scope.meter[0])
+        wds = scope.meter[0]
+
+        # for wd in _.compact wds.split("|")
+        #     c.log "wd", wd
+        #     elem.html scope.stringify wd
+        elem.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+
         w = elem.parent().width()
         part = ((Math.abs scope.meter[1]) / (Math.abs scope.max))
 

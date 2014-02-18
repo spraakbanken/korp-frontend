@@ -405,18 +405,17 @@ korpApp.filter "mapper", () ->
 
 korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope) ->
     s = $scope
-    cl = settings.corpusListing
     s.valfilter = utils.valfilter
 
     $rootScope.saveSearch {
         label : "frihet"
         cqp : "[lex contains 'frihet..nn.1']"
-        corpora : ["VIVILL"]
+        corpora : ["LB"]
     }
     $rootScope.saveSearch {
         label : "jämlikhet"
         cqp : "[lex contains 'jämlikhet..nn.1']"
-        corpora : ["VIVILL"]
+        corpora : ["LB"]
     }
 
 
@@ -428,7 +427,7 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
 
     s.getAttrs = () ->
         unless s.cmp1 then return null
-        listing = cl.subsetFactory(_.uniq [].concat s.cmp1.corpora, s.cmp2.corpora)
+        listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
         return utils.getAttributeGroups(listing)
 
 

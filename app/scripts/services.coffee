@@ -86,7 +86,7 @@ korpApp.factory 'backend', ($http, $q, utils) ->
             params : params
             method : "GET"
         ).success (data) ->
-            def.resolve [data, cmpObj1, cmpObj2]
+            def.resolve [data, cmpObj1, cmpObj2, reduce]
 
 
 

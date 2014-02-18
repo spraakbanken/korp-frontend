@@ -349,19 +349,18 @@
   });
 
   korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope) {
-    var cl, s;
+    var s;
     s = $scope;
-    cl = settings.corpusListing;
     s.valfilter = utils.valfilter;
     $rootScope.saveSearch({
       label: "frihet",
       cqp: "[lex contains 'frihet..nn.1']",
-      corpora: ["VIVILL"]
+      corpora: ["LB"]
     });
     $rootScope.saveSearch({
       label: "jämlikhet",
       cqp: "[lex contains 'jämlikhet..nn.1']",
-      corpora: ["VIVILL"]
+      corpora: ["LB"]
     });
     s.cmp1 = $rootScope.savedSearches[0];
     s.cmp2 = $rootScope.savedSearches[1];
@@ -371,7 +370,7 @@
       if (!s.cmp1) {
         return null;
       }
-      listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
+      listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);
     };
     return s.sendCompare = function() {

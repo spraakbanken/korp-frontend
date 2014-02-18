@@ -117,7 +117,7 @@
           params: params,
           method: "GET"
         }).success(function(data) {
-          return def.resolve([data, cmpObj1, cmpObj2]);
+          return def.resolve([data, cmpObj1, cmpObj2, reduce]);
         });
         return def.promise;
       }
