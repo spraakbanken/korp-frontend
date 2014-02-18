@@ -44,6 +44,7 @@
       return c.log("tabselect", arguments);
     });
     s.onexit = function() {
+      c.log("onexit");
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
@@ -192,8 +193,6 @@
   korpApp.controller("compareCtrl", function($scope) {
     var s;
     s = $scope;
-    s.$parent.loading = true;
-    s.$parent.active = true;
     return s.promise.then(function(_arg) {
       var cl, cmp1, cmp2, data, pairs, reduce, _ref;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];

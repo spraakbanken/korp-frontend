@@ -61,7 +61,8 @@ html
 
     script(src='components/angular-slider/angular-slider.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap.js')
-    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.10.0-SNAPSHOT.js')
     script(src='components/lodash/dist/lodash.compat.js')
     script(src='components/spin.js/dist/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')
@@ -139,7 +140,7 @@ html
                         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
-                tab(heading='Ordbild', select="selectTab(2)")
+                tab(heading='Ordbild', disabled="instance.disabled")
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent
                       input#wordclassChk(type='checkbox')

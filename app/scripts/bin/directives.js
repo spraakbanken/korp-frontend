@@ -100,8 +100,8 @@
   });
 
   korpApp.directive("tokenValue", function($compile, $controller) {
-    var defaultController, defaultTmpl;
-    defaultTmpl = "<input ng-model='model' class='arg_value'\nplaceholder='<{{\"any\" | loc}}>'>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>";
+    var defaultController, getDefaultTmpl;
+    getDefaultTmpl = _.template("<input ng-model='model' class='arg_value'\n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>");
     defaultController = function($scope) {
       $scope["case"] = "sensitive";
       $scope.makeSensitive = function() {
@@ -126,7 +126,7 @@
       template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
         return scope.$watch("tokenValue", function(valueObj) {
-          var locals, tmplElem;
+          var defaultTmpl, locals, tmplElem, tmplObj;
           c.log("watch value", valueObj);
           if (!valueObj) {
             return;
@@ -135,6 +135,16 @@
             $scope: _.extend(scope, valueObj)
           };
           $controller(valueObj.controller || defaultController, locals);
+          if (valueObj.value === "word") {
+            tmplObj = {
+              maybe_placeholder: "placeholder='<{{\"any\" | loc}}>'"
+            };
+          } else {
+            tmplObj = {
+              maybe_placeholder: ""
+            };
+          }
+          defaultTmpl = getDefaultTmpl(tmplObj);
           tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
           return elem.html(tmplElem);
         });
@@ -249,9 +259,9 @@
         s.pos = attr.pos || "bottom";
         s.togglePopover = function() {
           if (s.isPopoverVisible) {
-            return s.popHide();
+            s.popHide();
           } else {
-            return s.popShow();
+            s.popShow();
           }
         };
         popover = elem.find(".popover");
@@ -283,12 +293,12 @@
             at: at,
             of: elem.find(".opener")
           });
-          return $rootElement.on("keydown", onEscape);
+          $rootElement.on("keydown", onEscape);
         };
         s.popHide = function() {
           s.isPopoverVisible = false;
           popover.hide("fade", "fast");
-          return $rootElement.off("keydown", onEscape);
+          $rootElement.off("keydown", onEscape);
         };
         s.onSubmit = function() {
           s.popHide();

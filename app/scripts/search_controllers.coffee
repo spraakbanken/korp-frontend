@@ -3,7 +3,6 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "ui.bootstrap.tabs",
                                             "template/tabs/tabset.html"
                                             "template/tabs/tab.html"
-                                            "template/tabs/tabset-titles.html"
                                             "ui.bootstrap.modal"
                                             "template/modal/backdrop.html"
                                             "template/modal/window.html"
@@ -213,6 +212,9 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
                 ["_." + item.value, item]
             else 
                 [item.value, item]
+
+
+        # s.types = _.sortBy s.types, "label"
 
 
 

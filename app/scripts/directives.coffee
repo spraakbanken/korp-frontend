@@ -80,8 +80,9 @@ korpApp.directive "tabHash", (utils, $location) ->
 korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
-    defaultTmpl = """<input ng-model='model' class='arg_value'
-                placeholder='<{{"any" | loc}}>'>
+    
+    getDefaultTmpl = _.template """<input ng-model='model' class='arg_value'
+                <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
                         Aa
@@ -129,7 +130,12 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             $controller(valueObj.controller or defaultController, locals)
 
             # valueObj.controller?(scope, _.omit valueObj)
+            if valueObj.value == "word"
+                tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc}}>'"""}
+            else
+                tmplObj = {maybe_placeholder : ""}
 
+            defaultTmpl = getDefaultTmpl(tmplObj)
             tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
             elem.html(tmplElem)
 
@@ -261,6 +267,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                 s.popHide()
             else
                 s.popShow()
+            return
 
         popover = elem.find(".popover")
         s.isPopoverVisible = false
@@ -291,11 +298,13 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                 of : elem.find(".opener")
 
             $rootElement.on "keydown", onEscape
+            return
 
         s.popHide = () ->
             s.isPopoverVisible = false
             popover.hide("fade", "fast")
             $rootElement.off "keydown", onEscape
+            return
 
 
         s.onSubmit = () ->

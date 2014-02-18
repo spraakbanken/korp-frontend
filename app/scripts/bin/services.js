@@ -47,6 +47,9 @@
           }
           return _results;
         })();
+        sent_attrs = _.sortBy(sent_attrs, function(item) {
+          return util.getLocaleString(item.label);
+        });
         return [word].concat(attrs, sent_attrs);
       },
       setupHash: function(scope, config) {

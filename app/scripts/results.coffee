@@ -23,7 +23,6 @@ class BaseResults
 
         #       this.resetView();
         @$result.find(".error_msg").remove()
-        c.log "renderResults", @proxy
         util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
 
         #$("#result-container").tabs("select", 0);
@@ -75,7 +74,6 @@ class view.KWICResults extends BaseResults
 
         @s = scope
         @selectionManager = scope.selectionManager
-        c.log "selectionManager", @selectionManager
 
         @$result.click =>
             return unless @selectionManager.hasSelected()
@@ -385,10 +383,8 @@ class view.KWICResults extends BaseResults
         @showPreloader()
 
         # applyTo "kwicCtrl", ($scope) ->
-        c.log "makeRequest", @$result, @$result.scope()
         # @$result.scope().$apply ($scope) ->
         safeApply @$result.scope(), ($scope) ->
-            c.log "apply", $scope, $scope.setContextData
             if isReading
                 $scope.setContextData({kwic:[]})
             else
@@ -409,7 +405,6 @@ class view.KWICResults extends BaseResults
 
     centerScrollbar: ->
         m = @$result.find(".match:first")
-        c.log "centerScrollbar", m, @$result.find(".match:first")
         return unless m.length
         area = @$result.find(".table_scrollarea").scrollLeft(0)
         match = m.first().position().left + m.width() / 2
@@ -600,17 +595,19 @@ class view.LemgramResults extends BaseResults
                 $(".lemgram_result .wordclass_suffix", self.$result).hide()
 
         
-
+        @disabled = true
 
     resetView: ->
         super()
         $(".content_target", @$result).empty()
+        @disabled = true
 
     renderResult: (data, query) ->
         c.log "lemgramResults.renderResult", data, query
         resultError = super(data)
         @resetView()
-        return  if resultError is false
+        return if resultError is false
+        @disabled = false
         unless data.relations
             @showNoResults()
             @resultDeferred.reject()
@@ -631,7 +628,6 @@ class view.LemgramResults extends BaseResults
                 if confObj != "_"
 
                     unless $(this).find("table").length then return
-                    c.log "header confObj", wordClass, confObj
 
                     if confObj.alt_label
                         label = confObj.alt_label

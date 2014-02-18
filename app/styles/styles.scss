@@ -330,7 +330,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 
 .arg_type {
   @include inline-block();
-  min-width: 150px;
+  width : 160px;
 }
 
 .arg_opts {
@@ -1585,6 +1585,11 @@ label[for=lemgram_select]:before {
     }
   }
 }
+
+.nav-tabs li.disabled {
+  opacity : 0.6;
+}
+
 #results-wrapper .nav-tabs li:nth-child(4) {
   margin-left : 1em;
 }

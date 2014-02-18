@@ -216,8 +216,12 @@ settings.getTransformFunc = function(type, value, opt) {
 
 var selectType = {
 	extended_template : "<select ng-model='model' "
-	 + "ng-options='key as localize(val) | loc for (key, val) in dataset' ></select>",
+	 + "ng-options='key as localize(val) | loc for (key, val) in dataset | orderBy:order' ></select>",
  	controller : function($scope) {
+ 		$scope.order = function(a, b) {
+ 			c.log ("order", arguments)
+ 			return b;
+ 		}
  		$scope.localize = function(str) {
  			if($scope.localize === false) {
  				return str;

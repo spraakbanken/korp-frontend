@@ -31,7 +31,6 @@
 
     BaseResults.prototype.renderResult = function(data) {
       this.$result.find(".error_msg").remove();
-      c.log("renderResults", this.proxy);
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
       }
@@ -84,7 +83,6 @@
       this.current_page = 0;
       this.s = scope;
       this.selectionManager = scope.selectionManager;
-      c.log("selectionManager", this.selectionManager);
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
@@ -429,9 +427,7 @@
       var isReading, kwicCallback;
       isReading = this.$result.is(".reading_mode");
       this.showPreloader();
-      c.log("makeRequest", this.$result, this.$result.scope());
       safeApply(this.$result.scope(), function($scope) {
-        c.log("apply", $scope, $scope.setContextData);
         if (isReading) {
           return $scope.setContextData({
             kwic: []
@@ -453,7 +449,6 @@
     KWICResults.prototype.centerScrollbar = function() {
       var area, m, match, sidebarWidth;
       m = this.$result.find(".match:first");
-      c.log("centerScrollbar", m, this.$result.find(".match:first"));
       if (!m.length) {
         return;
       }
@@ -691,11 +686,13 @@
           return $(".lemgram_result .wordclass_suffix", self.$result).hide();
         }
       });
+      this.disabled = true;
     }
 
     LemgramResults.prototype.resetView = function() {
       LemgramResults.__super__.resetView.call(this);
-      return $(".content_target", this.$result).empty();
+      $(".content_target", this.$result).empty();
+      return this.disabled = true;
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
@@ -706,6 +703,7 @@
       if (resultError === false) {
         return;
       }
+      this.disabled = false;
       if (!data.relations) {
         this.showNoResults();
         return this.resultDeferred.reject();
@@ -730,7 +728,6 @@
             if (!$(this).find("table").length) {
               return;
             }
-            c.log("header confObj", wordClass, confObj);
             if (confObj.alt_label) {
               label = confObj.alt_label;
             } else {

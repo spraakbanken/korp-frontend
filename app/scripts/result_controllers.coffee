@@ -51,6 +51,7 @@ korpApp.controller "kwicCtrl", ($scope) ->
         c.log "tabselect", arguments
 
     s.onexit = () ->
+        c.log "onexit"
         s.$root.sidebar_visible = false
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
@@ -187,9 +188,9 @@ korpApp.controller "graphCtrl", ($scope) ->
 
 korpApp.controller "compareCtrl", ($scope) ->
     s = $scope
-    s.$parent.loading = true
+    # s.$parent.loading = true
     #active must always be true to make new tab active
-    s.$parent.active = true
+    # s.$parent.active = true
     s.promise.then ([data, cmp1, cmp2, reduce]) ->
         # c.log "compare promise", _.pairs data.loglike
         s.$parent.loading = false
