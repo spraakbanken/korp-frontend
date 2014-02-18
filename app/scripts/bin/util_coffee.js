@@ -399,10 +399,6 @@
 
   settings.corpusListing = new CorpusListing(settings.corpora);
 
-  window.getScope = function(ctrl) {
-    return angular.element("[ng-controller=" + ctrl + "]").scope();
-  };
-
   window.applyTo = function(ctrl, f) {
     var s;
     s = getScope(ctrl);
@@ -413,6 +409,9 @@
     var ret, s;
     s = $("body").scope();
     ret = safeApply(s.$root, function() {
+      if (!obj) {
+        return s.$root.search();
+      }
       if (_.isObject(obj)) {
         obj = _.extend({}, s.$root.search(), obj);
         return s.$root.search(obj);

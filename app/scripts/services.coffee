@@ -188,6 +188,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     command : "info"
                     corpus : _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join ","
             ).success (data) ->
+                c.log "data", data
                 for corpus in settings.corpusListing.corpora
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
 

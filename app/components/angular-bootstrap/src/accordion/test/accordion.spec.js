@@ -125,10 +125,10 @@ describe('accordion', function () {
     describe('with static panels', function () {
       beforeEach(function () {
         var tpl =
-          "<accordion>" +
-            "<accordion-group heading=\"title 1\">Content 1</accordion-group>" +
-            "<accordion-group heading=\"title 2\">Content 2</accordion-group>" +
-            "</accordion>";
+          '<accordion>' +
+            '<accordion-group heading="title 1">Content 1</accordion-group>' +
+            '<accordion-group heading="title 2">Content 2</accordion-group>' +
+            '</accordion>';
         element = angular.element(tpl);
         $compile(element)(scope);
         scope.$digest();
@@ -171,9 +171,9 @@ describe('accordion', function () {
       var model;
       beforeEach(function () {
         var tpl =
-          "<accordion>" +
-            "<accordion-group ng-repeat='group in groups' heading='{{group.name}}'>{{group.content}}</accordion-group>" +
-          "</accordion>";
+          '<accordion>' +
+            '<accordion-group ng-repeat="group in groups" heading="{{group.name}}">{{group.content}}</accordion-group>' +
+          '</accordion>';
         element = angular.element(tpl);
         model = [
           {name: 'title 1', content: 'Content 1'},
@@ -246,10 +246,10 @@ describe('accordion', function () {
     describe('is-open attribute with dynamic content', function() {
       beforeEach(function () {
         var tpl =
-          "<accordion>" +
-            "<accordion-group heading=\"title 1\" is-open=\"open1\"><div ng-repeat='item in items'>{{item}}</div></accordion-group>" +
-            "<accordion-group heading=\"title 2\" is-open=\"open2\">Static content</accordion-group>" +
-            "</accordion>";
+          '<accordion>' +
+            '<accordion-group heading="title 1" is-open="open1"><div ng-repeat="item in items">{{item}}</div></accordion-group>' +
+            '<accordion-group heading="title 2" is-open="open2">Static content</accordion-group>' +
+            '</accordion>';
         element = angular.element(tpl);
         scope.items = ['Item 1', 'Item 2', 'Item 3'];
         scope.open1 = true;
@@ -303,6 +303,42 @@ describe('accordion', function () {
         scope.$digest();
         expect(findGroupBody(0).scope().isOpen).toBe(false);
         expect(scope.groups[0].open).toBe(false);
+      });
+    });
+    
+    describe('`is-disabled` attribute', function() {
+      var groupBody;
+      beforeEach(function () {
+        var tpl =
+          '<accordion>' +
+            '<accordion-group heading="title 1" is-disabled="disabled">Content 1</accordion-group>' +
+            '</accordion>';
+        element = angular.element(tpl);
+        scope.disabled = true;
+        $compile(element)(scope);
+        scope.$digest();
+        groups = element.find('.panel');
+        groupBody = findGroupBody(0);
+      });
+
+      it('should open the panel with isOpen set to true', function () {
+        expect(groupBody.scope().isOpen).toBeFalsy();
+      });
+      
+      it('should not toggle if disabled', function() {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeFalsy();
+      });
+      
+      it('should toggle after enabling', function() {
+        scope.disabled = false;
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeFalsy();
+        
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeTruthy();
       });
     });
 

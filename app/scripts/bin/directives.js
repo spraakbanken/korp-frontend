@@ -209,7 +209,8 @@
         if (attr.constrName) {
           $window[attr.constrName] = instance;
         }
-        return scope.instance = instance;
+        scope.instance = instance;
+        return scope.$parent.instance = instance;
       }
     };
   });

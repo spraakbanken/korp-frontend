@@ -1280,9 +1280,6 @@ label[for=lemgram_select]:before {
 
 .ui-tabs .ui-tabs-nav li.custom_tab.loading {
   padding-right : 18px;
-  .tab_progress {
-    display : none;
-  }
 }
 
 .tabClose {
@@ -1746,16 +1743,28 @@ slider {
 
 // #wordclassChk! {}
 
+.nav-tabs li {
+  position : relative;
+}
+
 .tab_progress {
   height: 2px;
   background-color: darkblue;
   max-width: 100%;
+  position : absolute;
+  left : 0;
+  right : 0;
+  bottom : 0;
 }
 
 .not_loading .tab_progress {
   display: none;
 }
 
+.not_loading .hits_picture {
+  left: 180px;
+  @include transition(width 400ms ease);
+}
 .progress_container {
   width: 143px;
   overflow-x: hidden;
@@ -1767,10 +1776,6 @@ slider {
   @include transition(width 400ms ease);
 }
 
-.not_loading .hits_picture {
-  left: 180px;
-  @include transition(width 400ms ease);
-}
 
 .not_loading .progress_container {
   display: none;

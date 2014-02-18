@@ -1,14 +1,14 @@
 {
-  "name": "bootstrap",
+  "name": "angular-bootstrap",
   "homepage": "https://github.com/jroxendal/bootstrap",
-  "version": "0.9.1",
-  "_release": "0.9.1",
+  "version": "0.10.1",
+  "_release": "0.10.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.9.1",
-    "commit": "127310b25a828f07b664a62daa26a7092bc8d079"
+    "tag": "0.10.1",
+    "commit": "c4facd1889c887543826d952342ae13c7e3e6764"
   },
   "_source": "https://github.com/jroxendal/bootstrap.git",
-  "_target": "0.9.1",
+  "_target": "0.10.1",
   "_originalSource": "https://github.com/jroxendal/bootstrap.git"
 }

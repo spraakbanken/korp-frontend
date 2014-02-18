@@ -235,9 +235,11 @@
         });
       }
       reading = search().reading_mode;
+      c.log("reading", reading, hasChanged("reading_mode"));
       if (hasChanged("reading_mode")) {
         if (reading) {
           kwicResults.$result.addClass("reading_mode");
+          c.log("reading request");
           if (!isInit) {
             kwicResults.makeRequest();
           }

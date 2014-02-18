@@ -17,20 +17,20 @@ angular.module('ui.bootstrap.tabs', [])
     angular.forEach(tabs, function(tab) {
       if(tab.active && tab !== selectedTab) {
         tab.active = false;
-        if(tab.onDeselect) {
-          tab.onDeselect();
-        }
+        tab.onDeselect();
       }
     });
     selectedTab.active = true;
-    if(selectedTab.onSelect) {
-      selectedTab.onSelect();
-    }
+    selectedTab.onSelect();
   };
 
   ctrl.addTab = function addTab(tab) {
     tabs.push(tab);
-    if (tabs.length === 1 || tab.active) {
+    // we can't run the select function on the first tab 
+    // since that would select it twice
+    if (tabs.length === 1) {
+      tab.active = true;
+    } else if(tab.active) {
       ctrl.select(tab);
     }
   };
@@ -203,7 +203,7 @@ angular.module('ui.bootstrap.tabs', [])
               scope.active = !!value;
             }
           });
-          scope.active = getActive(scope.$parent) || false;
+          scope.active = getActive(scope.$parent);
         } else {
           setActive = getActive = angular.noop;
         }

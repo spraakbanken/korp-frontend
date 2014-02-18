@@ -173,6 +173,7 @@ korpApp.directive "korpAutocomplete", () ->
 
 korpApp.directive "constr", ($window) ->
     scope : true
+
     link : (scope, elem, attr) ->
         c.warn "constr scope", attr.constrName, scope.$id, scope.$parent.$id
 
@@ -181,6 +182,7 @@ korpApp.directive "constr", ($window) ->
             $window[attr.constrName] = instance
 
         scope.instance = instance
+        scope.$parent.instance = instance
 
         # c.log "$window[attr.constrName]", $window[attr.constrName], elem
 

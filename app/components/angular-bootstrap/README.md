@@ -1,8 +1,10 @@
-# bootstrap - [AngularJS](http://angularjs.org/) directives specific to [twitter bootstrap](http://twitter.github.io/bootstrap/)
+# bootstrap - [AngularJS](http://angularjs.org/) directives specific to [Bootstrap](http://getbootstrap.com)
 
 ***
 
-[![Build Status](https://secure.travis-ci.org/angular-ui/bootstrap.png)](http://travis-ci.org/angular-ui/bootstrap) [![devDependency Status](https://david-dm.org/angular-ui/bootstrap/dev-status.png?branch=master)](https://david-dm.org/angular-ui/bootstrap#info=devDependencies)
+[![Build Status](https://secure.travis-ci.org/angular-ui/bootstrap.png)](http://travis-ci.org/angular-ui/bootstrap)
+[![devDependency Status](https://david-dm.org/angular-ui/bootstrap/dev-status.png?branch=master)](https://david-dm.org/angular-ui/bootstrap#info=devDependencies)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/angular-ui/bootstrap/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 ## Demo
 
@@ -50,7 +52,7 @@ We are simply not regularly testing against IE8.
 
 ### Native, lightweight directives
 
-We are aiming at providing a set of AngularJS directives based on Twitter Bootstrap's markup and CSS. The goal is to provide **native AngularJS directives** without any dependency on jQuery or Bootstrap's JavaScript.
+We are aiming at providing a set of AngularJS directives based on Bootstrap's markup and CSS. The goal is to provide **native AngularJS directives** without any dependency on jQuery or Bootstrap's JavaScript.
 It is often better to rewrite an existing JavaScript code and create a new, pure AngularJS directive. Most of the time the resulting directive is smaller as compared to the orginal JavaScript code size and better integrated into the AngularJS ecosystem.
 
 ### Customizability

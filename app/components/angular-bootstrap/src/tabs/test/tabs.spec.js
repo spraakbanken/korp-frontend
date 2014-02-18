@@ -26,29 +26,15 @@ describe('tabs', function() {
 
 
   describe('basics', function() {
-    var selectionCallbacks, execOrder = [];
+
     beforeEach(inject(function($compile, $rootScope) {
       scope = $rootScope.$new();
       scope.first = '1';
       scope.second = '2';
       scope.actives = {};
-
-      selectionCallbacks = {
-        selectSecond: function() {
-          execOrder.push("select2");
-        },
-        deselectFirst : function() {
-          execOrder.push("deselect1");
-
-        }
-      };
-
-      spyOn(selectionCallbacks, "selectSecond").andCallThrough();
-      spyOn(selectionCallbacks, "deselectFirst").andCallThrough();
-
       scope.selectFirst = jasmine.createSpy();
-      scope.selectSecond = selectionCallbacks.selectSecond;
-      scope.deselectFirst = selectionCallbacks.deselectFirst;
+      scope.selectSecond = jasmine.createSpy();
+      scope.deselectFirst = jasmine.createSpy();
       scope.deselectSecond = jasmine.createSpy();
       elm = $compile([
         '<div>',
@@ -87,7 +73,7 @@ describe('tabs', function() {
       expect(titles().eq(0)).toHaveClass('active');
       expect(titles().eq(1)).not.toHaveClass('active');
       expect(scope.actives.one).toBe(true);
-      expect(scope.actives.two).toBe(false);
+      expect(scope.actives.two).not.toBeDefined();
     });
 
     it('should change active on click', function() {
@@ -113,15 +99,6 @@ describe('tabs', function() {
       titles().eq(1).find('a').click();
       expect(scope.deselectFirst).toHaveBeenCalled();
     });
-
-    it('should call deselect first, then select', function() {
-      titles().eq(1).find('a').click();
-      expect(scope.deselectFirst).toHaveBeenCalled();
-      expect(execOrder[0]).toEqual("deselect1");
-      expect(scope.selectSecond).toHaveBeenCalled();
-      expect(execOrder[1]).toEqual("select2");
-    });
-
   });
 
   describe('basics with initial active tab', function() {
@@ -172,6 +149,48 @@ describe('tabs', function() {
     it('should make tab titles and set active tab active', function() {
       expect(titles().length).toBe(scope.tabs.length);
       expectTabActive(scope.tabs[2]);
+    });
+  });
+
+  describe('tab callback order', function() {
+    var execOrder;
+    beforeEach(inject(function($compile, $rootScope) {
+      scope = $rootScope.$new();
+      execOrder = [];
+      scope.actives = {};
+
+      scope.execute = function(id) {
+        execOrder.push(id);
+      };
+
+      elm = $compile([
+        '<div>',
+        '  <tabset class="hello" data-pizza="pepperoni">',
+        '    <tab heading="First Tab" active="actives.one" select="execute(\'select1\')" deselect="execute(\'deselect1\')"></tab>',
+        '    <tab select="execute(\'select2\')" deselect="execute(\'deselect2\')"></tab>',
+        '  </tabset>',
+        '</div>'
+      ].join('\n'))(scope);
+      scope.$apply();
+      return elm;
+    }));
+
+    it('should call select  for the first tab', function() {
+        expect(execOrder).toEqual([ 'select1' ]);
+    });
+
+    it('should call deselect, then select', function() {
+          execOrder = [];
+
+          // Select second tab
+          titles().eq(1).find('a').click();
+          expect(execOrder).toEqual([ 'deselect1', 'select2' ]);
+
+          execOrder = [];
+
+          // Select again first tab
+          titles().eq(0).find('a').click();
+          expect(execOrder).toEqual([ 'deselect2', 'select1' ]);
     });
   });
 
@@ -254,7 +273,7 @@ describe('tabs', function() {
   describe('advanced tab-heading element', function() {
     beforeEach(inject(function($compile, $rootScope, $sce) {
       scope = $rootScope.$new();
-      scope.myHtml = $sce.trustAsHtml("<b>hello</b>, there!");
+      scope.myHtml = $sce.trustAsHtml('<b>hello</b>, there!');
       scope.value = true;
       elm = $compile([
         '<tabset>',
@@ -275,7 +294,7 @@ describe('tabs', function() {
     }
 
     it('should create a heading bound to myHtml', function() {
-      expect(heading().eq(0).html()).toBe("<b>hello</b>, there!");
+      expect(heading().eq(0).html()).toBe('<b>hello</b>, there!');
     });
 
     it('should hide and show the heading depending on value', function() {
@@ -300,9 +319,9 @@ describe('tabs', function() {
     beforeEach(inject(function($compile, $rootScope) {
       scope = $rootScope.$new();
       scope.tabs = [
-        { title:"Title 1", available:true },
-        { title:"Title 2", available:true },
-        { title:"Title 3", available:true }
+        { title:'Title 1', available:true },
+        { title:'Title 2', available:true },
+        { title:'Title 3', available:true }
       ];
       elm = $compile([
         '<tabset>',
@@ -354,21 +373,25 @@ describe('tabs', function() {
       scope.$apply('tabs[2].available=true');
       scope.$digest();
       expect(titles().length).toBe(9);
-      expect(titles().eq(0).text().trim()).toBe("first");
-      expect(titles().eq(1).text().trim()).toBe("Title 1");
-      expect(titles().eq(2).text().trim()).toBe("Title 2");
-      expect(titles().eq(3).text().trim()).toBe("Title 3");
-      expect(titles().eq(4).text().trim()).toBe("mid");
-      expect(titles().eq(5).text().trim()).toBe("Second Title 1");
-      expect(titles().eq(6).text().trim()).toBe("Second Title 2");
-      expect(titles().eq(7).text().trim()).toBe("Second Title 3");
-      expect(titles().eq(8).text().trim()).toBe("last");
+      expect(titles().eq(0).text().trim()).toBe('first');
+      expect(titles().eq(1).text().trim()).toBe('Title 1');
+      expect(titles().eq(2).text().trim()).toBe('Title 2');
+      expect(titles().eq(3).text().trim()).toBe('Title 3');
+      expect(titles().eq(4).text().trim()).toBe('mid');
+      expect(titles().eq(5).text().trim()).toBe('Second Title 1');
+      expect(titles().eq(6).text().trim()).toBe('Second Title 2');
+      expect(titles().eq(7).text().trim()).toBe('Second Title 3');
+      expect(titles().eq(8).text().trim()).toBe('last');
     });
   });
 
   describe('tabset controller', function() {
     function mockTab(isActive) {
-      return { active: !!isActive };
+      return { 
+        active: !!isActive, 
+        onSelect : angular.noop,
+        onDeselect : angular.noop
+      };
     }
 
     var ctrl;
@@ -455,7 +478,7 @@ describe('tabs', function() {
 
     it('should remove title tabs when elements are destroyed and change selection', inject(function($controller, $compile, $rootScope) {
       scope = $rootScope.$new();
-      elm = $compile("<tabset><tab heading='1'>Hello</tab><tab ng-repeat='i in list' heading='tab {{i}}'>content {{i}}</tab></tabset>")(scope);
+      elm = $compile('<tabset><tab heading="1">Hello</tab><tab ng-repeat="i in list" heading="tab {{i}}">content {{i}}</tab></tabset>')(scope);
       scope.$apply();
 
       expectTitles(['1']);

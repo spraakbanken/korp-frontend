@@ -63,7 +63,7 @@ html
     script(src='lib/angular-sortable.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.10.0-SNAPSHOT.js')
+    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js')
     script(src='components/lodash/dist/lodash.compat.js')
     script(src='components/spin.js/dist/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')
@@ -132,7 +132,7 @@ html
                     .stats_header
                       button#showGraph Visa trenddiagram
                       .progress_container
-                        progress(value='0', max='100')
+                        progress(value='{{progress || 0}}', max='100')
                       #showBarPlot
                     #myGrid
                     #exportStatsSection
@@ -145,8 +145,8 @@ html
                         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
-                tab(heading='Ordbild', disabled="instance.disabled")
-                  tab-heading(ng-class="{not_loading: progress == 100}")
+                tab(heading='Ordbild')
+                  tab-heading(ng-class="{not_loading: progress > 99}")
                     | Ordbild
                     .tab_progress(style="width:{{progress || 0}}%")
                   div(constr='LemgramResults', constr-name='lemgramResults')
@@ -154,7 +154,7 @@ html
                       input#wordclassChk(type='checkbox')
                       label(for='wordclassChk', rel='localize[show_wordclass]')
                     .progress_container
-                      progress(value='0', max='100')
+                      progress(value='{{progress || 0}}', max='100')
                     .content_target
 
                 include includes/dynamic_result_tabs

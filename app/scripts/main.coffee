@@ -298,11 +298,13 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
                 height: 0
 
         reading = search().reading_mode
+        c.log "reading", reading, hasChanged("reading_mode")
         if hasChanged("reading_mode")
 
             if reading
                 kwicResults.$result.addClass "reading_mode"
 
+                c.log "reading request"
                 kwicResults.makeRequest() unless isInit
             else
                 kwicResults.$result.removeClass "reading_mode"

@@ -1,12 +1,9 @@
 window.korpApp = angular.module('korpApp', ["watchFighters"
-                                            "ui.bootstrap.dropdownToggle",
-                                            "ui.bootstrap.tabs",
+                                            'ui.bootstrap',
                                             "template/tabs/tabset.html"
                                             "template/tabs/tab.html"
-                                            "ui.bootstrap.modal"
                                             "template/modal/backdrop.html"
                                             "template/modal/window.html"
-                                            "ui.bootstrap.typeahead"
                                             "template/typeahead/typeahead-match.html",
                                             "template/typeahead/typeahead-popup.html"
                                             "angularSpinner"

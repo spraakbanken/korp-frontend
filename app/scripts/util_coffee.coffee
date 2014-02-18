@@ -287,8 +287,6 @@ class window.ParallelCorpusListing extends CorpusListing
 settings.corpusListing = new CorpusListing(settings.corpora)
 
 
-window.getScope = (ctrl) ->
-    return angular.element("[ng-controller=#{ctrl}]").scope()
 
 window.applyTo = (ctrl, f) ->
     s = getScope(ctrl)
@@ -299,6 +297,7 @@ window.search = (obj, val) ->
 
     # ret = s.$root.$apply () ->
     ret = safeApply s.$root, () ->
+        unless obj then return s.$root.search()
         if _.isObject obj
             obj = _.extend {}, s.$root.search(), obj
             s.$root.search(obj)

@@ -5,7 +5,7 @@
     | :
     span.num-result 0
   .progress_container
-    progress(value='0', max='100')
+    progress(value='{{progress || 0}}', max='100')
   .hits_picture
 .pager-wrapper
 span.reading_btn.show.link(rel='localize[show_reading]') Visa läsläge
@@ -33,7 +33,8 @@ span.reading_btn.hide.link(rel='localize[show_kwic]') Visa kwic
     p.sentence(ng-repeat='sentence in contextKwic'
       ng-class='{corpus_info : sentence.newCorpus, \
         not_corpus_info : !sentence.newCorpus, \
-        linked_sentence : sentence.isLinked}')
+        linked_sentence : sentence.isLinked, \
+        odd : $index % 2 != 0}')
       span.corpus_title(colspan='0')
         | {{sentence.newCorpus}}
         span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')

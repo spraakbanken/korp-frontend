@@ -21,7 +21,7 @@
       this.num_result.html(prettyNumbers(progressObj["total_results"]));
       if (!isNaN(progressObj["stats"])) {
         try {
-          this.$result.find(".progress_container progress").attr("value", Math.round(progressObj["stats"]));
+
         } catch (_error) {
           e = _error;
           c.log("onprogress error", e);
@@ -52,12 +52,12 @@
     };
 
     BaseResults.prototype.showPreloader = function() {
-      this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
-      this.$tab.find(".tab_progress").css("width", 0);
-      return this.$result.find("progress").attr("value", 0);
+      c.log("showPreloader", this.$result.attr("class"));
+      return this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
     };
 
     BaseResults.prototype.hidePreloader = function() {
+      c.log("hidePreloader", this.$result.attr("class"));
       return this.$result.add(this.$tab).removeClass("loading").addClass("not_loading");
     };
 
@@ -78,7 +78,7 @@
       c.log("kwicresults constructor", tabSelector, resultSelector);
       self = this;
       this.prevCQP = null;
-      KWICResults.__super__.constructor.call(this, tabSelector, resultSelector);
+      KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.initHTML = this.$result.html();
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
@@ -677,7 +677,7 @@
     function LemgramResults(tabSelector, resultSelector, scope) {
       var self;
       self = this;
-      LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector);
+      LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.s = scope;
       this.resultDeferred = $.Deferred();
       this.proxy = new model.LemgramProxy();
@@ -703,6 +703,7 @@
       c.log("lemgramResults.renderResult", data, query);
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
+      this.s.$parent.progress = 100;
       if (resultError === false) {
         return;
       }

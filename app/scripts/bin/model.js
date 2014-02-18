@@ -213,7 +213,8 @@
         show: [],
         show_struct: [],
         sort: o.sort,
-        incremental: o.incremental
+        incremental: o.incremental,
+        cache: false
       };
       if (o.context != null) {
         data.context = o.context;
@@ -328,7 +329,8 @@
         data: params,
         error: function(data) {
           c.log("relationsearch abort", arguments);
-          return lemgramResults.hidePreloader();
+          lemgramResults.hidePreloader();
+          return lemgramResults.resultError();
         },
         success: function(data) {
           c.log("relations success", data);

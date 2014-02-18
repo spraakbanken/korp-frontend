@@ -231,6 +231,7 @@
           }
         }).success(function(data) {
           var corpus, _i, _len, _ref;
+          c.log("data", data);
           _ref = settings.corpusListing.corpora;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             corpus = _ref[_i];

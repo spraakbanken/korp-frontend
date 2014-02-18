@@ -1,6 +1,7 @@
 class BaseResults
     constructor: (resultSelector, tabSelector, scope) ->
         @s = scope
+        # @s.instance = this
         @$tab = $(tabSelector)
         @$result = $(resultSelector)
         @index = @$tab.index()
@@ -14,7 +15,7 @@ class BaseResults
         @num_result.html prettyNumbers(progressObj["total_results"])
         unless isNaN(progressObj["stats"])
             try
-                @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
+                # @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
             catch e
                 c.log "onprogress error", e
         # @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
@@ -53,11 +54,13 @@ class BaseResults
         util.setJsonLink @proxy.prevRequest
 
     showPreloader: ->
+        c.log "showPreloader", @$result.attr("class")
         @$result.add(@$tab).addClass("loading").removeClass "not_loading"
-        @$tab.find(".tab_progress").css "width", 0 #.show();
-        @$result.find("progress").attr "value", 0
+        # @$tab.find(".tab_progress").css "width", 0 #.show();
+        # @$result.find("progress").attr "value", 0
 
     hidePreloader: ->
+        c.log "hidePreloader", @$result.attr("class")
         @$result.add(@$tab).removeClass("loading").addClass "not_loading"
 
     resetView: ->
@@ -69,7 +72,7 @@ class view.KWICResults extends BaseResults
         c.log "kwicresults constructor", tabSelector, resultSelector
         self = this
         @prevCQP = null
-        super tabSelector, resultSelector
+        super tabSelector, resultSelector, scope
         @initHTML = @$result.html()
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
@@ -134,8 +137,6 @@ class view.KWICResults extends BaseResults
             scope.selectionManager.select word, aux
             safeApply @s.$root, (s) ->
                 s.$root.word_selected = word
-
-
 
 
 
@@ -586,7 +587,7 @@ class view.ExampleResults extends view.KWICResults
 class view.LemgramResults extends BaseResults
     constructor: (tabSelector, resultSelector, scope) ->
         self = this
-        super tabSelector, resultSelector
+        super tabSelector, resultSelector, scope
         @s = scope
         #   TODO: figure out what I use this for.
         @resultDeferred = $.Deferred()
@@ -610,6 +611,7 @@ class view.LemgramResults extends BaseResults
         c.log "lemgramResults.renderResult", data, query
         resultError = super(data)
         @resetView()
+        @s.$parent.progress = 100
         return if resultError is false
         @disabled = false
         unless data.relations

@@ -174,6 +174,7 @@ class model.KWICProxy extends BaseProxy
             show_struct: []
             sort: o.sort
             incremental: o.incremental
+            cache : false
 
         # data.within = settings.corpusListing.getWithinQueryString()
         # data.context = settings.corpusListing.getContextQueryString()
@@ -254,6 +255,7 @@ class model.LemgramProxy extends BaseProxy
             error: (data) ->
                 c.log "relationsearch abort", arguments
                 lemgramResults.hidePreloader()
+                lemgramResults.resultError()
 
             success: (data) ->
                 c.log "relations success", data
