@@ -343,6 +343,11 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
             return ""
         s.token.cqp.match(/\[(.*)]/)[1]
 
+
+    s.$on "change_case", (event, val) ->
+        c.log "change_case", val, s
+
+
 korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
     s = $scope
     # s.defaultOptions = settings.defaultOptions
@@ -375,17 +380,18 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
         c.log "crash", s.data
 
 
+    if $location.search().cqp
+        s.data = CQP.parse($location.search().cqp)
+    else
+        s.data = CQP.parse(s.cqp)
+
     for token in s.data
-        if "and_block" not of token
+        if "and_block" not of token or not token.and_block.length
             token.and_block = CQP.parse('[word = ""]')[0].and_block
 
 
     # c.log "s.data", s.data
 
-    if $location.search().cqp
-        s.data = CQP.parse($location.search().cqp)
-    else
-        s.data = CQP.parse(s.cqp)
 
     # expand [] to [word = '']
     
@@ -417,6 +423,7 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
         s.addOr token.and_block[0]
 
     s.removeToken = (i) ->
+        unless s.data.length > 1 then return
         s.data.splice(i, 1)
 
 korpApp.filter "mapper", () ->

@@ -286,12 +286,15 @@
         return delete token.repeat;
       }
     };
-    return s.getTokenCqp = function() {
+    s.getTokenCqp = function() {
       if (!s.token.cqp) {
         return "";
       }
       return s.token.cqp.match(/\[(.*)]/)[1];
     };
+    return s.$on("change_case", function(event, val) {
+      return c.log("change_case", val, s);
+    });
   });
 
   korpApp.controller("TokenList", function($scope, $location, $rootScope) {
@@ -327,17 +330,17 @@
       s.data = output;
       c.log("crash", s.data);
     }
-    _ref1 = s.data;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      token = _ref1[_j];
-      if (!("and_block" in token)) {
-        token.and_block = CQP.parse('[word = ""]')[0].and_block;
-      }
-    }
     if ($location.search().cqp) {
       s.data = CQP.parse($location.search().cqp);
     } else {
       s.data = CQP.parse(s.cqp);
+    }
+    _ref1 = s.data;
+    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+      token = _ref1[_j];
+      if (!("and_block" in token) || !token.and_block.length) {
+        token.and_block = CQP.parse('[word = ""]')[0].and_block;
+      }
     }
     s.$watch('getCQPString()', function(val) {
       var cqpstr;
@@ -365,6 +368,9 @@
       return s.addOr(token.and_block[0]);
     };
     return s.removeToken = function(i) {
+      if (!(s.data.length > 1)) {
+        return;
+      }
       return s.data.splice(i, 1);
     };
   });

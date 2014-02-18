@@ -338,7 +338,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 }
 
 input.arg_value {
-  width: 98%;
+  width: 95%;
 }
 
 .arg_value {
@@ -364,6 +364,12 @@ select.arg_value option {
     width: 20px;
     height: 20px;
     float: right;
+    i {
+      position: relative;
+      top: 0px;
+      left: -2px;
+      font-size: 14px;
+    }
   }
   .repeat {
     float: right;
@@ -372,10 +378,6 @@ select.arg_value option {
       max-width: 30px;
     }
   }
-}
-
-.ui-icon-gear {
-  background-position: -193px -114px;
 }
 
 .token_footer {
@@ -387,10 +389,6 @@ select.arg_value option {
   //   position: absolute;
   //   display: none;
   // }
-}
-
-.query_token button .ui-button-text {
-  height: 0;
 }
 
 // .token_footer ul, li {
@@ -405,13 +403,10 @@ select.arg_value option {
   background-color: rgb(242, 247, 255);
   border: thin lightgrey solid;
   padding-left: 5px;
-  padding-right: 1px;
+  padding-right: 2px;
   cursor: default;
-  .ui-icon-close {
-    @include inline-block(inherit);
-    position: relative;
-    top: 3px;
-    cursor: pointer;
+  i {
+    cursor : pointer;
   }
 }
 
@@ -1314,12 +1309,14 @@ label[for=lemgram_select]:before {
   .logic_switcher {
     float: left;
   }
-  .ui-icon-circle-close {
+  .close_btn {
+    cursor : pointer;
     float: right;
     opacity: 1;
     @include transition(opacity 200ms ease);
+    font-size : 15px;
   }
-  &:only-of-type .ui-icon-circle-close {
+  &:only-of-type .close_btn {
     opacity: 0;
     cursor: default;
     @include transition(opacity 200ms ease);
@@ -1610,26 +1607,17 @@ label[for=lemgram_select]:before {
 }
 
 .val_mod {
-  display: none;
   letter-spacing: 1px;
   font-size: .8em;
   cursor: pointer;
   margin-right: 1px;
 }
 
-.arg_value[type=text]:not(.ui-autocomplete-input) {
-  width: 91%;
-  margin-right: 3px;
-  + .val_mod {
-    display: inline;
-  }
-}
-
-#mod_menu {
+.mod_menu {
   cursor: default;
   position: absolute;
   font-size: .9em;
-  text-align: right;
+  // text-align: right;
 }
 
 .val_mod {
@@ -1638,11 +1626,11 @@ label[for=lemgram_select]:before {
   }
   &.sensitive {
     color: black;
-    + #mod_menu li:first-of-type a {
+    + .mod_menu li:first-of-type a {
       text-decoration: underline;
     }
   }
-  &.insensitive + #mod_menu li:nth-of-type(2) a {
+  &.insensitive + .mod_menu li:nth-of-type(2) a {
     text-decoration: underline;
   }
 }

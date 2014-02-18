@@ -98,27 +98,43 @@
   });
 
   korpApp.directive("tokenValue", function($compile, $controller) {
-    var defaultTmpl;
-    defaultTmpl = "<input ng-model='model'                 placeholder='{{\"any\" | loc}} '>";
+    var defaultController, defaultTmpl;
+    defaultTmpl = "<input ng-model='model' class='arg_value'\nplaceholder='<{{\"any\" | loc}}>'>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>";
+    defaultController = function($scope) {
+      c.log("defaultController", $scope);
+      $scope["case"] = "sensitive";
+      $scope.makeSensitive = function() {
+        var _ref;
+        $scope["case"] = "sensitive";
+        return (_ref = $scope.orObj.flags) != null ? delete _ref["c"] : void 0;
+      };
+      return $scope.makeInsensitive = function() {
+        var flags;
+        flags = $scope.orObj.flags || {};
+        flags["c"] = true;
+        $scope.orObj.flags = flags;
+        return $scope["case"] = "insensitive";
+      };
+    };
     return {
       scope: {
         tokenValue: "=",
-        model: "=ngModel"
+        model: "=ngModel",
+        orObj: "=orObj"
       },
       template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
-      link: function(scope, elem, attr, ngModelCtrl) {
+      link: function(scope, elem, attr) {
+        c.log("scope", scope);
         return scope.$watch("tokenValue", function(valueObj) {
           var locals, tmplElem;
           c.log("watch value", valueObj);
           if (!valueObj) {
             return;
           }
-          if (valueObj.controller) {
-            locals = {
-              $scope: _.extend(scope, valueObj)
-            };
-            $controller(valueObj.controller, locals);
-          }
+          locals = {
+            $scope: _.extend(scope, valueObj)
+          };
+          $controller(valueObj.controller || defaultController, locals);
           tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
           return elem.html(tmplElem);
         });

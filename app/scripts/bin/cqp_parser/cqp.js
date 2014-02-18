@@ -33,15 +33,14 @@
                 }[op] || [val, op], val = _ref2[0], op = _ref2[1];
               }
               flagstr = "";
-              if (flags) {
-                flagstr = " %" + flags.join("");
+              if (flags && _.keys(flags).length) {
+                flagstr = " %" + _.keys(flags).join("");
               }
               if (type === "word" && val === "") {
                 out = "";
               } else {
                 out = "" + type + " " + op + " \"" + val + "\"";
               }
-              c.log("out", out + " " + flagstr);
               _results1.push(out + flagstr);
             }
             return _results1;

@@ -91,7 +91,7 @@ case 3:this.$ = [].concat([$$[$0-1]], $$[$0])
 break;
 case 4:this.$ = {"and_block":[[{type:"word",op:"=",val:""}]]}
 break;
-case 5:this.$ = {"and_block" : $$[$0-1]}
+case 5:this.$ = $$[$0-1]
 break;
 case 6:this.$ = $$[$0-1]; $$[$0-1].repeat = $$[$0]
 break;
@@ -99,11 +99,11 @@ case 7:this.$ =  [Number($$[$0-3]), Number($$[$0-1])]
 break;
 case 8:this.$ = [Number($$[$0-2])]
 break;
-case 9:this.$ = [$$[$0]]
+case 9:this.$ = {"and_block" : [$$[$0]]}
 break;
-case 10:this.$ = [$$[$0]]
+case 10:this.$ = {"bound" : $$[$0], "and_block" : []}
 break;
-case 11:this.$ = [].concat([$$[$0-2]], $$[$0])
+case 11:$$[$0].and_block.push($$[$0-2]); this.$ = $$[$0];
 break;
 case 12:this.$ = {}; this.$[$$[$0]] = true
 break;
@@ -115,7 +115,13 @@ case 15:this.$ = [].concat([$$[$0-2]], $$[$0])
 break;
 case 16:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
 break;
-case 17:$$[$0-1].flags = $$[$0].slice(1).split(""); this.$ = $$[$0-1]
+case 17:
+            var chars = $$[$0].slice(1).split("");
+            for(var i = 0; i < chars.length; i++)
+                $$[$0-1].flags[chars[i]] = true;
+                
+            this.$ = $$[$0-1];
+        
 break;
 case 18: this.$ = $$[$0-1]
 break;

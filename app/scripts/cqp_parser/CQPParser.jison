@@ -80,11 +80,12 @@ repeat
 
 and_block
     : or_block
-        {$$ = {"and_block" : [$1]}
+        {$$ = {"and_block" : [$1]}}
     | bound_block
-        {$$ = {"bound" : $1, "and_block" : []}
+        {$$ = {"bound" : $1, "and_block" : []}}
     | or_block '&' and_block
-        {$$ = [].concat([$1], $3.and_block)}
+        {$3.and_block.push($1); $$ = $3;}
+        
     ;
 
 
@@ -109,7 +110,13 @@ or
     : TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
     | or 'FLAG'
-        {$1.flags = $2.slice(1).split(""); $$ = $1}
+        {
+            var chars = $2.slice(1).split("");
+            for(var i = 0; i < chars.length; i++)
+                $1.flags[chars[i]] = true;
+                
+            $$ = $1;
+        }
     ;
 
 

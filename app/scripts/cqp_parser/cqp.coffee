@@ -17,21 +17,19 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                     }[op] or [val, op]
 
                 flagstr = ""
-                if flags
-                    flagstr = " %" + flags.join("")
+                if flags and _.keys(flags).length
+                    flagstr = " %" + _.keys(flags).join("")
 
                 if type == "word" and val == ""
                     out = ""
                 else 
                     out = "#{type} #{op} \"#{val}\"" 
 
-                c.log "out", out + " " + flagstr
                 out + flagstr
 
 
         or_out = (x.join(" | ") for x in or_array)
         if token.bound
-            #TODO: broken here?
             or_out = _.compact or_out
             for bound in _.keys (token.bound)
                 or_out.push "#{bound}(sentence)"

@@ -1,13 +1,14 @@
 <div ng-controller="ExtendedSearch">
     <div id="query_table" ng-controller="TokenList">
-        <div class="cqp">cqp: {{getCQPString(data)}}</div>
+        <p class="cqp">cqp: {{getCQPString(data)}}</p>
     
     
     
         <div class="token query_token" ng-repeat="token in data track by $index" ng-controller="ExtendedToken">
             <div class="token_header">
-                <span class="ui-icon ui-icon-circle-close btn-icon"
-                      ng-click="removeToken($index)"></span>
+                <i class="close_btn fa fa-times-circle-o fa-1"
+
+                      ng-click="removeToken($index)"></i>
                 <div style="clear:both;"></div>
             </div>
     
@@ -30,7 +31,7 @@
                                         ng-model="or.op" ></select>
                                 </div>
                                 <!-- <input class="arg_value" ng-model="or.val"> -->
-                                <div token-value="typeMapping[or.type]" ng-model="or.val" ></div>
+                                <div token-value="typeMapping[or.type]" ng-model="or.val" or-obj="or"></div>
                             </div>
                         </div>
                     </div>
@@ -45,7 +46,7 @@
                 <div>
                     <img src="img/plus.png" class="image_button insert_arg" ng-click="addAnd()">
 
-                    <button popper class="btn btn-mini"><i class="icon-cog"></i></button>
+                    <button popper class="btn btn-mini"><i class="fa fa-cog"></i></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
                             <a ng-click="toggleRepeat(token)" rel="localize[repeat]">Upprepa</a>
@@ -54,13 +55,6 @@
                         <li><a ng-click="toggleEnd(token)" rel="localize[sent_end]">Meningsslut</a></li>
                     </ul>
 
-
-                    <!-- <button class="dropdown-toggle btn btn-mini" data-toggle="dropdown"><i class="icon-cog"></i></button> -->
-                    <!-- <ul class="dropdown-menu">
-                        <li><a data-item="repeat_item" rel="localize[repeat]">Upprepa</a></li>
-                        <li><a data-item="lbound_item" rel="localize[sent_start]">Meningsbörjan</a></li>
-                        <li><a data-item="rbound_item" rel="localize[sent_end]">Meningsslut</a></li>
-                    </ul> -->
     
                     <div class="repeat" ng-show="token.repeat">
                         <span rel="localize[repeat]">Upprepa</span>
@@ -68,7 +62,6 @@
                         <span rel="localize[to]">till</span>
                         <input type="number" ng-model="token.repeat[1]">
                         <span rel="localize[times]">gånger</span>
-            <!-- <div class="repeat">repeat : <input ng-model="token.repeat[0]"> <input ng-model="token.repeat[1]"></div> -->
                     </div>
     
                     <div style="clear:both;"></div>
@@ -77,11 +70,11 @@
                 <div class="lower_footer">
                     <span  class="lbound close_token" ng-show="token.bound.lbound">
                         <span rel="localize[sent_start]">Meningsbörjan</span>
-                        <span class="ui-icon ui-icon-close" ng-click="toggleStart(token)"></span>
+                        <i class="fa fa-1 fa-times" ng-click="toggleStart(token)"></i>
                     </span>
                     <span class="rbound close_token" ng-show="token.bound.rbound">
                         <span rel="localize[sent_end]">Meningsslut</span>
-                        <span class="ui-icon ui-icon-close" ng-click="toggleEnd(token)"></span>
+                        <i class="fa fa-1 fa-times" ng-click="toggleEnd(token)"></i>
                     </span>
                 </div>
     

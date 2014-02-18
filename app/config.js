@@ -185,6 +185,7 @@ settings.setOptions = {
     "is_not" : "not contains"
 }
 
+
 settings.getTransformFunc = function(type, value, opt) {
 
 	if(type == "word" && !value) return function() {return "";};

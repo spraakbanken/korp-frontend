@@ -77,17 +77,46 @@ korpApp.directive "tabHash", (utils, $location) ->
 korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
-    defaultTmpl = "<input ng-model='model' 
-                placeholder='{{\"any\" | loc}} '>"
+    defaultTmpl = """<input ng-model='model' class='arg_value'
+                placeholder='<{{"any" | loc}}>'>
+                <span class='val_mod' popper
+                    ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
+                        Aa
+                </span> 
+                <ul class='mod_menu popper_menu dropdown-menu'>
+                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>
+                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>
+                </ul>
+                """
+    defaultController = ($scope) ->
+        c.log "defaultController", $scope
+        $scope.case = "sensitive"
+        $scope.makeSensitive = () ->
+            $scope.case = "sensitive"
+            delete $scope.orObj.flags?["c"]
+            # $scope.$emit("change_case", "sensitive")
+
+        $scope.makeInsensitive = () ->
+            flags = ($scope.orObj.flags or {})
+            flags["c"] = true
+            $scope.orObj.flags = flags
+
+            $scope.case = "insensitive"
+            # $scope.$emit("change_case", "insensitive")
+            
+
+
 
     # require:'ngModel',
     scope :
         tokenValue : "="
         model : "=ngModel"
+        orObj : "=orObj"
     template : """
         <div class="arg_value">{{tokenValue.label}}</div>
     """
-    link : (scope, elem, attr, ngModelCtrl) ->
+    link : (scope, elem, attr) ->
+        c.log "scope", scope
         scope.$watch "tokenValue", (valueObj) ->
             c.log "watch value", valueObj
             unless valueObj then return
@@ -95,10 +124,9 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             
 
             # _.extend scope, (_.pick valueObj, "dataset", "translationKey")
-            if valueObj.controller
-                locals = {$scope : _.extend scope, valueObj} 
+            locals = {$scope : _.extend scope, valueObj} 
+            $controller(valueObj.controller or defaultController, locals)
 
-                $controller(valueObj.controller, locals)
             # valueObj.controller?(scope, _.omit valueObj)
 
             tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
