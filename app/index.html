@@ -8,6 +8,7 @@
 		<!-- <link rel="stylesheet" type="text/css" href="styles/bootstrap/css/bootstrap.css" /> -->
 		<!-- <link rel="stylesheet" type="text/css" href="styles/bootstrap_dropdowns.css" /> -->
 		<!-- build:css styles/korp.css -->
+		<link rel="stylesheet" type="text/css" href="styles/pagination.css" />
 		<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
 		<link type="text/css" href="components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet" />
 		<!-- <link type="text/css" href="components/jquery-ui/themes/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet" /> -->
@@ -16,7 +17,6 @@
 
 
 		<link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css" />
-		<link rel="stylesheet" type="text/css" href="styles/pagination.css" />
 		<link rel="stylesheet" href="components/rickshaw/rickshaw.css">
 		<link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="styles/styles.css" />
@@ -232,7 +232,7 @@
    		        </tab>
    		        <tab>
    		        	<tab-heading>
-						Jämförelse <span ng-if="savedSearches.length" class="badge badge-info">{{savedSearches.length}}</span>
+						Jämförelse <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span>
    		        	</tab-heading>
 					<div ng-controller="CompareSearchCtrl" class="search_compare">
 						<div ng-show="savedSearches.length < 2">Du måste spara minst två sökningar för att kunna jämföra.</div>
@@ -242,16 +242,16 @@
 							och sammanställ på
 							<select ng-model="reduce" 
 							    ng-options="obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in getAttrs()"></select>
+							<button ng-click="sendCompare()" class="btn btn-small">Jämför</button>
 						</div>
 					    
 
-						<div>
+						<!-- <div>
 							1: {{cmp1 | json}}
 						</div>
 						<div>
 							2: {{cmp2 | json}}
-						</div>
-						<button ng-click="sendCompare()" class="btn-primary btn-small">Jämför</button>
+						</div> -->
 					</div>
    		        </tab>
    		    </tabset>
@@ -281,17 +281,17 @@
 					<span id="reduceSelect"></span>
 				</div>
 	   		</div>
-			<div id="results-wrapper">
+			<div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
 				<div id="columns" >
-					<div id="left-column" >
-						<tabset tab-hash="result_tab">
-							<tab heading="KWIC"  >
+					<div id="left-column" ng-class="{sidebar_visible : word_selected && result_tab == 0}" >
+						<tabset tab-hash="result_tab" ng-controller="resultTabCtrl" ng-click="onClick($event)">
+							<tab heading="KWIC" >
 								<div id="results-kwic" constr="KWICResults" constr-name="kwicResults" ng-controller="kwicCtrl">
 								    <div class="result_controls">
 								        <div class="controls_n" >
 								            <span rel="localize[num_results]">Antal träffar</span>: <span class="num-result">0</span>
 								        </div>
-								        <div class="progress">
+								        <div class="progress_container">
 								            <progress value="0" max="100"></progress>
 								        </div>
 								       <div class="hits_picture" ></div>
@@ -355,25 +355,28 @@
 
 								</div>
 							</tab>
-							<tab heading="Statistik" constr="StatsResults" constr-name="statsResults">
-								<div class="stats_header">
-									<button id="showGraph">Visa trenddiagram</button>
-									<div class="progress">
-										<progress value="0" max="100"></progress>
+							<tab heading="Statistik">
+
+								<div ng-controller="StatsResultCtrl" constr="StatsResults" constr-name="statsResults">
+									<div class="stats_header">
+										<button id="showGraph">Visa trenddiagram</button>
+										<div class="progress_container">
+											<progress value="0" max="100"></progress>
+										</div>
+										<div id="showBarPlot"></div>
 									</div>
-									<div id="showBarPlot"></div>
-								</div>
-								<div id="myGrid"></div>
-								<div id="exportStatsSection">
-									<br/><br/><select id="kindOfData">
-										<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
-										<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
-									</select>
-									<select id="kindOfFormat">
-										<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
-										<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
-									</select>
-									<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
+									<div id="myGrid"></div>
+									<div id="exportStatsSection">
+										<br/><br/><select id="kindOfData">
+											<option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
+											<option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+										</select>
+										<select id="kindOfFormat">
+											<option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
+											<option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+										</select>
+										<input id="exportButton" value="Exportera" rel="localize[statstable_export]" type="submit"/>
+									</div>
 								</div>
 							</tab>
 							<tab heading="Ordbild">
@@ -383,37 +386,59 @@
 										<input id='wordclassChk' type='checkbox'>
 										<label for="wordclassChk" rel="localize[show_wordclass]"></label>
 									</div>
-									<div class="progress">
+									<div class="progress_container">
 										<progress value="0" max="100"></progress>
 									</div>
 
 									<div class="content_target"></div>
 								</div>
 							</tab>
-							<tab ng-repeat="promise in compareTabs">
-									<tab-heading class="compare_tab" ng-class="{loading : loading}">
-										Jämför <span  class="tab_spinner" 
-										us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
-									</tab-heading>
-									<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
-
-										<div class="column column_1">
-											<h2>Fler i {{cmp1.label}}</h2>
-											<ul>
-												<li ng-repeat="tuple in tables.negative">
-													<div class="meter" meter="tuple" max="max[1]" ></div>
-												</li>
-											</ul>
-										</div>
-										<div class="column column_2">
-											<h2>Fler i {{cmp2.label}}</h2>
-											<ul>
-												<li ng-repeat="tuple in tables.positive">
-													<div class="meter" meter="tuple" max="max[1]" ></div>
-												</li>
-											</ul>
-										</div>
+							<tab ng-repeat="data in graphTabs" heading="{{'graph' | loc}}" active="active">
+								<div ng-controller="graphCtrl" constr="GraphResults">
+									<div class="graph_header">
+									    <div class="progress_container">
+									        <progress value="0" max="100"></progress>
+									    </div>
+									    <div class="controls">
+									        <div class="form_switch">
+									            <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
+									            <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
+									        </div>
+									        <label for="smoothing_switch" class="smoothing_label" >Utjämna</label> <input type="checkbox" id="smoothing_switch" class="smoothing_switch">
+									        <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
+									    </div>
+									    <div class="legend"></div>
+									    <div style="clear:both;"></div>
 									</div>
+									<div class="chart"></div>
+									<div class="zoom_slider"></div>
+								</div>
+							</tab>
+
+							<tab ng-repeat="promise in compareTabs" active="active">
+								<tab-heading class="compare_tab" ng-class="{loading : loading}">
+									Jämför <span  class="tab_spinner" 
+										us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
+								</tab-heading>
+								<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
+
+									<div class="column column_1">
+										<h2>Fler i {{cmp1.label}}</h2>
+										<ul>
+											<li ng-repeat="tuple in tables.negative">
+												<div class="meter" meter="tuple" max="max[1]" ></div>
+											</li>
+										</ul>
+									</div>
+									<div class="column column_2">
+										<h2>Fler i {{cmp2.label}}</h2>
+										<ul>
+											<li ng-repeat="tuple in tables.positive">
+												<div class="meter" meter="tuple" max="max[1]" ></div>
+											</li>
+										</ul>
+									</div>
+								</div>
 							</tab>
 						</tabset>
 						<!-- <div id="result-container"> -->
@@ -426,7 +451,8 @@
 						<!-- </div> -->
 						<a id="json-link" href="#"><img src="img/json.png" /></a>
 					</div>
-					<div id="sidebar" class="ui-corner-all kwic_sidebar"></div>
+					<div id="sidebar" class="ui-corner-all kwic_sidebar" 
+						ng-class="{visible : word_selected && result_tab == 0}"></div>
 					<div style="clear : both; float : none;"></div>
 				</div>
 			</div>

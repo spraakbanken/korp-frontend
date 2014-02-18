@@ -70,12 +70,13 @@ korpApp.factory "utils", ($location) ->
 korpApp.factory 'backend', ($http, $q, utils) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
         def = $q.defer()
+        # c.log "reduce", reduce, reduce.replace(/^_\./, "")
         params = 
             command : "loglike"
-            groupby : reduce
-            set1_corpus : cmpObj1.corpora.join(",")
+            groupby : reduce.replace(/^_\./, "")
+            set1_corpus : cmpObj1.corpora.join(",").toUpperCase()
             set1_cqp : cmpObj1.cqp
-            set2_corpus : cmpObj2.corpora.join(",")
+            set2_corpus : cmpObj2.corpora.join(",").toUpperCase()
             set2_cqp : cmpObj2.cqp
             max : 50
 
@@ -91,15 +92,21 @@ korpApp.factory 'backend', ($http, $q, utils) ->
 
         return def.promise
 
+    # requestGraph : () ->
+        # def = $q.defer()
+
+        # new GraphProxy().makeRequest(cqp, subcqps, corpora)
 
 
 
-korpApp.factory 'searches', (utils, $location, $rootScope, $http) ->
+korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
     class Searches
         constructor : () ->
             @activeSearch = null
-            @getInfoData()
+            @infoDef = @getInfoData()
+
+
 
         kwicRequest : (cqp, page) ->
             kwicResults.showPreloader()
@@ -143,7 +150,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http) ->
 
 
         getInfoData : () ->
-            $http(
+            def = $q.defer()
+            return $http(
                 method : "GET"
                 url : settings.cgi_script
                 params:
@@ -153,16 +161,21 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http) ->
                 for corpus in settings.corpusListing.corpora
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
 
+                c.log "loadCorpora"
                 loadCorpora()
+                def.resolve()
+
+            return def.promise
 
 
 
 
     searches = new Searches()
+    # infoDef = searches.getInfoData()
 
 
 
-    $rootScope.$watch "_loc.search().search", () ->
+    $rootScope.$watch "_loc.search().search", () =>
         c.log "watch", $location.search().search
         searchExpr = $location.search().search
         unless searchExpr then return
@@ -172,42 +185,43 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http) ->
         view.updateSearchHistory value
         # $.when(chained).then () ->
             # $rootScope.$apply () ->
-        switch type
-            when "word"
-                searches.activeSearch = 
-                    type : type
-                    val : value
+        searches.infoDef.then () ->
+            switch type
+                when "word"
+                    searches.activeSearch = 
+                        type : type
+                        val : value
 
-                # cqp = simpleSearch.onSimpleChange()
-                # c.log "word search, cqp", cqp
-                
-                # searches.lemgramSearch(value, null, null, page)
-                # $("#simple_text").val value
-                # simpleSearch.onSimpleChange()
-                # simpleSearch.setPlaceholder null, null
-                
-                # $.sm.send "submit.word", data
-            when "lemgram"
-                searches.activeSearch = 
-                    type : type
-                    val : value
+                    # cqp = simpleSearch.onSimpleChange()
+                    # c.log "word search, cqp", cqp
+                    
+                    # searches.lemgramSearch(value, null, null, page)
+                    # $("#simple_text").val value
+                    # simpleSearch.onSimpleChange()
+                    # simpleSearch.setPlaceholder null, null
+                    
+                    # $.sm.send "submit.word", data
+                when "lemgram"
+                    searches.activeSearch = 
+                        type : type
+                        val : value
 
-                searches.lemgramSearch(value, null, null, page)
-                # $.sm.send "submit.lemgram", data
-            when "saldo"
-                extendedSearch.setOneToken "saldo", value
-                # $.sm.send "submit.cqp", data
-            when "cqp"
-                # advancedSearch.setCQP value
-                c.log "cqp search"
+                    searches.lemgramSearch(value, null, null, page)
+                    # $.sm.send "submit.lemgram", data
+                when "saldo"
+                    extendedSearch.setOneToken "saldo", value
+                    # $.sm.send "submit.cqp", data
+                when "cqp"
+                    # advancedSearch.setCQP value
+                    c.log "cqp search"
 
-                if not value then value = $location.search().cqp
-                searches.activeSearch = 
-                    type : type
-                    val : value
+                    if not value then value = $location.search().cqp
+                    searches.activeSearch = 
+                        type : type
+                        val : value
 
 
-                searches.kwicSearch value, page
+                    searches.kwicSearch value, page
 
 
     # utils.setupHash $rootScope, [

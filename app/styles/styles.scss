@@ -1,8 +1,4 @@
-@import "compass/css3/images";
-@import "compass/css3/transition";
-@import "compass/css3/transform";
-@import "compass/css3/inline-block";
-@import "compass/css3/border-radius";
+@import "compass/css3";
 
 
 
@@ -11,6 +7,10 @@
   src: url(SourceSansPro-Regular.otf);
 }
 
+
+* {
+    @include box-sizing(border-box);
+}
 
 $primaryColor: rgb(221, 233, 255);
 $primaryLight: rgb(242, 247, 255);
@@ -34,6 +34,7 @@ ul, ol {
 h4 {
   /*text-transform: capitalize;*/
 }
+
 
 #welcome {
   padding: 0.2em;
@@ -451,7 +452,7 @@ select.arg_value option {
   width: 480px;
   height: 33px;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
   vertical-align: bottom;
 }
 
@@ -504,10 +505,10 @@ select.arg_value option {
 }
 
 .hp_topframe {
-  height: 16px;
-  width: 433px;
+  // height: 16px;
+  width: 446px;
   padding-top: 7px;
-  padding-bottom: 7px;
+  // padding-bottom: 7px;
 }
 
 .webkit .hp_topframe > div {
@@ -1044,6 +1045,12 @@ table {
 #left-column {
   position: absolute;
   left: 0px;
+  right : 0;
+  transition : right 500ms;
+  &.sidebar_visible {
+    right : 265px;
+    transition : right 500ms;
+  }
 }
 
 #sidebar {
@@ -1051,7 +1058,13 @@ table {
   right: 0px;
   width: 250px;
   padding: 5px 0px 5px 5px;
-  display : none;
+  right : -268px;
+  transition : right 500ms;
+  &.visible {
+    transition : right 500ms;
+    // display : block;
+    right : 0;
+  }
   &.fixed {
     right: 8px;
     position: fixed;
@@ -1557,14 +1570,22 @@ label[for=lemgram_select]:before {
 }
 
 .search_tabs {
+  li:nth-child(4) {
+    margin-left : 1em;
+  }
   .tab-content {
     overflow : visible;
   }
   .search_compare {
+    padding-top: 1em;
     button {
-      margin-top : 1em;
+      margin-top : 2em;
+      display : block;
     }
   }
+}
+#results-wrapper .nav-tabs li:nth-child(4) {
+  margin-left : 1em;
 }
 
 #korp-extended .within_select ~ * {
@@ -1657,13 +1678,13 @@ label[for=lemgram_select]:before {
   display: none;
 }
 
-.progress {
+.progress_container {
   width: 143px;
   overflow-x: hidden;
   @include transition(width 400ms ease);
 }
 
-#results-kwic.not_loading .progress {
+#results-kwic.not_loading .progress_container {
   width: 0;
   @include transition(width 400ms ease);
 }
@@ -1673,7 +1694,7 @@ label[for=lemgram_select]:before {
   @include transition(width 400ms ease);
 }
 
-.not_loading .progress {
+.not_loading .progress_container {
   display: none;
 }
 
@@ -1820,6 +1841,10 @@ line.tick {
 #myGrid {
   width : 100%;
   height : 500px;
+
+}
+#myGrid, #myGrid * {
+  box-sizing : content-box;
 }
 .loading .exportStatsSection {
   display : none;
@@ -1828,11 +1853,27 @@ line.tick {
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
   border: 1px solid #AAAAAA;
+  border-radius: 2px 2px 0 0;
   color: #222222;
+
+  padding-top : 0.2em;
+
+  li {
+    cursor: pointer;
+    margin-right : 0.2em;
+  }
+  .badge {
+    margin-left : 1em;
+  }
+
+
+  
 }
+
 
 .tabbable {
   border : 1px solid #AAAAAA;
+  border-radius: 2px 2px 2px 2px;
   color : #222222;
   padding : 3px;
   .tab-content {
@@ -1847,14 +1888,34 @@ line.tick {
       color: #555555;
       font-weight: normal;
       margin-bottom : -1px;
+      &:first-child {
+        margin-left : 0.5em;
+      }
       a {
           padding-bottom: 0.3em !important;
           padding-top: 0.3em !important;
           padding: 0.2em 1em;
           color : #555555;
       }
+      &.active {
+        border-bottom-color : transparent; 
+      }
     }
   }
+}
+
+.search_tabs.tabbable {
+  border-bottom-right-radius : 0;
+  border-bottom-left-radius : 0;
+}
+
+.nav-tabs > .active > a, 
+.nav-tabs > .active > a:hover {
+  border-radius : 0;
+  border-color: transparent;
+}
+.nav-tabs > li > a, .nav-pills > li > a {
+  margin-right : 0;
 }
 
 .pagination {
@@ -1865,6 +1926,7 @@ line.tick {
   border-width : 1px;
   line-height: 18px;
   padding : 0 8px;
+  color : #555;
 }
 
 .modal-header {
@@ -1944,3 +2006,8 @@ line.tick {
   display : inline-block;
 }
 
+
+.badge {
+  padding-right: 5px;
+  padding-left: 6px;
+}

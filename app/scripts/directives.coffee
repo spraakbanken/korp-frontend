@@ -44,10 +44,8 @@ korpApp.directive "tabHash", (utils, $location) ->
             utils.setupHash s,[
                 expr : "getSelected()"
                 val_out : (val) ->
-                    c.log "val out", val
                     return val
                 val_in : (val) ->
-                    c.log "val_in", typeof val
                     s.setSelected parseInt(val)
                     return parseInt(val)
                 key : attr.tabHash
@@ -55,15 +53,12 @@ korpApp.directive "tabHash", (utils, $location) ->
             ]
 
         init_tab = parseInt($location.search()[attr.tabHash]) or 0
-        c.log "tab init", init_tab, s.tabs.length
 
 
         w = scope.$watch "tabs.length", (len) ->
-            c.log "tabs.length", len
             if (len - 1) >= init_tab
                 s.setSelected(init_tab)
                 watchHash()
-                c.log "watchHash()"
                 w()
 
 
@@ -80,7 +75,10 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 
 korpApp.directive "tokenValue", ($compile, $controller) ->
-    defaultTmpl = "<input ng-model='model'>"
+    # defaultTmpl = "<input ng-model='model' 
+    #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
+    defaultTmpl = "<input ng-model='model' 
+                placeholder='{{\"any\" | loc}} '>"
 
     # require:'ngModel',
     scope :
@@ -115,7 +113,6 @@ korpApp.directive "korpAutocomplete", () ->
         type : "@"
     link : (scope, elem, attr) ->
         
-        c.log "scope.model", scope.model, scope.type
         setVal = (lemgram) ->
             $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
                 .val("").blur().placeholder()
@@ -126,7 +123,6 @@ korpApp.directive "korpAutocomplete", () ->
             sortFunction: scope.sorter
             type: scope.type
             select: (lemgram) ->
-                c.log "extended lemgram", lemgram, $(this)
                 # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
                 setVal(lemgram)
                 scope.$apply () ->
@@ -140,7 +136,6 @@ korpApp.directive "korpAutocomplete", () ->
         .blur(->
             input = this
             setTimeout (->
-                c.log "blur"
 
                 if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
                     $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
@@ -194,7 +189,13 @@ korpApp.directive "slider", () ->
 
 korpApp.directive "constr", ($window) ->
     link : (scope, elem, attr) ->
-        $window[attr.constrName] = new $window.view[attr.constr](elem, elem, scope)
+        instance = new $window.view[attr.constr](elem, elem, scope)
+        if attr.constrName
+            $window[attr.constrName] = instance
+
+        c.log "constr", scope, instance
+        scope.instance = instance
+
         # c.log "$window[attr.constrName]", $window[attr.constrName], elem
 
 
@@ -249,7 +250,6 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
 
         onEscape = (event) ->
-            c.log "keydown", event.which
             if event.which == 27 #escape
                 s.popHide()
                 return false
@@ -261,7 +261,6 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                 at : at
                 of : elem.find(".opener")
 
-            c.log "popShow", $rootElement
             $rootElement.on "keydown", onEscape
 
         s.popHide = () ->

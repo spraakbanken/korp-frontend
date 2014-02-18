@@ -297,7 +297,8 @@ window.applyTo = (ctrl, f) ->
 window.search = (obj, val) ->
     s = $("body").scope()
 
-    ret = s.$root.$apply () ->
+    # ret = s.$root.$apply () ->
+    ret = safeApply s.$root, () ->
         if _.isObject obj
             obj = _.extend {}, s.$root.search(), obj
         s.$root.search(obj, val)
@@ -332,3 +333,7 @@ window.initLocales = () ->
         def.resolve loc_data
 
     return def
+
+
+window.safeApply = (scope, fn) ->
+    if (scope.$$phase || scope.$root.$$phase) then fn(scope) else scope.$apply(fn)

@@ -46,18 +46,21 @@ view.enableSearch = (bool) ->
         $("#search-tab").tabs("disable").addClass("ui-state-disabled").cover()
 
 view.initSearchOptions = ->
+    # TODO: unbreak this function
     selects = $("#search_options > div:first select").customSelect()
+    c.log "selects", selects
     view.updateReduceSelect()
     $("#search_options select").each ->
         # state = $.bbq.getState($(this).data("history"))
         state = search()[$(this).data("history")]
 
         unless not state
-            $(this).val(state).change()
+            $(this).val(state).change(null, true)
         else
-            $(this).prop("selectedIndex", 0).change()
+            $(this).prop("selectedIndex", 0).change(null, true)
+        $(this).prop("selectedIndex", 0).change(null, true)
 
-    $("#search_options").css("background-color", settings.primaryLight).change (event) ->
+    $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         simpleSearch.enableSubmit()
         extendedSearch.enableSubmit()
         advancedSearch.enableSubmit()
@@ -69,7 +72,9 @@ view.initSearchOptions = ->
         else
             if search()[target.data("history")]
                 search target.data("history"), null
-            # $.bbq.removeState target.data("history")
+
+        if isInit is true
+            search("search", null)
 
 
 view.updateContextSelect = (withinOrContext) ->
@@ -134,7 +139,8 @@ view.updateReduceSelect = ->
     select
 
 class BaseSearch
-    constructor: (mainDivId) ->
+    constructor: (mainDivId, scope) ->
+        @s = scope
         @$main = $(mainDivId)
         @$main.find("#sendBtn:submit").click $.proxy(@onSubmit, this)
         @_enabled = true
@@ -164,9 +170,7 @@ class BaseSearch
 
 class view.SimpleSearch extends BaseSearch
     constructor: (mainDivId, _mainDiv, scope) ->
-        super mainDivId
-        @s = scope
-        c.log "simplesearch", mainDivId, $(mainDivId)
+        super mainDivId, scope
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         # $("#simple_text").keyup $.proxy(@onSimpleChange, this)
         $("#simple_text").keypress () =>
@@ -404,13 +408,8 @@ class view.SimpleSearch extends BaseSearch
             $(this).empty()
 
 
-    onSimpleChange: (event) ->
-        c.log "onSimpleChange"
-        $("#simple_text").data "promise", null
-        if event and event.keyCode is 27 #escape
-            c.log "key", event.keyCode
-            return
-        currentText = $.trim($("#simple_text").val() or "", '"')
+    getCQP : (word) ->
+        currentText = $.trim(word or $("#simple_text").val() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
         if util.isLemgramId(currentText) # if the input is a lemgram, do semantic search.
             val = $.format("[lex contains \"%s\"]", currentText)
@@ -430,13 +429,21 @@ class view.SimpleSearch extends BaseSearch
                 $.format "[word = \"%s\"%s]", [regescape(item), suffix]
             )
             val = cqp.join(" ")
+
+    onSimpleChange: (event) ->
+        c.log "onSimpleChange"
+        $("#simple_text").data "promise", null
+        if event and event.keyCode is 27 #escape
+            c.log "key", event.keyCode
+            return
+        
+        val = @getCQP()
         $("#cqp_string").val val
         # @s.$apply () ->
         @s.$root.activeCQP = val
-        unless currentText is ""
-            @enableSubmit()
+        # unless currentText is ""
+        #     @enableSubmit()
 
-        return val
         # else
         #     @disableSubmit()
 
@@ -460,7 +467,6 @@ class view.SimpleSearch extends BaseSearch
 class view.ExtendedSearch extends BaseSearch
     constructor: (mainDivId) ->
         super mainDivId
-        c.log "extendedsearch constructor"
         $("#korp-extended").keyup (event) =>
             @onSubmit()  if event.keyCode is "13" and $("#search-tab").data("cover")?
             false

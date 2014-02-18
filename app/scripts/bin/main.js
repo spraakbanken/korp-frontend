@@ -160,18 +160,6 @@
       util.setLogin();
     }
     tab_a_selector = "ul .ui-tabs-anchor";
-    $("#search-tab").tabs({
-      event: "change",
-      activate: function(event, ui) {
-        var selected;
-        if ($("#sidebar").data("korpSidebar")) {
-          if ($("#columns").position().top > 0) {
-            $("#sidebar").sidebar("updatePlacement");
-          }
-        }
-        return selected = ui.newPanel.attr("id").split("-")[1];
-      }
-    });
     if (currentMode === "parallel") {
       $(".ui-tabs-nav li").first().hide();
       $(".ui-tabs-nav li").last().hide();
@@ -181,25 +169,6 @@
       $("#search-tab").tabs("option", "active", 1);
       $("#result-container > ul li:last ").hide();
     }
-    $("#result-container").korptabs({
-      event: "change",
-      activate: function(event, ui) {
-        var currentId, instance, selected, suffix, type;
-        if (ui.newTab.is(".custom_tab")) {
-          instance = $(this).korptabs("getCurrentInstance");
-          suffix = instance instanceof view.GraphResults ? ".graph" : ".kwic";
-          return type = instance;
-        } else {
-          currentId = ui.newPanel.attr("id");
-          return selected = currentId.split("-")[1];
-        }
-      }
-    });
-    $(".custom_anchor").on("mouseup", function() {
-      c.log("custom click");
-      search("result-container", null);
-      return $(this).triggerHandler("change");
-    });
     $("#log_out").click(function() {
       $.each(authenticationProxy.loginObj.credentials, function(i, item) {
         return $(".boxdiv[data=" + (item.toLowerCase()) + "]").addClass("disabled");
@@ -376,12 +345,14 @@
       },
       selected: settings.defaultLanguage
     }).vAlign();
-    $("#sidebar").sidebar().sidebar("hide");
+    $("#sidebar").sidebar();
     $(document).click(function() {
       return $("#simple_text.ui-autocomplete-input").autocomplete("close");
     });
-    view.initSearchOptions();
-    onHashChange(null, true);
+    setTimeout(function() {
+      view.initSearchOptions();
+      return onHashChange(null, true);
+    }, 0);
     $("body").animate({
       opacity: 1
     }, function() {

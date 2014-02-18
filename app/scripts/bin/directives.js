@@ -53,11 +53,9 @@
             {
               expr: "getSelected()",
               val_out: function(val) {
-                c.log("val out", val);
                 return val;
               },
               val_in: function(val) {
-                c.log("val_in", typeof val);
                 s.setSelected(parseInt(val));
                 return parseInt(val);
               },
@@ -67,13 +65,10 @@
           ]);
         };
         init_tab = parseInt($location.search()[attr.tabHash]) || 0;
-        c.log("tab init", init_tab, s.tabs.length);
         w = scope.$watch("tabs.length", function(len) {
-          c.log("tabs.length", len);
           if ((len - 1) >= init_tab) {
             s.setSelected(init_tab);
             watchHash();
-            c.log("watchHash()");
             return w();
           }
         });
@@ -104,7 +99,7 @@
 
   korpApp.directive("tokenValue", function($compile, $controller) {
     var defaultTmpl;
-    defaultTmpl = "<input ng-model='model'>";
+    defaultTmpl = "<input ng-model='model'                 placeholder='{{\"any\" | loc}} '>";
     return {
       scope: {
         tokenValue: "=",
@@ -140,7 +135,6 @@
       },
       link: function(scope, elem, attr) {
         var arg_value, setVal;
-        c.log("scope.model", scope.model, scope.type);
         setVal = function(lemgram) {
           return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
         };
@@ -152,7 +146,6 @@
           sortFunction: scope.sorter,
           type: scope.type,
           select: function(lemgram) {
-            c.log("extended lemgram", lemgram, $(this));
             setVal(lemgram);
             return scope.$apply(function() {
               if (scope.type === "baseform") {
@@ -167,7 +160,6 @@
           var input;
           input = this;
           return setTimeout((function() {
-            c.log("blur");
             if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
               return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
             } else {
@@ -218,7 +210,13 @@
   korpApp.directive("constr", function($window) {
     return {
       link: function(scope, elem, attr) {
-        return $window[attr.constrName] = new $window.view[attr.constr](elem, elem, scope);
+        var instance;
+        instance = new $window.view[attr.constr](elem, elem, scope);
+        if (attr.constrName) {
+          $window[attr.constrName] = instance;
+        }
+        c.log("constr", scope, instance);
+        return scope.instance = instance;
       }
     };
   });
@@ -256,7 +254,6 @@
           at = s.pos + "+10 center";
         }
         onEscape = function(event) {
-          c.log("keydown", event.which);
           if (event.which === 27) {
             s.popHide();
             return false;
@@ -269,7 +266,6 @@
             at: at,
             of: elem.find(".opener")
           });
-          c.log("popShow", $rootElement);
           return $rootElement.on("keydown", onEscape);
         };
         s.popHide = function() {

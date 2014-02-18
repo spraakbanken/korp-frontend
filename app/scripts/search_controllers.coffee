@@ -15,9 +15,20 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
 
 # korpApp.controller "kwicCtrl", ($scope) ->
 
-korpApp.run ($rootScope, $location, $route, $routeParams, utils) ->
+korpApp.run ($rootScope, $location, $route, $routeParams, utils, searches) ->
     s = $rootScope
     s.lang = "sv"
+    s.word_selected = null
+
+    # s.$watch "word_selected", (val) ->
+    #     c.log "word_selected", val
+        # unless $("#sidebar").data("korpSidebar") then return
+        # if val 
+        #     $("#sidebar").sidebar("show")
+        # else
+        #     $("#sidebar").sidebar("hide")
+
+
 
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
@@ -42,11 +53,50 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils) ->
 
 
     $rootScope.compareTabs = []
+    $rootScope.graphTabs = []
     isInit = true
-    s.$on "corpuschooserchange", () ->
+    s.$on "corpuschooserchange", (event, corpora) ->
+        c.log "corpuschooserchange", corpora
+        settings.corpusListing.select corpora
+        nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
+        c.log "corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length
+        if corpora.length and _.intersection(corpora, nonprotected).length isnt nonprotected.length
+            # $.bbq.pushState({"corpus" : corpora.join(",")})
+            # search corpus: corpora.join(",")
+            $location.search "corpus", corpora.join(",")
+        else
+            $location.search "corpus", null
+        if corpora.length
+          
+            # if(currentMode == "parallel")
+            #     extendedSearch.reset();
+            # else 
+            #     extendedSearch.refreshTokens();
+            view.updateReduceSelect()
+            view.updateContextSelect "within"
+
+        #           view.updateContextSelect("context");
+        enableSearch = !!corpora.length
+        view.enableSearch enableSearch
+
+
         unless isInit
             $location.search("search", null).replace()
         isInit = false
+
+
+    # corpus = search()["corpus"]
+    searches.infoDef.then () ->
+        corpus = $location.search().corpus
+        if corpus
+            corp_array = corpus.split(",")
+            processed_corp_array = []
+            settings.corpusListing.select(corp_array)
+            $.each corp_array, (key, val) ->
+                processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
+            corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
+            $("#select_corpus").val corpus
+        #     simpleSearch.enableSubmit()
         
 
 
@@ -164,10 +214,14 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         if search.type == "word"
             s.placeholder = null
             s.simple_text = search.val
-            cqp = simpleSearch.onSimpleChange()
+            cqp = simpleSearch.getCQP(search.val)
+            c.log "simple search cqp", cqp
             page = $rootScope.search()["page"] or 0
-            searches.kwicRequest(cqp, page)
-            simpleSearch.makeLemgramSelect() if settings.lemgramSelect
+            searches.kwicSearch(cqp, page)
+            # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
+            lemgramResults.showPreloader();
+            lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+
         else if search.type == "lemgram"
             s.placeholder = search.val
             s.simple_text = ""
@@ -202,11 +256,6 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
 
         # if search.type == "cqp"
         #     expr = 
-
-
-
-
-
     s.$on "btn_submit", () ->
         c.log "extended submit"
         $location.search("search", "cqp")
@@ -240,7 +289,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         s.typeMapping?[type]?.opts or settings.defaultOptions
 
 
-    onCorpusChange = (selected) ->
+    onCorpusChange = (event, selected) ->
         # TODO: respece the setting 'word_attribute_selector' and similar
         # attrs = for key, obj of settings.corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
         #     _.extend({group : "word_attr", value : key}, obj)
@@ -281,17 +330,19 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
 
 
     # cqp = '[msd = "" | word = "value2" & lex contains "ge..vb.1"] []{1,2}'
-    cqp = '[lex contains "ge..vb.1"]'
+    # cqp = '[lex contains "ge..vb.1"]'
+    s.cqp = '[]'
+
 
     s.data = []
 
     # s.$watch "activeCQP", (cqp) ->
     try
-        s.data = CQP.parse(cqp)
+        s.data = CQP.parse(s.cqp)
         c.log "s.data", s.data
     catch error
         output = []
-        for token in cqp.split("[")
+        for token in s.cqp.split("[")
             if not token
                 continue
             token = "[" + token
@@ -315,7 +366,7 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
     if $location.search().cqp
         s.data = CQP.parse($location.search().cqp)
     else
-        s.data = CQP.parse(cqp)
+        s.data = CQP.parse(s.cqp)
 
     # expand [] to [word = '']
     
@@ -326,6 +377,8 @@ korpApp.controller "TokenList", ($scope, $location, $rootScope) ->
         $rootScope.activeCQP = cqpstr
         # $location.search({cqp : encodeURIComponent(cqpstr)})
         $location.search("cqp", cqpstr)
+        
+        
 
     s.getCQPString = ->
         return (CQP.stringify s.data) or ""
@@ -353,20 +406,21 @@ korpApp.filter "mapper", () ->
 
 
 
+
 korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope) ->
     s = $scope
     cl = settings.corpusListing
     s.valfilter = utils.valfilter
 
     $rootScope.saveSearch {
-        label : "första"
-        cqp : "[pos='NN']"
-        corpora : ["ROMI"]
+        label : "frihet"
+        cqp : "[lex contains 'frihet..nn.1']"
+        corpora : ["VIVILL"]
     }
     $rootScope.saveSearch {
-        label : "andra"
-        cqp : "[pos='NN']"
-        corpora : ["ROMII"]
+        label : "jämlikhet"
+        cqp : "[lex contains 'jämlikhet..nn.1']"
+        corpora : ["VIVILL"]
     }
 
 
@@ -374,15 +428,17 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     s.cmp2 = $rootScope.savedSearches[1]
 
     s.reduce = 'word'
+    # s.reduce = '_.text_parti'
 
     s.getAttrs = () ->
+        unless s.cmp1 then return null
         listing = cl.subsetFactory(_.uniq [].concat s.cmp1.corpora, s.cmp2.corpora)
         return utils.getAttributeGroups(listing)
 
 
     s.sendCompare = () ->
         $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, s.reduce)
-
+        # tab = $("#results-wrapper .nav.nav-tabs").scope().tabs[-1..][0]
 
     # s.sendCompare()
 

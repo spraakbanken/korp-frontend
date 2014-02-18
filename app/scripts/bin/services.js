@@ -105,10 +105,10 @@
         def = $q.defer();
         params = {
           command: "loglike",
-          groupby: reduce,
-          set1_corpus: cmpObj1.corpora.join(","),
+          groupby: reduce.replace(/^_\./, ""),
+          set1_corpus: cmpObj1.corpora.join(",").toUpperCase(),
           set1_cqp: cmpObj1.cqp,
-          set2_corpus: cmpObj2.corpora.join(","),
+          set2_corpus: cmpObj2.corpora.join(",").toUpperCase(),
           set2_cqp: cmpObj2.cqp,
           max: 50
         };
@@ -124,12 +124,13 @@
     };
   });
 
-  korpApp.factory('searches', function(utils, $location, $rootScope, $http) {
-    var Searches, searches;
+  korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q) {
+    var Searches, searches,
+      _this = this;
     Searches = (function() {
       function Searches() {
         this.activeSearch = null;
-        this.getInfoData();
+        this.infoDef = this.getInfoData();
       }
 
       Searches.prototype.kwicRequest = function(cqp, page) {
@@ -178,6 +179,8 @@
       };
 
       Searches.prototype.getInfoData = function() {
+        var def;
+        def = $q.defer();
         return $http({
           method: "GET",
           url: settings.cgi_script,
@@ -192,8 +195,11 @@
             corpus = _ref[_i];
             corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"];
           }
-          return loadCorpora();
+          c.log("loadCorpora");
+          loadCorpora();
+          return def.resolve();
         });
+        return def.promise;
       };
 
       return Searches;
@@ -210,31 +216,33 @@
       _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = _ref[1];
       page = $rootScope.search()["page"] || 0;
       view.updateSearchHistory(value);
-      switch (type) {
-        case "word":
-          return searches.activeSearch = {
-            type: type,
-            val: value
-          };
-        case "lemgram":
-          searches.activeSearch = {
-            type: type,
-            val: value
-          };
-          return searches.lemgramSearch(value, null, null, page);
-        case "saldo":
-          return extendedSearch.setOneToken("saldo", value);
-        case "cqp":
-          c.log("cqp search");
-          if (!value) {
-            value = $location.search().cqp;
-          }
-          searches.activeSearch = {
-            type: type,
-            val: value
-          };
-          return searches.kwicSearch(value, page);
-      }
+      return searches.infoDef.then(function() {
+        switch (type) {
+          case "word":
+            return searches.activeSearch = {
+              type: type,
+              val: value
+            };
+          case "lemgram":
+            searches.activeSearch = {
+              type: type,
+              val: value
+            };
+            return searches.lemgramSearch(value, null, null, page);
+          case "saldo":
+            return extendedSearch.setOneToken("saldo", value);
+          case "cqp":
+            c.log("cqp search");
+            if (!value) {
+              value = $location.search().cqp;
+            }
+            searches.activeSearch = {
+              type: type,
+              val: value
+            };
+            return searches.kwicSearch(value, page);
+        }
+      });
     });
     return searches;
   });

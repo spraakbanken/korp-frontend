@@ -1,3 +1,37 @@
+korpApp.controller "resultTabCtrl", ($scope) ->
+    s = $scope
+
+    s.$watch "getSelected()", (val) ->
+        s.$root.result_tab = val
+        switch val
+            when 0 then kwicResults?.onentry()
+            # when 1 then statsResults.onentry()
+            when 2 then lemgramResults.onentry()
+
+    # prev = 0
+    # c.log "tabs", s
+    ###
+    s.onClick = (event, num) ->
+        i = $(event.target).parent().index()
+        i = num if num?
+
+        # hack time
+        switch i
+            when 0 then kwicResults.onentry()
+            # when 1 then statsResults.onentry()
+            when 2 then lemgramResults.onentry()
+
+        if prev == 0
+            kwicResults.onexit()
+
+        prev = i
+    ###
+
+
+korpApp.controller "resultContainerCtrl", ($scope, searches) ->
+    $scope.searches = searches
+
+
 korpApp.controller "kwicCtrl", ($scope) ->
     c.log "kwicCtrl init"
     s = $scope
@@ -119,9 +153,25 @@ korpApp.controller "kwicCtrl", ($scope) ->
 
 
 
+korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
+    s = $scope
+
+    s.onGraphShow = (data) ->
+        c.log "show graph!", arguments
+        $rootScope.graphTabs.push data
+        
+
+
+
+korpApp.controller "graphCtrl", ($scope) ->
+    $scope.$parent.active = true
+
+
 korpApp.controller "compareCtrl", ($scope) ->
     s = $scope
     s.$parent.loading = true
+    #active must always be true to make new tab active
+    s.$parent.active = true
     s.promise.then ([data, cmp1, cmp2]) ->
         # c.log "compare promise", _.pairs data.loglike
         s.$parent.loading = false

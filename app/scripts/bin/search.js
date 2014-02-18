@@ -69,17 +69,19 @@
   view.initSearchOptions = function() {
     var selects;
     selects = $("#search_options > div:first select").customSelect();
+    c.log("selects", selects);
     view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
       state = search()[$(this).data("history")];
       if (!!state) {
-        return $(this).val(state).change();
+        $(this).val(state).change(null, true);
       } else {
-        return $(this).prop("selectedIndex", 0).change();
+        $(this).prop("selectedIndex", 0).change(null, true);
       }
+      return $(this).prop("selectedIndex", 0).change(null, true);
     });
-    return $("#search_options").css("background-color", settings.primaryLight).change(function(event) {
+    return $("#search_options").css("background-color", settings.primaryLight).change(function(event, isInit) {
       var state, target;
       simpleSearch.enableSubmit();
       extendedSearch.enableSubmit();
@@ -88,11 +90,14 @@
       state = {};
       state[target.data("history")] = target.val();
       if (target.prop("selectedIndex") !== 0) {
-        return search(state);
+        search(state);
       } else {
         if (search()[target.data("history")]) {
-          return search(target.data("history"), null);
+          search(target.data("history"), null);
         }
+      }
+      if (isInit === true) {
+        return search("search", null);
       }
     });
   };
@@ -165,7 +170,8 @@
   };
 
   BaseSearch = (function() {
-    function BaseSearch(mainDivId) {
+    function BaseSearch(mainDivId, scope) {
+      this.s = scope;
       this.$main = $(mainDivId);
       this.$main.find("#sendBtn:submit").click($.proxy(this.onSubmit, this));
       this._enabled = true;
@@ -208,9 +214,7 @@
     function SimpleSearch(mainDivId, _mainDiv, scope) {
       var textinput,
         _this = this;
-      SimpleSearch.__super__.constructor.call(this, mainDivId);
-      this.s = scope;
-      c.log("simplesearch", mainDivId, $(mainDivId));
+      SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
       $("#simple_text").keypress(function() {
         return _this.s.$apply(function() {
@@ -433,23 +437,17 @@
       });
     };
 
-    SimpleSearch.prototype.onSimpleChange = function(event) {
+    SimpleSearch.prototype.getCQP = function(word) {
       var cqp, currentText, query, suffix, val, wordArray;
-      c.log("onSimpleChange");
-      $("#simple_text").data("promise", null);
-      if (event && event.keyCode === 27) {
-        c.log("key", event.keyCode);
-        return;
-      }
-      currentText = $.trim($("#simple_text").val() || "", '"');
+      currentText = $.trim(word || $("#simple_text").val() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
-        val = $.format("[lex contains \"%s\"]", currentText);
+        return val = $.format("[lex contains \"%s\"]", currentText);
       } else if (this.isSearchPrefix() || this.isSearchSuffix()) {
         query = [];
         this.isSearchPrefix() && query.push("%s.*");
         this.isSearchSuffix() && query.push(".*%s");
-        val = $.map(currentText.split(" "), function(wd) {
+        return val = $.map(currentText.split(" "), function(wd) {
           return "[" + $.map(query, function(q) {
             q = $.format(q, wd);
             return $.format("word = \"%s\"%s", [q, suffix]);
@@ -460,14 +458,21 @@
         cqp = $.map(wordArray, function(item, i) {
           return $.format("[word = \"%s\"%s]", [regescape(item), suffix]);
         });
-        val = cqp.join(" ");
+        return val = cqp.join(" ");
       }
+    };
+
+    SimpleSearch.prototype.onSimpleChange = function(event) {
+      var val;
+      c.log("onSimpleChange");
+      $("#simple_text").data("promise", null);
+      if (event && event.keyCode === 27) {
+        c.log("key", event.keyCode);
+        return;
+      }
+      val = this.getCQP();
       $("#cqp_string").val(val);
-      this.s.$root.activeCQP = val;
-      if (currentText !== "") {
-        this.enableSubmit();
-      }
-      return val;
+      return this.s.$root.activeCQP = val;
     };
 
     SimpleSearch.prototype.resetView = function() {
@@ -492,7 +497,6 @@
     function ExtendedSearch(mainDivId) {
       var _this = this;
       ExtendedSearch.__super__.constructor.call(this, mainDivId);
-      c.log("extendedsearch constructor");
       $("#korp-extended").keyup(function(event) {
         if (event.keyCode === "13" && ($("#search-tab").data("cover") != null)) {
           _this.onSubmit();

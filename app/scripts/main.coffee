@@ -160,12 +160,12 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
 
     tab_a_selector = "ul .ui-tabs-anchor"
 
-    $("#search-tab").tabs
-        event: "change"
-        activate: (event, ui) ->
-            if $("#sidebar").data("korpSidebar")
-                $("#sidebar").sidebar "updatePlacement" if $("#columns").position().top > 0 #place sidebar
-            selected = ui.newPanel.attr("id").split("-")[1]
+    # $("#search-tab").tabs
+    #     event: "change"
+    #     activate: (event, ui) ->
+    #         if $("#sidebar").data("korpSidebar")
+    #             $("#sidebar").sidebar "updatePlacement" if $("#columns").position().top > 0 #place sidebar
+    #         selected = ui.newPanel.attr("id").split("-")[1]
             # $.sm.send "searchtab." + selected
 
     if currentMode is "parallel"
@@ -176,17 +176,17 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
         $("#korp-advanced").hide()
         $("#search-tab").tabs "option", "active", 1
         $("#result-container > ul li:last ").hide()
-    $("#result-container").korptabs
-        event: "change"
-        activate: (event, ui) ->
-            if ui.newTab.is(".custom_tab")
-                instance = $(this).korptabs("getCurrentInstance")
-                suffix = if instance instanceof view.GraphResults then ".graph" else ".kwic"
-                type = instance
-                # $.sm.send "resultstab.custom" + suffix
-            else
-                currentId = ui.newPanel.attr("id")
-                selected = currentId.split("-")[1]
+    # $("#result-container").korptabs
+    #     event: "change"
+    #     activate: (event, ui) ->
+    #         if ui.newTab.is(".custom_tab")
+    #             instance = $(this).korptabs("getCurrentInstance")
+    #             suffix = if instance instanceof view.GraphResults then ".graph" else ".kwic"
+    #             type = instance
+    #             # $.sm.send "resultstab.custom" + suffix
+    #         else
+    #             currentId = ui.newPanel.attr("id")
+    #             selected = currentId.split("-")[1]
                 # c.log "send ", "resultstab." + selected
                 # $.sm.send "resultstab." + selected
 
@@ -208,10 +208,10 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
     #     search state
     #     false
 
-    $(".custom_anchor").on "mouseup", ->
-        c.log "custom click"
-        search "result-container", null
-        $(this).triggerHandler "change"
+    # $(".custom_anchor").on "mouseup", ->
+    #     c.log "custom click"
+    #     search "result-container", null
+    #     $(this).triggerHandler "change"
 
     $("#log_out").click ->
         $.each authenticationProxy.loginObj.credentials, (i, item) ->
@@ -223,17 +223,6 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
         $("#pass").val ""
         $("#corpusbox").corpusChooser "redraw"
 
-
-    # corpus = search()["corpus"]
-    # if corpus
-    #     corp_array = corpus.split(",")
-    #     processed_corp_array = []
-    #     settings.corpusListing.select(corp_array)
-    #     $.each corp_array, (key, val) ->
-    #         processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
-    #     corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-    #     $("#select_corpus").val corpus
-    #     simpleSearch.enableSubmit()
 
 
 
@@ -409,13 +398,15 @@ $.when(loc_dfd, deferred_mode, deferred_domReady).then ((loc_data) ->
 
 
     ).vAlign()
-    $("#sidebar").sidebar().sidebar "hide"
+    $("#sidebar").sidebar() #.sidebar "hide"
     # $("#simple_text")[0].focus()
     $(document).click ->
         $("#simple_text.ui-autocomplete-input").autocomplete "close"
 
-    view.initSearchOptions()
-    onHashChange null, true
+    setTimeout(() -> 
+        view.initSearchOptions()
+        onHashChange null, true
+    , 0)
     $("body").animate
         opacity: 1
     , ->

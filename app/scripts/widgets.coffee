@@ -142,8 +142,8 @@ Sidebar =
 
 
     applyEllipse: ->
-        oldDisplay = @element.css("display")
-        @element.css "display", "block"
+        # oldDisplay = @element.css("display")
+        # @element.css "display", "block"
         totalWidth = @element.width()
 
         # ellipse for too long links of type=url
@@ -157,7 +157,7 @@ Sidebar =
                 $(this).text ["http:/"].concat(domain, midsection).join("/")
                 break  if midsection is "..."
 
-        @element.css "display", oldDisplay
+        # @element.css "display", oldDisplay
 
     _parseLemma: (attr, tmplVal) ->
         seq = []
@@ -185,8 +185,8 @@ Sidebar =
             ).promise()
         else
             @element.removeClass("ui-state-highlight").addClass "kwic_sidebar"
-            instance = $("#result-container").korptabs("getCurrentInstance")
-            instance?.selectionManager?.selected?.click()
+            # instance = $("#result-container").korptabs("getCurrentInstance")
+            # instance?.selectionManager?.selected?.click()
 
     updatePlacement: ->
         max = Math.round($("#columns").position().top)
@@ -293,6 +293,7 @@ $.extend $.ui.autocomplete.prototype,
             that._renderItem ul, item
 
 
+
 $.fn.korp_autocomplete = (options) ->
     selector = $(this)
     if typeof options is "string" and options is "abort"
@@ -380,7 +381,7 @@ $.fn.korp_autocomplete = (options) ->
             false
 
     selector
-
+###            
 KorpTabs =
     _init: ->
         @_super()
@@ -969,3 +970,4 @@ ExtendedToken =
 
 $.widget "korp.extendedToken", ExtendedToken
 
+###

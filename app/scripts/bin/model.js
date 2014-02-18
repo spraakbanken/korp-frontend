@@ -510,7 +510,7 @@
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
-      reduceval = $.bbq.getState("stats_reduce") || "word";
+      reduceval = search().stats_reduce || "word";
       if (reduceval === "word_insensitive") {
         reduceval = "word";
       }

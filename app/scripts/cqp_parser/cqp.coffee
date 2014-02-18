@@ -5,7 +5,8 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
     output = []
 
     for token in cqp_obj
-        or_array = for and_array in token.and_block or []
+        or_array = []
+        or_array = for and_array in token.and_block
             for {type, op, val} in and_array
                 if translate_ops
                     [val, op] = {
@@ -14,7 +15,11 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
                     }[op] or [val, op]
-                "#{type} #{op} \"#{val}\"" 
+                if type == "word" and val == ""
+                    ""
+                else 
+                    "#{type} #{op} \"#{val}\"" 
+
 
         or_out = (x.join(" | ") for x in or_array)
 
@@ -70,9 +75,8 @@ c.log CQP.stringify [
         ]
     },
     {
-        "repeat": [
-            1,
-            2
-        ]
-    }
+        "and_block":[
+            [{"type": "word", "op": "=", "val": ""}]
+        ],
+        "repeat":[1,2]}
 ]

@@ -89,7 +89,7 @@ case 2:this.$ = [$$[$0]]
 break;
 case 3:this.$ = [].concat([$$[$0-1]], $$[$0])
 break;
-case 4:this.$ = {}
+case 4:this.$ = {"and_block":[[{type:"word",op:"=",val:""}]]}
 break;
 case 5:this.$ = {"and_block" : $$[$0-1]}
 break;

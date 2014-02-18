@@ -412,7 +412,7 @@
   window.search = function(obj, val) {
     var ret, s;
     s = $("body").scope();
-    ret = s.$root.$apply(function() {
+    ret = safeApply(s.$root, function() {
       if (_.isObject(obj)) {
         obj = _.extend({}, s.$root.search(), obj);
       }
@@ -457,6 +457,14 @@
       return def.resolve(loc_data);
     });
     return def;
+  };
+
+  window.safeApply = function(scope, fn) {
+    if (scope.$$phase || scope.$root.$$phase) {
+      return fn(scope);
+    } else {
+      return scope.$apply(fn);
+    }
   };
 
 }).call(this);

@@ -57,10 +57,10 @@ tokens
     ;
 
 
-
+/*  */
 token
     : 'EMPTY'
-        {$$ = {}}
+        {$$ = {"and_block":[[{type:"word",op:"=",val:""}]]}}
     | '[' and_block ']'
         {$$ = {"and_block" : $2}}
     | '[' and_block flag ']'

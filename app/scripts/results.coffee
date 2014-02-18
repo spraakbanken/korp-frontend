@@ -1,5 +1,6 @@
 class BaseResults
-    constructor: (tabSelector, resultSelector) ->
+    constructor: (resultSelector, tabSelector, scope) ->
+        @s = scope
         @$tab = $(tabSelector)
         @$result = $(resultSelector)
         @index = @$tab.index()
@@ -13,7 +14,7 @@ class BaseResults
         @num_result.html prettyNumbers(progressObj["total_results"])
         unless isNaN(progressObj["stats"])
             try
-                @$result.find(".progress progress").attr "value", Math.round(progressObj["stats"])
+                @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
             catch e
                 c.log "onprogress error", e
         @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
@@ -26,11 +27,11 @@ class BaseResults
         util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
 
         #$("#result-container").tabs("select", 0);
-        disabled = $("#result-container").korptabs("option", "disabled")
-        newDisabled = $.grep(disabled, (item) =>
-            item isnt @index
-        )
-        $("#result-container").korptabs "option", "disabled", newDisabled
+        # disabled = $("#result-container").korptabs("option", "disabled")
+        # newDisabled = $.grep(disabled, (item) =>
+        #     item isnt @index
+        # )
+        # $("#result-container").korptabs "option", "disabled", newDisabled
         if data.ERROR
             @resultError data
             false
@@ -72,12 +73,14 @@ class view.KWICResults extends BaseResults
         @readingProxy = new model.KWICProxy()
         @current_page = 0
 
-        @scope = scope
+        @s = scope
         @selectionManager = scope.selectionManager
 
         @$result.click =>
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
+            safeApply @s.$root, (s) ->
+                s.word_selected = null
             # $.sm.send "word.deselect"
 
         @$result.find(".reading_btn").click =>
@@ -89,12 +92,14 @@ class view.KWICResults extends BaseResults
                 # $.bbq.pushState reading_mode: true
                 search reading_mode: "yes"
 
+        $(document).keydown $.proxy(@onKeydown, this)
+
 
         @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
-        @$result.on "click", ".word", (event) ->
+        @$result.on "click", ".word", (event) =>
             # c.log "click", obj, event
             # c.log "word click", $(this).scope().wd, event.currentTarget
-            scope = $(this).scope()
+            scope = $(event.currentTarget).scope()
             obj = scope.wd
             sent = scope.sentence
             event.stopPropagation()
@@ -107,6 +112,8 @@ class view.KWICResults extends BaseResults
 
             if not obj.dephead?
                 scope.selectionManager.select word, null
+                safeApply @s.$root, (s) ->
+                    s.word_selected = word
                 return
 
             i = Number(obj.dephead)
@@ -122,6 +129,8 @@ class view.KWICResults extends BaseResults
                 sent_start = paragraph.index(l.eq(l.index(word) - 1))
             aux = $(paragraph.get(sent_start + i - 1))
             scope.selectionManager.select word, aux
+            safeApply @s.$root, (s) ->
+                s.word_selected = word
 
 
 
@@ -138,11 +147,14 @@ class view.KWICResults extends BaseResults
         @proxy
 
     onentry: ->
+        c.log "onentry kwic"
+        # $("#sidebar").sidebar("show")
         @centerScrollbar()
-        $(document).keydown $.proxy(@onKeydown, this)
+        # $(document).keydown $.proxy(@onKeydown, this)
 
     onexit: ->
-        $(document).unbind "keydown", @onKeydown
+        # $("#sidebar").sidebar("hide")
+        # $(document).unbind "keydown", @onKeydown
 
     onKeydown: (event) ->
         isSpecialKeyDown = event.shiftKey or event.ctrlKey or event.metaKey
@@ -202,7 +214,7 @@ class view.KWICResults extends BaseResults
 
 
         # applyTo "kwicCtrl", ($scope) ->
-        @scope.$apply ($scope) ->
+        @s.$apply ($scope) ->
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
@@ -338,7 +350,7 @@ class view.KWICResults extends BaseResults
             @getProxy().makeRequest @buildQueryOptions(), @current_page, ((progressObj) ->
 
                 #progress
-                self.$result.find(".progress progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
+                self.$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
                 self.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
             ), ((data) ->
                 #success
@@ -385,7 +397,8 @@ class view.KWICResults extends BaseResults
         @$result.find(".pager-wrapper").trigger "setPage", [page]
 
     centerScrollbar: ->
-        m = @$result.find(".match:visible:first")
+        m = @$result.find(".match:first")
+        c.log "centerScrollbar", m, @$result.find(".match:first")
         return unless m.length
         area = @$result.find(".table_scrollarea").scrollLeft(0)
         match = m.first().position().left + m.width() / 2
@@ -497,7 +510,7 @@ class view.ExampleResults extends view.KWICResults
     constructor: (tabSelector, resultSelector) ->
         super tabSelector, resultSelector
         @proxy = new model.ExamplesProxy()
-        @$result.find(".progress,.tab_progress").hide()
+        @$result.find(".progress_container,.tab_progress").hide()
         @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
 
@@ -765,7 +778,7 @@ class view.LemgramResults extends BaseResults
         $target = $(event.currentTarget)
         c.log "onClickExample", $target
         data = $target.parent().tmplItem().data
-        instance = $("#result-container").korptabs("addTab", view.ExampleResults)
+        # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
         opts = instance.getPageInterval()
         opts.ajaxParams =
             source : data.source.join(",")
@@ -791,7 +804,6 @@ class view.LemgramResults extends BaseResults
             , 5000)
 
     onentry: ->
-        c.log "lemgramResults.onentry", $.sm.getConfiguration()
         @resultDeferred.done @showWarning
 
     onexit: ->
@@ -868,7 +880,7 @@ newDataInGraph = (dataName, horizontalDiagram, targetDiv) ->
             resize: ->
                 $("#chartFrame").css "height", $("#chartFrame").parent().width() - 20
                 stats2Instance.pie_widget "resizeDiagram", $(this).width() - 60
-                false
+                # false
 
             resizeStop: (event, ui) ->
                 w = $(this).dialog("option", "width")
@@ -943,8 +955,9 @@ newDataInGraph = (dataName, horizontalDiagram, targetDiv) ->
 
 
 class view.StatsResults extends BaseResults
-    constructor: (tabSelector, resultSelector) ->
-        super tabSelector, resultSelector
+    constructor: (resultSelector, tabSelector, scope) ->
+        super resultSelector, tabSelector, scope
+        c.log "StatsResults constr", 
         self = this
         @gridData = null
         @proxy = new model.StatsProxy()
@@ -959,7 +972,7 @@ class view.StatsResults extends BaseResults
 
         $(".slick-cell.l0.r0 .link").on "click", ->
             c.log "word click", $(this).data("context"), $(this).data("corpora")
-            instance = $("#result-container").korptabs("addTab", view.ExampleResults)
+            # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
             instance.proxy.command = "query"
             query = $(this).data("query")
             instance.makeRequest
@@ -969,7 +982,7 @@ class view.StatsResults extends BaseResults
             util.localize instance.$result
 
         $(window).resize _.debounce( () ->
-            $("#myGrid").width($("#myGrid").parent().width())
+            $("#myGrid:visible").width($("#myGrid").parent().width())
         , 100)
 
         $("#exportButton").unbind "click"
@@ -1047,11 +1060,11 @@ class view.StatsResults extends BaseResults
         icon = $("<span class='graph_btn_icon'>")
 
         $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
-            instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
+            # instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
 
             params = @proxy.prevParams
             cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
-            instance.corpora = cl
+            # instance.corpora = cl
             reduceVal = params.groupby
 
 
@@ -1077,7 +1090,15 @@ class view.StatsResults extends BaseResults
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 
-            instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
+
+            @s.$apply () =>
+                @s.onGraphShow
+                    cqp : mainCQP
+                    subcqps : subExprs
+                    labelMapping : labelMapping
+                    showTotal : showTotal
+                    corpusListing : cl
+        #     instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
         $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
 
         paper = new Raphael(icon.get(0), 33, 33)
@@ -1171,36 +1192,42 @@ class view.StatsResults extends BaseResults
 
 
 class view.GraphResults extends BaseResults
-    constructor : (tabSelector, resultSelector) ->
-        super(tabSelector, resultSelector)
+    constructor : (tabSelector, resultSelector, scope) ->
+        super(tabSelector, resultSelector, scope)
         $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
         n = @$result.index()
-        $(resultSelector).html """
-            <div class="graph_header">
-                <div class="progress">
-                    <progress value="0" max="100"></progress>
-                </div>
-                <div class="controls">
-                    <div class="form_switch">
-                        <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
-                        <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
-                    </div>
-                    <label for="smoothing_switch" class="smoothing_label" >Utjämna</label> <input type="checkbox" id="smoothing_switch" class="smoothing_switch">
-                    <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
-                </div>
-                <div class="legend"></div>
-                <div style="clear:both;"></div>
-            </div>
-            <div class="chart"></div>
-            <div class="zoom_slider"></div>
-        """
+        # $(resultSelector).html """
+        #     <div class="graph_header">
+        #         <div class="progress">
+        #             <progress value="0" max="100"></progress>
+        #         </div>
+        #         <div class="controls">
+        #             <div class="form_switch">
+        #                 <input id="formswitch#{n}1" type="radio" name="form_switch" value="line" checked><label for="formswitch#{n}1">Linje</label>
+        #                 <input id="formswitch#{n}2" type="radio" name="form_switch" value="bar"><label for="formswitch#{n}2">Stapel</label>
+        #             </div>
+        #             <label for="smoothing_switch" class="smoothing_label" >Utjämna</label> <input type="checkbox" id="smoothing_switch" class="smoothing_switch">
+        #             <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></div>
+        #         </div>
+        #         <div class="legend"></div>
+        #         <div style="clear:both;"></div>
+        #     </div>
+        #     <div class="chart"></div>
+        #     <div class="zoom_slider"></div>
+        # """
             # Smoothing:
             # <div class="smoother"></div>
 
         @zoom = "year"
         @granularity = @zoom[0]
-        @corpora = null
+        # @corpora = null
         @proxy = new model.GraphProxy()
+
+        @makeRequest @s.data.cqp,
+            @s.data.subcqps,
+            @s.data.corpusListing,
+            @s.data.labelMapping,
+            @s.data.showTotal
 
         $(".chart", @$result).on "click", (event) =>
             target = $(".chart", @$result)
@@ -1215,13 +1242,13 @@ class view.GraphResults extends BaseResults
                 end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
                 timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
                 cqp = decodeURIComponent(cqp)[...-1] + " & #{timecqp}"
-                instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-                instance.proxy.command = "query"
-                instance.makeRequest
-                    corpora: @corpora.stringifySelected()
-                    cqp: cqp
+                # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
+                # instance.proxy.command = "query"
+                # instance.makeRequest
+                #     corpora: @corpora.stringifySelected()
+                #     cqp: cqp
 
-                util.localize instance.$result
+                # util.localize instance.$result
 
 
 
@@ -1349,10 +1376,11 @@ class view.GraphResults extends BaseResults
 
 
 
-    makeRequest : (cqp, subcqps, labelMapping, showTotal) ->
-        hidden = $(".progress", @$result).nextAll().hide()
+    makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
+        c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
+        hidden = $(".progress_container", @$result).nextAll().hide()
         @showPreloader()
-        @proxy.makeRequest(cqp, subcqps, @corpora.stringifySelected()).progress( (data) =>
+        @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress( (data) =>
             @onProgress(data)
 
 

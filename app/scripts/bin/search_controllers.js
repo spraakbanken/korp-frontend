@@ -1,10 +1,11 @@
 (function() {
   window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
 
-  korpApp.run(function($rootScope, $location, $route, $routeParams, utils) {
+  korpApp.run(function($rootScope, $location, $route, $routeParams, utils, searches) {
     var isInit, s;
     s = $rootScope;
     s.lang = "sv";
+    s.word_selected = null;
     s.activeCQP = "[]";
     s.search = function() {
       return $location.search.apply($location, arguments);
@@ -25,12 +26,43 @@
       return $rootScope.savedSearches.push(searchObj);
     };
     $rootScope.compareTabs = [];
+    $rootScope.graphTabs = [];
     isInit = true;
-    return s.$on("corpuschooserchange", function() {
+    s.$on("corpuschooserchange", function(event, corpora) {
+      var enableSearch, nonprotected;
+      c.log("corpuschooserchange", corpora);
+      settings.corpusListing.select(corpora);
+      nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id");
+      c.log("corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length);
+      if (corpora.length && _.intersection(corpora, nonprotected).length !== nonprotected.length) {
+        $location.search("corpus", corpora.join(","));
+      } else {
+        $location.search("corpus", null);
+      }
+      if (corpora.length) {
+        view.updateReduceSelect();
+        view.updateContextSelect("within");
+      }
+      enableSearch = !!corpora.length;
+      view.enableSearch(enableSearch);
       if (!isInit) {
         $location.search("search", null).replace();
       }
       return isInit = false;
+    });
+    return searches.infoDef.then(function() {
+      var corp_array, corpus, processed_corp_array;
+      corpus = $location.search().corpus;
+      if (corpus) {
+        corp_array = corpus.split(",");
+        processed_corp_array = [];
+        settings.corpusListing.select(corp_array);
+        $.each(corp_array, function(key, val) {
+          return processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val));
+        });
+        corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
+        return $("#select_corpus").val(corpus);
+      }
     });
   });
 
@@ -55,12 +87,12 @@
       if (search.type === "word") {
         s.placeholder = null;
         s.simple_text = search.val;
-        cqp = simpleSearch.onSimpleChange();
+        cqp = simpleSearch.getCQP(search.val);
+        c.log("simple search cqp", cqp);
         page = $rootScope.search()["page"] || 0;
-        searches.kwicRequest(cqp, page);
-        if (settings.lemgramSelect) {
-          return simpleSearch.makeLemgramSelect();
-        }
+        searches.kwicSearch(cqp, page);
+        lemgramResults.showPreloader();
+        return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
       } else if (search.type === "lemgram") {
         s.placeholder = search.val;
         return s.simple_text = "";
@@ -106,7 +138,7 @@
       var _ref, _ref1;
       return ((_ref = s.typeMapping) != null ? (_ref1 = _ref[type]) != null ? _ref1.opts : void 0 : void 0) || settings.defaultOptions;
     };
-    onCorpusChange = function(selected) {
+    onCorpusChange = function(event, selected) {
       c.log("onCorpusChange", selected);
       s.types = utils.getAttributeGroups(settings.corpusListing);
       return s.typeMapping = _.object(_.map(s.types, function(item) {
@@ -134,17 +166,17 @@
   });
 
   korpApp.controller("TokenList", function($scope, $location, $rootScope) {
-    var cqp, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
+    var error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
     s = $scope;
-    cqp = '[lex contains "ge..vb.1"]';
+    s.cqp = '[]';
     s.data = [];
     try {
-      s.data = CQP.parse(cqp);
+      s.data = CQP.parse(s.cqp);
       c.log("s.data", s.data);
     } catch (_error) {
       error = _error;
       output = [];
-      _ref = cqp.split("[");
+      _ref = s.cqp.split("[");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         token = _ref[_i];
         if (!token) {
@@ -176,7 +208,7 @@
     if ($location.search().cqp) {
       s.data = CQP.parse($location.search().cqp);
     } else {
-      s.data = CQP.parse(cqp);
+      s.data = CQP.parse(s.cqp);
     }
     s.$watch('getCQPString()', function(val) {
       var cqpstr;
@@ -220,20 +252,23 @@
     cl = settings.corpusListing;
     s.valfilter = utils.valfilter;
     $rootScope.saveSearch({
-      label: "första",
-      cqp: "[pos='NN']",
-      corpora: ["ROMI"]
+      label: "frihet",
+      cqp: "[lex contains 'frihet..nn.1']",
+      corpora: ["VIVILL"]
     });
     $rootScope.saveSearch({
-      label: "andra",
-      cqp: "[pos='NN']",
-      corpora: ["ROMII"]
+      label: "jämlikhet",
+      cqp: "[lex contains 'jämlikhet..nn.1']",
+      corpora: ["VIVILL"]
     });
     s.cmp1 = $rootScope.savedSearches[0];
     s.cmp2 = $rootScope.savedSearches[1];
     s.reduce = 'word';
     s.getAttrs = function() {
       var listing;
+      if (!s.cmp1) {
+        return null;
+      }
       listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);
     };

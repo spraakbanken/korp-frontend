@@ -309,30 +309,11 @@ function loadCorpora() {
     }).bind("corpuschooserchange", function(evt, corpora) {
     	c.log("corpuschooserchange", corpora)
     	// c.log("corpus changed", corpora);
-		settings.corpusListing.select(corpora);
-
-		var nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
-		if(corpora.length && _.intersection(corpora, nonprotected).length != nonprotected.length) {
-	        // $.bbq.pushState({"corpus" : corpora.join(",")})
-	        search({"corpus" : corpora.join(",")})
-		} else {
-			search("corpus", null)
-		}
-
-		if(corpora.length) {
-			if(currentMode == "parallel")
-				extendedSearch.reset();
-			else 
-				extendedSearch.refreshTokens();
-			view.updateReduceSelect();
-			view.updateContextSelect("within");
-//			view.updateContextSelect("context");
-		}
-		var enableSearch = !!corpora.length;
-		view.enableSearch(enableSearch);
-		$("body").scope().$apply(function(scope) {
-			scope.$broadcast("corpuschooserchange", selected)
-		});
+	safeApply($("body").scope(), function(scope) {
+		scope.$broadcast("corpuschooserchange", corpora);
+	    });
+		
+			
     });
     var selected = corpusChooserInstance.corpusChooser("selectedItems");
 	settings.corpusListing.select(selected);

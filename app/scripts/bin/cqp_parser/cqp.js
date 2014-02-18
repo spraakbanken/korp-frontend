@@ -12,9 +12,10 @@
     output = [];
     for (_i = 0, _len = cqp_obj.length; _i < _len; _i++) {
       token = cqp_obj[_i];
+      or_array = [];
       or_array = (function() {
         var _j, _len1, _ref, _results;
-        _ref = token.and_block || [];
+        _ref = token.and_block;
         _results = [];
         for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
           and_array = _ref[_j];
@@ -31,7 +32,11 @@
                   "*=": [val, "="]
                 }[op] || [val, op], val = _ref2[0], op = _ref2[1];
               }
-              _results1.push("" + type + " " + op + " \"" + val + "\"");
+              if (type === "word" && val === "") {
+                _results1.push("");
+              } else {
+                _results1.push("" + type + " " + op + " \"" + val + "\"");
+              }
             }
             return _results1;
           })());
@@ -91,6 +96,15 @@
         ]
       ]
     }, {
+      "and_block": [
+        [
+          {
+            "type": "word",
+            "op": "=",
+            "val": ""
+          }
+        ]
+      ],
       "repeat": [1, 2]
     }
   ]));

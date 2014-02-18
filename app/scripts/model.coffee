@@ -393,7 +393,8 @@ class model.StatsProxy extends BaseProxy
         self = this
         super()
         statsResults.showPreloader()
-        reduceval = $.bbq.getState("stats_reduce") or "word"
+        # reduceval = $.bbq.getState("stats_reduce") or "word"
+        reduceval = search().stats_reduce or "word"
         reduceval = "word" if reduceval is "word_insensitive"
 
         data =

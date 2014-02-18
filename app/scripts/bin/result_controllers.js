@@ -2,6 +2,41 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
+  korpApp.controller("resultTabCtrl", function($scope) {
+    var s;
+    s = $scope;
+    return s.$watch("getSelected()", function(val) {
+      s.$root.result_tab = val;
+      switch (val) {
+        case 0:
+          return typeof kwicResults !== "undefined" && kwicResults !== null ? kwicResults.onentry() : void 0;
+        case 2:
+          return lemgramResults.onentry();
+      }
+    });
+    /*
+    s.onClick = (event, num) ->
+        i = $(event.target).parent().index()
+        i = num if num?
+    
+        # hack time
+        switch i
+            when 0 then kwicResults.onentry()
+            # when 1 then statsResults.onentry()
+            when 2 then lemgramResults.onentry()
+    
+        if prev == 0
+            kwicResults.onexit()
+    
+        prev = i
+    */
+
+  });
+
+  korpApp.controller("resultContainerCtrl", function($scope, searches) {
+    return $scope.searches = searches;
+  });
+
   korpApp.controller("kwicCtrl", function($scope) {
     var findMatchSentence, massageData, punctArray, s;
     c.log("kwicCtrl init");
@@ -135,10 +170,24 @@
     };
   });
 
+  korpApp.controller("StatsResultCtrl", function($scope, utils, $location, backend, searches, $rootScope) {
+    var s;
+    s = $scope;
+    return s.onGraphShow = function(data) {
+      c.log("show graph!", arguments);
+      return $rootScope.graphTabs.push(data);
+    };
+  });
+
+  korpApp.controller("graphCtrl", function($scope) {
+    return $scope.$parent.active = true;
+  });
+
   korpApp.controller("compareCtrl", function($scope) {
     var s;
     s = $scope;
     s.$parent.loading = true;
+    s.$parent.active = true;
     return s.promise.then(function(_arg) {
       var cmp1, cmp2, data, pairs;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2];
