@@ -474,6 +474,44 @@ sattrs.date = {
 	displayType : "date"
 };
 
+settings.common_struct_types = {
+    date_interval : {
+        label: "date_interval",
+        displayType: "date_interval",
+
+        opts: settings.liteOptions,
+        extended_template : '<slider floor="{{floor}}" ceiling="{{ceiling}}" ' +
+                                'ng-model-low="lowVal" ng-model-high="highVal"></slider>',
+        controller : function($scope, searches) {
+            c.log( "searches", searches)
+            var s = $scope
+            
+            searches.timeDef.then(function() {
+                var all_years = _(settings.corpusListing.selected)
+                            .pluck("time")
+                            .map(_.pairs)
+                            .flatten(true)
+                            .filter(function(tuple) {
+                                return tuple[0] && tuple[1];
+                            }).map(_.compose(Number, _.head))
+                            .value()
+
+                s.lowVal = s.floor = Math.min.apply(null, all_years)
+                c.log ("s.lowVal", s.lowVal, typeof s.lowVal)
+                s.highVal = s.ceiling = Math.max.apply(null, all_years)
+
+                s.$watch("lowVal.toString() + highVal.toString()", function() {
+                    c.log ("low", s.lowVal, "high", s.highVal)
+                    s.model = s.lowVal + s.highVal
+                })
+                
+            })
+                
+        }
+    }
+
+}
+
 var modernAttrs = {
     pos : attrs.pos,
     msd : attrs.msd,

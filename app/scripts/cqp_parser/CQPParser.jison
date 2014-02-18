@@ -15,7 +15,7 @@
 \s+                 /* skip whitespace */
 \%[cd]+             return "FLAG"
 'not'               return 'not'
-(_.)?[A-Za-z]+      return 'TYPE'
+(_.)?[A-Za-z_]+      return 'TYPE'
 '!='                return '!='
 '^='                return '^='
 '&='                return '&='

@@ -101,7 +101,6 @@
     var defaultController, defaultTmpl;
     defaultTmpl = "<input ng-model='model' class='arg_value'\nplaceholder='<{{\"any\" | loc}}>'>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>";
     defaultController = function($scope) {
-      c.log("defaultController", $scope);
       $scope["case"] = "sensitive";
       $scope.makeSensitive = function() {
         var _ref;
@@ -124,7 +123,6 @@
       },
       template: "<div class=\"arg_value\">{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
-        c.log("scope", scope);
         return scope.$watch("tokenValue", function(valueObj) {
           var locals, tmplElem;
           c.log("watch value", valueObj);

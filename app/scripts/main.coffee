@@ -445,7 +445,7 @@ window.getAllCorporaInFolders = (lastLevel, folderOrCorpus) ->
 
 
 
-window.initTimeGraph = ->
+window.initTimeGraph = (def) ->
     timestruct = null
     all_timestruct = null
     restdata = null
@@ -471,14 +471,18 @@ window.initTimeGraph = ->
                 cor.non_time = struct[""]
                 struct = _.omit struct, ""
                 cor.time = struct
-                if _.keys(struct).length > 1
-                    cor.struct_attributes.date_interval =
-                        label: "date_interval"
-                        displayType: "date_interval"
-                        opts: settings.liteOptions
+                # if _.keys(struct).length > 1
+                #     cor.struct_attributes.date_interval =
+                #         label: "date_interval"
+                #         displayType: "date_interval"
+                #         opts: settings.liteOptions
 
         # $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
         # onTimeGraphChange()
+        safeApply $("body").scope(), (scope) ->
+            scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
+            def.resolve()
+        
     )
 
     $.when(time_comb, timeDeferred).then (combdata, timedata) ->

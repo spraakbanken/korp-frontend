@@ -89,7 +89,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
                 </ul>
                 """
     defaultController = ($scope) ->
-        c.log "defaultController", $scope
         $scope.case = "sensitive"
         $scope.makeSensitive = () ->
             $scope.case = "sensitive"
@@ -116,7 +115,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         <div class="arg_value">{{tokenValue.label}}</div>
     """
     link : (scope, elem, attr) ->
-        c.log "scope", scope
         scope.$watch "tokenValue", (valueObj) ->
             c.log "watch value", valueObj
             unless valueObj then return

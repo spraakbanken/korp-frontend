@@ -32,7 +32,7 @@
         })();
         sent_attrs = (function() {
           var _ref, _results;
-          _ref = corpusListing.getStructAttrs();
+          _ref = _.extend(settings.common_struct_types, corpusListing.getStructAttrs());
           _results = [];
           for (key in _ref) {
             obj = _ref[key];
@@ -129,15 +129,17 @@
       _this = this;
     Searches = (function() {
       function Searches() {
-        var def,
+        var def, timedef,
           _this = this;
         this.activeSearch = null;
         def = $q.defer();
+        timedef = $q.defer();
         this.infoDef = def.promise;
+        this.timeDef = timedef.promise;
         this.getMode().then(function() {
           return _this.getInfoData().then(function() {
             def.resolve();
-            return initTimeGraph();
+            return initTimeGraph(timedef);
           });
         });
       }

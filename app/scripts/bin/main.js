@@ -379,7 +379,7 @@
     return outCorpora;
   };
 
-  window.initTimeGraph = function() {
+  window.initTimeGraph = function(def) {
     var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
     timestruct = null;
     all_timestruct = null;
@@ -400,22 +400,19 @@
     };
     window.timeDeferred = timeProxy.makeRequest(false).done(function(data) {
       c.log("write time");
-      return $.each(data, function(corpus, struct) {
+      $.each(data, function(corpus, struct) {
         var cor;
         if (corpus !== "time") {
           cor = settings.corpora[corpus.toLowerCase()];
           timeProxy.expandTimeStruct(struct);
           cor.non_time = struct[""];
           struct = _.omit(struct, "");
-          cor.time = struct;
-          if (_.keys(struct).length > 1) {
-            return cor.struct_attributes.date_interval = {
-              label: "date_interval",
-              displayType: "date_interval",
-              opts: settings.liteOptions
-            };
-          }
+          return cor.time = struct;
         }
+      });
+      return safeApply($("body").scope(), function(scope) {
+        scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
+        return def.resolve();
       });
     });
     $.when(time_comb, timeDeferred).then(function(combdata, timedata) {

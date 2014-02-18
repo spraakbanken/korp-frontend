@@ -215,8 +215,6 @@
         sort: o.sort,
         incremental: o.incremental
       };
-      data.within = settings.corpusListing.getWithinQueryString();
-      data.context = settings.corpusListing.getContextQueryString();
       if (o.context != null) {
         data.context = o.context;
       }
@@ -272,8 +270,8 @@
       }
       data.show = _.uniq(data.show);
       this.prevCQP = o.cqp;
-      data.show = data.show.join();
-      data.show_struct = data.show_struct.join();
+      data.show = (_.uniq(data.show)).join(",");
+      data.show_struct = (_.uniq(data.show_struct)).join(",");
       this.prevRequest = data;
       return this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
@@ -562,7 +560,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, dataset, minWidth, totalRow, wordArray;
+          var columns, corpus, dataset, i, minWidth, obj, row, t, totalRow, word, wordArray, _i, _len, _ref1;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -613,6 +611,7 @@
           });
           wordArray = $.keys(data.total.absolute);
 <<<<<<< HEAD
+<<<<<<< HEAD
           t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
@@ -620,6 +619,11 @@
           $.each(wordArray, function(i, word) {
             var row;
 >>>>>>> got somewhere with compare function
+=======
+          t = $.now();
+          for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
+            word = wordArray[i];
+>>>>>>> trying to get the date slider to work
             row = {
               id: "row" + i,
               hit_value: word,
@@ -628,11 +632,14 @@
                 relative: data.total.relative[word]
               }
             };
-            $.each(data.corpora, function(corpus, obj) {
-              return row[corpus + "_value"] = {
+            _ref1 = data.corpora;
+            for (corpus in _ref1) {
+              obj = _ref1[corpus];
+              row[corpus + "_value"] = {
                 absolute: obj.absolute[word],
                 relative: obj.relative[word]
               };
+<<<<<<< HEAD
 <<<<<<< HEAD
             }
             dataset.push(row);
@@ -642,6 +649,11 @@
             return dataset.push(row);
           });
 >>>>>>> got somewhere with compare function
+=======
+            }
+            dataset.push(row);
+          }
+>>>>>>> trying to get the date slider to work
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
           return statsResults.renderResult(columns, dataset);
@@ -745,7 +757,7 @@
         });
       } else {
         xhr.done(function(data, status, xhr) {
-          if (_.keys(data).length < 2) {
+          if (_.keys(data).length < 2 || data.ERROR) {
             dfd.reject();
             return;
           }
@@ -785,6 +797,10 @@
       }
       minYear = _.min(years);
       maxYear = _.max(years);
+      if (_.isNaN(maxYear) || _.isNaN(minYear)) {
+        c.log("expandTimestruct broken, years:", years);
+        return;
+      }
       _results = [];
       for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
         thisVal = struct[y];

@@ -20,7 +20,8 @@
     "yepnope": "~1.5.4",
     "angular-bootstrap": "~0.6.0",
     "ui-slider": "https://github.com/angular-ui/ui-slider.git",
-    "angular-spinner": "~0.2.1"
+    "angular-spinner": "~0.2.1",
+    "angular-slider": "~0.1.6"
   },
   "devDependencies": {
     "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.0.6",

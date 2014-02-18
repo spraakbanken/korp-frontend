@@ -360,6 +360,10 @@ select.arg_value option {
 }
 
 .query_token {
+  .left_col {
+    @include inline-block(top);
+    min-width : 16px;
+  }
   button {
     width: 20px;
     height: 20px;

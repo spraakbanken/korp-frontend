@@ -5,7 +5,8 @@
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   BaseResults = (function() {
-    function BaseResults(tabSelector, resultSelector) {
+    function BaseResults(resultSelector, tabSelector, scope) {
+      this.s = scope;
       this.$tab = $(tabSelector);
       this.$result = $(resultSelector);
       this.index = this.$tab.index();
@@ -19,7 +20,7 @@
       this.num_result.html(prettyNumbers(progressObj["total_results"]));
       if (!isNaN(progressObj["stats"])) {
         try {
-          this.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+          this.$result.find(".progress_container progress").attr("value", Math.round(progressObj["stats"]));
         } catch (_error) {
           e = _error;
           c.log("onprogress error", e);
@@ -29,18 +30,11 @@
     };
 
     BaseResults.prototype.renderResult = function(data) {
-      var disabled, newDisabled,
-        _this = this;
       this.$result.find(".error_msg").remove();
       c.log("renderResults", this.proxy);
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
       }
-      disabled = $("#result-container").korptabs("option", "disabled");
-      newDisabled = $.grep(disabled, function(item) {
-        return item !== _this.index;
-      });
-      $("#result-container").korptabs("option", "disabled", newDisabled);
       if (data.ERROR) {
         this.resultError(data);
         return false;
@@ -89,16 +83,23 @@
       this.readingProxy = new model.KWICProxy();
       this.current_page = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
       this.selectionManager = this.$result.scope().selectionManager;
 =======
       this.scope = scope;
+=======
+      this.s = scope;
+>>>>>>> trying to get the date slider to work
       this.selectionManager = scope.selectionManager;
 >>>>>>> got somewhere with compare function
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
           return;
         }
-        return _this.selectionManager.deselect();
+        _this.selectionManager.deselect();
+        return safeApply(_this.s.$root, function(s) {
+          return s.word_selected = null;
+        });
       });
       this.$result.find(".reading_btn").click(function() {
         var isReading;
@@ -111,12 +112,13 @@
           });
         }
       });
+      $(document).keydown($.proxy(this.onKeydown, this));
       if ($.bbq.getState("reading_mode")) {
         this.$result.addClass("reading_mode");
       }
       this.$result.on("click", ".word", function(event) {
         var aux, i, l, obj, paragraph, sent, sent_start, word;
-        scope = $(this).scope();
+        scope = $(event.currentTarget).scope();
         obj = scope.wd;
         sent = scope.sentence;
         event.stopPropagation();
@@ -124,6 +126,9 @@
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
         if (obj.dephead == null) {
           scope.selectionManager.select(word, null);
+          safeApply(_this.s.$root, function(s) {
+            return s.word_selected = word;
+          });
           return;
         }
         i = Number(obj.dephead);
@@ -138,7 +143,10 @@
           sent_start = paragraph.index(l.eq(l.index(word) - 1));
         }
         aux = $(paragraph.get(sent_start + i - 1));
-        return scope.selectionManager.select(word, aux);
+        scope.selectionManager.select(word, aux);
+        return safeApply(_this.s.$root, function(s) {
+          return s.word_selected = word;
+        });
       });
     }
 
@@ -155,18 +163,16 @@
     };
 
     KWICResults.prototype.onentry = function() {
-      this.centerScrollbar();
-      return $(document).keydown($.proxy(this.onKeydown, this));
+      c.log("onentry kwic");
+      return this.centerScrollbar();
     };
 
-    KWICResults.prototype.onexit = function() {
-      return $(document).unbind("keydown", this.onKeydown);
-    };
+    KWICResults.prototype.onexit = function() {};
 
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
-      if (isSpecialKeyDown || $("input[type=text], input[type=password], textarea").is(":focus")) {
+      if (isSpecialKeyDown || $("input[type=text], input[type=password], textarea").is(":focus") || !this.$result.is(":visible")) {
         return;
       }
       switch (event.which) {
@@ -229,7 +235,7 @@
       }
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
-      this.scope.$apply(function($scope) {
+      this.s.$apply(function($scope) {
         c.log("apply kwic search data", data);
         if (isReading) {
           return $scope.setContextData(data);
@@ -390,7 +396,7 @@
         this.current_page = new_page_index;
         this.getProxy().makeRequest(this.buildQueryOptions(), this.current_page, (function(progressObj) {
           if (!isNaN(progressObj["stats"])) {
-            self.$result.find(".progress progress").attr("value", Math.round(progressObj["stats"]));
+            self.$result.find(".progress_container progress").attr("value", Math.round(progressObj["stats"]));
           }
           return self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
         }), (function(data) {
@@ -445,7 +451,8 @@
 
     KWICResults.prototype.centerScrollbar = function() {
       var area, m, match, sidebarWidth;
-      m = this.$result.find(".match:visible:first");
+      m = this.$result.find(".match:first");
+      c.log("centerScrollbar", m, this.$result.find(".match:first"));
       if (!m.length) {
         return;
       }
@@ -597,7 +604,7 @@
     function ExampleResults(tabSelector, resultSelector) {
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector);
       this.proxy = new model.ExamplesProxy();
-      this.$result.find(".progress,.tab_progress").hide();
+      this.$result.find(".progress_container,.tab_progress").hide();
       this.$result.add(this.$tab).addClass("not_loading customtab");
       this.$result.removeClass("reading_mode");
     }
@@ -905,12 +912,11 @@
     };
 
     LemgramResults.prototype.onClickExample = function(event) {
-      var $target, data, instance, opts, self;
+      var $target, data, opts, self;
       self = this;
       $target = $(event.currentTarget);
       c.log("onClickExample", $target);
       data = $target.parent().tmplItem().data;
-      instance = $("#result-container").korptabs("addTab", view.ExampleResults);
       opts = instance.getPageInterval();
       opts.ajaxParams = {
         source: data.source.join(","),
@@ -933,7 +939,6 @@
     };
 
     LemgramResults.prototype.onentry = function() {
-      c.log("lemgramResults.onentry", $.sm.getConfiguration());
       return this.resultDeferred.done(this.showWarning);
     };
 
@@ -1011,8 +1016,7 @@
         height: 500,
         resize: function() {
           $("#chartFrame").css("height", $("#chartFrame").parent().width() - 20);
-          stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
-          return false;
+          return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
         },
         resizeStop: function(event, ui) {
           var h, w;
@@ -1097,11 +1101,11 @@
   view.StatsResults = (function(_super) {
     __extends(StatsResults, _super);
 
-    function StatsResults(tabSelector, resultSelector) {
+    function StatsResults(resultSelector, tabSelector, scope) {
       var icon, paper, self,
         _this = this;
-      StatsResults.__super__.constructor.call(this, tabSelector, resultSelector);
-      self = this;
+      StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
+      c.log("StatsResults constr", self = this);
       this.gridData = null;
       this.proxy = new model.StatsProxy();
       window.statsProxy = this.proxy;
@@ -1115,19 +1119,10 @@
         }
       });
       $(".slick-cell.l0.r0 .link").on("click", function() {
-        var instance, query;
-        c.log("word click", $(this).data("context"), $(this).data("corpora"));
-        instance = $("#result-container").korptabs("addTab", view.ExampleResults);
-        instance.proxy.command = "query";
-        query = $(this).data("query");
-        instance.makeRequest({
-          corpora: $(this).data("corpora").join(","),
-          cqp: decodeURIComponent(query)
-        });
-        return util.localize(instance.$result);
+        return c.log("word click", $(this).data("context"), $(this).data("corpora"));
       });
       $(window).resize(_.debounce(function() {
-        return $("#myGrid").width($("#myGrid").parent().width());
+        return $("#myGrid:visible").width($("#myGrid").parent().width());
       }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
@@ -1191,19 +1186,9 @@
       }
       icon = $("<span class='graph_btn_icon'>");
       $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        var attrs, cell, chk, cl, cqp, instance, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
-        instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph");
-=======
-        var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
->>>>>>> after rebase
-=======
         var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
->>>>>>> minor bug fixes
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
-        instance.corpora = cl;
         reduceVal = params.groupby;
         isStructAttr = __indexOf.call(cl.getStructAttrs(), reduceVal) >= 0;
         subExprs = [];
@@ -1212,23 +1197,10 @@
         mainCQP = params.cqp;
         prefix = isStructAttr ? "_." : "";
         attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> minor bug fixes
         op = ((_ref = attrs[reduceVal]) != null ? _ref.type : void 0) === "set" ? "contains" : "=";
         _ref1 = _this.$result.find(".slick-cell-checkboxsel :checked");
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           chk = _ref1[_i];
-<<<<<<< HEAD
-=======
-        op = attrs[reduceVal].type === "set" ? "contains" : "=";
-        _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          chk = _ref[_i];
->>>>>>> after rebase
-=======
->>>>>>> minor bug fixes
           cell = $(chk).parent();
           if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
             showTotal = true;
@@ -1239,7 +1211,15 @@
           subExprs.push(cqp);
           labelMapping[cqp] = cell.next().text();
         }
-        return instance.makeRequest(mainCQP, subExprs, labelMapping, showTotal);
+        return _this.s.$apply(function() {
+          return _this.s.onGraphShow({
+            cqp: mainCQP,
+            subcqps: subExprs,
+            labelMapping: labelMapping,
+            showTotal: showTotal,
+            corpusListing: cl
+          });
+        });
       });
       $("#showGraph .ui-button-text", this.$result).localeKey("show_diagram");
       paper = new Raphael(icon.get(0), 33, 33);
@@ -1348,19 +1328,18 @@
   view.GraphResults = (function(_super) {
     __extends(GraphResults, _super);
 
-    function GraphResults(tabSelector, resultSelector) {
+    function GraphResults(tabSelector, resultSelector, scope) {
       var n,
         _this = this;
-      GraphResults.__super__.constructor.call(this, tabSelector, resultSelector);
+      GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       $(tabSelector).find(".ui-tabs-anchor").localeKey("graph");
       n = this.$result.index();
-      $(resultSelector).html("<div class=\"graph_header\">\n    <div class=\"progress\">\n        <progress value=\"0\" max=\"100\"></progress>\n    </div>\n    <div class=\"controls\">\n        <div class=\"form_switch\">\n            <input id=\"formswitch" + n + "1\" type=\"radio\" name=\"form_switch\" value=\"line\" checked><label for=\"formswitch" + n + "1\">Linje</label>\n            <input id=\"formswitch" + n + "2\" type=\"radio\" name=\"form_switch\" value=\"bar\"><label for=\"formswitch" + n + "2\">Stapel</label>\n        </div>\n        <label for=\"smoothing_switch\" class=\"smoothing_label\" >Utjämna</label> <input type=\"checkbox\" id=\"smoothing_switch\" class=\"smoothing_switch\">\n        <div class=\"non_time_div\"><span rel=\"localize[non_time_before]\"></span><span class=\"non_time\"></span><span rel=\"localize[non_time_after]\"></div>\n    </div>\n    <div class=\"legend\"></div>\n    <div style=\"clear:both;\"></div>\n</div>\n<div class=\"chart\"></div>\n<div class=\"zoom_slider\"></div>");
       this.zoom = "year";
       this.granularity = this.zoom[0];
-      this.corpora = null;
       this.proxy = new model.GraphProxy();
+      this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
       $(".chart", this.$result).on("click", function(event) {
-        var cqp, end, instance, m, start, target, timecqp, val;
+        var cqp, end, m, start, target, timecqp, val;
         target = $(".chart", _this.$result);
         val = $(".detail .x_label > span", target).data("val");
         cqp = $(".detail .item.active > span", target).data("cqp");
@@ -1370,14 +1349,7 @@
           start = m.format("YYYYMMDD");
           end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
           timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
-          cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
-          instance = $("#result-container").korptabs("addTab", view.ExampleResults);
-          instance.proxy.command = "query";
-          instance.makeRequest({
-            corpora: _this.corpora.stringifySelected(),
-            cqp: cqp
-          });
-          return util.localize(instance.$result);
+          return cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
         }
       });
     }
@@ -1536,12 +1508,13 @@
       return (non_time / totalsize) * 100;
     };
 
-    GraphResults.prototype.makeRequest = function(cqp, subcqps, labelMapping, showTotal) {
+    GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
       var hidden,
         _this = this;
-      hidden = $(".progress", this.$result).nextAll().hide();
+      c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
+      hidden = $(".progress_container", this.$result).nextAll().hide();
       this.showPreloader();
-      return this.proxy.makeRequest(cqp, subcqps, this.corpora.stringifySelected()).progress(function(data) {
+      return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress(function(data) {
         return _this.onProgress(data);
       }).fail(function(data) {
         c.log("graph crash");

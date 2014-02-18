@@ -11,6 +11,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/typeahead/typeahead.html"
                                             "template/typeahead/typeahead-popup.html"
                                             "angularSpinner"
+                                            "uiSlider"
                                         ])
 
 # korpApp.controller "kwicCtrl", ($scope) ->
@@ -263,6 +264,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s = $scope
     # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
     # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
+    cqp = '[]'
 
     # s.valfilter = (attrobj) ->
     #     return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
@@ -277,7 +279,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     s.setDefault = (or_obj) ->
         # assign the first value from the opts 
-        or_obj.op = _.values(s.getOpts(or_obj.type))[0]
+        or_obj.op = _.values(s.getOpts(or_obj.type))[0][1]
+        # c.log "setDefault", _.values(s.getOpts(or_obj.type)), or_obj.op
 
         or_obj.val = ""
 
@@ -303,6 +306,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
                 ["_." + item.value, item]
             else 
                 [item.value, item]
+
 
 
     s.$on "corpuschooserchange", onCorpusChange

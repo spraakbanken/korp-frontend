@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     __slice = [].slice;
 
-  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner", "uiSlider"]);
 
   korpApp.run(function($rootScope, $location, $route, $routeParams, utils, searches) {
     var isInit, s;
@@ -229,11 +229,12 @@
   });
 
   korpApp.controller("ExtendedToken", function($scope, utils, $location) {
-    var onCorpusChange, s, toggleBound;
+    var cqp, onCorpusChange, s, toggleBound;
     s = $scope;
+    cqp = '[]';
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
-      or_obj.op = _.values(s.getOpts(or_obj.type))[0];
+      or_obj.op = _.values(s.getOpts(or_obj.type))[0][1];
       return or_obj.val = "";
     };
     s.getOpts = function(type) {
