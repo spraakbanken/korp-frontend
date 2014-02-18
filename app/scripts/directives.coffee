@@ -1,6 +1,6 @@
 korpApp.directive 'kwicWord', ->
     replace: true
-    template : """<span class="word" set-class="getClassObj(wd)"
+    template : """<span class="word" ng-class="getClassObj(wd)"
                     set-text="wd.word + ' '" ></span>
                 """ #ng-click="wordClick($event, wd, sentence)"
     link : (scope, element) ->
@@ -32,13 +32,15 @@ korpApp.directive 'kwicWord', ->
                 output["close_" + struct] = true
 
 
-
             return (x for [x, y] in _.pairs output when y).join " "
 
 
 korpApp.directive "tabHash", (utils, $location) ->
     link : (scope, elem, attr) ->
         s = scope
+        contentScope = elem.find(".tab-content").scope()
+        c.log "contentScope", contentScope
+
 
         watchHash = () ->
             utils.setupHash s,[
@@ -55,7 +57,7 @@ korpApp.directive "tabHash", (utils, $location) ->
         init_tab = parseInt($location.search()[attr.tabHash]) or 0
 
 
-        w = scope.$watch "tabs.length", (len) ->
+        w = contentScope.$watch "tabs.length", (len) ->
             if (len - 1) >= init_tab
                 s.setSelected(init_tab)
                 watchHash()
@@ -64,13 +66,14 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 
         s.getSelected = () ->
-            for p, i in s.tabs
+
+            for p, i in contentScope.tabs
                 return i if p.active
         s.setSelected = (index) ->
-            for t in s.tabs
+            for t in contentScope.tabs
                 t.active = false
-            if s.tabs[index]
-                s.tabs[index].active = true
+            if contentScope.tabs[index]
+                contentScope.tabs[index].active = true
 
 
 

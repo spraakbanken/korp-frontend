@@ -31,7 +31,6 @@ html
     script(src='components/json3/lib/json3.js')
     script(src='components/jquery/jquery.js')
     script(src='components/jquery-ui/ui/jquery-ui.custom.js')
-    //- script(src='components/unstable-angular-complete/angular.js')
     script(src='components/angular/angular.js')
     script(src='lib/jquery.localize.js')
     script(src='components/raphael/raphael.js')
@@ -61,7 +60,7 @@ html
     script(src='lib/jquery.tooltip.pack.js')
 
     script(src='components/angular-slider/angular-slider.js')
-    script(src='components/angular-bootstrap/ui-bootstrap.js')
+    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
     script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
     script(src='components/lodash/dist/lodash.compat.js')
     script(src='components/spin.js/dist/spin.js')
@@ -114,10 +113,13 @@ html
         
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length', ng-controller='resultContainerCtrl')
           #columns
-            #left-column(ng-class='{sidebar_visible : word_selected && result_tab == 0}', ng-controller="resultTabCtrl")
-              tabset(tab-hash='result_tab', ng-click='onClick($event)')
-                tab(heading='KWIC', select="selectTab(0)")
-                  #results-kwic(constr='KWICResults', constr-name='kwicResults', ng-controller='kwicCtrl')
+            //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
+            #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
+              tabset(tab-hash='result_tab', ng-click='onClick($event)', ng-controller="resultTabCtrl")
+                tab(select="instance.onentry()", deselect="instance.onexit()", ng-controller='kwicCtrl')
+                  tab-heading
+                    | KWIC
+                  #results-kwic(constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
                 tab(heading='Statistik', select="selectTab(1)")
                   div(ng-controller='StatsResultCtrl', constr='StatsResults', constr-name='statsResults')
@@ -150,7 +152,8 @@ html
                 
               a#json-link(href='#')
                 img(src='img/json.png')
-            #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && result_tab == 0}')
+            //- ng-class='{visible : word_selected && result_tab == 0}'
+            #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
             div(style='clear: both; float: none;')
       #click_cover
       #about_content(title='Om Korp', style='display: none;')

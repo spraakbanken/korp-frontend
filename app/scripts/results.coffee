@@ -81,7 +81,7 @@ class view.KWICResults extends BaseResults
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
             safeApply @s.$root, (s) ->
-                s.word_selected = null
+                s.$root.word_selected = null
             # $.sm.send "word.deselect"
 
         @$result.find(".reading_btn").click =>
@@ -114,7 +114,7 @@ class view.KWICResults extends BaseResults
             if not obj.dephead?
                 scope.selectionManager.select word, null
                 safeApply @s.$root, (s) ->
-                    s.word_selected = word
+                    s.$root.word_selected = word
                 return
 
             i = Number(obj.dephead)
@@ -131,7 +131,7 @@ class view.KWICResults extends BaseResults
             aux = $(paragraph.get(sent_start + i - 1))
             scope.selectionManager.select word, aux
             safeApply @s.$root, (s) ->
-                s.word_selected = word
+                s.$root.word_selected = word
 
 
 
@@ -149,13 +149,21 @@ class view.KWICResults extends BaseResults
 
     onentry: ->
         c.log "onentry kwic"
+        @s.$root.sidebar_visible = true
+
+        @$result.find(".token_selected").click()
         # $("#sidebar").sidebar("show")
-        @centerScrollbar()
+        _.defer () => @centerScrollbar()
+        # @centerScrollbar()
         # $(document).keydown $.proxy(@onKeydown, this)
+        return
 
     onexit: ->
+        c.log "onexit kwic"
+        @s.$root.sidebar_visible = false
         # $("#sidebar").sidebar("hide")
         # $(document).unbind "keydown", @onKeydown
+        return
 
     onKeydown: (event) ->
         isSpecialKeyDown = event.shiftKey or event.ctrlKey or event.metaKey

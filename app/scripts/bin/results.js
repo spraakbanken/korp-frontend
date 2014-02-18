@@ -91,7 +91,7 @@
         }
         _this.selectionManager.deselect();
         return safeApply(_this.s.$root, function(s) {
-          return s.word_selected = null;
+          return s.$root.word_selected = null;
         });
       });
       this.$result.find(".reading_btn").click(function() {
@@ -120,7 +120,7 @@
         if (obj.dephead == null) {
           scope.selectionManager.select(word, null);
           safeApply(_this.s.$root, function(s) {
-            return s.word_selected = word;
+            return s.$root.word_selected = word;
           });
           return;
         }
@@ -138,7 +138,7 @@
         aux = $(paragraph.get(sent_start + i - 1));
         scope.selectionManager.select(word, aux);
         return safeApply(_this.s.$root, function(s) {
-          return s.word_selected = word;
+          return s.$root.word_selected = word;
         });
       });
     }
@@ -156,11 +156,19 @@
     };
 
     KWICResults.prototype.onentry = function() {
+      var _this = this;
       c.log("onentry kwic");
-      return this.centerScrollbar();
+      this.s.$root.sidebar_visible = true;
+      this.$result.find(".token_selected").click();
+      _.defer(function() {
+        return _this.centerScrollbar();
+      });
     };
 
-    KWICResults.prototype.onexit = function() {};
+    KWICResults.prototype.onexit = function() {
+      c.log("onexit kwic");
+      this.s.$root.sidebar_visible = false;
+    };
 
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;

@@ -8,7 +8,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/modal/backdrop.html"
                                             "template/modal/window.html"
                                             "ui.bootstrap.typeahead"
-                                            "template/typeahead/typeahead.html"
+                                            "template/typeahead/typeahead-match.html",
                                             "template/typeahead/typeahead-popup.html"
                                             "angularSpinner"
                                             "uiSlider"
@@ -29,7 +29,7 @@ korpApp.run ($rootScope, $location, utils, searches) ->
         # else
         #     $("#sidebar").sidebar("hide")
 
-
+    s.sidebar_visible = false
 
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
@@ -77,8 +77,8 @@ korpApp.run ($rootScope, $location, utils, searches) ->
         view.enableSearch enableSearch
 
 
-        unless isInit
-            $location.search("search", null).replace()
+        # unless isInit
+        #     $location.search("search", null).replace()
         isInit = false
 
 
@@ -109,100 +109,6 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             cqp : $rootScope.activeCQP
             corpora : settings.corpusListing.getSelectedCorpora()
         }
-
-    punctArray = [",", ".", ";", ":", "!", "?", "..."]
-
-    massageData = (sentenceArray) ->
-        unless sentenceArray then return
-        currentStruct = []
-        prevCorpus = ""
-        output = []
-        for sentence, i in sentenceArray
-            [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
-            {start, end} = sentence.match
-
-            for j in [0...sentence.tokens.length]
-                wd = sentence.tokens[j]
-                if start <= j < end
-                    _.extend wd, {_match : true}
-                if matchSentenceStart < j < matchSentenceEnd
-                    _.extend wd, {_matchSentence : true}
-                if wd.word in punctArray
-                    _.extend wd, {_punct : true}
-                if wd.structs?.open
-                    wd._open = wd.structs.open
-                    currentStruct = [].concat(currentStruct, wd.structs.open)
-                else if wd.structs?.close
-                    wd._close = wd.structs.close
-                    currentStruct = _.without currentStruct, wd.structs.close...
-
-
-                _.extend wd, {_struct : currentStruct} if currentStruct.length
-
-            
-            if currentMode == "parallel"
-                mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
-                linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
-            else
-                mainCorpusId = sentence.corpus.toLowerCase()
-
-            id = (linkCorpusId or mainCorpusId)
-
-            if prevCorpus != id
-                # id = mainCorpusId
-                # if currentMode == "parallel"
-                #     id = sentence.corpus.split("|")[1].toLowerCase()
-
-                corpus = settings.corpora[id]
-                newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
-                output.push newSent
-
-            if i % 2 == 0
-                sentence._color = settings.primaryColor
-            else
-                sentence._color = settings.primaryLight
-
-            sentence.corpus = mainCorpusId
-
-            output.push(sentence)
-            if sentence.aligned
-                [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
-                output.push
-                    tokens : tokens
-                    isLinked : true
-                    corpus : corpus_aligned
-                    _color : sentence._color
-
-
-            prevCorpus = id
-
-            # return sentence
-        return output
-
-    findMatchSentence = (sentence) ->
-        span = []
-        {start, end} = sentence.match
-        decr = start
-        incr = end
-        while decr >= 0
-            if "sentence" in (sentence.tokens[decr--].structs?.open or [])
-                span[0] = decr
-                break
-        while incr < sentence.tokens.length
-            if "sentence" in (sentence.tokens[incr++].structs?.close or [])
-                span[1] = incr
-                break
-
-        return span
-
-
-
-
-
-    s.kwic = []
-    s.contextKwic = []
-    s.setContextData = (data) ->
-        s.contextKwic = massageData data.kwic
 
     s.searches = searches
     s.$watch "searches.activeSearch", (search) ->

@@ -2,7 +2,7 @@
   korpApp.directive('kwicWord', function() {
     return {
       replace: true,
-      template: "<span class=\"word\" set-class=\"getClassObj(wd)\"\nset-text=\"wd.word + ' '\" ></span>",
+      template: "<span class=\"word\" ng-class=\"getClassObj(wd)\"\nset-text=\"wd.word + ' '\" ></span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
           var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
@@ -46,8 +46,10 @@
   korpApp.directive("tabHash", function(utils, $location) {
     return {
       link: function(scope, elem, attr) {
-        var init_tab, s, w, watchHash;
+        var contentScope, init_tab, s, w, watchHash;
         s = scope;
+        contentScope = elem.find(".tab-content").scope();
+        c.log("contentScope", contentScope);
         watchHash = function() {
           return utils.setupHash(s, [
             {
@@ -65,7 +67,7 @@
           ]);
         };
         init_tab = parseInt($location.search()[attr.tabHash]) || 0;
-        w = scope.$watch("tabs.length", function(len) {
+        w = contentScope.$watch("tabs.length", function(len) {
           if ((len - 1) >= init_tab) {
             s.setSelected(init_tab);
             watchHash();
@@ -74,7 +76,7 @@
         });
         s.getSelected = function() {
           var i, p, _i, _len, _ref;
-          _ref = s.tabs;
+          _ref = contentScope.tabs;
           for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
             p = _ref[i];
             if (p.active) {
@@ -84,13 +86,13 @@
         };
         return s.setSelected = function(index) {
           var t, _i, _len, _ref;
-          _ref = s.tabs;
+          _ref = contentScope.tabs;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             t = _ref[_i];
             t.active = false;
           }
-          if (s.tabs[index]) {
-            return s.tabs[index].active = true;
+          if (contentScope.tabs[index]) {
+            return contentScope.tabs[index].active = true;
           }
         };
       }

@@ -5,24 +5,14 @@
   korpApp.controller("resultTabCtrl", function($scope) {
     var s;
     s = $scope;
-    return s.selectTab = function(i) {
+    s.selectTab = function(i) {
       c.log("selectTab", i);
       return s.$broadcast("tabselect", i);
     };
-    /*
-    s.$watch "getSelected()", (val) ->
-        c.log "val", val
-        s.$root.result_tab = val
-        selectedScope = s.tabs[s.$root.result_tab]
-        c.log "selectedScope", selectedScope
-        instance = selectedScope.$parent.instance
-        c.log "instance", instance
-        switch val
-            when 0 then kwicResults?.onentry()
-            # when 1 then statsResults.onentry()
-            when 2 then lemgramResults.onentry()
-    */
-
+    return s.$watch("getSelected()", function(val) {
+      c.log("val", val);
+      return s.$root.result_tab = val;
+    });
     /*
     s.onClick = (event, num) ->
         i = $(event.target).parent().index()
@@ -53,6 +43,9 @@
     s.$on("tabselect", function($event) {
       return c.log("tabselect", arguments);
     });
+    s.onexit = function() {
+      return s.$root.sidebar_visible = false;
+    };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
