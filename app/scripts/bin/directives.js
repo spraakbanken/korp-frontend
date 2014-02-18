@@ -318,7 +318,7 @@
     };
   });
 
-  korpApp.directive("popper", function() {
+  korpApp.directive("popper", function($rootElement) {
     return {
       link: function(scope, elem, attrs) {
         var closePopup, popup;
@@ -328,19 +328,24 @@
           return popup.hide();
         };
         popup.on("click", function(event) {
-          return closePopup();
+          closePopup();
+          return false;
         });
-        return elem.on("click", function(event) {
+        elem.on("click", function(event) {
           if (popup.is(":visible")) {
             closePopup();
           } else {
             popup.show();
           }
-          return popup.position({
+          popup.position({
             my: "right top",
             at: "bottom right",
             of: elem
           });
+          return false;
+        });
+        return $rootElement.on("click", function() {
+          return closePopup();
         });
       }
     };

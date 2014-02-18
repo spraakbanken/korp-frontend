@@ -112,6 +112,7 @@ or
     | or 'FLAG'
         {
             var chars = $2.slice(1).split("");
+            $1.flags = {};
             for(var i = 0; i < chars.length; i++)
                 $1.flags[chars[i]] = true;
                 

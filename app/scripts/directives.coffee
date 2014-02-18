@@ -324,7 +324,7 @@ korpApp.directive "meter", () ->
 
 
 
-korpApp.directive "popper", () ->
+korpApp.directive "popper", ($rootElement) ->
     link : (scope, elem, attrs) ->
         popup = elem.next()
         popup.appendTo("body").hide()
@@ -333,6 +333,7 @@ korpApp.directive "popper", () ->
         
         popup.on "click", (event) ->
             closePopup()
+            return false
 
 
 
@@ -344,6 +345,11 @@ korpApp.directive "popper", () ->
                 my : "right top"
                 at : "bottom right"
                 of : elem
+
+            return false
+
+        $rootElement.on "click", () ->
+            closePopup()
 
 
 

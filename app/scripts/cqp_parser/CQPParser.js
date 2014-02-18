@@ -117,6 +117,7 @@ case 16:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
 break;
 case 17:
             var chars = $$[$0].slice(1).split("");
+            $$[$0-1].flags = {};
             for(var i = 0; i < chars.length; i++)
                 $$[$0-1].flags[chars[i]] = true;
                 

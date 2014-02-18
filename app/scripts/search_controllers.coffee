@@ -282,7 +282,9 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         or_obj.val = ""
 
     s.getOpts = (type) ->
-        s.typeMapping?[type]?.opts or settings.defaultOptions
+        optObj = s.typeMapping?[type]?.opts or settings.defaultOptions
+        _.pairs optObj
+
 
 
     onCorpusChange = (event, selected) ->

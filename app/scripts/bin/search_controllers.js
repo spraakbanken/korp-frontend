@@ -237,8 +237,9 @@
       return or_obj.val = "";
     };
     s.getOpts = function(type) {
-      var _ref, _ref1;
-      return ((_ref = s.typeMapping) != null ? (_ref1 = _ref[type]) != null ? _ref1.opts : void 0 : void 0) || settings.defaultOptions;
+      var optObj, _ref, _ref1;
+      optObj = ((_ref = s.typeMapping) != null ? (_ref1 = _ref[type]) != null ? _ref1.opts : void 0 : void 0) || settings.defaultOptions;
+      return _.pairs(optObj);
     };
     onCorpusChange = function(event, selected) {
       c.log("onCorpusChange", selected);
