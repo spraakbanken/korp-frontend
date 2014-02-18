@@ -244,7 +244,11 @@
       c.log("onCorpusChange", selected);
       s.types = utils.getAttributeGroups(settings.corpusListing);
       return s.typeMapping = _.object(_.map(s.types, function(item) {
-        return [item.value, item];
+        if (item.isStructAttr) {
+          return ["_." + item.value, item];
+        } else {
+          return [item.value, item];
+        }
       }));
     };
     s.$on("corpuschooserchange", onCorpusChange);

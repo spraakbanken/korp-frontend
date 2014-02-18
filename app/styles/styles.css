@@ -2415,6 +2415,7 @@ line.tick {
 /* line 1962, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
+  white-space: nowrap;
 }
 /* line 1965, styles.scss */
 .compare_result ul li .meter {

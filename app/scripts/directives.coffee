@@ -89,7 +89,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     """
     link : (scope, elem, attr, ngModelCtrl) ->
         scope.$watch "tokenValue", (valueObj) ->
-            # c.log "watch value", valueObj
+            c.log "watch value", valueObj
             unless valueObj then return
 
             

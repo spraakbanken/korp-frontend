@@ -296,7 +296,11 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         c.log "onCorpusChange", selected
 
         s.types = utils.getAttributeGroups(settings.corpusListing)
-        s.typeMapping = _.object _.map s.types, (item) -> [item.value, item]
+        s.typeMapping = _.object _.map s.types, (item) -> 
+            if item.isStructAttr
+                ["_." + item.value, item]
+            else 
+                [item.value, item]
 
 
     s.$on "corpuschooserchange", onCorpusChange

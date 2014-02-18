@@ -109,6 +109,7 @@
       link: function(scope, elem, attr, ngModelCtrl) {
         return scope.$watch("tokenValue", function(valueObj) {
           var locals, tmplElem;
+          c.log("watch value", valueObj);
           if (!valueObj) {
             return;
           }
