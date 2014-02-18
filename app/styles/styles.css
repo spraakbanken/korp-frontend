@@ -2310,13 +2310,20 @@ line.tick {
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
+  min-width: 300px;
+  font-size: 1.1em;
 }
-/* line 1879, styles.scss */
+/* line 1880, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
 }
+/* line 1883, styles.scss */
+.compare_result ul li .meter {
+  background-color: #dde9ff;
+  padding: 5px 0;
+}
 
-/* line 1885, styles.scss */
+/* line 1897, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2324,23 +2331,23 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 1887, styles.scss */
+/* line 1899, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 1890, styles.scss */
+/* line 1902, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 1898, styles.scss */
+/* line 1910, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-/* line 1906, styles.scss */
+/* line 1918, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }

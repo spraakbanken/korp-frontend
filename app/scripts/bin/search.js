@@ -206,7 +206,7 @@
     __extends(SimpleSearch, _super);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var search_val, textinput, type, _ref,
+      var textinput,
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId);
       this.s = scope;
@@ -220,7 +220,6 @@
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       textinput = $("#simple_text");
-      _ref = this.s.$root._search, type = _ref[0], search_val = _ref[1];
       if (settings.autocomplete) {
         textinput.korp_autocomplete({
           type: "lem",

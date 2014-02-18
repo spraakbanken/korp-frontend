@@ -285,4 +285,20 @@
     };
   });
 
+  korpApp.directive("meter", function() {
+    return {
+      scope: {
+        meter: "=",
+        max: "="
+      },
+      link: function(scope, elem, attr) {
+        var part, w;
+        elem.text(scope.meter[0]);
+        w = elem.parent().width();
+        part = 1 - ((Math.abs(scope.meter[1])) / scope.max);
+        return elem.width(Math.round(part * w));
+      }
+    };
+  });
+
 }).call(this);

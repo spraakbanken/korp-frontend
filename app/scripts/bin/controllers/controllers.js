@@ -5,13 +5,9 @@
   window.korpApp = angular.module('korpApp', ["watchFighters", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tabs", "template/tabs/tabset.html", "template/tabs/tab.html", "template/tabs/tabset-titles.html", "ui.bootstrap.modal", "template/modal/backdrop.html", "template/modal/window.html", "ui.bootstrap.typeahead", "template/typeahead/typeahead.html", "template/typeahead/typeahead-popup.html", "angularSpinner"]);
 
   korpApp.run(function($rootScope, $location, $route, $routeParams, utils) {
-    var corpus, s;
+    var s;
     s = $rootScope;
     s.lang = "sv";
-    corpus = search()["corpus"];
-    if (corpus) {
-      settings.corpusListing.select(corpus.split(","));
-    }
     s.activeCQP = "[]";
     s.search = function() {
       return $location.search.apply($location, arguments);
@@ -175,8 +171,10 @@
     s = $scope;
     s.$parent.loading = true;
     return s.promise.then(function(data) {
+      var pairs;
       s.$parent.loading = false;
-      s.tables = _.groupBy(_.pairs(data.loglike), function(_arg) {
+      pairs = _.pairs(data.loglike);
+      s.tables = _.groupBy(pairs, function(_arg) {
         var val, word;
         word = _arg[0], val = _arg[1];
         if (val > 0) {
@@ -188,8 +186,13 @@
       s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
         return tuple[1];
       });
-      return s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
+      s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
         return Math.abs(tuple[1]);
+      });
+      return s.max = _.max(pairs, function(_arg) {
+        var val, word;
+        word = _arg[0], val = _arg[1];
+        return Math.abs(val);
       });
     });
   });
@@ -373,9 +376,10 @@
       listing = cl.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);
     };
-    return s.sendCompare = function() {
+    s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1.corpora.join(","), s.cmp1.cqp, s.cmp2.corpora.join(","), s.cmp2.cqp, s.reduce));
     };
+    return s.sendCompare();
   });
 
   korpApp.filter("loc", function($rootScope) {

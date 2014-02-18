@@ -390,19 +390,23 @@
 								</div>
 							</tab>
 							<tab ng-repeat="promise in compareTabs">
-									<tab-heading ng-class="{loading : loading}">
+									<tab-heading class="compare_tab" ng-class="{loading : loading}">
 										Jämför <span  class="tab_spinner" 
 										us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
 									</tab-heading>
 									<div class="compare_result" ng-class="loading" ng-controller="compareCtrl">
-										<ul>
-											<li ng-repeat="tuple in tables.positive">
-												{{tuple[0]}}: {{tuple[1]}}
-											</li>
-										</ul>
+
+										<div>
+											Fler i {{}}
+											<ul>
+												<li ng-repeat="tuple in tables.positive">
+													<div class="meter" meter="tuple" max="max[1]" ></div>
+												</li>
+											</ul>
+										</div>
 										<ul>
 											<li ng-repeat="tuple in tables.negative">
-												{{tuple[0]}}: {{tuple[1]}}
+												<div class="meter" meter="tuple" max="max[1]" ></div>
 											</li>
 										</ul>
 									</div>

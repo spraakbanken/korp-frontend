@@ -26,6 +26,9 @@ $.ajaxPrefilter "json", (options, orig, jqXHR) ->
 deferred_mode = $.Deferred()
 deferred_domReady = $.Deferred((dfd) ->
     $ ->
+        corpus = search()["corpus"]
+        if corpus
+            settings.corpusListing.select corpus.split(",")
         mode = $.deparam.querystring().mode
         if mode? and mode isnt "default"
             $.getScript("modes/#{mode}_mode.js").done(->

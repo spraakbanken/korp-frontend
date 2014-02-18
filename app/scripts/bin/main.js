@@ -29,7 +29,11 @@
 
   deferred_domReady = $.Deferred(function(dfd) {
     return $(function() {
-      var mode;
+      var corpus, mode;
+      corpus = search()["corpus"];
+      if (corpus) {
+        settings.corpusListing.select(corpus.split(","));
+      }
       mode = $.deparam.querystring().mode;
       if ((mode != null) && mode !== "default") {
         $.getScript("modes/" + mode + "_mode.js").done(function() {

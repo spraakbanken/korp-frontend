@@ -202,7 +202,7 @@ class view.SimpleSearch extends BaseSearch
         
                 
         # [type, search_val] = search()["search"].split("|")
-        [type, search_val] = @s.$root._search
+        # [type, search_val] = @s.$root._search
 
         # if type == "lemgram"
             # setLemgram(search_val)

@@ -19,10 +19,6 @@ korpApp.run ($rootScope, $location, $route, $routeParams, utils) ->
     s = $rootScope
     s.lang = "sv"
 
-    corpus = search()["corpus"]
-    if corpus
-        settings.corpusListing.select corpus.split(",")
-
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
 
@@ -177,11 +173,18 @@ korpApp.controller "compareCtrl", ($scope) ->
     s.promise.then (data) ->
         # c.log "compare promise", _.pairs data.loglike
         s.$parent.loading = false
-        s.tables = _.groupBy  (_.pairs data.loglike), ([word, val]) ->
+        pairs = _.pairs data.loglike
+        s.tables = _.groupBy  (pairs), ([word, val]) ->
             if val > 0 then "positive" else "negative"
 
         s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1]
         s.tables.negative = _.sortBy s.tables.negative, (tuple) -> Math.abs tuple[1]
+
+        s.max = _.max pairs, ([word, val]) ->
+            Math.abs val
+
+
+
 
 
 
@@ -398,6 +401,7 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
                                   s.reduce)
 
 
+    s.sendCompare()
 
 
 

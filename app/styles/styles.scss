@@ -1882,10 +1882,22 @@ line.tick {
 .compare_result {
   ul {
     @include inline-block(top);
-
+    min-width : 300px;
+    font-size : 1.1em;
     li {
       margin-bottom : 0.5em;
+
+      .meter {
+        background-color : $primaryColor;
+        padding : 5px 0;
+      }
+      .content {
+        // z-index : 2;
+        // position : relative;
+      }
+
     }
+
   }
 }
 
@@ -1913,3 +1925,4 @@ line.tick {
 .loading .tab_spinner {
   display : inline-block;
 }
+

@@ -275,3 +275,14 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
             s.$broadcast('popover_submit', s.name)
 
 
+korpApp.directive "meter", () ->
+    scope :
+        meter : "="
+        max : "="
+    link : (scope, elem, attr) ->
+        elem.text(scope.meter[0])
+        w = elem.parent().width()
+        part = 1 -((Math.abs scope.meter[1]) / scope.max)
+
+        elem.width Math.round (part * w)
+
