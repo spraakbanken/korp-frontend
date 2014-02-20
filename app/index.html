@@ -332,8 +332,7 @@
                   </div>
                 </tab>
                 <tab active="[true][0]" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress == 100}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
-                  </tab-heading>
+                  <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div constr="ExampleResults">
                     <div class="result_controls">
                       <div class="controls_n"><span>{{'num_results' | loc}}:</span><span class="num-result">0</span></div>

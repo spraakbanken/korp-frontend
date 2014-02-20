@@ -217,7 +217,7 @@
 
 	"statstable_allcorpora" : "Samtliga",
 	"statstable_relfreq" : "relativ frekvens (per en miljon ord):",
-	"statstable_absfreq" : "absolut frekvens:",
+	"statstable_absfreq" : "absolut frekvens",
 	"statstable_absfigures" : "Absoluta frekvenser",
 	"statstable_relfigures" : "Relativa frekvenser",
 	"statstable_absfigures_hits" : "Träffar per korpus, absoluta frekvenser.",

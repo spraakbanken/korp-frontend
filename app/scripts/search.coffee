@@ -379,15 +379,15 @@ class view.SimpleSearch extends BaseSearch
         currentText = $.trim(word or $("#simple_text").val() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
         if util.isLemgramId(currentText) # if the input is a lemgram, do lemgram search.
-            val = $.format("[lex contains \"%s\"]", currentText)
+            val = "[lex contains \"#{currentText}\"]"
         else if @s.placeholder
-            #TODO: expand depending on prefix / suffix checks
-            val = "[lex contains '#{regescape @s.placeholder}'"
+            lemgram = regescape @s.placeholder
+            val = "[lex contains '#{lemgram}'"
 
             if @isSearchPrefix()
-                val += " | prefix contains #{regescape @s.placeholder} "
+                val += " | prefix contains #{lemgram} "
             if @isSearchSuffix()
-                val += " | suffix contains #{regescape @s.placeholder}"
+                val += " | suffix contains #{lemgram}"
 
             val += "]"
 
@@ -408,6 +408,8 @@ class view.SimpleSearch extends BaseSearch
             )
             val = cqp.join(" ")
 
+        return val
+
     onSimpleChange: (event) ->
         c.log "onSimpleChange"
         $("#simple_text").data "promise", null
@@ -416,7 +418,7 @@ class view.SimpleSearch extends BaseSearch
             return
         
         val = @getCQP()
-        @s.$root.activeCQP = val
+        # @s.$root.activeCQP = val
 
     resetView: ->
         $("#similar_lemgrams").empty().height "auto"

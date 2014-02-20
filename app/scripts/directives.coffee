@@ -282,7 +282,7 @@ korpApp.directive "meter", () ->
     template: '''
         <div>
             <div class="background" ng-bind-html="displayWd | trust"></div>
-            <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>
+            <div class="abs badge" tooltip="{{'statstable_absfreq' | loc}}">{{meter[2]}}</div>
         </div>
     '''
     replace: true
@@ -301,6 +301,7 @@ korpApp.directive "meter", () ->
         part = ((Math.abs scope.meter[1]) / (Math.abs scope.max))
 
         bkg.width Math.round (part * w)
+
 
 
 

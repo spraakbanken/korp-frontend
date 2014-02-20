@@ -153,14 +153,6 @@ settings.defaultLanguage = "sv";
 // for optimization purposes
 settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
 
-// settings.defaultOptions = {
-//  "is" : "is",
-//  "is_not" : "is_not",
-//  "starts_with" : "starts_with",
-//  "contains" : "contains",
-//  "ends_with" : "ends_with",
-//  "matches" : "matches"
-// };
 
 settings.defaultOptions = {
     "is" : "=",
@@ -271,7 +263,9 @@ attrs.pos = {
     },
     opts : settings.liteOptions,
     extended_template : selectType.extended_template,
-    controller : selectType.controller
+    controller : selectType.controller,
+
+
 };
 attrs.msd = {
     label : "msd",

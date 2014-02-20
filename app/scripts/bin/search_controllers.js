@@ -16,7 +16,6 @@
     return $scope.$watch((function() {
       return $location.search().search_tab;
     }), function(val) {
-      c.log("search tab watch", val, val === 3);
       return $scope.isCompareSelected = val === 3;
     });
   });
@@ -101,11 +100,16 @@
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
       or_obj.op = _.values(s.getOpts(or_obj.type))[0][1];
+      c.log("or_obj.op", or_obj.op);
       return or_obj.val = "";
     };
     s.getOpts = function(type) {
-      var optObj, _ref, _ref1;
-      optObj = ((_ref = s.typeMapping) != null ? (_ref1 = _ref[type]) != null ? _ref1.opts : void 0 : void 0) || settings.defaultOptions;
+      var confObj, optObj, _ref;
+      confObj = (_ref = s.typeMapping) != null ? _ref[type] : void 0;
+      optObj = _.extend({}, (confObj != null ? confObj.opts : void 0) || settings.defaultOptions);
+      if (confObj.type === "set") {
+        optObj.is = "contains";
+      }
       return _.pairs(optObj);
     };
     onCorpusChange = function(event, selected) {

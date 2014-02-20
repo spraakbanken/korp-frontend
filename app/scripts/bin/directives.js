@@ -294,7 +294,7 @@
 
   korpApp.directive("meter", function() {
     return {
-      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
+      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip="{{\'statstable_absfreq\' | loc}}">{{meter[2]}}</div>\n</div>',
       replace: true,
       scope: {
         meter: "=",

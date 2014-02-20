@@ -439,7 +439,7 @@
       currentText = $.trim(word || $("#simple_text").val() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
-        return val = $.format("[lex contains \"%s\"]", currentText);
+        val = "[lex contains \"" + currentText + "\"]";
       } else if (this.s.placeholder) {
         val = "[lex contains '" + (regescape(this.s.placeholder)) + "'";
         if (this.isSearchPrefix()) {
@@ -448,12 +448,12 @@
         if (this.isSearchSuffix()) {
           val += " | suffix contains " + (regescape(this.s.placeholder));
         }
-        return val += "]";
+        val += "]";
       } else if (this.isSearchPrefix() || this.isSearchSuffix()) {
         query = [];
         this.isSearchPrefix() && query.push("%s.*");
         this.isSearchSuffix() && query.push(".*%s");
-        return val = $.map(currentText.split(" "), function(wd) {
+        val = $.map(currentText.split(" "), function(wd) {
           return "[" + $.map(query, function(q) {
             q = $.format(q, wd);
             return $.format("word = \"%s\"%s", [q, suffix]);
@@ -464,8 +464,9 @@
         cqp = $.map(wordArray, function(item, i) {
           return $.format("[word = \"%s\"%s]", [regescape(item), suffix]);
         });
-        return val = cqp.join(" ");
+        val = cqp.join(" ");
       }
+      return val;
     };
 
     SimpleSearch.prototype.onSimpleChange = function(event) {
@@ -476,8 +477,7 @@
         c.log("key", event.keyCode);
         return;
       }
-      val = this.getCQP();
-      return this.s.$root.activeCQP = val;
+      return val = this.getCQP();
     };
 
     SimpleSearch.prototype.resetView = function() {

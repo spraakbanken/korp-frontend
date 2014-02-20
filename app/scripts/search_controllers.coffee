@@ -13,7 +13,6 @@ korpApp.controller "SearchCtrl", ($scope, $location) ->
 
     $scope.$watch( (() -> $location.search().search_tab),
         (val) ->
-            c.log "search tab watch", val, val == 3
             $scope.isCompareSelected = val == 3
     )
 
@@ -93,30 +92,25 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
 korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s = $scope
     c.log "ExtendedToken", s
-    # cqp = '[(word = "ge" | pos = "JJ") & deprel = 1"SS" & deprel = "lol" & deprel = "10000"]'
-    # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "" | word = "")]'
     cqp = '[]'
 
-    # s.valfilter = (attrobj) ->
-    #     return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
-
     s.valfilter = utils.valfilter
-    # words = "word,pos,msd,lemma,lex,saldo,dephead,deprel,ref,prefix,suffix,entity".split(",")
-    # word =
-    #     group : "word"
-    #     value : "word"
-    #     label : "word"
     
 
     s.setDefault = (or_obj) ->
         # assign the first value from the opts 
         or_obj.op = _.values(s.getOpts(or_obj.type))[0][1]
-        # c.log "setDefault", _.values(s.getOpts(or_obj.type)), or_obj.op
+        c.log "or_obj.op", or_obj.op
 
         or_obj.val = ""
 
     s.getOpts = (type) ->
-        optObj = s.typeMapping?[type]?.opts or settings.defaultOptions
+        confObj = s.typeMapping?[type]
+
+        optObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
+        if confObj.type == "set"
+            optObj.is = "contains"
+
         _.pairs optObj
 
 

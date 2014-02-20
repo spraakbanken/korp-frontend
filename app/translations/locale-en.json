@@ -214,7 +214,7 @@
 
 	"statstable_allcorpora" : "All&nbsp;corpora",
 	"statstable_relfreq" : "relative frequency (per million words):",
-	"statstable_absfreq" : "absolute frequency:",
+	"statstable_absfreq" : "absolute frequency",
 	"statstable_absfigures" : "Absolute frequencies",
 	"statstable_relfigures" : "Relative frequencies",
 	"statstable_absfigures_hits" : "Hits per corpus, absolute frequencies",
