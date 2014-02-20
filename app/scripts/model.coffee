@@ -204,6 +204,7 @@ class model.KWICProxy extends BaseProxy
         data.show = (_.uniq data.show).join(",")
         data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
+        @prevMisc = {"hitsPerPage" : $("#num_hits").val()}
         @pendingRequests.push $.ajax(
             url: settings.cgi_script
             data: data

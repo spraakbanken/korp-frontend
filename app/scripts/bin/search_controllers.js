@@ -20,6 +20,12 @@
     });
   });
 
+  korpApp.config(function($tooltipProvider) {
+    return $tooltipProvider.options({
+      appendToBody: true
+    });
+  });
+
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
     var s;
     s = $scope;

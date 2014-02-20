@@ -255,58 +255,20 @@ class view.KWICResults extends BaseResults
         @$result.find(".hits_picture").html ""
 
     renderHitsPicture: (data) ->
-        self = this
-        if settings.corpusListing.selected.length > 1
-            totalhits = data["hits"]
-            hits_picture_html = "<table class='hits_picture_table'><tr height='18px'>"
-            barcolors = ["color_blue", "color_purple", "color_green", "color_yellow", "color_azure", "color_red"]
-            ccounter = 0
-            corpusOrderArray = $.grep(data.corpus_order, (corpus) ->
-                data.corpus_hits[corpus] > 0
-            )
-            $.each corpusOrderArray, (index, corp) ->
-                hits = data["corpus_hits"][corp]
-                color = (if index % 2 is 0 then settings.primaryColor else settings.primaryLight)
-                hits_picture_html += """<td class="hits_picture_corp" data="#{corp}"
-                                            style="width:#{hits / totalhits * 100}%;background-color : #{color}"></td>"""
+        items = _.map data.corpus_order, (obj) ->
+            {"rid" : obj,
+            "rtitle" : settings.corpusListing.getTitle(obj.toLowerCase()),
+            "relative" : data.corpus_hits[obj] / data.hits,
+            "abs" : data.corpus_hits[obj]}
+        items = _.filter items, (item) -> item.abs > 0
+        # calculate which is the first page of hits for each item
+        index = 0
+        _.each items, (obj) ->
+            obj.page = Math.floor(index / kwicProxy.prevMisc.hitsPerPage )
+            index += obj.abs
 
-            hits_picture_html += "</tr></table>"
-            @$result.find(".hits_picture").html hits_picture_html
-
-            # Make sure that there is no mousover effect on touch screen devices:
-            ua = navigator.userAgent
-            if ua.match(/Android/i) or ua.match(/webOS/i) or ua.match(/iPhone/i) or ua.match(/iPod/i)
-                @$result.find(".hits_picture_table").css "opacity", "1"
-            @$result.find(".hits_picture_corp").each ->
-                corpus_name = $(this).attr("data")
-                $(this).tooltip
-                    delay: 0
-                    bodyHandler: ->
-                        corpusObj = settings.corpora[corpus_name.toLowerCase()]
-                        corpusObj = settings.corpora[corpus_name.split("|")[1].toLowerCase()]  if currentMode is "parallel"
-                        nHits = prettyNumbers(data["corpus_hits"][corpus_name].toString())
-                        return """<img src="img/korp_icon.png" style="vertical-align:middle"/>
-                                  <b>#{corpusObj["title"]} (#{nHits}) #{util.getLocaleString("hitspicture_hits")})</b>
-                                  <br/><br/><i>#{util.getLocaleString("hitspicture_gotocorpushits")}</i>"""
-
-
-
-            # Click to ge to the first page with a hit in the particular corpus
-            @$result.find(".hits_picture_corp").click (event) ->
-                theCorpus = $(this).attr("data")
-
-                # Count the index of the first hit for the corpus:
-                firstIndex = 0
-                $.each data["corpus_order"], (index, corp) ->
-                    return false  if corp is theCorpus
-                    firstIndex += data["corpus_hits"][corp]
-
-                firstHitPage = Math.floor(firstIndex / $("#num_hits").val())
-                self.handlePaginationClick firstHitPage, null, true
-                false
-
-        else
-            @$result.find(".hits_picture").html ""
+        @s.$apply ($scope) ->
+            $scope.hitsPictureData = items
 
     scrollToShowWord: (word) ->
         unless word.length then return

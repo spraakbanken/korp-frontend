@@ -251,6 +251,9 @@
       data.show = (_.uniq(data.show)).join(",");
       data.show_struct = (_.uniq(data.show_struct)).join(",");
       this.prevRequest = data;
+      this.prevMisc = {
+        "hitsPerPage": $("#num_hits").val()
+      };
       return this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
         data: data,

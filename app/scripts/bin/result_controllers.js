@@ -34,6 +34,9 @@
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
+    s.hitspictureClick = function(pageNumber) {
+      return s.instance.handlePaginationClick(pageNumber, null, true);
+    };
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
       currentStruct = [];

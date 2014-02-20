@@ -30,6 +30,9 @@ korpApp.controller "kwicCtrl", ($scope) ->
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
+    s.hitspictureClick = (pageNumber) ->
+        s.instance.handlePaginationClick(pageNumber, null, true)
+
     massageData = (sentenceArray) ->
         currentStruct = []
         prevCorpus = ""

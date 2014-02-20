@@ -270,7 +270,15 @@
                       <div class="progress_container">
                         <progress value="{{progress || 0}}" max="100"></progress>
                       </div>
-                      <div class="hits_picture"></div>
+                      <div class="hits_picture">
+                        <table class="hits_picture_table">
+                          <tbody>
+                            <tr>
+                              <td ng-if="hitsPictureData.length &gt; 1" ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,             even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     <div class="pager-wrapper"></div><span rel="localize[show_reading]" class="reading_btn show link">Visa läsläge</span><span rel="localize[show_kwic]" class="reading_btn hide link">Visa kwic</span>
                     <div class="table_scrollarea">
@@ -339,7 +347,15 @@
                       <div class="progress_container">
                         <progress value="{{progress || 0}}" max="100"></progress>
                       </div>
-                      <div class="hits_picture"></div>
+                      <div class="hits_picture">
+                        <table class="hits_picture_table">
+                          <tbody>
+                            <tr>
+                              <td ng-if="hitsPictureData.length &gt; 1" ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,             even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     <div class="pager-wrapper"></div><span rel="localize[show_reading]" class="reading_btn show link">Visa läsläge</span><span rel="localize[show_kwic]" class="reading_btn hide link">Visa kwic</span>
                     <div class="table_scrollarea">

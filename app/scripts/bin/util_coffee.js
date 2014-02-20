@@ -242,6 +242,10 @@
       });
     };
 
+    CorpusListing.prototype.getTitle = function(corpus) {
+      return this.struct[corpus].title;
+    };
+
     return CorpusListing;
 
   })();

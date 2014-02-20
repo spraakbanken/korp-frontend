@@ -804,6 +804,18 @@ table {
   }
 }
 
+.hits_picture {
+  tr {
+    height : 18px;
+  }
+  .odd {
+    background-color : $primaryColor;
+  }
+  .even {
+    background-color : $primaryLight;
+  }
+}
+
 #display_word {
   margin: auto 0;
 }

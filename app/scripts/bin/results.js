@@ -279,61 +279,26 @@
     };
 
     KWICResults.prototype.renderHitsPicture = function(data) {
-      var barcolors, ccounter, corpusOrderArray, hits_picture_html, self, totalhits, ua;
-      self = this;
-      if (settings.corpusListing.selected.length > 1) {
-        totalhits = data["hits"];
-        hits_picture_html = "<table class='hits_picture_table'><tr height='18px'>";
-        barcolors = ["color_blue", "color_purple", "color_green", "color_yellow", "color_azure", "color_red"];
-        ccounter = 0;
-        corpusOrderArray = $.grep(data.corpus_order, function(corpus) {
-          return data.corpus_hits[corpus] > 0;
-        });
-        $.each(corpusOrderArray, function(index, corp) {
-          var color, hits;
-          hits = data["corpus_hits"][corp];
-          color = (index % 2 === 0 ? settings.primaryColor : settings.primaryLight);
-          return hits_picture_html += "<td class=\"hits_picture_corp\" data=\"" + corp + "\"\nstyle=\"width:" + (hits / totalhits * 100) + "%;background-color : " + color + "\"></td>";
-        });
-        hits_picture_html += "</tr></table>";
-        this.$result.find(".hits_picture").html(hits_picture_html);
-        ua = navigator.userAgent;
-        if (ua.match(/Android/i) || ua.match(/webOS/i) || ua.match(/iPhone/i) || ua.match(/iPod/i)) {
-          this.$result.find(".hits_picture_table").css("opacity", "1");
-        }
-        this.$result.find(".hits_picture_corp").each(function() {
-          var corpus_name;
-          corpus_name = $(this).attr("data");
-          return $(this).tooltip({
-            delay: 0,
-            bodyHandler: function() {
-              var corpusObj, nHits;
-              corpusObj = settings.corpora[corpus_name.toLowerCase()];
-              if (currentMode === "parallel") {
-                corpusObj = settings.corpora[corpus_name.split("|")[1].toLowerCase()];
-              }
-              nHits = prettyNumbers(data["corpus_hits"][corpus_name].toString());
-              return "<img src=\"img/korp_icon.png\" style=\"vertical-align:middle\"/>\n<b>" + corpusObj["title"] + " (" + nHits + ") " + (util.getLocaleString("hitspicture_hits")) + ")</b>\n<br/><br/><i>" + (util.getLocaleString("hitspicture_gotocorpushits")) + "</i>";
-            }
-          });
-        });
-        return this.$result.find(".hits_picture_corp").click(function(event) {
-          var firstHitPage, firstIndex, theCorpus;
-          theCorpus = $(this).attr("data");
-          firstIndex = 0;
-          $.each(data["corpus_order"], function(index, corp) {
-            if (corp === theCorpus) {
-              return false;
-            }
-            return firstIndex += data["corpus_hits"][corp];
-          });
-          firstHitPage = Math.floor(firstIndex / $("#num_hits").val());
-          self.handlePaginationClick(firstHitPage, null, true);
-          return false;
-        });
-      } else {
-        return this.$result.find(".hits_picture").html("");
-      }
+      var index, items;
+      items = _.map(data.corpus_order, function(obj) {
+        return {
+          "rid": obj,
+          "rtitle": settings.corpusListing.getTitle(obj.toLowerCase()),
+          "relative": data.corpus_hits[obj] / data.hits,
+          "abs": data.corpus_hits[obj]
+        };
+      });
+      items = _.filter(items, function(item) {
+        return item.abs > 0;
+      });
+      index = 0;
+      _.each(items, function(obj) {
+        obj.page = Math.floor(index / kwicProxy.prevMisc.hitsPerPage);
+        return index += obj.abs;
+      });
+      return this.s.$apply(function($scope) {
+        return $scope.hitsPictureData = items;
+      });
     };
 
     KWICResults.prototype.scrollToShowWord = function(word) {

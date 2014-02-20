@@ -16,7 +16,9 @@ korpApp.controller "SearchCtrl", ($scope, $location) ->
             $scope.isCompareSelected = val == 3
     )
 
-
+korpApp.config ($tooltipProvider) ->
+    $tooltipProvider.options
+        appendToBody: true
 
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->

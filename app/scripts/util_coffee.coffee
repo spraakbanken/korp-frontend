@@ -174,6 +174,9 @@ class window.CorpusListing
         _.filter @corpora, (item) ->
             not item.limited_access
 
+    getTitle : (corpus) ->
+        @struct[corpus].title
+
 
 
 class window.ParallelCorpusListing extends CorpusListing
