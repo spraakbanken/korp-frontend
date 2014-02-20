@@ -264,54 +264,58 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   *display: inline;
   margin-right: 10px;
 }
+/* line 220, styles.scss */
+#search_options.covered {
+  opacity: 0.7;
+}
 
-/* line 222, styles.scss */
+/* line 225, styles.scss */
 #corpus_id {
   font-family: monospace;
 }
 
-/* line 226, styles.scss */
+/* line 229, styles.scss */
 #cqp_string {
   font-family: monospace;
   width: 100%;
 }
 
-/* line 231, styles.scss */
+/* line 234, styles.scss */
 #header {
   width: 100%;
   margin: 0;
   position: relative;
 }
 
-/* line 237, styles.scss */
+/* line 240, styles.scss */
 #content {
   padding: 0 8px 8px 8px;
 }
 
-/* line 241, styles.scss */
+/* line 244, styles.scss */
 .lang_selected {
   color: black;
 }
 
-/* line 245, styles.scss */
+/* line 248, styles.scss */
 #cite {
   margin-top: 1px;
 }
 
-/* line 248, styles.scss */
+/* line 251, styles.scss */
 #languages, #cite {
   float: right;
   margin-right: 8px;
 }
 
-/* line 253, styles.scss */
+/* line 256, styles.scss */
 #query_table {
   overflow: auto;
   white-space: nowrap;
   margin-bottom: 15px;
 }
 
-/* line 259, styles.scss */
+/* line 262, styles.scss */
 .lang_row {
   overflow: auto;
   white-space: nowrap;
@@ -319,54 +323,54 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   padding: 8px;
 }
 
-/* line 266, styles.scss */
+/* line 269, styles.scss */
 #query_table > select {
   margin-left: 2px;
   display: block;
 }
 
-/* line 272, styles.scss */
+/* line 275, styles.scss */
 .lang_row > select {
   margin-left: 2px;
   display: block;
 }
-/* line 276, styles.scss */
+/* line 279, styles.scss */
 .lang_row:nth-child(2n) {
   background-color: #F5F5F5;
 }
 
-/* line 285, styles.scss */
+/* line 288, styles.scss */
 .extended .search_submit {
   display: inline;
 }
-/* line 287, styles.scss */
+/* line 290, styles.scss */
 .extended .search_submit .btn-group {
   display: inline;
 }
 
-/* line 294, styles.scss */
+/* line 297, styles.scss */
 .mode-parallel #linkedLang {
   display: inline;
 }
-/* line 297, styles.scss */
+/* line 300, styles.scss */
 .mode-parallel .context_select, .mode-parallel .within_select {
   display: none;
 }
-/* line 302, styles.scss */
+/* line 305, styles.scss */
 .mode-parallel .results_table .odd {
   background-color: #fff3d8;
 }
-/* line 305, styles.scss */
+/* line 308, styles.scss */
 .mode-parallel .results_table .even {
   background-color: #fff9ec;
 }
 
-/* line 322, styles.scss */
+/* line 325, styles.scss */
 .lang_row + #removeLang {
   display: inline;
 }
 
-/* line 326, styles.scss */
+/* line 329, styles.scss */
 .remove_arg {
   position: relative;
   top: 15px;
@@ -377,20 +381,20 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   transition: opacity 200ms ease;
 }
 
-/* line 333, styles.scss */
+/* line 336, styles.scss */
 .insert_arg {
   margin-top: 4px;
   float: left;
 }
 
-/* line 338, styles.scss */
+/* line 341, styles.scss */
 .insert_token {
   position: relative;
   top: 54px;
   margin-left: 10px;
 }
 
-/* line 346, styles.scss */
+/* line 349, styles.scss */
 .arg_type {
   display: -moz-inline-stack;
   display: inline-block;
@@ -401,28 +405,28 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   width: 160px;
 }
 
-/* line 351, styles.scss */
+/* line 354, styles.scss */
 .arg_opts {
   margin-left: 5px;
 }
 
-/* line 355, styles.scss */
+/* line 358, styles.scss */
 input.arg_value {
   width: 95%;
 }
 
-/* line 359, styles.scss */
+/* line 362, styles.scss */
 .arg_value {
   max-width: 300px;
 }
 
-/* line 363, styles.scss */
+/* line 366, styles.scss */
 select.arg_value option {
   padding-top: 1px;
   padding-bottom: 1px;
 }
 
-/* line 368, styles.scss */
+/* line 371, styles.scss */
 .btn-icon {
   vertical-align: top;
   display: -moz-inline-stack;
@@ -437,7 +441,7 @@ select.arg_value option {
   top: -5px;
 }
 
-/* line 378, styles.scss */
+/* line 381, styles.scss */
 .query_token .left_col {
   display: -moz-inline-stack;
   display: inline-block;
@@ -447,40 +451,40 @@ select.arg_value option {
   *display: inline;
   min-width: 16px;
 }
-/* line 382, styles.scss */
+/* line 385, styles.scss */
 .query_token button {
   width: 20px;
   height: 20px;
   float: right;
 }
-/* line 386, styles.scss */
+/* line 389, styles.scss */
 .query_token button i {
   position: relative;
   top: 0px;
   left: -2px;
   font-size: 14px;
 }
-/* line 393, styles.scss */
+/* line 396, styles.scss */
 .query_token .repeat {
   float: right;
   margin-right: 25px;
 }
-/* line 396, styles.scss */
+/* line 399, styles.scss */
 .query_token .repeat input {
   max-width: 30px;
 }
 
-/* line 402, styles.scss */
+/* line 405, styles.scss */
 .token_header {
   padding-bottom: 3px;
 }
 
-/* line 405, styles.scss */
+/* line 408, styles.scss */
 .token_footer {
   font-size: .8em;
 }
 
-/* line 422, styles.scss */
+/* line 425, styles.scss */
 .close_token {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -494,18 +498,18 @@ select.arg_value option {
   padding-right: 2px;
   cursor: default;
 }
-/* line 431, styles.scss */
+/* line 434, styles.scss */
 .close_token i {
   cursor: pointer;
 }
 
-/* line 436, styles.scss */
+/* line 439, styles.scss */
 .lower_footer {
   text-align: right;
   margin-top: 2px;
 }
 
-/* line 441, styles.scss */
+/* line 444, styles.scss */
 #opt_menu {
   display: none;
   font-size: .8em;
@@ -513,22 +517,22 @@ select.arg_value option {
   width: 100px;
 }
 
-/* line 457, styles.scss */
+/* line 460, styles.scss */
 .statisticWords {
   border-style: hidden;
 }
 
-/* line 461, styles.scss */
+/* line 464, styles.scss */
 .searchForWordformInCorpus, .corpusTitleHeader {
   cursor: pointer;
 }
 
-/* line 465, styles.scss */
+/* line 468, styles.scss */
 .ext {
   margin-right: 0px;
 }
 
-/* line 469, styles.scss */
+/* line 472, styles.scss */
 .scroll_checkboxes {
   width: 480px;
   height: 33px;
@@ -537,7 +541,7 @@ select.arg_value option {
   vertical-align: bottom;
 }
 
-/* line 477, styles.scss */
+/* line 480, styles.scss */
 .buttonlink {
   padding: .4em 1em .4em 20px;
   color: #222222;
@@ -545,15 +549,15 @@ select.arg_value option {
   position: relative;
   text-size: .6em;
 }
-/* line 483, styles.scss */
+/* line 486, styles.scss */
 .buttonlink:link, .buttonlink:visited {
   color: #222222;
 }
-/* line 486, styles.scss */
+/* line 489, styles.scss */
 .buttonlink:hover {
   color: #444444;
 }
-/* line 489, styles.scss */
+/* line 492, styles.scss */
 .buttonlink span.ui-icon {
   margin: 0 5px 0 0;
   position: absolute;
@@ -562,7 +566,7 @@ select.arg_value option {
   margin-top: -8px;
 }
 
-/* line 498, styles.scss */
+/* line 501, styles.scss */
 .popupchecks {
   z-index: 9999;
   max-height: 600px;
@@ -575,7 +579,7 @@ select.arg_value option {
   padding: 10px;
   position: absolute;
 }
-/* line 509, styles.scss */
+/* line 512, styles.scss */
 .popupchecks .buttons {
   margin: 10px 0;
   display: -moz-inline-stack;
@@ -586,34 +590,34 @@ select.arg_value option {
   *display: inline;
   font-size: .8em;
 }
-/* line 513, styles.scss */
+/* line 516, styles.scss */
 .popupchecks .buttons a {
   display: block;
   margin-bottom: 5px;
 }
 
-/* line 521, styles.scss */
+/* line 524, styles.scss */
 .numberOfChildren {
   color: #888888;
 }
 
-/* line 525, styles.scss */
+/* line 528, styles.scss */
 .hp_topframe {
   width: 446px;
   padding-top: 7px;
 }
 
-/* line 532, styles.scss */
+/* line 535, styles.scss */
 .webkit .hp_topframe > div {
   margin-top: 1px;
 }
 
-/* line 536, styles.scss */
+/* line 539, styles.scss */
 #corpusbox {
   cursor: pointer;
 }
 
-/* line 540, styles.scss */
+/* line 543, styles.scss */
 .corpusInfoSpace {
   display: none;
   border: 1px solid #CCCCCC;
@@ -627,7 +631,7 @@ select.arg_value option {
   padding-right: 4px;
 }
 
-/* line 553, styles.scss */
+/* line 556, styles.scss */
 .tree {
   margin-top: 1px;
   margin-bottom: -3px;
@@ -637,12 +641,12 @@ select.arg_value option {
   overflow-x: hidden;
 }
 
-/* line 562, styles.scss */
+/* line 565, styles.scss */
 .collapsed {
   margin-bottom: 0px;
 }
 
-/* line 566, styles.scss */
+/* line 569, styles.scss */
 .boxdiv {
   margin-top: 2px;
   background-color: #F6F6F6;
@@ -650,30 +654,30 @@ select.arg_value option {
   padding-bottom: 1px;
   margin-bottom: 2px;
 }
-/* line 572, styles.scss */
+/* line 575, styles.scss */
 .boxdiv.disabled {
   color: grey;
 }
-/* line 574, styles.scss */
+/* line 577, styles.scss */
 .boxdiv.disabled img {
   display: none;
 }
 
-/* line 581, styles.scss */
+/* line 584, styles.scss */
 .hplabel {
   padding: 2px 6px 0px 6px;
 }
 
-/* line 585, styles.scss */
+/* line 588, styles.scss */
 .boxlabel {
   padding: 2px 6px 0px 6px;
 }
-/* line 587, styles.scss */
+/* line 590, styles.scss */
 .boxlabel > span {
   background: #FFFFFF;
 }
 
-/* line 592, styles.scss */
+/* line 595, styles.scss */
 .checkbox {
   width: 12px;
   height: 12px;
@@ -684,20 +688,20 @@ select.arg_value option {
   zoom: 1;
   *display: inline;
 }
-/* line 596, styles.scss */
+/* line 599, styles.scss */
 .checkbox.checked {
   background-image: url("../img/checked.png");
 }
-/* line 599, styles.scss */
+/* line 602, styles.scss */
 .checkbox.unchecked {
   background-image: url("../img/unchecked.png");
 }
-/* line 602, styles.scss */
+/* line 605, styles.scss */
 .checkbox.intermediate {
   background-image: url("../img/intermediate.png");
 }
 
-/* line 607, styles.scss */
+/* line 610, styles.scss */
 .boxdiv.disabled .checkbox {
   background-image: url("images/ui-icons_222222_256x240.png");
   background-position: -192px -96px;
@@ -706,7 +710,7 @@ select.arg_value option {
   margin-left: -2px;
 }
 
-/* line 615, styles.scss */
+/* line 618, styles.scss */
 .query_footer {
   background-color: #e1e1e1;
   padding: 1px 8px 8px 8px;
@@ -715,55 +719,55 @@ select.arg_value option {
   display: table;
 }
 
-/* line 623, styles.scss */
+/* line 626, styles.scss */
 #similar_lemgrams {
   margin-top: 5px;
   padding: 8px;
   overflow-y: hidden;
 }
 
-/* line 629, styles.scss */
+/* line 632, styles.scss */
 #similar_wrapper {
   max-width: 50%;
 }
 
-/* line 634, styles.scss */
+/* line 637, styles.scss */
 #similar_lemgrams:empty {
   padding: 0;
 }
-/* line 637, styles.scss */
+/* line 640, styles.scss */
 #similar_lemgrams p {
   margin-top: 2px;
   margin-bottom: 7px;
 }
-/* line 641, styles.scss */
+/* line 644, styles.scss */
 #similar_lemgrams a {
   font-size: 12px;
 }
-/* line 644, styles.scss */
+/* line 647, styles.scss */
 #similar_lemgrams ul {
   margin: 0;
   padding-left: 10px;
 }
-/* line 648, styles.scss */
+/* line 651, styles.scss */
 #similar_lemgrams li {
   padding: 5px 0;
 }
 
-/* line 653, styles.scss */
+/* line 656, styles.scss */
 #show_more {
   float: right;
   position: relative;
   top: -3px;
   padding: 2px 2px 0 2px;
 }
-/* line 658, styles.scss */
+/* line 661, styles.scss */
 #show_more a {
   font-size: 12px;
   font-weight: bold;
 }
 
-/* line 670, styles.scss */
+/* line 673, styles.scss */
 .ui-autocomplete-tall {
   max-height: 335px;
   overflow-y: auto;
@@ -773,7 +777,7 @@ select.arg_value option {
   padding-right: 20px;
 }
 
-/* line 679, styles.scss */
+/* line 682, styles.scss */
 .ui-preloader {
   position: absolute;
   width: 20px;
@@ -782,23 +786,23 @@ select.arg_value option {
   background-size: 18px 18px;
 }
 
-/* line 687, styles.scss */
+/* line 690, styles.scss */
 .image_button:hover {
   cursor: pointer;
 }
 
-/* line 691, styles.scss */
+/* line 694, styles.scss */
 td {
   margin: 0px;
 }
 
-/* line 695, styles.scss */
+/* line 698, styles.scss */
 table {
   margin: 0px 10px;
   padding: 0px 5px;
 }
 
-/* line 700, styles.scss */
+/* line 703, styles.scss */
 .query_token {
   background-color: #e1e1e1;
   display: inline-table;
@@ -812,28 +816,28 @@ table {
   margin-bottom: 5px;
   box-shadow: 2px 2px 3px grey;
 }
-/* line 712, styles.scss */
+/* line 715, styles.scss */
 .query_token.ui-sortable-helper {
   width: 275px !important;
 }
 
-/* line 717, styles.scss */
+/* line 720, styles.scss */
 .cqp_toggle {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-/* line 722, styles.scss */
+/* line 725, styles.scss */
 .result_controls {
   position: relative;
 }
 
-/* line 726, styles.scss */
+/* line 729, styles.scss */
 #results-kwic > div:not(:last-child) {
   margin-bottom: 8px;
 }
 
-/* line 730, styles.scss */
+/* line 733, styles.scss */
 .result_controls > * {
   display: -moz-inline-stack;
   display: inline-block;
@@ -843,45 +847,45 @@ table {
   *display: inline;
 }
 
-/* line 734, styles.scss */
+/* line 737, styles.scss */
 .controls_n {
   margin-right: 5px;
   min-width: 125px;
 }
 
-/* line 739, styles.scss */
+/* line 742, styles.scss */
 .loading .controls_n {
   color: darkgrey;
   font-style: italic;
 }
 
-/* line 744, styles.scss */
+/* line 747, styles.scss */
 #results-stats {
   overflow-x: hidden;
 }
 
-/* line 748, styles.scss */
+/* line 751, styles.scss */
 #results-lemgram {
   overflow: auto;
 }
-/* line 750, styles.scss */
+/* line 753, styles.scss */
 #results-lemgram > span * {
   margin-top: 11px;
 }
 
-/* line 755, styles.scss */
+/* line 758, styles.scss */
 .lemgram_help {
   text-transform: capitalize;
   white-space: nowrap;
   margin-top: 10px;
   margin-bottom: 20px;
 }
-/* line 760, styles.scss */
+/* line 763, styles.scss */
 .lemgram_help > span {
   padding: 10px 10px;
 }
 
-/* line 775, styles.scss */
+/* line 778, styles.scss */
 .lemgram_result {
   float: left;
   padding-top: 4px;
@@ -890,13 +894,13 @@ table {
   padding-right: 2px;
   counter-reset: wordpic;
 }
-/* line 782, styles.scss */
+/* line 785, styles.scss */
 .lemgram_result table {
   padding: 0 0;
   margin: 0 0;
 }
 
-/* line 788, styles.scss */
+/* line 791, styles.scss */
 .table_scrollarea {
   overflow: auto;
   clear: both;
@@ -904,73 +908,73 @@ table {
   -ms-overflow-y: hidden;
 }
 
-/* line 795, styles.scss */
+/* line 798, styles.scss */
 .results_table {
   padding-left: 0;
   margin-left: 0;
 }
-/* line 798, styles.scss */
+/* line 801, styles.scss */
 .results_table td {
   white-space: nowrap;
   border: none;
 }
 
-/* line 804, styles.scss */
+/* line 807, styles.scss */
 #display_word {
   margin: auto 0;
 }
 
-/* line 808, styles.scss */
+/* line 811, styles.scss */
 .table_scrollarea + .pager-wrapper {
   margin-top: 15px;
 }
 
 /* removing context for custom tab */
-/* line 814, styles.scss */
+/* line 817, styles.scss */
 .customtab .reading_btn {
   display: none !important;
 }
 
-/* line 818, styles.scss */
+/* line 821, styles.scss */
 .loading .reading_btn {
   display: none;
 }
 
-/* line 822, styles.scss */
+/* line 825, styles.scss */
 .pager-wrapper:empty ~ .reading_btn {
   margin-left: 0;
 }
 
-/* line 826, styles.scss */
+/* line 829, styles.scss */
 .reading_btn {
   margin-left: 1em;
   display: none;
   vertical-align: top;
   margin-top: 3px;
 }
-/* line 827, styles.scss */
+/* line 830, styles.scss */
 .reading_btn .show {
   line-height: 1.1;
 }
 
-/* line 836, styles.scss */
+/* line 839, styles.scss */
 .not_loading .reading_btn {
   display: inline;
 }
 
-/* line 842, styles.scss */
+/* line 845, styles.scss */
 .reading_mode .reading_btn.show,
 .reading_btn.hide,
 .zero_results .reading_btn {
   display: none;
 }
 
-/* line 846, styles.scss */
+/* line 849, styles.scss */
 .reading_mode .reading_btn.hide {
   display: inline;
 }
 
-/* line 850, styles.scss */
+/* line 853, styles.scss */
 .loading .table_scrollarea {
   opacity: 0;
   -webkit-transition: opacity 200ms ease;
@@ -979,7 +983,7 @@ table {
   transition: opacity 200ms ease;
 }
 
-/* line 854, styles.scss */
+/* line 857, styles.scss */
 .not_loading .table_scrollarea {
   opacity: 1;
   -webkit-transition: opacity 200ms ease;
@@ -988,11 +992,11 @@ table {
   transition: opacity 200ms ease;
 }
 
-/* line 860, styles.scss */
+/* line 863, styles.scss */
 .results_table.reading {
   display: none;
 }
-/* line 862, styles.scss */
+/* line 865, styles.scss */
 .results_table.reading p {
   display: block;
   padding: 1em !important;
@@ -1000,24 +1004,24 @@ table {
   margin: 0;
 }
 
-/* line 870, styles.scss */
+/* line 873, styles.scss */
 .reading_mode .results_table {
   margin-left: 10%;
 }
-/* line 872, styles.scss */
+/* line 875, styles.scss */
 .reading_mode .results_table.kwic {
   display: none;
 }
-/* line 875, styles.scss */
+/* line 878, styles.scss */
 .reading_mode .results_table.reading {
   display: block;
 }
 
-/* line 881, styles.scss */
+/* line 884, styles.scss */
 .results_table .odd {
   background-color: #dde9ff;
 }
-/* line 884, styles.scss */
+/* line 887, styles.scss */
 .results_table .even {
   background-color: #f2f7ff;
 }
@@ -1030,24 +1034,24 @@ table {
     display : none;
 }
 */
-/* line 899, styles.scss */
+/* line 902, styles.scss */
 .reading_match {
   font-weight: bold;
   color: black !important;
 }
 
-/* line 904, styles.scss */
+/* line 907, styles.scss */
 .result_table td {
   white-space: nowrap;
 }
 
-/* line 908, styles.scss */
+/* line 911, styles.scss */
 .left {
   text-align: right;
   vertical-align: text-top;
 }
 
-/* line 913, styles.scss */
+/* line 916, styles.scss */
 .match {
   font-weight: bold;
   vertical-align: text-top;
@@ -1055,7 +1059,7 @@ table {
   padding: 0 4px;
 }
 
-/* line 920, styles.scss */
+/* line 923, styles.scss */
 .corpus_title {
   font-weight: bold;
   vertical-align: text-top;
@@ -1070,29 +1074,29 @@ table {
   padding: 3px 0;
 }
 
-/* line 936, styles.scss */
+/* line 939, styles.scss */
 .not_corpus_info .corpus_title, .not_corpus_info .empty_td {
   display: none;
 }
 
-/* line 940, styles.scss */
+/* line 943, styles.scss */
 .corpus_info {
   background-color: white !important;
 }
 
-/* line 944, styles.scss */
+/* line 947, styles.scss */
 .reading_mode .corpus_title {
   margin: 0;
   font-size: 3em;
   text-align: left;
 }
 
-/* line 950, styles.scss */
+/* line 953, styles.scss */
 .reading_mode .no_context .corpus_title {
   left: 0;
 }
 
-/* line 954, styles.scss */
+/* line 957, styles.scss */
 .corpus_title_warn {
   margin-right: -100px;
   position: relative;
@@ -1100,86 +1104,86 @@ table {
   font-variant: normal;
 }
 
-/* line 961, styles.scss */
+/* line 964, styles.scss */
 .reading_mode .corpus_title_warn {
   font-size: 12px;
   display: block;
 }
 
-/* line 966, styles.scss */
+/* line 969, styles.scss */
 .webkit .reading_mode .no_context .corpus_title_warn {
   margin-bottom: -40px;
 }
 
-/* line 971, styles.scss */
+/* line 974, styles.scss */
 .corpus_title_warn:before {
   content: "(";
 }
-/* line 974, styles.scss */
+/* line 977, styles.scss */
 .corpus_title_warn:after {
   content: ")";
 }
 
-/* line 980, styles.scss */
+/* line 983, styles.scss */
 .right {
   vertical-align: text-top;
 }
 
-/* line 984, styles.scss */
+/* line 987, styles.scss */
 .extra {
   color: #e1e1e1;
 }
 
-/* line 988, styles.scss */
+/* line 991, styles.scss */
 .alt {
   background-color: #dde9ff;
 }
-/* line 990, styles.scss */
+/* line 993, styles.scss */
 .alt td {
   border: none;
 }
 
-/* line 995, styles.scss */
+/* line 998, styles.scss */
 .attr {
   display: none;
   font-size: xx-small;
   vertical-align: bottom;
 }
 
-/* line 1001, styles.scss */
+/* line 1004, styles.scss */
 .sentence img {
   border-width: 0px;
 }
 
-/* line 1005, styles.scss */
+/* line 1008, styles.scss */
 .word {
   cursor: pointer;
 }
-/* line 1007, styles.scss */
+/* line 1010, styles.scss */
 .word.punct {
   margin-left: -3px;
 }
-/* line 1010, styles.scss */
+/* line 1013, styles.scss */
 .word:hover {
   color: indianred;
 }
 
-/* line 1015, styles.scss */
+/* line 1018, styles.scss */
 .match_sentence {
   color: black !important;
 }
 
-/* line 1019, styles.scss */
+/* line 1022, styles.scss */
 .reading_mode .word {
   color: #666;
 }
 
-/* line 1023, styles.scss */
+/* line 1026, styles.scss */
 .matching_sentence {
   color: black !important;
 }
 
-/* line 1027, styles.scss */
+/* line 1030, styles.scss */
 .word_selected {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -1189,59 +1193,59 @@ table {
   padding-left: 3px;
   margin-left: -3px;
 }
-/* line 1031, styles.scss */
+/* line 1034, styles.scss */
 .word_selected:hover {
   color: indianred;
 }
 
-/* line 1036, styles.scss */
+/* line 1039, styles.scss */
 .token_selected {
   color: #fff !important;
   background-color: #666;
 }
 
-/* line 1041, styles.scss */
+/* line 1044, styles.scss */
 .aux_selected {
   color: #000;
   background-color: #FFDDD8;
 }
 
-/* line 1046, styles.scss */
+/* line 1049, styles.scss */
 #result-container {
   clear: both;
   min-height: 400px;
 }
 
-/* line 1051, styles.scss */
+/* line 1054, styles.scss */
 #json-link {
   float: right;
   display: none;
 }
-/* line 1054, styles.scss */
+/* line 1057, styles.scss */
 #json-link img {
   border: 0px;
 }
 
-/* line 1059, styles.scss */
+/* line 1062, styles.scss */
 #columns {
   position: relative;
   max-height: 600px;
 }
 
-/* line 1064, styles.scss */
+/* line 1067, styles.scss */
 #left-column {
   position: absolute;
   left: 0px;
   right: 0;
   transition: right 300ms;
 }
-/* line 1069, styles.scss */
+/* line 1072, styles.scss */
 #left-column.sidebar_visible {
   right: 258px;
   transition: right 300ms;
 }
 
-/* line 1075, styles.scss */
+/* line 1078, styles.scss */
 #sidebar {
   position: absolute;
   right: 0px;
@@ -1250,29 +1254,29 @@ table {
   right: -268px;
   transition: right 300ms;
 }
-/* line 1082, styles.scss */
+/* line 1085, styles.scss */
 #sidebar.visible {
   transition: right 300ms;
   right: 0;
 }
-/* line 1087, styles.scss */
+/* line 1090, styles.scss */
 #sidebar.visible.fixed {
   right: 8px;
   position: fixed;
   top: 8px;
 }
-/* line 1092, styles.scss */
+/* line 1095, styles.scss */
 #sidebar:empty {
   padding: 0;
   border: none;
 }
 
-/* line 1098, styles.scss */
+/* line 1101, styles.scss */
 .external_link {
   display: none;
 }
 
-/* line 1102, styles.scss */
+/* line 1105, styles.scss */
 #sidebar li:hover .external_link {
   background-image: url("../img/fish_icon.png");
   background-origin: content-box;
@@ -1293,7 +1297,7 @@ table {
   cursor: pointer;
 }
 
-/* line 1117, styles.scss */
+/* line 1120, styles.scss */
 #sidbar_info {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1308,7 +1312,7 @@ table {
   margin-top: -4px;
 }
 
-/* line 1126, styles.scss */
+/* line 1129, styles.scss */
 .kwic_sidebar {
   background-color: #fff;
   border-style: solid;
@@ -1316,15 +1320,15 @@ table {
   border-color: #999;
 }
 
-/* line 1134, styles.scss */
+/* line 1137, styles.scss */
 #sidebar div {
   margin-bottom: 10px;
 }
-/* line 1137, styles.scss */
+/* line 1140, styles.scss */
 #sidebar p {
   margin: 0 0 0 0;
 }
-/* line 1140, styles.scss */
+/* line 1143, styles.scss */
 #sidebar ul {
   margin-top: 0;
   margin-bottom: 2px;
@@ -1332,51 +1336,51 @@ table {
   list-style: none;
   line-height: 16px;
 }
-/* line 1148, styles.scss */
+/* line 1151, styles.scss */
 #sidebar #selected_sentence > h4:last-child {
   display: none;
 }
 
-/* line 1153, styles.scss */
+/* line 1156, styles.scss */
 #dialog ol {
   margin: 10px 0;
   font-size: 12px;
   list-style: decimal;
 }
-/* line 1157, styles.scss */
+/* line 1160, styles.scss */
 #dialog ol > li {
   padding: 5px 0;
   line-height: 18px;
 }
 
-/* line 1164, styles.scss */
+/* line 1167, styles.scss */
 span.absStat {
   color: #999999;
 }
 
-/* line 1169, styles.scss */
+/* line 1172, styles.scss */
 a.absStat {
   color: #999999;
 }
-/* line 1171, styles.scss */
+/* line 1174, styles.scss */
 a.absStat:hover {
   color: indianred;
 }
-/* line 1175, styles.scss */
+/* line 1178, styles.scss */
 a.relStat {
   color: #000000;
 }
-/* line 1177, styles.scss */
+/* line 1180, styles.scss */
 a.relStat:hover {
   color: indianred;
 }
 
-/* line 1183, styles.scss */
+/* line 1186, styles.scss */
 .word_column {
   text-align: left;
 }
 
-/* line 1187, styles.scss */
+/* line 1190, styles.scss */
 .linked_sentence {
   overflow-x: visible;
   font-weight: normal;
@@ -1384,51 +1388,51 @@ a.relStat:hover {
   font-style: italic;
   position: relative;
 }
-/* line 1198, styles.scss */
+/* line 1201, styles.scss */
 .linked_sentence .left, .linked_sentence .match, .linked_sentence .right {
   display: none;
 }
 
-/* line 1204, styles.scss */
+/* line 1207, styles.scss */
 #about_content ul {
   padding-left: 10px;
   margin-top: 8px;
 }
 
-/* line 1209, styles.scss */
+/* line 1212, styles.scss */
 #login {
   /*display : none;*/
 }
 
-/* line 1213, styles.scss */
+/* line 1216, styles.scss */
 #login_popup {
   display: none;
 }
-/* line 1215, styles.scss */
+/* line 1218, styles.scss */
 #login_popup * {
   display: block;
 }
-/* line 1218, styles.scss */
+/* line 1221, styles.scss */
 #login_popup label {
   margin-top: 5px;
 }
-/* line 1221, styles.scss */
+/* line 1224, styles.scss */
 #login_popup .err_msg {
   display: none;
   font-size: .8em;
 }
-/* line 1225, styles.scss */
+/* line 1228, styles.scss */
 #login_popup input[type=submit] {
   float: right;
   margin-top: 2em;
 }
 
-/* line 1231, styles.scss */
+/* line 1234, styles.scss */
 .logged_in #login {
   display: none;
 }
 
-/* line 1235, styles.scss */
+/* line 1238, styles.scss */
 #log_out {
   display: none;
   float: right;
@@ -1437,23 +1441,23 @@ a.relStat:hover {
   margin-left: 3px;
 }
 
-/* line 1243, styles.scss */
+/* line 1246, styles.scss */
 .logged_in #log_out {
   display: block;
 }
 
 /* when selecting a word, not a lemgram, this pops up. */
-/* line 1249, styles.scss */
+/* line 1252, styles.scss */
 .lemgram_select {
   margin-top: 8px;
 }
 
-/* line 1253, styles.scss */
+/* line 1256, styles.scss */
 label[for=lemgram_select]:before {
   display: block;
 }
 
-/* line 1259, styles.scss */
+/* line 1262, styles.scss */
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
@@ -1464,12 +1468,12 @@ label[for=lemgram_select]:before {
   border-radius: 5px;
 }
 
-/* line 1266, styles.scss */
+/* line 1269, styles.scss */
 .inline_list {
   margin: 0;
   padding: 0;
 }
-/* line 1269, styles.scss */
+/* line 1272, styles.scss */
 .inline_list li {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1479,25 +1483,25 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1274, styles.scss */
+/* line 1277, styles.scss */
 .msie8 .inline_list li {
   display: inline;
 }
 
-/* line 1278, styles.scss */
+/* line 1281, styles.scss */
 .inline_list span {
   padding: 0 5px;
   color: grey;
 }
 
-/* line 1283, styles.scss */
+/* line 1286, styles.scss */
 #mode_switch {
   margin: 0;
   margin-right: 10px;
   float: left;
   padding-left: 0;
 }
-/* line 1290, styles.scss */
+/* line 1293, styles.scss */
 #mode_switch li.visible {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1506,54 +1510,54 @@ label[for=lemgram_select]:before {
   zoom: 1;
   *display: inline;
 }
-/* line 1293, styles.scss */
+/* line 1296, styles.scss */
 #mode_switch li.selected a {
   color: black;
 }
-/* line 1296, styles.scss */
+/* line 1299, styles.scss */
 #mode_switch li.visible:after {
   content: "|";
   margin: 0 0.3em;
 }
-/* line 1300, styles.scss */
+/* line 1303, styles.scss */
 #mode_switch li:last-child:after {
   display: none;
 }
-/* line 1305, styles.scss */
+/* line 1308, styles.scss */
 #mode_switch li.menu_more a {
   background: rgba(0, 0, 0, 0);
 }
-/* line 1308, styles.scss */
+/* line 1311, styles.scss */
 #mode_switch li.menu_more i {
   margin-left: 5px;
 }
 
-/* line 1315, styles.scss */
+/* line 1318, styles.scss */
 .radioList_selected {
   color: black !important;
   cursor: default;
 }
 
-/* line 1320, styles.scss */
+/* line 1323, styles.scss */
 .custom_anchor {
   padding-right: 8px !important;
 }
 
-/* line 1328, styles.scss */
+/* line 1331, styles.scss */
 .tabClose {
   padding: 0 !important;
   margin-right: 6px;
   cursor: pointer !important;
 }
 
-/* line 1334, styles.scss */
+/* line 1337, styles.scss */
 .hits_picture_table {
   /*    opacity: .3; */
   width: 100%;
   padding: 0px;
 }
 
-/* line 1342, styles.scss */
+/* line 1345, styles.scss */
 .hits_picture {
   cursor: pointer;
   position: absolute;
@@ -1566,17 +1570,17 @@ label[for=lemgram_select]:before {
   transition: left 400ms ease;
 }
 
-/* line 1351, styles.scss */
+/* line 1354, styles.scss */
 #showLineDiagram {
   position: relative;
   top: 3px;
 }
 
-/* line 1357, styles.scss */
+/* line 1360, styles.scss */
 .query_token .logic_switcher {
   float: left;
 }
-/* line 1360, styles.scss */
+/* line 1363, styles.scss */
 .query_token .close_btn {
   cursor: pointer;
   float: right;
@@ -1587,7 +1591,7 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
   font-size: 15px;
 }
-/* line 1367, styles.scss */
+/* line 1370, styles.scss */
 .query_token:only-of-type .close_btn {
   opacity: 0;
   cursor: default;
@@ -1597,17 +1601,17 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-/* line 1374, styles.scss */
+/* line 1377, styles.scss */
 .right_col {
   padding-right: 2px;
 }
 
-/* line 1377, styles.scss */
+/* line 1380, styles.scss */
 .ie8 .right_col .input {
   float: right;
 }
 
-/* line 1381, styles.scss */
+/* line 1384, styles.scss */
 .query_arg {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1621,11 +1625,11 @@ label[for=lemgram_select]:before {
   padding-right: 13px;
 }
 
-/* line 1390, styles.scss */
+/* line 1393, styles.scss */
 .or_arg {
   margin-bottom: 5px;
 }
-/* line 1392, styles.scss */
+/* line 1395, styles.scss */
 .or_arg .ui-icon-info {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1636,7 +1640,7 @@ label[for=lemgram_select]:before {
   cursor: pointer;
 }
 
-/* line 1398, styles.scss */
+/* line 1401, styles.scss */
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
   cursor: default;
   opacity: 0;
@@ -1646,7 +1650,7 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-/* line 1404, styles.scss */
+/* line 1407, styles.scss */
 .arg_header {
   opacity: 0;
   -webkit-transition: opacity 200ms ease;
@@ -1656,7 +1660,7 @@ label[for=lemgram_select]:before {
   margin-bottom: 1px;
 }
 
-/* line 1410, styles.scss */
+/* line 1413, styles.scss */
 .or_arg:not(:only-child):first-child .arg_header {
   opacity: 1;
   -webkit-transition: opacity 200ms ease;
@@ -1665,12 +1669,12 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-/* line 1419, styles.scss */
+/* line 1422, styles.scss */
 .arg_header {
   font-size: 10px;
 }
 
-/* line 1424, styles.scss */
+/* line 1427, styles.scss */
 .insert_or {
   padding-top: 6px;
   right: 0;
@@ -1678,7 +1682,7 @@ label[for=lemgram_select]:before {
   float: right;
 }
 
-/* line 1432, styles.scss */
+/* line 1435, styles.scss */
 #time {
   margin-top: 10px;
   display: -moz-inline-stack;
@@ -1689,14 +1693,14 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1438, styles.scss */
+/* line 1441, styles.scss */
 #time_inputs input {
   border: none;
   font-weight: bold;
   width: 30px;
 }
 
-/* line 1445, styles.scss */
+/* line 1448, styles.scss */
 #time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1708,7 +1712,7 @@ label[for=lemgram_select]:before {
   height: 70px;
 }
 
-/* line 1451, styles.scss */
+/* line 1454, styles.scss */
 #rest_time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1722,7 +1726,7 @@ label[for=lemgram_select]:before {
   bottom: 20px;
 }
 
-/* line 1459, styles.scss */
+/* line 1462, styles.scss */
 #time_slider {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1734,7 +1738,7 @@ label[for=lemgram_select]:before {
   margin-right: 10px;
 }
 
-/* line 1465, styles.scss */
+/* line 1468, styles.scss */
 .ui-slider-handle {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -1743,7 +1747,7 @@ label[for=lemgram_select]:before {
   border-radius: 20px;
 }
 
-/* line 1469, styles.scss */
+/* line 1472, styles.scss */
 .pager-wrapper {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1753,12 +1757,12 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1475, styles.scss */
+/* line 1478, styles.scss */
 .sidebar_url {
   white-space: nowrap;
 }
 
-/* line 1479, styles.scss */
+/* line 1482, styles.scss */
 .arcDiagramPicture {
   cursor: pointer;
   margin-bottom: -2px;
@@ -1766,18 +1770,18 @@ label[for=lemgram_select]:before {
   padding-right: 5px;
 }
 
-/* line 1486, styles.scss */
+/* line 1489, styles.scss */
 .c0 {
   position: relative;
 }
 
-/* line 1490, styles.scss */
+/* line 1493, styles.scss */
 .arcDiagramPicture {
   position: absolute;
   right: 0;
 }
 
-/* line 1496, styles.scss */
+/* line 1499, styles.scss */
 .lemgram_section {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1788,7 +1792,7 @@ label[for=lemgram_select]:before {
   margin-right: 30px;
 }
 
-/* line 1501, styles.scss */
+/* line 1504, styles.scss */
 .tableContainer {
   margin-bottom: 15px;
   display: -moz-inline-stack;
@@ -1801,7 +1805,7 @@ label[for=lemgram_select]:before {
   border: solid 1px lightgray;
   margin-right: 20px;
 }
-/* line 1507, styles.scss */
+/* line 1510, styles.scss */
 .tableContainer > .header {
   color: #333;
   font-size: 1.1em;
@@ -1809,45 +1813,45 @@ label[for=lemgram_select]:before {
   font-family: Lucida Grande, sans-serif;
 }
 
-/* line 1515, styles.scss */
+/* line 1518, styles.scss */
 .explanation {
   font-size: 12px;
   padding: 0 20px;
 }
 
-/* line 1520, styles.scss */
+/* line 1523, styles.scss */
 .ui-dialog ul, ol {
   padding-left: 0;
 }
 
-/* line 1524, styles.scss */
+/* line 1527, styles.scss */
 .ui-dialog li {
   margin-bottom: 3px;
 }
 
-/* line 1528, styles.scss */
+/* line 1531, styles.scss */
 .autocomplete-item-disabled a {
   font-style: italic;
   color: indianred;
   opacity: 0.7;
 }
 
-/* line 1534, styles.scss */
+/* line 1537, styles.scss */
 #showLineDiagram {
   display: none;
 }
 
-/* line 1538, styles.scss */
+/* line 1541, styles.scss */
 .lab #showLineDiagram {
   display: inline;
 }
 
-/* line 1542, styles.scss */
+/* line 1545, styles.scss */
 #labs_logo {
   display: none;
 }
 
-/* line 1546, styles.scss */
+/* line 1549, styles.scss */
 .lab #labs_logo {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1857,21 +1861,21 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1550, styles.scss */
+/* line 1553, styles.scss */
 #korplink {
   display: none;
 }
 
-/* line 1555, styles.scss */
+/* line 1558, styles.scss */
 .lab #korplablink {
   display: none;
 }
-/* line 1558, styles.scss */
+/* line 1561, styles.scss */
 .lab #korplink {
   display: block;
 }
 
-/* line 1563, styles.scss */
+/* line 1566, styles.scss */
 #cog {
   float: right;
   margin-top: -6px;
@@ -1879,26 +1883,26 @@ label[for=lemgram_select]:before {
   height: 26px;
 }
 
-/* line 1570, styles.scss */
+/* line 1573, styles.scss */
 #cog_menu {
   position: absolute;
   font-size: inherit;
   text-align: right;
 }
 
-/* line 1576, styles.scss */
+/* line 1579, styles.scss */
 .ui-menu {
   box-shadow: 2px 2px 3px grey;
   z-index: 999;
 }
 
-/* line 1581, styles.scss */
+/* line 1584, styles.scss */
 .korp_fail {
   height: 146px;
   width: 290px;
 }
 
-/* line 1586, styles.scss */
+/* line 1589, styles.scss */
 .fail_text {
   margin: 1em 0 0 1em;
   vertical-align: top;
@@ -1906,76 +1910,76 @@ label[for=lemgram_select]:before {
   font-size: 1.3em;
 }
 
-/* line 1593, styles.scss */
+/* line 1596, styles.scss */
 .error_msg ~ * {
   display: none !important;
 }
 
-/* line 1597, styles.scss */
+/* line 1600, styles.scss */
 .msd {
   font-size: 0.8em;
 }
 
-/* line 1602, styles.scss */
+/* line 1605, styles.scss */
 #korp-simple .btn-group {
   display: inline;
 }
 
-/* line 1608, styles.scss */
+/* line 1611, styles.scss */
 .search_submit {
   display: inline;
   margin-right: 5px;
 }
 
-/* line 1615, styles.scss */
+/* line 1618, styles.scss */
 .search_tabs li:nth-child(4) {
   margin-left: 1em;
 }
-/* line 1618, styles.scss */
+/* line 1621, styles.scss */
 .search_tabs .tab-content {
   overflow: visible;
 }
-/* line 1621, styles.scss */
+/* line 1624, styles.scss */
 .search_tabs .search_compare {
   padding-top: 1em;
 }
-/* line 1623, styles.scss */
+/* line 1626, styles.scss */
 .search_tabs .search_compare button {
   margin-top: 2em;
   display: block;
 }
-/* line 1627, styles.scss */
+/* line 1630, styles.scss */
 .search_tabs .search_compare select {
   margin: 0 5px;
 }
 
-/* line 1633, styles.scss */
+/* line 1636, styles.scss */
 .nav-tabs li.disabled {
   opacity: 0.6;
 }
 
-/* line 1637, styles.scss */
+/* line 1640, styles.scss */
 #results-wrapper .nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
 
-/* line 1641, styles.scss */
+/* line 1644, styles.scss */
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-/* line 1645, styles.scss */
+/* line 1648, styles.scss */
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-/* line 1654, styles.scss */
+/* line 1657, styles.scss */
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 1659, styles.scss */
+/* line 1662, styles.scss */
 .val_mod {
   letter-spacing: 1px;
   font-size: .8em;
@@ -1983,14 +1987,14 @@ label[for=lemgram_select]:before {
   margin-right: 1px;
 }
 
-/* line 1666, styles.scss */
+/* line 1669, styles.scss */
 .mod_menu {
   cursor: default;
   position: absolute;
   font-size: .9em;
 }
 
-/* line 1674, styles.scss */
+/* line 1677, styles.scss */
 slider {
   display: inline-block;
   position: relative;
@@ -1999,19 +2003,19 @@ slider {
   margin: 25px 5px 25px 5px;
   vertical-align: middle;
 }
-/* line 1682, styles.scss */
+/* line 1685, styles.scss */
 slider span {
   white-space: nowrap;
   position: absolute;
   display: inline-block;
 }
-/* line 1686, styles.scss */
+/* line 1689, styles.scss */
 slider span.base {
   width: 100%;
   height: 100%;
   padding: 0;
 }
-/* line 1691, styles.scss */
+/* line 1694, styles.scss */
 slider span.bar {
   width: 100%;
   height: 100%;
@@ -2024,7 +2028,7 @@ slider span.bar {
   background-image: linear-gradient(top, #cccccc, #ffffff);
   box-shadow: inset 0 1px 3px rgba(10, 10, 10, 0.5);
 }
-/* line 1702, styles.scss */
+/* line 1705, styles.scss */
 slider span.bar.selection {
   width: 0%;
   z-index: 1;
@@ -2035,7 +2039,7 @@ slider span.bar.selection {
   background-image: linear-gradient(top, #ababab, #c6c6c6);
   box-shadow: none;
 }
-/* line 1710, styles.scss */
+/* line 1713, styles.scss */
 slider span.pointer {
   cursor: pointer;
   width: 15px;
@@ -2052,19 +2056,19 @@ slider span.pointer {
   border-radius: 1em/1em;
   box-shadow: 2px 2px 3px grey;
 }
-/* line 1726, styles.scss */
+/* line 1729, styles.scss */
 slider span.pointer:after {
   box-shadow: inset 2px 2px 5px;
 }
-/* line 1730, styles.scss */
+/* line 1733, styles.scss */
 slider span.pointer:hover:after {
   background-color: #000;
 }
-/* line 1733, styles.scss */
+/* line 1736, styles.scss */
 slider span.pointer.active:hover:after {
   background-color: #f00;
 }
-/* line 1738, styles.scss */
+/* line 1741, styles.scss */
 slider span.bubble {
   cursor: default;
   top: -22px;
@@ -2072,57 +2076,57 @@ slider span.bubble {
   font-size: 0.7em;
   font-family: sans-serif;
 }
-/* line 1744, styles.scss */
+/* line 1747, styles.scss */
 slider span.bubble.selection {
   top: 15px;
 }
-/* line 1747, styles.scss */
+/* line 1750, styles.scss */
 slider span.bubble.limit {
   color: #808080;
 }
 
-/* line 1756, styles.scss */
+/* line 1759, styles.scss */
 .val_mod.insensitive {
   color: lightgrey;
 }
-/* line 1759, styles.scss */
+/* line 1762, styles.scss */
 .val_mod.sensitive {
   color: black;
 }
-/* line 1761, styles.scss */
+/* line 1764, styles.scss */
 .val_mod.sensitive + .mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-/* line 1765, styles.scss */
+/* line 1768, styles.scss */
 .val_mod.insensitive + .mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-/* line 1770, styles.scss */
+/* line 1773, styles.scss */
 .enumerate {
   counter-increment: wordpic;
 }
-/* line 1772, styles.scss */
+/* line 1775, styles.scss */
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-/* line 1777, styles.scss */
+/* line 1780, styles.scss */
 #showBarPlot {
   display: none;
 }
 
-/* line 1785, styles.scss */
+/* line 1788, styles.scss */
 #wordclassChkParent {
   float: right;
 }
 
-/* line 1791, styles.scss */
+/* line 1794, styles.scss */
 .nav-tabs li {
   position: relative;
 }
 
-/* line 1795, styles.scss */
+/* line 1798, styles.scss */
 .tab_progress {
   height: 2px;
   background-color: darkblue;
@@ -2133,12 +2137,12 @@ slider span.bubble.limit {
   bottom: 0;
 }
 
-/* line 1805, styles.scss */
+/* line 1808, styles.scss */
 .not_loading .tab_progress {
   display: none;
 }
 
-/* line 1809, styles.scss */
+/* line 1812, styles.scss */
 .not_loading .hits_picture {
   left: 180px;
   -webkit-transition: width 400ms ease;
@@ -2147,7 +2151,7 @@ slider span.bubble.limit {
   transition: width 400ms ease;
 }
 
-/* line 1813, styles.scss */
+/* line 1816, styles.scss */
 .progress_container {
   width: 143px;
   overflow-x: hidden;
@@ -2157,7 +2161,7 @@ slider span.bubble.limit {
   transition: width 400ms ease;
 }
 
-/* line 1819, styles.scss */
+/* line 1822, styles.scss */
 #results-kwic.not_loading .progress_container {
   width: 0;
   -webkit-transition: width 400ms ease;
@@ -2166,31 +2170,31 @@ slider span.bubble.limit {
   transition: width 400ms ease;
 }
 
-/* line 1825, styles.scss */
+/* line 1828, styles.scss */
 .not_loading .progress_container {
   display: none;
 }
 
-/* line 1830, styles.scss */
+/* line 1833, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 1833, styles.scss */
+/* line 1836, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 1836, styles.scss */
+/* line 1839, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-/* line 1843, styles.scss */
+/* line 1846, styles.scss */
 .arg_val_container {
   margin-top: 2px;
 }
 
-/* line 1847, styles.scss */
+/* line 1850, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -2198,76 +2202,76 @@ slider span.bubble.limit {
   letter-spacing: 1.1;
 }
 
-/* line 1854, styles.scss */
+/* line 1857, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-/* line 1860, styles.scss */
+/* line 1863, styles.scss */
 #char_table {
   display: none;
 }
 
-/* line 1864, styles.scss */
+/* line 1867, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-/* line 1871, styles.scss */
+/* line 1874, styles.scss */
 #deptree_popup {
   overflow-y: hidden;
 }
-/* line 1873, styles.scss */
+/* line 1876, styles.scss */
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-/* line 1877, styles.scss */
+/* line 1880, styles.scss */
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-/* line 1883, styles.scss */
+/* line 1886, styles.scss */
 .smoother.ui-slider {
   width: 200px;
 }
 
-/* line 1887, styles.scss */
+/* line 1890, styles.scss */
 .legend {
   float: right;
 }
-/* line 1889, styles.scss */
+/* line 1892, styles.scss */
 .legend .action {
   opacity: 0.5 !important;
   color: white;
 }
 
-/* line 1895, styles.scss */
+/* line 1898, styles.scss */
 .slick-viewport .slick-cell-checkboxsel input {
   margin-left: 6px;
 }
 
-/* line 1899, styles.scss */
+/* line 1902, styles.scss */
 .graph_btn_icon {
   position: absolute;
   left: 0;
 }
 
-/* line 1904, styles.scss */
+/* line 1907, styles.scss */
 .graph_header .controls {
   float: left;
 }
 
-/* line 1909, styles.scss */
+/* line 1912, styles.scss */
 .stats_header {
   margin-bottom: 1em;
 }
-/* line 1911, styles.scss */
+/* line 1914, styles.scss */
 .stats_header > * {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2277,33 +2281,33 @@ slider span.bubble.limit {
   *display: inline;
 }
 
-/* line 1915, styles.scss */
+/* line 1918, styles.scss */
 .reading_mode .show_deptree {
   display: none;
 }
 
-/* line 1919, styles.scss */
+/* line 1922, styles.scss */
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
   left: -3em;
 }
 
-/* line 1924, styles.scss */
+/* line 1927, styles.scss */
 .form-bar .rickshaw_graph .x_tick .title {
   left: 0;
 }
 
-/* line 1929, styles.scss */
+/* line 1932, styles.scss */
 .y_ticks.plain g:first-of-type text {
   display: none;
 }
 
-/* line 1933, styles.scss */
+/* line 1936, styles.scss */
 .form-bar .legend li:last-child:not(:only-child) {
   display: none;
 }
 
-/* line 1936, styles.scss */
+/* line 1939, styles.scss */
 .form_switch {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2313,69 +2317,69 @@ slider span.bubble.limit {
   *display: inline;
 }
 
-/* line 1940, styles.scss */
+/* line 1943, styles.scss */
 line.tick {
   display: none;
 }
 
-/* line 1944, styles.scss */
+/* line 1947, styles.scss */
 .dot.active {
   cursor: pointer;
 }
 
-/* line 1948, styles.scss */
+/* line 1951, styles.scss */
 .rickshaw_graph .x_tick {
   border: none !important;
 }
 
-/* line 1951, styles.scss */
+/* line 1954, styles.scss */
 .zoom_slider {
   margin-top: 30px;
   width: 100% !important;
 }
 
-/* line 1956, styles.scss */
+/* line 1959, styles.scss */
 #main > #msd_popup {
   display: none !important;
 }
 
-/* line 1960, styles.scss */
+/* line 1963, styles.scss */
 .popupchecks .header {
   white-space: nowrap;
 }
 
-/* line 1964, styles.scss */
+/* line 1967, styles.scss */
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-/* line 1967, styles.scss */
+/* line 1970, styles.scss */
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-/* line 1970, styles.scss */
+/* line 1973, styles.scss */
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
 
-/* line 1974, styles.scss */
+/* line 1977, styles.scss */
 #myGrid {
   width: 100%;
   height: 500px;
 }
 
-/* line 1979, styles.scss */
+/* line 1982, styles.scss */
 #myGrid, #myGrid * {
   box-sizing: content-box;
 }
 
-/* line 1982, styles.scss */
+/* line 1985, styles.scss */
 .loading .exportStatsSection {
   display: none;
 }
 
-/* line 1986, styles.scss */
+/* line 1989, styles.scss */
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #cccccc;
   border: 1px solid #AAAAAA;
@@ -2383,38 +2387,38 @@ line.tick {
   color: #222222;
   padding-top: 0.2em;
 }
-/* line 1994, styles.scss */
+/* line 1997, styles.scss */
 .nav.nav-tabs li {
   cursor: pointer;
   margin-right: 0.2em;
 }
-/* line 1998, styles.scss */
+/* line 2001, styles.scss */
 .nav.nav-tabs .badge {
   margin-left: 1em;
 }
 
-/* line 2007, styles.scss */
+/* line 2010, styles.scss */
 .tabbable {
   border: 1px solid #AAAAAA;
   border-radius: 2px 2px 2px 2px;
   color: #222222;
   padding: 3px;
 }
-/* line 2012, styles.scss */
+/* line 2015, styles.scss */
 .tabbable .tab-content {
   padding: 1em;
 }
-/* line 2015, styles.scss */
+/* line 2018, styles.scss */
 .tabbable .close_icon {
   cursor: pointer;
   padding-left: 5px;
 }
-/* line 2019, styles.scss */
+/* line 2022, styles.scss */
 .tabbable .nav.nav-tabs {
   margin: 0;
   padding-left: 0;
 }
-/* line 2022, styles.scss */
+/* line 2025, styles.scss */
 .tabbable .nav.nav-tabs li {
   background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
   border: 1px solid #D3D3D3;
@@ -2422,47 +2426,47 @@ line.tick {
   font-weight: normal;
   margin-bottom: -1px;
 }
-/* line 2028, styles.scss */
+/* line 2031, styles.scss */
 .tabbable .nav.nav-tabs li:first-child {
   margin-left: 0.5em;
 }
-/* line 2031, styles.scss */
+/* line 2034, styles.scss */
 .tabbable .nav.nav-tabs li a {
   padding-bottom: 0.3em !important;
   padding-top: 0.3em !important;
   padding: 0.2em 1em;
   color: #555555;
 }
-/* line 2037, styles.scss */
+/* line 2040, styles.scss */
 .tabbable .nav.nav-tabs li.active {
   border-bottom-color: transparent;
 }
 
-/* line 2044, styles.scss */
+/* line 2047, styles.scss */
 .search_tabs.tabbable {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 2050, styles.scss */
+/* line 2053, styles.scss */
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   border-radius: 0;
   border-color: transparent;
 }
 
-/* line 2054, styles.scss */
+/* line 2057, styles.scss */
 .nav-tabs > li > a, .nav-pills > li > a {
   margin-right: 0;
 }
 
-/* line 2058, styles.scss */
+/* line 2061, styles.scss */
 .pagination {
   height: 20px;
   margin: 0;
 }
 
-/* line 2062, styles.scss */
+/* line 2065, styles.scss */
 .pagination a, .pagination span {
   border-width: 1px;
   line-height: 18px;
@@ -2470,23 +2474,23 @@ line.tick {
   color: #555;
 }
 
-/* line 2069, styles.scss */
+/* line 2072, styles.scss */
 .modal-header {
   display: none;
 }
 
-/* line 2072, styles.scss */
+/* line 2075, styles.scss */
 .modal .modal-header {
   display: block;
 }
 
-/* line 2076, styles.scss */
+/* line 2079, styles.scss */
 .modal {
   max-height: 600px;
   overflow-y: auto;
 }
 
-/* line 2082, styles.scss */
+/* line 2085, styles.scss */
 .compare_result .column {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2495,7 +2499,7 @@ line.tick {
   zoom: 1;
   *display: inline;
 }
-/* line 2085, styles.scss */
+/* line 2088, styles.scss */
 .compare_result .meter {
   cursor: pointer;
   position: relative;
@@ -2505,53 +2509,53 @@ line.tick {
   -o-transition: all 200ms ease;
   transition: all 200ms ease;
 }
-/* line 2092, styles.scss */
+/* line 2095, styles.scss */
 .compare_result .meter:hover {
   color: navy;
   border: 1px solid #aac8ff;
 }
-/* line 2105, styles.scss */
+/* line 2108, styles.scss */
 .compare_result .badge {
   position: absolute;
   right: 0;
   top: 4px;
 }
-/* line 2110, styles.scss */
+/* line 2113, styles.scss */
 .compare_result .background {
   padding: 5px 0;
 }
-/* line 2114, styles.scss */
+/* line 2117, styles.scss */
 .compare_result .column_1 ul {
   background-color: #f1f6ff;
   border: 1px solid #dde9ff;
 }
-/* line 2117, styles.scss */
+/* line 2120, styles.scss */
 .compare_result .column_1 ul .background {
   background-color: #dde9ff;
 }
-/* line 2121, styles.scss */
+/* line 2124, styles.scss */
 .compare_result .column_2 ul {
   background-color: #fff9ec;
   border: 1px solid #FFF3D8;
 }
-/* line 2124, styles.scss */
+/* line 2127, styles.scss */
 .compare_result .column_2 ul .background {
   background-color: #FFF3D8;
 }
-/* line 2128, styles.scss */
+/* line 2131, styles.scss */
 .compare_result ul {
   padding: 2px;
   margin-right: 2em;
   width: 400px;
   font-size: 1.1em;
 }
-/* line 2135, styles.scss */
+/* line 2138, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
   white-space: nowrap;
 }
 
-/* line 2150, styles.scss */
+/* line 2153, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2559,39 +2563,39 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 2152, styles.scss */
+/* line 2155, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 2155, styles.scss */
+/* line 2158, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 2163, styles.scss */
+/* line 2166, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-/* line 2174, styles.scss */
+/* line 2177, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }
 
-/* line 2177, styles.scss */
+/* line 2180, styles.scss */
 .loading .close_icon {
   display: none;
 }
 
-/* line 2182, styles.scss */
+/* line 2185, styles.scss */
 .badge {
   padding-right: 5px;
   padding-left: 6px;
 }
 
-/* line 2187, styles.scss */
+/* line 2190, styles.scss */
 .popper_menu {
   width: 130px;
 }
@@ -2599,43 +2603,43 @@ line.tick {
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
-/* line 2199, styles.scss */
+/* line 2202, styles.scss */
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
-/* line 2204, styles.scss */
+/* line 2207, styles.scss */
 .bs-callout h4 {
   margin-top: 0;
 }
 
-/* line 2207, styles.scss */
+/* line 2210, styles.scss */
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
-/* line 2211, styles.scss */
+/* line 2214, styles.scss */
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
-/* line 2216, styles.scss */
+/* line 2219, styles.scss */
 .bs-callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
 }
 
-/* line 2220, styles.scss */
+/* line 2223, styles.scss */
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
-/* line 2224, styles.scss */
+/* line 2227, styles.scss */
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;

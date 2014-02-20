@@ -281,7 +281,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 korpApp.directive "meter", () ->
     template: '''
         <div>
-            <div class="background">{{displayWd}}</div>
+            <div class="background" ng-bind-html="displayWd | trust"></div>
             <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>
         </div>
     '''
@@ -428,3 +428,22 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
             s.data.splice(i, 1)
 
   
+korpApp.directive "clickCover", () ->
+    scope : 
+        clickCover : "="
+    link : (scope, elem, attr) ->
+        cover = $("<div>").css(
+            position: "absolute"
+            top: 0
+            left: 0
+            right : 0
+            bottom : 0
+        ).on "click", () -> return false
+        pos = elem.css("position") or "static"
+        scope.$watch "clickCover", (val) ->
+            if val
+                elem.prepend(cover)
+                elem.css("position", "relative").addClass("covered")
+            else
+                cover.remove()
+                elem.css("position", pos).removeClass("covered")

@@ -1,10 +1,24 @@
 korpApp = angular.module("korpApp")
 
 
-korpApp.controller "SearchCtrl", ($scope) ->
-    c.log "searchctrl original", $scope
+korpApp.controller "SearchCtrl", ($scope, $location) ->
     $scope.visibleTabs = [true, true, true, true]
-    $scope.extendedTmpl = "views/extended_tmpl.html";
+    $scope.extendedTmpl = "views/extended_tmpl.html"
+    $scope.isCompareSelected = false
+
+    $scope.selectCompare = () ->
+        $scope.isCompareSelected = true
+    $scope.deselectCompare = () ->
+        $scope.isCompareSelected = false
+
+    $scope.$watch( (() -> $location.search().search_tab),
+        (val) ->
+            c.log "search tab watch", val, val == 3
+            $scope.isCompareSelected = val == 3
+    )
+
+
+
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope

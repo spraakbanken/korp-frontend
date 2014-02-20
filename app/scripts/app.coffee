@@ -121,3 +121,9 @@ korpApp.controller "headerCtrl", ($scope, $location) ->
             location.href = location.pathname
         else
             location.href = location.pathname + "?mode=" + modeId
+
+
+korpApp.filter "trust", ($sce) ->
+    return (input) ->
+        $sce.trustAsHtml input
+

@@ -294,7 +294,7 @@
 
   korpApp.directive("meter", function() {
     return {
-      template: '<div>\n    <div class="background">{{displayWd}}</div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
+      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip="absolut förekomst">{{meter[2]}}</div>\n</div>',
       replace: true,
       scope: {
         meter: "=",
@@ -443,6 +443,36 @@
           }
           return s.data.splice(i, 1);
         };
+      }
+    };
+  });
+
+  korpApp.directive("clickCover", function() {
+    return {
+      scope: {
+        clickCover: "="
+      },
+      link: function(scope, elem, attr) {
+        var cover, pos;
+        cover = $("<div>").css({
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }).on("click", function() {
+          return false;
+        });
+        pos = elem.css("position") || "static";
+        return scope.$watch("clickCover", function(val) {
+          if (val) {
+            elem.prepend(cover);
+            return elem.css("position", "relative").addClass("covered");
+          } else {
+            cover.remove();
+            return elem.css("position", pos).removeClass("covered");
+          }
+        });
       }
     };
   });

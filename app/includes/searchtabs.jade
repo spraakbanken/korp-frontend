@@ -3,7 +3,6 @@ div(ng-controller="SearchCtrl")
     tab(heading='{{"simple" | loc}}', ng-if="visibleTabs[0]")
       include simple
     tab(heading='{{"detailed" | loc}}', ng-if="visibleTabs[1]")
-      //- include extended
       .extended(ng-include='extendedTmpl')
 
     tab(heading='{{"advanced" | loc}}', ng-if="visibleTabs[2]", ng-controller="AdvancedCtrl")
@@ -42,7 +41,7 @@ div(ng-controller="SearchCtrl")
              loc group by obj.group | \
              loc for obj in getAttrs()')
           button.btn.btn-small(ng-click='sendCompare()') {{'compare_vb' | loc}}
-  #search_options.ui-widget-content.ui-corner-bottom
+  #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div
       span(style='font-size: .9em;') KWIC: 
       select#num_hits.num_hits(data-history='hpp', data-prefix='hits_per_page', rel='localize[hits_per_page]')

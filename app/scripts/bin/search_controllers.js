@@ -3,10 +3,22 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("SearchCtrl", function($scope) {
-    c.log("searchctrl original", $scope);
+  korpApp.controller("SearchCtrl", function($scope, $location) {
     $scope.visibleTabs = [true, true, true, true];
-    return $scope.extendedTmpl = "views/extended_tmpl.html";
+    $scope.extendedTmpl = "views/extended_tmpl.html";
+    $scope.isCompareSelected = false;
+    $scope.selectCompare = function() {
+      return $scope.isCompareSelected = true;
+    };
+    $scope.deselectCompare = function() {
+      return $scope.isCompareSelected = false;
+    };
+    return $scope.$watch((function() {
+      return $location.search().search_tab;
+    }), function(val) {
+      c.log("search tab watch", val, val === 3);
+      return $scope.isCompareSelected = val === 3;
+    });
   });
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
