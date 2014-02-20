@@ -17,7 +17,7 @@
     "jquery-bbq": "https://github.com/cowboy/jquery-bbq.git#1.2.1",
     "modernizr": "~2.6.2",
     "yepnope": "~1.5.4",
-    "angular-bootstrap": "https://github.com/jroxendal/bootstrap.git#0.10.1",
+    "angular-bootstrap": "~0.10.0",
     "ui-slider": "https://github.com/angular-ui/ui-slider.git",
     "angular-spinner": "~0.2.1",
     "angular-slider": "~0.1.6",

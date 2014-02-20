@@ -435,18 +435,19 @@
     };
 
     SimpleSearch.prototype.getCQP = function(word) {
-      var cqp, currentText, query, suffix, val, wordArray;
+      var cqp, currentText, lemgram, query, suffix, val, wordArray;
       currentText = $.trim(word || $("#simple_text").val() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
         val = "[lex contains \"" + currentText + "\"]";
       } else if (this.s.placeholder) {
-        val = "[lex contains '" + (regescape(this.s.placeholder)) + "'";
+        lemgram = regescape(this.s.placeholder);
+        val = "[lex contains '" + lemgram + "'";
         if (this.isSearchPrefix()) {
-          val += " | prefix contains " + (regescape(this.s.placeholder)) + " ";
+          val += " | prefix contains " + lemgram + " ";
         }
         if (this.isSearchSuffix()) {
-          val += " | suffix contains " + (regescape(this.s.placeholder));
+          val += " | suffix contains " + lemgram;
         }
         val += "]";
       } else if (this.isSearchPrefix() || this.isSearchSuffix()) {
