@@ -165,8 +165,8 @@
 	"rel_hits_short" : "Rel. träffar",
 
 	"word_insensitive" : "ord (skiftlägesoberoende)",
-	"sentence_attr" : "textattribut",
-	"word_attr" : "ordattribut",
+	"sentence_attr" : "Textattribut",
+	"word_attr" : "Ordattribut",
 
 	"similar_header" : "Relaterade ord",
 	"show_wordclass" : "Visa ordklass",

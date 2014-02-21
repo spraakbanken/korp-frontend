@@ -163,8 +163,8 @@
 
 
     "word_insensitive" : "word (case insensitive)",
-	"sentence_attr" : "text attributes",
-	"word_attr" : "word attributes",
+	"sentence_attr" : "Text attributes",
+	"word_attr" : "Word attributes",
 
 	"similar_header" : "Related words",
 	"show_wordclass" : "Show word class",
