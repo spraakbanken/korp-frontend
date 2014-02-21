@@ -302,6 +302,7 @@
     "meL" : "Magnus Erikssons Landslag",
     "meSt" : "Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
     
+    "activity" : "aktivitet",
     "activity1" : "aktivitet 1",
     "activity2" : "aktivitet 2",
     "activity3" : "aktivitet 3",
@@ -374,7 +375,10 @@
     "party_svp" : "Sverges socialdemokratiska vänsterparti",
     "party_lp" : "Sveriges liberala parti",
     "party_s" : "Sveriges socialdemokratiska arbetareparti",
-    "party_v" : "Vänsterpartiet"
+    "party_v" : "Vänsterpartiet",
 
+    "group" : "grupp",
+    "interviewee" : "intervjuad",
+    "part" : "del"
 
 }
