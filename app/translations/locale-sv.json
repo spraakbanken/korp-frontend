@@ -188,6 +188,7 @@
 	"compare_with" : "med",
 	"compare_reduce" : "och sammanställ på",
 	"compare_warning" : "Du måste spara minst två sökningar för att kunna jämföra. Leta efter pilen bredvid sökknappen.",
+	"compare_delete" : "Rensa sparade sökningar",
 
 	"compare_distinctive" : "Utmärkande för",
 

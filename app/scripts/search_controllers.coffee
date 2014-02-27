@@ -6,11 +6,6 @@ korpApp.controller "SearchCtrl", ($scope, $location) ->
     $scope.extendedTmpl = "views/extended_tmpl.html"
     $scope.isCompareSelected = false
 
-    $scope.selectCompare = () ->
-        $scope.isCompareSelected = true
-    $scope.deselectCompare = () ->
-        $scope.isCompareSelected = false
-
     $scope.$watch( (() -> $location.search().search_tab),
         (val) ->
             $scope.isCompareSelected = val == 3
@@ -45,8 +40,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             page = $rootScope.search()["page"] or 0
             searches.kwicSearch(cqp, page)
             # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
-            lemgramResults.showPreloader();
-            lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+            if settings.wordpicture
+                lemgramResults.showPreloader();
+                lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
 
         else if search.type == "lemgram"
             s.placeholder = search.val
@@ -244,6 +240,9 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     s.sendCompare = () ->
         $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, s.reduce)
         # tab = $("#results-wrapper .nav.nav-tabs").scope().tabs[-1..][0]
+
+    s.deleteCompares = () ->
+        compareSearches.flush()
 
     # s.sendCompare()
 

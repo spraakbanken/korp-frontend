@@ -183,9 +183,10 @@
     var s;
     s = $scope;
     s.loading = true;
-    return s.promise.then(function(_arg) {
+    return s.promise.then(function(_arg, xhr) {
       var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, _ref, _ref1;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
+      c.log("xhr", xhr);
       s.loading = false;
       pairs = _.pairs(data.loglike);
       s.tables = _.groupBy(pairs, function(_arg1) {

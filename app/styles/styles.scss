@@ -34,11 +34,6 @@ ul, ol {
   list-style: none;
 }
 
-h4 {
-  /*text-transform: capitalize;*/
-}
-
-
 #welcome {
   padding: 0.2em;
 }
@@ -187,8 +182,7 @@ a {
   // height: 30px;
   width: 100%;
   @include background-image(linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%));
-  padding : 5px;
-  padding-left: 8px;
+  padding : 6px 5px 5px 8px;
 }
 
 /*match placeholder/watermark padding to border+padding for input element*/
@@ -245,8 +239,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   color: black;
 }
 
-#cite {
-  margin-top: 1px;
+#languages {
+  margin-top : -1px;
 }
 #languages, #cite {
   float: right;
@@ -1251,8 +1245,11 @@ a {
   display: none;
   float: right;
   margin-right: 8px;
-  margin-top: 7px;
+  // margin-top: 7px;
   margin-left: 3px;
+  span {
+    // margin-right: 1em;
+  }
 }
 
 .logged_in #log_out {
@@ -1318,6 +1315,7 @@ label[for=lemgram_select]:before {
       display: none;
     }
     &.menu_more {
+      margin-left: -3px;
       a {
         background: rgba(0,0,0,0);
       }
@@ -1636,7 +1634,13 @@ label[for=lemgram_select]:before {
   }
   .search_compare {
     padding-top: 1em;
-    button {
+    button.delete {
+      float : right;
+      .fa {
+        margin-right: 0.8em;
+      }
+    }
+    button.search {
       margin-top : 2em;
       display : block;
     }
@@ -2083,7 +2087,7 @@ line.tick {
   color : #555;
 }
 
-.modal-header {
+.modal-header_left {
   display : none;
 }
 .modal .modal-header {
@@ -2244,4 +2248,8 @@ line.tick {
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
+}
+
+.dropdown-menu {
+  border-radius: 2px;
 }

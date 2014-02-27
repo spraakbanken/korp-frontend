@@ -186,6 +186,7 @@
 	"compare_with" : "with",
 	"compare_reduce" : "and compile based on",
 	"compare_warning" : "Please save two searches in order to perform comparison. Look for the arrow next to the search button.",
+	"compare_delete" : "Delete saved searches",
 
 	"compare_distinctive" : "Prominent in",
 

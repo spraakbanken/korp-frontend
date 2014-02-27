@@ -86,13 +86,14 @@ korpApp.factory 'backend', ($http, $q, utils) ->
             set2_cqp : cmpObj2.cqp
             max : 50
 
-
-        $http(
+        conf = 
             url : settings.cgi_script
             params : params
             method : "GET"
-        ).success (data) ->
-            def.resolve [data, cmpObj1, cmpObj2, reduce]
+        xhr = $http(conf)
+
+        xhr.success (data) ->
+            def.resolve [data, cmpObj1, cmpObj2, reduce], xhr
 
 
 
@@ -229,15 +230,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                         type : type
                         val : value
 
-                    # cqp = simpleSearch.onSimpleChange()
-                    # c.log "word search, cqp", cqp
-                    
-                    # searches.lemgramSearch(value, null, null, page)
-                    # $("#simple_text").val value
-                    # simpleSearch.onSimpleChange()
-                    # simpleSearch.setPlaceholder null, null
-                    
-                    # $.sm.send "submit.word", data
                 when "lemgram"
                     searches.activeSearch = 
                         type : type
@@ -261,21 +253,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     searches.kwicSearch value, page
 
 
-    # utils.setupHash $rootScope, [
-    #     key : "search"
-    #     scope_name : "_search"
-    #     val_in : (val) ->
-    #         c.log "search hash", val
-    #         [type, value] = val.split("|")
-    #     val_out : (val) ->
-    #         val?.join("|")
-        
-        # post_change : 
-
-                    # $.sm.send "submit.cqp", data
-
-
-    # ]
 
     return searches
 
@@ -283,6 +260,14 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 korpApp.service "compareSearches",
     class CompareSearches
         constructor : () ->
-            @savedSearches = []
+            @savedSearches = ($.jStorage.get 'saved_searches') or []
+
         saveSearch : (searchObj) ->
             @savedSearches.push searchObj
+            $.jStorage.set 'saved_searches', @savedSearches
+
+        flush: () ->
+            @savedSearches[..] = []
+            $.jStorage.set "saved_searches", @savedSearches
+
+

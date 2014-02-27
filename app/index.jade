@@ -134,8 +134,8 @@ html
                   div(constr='StatsResults', constr-name='statsResults')
                     .stats_header
                       button#showGraph Visa trenddiagram
-                      .progress_container
-                        progress(value='{{progress || 0}}', max='100')
+                      //- .progress_container
+                      //-   progress(value='{{progress || 0}}', max='100')
                       #showBarPlot
                     #myGrid
                     #exportStatsSection
@@ -156,8 +156,8 @@ html
                     #wordclassChkParent
                       input#wordclassChk(type='checkbox')
                       label(for='wordclassChk', rel='localize[show_wordclass]')
-                    .progress_container
-                      progress(value='{{progress || 0}}', max='100')
+                    //- .progress_container
+                    //-   progress(value='{{progress || 0}}', max='100')
                     .content_target
 
                 include includes/dynamic_result_tabs

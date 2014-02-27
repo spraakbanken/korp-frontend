@@ -168,9 +168,9 @@ class view.SimpleSearch extends BaseSearch
         super mainDivId, scope
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         # $("#simple_text").keyup $.proxy(@onSimpleChange, this)
-        $("#simple_text").keyup () =>
+        $("#simple_text").keyup (event) =>
             @s.$apply () =>
-                @onSimpleChange()
+                @onSimpleChange(event)
         # @onSimpleChange()
         $("#similar_lemgrams").hide()
         @savedSelect = null
@@ -417,8 +417,10 @@ class view.SimpleSearch extends BaseSearch
             c.log "key", event.keyCode
             return
         
-        val = @getCQP()
-        @s.placeholder = null
+        c.log "event", event.keyCode
+        if event and event.keyCode != 13   
+           @s.placeholder = null
+        # val = @getCQP()
         # @s.$root.activeCQP = val
 
     resetView: ->

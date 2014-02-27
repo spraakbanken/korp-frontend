@@ -212,9 +212,9 @@
         _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keyup(function() {
+      $("#simple_text").keyup(function(event) {
         return _this.s.$apply(function() {
-          return _this.onSimpleChange();
+          return _this.onSimpleChange(event);
         });
       });
       $("#similar_lemgrams").hide();
@@ -471,15 +471,16 @@
     };
 
     SimpleSearch.prototype.onSimpleChange = function(event) {
-      var val;
       c.log("onSimpleChange");
       $("#simple_text").data("promise", null);
       if (event && event.keyCode === 27) {
         c.log("key", event.keyCode);
         return;
       }
-      val = this.getCQP();
-      return this.s.placeholder = null;
+      c.log("event", event.keyCode);
+      if (event && event.keyCode !== 13) {
+        return this.s.placeholder = null;
+      }
     };
 
     SimpleSearch.prototype.resetView = function() {

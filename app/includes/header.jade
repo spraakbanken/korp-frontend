@@ -27,8 +27,9 @@
     li#login
       a(href='javascript:', rel='localize[log_in]')
   #log_out.link
-    span(rel='localize[log_out]') Logga ut
-    span.usrname
+    span 
+      | {{'log_out' | loc}}   
+    span.usrname 
   #languages
     a(href='javascript:', rel='localize[swedish]', data-mode='sv', ng-click='lang = \'sv\'') Svenska
     a(href='javascript:', rel='localize[english]', data-mode='en', ng-click='lang = \'en\'') Engelska

@@ -7,12 +7,6 @@
     $scope.visibleTabs = [true, true, true, true];
     $scope.extendedTmpl = "views/extended_tmpl.html";
     $scope.isCompareSelected = false;
-    $scope.selectCompare = function() {
-      return $scope.isCompareSelected = true;
-    };
-    $scope.deselectCompare = function() {
-      return $scope.isCompareSelected = false;
-    };
     return $scope.$watch((function() {
       return $location.search().search_tab;
     }), function(val) {
@@ -52,8 +46,10 @@
         c.log("simple search cqp", cqp);
         page = $rootScope.search()["page"] || 0;
         searches.kwicSearch(cqp, page);
-        lemgramResults.showPreloader();
-        return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+        if (settings.wordpicture) {
+          lemgramResults.showPreloader();
+          return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+        }
       } else if (search.type === "lemgram") {
         s.placeholder = search.val;
         return s.simple_text = "";
@@ -217,8 +213,11 @@
       listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
       return utils.getAttributeGroups(listing);
     };
-    return s.sendCompare = function() {
+    s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, s.reduce));
+    };
+    return s.deleteCompares = function() {
+      return compareSearches.flush();
     };
   });
 

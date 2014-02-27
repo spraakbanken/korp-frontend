@@ -297,7 +297,6 @@ korpApp.directive "meter", () ->
         # bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
         scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
         scope.loglike = Math.abs scope.meter[1]
-        c.log "scope.loglike", scope.loglike
 
 
         scope.tooltipHTML = """
@@ -308,7 +307,6 @@ korpApp.directive "meter", () ->
 
         w = elem.parent().width()
         part = ((scope.loglike) / (Math.abs scope.max))
-        c.log "part", part, scope.max, w, (part * w)
 
         bkg.width Math.round (part * w)
 

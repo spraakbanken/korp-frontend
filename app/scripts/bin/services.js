@@ -113,7 +113,7 @@
   korpApp.factory('backend', function($http, $q, utils) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
-        var def, params;
+        var conf, def, params, xhr;
         def = $q.defer();
         params = {
           command: "loglike",
@@ -124,12 +124,14 @@
           set2_cqp: cmpObj2.cqp,
           max: 50
         };
-        $http({
+        conf = {
           url: settings.cgi_script,
           params: params,
           method: "GET"
-        }).success(function(data) {
-          return def.resolve([data, cmpObj1, cmpObj2, reduce]);
+        };
+        xhr = $http(conf);
+        xhr.success(function(data) {
+          return def.resolve([data, cmpObj1, cmpObj2, reduce], xhr);
         });
         return def.promise;
       }
@@ -295,11 +297,18 @@
 
   korpApp.service("compareSearches", CompareSearches = (function() {
     function CompareSearches() {
-      this.savedSearches = [];
+      this.savedSearches = ($.jStorage.get('saved_searches')) || [];
     }
 
     CompareSearches.prototype.saveSearch = function(searchObj) {
-      return this.savedSearches.push(searchObj);
+      this.savedSearches.push(searchObj);
+      return $.jStorage.set('saved_searches', this.savedSearches);
+    };
+
+    CompareSearches.prototype.flush = function() {
+      var _ref;
+      [].splice.apply(this.savedSearches, [0, 9e9].concat(_ref = [])), _ref;
+      return $.jStorage.set("saved_searches", this.savedSearches);
     };
 
     return CompareSearches;

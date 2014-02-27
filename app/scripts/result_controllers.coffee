@@ -166,15 +166,13 @@ korpApp.controller "graphCtrl", ($scope) ->
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->
     s = $scope
     s.loading = true
-    #active must always be true to make new tab active
-    # s.$parent.active = true
 
 
 
-    s.promise.then ([data, cmp1, cmp2, reduce]) ->
+    s.promise.then ([data, cmp1, cmp2, reduce], xhr) ->
         # c.log "compare promise", _.pairs data.loglike
-
-
+        c.log "xhr", xhr
+        # util.setJsonLink()
         s.loading = false
         pairs = _.pairs data.loglike
         s.tables = _.groupBy  (pairs), ([word, val]) ->
