@@ -171,7 +171,7 @@ var hp_corpusChooser = {
 			var newHTML = recursive_transform(body,0);
 			$(".popupchecks .checks").html(newHTML);
 
-			el.addClass("scroll_checkboxes inline_block");
+			// el.addClass("scroll_checkboxes inline_block");
 			var pos = $(".scroll_checkboxes").offset().left + 434;
 			$(".corpusInfoSpace").css({"left": (pos.toString() + "px")})
 			.click(function(event) {

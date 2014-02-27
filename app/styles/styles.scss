@@ -1863,6 +1863,9 @@ slider {
 
 .arg_val_container {
   margin-top : 2px;
+  select {
+    max-width : 100%;
+  }
 }
 
 .ui-autocomplete-category {

@@ -31,6 +31,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                 if type == "word" and val == ""
                     out = ""
                 else if type == "date_interval"
+                    c.log "date_interval", val
                     [from, to] = val.split(",")
                     operator1 = ">="
                     operator2 = "<="
@@ -47,6 +48,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                          bool : bool,
                          from : from,
                          to : to
+                    unless from and to then out = ""
                 else 
                     out = "#{type} #{op} \"#{val}\"" 
 

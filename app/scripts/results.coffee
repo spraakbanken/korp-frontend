@@ -263,8 +263,8 @@ class view.KWICResults extends BaseResults
         items = _.filter items, (item) -> item.abs > 0
         # calculate which is the first page of hits for each item
         index = 0
-        _.each items, (obj) ->
-            obj.page = Math.floor(index / kwicProxy.prevMisc.hitsPerPage )
+        _.each items, (obj) =>
+            obj.page = Math.floor(index / @proxy.prevMisc.hitsPerPage )
             index += obj.abs
 
         @s.$apply ($scope) ->

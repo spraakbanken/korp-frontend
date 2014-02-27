@@ -279,7 +279,8 @@
     };
 
     KWICResults.prototype.renderHitsPicture = function(data) {
-      var index, items;
+      var index, items,
+        _this = this;
       items = _.map(data.corpus_order, function(obj) {
         return {
           "rid": obj,
@@ -293,7 +294,7 @@
       });
       index = 0;
       _.each(items, function(obj) {
-        obj.page = Math.floor(index / kwicProxy.prevMisc.hitsPerPage);
+        obj.page = Math.floor(index / _this.proxy.prevMisc.hitsPerPage);
         return index += obj.abs;
       });
       return this.s.$apply(function($scope) {

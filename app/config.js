@@ -78,8 +78,8 @@ settings.modeConfig = [
         mode: "lb"
     },
     {
-        localekey: "digidaily",
-        mode: "digidaily"
+        localekey: "kubhist",
+        mode: "kubhist"
     },
     {
         localekey: "all_hist",
@@ -505,8 +505,10 @@ settings.common_struct_types = {
                 w = s.$watch("values.low.toString() + values.high.toString()", function() {
                     // TODO: seems to be be running too much
                     c.log ("low", s.values.low, "high", s.values.high, s.floor, s.ceiling)
-                    if(isNaN(s.values.low) || isNaN(s.values.high))
+                    if(!angular.isDefined(s.values.low) || isNaN(s.values.low) || isNaN(s.values.high) || !angular.isDefined(s.values.high)) {
+                        s.model = ""
                         return
+                    }
 
                     // s.model = s.values.low.toString() + s.values.high.toString()
                     s.model = [

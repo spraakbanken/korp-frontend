@@ -51,6 +51,7 @@
               if (type === "word" && val === "") {
                 out = "";
               } else if (type === "date_interval") {
+                c.log("date_interval", val);
                 _ref3 = val.split(","), from = _ref3[0], to = _ref3[1];
                 operator1 = ">=";
                 operator2 = "<=";
@@ -68,6 +69,9 @@
                   from: from,
                   to: to
                 });
+                if (!(from && to)) {
+                  out = "";
+                }
               } else {
                 out = "" + type + " " + op + " \"" + val + "\"";
               }
