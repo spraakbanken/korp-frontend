@@ -1977,45 +1977,6 @@ settings.corpora.drama = {
     struct_attributes : {}
 };
 
-if(location.port == "9000") {
-
-settings.corpora.minisuc = {
-    id : "minisuc",
-    title : "Minisuc",
-    description : "",
-    within : {
-        "s" : "s",
-        "p" : "p"
-    },
-    context : {
-        "1 s" : "1 s",
-        "1 p" : "1 p"
-    },
-    attributes : {
-        msd : attrs.msd,
-        lex : attrs.lemgram,
-    },
-    struct_attributes : {}
-};
-settings.corpora.smetest = {
-    id : "smetest",
-    title : "smetest",
-    description : "",
-    within : {
-        "sentence" : "sentence",
-    },
-    context : {
-        "1 sentence" : "1 sentence",
-    },
-    attributes : {
-        // msd : attrs.msd,
-        // lex : attrs.lemgram,
-    },
-    struct_attributes : {}
-};
-}
-
-
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
