@@ -306,7 +306,7 @@ class view.KWICResults extends BaseResults
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
-
+    # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
         c.log "handlePaginationClick", new_page_index, @current_page
         self = this

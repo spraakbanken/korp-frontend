@@ -1533,77 +1533,45 @@ label[for=lemgram_select]:before {
   margin: 0 0.3em;
   color: grey;
 }
-<<<<<<< HEAD
-/* line 1315, styles.scss */
+/* line 1316, styles.scss */
 #mode_switch li:last-child:after {
   display: none;
 }
-/* line 1320, styles.scss */
+/* line 1321, styles.scss */
 #mode_switch li.menu_more a {
   background: rgba(0, 0, 0, 0);
 }
-/* line 1323, styles.scss */
-=======
-/* line 1304, styles.scss */
-#mode_switch li:last-child:after {
-  display: none;
-}
-/* line 1309, styles.scss */
-#mode_switch li.menu_more a {
-  background: rgba(0, 0, 0, 0);
-}
-/* line 1312, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1324, styles.scss */
 #mode_switch li.menu_more i {
   margin-left: 5px;
 }
 
-<<<<<<< HEAD
-/* line 1330, styles.scss */
-=======
-/* line 1319, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1331, styles.scss */
 .radioList_selected {
   color: black !important;
   cursor: default;
 }
 
-<<<<<<< HEAD
-/* line 1335, styles.scss */
-=======
-/* line 1324, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1336, styles.scss */
 .custom_anchor {
   padding-right: 8px !important;
 }
 
-<<<<<<< HEAD
-/* line 1343, styles.scss */
-=======
-/* line 1332, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1344, styles.scss */
 .tabClose {
   padding: 0 !important;
   margin-right: 6px;
   cursor: pointer !important;
 }
 
-<<<<<<< HEAD
-/* line 1349, styles.scss */
-=======
-/* line 1338, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1350, styles.scss */
 .hits_picture_table {
   /*    opacity: .3; */
   width: 100%;
   padding: 0px;
 }
 
-<<<<<<< HEAD
-/* line 1357, styles.scss */
-=======
-/* line 1346, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1358, styles.scss */
 .hits_picture {
   cursor: pointer;
   position: absolute;
@@ -1616,29 +1584,17 @@ label[for=lemgram_select]:before {
   transition: left 400ms ease;
 }
 
-<<<<<<< HEAD
-/* line 1366, styles.scss */
-=======
-/* line 1355, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1367, styles.scss */
 #showLineDiagram {
   position: relative;
   top: 3px;
 }
 
-<<<<<<< HEAD
-/* line 1372, styles.scss */
+/* line 1373, styles.scss */
 .query_token .logic_switcher {
   float: left;
 }
-/* line 1375, styles.scss */
-=======
-/* line 1361, styles.scss */
-.query_token .logic_switcher {
-  float: left;
-}
-/* line 1364, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1376, styles.scss */
 .query_token .close_btn {
   cursor: pointer;
   float: right;
@@ -1649,11 +1605,7 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
   font-size: 15px;
 }
-<<<<<<< HEAD
-/* line 1382, styles.scss */
-=======
-/* line 1371, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1383, styles.scss */
 .query_token:only-of-type .close_btn {
   opacity: 0;
   cursor: default;
@@ -1663,29 +1615,17 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-<<<<<<< HEAD
-/* line 1389, styles.scss */
-=======
-/* line 1378, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1390, styles.scss */
 .right_col {
   padding-right: 2px;
 }
 
-<<<<<<< HEAD
-/* line 1392, styles.scss */
-=======
-/* line 1381, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1393, styles.scss */
 .ie8 .right_col .input {
   float: right;
 }
 
-<<<<<<< HEAD
-/* line 1396, styles.scss */
-=======
-/* line 1385, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1397, styles.scss */
 .query_arg {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1699,19 +1639,11 @@ label[for=lemgram_select]:before {
   padding-right: 13px;
 }
 
-<<<<<<< HEAD
-/* line 1405, styles.scss */
+/* line 1406, styles.scss */
 .or_arg {
   margin-bottom: 5px;
 }
-/* line 1407, styles.scss */
-=======
-/* line 1394, styles.scss */
-.or_arg {
-  margin-bottom: 5px;
-}
-/* line 1396, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1408, styles.scss */
 .or_arg .ui-icon-info {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1722,11 +1654,7 @@ label[for=lemgram_select]:before {
   cursor: pointer;
 }
 
-<<<<<<< HEAD
-/* line 1413, styles.scss */
-=======
-/* line 1402, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1414, styles.scss */
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
   cursor: default;
   opacity: 0;
@@ -1736,11 +1664,7 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-<<<<<<< HEAD
-/* line 1419, styles.scss */
-=======
-/* line 1408, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1420, styles.scss */
 .arg_header {
   opacity: 0;
   -webkit-transition: opacity 200ms ease;
@@ -1750,11 +1674,7 @@ label[for=lemgram_select]:before {
   margin-bottom: 1px;
 }
 
-<<<<<<< HEAD
-/* line 1425, styles.scss */
-=======
-/* line 1414, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1426, styles.scss */
 .or_arg:not(:only-child):first-child .arg_header {
   opacity: 1;
   -webkit-transition: opacity 200ms ease;
@@ -1763,20 +1683,12 @@ label[for=lemgram_select]:before {
   transition: opacity 200ms ease;
 }
 
-<<<<<<< HEAD
-/* line 1434, styles.scss */
-=======
-/* line 1423, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1435, styles.scss */
 .arg_header {
   font-size: 10px;
 }
 
-<<<<<<< HEAD
-/* line 1439, styles.scss */
-=======
-/* line 1428, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1440, styles.scss */
 .insert_or {
   padding-top: 6px;
   right: 0;
@@ -1784,11 +1696,7 @@ label[for=lemgram_select]:before {
   float: right;
 }
 
-<<<<<<< HEAD
-/* line 1447, styles.scss */
-=======
-/* line 1436, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1448, styles.scss */
 #time {
   margin-top: 10px;
   display: -moz-inline-stack;
@@ -1799,22 +1707,14 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1453, styles.scss */
-=======
-/* line 1442, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1454, styles.scss */
 #time_inputs input {
   border: none;
   font-weight: bold;
   width: 30px;
 }
 
-<<<<<<< HEAD
-/* line 1460, styles.scss */
-=======
-/* line 1449, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1461, styles.scss */
 #time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1826,11 +1726,7 @@ label[for=lemgram_select]:before {
   height: 70px;
 }
 
-<<<<<<< HEAD
-/* line 1466, styles.scss */
-=======
-/* line 1455, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1467, styles.scss */
 #rest_time_graph {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1844,11 +1740,7 @@ label[for=lemgram_select]:before {
   bottom: 20px;
 }
 
-<<<<<<< HEAD
-/* line 1474, styles.scss */
-=======
-/* line 1463, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1475, styles.scss */
 #time_slider {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1860,11 +1752,7 @@ label[for=lemgram_select]:before {
   margin-right: 10px;
 }
 
-<<<<<<< HEAD
-/* line 1480, styles.scss */
-=======
-/* line 1469, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1481, styles.scss */
 .ui-slider-handle {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -1873,11 +1761,7 @@ label[for=lemgram_select]:before {
   border-radius: 20px;
 }
 
-<<<<<<< HEAD
-/* line 1484, styles.scss */
-=======
-/* line 1473, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1485, styles.scss */
 .pager-wrapper {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1887,20 +1771,12 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1490, styles.scss */
-=======
-/* line 1479, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1491, styles.scss */
 .sidebar_url {
   white-space: nowrap;
 }
 
-<<<<<<< HEAD
-/* line 1494, styles.scss */
-=======
-/* line 1483, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1495, styles.scss */
 .arcDiagramPicture {
   cursor: pointer;
   margin-bottom: -2px;
@@ -1908,30 +1784,18 @@ label[for=lemgram_select]:before {
   padding-right: 5px;
 }
 
-<<<<<<< HEAD
-/* line 1501, styles.scss */
-=======
-/* line 1490, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1502, styles.scss */
 .c0 {
   position: relative;
 }
 
-<<<<<<< HEAD
-/* line 1505, styles.scss */
-=======
-/* line 1494, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1506, styles.scss */
 .arcDiagramPicture {
   position: absolute;
   right: 0;
 }
 
-<<<<<<< HEAD
-/* line 1511, styles.scss */
-=======
-/* line 1500, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1512, styles.scss */
 .lemgram_section {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1942,11 +1806,7 @@ label[for=lemgram_select]:before {
   margin-right: 30px;
 }
 
-<<<<<<< HEAD
-/* line 1516, styles.scss */
-=======
-/* line 1505, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1517, styles.scss */
 .tableContainer {
   margin-bottom: 15px;
   display: -moz-inline-stack;
@@ -1959,11 +1819,7 @@ label[for=lemgram_select]:before {
   border: solid 1px lightgray;
   margin-right: 20px;
 }
-<<<<<<< HEAD
-/* line 1522, styles.scss */
-=======
-/* line 1511, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1523, styles.scss */
 .tableContainer > .header {
   color: #333;
   font-size: 1.1em;
@@ -1971,77 +1827,45 @@ label[for=lemgram_select]:before {
   font-family: Lucida Grande, sans-serif;
 }
 
-<<<<<<< HEAD
-/* line 1530, styles.scss */
-=======
-/* line 1519, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1531, styles.scss */
 .explanation {
   font-size: 12px;
   padding: 0 20px;
 }
 
-<<<<<<< HEAD
-/* line 1535, styles.scss */
-=======
-/* line 1524, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1536, styles.scss */
 .ui-dialog ul, ol {
   padding-left: 0;
 }
 
-<<<<<<< HEAD
-/* line 1539, styles.scss */
-=======
-/* line 1528, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1540, styles.scss */
 .ui-dialog li {
   margin-bottom: 3px;
 }
 
-<<<<<<< HEAD
-/* line 1543, styles.scss */
-=======
-/* line 1532, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1544, styles.scss */
 .autocomplete-item-disabled a {
   font-style: italic;
   color: indianred;
   opacity: 0.7;
 }
 
-<<<<<<< HEAD
-/* line 1549, styles.scss */
-=======
-/* line 1538, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1550, styles.scss */
 #showLineDiagram {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1553, styles.scss */
-=======
-/* line 1542, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1554, styles.scss */
 .lab #showLineDiagram {
   display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1557, styles.scss */
-=======
-/* line 1546, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1558, styles.scss */
 #labs_logo {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1561, styles.scss */
-=======
-/* line 1550, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1562, styles.scss */
 .lab #labs_logo {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2051,37 +1875,21 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1565, styles.scss */
-=======
-/* line 1554, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1566, styles.scss */
 #korplink {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1570, styles.scss */
+/* line 1571, styles.scss */
 .lab #korplablink {
   display: none;
 }
-/* line 1573, styles.scss */
-=======
-/* line 1559, styles.scss */
-.lab #korplablink {
-  display: none;
-}
-/* line 1562, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1574, styles.scss */
 .lab #korplink {
   display: block;
 }
 
-<<<<<<< HEAD
-/* line 1578, styles.scss */
-=======
-/* line 1567, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1579, styles.scss */
 #cog {
   float: right;
   margin-top: -6px;
@@ -2089,42 +1897,26 @@ label[for=lemgram_select]:before {
   height: 26px;
 }
 
-<<<<<<< HEAD
-/* line 1585, styles.scss */
-=======
-/* line 1574, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1586, styles.scss */
 #cog_menu {
   position: absolute;
   font-size: inherit;
   text-align: right;
 }
 
-<<<<<<< HEAD
-/* line 1591, styles.scss */
-=======
-/* line 1580, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1592, styles.scss */
 .ui-menu {
   box-shadow: 2px 2px 3px grey;
   z-index: 999;
 }
 
-<<<<<<< HEAD
-/* line 1596, styles.scss */
-=======
-/* line 1585, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1597, styles.scss */
 .korp_fail {
   height: 146px;
   width: 290px;
 }
 
-<<<<<<< HEAD
-/* line 1601, styles.scss */
-=======
-/* line 1590, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1602, styles.scss */
 .fail_text {
   margin: 1em 0 0 1em;
   vertical-align: top;
@@ -2132,136 +1924,76 @@ label[for=lemgram_select]:before {
   font-size: 1.3em;
 }
 
-<<<<<<< HEAD
-/* line 1608, styles.scss */
-=======
-/* line 1597, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1609, styles.scss */
 .error_msg ~ * {
   display: none !important;
 }
 
-<<<<<<< HEAD
-/* line 1612, styles.scss */
-=======
-/* line 1601, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1613, styles.scss */
 .msd {
   font-size: 0.8em;
 }
 
-<<<<<<< HEAD
-/* line 1617, styles.scss */
-=======
-/* line 1606, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1618, styles.scss */
 #korp-simple .btn-group {
   display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1623, styles.scss */
-=======
-/* line 1612, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1624, styles.scss */
 .search_submit {
   display: inline;
   margin-right: 5px;
 }
 
-<<<<<<< HEAD
-/* line 1630, styles.scss */
+/* line 1631, styles.scss */
 .search_tabs li:nth-child(4) {
   margin-left: 1em;
 }
-/* line 1633, styles.scss */
+/* line 1634, styles.scss */
 .search_tabs .tab-content {
   overflow: visible;
 }
-/* line 1636, styles.scss */
+/* line 1637, styles.scss */
 .search_tabs .search_compare {
   padding-top: 1em;
 }
-/* line 1638, styles.scss */
-=======
-/* line 1619, styles.scss */
-.search_tabs li:nth-child(4) {
-  margin-left: 1em;
-}
-/* line 1622, styles.scss */
-.search_tabs .tab-content {
-  overflow: visible;
-}
-/* line 1625, styles.scss */
-.search_tabs .search_compare {
-  padding-top: 1em;
-}
-/* line 1627, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1639, styles.scss */
 .search_tabs .search_compare button {
   margin-top: 2em;
   display: block;
 }
-<<<<<<< HEAD
-/* line 1642, styles.scss */
-=======
-/* line 1631, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1643, styles.scss */
 .search_tabs .search_compare select {
   margin: 0 5px;
 }
 
-<<<<<<< HEAD
-/* line 1648, styles.scss */
-=======
-/* line 1637, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1649, styles.scss */
 .nav-tabs li.disabled {
   opacity: 0.6;
 }
 
-<<<<<<< HEAD
-/* line 1652, styles.scss */
-=======
-/* line 1641, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1653, styles.scss */
 #results-wrapper .nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
 
-<<<<<<< HEAD
-/* line 1656, styles.scss */
-=======
-/* line 1645, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1657, styles.scss */
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1660, styles.scss */
-=======
-/* line 1649, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1661, styles.scss */
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1669, styles.scss */
-=======
-/* line 1658, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1670, styles.scss */
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-<<<<<<< HEAD
-/* line 1674, styles.scss */
-=======
-/* line 1663, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1675, styles.scss */
 .val_mod {
   letter-spacing: 1px;
   font-size: .8em;
@@ -2269,22 +2001,14 @@ label[for=lemgram_select]:before {
   margin-right: 1px;
 }
 
-<<<<<<< HEAD
-/* line 1681, styles.scss */
-=======
-/* line 1670, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1682, styles.scss */
 .mod_menu {
   cursor: default;
   position: absolute;
   font-size: .9em;
 }
 
-<<<<<<< HEAD
-/* line 1689, styles.scss */
-=======
-/* line 1678, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1690, styles.scss */
 slider {
   display: inline-block;
   position: relative;
@@ -2293,31 +2017,19 @@ slider {
   margin: 25px 5px 25px 5px;
   vertical-align: middle;
 }
-<<<<<<< HEAD
-/* line 1697, styles.scss */
-=======
-/* line 1686, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1698, styles.scss */
 slider span {
   white-space: nowrap;
   position: absolute;
   display: inline-block;
 }
-<<<<<<< HEAD
-/* line 1701, styles.scss */
-=======
-/* line 1690, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1702, styles.scss */
 slider span.base {
   width: 100%;
   height: 100%;
   padding: 0;
 }
-<<<<<<< HEAD
-/* line 1706, styles.scss */
-=======
-/* line 1695, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1707, styles.scss */
 slider span.bar {
   width: 100%;
   height: 100%;
@@ -2330,11 +2042,7 @@ slider span.bar {
   background-image: linear-gradient(top, #cccccc, #ffffff);
   box-shadow: inset 0 1px 3px rgba(10, 10, 10, 0.5);
 }
-<<<<<<< HEAD
-/* line 1717, styles.scss */
-=======
-/* line 1706, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1718, styles.scss */
 slider span.bar.selection {
   width: 0%;
   z-index: 1;
@@ -2345,11 +2053,7 @@ slider span.bar.selection {
   background-image: linear-gradient(top, #ababab, #c6c6c6);
   box-shadow: none;
 }
-<<<<<<< HEAD
-/* line 1725, styles.scss */
-=======
-/* line 1714, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1726, styles.scss */
 slider span.pointer {
   cursor: pointer;
   width: 15px;
@@ -2366,35 +2070,19 @@ slider span.pointer {
   border-radius: 1em/1em;
   box-shadow: 2px 2px 3px grey;
 }
-<<<<<<< HEAD
-/* line 1741, styles.scss */
-slider span.pointer:after {
-  box-shadow: inset 2px 2px 5px;
-}
-/* line 1745, styles.scss */
-slider span.pointer:hover:after {
-  background-color: #000;
-}
-/* line 1748, styles.scss */
-slider span.pointer.active:hover:after {
-  background-color: #f00;
-}
-/* line 1753, styles.scss */
-=======
-/* line 1730, styles.scss */
-slider span.pointer:after {
-  box-shadow: inset 2px 2px 5px;
-}
-/* line 1734, styles.scss */
-slider span.pointer:hover:after {
-  background-color: #000;
-}
-/* line 1737, styles.scss */
-slider span.pointer.active:hover:after {
-  background-color: #f00;
-}
 /* line 1742, styles.scss */
->>>>>>> fixed bugs related to compare and search
+slider span.pointer:after {
+  box-shadow: inset 2px 2px 5px;
+}
+/* line 1746, styles.scss */
+slider span.pointer:hover:after {
+  background-color: #000;
+}
+/* line 1749, styles.scss */
+slider span.pointer.active:hover:after {
+  background-color: #f00;
+}
+/* line 1754, styles.scss */
 slider span.bubble {
   cursor: default;
   top: -22px;
@@ -2402,105 +2090,57 @@ slider span.bubble {
   font-size: 0.7em;
   font-family: sans-serif;
 }
-<<<<<<< HEAD
-/* line 1759, styles.scss */
+/* line 1760, styles.scss */
 slider span.bubble.selection {
   top: 15px;
 }
-/* line 1762, styles.scss */
-=======
-/* line 1748, styles.scss */
-slider span.bubble.selection {
-  top: 15px;
-}
-/* line 1751, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1763, styles.scss */
 slider span.bubble.limit {
   color: #808080;
 }
 
-<<<<<<< HEAD
-/* line 1771, styles.scss */
+/* line 1772, styles.scss */
 .val_mod.insensitive {
   color: lightgrey;
 }
-/* line 1774, styles.scss */
+/* line 1775, styles.scss */
 .val_mod.sensitive {
   color: black;
 }
-/* line 1776, styles.scss */
+/* line 1777, styles.scss */
 .val_mod.sensitive + .mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-/* line 1780, styles.scss */
-=======
-/* line 1760, styles.scss */
-.val_mod.insensitive {
-  color: lightgrey;
-}
-/* line 1763, styles.scss */
-.val_mod.sensitive {
-  color: black;
-}
-/* line 1765, styles.scss */
-.val_mod.sensitive + .mod_menu li:first-of-type a {
-  text-decoration: underline;
-}
-/* line 1769, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1781, styles.scss */
 .val_mod.insensitive + .mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-<<<<<<< HEAD
-/* line 1785, styles.scss */
+/* line 1786, styles.scss */
 .enumerate {
   counter-increment: wordpic;
 }
-/* line 1787, styles.scss */
-=======
-/* line 1774, styles.scss */
-.enumerate {
-  counter-increment: wordpic;
-}
-/* line 1776, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1788, styles.scss */
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-<<<<<<< HEAD
-/* line 1792, styles.scss */
-=======
-/* line 1781, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1793, styles.scss */
 #showBarPlot {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1800, styles.scss */
-=======
-/* line 1789, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1801, styles.scss */
 #wordclassChkParent {
   float: right;
 }
 
-<<<<<<< HEAD
-/* line 1806, styles.scss */
-=======
-/* line 1795, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1807, styles.scss */
 .nav-tabs li {
   position: relative;
 }
 
-<<<<<<< HEAD
-/* line 1810, styles.scss */
-=======
-/* line 1799, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1811, styles.scss */
 .tab_progress {
   height: 2px;
   background-color: darkblue;
@@ -2511,20 +2151,12 @@ slider span.bubble.limit {
   bottom: 0;
 }
 
-<<<<<<< HEAD
-/* line 1820, styles.scss */
-=======
-/* line 1809, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1821, styles.scss */
 .not_loading .tab_progress {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1824, styles.scss */
-=======
-/* line 1813, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1825, styles.scss */
 .not_loading .hits_picture {
   left: 180px;
   -webkit-transition: width 400ms ease;
@@ -2533,76 +2165,43 @@ slider span.bubble.limit {
   transition: width 400ms ease;
 }
 
-<<<<<<< HEAD
-/* line 1828, styles.scss */
-=======
 /*
->>>>>>> fixed bugs related to compare and search
 .progress_container {
   width: 143px;
   overflow-x: hidden;
   @include transition(width 400ms ease);
 }
 
-<<<<<<< HEAD
-/* line 1834, styles.scss */
-=======
->>>>>>> fixed bugs related to compare and search
 #results-kwic.not_loading .progress_container {
   width: 0;
   @include transition(width 400ms ease);
 }
 
-<<<<<<< HEAD
-/* line 1840, styles.scss */
-.not_loading .progress_container {
-  display: none;
-}
-
-/* line 1845, styles.scss */
-.arg_value .from, .arg_value .to {
-  width: 50px;
-}
-/* line 1848, styles.scss */
-.arg_value .from {
-  float: left;
-}
-/* line 1851, styles.scss */
-=======
 
 .not_loading .progress_container {
   display: none;
 }
 */
-/* line 1835, styles.scss */
+/* line 1847, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 1838, styles.scss */
+/* line 1850, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 1841, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1853, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-<<<<<<< HEAD
-/* line 1858, styles.scss */
-=======
-/* line 1848, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1860, styles.scss */
 .arg_val_container {
   margin-top: 2px;
 }
 
-<<<<<<< HEAD
-/* line 1862, styles.scss */
-=======
-/* line 1852, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1864, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -2610,132 +2209,76 @@ slider span.bubble.limit {
   letter-spacing: 1.1;
 }
 
-<<<<<<< HEAD
-/* line 1869, styles.scss */
-=======
-/* line 1859, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1871, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1875, styles.scss */
-=======
-/* line 1865, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1877, styles.scss */
 #char_table {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1879, styles.scss */
-=======
-/* line 1869, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1881, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-<<<<<<< HEAD
-/* line 1886, styles.scss */
-#deptree_popup {
-  overflow-y: hidden;
-}
 /* line 1888, styles.scss */
-=======
-/* line 1876, styles.scss */
 #deptree_popup {
   overflow-y: hidden;
 }
-/* line 1878, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1890, styles.scss */
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-<<<<<<< HEAD
-/* line 1892, styles.scss */
-=======
-/* line 1882, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1894, styles.scss */
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-<<<<<<< HEAD
-/* line 1898, styles.scss */
-=======
-/* line 1888, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1900, styles.scss */
 .smoother.ui-slider {
   width: 200px;
 }
 
-<<<<<<< HEAD
-/* line 1902, styles.scss */
-.legend {
-  float: right;
-}
 /* line 1904, styles.scss */
-=======
-/* line 1892, styles.scss */
 .legend {
   float: right;
 }
-/* line 1894, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1906, styles.scss */
 .legend .action {
   opacity: 0.5 !important;
   color: white;
 }
 
-<<<<<<< HEAD
-/* line 1910, styles.scss */
-=======
-/* line 1900, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1912, styles.scss */
 .slick-viewport .slick-cell-checkboxsel input {
   margin-left: 6px;
 }
 
-<<<<<<< HEAD
-/* line 1914, styles.scss */
-=======
-/* line 1904, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1916, styles.scss */
 .graph_btn_icon {
   position: absolute;
   left: 0;
 }
 
-<<<<<<< HEAD
-/* line 1919, styles.scss */
-=======
-/* line 1909, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1921, styles.scss */
 .graph_header .controls {
   float: left;
 }
 
-<<<<<<< HEAD
-/* line 1924, styles.scss */
-.stats_header {
-  margin-bottom: 1em;
-}
 /* line 1926, styles.scss */
-=======
-/* line 1914, styles.scss */
 .stats_header {
   margin-bottom: 1em;
 }
-/* line 1916, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1928, styles.scss */
 .stats_header > * {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2745,57 +2288,33 @@ slider span.bubble.limit {
   *display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1930, styles.scss */
-=======
-/* line 1920, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1932, styles.scss */
 .reading_mode .show_deptree {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1934, styles.scss */
-=======
-/* line 1924, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1936, styles.scss */
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
   left: -3em;
 }
 
-<<<<<<< HEAD
-/* line 1939, styles.scss */
-=======
-/* line 1929, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1941, styles.scss */
 .form-bar .rickshaw_graph .x_tick .title {
   left: 0;
 }
 
-<<<<<<< HEAD
-/* line 1944, styles.scss */
-=======
-/* line 1934, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1946, styles.scss */
 .y_ticks.plain g:first-of-type text {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1948, styles.scss */
-=======
-/* line 1938, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1950, styles.scss */
 .form-bar .legend li:last-child:not(:only-child) {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1951, styles.scss */
-=======
-/* line 1941, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1953, styles.scss */
 .form_switch {
   display: -moz-inline-stack;
   display: inline-block;
@@ -2805,121 +2324,69 @@ slider span.bubble.limit {
   *display: inline;
 }
 
-<<<<<<< HEAD
-/* line 1955, styles.scss */
-=======
-/* line 1945, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1957, styles.scss */
 line.tick {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 1959, styles.scss */
-=======
-/* line 1949, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1961, styles.scss */
 .dot.active {
   cursor: pointer;
 }
 
-<<<<<<< HEAD
-/* line 1963, styles.scss */
-=======
-/* line 1953, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1965, styles.scss */
 .rickshaw_graph .x_tick {
   border: none !important;
 }
 
-<<<<<<< HEAD
-/* line 1966, styles.scss */
-=======
-/* line 1956, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1968, styles.scss */
 .zoom_slider {
   margin-top: 30px;
   width: 100% !important;
 }
 
-<<<<<<< HEAD
-/* line 1971, styles.scss */
-=======
-/* line 1961, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1973, styles.scss */
 #main > #msd_popup {
   display: none !important;
 }
 
-<<<<<<< HEAD
-/* line 1975, styles.scss */
-=======
-/* line 1965, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1977, styles.scss */
 .popupchecks .header {
   white-space: nowrap;
 }
 
-<<<<<<< HEAD
-/* line 1979, styles.scss */
-=======
-/* line 1969, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1981, styles.scss */
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-<<<<<<< HEAD
-/* line 1982, styles.scss */
-=======
-/* line 1972, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1984, styles.scss */
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-<<<<<<< HEAD
-/* line 1985, styles.scss */
-=======
-/* line 1975, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1987, styles.scss */
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
 
-<<<<<<< HEAD
-/* line 1989, styles.scss */
-=======
-/* line 1979, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1991, styles.scss */
 #myGrid {
   width: 100%;
   height: 500px;
 }
 
-<<<<<<< HEAD
-/* line 1994, styles.scss */
-=======
-/* line 1984, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1996, styles.scss */
 #myGrid, #myGrid * {
   box-sizing: content-box;
 }
 
-<<<<<<< HEAD
-/* line 1997, styles.scss */
-=======
-/* line 1987, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 1999, styles.scss */
 .loading .exportStatsSection {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 2001, styles.scss */
-=======
-/* line 1991, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2003, styles.scss */
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #cccccc;
   border: 1px solid #AAAAAA;
@@ -2927,66 +2394,38 @@ line.tick {
   color: #222222;
   padding-top: 0.2em;
 }
-<<<<<<< HEAD
-/* line 2009, styles.scss */
-=======
-/* line 1999, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2011, styles.scss */
 .nav.nav-tabs li {
   cursor: pointer;
   margin-right: 0.2em;
 }
-<<<<<<< HEAD
-/* line 2013, styles.scss */
-=======
-/* line 2003, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2015, styles.scss */
 .nav.nav-tabs .badge {
   margin-left: 1em;
 }
 
-<<<<<<< HEAD
-/* line 2022, styles.scss */
-=======
-/* line 2012, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2024, styles.scss */
 .tabbable {
   border: 1px solid #AAAAAA;
   border-radius: 2px 2px 2px 2px;
   color: #222222;
   padding: 3px;
 }
-<<<<<<< HEAD
-/* line 2027, styles.scss */
+/* line 2029, styles.scss */
 .tabbable .tab-content {
   padding: 1em;
 }
-/* line 2030, styles.scss */
-=======
-/* line 2017, styles.scss */
-.tabbable .tab-content {
-  padding: 1em;
-}
-/* line 2020, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2032, styles.scss */
 .tabbable .close_icon {
   cursor: pointer;
   padding-left: 5px;
 }
-<<<<<<< HEAD
-/* line 2034, styles.scss */
-=======
-/* line 2024, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2036, styles.scss */
 .tabbable .nav.nav-tabs {
   margin: 0;
   padding-left: 0;
 }
-<<<<<<< HEAD
-/* line 2037, styles.scss */
-=======
-/* line 2027, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2039, styles.scss */
 .tabbable .nav.nav-tabs li {
   background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
   border: 1px solid #D3D3D3;
@@ -2994,79 +2433,47 @@ line.tick {
   font-weight: normal;
   margin-bottom: -1px;
 }
-<<<<<<< HEAD
-/* line 2043, styles.scss */
+/* line 2045, styles.scss */
 .tabbable .nav.nav-tabs li:first-child {
   margin-left: 0.5em;
 }
-/* line 2046, styles.scss */
-=======
-/* line 2033, styles.scss */
-.tabbable .nav.nav-tabs li:first-child {
-  margin-left: 0.5em;
-}
-/* line 2036, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2048, styles.scss */
 .tabbable .nav.nav-tabs li a {
   padding-bottom: 0.3em !important;
   padding-top: 0.3em !important;
   padding: 0.2em 1em;
   color: #555555;
 }
-<<<<<<< HEAD
-/* line 2052, styles.scss */
-=======
-/* line 2042, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2054, styles.scss */
 .tabbable .nav.nav-tabs li.active {
   border-bottom-color: transparent;
 }
 
-<<<<<<< HEAD
-/* line 2059, styles.scss */
-=======
-/* line 2049, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2061, styles.scss */
 .search_tabs.tabbable {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-<<<<<<< HEAD
-/* line 2065, styles.scss */
-=======
-/* line 2055, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2067, styles.scss */
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   border-radius: 0;
   border-color: transparent;
 }
 
-<<<<<<< HEAD
-/* line 2069, styles.scss */
-=======
-/* line 2059, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2071, styles.scss */
 .nav-tabs > li > a, .nav-pills > li > a {
   margin-right: 0;
 }
 
-<<<<<<< HEAD
-/* line 2073, styles.scss */
-=======
-/* line 2063, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2075, styles.scss */
 .pagination {
   height: 20px;
   margin: 0;
 }
 
-<<<<<<< HEAD
-/* line 2077, styles.scss */
-=======
-/* line 2067, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2079, styles.scss */
 .pagination a, .pagination span {
   border-width: 1px;
   line-height: 18px;
@@ -3074,43 +2481,27 @@ line.tick {
   color: #555;
 }
 
-<<<<<<< HEAD
-/* line 2084, styles.scss */
-=======
-/* line 2074, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2086, styles.scss */
 .modal-header {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 2087, styles.scss */
-=======
-/* line 2077, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2089, styles.scss */
 .modal .modal-header {
   display: block;
 }
 
-<<<<<<< HEAD
-/* line 2091, styles.scss */
-=======
-/* line 2081, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2093, styles.scss */
 .modal {
   max-height: 600px;
   overflow-y: auto;
 }
 
-<<<<<<< HEAD
-/* line 2097, styles.scss */
-=======
-/* line 2087, styles.scss */
+/* line 2099, styles.scss */
 .compare_result.loading {
   visibility: hidden;
 }
-/* line 2090, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2102, styles.scss */
 .compare_result .column {
   display: -moz-inline-stack;
   display: inline-block;
@@ -3119,11 +2510,7 @@ line.tick {
   zoom: 1;
   *display: inline;
 }
-<<<<<<< HEAD
-/* line 2100, styles.scss */
-=======
-/* line 2093, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2105, styles.scss */
 .compare_result .meter {
   cursor: pointer;
   position: relative;
@@ -3133,93 +2520,53 @@ line.tick {
   -o-transition: all 200ms ease;
   transition: all 200ms ease;
 }
-<<<<<<< HEAD
-/* line 2107, styles.scss */
-=======
-/* line 2100, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2112, styles.scss */
 .compare_result .meter:hover {
   color: navy;
   border: 1px solid #aac8ff;
 }
-<<<<<<< HEAD
-/* line 2120, styles.scss */
-=======
-/* line 2113, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2125, styles.scss */
 .compare_result .badge {
   position: absolute;
   right: 0;
   top: 4px;
 }
-<<<<<<< HEAD
-/* line 2125, styles.scss */
+/* line 2130, styles.scss */
 .compare_result .background {
   padding: 5px 0;
 }
-/* line 2129, styles.scss */
-=======
-/* line 2118, styles.scss */
-.compare_result .background {
-  padding: 5px 0;
-}
-/* line 2122, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2134, styles.scss */
 .compare_result .column_1 ul {
   background-color: #f1f6ff;
   border: 1px solid #dde9ff;
 }
-<<<<<<< HEAD
-/* line 2132, styles.scss */
+/* line 2137, styles.scss */
 .compare_result .column_1 ul .background {
   background-color: #dde9ff;
 }
-/* line 2136, styles.scss */
-=======
-/* line 2125, styles.scss */
-.compare_result .column_1 ul .background {
-  background-color: #dde9ff;
-}
-/* line 2129, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2141, styles.scss */
 .compare_result .column_2 ul {
   background-color: #fff9ec;
   border: 1px solid #FFF3D8;
 }
-<<<<<<< HEAD
-/* line 2139, styles.scss */
+/* line 2144, styles.scss */
 .compare_result .column_2 ul .background {
   background-color: #FFF3D8;
 }
-/* line 2143, styles.scss */
-=======
-/* line 2132, styles.scss */
-.compare_result .column_2 ul .background {
-  background-color: #FFF3D8;
-}
-/* line 2136, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2148, styles.scss */
 .compare_result ul {
   padding: 2px;
   margin-right: 2em;
   width: 400px;
   font-size: 1.1em;
 }
-<<<<<<< HEAD
-/* line 2150, styles.scss */
-=======
-/* line 2143, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2155, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
   white-space: nowrap;
 }
 
-<<<<<<< HEAD
-/* line 2165, styles.scss */
-=======
-/* line 2158, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2170, styles.scss */
 .popover {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3227,67 +2574,39 @@ line.tick {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-<<<<<<< HEAD
-/* line 2167, styles.scss */
+/* line 2172, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 2170, styles.scss */
-=======
-/* line 2160, styles.scss */
-.popover .popover-content {
-  padding: 5px;
-}
-/* line 2163, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2175, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-<<<<<<< HEAD
-/* line 2178, styles.scss */
-=======
-/* line 2171, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2183, styles.scss */
 .tab_spinner {
   width: 9px;
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 2189, styles.scss */
-=======
-/* line 2182, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2194, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }
 
-<<<<<<< HEAD
-/* line 2192, styles.scss */
-=======
-/* line 2185, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2197, styles.scss */
 .loading .close_icon {
   display: none;
 }
 
-<<<<<<< HEAD
-/* line 2197, styles.scss */
-=======
-/* line 2190, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2202, styles.scss */
 .badge {
   padding-right: 5px;
   padding-left: 6px;
 }
 
-<<<<<<< HEAD
-/* line 2202, styles.scss */
-=======
-/* line 2195, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2207, styles.scss */
 .popper_menu {
   width: 130px;
 }
@@ -3295,71 +2614,43 @@ line.tick {
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
-<<<<<<< HEAD
-/* line 2214, styles.scss */
-=======
-/* line 2207, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2219, styles.scss */
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
-<<<<<<< HEAD
-/* line 2219, styles.scss */
-=======
-/* line 2212, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2224, styles.scss */
 .bs-callout h4 {
   margin-top: 0;
 }
 
-<<<<<<< HEAD
-/* line 2222, styles.scss */
-=======
-/* line 2215, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2227, styles.scss */
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
-<<<<<<< HEAD
-/* line 2226, styles.scss */
-=======
-/* line 2219, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2231, styles.scss */
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
-<<<<<<< HEAD
-/* line 2231, styles.scss */
-=======
-/* line 2224, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2236, styles.scss */
 .bs-callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
 }
 
-<<<<<<< HEAD
-/* line 2235, styles.scss */
-=======
-/* line 2228, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2240, styles.scss */
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
-<<<<<<< HEAD
-/* line 2239, styles.scss */
-=======
-/* line 2232, styles.scss */
->>>>>>> fixed bugs related to compare and search
+/* line 2244, styles.scss */
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
