@@ -222,7 +222,7 @@
 	"statstable_absfigures_hits" : "Hits per corpus, absolute frequencies",
 	"statstable_relfigures_hits" : "Hits per corpus, relative frequencies.",
 	"statstable_hitsheader" : "Hits for ",
-	"statstable_hitsheader_lemgram" : "Hits for the lemgram",
+	"statstable_hitsheader_lemgram" : "Hits",
 	"statstable_exp_csv" : "CSV (comma separated values)",
 	"statstable_exp_tsv" : "TSV (tab separated values)",
 	"statstable_export" : "Export",

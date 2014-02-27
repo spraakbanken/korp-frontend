@@ -1,5 +1,6 @@
 (function() {
-  var korpApp;
+  var korpApp,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   korpApp = angular.module("korpApp");
 
@@ -46,7 +47,7 @@
         c.log("simple search cqp", cqp);
         page = $rootScope.search()["page"] || 0;
         searches.kwicSearch(cqp, page);
-        if (settings.wordpicture) {
+        if (settings.wordpicture !== false && __indexOf.call(search.val, " ") < 0) {
           lemgramResults.showPreloader();
           return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
         }

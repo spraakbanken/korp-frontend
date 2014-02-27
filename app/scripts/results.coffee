@@ -797,7 +797,8 @@ class view.LemgramResults extends BaseResults
 
 
 
-newDataInGraph = (dataName, horizontalDiagram, targetDiv) ->
+newDataInGraph = (dataName, horizontalDiagram) ->
+    c.log "dataName, horizontalDiagram", dataName, horizontalDiagram
     dataItems = []
     wordArray = []
     corpusArray = []
@@ -843,7 +844,7 @@ newDataInGraph = (dataName, horizontalDiagram, targetDiv) ->
             locstring = "statstable_hitsheader"
         relHitsString = util.getLocaleString("statstable_relfigures_hits")
         $("<div id='dialog' title='#{topheader}' />")
-        .appendTo("#results-stats")
+        .appendTo("body")
         .append("""<br/><div id="statistics_switch" style="text-align:center">
                             <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
                             <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
@@ -938,8 +939,9 @@ class view.StatsResults extends BaseResults
         @gridData = null
         @proxy = new model.StatsProxy()
         window.statsProxy = @proxy
-        @$result.on "click", ".arcDiagramPicture", ->
-            parts = $(this).attr("id").split("__")
+        @$result.on "click", ".arcDiagramPicture", (event) ->
+            parts = $(event.currentTarget).attr("id").split("__")
+            c.log "hello", event.target, parts
 
             if parts[1] != "Σ"
                 newDataInGraph(parts[1],true)

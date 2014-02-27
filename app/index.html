@@ -366,7 +366,7 @@
                     </div>
                   </div>
                 </tab>
-                <tab ng-repeat="data in graphTabs">
+                <tab active="[true][0]" ng-repeat="data in graphTabs">
                   <tab-heading>{{'graph' | loc}}<span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-controller="graphCtrl" constr="GraphResults">
                     <div class="graph_header">

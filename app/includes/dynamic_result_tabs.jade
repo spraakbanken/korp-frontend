@@ -5,7 +5,7 @@ tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwic
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(constr='ExampleResults' )
     include kwicresult
-tab(ng-repeat='data in graphTabs')
+tab(active="[true][0]", ng-repeat='data in graphTabs')
   tab-heading
     | {{'graph' | loc}}
     span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')

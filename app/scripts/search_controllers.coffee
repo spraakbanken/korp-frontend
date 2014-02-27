@@ -40,9 +40,11 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             page = $rootScope.search()["page"] or 0
             searches.kwicSearch(cqp, page)
             # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
-            if settings.wordpicture
+            if settings.wordpicture != false and " " not in search.val
                 lemgramResults.showPreloader();
                 lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+            # else 
+            #     lemgramResults.
 
         else if search.type == "lemgram"
             s.placeholder = search.val

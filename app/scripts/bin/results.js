@@ -929,8 +929,9 @@
 
   })(BaseResults);
 
-  newDataInGraph = function(dataName, horizontalDiagram, targetDiv) {
+  newDataInGraph = function(dataName, horizontalDiagram) {
     var corpusArray, dataItems, locstring, relHitsString, stats2Instance, statsSwitchInstance, topheader, wordArray;
+    c.log("dataName, horizontalDiagram", dataName, horizontalDiagram);
     dataItems = [];
     wordArray = [];
     corpusArray = [];
@@ -978,7 +979,7 @@
         locstring = "statstable_hitsheader";
       }
       relHitsString = util.getLocaleString("statstable_relfigures_hits");
-      $("<div id='dialog' title='" + topheader + "' />").appendTo("#results-stats").append("<br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p>").dialog({
+      $("<div id='dialog' title='" + topheader + "' />").appendTo("body").append("<br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p>").dialog({
         width: 400,
         height: 500,
         resize: function() {
@@ -1076,9 +1077,10 @@
       this.gridData = null;
       this.proxy = new model.StatsProxy();
       window.statsProxy = this.proxy;
-      this.$result.on("click", ".arcDiagramPicture", function() {
+      this.$result.on("click", ".arcDiagramPicture", function(event) {
         var parts;
-        parts = $(this).attr("id").split("__");
+        parts = $(event.currentTarget).attr("id").split("__");
+        c.log("hello", event.target, parts);
         if (parts[1] !== "Σ") {
           return newDataInGraph(parts[1], true);
         } else {
