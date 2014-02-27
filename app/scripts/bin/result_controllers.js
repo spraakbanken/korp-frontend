@@ -231,7 +231,7 @@
         var cmp, cqpobj, opts;
         c.log("triple", triple);
         cmp = cmps[cmp_index];
-        _.extend(cmp, {
+        cmp = _.extend({}, cmp, {
           command: "query"
         });
         cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");

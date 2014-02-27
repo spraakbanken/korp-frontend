@@ -210,7 +210,7 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
         s.rowClick = (triple, cmp_index) ->
             c.log "triple", triple
             cmp = cmps[cmp_index]
-            _.extend cmp, 
+            cmp = _.extend {}, cmp, 
                 command: "query"
             cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
 

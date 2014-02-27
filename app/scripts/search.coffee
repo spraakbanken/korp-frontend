@@ -168,7 +168,7 @@ class view.SimpleSearch extends BaseSearch
         super mainDivId, scope
         $("#similar_lemgrams").css "background-color", settings.primaryColor
         # $("#simple_text").keyup $.proxy(@onSimpleChange, this)
-        $("#simple_text").change () =>
+        $("#simple_text").keyup () =>
             @s.$apply () =>
                 @onSimpleChange()
         # @onSimpleChange()
@@ -418,6 +418,7 @@ class view.SimpleSearch extends BaseSearch
             return
         
         val = @getCQP()
+        @s.placeholder = null
         # @s.$root.activeCQP = val
 
     resetView: ->

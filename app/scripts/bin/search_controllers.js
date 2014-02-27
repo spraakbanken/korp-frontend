@@ -70,7 +70,7 @@
     };
   });
 
-  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
+  korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {
     var s;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
@@ -83,7 +83,10 @@
     s.searches = searches;
     s.$on("btn_submit", function() {
       c.log("extended submit");
-      return $location.search("search", "cqp");
+      $location.search("search", null);
+      return $timeout(function() {
+        return $location.search("search", "cqp");
+      }, 0);
     });
     if ($location.search().cqp) {
       s.cqp = $location.search().cqp;

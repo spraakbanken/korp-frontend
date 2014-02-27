@@ -63,7 +63,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
 
 
-korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
+korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) ->
     s = $scope
     s.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
@@ -76,7 +76,10 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     s.searches = searches
     s.$on "btn_submit", () ->
         c.log "extended submit"
-        $location.search("search", "cqp")
+        $location.search("search", null)
+        $timeout( () ->
+            $location.search("search", "cqp")
+        , 0)
 
 
     if $location.search().cqp

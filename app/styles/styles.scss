@@ -1311,6 +1311,7 @@ label[for=lemgram_select]:before {
     &.visible:after {
       content: "|";
       margin : 0 0.3em;
+      color : grey;
     }
     &:last-child:after {
       // content: "";
@@ -1825,6 +1826,7 @@ slider {
   left: 180px;
   @include transition(width 400ms ease);
 }
+/*
 .progress_container {
   width: 143px;
   overflow-x: hidden;
@@ -1840,7 +1842,7 @@ slider {
 .not_loading .progress_container {
   display: none;
 }
-
+*/
 .arg_value {
   .from, .to {
     width: 50px;
@@ -2094,6 +2096,9 @@ line.tick {
 }
 
 .compare_result {
+  &.loading {
+    visibility : hidden;
+  }
   .column {
     @include inline-block(top);
   }

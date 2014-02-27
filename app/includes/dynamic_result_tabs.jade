@@ -11,8 +11,8 @@ tab(ng-repeat='data in graphTabs')
     span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(ng-controller='graphCtrl', constr='GraphResults')
     .graph_header
-      .progress_container
-        progress(value='0', max='100')
+      //- .progress_container
+      //-   progress(value='0', max='100')
       .controls
         .form_switch
           input#line_input(type='radio', name='form_switch', value='line', checked='checked')
