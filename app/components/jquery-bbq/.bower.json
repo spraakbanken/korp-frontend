@@ -9,5 +9,6 @@
     "commit": "98b5125708ff51e0c3e258ed138c1414f2826da8"
   },
   "_source": "https://github.com/cowboy/jquery-bbq.git",
-  "_target": "1.2.1"
+  "_target": "1.2.1",
+  "_originalSource": "https://github.com/cowboy/jquery-bbq.git"
 }

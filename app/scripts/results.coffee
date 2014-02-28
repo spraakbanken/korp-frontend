@@ -1298,6 +1298,7 @@ class view.GraphResults extends BaseResults
         ).show()
 
     updateTicks : () ->
+        return
         ticks = $(".chart .title:visible", @$result)
         firstTick = ticks.eq(0)
         secondTick = ticks.eq(1)

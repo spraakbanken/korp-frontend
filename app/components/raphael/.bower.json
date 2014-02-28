@@ -9,5 +9,6 @@
     "commit": "7ba1a8258be64fdb517bc78fde44ff0e6188ca05"
   },
   "_source": "git://github.com/DmitryBaranovskiy/raphael.git",
-  "_target": "2.1.0"
+  "_target": "2.1.0",
+  "_originalSource": "git://github.com/DmitryBaranovskiy/raphael.git"
 }

@@ -9,5 +9,6 @@
     "commit": "2ed824d471d31a4f7d7a4cfc3810d9fce2f589a4"
   },
   "_source": "git://github.com/timrwood/moment.git",
-  "_target": "2.0.0"
+  "_target": "2.0.0",
+  "_originalSource": "git://github.com/timrwood/moment.git"
 }

@@ -34,11 +34,11 @@ A reference to an HTML element that should hold the graph.
 
 ##### series
 
-Array of objects containing series data to plot.  Each object should contain `data` at a minimum, an array of objects each with x and y properties.  Optionally send a `name` and `color` as well.  Some renderers and extensions may also support additional keys.
+Array of objects containing series data to plot.  Each object should contain `data` at a minimum, a sorted array of objects each with x and y properties.  Optionally send a `name` and `color` as well.  Some renderers and extensions may also support additional keys.
 
 ##### renderer
 
-A string containing the name of the renderer to be used.  Options include `area`, `stack`, `bar`, `line`, and `scatterplot`.
+A string containing the name of the renderer to be used.  Options include `area`, `stack`, `bar`, `line`, and `scatterplot`.  Also see the `multi` meta renderer in order to support different renderers per series.
 
 ##### width
 
@@ -58,7 +58,7 @@ Highest value on the Y-axis.  Defaults to the highest value in the series.
 
 ##### padding
 
-An object containing any of `top`, `right`, `bottom`, and `left` properties specifying padding around the extrema of the data in the graph.  Defaults to 0.01 on top for 1% padding, and 0 on other sides.
+An object containing any of `top`, `right`, `bottom`, and `left` properties specifying a padding percentage around the extrema of the data in the graph.  Defaults to 0.01 on top for 1% padding, and 0 on other sides. Padding on the bottom only applies when the `yMin` is either negative or `auto`.
 
 ##### interpolation
 
@@ -100,11 +100,15 @@ Once you have a basic graph, extensions let you add functionality.  See the [ove
 
 * __Rickshaw.Graph.RangeSlider__ - dynamically zoom on the x-axis with a slider
 
-* __Rickshaw.Graph.Axis.Time__ - add x-axis and grid lines with time labels
+* __Rickshaw.Graph.RangeSlider.Preview__ - pan and zoom via graphical preview of entire data set
+
+* __Rickshaw.Graph.Axis.Time__ - add an x-axis and grid lines with time labels
 
 * __Rickshaw.Graph.Axis.X__ - add an x-axis and grid lines with arbitrary labels
 
 * __Rickshaw.Graph.Axis.Y__ - add a y-axis and grid lines
+
+* __Rickshaw.Graph.Axis.Y.Scaled__ - add a y-axis with an alternate scale
 
 * __Rickshaw.Graph.Behavior.Series.Highlight__ - highlight series on legend hover
 
@@ -136,11 +140,11 @@ palette.color() // => next color in the palette...
 
 #### Interpolation
 
-For graphs with more series than palettes have colors, sepcify an `interpolatedStopsCount` to the palette constructor.
+For graphs with more series than palettes have colors, specify an `interpolatedStopCount` to the palette constructor.
 
 ## Rickshaw and Cross-Browser Support
 
-This library works in modern browsers and Internet Explorer 9.
+This library works in modern browsers and Internet Explorer 9+.
 
 Rickshaw relies on the HTMLElement#classList API, which isn't natively supported in Internet Explorer 9.  Rickshaw adds support by including a shim which implements the classList API by extending the HTMLElement prototype.  You can disable this behavior if you like, by setting `RICKSHAW_NO_COMPAT` to a true value before including the library. 
 
@@ -151,7 +155,9 @@ Rickshaw relies on the fantastic [D3 visualization library](http://mbostock.gith
 
 Some extensions require [jQuery](http://jquery.com) and [jQuery UI](http://jqueryui.com), but for drawing some basic graphs you'll be okay without.
 
-For building, we need [Node](http://nodejs.org) and [npm](http://npmjs.org).  Running 'make' should get you going with any luck.
+For building, we need [Node](http://nodejs.org) and [npm](http://npmjs.org).  Running `make` should get you going with any luck.
+
+After doing a build you can run the tests with the command: `npm test`
 
 ## Contributing
 
@@ -169,7 +175,7 @@ This library was developed by David Chester, Douglas Hunter, and Silas Sewell at
 
 ## License
 
-Copyright (C) 2011-2012 by Shutterstock Images, LLC
+Copyright (C) 2011-2013 by Shutterstock Images, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

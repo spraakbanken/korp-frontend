@@ -59,7 +59,7 @@
     <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/lodash/dist/lodash.compat.js"></script>
     <script src="components/underscore.string/lib/underscore.string.js"></script>
-    <script src="components/spin.js/dist/spin.js"></script>
+    <script src="components/spin.js/spin.js"></script>
     <script src="components/angular-spinner/angular-spinner.js"></script>
     <script src="components/angular-bindonce/bindonce.js"></script>
     <script src="components/angular-slider/angular-slider.js"></script>
@@ -367,7 +367,9 @@
                   </div>
                 </tab>
                 <tab active="[true][0]" ng-repeat="data in graphTabs">
-                  <tab-heading>{{'graph' | loc}}<span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
+                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc}}
+                    <div style="width:{{progress || 0}}%" class="tab_progress"></div><span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
+                  </tab-heading>
                   <div ng-controller="graphCtrl" constr="GraphResults">
                     <div class="graph_header">
                       <div class="controls">

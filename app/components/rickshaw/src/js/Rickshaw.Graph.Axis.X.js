@@ -10,8 +10,10 @@ Rickshaw.Graph.Axis.X = function(args) {
 		this.graph = args.graph;
 		this.orientation = args.orientation || 'top';
 
-		var pixelsPerTick = args.pixelsPerTick || 75;
-		this.ticks = args.ticks || Math.floor(this.graph.width / pixelsPerTick);
+		this.pixelsPerTick = args.pixelsPerTick || 75;
+		if (args.ticks) this.staticTicks = args.ticks;
+		if (args.tickValues) this.tickValues = args.tickValues;
+
 		this.tickSize = args.tickSize || 4;
 		this.ticksTreatment = args.ticksTreatment || 'plain';
 
@@ -55,18 +57,22 @@ Rickshaw.Graph.Axis.X = function(args) {
 
 	this.render = function() {
 
-		if (this.graph.width !== this._renderWidth) this.setSize({ auto: true });
+		if (this._renderWidth !== undefined && this.graph.width !== this._renderWidth) this.setSize({ auto: true });
 
 		var axis = d3.svg.axis().scale(this.graph.x).orient(this.orientation);
 		axis.tickFormat( args.tickFormat || function(x) { return x } );
+		if (this.tickValues) axis.tickValues(this.tickValues);
+
+		this.ticks = this.staticTicks || Math.floor(this.graph.width / this.pixelsPerTick);
 
 		var berth = Math.floor(this.width * berthRate / 2) || 0;
+		var transform;
 
 		if (this.orientation == 'top') {
 			var yOffset = this.height || this.graph.height;
-			var transform = 'translate(' + berth + ',' + yOffset + ')';
+			transform = 'translate(' + berth + ',' + yOffset + ')';
 		} else {
-			var transform = 'translate(' + berth + ', 0)';
+			transform = 'translate(' + berth + ', 0)';
 		}
 
 		if (this.element) {
@@ -84,7 +90,9 @@ Rickshaw.Graph.Axis.X = function(args) {
 		this.graph.vis
 			.append("svg:g")
 			.attr("class", "x_grid_d3")
-			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(gridSize));
+			.call(axis.ticks(this.ticks).tickSubdivide(0).tickSize(gridSize))
+			.selectAll('text')
+			.each(function() { this.parentNode.setAttribute('data-x-value', this.textContent) });
 
 		this._renderHeight = this.graph.height;
 	};
@@ -94,10 +102,10 @@ Rickshaw.Graph.Axis.X = function(args) {
 		if (typeof window !== 'undefined') {
 
 			var style = window.getComputedStyle(element, null);
-			var elementHeight = parseInt(style.getPropertyValue('height'));
+			var elementHeight = parseInt(style.getPropertyValue('height'), 10);
 
 			if (!args.auto) {
-				var elementWidth = parseInt(style.getPropertyValue('width'));
+				var elementWidth = parseInt(style.getPropertyValue('width'), 10);
 			}
 		}
 

@@ -1,7 +1,7 @@
 <!doctype html>
-<link type="text/css" rel="stylesheet" href="../src/css/graph.css">
+<link type="text/css" rel="stylesheet" href="../rickshaw.css">
 
-<script src="../vendor/d3.v2.js"></script>
+<script src="../vendor/d3.v3.js"></script>
 
 <script src="../rickshaw.js"></script>
 
@@ -37,6 +37,8 @@ var graph = new Rickshaw.Graph( {
 } );
 
 graph.renderer.dotSize = 6;
+
+new Rickshaw.Graph.HoverDetail({ graph: graph });
 
 graph.render();
 

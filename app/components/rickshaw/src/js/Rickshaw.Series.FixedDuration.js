@@ -4,7 +4,7 @@ Rickshaw.Series.FixedDuration = Rickshaw.Class.create(Rickshaw.Series, {
 
 	initialize: function (data, palette, options) {
 
-		var options = options || {}
+		options = options || {};
 
 		if (typeof(options.timeInterval) === 'undefined') {
 			throw new Error('FixedDuration series requires timeInterval');
@@ -29,7 +29,7 @@ Rickshaw.Series.FixedDuration = Rickshaw.Class.create(Rickshaw.Series, {
 		this.maxDataPoints = options.maxDataPoints;
 
 
-		if (data && (typeof(data) == "object") && (data instanceof Array)) {
+		if (data && (typeof(data) == "object") && Array.isArray(data)) {
 			data.forEach( function (item) { this.addItem(item) }, this );
 			this.currentSize  += 1;
 			this.currentIndex += 1;
@@ -40,7 +40,7 @@ Rickshaw.Series.FixedDuration = Rickshaw.Class.create(Rickshaw.Series, {
 
 		// zero-fill up to maxDataPoints size if we don't have that much data yet
 		if ((typeof(this.maxDataPoints) !== 'undefined') && (this.currentSize < this.maxDataPoints)) {
-			for (var i = this.maxDataPoints - this.currentSize - 1; i > 0; i--) {
+			for (var i = this.maxDataPoints - this.currentSize - 1; i > 1; i--) {
 				this.currentSize  += 1;
 				this.currentIndex += 1;
 				this.forEach( function (item) {
@@ -50,9 +50,9 @@ Rickshaw.Series.FixedDuration = Rickshaw.Class.create(Rickshaw.Series, {
 		}
 	},
 
-	addData: function($super, data) {
+	addData: function($super, data, x) {
 
-		$super(data)
+		$super(data, x);
 
 		this.currentSize += 1;
 		this.currentIndex += 1;

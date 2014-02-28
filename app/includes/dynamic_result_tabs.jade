@@ -6,8 +6,9 @@ tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwic
   div(constr='ExampleResults' )
     include kwicresult
 tab(active="[true][0]", ng-repeat='data in graphTabs')
-  tab-heading
+  tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc}}
+    .tab_progress(style="width:{{progress || 0}}%")
     span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(ng-controller='graphCtrl', constr='GraphResults')
     .graph_header

@@ -1457,6 +1457,7 @@
 
     GraphResults.prototype.updateTicks = function() {
       var firstTick, margin, secondTick, ticks;
+      return;
       ticks = $(".chart .title:visible", this.$result);
       firstTick = ticks.eq(0);
       secondTick = ticks.eq(1);

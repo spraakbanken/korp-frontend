@@ -25,33 +25,34 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 
 		var domain = $super();
 
-		var frequentInterval = this._frequentInterval();
-		domain.x[1] += parseInt(frequentInterval.magnitude);
+		var frequentInterval = this._frequentInterval(this.graph.stackedData.slice(-1).shift());
+		domain.x[1] += Number(frequentInterval.magnitude);
 
 		return domain;
 	},
 
-	barWidth: function() {
+	barWidth: function(series) {
 
-		var stackedData = this.graph.stackedData || this.graph.stackData();
-		var data = stackedData.slice(-1).shift();
-
-		var frequentInterval = this._frequentInterval();
-		var barWidth = this.graph.x(data[0].x + frequentInterval.magnitude * (1 - this.gapSize)); 
+		var frequentInterval = this._frequentInterval(series.stack);
+		var barWidth = this.graph.x(series.stack[0].x + frequentInterval.magnitude * (1 - this.gapSize)); 
 
 		return barWidth;
 	},
 
-	render: function() {
+	render: function(args) {
+
+		args = args || {};
 
 		var graph = this.graph;
+		var series = args.series || graph.series;
 
-		graph.vis.selectAll('*').remove();
+		var vis = args.vis || graph.vis;
+		vis.selectAll('*').remove();
 
-		var barWidth = this.barWidth();
+		var barWidth = this.barWidth(series.active()[0]);
 		var barXOffset = 0;
 
-		var activeSeriesCount = graph.series.filter( function(s) { return !s.disabled; } ).length;
+		var activeSeriesCount = series.filter( function(s) { return !s.disabled; } ).length;
 		var seriesBarWidth = this.unstack ? barWidth / activeSeriesCount : barWidth;
 
 		var transform = function(d) {
@@ -60,11 +61,13 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 			return "matrix(" + matrix.join(',') + ")";
 		};
 
-		graph.series.forEach( function(series) {
+		series.forEach( function(series) {
 
 			if (series.disabled) return;
 
-			var nodes = graph.vis.selectAll("path")
+			var barWidth = this.barWidth(series);
+
+			var nodes = vis.selectAll("path")
 				.data(series.stack.filter( function(d) { return d.y !== null } ))
 				.enter().append("svg:rect")
 				.attr("x", function(d) { return graph.x(d.x) + barXOffset })
@@ -82,10 +85,7 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 		}, this );
 	},
 
-	_frequentInterval: function() {
-
-		var stackedData = this.graph.stackedData || this.graph.stackData();
-		var data = stackedData.slice(-1).shift();
+	_frequentInterval: function(data) {
 
 		var intervalCounts = {};
 
@@ -95,19 +95,16 @@ Rickshaw.Graph.Renderer.Bar = Rickshaw.Class.create( Rickshaw.Graph.Renderer, {
 			intervalCounts[interval]++;
 		}
 
-		var frequentInterval = { count: 0 };
+		var frequentInterval = { count: 0, magnitude: 1 };
 
 		Rickshaw.keys(intervalCounts).forEach( function(i) {
 			if (frequentInterval.count < intervalCounts[i]) {
-
 				frequentInterval = {
 					count: intervalCounts[i],
 					magnitude: i
 				};
 			}
 		} );
-
-		this._frequentInterval = function() { return frequentInterval };
 
 		return frequentInterval;
 	}

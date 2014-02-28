@@ -4,7 +4,7 @@ Rickshaw.Series = Rickshaw.Class.create( Array, {
 
 	initialize: function (data, palette, options) {
 
-		options = options || {}
+		options = options || {};
 
 		this.palette = new Rickshaw.Color.Palette(palette);
 
@@ -18,7 +18,7 @@ Rickshaw.Series = Rickshaw.Class.create( Array, {
 
 		this.setTimeInterval(timeInterval);
 
-		if (data && (typeof(data) == "object") && (data instanceof Array)) {
+		if (data && (typeof(data) == "object") && Array.isArray(data)) {
 			data.forEach( function(item) { this.addItem(item) }, this );
 		}
 	},
@@ -33,11 +33,11 @@ Rickshaw.Series = Rickshaw.Class.create( Array, {
 		item.data = (item.data || []);
 
 		// backfill, if necessary
-		if ((item.data.length == 0) && this.length && (this.getIndex() > 0)) {
+		if ((item.data.length === 0) && this.length && (this.getIndex() > 0)) {
 			this[0].data.forEach( function(plot) {
 				item.data.push({ x: plot.x, y: 0 });
 			} );
-		} else if (item.data.length == 0) {
+		} else if (item.data.length === 0) {
 			item.data.push({ x: this.timeBase - (this.timeInterval || 0), y: 0 });
 		} 
 
@@ -48,7 +48,7 @@ Rickshaw.Series = Rickshaw.Class.create( Array, {
 		}
 	},
 
-	addData: function(data) {
+	addData: function(data, x) {
 
 		var index = this.getIndex();
 
@@ -60,7 +60,7 @@ Rickshaw.Series = Rickshaw.Class.create( Array, {
 
 		this.forEach( function(item) {
 			item.data.push({ 
-				x: (index * this.timeInterval || 1) + this.timeBase, 
+				x: x || (index * this.timeInterval || 1) + this.timeBase, 
 				y: (data[item.name] || 0) 
 			});
 		}, this );
