@@ -304,7 +304,7 @@ module.exports = function (grunt) {
             'markup/*',
             'modes/*',
             'img/*',
-            'lib/*',
+            'lib/**/*',
             'styles/**/*.{png,otf,gif}',
             'scripts/jq_extensions.js',
             'scripts/bin/controllers/controllers.js',
