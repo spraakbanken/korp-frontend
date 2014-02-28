@@ -28,6 +28,7 @@
         _results = [];
         for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
           and_array = _ref[_j];
+          c.log("and_array", and_array);
           _results.push((function() {
             var _k, _len2, _ref1, _ref2, _ref3, _results1;
             _results1 = [];
@@ -35,7 +36,9 @@
               _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val, flags = _ref1.flags;
               if (translate_ops) {
                 if (op !== "*=") {
+                  c.log("val", val);
                   val = regescape(val);
+                  c.log("val", val);
                 }
                 _ref2 = {
                   "^=": [val + ".*", "="],

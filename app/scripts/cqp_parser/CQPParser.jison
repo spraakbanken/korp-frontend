@@ -28,7 +28,7 @@
 '*='                return '*='
 '='                 return '='
 (_.)?[A-Za-z_]+      return 'TYPE'
-["'].*['"]           return 'VALUE'
+["'].*?['"]           return 'VALUE'
 "["\s*"]"           return 'EMPTY'
 "["                 return '['
 "]"                 return ']'
