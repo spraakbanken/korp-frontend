@@ -72,7 +72,7 @@ class view.KWICResults extends BaseResults
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
-        @current_page = 0
+        # @current_page = 0
 
         @s = scope
         @selectionManager = scope.selectionManager
@@ -288,7 +288,6 @@ class view.KWICResults extends BaseResults
         area.stop(true, true).animate scrollLeft: newX
 
     buildPager: (number_of_hits) ->
-        c.log "buildPager", @current_page
         items_per_page = @optionWidget.find(".num_hits").val()
         @movePager "up"
         $.onScrollOut "unbind"
@@ -302,23 +301,22 @@ class view.KWICResults extends BaseResults
                 link_to: "javascript:void(0)"
                 num_edge_entries: 2
                 ellipse_text: ".."
-                current_page: @current_page or 0
+                current_page: search().page or 0
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
     # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
-        c.log "handlePaginationClick", new_page_index, @current_page
+        page = search().page or 0
+        c.log "handlePaginationClick", new_page_index, page
         self = this
-        if new_page_index isnt @current_page or !!force_click
+        if new_page_index isnt page or !!force_click
             isReading = @$result.is(".reading_mode")
             kwicCallback = @renderResult
 
             this.showPreloader();
-            @current_page = new_page_index
 
-            #     this.proxy.makeRequest(this.buildQueryOptions(), this.current_page, function(progressObj) {
-            @getProxy().makeRequest @buildQueryOptions(), @current_page, ((progressObj) ->
+            @getProxy().makeRequest @buildQueryOptions(), new_page_index, ((progressObj) ->
 
                 #progress
                 self.$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
@@ -356,7 +354,7 @@ class view.KWICResults extends BaseResults
 
         kwicCallback = $.proxy(@renderResult, this)
         @proxy.makeRequest @buildQueryOptions(),
-                           page_num or @current_page,
+                           page_num,
                            (if isReading then $.noop else $.proxy(@onProgress, this)),
                            $.proxy(@renderCompleteResult, this),
                            kwicCallback
@@ -513,15 +511,15 @@ class view.ExampleResults extends view.KWICResults
 
 
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
-        c.log "handlePaginationClick", new_page_index, @current_page
-        if new_page_index isnt @current_page or !!force_click
+        page = search().page or 0
+        c.log "handlePaginationClick", new_page_index, page
+        if new_page_index isnt page or !!force_click
             items_per_page = parseInt(@optionWidget.find(".num_hits").val())
             opts = {}
             opts.cqp = @proxy.prevCQP
             opts.start = new_page_index * items_per_page
             opts.end = (opts.start + items_per_page)
             opts.sort = $(".sort_select").val()
-            @current_page = new_page_index
             @makeRequest opts
         false
 

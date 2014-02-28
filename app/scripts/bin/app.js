@@ -96,14 +96,14 @@
       return _results;
     };
     s.select(currentMode);
-    return s.onSelect = function(modeId) {
-      s.select(modeId);
-      $location.search("corpus", null);
+    s.getUrl = function(modeId) {
       if (modeId === "default") {
-        return location.href = location.pathname;
-      } else {
-        return location.href = location.pathname + "?mode=" + modeId;
+        return location.pathname;
       }
+      return location.pathname + "?mode=" + modeId;
+    };
+    return s.onSelect = function(modeId) {
+      return $location.search("corpus", null);
     };
   });
 

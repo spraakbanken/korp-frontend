@@ -11,7 +11,6 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
     for token in cqp_obj
         or_array = []
         or_array = for and_array in token.and_block
-            c.log "and_array", and_array
             for {type, op, val, flags} in and_array
                 if translate_ops
                     if op != "*="

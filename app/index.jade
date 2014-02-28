@@ -71,7 +71,11 @@ html
     script(src='components/angular-bindonce/bindonce.js')
     script(src='components/angular-slider/angular-slider.js')
     script(src='lib/angular-sortable.js')
+    
+    script(src='components/moment/moment.js')
+    script(src='scripts/jq_extensions.js')
     // endbuild  
+    script(src='components/rickshaw/rickshaw.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap.js')
     //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
     script.
@@ -79,9 +83,6 @@ html
       test: $("html.msie7,html.msie8").length,
       nope: 'components/d3/d3.js'
       });
-    script(src='components/moment/moment.js')
-    script(src='components/rickshaw/rickshaw.js')
-    script(src='scripts/jq_extensions.js')
     script(src='config.js')
     // build:js scripts/scripts.js 
        

@@ -411,13 +411,11 @@ class view.SimpleSearch extends BaseSearch
         return val
 
     onSimpleChange: (event) ->
-        c.log "onSimpleChange"
         $("#simple_text").data "promise", null
         if event and event.keyCode is 27 #escape
             c.log "key", event.keyCode
             return
         
-        c.log "event", event.keyCode
         if event and event.keyCode != 13   
            @s.placeholder = null
         # val = @getCQP()

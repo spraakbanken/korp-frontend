@@ -114,13 +114,11 @@ korpApp.controller "headerCtrl", ($scope, $location) ->
                 mode.selected = true
 
     s.select(currentMode)
+    s.getUrl = (modeId) ->
+        if modeId is "default" then return location.pathname
+        return location.pathname + "?mode=" + modeId
     s.onSelect = (modeId) ->
-        s.select(modeId)
         $location.search("corpus", null)
-        if modeId is "default"
-            location.href = location.pathname
-        else
-            location.href = location.pathname + "?mode=" + modeId
 
 
 korpApp.filter "trust", ($sce) ->

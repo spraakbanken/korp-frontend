@@ -219,6 +219,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         unless searchExpr then return
         [type, value] = searchExpr?.split("|")
         page = $rootScope.search()["page"] or 0
+        c.log "page", page
 
         view.updateSearchHistory value
         # $.when(chained).then () ->
@@ -260,14 +261,18 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 korpApp.service "compareSearches",
     class CompareSearches
         constructor : () ->
-            @savedSearches = ($.jStorage.get 'saved_searches') or []
+            if currentMode != "default"
+                @key = 'saved_searches_' + currentMode
+            else 
+                @key = "saved_searches"
+            @savedSearches = ($.jStorage.get @key) or []
 
         saveSearch : (searchObj) ->
             @savedSearches.push searchObj
-            $.jStorage.set 'saved_searches', @savedSearches
+            $.jStorage.set @key, @savedSearches
 
         flush: () ->
             @savedSearches[..] = []
-            $.jStorage.set "saved_searches", @savedSearches
+            $.jStorage.set @key, @savedSearches
 
 

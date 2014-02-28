@@ -471,13 +471,11 @@
     };
 
     SimpleSearch.prototype.onSimpleChange = function(event) {
-      c.log("onSimpleChange");
       $("#simple_text").data("promise", null);
       if (event && event.keyCode === 27) {
         c.log("key", event.keyCode);
         return;
       }
-      c.log("event", event.keyCode);
       if (event && event.keyCode !== 13) {
         return this.s.placeholder = null;
       }

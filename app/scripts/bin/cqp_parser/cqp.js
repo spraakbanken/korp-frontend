@@ -28,7 +28,6 @@
         _results = [];
         for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
           and_array = _ref[_j];
-          c.log("and_array", and_array);
           _results.push((function() {
             var _k, _len2, _ref1, _ref2, _ref3, _results1;
             _results1 = [];

@@ -86,7 +86,6 @@
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
-      this.current_page = 0;
       this.s = scope;
       this.selectionManager = scope.selectionManager;
       this.$result.click(function() {
@@ -337,7 +336,6 @@
 
     KWICResults.prototype.buildPager = function(number_of_hits) {
       var items_per_page;
-      c.log("buildPager", this.current_page);
       items_per_page = this.optionWidget.find(".num_hits").val();
       this.movePager("up");
       $.onScrollOut("unbind");
@@ -351,7 +349,7 @@
           link_to: "javascript:void(0)",
           num_edge_entries: 2,
           ellipse_text: "..",
-          current_page: this.current_page || 0
+          current_page: search().page || 0
         });
         this.$result.find(".next").attr("rel", "localize[next]");
         return this.$result.find(".prev").attr("rel", "localize[prev]");
@@ -359,15 +357,15 @@
     };
 
     KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var isReading, kwicCallback, self;
-      c.log("handlePaginationClick", new_page_index, this.current_page);
+      var isReading, kwicCallback, page, self;
+      page = search().page || 0;
+      c.log("handlePaginationClick", new_page_index, page);
       self = this;
-      if (new_page_index !== this.current_page || !!force_click) {
+      if (new_page_index !== page || !!force_click) {
         isReading = this.$result.is(".reading_mode");
         kwicCallback = this.renderResult;
         this.showPreloader();
-        this.current_page = new_page_index;
-        this.getProxy().makeRequest(this.buildQueryOptions(), this.current_page, (function(progressObj) {
+        this.getProxy().makeRequest(this.buildQueryOptions(), new_page_index, (function(progressObj) {
           if (!isNaN(progressObj["stats"])) {
             self.$result.find(".progress_container progress").attr("value", Math.round(progressObj["stats"]));
           }
@@ -413,7 +411,7 @@
         }
       });
       kwicCallback = $.proxy(this.renderResult, this);
-      return this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
+      return this.proxy.makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
 
     KWICResults.prototype.setPage = function(page) {
@@ -608,16 +606,16 @@
     };
 
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var items_per_page, opts;
-      c.log("handlePaginationClick", new_page_index, this.current_page);
-      if (new_page_index !== this.current_page || !!force_click) {
+      var items_per_page, opts, page;
+      page = search().page || 0;
+      c.log("handlePaginationClick", new_page_index, page);
+      if (new_page_index !== page || !!force_click) {
         items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
         opts = {};
         opts.cqp = this.proxy.prevCQP;
         opts.start = new_page_index * items_per_page;
         opts.end = opts.start + items_per_page;
         opts.sort = $(".sort_select").val();
-        this.current_page = new_page_index;
         this.makeRequest(opts);
       }
       return false;

@@ -1,7 +1,7 @@
 #top_bar(ng-controller="headerCtrl")
   ul#mode_switch
     li(ng-repeat="mode in visible", class="visible", ng-class="{selected: mode.selected}")
-      a(href="javascript:", ng-click="onSelect(mode.mode)") 
+      a(ng-href="{{getUrl(mode.mode)}}", ng-click="onSelect(mode.mode)") 
         | {{mode.localekey | loc}}
     li.menu_more.visible(ng-if="menu.length") 
       a.dropdown-toggle(popper, my="right+15% top+10", at="bottom right", href="javascript:") Fler

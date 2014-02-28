@@ -263,6 +263,7 @@
       }
       _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = _ref[1];
       page = $rootScope.search()["page"] || 0;
+      c.log("page", page);
       view.updateSearchHistory(value);
       return searches.infoDef.then(function() {
         switch (type) {
@@ -297,18 +298,23 @@
 
   korpApp.service("compareSearches", CompareSearches = (function() {
     function CompareSearches() {
-      this.savedSearches = ($.jStorage.get('saved_searches')) || [];
+      if (currentMode !== "default") {
+        this.key = 'saved_searches_' + currentMode;
+      } else {
+        this.key = "saved_searches";
+      }
+      this.savedSearches = ($.jStorage.get(this.key)) || [];
     }
 
     CompareSearches.prototype.saveSearch = function(searchObj) {
       this.savedSearches.push(searchObj);
-      return $.jStorage.set('saved_searches', this.savedSearches);
+      return $.jStorage.set(this.key, this.savedSearches);
     };
 
     CompareSearches.prototype.flush = function() {
       var _ref;
       [].splice.apply(this.savedSearches, [0, 9e9].concat(_ref = [])), _ref;
-      return $.jStorage.set("saved_searches", this.savedSearches);
+      return $.jStorage.set(this.key, this.savedSearches);
     };
 
     return CompareSearches;
