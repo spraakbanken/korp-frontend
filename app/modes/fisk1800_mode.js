@@ -33,9 +33,28 @@ settings.corporafolders.sakprosa = {
 
 settings.corporafolders.tidskrifter = {
 	title : "Tidskrifter",
-	contents : ["filosofia1850-1899", "filosofia1900-1959", "spanskaflugan"],
+	contents : [],
 	description : ""
 };
+
+settings.corporafolders.tidskrifter.tidskrifter1849 = {
+	title : "Tidskrifter 1800–1849",
+	contents : ["spanskaflugan"],
+	description : ""
+};
+
+settings.corporafolders.tidskrifter.tidskrifter1899 = {
+	title : "Tidskrifter 1850–1899",
+	contents : ["filosofia1850-1899"],
+	description : ""
+};
+
+settings.corporafolders.tidskrifter.tidskrifter1959 = {
+	title : "Tidskrifter 1900–1959",
+	contents : ["astra", "euterpe", "filosofia1900-1959"],
+	description : ""
+};
+
 
 settings.corpora.fsbbrev1700tal = {
 	id : "fsbbrev1700tal",
@@ -345,5 +364,30 @@ settings.corpora.spanskaflugan = {
 	}
 };
 
+settings.corpora.astra = {
+    id : "astra",
+    title : "Astra 1929–1959",
+    description : "",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : {label : "year"},
+        text_issue : {label : "issue"}
+    }
+};
+
+settings.corpora.euterpe = {
+    id : "euterpe",
+    title : "Euterpe 1900–1905",
+    description : "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift.",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : {label : "year"},
+        text_issue : {label : "issue"}
+    }
+};
 
 settings.corpusListing = new CorpusListing(settings.corpora);
