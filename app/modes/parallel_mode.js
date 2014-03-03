@@ -207,7 +207,7 @@ settings.corpora["europarl-sv"] = {
 		}
 	},
 	hide : true
-}
+};
 
 settings.corpora["europarl-da"] = {
 	id : "europarl-da",
@@ -224,7 +224,7 @@ settings.corpora["europarl-da"] = {
 	},
 	struct_attributes : {
 	}
-}
+};
 
 settings.corpora["europarl-de"] = {
 	id : "europarl-de",
@@ -416,7 +416,7 @@ settings.corpora.saltnld_swe = {
 		},
 		page_n : {label : "page_n"}
 	}
-}
+};
 settings.corpora.saltnld_nld = {
 	id : "saltnld_nld",
 	lang : "nld",
@@ -443,7 +443,7 @@ settings.corpora.saltnld_nld = {
 		page_n : {label : "page_n"}
 	},
 	hide : true
-}
+};
 
 settings.corpora["espc-sv"] = {
 	id : "espc-sv",
@@ -473,7 +473,7 @@ settings.corpora["espc-sv"] = {
 		text_title : {label : "title"},
 		text_date : {label : "year"}
 	}
-}
+};
 settings.corpora["espc-en"] = {
 	id : "espc-en",
 	lang : "eng",
@@ -491,7 +491,7 @@ settings.corpora["espc-en"] = {
 		text_date : {label : "year"}
 	},
 	hide : true
-}
+};
 
 
 window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora);
