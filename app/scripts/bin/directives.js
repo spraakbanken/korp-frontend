@@ -357,7 +357,7 @@
 
   korpApp.directive("tabSpinner", function($rootElement) {
     return {
-      template: "<i class=\"fa fa-times-circle close_icon\"></i> \n    <span class=\"tab_spinner\" \n        us-spinner=\"{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}\"></span>"
+      template: "<i class=\"fa fa-times-circle close_icon\"></i> \n<span class=\"tab_spinner\" \n    us-spinner=\"{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}\"></span>"
     };
   });
 
@@ -446,6 +446,19 @@
           return s.data.splice(i, 1);
         };
       }
+    };
+  });
+
+  korpApp.directive("tabPreloader", function() {
+    return {
+      restrict: "E",
+      scope: {
+        value: "=",
+        spinner: "="
+      },
+      replace: true,
+      template: "<div class=\"tab_preloaders\">\n    <div ng-if=\"!spinner\" class=\"tab_progress\" style=\"width:{{value || 0}}%\"></div>\n        <span ng-if=\"spinner\" class=\"tab_spinner\" \n            us-spinner=\"{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 7, top : -12}\"></span>\n</div>",
+      link: function(scope, elem, attr) {}
     };
   });
 

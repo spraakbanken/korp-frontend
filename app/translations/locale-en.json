@@ -161,6 +161,8 @@
 	"non_time_before" : "",
 	"non_time_after" : " of selected material lacks time data.",
 	"rel_hits_short" : "Rel. hits",
+	"drawing" : "Drawing graph...",
+	"material_warn" : "The selected corpora lack time data.",
 
 
     "word_insensitive" : "word (case insensitive)",

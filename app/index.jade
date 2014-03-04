@@ -123,18 +123,23 @@ html
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
               tabset(tab-hash='result_tab', ng-click='onClick($event)')
                 tab(disabled="!instance.hasData", select="instance.onentry()", deselect="instance.onexit()", ng-controller='kwicCtrl')
-                  tab-heading(ng-class="{not_loading: progress > 99}")
+                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
-                    .tab_progress(style="width:{{progress || 0}}%")
+                    tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   #results-kwic(constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
                 tab(disabled="!instance.hasData", ng-controller='StatsResultCtrl', ng-if="_settings.statistics != false")
-                  tab-heading(ng-class="{not_loading: progress > 99}")
+                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'statistics' | loc}}
-                    .tab_progress(style="width:{{progress || 0}}%")
+                    tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='StatsResults', constr-name='statsResults')
                     .stats_header
-                      button#showGraph Visa trenddiagram
+                      #showGraph.button.btn.btn-small(ng-class="{disabled: !graphEnabled}", 
+                        tooltip="{{'material_warn' | loc}}", tooltip-placement="right"  
+                      )
+                        span.graph_btn_icon
+                        | {{'show_diagram' | loc}}
+
                       //- .progress_container
                       //-   progress(value='{{progress || 0}}', max='100')
                       #showBarPlot
@@ -150,9 +155,9 @@ html
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
                 tab(disabled="!instance.hasData", ng-if="_settings.wordpicture != false")
-                  tab-heading(ng-class="{not_loading: progress > 99}")
+                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc}}
-                    .tab_progress(style="width:{{progress || 0}}%")
+                    tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent
                       input#wordclassChk(type='checkbox')

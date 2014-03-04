@@ -1,7 +1,8 @@
 (function() {
   var BaseProxy,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.model = {};
 
@@ -169,9 +170,7 @@
       self.progress = 0;
       corpus = settings.corpusListing.stringifySelected();
       o = $.extend({
-        cqp: $("body").scope().activeCQP || search().cqp,
         queryData: null,
-        ajaxParams: this.prevAjaxParams,
         success: function(data, status, xhr) {
           self.popXhr(xhr);
           return successCallback(data);
@@ -196,7 +195,6 @@
         },
         incremental: $.support.ajaxProgress
       }, kwicResults.getPageInterval(page), options);
-      this.prevAjaxParams = o.ajaxParams;
       c.log("kwicProxy.makeRequest", o.cqp);
       data = {
         command: o.command,
@@ -221,7 +219,6 @@
       if (o.random_seed != null) {
         data.random_seed = o.random_seed;
       }
-      $.extend(data, o.ajaxParams);
       if (o.queryData != null) {
         data.querydata = o.queryData;
       }
@@ -254,6 +251,7 @@
       this.prevMisc = {
         "hitsPerPage": $("#num_hits").val()
       };
+      this.prevParams = data;
       return this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
         data: data,
@@ -312,6 +310,7 @@
         type: type,
         cache: false
       };
+      this.prevParams = params;
       return $.ajax({
         url: settings.cgi_script,
         data: params,
@@ -661,6 +660,11 @@
         return dfd.reject();
       });
       return dfd;
+    };
+
+    AuthenticationProxy.prototype.hasCred = function(corpusId) {
+      var _ref;
+      return _ref = corpusId.toUpperCase(), __indexOf.call(this.loginObj.credentials, _ref) >= 0;
     };
 
     return AuthenticationProxy;

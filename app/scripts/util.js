@@ -446,18 +446,6 @@ util.changeColor = function(rgbstr, incr) {
 };
 
 
-util.setLogin = function() {
-	c.log("login success");
-	$("body").toggleClass("logged_in not_logged_in");
-	$.each(authenticationProxy.loginObj.credentials, function(i, item) {
-		$($.format("#hpcorpus_%s", item.toLowerCase())).closest(".boxdiv.disabled").removeClass("disabled");
-	});
-	$("#log_out .usrname").text(authenticationProxy.loginObj.name);
-	$(".err_msg", self).hide();
-};
-
-
-
 util.convertLMFFeatsToObjects = function(structure, key) {
 	   // Recursively traverse a tree, expanding each "feat" array into a real object, with the key "feat-[att]":
 

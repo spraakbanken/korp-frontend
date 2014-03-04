@@ -1297,7 +1297,12 @@ label[for=lemgram_select]:before {
   margin-right: 10px;
   float: left;
   padding-left: 0;
-
+  a:visited {
+    color : navy;
+  }
+  a:hover {
+    color: indianred;
+  }
   li {
     &.visible {
       @include inline-block();
@@ -1460,6 +1465,7 @@ label[for=lemgram_select]:before {
   @include inline-block();
   width: 335px;
   height: 70px;
+  margin-bottom : 1em;
 }
 
 #rest_time_graph {
@@ -1921,8 +1927,13 @@ slider {
 }
 
 .graph_btn_icon {
-  position : absolute;
-  left : 0;
+  // position : absolute;
+  // left : 0;
+  svg {
+    margin-top : -6px;
+    margin-bottom : -6px;
+    margin-left : -8px;
+  }
 }
 .graph_header {
   .controls {
@@ -2033,6 +2044,9 @@ line.tick {
   border-radius: 2px 2px 2px 2px;
   color : #222222;
   padding : 3px;
+  .single {
+    margin-right : 1em;
+  }
   .tab-content {
     padding : 1em;
   }
@@ -2185,6 +2199,13 @@ line.tick {
   }
 }
 
+.tab_preloaders {
+  display : inline-block;
+  .tab_spinner {
+    // position: relative;
+    // left: 3px;
+  }
+}
 
 
 .tab_spinner {
@@ -2192,15 +2213,17 @@ line.tick {
   // top: 21px;
   // left: 38px;
   width : 9px;
-  display : none;
+  // display : none;
+  display : inline;
+
 }
 .close_icon {
   // display : inline;
 }
 
-.loading .tab_spinner {
-  display : inline-block;
-}
+// .loading .tab_spinner {
+//   display : inline-block;
+// }
 .loading .close_icon {
   display : none;
 }

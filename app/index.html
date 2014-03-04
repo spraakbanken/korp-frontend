@@ -264,8 +264,8 @@
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
               <tabset tab-hash="result_tab" ng-click="onClick($event)">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99}">KWIC
-                    <div style="width:{{progress || 0}}%" class="tab_progress"></div>
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
+                    <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div id="results-kwic" constr="KWICResults" constr-name="kwicResults">
                     <div class="result_controls">
@@ -299,12 +299,12 @@
                   </div>
                 </tab>
                 <tab disabled="!instance.hasData" ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'statistics' | loc}}
-                    <div style="width:{{progress || 0}}%" class="tab_progress"></div>
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc}}
+                    <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div constr="StatsResults" constr-name="statsResults">
                     <div class="stats_header">
-                      <button id="showGraph">Visa trenddiagram</button>
+                      <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{'material_warn' | loc}}" tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"></span>{{'show_diagram' | loc}}</div>
                       <div id="showBarPlot"></div>
                     </div>
                     <div id="myGrid"></div>
@@ -322,8 +322,8 @@
                   </div>
                 </tab>
                 <tab disabled="!instance.hasData" ng-if="_settings.wordpicture != false">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'word_picture' | loc}}
-                    <div style="width:{{progress || 0}}%" class="tab_progress"></div>
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc}}
+                    <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div constr="LemgramResults" constr-name="lemgramResults">
                     <div id="wordclassChkParent">
@@ -372,7 +372,7 @@
                   </tab-heading>
                   <div ng-controller="graphCtrl" constr="GraphResults">
                     <div class="graph_header">
-                      <div class="controls">
+                      <div ng-show="!loading" class="controls">
                         <div class="form_switch">
                           <input id="line_input" type="radio" name="form_switch" value="line" checked="checked">
                           <label for="line_input">Linje</label>
@@ -385,6 +385,7 @@
                       </div>
                       <div class="legend"></div>
                       <div style="clear: both;"></div>
+                      <div ng-show="loading" class="drawing">{{'drawing' | loc}}</div>
                     </div>
                     <div class="chart"></div>
                     <div class="zoom_slider"></div>

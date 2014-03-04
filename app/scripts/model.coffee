@@ -137,9 +137,9 @@ class model.KWICProxy extends BaseProxy
 
 
         o = $.extend(
-            cqp: $("body").scope().activeCQP || search().cqp
+            # cqp: $("body").scope().activeCQP || search().cqp
             queryData: null
-            ajaxParams: @prevAjaxParams
+            # ajaxParams: @prevAjaxParams
             success: (data, status, xhr) ->
                 self.popXhr xhr
                 successCallback data
@@ -162,7 +162,7 @@ class model.KWICProxy extends BaseProxy
 
             incremental: $.support.ajaxProgress
         , kwicResults.getPageInterval(page), options)
-        @prevAjaxParams = o.ajaxParams
+        # @prevAjaxParams = o.ajaxParams
 
         #       kwicResults.num_result = 0;
         c.log "kwicProxy.makeRequest", o.cqp
@@ -185,7 +185,7 @@ class model.KWICProxy extends BaseProxy
         data.context = o.context if o.context?
         data.within = o.within if o.within?
         data.random_seed = o.random_seed if o.random_seed?
-        $.extend data, o.ajaxParams
+        # $.extend data, o.ajaxParams
         data.querydata = o.queryData if o.queryData?
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
@@ -205,6 +205,7 @@ class model.KWICProxy extends BaseProxy
         data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
         @prevMisc = {"hitsPerPage" : $("#num_hits").val()}
+        @prevParams = data
         @pendingRequests.push $.ajax(
             url: settings.cgi_script
             data: data
@@ -249,7 +250,7 @@ class model.LemgramProxy extends BaseProxy
             incremental: $.support.ajaxProgress
             type: type
             cache : false
-
+        @prevParams = params
         $.ajax
             url: settings.cgi_script
             data: params
@@ -554,6 +555,8 @@ class model.AuthenticationProxy
             dfd.reject()
 
         dfd
+    hasCred : (corpusId) ->
+        corpusId.toUpperCase() in @loginObj.credentials
 
 class model.TimeProxy extends BaseProxy
     constructor: ->

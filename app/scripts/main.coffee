@@ -3,6 +3,9 @@ window.currentMode = $.deparam.querystring().mode or "default"
 window.searchProxy = new model.SearchProxy()
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
+creds = $.jStorage.get("creds")
+if creds
+    authenticationProxy.loginObj = creds
 
 
 t = $.now()
@@ -94,10 +97,9 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     
     creds = $.jStorage.get("creds")
-    # $.sm.start()
     if creds
-        authenticationProxy.loginObj = creds
         util.setLogin()
+    #     authenticationProxy.loginObj = creds
 
     tab_a_selector = "ul .ui-tabs-anchor"
 

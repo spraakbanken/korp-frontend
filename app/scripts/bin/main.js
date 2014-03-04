@@ -1,5 +1,5 @@
 (function() {
-  var deferred_domReady, isDev, loc_dfd, t,
+  var creds, deferred_domReady, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.currentMode = $.deparam.querystring().mode || "default";
@@ -9,6 +9,12 @@
   window.authenticationProxy = new model.AuthenticationProxy();
 
   window.timeProxy = new model.TimeProxy();
+
+  creds = $.jStorage.get("creds");
+
+  if (creds) {
+    authenticationProxy.loginObj = creds;
+  }
 
   t = $.now();
 
@@ -43,7 +49,7 @@
   loc_dfd = initLocales();
 
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
-    var corpus, creds, labs, paper, prevFragment, tab_a_selector;
+    var corpus, labs, paper, prevFragment, tab_a_selector;
     c.log("preloading done, t = ", $.now() - t);
     angular.bootstrap(document, ['korpApp']);
     corpus = search()["corpus"];
@@ -96,7 +102,6 @@
     });
     creds = $.jStorage.get("creds");
     if (creds) {
-      authenticationProxy.loginObj = creds;
       util.setLogin();
     }
     tab_a_selector = "ul .ui-tabs-anchor";

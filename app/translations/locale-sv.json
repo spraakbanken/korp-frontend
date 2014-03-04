@@ -164,6 +164,8 @@
 	"non_time_before" : "Saknar tidsuppmärkning: ",
 	"non_time_after" : " av valt material",
 	"rel_hits_short" : "Rel. träffar",
+	"drawing" : "Ritar upp diagrammet...",
+	"material_warn" : "Valt material saknar tidsdata",
 
 	"word_insensitive" : "ord (skiftlägesoberoende)",
 	"sentence_attr" : "Textattribut",

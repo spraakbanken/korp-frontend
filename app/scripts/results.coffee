@@ -49,18 +49,17 @@ class BaseResults
             .wrapAll "<div class='error_msg'>"
         util.setJsonLink @proxy.prevRequest
 
-    showPreloader: ->
-        c.log "showPreloader", @$result.attr("class")
-        @$result.add(@$tab).addClass("loading").removeClass "not_loading"
-        # @$tab.find(".tab_progress").css "width", 0 #.show();
-        # @$result.find("progress").attr "value", 0
-
-    hidePreloader: ->
-        c.log "hidePreloader", @$result.attr("class")
-        @$result.add(@$tab).removeClass("loading").addClass "not_loading"
+    showPreloader : () ->
+        @s.$parent.loading = true
+    
+    hidePreloader : () ->
+        @s.$parent.loading = false
 
     resetView: ->
         @$result.find(".error_msg").remove()
+
+    countCorpora : () ->
+        @proxy.prevParams?.corpus.split(",").length
 
 
 class view.KWICResults extends BaseResults
@@ -68,6 +67,7 @@ class view.KWICResults extends BaseResults
         self = this
         @prevCQP = null
         super tabSelector, resultSelector, scope
+        @s.$parent.loading = false
         # @initHTML = @$result.html()
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
@@ -197,10 +197,12 @@ class view.KWICResults extends BaseResults
         output
 
     renderCompleteResult: (data) ->
+        c.log "renderCompleteResult", data
         unless data.hits
             c.log "no kwic results"
             @showNoResults()
             return
+        @s.$parent.loading = false
         @$result.removeClass "zero_results"
         @$result.find(".num-result").html prettyNumbers(data.hits)
         @renderHitsPicture data
@@ -330,7 +332,7 @@ class view.KWICResults extends BaseResults
         false
 
     buildQueryOptions: ->
-        opts = {}
+        opts = {command : "query"}
         opts.cqp = @proxy.prevCQP
         opts.queryData = @proxy.queryData
         opts.sort = $(".sort_select").val()
@@ -339,25 +341,25 @@ class view.KWICResults extends BaseResults
         opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
         return opts
 
+
     makeRequest: (page_num) ->
-        isReading = @$result.is(".reading_mode")
-        @showPreloader()
+        $.error("kwicResults.makeRequest is no longer used")
+        return
+        # isReading = @$result.is(".reading_mode")
 
-        # applyTo "kwicCtrl", ($scope) ->
-        # @$result.scope().$apply ($scope) ->
-        safeApply @$result.scope(), ($scope) ->
-            if isReading
-                $scope.setContextData({kwic:[]})
-            else
-                $scope.setKwicData({kwic:[]})
-                # $scope.kwic = data.kwic
+        # safeApply @s, () =>
+        #     if isReading
+        #         @s.setContextData({kwic:[]})
+        #     else
+        #         @s.setKwicData({kwic:[]})
+        #         # $scope.kwic = data.kwic
 
-        kwicCallback = $.proxy(@renderResult, this)
-        @proxy.makeRequest @buildQueryOptions(),
-                           page_num,
-                           (if isReading then $.noop else $.proxy(@onProgress, this)),
-                           $.proxy(@renderCompleteResult, this),
-                           kwicCallback
+        # kwicCallback = $.proxy(@renderResult, this)
+        # @proxy.makeRequest @buildQueryOptions(),
+        #                    page_num,
+        #                    (if isReading then $.noop else $.proxy(@onProgress, this)),
+        #                    $.proxy(@renderCompleteResult, this),
+        #                    kwicCallback
 
 
     #   this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.noop);
@@ -478,7 +480,7 @@ class view.ExampleResults extends view.KWICResults
         super tabSelector, resultSelector, scope
         @proxy = new model.KWICProxy()
         @$result.find(".progress_container,.tab_progress").hide()
-        @$result.add(@$tab).addClass "not_loading customtab"
+        # @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
 
         if @s.$parent.queryParams
@@ -524,25 +526,6 @@ class view.ExampleResults extends view.KWICResults
         false
 
 
-    #     $.bbq.pushState({"sort" : opt.val()});
-    showPreloader: ->
-        @$result.add(@$tab).addClass("loading").removeClass "not_loading"
-        @$tab.find(".spinner").remove()
-        $("<div class='spinner' />").appendTo(@$tab).spinner
-            innerRadius: 5
-            outerRadius: 7
-            dashes: 8
-            strokeWidth: 3
-
-        @$tab.find(".tabClose").hide()
-
-    hidePreloader: ->
-        @$result.add(@$tab).addClass("not_loading").removeClass "loading"
-        @$tab.find(".spinner").remove()
-        @$tab.find(".tabClose").show()
-
-
-
 class view.LemgramResults extends BaseResults
     constructor: (tabSelector, resultSelector, scope) ->
         self = this
@@ -568,7 +551,9 @@ class view.LemgramResults extends BaseResults
         c.log "lemgramResults.renderResult", data, query
         resultError = super(data)
         @resetView()
-        @s.$parent.progress = 100
+        safeApply @s, () =>
+            @hidePreloader()
+            @s.$parent.progress = 100
         return if resultError is false
         unless data.relations
             @showNoResults()
@@ -617,9 +602,20 @@ class view.LemgramResults extends BaseResults
         )
         unique_words = _.uniq wordlist, ([word, pos]) ->
             word + pos
+        c.log "unique_words", unique_words
 
         tagsetTrans = _.invert settings.wordpictureTagset
+        unique_words = _.filter unique_words, ([currentWd, pos]) -> 
+            settings.wordPictureConf[tagsetTrans[pos]]?
+        # c.log "isPosSupported", isPosSupported
+        if not unique_words.length
+            @showNoResults()
+            return
+            
+        
+        
         $.each unique_words, (i, [currentWd, pos]) =>
+            c.log "currentWd, pos", currentWd, pos
             self.drawTable currentWd, pos, data
             self.renderHeader pos
             content = """
@@ -666,11 +662,11 @@ class view.LemgramResults extends BaseResults
         c.log "drawTable", wordClass
 
         unless settings.wordPictureConf[wordClass]?
-            @showNoResults()
+        #     @showNoResults()
             return
         orderArrays = [[], [], []]
         $.each data, (index, item) =>
-            $.each settings.wordPictureConf[wordClass], (i, rel_type_list) =>
+            $.each settings.wordPictureConf[wordClass] or [], (i, rel_type_list) =>
                 list = orderArrays[i]
                 rel = getRelType(item)
 
@@ -791,7 +787,6 @@ class view.LemgramResults extends BaseResults
     hideWordclass: ->
         $("td:first-child", @$result).each ->
             $(this).html $.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" "))
-
 
 
 
@@ -1020,9 +1015,10 @@ class view.StatsResults extends BaseResults
         if $("html.msie7,html.msie8").length
             $("#showGraph").hide()
             return
-        icon = $("<span class='graph_btn_icon'>")
+        # icon = $("<span class='graph_btn_icon'>")
 
-        $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
+        # $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
+        $("#showGraph").click () =>
             # instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
 
             params = @proxy.prevParams
@@ -1062,9 +1058,10 @@ class view.StatsResults extends BaseResults
                     showTotal : showTotal
                     corpusListing : cl
         #     instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
-        $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
+        # $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
 
-        paper = new Raphael(icon.get(0), 33, 33)
+
+        paper = new Raphael($(".graph_btn_icon", @$result).get(0), 33, 24)
         paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z")
             .attr
                 fill: "#666"
@@ -1081,7 +1078,8 @@ class view.StatsResults extends BaseResults
         @gridData = data
         resultError = super(data)
         return if resultError is false
-        if data[0].total_value.absolute is 0
+        c.log "renderresults"
+        if data[0].total_value.absolute == 0
             @showNoResults()
             return
 
@@ -1128,16 +1126,21 @@ class view.StatsResults extends BaseResults
         $(".slick-row:first input", @$result).click()
 
         $.when(timeDeferred).then =>
-            @updateGraphBtnState()            
-        @hidePreloader()
+            safeApply @s, () =>
+                @updateGraphBtnState()            
+        safeApply @s, () =>
+            @hidePreloader()
 
     updateGraphBtnState : () ->
 
-        $("#showGraph").button("enable")
+        # $("#showGraph").button("enable")
+        @s.graphEnabled = true
         cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
 
         if not (_.compact cl.getTimeInterval()).length
-            $("#showGraph").button("disable")
+            @s.graphEnabled = false
+            # $("#showGraph").button("disable")
+
     # showError : function() {
     #   this.hidePreloader();
     #   $("<i/>")
@@ -1146,11 +1149,13 @@ class view.StatsResults extends BaseResults
     # },
     resetView: ->
         super()
+        $("myGrid").empty()
         $("#exportStatsSection").show()
 
     showNoResults: ->
+        c.log "showNoResults", @$result
         @hidePreloader()
-        $("#results-stats").prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
+        @$result.prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
         $("#exportStatsSection").hide()
 
     # onProgress : (progressObj) ->
@@ -1162,8 +1167,6 @@ class view.StatsResults extends BaseResults
 class view.GraphResults extends BaseResults
     constructor : (tabSelector, resultSelector, scope) ->
         super(tabSelector, resultSelector, scope)
-        # $(tabSelector).find(".ui-tabs-anchor").localeKey "graph"
-        n = @$result.index()
 
         @zoom = "year"
         @granularity = @zoom[0]
@@ -1189,13 +1192,6 @@ class view.GraphResults extends BaseResults
                 end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
                 timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
                 cqp = decodeURIComponent(cqp)[...-1] + " & #{timecqp}"
-                # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-                # instance.proxy.command = "query"
-                # instance.makeRequest
-                #     corpora: @corpora.stringifySelected()
-                #     cqp: cqp
-
-                # util.localize instance.$result
 
 
 
@@ -1323,10 +1319,14 @@ class view.GraphResults extends BaseResults
         return (non_time / totalsize) * 100
 
 
+    # onProgress : (progress) ->
+    #     super progress
+    #     c.log "progress", progress
 
     makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
         hidden = $(".progress_container", @$result).nextAll().hide()
+        @s.loading = true
         @showPreloader()
         @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress( (data) =>
             @onProgress(data)
@@ -1336,13 +1336,15 @@ class view.GraphResults extends BaseResults
         ).fail( (data) =>
             c.log "graph crash"
             @resultError(data)
+            @s.loading = false
 
 
         ).done (data) =>
             c.log "data", data
-
+            
             if data.ERROR
                 @resultError data
+                return
             nontime = @getNonTime()
             if nontime
                 $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
@@ -1492,6 +1494,8 @@ class view.GraphResults extends BaseResults
             yAxis.render()
             hidden.fadeIn()
             @hidePreloader()
+            safeApply @s, () =>
+                @s.loading = false
 
 
 

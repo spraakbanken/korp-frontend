@@ -350,8 +350,8 @@ korpApp.directive "popper", ($rootElement) ->
 korpApp.directive "tabSpinner", ($rootElement) ->
     template : """
     <i class="fa fa-times-circle close_icon"></i> 
-        <span class="tab_spinner" 
-            us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
+    <span class="tab_spinner" 
+        us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 4, top : -12}"></span>
     """
 
 
@@ -437,6 +437,23 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
             s.data.splice(i, 1)
 
   
+korpApp.directive "tabPreloader", () ->
+    restrict : "E"
+    scope : 
+        value : "="
+        spinner : "="
+    replace : true
+    template : """
+        <div class="tab_preloaders">
+            <div ng-if="!spinner" class="tab_progress" style="width:{{value || 0}}%"></div>
+                <span ng-if="spinner" class="tab_spinner" 
+                    us-spinner="{lines : 8 ,radius:4, width:1.5, length: 2.5, left : 7, top : -12}"></span>
+        </div>
+    """
+
+    link : (scope, elem, attr) ->
+
+
 korpApp.directive "clickCover", () ->
     scope : 
         clickCover : "="

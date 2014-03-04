@@ -157,7 +157,7 @@
 
       Searches.prototype.kwicRequest = function(cqp, page) {
         var isReading, kwicCallback, kwicopts, rnd;
-        kwicResults.showPreloader();
+        kwicResults.s.$parent.loading = true;
         isReading = kwicResults.$result.is(".reading_mode");
         kwicCallback = kwicResults.renderResult;
         kwicopts = {

@@ -401,7 +401,9 @@ var hp_corpusChooser = {
 						outStr += recursive_transform(theHTML, levelindent+1);
 						outStr += "</div>";
 					} else {
-						var disable = settings.corpora[$(this).attr('id')].limited_access != null;
+						var disable = settings.corpora[$(this).attr('id')].limited_access === true && 
+							!authenticationProxy.hasCred($(this).attr('id'));
+
 						if(levelindent > 0) {
 							// Indragna och gömda per default
 							hasDirectCorporaChildren = true;

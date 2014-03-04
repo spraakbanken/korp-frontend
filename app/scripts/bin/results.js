@@ -57,17 +57,20 @@
     };
 
     BaseResults.prototype.showPreloader = function() {
-      c.log("showPreloader", this.$result.attr("class"));
-      return this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
+      return this.s.$parent.loading = true;
     };
 
     BaseResults.prototype.hidePreloader = function() {
-      c.log("hidePreloader", this.$result.attr("class"));
-      return this.$result.add(this.$tab).removeClass("loading").addClass("not_loading");
+      return this.s.$parent.loading = false;
     };
 
     BaseResults.prototype.resetView = function() {
       return this.$result.find(".error_msg").remove();
+    };
+
+    BaseResults.prototype.countCorpora = function() {
+      var _ref;
+      return (_ref = this.proxy.prevParams) != null ? _ref.corpus.split(",").length : void 0;
     };
 
     return BaseResults;
@@ -83,6 +86,7 @@
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
+      this.s.$parent.loading = false;
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
@@ -221,11 +225,13 @@
     };
 
     KWICResults.prototype.renderCompleteResult = function(data) {
+      c.log("renderCompleteResult", data);
       if (!data.hits) {
         c.log("no kwic results");
         this.showNoResults();
         return;
       }
+      this.s.$parent.loading = false;
       this.$result.removeClass("zero_results");
       this.$result.find(".num-result").html(prettyNumbers(data.hits));
       this.renderHitsPicture(data);
@@ -382,7 +388,9 @@
 
     KWICResults.prototype.buildQueryOptions = function() {
       var opts;
-      opts = {};
+      opts = {
+        command: "query"
+      };
       opts.cqp = this.proxy.prevCQP;
       opts.queryData = this.proxy.queryData;
       opts.sort = $(".sort_select").val();
@@ -396,22 +404,7 @@
     };
 
     KWICResults.prototype.makeRequest = function(page_num) {
-      var isReading, kwicCallback;
-      isReading = this.$result.is(".reading_mode");
-      this.showPreloader();
-      safeApply(this.$result.scope(), function($scope) {
-        if (isReading) {
-          return $scope.setContextData({
-            kwic: []
-          });
-        } else {
-          return $scope.setKwicData({
-            kwic: []
-          });
-        }
-      });
-      kwicCallback = $.proxy(this.renderResult, this);
-      return this.proxy.makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
+      $.error("kwicResults.makeRequest is no longer used");
     };
 
     KWICResults.prototype.setPage = function(page) {
@@ -573,7 +566,6 @@
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
       this.$result.find(".progress_container,.tab_progress").hide();
-      this.$result.add(this.$tab).addClass("not_loading customtab");
       this.$result.removeClass("reading_mode");
       if (this.s.$parent.queryParams) {
         this.makeRequest(this.s.$parent.queryParams);
@@ -621,24 +613,6 @@
       return false;
     };
 
-    ExampleResults.prototype.showPreloader = function() {
-      this.$result.add(this.$tab).addClass("loading").removeClass("not_loading");
-      this.$tab.find(".spinner").remove();
-      $("<div class='spinner' />").appendTo(this.$tab).spinner({
-        innerRadius: 5,
-        outerRadius: 7,
-        dashes: 8,
-        strokeWidth: 3
-      });
-      return this.$tab.find(".tabClose").hide();
-    };
-
-    ExampleResults.prototype.hidePreloader = function() {
-      this.$result.add(this.$tab).addClass("not_loading").removeClass("loading");
-      this.$tab.find(".spinner").remove();
-      return this.$tab.find(".tabClose").show();
-    };
-
     return ExampleResults;
 
   })(view.KWICResults);
@@ -669,11 +643,15 @@
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
-      var resultError;
+      var resultError,
+        _this = this;
       c.log("lemgramResults.renderResult", data, query);
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
-      this.s.$parent.progress = 100;
+      safeApply(this.s, function() {
+        _this.hidePreloader();
+        return _this.s.$parent.progress = 100;
+      });
       if (resultError === false) {
         return;
       }
@@ -741,10 +719,21 @@
         word = _arg[0], pos = _arg[1];
         return word + pos;
       });
+      c.log("unique_words", unique_words);
       tagsetTrans = _.invert(settings.wordpictureTagset);
+      unique_words = _.filter(unique_words, function(_arg) {
+        var currentWd, pos;
+        currentWd = _arg[0], pos = _arg[1];
+        return settings.wordPictureConf[tagsetTrans[pos]] != null;
+      });
+      if (!unique_words.length) {
+        this.showNoResults();
+        return;
+      }
       $.each(unique_words, function(i, _arg) {
         var content, currentWd, pos;
         currentWd = _arg[0], pos = _arg[1];
+        c.log("currentWd, pos", currentWd, pos);
         self.drawTable(currentWd, pos, data);
         self.renderHeader(pos);
         content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
@@ -795,12 +784,11 @@
       wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
       c.log("drawTable", wordClass);
       if (settings.wordPictureConf[wordClass] == null) {
-        this.showNoResults();
         return;
       }
       orderArrays = [[], [], []];
       $.each(data, function(index, item) {
-        return $.each(settings.wordPictureConf[wordClass], function(i, rel_type_list) {
+        return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
           var list, rel, ret;
           list = orderArrays[i];
           rel = getRelType(item);
@@ -1068,7 +1056,7 @@
     __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
-      var icon, paper, self,
+      var paper, self,
         _this = this;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
@@ -1164,8 +1152,7 @@
         $("#showGraph").hide();
         return;
       }
-      icon = $("<span class='graph_btn_icon'>");
-      $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click(function() {
+      $("#showGraph").click(function() {
         var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
@@ -1201,8 +1188,7 @@
           });
         });
       });
-      $("#showGraph .ui-button-text", this.$result).localeKey("show_diagram");
-      paper = new Raphael(icon.get(0), 33, 33);
+      paper = new Raphael($(".graph_btn_icon", this.$result).get(0), 33, 24);
       paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z").attr({
         fill: "#666",
         stroke: "none",
@@ -1225,6 +1211,7 @@
       if (resultError === false) {
         return;
       }
+      c.log("renderresults");
       if (data[0].total_value.absolute === 0) {
         this.showNoResults();
         return;
@@ -1273,28 +1260,34 @@
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
       $.when(timeDeferred).then(function() {
-        return _this.updateGraphBtnState();
+        return safeApply(_this.s, function() {
+          return _this.updateGraphBtnState();
+        });
       });
-      return this.hidePreloader();
+      return safeApply(this.s, function() {
+        return _this.hidePreloader();
+      });
     };
 
     StatsResults.prototype.updateGraphBtnState = function() {
       var cl;
-      $("#showGraph").button("enable");
+      this.s.graphEnabled = true;
       cl = settings.corpusListing.subsetFactory(this.proxy.prevParams.corpus.split(","));
       if (!(_.compact(cl.getTimeInterval())).length) {
-        return $("#showGraph").button("disable");
+        return this.s.graphEnabled = false;
       }
     };
 
     StatsResults.prototype.resetView = function() {
       StatsResults.__super__.resetView.call(this);
+      $("myGrid").empty();
       return $("#exportStatsSection").show();
     };
 
     StatsResults.prototype.showNoResults = function() {
+      c.log("showNoResults", this.$result);
       this.hidePreloader();
-      $("#results-stats").prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
+      this.$result.prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
       return $("#exportStatsSection").hide();
     };
 
@@ -1306,10 +1299,8 @@
     __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector, scope) {
-      var n,
-        _this = this;
+      var _this = this;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
-      n = this.$result.index();
       this.zoom = "year";
       this.granularity = this.zoom[0];
       this.proxy = new model.GraphProxy();
@@ -1490,17 +1481,20 @@
         _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
       hidden = $(".progress_container", this.$result).nextAll().hide();
+      this.s.loading = true;
       this.showPreloader();
       return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress(function(data) {
         return _this.onProgress(data);
       }).fail(function(data) {
         c.log("graph crash");
-        return _this.resultError(data);
+        _this.resultError(data);
+        return _this.s.loading = false;
       }).done(function(data) {
         var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, slider, smoother, time, timeunit, xAxis, yAxis, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
+          return;
         }
         nontime = _this.getNonTime();
         if (nontime) {
@@ -1660,7 +1654,10 @@
         });
         yAxis.render();
         hidden.fadeIn();
-        return _this.hidePreloader();
+        _this.hidePreloader();
+        return safeApply(_this.s, function() {
+          return _this.s.loading = false;
+        });
       });
     };
 

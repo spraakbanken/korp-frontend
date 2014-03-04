@@ -14,7 +14,7 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
     .graph_header
       //- .progress_container
       //-   progress(value='0', max='100')
-      .controls
+      .controls(ng-show="!loading")
         .form_switch
           input#line_input(type='radio', name='form_switch', value='line', checked='checked')
           label(for='line_input') Linje
@@ -28,6 +28,8 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
           span(rel='localize[non_time_after]')
       .legend
       div(style='clear: both;')
+      .drawing(ng-show="loading")
+        | {{'drawing' | loc}}
     .chart
     .zoom_slider
 tab(active="[true][0]", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
