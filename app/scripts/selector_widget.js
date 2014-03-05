@@ -7,6 +7,9 @@ var hp_corpusChooser = {
 	_create: function() {
 		this._transform();
 		var self = this;
+
+		this.updateAllStates();
+		
 		// Make the popup disappear when the user clicks outside it
 		$(window).unbind('click.corpusselector');
 		$(window).bind('click.corpusselector', function(e) {
@@ -23,8 +26,7 @@ var hp_corpusChooser = {
 			function() { $(this).removeClass('ui-state-hover'); }
 		);
 
-
-
+		
 
 	},
 	isSelected: function(id) {
@@ -52,14 +54,13 @@ var hp_corpusChooser = {
 			/* First clear all items */
 			hp_this.setStatus($(this),"unchecked");
 		});
-//		var realboxes = $(".boxdiv label .checkbox");
 		var realboxes = $(".boxdiv");
 		realboxes.each(function() {
 			var chk = $(".checkbox", this);
 			if($.inArray(chk.attr('id'), item_ids) != -1 && !$(this).is(".disabled")) {
 				/* Change status of item */
 	 			hp_this.setStatus(chk,"checked");
-	 			hp_this.updateState(chk);
+	 			hp_this.updateState(chk); // <-?
 	 			var ancestors = chk.parents('.tree');
 	 			ancestors.each(function(){
 		 			hp_this.updateState($(this));
@@ -70,41 +71,49 @@ var hp_corpusChooser = {
 		// Fire callback "change":
 		hp_this.triggerChange();
 	},
+	updateAllStates : function() {
+		var self = this;
+		$(".tree").each(function() { self.updateState($(this)); });
+	},
 	updateState: function (element) {
-			// element is a div!
-			var descendants = element.find('.checkbox');
-			var numbOfChecked = 0;
-			var numbOfUnchecked = 0;
-			descendants.each(function(){
-				if (! $(this).parent().parent().hasClass("tree") ) {
-					if( $(this).hasClass("checked") ) {
-						numbOfChecked++;
-					} else if( $(this).hasClass("unchecked") ) {
-						numbOfUnchecked++;
-					}
+		// element is a div!
+		var descendants = element.find('.checkbox');
+		var numbOfChecked = 0;
+		var numbOfUnchecked = 0;
+		descendants.each(function(){
+			if (! $(this).parent().parent().hasClass("tree") ) {
+				if( $(this).hasClass("checked") ) {
+					numbOfChecked++;
+				} else if( $(this).hasClass("unchecked") ) {
+					numbOfUnchecked++;
 				}
-			});
-			var theBox = element.children('label').children('.checkbox');
-			if (numbOfUnchecked > 0 && numbOfChecked > 0) {
-				this.setStatus(theBox,"intermediate"); // Intermediate
-			} else if (numbOfUnchecked > 0 && numbOfChecked == 0) {
-				this.setStatus(theBox,"unchecked"); // Unchecked
-			} else if (numbOfChecked > 0 && numbOfUnchecked == 0) {
-				this.setStatus(theBox,"checked"); // Checked
 			}
+		});
+		var theBox = element.children('label').children('.checkbox');
+		if (numbOfUnchecked > 0 && numbOfChecked > 0) {
+			this.setStatus(theBox,"intermediate"); // Intermediate
+		} else if (numbOfUnchecked > 0 && numbOfChecked == 0) {
+			this.setStatus(theBox,"unchecked"); // Unchecked
+		} else if (numbOfChecked > 0 && numbOfUnchecked == 0) {
+			this.setStatus(theBox,"checked"); // Checked
+		}
+
+		var numDisabled = element.find('.disabled').length;
+		if(element.find('.boxdiv').length === numDisabled && numDisabled > 0 ) {
+			element.addClass("disabled");
+		} else {
+			element.removeClass("disabled")
+		}
 
 	},
  	setStatus: function (obj, stat) { /* Change status of item */
  			obj.removeClass("intermediate unchecked checked");
  			if(stat == "checked") {
  				obj.addClass("checked");
-// 				obj.attr({src : "img/checked.png"});
  			} else if(stat == "intermediate") {
  				obj.addClass("intermediate");
-// 				obj.attr({src : "img/intermediate.png"});
  			} else {
  				obj.addClass("unchecked");
-// 				obj.attr({src : "img/unchecked.png"});
  			}
  	},
 	countSelected: function () { /* Update header */
@@ -122,7 +131,7 @@ var hp_corpusChooser = {
 		} else if (num_checked_checkboxes == 1) {
 			var currentCorpusName = checked_checkboxes.parent().parent().attr('data');
 			if (currentCorpusName.length > 37) { // Ellipsis
-				currentCorpusName = $.trim(currentCorpusName.substr(0,37)) + "...";
+				currentCorpusName = $.trim(currentCorpusName.substr(0, 37)) + "...";
 			}
 			header_text = currentCorpusName;
 			header_text_2 = "corpselector_selectedone";
@@ -135,12 +144,10 @@ var hp_corpusChooser = {
 		var totNumberOfTokens = 0;
         var totNumberOfSentences = 0;
 		checked_checkboxes.each(function(key, corpItem) {
-			//c.log(">>>>>>" + $(this).attr('id'));
 			var corpusID = $(this).attr('id').slice(9);
 			totNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
 			var numSen = parseInt(settings.corpora[corpusID]["info"]["Sentences"]);
-			if(!isNaN(numSen))
-                totNumberOfSentences += numSen;
+			if(!isNaN(numSen)) totNumberOfSentences += numSen;
 		});
 
 		$("#hp_corpora_title1").text(header_text);
@@ -188,7 +195,6 @@ var hp_corpusChooser = {
 			});
 
 			var popoffset = $(".scroll_checkboxes").position().top + $(".scroll_checkboxes").height();
-
 
 			$(".scroll_checkboxes").unbind("mousedown");
 			$(".scroll_checkboxes").mousedown(function(e) {
@@ -262,35 +268,37 @@ var hp_corpusChooser = {
 			$(".boxlabel")
 			.unbind("click") // "folders"
 			.click(function(event) {
-			    if( event.altKey == 1 ) {
-                    $(".checkbox").each(function() {
-                        hp_this.setStatus($(this), "unchecked");
-                    });
-                }
-			    if($(this).is(".disabled")) return;
-				hp_this.updateState($(this).parent());
-	 			var childMan = $(this).children('.checkbox');
-	 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
-	 				if (!($(this).parent().hasClass('tree'))) {
-	 					hp_this.setStatus(childMan,"unchecked");
-	 				} else {
-	 					var descendants = childMan.parent().siblings('div').find('.checkbox');
-		 				hp_this.setStatus(descendants,"unchecked");
-	 				}
-	 			} else { // Unchecked, check it!
-	 				hp_this.setStatus(childMan,"checked");
-	 				if (($(this).parent().hasClass('tree'))) { // If tree, check all descendants
-		 				descendants = childMan.parent().siblings('div').find('.checkbox');
-		 				hp_this.setStatus(descendants,"checked");
-	 				}
-				}
-				var ancestors = childMan.parents('.tree');
-		 		ancestors.each(function(){
-		 			hp_this.updateState($(this));
-		 		});
-		 		hp_this.countSelected();
-		 		// Fire callback "change":
-		 		hp_this.triggerChange();
+				if( ! $(this).parent().hasClass("disabled") ) {
+				    if( event.altKey == 1 ) {
+	                    $(".checkbox").each(function() {
+	                        hp_this.setStatus($(this), "unchecked");
+	                    });
+	                }
+				    if($(this).is(".disabled")) return;
+					hp_this.updateState($(this).parent());
+		 			var childMan = $(this).children('.checkbox');
+		 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
+		 				if (!($(this).parent().hasClass('tree'))) {
+		 					hp_this.setStatus(childMan,"unchecked");
+		 				} else {
+		 					var descendants = childMan.parent().siblings('div').find('.checkbox');
+			 				hp_this.setStatus(descendants,"unchecked");
+		 				}
+		 			} else { // Unchecked, check it!
+		 				hp_this.setStatus(childMan,"checked");
+		 				if (($(this).parent().hasClass('tree'))) { // If tree, check all descendants
+			 				descendants = childMan.parent().siblings('div:not(.disabled)').find('.checkbox');
+			 				hp_this.setStatus(descendants,"checked");
+		 				}
+					}
+					var ancestors = childMan.parents('.tree');
+			 		ancestors.each(function(){
+			 			hp_this.updateState($(this));
+			 		});
+			 		hp_this.countSelected();
+			 		// Fire callback "change":
+			 		hp_this.triggerChange();
+		 		}
  			});
 
  			var hoverConfig = {
@@ -387,15 +395,13 @@ var hp_corpusChooser = {
 
 					if(theHTML.indexOf("<li") != -1 || theHTML.indexOf("<LI") != -1 ) {
 						var cssattrib = "";
-//						leftattrib = 30*Math.min(1,levelindent);
 						if(levelindent > 0) {
 							leftattrib = 30;
 							cssattrib += 'margin-left:' + leftattrib + 'px; display:none';
 						}
 						var foldertitle = $(this).children('ul').attr('title');
 						var folderdescription = $(this).children('ul').attr('description');
-						if(folderdescription == "undefined")
-							folderdescription = "";
+						if(folderdescription == "undefined") folderdescription = "";
 						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="' + cssattrib + '" class="tree collapsed '+ levelindent +'"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 
 						outStr += recursive_transform(theHTML, levelindent+1);

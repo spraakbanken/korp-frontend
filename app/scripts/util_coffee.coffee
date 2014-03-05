@@ -373,7 +373,8 @@ window.util.setLogin = () ->
     for corp in authenticationProxy.loginObj.credentials
         $("#hpcorpus_#{corp.toLowerCase()}")
             .closest(".boxdiv.disabled").removeClass("disabled")
-
+    if window.corpusChooserInstance
+        window.corpusChooserInstance.corpusChooser "updateAllStates"
 
     $("#log_out .usrname").text(authenticationProxy.loginObj.name)
     $(".err_msg", self).hide()

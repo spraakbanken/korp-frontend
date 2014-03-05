@@ -609,6 +609,14 @@ select.arg_value option {
   margin-left: -2px;
 }
 
+.tree.disabled > label .checkbox {
+  background-image: url("images/ui-icons_222222_256x240.png");
+  background-position: -192px -96px;
+  height: 13px;
+  width: 14px;
+  margin-left: -2px;
+}
+
 .query_footer {
   background-color: #e1e1e1;
   padding: 1px 8px 8px 8px;
