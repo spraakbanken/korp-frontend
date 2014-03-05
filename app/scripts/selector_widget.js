@@ -183,7 +183,7 @@ var hp_corpusChooser = {
 			hp_this.countSelected();
 			// Update the number of children for all folders:
 			$(".tree").each(function() {
-				var noItems = $(this).find(".hplabel .checked").length;
+				var noItems = $(this).find(".hplabel .checkbox").length;
 				$(this).children("label").children(".numberOfChildren").text("(" + noItems + ")");
 			});
 
