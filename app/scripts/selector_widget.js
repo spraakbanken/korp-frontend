@@ -389,7 +389,7 @@ var hp_corpusChooser = {
 						var cssattrib = "";
 //						leftattrib = 30*Math.min(1,levelindent);
 						if(levelindent > 0) {
-							leftattrib = 30 * levelindent;
+							leftattrib = 30;
 							cssattrib += 'margin-left:' + leftattrib + 'px; display:none';
 						}
 						var foldertitle = $(this).children('ul').attr('title');
