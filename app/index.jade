@@ -95,8 +95,8 @@ html
     script(src='scripts/bin/results.js')
     script(src='scripts/bin/model.js')
     script(src='scripts/bin/widgets.js')
-    script(src='scripts/selector_widget.js')
     script(src='scripts/bin/main.js')
+    script(src='scripts/selector_widget.js')
     script(src='scripts/bin/app.js')
     script(src='scripts/bin/search_controllers.js')
     script(src='scripts/bin/result_controllers.js')
@@ -122,7 +122,11 @@ html
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
               tabset(tab-hash='result_tab', ng-click='onClick($event)')
-                tab(disabled="!instance.hasData", select="instance.onentry()", deselect="instance.onexit()", ng-controller='kwicCtrl')
+                tab(disabled="!instance.hasData",
+                    select="instance.onentry()",
+                    deselect="instance.onexit()",
+                    ng-controller='kwicCtrl'
+                )
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")

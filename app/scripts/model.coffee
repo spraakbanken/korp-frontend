@@ -556,6 +556,7 @@ class model.AuthenticationProxy
 
         dfd
     hasCred : (corpusId) ->
+        unless @loginObj.credentials then return false
         corpusId.toUpperCase() in @loginObj.credentials
 
 class model.TimeProxy extends BaseProxy

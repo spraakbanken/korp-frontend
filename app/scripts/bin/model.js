@@ -664,6 +664,9 @@
 
     AuthenticationProxy.prototype.hasCred = function(corpusId) {
       var _ref;
+      if (!this.loginObj.credentials) {
+        return false;
+      }
       return _ref = corpusId.toUpperCase(), __indexOf.call(this.loginObj.credentials, _ref) >= 0;
     };
 
