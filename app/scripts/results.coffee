@@ -67,7 +67,7 @@ class view.KWICResults extends BaseResults
         self = this
         @prevCQP = null
         super tabSelector, resultSelector, scope
-        @s.$parent.loading = false
+        # @s.$parent.loading = false
         # @initHTML = @$result.html()
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
@@ -198,22 +198,21 @@ class view.KWICResults extends BaseResults
 
     renderCompleteResult: (data) ->
         c.log "renderCompleteResult", data
+        safeApply @s, () =>
+            @hidePreloader()
         unless data.hits
             c.log "no kwic results"
             @showNoResults()
             return
-        @s.$parent.loading = false
+        # @s.$parent.loading = false
         @$result.removeClass "zero_results"
         @$result.find(".num-result").html prettyNumbers(data.hits)
         @renderHitsPicture data
         @buildPager data.hits
-        @hidePreloader()
 
+        safeApply @s, () =>
+            @hidePreloader()
 
-    # renderKwicResult: (data, sourceCQP) ->
-    #     c.log "renderKwicResult", data
-    #     # @$result.find(".results_table.reading").empty()
-    #     @renderResult ".results_table.kwic", data, sourceCQP
 
     renderResult: (data) ->
         resultError = super(data)
@@ -225,12 +224,13 @@ class view.KWICResults extends BaseResults
 
 
         # applyTo "kwicCtrl", ($scope) ->
-        @s.$apply ($scope) ->
+        @s.$apply ($scope) =>
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
             else
                 $scope.setKwicData(data)
+            # @hidePreloader()    
 
         if currentMode == "parallel" and not isReading
             scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
@@ -241,7 +241,6 @@ class view.KWICResults extends BaseResults
                 offset = (firstWord.position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
-        @hidePreloader()
         @$result.localize()
         @centerScrollbar()
         @$result.find(".match").children().first().click()
@@ -343,23 +342,23 @@ class view.KWICResults extends BaseResults
 
 
     makeRequest: (page_num) ->
-        $.error("kwicResults.makeRequest is no longer used")
-        return
-        # isReading = @$result.is(".reading_mode")
+        # $.error("kwicResults.makeRequest is no longer used")
+        # return
+        isReading = @$result.is(".reading_mode")
 
-        # safeApply @s, () =>
-        #     if isReading
-        #         @s.setContextData({kwic:[]})
-        #     else
-        #         @s.setKwicData({kwic:[]})
-        #         # $scope.kwic = data.kwic
+        safeApply @s, () =>
+            if isReading
+                @s.setContextData({kwic:[]})
+            else
+                @s.setKwicData({kwic:[]})
+                # $scope.kwic = data.kwic
 
-        # kwicCallback = $.proxy(@renderResult, this)
-        # @proxy.makeRequest @buildQueryOptions(),
-        #                    page_num,
-        #                    (if isReading then $.noop else $.proxy(@onProgress, this)),
-        #                    $.proxy(@renderCompleteResult, this),
-        #                    kwicCallback
+        kwicCallback = $.proxy(@renderResult, this)
+        @proxy.makeRequest @buildQueryOptions(),
+                           page_num,
+                           (if isReading then $.noop else $.proxy(@onProgress, this)),
+                           $.proxy(@renderCompleteResult, this),
+                           kwicCallback
 
 
     #   this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.noop);

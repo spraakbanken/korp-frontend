@@ -86,7 +86,6 @@
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
-      this.s.$parent.loading = false;
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
@@ -225,22 +224,28 @@
     };
 
     KWICResults.prototype.renderCompleteResult = function(data) {
+      var _this = this;
       c.log("renderCompleteResult", data);
+      safeApply(this.s, function() {
+        return _this.hidePreloader();
+      });
       if (!data.hits) {
         c.log("no kwic results");
         this.showNoResults();
         return;
       }
-      this.s.$parent.loading = false;
       this.$result.removeClass("zero_results");
       this.$result.find(".num-result").html(prettyNumbers(data.hits));
       this.renderHitsPicture(data);
       this.buildPager(data.hits);
-      return this.hidePreloader();
+      return safeApply(this.s, function() {
+        return _this.hidePreloader();
+      });
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref,
+        _this = this;
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -269,7 +274,6 @@
           $(linked).find(".lnk").css("padding-left", Math.round(offset));
         }
       }
-      this.hidePreloader();
       this.$result.localize();
       this.centerScrollbar();
       return this.$result.find(".match").children().first().click();
@@ -404,7 +408,22 @@
     };
 
     KWICResults.prototype.makeRequest = function(page_num) {
-      $.error("kwicResults.makeRequest is no longer used");
+      var isReading, kwicCallback,
+        _this = this;
+      isReading = this.$result.is(".reading_mode");
+      safeApply(this.s, function() {
+        if (isReading) {
+          return _this.s.setContextData({
+            kwic: []
+          });
+        } else {
+          return _this.s.setKwicData({
+            kwic: []
+          });
+        }
+      });
+      kwicCallback = $.proxy(this.renderResult, this);
+      return this.proxy.makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
 
     KWICResults.prototype.setPage = function(page) {

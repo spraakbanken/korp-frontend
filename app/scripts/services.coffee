@@ -127,8 +127,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
 
         kwicRequest : (cqp, page) ->
-            # kwicResults.showPreloader()
-            kwicResults.s.$parent.loading = true
+            kwicResults.showPreloader()
+            # kwicResults.s.$parent.loading = true
             isReading = kwicResults.$result.is(".reading_mode")
             
             #var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
