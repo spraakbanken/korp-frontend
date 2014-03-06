@@ -102,8 +102,11 @@
       }
       return location.pathname + "?mode=" + modeId;
     };
-    return s.onSelect = function(modeId) {
+    s.onSelect = function(modeId) {
       return $location.search("corpus", null);
+    };
+    return s.onModeMenuClick = function(modeId) {
+      return window.location = location.pathname + "?mode=" + modeId;
     };
   });
 

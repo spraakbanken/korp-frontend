@@ -119,6 +119,9 @@ korpApp.controller "headerCtrl", ($scope, $location) ->
         return location.pathname + "?mode=" + modeId
     s.onSelect = (modeId) ->
         $location.search("corpus", null)
+        
+    s.onModeMenuClick = (modeId) ->
+        window.location = location.pathname + "?mode=" + modeId
 
 
 korpApp.filter "trust", ($sce) ->

@@ -12,7 +12,6 @@
     <link type="text/css" href="styles/ui_mods.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles/jquery.tooltip.css">
     <link rel="stylesheet" href="components/rickshaw/rickshaw.css">
-    <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <!-- endbuild -->
     <link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
@@ -108,7 +107,7 @@
                 {{mode.localekey | loc}}</a></li>
             <li ng-if="menu.length" class="menu_more visible"> <a popper my="right+15% top+10" at="bottom right" href="javascript:" class="dropdown-toggle">Fler<i class="fa fa-angle-double-down"></i></a>
               <ul class="dropdown-menu popper_menu">
-                <li ng-repeat="mode in menu"><a href="javascript:" ng-click="onSelect(mode.mode)">
+                <li ng-repeat="mode in menu"><a ng-href="{{getUrl(mode.mode)}}" ng-click="onModeMenuClick(mode.mode)">
                      
                     {{mode.localekey | loc}}</a></li>
               </ul>

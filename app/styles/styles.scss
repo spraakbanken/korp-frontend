@@ -1,4 +1,5 @@
 @import "compass/css3";
+@import "../components/font-awesome/scss/font-awesome.scss";
 
 
 
@@ -601,20 +602,12 @@ select.arg_value option {
   }
 }
 
-.boxdiv.disabled .checkbox {
-  background-image: url("images/ui-icons_222222_256x240.png");
-  background-position: -192px -96px;
-  height: 13px;
-  width: 14px;
-  margin-left: -2px;
-}
-
+.boxdiv.disabled .checkbox,
 .tree.disabled > label .checkbox {
-  background-image: url("images/ui-icons_222222_256x240.png");
-  background-position: -192px -96px;
-  height: 13px;
-  width: 14px;
-  margin-left: -2px;
+  @extend .fa;
+  @extend .fa-lock;
+  background: none;
+  margin-bottom : 3px;
 }
 
 .query_footer {

@@ -8,7 +8,7 @@
         i.fa.fa-angle-double-down
       ul.dropdown-menu.popper_menu
          li(ng-repeat="mode in menu")
-           a(href="javascript:", ng-click="onSelect(mode.mode)") 
+           a(ng-href="{{getUrl(mode.mode)}}", ng-click="onModeMenuClick(mode.mode)") 
              | {{mode.localekey | loc}}
       
   #cog

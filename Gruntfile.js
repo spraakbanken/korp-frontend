@@ -168,7 +168,7 @@ module.exports = function (grunt) {
         cssDir: ['.tmp/styles', '<%= yeoman.app %>/styles'],
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
+        fontsDir: ['<%= yeoman.app %>/styles/fonts', "<%= yeoman.app %>/components/font-awesome/fonts"],
         importPath: '<%= yeoman.app %>/components',
         relativeAssets: true
       },
@@ -282,6 +282,17 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      dev : {
+        files: [
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: ['components/font-awesome/fonts/*'],
+          dest: '.tmp/fonts',
+          flatten: true
+        }]
+
+      },
       dist: {
         files: [
         {
@@ -326,9 +337,11 @@ module.exports = function (grunt) {
           'coffee:dist',
           'jade',
           'compass:server',
+          'copy:dev',
           'livereload-start',
           'connect:livereload',
           // 'open',
+
           'watch'
       ]);
   });
