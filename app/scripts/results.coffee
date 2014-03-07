@@ -488,6 +488,7 @@ class view.ExampleResults extends view.KWICResults
         # @s.$parent.active = true
 
     makeRequest: (opts) ->
+        c.log "opts", opts
         @resetView()
         incr = opts.command == "query"
         $.extend opts,
@@ -737,11 +738,10 @@ class view.LemgramResults extends BaseResults
         data = $target.parent().tmplItem().data
         # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
         # opts = instance.getPageInterval()
-        opts = {
+        opts = {}
+        opts.ajaxParams =
             start : 0
             end : 24
-        }
-        opts.ajaxParams =
             command : "relations_sentences"
             source : data.source.join(",")
             corpus : null
@@ -943,11 +943,10 @@ class view.StatsResults extends BaseResults
         @$result.on "click", ".slick-cell.l1.r1 .link", () ->
             query = $(this).data("query")
             
-            opts = {
+            opts = {}
+            opts.ajaxParams =
                 start : 0
                 end : 24
-            }
-            opts.ajaxParams =
                 command : "query"
                 corpus : $(this).data("corpora").join(",").toUpperCase()
                 cqp: decodeURIComponent(query)

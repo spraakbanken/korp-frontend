@@ -595,6 +595,7 @@
     ExampleResults.prototype.makeRequest = function(opts) {
       var incr, progress,
         _this = this;
+      c.log("opts", opts);
       this.resetView();
       incr = opts.command === "query";
       $.extend(opts, {
@@ -881,11 +882,10 @@
       $target = $(event.currentTarget);
       c.log("onClickExample", $target);
       data = $target.parent().tmplItem().data;
-      opts = {
-        start: 0,
-        end: 24
-      };
+      opts = {};
       opts.ajaxParams = {
+        start: 0,
+        end: 24,
         command: "relations_sentences",
         source: data.source.join(","),
         corpus: null,
@@ -1095,11 +1095,10 @@
       this.$result.on("click", ".slick-cell.l1.r1 .link", function() {
         var opts, query;
         query = $(this).data("query");
-        opts = {
-          start: 0,
-          end: 24
-        };
+        opts = {};
         opts.ajaxParams = {
+          start: 0,
+          end: 24,
           command: "query",
           corpus: $(this).data("corpora").join(",").toUpperCase(),
           cqp: decodeURIComponent(query)

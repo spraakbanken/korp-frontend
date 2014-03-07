@@ -168,7 +168,6 @@
       successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults);
       kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
       self.progress = 0;
-      corpus = settings.corpusListing.stringifySelected();
       o = $.extend({
         queryData: null,
         success: function(data, status, xhr) {
@@ -192,36 +191,19 @@
             this.foundKwic = true;
             return kwicCallback(progressObj["struct"]);
           }
-        },
-        incremental: $.support.ajaxProgress
-      }, kwicResults.getPageInterval(page), options);
-      c.log("kwicProxy.makeRequest", o.cqp);
+        }
+      }, options);
       data = {
-        command: o.command,
-        corpus: corpus,
-        cqp: o.cqp,
-        start: o.start || 0,
-        end: o.end,
-        defaultcontext: $.keys(settings.defaultContext)[0],
-        defaultwithin: $.keys(settings.defaultWithin)[0],
+        command: "query",
+        corpus: settings.corpusListing.stringifySelected(),
+        defaultcontext: _.keys(settings.defaultContext)[0],
+        defaultwithin: _.keys(settings.defaultWithin)[0],
         show: [],
         show_struct: [],
-        sort: o.sort,
-        incremental: o.incremental,
-        cache: false
+        incremental: $.support.ajaxProgress,
+        cache: true
       };
-      if (o.context != null) {
-        data.context = o.context;
-      }
-      if (o.within != null) {
-        data.within = o.within;
-      }
-      if (o.random_seed != null) {
-        data.random_seed = o.random_seed;
-      }
-      if (o.queryData != null) {
-        data.querydata = o.queryData;
-      }
+      $.extend(data, kwicResults.getPageInterval(page), o.ajaxParams);
       _ref = settings.corpusListing.selected;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         corpus = _ref[_i];
@@ -244,7 +226,7 @@
         }
       }
       data.show = _.uniq(data.show);
-      this.prevCQP = o.cqp;
+      this.prevCQP = data.cqp;
       data.show = (_.uniq(data.show)).join(",");
       data.show_struct = (_.uniq(data.show_struct)).join(",");
       this.prevRequest = data;
@@ -261,10 +243,10 @@
         },
         success: function(data, status, jqxhr) {
           self.queryData = data.querydata;
-          if (o.incremental === false || !this.foundKwic) {
+          if (data.incremental === false || !this.foundKwic) {
             kwicCallback(data);
           }
-          return o.success(data, o.cqp);
+          return o.success(data, data.cqp);
         },
         error: o.error,
         progress: o.progress
@@ -308,7 +290,7 @@
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
         type: type,
-        cache: false
+        cache: true
       };
       this.prevParams = params;
       return $.ajax({

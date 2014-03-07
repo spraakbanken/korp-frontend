@@ -156,30 +156,39 @@
       }
 
       Searches.prototype.kwicRequest = function(cqp, page) {
-        var isReading, kwicCallback, kwicopts, rnd;
+        var getSortParams, isReading, kwicCallback, kwicopts;
         kwicResults.showPreloader();
         isReading = kwicResults.$result.is(".reading_mode");
         kwicCallback = kwicResults.renderResult;
-        kwicopts = {
-          sort: $.bbq.getState("sort")
-        };
-        if (kwicopts["sort"] === "random") {
-          rnd = void 0;
-          if (_event.data.isInit && $.bbq.getState("random_seed")) {
-            rnd = $.bbq.getState("random_seed");
-          } else {
-            rnd = Math.ceil(Math.random() * 10000000);
-            search({
+        getSortParams = function() {
+          var rnd, sort;
+          sort = search().sort;
+          if (sort === "random") {
+            if (search().random_seed) {
+              rnd = search().random_seed;
+            } else {
+              rnd = Math.ceil(Math.random() * 10000000);
+              search({
+                random_seed: rnd
+              });
+            }
+            return {
+              sort: sort,
               random_seed: rnd
-            });
+            };
           }
-          kwicopts["random_seed"] = rnd;
-        }
+          return {
+            sort: sort
+          };
+        };
+        kwicopts = {
+          ajaxParams: getSortParams()
+        };
         if (isReading || currentMode === "parallel") {
-          kwicopts.context = settings.corpusListing.getContextQueryString();
+          kwicopts.ajaxParams.context = settings.corpusListing.getContextQueryString();
         }
         if (cqp) {
-          kwicopts.cqp = cqp;
+          kwicopts.ajaxParams.cqp = cqp;
         }
         return kwicProxy.makeRequest(kwicopts, page, $.proxy(kwicResults.onProgress, kwicResults), null, $.proxy(kwicCallback, kwicResults));
       };

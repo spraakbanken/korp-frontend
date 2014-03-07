@@ -129,12 +129,6 @@ class model.KWICProxy extends BaseProxy
         # kwicCallback = kwicCallback or $.proxy(kwicResults.renderKwicResult, kwicResults)
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
-        corpus = settings.corpusListing.stringifySelected()
-        # corpus = extendedSearch.getCorporaQuery() if currentMode is "parallel"
-        # if currentMode is "parallel"
-
-
-
 
         o = $.extend(
             # cqp: $("body").scope().activeCQP || search().cqp
@@ -159,34 +153,30 @@ class model.KWICProxy extends BaseProxy
                     c.log "found kwic!"
                     @foundKwic = true
                     kwicCallback progressObj["struct"]
+        , options)
 
-            incremental: $.support.ajaxProgress
-        , kwicResults.getPageInterval(page), options)
+
         # @prevAjaxParams = o.ajaxParams
 
         #       kwicResults.num_result = 0;
-        c.log "kwicProxy.makeRequest", o.cqp
+        # defaults
         data =
-            command: o.command
-            corpus: corpus
-            cqp: o.cqp
-            start: o.start or 0
-            end: o.end
-            defaultcontext: $.keys(settings.defaultContext)[0]
-            defaultwithin: $.keys(settings.defaultWithin)[0]
+            command: "query"
+            corpus: settings.corpusListing.stringifySelected()
+            defaultcontext: _.keys(settings.defaultContext)[0]
+            defaultwithin: _.keys(settings.defaultWithin)[0]
             show: []
             show_struct: []
-            sort: o.sort
-            incremental: o.incremental
-            cache : false
+            incremental: $.support.ajaxProgress
+            cache : true
 
         # data.within = settings.corpusListing.getWithinQueryString()
         # data.context = settings.corpusListing.getContextQueryString()
-        data.context = o.context if o.context?
-        data.within = o.within if o.within?
-        data.random_seed = o.random_seed if o.random_seed?
-        # $.extend data, o.ajaxParams
-        data.querydata = o.queryData if o.queryData?
+        # data.context = o.context if o.context?
+        # data.within = o.within if o.within?
+        # data.random_seed = o.random_seed if o.random_seed?
+        $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
+        # data.querydata = o.queryData if o.queryData?
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
                 data.show.push key
@@ -200,7 +190,7 @@ class model.KWICProxy extends BaseProxy
 
 
         data.show = _.uniq data.show
-        @prevCQP = o.cqp
+        @prevCQP = data.cqp
         data.show = (_.uniq data.show).join(",")
         data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
@@ -215,8 +205,8 @@ class model.KWICProxy extends BaseProxy
 
             success: (data, status, jqxhr) ->
                 self.queryData = data.querydata
-                kwicCallback data if o.incremental is false or not @foundKwic
-                o.success data, o.cqp
+                kwicCallback data if data.incremental is false or not @foundKwic
+                o.success data, data.cqp
 
             error: o.error
             progress: o.progress
@@ -249,7 +239,7 @@ class model.LemgramProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             type: type
-            cache : false
+            cache : true
         @prevParams = params
         $.ajax
             url: settings.cgi_script

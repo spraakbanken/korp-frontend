@@ -133,17 +133,29 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             
             #var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
             kwicCallback = kwicResults.renderResult
-            kwicopts = sort: $.bbq.getState("sort")
-            if kwicopts["sort"] is "random"
-                rnd = undefined
-                if _event.data.isInit and $.bbq.getState("random_seed")
-                    rnd = $.bbq.getState("random_seed")
-                else
-                    rnd = Math.ceil(Math.random() * 10000000)
-                    search random_seed: rnd
-                kwicopts["random_seed"] = rnd
-            kwicopts.context = settings.corpusListing.getContextQueryString() if isReading or currentMode is "parallel"
-            kwicopts.cqp = cqp if cqp
+            getSortParams = () -> 
+                sort = search().sort
+                if sort == "random"
+                    if search().random_seed
+                        rnd = search().random_seed
+                    else
+                        rnd = Math.ceil(Math.random() * 10000000)
+                        search random_seed: rnd
+
+                    return {
+                        sort : sort
+                        random_seed : rnd
+                    }
+                return {sort : sort}
+
+
+            kwicopts = {
+                ajaxParams : getSortParams()
+            }
+            
+            kwicopts.ajaxParams.context = settings.corpusListing.getContextQueryString() if isReading or currentMode is "parallel"
+            kwicopts.ajaxParams.cqp = cqp if cqp
+
             kwicProxy.makeRequest kwicopts, page, $.proxy(kwicResults.onProgress, kwicResults), null, $.proxy(kwicCallback, kwicResults)
         
         kwicSearch : (cqp, page) ->

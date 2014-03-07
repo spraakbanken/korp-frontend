@@ -4762,25 +4762,40 @@ line.tick {
 .tab_preloaders {
   display: inline-block;
 }
-
-/* line 2212, styles.scss */
-.tab_spinner {
+/* line 2205, styles.scss */
+.tab_preloaders .preloader_spinner {
   width: 9px;
   display: inline;
 }
 
-/* line 2228, styles.scss */
+/* line 2214, styles.scss */
+.close_icon {
+  display: inline;
+}
+
+/* line 2217, styles.scss */
+.tab_spinner {
+  display: none;
+  width: 13px;
+}
+
+/* line 2221, styles.scss */
+.loading .tab_spinner {
+  display: inline-block;
+}
+
+/* line 2224, styles.scss */
 .loading .close_icon {
   display: none;
 }
 
-/* line 2233, styles.scss */
+/* line 2229, styles.scss */
 .badge {
   padding-right: 5px;
   padding-left: 6px;
 }
 
-/* line 2238, styles.scss */
+/* line 2234, styles.scss */
 .popper_menu {
   width: 130px;
 }
@@ -4788,49 +4803,49 @@ line.tick {
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
-/* line 2250, styles.scss */
+/* line 2246, styles.scss */
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
-/* line 2255, styles.scss */
+/* line 2251, styles.scss */
 .bs-callout h4 {
   margin-top: 0;
 }
 
-/* line 2258, styles.scss */
+/* line 2254, styles.scss */
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
-/* line 2262, styles.scss */
+/* line 2258, styles.scss */
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
-/* line 2267, styles.scss */
+/* line 2263, styles.scss */
 .bs-callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
 }
 
-/* line 2271, styles.scss */
+/* line 2267, styles.scss */
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
-/* line 2275, styles.scss */
+/* line 2271, styles.scss */
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
 
-/* line 2280, styles.scss */
+/* line 2276, styles.scss */
 .dropdown-menu {
   border-radius: 2px;
 }
