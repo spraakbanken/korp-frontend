@@ -129,6 +129,7 @@ class model.KWICProxy extends BaseProxy
         # kwicCallback = kwicCallback or $.proxy(kwicResults.renderKwicResult, kwicResults)
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
+        
 
         o = $.extend(
             # cqp: $("body").scope().activeCQP || search().cqp

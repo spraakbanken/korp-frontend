@@ -253,6 +253,7 @@
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
       this.s.$apply(function($scope) {
+        kwicResults.hidePreloader();
         c.log("apply kwic search data", data);
         if (isReading) {
           return $scope.setContextData(data);
@@ -392,18 +393,15 @@
 
     KWICResults.prototype.buildQueryOptions = function() {
       var opts;
-      opts = {
-        command: "query"
+      opts = {};
+      opts.ajaxParams = {
+        command: "query",
+        cqp: this.proxy.prevCQP,
+        queryData: this.proxy.queryData,
+        sort: $(".sort_select").val(),
+        random_seed: opts.sort === "random" ? $.bbq.getState("random_seed") : void 0,
+        context: this.$result.is(".reading_mode") || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0
       };
-      opts.cqp = this.proxy.prevCQP;
-      opts.queryData = this.proxy.queryData;
-      opts.sort = $(".sort_select").val();
-      if (opts.sort === "random") {
-        opts.random_seed = $.bbq.getState("random_seed");
-      }
-      if (this.$result.is(".reading_mode") || currentMode === "parallel") {
-        opts.context = settings.corpusListing.getContextQueryString();
-      }
       return opts;
     };
 

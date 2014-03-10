@@ -225,6 +225,7 @@ class view.KWICResults extends BaseResults
 
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
+            kwicResults.hidePreloader()
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
@@ -331,13 +332,16 @@ class view.KWICResults extends BaseResults
         false
 
     buildQueryOptions: ->
-        opts = {command : "query"}
-        opts.cqp = @proxy.prevCQP
-        opts.queryData = @proxy.queryData
-        opts.sort = $(".sort_select").val()
-        opts.random_seed = $.bbq.getState("random_seed") if opts.sort is "random"
-        # opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
-        opts.context = settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
+        opts = {}
+        opts.ajaxParams = {
+            command : "query"
+            cqp : @proxy.prevCQP
+            queryData : @proxy.queryData
+            sort : $(".sort_select").val()
+            random_seed : $.bbq.getState("random_seed") if opts.sort is "random"
+            # context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
+            context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
+        }
         return opts
 
 
