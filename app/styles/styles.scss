@@ -721,7 +721,7 @@ table {
   position: relative;
 }
 
-#results-kwic > div:not(:last-child) {
+.result_controls, .pager-wrapper {
   margin-bottom: 8px;
 }
 

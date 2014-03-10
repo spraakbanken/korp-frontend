@@ -89,6 +89,7 @@
       window.kwicProxy = new model.KWICProxy();
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
+      this.current_page = search().page || 0;
       this.s = scope;
       this.selectionManager = scope.selectionManager;
       this.$result.click(function() {
@@ -152,8 +153,7 @@
     }
 
     KWICResults.prototype.resetView = function() {
-      KWICResults.__super__.resetView.call(this);
-      return this.$result.find(".pager-wrapper").empty();
+      return KWICResults.__super__.resetView.call(this);
     };
 
     KWICResults.prototype.getProxy = function() {
@@ -237,10 +237,7 @@
       this.$result.removeClass("zero_results");
       this.$result.find(".num-result").html(prettyNumbers(data.hits));
       this.renderHitsPicture(data);
-      this.buildPager(data.hits);
-      return safeApply(this.s, function() {
-        return _this.hidePreloader();
-      });
+      return this.buildPager(data.hits);
     };
 
     KWICResults.prototype.renderResult = function(data) {
@@ -253,7 +250,6 @@
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
       this.s.$apply(function($scope) {
-        kwicResults.hidePreloader();
         c.log("apply kwic search data", data);
         if (isReading) {
           return $scope.setContextData(data);
@@ -360,7 +356,7 @@
           link_to: "javascript:void(0)",
           num_edge_entries: 2,
           ellipse_text: "..",
-          current_page: search().page || 0
+          current_page: this.current_page || 0
         });
         this.$result.find(".next").attr("rel", "localize[next]");
         return this.$result.find(".prev").attr("rel", "localize[prev]");
@@ -375,18 +371,17 @@
       if (new_page_index !== page || !!force_click) {
         isReading = this.$result.is(".reading_mode");
         kwicCallback = this.renderResult;
-        this.showPreloader();
         this.getProxy().makeRequest(this.buildQueryOptions(), new_page_index, (function(progressObj) {
-          if (!isNaN(progressObj["stats"])) {
-            self.$result.find(".progress_container progress").attr("value", Math.round(progressObj["stats"]));
-          }
           return self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
         }), (function(data) {
           return self.buildPager(data.hits);
         }), $.proxy(kwicCallback, this));
-        search({
-          page: new_page_index
+        safeApply(this.s, function() {
+          return search({
+            page: new_page_index
+          });
         });
+        this.current_page = new_page_index;
       }
       return false;
     };
@@ -582,33 +577,36 @@
     function ExampleResults(tabSelector, resultSelector, scope) {
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
-      this.$result.find(".progress_container,.tab_progress").hide();
       this.$result.removeClass("reading_mode");
       if (this.s.$parent.queryParams) {
         this.makeRequest(this.s.$parent.queryParams);
         this.onentry();
       }
+      this.current_page = 0;
     }
 
     ExampleResults.prototype.makeRequest = function(opts) {
-      var incr, progress,
+      var progress,
         _this = this;
       c.log("opts", opts);
       this.resetView();
-      incr = opts.command === "query";
+      opts.ajaxParams.incr = opts.ajaxParams.command === "query";
       $.extend(opts, {
         success: function(data) {
           c.log("ExampleResults success", data, opts);
           _this.renderResult(data, opts.cqp);
           _this.renderCompleteResult(data);
-          _this.hidePreloader();
+          safeApply(_this.s, function() {
+            return _this.hidePreloader();
+          });
           util.setJsonLink(_this.proxy.prevRequest);
           return _this.$result.find(".num-result").html(prettyNumbers(data.hits));
         },
         error: function() {
-          return this.hidePreloader();
-        },
-        incremental: incr
+          return safeApply(_this.s, function() {
+            return _this.hidePreloader();
+          });
+        }
       });
       this.showPreloader();
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
@@ -616,18 +614,20 @@
     };
 
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var items_per_page, opts, page;
-      page = search().page || 0;
-      c.log("handlePaginationClick", new_page_index, page);
-      if (new_page_index !== page || !!force_click) {
-        items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
-        opts = {};
-        opts.cqp = this.proxy.prevCQP;
-        opts.start = new_page_index * items_per_page;
-        opts.end = opts.start + items_per_page;
-        opts.sort = $(".sort_select").val();
-        this.makeRequest(opts);
-      }
+      var items_per_page, opts, prev;
+      items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
+      opts = {
+        ajaxParams: {
+          cqp: this.proxy.prevRequest.cqp,
+          start: new_page_index * items_per_page,
+          sort: $(".sort_select").val()
+        }
+      };
+      opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
+      prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
+      _.extend(opts.ajaxParams, prev);
+      this.makeRequest(opts);
+      this.current_page = new_page_index;
       return false;
     };
 
@@ -663,7 +663,6 @@
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError,
         _this = this;
-      c.log("lemgramResults.renderResult", data, query);
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
       safeApply(this.s, function() {
@@ -707,7 +706,6 @@
             }).localeKey(label).addClass(confObj.css_class || "").appendTo($parent);
             return $(this).addClass(confObj.css_class).css("border-color", $(this).css("background-color"));
           } else {
-            c.log("header data", $(this).data("word"), $(this).tmplItem().lemgram);
             label = $(this).data("word") || $(this).tmplItem().lemgram;
             return $("<span class='hit'><b>" + label + "</b></span>").appendTo($parent);
           }
@@ -718,9 +716,7 @@
     LemgramResults.prototype.renderWordTables = function(word, data) {
       var self, tagsetTrans, unique_words, wordlist,
         _this = this;
-      c.log("lemgramResults.renderWordTables", word);
       self = this;
-      c.log("renderWordTables");
       wordlist = $.map(data, function(item) {
         var output;
         output = [];
@@ -737,7 +733,6 @@
         word = _arg[0], pos = _arg[1];
         return word + pos;
       });
-      c.log("unique_words", unique_words);
       tagsetTrans = _.invert(settings.wordpictureTagset);
       unique_words = _.filter(unique_words, function(_arg) {
         var currentWd, pos;
@@ -751,7 +746,6 @@
       $.each(unique_words, function(i, _arg) {
         var content, currentWd, pos;
         currentWd = _arg[0], pos = _arg[1];
-        c.log("currentWd, pos", currentWd, pos);
         self.drawTable(currentWd, pos, data);
         self.renderHeader(pos);
         content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
@@ -779,7 +773,6 @@
     LemgramResults.prototype.drawTable = function(token, wordClass, data) {
       var container, getRelType, inArray, orderArrays, self, tagsetTrans,
         _this = this;
-      c.log("token, wordClass", token, wordClass);
       inArray = function(rel, orderList) {
         var i, type;
         i = _.findIndex(orderList, function(item) {
@@ -800,7 +793,6 @@
       };
       self = this;
       wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
-      c.log("drawTable", wordClass);
       if (settings.wordPictureConf[wordClass] == null) {
         return;
       }
@@ -1493,10 +1485,8 @@
     };
 
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
-      var hidden,
-        _this = this;
+      var _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
-      hidden = $(".progress_container", this.$result).nextAll().hide();
       this.s.loading = true;
       this.showPreloader();
       return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress(function(data) {
@@ -1669,7 +1659,6 @@
           graph: graph
         });
         yAxis.render();
-        hidden.fadeIn();
         _this.hidePreloader();
         return safeApply(_this.s, function() {
           return _this.s.loading = false;

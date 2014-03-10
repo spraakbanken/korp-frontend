@@ -72,7 +72,7 @@ class view.KWICResults extends BaseResults
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
-        # @current_page = 0
+        @current_page = search().page or 0
 
         @s = scope
         @selectionManager = scope.selectionManager
@@ -140,7 +140,7 @@ class view.KWICResults extends BaseResults
     resetView: ->
         super()
         # @$result.find(".results_table,.pager-wrapper").empty()
-        @$result.find(".pager-wrapper").empty()
+        # @$result.find(".pager-wrapper").empty()
 
     getProxy: ->
         return @readingProxy if @$result.is(".reading_mode")
@@ -210,8 +210,6 @@ class view.KWICResults extends BaseResults
         @renderHitsPicture data
         @buildPager data.hits
 
-        safeApply @s, () =>
-            @hidePreloader()
 
 
     renderResult: (data) ->
@@ -225,7 +223,7 @@ class view.KWICResults extends BaseResults
 
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
-            kwicResults.hidePreloader()
+            # kwicResults.hidePreloader()
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
@@ -303,7 +301,7 @@ class view.KWICResults extends BaseResults
                 link_to: "javascript:void(0)"
                 num_edge_entries: 2
                 ellipse_text: ".."
-                current_page: search().page or 0
+                current_page: @current_page or 0
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
@@ -316,19 +314,21 @@ class view.KWICResults extends BaseResults
             isReading = @$result.is(".reading_mode")
             kwicCallback = @renderResult
 
-            this.showPreloader();
+            # this.showPreloader();
 
             @getProxy().makeRequest @buildQueryOptions(), new_page_index, ((progressObj) ->
 
                 #progress
-                self.$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
+                # self.$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
                 self.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
             ), ((data) ->
                 #success
                 self.buildPager data.hits
             ), $.proxy(kwicCallback, this)
             # $.bbq.pushState page: new_page_index
-            search page: new_page_index
+            safeApply @s, () ->
+                search page: new_page_index
+            @current_page = new_page_index
         false
 
     buildQueryOptions: ->
@@ -482,32 +482,35 @@ class view.ExampleResults extends view.KWICResults
     constructor: (tabSelector, resultSelector, scope) ->
         super tabSelector, resultSelector, scope
         @proxy = new model.KWICProxy()
-        @$result.find(".progress_container,.tab_progress").hide()
+        # @$result.find(".progress_container,.tab_progress").hide()
         # @$result.add(@$tab).addClass "not_loading customtab"
         @$result.removeClass "reading_mode"
 
         if @s.$parent.queryParams
             @makeRequest @s.$parent.queryParams
             @onentry()
+        @current_page = 0
         # @s.$parent.active = true
 
     makeRequest: (opts) ->
         c.log "opts", opts
         @resetView()
-        incr = opts.command == "query"
+        opts.ajaxParams.incr = opts.ajaxParams.command == "query"
+
         $.extend opts,
             success: (data) =>
                 c.log "ExampleResults success", data, opts
                 @renderResult data, opts.cqp
                 @renderCompleteResult data
-                @hidePreloader()
+                safeApply @s, () =>
+                    @hidePreloader()
                 util.setJsonLink @proxy.prevRequest
                 @$result.find(".num-result").html prettyNumbers(data.hits)
 
-            error: ->
-                @hidePreloader()
+            error: =>
+                safeApply @s, () =>
+                    @hidePreloader()
 
-            incremental: incr
 
         @showPreloader()
 
@@ -517,16 +520,19 @@ class view.ExampleResults extends view.KWICResults
 
 
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
-        page = search().page or 0
-        c.log "handlePaginationClick", new_page_index, page
-        if new_page_index isnt page or !!force_click
-            items_per_page = parseInt(@optionWidget.find(".num_hits").val())
-            opts = {}
-            opts.cqp = @proxy.prevCQP
-            opts.start = new_page_index * items_per_page
-            opts.end = (opts.start + items_per_page)
-            opts.sort = $(".sort_select").val()
-            @makeRequest opts
+        items_per_page = parseInt(@optionWidget.find(".num_hits").val())
+        opts = {
+            ajaxParams : {
+                cqp : @proxy.prevRequest.cqp
+                start : new_page_index * items_per_page
+                sort : $(".sort_select").val()
+            }
+        }
+        opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page)
+        prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
+        _.extend opts.ajaxParams, prev
+        @makeRequest opts
+        @current_page = new_page_index
         false
 
 
@@ -552,7 +558,6 @@ class view.LemgramResults extends BaseResults
         $(".content_target", @$result).empty()
 
     renderResult: (data, query) ->
-        c.log "lemgramResults.renderResult", data, query
         resultError = super(data)
         @resetView()
         safeApply @s, () =>
@@ -589,15 +594,13 @@ class view.LemgramResults extends BaseResults
                         .addClass(confObj.css_class or "").appendTo($parent)
                     $(this).addClass(confObj.css_class).css "border-color", $(this).css("background-color")
                 else
-                    c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
+                    # c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
                     label = $(this).data("word") or $(this).tmplItem().lemgram
                     $("<span class='hit'><b>#{label}</b></span>").appendTo $parent
         ).append "<div style='clear:both;'/>"
 
     renderWordTables: (word, data) ->
-        c.log "lemgramResults.renderWordTables", word
         self = this
-        c.log "renderWordTables"
         wordlist = $.map(data, (item) ->
             output = []
             output.push [item.head, item.headpos.toLowerCase()] if item.head.split("_")[0] is word
@@ -606,12 +609,10 @@ class view.LemgramResults extends BaseResults
         )
         unique_words = _.uniq wordlist, ([word, pos]) ->
             word + pos
-        c.log "unique_words", unique_words
 
         tagsetTrans = _.invert settings.wordpictureTagset
         unique_words = _.filter unique_words, ([currentWd, pos]) -> 
             settings.wordPictureConf[tagsetTrans[pos]]?
-        # c.log "isPosSupported", isPosSupported
         if not unique_words.length
             @showNoResults()
             return
@@ -619,7 +620,6 @@ class view.LemgramResults extends BaseResults
         
         
         $.each unique_words, (i, [currentWd, pos]) =>
-            c.log "currentWd, pos", currentWd, pos
             self.drawTable currentWd, pos, data
             self.renderHeader pos
             content = """
@@ -646,7 +646,7 @@ class view.LemgramResults extends BaseResults
         @hidePreloader()
 
     drawTable: (token, wordClass, data) ->
-        c.log "token, wordClass", token, wordClass
+        # c.log "token, wordClass", token, wordClass
         inArray = (rel, orderList) ->
             i = _.findIndex orderList, (item) -> 
                 (item.field_reverse or false) == (rel.field_reverse or false) and item.rel == rel.rel
@@ -663,7 +663,7 @@ class view.LemgramResults extends BaseResults
         self = this
         # wordClass = settings.wordpictureTagset[wordClass.toLowerCase()]
         wordClass = (_.invert settings.wordpictureTagset)[wordClass.toLowerCase()]
-        c.log "drawTable", wordClass
+        # c.log "drawTable", wordClass
 
         unless settings.wordPictureConf[wordClass]?
         #     @showNoResults()
@@ -1327,7 +1327,7 @@ class view.GraphResults extends BaseResults
 
     makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
-        hidden = $(".progress_container", @$result).nextAll().hide()
+        # hidden = $(".progress_container", @$result).nextAll().hide()
         @s.loading = true
         @showPreloader()
         @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress( (data) =>
@@ -1494,7 +1494,7 @@ class view.GraphResults extends BaseResults
                 graph: graph
 
             yAxis.render()
-            hidden.fadeIn()
+            # hidden.fadeIn()
             @hidePreloader()
             safeApply @s, () =>
                 @s.loading = false
