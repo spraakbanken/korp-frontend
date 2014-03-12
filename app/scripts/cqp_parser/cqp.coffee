@@ -14,9 +14,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
             for {type, op, val, flags} in and_array
                 if translate_ops
                     if op != "*="
-                        c.log "val", val
                         val = regescape val
-                        c.log "val", val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]
@@ -33,7 +31,6 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                 if type == "word" and val == ""
                     out = ""
                 else if type == "date_interval"
-                    c.log "date_interval", val
                     [from, to] = val.split(",")
                     operator1 = ">="
                     operator2 = "<="

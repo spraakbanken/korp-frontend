@@ -49,7 +49,7 @@
     };
 
     BaseResults.prototype.resultError = function(data) {
-      c.log("json fetch error: ", data);
+      c.error("json fetch error: ", data);
       this.hidePreloader();
       this.resetView();
       $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">').append("<img class='korp_fail' src='img/korp_fail.svg'>").add($("<div class='fail_text' />").localeKey("fail_text")).addClass("inline_block").prependTo(this.$result).wrapAll("<div class='error_msg'>");
@@ -101,21 +101,7 @@
           return s.$root.word_selected = null;
         });
       });
-      this.$result.find(".reading_btn").click(function() {
-        var isReading;
-        isReading = _this.$result.is(".reading_mode");
-        if (search().reading_mode) {
-          return search("reading_mode", null).replace();
-        } else {
-          return search({
-            reading_mode: "yes"
-          });
-        }
-      });
       $(document).keydown($.proxy(this.onKeydown, this));
-      if ($.bbq.getState("reading_mode")) {
-        this.$result.addClass("reading_mode");
-      }
       this.$result.on("click", ".word", function(event) {
         var aux, i, l, obj, paragraph, sent, sent_start, word;
         scope = $(event.currentTarget).scope();
@@ -416,7 +402,7 @@
         }
       });
       kwicCallback = $.proxy(this.renderResult, this);
-      return this.proxy.makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
+      return this.getProxy().makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
 
     KWICResults.prototype.setPage = function(page) {
@@ -1160,8 +1146,11 @@
         $("#showGraph").hide();
         return;
       }
-      $("#showGraph").click(function() {
+      $("#showGraph").on("click", function() {
         var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
+        if ($("#showGraph").is(".disabled")) {
+          return;
+        }
         params = _this.proxy.prevParams;
         cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
         reduceVal = params.groupby;

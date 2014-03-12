@@ -17,18 +17,31 @@ korpApp.controller "resultContainerCtrl", ($scope, searches) ->
     $scope.searches = searches
 
 
-korpApp.controller "kwicCtrl", ($scope) ->
+korpApp.controller "kwicCtrl", ($scope, utils) ->
     c.log "kwicCtrl init", $scope.$parent
     s = $scope
-
-    s.$on "tabselect", ($event) ->
-        c.log "tabselect", arguments
 
     s.onexit = () ->
         c.log "onexit"
         s.$root.sidebar_visible = false
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
+
+    utils.setupHash s, [
+        key : "reading_mode",
+        post_change : (isReading) =>
+            c.log "change reading mode", isReading
+
+            c.log "s.proxy.pendingRequests", s.instance.proxy.pendingRequests
+            if s.instance.proxy.pendingRequests.length
+                $.when(s.instance.pendingRequests...).then () ->
+                    s.instance.makeRequest()
+                    
+
+    ]
+
+    s.toggleReading = () ->
+        s.reading_mode = not s.reading_mode
 
     s.hitspictureClick = (pageNumber) ->
         s.instance.handlePaginationClick(pageNumber, null, true)

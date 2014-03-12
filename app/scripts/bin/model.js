@@ -512,7 +512,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, corpus, dataset, i, minWidth, obj, row, t, totalRow, word, wordArray, _i, _len, _ref1;
+          var columns, corpus, dataset, i, minWidth, obj, row, totalRow, word, wordArray, _i, _len, _ref1;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -562,7 +562,6 @@
             };
           });
           wordArray = $.keys(data.total.absolute);
-          t = $.now();
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
             row = {

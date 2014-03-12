@@ -158,7 +158,7 @@
       Searches.prototype.kwicRequest = function(cqp, page) {
         var getSortParams, isReading, kwicCallback, kwicopts;
         kwicResults.showPreloader();
-        isReading = kwicResults.$result.is(".reading_mode");
+        isReading = search().reading;
         kwicCallback = kwicResults.renderResult;
         getSortParams = function() {
           var rnd, sort;

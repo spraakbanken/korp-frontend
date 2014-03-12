@@ -131,7 +131,7 @@ html
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
-                  #results-kwic(constr='KWICResults', constr-name='kwicResults')
+                  #results-kwic(ng-class="{reading_mode : reading_mode}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
                 tab(disabled="!instance.hasData", ng-controller='StatsResultCtrl', ng-if="_settings.statistics != false")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")

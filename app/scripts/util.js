@@ -74,6 +74,7 @@ util.localize = function(root) {
 };
 
 util.lemgramToString = function(lemgram, appendIndex) {
+	lemgram = _.str.trim(lemgram);
 	var infixIndex = "";
 	if(util.isLemgramId(lemgram)) {
 		var match = util.splitLemgram(lemgram);

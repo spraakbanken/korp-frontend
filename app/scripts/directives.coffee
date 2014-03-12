@@ -109,7 +109,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     """
     link : (scope, elem, attr) ->
         scope.$watch "tokenValue", (valueObj) ->
-            c.log "watch value", valueObj
             unless valueObj then return
 
             
@@ -333,7 +332,6 @@ korpApp.directive "popper", ($rootElement) ->
                 my : attrs.my or "right top"
                 at : attrs.at or "bottom right"
                 of : elem
-            c.log "pos", pos
             if scope.offset
                 pos.offset = scope.offset
 
@@ -401,20 +399,10 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
                 token.and_block = CQP.parse('[word = ""]')[0].and_block
 
 
-        # c.log "s.data", s.data
-
-
-        # expand [] to [word = '']
-        
 
         s.$watch 'getCQPString()', (val) ->
-            # c.log "getCQPString", val
             s.cqp = CQP.stringify(s.data)
             
-            # $rootScope.activeCQP = cqpstr
-            # $location.search("cqp", s.cqp)
-            
-
         s.getCQPString = ->
             return (CQP.stringify s.data) or ""
 

@@ -123,6 +123,8 @@ class model.KWICProxy extends BaseProxy
 
     makeRequest: (options, page, callback, successCallback, kwicCallback) ->
         self = this
+        # unless options.cqp
+        #     debugger;
         @foundKwic = false
         super()
         successCallback = successCallback or $.proxy(kwicResults.renderCompleteResult, kwicResults)
@@ -171,13 +173,7 @@ class model.KWICProxy extends BaseProxy
             incremental: $.support.ajaxProgress
             cache : true
 
-        # data.within = settings.corpusListing.getWithinQueryString()
-        # data.context = settings.corpusListing.getContextQueryString()
-        # data.context = o.context if o.context?
-        # data.within = o.within if o.within?
-        # data.random_seed = o.random_seed if o.random_seed?
         $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
-        # data.querydata = o.queryData if o.queryData?
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
                 data.show.push key
@@ -479,7 +475,7 @@ class model.StatsProxy extends BaseProxy
 
                 wordArray = $.keys(data.total.absolute)
 
-                t = $.now()
+                # t = $.now()
                 # $.each wordArray, (i, word) ->
                 for word, i in wordArray
                     row =

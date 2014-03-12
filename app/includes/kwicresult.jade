@@ -5,18 +5,21 @@
     span.num-result 0
   //- .progress_container
   //-   progress(value='{{progress || 0}}', max='100')
-  .hits_picture
+  .hits_picture(ng-if='hitsPictureData.length > 1')
     table.hits_picture_table
       tbody
         tr
-          td.hits_picture_corp(ng-if='hitsPictureData.length > 1', ng-repeat='corpus in hitsPictureData'
-            ng-style='{width : corpus.relative + "%"}'
-            ng-class='{odd : $index % 2 != 0, \
-            even : $index % 2 == 0}'
-            ng-click='hitspictureClick(corpus.page)', tooltip='{{corpus.rtitle}}: {{corpus.abs}}', tooltip-placement='{{$last? "left":"top"}}')
+          td.hits_picture_corp(ng-repeat='corpus in hitsPictureData'
+              ng-style='{width : corpus.relative + "%"}'
+              ng-class='{odd : $index % 2 != 0, \
+                         even : $index % 2 == 0, \
+                         disable : }'
+              ng-click='hitspictureClick(corpus.page)'
+              tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
+              tooltip-placement='{{$last? "left":"top"}}')
 .pager-wrapper
-span.reading_btn.show.link(rel='localize[show_reading]') Visa läsläge
-span.reading_btn.hide.link(rel='localize[show_kwic]') Visa kwic
+span.reading_btn.show.link(ng-click="toggleReading()") {{'show_reading' | loc}}
+span.reading_btn.hide.link(ng-click="toggleReading()") {{'show_kwic' | loc}}
 .table_scrollarea
   table.results_table.kwic(cellspacing='0')
     tr.sentence(ng-repeat='sentence in kwic'

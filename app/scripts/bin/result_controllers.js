@@ -22,18 +22,33 @@
     return $scope.searches = searches;
   });
 
-  korpApp.controller("kwicCtrl", function($scope) {
-    var findMatchSentence, massageData, punctArray, s;
+  korpApp.controller("kwicCtrl", function($scope, utils) {
+    var findMatchSentence, massageData, punctArray, s,
+      _this = this;
     c.log("kwicCtrl init", $scope.$parent);
     s = $scope;
-    s.$on("tabselect", function($event) {
-      return c.log("tabselect", arguments);
-    });
     s.onexit = function() {
       c.log("onexit");
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
+    utils.setupHash(s, [
+      {
+        key: "reading_mode",
+        post_change: function(isReading) {
+          c.log("change reading mode", isReading);
+          c.log("s.proxy.pendingRequests", s.instance.proxy.pendingRequests);
+          if (s.instance.proxy.pendingRequests.length) {
+            return $.when.apply($, s.instance.pendingRequests).then(function() {
+              return s.instance.makeRequest();
+            });
+          }
+        }
+      }
+    ]);
+    s.toggleReading = function() {
+      return s.reading_mode = !s.reading_mode;
+    };
     s.hitspictureClick = function(pageNumber) {
       return s.instance.handlePaginationClick(pageNumber, null, true);
     };

@@ -133,7 +133,6 @@
       link: function(scope, elem, attr) {
         return scope.$watch("tokenValue", function(valueObj) {
           var defaultTmpl, locals, tmplElem, tmplObj;
-          c.log("watch value", valueObj);
           if (!valueObj) {
             return;
           }
@@ -341,7 +340,6 @@
             at: attrs.at || "bottom right",
             of: elem
           };
-          c.log("pos", pos);
           if (scope.offset) {
             pos.offset = scope.offset;
           }

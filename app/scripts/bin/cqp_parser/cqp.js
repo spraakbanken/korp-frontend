@@ -35,9 +35,7 @@
               _ref1 = and_array[_k], type = _ref1.type, op = _ref1.op, val = _ref1.val, flags = _ref1.flags;
               if (translate_ops) {
                 if (op !== "*=") {
-                  c.log("val", val);
                   val = regescape(val);
-                  c.log("val", val);
                 }
                 _ref2 = {
                   "^=": [val + ".*", "="],
@@ -53,7 +51,6 @@
               if (type === "word" && val === "") {
                 out = "";
               } else if (type === "date_interval") {
-                c.log("date_interval", val);
                 _ref3 = val.split(","), from = _ref3[0], to = _ref3[1];
                 operator1 = ">=";
                 operator2 = "<=";

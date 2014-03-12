@@ -37,7 +37,7 @@ class BaseResults
                 @hasData = true
 
     resultError: (data) ->
-        c.log "json fetch error: ", data
+        c.error "json fetch error: ", data
         @hidePreloader()
         @resetView()
         $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">')
@@ -84,19 +84,18 @@ class view.KWICResults extends BaseResults
                 s.$root.word_selected = null
             # $.sm.send "word.deselect"
 
-        @$result.find(".reading_btn").click =>
-            isReading = @$result.is(".reading_mode")
-            if search().reading_mode
-                # $.bbq.removeState "reading_mode"
-                search("reading_mode", null).replace()
-            else
+        # @$result.find(".reading_btn").click =>
+        #     isReading = @$result.is(".reading_mode")
+        #     if search().reading_mode
+                # search("reading_mode", null)
+            # else
                 # $.bbq.pushState reading_mode: true
-                search reading_mode: "yes"
+                # search reading_mode: "yes"
 
         $(document).keydown $.proxy(@onKeydown, this)
 
 
-        @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
+        # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
         @$result.on "click", ".word", (event) =>
             # c.log "click", obj, event
             # c.log "word click", $(this).scope().wd, event.currentTarget
@@ -358,7 +357,7 @@ class view.KWICResults extends BaseResults
                 # $scope.kwic = data.kwic
 
         kwicCallback = $.proxy(@renderResult, this)
-        @proxy.makeRequest @buildQueryOptions(),
+        @getProxy().makeRequest @buildQueryOptions(),
                            page_num,
                            (if isReading then $.noop else $.proxy(@onProgress, this)),
                            $.proxy(@renderCompleteResult, this),
@@ -1020,9 +1019,9 @@ class view.StatsResults extends BaseResults
         # icon = $("<span class='graph_btn_icon'>")
 
         # $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
-        $("#showGraph").click () =>
+        $("#showGraph").on "click", () =>
             # instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
-
+            if $("#showGraph").is(".disabled") then return
             params = @proxy.prevParams
             cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
             # instance.corpora = cl

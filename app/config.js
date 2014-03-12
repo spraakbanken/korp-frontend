@@ -317,7 +317,9 @@ attrs.lemgram = {
     displayType : "autocomplete",
     opts : settings.setOptions,
     stringify : function(lemgram) {
-        return util.lemgramToString(lemgram, true);
+        // if(_.contains(lemgram, " "))
+        // TODO: what if we're getting more than one consequtive lemgram back?
+        return util.lemgramToString(_.str.trim(lemgram), true);
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
@@ -3609,16 +3611,20 @@ settings.reduce_stringify = function(type) {
         return function(row, cell, value, columnDef, dataContext) {
         var corpora = getCorpora(dataContext);
         if(value == "&Sigma;") return appendDiagram(value, corpora, value);
-        else if(value == "|") return "-";
-        output = _(value.split("|"))
-                .filter(Boolean)
-                .map(function(item) {
-                    var wrapper = $("<div>");
-                    $("<span>").html(util.lemgramToString(item, true)).attr("data-cqp", '[lex contains "' + item + '"]').appendTo(wrapper);
-                    return wrapper.html();
-                })
-                .join(", ");
-        return appendDiagram(output, corpora, value);
+        // else if(value == "|") return "-";
+        output = _.map(value.split(" "), function(token) {
+            if(token == "|") return "–";
+            return _(token.split("|"))
+                    .filter(Boolean)
+                    .map(function(item) {
+                        var wrapper = $("<div>");
+                        $("<span>").html(util.lemgramToString(item, true)).attr("data-cqp", '[lex contains "' + item + '"]').appendTo(wrapper);
+                        return wrapper.html();
+                    })
+                    .join(", ");
+
+        });
+        return appendDiagram(output.join(" "), corpora, value);
         };
     case "saldo":
         return function(row, cell, value, columnDef, dataContext) {

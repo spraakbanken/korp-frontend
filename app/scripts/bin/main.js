@@ -124,7 +124,7 @@
     });
     prevFragment = {};
     window.onHashChange = function(event, isInit) {
-      var display, hasChanged, newLang, page, reading, showAbout;
+      var display, hasChanged, newLang, page, showAbout;
       c.log("onHashChange");
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
@@ -207,24 +207,6 @@
           display: "block",
           height: 0
         });
-      }
-      reading = search().reading_mode;
-      c.log("reading", reading, hasChanged("reading_mode"));
-      if (hasChanged("reading_mode")) {
-        if (reading) {
-          kwicResults.$result.addClass("reading_mode");
-          c.log("reading request");
-          if (!isInit) {
-            kwicResults.makeRequest();
-          }
-        } else {
-          kwicResults.$result.removeClass("reading_mode");
-          if (!isInit) {
-            kwicResults.makeRequest();
-          } else {
-            kwicResults.centerScrollbar();
-          }
-        }
       }
       if (isInit) {
         util.localize();
