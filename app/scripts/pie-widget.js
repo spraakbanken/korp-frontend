@@ -11,7 +11,7 @@ var pie_widget = {
 		container_id : '',
 		data_items : '',
 		diameter : 300,
-		sort_desc : false,
+		sort_desc : true,
 		diagram_type : 1,
 		offset_x: 0,
 		offset_y: 0,
