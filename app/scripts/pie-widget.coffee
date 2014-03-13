@@ -93,13 +93,13 @@ pie_widget =
             nowthis._highlight this
             # Fire callback "enteredArc":
             callback = nowthis.options.enteredArc
-            callback nowthis.eventArc(this)  if $.isFunction(callback)
+            callback nowthis.eventArc(this) if $.isFunction(callback)
 
         mouseExit = (event) ->
             nowthis._deHighlight this
             # Fire callback "exitedArc":
             callback = nowthis.options.exitedArc
-            callback nowthis.eventArc(this)  if $.isFunction(callback)
+            callback nowthis.eventArc(this) if $.isFunction(callback)
 
         r = Raphael(@options.container_id)
         @canvas = r
@@ -206,7 +206,7 @@ pie_widget =
     highlightArc: (itemID) ->
         for shape of @shapes
             n = @shapes[shape].node
-            if n and n["shape_id"] and n["shape_id"] is itemID
+            if n?.shape_id is itemID
                 # Highlight the arc
                 @_highlight @shapes[shape]
                 return true
@@ -214,7 +214,7 @@ pie_widget =
     deHighlightArc: (itemID) ->
         for shape of @shapes
             n = @shapes[shape].node
-            if n and n["shape_id"] and n["shape_id"] is itemID
+            if n?.shape_id is itemID
                 # Highlight the arc
                 @_deHighlight @shapes[shape]
                 return true

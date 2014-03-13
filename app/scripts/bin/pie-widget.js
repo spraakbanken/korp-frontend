@@ -242,7 +242,7 @@
       var n, shape;
       for (shape in this.shapes) {
         n = this.shapes[shape].node;
-        if (n && n["shape_id"] && n["shape_id"] === itemID) {
+        if ((n != null ? n.shape_id : void 0) === itemID) {
           this._highlight(this.shapes[shape]);
           return true;
         }
@@ -252,7 +252,7 @@
       var n, shape;
       for (shape in this.shapes) {
         n = this.shapes[shape].node;
-        if (n && n["shape_id"] && n["shape_id"] === itemID) {
+        if ((n != null ? n.shape_id : void 0) === itemID) {
           this._deHighlight(this.shapes[shape]);
           return true;
         }
