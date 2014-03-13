@@ -3601,9 +3601,16 @@ settings.reduce_stringify = function(type) {
             var query = $.map(dataContext.hit_value.split(" "), function(item) {
                 return $.format('[pos="%s"]', item);
             }).join(" ");
-            output =  $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
-                    [query, JSON.stringify(corpora), value, util.getLocaleString("pos_" + value)]);
-            return appendDiagram(output, corpora, value);
+            output =  _.map(value.split(" "), function(token) {
+                return $("<span>")
+                .localeKey("pos_" + token)
+                .outerHTML()
+            })
+            var link = $("<span>").addClass("link")
+                .attr("data-query", query)
+                .attr("data-corpora", JSON.stringify(corpora))
+                .html(output.join(" "))
+            return appendDiagram(link.outerHTML(), corpora, value);
         };
     case "prefix":
     case "suffix":

@@ -40,6 +40,7 @@
 	"lawroom" : "Habeas Corpus",
 	"all_hist" : "Old texts",
 	"search_history" : "Search history",
+	"search_history_clear" : "✘ Clear search history",
 	"add_lang" : "Add lang",
 	"remove_lang" : "Remove lang",
 	"about" : "About Korp",
@@ -190,6 +191,9 @@
 	"compare_reduce" : "and compile based on",
 	"compare_warning" : "Please save two searches in order to perform comparison. Look for the arrow next to the search button.",
 	"compare_delete" : "Delete saved searches",
+	"compare_save_header" : "Save for comparison",
+	"compare_name" : "Name",
+	"compare_save" : "Save",
 
 	"compare_distinctive" : "Prominent in",
 

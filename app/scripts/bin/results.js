@@ -91,6 +91,7 @@
       this.readingProxy = new model.KWICProxy();
       this.current_page = search().page || 0;
       this.s = scope;
+      this.s.setupReadingHash();
       this.selectionManager = scope.selectionManager;
       this.$result.click(function() {
         if (!_this.selectionManager.hasSelected()) {
@@ -229,9 +230,13 @@
     KWICResults.prototype.renderResult = function(data) {
       var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref,
         _this = this;
+      c.log("data", data);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
+      }
+      if (!data.kwic) {
+        data.kwic = [];
       }
       c.log("corpus_results");
       isReading = this.$result.is(".reading_mode");
@@ -418,7 +423,7 @@
       area = this.$result.find(".table_scrollarea").scrollLeft(0);
       match = m.first().position().left + m.width() / 2;
       sidebarWidth = $("#sidebar").outerWidth() || 0;
-      return area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth) / 2);
+      area.stop(true, true).scrollLeft(match - ($("body").innerWidth() - sidebarWidth) / 2);
     };
 
     KWICResults.prototype.getCurrentRow = function() {
@@ -563,20 +568,26 @@
     function ExampleResults(tabSelector, resultSelector, scope) {
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
-      this.$result.removeClass("reading_mode");
+      this.s.setupReadingWatch();
       if (this.s.$parent.queryParams) {
-        this.makeRequest(this.s.$parent.queryParams);
+        this.makeRequest();
         this.onentry();
       }
       this.current_page = 0;
     }
 
-    ExampleResults.prototype.makeRequest = function(opts) {
-      var progress,
+    ExampleResults.prototype.makeRequest = function() {
+      var items_per_page, opts, prev, progress,
         _this = this;
-      c.log("opts", opts);
+      c.log("ExampleResults.makeRequest()", this.current_page);
+      items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
+      opts = this.s.$parent.queryParams;
       this.resetView();
-      opts.ajaxParams.incr = opts.ajaxParams.command === "query";
+      opts.ajaxParams.incremental = opts.ajaxParams.command === "query";
+      opts.ajaxParams.start = this.current_page * items_per_page;
+      opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
+      prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
+      _.extend(opts.ajaxParams, prev);
       $.extend(opts, {
         success: function(data) {
           c.log("ExampleResults success", data, opts);
@@ -600,20 +611,8 @@
     };
 
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var items_per_page, opts, prev;
-      items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
-      opts = {
-        ajaxParams: {
-          cqp: this.proxy.prevRequest.cqp,
-          start: new_page_index * items_per_page,
-          sort: $(".sort_select").val()
-        }
-      };
-      opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
-      prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
-      _.extend(opts.ajaxParams, prev);
-      this.makeRequest(opts);
       this.current_page = new_page_index;
+      this.makeRequest();
       return false;
     };
 
@@ -1282,8 +1281,11 @@
     };
 
     StatsResults.prototype.showNoResults = function() {
+      var _this = this;
       c.log("showNoResults", this.$result);
-      this.hidePreloader();
+      safeApply(this.s, function() {
+        return _this.hidePreloader();
+      });
       this.$result.prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
       return $("#exportStatsSection").hide();
     };

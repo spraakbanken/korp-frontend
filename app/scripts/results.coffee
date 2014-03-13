@@ -75,6 +75,7 @@ class view.KWICResults extends BaseResults
         @current_page = search().page or 0
 
         @s = scope
+        @s.setupReadingHash()
         @selectionManager = scope.selectionManager
 
         @$result.click =>
@@ -212,9 +213,10 @@ class view.KWICResults extends BaseResults
 
 
     renderResult: (data) ->
+        c.log "data", data
         resultError = super(data)
         return if resultError is false
-        # this.prevCQP = sourceCQP;
+        unless data.kwic then data.kwic = []
         c.log "corpus_results"
         isReading = @$result.is(".reading_mode")
 
@@ -375,6 +377,7 @@ class view.KWICResults extends BaseResults
         match = m.first().position().left + m.width() / 2
         sidebarWidth = $("#sidebar").outerWidth() or 0
         area.stop(true, true).scrollLeft match - ($("body").innerWidth() - sidebarWidth) / 2
+        return
 
     getCurrentRow: ->
         tr = @$result.find(".token_selected").closest("tr")
@@ -483,18 +486,26 @@ class view.ExampleResults extends view.KWICResults
         @proxy = new model.KWICProxy()
         # @$result.find(".progress_container,.tab_progress").hide()
         # @$result.add(@$tab).addClass "not_loading customtab"
-        @$result.removeClass "reading_mode"
-
+        # @$result.removeClass "reading_mode"
+        @s.setupReadingWatch()
         if @s.$parent.queryParams
-            @makeRequest @s.$parent.queryParams
+            @makeRequest()
             @onentry()
         @current_page = 0
         # @s.$parent.active = true
 
-    makeRequest: (opts) ->
-        c.log "opts", opts
+    makeRequest: () ->
+        c.log "ExampleResults.makeRequest()", @current_page
+        items_per_page = parseInt(@optionWidget.find(".num_hits").val())
+        opts = @s.$parent.queryParams
         @resetView()
-        opts.ajaxParams.incr = opts.ajaxParams.command == "query"
+        opts.ajaxParams.incremental = opts.ajaxParams.command == "query"
+
+        opts.ajaxParams.start = @current_page * items_per_page
+        opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page)
+
+        prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
+        _.extend opts.ajaxParams, prev
 
         $.extend opts,
             success: (data) =>
@@ -518,20 +529,10 @@ class view.ExampleResults extends view.KWICResults
         @proxy.makeRequest opts, null, $.noop, $.noop, progress
 
 
+
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
-        items_per_page = parseInt(@optionWidget.find(".num_hits").val())
-        opts = {
-            ajaxParams : {
-                cqp : @proxy.prevRequest.cqp
-                start : new_page_index * items_per_page
-                sort : $(".sort_select").val()
-            }
-        }
-        opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page)
-        prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
-        _.extend opts.ajaxParams, prev
-        @makeRequest opts
         @current_page = new_page_index
+        @makeRequest()
         false
 
 
@@ -1155,7 +1156,8 @@ class view.StatsResults extends BaseResults
 
     showNoResults: ->
         c.log "showNoResults", @$result
-        @hidePreloader()
+        safeApply @s, () =>
+            @hidePreloader()
         @$result.prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
         $("#exportStatsSection").hide()
 

@@ -20,6 +20,7 @@ view.updateSearchHistory = (value) ->
         $.grep($.param.fragment(url).split("&"), (item) ->
             item.split("=")[0] is "search" or item.split("=")[0] is "corpus"
         ).join "&"
+    $("#search_history").empty()
     searches = $.jStorage.get("searches") or []
     searchLocations = $.map(searches, (item) ->
         filterParam item.location
@@ -37,13 +38,19 @@ view.updateSearchHistory = (value) ->
         output
     )
     placeholder = $("<option>").localeKey("search_history").get(0)
-    $("#search_history").html [placeholder].concat(opts)
+    clear = $("<option class='clear'>").localeKey("search_history_clear")
+
+    $("#search_history").html(opts)
+        .prepend(clear)
+        .prepend(placeholder)
+
 
 view.enableSearch = (bool) ->
-    if bool
-        $("#search-tab").tabs("enable").removeClass("ui-state-disabled").uncover()
-    else
-        $("#search-tab").tabs("disable").addClass("ui-state-disabled").cover()
+    # TODO: revive this
+    # if bool
+    #     $("#search-tab").tabs("enable").removeClass("ui-state-disabled").uncover()
+    # else
+    #     $("#search-tab").tabs("disable").addClass("ui-state-disabled").cover()
 
 view.initSearchOptions = ->
     selects = $("#search_options > div:first select").customSelect()
@@ -189,11 +196,6 @@ class view.SimpleSearch extends BaseSearch
                         @s.placeholder = lemgram
                         @s.simple_text = ""
 
-                    # search("search", "lemgram|" + lemgram)
-                    # setLemgram(lemgram)
-                    # @s.$apply () =>
-                        # @s.$root.activeCQP = "[lex contains \"#{lemgram}\"]"
-                    # return false
                 middleware: (request, idArray) =>
                     dfd = $.Deferred()
                     @lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->

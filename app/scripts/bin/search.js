@@ -27,12 +27,13 @@
   };
 
   view.updateSearchHistory = function(value) {
-    var filterParam, opts, placeholder, searchLocations, searches, _ref;
+    var clear, filterParam, opts, placeholder, searchLocations, searches, _ref;
     filterParam = function(url) {
       return $.grep($.param.fragment(url).split("&"), function(item) {
         return item.split("=")[0] === "search" || item.split("=")[0] === "corpus";
       }).join("&");
     };
+    $("#search_history").empty();
     searches = $.jStorage.get("searches") || [];
     searchLocations = $.map(searches, function(item) {
       return filterParam(item.location);
@@ -55,16 +56,11 @@
       return output;
     });
     placeholder = $("<option>").localeKey("search_history").get(0);
-    return $("#search_history").html([placeholder].concat(opts));
+    clear = $("<option class='clear'>").localeKey("search_history_clear");
+    return $("#search_history").html(opts).prepend(clear).prepend(placeholder);
   };
 
-  view.enableSearch = function(bool) {
-    if (bool) {
-      return $("#search-tab").tabs("enable").removeClass("ui-state-disabled").uncover();
-    } else {
-      return $("#search-tab").tabs("disable").addClass("ui-state-disabled").cover();
-    }
-  };
+  view.enableSearch = function(bool) {};
 
   view.initSearchOptions = function() {
     var selects;

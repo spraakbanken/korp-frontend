@@ -3,7 +3,7 @@ tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwic
     | KWIC
 
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
-  div(constr='ExampleResults' )
+  div(ng-class="{reading_mode : reading_mode}", constr='ExampleResults' )
     include kwicresult
 tab(active="[true][0]", ng-repeat='data in graphTabs')
   tab-heading(ng-class="{not_loading: progress > 99}")

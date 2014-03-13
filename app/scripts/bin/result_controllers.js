@@ -23,8 +23,7 @@
   });
 
   korpApp.controller("kwicCtrl", function($scope, utils) {
-    var findMatchSentence, massageData, punctArray, s,
-      _this = this;
+    var findMatchSentence, massageData, punctArray, readingChange, s;
     c.log("kwicCtrl init", $scope.$parent);
     s = $scope;
     s.onexit = function() {
@@ -32,22 +31,34 @@
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
-    utils.setupHash(s, [
-      {
-        key: "reading_mode",
-        post_change: function(isReading) {
-          c.log("change reading mode", isReading);
-          c.log("s.proxy.pendingRequests", s.instance.proxy.pendingRequests);
-          if (s.instance.proxy.pendingRequests.length) {
-            return $.when.apply($, s.instance.pendingRequests).then(function() {
-              return s.instance.makeRequest();
-            });
+    readingChange = function() {
+      var _ref;
+      if ((_ref = s.instance) != null ? _ref.proxy.pendingRequests.length : void 0) {
+        return $.when.apply($, s.instance.pendingRequests).then(function() {
+          return s.instance.makeRequest();
+        });
+      }
+    };
+    s.setupReadingHash = function() {
+      var _this = this;
+      return utils.setupHash(s, [
+        {
+          key: "reading_mode",
+          post_change: function(isReading) {
+            c.log("change reading mode", isReading);
+            return readingChange();
           }
         }
-      }
-    ]);
+      ]);
+    };
+    s.setupReadingWatch = function() {
+      return s.$watch("reading_mode", function() {
+        return readingChange();
+      });
+    };
     s.toggleReading = function() {
-      return s.reading_mode = !s.reading_mode;
+      s.reading_mode = !s.reading_mode;
+      return s.instance.centerScrollbar();
     };
     s.hitspictureClick = function(pageNumber) {
       return s.instance.handlePaginationClick(pageNumber, null, true);

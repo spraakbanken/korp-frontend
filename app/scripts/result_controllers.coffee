@@ -27,21 +27,28 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
-    utils.setupHash s, [
-        key : "reading_mode",
-        post_change : (isReading) =>
-            c.log "change reading mode", isReading
+    readingChange = () ->
+        if s.instance?.proxy.pendingRequests.length
+            $.when(s.instance.pendingRequests...).then () ->
+                s.instance.makeRequest()
 
-            c.log "s.proxy.pendingRequests", s.instance.proxy.pendingRequests
-            if s.instance.proxy.pendingRequests.length
-                $.when(s.instance.pendingRequests...).then () ->
-                    s.instance.makeRequest()
-                    
+    s.setupReadingHash = () ->
+        utils.setupHash s, [
+            key : "reading_mode",
+            post_change : (isReading) =>
+                c.log "change reading mode", isReading
+                readingChange()
+        ]
 
-    ]
+    s.setupReadingWatch = () ->
+        s.$watch "reading_mode", () ->
+            readingChange()   
+
+
 
     s.toggleReading = () ->
         s.reading_mode = not s.reading_mode
+        s.instance.centerScrollbar()
 
     s.hitspictureClick = (pageNumber) ->
         s.instance.handlePaginationClick(pageNumber, null, true)

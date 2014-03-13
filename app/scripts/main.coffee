@@ -93,7 +93,13 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     # $("#searchbar").html searchbar_html[0]
     $("#search_history").change (event) ->
         c.log "select", $(this).find(":selected")
-        location.href = $(this).find(":selected").val()
+        target = $(this).find(":selected")
+        if _.str.contains target.val(), "http://"
+            location.href = target.val()
+        else if target.is(".clear")
+            c.log "empty searches"
+            $.jStorage.set("searches", [])
+            view.updateSearchHistory()
 
     
     creds = $.jStorage.get("creds")

@@ -200,13 +200,13 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
         </div>
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
-            <h3 class="popover-title">Spara för jämförelse</h3>
+            <h3 class="popover-title">{{'compare_save_header' | loc}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
-                    <label for="cmp_input">Namn:</label> <input id="cmp_input" ng-model="name">
+                    <label for="cmp_input">{{'compare_name' | loc}} :</label> <input id="cmp_input" ng-model="name">
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-small">Spara</button>
+                    <button class="btn btn-primary btn-small">{{'compare_save' | loc}}</button>
                 </div>
             </form>
         </div>
@@ -294,7 +294,12 @@ korpApp.directive "meter", () ->
 
         bkg = elem.find(".background")
         # bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        # if not _.str.trim wds
+        #     c.log "wds not length"
+        #     scope.displayWd = "&mdash;"
+        # else
         scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        
         scope.loglike = Math.abs scope.meter[1]
 
 

@@ -97,8 +97,16 @@
       return false;
     });
     $("#search_history").change(function(event) {
+      var target;
       c.log("select", $(this).find(":selected"));
-      return location.href = $(this).find(":selected").val();
+      target = $(this).find(":selected");
+      if (_.str.contains(target.val(), "http://")) {
+        return location.href = target.val();
+      } else if (target.is(".clear")) {
+        c.log("empty searches");
+        $.jStorage.set("searches", []);
+        return view.updateSearchHistory();
+      }
     });
     creds = $.jStorage.get("creds");
     if (creds) {

@@ -42,6 +42,7 @@
 	"lawroom" : "Lagrummet",
 	"all_hist" : "Historiskt",
 	"search_history" : "Sökhistorik",
+	"search_history_clear" : "✘ Rensa sökhistorik",
 	"add_lang" : "Fler språk",
 	"remove_lang" : "Färre språk",
 	"about" : "Om Korp",
@@ -192,6 +193,9 @@
 	"compare_reduce" : "och sammanställ på",
 	"compare_warning" : "Du måste spara minst två sökningar för att kunna jämföra. Leta efter pilen bredvid sökknappen.",
 	"compare_delete" : "Rensa sparade sökningar",
+	"compare_save_header" : "Spara för jämförelse",
+	"compare_name" : "Namn",
+	"compare_save" : "Spara",
 
 	"compare_distinctive" : "Utmärkande för",
 

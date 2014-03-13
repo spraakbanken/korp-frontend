@@ -279,7 +279,7 @@
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper"></div><span ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -334,7 +334,7 @@
                 </tab>
                 <tab active="[true][0]" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
-                  <div constr="ExampleResults">
+                  <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
                     <div class="result_controls">
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
@@ -347,7 +347,7 @@
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper"></div><span ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">

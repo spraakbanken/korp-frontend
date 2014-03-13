@@ -18,8 +18,8 @@
               tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               tooltip-placement='{{$last? "left":"top"}}')
 .pager-wrapper
-span.reading_btn.show.link(ng-click="toggleReading()") {{'show_reading' | loc}}
-span.reading_btn.hide.link(ng-click="toggleReading()") {{'show_kwic' | loc}}
+span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc}}
+span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc}}
 .table_scrollarea
   table.results_table.kwic(cellspacing='0')
     tr.sentence(ng-repeat='sentence in kwic'
