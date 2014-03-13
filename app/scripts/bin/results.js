@@ -982,9 +982,7 @@
       $("#dialog").find("a").blur();
       stats2Instance = $("#chartFrame").pie_widget({
         container_id: "chartFrame",
-        data_items: dataItems,
-        bar_horizontal: false,
-        diagram_type: 0
+        data_items: dataItems
       });
       return statsSwitchInstance = $("#statistics_switch").radioList({
         change: function() {

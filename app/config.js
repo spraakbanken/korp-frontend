@@ -3568,10 +3568,10 @@ settings.reduce_stringify = function(type) {
     }
 
     function appendDiagram(output, corpora, value) {
-        if(corpora.length > 1)
+        //if(corpora.length > 1)
             return output + $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
-        else
-            return output;
+        //else
+        //    return output;
     }
     var output = "";
     switch(type) {

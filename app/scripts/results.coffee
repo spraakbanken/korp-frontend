@@ -870,8 +870,6 @@ newDataInGraph = (dataName, horizontalDiagram) ->
         stats2Instance = $("#chartFrame").pie_widget(
             container_id: "chartFrame"
             data_items: dataItems
-            bar_horizontal: false
-            diagram_type: 0
         )
         statsSwitchInstance = $("#statistics_switch").radioList(
             change: ->
