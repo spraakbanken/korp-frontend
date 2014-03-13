@@ -12,8 +12,7 @@
           td.hits_picture_corp(ng-repeat='corpus in hitsPictureData'
               ng-style='{width : corpus.relative + "%"}'
               ng-class='{odd : $index % 2 != 0, \
-                         even : $index % 2 == 0, \
-                         disable : }'
+                         even : $index % 2 == 0}'
               ng-click='hitspictureClick(corpus.page)'
               tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               tooltip-placement='{{$last? "left":"top"}}')
