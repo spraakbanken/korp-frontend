@@ -683,7 +683,7 @@ settings.corporafolders.socialmedia.forum = {
 
 settings.corporafolders.socialmedia.forum.flashback = {
 	title : "Flashback",
-	contents : ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-resor"],
+	contents : ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
 	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>. Materialet är under uppbyggnad."
 };
 
@@ -1986,9 +1986,201 @@ settings.corpora["flashback-mat"] = {
 	}
 };
 
+settings.corpora["flashback-politik"] = {
+	id : "flashback-politik",
+	title : "Flashback: Politik",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["flashback-sex"] = {
+	id : "flashback-sex",
+	title : "Flashback: Sex",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["flashback-sport"] = {
+	id : "flashback-sport",
+	title : "Flashback: Sport & träning",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["flashback-vetenskap"] = {
+	id : "flashback-vetenskap",
+	title : "Flashback: Vetenskap & humaniora",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
 settings.corpora["flashback-resor"] = {
 	id : "flashback-resor",
 	title : "Flashback: Resor",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["flashback-ovrigt"] = {
+	id : "flashback-ovrigt",
+	title : "Flashback: Övrigt",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix
+	},
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["flashback-flashback"] = {
+	id : "flashback-flashback",
+	title : "Flashback: Om Flashback",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
