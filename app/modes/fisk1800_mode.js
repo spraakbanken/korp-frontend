@@ -51,7 +51,7 @@ settings.corporafolders.tidskrifter.tidskrifter1899 = {
 
 settings.corporafolders.tidskrifter.tidskrifter1959 = {
 	title : "Tidskrifter 1900–1959",
-	contents : ["astra", "euterpe", "filosofia1900-1959"],
+	contents : ["argus", "astra", "euterpe", "filosofia1900-1959"],
 	description : ""
 };
 
@@ -360,6 +360,31 @@ settings.corpora.spanskaflugan = {
 	},
 	struct_attributes : {
 		"text_title" : {label : "title"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora.argus = {
+	id : "argus",
+	title : "Argus 1907–1911",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
 	}
 };
