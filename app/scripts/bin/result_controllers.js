@@ -273,9 +273,7 @@
           }
         }
         cqpobj = CQP.concat.apply(CQP, cqps);
-        c.log("cqpobj", cqpobj);
         cl = settings.corpusListing.subsetFactory(cmp.corpora);
-        c.log("cmp.cqp", cmp.cqp);
         opts = {
           start: 0,
           end: 24,

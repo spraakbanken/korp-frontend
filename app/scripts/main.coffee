@@ -110,15 +110,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     tab_a_selector = "ul .ui-tabs-anchor"
 
 
-    if currentMode is "parallel"
-        # $(".ui-tabs-nav li").first().hide()
-        # $(".ui-tabs-nav li").last().hide()
-        $("#korp-simple").hide()
-        $(".ui-tabs-nav a").eq(1).localeKey "parallel"
-        $("#korp-advanced").hide()
-        $("#search-tab").tabs "option", "active", 1
-        $("#result-container > ul li:last ").hide()
-
     $("#log_out").click ->
         $.each authenticationProxy.loginObj.credentials, (i, item) ->
             $(".boxdiv[data=#{item.toLowerCase()}]").addClass "disabled"
@@ -213,22 +204,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
                 display: "block"
                 height: 0
 
-        # reading = search().reading_mode
-        # c.log "reading", reading, hasChanged("reading_mode")
-        # if hasChanged("reading_mode")
-
-        #     if reading
-        #         kwicResults.$result.addClass "reading_mode"
-
-        #         c.log "reading request"
-        #         kwicResults.makeRequest() unless isInit
-        #     else
-        #         kwicResults.$result.removeClass "reading_mode"
-
-        #         unless isInit
-        #             kwicResults.makeRequest()
-        #         else
-        #             kwicResults.centerScrollbar()
 
         if isInit
             util.localize()
@@ -467,11 +442,11 @@ window.initTimeGraph = (def) ->
                 pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>")
                 firstrow = pTmpl(
                     loc: "corpselector_time_chosen"
-                    num: prettyNumbers(val or 0)
+                    num: util.prettyNumbers(val or 0)
                 )
                 secondrow = pTmpl(
                     loc: "corpselector_of_total"
-                    num: prettyNumbers(total)
+                    num: util.prettyNumbers(total)
                 )
                 time = item.datapoint[0]
                 $(".corpusInfoSpace").css top: $(this).parent().offset().top

@@ -213,7 +213,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
 
                 c.log "loadCorpora"
-                loadCorpora()
+                util.loadCorpora()
                 def.resolve()
 
             return def.promise

@@ -210,8 +210,6 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
         s.reduce = reduce
 
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
-        # stringify = settings.corpusListing.
-        # c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
         attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
         s.stringify = attributes[_.str.strip(reduce, "_.")]?.stringify or angular.identity
 
@@ -228,9 +226,6 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
         s.rowClick = (triple, cmp_index) ->
             cmp = cmps[cmp_index]
-            # cmp = _.extend {}, (_.pick cmp), 
-            #     command: "query"
-            # cmp.corpus = 
 
             c.log "triple", triple, cmp
 
@@ -246,12 +241,9 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                         val : token
             
             cqpobj = CQP.concat cqps...
-            c.log "cqpobj", cqpobj
 
             cl = settings.corpusListing.subsetFactory cmp.corpora
             
-            # cmp.cqp = 
-            c.log "cmp.cqp", cmp.cqp
             opts = {
                 start : 0
                 end : 24

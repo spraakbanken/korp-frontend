@@ -502,7 +502,7 @@ class model.StatsProxy extends BaseProxy
         return ""  if not value.relative and not value.absolute
         return """<span>
                         <span class='relStat'>#{util.formatDecimalString(value.relative.toFixed(1), true)}</span>
-                        <span class='absStat'>(#{prettyNumbers(String(value.absolute))})</span>
+                        <span class='absStat'>(#{util.prettyNumbers(String(value.absolute))})</span>
                   <span>"""
 
 class model.AuthenticationProxy

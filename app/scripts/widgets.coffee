@@ -68,6 +68,7 @@ Sidebar =
         return $(items)
 
     renderItem: (key, value, attrs) ->
+        c.log "renderItem", key, value, attrs
         if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
             return ""
         output = $("<p><span rel='localize[#{attrs.label}]'>#{key}</span>: </p>")
@@ -118,27 +119,27 @@ Sidebar =
             return output
 
 
-        value = (attrs.stringify or _.identity)(value)
+        str_value = (attrs.stringify or _.identity)(value)
 
 
         if attrs.type == "url"
-            return output.append "<a href='#{value}' class='exturl sidebar_url'>#{decodeURI(value)}</a>"
+            return output.append "<a href='#{str_value}' class='exturl sidebar_url'>#{decodeURI(str_value)}</a>"
 
         else if key == "msd"
-            return output.append """<span class='msd'>#{value}</span>
+            return output.append """<span class='msd'>#{str_value}</span>
                                         <a href='markup/msdtags.html' target='_blank'>
                                             <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
                                         </a>
                                     </span>
                                 """
         else if attrs.pattern
-            return output.append _.template(attrs.pattern, {key : key, val : value})
+            return output.append _.template(attrs.pattern, {key : key, val : str_value})
 
         else
             if attrs.translationKey
                 return output.append "<span rel='localize[#{attrs.translationKey}#{value}]'></span>"
             else
-                return output.append "<span>#{value || ''}</span>"
+                return output.append "<span>#{str_value || ''}</span>"
 
 
     applyEllipse: ->
@@ -260,21 +261,6 @@ $.widget "korp.radioList",
     getSelected: ->
         @element.find ".radioList_selected"
 
-ModeSelector =
-    options:
-        modes: []
-
-    _create: ->
-        self = this
-        $.each @options.modes, (i, item) ->
-            a = $("<a href='javascript:'>")
-            .localeKey(item.localekey).data("mode", item.mode)
-            if not item.labOnly or (isLab and item.labOnly)
-                a.appendTo self.element
-
-        @_super()
-
-$.widget "korp.modeSelector", $.korp.radioList, ModeSelector
 $.extend $.ui.autocomplete.prototype,
     _renderItem: (ul, item) ->
         li = $("<li></li>").data("ui-autocomplete-item", item)

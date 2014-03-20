@@ -18,7 +18,7 @@
     BaseResults.prototype.onProgress = function(progressObj) {
       var e,
         _this = this;
-      this.num_result.html(prettyNumbers(progressObj["total_results"]));
+      this.num_result.html(util.prettyNumbers(progressObj["total_results"]));
       if (!isNaN(progressObj["stats"])) {
         try {
 
@@ -222,7 +222,7 @@
         return;
       }
       this.$result.removeClass("zero_results");
-      this.$result.find(".num-result").html(prettyNumbers(data.hits));
+      this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
       this.renderHitsPicture(data);
       return this.buildPager(data.hits);
     };
@@ -597,7 +597,7 @@
             return _this.hidePreloader();
           });
           util.setJsonLink(_this.proxy.prevRequest);
-          return _this.$result.find(".num-result").html(prettyNumbers(data.hits));
+          return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
         },
         error: function() {
           return safeApply(_this.s, function() {
@@ -1059,7 +1059,6 @@
       this.$result.on("click", ".arcDiagramPicture", function(event) {
         var parts;
         parts = $(event.currentTarget).attr("id").split("__");
-        c.log("hello", event.target, parts);
         if (parts[1] !== "Σ") {
           return newDataInGraph(parts[1], true);
         } else {

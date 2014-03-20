@@ -253,7 +253,7 @@
             corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"];
           }
           c.log("loadCorpora");
-          loadCorpora();
+          util.loadCorpora();
           return def.resolve();
         });
         return def.promise;

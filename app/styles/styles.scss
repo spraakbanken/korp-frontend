@@ -546,6 +546,13 @@ select.arg_value option {
   left: 615px;
   background-color: white;
   padding-right: 4px;
+  .popup_icon {
+    margin-right : 4px;
+    width : 24px;
+    height : 24px;
+    vertical-align : middle;
+    margin-top : -1px
+  }
 }
 
 .tree {

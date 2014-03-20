@@ -1,5 +1,4 @@
-unless window.util then window.util = {}
-
+window.util = {}
 
 
 class window.CorpusListing
@@ -82,8 +81,6 @@ class window.CorpusListing
             corpus.struct_attributes
         )
         rest = @_invalidateAttrs(attrs)
-
-        # rest = attrs
 
         # fix for combining dataset values
         withDataset = _.filter(_.pairs(rest), (item) ->
@@ -230,8 +227,6 @@ class window.ParallelCorpusListing extends CorpusListing
     getEnabledByLang : (lang, andSelf=false, flatten=true) ->
         corps = _.filter @selected, (item) ->
             item["lang"] == lang
-        # c.log "corps", corps
-        # window.crp = corps
         output = _(corps).map((item) =>
             @getLinked item, andSelf
         ).value()
@@ -378,5 +373,425 @@ window.util.setLogin = () ->
 
     $("#log_out .usrname").text(authenticationProxy.loginObj.name)
     $(".err_msg", self).hide()
+
+
+
+util.SelectionManager = ->
+    @selected = $()
+    @aux = $()
+    return
+
+util.SelectionManager::select = (word, aux) ->
+    return if not word? or not word.length
+    if @selected.length
+        @selected.removeClass "word_selected token_selected"
+        @aux.removeClass "word_selected aux_selected"
+    @selected = word
+    @aux = aux or $()
+    @aux.addClass "word_selected aux_selected"
+    word.addClass "word_selected token_selected"
+
+util.SelectionManager::deselect = ->
+    return unless @selected.length
+    @selected.removeClass "word_selected token_selected"
+    @selected = $()
+    @aux.removeClass "word_selected aux_selected"
+    @aux = $()
+    return
+
+util.SelectionManager::hasSelected = ->
+    @selected.length > 0
+
+util.getLocaleString = (key) ->
+    lang = (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
+    output = loc_data[lang][key] if loc_data and loc_data[lang]
+    return key if not output? and key?
+    output
+
+util.initLocalize = ->
+    $.localize "init",
+        packages: [
+            "locale"
+            "corpora"
+        ]
+        pathPrefix: "translations"
+        language: (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
+        callback: ->
+            if @is(".num_hits")
+                selected = @find("option:selected")
+                c.log "selected", selected, util.getLocaleString(@data("prefix")) + ": " + selected.text()
+                selected.text util.getLocaleString(@data("prefix")) + ": " + selected.text()
+            @find("[data-placeholder]").add(@filter("[data-placeholder]")).each ->
+                $(this).attr "placeholder", util.getLocaleString($(this).data("placeholder"))
+                return
+
+            return
+
+
+util.localize = (root) ->
+    root = root or "body"
+    $(root).localize()
+    return
+
+util.lemgramToString = (lemgram, appendIndex) ->
+    lemgram = _.str.trim(lemgram)
+    infixIndex = ""
+    if util.isLemgramId(lemgram)
+        match = util.splitLemgram(lemgram)
+        infixIndex = $.format("<sup>%s</sup>", match.index) if appendIndex? and match.index isnt "1"
+        concept = match.form.replace(/_/g, " ")
+        type = match.pos.slice(0, 2)
+    else # missing from saldo, and has the form word_NN instead.
+        concept = ""
+        type = ""
+        try
+            concept = lemgram.split("_")[0]
+            type = lemgram.split("_")[1].toLowerCase()
+        catch e
+            c.log "lemgramToString broken for ", lemgram
+    $.format "%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
+        concept
+        infixIndex
+        type
+        util.getLocaleString(type)
+    ]
+
+util.saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/
+util.saldoToString = (saldoId, appendIndex) ->
+    match = saldoId.match(util.saldoRegExp)
+    infixIndex = ""
+    infixIndex = $.format("<sup>%s</sup>", match[2]) if appendIndex? and match[2] isnt "1"
+    $.format "%s%s", [
+        match[1].replace(/_/g, " ")
+        infixIndex
+    ]
+
+util.sblexArraytoString = (idArray, labelFunction) ->
+    labelFunction = labelFunction or util.lemgramToString
+    tempArray = $.map(idArray, (lemgram) ->
+        labelFunction lemgram, false
+    )
+    $.map idArray, (lemgram) ->
+        isAmbigous = $.grep(tempArray, (tempLemgram) ->
+            tempLemgram is labelFunction(lemgram, false)
+        ).length > 1
+        labelFunction lemgram, isAmbigous
+
+
+util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/
+util.isLemgramId = (lemgram) ->
+    lemgram.search(util.lemgramRegexp) isnt -1
+
+util.splitLemgram = (lemgram) ->
+    unless util.isLemgramId(lemgram)
+        throw new Error("Input to util.splitLemgram is not a lemgram: " + lemgram)
+    keys = ["morph", "form", "pos", "index", "startIndex"]
+    splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2)
+    _.object keys, splitArray
+
+util.splitSaldo = (saldo) ->
+    saldo.match util.saldoRegExp
+
+util.setJsonLink = (settings) ->
+    unless settings?
+        c.log "failed to update json link"
+        return
+    $("#json-link").attr "href", settings.url
+    $("#json-link").show()
+    return
+
+util.searchHash = (type, value) ->
+    search
+        search: type + "|" + value
+        page: 0
+
+    return
+
+# $(window).trigger("hashchange")
+added_corpora_ids = []
+util.loadCorporaFolderRecursive = (first_level, folder) ->
+    outHTML = undefined
+    if first_level
+        outHTML = "<ul>"
+    else
+        outHTML = "<ul title=\"" + folder.title + "\" description=\"" + escape(folder.description) + "\">"
+    if folder #This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
+        # Folders
+        $.each folder, (fol, folVal) ->
+            outHTML += "<li>" + util.loadCorporaFolderRecursive(false, folVal) + "</li>"  if fol isnt "contents" and fol isnt "title" and fol isnt "description"
+            return
+
+        
+        # Corpora
+        if folder["contents"] and folder["contents"].length > 0
+            $.each folder.contents, (key, value) ->
+                outHTML += "<li id=\"" + value + "\">" + settings.corpora[value]["title"] + "</li>"
+                added_corpora_ids.push value
+                return
+
+    if first_level
+        
+        # Add all corpora which have not been added to a corpus
+        for val of settings.corpora
+            cont = false
+            for usedid of added_corpora_ids
+                if added_corpora_ids[usedid] is val or settings.corpora[val].hide
+                    cont = true
+            continue if cont
+            
+            # Add it anyway:
+            outHTML += "<li id='#{val}'>#{settings.corpora[val].title}</li>"
+    outHTML += "</ul>"
+    outHTML
+
+# Helper function to turn 1.2345 into 1,2345 (locale dependent)
+# Use "," instead of "." if Swedish, if mode is
+# Split the string into two parts
+
+#return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
+
+#return x.replace(".", decimalSeparator);
+
+# Helper function to turn "8455999" into "8 455 999" 
+util.prettyNumbers = (numstring) ->
+    regex = /(\d+)(\d{3})/
+    outStrNum = numstring.toString()
+    outStrNum = outStrNum.replace(regex, "$1" + "<span rel=\"localize[util_numbergroupseparator]\">" + util.getLocaleString("util_numbergroupseparator") + "</span>" + "$2")  while regex.test(outStrNum)
+    outStrNum
+
+# Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget 
+util.loadCorpora = ->
+    added_corpora_ids = []
+    outStr = util.loadCorporaFolderRecursive(true, settings.corporafolders)
+    window.corpusChooserInstance = $("#corpusbox").corpusChooser(
+        template: outStr
+        infoPopup: (corpusID) ->
+            corpusObj = settings.corpora[corpusID]
+            maybeInfo = ""
+            maybeInfo = "<br/><br/>" + corpusObj.description  if corpusObj.description
+            numTokens = corpusObj["info"]["Size"]
+            numSentences = corpusObj["info"]["Sentences"]
+            lastUpdate = corpusObj["info"]["Updated"]
+            lastUpdate = "?" unless lastUpdate
+            sentenceString = "-"
+            sentenceString = util.prettyNumbers(numSentences.toString())  if numSentences
+            
+            output = """
+            <b>
+                <img class="popup_icon" src="img/korp_icon.png" />
+                #{corpusObj.title}
+            </b>
+            #{maybeInfo}
+            <br/><br/>
+            #{util.getLocaleString("corpselector_numberoftokens")}:
+            <b>util.prettyNumbers(numTokens)</b>
+            <br/>#{util.getLocaleString("corpselector_numberofsentences")}: 
+            <b>#{sentenceString}</b>
+            <br/>
+            #{util.getLocaleString("corpselector_lastupdate")}: 
+            <b>#{lastUpdate}</b>
+            <br/><br/>"""
+            
+            supportsContext = _.keys(corpusObj.context).length > 1
+            output += $("<div>").localeKey("corpselector_supports").html() + "<br>"  if supportsContext
+            output += $("<div>").localeKey("corpselector_limited").html()  if corpusObj.limited_access
+            output
+
+        infoPopupFolder: (indata) ->
+            corporaID = indata.corporaID
+            desc = indata.description
+            totalTokens = 0
+            totalSentences = 0
+            missingSentenceData = false
+            $(corporaID).each (key, oneID) ->
+                totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"])
+                oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"]
+                if oneCorpusSentences
+                    totalSentences += parseInt(oneCorpusSentences)
+                else
+                    missingSentenceData = true
+                return
+
+            totalSentencesString = util.prettyNumbers(totalSentences.toString())
+            totalSentencesString += "+"  if missingSentenceData
+            maybeInfo = ""
+            maybeInfo = desc + "<br/><br/>"  if desc and desc isnt ""
+            glueString = ""
+            if corporaID.length is 1
+                glueString = util.getLocaleString("corpselector_corporawith_sing")
+            else
+                glueString = util.getLocaleString("corpselector_corporawith_plur")
+            "<b><img src=\"img/folder.png\" style=\"margin-right:4px; vertical-align:middle; margin-top:-1px\"/>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + util.prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences")
+    ).bind("corpuschooserchange", (evt, corpora) ->
+        c.log "corpuschooserchange", corpora
+        
+        # c.log("corpus changed", corpora);
+        safeApply $("body").scope(), (scope) ->
+            scope.$broadcast "corpuschooserchange", corpora
+            return
+
+        return
+    )
+    selected = corpusChooserInstance.corpusChooser("selectedItems")
+    settings.corpusListing.select selected
+    return
+
+regescape = (s) ->
+    s.replace /[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&"
+
+util.localizeFloat = (float, nDec) ->
+    lang = $("#languages").radioList("getSelected").data("lang")
+    sep = null
+    nDec = nDec or float.toString().split(".")[1].length
+    if lang is "sv"
+        sep = ","
+    else sep = "."  if lang is "en"
+    $.format("%." + nDec + "f", float).replace ".", sep
+
+util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
+    if _.contains(x, ".")
+        parts = x.split(".")
+        decimalSeparator = util.getLocaleString("util_decimalseparator")
+        return parts[0] + decimalSeparator + parts[1]  if stringOnly
+        if mode
+            util.prettyNumbers(parts[0]) + "<span rel=\"localize[util_decimalseparator]\">" + decimalSeparator + "</span>" + parts[1]
+        else
+            util.prettyNumbers(parts[0]) + decimalSeparator + parts[1]
+    else
+        if statsmode
+            x
+        else
+            util.prettyNumbers x
+
+util.makeAttrSelect = (groups) ->
+    arg_select = $("<select/>")
+    $.each groups, (lbl, group) ->
+        return if $.isEmptyObject(group)
+        optgroup = $("<optgroup/>",
+            label: util.getLocaleString(lbl).toLowerCase()
+            rel: $.format("localize[%s]", lbl)
+        ).appendTo(arg_select)
+        $.each group, (key, val) ->
+            return if val.displayType is "hidden"
+            $("<option/>",
+                rel: $.format("localize[%s]", val.label)
+            ).val(key).text(util.getLocaleString(val.label) or "").appendTo(optgroup).data "dataProvider", val
+            return
+
+        return
+
+    arg_select
+
+util.browserWarn = ->
+    $.reject
+        reject:
+            
+            # all : false,
+            msie5: true
+            msie6: true
+            msie7: true
+            msie8: true
+            msie9: true
+
+        imagePath: "img/browsers/"
+        display: [
+            "firefox"
+            "chrome"
+            "safari"
+            "opera"
+        ]
+        browserInfo: # Settings for which browsers to display
+            firefox:
+                text: "Firefox" # Text below the icon
+                url: "http://www.mozilla.com/firefox/" # URL For icon/text link
+
+            safari:
+                text: "Safari"
+                url: "http://www.apple.com/safari/download/"
+
+            opera:
+                text: "Opera"
+                url: "http://www.opera.com/download/"
+
+            chrome:
+                text: "Chrome"
+                url: "http://www.google.com/chrome/"
+
+            msie:
+                text: "Internet Explorer"
+                url: "http://www.microsoft.com/windows/Internet-explorer/"
+
+        header: "Du använder en omodern webbläsare" # Header of pop-up window
+        paragraph1: "Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt." # Paragraph 1
+        paragraph2: "" # Paragraph 2
+        closeMessage: "Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut." # Message displayed below closing link
+        closeLink: "Stäng varningen" # Text for closing link
+        #   header: 'Did you know that your Internet Browser is out of date?', // Header of pop-up window
+        #     paragraph1: 'Your browser is out of date, and may not be compatible with our website. A list of the most popular web browsers can be found below.', // Paragraph 1
+        #     paragraph2: 'Just click on the icons to get to the download page', // Paragraph 2
+        #     closeMessage: 'By closing this window you acknowledge that your experience on this website may be degraded', // Message displayed below closing link
+        #     closeLink: 'Close This Window', // Text for closing link
+        closeCookie: true # If cookies should be used to remmember if the window was closed (see cookieSettings for more options)
+        # Cookie settings are only used if closeCookie is true
+        cookieSettings:
+            path: "/" # Path for the cookie to be saved on (should be root domain in most cases)
+            expires: 100000 # Expiration Date (in seconds), 0 (default) means it ends with the current session
+
+    return
+
+util.convertLMFFeatsToObjects = (structure, key) ->
+    
+    # Recursively traverse a tree, expanding each "feat" array into a real object, with the key "feat-[att]":
+    if structure?
+        output = null
+        theType = util.findoutType(structure)
+        if theType is "object"
+            output = {}
+            $.each structure, (inkey, inval) ->
+                if inkey is "feat"
+                    innerType = util.findoutType(inval)
+                    if innerType is "array"
+                        $.each inval, (fkey, fval) ->
+                            keyName = "feat_" + fval["att"]
+                            if not output[keyName]?
+                                output[keyName] = fval["val"]
+                            else
+                                if $.isArray(output[keyName])
+                                    output[keyName].push fval["val"]
+                                else
+                                    output[keyName] = [output[keyName], fval["val"]]
+                            return
+
+                    else
+                        keyName = "feat_" + inval["att"]
+                        if not output[keyName]?
+                            output[keyName] = inval["val"]
+                        else
+                            if $.isArray(output[keyName])
+                                output[keyName].push inval["val"]
+                            else
+                                output[keyName] = [output[keyName], inval["val"]]
+                else
+                    output[inkey] = util.convertLMFFeatsToObjects(inval)
+                return
+
+        else if theType is "array"
+            dArr = new Array()
+            $.each structure, (inkey, inval) ->
+                dArr.push util.convertLMFFeatsToObjects(inval)
+                return
+
+            output = dArr
+        else
+            output = structure
+        output
+    else
+        null
+
+util.findoutType = (variable) ->
+    if $.isArray(variable)
+        "array"
+    else
+        typeof (variable)
 
 

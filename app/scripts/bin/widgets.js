@@ -1,5 +1,5 @@
 (function() {
-  var ModeSelector, Sidebar;
+  var Sidebar;
 
   Sidebar = {
     options: {
@@ -74,7 +74,8 @@
       return $(items);
     },
     renderItem: function(key, value, attrs) {
-      var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, ul, val, valueArray, x;
+      var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, str_value, ul, val, valueArray, x;
+      c.log("renderItem", key, value, attrs);
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }
@@ -146,21 +147,21 @@
         output.append(ul);
         return output;
       }
-      value = (attrs.stringify || _.identity)(value);
+      str_value = (attrs.stringify || _.identity)(value);
       if (attrs.type === "url") {
-        return output.append("<a href='" + value + "' class='exturl sidebar_url'>" + (decodeURI(value)) + "</a>");
+        return output.append("<a href='" + str_value + "' class='exturl sidebar_url'>" + (decodeURI(str_value)) + "</a>");
       } else if (key === "msd") {
-        return output.append("<span class='msd'>" + value + "</span>\n    <a href='markup/msdtags.html' target='_blank'>\n        <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n    </a>\n</span>");
+        return output.append("<span class='msd'>" + str_value + "</span>\n    <a href='markup/msdtags.html' target='_blank'>\n        <span id='sidbar_info' class='ui-icon ui-icon-info'></span>\n    </a>\n</span>");
       } else if (attrs.pattern) {
         return output.append(_.template(attrs.pattern, {
           key: key,
-          val: value
+          val: str_value
         }));
       } else {
         if (attrs.translationKey) {
           return output.append("<span rel='localize[" + attrs.translationKey + value + "]'></span>");
         } else {
-          return output.append("<span>" + (value || '') + "</span>");
+          return output.append("<span>" + (str_value || '') + "</span>");
         }
       }
     },
@@ -293,26 +294,6 @@
       return this.element.find(".radioList_selected");
     }
   });
-
-  ModeSelector = {
-    options: {
-      modes: []
-    },
-    _create: function() {
-      var self;
-      self = this;
-      $.each(this.options.modes, function(i, item) {
-        var a;
-        a = $("<a href='javascript:'>").localeKey(item.localekey).data("mode", item.mode);
-        if (!item.labOnly || (isLab && item.labOnly)) {
-          return a.appendTo(self.element);
-        }
-      });
-      return this._super();
-    }
-  };
-
-  $.widget("korp.modeSelector", $.korp.radioList, ModeSelector);
 
   $.extend($.ui.autocomplete.prototype, {
     _renderItem: function(ul, item) {

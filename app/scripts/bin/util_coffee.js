@@ -1,12 +1,11 @@
 (function() {
-  var __slice = [].slice,
+  var added_corpora_ids, regescape,
+    __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  if (!window.util) {
-    window.util = {};
-  }
+  window.util = {};
 
   window.CorpusListing = (function() {
     function CorpusListing(corpora) {
@@ -505,6 +504,465 @@
     }
     $("#log_out .usrname").text(authenticationProxy.loginObj.name);
     return $(".err_msg", self).hide();
+  };
+
+  util.SelectionManager = function() {
+    this.selected = $();
+    this.aux = $();
+  };
+
+  util.SelectionManager.prototype.select = function(word, aux) {
+    if ((word == null) || !word.length) {
+      return;
+    }
+    if (this.selected.length) {
+      this.selected.removeClass("word_selected token_selected");
+      this.aux.removeClass("word_selected aux_selected");
+    }
+    this.selected = word;
+    this.aux = aux || $();
+    this.aux.addClass("word_selected aux_selected");
+    return word.addClass("word_selected token_selected");
+  };
+
+  util.SelectionManager.prototype.deselect = function() {
+    if (!this.selected.length) {
+      return;
+    }
+    this.selected.removeClass("word_selected token_selected");
+    this.selected = $();
+    this.aux.removeClass("word_selected aux_selected");
+    this.aux = $();
+  };
+
+  util.SelectionManager.prototype.hasSelected = function() {
+    return this.selected.length > 0;
+  };
+
+  util.getLocaleString = function(key) {
+    var lang, output;
+    lang = ($("body").scope() ? $("body").scope().lang || "sv" : "sv");
+    if (loc_data && loc_data[lang]) {
+      output = loc_data[lang][key];
+    }
+    if ((output == null) && (key != null)) {
+      return key;
+    }
+    return output;
+  };
+
+  util.initLocalize = function() {
+    return $.localize("init", {
+      packages: ["locale", "corpora"],
+      pathPrefix: "translations",
+      language: ($("body").scope() ? $("body").scope().lang || "sv" : "sv"),
+      callback: function() {
+        var selected;
+        if (this.is(".num_hits")) {
+          selected = this.find("option:selected");
+          c.log("selected", selected, util.getLocaleString(this.data("prefix")) + ": " + selected.text());
+          selected.text(util.getLocaleString(this.data("prefix")) + ": " + selected.text());
+        }
+        this.find("[data-placeholder]").add(this.filter("[data-placeholder]")).each(function() {
+          $(this).attr("placeholder", util.getLocaleString($(this).data("placeholder")));
+        });
+      }
+    });
+  };
+
+  util.localize = function(root) {
+    root = root || "body";
+    $(root).localize();
+  };
+
+  util.lemgramToString = function(lemgram, appendIndex) {
+    var concept, e, infixIndex, match, type;
+    lemgram = _.str.trim(lemgram);
+    infixIndex = "";
+    if (util.isLemgramId(lemgram)) {
+      match = util.splitLemgram(lemgram);
+      if ((appendIndex != null) && match.index !== "1") {
+        infixIndex = $.format("<sup>%s</sup>", match.index);
+      }
+      concept = match.form.replace(/_/g, " ");
+      type = match.pos.slice(0, 2);
+    } else {
+      concept = "";
+      type = "";
+      try {
+        concept = lemgram.split("_")[0];
+        type = lemgram.split("_")[1].toLowerCase();
+      } catch (_error) {
+        e = _error;
+        c.log("lemgramToString broken for ", lemgram);
+      }
+    }
+    return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [concept, infixIndex, type, util.getLocaleString(type)]);
+  };
+
+  util.saldoRegExp = /(.*?)\.\.(\d\d?)(\:\d+)?$/;
+
+  util.saldoToString = function(saldoId, appendIndex) {
+    var infixIndex, match;
+    match = saldoId.match(util.saldoRegExp);
+    infixIndex = "";
+    if ((appendIndex != null) && match[2] !== "1") {
+      infixIndex = $.format("<sup>%s</sup>", match[2]);
+    }
+    return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex]);
+  };
+
+  util.sblexArraytoString = function(idArray, labelFunction) {
+    var tempArray;
+    labelFunction = labelFunction || util.lemgramToString;
+    tempArray = $.map(idArray, function(lemgram) {
+      return labelFunction(lemgram, false);
+    });
+    return $.map(idArray, function(lemgram) {
+      var isAmbigous;
+      isAmbigous = $.grep(tempArray, function(tempLemgram) {
+        return tempLemgram === labelFunction(lemgram, false);
+      }).length > 1;
+      return labelFunction(lemgram, isAmbigous);
+    });
+  };
+
+  util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/;
+
+  util.isLemgramId = function(lemgram) {
+    return lemgram.search(util.lemgramRegexp) !== -1;
+  };
+
+  util.splitLemgram = function(lemgram) {
+    var keys, splitArray;
+    if (!util.isLemgramId(lemgram)) {
+      throw new Error("Input to util.splitLemgram is not a lemgram: " + lemgram);
+    }
+    keys = ["morph", "form", "pos", "index", "startIndex"];
+    splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2);
+    return _.object(keys, splitArray);
+  };
+
+  util.splitSaldo = function(saldo) {
+    return saldo.match(util.saldoRegExp);
+  };
+
+  util.setJsonLink = function(settings) {
+    if (settings == null) {
+      c.log("failed to update json link");
+      return;
+    }
+    $("#json-link").attr("href", settings.url);
+    $("#json-link").show();
+  };
+
+  util.searchHash = function(type, value) {
+    search({
+      search: type + "|" + value,
+      page: 0
+    });
+  };
+
+  added_corpora_ids = [];
+
+  util.loadCorporaFolderRecursive = function(first_level, folder) {
+    var cont, outHTML, usedid, val;
+    outHTML = void 0;
+    if (first_level) {
+      outHTML = "<ul>";
+    } else {
+      outHTML = "<ul title=\"" + folder.title + "\" description=\"" + escape(folder.description) + "\">";
+    }
+    if (folder) {
+      $.each(folder, function(fol, folVal) {
+        if (fol !== "contents" && fol !== "title" && fol !== "description") {
+          outHTML += "<li>" + util.loadCorporaFolderRecursive(false, folVal) + "</li>";
+        }
+      });
+      if (folder["contents"] && folder["contents"].length > 0) {
+        $.each(folder.contents, function(key, value) {
+          outHTML += "<li id=\"" + value + "\">" + settings.corpora[value]["title"] + "</li>";
+          added_corpora_ids.push(value);
+        });
+      }
+    }
+    if (first_level) {
+      for (val in settings.corpora) {
+        cont = false;
+        for (usedid in added_corpora_ids) {
+          if (added_corpora_ids[usedid] === val || settings.corpora[val].hide) {
+            cont = true;
+          }
+        }
+        if (cont) {
+          continue;
+        }
+        outHTML += "<li id='" + val + "'>" + settings.corpora[val].title + "</li>";
+      }
+    }
+    outHTML += "</ul>";
+    return outHTML;
+  };
+
+  util.prettyNumbers = function(numstring) {
+    var outStrNum, regex;
+    regex = /(\d+)(\d{3})/;
+    outStrNum = numstring.toString();
+    while (regex.test(outStrNum)) {
+      outStrNum = outStrNum.replace(regex, "$1" + "<span rel=\"localize[util_numbergroupseparator]\">" + util.getLocaleString("util_numbergroupseparator") + "</span>" + "$2");
+    }
+    return outStrNum;
+  };
+
+  util.loadCorpora = function() {
+    var outStr, selected;
+    added_corpora_ids = [];
+    outStr = util.loadCorporaFolderRecursive(true, settings.corporafolders);
+    window.corpusChooserInstance = $("#corpusbox").corpusChooser({
+      template: outStr,
+      infoPopup: function(corpusID) {
+        var corpusObj, lastUpdate, maybeInfo, numSentences, numTokens, output, sentenceString, supportsContext;
+        corpusObj = settings.corpora[corpusID];
+        maybeInfo = "";
+        if (corpusObj.description) {
+          maybeInfo = "<br/><br/>" + corpusObj.description;
+        }
+        numTokens = corpusObj["info"]["Size"];
+        numSentences = corpusObj["info"]["Sentences"];
+        lastUpdate = corpusObj["info"]["Updated"];
+        if (!lastUpdate) {
+          lastUpdate = "?";
+        }
+        sentenceString = "-";
+        if (numSentences) {
+          sentenceString = util.prettyNumbers(numSentences.toString());
+        }
+        output = "<b>\n    <img class=\"popup_icon\" src=\"img/korp_icon.png\" />\n    " + corpusObj.title + "\n</b>\n" + maybeInfo + "\n<br/><br/>\n" + (util.getLocaleString("corpselector_numberoftokens")) + ":\n<b>util.prettyNumbers(numTokens)</b>\n<br/>" + (util.getLocaleString("corpselector_numberofsentences")) + ": \n<b>" + sentenceString + "</b>\n<br/>\n" + (util.getLocaleString("corpselector_lastupdate")) + ": \n<b>" + lastUpdate + "</b>\n<br/><br/>";
+        supportsContext = _.keys(corpusObj.context).length > 1;
+        if (supportsContext) {
+          output += $("<div>").localeKey("corpselector_supports").html() + "<br>";
+        }
+        if (corpusObj.limited_access) {
+          output += $("<div>").localeKey("corpselector_limited").html();
+        }
+        return output;
+      },
+      infoPopupFolder: function(indata) {
+        var corporaID, desc, glueString, maybeInfo, missingSentenceData, totalSentences, totalSentencesString, totalTokens;
+        corporaID = indata.corporaID;
+        desc = indata.description;
+        totalTokens = 0;
+        totalSentences = 0;
+        missingSentenceData = false;
+        $(corporaID).each(function(key, oneID) {
+          var oneCorpusSentences;
+          totalTokens += parseInt(settings.corpora[oneID]["info"]["Size"]);
+          oneCorpusSentences = settings.corpora[oneID]["info"]["Sentences"];
+          if (oneCorpusSentences) {
+            totalSentences += parseInt(oneCorpusSentences);
+          } else {
+            missingSentenceData = true;
+          }
+        });
+        totalSentencesString = util.prettyNumbers(totalSentences.toString());
+        if (missingSentenceData) {
+          totalSentencesString += "+";
+        }
+        maybeInfo = "";
+        if (desc && desc !== "") {
+          maybeInfo = desc + "<br/><br/>";
+        }
+        glueString = "";
+        if (corporaID.length === 1) {
+          glueString = util.getLocaleString("corpselector_corporawith_sing");
+        } else {
+          glueString = util.getLocaleString("corpselector_corporawith_plur");
+        }
+        return "<b><img src=\"img/folder.png\" style=\"margin-right:4px; vertical-align:middle; margin-top:-1px\"/>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + util.prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences");
+      }
+    }).bind("corpuschooserchange", function(evt, corpora) {
+      c.log("corpuschooserchange", corpora);
+      safeApply($("body").scope(), function(scope) {
+        scope.$broadcast("corpuschooserchange", corpora);
+      });
+    });
+    selected = corpusChooserInstance.corpusChooser("selectedItems");
+    settings.corpusListing.select(selected);
+  };
+
+  regescape = function(s) {
+    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
+  };
+
+  util.localizeFloat = function(float, nDec) {
+    var lang, sep;
+    lang = $("#languages").radioList("getSelected").data("lang");
+    sep = null;
+    nDec = nDec || float.toString().split(".")[1].length;
+    if (lang === "sv") {
+      sep = ",";
+    } else {
+      if (lang === "en") {
+        sep = ".";
+      }
+    }
+    return $.format("%." + nDec + "f", float).replace(".", sep);
+  };
+
+  util.formatDecimalString = function(x, mode, statsmode, stringOnly) {
+    var decimalSeparator, parts;
+    if (_.contains(x, ".")) {
+      parts = x.split(".");
+      decimalSeparator = util.getLocaleString("util_decimalseparator");
+      if (stringOnly) {
+        return parts[0] + decimalSeparator + parts[1];
+      }
+      if (mode) {
+        return util.prettyNumbers(parts[0]) + "<span rel=\"localize[util_decimalseparator]\">" + decimalSeparator + "</span>" + parts[1];
+      } else {
+        return util.prettyNumbers(parts[0]) + decimalSeparator + parts[1];
+      }
+    } else {
+      if (statsmode) {
+        return x;
+      } else {
+        return util.prettyNumbers(x);
+      }
+    }
+  };
+
+  util.makeAttrSelect = function(groups) {
+    var arg_select;
+    arg_select = $("<select/>");
+    $.each(groups, function(lbl, group) {
+      var optgroup;
+      if ($.isEmptyObject(group)) {
+        return;
+      }
+      optgroup = $("<optgroup/>", {
+        label: util.getLocaleString(lbl).toLowerCase(),
+        rel: $.format("localize[%s]", lbl)
+      }).appendTo(arg_select);
+      $.each(group, function(key, val) {
+        if (val.displayType === "hidden") {
+          return;
+        }
+        $("<option/>", {
+          rel: $.format("localize[%s]", val.label)
+        }).val(key).text(util.getLocaleString(val.label) || "").appendTo(optgroup).data("dataProvider", val);
+      });
+    });
+    return arg_select;
+  };
+
+  util.browserWarn = function() {
+    $.reject({
+      reject: {
+        msie5: true,
+        msie6: true,
+        msie7: true,
+        msie8: true,
+        msie9: true
+      },
+      imagePath: "img/browsers/",
+      display: ["firefox", "chrome", "safari", "opera"],
+      browserInfo: {
+        firefox: {
+          text: "Firefox",
+          url: "http://www.mozilla.com/firefox/"
+        },
+        safari: {
+          text: "Safari",
+          url: "http://www.apple.com/safari/download/"
+        },
+        opera: {
+          text: "Opera",
+          url: "http://www.opera.com/download/"
+        },
+        chrome: {
+          text: "Chrome",
+          url: "http://www.google.com/chrome/"
+        },
+        msie: {
+          text: "Internet Explorer",
+          url: "http://www.microsoft.com/windows/Internet-explorer/"
+        }
+      },
+      header: "Du använder en omodern webbläsare",
+      paragraph1: "Korp använder sig av moderna webbteknologier som inte stödjs av din webbläsare. En lista på de mest populära moderna alternativen visas nedan. Firefox rekommenderas varmt.",
+      paragraph2: "",
+      closeMessage: "Du kan fortsätta ändå – all funktionalitet är densamma – men så fort du önskar att Korp vore snyggare och snabbare är det bara att installera Firefox, det tar bara en minut.",
+      closeLink: "Stäng varningen",
+      closeCookie: true,
+      cookieSettings: {
+        path: "/",
+        expires: 100000
+      }
+    });
+  };
+
+  util.convertLMFFeatsToObjects = function(structure, key) {
+    var dArr, output, theType;
+    if (structure != null) {
+      output = null;
+      theType = util.findoutType(structure);
+      if (theType === "object") {
+        output = {};
+        $.each(structure, function(inkey, inval) {
+          var innerType, keyName;
+          if (inkey === "feat") {
+            innerType = util.findoutType(inval);
+            if (innerType === "array") {
+              $.each(inval, function(fkey, fval) {
+                var keyName;
+                keyName = "feat_" + fval["att"];
+                if (output[keyName] == null) {
+                  output[keyName] = fval["val"];
+                } else {
+                  if ($.isArray(output[keyName])) {
+                    output[keyName].push(fval["val"]);
+                  } else {
+                    output[keyName] = [output[keyName], fval["val"]];
+                  }
+                }
+              });
+            } else {
+              keyName = "feat_" + inval["att"];
+              if (output[keyName] == null) {
+                output[keyName] = inval["val"];
+              } else {
+                if ($.isArray(output[keyName])) {
+                  output[keyName].push(inval["val"]);
+                } else {
+                  output[keyName] = [output[keyName], inval["val"]];
+                }
+              }
+            }
+          } else {
+            output[inkey] = util.convertLMFFeatsToObjects(inval);
+          }
+        });
+      } else if (theType === "array") {
+        dArr = new Array();
+        $.each(structure, function(inkey, inval) {
+          dArr.push(util.convertLMFFeatsToObjects(inval));
+        });
+        output = dArr;
+      } else {
+        output = structure;
+      }
+      return output;
+    } else {
+      return null;
+    }
+  };
+
+  util.findoutType = function(variable) {
+    if ($.isArray(variable)) {
+      return "array";
+    } else {
+      return typeof variable;
+    }
   };
 
 }).call(this);

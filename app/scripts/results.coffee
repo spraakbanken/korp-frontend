@@ -12,7 +12,7 @@ class BaseResults
     onProgress: (progressObj) ->
         # c.log "onProgress", progressObj
         # TODO: this item only exists in the kwic.
-        @num_result.html prettyNumbers(progressObj["total_results"])
+        @num_result.html util.prettyNumbers(progressObj["total_results"])
         unless isNaN(progressObj["stats"])
             try
                 # @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
@@ -206,7 +206,7 @@ class view.KWICResults extends BaseResults
             return
         # @s.$parent.loading = false
         @$result.removeClass "zero_results"
-        @$result.find(".num-result").html prettyNumbers(data.hits)
+        @$result.find(".num-result").html util.prettyNumbers(data.hits)
         @renderHitsPicture data
         @buildPager data.hits
 
@@ -514,7 +514,7 @@ class view.ExampleResults extends view.KWICResults
                 safeApply @s, () =>
                     @hidePreloader()
                 util.setJsonLink @proxy.prevRequest
-                @$result.find(".num-result").html prettyNumbers(data.hits)
+                @$result.find(".num-result").html util.prettyNumbers(data.hits)
 
             error: =>
                 safeApply @s, () =>
@@ -923,7 +923,6 @@ class view.StatsResults extends BaseResults
         window.statsProxy = @proxy
         @$result.on "click", ".arcDiagramPicture", (event) ->
             parts = $(event.currentTarget).attr("id").split("__")
-            c.log "hello", event.target, parts
 
             if parts[1] != "Σ"
                 newDataInGraph(parts[1],true)

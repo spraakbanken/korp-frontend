@@ -153,8 +153,8 @@ var hp_corpusChooser = {
 		$("#hp_corpora_title1").text(header_text);
 		$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-		$("#hp_corpora_title3").html(" — " + prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
-        $("#sentenceCounter").html(prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
+		$("#hp_corpora_title3").html(" — " + util.prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
+        $("#sentenceCounter").html(util.prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
 	},
 	triggerChange : function() {
 		this._trigger("change", null, [this.selectedItems()]);

@@ -113,13 +113,6 @@
       util.setLogin();
     }
     tab_a_selector = "ul .ui-tabs-anchor";
-    if (currentMode === "parallel") {
-      $("#korp-simple").hide();
-      $(".ui-tabs-nav a").eq(1).localeKey("parallel");
-      $("#korp-advanced").hide();
-      $("#search-tab").tabs("option", "active", 1);
-      $("#result-container > ul li:last ").hide();
-    }
     $("#log_out").click(function() {
       $.each(authenticationProxy.loginObj.credentials, function(i, item) {
         return $(".boxdiv[data=" + (item.toLowerCase()) + "]").addClass("disabled");
@@ -445,11 +438,11 @@
           pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
           firstrow = pTmpl({
             loc: "corpselector_time_chosen",
-            num: prettyNumbers(val || 0)
+            num: util.prettyNumbers(val || 0)
           });
           secondrow = pTmpl({
             loc: "corpselector_of_total",
-            num: prettyNumbers(total)
+            num: util.prettyNumbers(total)
           });
           time = item.datapoint[0];
           $(".corpusInfoSpace").css({
