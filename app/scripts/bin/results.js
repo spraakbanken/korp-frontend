@@ -1083,7 +1083,7 @@
       });
       $(window).resize(_.debounce(function() {
         $("#myGrid:visible").width($(document).width() - 40);
-        return $("#myGrid:visible").height($("#myGrid").parent().height());
+        return $("#myGrid:visible").height($(window).height());
       }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {

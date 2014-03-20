@@ -958,7 +958,8 @@ class view.StatsResults extends BaseResults
         $(window).resize _.debounce( () ->
             # $("#myGrid:visible").width($("#myGrid").parent().width())
             $("#myGrid:visible").width($(document).width() - 40)
-            $("#myGrid:visible").height $("#myGrid").parent().height()
+            $("#myGrid:visible").height $(window).height()
+            
         , 100)
 
         $("#exportButton").unbind "click"
@@ -1139,7 +1140,6 @@ class view.StatsResults extends BaseResults
 
         if not (_.compact cl.getTimeInterval()).length
             @s.graphEnabled = false
-            # $("#showGraph").button("disable")
 
     # showError : function() {
     #   this.hidePreloader();

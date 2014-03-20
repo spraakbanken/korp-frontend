@@ -242,12 +242,12 @@ settings.corpora["moderntdv"] = {
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 
-function getAnnotationRank(anno) {
-	return {
-		"word" : 1,
-		"gf" : 2,
-		"lemgram" : 3,
-		"sense" : 4
-	}[anno] || 5;
-}
+// function getAnnotationRank(anno) {
+// 	return {
+// 		"word" : 1,
+// 		"gf" : 2,
+// 		"lemgram" : 3,
+// 		"sense" : 4
+// 	}[anno] || 5;
+// }
 

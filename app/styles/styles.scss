@@ -1320,6 +1320,9 @@ label[for=lemgram_select]:before {
       // content: "";
       display: none;
     }
+    .dropdown-toggle {
+      background-color : transparent;
+    }
     &.menu_more {
       margin-left: -3px;
       a {
