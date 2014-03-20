@@ -94,6 +94,9 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             t = _ref[_i];
             t.active = false;
+            if (typeof t.onDeselect === "function") {
+              t.onDeselect();
+            }
           }
           if (contentScope.tabs[index]) {
             return contentScope.tabs[index].active = true;

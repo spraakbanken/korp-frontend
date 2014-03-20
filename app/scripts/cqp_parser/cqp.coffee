@@ -85,6 +85,14 @@ window.CQP =
     expandOperators : (cqpstr) ->
         CQP.stringify CQP.parse(cqpstr), true
 
+    fromObj : (obj) ->
+        CQP.parse "[#{obj.type} #{obj.op} '#{obj.val}']"
+
+    concat : (cqpObjs...) ->
+        [].concat cqpObjs...
+
+
+
 
 # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "b" | word = "a")]'
 c.log CQP.stringify( CQP.parse('[(word &= "ge" | pos = "JJ")]'), true)

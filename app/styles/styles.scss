@@ -1954,8 +1954,8 @@ slider {
 
 .rickshaw_graph .x_tick .title {
   bottom : -1.1em !important;
-  // left : -1.3em;
-  left : -3em;
+  left : -1.3em;
+  // left : -3em;
 }
 .form-bar .rickshaw_graph .x_tick .title {
   left : 0;
@@ -1982,7 +1982,7 @@ line.tick {
 }
 
 .rickshaw_graph .x_tick {
-  border : none !important;
+  // border : none !important;
 }
 .zoom_slider {
   margin-top : 30px;
@@ -2009,8 +2009,8 @@ line.tick {
 
 #myGrid {
   width : 100%;
+  // height : 100%;
   height : 500px;
-
 }
 #myGrid, #myGrid * {
   box-sizing : content-box;

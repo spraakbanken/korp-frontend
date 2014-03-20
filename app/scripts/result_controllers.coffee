@@ -211,7 +211,7 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
         # stringify = settings.corpusListing.
-        c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
+        # c.log "_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()
         attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
         s.stringify = attributes[_.str.strip(reduce, "_.")]?.stringify or angular.identity
 
@@ -226,17 +226,27 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
         op = if attributes[_.str.strip(reduce, "_.")]?.type == "set" then "contains" else "="
         cmps = [cmp1, cmp2]
         s.rowClick = (triple, cmp_index) ->
-            c.log "triple", triple
             cmp = cmps[cmp_index]
             cmp = _.extend {}, cmp, 
                 command: "query"
             cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
 
-            cqpobj = CQP.parse(cmp.cqp)
+            c.log "triple", triple, cmp
+            # cqpobj = CQP.parse(cmp.cqp)
 
-            cqpobj[0].and_block.push CQP.parse("[#{reduce} #{op} '#{triple[0]}']")[0].and_block[0]
+            cqps = for token in triple[0].split(" ")
+                CQP.fromObj 
+                    type : reduce
+                    op : op
+                    val : token
+                # cqpobj[0].and_block.push CQP.parse("[#{reduce} #{op} '#{token}']")[0].and_block[0]
+            
+            cqpobj = CQP.concat cqps...
+            c.log "cqpobj", cqpobj
+
             
             cmp.cqp = CQP.stringify cqpobj
+            c.log "cmp.cqp", cmp.cqp
             opts = {
                 start : 0
                 end : 24

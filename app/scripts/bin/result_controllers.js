@@ -242,7 +242,6 @@
       });
       s.reduce = reduce;
       cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
-      c.log("_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs()", reduce, _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs()));
       attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
       s.stringify = ((_ref = attributes[_.str.strip(reduce, "_.")]) != null ? _ref.stringify : void 0) || angular.identity;
       s.max = _.max(pairs, function(_arg1) {
@@ -255,16 +254,31 @@
       op = ((_ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? _ref1.type : void 0) === "set" ? "contains" : "=";
       cmps = [cmp1, cmp2];
       return s.rowClick = function(triple, cmp_index) {
-        var cmp, cqpobj, opts;
-        c.log("triple", triple);
+        var cmp, cqpobj, cqps, opts, token;
         cmp = cmps[cmp_index];
         cmp = _.extend({}, cmp, {
           command: "query"
         });
         cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");
-        cqpobj = CQP.parse(cmp.cqp);
-        cqpobj[0].and_block.push(CQP.parse("[" + reduce + " " + op + " '" + triple[0] + "']")[0].and_block[0]);
+        c.log("triple", triple, cmp);
+        cqps = (function() {
+          var _i, _len, _ref2, _results;
+          _ref2 = triple[0].split(" ");
+          _results = [];
+          for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+            token = _ref2[_i];
+            _results.push(CQP.fromObj({
+              type: reduce,
+              op: op,
+              val: token
+            }));
+          }
+          return _results;
+        })();
+        cqpobj = CQP.concat.apply(CQP, cqps);
+        c.log("cqpobj", cqpobj);
         cmp.cqp = CQP.stringify(cqpobj);
+        c.log("cmp.cqp", cmp.cqp);
         opts = {
           start: 0,
           end: 24,

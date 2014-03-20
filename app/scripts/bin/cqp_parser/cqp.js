@@ -1,6 +1,7 @@
 (function() {
   var regescape, stringifyCqp,
-    _this = this;
+    _this = this,
+    __slice = [].slice;
 
   window.c = console;
 
@@ -118,6 +119,14 @@
     stringify: stringifyCqp,
     expandOperators: function(cqpstr) {
       return CQP.stringify(CQP.parse(cqpstr), true);
+    },
+    fromObj: function(obj) {
+      return CQP.parse("[" + obj.type + " " + obj.op + " '" + obj.val + "']");
+    },
+    concat: function() {
+      var cqpObjs, _ref;
+      cqpObjs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return (_ref = []).concat.apply(_ref, cqpObjs);
     }
   };
 

@@ -756,7 +756,7 @@
     };
 
     LemgramResults.prototype.drawTable = function(token, wordClass, data) {
-      var container, getRelType, inArray, orderArrays, self, tagsetTrans,
+      var container, getRelType, inArray, orderArrays, tagsetTrans,
         _this = this;
       inArray = function(rel, orderList) {
         var i, type;
@@ -776,7 +776,6 @@
           field_reverse: item.dep === token
         };
       };
-      self = this;
       wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
       if (settings.wordPictureConf[wordClass] == null) {
         return;
@@ -832,7 +831,9 @@
       c.log("orderArrays", orderArrays);
       $("#lemgramResultsTmpl").tmpl(orderArrays, {
         lemgram: token
-      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click($.proxy(self.onClickExample, self)).end().appendTo(container);
+      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click(function() {
+        return this.onClickExample();
+      }).end().appendTo(container);
       return $("td:nth-child(2)", this.$result).each(function() {
         var $siblings, hasHomograph, label, prefix, siblingLemgrams;
         $siblings = $(this).parent().siblings().find("td:nth-child(2)");
@@ -1081,7 +1082,8 @@
         });
       });
       $(window).resize(_.debounce(function() {
-        return $("#myGrid:visible").width($("#myGrid").parent().width());
+        $("#myGrid:visible").width($(document).width() - 40);
+        return $("#myGrid:visible").height($("#myGrid").parent().height());
       }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
@@ -1272,6 +1274,12 @@
       }
     };
 
+    StatsResults.prototype.onentry = function() {
+      $(window).trigger("resize");
+    };
+
+    StatsResults.prototype.onexit = function() {};
+
     StatsResults.prototype.resetView = function() {
       StatsResults.__super__.resetView.call(this);
       $("myGrid").empty();
@@ -1438,14 +1446,13 @@
     };
 
     GraphResults.prototype.hideNthTick = function(graphDiv) {
-      return $(".x_tick .title:visible", graphDiv).hide().filter(function(n) {
+      return $(".x_tick:visible", graphDiv).hide().filter(function(n) {
         return n % 2 === 0;
       }).show();
     };
 
     GraphResults.prototype.updateTicks = function() {
       var firstTick, margin, secondTick, ticks;
-      return;
       ticks = $(".chart .title:visible", this.$result);
       firstTick = ticks.eq(0);
       secondTick = ticks.eq(1);
@@ -1485,7 +1492,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, first, hoverDetail, item, last, legend, nontime, old_render, palette, series, shelving, slider, smoother, time, timeunit, xAxis, yAxis, _ref;
+        var color, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1526,6 +1533,8 @@
           ];
         }
         Rickshaw.Series.zeroFill(series);
+        window.data = series[0].data;
+        c.log("series", series[0].data);
         window.graph = new Rickshaw.Graph({
           element: $(".chart", _this.$result).get(0),
           renderer: 'line',
@@ -1547,7 +1556,6 @@
         smoother = new Rickshaw.Graph.Smoother({
           graph: graph
         });
-        c.log($(".smoothing_switch", _this.$result));
         $(".smoothing_switch", _this.$result).button().change(function() {
           if ($(this).is(":checked")) {
             smoother.setScale(3);
@@ -1629,8 +1637,27 @@
         });
         _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
         timeunit = last - first > 100 ? "decade" : _this.zoom;
+        toDate = function(sec) {
+          return moment(sec * 1000).toDate();
+        };
         time = new Rickshaw.Fixtures.Time();
-        xAxis = new Rickshaw.Graph.Axis.Time({
+        old_ceil = time.ceil;
+        time.ceil = function(time, unit) {
+          var mom, out;
+          if (unit.name === "decade") {
+            c.log("unit.seconds", unit.seconds, toDate(Math.ceil(time / unit.seconds) * unit.seconds));
+            out = Math.ceil(time / unit.seconds) * unit.seconds;
+            mom = moment(out * 1000);
+            if (mom.date() === 31) {
+              c.log("tick up");
+              mom.add("day", 1);
+            }
+            return mom.unix();
+          } else {
+            return old_ceil(time, unit);
+          }
+        };
+        window.xAxis = new Rickshaw.Graph.Axis.Time({
           graph: graph,
           timeUnit: time.unit(timeunit)
         });
@@ -1642,6 +1669,29 @@
         xAxis.render = function() {
           old_render.call(xAxis);
           return _this.updateTicks();
+        };
+        old_tickOffsets = xAxis.tickOffsets;
+        xAxis.tickOffsets = function() {
+          var count, domain, i, offsets, runningTick, tickValue, unit, _i;
+          domain = xAxis.graph.x.domain();
+          unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
+          c.log("unit", unit);
+          count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
+          runningTick = domain[0];
+          offsets = [];
+          for (i = _i = 0; 0 <= count ? _i < count : _i > count; i = 0 <= count ? ++_i : --_i) {
+            c.log(moment(runningTick * 1000).toDate());
+            tickValue = time.ceil(runningTick, unit);
+            c.log("r", moment(tickValue * 1000).toDate());
+            runningTick = tickValue + unit.seconds / 2;
+            offsets.push({
+              value: tickValue,
+              unit: unit,
+              _date: moment(tickValue * 1000).toDate()
+            });
+          }
+          c.log("offsets", offsets);
+          return offsets;
         };
         xAxis.render();
         yAxis = new Rickshaw.Graph.Axis.Y({

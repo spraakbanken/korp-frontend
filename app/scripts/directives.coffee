@@ -61,6 +61,7 @@ korpApp.directive "tabHash", (utils, $location) ->
         s.setSelected = (index) ->
             for t in contentScope.tabs
                 t.active = false
+                t.onDeselect?()
             if contentScope.tabs[index]
                 contentScope.tabs[index].active = true
 

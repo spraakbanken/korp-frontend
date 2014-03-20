@@ -297,13 +297,13 @@
                     </div>
                   </div>
                 </tab>
-                <tab disabled="!instance.hasData" ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false">
+                <tab disabled="!instance.hasData" ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div constr="StatsResults" constr-name="statsResults">
                     <div class="stats_header">
-                      <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{'material_warn' | loc}}" tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"></span>{{'show_diagram' | loc}}</div>
+                      <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{graphEnabled ? '' : ('material_warn' | loc)}} " tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"></span>{{'show_diagram' | loc}}</div>
                       <div id="showBarPlot"></div>
                     </div>
                     <div id="myGrid"></div>

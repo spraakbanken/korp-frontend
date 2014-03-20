@@ -133,14 +133,19 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   #results-kwic(ng-class="{reading_mode : reading_mode}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
-                tab(disabled="!instance.hasData", ng-controller='StatsResultCtrl', ng-if="_settings.statistics != false")
+                tab(disabled="!instance.hasData", 
+                    ng-controller='StatsResultCtrl', 
+                    ng-if="_settings.statistics != false"
+                    select="instance.onentry()"
+                    deselect="instance.onexit()"
+                    )
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'statistics' | loc}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='StatsResults', constr-name='statsResults')
                     .stats_header
                       #showGraph.button.btn.btn-small(ng-class="{disabled: !graphEnabled}", 
-                        tooltip="{{'material_warn' | loc}}", tooltip-placement="right"  
+                        tooltip="{{graphEnabled ? '' : ('material_warn' | loc)}} ", tooltip-placement="right"  
                       )
                         span.graph_btn_icon
                         | {{'show_diagram' | loc}}

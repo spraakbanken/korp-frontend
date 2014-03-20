@@ -320,7 +320,6 @@ class view.KWICResults extends BaseResults
             @getProxy().makeRequest @buildQueryOptions(), new_page_index, ((progressObj) ->
 
                 #progress
-                # self.$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"]) unless isNaN(progressObj["stats"])
                 self.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
             ), ((data) ->
                 #success
@@ -660,13 +659,9 @@ class view.LemgramResults extends BaseResults
         getRelType = (item) ->
             return {rel : tagsetTrans[item.rel.toLowerCase()] , field_reverse : item.dep == token}
 
-        self = this
-        # wordClass = settings.wordpictureTagset[wordClass.toLowerCase()]
         wordClass = (_.invert settings.wordpictureTagset)[wordClass.toLowerCase()]
-        # c.log "drawTable", wordClass
 
         unless settings.wordPictureConf[wordClass]?
-        #     @showNoResults()
             return
         orderArrays = [[], [], []]
         $.each data, (index, item) =>
@@ -714,7 +709,8 @@ class view.LemgramResults extends BaseResults
         .append($("<span>")
             .addClass("ui-icon ui-icon-document")
         ).css("cursor", "pointer")
-        .click($.proxy(self.onClickExample, self)
+        .click( () ->
+            @onClickExample()
         ).end()
         .appendTo container
 
@@ -957,8 +953,12 @@ class view.StatsResults extends BaseResults
                 scope.$root.kwicTabs.push opts
 
 
+
+
         $(window).resize _.debounce( () ->
-            $("#myGrid:visible").width($("#myGrid").parent().width())
+            # $("#myGrid:visible").width($("#myGrid").parent().width())
+            $("#myGrid:visible").width($(document).width() - 40)
+            $("#myGrid:visible").height $("#myGrid").parent().height()
         , 100)
 
         $("#exportButton").unbind "click"
@@ -1147,6 +1147,11 @@ class view.StatsResults extends BaseResults
     #   .localeKey("error_occurred")
     #   .appendTo("#results-stats");
     # },
+    onentry : () ->
+        $(window).trigger("resize")
+        return
+    onexit : () ->
+
     resetView: ->
         super()
         $("myGrid").empty()
@@ -1288,14 +1293,13 @@ class view.GraphResults extends BaseResults
 
 
     hideNthTick : (graphDiv) ->
-        $(".x_tick .title:visible", graphDiv).hide()
+        $(".x_tick:visible", graphDiv).hide()
         .filter((n) ->
             return n % 2 == 0
             # return Number($(this).text()) % 5 == 0
         ).show()
 
     updateTicks : () ->
-        return
         ticks = $(".chart .title:visible", @$result)
         firstTick = ticks.eq(0)
         secondTick = ticks.eq(1)
@@ -1355,7 +1359,6 @@ class view.GraphResults extends BaseResults
             palette = new Rickshaw.Color.Palette()
             # @colorToCqp = {}
             if _.isArray data.combined
-                # series = _.map data.combined, (item) =>
                 series = for item in data.combined
                     color = palette.color()
                     # @colorToCqp[color] = item.cqp
@@ -1376,6 +1379,8 @@ class view.GraphResults extends BaseResults
                         }]
 
             Rickshaw.Series.zeroFill(series)
+            window.data = series[0].data
+            c.log "series", series[0].data
             window.graph = new Rickshaw.Graph
                 element: $(".chart", @$result).get(0)
                 renderer: 'line'
@@ -1397,9 +1402,6 @@ class view.GraphResults extends BaseResults
                 graph: graph,
                 # element: $('.smoother', @$result)
 
-            # smoother.setScale(3)
-            # TODO: use class to live with other tabs
-            c.log $(".smoothing_switch", @$result)
             $(".smoothing_switch", @$result).button().change ->
                 if $(this).is(":checked")
                     smoother.setScale(3)
@@ -1473,8 +1475,25 @@ class view.GraphResults extends BaseResults
 
             timeunit = if last - first > 100 then "decade" else @zoom
 
+            toDate = (sec) ->
+                moment(sec * 1000).toDate()
+
             time = new Rickshaw.Fixtures.Time()
-            xAxis = new Rickshaw.Graph.Axis.Time
+            old_ceil = time.ceil
+            time.ceil = (time, unit) =>
+                if unit.name == "decade"
+                    c.log "unit.seconds", unit.seconds, toDate(Math.ceil(time / unit.seconds) * unit.seconds)
+                    out = Math.ceil(time / unit.seconds) * unit.seconds;
+                    mom = moment(out * 1000)
+                    # c.log "mom", mom.date()
+                    if mom.date() == 31
+                        c.log "tick up"
+                        mom.add("day", 1)
+                    return mom.unix()
+                else 
+                    return old_ceil(time, unit)
+
+            window.xAxis = new Rickshaw.Graph.Axis.Time
                 graph: graph
                 timeUnit: time.unit(timeunit)
 
@@ -1486,6 +1505,40 @@ class view.GraphResults extends BaseResults
             xAxis.render = () =>
                 old_render.call xAxis
                 @updateTicks()
+            
+            
+
+
+
+
+
+            old_tickOffsets = xAxis.tickOffsets
+            xAxis.tickOffsets = () =>
+                # offsets = old_tickOffsets.call xAxis
+                # c.log "offsets", offsets
+                domain = xAxis.graph.x.domain()
+
+                unit = xAxis.fixedTimeUnit or xAxis.appropriateTimeUnit()
+                c.log "unit", unit
+                count = Math.ceil((domain[1] - domain[0]) / unit.seconds)
+
+                runningTick = domain[0]
+
+                offsets = []
+
+                for i in [0...count]
+                    c.log moment(runningTick * 1000).toDate()
+                    tickValue = time.ceil(runningTick, unit)
+                    # tickValue = Math.ceil(runningTick / unit.seconds) * unit.seconds;
+                    c.log "r", moment(tickValue * 1000).toDate()
+                    runningTick = tickValue + unit.seconds / 2
+
+                    offsets.push( { value: tickValue, unit: unit, _date: moment(tickValue * 1000).toDate() } )
+                
+
+                c.log "offsets", offsets
+                return offsets
+                # @updateTicks()
 
             xAxis.render()
 

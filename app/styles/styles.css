@@ -4466,7 +4466,7 @@ slider span.bubble.limit {
 /* line 1955, styles.scss */
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
-  left: -3em;
+  left: -1.3em;
 }
 
 /* line 1960, styles.scss */
@@ -4502,11 +4502,6 @@ line.tick {
 /* line 1980, styles.scss */
 .dot.active {
   cursor: pointer;
-}
-
-/* line 1984, styles.scss */
-.rickshaw_graph .x_tick {
-  border: none !important;
 }
 
 /* line 1987, styles.scss */
