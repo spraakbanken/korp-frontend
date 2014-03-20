@@ -83,7 +83,7 @@ settings.corporafolders.nysvenska = {
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
-        morf : 'fsvm',
+    morf : 'fsvm',
 	id : "fsv-aldrereligiosprosa",
 	title : "Äldre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -108,7 +108,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-profanprosa"] = {
-        morf : 'fsvm',
+    morf : 'fsvm',
  	id : "fsv-profanprosa",
 	title : "Profan prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -138,7 +138,7 @@ settings.corpora["fsv-profanprosa"] = {
 };
 
 settings.corpora["fsv-verser"] = {
-        morf : 'fsvm',
+    morf : 'fsvm',
 	id : "fsv-verser",
 	title : "Verser – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -167,7 +167,7 @@ settings.corpora["fsv-yngrelagar"] = fsv_yngrelagar;
 
 settings.corpora["fsv-yngrereligiosprosa"] = {
 	id : "fsv-yngrereligiosprosa",
-        morf : 'fsvm',
+    morf : 'fsvm',
 	title : "Yngre religiös prosa – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
@@ -276,7 +276,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-yngretankebocker"] = {
-        morf : 'fsvm',
+    morf : 'fsvm',
 	id : "fsv-yngretankebocker",
 	title : "Yngre tankeböcker – Fornsvenska textbankens material",
 	description : settings.fsvdescription,

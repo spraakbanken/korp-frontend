@@ -1082,8 +1082,11 @@
         });
       });
       $(window).resize(_.debounce(function() {
-        $("#myGrid:visible").width($(document).width() - 40);
-        return $("#myGrid:visible").height($(window).height());
+        var nRows, _ref;
+        $("#myGrid:visible").width($("#myGrid").parent().width());
+        nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
+        $("#myGrid:visible").height("" + ((nRows * 2) + 4) + ".1em");
+        return _this.grid.resizeCanvas();
       }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
@@ -1255,6 +1258,7 @@
       });
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
+      $(window).trigger("resize");
       $.when(timeDeferred).then(function() {
         return safeApply(_this.s, function() {
           return _this.updateGraphBtnState();

@@ -608,6 +608,7 @@ select.arg_value option {
   @extend .fa-lock;
   background: none;
   margin-bottom : 3px;
+  text-align : center;
 }
 
 .query_footer {
@@ -2237,6 +2238,10 @@ line.tick {
 
 .popper_menu {
   width : 130px;
+}
+
+.tab-content {
+  overflow: hidden;
 }
 
 

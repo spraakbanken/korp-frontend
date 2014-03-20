@@ -955,10 +955,14 @@ class view.StatsResults extends BaseResults
 
 
 
-        $(window).resize _.debounce( () ->
-            # $("#myGrid:visible").width($("#myGrid").parent().width())
-            $("#myGrid:visible").width($(document).width() - 40)
-            $("#myGrid:visible").height $(window).height()
+        $(window).resize _.debounce( () =>
+            $("#myGrid:visible").width($("#myGrid").parent().width())
+            # $("#myGrid:visible").width($(document).width() - 70)
+            # $("#myGrid:visible").width($(document).width() - 70)
+            # $("#myGrid:visible").height ($(window).height() - $("#myGrid").offset().top - 100)
+            nRows = @gridData?.length or 2
+            $("#myGrid:visible").height "#{(nRows * 2) + 4}.1em"
+            @grid.resizeCanvas()
             
         , 100)
 
@@ -1125,6 +1129,7 @@ class view.StatsResults extends BaseResults
         # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
         $(".slick-row:first input", @$result).click()
+        $(window).trigger("resize")
 
         $.when(timeDeferred).then =>
             safeApply @s, () =>
