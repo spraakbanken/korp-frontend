@@ -221,35 +221,45 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
         s.cmp1 = cmp1
         s.cmp2 = cmp2
 
+        type = attributes[_.str.strip(reduce, "_.")]?.type
 
-
-        op = if attributes[_.str.strip(reduce, "_.")]?.type == "set" then "contains" else "="
+        op = if type == "set" then "contains" else "="
         cmps = [cmp1, cmp2]
+
         s.rowClick = (triple, cmp_index) ->
             cmp = cmps[cmp_index]
-            cmp = _.extend {}, cmp, 
-                command: "query"
-            cmp.corpus = _.invoke cmp.corpora, "toUpperCase"
+            # cmp = _.extend {}, (_.pick cmp), 
+            #     command: "query"
+            # cmp.corpus = 
 
             c.log "triple", triple, cmp
-            # cqpobj = CQP.parse(cmp.cqp)
 
-            cqps = for token in triple[0].split(" ")
-                CQP.fromObj 
-                    type : reduce
-                    op : op
-                    val : token
-                # cqpobj[0].and_block.push CQP.parse("[#{reduce} #{op} '#{token}']")[0].and_block[0]
+            cqps = []
+            
+            for token in triple[0].split(" ")
+                if type == "set" and token == "|"
+                    cqps.push "[ambiguity(#{reduce}) = 0]"
+                else
+                    cqps.push CQP.fromObj 
+                        type : reduce
+                        op : op
+                        val : token
             
             cqpobj = CQP.concat cqps...
             c.log "cqpobj", cqpobj
 
+            cl = settings.corpusListing.subsetFactory cmp.corpora
             
-            cmp.cqp = CQP.stringify cqpobj
+            # cmp.cqp = 
             c.log "cmp.cqp", cmp.cqp
             opts = {
                 start : 0
                 end : 24
-                ajaxParams : cmp
+                ajaxParams : 
+                    command : "query"
+                    cqp : CQP.stringify cqpobj
+                    corpus : cl.stringifySelected()
+                    show_struct : _.keys cl.getStructAttrs()
+
             }
             $rootScope.kwicTabs.push opts

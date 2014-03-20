@@ -290,7 +290,7 @@
           case "saldo":
             return extendedSearch.setOneToken("saldo", value);
           case "cqp":
-            c.log("cqp search");
+            c.log("cqp search", value);
             if (!value) {
               value = CQP.expandOperators($location.search().cqp);
             }

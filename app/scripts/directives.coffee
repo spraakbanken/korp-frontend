@@ -295,11 +295,10 @@ korpApp.directive "meter", () ->
 
         bkg = elem.find(".background")
         # bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
-        # if not _.str.trim wds
-        #     c.log "wds not length"
-        #     scope.displayWd = "&mdash;"
-        # else
-        scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
+        if wds == "|"
+            scope.displayWd = "&mdash;"
+        else
+            scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
         
         scope.loglike = Math.abs scope.meter[1]
 

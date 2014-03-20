@@ -22,6 +22,10 @@
     };
     for (_i = 0, _len = cqp_obj.length; _i < _len; _i++) {
       token = cqp_obj[_i];
+      if (typeof token === "string") {
+        output.push(token);
+        continue;
+      }
       or_array = [];
       or_array = (function() {
         var _j, _len1, _ref, _results;

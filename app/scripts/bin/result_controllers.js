@@ -210,7 +210,7 @@
     s = $scope;
     s.loading = true;
     return s.promise.then(function(_arg, xhr) {
-      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, _ref, _ref1;
+      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, type, _ref, _ref1;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
       c.log("xhr", xhr);
       s.loading = false;
@@ -251,38 +251,40 @@
       });
       s.cmp1 = cmp1;
       s.cmp2 = cmp2;
-      op = ((_ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? _ref1.type : void 0) === "set" ? "contains" : "=";
+      type = (_ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? _ref1.type : void 0;
+      op = type === "set" ? "contains" : "=";
       cmps = [cmp1, cmp2];
       return s.rowClick = function(triple, cmp_index) {
-        var cmp, cqpobj, cqps, opts, token;
+        var cmp, cqpobj, cqps, opts, token, _i, _len, _ref2;
         cmp = cmps[cmp_index];
-        cmp = _.extend({}, cmp, {
-          command: "query"
-        });
-        cmp.corpus = _.invoke(cmp.corpora, "toUpperCase");
         c.log("triple", triple, cmp);
-        cqps = (function() {
-          var _i, _len, _ref2, _results;
-          _ref2 = triple[0].split(" ");
-          _results = [];
-          for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-            token = _ref2[_i];
-            _results.push(CQP.fromObj({
+        cqps = [];
+        _ref2 = triple[0].split(" ");
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          token = _ref2[_i];
+          if (type === "set" && token === "|") {
+            cqps.push("[ambiguity(" + reduce + ") = 0]");
+          } else {
+            cqps.push(CQP.fromObj({
               type: reduce,
               op: op,
               val: token
             }));
           }
-          return _results;
-        })();
+        }
         cqpobj = CQP.concat.apply(CQP, cqps);
         c.log("cqpobj", cqpobj);
-        cmp.cqp = CQP.stringify(cqpobj);
+        cl = settings.corpusListing.subsetFactory(cmp.corpora);
         c.log("cmp.cqp", cmp.cqp);
         opts = {
           start: 0,
           end: 24,
-          ajaxParams: cmp
+          ajaxParams: {
+            command: "query",
+            cqp: CQP.stringify(cqpobj),
+            corpus: cl.stringifySelected(),
+            show_struct: _.keys(cl.getStructAttrs())
+          }
         };
         return $rootScope.kwicTabs.push(opts);
       };

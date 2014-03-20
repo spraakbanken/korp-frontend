@@ -1082,11 +1082,16 @@
         });
       });
       $(window).resize(_.debounce(function() {
-        var nRows, _ref;
-        $("#myGrid:visible").width($("#myGrid").parent().width());
+        var h, nRows, _ref, _ref1, _ref2;
+        $("#myGrid:visible").width($(window).width() - 40);
         nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
-        $("#myGrid:visible").height("" + ((nRows * 2) + 4) + ".1em");
-        return _this.grid.resizeCanvas();
+        h = (nRows * 2) + 4;
+        h = Math.min(h, 40);
+        $("#myGrid:visible").height("" + h + ".1em");
+        if ((_ref1 = _this.grid) != null) {
+          _ref1.resizeCanvas();
+        }
+        return (_ref2 = _this.grid) != null ? _ref2.autosizeColumns() : void 0;
       }, 100));
       $("#exportButton").unbind("click");
       $("#exportButton").click(function() {
@@ -1315,7 +1320,7 @@
       this.proxy = new model.GraphProxy();
       this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
       $(".chart", this.$result).on("click", function(event) {
-        var cqp, end, m, start, target, timecqp, val;
+        var cqp, end, m, opts, start, target, timecqp, val;
         target = $(".chart", _this.$result);
         val = $(".detail .x_label > span", target).data("val");
         cqp = $(".detail .item.active > span", target).data("cqp");
@@ -1325,7 +1330,18 @@
           start = m.format("YYYYMMDD");
           end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
           timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
-          return cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
+          cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
+          opts = {};
+          opts.ajaxParams = {
+            start: 0,
+            end: 24,
+            command: "query",
+            corpus: _this.s.data.corpusListing.stringifySelected(),
+            cqp: cqp
+          };
+          return safeApply(_this.s.$root, function() {
+            return _this.s.$root.kwicTabs.push(opts);
+          });
         }
       });
     }
@@ -1508,7 +1524,7 @@
         } else {
           $(".non_time_div").hide();
         }
-        palette = new Rickshaw.Color.Palette();
+        palette = new Rickshaw.Color.Palette("colorwheel");
         if (_.isArray(data.combined)) {
           series = (function() {
             var _i, _len, _ref, _results;
@@ -1538,7 +1554,6 @@
         }
         Rickshaw.Series.zeroFill(series);
         window.data = series[0].data;
-        c.log("series", series[0].data);
         window.graph = new Rickshaw.Graph({
           element: $(".chart", _this.$result).get(0),
           renderer: 'line',
@@ -1649,11 +1664,9 @@
         time.ceil = function(time, unit) {
           var mom, out;
           if (unit.name === "decade") {
-            c.log("unit.seconds", unit.seconds, toDate(Math.ceil(time / unit.seconds) * unit.seconds));
             out = Math.ceil(time / unit.seconds) * unit.seconds;
             mom = moment(out * 1000);
             if (mom.date() === 31) {
-              c.log("tick up");
               mom.add("day", 1);
             }
             return mom.unix();
@@ -1679,14 +1692,11 @@
           var count, domain, i, offsets, runningTick, tickValue, unit, _i;
           domain = xAxis.graph.x.domain();
           unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
-          c.log("unit", unit);
           count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
           runningTick = domain[0];
           offsets = [];
           for (i = _i = 0; 0 <= count ? _i < count : _i > count; i = 0 <= count ? ++_i : --_i) {
-            c.log(moment(runningTick * 1000).toDate());
             tickValue = time.ceil(runningTick, unit);
-            c.log("r", moment(tickValue * 1000).toDate());
             runningTick = tickValue + unit.seconds / 2;
             offsets.push({
               value: tickValue,
@@ -1694,7 +1704,6 @@
               _date: moment(tickValue * 1000).toDate()
             });
           }
-          c.log("offsets", offsets);
           return offsets;
         };
         xAxis.render();

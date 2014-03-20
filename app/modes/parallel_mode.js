@@ -4,18 +4,15 @@ settings.statistics = false;
 var start_lang = "swe";
 
 korpApp.controller("SearchCtrl", function($scope) {
-	c.log("searchctrl", $scope);
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
 });
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 	var s = $scope;
 
-	// s.$on("btn_submit", function() {
 	s.onSubmit = function() {
-	    $location.search("search", "cqp");
+	    $location.search("search", "cqp|" + $rootScope.activeCQP);
 	}
-	// });
 
 	if($location.search().parallel_corpora)
 		s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
@@ -26,9 +23,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 		})
 
 	else
-		// s.langs = [{lang : "swe", cqp : '[word = "apa"]'}];
 		s.langs = [{lang : "swe"}];
-	c.log ("s.langs", s.langs)
 
 	s.$watch("langs", function() {
 		var currentLangList = _.pluck(s.langs, "lang");
@@ -43,11 +38,6 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 				}).groupBy("lang").value()
 		}
 
-
-		// c.log ("langMapping", langMapping)
-		// query += ":LINKED_CORPUS:" + _(langMapping[lang]).pluck("id").invoke("toUpperCase").join("|") + " " + cqp;
-
-		// TODO: remove LINKED_CORPUS crap from lang.cqp, only apply when searching. 
 		var output = s.langs[0].cqp;
 		output += _.map(s.langs.slice(1), function(langobj, i) {
 			var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
@@ -55,7 +45,6 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 			return ":LINKED_CORPUS:" + linkedCorpus + " " + langobj.cqp;
 		}).join("");
 
-		c.log("langs cqp", output);
 		_.each(s.langs, function(langobj, i) {
 			search("cqp_" + langobj.lang , langobj.cqp);
 		})

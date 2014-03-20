@@ -307,7 +307,11 @@
         var bkg, part, w, wds;
         wds = scope.meter[0];
         bkg = elem.find(".background");
-        scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
+        if (wds === "|") {
+          scope.displayWd = "&mdash;";
+        } else {
+          scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
+        }
         scope.loglike = Math.abs(scope.meter[1]);
         scope.tooltipHTML = "" + (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
         w = elem.parent().width();

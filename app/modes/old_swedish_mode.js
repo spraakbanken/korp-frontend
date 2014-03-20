@@ -34,7 +34,7 @@ settings.corpora = {};
 settings.corporafolders = {};
 
 
-if(isLab){
+// if(isLab){
 settings.corporafolders.fsvb = {
 	title : "Fornsvenska textbanken",
 	contents : ["fsv-profanprosa","fsv-verser"],
@@ -61,8 +61,8 @@ settings.corporafolders.medeltid = {
 	contents : ["sdhk-svenska", "sdhk-norska", "sdhk-tyska", "sdhk-latin", "sdhk-ovrigt"],
 };
 
-}
-else{
+// }
+// else{
 settings.corporafolders.aldre = {
 	title : "Äldre fornsvenska",
 	contents : ["fsv-aldrelagar", "fsv-aldrereligiosprosa"]
@@ -78,7 +78,7 @@ settings.corporafolders.nysvenska = {
 	contents : ["fsv-nysvensklagar",  "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
 };
 
-}
+// }
 
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
@@ -425,7 +425,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 	}
 };
 
-if(isLab){
+// if(isLab){
 settings.corpora["sdhk-svenska"] = {
 	id : "sdhk-svenska",
 	title : "Medeltidsbrev - Svenska",
@@ -475,7 +475,7 @@ settings.corpora["sdhk-ovrigt"] = {
 	attributes : {},
 	struct_attributes : settings.sdhkstructs
 };
-}
+// }
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 

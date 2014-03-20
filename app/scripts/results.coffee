@@ -736,8 +736,7 @@ class view.LemgramResults extends BaseResults
         $target = $(event.currentTarget)
         c.log "onClickExample", $target
         data = $target.parent().tmplItem().data
-        # instance = $("#result-container").korptabs("addTab", view.ExampleResults)
-        # opts = instance.getPageInterval()
+        
         opts = {}
         opts.ajaxParams =
             start : 0
@@ -750,13 +749,6 @@ class view.LemgramResults extends BaseResults
             rel: data.rel
             depextra: data.depextra
             corpus: data.corpus
-
-        # util.localize instance.$result
-        # instance.makeRequest opts
-        
-        # injector = @$result.injector()
-        # c.log "injector", injector, injector.get("compareSearches")
-        # @s.$parent.queryParams
 
 
         @s.$root.kwicTabs.push opts
@@ -956,13 +948,14 @@ class view.StatsResults extends BaseResults
 
 
         $(window).resize _.debounce( () =>
-            $("#myGrid:visible").width($("#myGrid").parent().width())
-            # $("#myGrid:visible").width($(document).width() - 70)
-            # $("#myGrid:visible").width($(document).width() - 70)
-            # $("#myGrid:visible").height ($(window).height() - $("#myGrid").offset().top - 100)
+            # $("#myGrid:visible").width($("#myGrid").parent().width())
+            $("#myGrid:visible").width($(window).width() - 40)
             nRows = @gridData?.length or 2
-            $("#myGrid:visible").height "#{(nRows * 2) + 4}.1em"
-            @grid.resizeCanvas()
+            h = (nRows * 2) + 4
+            h = Math.min h, 40
+            $("#myGrid:visible").height "#{h}.1em"
+            @grid?.resizeCanvas()
+            @grid?.autosizeColumns()
             
         , 100)
 
@@ -1205,6 +1198,19 @@ class view.GraphResults extends BaseResults
                 cqp = decodeURIComponent(cqp)[...-1] + " & #{timecqp}"
 
 
+                opts = {}
+                opts.ajaxParams =
+                    start : 0
+                    end : 24
+                    command : "query"
+                    corpus: @s.data.corpusListing.stringifySelected()
+                    cqp : cqp
+
+
+                safeApply @s.$root, () =>
+                    @s.$root.kwicTabs.push opts
+
+
 
     onentry : ->
     onexit : ->
@@ -1361,7 +1367,7 @@ class view.GraphResults extends BaseResults
             else
                 $(".non_time_div").hide()
 
-            palette = new Rickshaw.Color.Palette()
+            palette = new Rickshaw.Color.Palette("colorwheel")
             # @colorToCqp = {}
             if _.isArray data.combined
                 series = for item in data.combined
@@ -1385,7 +1391,6 @@ class view.GraphResults extends BaseResults
 
             Rickshaw.Series.zeroFill(series)
             window.data = series[0].data
-            c.log "series", series[0].data
             window.graph = new Rickshaw.Graph
                 element: $(".chart", @$result).get(0)
                 renderer: 'line'
@@ -1471,10 +1476,7 @@ class view.GraphResults extends BaseResults
                 formatter : (series, x, y, formattedX, formattedY, d) ->
                     content = series.name + ':&nbsp;' + formattedY
                     return """<span data-cqp="#{encodeURIComponent(series.cqp)}">#{content}</span>"""
-                # onRender: (args) ->
-                #     c.log "onRender", args.detail.cqp
             } )
-            # if @granularity == "y"
 
             [first, last] = settings.corpusListing.getTimeInterval()
 
@@ -1487,12 +1489,9 @@ class view.GraphResults extends BaseResults
             old_ceil = time.ceil
             time.ceil = (time, unit) =>
                 if unit.name == "decade"
-                    c.log "unit.seconds", unit.seconds, toDate(Math.ceil(time / unit.seconds) * unit.seconds)
                     out = Math.ceil(time / unit.seconds) * unit.seconds;
                     mom = moment(out * 1000)
-                    # c.log "mom", mom.date()
                     if mom.date() == 31
-                        c.log "tick up"
                         mom.add("day", 1)
                     return mom.unix()
                 else 
@@ -1511,20 +1510,12 @@ class view.GraphResults extends BaseResults
                 old_render.call xAxis
                 @updateTicks()
             
-            
-
-
-
-
 
             old_tickOffsets = xAxis.tickOffsets
             xAxis.tickOffsets = () =>
-                # offsets = old_tickOffsets.call xAxis
-                # c.log "offsets", offsets
                 domain = xAxis.graph.x.domain()
 
                 unit = xAxis.fixedTimeUnit or xAxis.appropriateTimeUnit()
-                c.log "unit", unit
                 count = Math.ceil((domain[1] - domain[0]) / unit.seconds)
 
                 runningTick = domain[0]
@@ -1532,18 +1523,12 @@ class view.GraphResults extends BaseResults
                 offsets = []
 
                 for i in [0...count]
-                    c.log moment(runningTick * 1000).toDate()
                     tickValue = time.ceil(runningTick, unit)
-                    # tickValue = Math.ceil(runningTick / unit.seconds) * unit.seconds;
-                    c.log "r", moment(tickValue * 1000).toDate()
                     runningTick = tickValue + unit.seconds / 2
 
                     offsets.push( { value: tickValue, unit: unit, _date: moment(tickValue * 1000).toDate() } )
-                
 
-                c.log "offsets", offsets
                 return offsets
-                # @updateTicks()
 
             xAxis.render()
 

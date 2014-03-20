@@ -9,6 +9,9 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
         word : (val) -> 
             regescape(val)
     for token in cqp_obj
+        if typeof token == "string"
+            output.push token
+            continue
         or_array = []
         or_array = for and_array in token.and_block
             for {type, op, val, flags} in and_array

@@ -3702,7 +3702,7 @@ label[for=lemgram_select]:before {
 }
 /* line 1332, styles.scss */
 #mode_switch li.menu_more i {
-  margin-left: 5px;
+  padding-left: 5px;
 }
 
 /* line 1339, styles.scss */
