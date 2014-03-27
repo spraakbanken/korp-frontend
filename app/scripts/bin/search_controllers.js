@@ -22,7 +22,8 @@
   });
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
-    var s;
+    var s,
+      _this = this;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
       var cqp;
@@ -40,12 +41,12 @@
         return;
       }
       c.log("searches.activeSearch", search);
+      page = $rootScope.search()["page"] || 0;
       if (search.type === "word") {
         s.placeholder = null;
         s.simple_text = search.val;
         cqp = simpleSearch.getCQP(search.val);
         c.log("simple search cqp", cqp);
-        page = $rootScope.search()["page"] || 0;
         searches.kwicSearch(cqp, page);
         if (settings.wordpicture !== false && __indexOf.call(search.val, " ") < 0) {
           lemgramResults.showPreloader();
@@ -53,18 +54,28 @@
         }
       } else if (search.type === "lemgram") {
         s.placeholder = search.val;
-        return s.simple_text = "";
+        s.simple_text = "";
+        return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
       } else {
         s.placeholder = null;
         return s.simple_text = "";
       }
     });
-    return s.lemgramToString = function(lemgram) {
+    s.lemgramToString = function(lemgram) {
       if (!lemgram) {
         return;
       }
       return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
     };
+    return utils.setupHash(s, [
+      {
+        key: "prefix"
+      }, {
+        key: "suffix"
+      }, {
+        key: "isCaseInsensitive"
+      }
+    ]);
   });
 
   korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {

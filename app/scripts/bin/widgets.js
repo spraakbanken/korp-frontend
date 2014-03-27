@@ -75,7 +75,6 @@
     },
     renderItem: function(key, value, attrs) {
       var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, str_value, ul, val, valueArray, x;
-      c.log("renderItem", key, value, attrs);
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }

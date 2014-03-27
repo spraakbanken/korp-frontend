@@ -171,11 +171,11 @@
                   <search-submit></search-submit><span>
                      
                      {{'and_include' | loc}} </span>
-                  <input id="prefixChk" type="checkbox">
+                  <input id="prefixChk" type="checkbox" ng-model="prefix">
                   <label for="prefixChk"> {{'prefix' | loc}} </label>
-                  <input id="suffixChk" type="checkbox">
+                  <input id="suffixChk" type="checkbox" ng-model="suffix">
                   <label for="suffixChk"> {{'suffix' | loc}} </label><span> {{'and' | loc}} </span>
-                  <input id="caseChk" type="checkbox">
+                  <input id="caseChk" type="checkbox" ng-model="isCaseInsensitive">
                   <label for="caseChk"> {{'case_insensitive' | loc}}  </label>
                 </form>
                 <table id="char_table">

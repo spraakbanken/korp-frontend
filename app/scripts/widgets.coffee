@@ -68,7 +68,6 @@ Sidebar =
         return $(items)
 
     renderItem: (key, value, attrs) ->
-        c.log "renderItem", key, value, attrs
         if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
             return ""
         output = $("<p><span rel='localize[#{attrs.label}]'>#{key}</span>: </p>")

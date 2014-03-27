@@ -584,7 +584,7 @@ util.loadCorpora = ->
             #{maybeInfo}
             <br/><br/>
             #{util.getLocaleString("corpselector_numberoftokens")}:
-            <b>util.prettyNumbers(numTokens)</b>
+            <b>#{util.prettyNumbers(numTokens)}</b>
             <br/>#{util.getLocaleString("corpselector_numberofsentences")}: 
             <b>#{sentenceString}</b>
             <br/>
@@ -636,7 +636,7 @@ util.loadCorpora = ->
     settings.corpusListing.select selected
     return
 
-regescape = (s) ->
+window.regescape = (s) ->
     s.replace /[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&"
 
 util.localizeFloat = (float, nDec) ->

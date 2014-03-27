@@ -282,11 +282,10 @@
               val: value
             };
           case "lemgram":
-            searches.activeSearch = {
+            return searches.activeSearch = {
               type: type,
               val: value
             };
-            return searches.lemgramSearch(value, null, null, page);
           case "saldo":
             return extendedSearch.setOneToken("saldo", value);
           case "cqp":

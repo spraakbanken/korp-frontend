@@ -285,15 +285,6 @@
           return _this.onSimpleChange();
         }
       });
-      $("#keyboard").click(function() {
-        c.log("click", arguments);
-        return $("#char_table").toggle("slide", {
-          direction: "up"
-        }, "fast");
-      });
-      $("#char_table td").click(function() {
-        return $("#simple_text").val($("#simple_text").val() + $(this).text());
-      });
     }
 
     SimpleSearch.prototype.isSearchPrefix = function() {
@@ -432,6 +423,7 @@
 
     SimpleSearch.prototype.getCQP = function(word) {
       var cqp, currentText, lemgram, query, suffix, val, wordArray;
+      c.log("getCQP", word);
       currentText = $.trim(word || $("#simple_text").val() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {

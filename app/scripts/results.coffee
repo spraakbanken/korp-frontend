@@ -709,8 +709,8 @@ class view.LemgramResults extends BaseResults
         .append($("<span>")
             .addClass("ui-icon ui-icon-document")
         ).css("cursor", "pointer")
-        .click( () ->
-            @onClickExample()
+        .click( (event) =>
+            @onClickExample(event)
         ).end()
         .appendTo container
 

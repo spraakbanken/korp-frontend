@@ -8,12 +8,12 @@
     search-submit
     span 
         |  {{'and_include' | loc}} 
-    input#prefixChk(type='checkbox') 
+    input#prefixChk(type='checkbox', ng-model="prefix") 
     label(for='prefixChk')  {{'prefix' | loc}} 
-    input#suffixChk(type='checkbox') 
+    input#suffixChk(type='checkbox', ng-model="suffix") 
     label(for='suffixChk')  {{'suffix' | loc}} 
     span  {{'and' | loc}} 
-    input#caseChk(type='checkbox') 
+    input#caseChk(type='checkbox', ng-model="isCaseInsensitive") 
     label(for='caseChk')  {{'case_insensitive' | loc}}  
   table#char_table
     tbody

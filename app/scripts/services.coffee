@@ -249,7 +249,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                         type : type
                         val : value
 
-                    searches.lemgramSearch(value, null, null, page)
+                    
                     # $.sm.send "submit.lemgram", data
                 when "saldo"
                     extendedSearch.setOneToken "saldo", value

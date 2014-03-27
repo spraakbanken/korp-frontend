@@ -244,14 +244,14 @@ class view.SimpleSearch extends BaseSearch
             else
                 @onSimpleChange()
 
-        $("#keyboard").click ->
-            c.log "click", arguments
-            $("#char_table").toggle "slide",
-                direction: "up"
-            , "fast"
+        # $("#keyboard").click ->
+        #     c.log "click", arguments
+        #     $("#char_table").toggle "slide",
+        #         direction: "up"
+        #     , "fast"
 
-        $("#char_table td").click ->
-            $("#simple_text").val $("#simple_text").val() + $(this).text()
+        # $("#char_table td").click ->
+        #     $("#simple_text").val $("#simple_text").val() + $(this).text()
 
 
     isSearchPrefix: ->
@@ -301,6 +301,10 @@ class view.SimpleSearch extends BaseSearch
     selectLemgram: (lemgram) ->
         return if $("#search-tab").data("cover")?
         @refreshSearch()
+        # if @isSearchSuffix() or @isSearchPrefix()
+        #     c.log "suffix or prefix"
+        #     util.searchHash "cqp", @getCQP()
+        # else
         util.searchHash "lemgram", lemgram
 
     buildLemgramSelect: (lemgrams) ->
@@ -378,6 +382,7 @@ class view.SimpleSearch extends BaseSearch
 
 
     getCQP : (word) ->
+        c.log "getCQP", word
         currentText = $.trim(word or $("#simple_text").val() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
         if util.isLemgramId(currentText) # if the input is a lemgram, do lemgram search.
