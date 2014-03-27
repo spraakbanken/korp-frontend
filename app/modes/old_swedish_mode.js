@@ -61,25 +61,6 @@ settings.corporafolders.medeltid = {
 	contents : ["sdhk-svenska", "sdhk-norska", "sdhk-tyska", "sdhk-latin", "sdhk-ovrigt"],
 };
 
-// }
-// else{
-settings.corporafolders.aldre = {
-	title : "Äldre fornsvenska",
-	contents : ["fsv-aldrelagar", "fsv-aldrereligiosprosa"]
-};
-
-settings.corporafolders.yngre = {
-	title : "Yngre fornsvenska",
-	contents : ["fsv-yngrelagar",  "fsv-yngrereligiosprosa", "fsv-yngretankebocker"]
-};
-
-settings.corporafolders.nysvenska = {
-	title : "Nysvenska",
-	contents : ["fsv-nysvensklagar",  "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
-};
-
-// }
-
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
