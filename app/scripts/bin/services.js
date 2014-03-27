@@ -159,6 +159,9 @@
         var getSortParams, isReading, kwicCallback, kwicopts;
         kwicResults.showPreloader();
         isReading = search().reading;
+        c.log("kwicRequest", page, cqp);
+        kwicResults.makeRequest(page, cqp);
+        return;
         kwicCallback = kwicResults.renderResult;
         getSortParams = function() {
           var rnd, sort;

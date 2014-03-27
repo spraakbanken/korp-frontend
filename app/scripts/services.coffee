@@ -131,6 +131,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             # kwicResults.s.$parent.loading = true
             isReading = search().reading
             
+            c.log "kwicRequest", page, cqp
+            kwicResults.makeRequest(page, cqp)
+
+            return
+
             #var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
             kwicCallback = kwicResults.renderResult
             getSortParams = () -> 

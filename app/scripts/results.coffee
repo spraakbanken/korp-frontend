@@ -331,21 +331,26 @@ class view.KWICResults extends BaseResults
             @current_page = new_page_index
         false
 
-    buildQueryOptions: ->
+    buildQueryOptions: (cqp) ->
+        c.log "buildQueryOptions", cqp
         opts = {}
         opts.ajaxParams = {
             command : "query"
-            cqp : @proxy.prevCQP
-            queryData : @proxy.queryData
+            cqp : cqp or @proxy.prevCQP
+            queryData : @proxy.queryData if @proxy.queryData
             sort : $(".sort_select").val()
             random_seed : $.bbq.getState("random_seed") if opts.sort is "random"
             # context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
             context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
         }
+        # isReading = @$result.is(".reading_mode")
+        # if isReading
+        #     opts.
+        # c.log "opts", opts
         return opts
 
 
-    makeRequest: (page_num) ->
+    makeRequest: (page_num, cqp) ->
         # $.error("kwicResults.makeRequest is no longer used")
         # return
         isReading = @$result.is(".reading_mode")
@@ -358,14 +363,13 @@ class view.KWICResults extends BaseResults
                 # $scope.kwic = data.kwic
 
         kwicCallback = $.proxy(@renderResult, this)
-        @getProxy().makeRequest @buildQueryOptions(),
+        @getProxy().makeRequest @buildQueryOptions(cqp),
                            page_num,
                            (if isReading then $.noop else $.proxy(@onProgress, this)),
                            $.proxy(@renderCompleteResult, this),
                            kwicCallback
 
 
-    #   this.proxy.makeRequest(this.buildQueryOptions(), page_num || this.current_page, $.noop);
     setPage: (page) ->
         @$result.find(".pager-wrapper").trigger "setPage", [page]
 

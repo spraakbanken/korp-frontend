@@ -377,13 +377,14 @@
       return false;
     };
 
-    KWICResults.prototype.buildQueryOptions = function() {
+    KWICResults.prototype.buildQueryOptions = function(cqp) {
       var opts;
+      c.log("buildQueryOptions", cqp);
       opts = {};
       opts.ajaxParams = {
         command: "query",
-        cqp: this.proxy.prevCQP,
-        queryData: this.proxy.queryData,
+        cqp: cqp || this.proxy.prevCQP,
+        queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
         sort: $(".sort_select").val(),
         random_seed: opts.sort === "random" ? $.bbq.getState("random_seed") : void 0,
         context: this.$result.is(".reading_mode") || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0
@@ -391,7 +392,7 @@
       return opts;
     };
 
-    KWICResults.prototype.makeRequest = function(page_num) {
+    KWICResults.prototype.makeRequest = function(page_num, cqp) {
       var isReading, kwicCallback,
         _this = this;
       isReading = this.$result.is(".reading_mode");
@@ -407,7 +408,7 @@
         }
       });
       kwicCallback = $.proxy(this.renderResult, this);
-      return this.getProxy().makeRequest(this.buildQueryOptions(), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
+      return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
 
     KWICResults.prototype.setPage = function(page) {
