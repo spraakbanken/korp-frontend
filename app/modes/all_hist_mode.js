@@ -194,6 +194,27 @@ settings.corpora.lb = {
 };
 
 
+settings.corpora.ekeblad = {
+	id : "ekeblad",
+	title : "Ekeblads brev",
+	description : 'Breven till Claes. Elektronisk utgåva av Sture Alléns edition 1965',
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		pos : attrs.pos,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_author" : {label : "author"},
+		"text_date" : {label : "date"},
+		"paragraph_date" : {label : "datering"}
+	}
+};
+
+
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
