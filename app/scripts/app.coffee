@@ -76,12 +76,18 @@ korpApp.run ($rootScope, $location, utils, searches) ->
         if corpus
             corp_array = corpus.split(",")
             processed_corp_array = []
-            settings.corpusListing.select(corp_array)
             $.each corp_array, (key, val) ->
                 processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
+            settings.corpusListing.select(processed_corp_array)
             corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
             $("#select_corpus").val corpus
-        #     simpleSearch.enableSubmit()
+        else
+            all_default_corpora = []
+            for pre_item in settings.preselected_corpora
+                pre_item = pre_item.replace /^__/g, ''
+                all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
+            settings.corpusListing.select all_default_corpora
+            corpusChooserInstance.corpusChooser "selectItems", all_default_corpora
         
 korpApp.controller "headerCtrl", ($scope, $location) ->
     s = $scope

@@ -44,17 +44,27 @@
       return isInit = false;
     });
     return searches.infoDef.then(function() {
-      var corp_array, corpus, processed_corp_array;
+      var all_default_corpora, corp_array, corpus, pre_item, processed_corp_array, _i, _len, _ref;
       corpus = $location.search().corpus;
       if (corpus) {
         corp_array = corpus.split(",");
         processed_corp_array = [];
-        settings.corpusListing.select(corp_array);
         $.each(corp_array, function(key, val) {
           return processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val));
         });
+        settings.corpusListing.select(processed_corp_array);
         corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
         return $("#select_corpus").val(corpus);
+      } else {
+        all_default_corpora = [];
+        _ref = settings.preselected_corpora;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          pre_item = _ref[_i];
+          pre_item = pre_item.replace(/^__/g, '');
+          all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item));
+        }
+        settings.corpusListing.select(all_default_corpora);
+        return corpusChooserInstance.corpusChooser("selectItems", all_default_corpora);
       }
     });
   });

@@ -218,6 +218,7 @@
 	"corpselector_time" : "Material dated",
 	"corpselector_rest_time" : "Undated material",
 	"corpselector_time_chosen" : "Selected material",
+	"corpselector_of" : " of ",
     "corpselector_of_total" : "of total",
 
 	"statstable_allcorpora" : "All&nbsp;corpora",

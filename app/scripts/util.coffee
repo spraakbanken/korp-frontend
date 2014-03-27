@@ -520,7 +520,6 @@ util.loadCorporaFolderRecursive = (first_level, folder) ->
         $.each folder, (fol, folVal) ->
             outHTML += "<li>" + util.loadCorporaFolderRecursive(false, folVal) + "</li>"  if fol isnt "contents" and fol isnt "title" and fol isnt "description"
             return
-
         
         # Corpora
         if folder["contents"] and folder["contents"].length > 0

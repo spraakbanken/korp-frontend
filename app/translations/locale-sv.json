@@ -221,6 +221,7 @@
 	"corpselector_time" : "Material daterat",
 	"corpselector_rest_time" : "Odaterat material",
 	"corpselector_time_chosen" : "Valt material",
+	"corpselector_of" : " av ",
 	"corpselector_of_total" : "av sammanlagt",
 
 	"statstable_allcorpora" : "Samtliga",

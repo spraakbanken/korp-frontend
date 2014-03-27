@@ -119,13 +119,16 @@ var hp_corpusChooser = {
 	countSelected: function () { /* Update header */
 		var header_text = "";
 		var header_text_2 = "";
+		var header_total = "";
+		var header_of = false;
 		var checked_checkboxes = $(".hplabel .checked");
 		var num_checked_checkboxes = checked_checkboxes.length;
 		var num_unchecked_checkboxes = $(".hplabel .unchecked").length;
 		var num_checkboxes = $(".hplabel .checkbox").length;
-		if (num_unchecked_checkboxes == num_checkboxes) {
-			header_text_2 = 'corpselector_noneselected';
-		} else if (num_checked_checkboxes == num_checkboxes && num_checkboxes > 1) {
+		//if (num_unchecked_checkboxes == num_checkboxes) {
+		//	header_text_2 = 'corpselector_noneselected';
+		//} else 
+		if (num_checked_checkboxes == num_checkboxes && num_checkboxes > 1) {
 			header_text = num_checked_checkboxes;
 			header_text_2 = 'corpselector_allselected';
 		} else if (num_checked_checkboxes == 1) {
@@ -138,6 +141,8 @@ var hp_corpusChooser = {
 		} else {
 			header_text = num_checked_checkboxes;
 			header_text_2 = "corpselector_selectedmultiple";
+			header_total = $(".popupchecks").find(".hplabel").length;
+			header_of = true;
 		}
 
 		// Number of tokens
@@ -151,9 +156,11 @@ var hp_corpusChooser = {
 		});
 
 		$("#hp_corpora_title1").text(header_text);
+		$("#hp_corpora_titleOf").toggle(header_of);
+		$("#hp_corpora_titleTotal").text(header_total);
 		$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-		$("#hp_corpora_title3").html(" — " + util.prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
+		$("#hp_corpora_titleTokens").html(" — " + util.prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
         $("#sentenceCounter").html(util.prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
 	},
 	triggerChange : function() {
