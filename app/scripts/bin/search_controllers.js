@@ -1,3 +1,4 @@
+//@ sourceMappingURL=search_controllers.map
 (function() {
   var korpApp,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
@@ -51,6 +52,8 @@
         if (settings.wordpicture !== false && __indexOf.call(search.val, " ") < 0) {
           lemgramResults.showPreloader();
           return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
+        } else {
+          return lemgramResults.resetView();
         }
       } else if (search.type === "lemgram") {
         s.placeholder = search.val;
@@ -81,6 +84,7 @@
   korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {
     var s;
     s = $scope;
+    s.within = "sentence";
     s.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
         label: name || $rootScope.activeCQP,
@@ -93,19 +97,50 @@
       c.log("extended submit");
       $location.search("search", null);
       return $timeout(function() {
+        var within;
+        c.log("_.last _.values settings.defaultWithin", _.last(_.values(settings.defaultWithin === s.within)));
+        if (s.within !== _.last(_.values(settings.defaultWithin))) {
+          within = s.within;
+        }
+        $location.search("within", s.within || null);
         return $location.search("search", "cqp");
       }, 0);
     });
     if ($location.search().cqp) {
       s.cqp = $location.search().cqp;
     }
-    return s.$watch("cqp", function(val) {
+    s.$watch("cqp", function(val) {
       c.log("cqp change", val);
       if (!val) {
         return;
       }
       $rootScope.activeCQP = CQP.expandOperators(val);
       return $location.search("cqp", val);
+    });
+    s.withins = [];
+    s.getWithins = function() {
+      var intersect, obj, output, union, _i, _len, _ref;
+      intersect = settings.corpusListing.getAttrIntersection("within");
+      union = settings.corpusListing.getAttrUnion("within");
+      output = _.map(union, function(item) {
+        return {
+          value: item
+        };
+      });
+      if (union.length > intersect.length) {
+        for (_i = 0, _len = output.length; _i < _len; _i++) {
+          obj = output[_i];
+          if (_ref = obj.value, __indexOf.call(intersect, _ref) < 0) {
+            obj.partial = true;
+          } else {
+            obj.partial = false;
+          }
+        }
+      }
+      return output;
+    };
+    return s.$on("corpuschooserchange", function() {
+      return s.withins = s.getWithins();
     });
   });
 
@@ -197,6 +232,7 @@
       });
     });
     return $scope.$on("btn_submit", function() {
+      c.log("advanced cqp", $scope.cqp);
       return $location.search("search", "cqp|" + $scope.cqp);
     });
   });

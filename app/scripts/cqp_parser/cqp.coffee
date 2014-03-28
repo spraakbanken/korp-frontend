@@ -5,27 +5,22 @@ regescape = (s) ->
 
 stringifyCqp = (cqp_obj, translate_ops = false) ->
     output = []
-    valTransform = 
-        word : (val) -> 
-            regescape(val)
     for token in cqp_obj
         if typeof token == "string"
             output.push token
             continue
-        or_array = []
+        
         or_array = for and_array in token.and_block
             for {type, op, val, flags} in and_array
+                # if op != "*="
+                #     val = regescape val
                 if translate_ops
-                    if op != "*="
-                        val = regescape val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
                     }[op] or [val, op]
-                # else 
-                #     val = regescape
 
                 flagstr = ""
                 if flags and _.keys(flags).length

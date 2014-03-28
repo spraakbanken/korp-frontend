@@ -13,11 +13,11 @@ class BaseResults
         # c.log "onProgress", progressObj
         # TODO: this item only exists in the kwic.
         @num_result.html util.prettyNumbers(progressObj["total_results"])
-        unless isNaN(progressObj["stats"])
-            try
+        # unless isNaN(progressObj["stats"])
+            # try
                 # @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
-            catch e
-                c.log "onprogress error", e
+            # catch e
+                # c.log "onprogress error", e
         # @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
 
         safeApply @s, () =>
@@ -83,15 +83,6 @@ class view.KWICResults extends BaseResults
             @selectionManager.deselect()
             safeApply @s.$root, (s) ->
                 s.$root.word_selected = null
-            # $.sm.send "word.deselect"
-
-        # @$result.find(".reading_btn").click =>
-        #     isReading = @$result.is(".reading_mode")
-        #     if search().reading_mode
-                # search("reading_mode", null)
-            # else
-                # $.bbq.pushState reading_mode: true
-                # search reading_mode: "yes"
 
         $(document).keydown $.proxy(@onKeydown, this)
 
@@ -143,8 +134,11 @@ class view.KWICResults extends BaseResults
         # @$result.find(".pager-wrapper").empty()
 
     getProxy: ->
-        return @readingProxy if @$result.is(".reading_mode")
+        # return @readingProxy if @isReadingMode()
         @proxy
+
+    isReadingMode : () ->
+        @s.reading_mode
 
     onentry: ->
         c.log "onentry kwic"
@@ -218,7 +212,7 @@ class view.KWICResults extends BaseResults
         return if resultError is false
         unless data.kwic then data.kwic = []
         c.log "corpus_results"
-        isReading = @$result.is(".reading_mode")
+        isReading = @isReadingMode()
 
 
 
@@ -228,6 +222,8 @@ class view.KWICResults extends BaseResults
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
+                @selectionManager.deselect()
+                @s.$root.word_selected = null
             else
                 $scope.setKwicData(data)
             # @hidePreloader()    
@@ -243,7 +239,8 @@ class view.KWICResults extends BaseResults
 
         @$result.localize()
         @centerScrollbar()
-        @$result.find(".match").children().first().click()
+        if not @s.$root.word_selected and not isReading
+            @$result.find(".match").children().first().click()
 
     showNoResults: ->
         # @$result.find(".results_table").empty()
@@ -306,13 +303,14 @@ class view.KWICResults extends BaseResults
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
+    
     # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
         page = search().page or 0
         c.log "handlePaginationClick", new_page_index, page
         self = this
         if new_page_index isnt page or !!force_click
-            isReading = @$result.is(".reading_mode")
+            isReading = @isReadingMode()
             kwicCallback = @renderResult
 
             # this.showPreloader();
@@ -334,26 +332,36 @@ class view.KWICResults extends BaseResults
     buildQueryOptions: (cqp) ->
         c.log "buildQueryOptions", cqp
         opts = {}
+        getSortParams = () -> 
+            sort = search().sort
+            unless sort then return {}
+            if sort == "random"
+                if search().random_seed
+                    rnd = search().random_seed
+                else
+                    rnd = Math.ceil(Math.random() * 10000000)
+                    search random_seed: rnd
+
+                return {
+                    sort : sort
+                    random_seed : rnd
+                }
+            return {sort : sort}
+
         opts.ajaxParams = {
             command : "query"
             cqp : cqp or @proxy.prevCQP
             queryData : @proxy.queryData if @proxy.queryData
-            sort : $(".sort_select").val()
-            random_seed : $.bbq.getState("random_seed") if opts.sort is "random"
-            # context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode")
-            context : settings.corpusListing.getContextQueryString() if @$result.is(".reading_mode") or currentMode == "parallel"
+            context : settings.corpusListing.getContextQueryString() if @isReadingMode() or currentMode == "parallel"
+            within : settings.corpusListing.getWithinQueryString()
         }
-        # isReading = @$result.is(".reading_mode")
-        # if isReading
-        #     opts.
-        # c.log "opts", opts
+        _.extend opts.ajaxParams, getSortParams()
         return opts
 
 
     makeRequest: (page_num, cqp) ->
-        # $.error("kwicResults.makeRequest is no longer used")
-        # return
-        isReading = @$result.is(".reading_mode")
+        @showPreloader()
+        isReading = @isReadingMode()
 
         safeApply @s, () =>
             if isReading
@@ -390,7 +398,7 @@ class view.KWICResults extends BaseResults
             tr.find "div > .word"
 
     selectNext: ->
-        unless @$result.is(".reading_mode")
+        unless @isReadingMode()
             i = @getCurrentRow().index(@$result.find(".token_selected").get(0))
             next = @getCurrentRow().get(i + 1)
             return unless next?
@@ -401,7 +409,7 @@ class view.KWICResults extends BaseResults
         return next
 
     selectPrev: ->
-        unless @$result.is(".reading_mode")
+        unless @isReadingMode()
             i = @getCurrentRow().index(@$result.find(".token_selected").get(0))
             return  if i is 0
             prev = @getCurrentRow().get(i - 1)
@@ -412,7 +420,7 @@ class view.KWICResults extends BaseResults
 
     selectUp: ->
         current = @selectionManager.selected
-        unless @$result.is(".reading_mode")
+        unless @isReadingMode()
             prevMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").prevAll(".not_corpus_info").first())
             prevMatch.click()
         else
@@ -424,7 +432,7 @@ class view.KWICResults extends BaseResults
 
     selectDown: ->
         current = @selectionManager.selected
-        unless @$result.is(".reading_mode")
+        unless @isReadingMode()
             nextMatch = @getWordAt(current.offset().left + current.width() / 2, current.closest("tr").nextAll(".not_corpus_info").first())
             nextMatch.click()
         else

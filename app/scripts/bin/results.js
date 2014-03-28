@@ -1,3 +1,4 @@
+//@ sourceMappingURL=results.map
 (function() {
   var BaseResults, newDataInGraph,
     __hasProp = {}.hasOwnProperty,
@@ -16,17 +17,8 @@
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
-      var e,
-        _this = this;
+      var _this = this;
       this.num_result.html(util.prettyNumbers(progressObj["total_results"]));
-      if (!isNaN(progressObj["stats"])) {
-        try {
-
-        } catch (_error) {
-          e = _error;
-          c.log("onprogress error", e);
-        }
-      }
       return safeApply(this.s, function() {
         return _this.s.$parent.progress = Math.round(progressObj["stats"]);
       });
@@ -144,10 +136,11 @@
     };
 
     KWICResults.prototype.getProxy = function() {
-      if (this.$result.is(".reading_mode")) {
-        return this.readingProxy;
-      }
       return this.proxy;
+    };
+
+    KWICResults.prototype.isReadingMode = function() {
+      return this.s.reading_mode;
     };
 
     KWICResults.prototype.onentry = function() {
@@ -239,11 +232,13 @@
         data.kwic = [];
       }
       c.log("corpus_results");
-      isReading = this.$result.is(".reading_mode");
+      isReading = this.isReadingMode();
       this.s.$apply(function($scope) {
         c.log("apply kwic search data", data);
         if (isReading) {
-          return $scope.setContextData(data);
+          $scope.setContextData(data);
+          _this.selectionManager.deselect();
+          return _this.s.$root.word_selected = null;
         } else {
           return $scope.setKwicData(data);
         }
@@ -264,7 +259,9 @@
       }
       this.$result.localize();
       this.centerScrollbar();
-      return this.$result.find(".match").children().first().click();
+      if (!this.s.$root.word_selected && !isReading) {
+        return this.$result.find(".match").children().first().click();
+      }
     };
 
     KWICResults.prototype.showNoResults = function() {
@@ -360,7 +357,7 @@
       c.log("handlePaginationClick", new_page_index, page);
       self = this;
       if (new_page_index !== page || !!force_click) {
-        isReading = this.$result.is(".reading_mode");
+        isReading = this.isReadingMode();
         kwicCallback = this.renderResult;
         this.getProxy().makeRequest(this.buildQueryOptions(), new_page_index, (function(progressObj) {
           return self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
@@ -378,24 +375,49 @@
     };
 
     KWICResults.prototype.buildQueryOptions = function(cqp) {
-      var opts;
+      var getSortParams, opts;
       c.log("buildQueryOptions", cqp);
       opts = {};
+      getSortParams = function() {
+        var rnd, sort;
+        sort = search().sort;
+        if (!sort) {
+          return {};
+        }
+        if (sort === "random") {
+          if (search().random_seed) {
+            rnd = search().random_seed;
+          } else {
+            rnd = Math.ceil(Math.random() * 10000000);
+            search({
+              random_seed: rnd
+            });
+          }
+          return {
+            sort: sort,
+            random_seed: rnd
+          };
+        }
+        return {
+          sort: sort
+        };
+      };
       opts.ajaxParams = {
         command: "query",
         cqp: cqp || this.proxy.prevCQP,
         queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
-        sort: $(".sort_select").val(),
-        random_seed: opts.sort === "random" ? $.bbq.getState("random_seed") : void 0,
-        context: this.$result.is(".reading_mode") || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0
+        context: this.isReadingMode() || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0,
+        within: settings.corpusListing.getWithinQueryString()
       };
+      _.extend(opts.ajaxParams, getSortParams());
       return opts;
     };
 
     KWICResults.prototype.makeRequest = function(page_num, cqp) {
       var isReading, kwicCallback,
         _this = this;
-      isReading = this.$result.is(".reading_mode");
+      this.showPreloader();
+      isReading = this.isReadingMode();
       safeApply(this.s, function() {
         if (isReading) {
           return _this.s.setContextData({
@@ -439,7 +461,7 @@
 
     KWICResults.prototype.selectNext = function() {
       var i, next;
-      if (!this.$result.is(".reading_mode")) {
+      if (!this.isReadingMode()) {
         i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
         next = this.getCurrentRow().get(i + 1);
         if (next == null) {
@@ -454,7 +476,7 @@
 
     KWICResults.prototype.selectPrev = function() {
       var i, prev;
-      if (!this.$result.is(".reading_mode")) {
+      if (!this.isReadingMode()) {
         i = this.getCurrentRow().index(this.$result.find(".token_selected").get(0));
         if (i === 0) {
           return;
@@ -470,7 +492,7 @@
     KWICResults.prototype.selectUp = function() {
       var current, def, prevMatch, searchwords;
       current = this.selectionManager.selected;
-      if (!this.$result.is(".reading_mode")) {
+      if (!this.isReadingMode()) {
         prevMatch = this.getWordAt(current.offset().left + current.width() / 2, current.closest("tr").prevAll(".not_corpus_info").first());
         prevMatch.click();
       } else {
@@ -484,7 +506,7 @@
     KWICResults.prototype.selectDown = function() {
       var current, def, nextMatch, searchwords;
       current = this.selectionManager.selected;
-      if (!this.$result.is(".reading_mode")) {
+      if (!this.isReadingMode()) {
         nextMatch = this.getWordAt(current.offset().left + current.width() / 2, current.closest("tr").nextAll(".not_corpus_info").first());
         nextMatch.click();
       } else {

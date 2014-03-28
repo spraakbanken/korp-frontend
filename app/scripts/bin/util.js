@@ -1,3 +1,4 @@
+//@ sourceMappingURL=util.map
 (function() {
   var added_corpora_ids,
     __slice = [].slice,

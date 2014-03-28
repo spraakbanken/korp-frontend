@@ -1,3 +1,4 @@
+//@ sourceMappingURL=app.map
 (function() {
   window.korpApp = angular.module('korpApp', ["watchFighters", 'ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "angularSpinner", "uiSlider", "ui.sortable", "pasvaz.bindonce"]);
 
@@ -29,7 +30,6 @@
       c.log("corpuschooserchange", corpora);
       settings.corpusListing.select(corpora);
       nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id");
-      c.log("corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length);
       if (corpora.length && _.intersection(corpora, nonprotected).length !== nonprotected.length) {
         $location.search("corpus", corpora.join(","));
       } else {
@@ -37,14 +37,13 @@
       }
       if (corpora.length) {
         view.updateReduceSelect();
-        view.updateContextSelect("within");
       }
       enableSearch = !!corpora.length;
       view.enableSearch(enableSearch);
       return isInit = false;
     });
     return searches.infoDef.then(function() {
-      var all_default_corpora, corp_array, corpus, pre_item, processed_corp_array, _i, _len, _ref;
+      var all_default_corpora, corp_array, corpus, pre_item, processed_corp_array, _i, _len, _ref, _ref1;
       corpus = $location.search().corpus;
       if (corpus) {
         corp_array = corpus.split(",");
@@ -56,13 +55,18 @@
         corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
         return $("#select_corpus").val(corpus);
       } else {
-        all_default_corpora = [];
-        _ref = settings.preselected_corpora;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          pre_item = _ref[_i];
-          pre_item = pre_item.replace(/^__/g, '');
-          all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item));
+        if (!((_ref = settings.preselected_corpora) != null ? _ref.length : void 0)) {
+          all_default_corpora = _.pluck(settings.corpusListing.corpora, "id");
+        } else {
+          all_default_corpora = [];
+          _ref1 = settings.preselected_corpora;
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            pre_item = _ref1[_i];
+            pre_item = pre_item.replace(/^__/g, '');
+            all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item));
+          }
         }
+        settings.preselected_corpora = all_default_corpora;
         settings.corpusListing.select(all_default_corpora);
         return corpusChooserInstance.corpusChooser("selectItems", all_default_corpora);
       }

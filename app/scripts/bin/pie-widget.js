@@ -1,3 +1,4 @@
+//@ sourceMappingURL=pie-widget.map
 (function() {
   var pie_widget;
 

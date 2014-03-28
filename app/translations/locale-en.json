@@ -143,6 +143,8 @@
 	"no_context_support" : "does not support extended context",
 	"within_sentence" : "sentence",
     "within_paragraph" : "up to paragraph",
+    "within_text" : "up to text",
+    "within_warn" : "not all selected corpora support extended context",
     "asterix" : "*",
 	"appearance_context" : "not sorted",
 	"word_context" : "matched word(s)",

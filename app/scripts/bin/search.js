@@ -1,3 +1,4 @@
+//@ sourceMappingURL=search.map
 (function() {
   var BaseSearch,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
@@ -92,30 +93,6 @@
         return search("search", null);
       }
     });
-  };
-
-  view.updateContextSelect = function(withinOrContext) {
-    var intersect, opts, union;
-    intersect = settings.corpusListing.getAttrIntersection(withinOrContext);
-    union = settings.corpusListing.getAttrUnion(withinOrContext);
-    opts = $("." + withinOrContext + "_select option");
-    opts.data("locSuffix", null).attr("disabled", null).removeClass("limited");
-    if (union.length > intersect.length) {
-      opts.each(function() {
-        if ($.inArray($(this).attr("value"), intersect) === -1) {
-          return $(this).addClass("limited").data("locSuffix", "asterix");
-        }
-      });
-    } else if (union.length === 1 && intersect.length === 1) {
-      opts.each(function() {
-        if ($.inArray($(this).attr("value"), intersect) !== -1) {
-          return $(this).attr("disabled", null);
-        } else {
-          return $(this).attr("disabled", "disabled").parent().val("sentence").change();
-        }
-      });
-    }
-    return $("." + withinOrContext + "_select").localize();
   };
 
   view.updateReduceSelect = function() {

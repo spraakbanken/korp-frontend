@@ -28,8 +28,9 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
     readingChange = () ->
-        if s.instance?.proxy.pendingRequests.length
-            $.when(s.instance.pendingRequests...).then () ->
+        c.log "reading change"
+        if s.instance?.getProxy().pendingRequests.length
+            $.when(s.instance.getProxy().pendingRequests...).then () ->
                 s.instance.makeRequest()
 
     s.setupReadingHash = () ->
@@ -89,10 +90,6 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
             id = (linkCorpusId or mainCorpusId)
 
             if prevCorpus != id
-                # id = mainCorpusId
-                # if currentMode == "parallel"
-                #     id = sentence.corpus.split("|")[1].toLowerCase()
-
                 corpus = settings.corpora[id]
                 newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
                 output.push newSent

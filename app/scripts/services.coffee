@@ -72,6 +72,34 @@ korpApp.factory "utils", ($location) ->
                     obj.post_change?(val)
 
 
+korpApp.factory "debounce", ($timeout) ->
+    (func, wait, options) ->
+        args = null
+        inited = null
+        result = null
+        thisArg = null
+        timeoutDeferred = null
+        trailing = true
+        
+        delayed = ->
+            inited = timeoutDeferred = null
+            result = func.apply(thisArg, args) if trailing
+        if options is true
+            leading = true
+            trailing = false
+        else if options and angular.isObject(options)
+            leading = options.leading
+            trailing = (if "trailing" of options then options.trailing else trailing)
+        return () ->
+            args = arguments
+            thisArg = this
+            $timeout.cancel timeoutDeferred
+            if not inited and leading
+                inited = true
+                result = func.apply(thisArg, args)
+            else
+                timeoutDeferred = $timeout(delayed, wait)
+            result
 
 korpApp.factory 'backend', ($http, $q, utils) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
@@ -121,47 +149,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                 def.resolve()
                 initTimeGraph(timedef)
 
-
-            
-
-
-
         kwicRequest : (cqp, page) ->
-            kwicResults.showPreloader()
-            # kwicResults.s.$parent.loading = true
-            isReading = search().reading
             
             c.log "kwicRequest", page, cqp
             kwicResults.makeRequest(page, cqp)
 
-            return
-
-            #var kwicCallback = isReading ? kwicResults.renderContextResult : kwicResults.renderKwicResult;
-            kwicCallback = kwicResults.renderResult
-            getSortParams = () -> 
-                sort = search().sort
-                if sort == "random"
-                    if search().random_seed
-                        rnd = search().random_seed
-                    else
-                        rnd = Math.ceil(Math.random() * 10000000)
-                        search random_seed: rnd
-
-                    return {
-                        sort : sort
-                        random_seed : rnd
-                    }
-                return {sort : sort}
-
-
-            kwicopts = {
-                ajaxParams : getSortParams()
-            }
-            
-            kwicopts.ajaxParams.context = settings.corpusListing.getContextQueryString() if isReading or currentMode is "parallel"
-            kwicopts.ajaxParams.cqp = cqp if cqp
-
-            kwicProxy.makeRequest kwicopts, page, $.proxy(kwicResults.onProgress, kwicResults), null, $.proxy(kwicCallback, kwicResults)
         
         kwicSearch : (cqp, page) ->
             # simpleSearch.resetView()
@@ -235,7 +227,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         c.log "watch", $location.search().search
         searchExpr = $location.search().search
         unless searchExpr then return
-        [type, value] = searchExpr?.split("|")
+        [type, value...] = searchExpr?.split("|")
+        value = value.join("|")
         page = $rootScope.search()["page"] or 0
         c.log "page", page
 

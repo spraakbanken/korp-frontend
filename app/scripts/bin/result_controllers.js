@@ -1,3 +1,4 @@
+//@ sourceMappingURL=result_controllers.map
 (function() {
   var korpApp,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
@@ -33,8 +34,9 @@
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     readingChange = function() {
       var _ref;
-      if ((_ref = s.instance) != null ? _ref.proxy.pendingRequests.length : void 0) {
-        return $.when.apply($, s.instance.pendingRequests).then(function() {
+      c.log("reading change");
+      if ((_ref = s.instance) != null ? _ref.getProxy().pendingRequests.length : void 0) {
+        return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
           return s.instance.makeRequest();
         });
       }

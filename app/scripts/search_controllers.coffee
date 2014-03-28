@@ -43,8 +43,8 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             if settings.wordpicture != false and " " not in search.val
                 lemgramResults.showPreloader();
                 lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
-            # else 
-            #     lemgramResults.
+            else  
+                lemgramResults.resetView()
 
         else if search.type == "lemgram"
             s.placeholder = search.val
@@ -73,6 +73,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
 korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) ->
     s = $scope
+    s.within = "sentence"
     s.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
             label : name or $rootScope.activeCQP
@@ -86,6 +87,9 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         c.log "extended submit"
         $location.search("search", null)
         $timeout( () ->
+            c.log "_.last _.values settings.defaultWithin", _.last _.values settings.defaultWithin == s.within
+            within = s.within unless s.within == _.last _.values settings.defaultWithin
+            $location.search("within", s.within or null)
             $location.search("search", "cqp")
         , 0)
 
@@ -98,6 +102,33 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         unless val then return
         $rootScope.activeCQP = CQP.expandOperators(val)
         $location.search("cqp", val)
+
+
+
+
+    s.withins = []
+
+    s.getWithins = () ->
+        intersect = settings.corpusListing.getAttrIntersection("within")
+        union = settings.corpusListing.getAttrUnion("within")
+        # opts = $(".#{withinOrContext}_select option")
+        # opts.data("locSuffix", null).attr("disabled", null).removeClass "limited"
+
+        # return union
+        output = _.map union, (item) -> {value : item}
+
+        # all support enhanced context
+        if union.length > intersect.length
+            for obj in output
+                if obj.value not in intersect
+                    obj.partial = true
+                else
+                    obj.partial = false
+
+        return output
+
+    s.$on "corpuschooserchange", () ->
+        s.withins = s.getWithins()
 
 
 
@@ -208,6 +239,7 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location) ->
         }
 
     $scope.$on "btn_submit", () ->
+        c.log "advanced cqp", $scope.cqp
         $location.search("search", "cqp|" + $scope.cqp)
 
 

@@ -1,3 +1,4 @@
+//@ sourceMappingURL=services.map
 (function() {
   var CompareSearches, korpApp,
     __slice = [].slice;
@@ -110,6 +111,43 @@
     };
   });
 
+  korpApp.factory("debounce", function($timeout) {
+    return function(func, wait, options) {
+      var args, delayed, inited, leading, result, thisArg, timeoutDeferred, trailing;
+      args = null;
+      inited = null;
+      result = null;
+      thisArg = null;
+      timeoutDeferred = null;
+      trailing = true;
+      delayed = function() {
+        inited = timeoutDeferred = null;
+        if (trailing) {
+          return result = func.apply(thisArg, args);
+        }
+      };
+      if (options === true) {
+        leading = true;
+        trailing = false;
+      } else if (options && angular.isObject(options)) {
+        leading = options.leading;
+        trailing = ("trailing" in options ? options.trailing : trailing);
+      }
+      return function() {
+        args = arguments;
+        thisArg = this;
+        $timeout.cancel(timeoutDeferred);
+        if (!inited && leading) {
+          inited = true;
+          result = func.apply(thisArg, args);
+        } else {
+          timeoutDeferred = $timeout(delayed, wait);
+        }
+        return result;
+      };
+    };
+  });
+
   korpApp.factory('backend', function($http, $q, utils) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
@@ -156,44 +194,8 @@
       }
 
       Searches.prototype.kwicRequest = function(cqp, page) {
-        var getSortParams, isReading, kwicCallback, kwicopts;
-        kwicResults.showPreloader();
-        isReading = search().reading;
         c.log("kwicRequest", page, cqp);
-        kwicResults.makeRequest(page, cqp);
-        return;
-        kwicCallback = kwicResults.renderResult;
-        getSortParams = function() {
-          var rnd, sort;
-          sort = search().sort;
-          if (sort === "random") {
-            if (search().random_seed) {
-              rnd = search().random_seed;
-            } else {
-              rnd = Math.ceil(Math.random() * 10000000);
-              search({
-                random_seed: rnd
-              });
-            }
-            return {
-              sort: sort,
-              random_seed: rnd
-            };
-          }
-          return {
-            sort: sort
-          };
-        };
-        kwicopts = {
-          ajaxParams: getSortParams()
-        };
-        if (isReading || currentMode === "parallel") {
-          kwicopts.ajaxParams.context = settings.corpusListing.getContextQueryString();
-        }
-        if (cqp) {
-          kwicopts.ajaxParams.cqp = cqp;
-        }
-        return kwicProxy.makeRequest(kwicopts, page, $.proxy(kwicResults.onProgress, kwicResults), null, $.proxy(kwicCallback, kwicResults));
+        return kwicResults.makeRequest(page, cqp);
       };
 
       Searches.prototype.kwicSearch = function(cqp, page) {
@@ -273,7 +275,8 @@
       if (!searchExpr) {
         return;
       }
-      _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = _ref[1];
+      _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
+      value = value.join("|");
       page = $rootScope.search()["page"] || 0;
       c.log("page", page);
       view.updateSearchHistory(value);

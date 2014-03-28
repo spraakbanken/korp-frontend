@@ -1,3 +1,4 @@
+//@ sourceMappingURL=widgets.map
 (function() {
   var Sidebar;
 

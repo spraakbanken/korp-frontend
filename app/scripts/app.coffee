@@ -44,33 +44,20 @@ korpApp.run ($rootScope, $location, utils, searches) ->
         c.log "corpuschooserchange", corpora
         settings.corpusListing.select corpora
         nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
-        c.log "corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length
+        # c.log "corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length
         if corpora.length and _.intersection(corpora, nonprotected).length isnt nonprotected.length
-            # $.bbq.pushState({"corpus" : corpora.join(",")})
-            # search corpus: corpora.join(",")
             $location.search "corpus", corpora.join(",")
         else
             $location.search "corpus", null
         if corpora.length
-          
-            # if(currentMode == "parallel")
-            #     extendedSearch.reset();
-            # else 
-            #     extendedSearch.refreshTokens();
             view.updateReduceSelect()
-            view.updateContextSelect "within"
 
-        #           view.updateContextSelect("context");
         enableSearch = !!corpora.length
         view.enableSearch enableSearch
 
-
-        # unless isInit
-        #     $location.search("search", null).replace()
         isInit = false
 
 
-    # corpus = search()["corpus"]
     searches.infoDef.then () ->
         corpus = $location.search().corpus
         if corpus
@@ -82,10 +69,15 @@ korpApp.run ($rootScope, $location, utils, searches) ->
             corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
             $("#select_corpus").val corpus
         else
-            all_default_corpora = []
-            for pre_item in settings.preselected_corpora
-                pre_item = pre_item.replace /^__/g, ''
-                all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
+            if not settings.preselected_corpora?.length
+                all_default_corpora = _.pluck settings.corpusListing.corpora, "id"
+            else
+                all_default_corpora = []
+                for pre_item in settings.preselected_corpora
+                    pre_item = pre_item.replace /^__/g, ''
+                    all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
+
+            settings.preselected_corpora = all_default_corpora
             settings.corpusListing.select all_default_corpora
             corpusChooserInstance.corpusChooser "selectItems", all_default_corpora
         

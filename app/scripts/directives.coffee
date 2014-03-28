@@ -71,7 +71,8 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
     
-    getDefaultTmpl = _.template """<input ng-model='model' class='arg_value'
+    getDefaultTmpl = _.template """
+                <input ng-model='input' class='arg_value' ng-change="model = escape(input)"
                 <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
@@ -96,6 +97,13 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             $scope.case = "insensitive"
             # $scope.$emit("change_case", "insensitive")
+
+        $scope.escape = (val) ->
+            c.log "escape", $scope.orObj
+            if $scope.orObj.op != "*="
+                regescape(val)
+            else
+                val
     ]
 
 

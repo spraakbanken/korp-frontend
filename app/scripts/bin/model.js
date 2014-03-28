@@ -1,3 +1,4 @@
+//@ sourceMappingURL=model.map
 (function() {
   var BaseProxy,
     __hasProp = {}.hasOwnProperty,

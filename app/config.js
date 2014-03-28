@@ -172,34 +172,6 @@ settings.setOptions = {
 }
 
 
-// settings.getTransformFunc = function(type, value, opt) {
-
-//  if(type == "word" && !value) return function() {return "";};
-
-//  if(type == "date_interval") {
-//      c.log("date_interval", arguments)
-//      var from = value[0].toString() + "0101";
-//      var to = value[1].toString() + "1231";
-
-//      var operator1 = ">=", operator2 = "<=", bool = "&";
-//      if(opt == "is_not") {
-//          operator1 = "<";
-//          operator2 = ">";
-//          bool = "|";
-//      }
-
-//      return function() {
-//          return $.format("(int(_.text_datefrom) %s %s %s int(_.text_dateto) %s %s)",
-//                  [operator1, from, bool, operator2, to]);
-//      };
-
-//  }
-// };
-
-// settings.liteOptions = $.exclude(settings.defaultOptions, ["starts_with", "contains", "ends_with", "matches"]);
-// settings.liteOptions = _.omit.apply(null, [settings.defaultOptions, "starts_with", "contains", "ends_with", "matches"]);
-
-
 var selectType = {
     extended_template : "<select ng-model='model' "
      + "ng-options='tuple[0] as localize(tuple[1]) for tuple in dataset' ></select>",
@@ -722,8 +694,8 @@ settings.corporafolders.magazines = {
  * PRESELECTED CORPORA
  * Folders will be expanded to all corpora. Optionally prefix folders with __ , which will be ignored.
  */
-settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk", 
-                                "fof", "twitter", "__socialmedia.bloggmix", "romi", "romii", "rom99", "storsuc"];
+// settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk", 
+//                                 "fof", "twitter", "__socialmedia.bloggmix", "romi", "romii", "rom99", "storsuc"];
 
 /*
  * CORPORA

@@ -146,6 +146,8 @@
 	"no_context_support" : "stödjer ej utökad kontext",
 	"within_sentence" : "mening",
 	"within_paragraph" : "upp till stycke",
+	"within_text" : "upp till text",
+	"within_warn" : "vissa valda korpusar stödjer inte utökad kontext",
 	"asterix" : "*",
 	"appearance_context" : "förekomst",
 	"word_context" : "träff",

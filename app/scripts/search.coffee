@@ -79,29 +79,29 @@ view.initSearchOptions = ->
             search("search", null)
 
 
-view.updateContextSelect = (withinOrContext) ->
-    intersect = settings.corpusListing.getAttrIntersection(withinOrContext)
-    union = settings.corpusListing.getAttrUnion(withinOrContext)
-    opts = $(".#{withinOrContext}_select option")
-    opts.data("locSuffix", null).attr("disabled", null).removeClass "limited"
+# view.updateContextSelect = (withinOrContext) ->
+#     intersect = settings.corpusListing.getAttrIntersection(withinOrContext)
+#     union = settings.corpusListing.getAttrUnion(withinOrContext)
+#     opts = $(".#{withinOrContext}_select option")
+#     opts.data("locSuffix", null).attr("disabled", null).removeClass "limited"
 
-    # all support enhanced context
-    if union.length > intersect.length
+#     # all support enhanced context
+#     if union.length > intersect.length
 
-        # partial support for enhanced context
-        opts.each ->
-            $(this).addClass("limited").data "locSuffix", "asterix" if $.inArray($(this).attr("value"), intersect) is -1
+#         # partial support for enhanced context
+#         opts.each ->
+#             $(this).addClass("limited").data "locSuffix", "asterix" if $.inArray($(this).attr("value"), intersect) is -1
 
-    else if union.length is 1 and intersect.length is 1
+#     else if union.length is 1 and intersect.length is 1
 
-        # no support
-        opts.each ->
-            unless $.inArray($(this).attr("value"), intersect) is -1
-                $(this).attr "disabled", null
-            else
-                $(this).attr("disabled", "disabled").parent().val("sentence").change()
+#         # no support
+#         opts.each ->
+#             unless $.inArray($(this).attr("value"), intersect) is -1
+#                 $(this).attr "disabled", null
+#             else
+#                 $(this).attr("disabled", "disabled").parent().val("sentence").change()
 
-    $(".#{withinOrContext}_select").localize()
+#     $(".#{withinOrContext}_select").localize()
 
 view.updateReduceSelect = ->
     cl = settings.corpusListing
