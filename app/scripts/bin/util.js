@@ -715,6 +715,23 @@
     return outStrNum;
   };
 
+  util.suffixedNumbers = function(num) {
+    var out;
+    out = "";
+    if (num < 1000) {
+      out = num.toString();
+    } else if ((1000 <= num && num < 1e6)) {
+      out = (num / 1000).toFixed(2).toString() + "K";
+    } else if ((1e6 <= num && num < 1e9)) {
+      out = (num / 1e6).toFixed(2).toString() + "M";
+    } else if ((1e9 <= num && num < 1e12)) {
+      out = (num / 1e9).toFixed(2).toString() + "G";
+    } else if (1e12 <= num) {
+      out = (num / 1e12).toFixed(2).toString() + "T";
+    }
+    return out.replace(".", "<span rel=\"localize[util_decimalseparator]\">" + util.getLocaleString("util_decimalseparator") + "</span>");
+  };
+
   util.loadCorpora = function() {
     var outStr, selected;
     added_corpora_ids = [];
@@ -722,13 +739,23 @@
     window.corpusChooserInstance = $("#corpusbox").corpusChooser({
       template: outStr,
       infoPopup: function(corpusID) {
-        var corpusObj, lastUpdate, maybeInfo, numSentences, numTokens, output, sentenceString, supportsContext;
+        var baseLang, baseLangSentenceHTML, baseLangTokenHTML, corpusObj, lang, lastUpdate, maybeInfo, numSentences, numTokens, output, sentenceString, supportsContext, _ref;
         corpusObj = settings.corpora[corpusID];
         maybeInfo = "";
         if (corpusObj.description) {
           maybeInfo = "<br/><br/>" + corpusObj.description;
         }
-        numTokens = corpusObj["info"]["Size"];
+        numTokens = corpusObj.info.Size;
+        baseLang = (_ref = settings.corpora[corpusID]) != null ? _ref.linked_to : void 0;
+        if (baseLang) {
+          lang = " (" + util.getLocaleString(settings.corpora[corpusID].lang) + ")";
+          baseLangTokenHTML = "" + (util.getLocaleString("corpselector_numberoftokens")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Size)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
+          baseLangSentenceHTML = "" + (util.getLocaleString("corpselector_numberofsentences")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Sentences)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
+        } else {
+          lang = "";
+          baseLangTokenHTML = "";
+          baseLangSentenceHTML = "";
+        }
         numSentences = corpusObj["info"]["Sentences"];
         lastUpdate = corpusObj["info"]["Updated"];
         if (!lastUpdate) {
@@ -738,7 +765,7 @@
         if (numSentences) {
           sentenceString = util.prettyNumbers(numSentences.toString());
         }
-        output = "<b>\n    <img class=\"popup_icon\" src=\"img/korp_icon.png\" />\n    " + corpusObj.title + "\n</b>\n" + maybeInfo + "\n<br/><br/>\n" + (util.getLocaleString("corpselector_numberoftokens")) + ":\n<b>" + (util.prettyNumbers(numTokens)) + "</b>\n<br/>" + (util.getLocaleString("corpselector_numberofsentences")) + ": \n<b>" + sentenceString + "</b>\n<br/>\n" + (util.getLocaleString("corpselector_lastupdate")) + ": \n<b>" + lastUpdate + "</b>\n<br/><br/>";
+        output = "<b>\n    <img class=\"popup_icon\" src=\"img/korp_icon.png\" />\n    " + corpusObj.title + "\n</b>\n" + maybeInfo + "\n<br/><br/>" + baseLangTokenHTML + "\n" + (util.getLocaleString("corpselector_numberoftokens")) + ":\n<b>" + (util.prettyNumbers(numTokens)) + "</b>" + lang + "\n<br/>" + baseLangSentenceHTML + "\n" + (util.getLocaleString("corpselector_numberofsentences")) + ": \n<b>" + sentenceString + "</b>" + lang + "\n<br/>\n" + (util.getLocaleString("corpselector_lastupdate")) + ": \n<b>" + lastUpdate + "</b>\n<br/><br/>";
         supportsContext = _.keys(corpusObj.context).length > 1;
         if (supportsContext) {
           output += $("<div>").localeKey("corpselector_supports").html() + "<br>";

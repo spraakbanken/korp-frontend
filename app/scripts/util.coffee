@@ -558,6 +558,20 @@ util.prettyNumbers = (numstring) ->
     outStrNum = outStrNum.replace(regex, "$1" + "<span rel=\"localize[util_numbergroupseparator]\">" + util.getLocaleString("util_numbergroupseparator") + "</span>" + "$2")  while regex.test(outStrNum)
     outStrNum
 
+util.suffixedNumbers = (num) ->
+    out = ""
+    if num < 1000 # 232
+        out = num.toString()
+    else if 1000 <= num < 1e6 # 232,21K
+        out = (num/1000).toFixed(2).toString() + "K"
+    else if 1e6 <= num < 1e9 # 232,21M
+        out = (num/1e6).toFixed(2).toString() + "M"
+    else if 1e9 <= num < 1e12 # 232,21G
+        out = (num/1e9).toFixed(2).toString() + "G"
+    else if 1e12 <= num # 232,21T
+        out = (num/1e12).toFixed(2).toString() + "T"
+    return out.replace(".","<span rel=\"localize[util_decimalseparator]\">" + util.getLocaleString("util_decimalseparator") + "</span>")
+
 # Goes through the settings.corporafolders and recursively adds the settings.corpora hierarchically to the corpus chooser widget 
 util.loadCorpora = ->
     added_corpora_ids = []
@@ -568,7 +582,22 @@ util.loadCorpora = ->
             corpusObj = settings.corpora[corpusID]
             maybeInfo = ""
             maybeInfo = "<br/><br/>" + corpusObj.description  if corpusObj.description
-            numTokens = corpusObj["info"]["Size"]
+            numTokens = corpusObj.info.Size
+            baseLang = settings.corpora[corpusID]?.linked_to
+            if baseLang
+                lang = " (" + util.getLocaleString(settings.corpora[corpusID].lang) + ")"
+                #baseLangTag = " (" + settings.corpora[baseLang].lang + ")"
+                baseLangTokenHTML = """#{util.getLocaleString("corpselector_numberoftokens")}: <b>#{util.prettyNumbers(settings.corpora[baseLang].info.Size)}
+                </b> (#{util.getLocaleString(settings.corpora[baseLang].lang)})<br/>
+                """
+                baseLangSentenceHTML = """#{util.getLocaleString("corpselector_numberofsentences")}: <b>#{util.prettyNumbers(settings.corpora[baseLang].info.Sentences)}
+                </b> (#{util.getLocaleString(settings.corpora[baseLang].lang)})<br/>
+                """
+            else
+                lang = ""
+                baseLangTokenHTML = ""
+                baseLangSentenceHTML = ""
+
             numSentences = corpusObj["info"]["Sentences"]
             lastUpdate = corpusObj["info"]["Updated"]
             lastUpdate = "?" unless lastUpdate
@@ -581,11 +610,12 @@ util.loadCorpora = ->
                 #{corpusObj.title}
             </b>
             #{maybeInfo}
-            <br/><br/>
+            <br/><br/>#{baseLangTokenHTML}
             #{util.getLocaleString("corpselector_numberoftokens")}:
-            <b>#{util.prettyNumbers(numTokens)}</b>
-            <br/>#{util.getLocaleString("corpselector_numberofsentences")}: 
-            <b>#{sentenceString}</b>
+            <b>#{util.prettyNumbers(numTokens)}</b>#{lang}
+            <br/>#{baseLangSentenceHTML}
+            #{util.getLocaleString("corpselector_numberofsentences")}: 
+            <b>#{sentenceString}</b>#{lang}
             <br/>
             #{util.getLocaleString("corpselector_lastupdate")}: 
             <b>#{lastUpdate}</b>

@@ -5,6 +5,7 @@ var hp_corpusChooser = {
 	},
 
 	_create: function() {
+		this.totalTokenCount = 0;
 		this._transform();
 		var self = this;
 
@@ -47,7 +48,7 @@ var hp_corpusChooser = {
 		return IDArray;
 	},
 	selectItems: function(item_ids) {
-		item_ids = $.map(item_ids, function(item){ return "hpcorpus_"+item; })
+		item_ids = $.map(item_ids, function(item){ return "hpcorpus_" + item; })
 		// Check items from outside
 		var allboxes = $(".checkbox");
 		allboxes.each(function() {
@@ -59,7 +60,7 @@ var hp_corpusChooser = {
 			var chk = $(".checkbox", this);
 			if($.inArray(chk.attr('id'), item_ids) != -1 && !$(this).is(".disabled")) {
 				/* Change status of item */
-	 			hp_this.setStatus(chk,"checked");
+	 			hp_this.setStatus(chk, "checked");
 	 			hp_this.updateState(chk); // <-?
 	 			var ancestors = chk.parents('.tree');
 	 			ancestors.each(function(){
@@ -91,11 +92,11 @@ var hp_corpusChooser = {
 		});
 		var theBox = element.children('label').children('.checkbox');
 		if (numbOfUnchecked > 0 && numbOfChecked > 0) {
-			this.setStatus(theBox,"intermediate"); // Intermediate
+			this.setStatus(theBox, "intermediate"); // Intermediate
 		} else if (numbOfUnchecked > 0 && numbOfChecked == 0) {
-			this.setStatus(theBox,"unchecked"); // Unchecked
+			this.setStatus(theBox, "unchecked"); // Unchecked
 		} else if (numbOfChecked > 0 && numbOfUnchecked == 0) {
-			this.setStatus(theBox,"checked"); // Checked
+			this.setStatus(theBox, "checked"); // Checked
 		}
 
 		var numDisabled = element.find('.disabled').length;
@@ -146,22 +147,23 @@ var hp_corpusChooser = {
 		}
 
 		// Number of tokens
-		var totNumberOfTokens = 0;
-        var totNumberOfSentences = 0;
+		var selectedNumberOfTokens = 0;
+        var selectedNumberOfSentences = 0;
 		checked_checkboxes.each(function(key, corpItem) {
 			var corpusID = $(this).attr('id').slice(9);
-			totNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
+			selectedNumberOfTokens += parseInt(settings.corpora[corpusID]["info"]["Size"]);
 			var numSen = parseInt(settings.corpora[corpusID]["info"]["Sentences"]);
-			if(!isNaN(numSen)) totNumberOfSentences += numSen;
+			if(!isNaN(numSen)) selectedNumberOfSentences += numSen;
 		});
+		var totalNumberOfTokens = this.totalTokenCount;
 
 		$("#hp_corpora_title1").text(header_text);
 		$("#hp_corpora_titleOf").toggle(header_of);
 		$("#hp_corpora_titleTotal").text(header_total);
 		$("#hp_corpora_title2").attr({"rel" : 'localize[' + header_text_2 + ']'});
 		$("#hp_corpora_title2").text(util.getLocaleString(header_text_2));
-		$("#hp_corpora_titleTokens").html(" — " + util.prettyNumbers(totNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
-        $("#sentenceCounter").html(util.prettyNumbers(totNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
+		$("#hp_corpora_titleTokens").html(" — " + util.suffixedNumbers(selectedNumberOfTokens.toString()) + '<span rel="localize[corpselector_of]">' + util.getLocaleString("corpselector_of") + '</span>' + util.suffixedNumbers(totalNumberOfTokens.toString()) + " ").append($("<span>").localeKey("corpselector_tokens"));
+        $("#sentenceCounter").html(util.prettyNumbers(selectedNumberOfSentences.toString()) + " ").append($("<span>").localeKey("corpselector_sentences_long"));
 	},
 	triggerChange : function() {
 		this._trigger("change", null, [this.selectedItems()]);
@@ -180,7 +182,6 @@ var hp_corpusChooser = {
 			} else {
 				body = el.html();
 			}
-
 
 			var newHTML = recursive_transform(body,0);
 			$(".popupchecks .checks").html(newHTML);
@@ -226,20 +227,17 @@ var hp_corpusChooser = {
 				e.stopPropagation();
 			});
 
-			$(".scroll_checkboxes").unbind("click");
-			$(".scroll_checkboxes").click(function(e) {
+			$(".scroll_checkboxes").unbind("click").click(function(e) {
 				e.stopPropagation();
 			});
 
 			// Prevent clicking through the box
-			$(".popupchecks").unbind("click");
-			$(".popupchecks").click(function(e) {
+			$(".popupchecks").unbind("click").click(function(e) {
 				e.stopPropagation();
 			});
 
 			/* SELECT ALL BUTTON */
-			$(".selectall").unbind("click");
-			$(".selectall").click(function() {
+			$(".selectall").unbind("click").click(function() {
 				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "checked");
 				hp_this.countSelected();
 				// Fire callback "change":
@@ -248,8 +246,7 @@ var hp_corpusChooser = {
 			});
 
 			/* SELECT NONE BUTTON */
-			$(".selectnone").unbind("click");
-			$(".selectnone").click(function() {
+			$(".selectnone").unbind("click").click(function() {
 				hp_this.setStatus($(".boxlabel .checkbox, div.checks .boxdiv:not(.disabled) .checkbox"), "unchecked");
 				hp_this.countSelected();
 				// Fire callback "change":
@@ -397,8 +394,11 @@ var hp_corpusChooser = {
 					var item_id = $(this).attr('id');
 					if(item_id == null)
 						item_id = "";
-					if(item_id != "")
+
+					if(item_id != "") {
+						hp_this.totalTokenCount += parseInt(settings.corpora[item_id]["info"]["Size"]);
 						item_id = "hpcorpus_" + item_id;
+					}
 
 					if(theHTML.indexOf("<li") != -1 || theHTML.indexOf("<LI") != -1 ) {
 						var cssattrib = "";
@@ -411,7 +411,7 @@ var hp_corpusChooser = {
 						if(folderdescription == "undefined") folderdescription = "";
 						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="' + cssattrib + '" class="tree collapsed '+ levelindent +'"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 
-						outStr += recursive_transform(theHTML, levelindent+1);
+						outStr += recursive_transform(theHTML, levelindent + 1);
 						outStr += "</div>";
 					} else {
 						var disable = settings.corpora[$(this).attr('id')].limited_access === true && 
