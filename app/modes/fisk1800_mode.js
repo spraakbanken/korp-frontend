@@ -21,13 +21,19 @@ settings.corporafolders.bd1700 = {
 
 settings.corporafolders.bd1800 = {
 	title : "Brev och dagböcker 1800-tal",
-	contents : ["fsbbrev1800tal"],
+	contents : ["fsbbrev1800-1849", "fsbbrev1850-1899"],
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
 settings.corporafolders.sakprosa = {
 	title : "Sakprosa",
 	contents : ["sakprosa1750-1799", "sakprosa1800-1849", "sakprosa1850-1899", "sakprosa1900-1959"],
+	description : ""
+};
+
+settings.corporafolders.skonlitteratur = {
+	title : "Skönlitteratur",
+	contents : ["fsbskonlit1800-1849", "fsbskonlit1850-1899", "fsbskonlit1900-1959"],
 	description : ""
 };
 
@@ -45,13 +51,13 @@ settings.corporafolders.tidskrifter.tidskrifter1849 = {
 
 settings.corporafolders.tidskrifter.tidskrifter1899 = {
 	title : "Tidskrifter 1850–1899",
-	contents : ["filosofia1850-1899"],
+	contents : ["filosofia1850-1899", "litterartidskrift-helsingfors"],
 	description : ""
 };
 
 settings.corporafolders.tidskrifter.tidskrifter1959 = {
 	title : "Tidskrifter 1900–1959",
-	contents : ["argus", "astra", "euterpe", "filosofia1900-1959"],
+	contents : ["argus", "euterpe", "filosofia1900-1959", "husmodern"],
 	description : ""
 };
 
@@ -85,9 +91,9 @@ settings.corpora.fsbbrev1700tal = {
 	}
 };
 
-settings.corpora.fsbbrev1800tal = {
-	id : "fsbbrev1800tal",
-	title : "Brev 1800-tal",
+settings.corpora["fsbbrev1800-1849"] = {
+	id : "fsbbrev1800-1849",
+	title : "Brev 1800–1849",
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
@@ -114,9 +120,64 @@ settings.corpora.fsbbrev1800tal = {
 	}
 };
 
-settings.corpora.fsbskonlit1800tal = {
-	id : "fsbskonlit1800tal",
-	title : "Skönlitteratur 1800-tal",
+settings.corpora["fsbbrev1850-1899"] = {
+	id : "fsbbrev1850-1899",
+	title : "Brev 1850–1899",
+	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_sender" : {label : "sender"},
+		"text_recipient" : {label : "text_recipient"},
+		"text_title" : {label : "title"},
+		"text_date" : {label : "date"},
+		"text_source" : {label : "source"},
+		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["fsbskonlit1800-1849"] = {
+	id : "fsbskonlit1800-1849",
+	title : "Skönlitteratur 1800–1849",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_author" : {label : "author"},
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["fsbskonlit1850-1899"] = {
+	id : "fsbskonlit1850-1899",
+	title : "Skönlitteratur 1850–1899",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
@@ -389,17 +450,54 @@ settings.corpora.argus = {
 	}
 };
 
-settings.corpora.astra = {
-    id : "astra",
-    title : "Astra 1929–1959",
-    description : "",
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : modernAttrs,
-    struct_attributes : {
-        text_date : {label : "year"},
-        text_issue : {label : "issue"}
-    }
+settings.corpora.husmodern = {
+	id : "husmodern",
+	title : "Husmodern 1903–1912",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["litterartidskrift-helsingfors"] = {
+	id : "litterartidskrift-helsingfors",
+	title : "Litterär tidskrift utgifven i Helsingfors",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
 };
 
 settings.corpora.euterpe = {
