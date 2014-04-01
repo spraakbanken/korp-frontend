@@ -5,3 +5,4 @@ node_modules
 /.tmp
 /app/components/angular-bootstrap/template
 /app/scripts/bin/**/*.map
+/test/spec/*.map

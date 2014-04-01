@@ -99,7 +99,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             # $scope.$emit("change_case", "insensitive")
 
         $scope.escape = (val) ->
-            c.log "escape", $scope.orObj
             if $scope.orObj.op != "*="
                 regescape(val)
             else

@@ -1,4 +1,3 @@
-//@ sourceMappingURL=cqp.map
 (function() {
   var regescape, stringifyCqp,
     _this = this,
@@ -168,3 +167,7 @@
   ]));
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=cqp.js.map
+*/

@@ -1,4 +1,3 @@
-//@ sourceMappingURL=pie-widget.map
 (function() {
   var pie_widget;
 
@@ -267,3 +266,7 @@
   $.widget("hp.pie_widget", pie_widget);
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=pie-widget.js.map
+*/

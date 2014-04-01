@@ -1,4 +1,3 @@
-//@ sourceMappingURL=util.map
 (function() {
   var added_corpora_ids,
     __slice = [].slice,
@@ -994,3 +993,7 @@
   };
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=util.js.map
+*/

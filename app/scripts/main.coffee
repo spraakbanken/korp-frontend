@@ -1,5 +1,4 @@
 
-window.currentMode = $.deparam.querystring().mode or "default"
 window.searchProxy = new model.SearchProxy()
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()

@@ -1,9 +1,6 @@
-//@ sourceMappingURL=main.map
 (function() {
   var creds, deferred_domReady, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-  window.currentMode = $.deparam.querystring().mode || "default";
 
   window.searchProxy = new model.SearchProxy();
 
@@ -466,3 +463,7 @@
   };
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=main.js.map
+*/

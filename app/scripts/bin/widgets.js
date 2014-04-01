@@ -1,4 +1,3 @@
-//@ sourceMappingURL=widgets.map
 (function() {
   var Sidebar;
 
@@ -417,3 +416,7 @@
   };
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=widgets.js.map
+*/

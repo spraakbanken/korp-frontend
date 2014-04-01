@@ -1,4 +1,3 @@
-//@ sourceMappingURL=directives.map
 (function() {
   var korpApp;
 
@@ -126,7 +125,6 @@
           return $scope["case"] = "insensitive";
         };
         return $scope.escape = function(val) {
-          c.log("escape", $scope.orObj);
           if ($scope.orObj.op !== "*=") {
             return regescape(val);
           } else {
@@ -507,3 +505,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=directives.js.map
+*/

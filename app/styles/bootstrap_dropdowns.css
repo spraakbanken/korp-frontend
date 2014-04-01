@@ -1,21 +1,25 @@
 /* line 8, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropup,
 .dropdown {
   position: relative;
 }
 
 /* line 11, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-toggle {
   *margin-bottom: -3px;
 }
 
 /* line 16, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-toggle:active,
 .open .dropdown-toggle {
   outline: 0;
 }
 
 /* line 22, compass_twitter_bootstrap/_dropdowns.scss */
+
 .caret {
   display: inline-block;
   width: 0;
@@ -28,12 +32,14 @@
 }
 
 /* line 34, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown .caret {
   margin-top: 8px;
   margin-left: 2px;
 }
 
 /* line 41, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -50,22 +56,20 @@
   border: 1px solid rgba(0, 0, 0, 0.2);
   *border-right-width: 2px;
   *border-bottom-width: 2px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
   border-radius: 6px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
   background-clip: padding-box;
 }
+
 /* line 64, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu.pull-right {
   right: 0;
   left: auto;
 }
+
 /* line 70, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu .divider {
   *width: 100%;
   height: 1px;
@@ -75,7 +79,9 @@
   background-color: #e5e5e5;
   border-bottom: 1px solid white;
 }
+
 /* line 75, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu a {
   display: block;
   padding: 3px 20px;
@@ -87,6 +93,7 @@
 }
 
 /* line 90, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu li > a:hover,
 .dropdown-menu li > a:focus,
 .dropdown-submenu:hover > a {
@@ -94,16 +101,13 @@
   color: white;
   background-color: #0088cc;
   background-color: #0081c2;
-  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
   background-image: linear-gradient(to bottom, #0088cc, #0077b3);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085c7', endColorstr='#0074ad', GradientType=0);
 }
 
 /* line 100, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu .active > a,
 .dropdown-menu .active > a:hover {
   color: white;
@@ -111,22 +115,20 @@
   outline: 0;
   background-color: #0088cc;
   background-color: #0081c2;
-  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
-  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
-  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
   background-image: linear-gradient(to bottom, #0088cc, #0077b3);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0085c7', endColorstr='#0074ad', GradientType=0);
 }
 
 /* line 112, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu .disabled > a,
 .dropdown-menu .disabled > a:hover {
   color: #999999;
 }
 
 /* line 116, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-menu .disabled > a:hover {
   text-decoration: none;
   background-color: transparent;
@@ -134,28 +136,35 @@
 }
 
 /* line 124, compass_twitter_bootstrap/_dropdowns.scss */
+
 .open {
   *z-index: 1000;
 }
+
 /* line 129, compass_twitter_bootstrap/_dropdowns.scss */
+
 .open > .dropdown-menu {
   display: block;
 }
 
 /* line 136, compass_twitter_bootstrap/_dropdowns.scss */
+
 .pull-right > .dropdown-menu {
   right: 0;
   left: auto;
 }
 
 /* line 148, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropup .caret,
 .navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
   border-bottom: 4px solid black;
   content: "\2191";
 }
+
 /* line 154, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropup .dropdown-menu,
 .navbar-fixed-bottom .dropdown .dropdown-menu {
   top: auto;
@@ -164,27 +173,29 @@
 }
 
 /* line 163, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-submenu {
   position: relative;
 }
 
 /* line 166, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-submenu > .dropdown-menu {
   top: 0;
   left: 100%;
   margin-top: -6px;
   margin-left: -1px;
-  -webkit-border-radius: 0 6px 6px 6px;
-  -moz-border-radius: 0 6px 6px 6px;
   border-radius: 0 6px 6px 6px;
 }
 
 /* line 175, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-submenu:hover .dropdown-menu {
   display: block;
 }
 
 /* line 179, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-submenu > a:after {
   display: block;
   content: " ";
@@ -200,20 +211,21 @@
 }
 
 /* line 192, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown-submenu:hover > a:after {
   border-left-color: white;
 }
 
 /* line 200, compass_twitter_bootstrap/_dropdowns.scss */
+
 .dropdown .dropdown-menu .nav-header {
   padding-left: 20px;
   padding-right: 20px;
 }
 
 /* line 207, compass_twitter_bootstrap/_dropdowns.scss */
+
 .typeahead {
   margin-top: 2px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
 }

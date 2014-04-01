@@ -1,4 +1,3 @@
-//@ sourceMappingURL=services.map
 (function() {
   var CompareSearches, korpApp,
     __slice = [].slice;
@@ -336,3 +335,7 @@
   })());
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=services.js.map
+*/

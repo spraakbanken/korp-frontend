@@ -1,4 +1,3 @@
-//@ sourceMappingURL=results.map
 (function() {
   var BaseResults, newDataInGraph,
     __hasProp = {}.hasOwnProperty,
@@ -1745,3 +1744,7 @@
   })(BaseResults);
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=results.js.map
+*/

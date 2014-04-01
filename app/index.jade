@@ -17,100 +17,19 @@ html
     //- link(rel='stylesheet', type='text/css', href='components/font-awesome/css/font-awesome.css')
     link(rel='stylesheet', type='text/css', href='styles/styles.css')
     
+    //- bower:css
+    //- endbower
     // endbuild 
     link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
     title Korp
-    //if lte IE 8
-      script(language='javascript', src='lib/flot/excanvas.min.js')
-    script.
-      var isLab = window.location.pathname.split("/")[1] == "korplabb";
-      if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
-      window.c = window.console;
-
-    // build:js scripts/korp_lib.js 
-    script(src='components/json3/lib/json3.js')
-    script(src='components/jquery/jquery.js')
-    script(src='components/jquery-ui/ui/jquery-ui.custom.js')
-
-    script(src='components/angular/angular.js')
-
-    script(src='lib/jquery.localize.js')
-    script(src='components/raphael/raphael.js')
-    script(src='components/jReject/js/jquery.reject.js')
-    script(src='lib/jquery.raphael.spinner.js')
-    script(src='lib/watch-fighters.js')
-    script(src='lib/jquery.format.js')
-
-    script(src='components/modernizr/modernizr.js')
-    script(src='components/yepnope/yepnope.js')
-    script(src='components/jquery-bbq/jquery.ba-bbq.js')
-    script(src='lib/jstorage.js')
-    script(src='lib/jquery.hoverIntent.js')
-    script(src='lib/jquery.ui.preloader.min.js')
-    script(src='lib/jquery.tmpl.js')
-    script(src='lib/jquery.dump.js')
-    script(src='lib/jquery.placeholder.js')
-    script(src='lib/jquery.pagination.js')
-    script(src='lib/flot/jquery.flot.min.js')
-    script(src='lib/flot/jquery.flot.stack.js')
-    //- here
-    script(src='components/SlickGrid/slick.core.js')
-    script(src='lib/jquery.event.drag-2.2.js')
-    script(src='components/SlickGrid/slick.grid.js')
-    script(src='components/SlickGrid/plugins/slick.checkboxselectcolumn.js')
-    script(src='components/SlickGrid/plugins/slick.rowselectionmodel.js')
-    script(src='lib/g.line-min.js')
-    script(src='lib/jquery.tooltip.pack.js')
-
     
-    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js')
-    script(src='components/lodash/dist/lodash.compat.js')
-    script(src="components/underscore.string/lib/underscore.string.js")
-    script(src='components/spin.js/spin.js')
-    script(src='components/angular-spinner/angular-spinner.js')
-
-    script(src='components/angular-bindonce/bindonce.js')
-    script(src='components/angular-slider/angular-slider.js')
-    script(src='lib/angular-sortable.js')
-    
-    script(src='components/moment/moment.js')
-    script(src='scripts/jq_extensions.js')
-    // endbuild  
-    script(src='components/rickshaw/rickshaw.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    script.
-      yepnope({
-      test: $("html.msie7,html.msie8").length,
-      nope: 'components/d3/d3.js'
-      });
-    script(src='config.js')
-    // build:js scripts/scripts.js 
-       
-    script(src='scripts/cqp_parser/CQPParser.js')
-    script(src='scripts/bin/cqp_parser/cqp.js')
-    script(src='scripts/bin/util.js')
-    script(src='scripts/bin/pie-widget.js')
-    script(src='scripts/bin/search.js')
-    script(src='scripts/bin/results.js')
-    script(src='scripts/bin/model.js')
-    script(src='scripts/bin/widgets.js')
-    script(src='scripts/bin/main.js')
-    script(src='scripts/selector_widget.js')
-    script(src='scripts/bin/app.js')
-    script(src='scripts/bin/search_controllers.js')
-    script(src='scripts/bin/result_controllers.js')
-    script(src='scripts/bin/services.js')
-    script(src='scripts/bin/directives.js')
-    // endbuild 
        
   //- body.not_logged_in(ng-app='korpApp')
-  body.not_logged_in
+  body.not_logged_in(style="opacity: 0;")
     noscript
       h2 You need JavaScript to run Korp.
-    script.
-      $("body").css("opacity", 0);
+    //- script.
+      //- $("body").css("opacity", 0);
     #main
       #header
         include includes/header
@@ -232,3 +151,109 @@ html
       <a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
       {{/each}}
       </li>
+
+
+    //- scripts
+
+
+
+
+    //if lte IE 8
+      script(language='javascript', src='lib/flot/excanvas.min.js')
+    script.
+      var isLab = window.location.pathname.split("/")[1] == "korplabb";
+      if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
+      window.c = window.console;
+
+    // build:js scripts/korp_lib.js 
+    script(src='components/json3/lib/json3.js')
+    script(src='components/jquery/jquery.js')
+    //- script(src='components/jquery-ui/ui/jquery-ui.custom.js')
+    script(src='components/jquery-ui/ui/jquery.ui.core.js')
+    script(src='components/jquery-ui/ui/jquery.ui.widget.js')
+    script(src='components/jquery-ui/ui/jquery.ui.autocomplete.js')
+    script(src='components/jquery-ui/ui/jquery.ui.button.js')
+    script(src='components/jquery-ui/ui/jquery.ui.dialog.js')
+    script(src='components/jquery-ui/ui/jquery.ui.effect.js')
+    script(src='components/jquery-ui/ui/jquery.ui.menu.js')
+    script(src='components/jquery-ui/ui/jquery.ui.mouse.js')
+    script(src='components/jquery-ui/ui/jquery.ui.position.js')
+    script(src='components/jquery-ui/ui/jquery.ui.sortable.js')
+
+    script(src='components/angular/angular.js')
+
+    script(src='lib/jquery.localize.js')
+    script(src='components/raphael/raphael.js')
+    script(src='components/jReject/js/jquery.reject.js')
+    script(src='lib/jquery.raphael.spinner.js')
+    script(src='lib/watch-fighters.js')
+    script(src='lib/jquery.format.js')
+
+    script(src='components/modernizr/modernizr.js')
+    script(src='components/yepnope/yepnope.js')
+    script(src='components/jquery-bbq/jquery.ba-bbq.js')
+    script(src='lib/jstorage.js')
+    script(src='lib/jquery.hoverIntent.js')
+    script(src='lib/jquery.ui.preloader.min.js')
+    script(src='lib/jquery.tmpl.js')
+    script(src='lib/jquery.dump.js')
+    script(src='lib/jquery.placeholder.js')
+    script(src='lib/jquery.pagination.js')
+    script(src='lib/flot/jquery.flot.min.js')
+    script(src='lib/flot/jquery.flot.stack.js')
+    //- here
+    script(src='components/SlickGrid/slick.core.js')
+    script(src='lib/jquery.event.drag-2.2.js')
+    script(src='components/SlickGrid/slick.grid.js')
+    script(src='components/SlickGrid/plugins/slick.checkboxselectcolumn.js')
+    script(src='components/SlickGrid/plugins/slick.rowselectionmodel.js')
+    script(src='lib/g.line-min.js')
+    script(src='lib/jquery.tooltip.pack.js')
+
+    
+    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js')
+    script(src='components/lodash/dist/lodash.compat.js')
+    script(src="components/underscore.string/lib/underscore.string.js")
+    script(src='components/spin.js/spin.js')
+    script(src='components/angular-spinner/angular-spinner.js')
+
+    script(src='components/angular-bindonce/bindonce.js')
+    script(src='components/angular-slider/angular-slider.js')
+    script(src='lib/angular-sortable.js')
+    
+    script(src='components/moment/moment.js')
+    script(src='scripts/jq_extensions.js')
+    //- not used currently
+    //- bower:js
+    //- endbower
+    script(src='components/d3/d3.js')
+    script(src='components/rickshaw/rickshaw.js')
+    // endbuild  
+    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
+    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script.
+      window.currentMode = $.deparam.querystring().mode || "default"
+    //-   yepnope({
+    //-   test: $("html.msie7,html.msie8").length,
+    //-   nope: 'components/d3/d3.js'
+    //-   });
+    script(src='config.js')
+    // build:js scripts/scripts.js 
+       
+    script(src='scripts/cqp_parser/CQPParser.js')
+    script(src='scripts/bin/cqp_parser/cqp.js')
+    script(src='scripts/bin/util.js')
+    script(src='scripts/bin/pie-widget.js')
+    script(src='scripts/bin/search.js')
+    script(src='scripts/bin/results.js')
+    script(src='scripts/bin/model.js')
+    script(src='scripts/bin/widgets.js')
+    script(src='scripts/bin/main.js')
+    script(src='scripts/selector_widget.js')
+    script(src='scripts/bin/app.js')
+    script(src='scripts/bin/search_controllers.js')
+    script(src='scripts/bin/result_controllers.js')
+    script(src='scripts/bin/services.js')
+    script(src='scripts/bin/directives.js')
+    // endbuild 
