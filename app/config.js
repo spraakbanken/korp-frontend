@@ -614,7 +614,7 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
 
 settings.corporafolders.fisk.magazines = {
     title : "Tidskrifter",
-    contents : ["astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "jft", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
+    contents : ["astra1960-1979", "astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "jft", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
 settings.corporafolders.protected = {
@@ -3012,6 +3012,19 @@ settings.corpora.astranova = {
     description : "<a href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
     within : settings.spWithin,
     context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : {label : "year"},
+        text_issue : {label : "issue"}
+    }
+};
+
+settings.corpora["astra1960-1979"] = {
+    id : "astra1960-1979",
+    title : "Astra 1960–1979",
+    description : "",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
     attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
