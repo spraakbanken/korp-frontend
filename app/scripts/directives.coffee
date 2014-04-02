@@ -201,7 +201,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     template : '''
     <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">Sök</button>
+            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">{{'search' | loc}}</button>
             <button class="btn btn-small opener" ng-click="togglePopover($event)">
                 <span class="caret"></span>
             </button>
