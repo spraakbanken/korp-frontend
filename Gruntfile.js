@@ -189,12 +189,12 @@ module.exports = function (grunt) {
         generatedImagesDir: '.tmp/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
         javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: ['<%= yeoman.app %>/styles/fonts', "<%= yeoman.app %>/components/font-awesome/fonts"],
+        fontsDir: ['<%= yeoman.app %>/styles/fonts','<%= yeoman.app %>/styles/fonts', "<%= yeoman.app %>/components/font-awesome/fonts"],
         importPath: '<%= yeoman.app %>/components',
-        httpImagesPath: '/images',
+        httpImagesPath: 'images',
         httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/styles/fonts',
-        relativeAssets: false,
+        httpFontsPath: 'styles/fonts',
+        relativeAssets: true,
         assetCacheBuster: false,
         raw: 'Sass::Script::Number.precision = 10\n'
       },
@@ -241,7 +241,10 @@ module.exports = function (grunt) {
       html: ['<%= yeoman.dist %>/*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
-        dirs: ['<%= yeoman.dist %>']
+        dirs: ['<%= yeoman.dist %>'],
+
+        // assetsDirs: ['<%= yeoman.dist %>/styles', '<%= yeoman.dist %>/styles/fonts', '"<%= yeoman.dist %>/components/font-awesome/fonts"' ],
+        // assetsDirs: ['<%= yeoman.dist %>/styles'],
       }
     },
     cssmin: {
@@ -335,12 +338,16 @@ module.exports = function (grunt) {
             '*.{ico,txt,js,xml}',
             '.htaccess',
             'components/jquery-ui/themes/smoothness/images/*',
+            'components/SlickGrid/images/*',
             'translations/*.json',
             // 'markup/*',
             'modes/*',
             'img/*',
             'lib/**/*',
             'styles/**/*.{png,otf,gif}',
+            'styles/styles.css',
+            "components/font-awesome/fonts/*",
+            'components/jquery-ui/themes/smoothness/jquery-ui.min.css'
             // 'scripts/jq_extensions.js',
             // 'scripts/bin/controllers/controllers.js',
           ]
