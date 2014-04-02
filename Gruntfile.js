@@ -221,16 +221,6 @@ module.exports = function (grunt) {
         }
       }
     },
-    // concat: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '.tmp/scripts/{,*/}*.js',
-    //         '<%= yeoman.app %>/scripts/{,*/}*.js'
-    //       ]
-    //     }
-    //   }
-    // },
     useminPrepare: {
       html: '<%= yeoman.app %>/index.html',
       options: {
@@ -309,15 +299,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ],
-    //     }
-    //   }
-    // },
     copy: {
       dev : {
         files: [{
@@ -450,24 +431,6 @@ module.exports = function (grunt) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
   });
-  // grunt.registerTask('server', function (target) {
-  //     if (target === 'dist') {
-  //         return grunt.task.run(['connect:dist:keepalive']);
-  //     }
-
-  //     grunt.task.run([
-  //         'clean:server',
-  //         'coffee:dist',
-  //         'jade',
-  //         'compass:server',
-  //         'copy:dev',
-  //         'livereload-start',
-  //         'connect:livereload',
-  //         // 'open',
-
-  //         'watch'
-  //     ]);
-  // });
 
   grunt.registerTask('test', [
     'clean:server',
@@ -476,13 +439,6 @@ module.exports = function (grunt) {
     'connect:test',
     'karma'
   ]);
-  // grunt.registerTask('test', [
-  //   'clean:server',
-  //   'coffee',
-  //   'compass',
-  //   'connect:test',
-  //   'karma'
-  // ]);
 
   grunt.registerTask('build', [
     'clean:dist',
@@ -507,24 +463,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
-
-  // grunt.registerTask('build', [
-  //   'clean:dist',
-  //   // 'jshint',
-  //   'test',
-  //   'coffee',
-  //   "jade",
-  //   'compass:dist',
-  //   'useminPrepare',
-  //   // 'imagemin',
-  //   'htmlmin',
-  //   'concat',
-  //   'copy',
-  //   'ngmin',
-  //   'uglify',
-  //   'rev',
-  //   'usemin',
-  // ]);
 
   grunt.registerTask('default', ['build']);
 };

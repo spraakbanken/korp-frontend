@@ -7,41 +7,41 @@
 
 "int(_.text_datefrom)"  return "DATE_FROM"
 "int(_.text_dateto)"  return "DATE_TO"
-\d{8}               return "DATE_VAL"
-"<="                 return "DATE_OP"
-">="                 return "DATE_OP"
-"<"                 return "DATE_OP"
-">"                 return "DATE_OP"
-' contains '        return 'contains'
-'lbound'            return "FUNC"
-'rbound'            return "FUNC"
-'sentence'          return "FUNCVAL"
-"("                 /* skip */
-")"                 /* skip */
-\s+                 /* skip whitespace */
-\%[cd]+             return "FLAG"
-'not'               return 'not'
-'!='                return '!='
-'^='                return '^='
-'&='                return '&='
-'_='                return '_='
-'*='                return '*='
-'='                 return '='
-(_.)?[A-Za-z_]+      return 'TYPE'
+\d{8}                 return "DATE_VAL"
+"<="                  return "DATE_OP"
+">="                  return "DATE_OP"
+"<"                   return "DATE_OP"
+">"                   return "DATE_OP"
+' contains '          return 'contains'
+'lbound'              return "FUNC"
+'rbound'              return "FUNC"
+'sentence'            return "FUNCVAL"
+"("                   /* skip */
+")"                   /* skip */
+\s+                   /* skip whitespace */
+\%[cd]+               return "FLAG"
+'not'                 return 'not'
+'!='                  return '!='
+'^='                  return '^='
+'&='                  return '&='
+'_='                  return '_='
+'*='                  return '*='
+'='                   return '='
+(_.)?[A-Za-z_]+       return 'TYPE'
 ["'].*?['"]           return 'VALUE'
-"["\s*"]"           return 'EMPTY'
-"["                 return '['
-"]"                 return ']'
-"|"                 return '|'
-"&"                 return '&'
-"{"                 return '{'
-"}"                 return '}'
-\d+                 return "INT"
-","                 return ','
-"%"                 return "%"
-
-
-<<EOF>>             return 'EOF'
+"["\s*"]"             return 'EMPTY'
+"["                   return '['
+"]"                   return ']'
+"|"                   return '|'
+"&"                   return '&'
+"{"                   return '{'
+"}"                   return '}'
+\d+                   return "INT"
+","                   return ','
+"%"                   return "%"
+  
+  
+<<EOF>>               return 'EOF'
 
 /lex
 
