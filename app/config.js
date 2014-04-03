@@ -571,7 +571,7 @@ settings.corporafolders.fisk.newspapertexts.fnb = {
 
 settings.corporafolders.fisk.newspapertexts.hbl = {
     title : "Hufvudstadsbladet",
-    contents : ["hbl1991", "hbl1998", "hbl1999", "hbl20122013"],
+    contents : ["hbl1991", "hbl1998", "hbl1999", "hbl20122013", "hbl2014"],
     description : "<a href=\"http://www.hbl.fi\" target=\"_blank\">Hufvudstadsbladet</a> är den största finlandssvenska dagstidningen i Finland."
 };
 
@@ -3418,6 +3418,18 @@ settings.corpora.hbl1999 = {
 settings.corpora.hbl20122013 = {
     id : "hbl20122013",
     title : "Hufvudstadsbladet (2012–)2013",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : {label : "date"}
+    }
+};
+
+settings.corpora.hbl2014 = {
+    id : "hbl2014",
+    title : "Hufvudstadsbladet 2014",
     description : "",
     within : settings.spWithin,
     context : settings.spContext,
