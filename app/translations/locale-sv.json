@@ -235,7 +235,7 @@
 	"statstable_relfigures_hits" : "Träffar per korpus, relativa frekvenser.",
 	"statstable_hitsheader" : "Träffar för ",
 	"statstable_hitsheader_lemgram" : "Träffar",
-	"statstable_exp_csv" : "CSV (kommaseparerade värden)",
+	"statstable_exp_csv" : "CSV (semikolonseparerade värden)",
 	"statstable_exp_tsv" : "TSV (tabseparerade värden)",
 	"statstable_export" : "Exportera",
 
