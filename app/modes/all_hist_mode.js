@@ -152,7 +152,7 @@ settings.corporafolders.bibel = {
 
 settings.corporafolders.runeberg = {
 	title : "Runeberg",
-	contents : ["runeberg-diverse", "runeberg-rost", "runeberg-svtidskr", "runeberg-urdagkron", "runeberg-tiden"],
+	contents : ["runeberg-diverse", "runeberg-rost", "runeberg-svtidskr", "runeberg-urdagkron", "runeberg-tiden", "runeberg-biblblad", "runeberg-folkbbl"],
         description : "Tidskrifter från Projekt Runeberg"
 }
 
@@ -1069,6 +1069,30 @@ settings.corpora.bibel1873dalin = {
 		"verse_name" : {label : "verse"},
 		"text_date" : {label : "year"}
 	}
+};
+
+settings.corpora["runeberg-folkbbl"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-folkbbl",
+	title : "Folkbiblioteksbladet",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
+};
+
+settings.corpora["runeberg-biblblad"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "runeberg-biblblad",
+	title : "Biblioteksbladet",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : settings.runebergattributes,
+	struct_attributes : settings.runebergstruct_attributes,
+
 };
 
 
