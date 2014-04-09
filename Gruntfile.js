@@ -347,9 +347,9 @@ module.exports = function (grunt) {
             'styles/**/*.{png,otf,gif}',
             'styles/styles.css',
             "components/font-awesome/fonts/*",
-            'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
             'components/d3/d3.js',
             'components/rickshaw/rickshaw.js'
+            'components/jquery-ui/themes/smoothness/jquery-ui.min.css'
             // 'scripts/jq_extensions.js',
             // 'scripts/bin/controllers/controllers.js',
           ]
