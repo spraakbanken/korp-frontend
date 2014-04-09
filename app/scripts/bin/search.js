@@ -79,6 +79,9 @@
       var state, target;
       simpleSearch.enableSubmit();
       target = $(event.target);
+      if (!target.data("history")) {
+        return;
+      }
       state = {};
       state[target.data("history")] = target.val();
       if (target.prop("selectedIndex") !== 0) {

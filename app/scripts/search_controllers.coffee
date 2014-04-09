@@ -6,6 +6,8 @@ korpApp.controller "SearchCtrl", ($scope, $location) ->
     $scope.extendedTmpl = "views/extended_tmpl.html"
     $scope.isCompareSelected = false
 
+    $scope.settings = settings
+
     $scope.$watch( (() -> $location.search().search_tab),
         (val) ->
             $scope.isCompareSelected = val == 3
@@ -18,7 +20,7 @@ korpApp.config ($tooltipProvider) ->
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
     s = $scope
-    
+
     s.$on "popover_submit", (event, name) ->
         cqp = s.instance.getCQP()
         compareSearches.saveSearch {
@@ -40,7 +42,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             c.log "simple search cqp", cqp
             searches.kwicSearch(cqp, page)
             # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
-            if settings.wordpicture != false and " " not in search.val
+            if settings.wordpicture != false and s.word_pic and " " not in search.val
                 lemgramResults.showPreloader();
                 lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
             else  
@@ -66,6 +68,11 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             key : "suffix"
         ,
             key : "isCaseInsensitive"
+        ,
+            key : "word_pic"
+            # val_in : (val) ->
+            #     c.log "word_pic post", val, s.word_pic
+                # settings.wordpicture = val
     ]
 
 

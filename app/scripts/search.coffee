@@ -67,6 +67,7 @@ view.initSearchOptions = ->
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         simpleSearch.enableSubmit()
         target = $(event.target)
+        unless target.data("history") then return 
         state = {}
         state[target.data("history")] = target.val()
         unless target.prop("selectedIndex") is 0
@@ -78,30 +79,6 @@ view.initSearchOptions = ->
         if isInit is true
             search("search", null)
 
-
-# view.updateContextSelect = (withinOrContext) ->
-#     intersect = settings.corpusListing.getAttrIntersection(withinOrContext)
-#     union = settings.corpusListing.getAttrUnion(withinOrContext)
-#     opts = $(".#{withinOrContext}_select option")
-#     opts.data("locSuffix", null).attr("disabled", null).removeClass "limited"
-
-#     # all support enhanced context
-#     if union.length > intersect.length
-
-#         # partial support for enhanced context
-#         opts.each ->
-#             $(this).addClass("limited").data "locSuffix", "asterix" if $.inArray($(this).attr("value"), intersect) is -1
-
-#     else if union.length is 1 and intersect.length is 1
-
-#         # no support
-#         opts.each ->
-#             unless $.inArray($(this).attr("value"), intersect) is -1
-#                 $(this).attr "disabled", null
-#             else
-#                 $(this).attr("disabled", "disabled").parent().val("sentence").change()
-
-#     $(".#{withinOrContext}_select").localize()
 
 view.updateReduceSelect = ->
     cl = settings.corpusListing

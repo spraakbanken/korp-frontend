@@ -1,7 +1,8 @@
 #korp-simple(constr='SimpleSearch', constr-name='simpleSearch', ng-controller='SimpleCtrl')
   form
     label(for='simple_text') {{'search_for' | loc}}
-    input#simple_text(type='text', ng-model='simple_text', placeholder='{{lemgramToString(placeholder)}}')
+    input#simple_text(type='text', ng-model='simple_text', placeholder='{{lemgramToString(placeholder)}}'
+        autofocus)
     // <span id="keyboard" class="lig">&#xe07d;</span>
     span#keyboard.ui-state-default.specialkey ð
     // <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />

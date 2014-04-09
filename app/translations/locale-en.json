@@ -87,6 +87,7 @@
 	"case_insensitive" : "case-insensitive",
 	"case_sensitive" : "case-sensitive",
 	"reduce_text" : "compile based on",
+	"show_word_pic" : "Show word picture",
 
 	"word_is" : "word is",
 	"word_is_not" : "word is not",

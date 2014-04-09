@@ -8,6 +8,7 @@ var isLab = window.isLab || false;
 
 settings.lemgramSelect = true;
 settings.autocomplete = true;
+// settings.wordpicture = false;
 
 // for extended search dropdown, can be 'union' or 'intersection'
 settings.word_attribute_selector = "union"

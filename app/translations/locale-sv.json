@@ -84,6 +84,7 @@
 	"case_insensitive" : "skiftlägesoberoende",
 	"case_sensitive" : "skiftlägesberoende",
 	"reduce_text" : "sammanställ på",
+	"show_word_pic" : "Visa ordbild",
 
 	"is" : "är",
 	"is_not" : "är inte",
