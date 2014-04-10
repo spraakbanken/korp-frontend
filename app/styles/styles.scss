@@ -1964,6 +1964,12 @@ slider {
   display : none;
 }
 
+.empty_area {
+  background-color : #999;
+  position : absolute;
+  top : 0;
+  bottom : 0;
+}
 .rickshaw_graph .x_tick .title {
   bottom : -1.1em !important;
   left : -1.3em;

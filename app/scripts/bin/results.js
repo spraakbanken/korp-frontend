@@ -1521,6 +1521,55 @@
       return (non_time / totalsize) * 100;
     };
 
+    GraphResults.prototype.getEmptyIntervals = function(data) {
+      var breaker, i, interval, intervals, item;
+      intervals = [];
+      i = 0;
+      c.log("data.length", data.length);
+      while (i < data.length) {
+        item = data[i];
+        if (item.y === null) {
+          interval = [item];
+          breaker = true;
+          while (breaker) {
+            i++;
+            item = data[i];
+            if (item.y === null) {
+              interval.push(item);
+            } else {
+              if (data[i + 1]) {
+                interval.push(data[i + 1]);
+              }
+              intervals.push(interval);
+              breaker = false;
+            }
+          }
+        }
+        i++;
+      }
+      return intervals;
+    };
+
+    GraphResults.prototype.drawIntervals = function(graph, intervals) {
+      var from, list, max, min, offset, to, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = intervals.length; _i < _len; _i++) {
+        list = intervals[_i];
+        max = _.max(list, "x");
+        min = _.min(list, "x");
+        from = Math.round(graph.x(min.x));
+        to = Math.round(graph.x(max.x));
+        offset = 8;
+        _results.push($("<div>", {
+          "class": "empty_area"
+        }).css({
+          left: from - offset,
+          width: to - from
+        }).appendTo(graph.element));
+      }
+      return _results;
+    };
+
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
       var _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
@@ -1533,7 +1582,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _ref;
+        var color, emptyIntervals, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1545,8 +1594,8 @@
         } else {
           $(".non_time_div").hide();
         }
-        palette = new Rickshaw.Color.Palette("colorwheel");
         if (_.isArray(data.combined)) {
+          palette = new Rickshaw.Color.Palette("colorwheel");
           series = (function() {
             var _i, _len, _ref, _results;
             _ref = data.combined;
@@ -1575,6 +1624,7 @@
         }
         Rickshaw.Series.zeroFill(series);
         window.data = series[0].data;
+        emptyIntervals = _this.getEmptyIntervals(series[0].data);
         window.graph = new Rickshaw.Graph({
           element: $(".chart", _this.$result).get(0),
           renderer: 'line',
@@ -1587,6 +1637,7 @@
           min: "auto"
         });
         graph.render();
+        _this.drawIntervals(graph, emptyIntervals);
         $(window).on("resize", _.throttle(function() {
           if (_this.$result.is(":visible")) {
             graph.setSize();
@@ -1667,6 +1718,9 @@
             return "<span data-val='" + x + "'>" + out + "</span>";
           },
           yFormatter: function(y) {
+            if (!y) {
+              return;
+            }
             return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + y.toFixed(2);
           },
           formatter: function(series, x, y, formattedX, formattedY, d) {
