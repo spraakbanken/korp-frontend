@@ -2995,7 +2995,7 @@ settings.corpora.swefn = {
 
 settings.corpora["wikipedia-sv"] = {
     id : "wikipedia-sv",
-    title : "Svenska Wikipedia (november 2013)",
+    title : "Svenska Wikipedia (april 2014)",
     description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
     within : settings.spWithin,
     context : settings.spContext,
