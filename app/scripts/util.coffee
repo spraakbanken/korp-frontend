@@ -179,6 +179,27 @@ class window.CorpusListing
         @struct[corpus].title
 
 
+    getAttributeGroups : (lang) ->
+        word =
+            group : "word"
+            value : "word"
+            label : "word"
+        
+        attrs = for key, obj of @getCurrentAttributes(lang) when obj.displayType != "hidden"
+            _.extend({group : "word_attr", value : key}, obj)
+
+        common_keys = _.compact _.flatten _.map @selected, (corp) -> _.keys corp.common_attributes
+        common = _.pick settings.common_struct_types, common_keys...
+
+        sent_attrs = for key, obj of (_.extend {}, common, @getStructAttrs(lang)) when obj.displayType != "hidden"
+            _.extend({group : "sentence_attr", value : key}, obj)
+
+        sent_attrs = _.sortBy sent_attrs, (item) ->
+            util.getLocaleString(item.label)
+
+        return [word].concat(attrs, sent_attrs)
+
+
 
 class window.ParallelCorpusListing extends CorpusListing
     constructor: (corpora) ->

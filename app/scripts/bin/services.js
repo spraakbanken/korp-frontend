@@ -13,52 +13,6 @@
           return attrobj.value;
         }
       },
-      getAttributeGroups: function(corpusListing) {
-        var attrs, common, common_keys, key, obj, sent_attrs, word;
-        word = {
-          group: "word",
-          value: "word",
-          label: "word"
-        };
-        attrs = (function() {
-          var _ref, _results;
-          _ref = corpusListing.getCurrentAttributes();
-          _results = [];
-          for (key in _ref) {
-            obj = _ref[key];
-            if (obj.displayType !== "hidden") {
-              _results.push(_.extend({
-                group: "word_attr",
-                value: key
-              }, obj));
-            }
-          }
-          return _results;
-        })();
-        common_keys = _.compact(_.flatten(_.map(corpusListing.selected, function(corp) {
-          return _.keys(corp.common_attributes);
-        })));
-        common = _.pick.apply(_, [settings.common_struct_types].concat(__slice.call(common_keys)));
-        sent_attrs = (function() {
-          var _ref, _results;
-          _ref = _.extend({}, common, corpusListing.getStructAttrs());
-          _results = [];
-          for (key in _ref) {
-            obj = _ref[key];
-            if (obj.displayType !== "hidden") {
-              _results.push(_.extend({
-                group: "sentence_attr",
-                value: key
-              }, obj));
-            }
-          }
-          return _results;
-        })();
-        sent_attrs = _.sortBy(sent_attrs, function(item) {
-          return util.getLocaleString(item.label);
-        });
-        return [word].concat(attrs, sent_attrs);
-      },
       setupHash: function(scope, config) {
         var obj, onWatch, watch, _i, _len, _results;
         onWatch = function() {

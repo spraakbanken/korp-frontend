@@ -249,6 +249,53 @@
       return this.struct[corpus].title;
     };
 
+    CorpusListing.prototype.getAttributeGroups = function(lang) {
+      var attrs, common, common_keys, key, obj, sent_attrs, word;
+      word = {
+        group: "word",
+        value: "word",
+        label: "word"
+      };
+      attrs = (function() {
+        var _ref, _results;
+        _ref = this.getCurrentAttributes(lang);
+        _results = [];
+        for (key in _ref) {
+          obj = _ref[key];
+          if (obj.displayType !== "hidden") {
+            _results.push(_.extend({
+              group: "word_attr",
+              value: key
+            }, obj));
+          }
+        }
+        return _results;
+      }).call(this);
+      common_keys = _.compact(_.flatten(_.map(this.selected, function(corp) {
+        return _.keys(corp.common_attributes);
+      })));
+      common = _.pick.apply(_, [settings.common_struct_types].concat(__slice.call(common_keys)));
+      sent_attrs = (function() {
+        var _ref, _results;
+        _ref = _.extend({}, common, this.getStructAttrs(lang));
+        _results = [];
+        for (key in _ref) {
+          obj = _ref[key];
+          if (obj.displayType !== "hidden") {
+            _results.push(_.extend({
+              group: "sentence_attr",
+              value: key
+            }, obj));
+          }
+        }
+        return _results;
+      }).call(this);
+      sent_attrs = _.sortBy(sent_attrs, function(item) {
+        return util.getLocaleString(item.label);
+      });
+      return [word].concat(attrs, sent_attrs);
+    };
+
     return CorpusListing;
 
   })();

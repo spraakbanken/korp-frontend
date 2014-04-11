@@ -65,7 +65,7 @@ view.initSearchOptions = ->
             $(this).prop("selectedIndex", 0).change()
 
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
-        simpleSearch.enableSubmit()
+        # simpleSearch.enableSubmit()
         target = $(event.target)
         unless target.data("history") then return 
         state = {}

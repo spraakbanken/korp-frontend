@@ -1205,8 +1205,8 @@ class view.GraphResults extends BaseResults
 
                 start = m.format("YYYYMMDD")
                 end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
-                timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
-                cqp = decodeURIComponent(cqp)[...-1] + " & #{timecqp}"
+                timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})"
+                cqp = "[(#{decodeURIComponent(cqp)[1...-1]}) & #{timecqp}]"
 
 
                 opts = {}

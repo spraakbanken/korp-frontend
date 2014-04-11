@@ -174,9 +174,10 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         # sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
         #     _.extend({group : "sentence_attr", value : key}, obj)
 
-        c.log "onCorpusChange", selected
+        c.log "onCorpusChange", selected, s.l
 
-        s.types = utils.getAttributeGroups(settings.corpusListing)
+        lang = s.$parent.$parent?.l?.lang
+        s.types = settings.corpusListing.getAttributeGroups(lang)
         s.typeMapping = _.object _.map s.types, (item) -> 
             if item.isStructAttr
                 ["_." + item.value, item]
@@ -235,7 +236,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         c.log "change_case", val, s
 
 
-korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location) ->
+korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
     $scope.cqp = "[]"
     $scope.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
@@ -247,7 +248,10 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location) ->
 
     $scope.$on "btn_submit", () ->
         c.log "advanced cqp", $scope.cqp
-        $location.search("search", "cqp|" + $scope.cqp)
+        $location.search("search", null)
+        $timeout( () ->
+            $location.search("search", "cqp|" + $scope.cqp)
+        , 0)
 
 
 
@@ -285,7 +289,7 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
     s.getAttrs = () ->
         unless s.cmp1 and s.cmp2 then return
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
-        return utils.getAttributeGroups(listing)
+        return listing.getAttributeGroups()
 
 
     s.sendCompare = () ->

@@ -1,10 +1,11 @@
 window.c = console
-regescape = (s) ->
-    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
 
+prio = settings.cqp_prio or ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word']
 
 stringifyCqp = (cqp_obj, translate_ops = false) ->
     output = []
+    cqp_obj = CQP.prioSort _.cloneDeep cqp_obj
+
     for token in cqp_obj
         if typeof token == "string"
             output.push token
@@ -88,6 +89,20 @@ window.CQP =
 
     concat : (cqpObjs...) ->
         [].concat cqpObjs...
+
+    prioSort : (cqpObjs) ->
+        getPrio = (and_array) ->
+            numbers = _.map and_array, (item) ->
+                _.indexOf prio, item.type
+
+
+            return Math.min numbers...
+
+        for token in cqpObjs
+            token.and_block = (_.sortBy token.and_block, getPrio).reverse()
+
+        return cqpObjs
+
 
 
 

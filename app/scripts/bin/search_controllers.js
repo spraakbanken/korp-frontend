@@ -167,8 +167,10 @@
       return _.pairs(optObj);
     };
     onCorpusChange = function(event, selected) {
-      c.log("onCorpusChange", selected);
-      s.types = utils.getAttributeGroups(settings.corpusListing);
+      var lang, _ref, _ref1;
+      c.log("onCorpusChange", selected, s.l);
+      lang = (_ref = s.$parent.$parent) != null ? (_ref1 = _ref.l) != null ? _ref1.lang : void 0 : void 0;
+      s.types = settings.corpusListing.getAttributeGroups(lang);
       s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
           return ["_." + item.value, item];
@@ -224,7 +226,7 @@
     });
   });
 
-  korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location) {
+  korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
     $scope.cqp = "[]";
     $scope.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
@@ -235,7 +237,10 @@
     });
     return $scope.$on("btn_submit", function() {
       c.log("advanced cqp", $scope.cqp);
-      return $location.search("search", "cqp|" + $scope.cqp);
+      $location.search("search", null);
+      return $timeout(function() {
+        return $location.search("search", "cqp|" + $scope.cqp);
+      }, 0);
     });
   });
 
@@ -261,7 +266,7 @@
         return;
       }
       listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
-      return utils.getAttributeGroups(listing);
+      return listing.getAttributeGroups();
     };
     s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, s.reduce));

@@ -1350,8 +1350,8 @@
           m = moment(val * 1000);
           start = m.format("YYYYMMDD");
           end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
-          timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
-          cqp = decodeURIComponent(cqp).slice(0, -1) + (" & " + timecqp);
+          timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")";
+          cqp = "[(" + (decodeURIComponent(cqp).slice(1, -1)) + ") & " + timecqp + "]";
           opts = {};
           opts.ajaxParams = {
             start: 0,

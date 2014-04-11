@@ -1,13 +1,11 @@
 (function() {
-  var regescape, stringifyCqp,
+  var prio, stringifyCqp,
     _this = this,
     __slice = [].slice;
 
   window.c = console;
 
-  regescape = function(s) {
-    return s.replace(/[\.|\?|\+|\*|\|\'|\"\(\)\^\$]/g, "\\$&");
-  };
+  prio = settings.cqp_prio || ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
 
   stringifyCqp = function(cqp_obj, translate_ops) {
     var and_array, bool, bound, flags, flagstr, from, op, operator1, operator2, or_array, or_out, out, out_token, output, tmpl, to, token, type, val, x, _i, _j, _len, _len1, _ref;
@@ -15,6 +13,7 @@
       translate_ops = false;
     }
     output = [];
+    cqp_obj = CQP.prioSort(_.cloneDeep(cqp_obj));
     for (_i = 0, _len = cqp_obj.length; _i < _len; _i++) {
       token = cqp_obj[_i];
       if (typeof token === "string") {
@@ -122,6 +121,21 @@
       var cqpObjs, _ref;
       cqpObjs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return (_ref = []).concat.apply(_ref, cqpObjs);
+    },
+    prioSort: function(cqpObjs) {
+      var getPrio, token, _i, _len;
+      getPrio = function(and_array) {
+        var numbers;
+        numbers = _.map(and_array, function(item) {
+          return _.indexOf(prio, item.type);
+        });
+        return Math.min.apply(Math, numbers);
+      };
+      for (_i = 0, _len = cqpObjs.length; _i < _len; _i++) {
+        token = cqpObjs[_i];
+        token.and_block = (_.sortBy(token.and_block, getPrio)).reverse();
+      }
+      return cqpObjs;
     }
   };
 

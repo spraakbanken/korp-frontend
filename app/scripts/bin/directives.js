@@ -108,7 +108,7 @@
 
   korpApp.directive("tokenValue", function($compile, $controller) {
     var defaultController, getDefaultTmpl;
-    getDefaultTmpl = _.template("<input ng-model='input' class='arg_value' ng-change=\"model = escape(input)\"\n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>");
+    getDefaultTmpl = _.template("<input ng-model='input' class='arg_value' \n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>");
     defaultController = [
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
@@ -124,13 +124,24 @@
           $scope.orObj.flags = flags;
           return $scope["case"] = "insensitive";
         };
-        return $scope.escape = function(val) {
+        $scope.escape = function(val) {
           if ($scope.orObj.op !== "*=") {
             return regescape(val);
           } else {
             return val;
           }
         };
+        $scope.unescape = function(val) {
+          if ($scope.orObj.op !== "*=") {
+            return val.replace("\\", "");
+          } else {
+            return val;
+          }
+        };
+        $scope.$watch("orObj.op + input", function() {
+          return $scope.model = $scope.escape($scope.input);
+        });
+        return $scope.input = $scope.unescape($scope.model);
       }
     ];
     return {
