@@ -349,7 +349,7 @@ module.exports = function (grunt) {
             "components/font-awesome/fonts/*",
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
             'components/d3/d3.js',
-            'components/rickshaw/rickshaw.js'
+            'components/rickshaw/rickshaw.js',
             // 'scripts/jq_extensions.js',
             // 'scripts/bin/controllers/controllers.js',
           ]
