@@ -8,6 +8,7 @@
     $scope.visibleTabs = [true, true, true, true];
     $scope.extendedTmpl = "views/extended_tmpl.html";
     $scope.isCompareSelected = false;
+    $scope.settings = settings;
     return $scope.$watch((function() {
       return $location.search().search_tab;
     }), function(val) {
@@ -48,7 +49,7 @@
         cqp = simpleSearch.getCQP(search.val);
         c.log("simple search cqp", cqp);
         searches.kwicSearch(cqp, page);
-        if (settings.wordpicture !== false && __indexOf.call(search.val, " ") < 0) {
+        if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
           lemgramResults.showPreloader();
           return lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
         } else {
@@ -76,6 +77,8 @@
         key: "suffix"
       }, {
         key: "isCaseInsensitive"
+      }, {
+        key: "word_pic"
       }
     ]);
   });

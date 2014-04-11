@@ -89,7 +89,7 @@
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form>
                   <label for="simple_text">{{'search_for' | loc}}</label>
-                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}">
+                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus>
                   <!-- <span id="keyboard" class="lig">&#xe07d;</span>--><span id="keyboard" class="ui-state-default specialkey">ð</span>
                   <!-- <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />-->
                   <search-submit></search-submit><span>
@@ -180,6 +180,10 @@
               </select>
             </div>
             <div><span rel="localize[statistics]">Statistik </span>: <span id="reduceSelect"></span></div>
+            <div>
+              <input id="word_pic" type="checkbox" ng-model="word_pic">
+              <label for="word_pic">{{'show_word_pic' | loc}}</label>
+            </div>
           </div>
         </div>
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
@@ -291,7 +295,7 @@
                 </tab>
                 <tab active="[true][0]" ng-repeat="data in graphTabs">
                   <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc}}
-                    <div style="width:{{progress || 0}}%" class="tab_progress"></div><span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
+                    <div style="width:{{progress || 0}}%" ng-show="loading" class="tab_progress"></div><span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
                   </tab-heading>
                   <div ng-controller="graphCtrl" constr="GraphResults">
                     <div class="graph_header">
@@ -421,6 +425,7 @@
     <script src="components/jquery-ui/ui/jquery.ui.mouse.js"></script>
     <script src="components/jquery-ui/ui/jquery.ui.position.js"></script>
     <script src="components/jquery-ui/ui/jquery.ui.sortable.js"></script>
+    <script src="components/jquery-ui/ui/jquery.ui.slider.js"></script>
     <script src="components/angular/angular.js"></script>
     <script src="lib/jquery.localize.js"></script>
     <script src="components/raphael/raphael.js"></script>
@@ -457,9 +462,9 @@
     <script src="lib/angular-sortable.js"></script>
     <script src="components/moment/moment.js"></script>
     <script src="scripts/jq_extensions.js"></script>
+    <!-- endbuild  -->
     <script src="components/d3/d3.js"></script>
     <script src="components/rickshaw/rickshaw.js"></script>
-    <!-- endbuild  -->
     <script>window.currentMode = $.deparam.querystring().mode || "default"</script>
     <script src="config.js"></script>
     <!-- build:js scripts/scripts.js -->
