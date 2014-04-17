@@ -1283,9 +1283,7 @@ class view.GraphResults extends BaseResults
         delete data[""]
         [first, last] = settings.corpusListing.getTimeInterval()
         firstVal = @parseDate "y", first
-        # c.log "firstVal", firstVal
         lastVal = @parseDate "y", last.toString()
-        # c.log "lastVal", lastVal
 
         hasFirstValue = false
         hasLastValue = false
@@ -1354,21 +1352,20 @@ class view.GraphResults extends BaseResults
         intervals = []
         i = 0
 
-        c.log "data.length", data.length
         while i < data.length
             item = data[i]
 
             if item.y == null
                 # c.log "item y null", item
-                interval = [item]
+                interval = [_.clone item]
                 breaker = true
                 while breaker
                     i++
                     item = data[i]
                     if item.y == null
-                        interval.push item
+                        interval.push _.clone item
                     else
-                        if data[i + 1] then interval.push data[i + 1]
+                        # if data[i + 1] then interval.push _.clone data[i + 1]
                         intervals.push interval
                         breaker = false
             i++
@@ -1377,8 +1374,15 @@ class view.GraphResults extends BaseResults
 
 
     drawIntervals : (graph, intervals) ->
-        # elem = $(graph.element)
+        # c.log "unitWidth", unitWidth
+        unless $(".zoom_slider", @$result).is ".ui-slider"
+            return
+        [from, to] = $('.zoom_slider', @$result).slider("values")
+        
+        unitSpan = moment.unix(to).diff(moment.unix(from), @zoom)
+        unitWidth = graph.width / unitSpan
 
+        $(".empty_area", @$result).remove()
         for list in intervals
             max = _.max list, "x"
             min = _.min list, "x"
@@ -1387,8 +1391,10 @@ class view.GraphResults extends BaseResults
             # c.log "from", from, to
             offset = 8
             $("<div>", {class : "empty_area"}).css
-                left : from - offset
-                width : to - from
+                # left : ((from + unitWidth / 2) - offset)
+                left : from - unitWidth / 2
+                # width : (to - from) - unitWidth / 2
+                width : unitWidth
             .appendTo graph.element
 
 
@@ -1449,6 +1455,11 @@ class view.GraphResults extends BaseResults
             Rickshaw.Series.zeroFill(series)
             window.data = series[0].data
             emptyIntervals = @getEmptyIntervals(series[0].data)
+            c.log "emptyIntervals", emptyIntervals
+
+            for s in series
+                s.data = _.filter s.data, (item) -> item.y != null
+
 
             window.graph = new Rickshaw.Graph
                 element: $(".chart", @$result).get(0)
@@ -1460,6 +1471,9 @@ class view.GraphResults extends BaseResults
                     right : 0.01
                 min : "auto"
             graph.render()
+
+            
+            
 
             @drawIntervals(graph, emptyIntervals)
 
@@ -1571,6 +1585,7 @@ class view.GraphResults extends BaseResults
             xAxis.render = () =>
                 old_render.call xAxis
                 @updateTicks()
+                @drawIntervals(graph, emptyIntervals)
             
 
             old_tickOffsets = xAxis.tickOffsets
