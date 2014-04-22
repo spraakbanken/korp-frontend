@@ -154,7 +154,6 @@
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
       or_obj.op = _.values(s.getOpts(or_obj.type))[0][1];
-      c.log("or_obj.op", or_obj.op);
       return or_obj.val = "";
     };
     s.getOpts = function(type) {

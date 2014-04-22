@@ -106,9 +106,35 @@
     };
   });
 
+  korpApp.directive("escaper", function() {
+    return {
+      link: function($scope, elem, attr) {
+        var escape, unescape;
+        escape = function(val) {
+          if ($scope.orObj.op !== "*=") {
+            return regescape(val);
+          } else {
+            return val;
+          }
+        };
+        unescape = function(val) {
+          if ($scope.orObj.op !== "*=") {
+            return val.replace(/\\/g, "");
+          } else {
+            return val;
+          }
+        };
+        $scope.input = unescape($scope.model);
+        return $scope.$watch("orObj.op + input", function() {
+          return $scope.model = escape($scope.input);
+        });
+      }
+    };
+  });
+
   korpApp.directive("tokenValue", function($compile, $controller) {
     var defaultController, getDefaultTmpl;
-    getDefaultTmpl = _.template("<input ng-model='input' class='arg_value' \n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>");
+    getDefaultTmpl = _.template("<input ng-model='input' class='arg_value' escaper\n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>\n</ul>");
     defaultController = [
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
@@ -117,31 +143,13 @@
           $scope["case"] = "sensitive";
           return (_ref = $scope.orObj.flags) != null ? delete _ref["c"] : void 0;
         };
-        $scope.makeInsensitive = function() {
+        return $scope.makeInsensitive = function() {
           var flags;
           flags = $scope.orObj.flags || {};
           flags["c"] = true;
           $scope.orObj.flags = flags;
           return $scope["case"] = "insensitive";
         };
-        $scope.escape = function(val) {
-          if ($scope.orObj.op !== "*=") {
-            return regescape(val);
-          } else {
-            return val;
-          }
-        };
-        $scope.unescape = function(val) {
-          if ($scope.orObj.op !== "*=") {
-            return val.replace("\\", "");
-          } else {
-            return val;
-          }
-        };
-        $scope.$watch("orObj.op + input", function() {
-          return $scope.model = $scope.escape($scope.input);
-        });
-        return $scope.input = $scope.unescape($scope.model);
       }
     ];
     return {
@@ -152,11 +160,18 @@
       },
       template: "<div>{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
+        var current;
+        current = null;
         return scope.$watch("tokenValue", function(valueObj) {
           var defaultTmpl, locals, tmplElem, tmplObj;
           if (!valueObj) {
             return;
           }
+          c.log("$scope tokenValue link", valueObj);
+          if (valueObj.value === (current != null ? current.value : void 0)) {
+            return;
+          }
+          current = valueObj;
           locals = {
             $scope: _.extend(scope, valueObj)
           };

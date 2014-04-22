@@ -243,11 +243,9 @@ attrs.pos = {
 attrs.msd = {
     label : "msd",
     opts : settings.defaultOptions,
-    extended_template : '<input class="arg_value" ng-model="model">' +
+    extended_template : '<input class="arg_value" ng-model="input" escaper>' +
     '<span ng-click="onIconClick()" class="ui-icon ui-icon-info"></span>',
     controller : function($scope, $modal) {
-
-
         var modal = null;
 
         $scope.onIconClick = function() {
@@ -262,9 +260,10 @@ attrs.msd = {
             })
         }
         $scope.msdClick = function(event) {
-            c.log(event, arguments)
             val = $(event.target).parent().data("value")
-            $scope.model = val
+
+            $scope.input = val;
+
             modal.close();
         }
     }

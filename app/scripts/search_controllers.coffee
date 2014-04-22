@@ -151,7 +151,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s.setDefault = (or_obj) ->
         # assign the first value from the opts 
         or_obj.op = _.values(s.getOpts(or_obj.type))[0][1]
-        c.log "or_obj.op", or_obj.op
 
         or_obj.val = ""
 

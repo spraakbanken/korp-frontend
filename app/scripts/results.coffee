@@ -1547,7 +1547,6 @@ class view.GraphResults extends BaseResults
 
 
                 yFormatter: (y) ->
-                    unless y then return
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + y.toFixed 2
                 formatter : (series, x, y, formattedX, formattedY, d) ->
                     content = series.name + ':&nbsp;' + formattedY

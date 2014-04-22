@@ -26,7 +26,12 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
           span(rel='localize[non_time_before]')
           span.non_time
           span(rel='localize[non_time_after]')
-      .legend
+      .legend(ng-show="!loading")
+        .line
+          a.action
+          .swatch(style="background-color: #999")
+          span.label 
+            em Material saknas
       div(style='clear: both;')
       .drawing(ng-show="loading")
         | {{'drawing' | loc}}

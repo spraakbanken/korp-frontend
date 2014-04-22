@@ -1521,6 +1521,58 @@
       return (non_time / totalsize) * 100;
     };
 
+    GraphResults.prototype.getEmptyIntervals = function(data) {
+      var breaker, i, interval, intervals, item;
+      intervals = [];
+      i = 0;
+      while (i < data.length) {
+        item = data[i];
+        if (item.y === null) {
+          interval = [_.clone(item)];
+          breaker = true;
+          while (breaker) {
+            i++;
+            item = data[i];
+            if (item.y === null) {
+              interval.push(_.clone(item));
+            } else {
+              intervals.push(interval);
+              breaker = false;
+            }
+          }
+        }
+        i++;
+      }
+      return intervals;
+    };
+
+    GraphResults.prototype.drawIntervals = function(graph, intervals) {
+      var from, list, max, min, offset, to, unitSpan, unitWidth, _i, _len, _ref, _results;
+      if (!$(".zoom_slider", this.$result).is(".ui-slider")) {
+        return;
+      }
+      _ref = $('.zoom_slider', this.$result).slider("values"), from = _ref[0], to = _ref[1];
+      unitSpan = moment.unix(to).diff(moment.unix(from), this.zoom);
+      unitWidth = graph.width / unitSpan;
+      $(".empty_area", this.$result).remove();
+      _results = [];
+      for (_i = 0, _len = intervals.length; _i < _len; _i++) {
+        list = intervals[_i];
+        max = _.max(list, "x");
+        min = _.min(list, "x");
+        from = Math.round(graph.x(min.x));
+        to = Math.round(graph.x(max.x));
+        offset = 8;
+        _results.push($("<div>", {
+          "class": "empty_area"
+        }).css({
+          left: from - unitWidth / 2,
+          width: unitWidth
+        }).appendTo(graph.element));
+      }
+      return _results;
+    };
+
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
       var _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
@@ -1533,7 +1585,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _ref;
+        var color, emptyIntervals, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _i, _len, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1545,8 +1597,8 @@
         } else {
           $(".non_time_div").hide();
         }
-        palette = new Rickshaw.Color.Palette("colorwheel");
         if (_.isArray(data.combined)) {
+          palette = new Rickshaw.Color.Palette("colorwheel");
           series = (function() {
             var _i, _len, _ref, _results;
             _ref = data.combined;
@@ -1575,6 +1627,14 @@
         }
         Rickshaw.Series.zeroFill(series);
         window.data = series[0].data;
+        emptyIntervals = _this.getEmptyIntervals(series[0].data);
+        c.log("emptyIntervals", emptyIntervals);
+        for (_i = 0, _len = series.length; _i < _len; _i++) {
+          s = series[_i];
+          s.data = _.filter(s.data, function(item) {
+            return item.y !== null;
+          });
+        }
         window.graph = new Rickshaw.Graph({
           element: $(".chart", _this.$result).get(0),
           renderer: 'line',
@@ -1587,6 +1647,7 @@
           min: "auto"
         });
         graph.render();
+        _this.drawIntervals(graph, emptyIntervals);
         $(window).on("resize", _.throttle(function() {
           if (_this.$result.is(":visible")) {
             graph.setSize();
@@ -1607,12 +1668,12 @@
           return graph.render();
         });
         $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
-          var cls, target, val, _i, _len, _ref;
+          var cls, target, val, _j, _len1, _ref;
           target = event.currentTarget;
           val = $(":checked", target).val();
           _ref = _this.$result.attr("class").split(" ");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            cls = _ref[_i];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            cls = _ref[_j];
             if (cls.match(/^form-/)) {
               _this.$result.removeClass(cls);
             }
@@ -1706,17 +1767,18 @@
         old_render = xAxis.render;
         xAxis.render = function() {
           old_render.call(xAxis);
-          return _this.updateTicks();
+          _this.updateTicks();
+          return _this.drawIntervals(graph, emptyIntervals);
         };
         old_tickOffsets = xAxis.tickOffsets;
         xAxis.tickOffsets = function() {
-          var count, domain, i, offsets, runningTick, tickValue, unit, _i;
+          var count, domain, i, offsets, runningTick, tickValue, unit, _j;
           domain = xAxis.graph.x.domain();
           unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
           count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
           runningTick = domain[0];
           offsets = [];
-          for (i = _i = 0; 0 <= count ? _i < count : _i > count; i = 0 <= count ? ++_i : --_i) {
+          for (i = _j = 0; 0 <= count ? _j < count : _j > count; i = 0 <= count ? ++_j : --_j) {
             tickValue = time.ceil(runningTick, unit);
             runningTick = tickValue + unit.seconds / 2;
             offsets.push({

@@ -67,12 +67,32 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 
 
+korpApp.directive "escaper", () ->
+    link : ($scope, elem, attr) ->
+        escape = (val) ->
+            if $scope.orObj.op != "*="
+                regescape(val)
+            else
+                val
+
+        unescape = (val) ->
+            if $scope.orObj.op != "*="
+                val.replace(/\\/g, "")
+            else
+                val
+
+        $scope.input = unescape $scope.model
+        $scope.$watch "orObj.op + input", () ->
+            $scope.model = escape($scope.input)
+
+
+
 korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
     
     getDefaultTmpl = _.template """
-                <input ng-model='input' class='arg_value' 
+                <input ng-model='input' class='arg_value' escaper
                 <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
@@ -98,22 +118,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             $scope.case = "insensitive"
 
-        $scope.escape = (val) ->
-            if $scope.orObj.op != "*="
-                regescape(val)
-            else
-                val
-
-        $scope.unescape = (val) ->
-            if $scope.orObj.op != "*="
-                val.replace("\\", "")
-            else
-                val
-
-        $scope.$watch "orObj.op + input", () ->
-            $scope.model = $scope.escape($scope.input)
-
-        $scope.input = $scope.unescape $scope.model
     ]
 
 
@@ -127,8 +131,12 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         <div>{{tokenValue.label}}</div>
     """
     link : (scope, elem, attr) ->
+        current = null
         scope.$watch "tokenValue", (valueObj) ->
             unless valueObj then return
+            c.log "$scope tokenValue link", valueObj
+            if valueObj.value == current?.value then return
+            current = valueObj
 
             
 

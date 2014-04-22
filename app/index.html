@@ -310,7 +310,11 @@
                         <input id="smoothing_switch" type="checkbox" class="smoothing_switch">
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
-                      <div class="legend"></div>
+                      <div ng-show="!loading" class="legend">
+                        <div class="line"><a class="action"></a>
+                          <div style="background-color: #999" class="swatch"></div><span class="label"> <em>Material saknas</em></span>
+                        </div>
+                      </div>
                       <div style="clear: both;"></div>
                       <div ng-show="loading" class="drawing">{{'drawing' | loc}}</div>
                     </div>
