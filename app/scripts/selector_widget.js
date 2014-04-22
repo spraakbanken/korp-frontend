@@ -281,18 +281,19 @@ var hp_corpusChooser = {
 				    if($(this).is(".disabled")) return;
 					hp_this.updateState($(this).parent());
 		 			var childMan = $(this).children('.checkbox');
-		 			if ( childMan.hasClass("checked") ) { // Checked, uncheck it if not the root of a tree
+	 				var checkedAllUnlocked = ( childMan.hasClass("intermediate") && childMan.parent().siblings('div:not(.disabled)').length === childMan.parent().siblings().find('.checked').length );
+		 			if ( childMan.hasClass("checked") || checkedAllUnlocked ) { // Checked, uncheck it if not the root of a tree
 		 				if (!($(this).parent().hasClass('tree'))) {
-		 					hp_this.setStatus(childMan,"unchecked");
+		 					hp_this.setStatus(childMan, "unchecked");
 		 				} else {
 		 					var descendants = childMan.parent().siblings('div').find('.checkbox');
-			 				hp_this.setStatus(descendants,"unchecked");
+			 				hp_this.setStatus(descendants, "unchecked");
 		 				}
-		 			} else { // Unchecked, check it!
-		 				hp_this.setStatus(childMan,"checked");
+		 			} else { // Unchecked, check it unless it's intermediate and all unchecked ones are locked
+		 				hp_this.setStatus(childMan, "checked");
 		 				if (($(this).parent().hasClass('tree'))) { // If tree, check all descendants
 			 				descendants = childMan.parent().siblings('div:not(.disabled)').find('.checkbox');
-			 				hp_this.setStatus(descendants,"checked");
+			 				hp_this.setStatus(descendants, "checked");
 		 				}
 					}
 					var ancestors = childMan.parents('.tree');
