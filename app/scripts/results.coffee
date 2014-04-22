@@ -1283,9 +1283,7 @@ class view.GraphResults extends BaseResults
         delete data[""]
         [first, last] = settings.corpusListing.getTimeInterval()
         firstVal = @parseDate "y", first
-        # c.log "firstVal", firstVal
         lastVal = @parseDate "y", last.toString()
-        # c.log "lastVal", lastVal
 
         hasFirstValue = false
         hasLastValue = false
@@ -1350,6 +1348,59 @@ class view.GraphResults extends BaseResults
     #     super progress
     #     c.log "progress", progress
 
+    getEmptyIntervals : (data) ->
+        intervals = []
+        i = 0
+
+        while i < data.length
+            item = data[i]
+
+            if item.y == null
+                # c.log "item y null", item
+                interval = [_.clone item]
+                breaker = true
+                while breaker
+                    i++
+                    item = data[i]
+                    if item.y == null
+                        interval.push _.clone item
+                    else
+                        # if data[i + 1] then interval.push _.clone data[i + 1]
+                        intervals.push interval
+                        breaker = false
+            i++
+
+        return intervals
+
+
+    drawIntervals : (graph, intervals) ->
+        # c.log "unitWidth", unitWidth
+        unless $(".zoom_slider", @$result).is ".ui-slider"
+            return
+        [from, to] = $('.zoom_slider', @$result).slider("values")
+        
+        unitSpan = moment.unix(to).diff(moment.unix(from), @zoom)
+        unitWidth = graph.width / unitSpan
+
+        $(".empty_area", @$result).remove()
+        for list in intervals
+            max = _.max list, "x"
+            min = _.min list, "x"
+            from = Math.round graph.x min.x
+            to = Math.round graph.x max.x
+            # c.log "from", from, to
+            offset = 8
+            $("<div>", {class : "empty_area"}).css
+                # left : ((from + unitWidth / 2) - offset)
+                left : from - unitWidth / 2
+                # width : (to - from) - unitWidth / 2
+                width : unitWidth
+            .appendTo graph.element
+
+
+
+
+
     makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
         # hidden = $(".progress_container", @$result).nextAll().hide()
@@ -1368,19 +1419,20 @@ class view.GraphResults extends BaseResults
 
         ).done (data) =>
             c.log "data", data
-            
+                
             if data.ERROR
                 @resultError data
                 return
             nontime = @getNonTime()
+            
             if nontime
                 $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
             else
                 $(".non_time_div").hide()
 
-            palette = new Rickshaw.Color.Palette("colorwheel")
-            # @colorToCqp = {}
+            
             if _.isArray data.combined
+                palette = new Rickshaw.Color.Palette("colorwheel")
                 series = for item in data.combined
                     color = palette.color()
                     # @colorToCqp[color] = item.cqp
@@ -1402,6 +1454,13 @@ class view.GraphResults extends BaseResults
 
             Rickshaw.Series.zeroFill(series)
             window.data = series[0].data
+            emptyIntervals = @getEmptyIntervals(series[0].data)
+            c.log "emptyIntervals", emptyIntervals
+
+            for s in series
+                s.data = _.filter s.data, (item) -> item.y != null
+
+
             window.graph = new Rickshaw.Graph
                 element: $(".chart", @$result).get(0)
                 renderer: 'line'
@@ -1412,6 +1471,11 @@ class view.GraphResults extends BaseResults
                     right : 0.01
                 min : "auto"
             graph.render()
+
+            
+            
+
+            @drawIntervals(graph, emptyIntervals)
 
             $(window).on "resize", _.throttle(() =>
                 if @$result.is(":visible")
@@ -1483,6 +1547,7 @@ class view.GraphResults extends BaseResults
 
 
                 yFormatter: (y) ->
+                    unless y then return
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + y.toFixed 2
                 formatter : (series, x, y, formattedX, formattedY, d) ->
                     content = series.name + ':&nbsp;' + formattedY
@@ -1520,6 +1585,7 @@ class view.GraphResults extends BaseResults
             xAxis.render = () =>
                 old_render.call xAxis
                 @updateTicks()
+                @drawIntervals(graph, emptyIntervals)
             
 
             old_tickOffsets = xAxis.tickOffsets

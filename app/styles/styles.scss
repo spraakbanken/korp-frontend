@@ -1929,6 +1929,7 @@ slider {
 
 .legend {
   float : right;
+  margin-bottom : 1em;
   .action {
     opacity : 0.5 !important;
     color : white;
@@ -1964,6 +1965,26 @@ slider {
   display : none;
 }
 
+.rickshaw_graph {
+  .empty_area {
+    background-color : #999;
+    position : absolute;
+    top : 0;
+    bottom : 0;
+    opacity : 0.2;
+    z-index : 1;
+  }
+
+  .detail {
+    z-index : 101;  
+  }
+  
+}
+
+.rickshaw_graph svg {
+  position: relative;
+  z-index : 100;
+}
 .rickshaw_graph .x_tick .title {
   bottom : -1.1em !important;
   left : -1.3em;
