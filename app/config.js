@@ -3470,15 +3470,43 @@ settings.corpora.sw1203 = {
 		ref : attrs.ref
 	},
 	struct_attributes : {
-	    text_type : {label : "type"},
+	    text_type : {
+	        label : "type",
+            displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "A: Inträdesuppsats" : "A: Inträdesuppsats",
+                "B: Mitterminsuppsats" : "B: Mitterminsuppsats",
+                "C: Slutprovsuppsats" : "C: Slutprovsuppsats"
+            }
+        },
 	    text_student : {label : "student"},
 	    text_l1 : {label : "tisus_l1"},
-	    text_gender : {label : "gender"},
+	    text_gender : {
+	        label : "gender",
+	        displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "F" : "Kvinna",
+                "M" : "Man"
+            }
+        },
 	    text_birthyear : {label : "birthyear"},
 	    text_a : {label : "a"},
 	    text_b : {label : "b"},
 	    text_cd : {label : "c/d"},
-	    text_semester : {label : "semester"}
+	    text_semester : {
+	        label : "semester",
+	        displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "HT12" : "HT12",
+                "VT13" : "VT13"
+            }
+        }
 	}
 };
 
