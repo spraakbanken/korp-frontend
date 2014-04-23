@@ -1391,7 +1391,7 @@
     };
 
     GraphResults.prototype.fillMissingDate = function(data) {
-      var dateArray, diff, duration, exists, i, max, min, n_diff, newMoment, newMoments, _i;
+      var dateArray, diff, duration, i, lastYVal, max, maybeCurrent, min, momentMapping, n_diff, newMoment, newMoments, _i;
       dateArray = _.pluck(data, "x");
       min = _.min(dateArray, function(mom) {
         return mom.toDate();
@@ -1419,24 +1419,26 @@
         }
       }).call(this);
       n_diff = moment(max).diff(min, diff);
-      exists = function(mom) {
-        return _.any(_.map(dateArray, function(item) {
-          return item.isSame(mom, diff);
-        }));
-      };
+      momentMapping = _.object(_.map(data, function(item) {
+        return [moment(item.x).unix(), item.y];
+      }));
+      c.log("momentMapping", momentMapping);
       newMoments = [];
       for (i = _i = 0; 0 <= n_diff ? _i <= n_diff : _i >= n_diff; i = 0 <= n_diff ? ++_i : --_i) {
         newMoment = moment(min).add(diff, i);
-        if (!exists(newMoment)) {
-          newMoments.push(newMoment);
+        maybeCurrent = momentMapping[newMoment.unix()];
+        if (typeof maybeCurrent !== 'undefined') {
+          lastYVal = maybeCurrent;
+          c.log("maybeCurrent", maybeCurrent);
+        } else {
+          c.log("newMoment", newMoment.year());
+          newMoments.push({
+            x: newMoment,
+            y: lastYVal
+          });
         }
       }
-      newMoments = _.map(newMoments, function(item) {
-        return {
-          x: item,
-          y: 0
-        };
-      });
+      c.log("newMoments", newMoments);
       return [].concat(data, newMoments);
     };
 
@@ -1475,6 +1477,7 @@
         });
       }
       output = this.fillMissingDate(output);
+      c.log("fillMissingDate output", output);
       output = output.sort(function(a, b) {
         return a.x.unix() - b.x.unix();
       });
@@ -1533,7 +1536,7 @@
           while (breaker) {
             i++;
             item = data[i];
-            if (item.y === null) {
+            if ((item != null ? item.y : void 0) === null) {
               interval.push(_.clone(item));
             } else {
               intervals.push(interval);
@@ -1567,7 +1570,7 @@
           "class": "empty_area"
         }).css({
           left: from - unitWidth / 2,
-          width: unitWidth
+          width: (to - from) + unitWidth
         }).appendTo(graph.element));
       }
       return _results;
@@ -1585,7 +1588,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, emptyIntervals, first, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _i, _len, _ref;
+        var color, emptyIntervals, first, graph, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _i, _len, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1629,14 +1632,13 @@
         window.data = series[0].data;
         emptyIntervals = _this.getEmptyIntervals(series[0].data);
         _this.s.hasEmptyIntervals = emptyIntervals.length;
-        c.log("emptyIntervals", emptyIntervals);
         for (_i = 0, _len = series.length; _i < _len; _i++) {
           s = series[_i];
           s.data = _.filter(s.data, function(item) {
             return item.y !== null;
           });
         }
-        window.graph = new Rickshaw.Graph({
+        graph = new Rickshaw.Graph({
           element: $(".chart", _this.$result).get(0),
           renderer: 'line',
           interpolation: "linear",
@@ -1648,6 +1650,7 @@
           min: "auto"
         });
         graph.render();
+        window._graph = graph;
         _this.drawIntervals(graph, emptyIntervals);
         $(window).on("resize", _.throttle(function() {
           if (_this.$result.is(":visible")) {

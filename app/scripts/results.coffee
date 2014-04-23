@@ -1258,19 +1258,32 @@ class view.GraphResults extends BaseResults
 
         n_diff = moment(max).diff min, diff
 
-        # c.log "ndiff", n_diff, [1..n_diff]
-        exists = (mom) ->
-            _.any _.map dateArray, (item) ->
-                item.isSame mom, diff
+        momentMapping = _.object _.map data, (item) ->
+            [moment(item.x).unix(), item.y]
+        c.log "momentMapping", momentMapping
+
+        # exists = (mom) ->
+        #     _.any _.map dateArray, (item) ->
+        #         item.isSame mom, diff
+
         newMoments = []
+        # lastYVal = min
         for i in [0..n_diff]
             newMoment = moment(min).add(diff, i)
-            newMoments.push newMoment if !exists newMoment
+            maybeCurrent = momentMapping[newMoment.unix()]
+            if typeof maybeCurrent != 'undefined'
+                lastYVal = maybeCurrent
+                c.log "maybeCurrent", maybeCurrent
+            else
+                c.log "newMoment", newMoment.year()
+                newMoments.push {x : newMoment, y : lastYVal}
+                
 
 
 
-        # c.log "newMoments", newMoments
-        newMoments = _.map newMoments, (item) -> x : item, y : 0
+        # TODO: the getYValue is pretty damn inefficient
+        # newMoments = _.map newMoments, ([]) -> x : item, y : getYValue(item)
+        c.log "newMoments", newMoments
         return [].concat data, newMoments
 
 
@@ -1294,6 +1307,7 @@ class view.GraphResults extends BaseResults
             output.push {x : firstVal, y:0}
 
         output = @fillMissingDate output
+        c.log "fillMissingDate output", output
 
         # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
 
@@ -1358,13 +1372,15 @@ class view.GraphResults extends BaseResults
                 while breaker
                     i++
                     item = data[i]
-                    if item.y == null
+                    if item?.y == null
                         interval.push _.clone item
                     else
+                        # if data[i + 1] then interval.push _.clone data[i + 1]
                         intervals.push interval
                         breaker = false
             i++
 
+        # return intervals.splice(intervals.length - 1, 1)
         return intervals
 
 
@@ -1389,7 +1405,7 @@ class view.GraphResults extends BaseResults
                 # left : ((from + unitWidth / 2) - offset)
                 left : from - unitWidth / 2
                 # width : (to - from) - unitWidth / 2
-                width : unitWidth
+                width : (to - from) + unitWidth
             .appendTo graph.element
 
 
@@ -1451,13 +1467,13 @@ class view.GraphResults extends BaseResults
             window.data = series[0].data
             emptyIntervals = @getEmptyIntervals(series[0].data)
             @s.hasEmptyIntervals = emptyIntervals.length
-            c.log "emptyIntervals", emptyIntervals
+            # c.log "emptyIntervals", emptyIntervals
 
             for s in series
                 s.data = _.filter s.data, (item) -> item.y != null
 
 
-            window.graph = new Rickshaw.Graph
+            graph = new Rickshaw.Graph
                 element: $(".chart", @$result).get(0)
                 renderer: 'line'
                 interpolation : "linear"
@@ -1467,7 +1483,7 @@ class view.GraphResults extends BaseResults
                     right : 0.01
                 min : "auto"
             graph.render()
-
+            window._graph = graph
             
             
 
