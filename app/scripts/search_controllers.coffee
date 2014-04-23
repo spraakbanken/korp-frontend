@@ -156,6 +156,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     s.getOpts = (type) ->
         confObj = s.typeMapping?[type]
+        unless confObj
+            c.log "confObj missing", confObj
 
         optObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
         if confObj.type == "set"

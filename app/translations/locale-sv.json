@@ -170,6 +170,8 @@
 	"rel_hits_short" : "Rel. träffar",
 	"drawing" : "Ritar upp diagrammet...",
 	"material_warn" : "Valt material saknar tidsdata",
+	"graph_material" : "Tidsdata saknas",
+	"graph_material_tooltip" : "De valda korpusarna saknar tidsdata för de skuggade perioderna.",
 
 	"word_insensitive" : "ord (skiftlägesoberoende)",
 	"sentence_attr" : "Textattribut",

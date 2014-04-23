@@ -11410,6 +11410,20 @@ slider span.bubble.limit {
   }
 }
 
+.rickshaw_legend .line {
+  white-space: nowrap;
+}
+
+@media -sass-debug-info {
+  filename {
+    font-family: file\:\/\/\/Users\/johan\/Dropbox\/Development\/workspace_juno\/korp\/app\/styles\/styles\.scss;
+  }
+
+  line {
+    font-family: \000031989;
+  }
+}
+
 .rickshaw_graph svg {
   position: relative;
   z-index: 100;
@@ -11421,7 +11435,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000031988;
+    font-family: \000031993;
   }
 }
 
@@ -11436,7 +11450,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000031993;
+    font-family: \000031998;
   }
 }
 
@@ -11450,7 +11464,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000031998;
+    font-family: \000032003;
   }
 }
 
@@ -11464,7 +11478,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000032002;
+    font-family: \000032007;
   }
 }
 
@@ -11478,7 +11492,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000032005;
+    font-family: \000032010;
   }
 }
 
@@ -11497,7 +11511,7 @@ slider span.bubble.limit {
   }
 
   line {
-    font-family: \000032009;
+    font-family: \000032014;
   }
 }
 
@@ -11511,7 +11525,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032013;
+    font-family: \000032018;
   }
 }
 
@@ -11525,7 +11539,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032020;
+    font-family: \000032025;
   }
 }
 
@@ -11540,7 +11554,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032025;
+    font-family: \000032030;
   }
 }
 
@@ -11554,7 +11568,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032029;
+    font-family: \000032034;
   }
 }
 
@@ -11568,7 +11582,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032033;
+    font-family: \000032038;
   }
 }
 
@@ -11582,7 +11596,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032036;
+    font-family: \000032041;
   }
 }
 
@@ -11596,7 +11610,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032039;
+    font-family: \000032044;
   }
 }
 
@@ -11611,7 +11625,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032043;
+    font-family: \000032048;
   }
 }
 
@@ -11626,7 +11640,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032048;
+    font-family: \000032053;
   }
 }
 
@@ -11642,7 +11656,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032051;
+    font-family: \000032056;
   }
 }
 
@@ -11656,7 +11670,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032055;
+    font-family: \000032060;
   }
 }
 
@@ -11674,7 +11688,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032063;
+    font-family: \000032068;
   }
 }
 
@@ -11689,7 +11703,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032067;
+    font-family: \000032072;
   }
 }
 
@@ -11703,7 +11717,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032076;
+    font-family: \000032081;
   }
 }
 
@@ -11720,7 +11734,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032081;
+    font-family: \000032086;
   }
 }
 
@@ -11734,7 +11748,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032084;
+    font-family: \000032089;
   }
 }
 
@@ -11748,7 +11762,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032087;
+    font-family: \000032092;
   }
 }
 
@@ -11763,7 +11777,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032091;
+    font-family: \000032096;
   }
 }
 
@@ -11778,7 +11792,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032094;
+    font-family: \000032099;
   }
 }
 
@@ -11796,7 +11810,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032100;
+    font-family: \000032105;
   }
 }
 
@@ -11810,7 +11824,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032103;
+    font-family: \000032108;
   }
 }
 
@@ -11828,7 +11842,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032110;
+    font-family: \000032115;
   }
 }
 
@@ -11842,7 +11856,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032117;
+    font-family: \000032122;
   }
 }
 
@@ -11857,7 +11871,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032123;
+    font-family: \000032128;
   }
 }
 
@@ -11873,7 +11887,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032127;
+    font-family: \000032132;
   }
 }
 
@@ -11888,7 +11902,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032131;
+    font-family: \000032136;
   }
 }
 
@@ -11903,7 +11917,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032135;
+    font-family: \000032140;
   }
 }
 
@@ -11921,7 +11935,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032142;
+    font-family: \000032147;
   }
 }
 
@@ -11935,7 +11949,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032145;
+    font-family: \000032150;
   }
 }
 
@@ -11949,7 +11963,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032149;
+    font-family: \000032154;
   }
 }
 
@@ -11964,7 +11978,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032155;
+    font-family: \000032160;
   }
 }
 
@@ -11978,7 +11992,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032158;
+    font-family: \000032163;
   }
 }
 
@@ -11997,7 +12011,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032161;
+    font-family: \000032166;
   }
 }
 
@@ -12014,7 +12028,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032168;
+    font-family: \000032173;
   }
 }
 
@@ -12029,7 +12043,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032181;
+    font-family: \000032186;
   }
 }
 
@@ -12045,7 +12059,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032186;
+    font-family: \000032191;
   }
 }
 
@@ -12059,7 +12073,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032190;
+    font-family: \000032195;
   }
 }
 
@@ -12074,7 +12088,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032193;
+    font-family: \000032198;
   }
 }
 
@@ -12088,7 +12102,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032197;
+    font-family: \000032202;
   }
 }
 
@@ -12103,7 +12117,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032200;
+    font-family: \000032205;
   }
 }
 
@@ -12117,7 +12131,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032204;
+    font-family: \000032209;
   }
 }
 
@@ -12134,7 +12148,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032211;
+    font-family: \000032216;
   }
 }
 
@@ -12149,7 +12163,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032226;
+    font-family: \000032231;
   }
 }
 
@@ -12164,7 +12178,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032228;
+    font-family: \000032233;
   }
 }
 
@@ -12178,7 +12192,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032231;
+    font-family: \000032236;
   }
 }
 
@@ -12193,7 +12207,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032237;
+    font-family: \000032242;
   }
 }
 
@@ -12207,7 +12221,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032239;
+    font-family: \000032244;
   }
 }
 
@@ -12222,7 +12236,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032248;
+    font-family: \000032253;
   }
 }
 
@@ -12236,7 +12250,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032251;
+    font-family: \000032256;
   }
 }
 
@@ -12251,7 +12265,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032255;
+    font-family: \000032260;
   }
 }
 
@@ -12265,7 +12279,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032258;
+    font-family: \000032263;
   }
 }
 
@@ -12279,7 +12293,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032263;
+    font-family: \000032268;
   }
 }
 
@@ -12294,7 +12308,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032268;
+    font-family: \000032273;
   }
 }
 
@@ -12308,7 +12322,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032272;
+    font-family: \000032277;
   }
 }
 
@@ -12327,7 +12341,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032284;
+    font-family: \000032289;
   }
 }
 
@@ -12343,7 +12357,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032289;
+    font-family: \000032294;
   }
 }
 
@@ -12357,7 +12371,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032292;
+    font-family: \000032297;
   }
 }
 
@@ -12371,7 +12385,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032296;
+    font-family: \000032301;
   }
 }
 
@@ -12388,7 +12402,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032301;
+    font-family: \000032306;
   }
 }
 
@@ -12403,7 +12417,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032305;
+    font-family: \000032310;
   }
 }
 
@@ -12418,7 +12432,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032309;
+    font-family: \000032314;
   }
 }
 
@@ -12433,7 +12447,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032314;
+    font-family: \000032319;
   }
 }
 

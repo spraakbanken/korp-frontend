@@ -27,11 +27,11 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
           span.non_time
           span(rel='localize[non_time_after]')
       .legend(ng-show="!loading")
-        .line
+        .line(ng-show="hasEmptyIntervals", tooltip="{{'graph_material_tooltip' | loc}}")
           a.action
           .swatch(style="background-color: #999")
           span.label 
-            em Material saknas
+            em {{'graph_material' | loc}} 
       div(style='clear: both;')
       .drawing(ng-show="loading")
         | {{'drawing' | loc}}

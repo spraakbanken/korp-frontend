@@ -1024,11 +1024,8 @@ class view.StatsResults extends BaseResults
         if $("html.msie7,html.msie8").length
             $("#showGraph").hide()
             return
-        # icon = $("<span class='graph_btn_icon'>")
 
-        # $("#showGraph").button().addClass("ui-button-text-icon-primary").prepend(icon).click () =>
         $("#showGraph").on "click", () =>
-            # instance = $("#result-container").korptabs("addTab", view.GraphResults, "Graph")
             if $("#showGraph").is(".disabled") then return
             params = @proxy.prevParams
             cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
@@ -1039,7 +1036,7 @@ class view.StatsResults extends BaseResults
             isStructAttr = reduceVal in cl.getStructAttrs()
             subExprs = []
             labelMapping = {}
-            # TODO: doesn't work when reloading with extended tab showing.
+            
             showTotal = false
             mainCQP = params.cqp
             prefix = if isStructAttr then "_." else ""
@@ -1356,7 +1353,6 @@ class view.GraphResults extends BaseResults
             item = data[i]
 
             if item.y == null
-                # c.log "item y null", item
                 interval = [_.clone item]
                 breaker = true
                 while breaker
@@ -1365,7 +1361,6 @@ class view.GraphResults extends BaseResults
                     if item.y == null
                         interval.push _.clone item
                     else
-                        # if data[i + 1] then interval.push _.clone data[i + 1]
                         intervals.push interval
                         breaker = false
             i++
@@ -1455,6 +1450,7 @@ class view.GraphResults extends BaseResults
             Rickshaw.Series.zeroFill(series)
             window.data = series[0].data
             emptyIntervals = @getEmptyIntervals(series[0].data)
+            @s.hasEmptyIntervals = emptyIntervals.length
             c.log "emptyIntervals", emptyIntervals
 
             for s in series
@@ -1476,6 +1472,7 @@ class view.GraphResults extends BaseResults
             
 
             @drawIntervals(graph, emptyIntervals)
+
 
             $(window).on "resize", _.throttle(() =>
                 if @$result.is(":visible")

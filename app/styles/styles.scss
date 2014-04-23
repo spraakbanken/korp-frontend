@@ -1980,6 +1980,11 @@ slider {
   }
   
 }
+.rickshaw_legend {
+  .line {
+    white-space : nowrap;
+  }
+}
 
 .rickshaw_graph svg {
   position: relative;
@@ -2015,8 +2020,8 @@ line.tick {
 }
 
 .rickshaw_graph .x_tick {
-  // border : none !important;
 }
+
 .zoom_slider {
   margin-top : 30px;
   width : 100% !important;

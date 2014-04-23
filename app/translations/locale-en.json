@@ -167,6 +167,8 @@
 	"rel_hits_short" : "Rel. hits",
 	"drawing" : "Drawing graph...",
 	"material_warn" : "The selected corpora lack time data.",
+	"graph_material" : "No available time data",
+	"graph_material_tooltip" : "The selected corpora lack time data for the shadowed periods.",
 
 
     "word_insensitive" : "word (case insensitive)",

@@ -159,6 +159,9 @@
     s.getOpts = function(type) {
       var confObj, optObj, _ref;
       confObj = (_ref = s.typeMapping) != null ? _ref[type] : void 0;
+      if (!confObj) {
+        c.log("confObj missing", confObj);
+      }
       optObj = _.extend({}, (confObj != null ? confObj.opts : void 0) || settings.defaultOptions);
       if (confObj.type === "set") {
         optObj.is = "contains";

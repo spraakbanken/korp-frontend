@@ -1628,6 +1628,7 @@
         Rickshaw.Series.zeroFill(series);
         window.data = series[0].data;
         emptyIntervals = _this.getEmptyIntervals(series[0].data);
+        _this.s.hasEmptyIntervals = emptyIntervals.length;
         c.log("emptyIntervals", emptyIntervals);
         for (_i = 0, _len = series.length; _i < _len; _i++) {
           s = series[_i];
