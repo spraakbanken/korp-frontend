@@ -56,6 +56,7 @@
     };
 
     BaseResults.prototype.resetView = function() {
+      this.hasData = false;
       return this.$result.find(".error_msg").remove();
     };
 
@@ -670,8 +671,8 @@
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError,
         _this = this;
-      resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.resetView();
+      resultError = LemgramResults.__super__.renderResult.call(this, data);
       safeApply(this.s, function() {
         _this.hidePreloader();
         return _this.s.$parent.progress = 100;
@@ -1422,23 +1423,19 @@
       momentMapping = _.object(_.map(data, function(item) {
         return [moment(item.x).unix(), item.y];
       }));
-      c.log("momentMapping", momentMapping);
       newMoments = [];
       for (i = _i = 0; 0 <= n_diff ? _i <= n_diff : _i >= n_diff; i = 0 <= n_diff ? ++_i : --_i) {
         newMoment = moment(min).add(diff, i);
         maybeCurrent = momentMapping[newMoment.unix()];
         if (typeof maybeCurrent !== 'undefined') {
           lastYVal = maybeCurrent;
-          c.log("maybeCurrent", maybeCurrent);
         } else {
-          c.log("newMoment", newMoment.year());
           newMoments.push({
             x: newMoment,
             y: lastYVal
           });
         }
       }
-      c.log("newMoments", newMoments);
       return [].concat(data, newMoments);
     };
 
@@ -1588,7 +1585,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, emptyIntervals, first, graph, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, smoother, time, timeunit, toDate, yAxis, _i, _len, _ref;
+        var color, emptyIntervals, first, graph, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, time, timeunit, toDate, yAxis, _i, _len, _ref;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1658,19 +1655,6 @@
             return graph.render();
           }
         }, 200));
-        smoother = new Rickshaw.Graph.Smoother({
-          graph: graph
-        });
-        $(".smoothing_switch", _this.$result).button().change(function() {
-          if ($(this).is(":checked")) {
-            smoother.setScale(3);
-            graph.interpolation = "cardinal";
-          } else {
-            smoother.setScale(1);
-            graph.interpolation = "linear";
-          }
-          return graph.render();
-        });
         $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
           var cls, target, val, _j, _len1, _ref;
           target = event.currentTarget;
@@ -1732,7 +1716,9 @@
             return "<span data-val='" + x + "'>" + out + "</span>";
           },
           yFormatter: function(y) {
-            return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + y.toFixed(2);
+            var val;
+            val = util.formatDecimalString(y.toFixed(2), false, true, true);
+            return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
           },
           formatter: function(series, x, y, formattedX, formattedY, d) {
             var content;

@@ -118,8 +118,10 @@
         conf = {
           url: settings.cgi_script,
           params: params,
-          method: "GET"
+          method: "GET",
+          headers: {}
         };
+        _.extend(conf.headers, model.getAuthorizationHeader());
         xhr = $http(conf);
         xhr.success(function(data) {
           return def.resolve([data, cmpObj1, cmpObj2, reduce], xhr);

@@ -4,16 +4,23 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("SearchCtrl", function($scope, $location) {
+  korpApp.controller("SearchCtrl", function($scope, $location, utils) {
     $scope.visibleTabs = [true, true, true, true];
     $scope.extendedTmpl = "views/extended_tmpl.html";
     $scope.isCompareSelected = false;
     $scope.settings = settings;
-    return $scope.$watch((function() {
+    $scope.$watch((function() {
       return $location.search().search_tab;
     }), function(val) {
       return $scope.isCompareSelected = val === 3;
     });
+    return utils.setupHash($scope, [
+      {
+        key: "word_pic",
+        val_out: Boolean,
+        val_in: Boolean
+      }
+    ]);
   });
 
   korpApp.config(function($tooltipProvider) {
@@ -77,8 +84,6 @@
         key: "suffix"
       }, {
         key: "isCaseInsensitive"
-      }, {
-        key: "word_pic"
       }
     ]);
   });

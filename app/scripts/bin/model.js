@@ -6,6 +6,16 @@
 
   window.model = {};
 
+  model.getAuthorizationHeader = function() {
+    if (typeof authenticationProxy !== "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
+      return {
+        "Authorization": "Basic " + authenticationProxy.loginObj.auth
+      };
+    } else {
+      return {};
+    }
+  };
+
   BaseProxy = (function() {
     function BaseProxy() {
       this.prev = "";
@@ -40,9 +50,10 @@
     };
 
     BaseProxy.prototype.addAuthorizationHeader = function(req) {
-      if (typeof authenticationProxy !== "undefined" && !$.isEmptyObject(authenticationProxy.loginObj)) {
-        c.log("adding creds", authenticationProxy.loginObj.auth);
-        return req.setRequestHeader("Authorization", "Basic " + authenticationProxy.loginObj.auth);
+      var pairs;
+      pairs = _.pairs(model.getAuthorizationHeader());
+      if (pairs.length) {
+        return req.setRequestHeader.apply(req, pairs[0]);
       }
     };
 

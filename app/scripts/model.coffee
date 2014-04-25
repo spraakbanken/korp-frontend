@@ -1,5 +1,12 @@
 window.model = {}
 
+model.getAuthorizationHeader = () ->
+    if typeof authenticationProxy isnt "undefined" and not $.isEmptyObject(authenticationProxy.loginObj)
+        "Authorization" : "Basic " + authenticationProxy.loginObj.auth
+    else
+        {}
+
+
 class BaseProxy
     constructor: ->
 
@@ -38,9 +45,9 @@ class BaseProxy
             return JSON.parse(data)
 
     addAuthorizationHeader: (req) ->
-        if typeof authenticationProxy isnt "undefined" and not $.isEmptyObject(authenticationProxy.loginObj)
-            c.log "adding creds", authenticationProxy.loginObj.auth
-            req.setRequestHeader "Authorization", "Basic " + authenticationProxy.loginObj.auth
+        pairs = _.pairs model.getAuthorizationHeader()
+        if pairs.length
+            req.setRequestHeader pairs[0]...
 
     calcProgress: (e) ->
         newText = e.target.responseText.slice(@prev.length)

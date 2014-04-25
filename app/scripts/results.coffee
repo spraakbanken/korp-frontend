@@ -56,6 +56,7 @@ class BaseResults
         @s.$parent.loading = false
 
     resetView: ->
+        @hasData = false
         @$result.find(".error_msg").remove()
 
     countCorpora : () ->
@@ -568,9 +569,11 @@ class view.LemgramResults extends BaseResults
         super()
         $(".content_target", @$result).empty()
 
+
+
     renderResult: (data, query) ->
-        resultError = super(data)
         @resetView()
+        resultError = super(data)
         safeApply @s, () =>
             @hidePreloader()
             @s.$parent.progress = 100
@@ -1237,7 +1240,6 @@ class view.GraphResults extends BaseResults
 
         return moment([Number(year), Number(month), Number(day)])
 
-    # buildSeries : (cqpArray) ->
 
     fillMissingDate : (data) ->
         dateArray = _.pluck data, "x"
@@ -1260,30 +1262,17 @@ class view.GraphResults extends BaseResults
 
         momentMapping = _.object _.map data, (item) ->
             [moment(item.x).unix(), item.y]
-        c.log "momentMapping", momentMapping
-
-        # exists = (mom) ->
-        #     _.any _.map dateArray, (item) ->
-        #         item.isSame mom, diff
 
         newMoments = []
-        # lastYVal = min
         for i in [0..n_diff]
             newMoment = moment(min).add(diff, i)
             maybeCurrent = momentMapping[newMoment.unix()]
             if typeof maybeCurrent != 'undefined'
                 lastYVal = maybeCurrent
-                c.log "maybeCurrent", maybeCurrent
             else
-                c.log "newMoment", newMoment.year()
                 newMoments.push {x : newMoment, y : lastYVal}
                 
 
-
-
-        # TODO: the getYValue is pretty damn inefficient
-        # newMoments = _.map newMoments, ([]) -> x : item, y : getYValue(item)
-        c.log "newMoments", newMoments
         return [].concat data, newMoments
 
 
@@ -1496,18 +1485,18 @@ class view.GraphResults extends BaseResults
                     graph.render()
             , 200)
 
-            smoother = new Rickshaw.Graph.Smoother
-                graph: graph,
-                # element: $('.smoother', @$result)
+            # smoother = new Rickshaw.Graph.Smoother
+            #     graph: graph,
 
-            $(".smoothing_switch", @$result).button().change ->
-                if $(this).is(":checked")
-                    smoother.setScale(3)
-                    graph.interpolation = "cardinal"
-                else
-                    smoother.setScale(1)
-                    graph.interpolation = "linear"
-                graph.render()
+            # $(".smoothing_switch", @$result).button().change ->
+            #     if $(this).is(":checked")
+            #         smoother.setScale(1)
+            #         graph.interpolation = "cardinal"
+            #     else
+            #         smoother.setScale(1)
+            #         graph.interpolation = "linear"
+            #     graph.render()
+
             $(".form_switch", @$result).buttonset().change (event, ui) =>
                 target = event.currentTarget
                 val = $(":checked", target).val()
@@ -1560,7 +1549,9 @@ class view.GraphResults extends BaseResults
 
 
                 yFormatter: (y) ->
-                    "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + y.toFixed 2
+                    val = util.formatDecimalString (y.toFixed 2), false, true, true
+
+                    "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
                 formatter : (series, x, y, formattedX, formattedY, d) ->
                     content = series.name + ':&nbsp;' + formattedY
                     return """<span data-cqp="#{encodeURIComponent(series.cqp)}">#{content}</span>"""

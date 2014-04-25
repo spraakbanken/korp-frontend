@@ -187,10 +187,11 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
 
     s.promise.then ([data, cmp1, cmp2, reduce], xhr) ->
-        # c.log "compare promise", _.pairs data.loglike
-        c.log "xhr", xhr
-        # util.setJsonLink()
         s.loading = false
+        if data.ERROR
+            s.error = true
+            return
+
         pairs = _.pairs data.loglike
         s.tables = _.groupBy  (pairs), ([word, val]) ->
             if val > 0 then "positive" else "negative"

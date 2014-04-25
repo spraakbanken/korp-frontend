@@ -118,6 +118,12 @@ korpApp.factory 'backend', ($http, $q, utils) ->
             url : settings.cgi_script
             params : params
             method : "GET"
+            headers : {}
+
+
+        _.extend conf.headers, model.getAuthorizationHeader()
+
+
         xhr = $http(conf)
 
         xhr.success (data) ->

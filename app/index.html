@@ -306,8 +306,6 @@
                           <input id="bar_input" type="radio" name="form_switch" value="bar">
                           <label for="bar_input">Stapel</label>
                         </div>
-                        <label for="smoothing_switch" class="smoothing_label">Utjämna</label>
-                        <input id="smoothing_switch" type="checkbox" class="smoothing_switch">
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
                       <div ng-show="!loading" class="legend">
@@ -325,7 +323,11 @@
                 <tab active="[true][0]" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">
                   <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc}}<span tab-spinner="tab-spinner" ng-click="compareTabs.splice($index, 1)"></span></tab-heading>
                   <div ng-class="{loading : loading}" class="compare_result">
-                    <div class="column column_1">
+                    <div ng-if="error" class="error_msg">
+                      <object type="image/svg+xml" data="img/korp_fail.svg" class="korp_fail inline_block"><img src="img/korp_fail.svg" class="korp_fail"></object>
+                      <div rel="localize[fail_text]" class="fail_text inline_block">Ett fel har uppstått. </div>
+                    </div>
+                    <div ng-if="!error" class="column column_1">
                       <h2>{{'compare_distinctive' | loc}} <em>{{cmp1.label}}</em></h2>
                       <ul>
                         <li ng-repeat="tuple in tables.negative" ng-click="rowClick(tuple, 0)">

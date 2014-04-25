@@ -1,7 +1,7 @@
 korpApp = angular.module("korpApp")
 
 
-korpApp.controller "SearchCtrl", ($scope, $location) ->
+korpApp.controller "SearchCtrl", ($scope, $location, utils) ->
     $scope.visibleTabs = [true, true, true, true]
     $scope.extendedTmpl = "views/extended_tmpl.html"
     $scope.isCompareSelected = false
@@ -12,6 +12,12 @@ korpApp.controller "SearchCtrl", ($scope, $location) ->
         (val) ->
             $scope.isCompareSelected = val == 3
     )
+
+    utils.setupHash $scope, [
+            key : "word_pic"
+            val_out : Boolean
+            val_in : Boolean
+    ]
 
 korpApp.config ($tooltipProvider) ->
     $tooltipProvider.options
@@ -61,18 +67,12 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         unless lemgram then return
         util.lemgramToString(lemgram).replace(/<.*?>/g, "")
 
-
     utils.setupHash s, [
             key : "prefix"
         ,
             key : "suffix"
         ,
             key : "isCaseInsensitive"
-        ,
-            key : "word_pic"
-            # val_in : (val) ->
-            #     c.log "word_pic post", val, s.word_pic
-                # settings.wordpicture = val
     ]
 
 

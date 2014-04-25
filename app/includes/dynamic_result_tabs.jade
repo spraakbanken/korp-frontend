@@ -20,8 +20,8 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
           label(for='line_input') Linje
           input#bar_input(type='radio', name='form_switch', value='bar')
           label(for="bar_input") Stapel
-        label.smoothing_label(for='smoothing_switch') Utjämna
-        input#smoothing_switch.smoothing_switch(type='checkbox')
+        //- label.smoothing_label(for='smoothing_switch') Utjämna
+        //- input#smoothing_switch.smoothing_switch(type='checkbox')
         .non_time_div
           span(rel='localize[non_time_before]')
           span.non_time
@@ -42,7 +42,13 @@ tab(active="[true][0]", ng-repeat='promise in compareTabs', ng-controller='compa
     | {{'compare_vb' | loc}}
     span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')
   .compare_result(ng-class='{loading : loading}')
-    .column.column_1
+    .error_msg(ng-if="error")
+      object.korp_fail.inline_block(type='image/svg+xml', data='img/korp_fail.svg')
+        img.korp_fail(src='img/korp_fail.svg')
+      .fail_text.inline_block(rel='localize[fail_text]') Ett fel har uppstått. 
+
+
+    .column.column_1(ng-if="!error")
       h2
         | {{'compare_distinctive' | loc}} 
         em {{cmp1.label}}
