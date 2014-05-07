@@ -127,9 +127,13 @@ class window.CorpusListing
         )
         _.union struct...
 
-    getContextQueryString: ->
+    getContextQueryString: (prefer) ->
         output = for corpus in @selected
             contexts = _.keys(corpus.context)
+
+            # if prefer in contexts and prefer not of settings.defaultContext
+            #     corpus.id.toUpperCase() + ":" + prefer
+
             for context in contexts
                 if context and context not of settings.defaultContext
                     corpus.id.toUpperCase() + ":" + context

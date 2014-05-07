@@ -168,6 +168,7 @@
 	"non_time_before" : "Saknar tidsuppmärkning: ",
 	"non_time_after" : " av valt material",
 	"rel_hits_short" : "Rel. träffar",
+	"abs_hits_short" : "Abs. träffar",
 	"drawing" : "Ritar upp diagrammet...",
 	"material_warn" : "Valt material saknar tidsdata",
 	"graph_material" : "Tidsperiod saknar data",

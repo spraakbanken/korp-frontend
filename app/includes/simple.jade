@@ -3,9 +3,7 @@
     label(for='simple_text') {{'search_for' | loc}}
     input#simple_text(type='text', ng-model='simple_text', placeholder='{{lemgramToString(placeholder)}}'
         autofocus)
-    // <span id="keyboard" class="lig">&#xe07d;</span>
     span#keyboard.ui-state-default.specialkey ð
-    // <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />
     search-submit
     span 
         |  {{'and_include' | loc}} 

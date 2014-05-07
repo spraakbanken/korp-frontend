@@ -94,9 +94,8 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         c.log "extended submit"
         $location.search("search", null)
         $timeout( () ->
-            c.log "_.last _.values settings.defaultWithin", _.last _.values settings.defaultWithin == s.within
-            within = s.within unless s.within == _.last _.values settings.defaultWithin
-            $location.search("within", s.within or null)
+            within = s.within unless s.within in _.keys settings.defaultWithin
+            $location.search("within", within or null)
             $location.search("search", "cqp")
         , 0)
 

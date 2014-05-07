@@ -500,7 +500,9 @@
           ignore_case: "word"
         });
       }
-      data.within = settings.corpusListing.getWithinQueryString();
+      if ($(".within_select").val() !== settings.defaultWithin) {
+        data.within = settings.corpusListing.getWithinQueryString();
+      }
       this.prevParams = data;
       return $.ajax({
         url: settings.cgi_script,

@@ -104,12 +104,11 @@
       c.log("extended submit");
       $location.search("search", null);
       return $timeout(function() {
-        var within;
-        c.log("_.last _.values settings.defaultWithin", _.last(_.values(settings.defaultWithin === s.within)));
-        if (s.within !== _.last(_.values(settings.defaultWithin))) {
+        var within, _ref;
+        if (_ref = s.within, __indexOf.call(_.keys(settings.defaultWithin), _ref) < 0) {
           within = s.within;
         }
-        $location.search("within", s.within || null);
+        $location.search("within", within || null);
         return $location.search("search", "cqp");
       }, 0);
     });

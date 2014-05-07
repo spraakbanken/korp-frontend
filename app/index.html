@@ -89,9 +89,7 @@
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form>
                   <label for="simple_text">{{'search_for' | loc}}</label>
-                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus>
-                  <!-- <span id="keyboard" class="lig">&#xe07d;</span>--><span id="keyboard" class="ui-state-default specialkey">ð</span>
-                  <!-- <input id="sendBtn" value="  Sök  " type="submit" rel="localize[search]" />-->
+                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus><span id="keyboard" class="ui-state-default specialkey">ð</span>
                   <search-submit></search-submit><span>
                      
                      {{'and_include' | loc}} </span>

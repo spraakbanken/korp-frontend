@@ -205,6 +205,7 @@
     KWICResults.prototype.renderCompleteResult = function(data) {
       var _this = this;
       c.log("renderCompleteResult", data);
+      this.current_page = search().page || 0;
       safeApply(this.s, function() {
         return _this.hidePreloader();
       });
@@ -331,7 +332,6 @@
     KWICResults.prototype.buildPager = function(number_of_hits) {
       var items_per_page;
       items_per_page = this.optionWidget.find(".num_hits").val();
-      this.movePager("up");
       $.onScrollOut("unbind");
       this.$result.find(".pager-wrapper").unbind().empty();
       if (number_of_hits > items_per_page) {
@@ -406,7 +406,7 @@
         cqp: cqp || this.proxy.prevCQP,
         queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
         context: this.isReadingMode() || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0,
-        within: settings.corpusListing.getWithinQueryString()
+        within: search().within ? settings.corpusListing.getWithinQueryString() : void 0
       };
       _.extend(opts.ajaxParams, getSortParams());
       return opts;
@@ -544,40 +544,6 @@
         }
       });
       return output;
-    };
-
-    KWICResults.prototype.setupPagerMover = function() {
-      var downOpts, pager, self, upOpts;
-      self = this;
-      pager = this.$result.find(".pager-wrapper");
-      upOpts = {
-        point: pager.offset().top + pager.height(),
-        callback: function() {
-          return self.movePager("up");
-        }
-      };
-      self.movePager("down");
-      downOpts = {
-        point: pager.offset().top + pager.height(),
-        callback: function() {
-          return self.movePager("down");
-        }
-      };
-      self.movePager("up");
-      c.log("onscrollout", upOpts.point, downOpts.point);
-      return $.onScrollOut(upOpts, downOpts);
-    };
-
-    KWICResults.prototype.movePager = function(dir) {
-      var pager;
-      pager = this.$result.find(".pager-wrapper");
-      if (dir === "down") {
-        return pager.data("prevPos", pager.prev()).appendTo(this.$result);
-      } else {
-        if (pager.data("prevPos")) {
-          return pager.data("prevPos").after(pager);
-        }
-      }
     };
 
     return KWICResults;
@@ -1473,7 +1439,6 @@
         });
       }
       output = this.fillMissingDate(output);
-      c.log("fillMissingDate output", output);
       output = output.sort(function(a, b) {
         return a.x.unix() - b.x.unix();
       });
@@ -1609,7 +1574,8 @@
                 data: this.getSeriesData(item.relative),
                 color: color,
                 name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
-                cqp: item.cqp || cqp
+                cqp: item.cqp || cqp,
+                abs_data: this.getSeriesData(item.absolute)
               });
             }
             return _results;
@@ -1620,7 +1586,8 @@
               data: _this.getSeriesData(data.combined.relative),
               color: 'steelblue',
               name: "&Sigma;",
-              cqp: cqp
+              cqp: cqp,
+              abs_data: _this.getSeriesData(data.combined.absolute)
             }
           ];
         }
@@ -1719,11 +1686,13 @@
             val = util.formatDecimalString(y.toFixed(2), false, true, true);
             return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
           },
-          formatter: function(series, x, y, formattedX, formattedY, d) {
-            var content;
-            content = series.name + ':&nbsp;' + formattedY;
-            return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">" + content + "</span>";
-          }
+          formatter: _.debounce(function(series, x, y, formattedX, formattedY, d) {
+            var abs_y, i, rel;
+            i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
+            abs_y = series.abs_data[i].y;
+            rel = series.name + ':&nbsp;' + formattedY;
+            return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
+          }, 100)
         });
         _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
         timeunit = last - first > 100 ? "decade" : _this.zoom;

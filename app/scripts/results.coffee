@@ -193,6 +193,7 @@ class view.KWICResults extends BaseResults
 
     renderCompleteResult: (data) ->
         c.log "renderCompleteResult", data
+        @current_page = search().page or 0
         safeApply @s, () =>
             @hidePreloader()
         unless data.hits
@@ -288,7 +289,7 @@ class view.KWICResults extends BaseResults
 
     buildPager: (number_of_hits) ->
         items_per_page = @optionWidget.find(".num_hits").val()
-        @movePager "up"
+        # @movePager "up"
         $.onScrollOut "unbind"
         @$result.find(".pager-wrapper").unbind().empty()
         if number_of_hits > items_per_page
@@ -354,7 +355,7 @@ class view.KWICResults extends BaseResults
             cqp : cqp or @proxy.prevCQP
             queryData : @proxy.queryData if @proxy.queryData
             context : settings.corpusListing.getContextQueryString() if @isReadingMode() or currentMode == "parallel"
-            within : settings.corpusListing.getWithinQueryString()
+            within : settings.corpusListing.getWithinQueryString() if search().within
         }
         _.extend opts.ajaxParams, getSortParams()
         return opts
@@ -462,31 +463,31 @@ class view.KWICResults extends BaseResults
             false  if (xCoor > thisLeft and xCoor < thisRight) or thisLeft > xCoor
 
         output
+    # TODO: currently out of commission
+    # setupPagerMover: ->
+    #     self = this
+    #     pager = @$result.find(".pager-wrapper")
+    #     upOpts =
+    #         point: pager.offset().top + pager.height()
+    #         callback: ->
+    #             self.movePager "up"
 
-    setupPagerMover: ->
-        self = this
-        pager = @$result.find(".pager-wrapper")
-        upOpts =
-            point: pager.offset().top + pager.height()
-            callback: ->
-                self.movePager "up"
+    #     self.movePager "down"
+    #     downOpts =
+    #         point: pager.offset().top + pager.height()
+    #         callback: ->
+    #             self.movePager "down"
 
-        self.movePager "down"
-        downOpts =
-            point: pager.offset().top + pager.height()
-            callback: ->
-                self.movePager "down"
+    #     self.movePager "up"
+    #     c.log "onscrollout", upOpts.point, downOpts.point
+    #     $.onScrollOut upOpts, downOpts
 
-        self.movePager "up"
-        c.log "onscrollout", upOpts.point, downOpts.point
-        $.onScrollOut upOpts, downOpts
-
-    movePager: (dir) ->
-        pager = @$result.find(".pager-wrapper")
-        if dir is "down"
-            pager.data("prevPos", pager.prev()).appendTo @$result
-        else
-            pager.data("prevPos").after pager  if pager.data("prevPos")
+    # movePager: (dir) ->
+    #     pager = @$result.find(".pager-wrapper")
+    #     if dir is "down"
+    #         pager.data("prevPos", pager.prev()).appendTo @$result
+    #     else
+    #         pager.data("prevPos").after pager  if pager.data("prevPos")
 
 
 
@@ -1280,6 +1281,7 @@ class view.GraphResults extends BaseResults
 
     getSeriesData : (data) ->
         delete data[""]
+        # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
         [first, last] = settings.corpusListing.getTimeInterval()
         firstVal = @parseDate "y", first
         lastVal = @parseDate "y", last.toString()
@@ -1296,9 +1298,7 @@ class view.GraphResults extends BaseResults
             output.push {x : firstVal, y:0}
 
         output = @fillMissingDate output
-        c.log "fillMissingDate output", output
 
-        # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
 
         output =  output.sort (a, b) ->
             a.x.unix() - b.x.unix()
@@ -1442,6 +1442,7 @@ class view.GraphResults extends BaseResults
                         # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
                         name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
                         cqp : item.cqp or cqp
+                        abs_data : @getSeriesData item.absolute
                     }
             else
                 # @colorToCqp['steelblue'] = cqp
@@ -1450,6 +1451,7 @@ class view.GraphResults extends BaseResults
                             color: 'steelblue'
                             name : "&Sigma;"
                             cqp : cqp
+                            abs_data : @getSeriesData data.combined.absolute
                         }]
 
             Rickshaw.Series.zeroFill(series)
@@ -1552,9 +1554,18 @@ class view.GraphResults extends BaseResults
                     val = util.formatDecimalString (y.toFixed 2), false, true, true
 
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
-                formatter : (series, x, y, formattedX, formattedY, d) ->
-                    content = series.name + ':&nbsp;' + formattedY
-                    return """<span data-cqp="#{encodeURIComponent(series.cqp)}">#{content}</span>"""
+                formatter : _.debounce( (series, x, y, formattedX, formattedY, d) ->
+                    i = _.indexOf (_.pluck series.abs_data, "x"), x, true
+                    abs_y = series.abs_data[i].y
+
+
+                    rel = series.name + ':&nbsp;' + formattedY
+                    return """<span data-cqp="#{encodeURIComponent(series.cqp)}">
+                        #{rel}
+                        <br>
+                        #{util.getLocaleString 'abs_hits_short'}: #{abs_y}
+                    </span>"""
+                , 100)
             } )
 
             [first, last] = settings.corpusListing.getTimeInterval()

@@ -127,6 +127,7 @@ class BaseSearch
     refreshSearch: ->
         # $.bbq.removeState "search"
         search "search", null
+        # search "page", null
         $(window).trigger "hashchange"
 
     onSubmit: ->

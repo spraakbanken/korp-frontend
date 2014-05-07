@@ -165,7 +165,7 @@
       return _.union.apply(_, struct);
     };
 
-    CorpusListing.prototype.getContextQueryString = function() {
+    CorpusListing.prototype.getContextQueryString = function(prefer) {
       var context, contexts, corpus, output;
       output = (function() {
         var _i, _len, _ref, _results;

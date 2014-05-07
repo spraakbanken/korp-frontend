@@ -192,7 +192,8 @@ class model.KWICProxy extends BaseProxy
                 $.each corpus.struct_attributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
-
+        # if $(".within_select").val() != settings.defaultWithin
+        #     data.within = settings.corpusListing.getWithinQueryString()
         data.show = _.uniq data.show
         @prevCQP = data.cqp
         data.show = (_.uniq data.show).join(",")
@@ -416,7 +417,8 @@ class model.StatsProxy extends BaseProxy
                 ignore_case: "word"
 
         # data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
-        data.within = settings.corpusListing.getWithinQueryString()
+        if $(".within_select").val() != settings.defaultWithin
+            data.within = settings.corpusListing.getWithinQueryString()
         @prevParams = data
         $.ajax
             url: settings.cgi_script
