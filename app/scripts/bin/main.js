@@ -14,6 +14,10 @@
     authenticationProxy.loginObj = creds;
   }
 
+  if (location.hash.length && location.hash[1] !== "?") {
+    location.hash = "#?" + _.str.lstrip(location.hash, "#");
+  }
+
   t = $.now();
 
   isDev = window.location.host === "localhost";

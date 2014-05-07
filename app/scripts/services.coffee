@@ -2,26 +2,6 @@ korpApp = angular.module("korpApp")
 korpApp.factory "utils", ($location) ->
     valfilter : (attrobj) ->
         return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
-    # getAttributeGroups : (corpusListing) ->
-    #     word =
-    #         group : "word"
-    #         value : "word"
-    #         label : "word"
-        
-    #     attrs = for key, obj of corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
-    #         _.extend({group : "word_attr", value : key}, obj)
-
-    #     common_keys = _.compact _.flatten _.map corpusListing.selected, (corp) -> _.keys corp.common_attributes
-    #     common = _.pick settings.common_struct_types, common_keys...
-
-    #     sent_attrs = for key, obj of (_.extend {}, common, corpusListing.getStructAttrs()) when obj.displayType != "hidden"
-    #         _.extend({group : "sentence_attr", value : key}, obj)
-
-    #     sent_attrs = _.sortBy sent_attrs, (item) ->
-    #         util.getLocaleString(item.label)
-
-    #     return [word].concat(attrs, sent_attrs)
-        
 
     setupHash : (scope, config) ->
         # config = [

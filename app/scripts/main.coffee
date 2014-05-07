@@ -6,6 +6,9 @@ creds = $.jStorage.get("creds")
 if creds
     authenticationProxy.loginObj = creds
 
+# rewriting old url format to the angular one
+if(location.hash.length && location.hash[1] != "?")
+    location.hash = "#?" + _.str.lstrip(location.hash, "#")
 
 t = $.now()
 

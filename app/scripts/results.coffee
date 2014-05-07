@@ -1036,7 +1036,7 @@ class view.StatsResults extends BaseResults
             reduceVal = params.groupby
 
 
-            isStructAttr = reduceVal in cl.getStructAttrs()
+            isStructAttr = reduceVal of cl.getStructAttrs()
             subExprs = []
             labelMapping = {}
             
