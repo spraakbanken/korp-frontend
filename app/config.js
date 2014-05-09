@@ -671,7 +671,7 @@ settings.corporafolders.newspapertexts = {
 
 settings.corporafolders.newspapertexts.gp = {
     title : "GP",
-    contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2010", "gp2011", "gp2012", "gp2d"]
+    contents : ["gp1994", "gp2001", "gp2002", "gp2003", "gp2004", "gp2005", "gp2006", "gp2007", "gp2008", "gp2009", "gp2010", "gp2011", "gp2012", "gp2013", "gp2d"]
 };
 
 settings.corporafolders.newspapertexts.press = {
@@ -1595,6 +1595,20 @@ settings.corpora.gp2012 = {
     id : "gp2012",
     title : "GP 2012",
     description : "Göteborgs-Posten 2012.",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : sattrs.date,
+        text_author : {label : "article_author"},
+        text_section : {label : "article_section"}
+    }
+};
+
+settings.corpora.gp2013 = {
+    id : "gp2013",
+    title : "GP 2013",
+    description : "Göteborgs-Posten 2013.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
