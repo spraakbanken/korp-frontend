@@ -84,7 +84,7 @@
       </div>
       <div id="content">
         <div ng-controller="SearchCtrl">
-          <tabset tab-hash="search_tab" class="search_tabs">
+          <tabset tab-hash="search_tab" class="tabbable search_tabs">
             <tab heading="{{&quot;simple&quot; | loc}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form>
@@ -187,7 +187,7 @@
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
-              <tabset tab-hash="result_tab" ng-click="onClick($event)">
+              <tabset tab-hash="result_tab" ng-click="onClick($event)" class="tabbable">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
@@ -462,7 +462,7 @@
     <script src="components/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
     <script src="lib/g.line-min.js"></script>
     <script src="lib/jquery.tooltip.pack.js"></script>
-    <script src="components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/lodash/dist/lodash.compat.js"></script>
     <script src="components/underscore.string/lib/underscore.string.js"></script>
     <script src="components/spin.js/spin.js"></script>

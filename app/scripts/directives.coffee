@@ -91,9 +91,8 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
     
-                # <input ng-model='input' class='arg_value' escaper
     getDefaultTmpl = _.template """
-                <eased-input value='input' input="500" class='arg_value' escaper
+                <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : 300}'
                 <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
@@ -135,7 +134,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         current = null
         scope.$watch "tokenValue", (valueObj) ->
             unless valueObj then return
-            c.log "$scope tokenValue link", valueObj
+            # c.log "$scope tokenValue link", valueObj
             if valueObj.value == current?.value then return
             current = valueObj
 

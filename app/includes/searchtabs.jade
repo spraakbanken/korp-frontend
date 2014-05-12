@@ -1,5 +1,5 @@
 div(ng-controller="SearchCtrl")
-  tabset.search_tabs(tab-hash='search_tab')
+  tabset.tabbable.search_tabs(tab-hash='search_tab')
     tab(heading='{{"simple" | loc}}', ng-if="visibleTabs[0]")
       include simple
     tab(heading='{{"detailed" | loc}}', ng-if="visibleTabs[1]")

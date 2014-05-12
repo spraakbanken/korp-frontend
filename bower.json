@@ -2,7 +2,7 @@
   "name": "Korp",
   "version": "2.0",
   "dependencies": {
-    "angular": "~1.2.7",
+    "angular": "v1.3.0-beta.7",
     "json3": "git://github.com/bestiejs/json3.git#3.2.4",
     "es5-shim": "git://github.com/kriskowal/es5-shim#2.0.8",
     "jquery-ui": "git://github.com/components/jqueryui#1.10.2",
@@ -17,7 +17,7 @@
     "jquery-bbq": "https://github.com/cowboy/jquery-bbq.git#1.2.1",
     "modernizr": "~2.6.2",
     "yepnope": "~1.5.4",
-    "angular-bootstrap": "https://github.com/jroxendal/bootstrap.git#0.10.1",
+    "angular-bootstrap": "~0.11",
     "angular-spinner": "~0.2.1",
     "angular-slider": "~0.1.6",
     "underscore.string": "~2.3.3",
@@ -30,6 +30,6 @@
     "angular-scenario": "git://github.com/angular/bower-angular-scenario.git#1.0.6"
   },
   "resolutions": {
-    "angular": "1.2.15"
+    "angular": "v1.3.0-beta.7"
   }
 }

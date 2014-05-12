@@ -41,7 +41,7 @@ html
           #columns
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
-              tabset(tab-hash='result_tab', ng-click='onClick($event)')
+              tabset.tabbable(tab-hash='result_tab', ng-click='onClick($event)')
                 tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",
@@ -218,8 +218,8 @@ html
     script(src='lib/jquery.tooltip.pack.js')
 
     
-    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.0-SNAPSHOT.js')
+    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    //- script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.js')
     script(src='components/lodash/dist/lodash.compat.js')
     script(src="components/underscore.string/lib/underscore.string.js")
     script(src='components/spin.js/spin.js')
