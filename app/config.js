@@ -3717,7 +3717,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
 settings.corpora["twitter-pldebatt-140504"] = {
     id : "twitter-pldebatt-140504",
     title : "Twitter - Partiledardebatt maj 2014",
-    description : "Material från Twitter, insamlat under partiledardebatten 6 oktober 2013 samt några dagar före och efter.",
+    description : "Material från Twitter, insamlat under partiledardebatten 4 maj 2014 samt några dagar före och efter.",
     within : {
         "sentence" : "sentence",
         "text" : "text"
