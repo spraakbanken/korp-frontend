@@ -22,6 +22,7 @@
       this.progress = 0;
       this.total;
       this.total_results = 0;
+      this.pendingRequests = [];
     }
 
     BaseProxy.prototype.makeRequest = function() {
@@ -29,6 +30,13 @@
       this.progress = 0;
       this.total_results = 0;
       return this.total = null;
+    };
+
+    BaseProxy.prototype.abort = function() {
+      if (this.pendingRequests.length) {
+        _.invoke(this.pendingRequests, "abort");
+      }
+      return this.pendingRequests = [];
     };
 
     BaseProxy.prototype.parseJSON = function(data) {
@@ -152,16 +160,8 @@
       this.prevRequest = null;
       this.queryData = null;
       this.prevAjaxParams = null;
-      this.pendingRequests = [];
       this.foundKwic = false;
     }
-
-    KWICProxy.prototype.abort = function() {
-      if (this.pendingRequests.length) {
-        _.invoke(this.pendingRequests, "abort");
-      }
-      return this.pendingRequests = [];
-    };
 
     KWICProxy.prototype.popXhr = function(xhr) {
       var i;
@@ -273,9 +273,6 @@
 
     function LemgramProxy() {
       LemgramProxy.__super__.constructor.call(this);
-      this.pendingRequest = {
-        abort: $.noop
-      };
     }
 
     LemgramProxy.prototype.buildAffixQuery = function(isValid, key, value) {
@@ -292,7 +289,7 @@
     };
 
     LemgramProxy.prototype.makeRequest = function(word, type, callback) {
-      var params, self;
+      var def, params, self;
       LemgramProxy.__super__.makeRequest.call(this);
       self = this;
       params = {
@@ -304,14 +301,9 @@
         cache: true
       };
       this.prevParams = params;
-      return $.ajax({
+      def = $.ajax({
         url: settings.cgi_script,
         data: params,
-        error: function(data) {
-          c.log("relationsearch abort", arguments);
-          lemgramResults.hidePreloader();
-          return lemgramResults.resultError();
-        },
         success: function(data) {
           c.log("relations success", data);
           self.prevRequest = params;
@@ -330,47 +322,15 @@
           return self.addAuthorizationHeader(req);
         }
       });
-    };
-
-    LemgramProxy.prototype.relationsWordSearch = function(word) {
-      var data, self;
-      self = this;
-      data = {
-        command: "relations",
-        word: word,
-        corpus: settings.corpusListing.stringifySelected(),
-        incremental: $.support.ajaxProgress
-      };
-      return $.ajax({
-        url: settings.cgi_script,
-        data: data,
-        beforeSend: function(jqXHR, settings) {
-          c.log("before relations send", settings);
-          return self.prevRequest = settings;
-        },
-        error: function(data) {
-          c.log("relationsearch abort", arguments);
-          return lemgramResults.hidePreloader();
-        },
-        success: function(data) {
-          c.log("relations success", data);
-          return lemgramResults.renderResult(data, word);
-        }
-      });
-    };
-
-    LemgramProxy.prototype.abort = function() {
-      this.pendingRequest.abort();
-      return this.pendingRequest = {
-        abort: $.noop
-      };
+      this.pendingRequests.push(def);
+      return def;
     };
 
     LemgramProxy.prototype.karpSearch = function(word, sw_forms) {
-      var deferred, self;
-      self = this;
+      var deferred,
+        _this = this;
       deferred = $.Deferred(function(dfd) {
-        return self.pendingRequest = $.ajax({
+        return _this.pendingRequests.push($.ajax({
           url: "http://spraakbanken.gu.se/ws/karp-sok",
           data: {
             wf: word,
@@ -397,7 +357,7 @@
             c.log("karp error", jqXHR, textStatus, errorThrown);
             return dfd.reject();
           }
-        });
+        }));
       }).promise();
       return deferred;
     };

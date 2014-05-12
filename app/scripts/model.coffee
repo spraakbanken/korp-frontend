@@ -15,12 +15,17 @@ class BaseProxy
         @progress = 0
         @total
         @total_results = 0
+        @pendingRequests = []
 
     makeRequest: ->
         @prev = ""
         @progress = 0
         @total_results = 0
         @total = null
+
+    abort: ->
+        _.invoke @pendingRequests, "abort" if @pendingRequests.length
+        @pendingRequests = []
 
     parseJSON: (data) ->
         try
@@ -117,12 +122,8 @@ class model.KWICProxy extends BaseProxy
         @prevRequest = null
         @queryData = null
         @prevAjaxParams = null
-        @pendingRequests = []
         @foundKwic = false
 
-    abort: ->
-        _.invoke @pendingRequests, "abort" if @pendingRequests.length
-        @pendingRequests = []
 
     popXhr: (xhr) ->
         i = $.inArray(@pendingRequests, xhr)
@@ -225,7 +226,7 @@ class model.KWICProxy extends BaseProxy
 class model.LemgramProxy extends BaseProxy
     constructor: ->
         super()
-        @pendingRequest = abort: $.noop
+        # @pendingRequest = abort: $.noop
 
     buildAffixQuery: (isValid, key, value) ->
         return "" unless isValid
@@ -246,17 +247,20 @@ class model.LemgramProxy extends BaseProxy
             type: type
             cache : true
         @prevParams = params
-        $.ajax
+        def =  $.ajax
             url: settings.cgi_script
             data: params
             # beforeSend: (jqXHR, settings) ->
             #   c.log "before relations send", settings
             #   # self.prevRequest = settings
 
-            error: (data) ->
-                c.log "relationsearch abort", arguments
-                lemgramResults.hidePreloader()
-                lemgramResults.resultError()
+            # error: (data, status) ->
+            #     c.log "relationsearch abort", arguments
+            #     if status == "abort"
+                    
+            #     else
+            #         lemgramResults.resultError()
+                    
 
             success: (data) ->
                 c.log "relations success", data
@@ -271,45 +275,43 @@ class model.LemgramProxy extends BaseProxy
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
+        @pendingRequests.push def
+        return def
 
 
-    relationsWordSearch: (word) ->
-        self = this
-        data =
-            command: "relations"
-            word: word
-            corpus: settings.corpusListing.stringifySelected()
-            incremental: $.support.ajaxProgress
+    # relationsWordSearch: (word) ->
+    #     self = this
+    #     data =
+    #         command: "relations"
+    #         word: word
+    #         corpus: settings.corpusListing.stringifySelected()
+    #         incremental: $.support.ajaxProgress
 
-        $.ajax
-            url: settings.cgi_script
-            data: data
-            beforeSend: (jqXHR, settings) ->
-                c.log "before relations send", settings
-                self.prevRequest = settings
-
-
-            #                 if($("#results-lemgram").is(":visible"))
-            #                     util.setJsonLink(settings);
-            error: (data) ->
-                c.log "relationsearch abort", arguments
-                lemgramResults.hidePreloader()
-
-            success: (data) ->
-                c.log "relations success", data
-                lemgramResults.renderResult data, word
+    #     @pendingRequests.push $.ajax
+    #         url: settings.cgi_script
+    #         data: data
+    #         beforeSend: (jqXHR, settings) ->
+    #             c.log "before relations send", settings
+    #             self.prevRequest = settings
 
 
-    abort: ->
-        @pendingRequest.abort()
-        @pendingRequest = abort: $.noop
+    #         error: (data) ->
+    #             c.log "relationwordsearch abort", arguments
+    #             safeApply lemgramResults.s, () =>
+    #                 lemgramResults.hidePreloader()
+    #             if status == "abort"
+                    
+    #             else
+    #                 lemgramResults.resultError()
+
+    #         success: (data) ->
+    #             c.log "relations success", data
+    #             lemgramResults.renderResult data, word
+
 
     karpSearch: (word, sw_forms) ->
-        self = this
-
-        #               url : "http://spraakbanken.gu.se/ws/lexikon",
-        deferred = $.Deferred((dfd) ->
-            self.pendingRequest = $.ajax(
+        deferred = $.Deferred((dfd) =>
+            @pendingRequests.push $.ajax(
                 url: "http://spraakbanken.gu.se/ws/karp-sok"
                 data:
                     wf: word

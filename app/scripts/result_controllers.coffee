@@ -1,25 +1,31 @@
 korpApp = angular.module("korpApp")
-korpApp.controller "resultTabCtrl", ($scope) ->
-    s = $scope
-    
-    # c.log "selectTab", s
-    s.selectTab = (i) ->
-        c.log "selectTab", i
-        s.$broadcast "tabselect", i
-        # tab = 
 
-    s.$watch "getSelected()", (val) ->
-        c.log "val", val
-        s.$root.result_tab = val
+# korpApp.controller "resultTabCtrl", ($scope) ->
+#     s = $scope
+    
+#     s.selectTab = (i) ->
+#         s.$broadcast "tabselect", i
+
+#     s.$watch "getSelected()", (val) ->
+#         s.$root.result_tab = val
 
 
 korpApp.controller "resultContainerCtrl", ($scope, searches) ->
     $scope.searches = searches
 
+    c.log "resultContainerCtrl", $scope
+    # slots = new Array(10000);
+    # actives = {}
+    # $scope.getActive = (obj) ->
+    #     actives[JSON.stringify obj] = true
+    #     actives[JSON.stringify obj]
+
 
 korpApp.controller "kwicCtrl", ($scope, utils) ->
     c.log "kwicCtrl init", $scope.$parent
     s = $scope
+
+    s.active = true
 
     s.onexit = () ->
         c.log "onexit"
@@ -185,19 +191,23 @@ korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
     $scope.activate = () ->
         $location.search("word_pic", true)
         search = searches.activeSearch
-        $scope.instance.showPreloader();
-        lemgramProxy.makeRequest(search.val, "word", $.proxy($scope.instance.onProgress, $scope.instance));
+        # $scope.instance.showPreloader();
+        #TODO: should word really be hard coded here?
+        $scope.instance.makeRequest(search.val, "word")
+        # lemgramProxy.makeRequest(search.val, "word");
 
 
         
 
 korpApp.controller "graphCtrl", ($scope) ->
-    $scope.$parent.active = true
+    $scope.active = true
+    # $scope.$parent.active = true
 
 
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->
     s = $scope
     s.loading = true
+    s.active = true
 
 
 

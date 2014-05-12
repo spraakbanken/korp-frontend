@@ -27,7 +27,6 @@ settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.rik
 
 
 $("#lemgram_list_item").remove();
-$("#results-lemgram").remove();
 //$("#showLineDiagram").remove();
 
 settings.corpora = {};

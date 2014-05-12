@@ -160,7 +160,7 @@
       };
 
       Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, page) {
-        var cqp, type;
+        var cqp;
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         if (typeof statsProxy !== "undefined" && statsProxy !== null) {
           statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
@@ -170,9 +170,7 @@
           return;
         }
         searchProxy.relatedWordSearch(lemgram);
-        c.log("lemgramSearch", lemgram);
-        lemgramResults.showPreloader();
-        return type = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults));
+        return lemgramResults.makeRequest(lemgram, "lemgram");
       };
 
       Searches.prototype.getMode = function() {

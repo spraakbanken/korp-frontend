@@ -1,7 +1,8 @@
 (function() {
   var BaseResults, newDataInGraph,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   BaseResults = (function() {
     function BaseResults(resultSelector, tabSelector, scope) {
@@ -633,6 +634,26 @@
       return $(".content_target", this.$result).empty();
     };
 
+    LemgramResults.prototype.makeRequest = function(word, type) {
+      var def,
+        _this = this;
+      this.showPreloader();
+      def = this.proxy.makeRequest(word, type, function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return _this.onProgress.apply(_this, args);
+      });
+      return def.fail(function(jqXHR, status, errorThrown) {
+        var _this = this;
+        c.log("def fail", status);
+        if (status === "abort") {
+          return safeApply(lemgramResults.s, function() {
+            return lemgramResults.hidePreloader();
+          });
+        }
+      });
+    };
+
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError,
         _this = this;
@@ -646,7 +667,9 @@
         return;
       }
       if (!data.relations) {
-        this.showNoResults();
+        safeApply(this.s, function() {
+          return _this.hasData = false;
+        });
         return this.resultDeferred.reject();
       } else if (util.isLemgramId(query)) {
         this.renderTables(query, data.relations);
@@ -1609,8 +1632,7 @@
           padding: {
             top: 0.1,
             right: 0.01
-          },
-          min: "auto"
+          }
         });
         graph.render();
         window._graph = graph;

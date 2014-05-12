@@ -28,7 +28,6 @@ settings.digidailystruct_attributes = {
 digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'
 	
 $("#lemgram_list_item").remove();
-$("#results-lemgram").remove();
 $("#showLineDiagram").remove();
 
 

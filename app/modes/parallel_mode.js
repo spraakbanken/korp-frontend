@@ -78,8 +78,6 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 
 });
 
-// $("#lemgram_list_item").remove();
-// $("#results-lemgram").remove();
 $("#search_options > div:last").remove();
 $("#num_hits").prepend("<option value='10'>10</option>");
 

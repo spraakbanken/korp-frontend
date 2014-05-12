@@ -570,6 +570,16 @@ class view.LemgramResults extends BaseResults
         super()
         $(".content_target", @$result).empty()
 
+    makeRequest : (word, type) ->
+        @showPreloader()
+        def = @proxy.makeRequest word, type, (args...) =>
+            @onProgress args...
+
+        def.fail (jqXHR, status, errorThrown) ->
+            c.log "def fail", status
+            if status == "abort"
+                safeApply lemgramResults.s, () =>
+                    lemgramResults.hidePreloader()
 
 
     renderResult: (data, query) ->
@@ -580,7 +590,9 @@ class view.LemgramResults extends BaseResults
             @s.$parent.progress = 100
         return if resultError is false
         unless data.relations
-            @showNoResults()
+            safeApply @s, () =>
+                @hasData = false
+
             @resultDeferred.reject()
         else if util.isLemgramId(query)
             @renderTables query, data.relations
@@ -790,6 +802,8 @@ class view.LemgramResults extends BaseResults
     showNoResults: ->
         @hidePreloader()
         @$result.find(".content_target").html $("<i />").localeKey("no_lemgram_results")
+
+
 
     hideWordclass: ->
         $("td:first-child", @$result).each ->
@@ -1472,7 +1486,7 @@ class view.GraphResults extends BaseResults
                 padding :
                     top : 0.1
                     right : 0.01
-                min : "auto"
+                # min : "auto"
             graph.render()
             window._graph = graph
             

@@ -187,7 +187,7 @@
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
-              <tabset tab-hash="result_tab" ng-click="onClick($event)" class="tabbable">
+              <tabset tab-hash="result_tab" class="tabbable">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
@@ -255,6 +255,7 @@
                       <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'word_pic_warn_btn' | loc}}</button>
                     </div>
                   </div>
+                  <div ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading" class="bad_search bs-callout bs-callout-warning">{{'word_pic_bad_search' | loc}} </div>
                   <div constr="LemgramResults" constr-name="lemgramResults">
                     <div id="wordclassChkParent" ng-show="word_pic &amp;&amp; instance.hasData">
                       <input id="wordclassChk" type="checkbox">
@@ -263,7 +264,7 @@
                     <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </tab>
-                <tab active="[true][0]" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
+                <tab active="active" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
                     <div class="result_controls">
@@ -296,11 +297,11 @@
                     </div>
                   </div>
                 </tab>
-                <tab active="[true][0]" ng-repeat="data in graphTabs">
+                <tab active="active" ng-repeat="data in graphTabs" ng-controller="graphCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc}}
                     <div style="width:{{progress || 0}}%" ng-show="loading" class="tab_progress"></div><span ng-click="graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
                   </tab-heading>
-                  <div ng-controller="graphCtrl" constr="GraphResults">
+                  <div constr="GraphResults">
                     <div class="graph_header">
                       <div ng-show="!loading" class="controls">
                         <div class="form_switch">
@@ -323,7 +324,7 @@
                     <div class="zoom_slider"></div>
                   </div>
                 </tab>
-                <tab active="[true][0]" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">
+                <tab active="active" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">
                   <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc}}<span tab-spinner="tab-spinner" ng-click="compareTabs.splice($index, 1)"></span></tab-heading>
                   <div ng-class="{loading : loading}" class="compare_result">
                     <div ng-if="error" class="error_msg">

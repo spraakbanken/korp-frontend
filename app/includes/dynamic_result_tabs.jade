@@ -1,16 +1,16 @@
-tab(active="[true][0]", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
+tab(active="active", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
   tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(ng-class="{reading_mode : reading_mode}", constr='ExampleResults' )
     include kwicresult
-tab(active="[true][0]", ng-repeat='data in graphTabs')
+tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
   tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
-  div(ng-controller='graphCtrl', constr='GraphResults')
+  div(constr='GraphResults')
     .graph_header
       //- .progress_container
       //-   progress(value='0', max='100')
@@ -37,7 +37,7 @@ tab(active="[true][0]", ng-repeat='data in graphTabs')
         | {{'drawing' | loc}}
     .chart
     .zoom_slider
-tab(active="[true][0]", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
+tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc}}
     span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')

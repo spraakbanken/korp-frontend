@@ -752,13 +752,6 @@ table {
   overflow-x : hidden;
 }
 
-#results-lemgram {
-  overflow: auto;
-  > span * {
-    margin-top: 11px;
-  }
-}
-
 .lemgram_help {
   text-transform: capitalize;
   white-space: nowrap;
@@ -853,6 +846,7 @@ table {
   display: none;
   vertical-align: top;
   margin-top: 3px;
+  white-space : nowrap;
 }
 
 .not_loading .reading_btn {
@@ -1817,6 +1811,10 @@ slider {
 //   @include inline-block();
 // }
 
+.bad_search {
+  max-width : 500px;
+}
+
 #wordclassChkParent {
   float: right;
 }
@@ -1831,6 +1829,7 @@ slider {
   height: 2px;
   background-color: darkblue;
   max-width: 100%;
+  min-width: 3%;
   position : absolute;
   left : 0;
   right : 0;

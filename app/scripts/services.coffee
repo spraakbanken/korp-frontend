@@ -154,17 +154,16 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             if settings.wordpicture == false then return
             
             searchProxy.relatedWordSearch lemgram
-            c.log "lemgramSearch", lemgram
-            lemgramResults.showPreloader()
-            
-            #simpleSearch
-            #.clear();
-            #.setPlaceholder(util.lemgramToString(lemgram).replace(/<.*?>/g, ""), lemgram)
-            type = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))
-            # cqp = lemgramProxy.lemgramSearch(lemgram, searchPrefix, searchSuffix)
-            
-            #kwicProxy.makeRequest({cqp : cqp, "sort" : $.bbq.getState("sort")}, page, $.proxy(kwicResults.onProgress, kwicResults));
-            # $("#cqp_string").val cqp
+            # lemgramResults.showPreloader()
+            lemgramResults.makeRequest(lemgram, "lemgram")
+            # def = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))
+            # c.log "def", def
+            # def.fail (jqXHR, status, errorThrown) ->
+            #     c.log "def fail", status
+            #     if status == "abort"
+            #         safeApply lemgramResults.s, () =>
+            #             lemgramResults.hidePreloader()
+
 
         getMode : () ->
             def = $q.defer()

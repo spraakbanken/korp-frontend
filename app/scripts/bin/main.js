@@ -50,6 +50,12 @@
 
   loc_dfd = initLocales();
 
+  $(document).keyup(function(event) {
+    if (event.keyCode === 27) {
+      return typeof lemgramProxy !== "undefined" && lemgramProxy !== null ? lemgramProxy.abort() : void 0;
+    }
+  });
+
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
     var corpus, labs, paper, prevFragment, tab_a_selector;
     c.log("preloading done, t = ", $.now() - t);

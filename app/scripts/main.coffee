@@ -36,7 +36,9 @@ deferred_domReady = $.Deferred((dfd) ->
 ).promise()
 
 loc_dfd = initLocales()
-
+$(document).keyup (event) ->
+    if event.keyCode == 27
+        lemgramProxy?.abort()
 
 $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     c.log "preloading done, t = ", $.now() - t

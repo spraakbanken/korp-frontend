@@ -41,7 +41,8 @@ html
           #columns
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
-              tabset.tabbable(tab-hash='result_tab', ng-click='onClick($event)')
+              //- tabset.tabbable
+              tabset.tabbable(tab-hash='result_tab')
                 tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",
@@ -92,6 +93,8 @@ html
                     div
                       button.btn.btn-small.activate_word_pic(ng-click="activate()")
                         | {{'word_pic_warn_btn' | loc}}
+                  .bad_search.bs-callout.bs-callout-warning(ng-if="word_pic && !instance.hasData && !loading")
+                      | {{'word_pic_bad_search' | loc}} 
                   div(constr='LemgramResults', constr-name='lemgramResults')
                     #wordclassChkParent(ng-show="word_pic && instance.hasData")
                       input#wordclassChk(type='checkbox')

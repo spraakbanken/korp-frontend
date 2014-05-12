@@ -5,27 +5,16 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("resultTabCtrl", function($scope) {
-    var s;
-    s = $scope;
-    s.selectTab = function(i) {
-      c.log("selectTab", i);
-      return s.$broadcast("tabselect", i);
-    };
-    return s.$watch("getSelected()", function(val) {
-      c.log("val", val);
-      return s.$root.result_tab = val;
-    });
-  });
-
   korpApp.controller("resultContainerCtrl", function($scope, searches) {
-    return $scope.searches = searches;
+    $scope.searches = searches;
+    return c.log("resultContainerCtrl", $scope);
   });
 
   korpApp.controller("kwicCtrl", function($scope, utils) {
     var findMatchSentence, massageData, punctArray, readingChange, s;
     c.log("kwicCtrl init", $scope.$parent);
     s = $scope;
+    s.active = true;
     s.onexit = function() {
       c.log("onexit");
       return s.$root.sidebar_visible = false;
@@ -214,19 +203,19 @@
       var search;
       $location.search("word_pic", true);
       search = searches.activeSearch;
-      $scope.instance.showPreloader();
-      return lemgramProxy.makeRequest(search.val, "word", $.proxy($scope.instance.onProgress, $scope.instance));
+      return $scope.instance.makeRequest(search.val, "word");
     };
   });
 
   korpApp.controller("graphCtrl", function($scope) {
-    return $scope.$parent.active = true;
+    return $scope.active = true;
   });
 
   korpApp.controller("compareCtrl", function($scope, $rootScope) {
     var s;
     s = $scope;
     s.loading = true;
+    s.active = true;
     return s.promise.then(function(_arg, xhr) {
       var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, type, _ref, _ref1;
       data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
