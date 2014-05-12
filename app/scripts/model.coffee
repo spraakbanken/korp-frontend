@@ -105,7 +105,7 @@ class model.SearchProxy extends BaseProxy
                 lemgramProxy.lemgramCount(lemgrams).done (freqs) ->
                     $.each data, (i, item) ->
                         item.rel = $.grep(item.rel, (lemgram) ->
-                            hasAnyFreq = true  if freqs[lemgram]
+                            hasAnyFreq = true if freqs[lemgram]
                             !!freqs[lemgram]
                         )
 
@@ -156,7 +156,7 @@ class model.KWICProxy extends BaseProxy
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
-                return  unless progressObj?
+                return unless progressObj?
 
                 #               c.log("progressObj", progressObj)
                 callback progressObj
@@ -279,35 +279,6 @@ class model.LemgramProxy extends BaseProxy
         return def
 
 
-    # relationsWordSearch: (word) ->
-    #     self = this
-    #     data =
-    #         command: "relations"
-    #         word: word
-    #         corpus: settings.corpusListing.stringifySelected()
-    #         incremental: $.support.ajaxProgress
-
-    #     @pendingRequests.push $.ajax
-    #         url: settings.cgi_script
-    #         data: data
-    #         beforeSend: (jqXHR, settings) ->
-    #             c.log "before relations send", settings
-    #             self.prevRequest = settings
-
-
-    #         error: (data) ->
-    #             c.log "relationwordsearch abort", arguments
-    #             safeApply lemgramResults.s, () =>
-    #                 lemgramResults.hidePreloader()
-    #             if status == "abort"
-                    
-    #             else
-    #                 lemgramResults.resultError()
-
-    #         success: (data) ->
-    #             c.log "relations success", data
-    #             lemgramResults.renderResult data, word
-
 
     karpSearch: (word, sw_forms) ->
         deferred = $.Deferred((dfd) =>
@@ -356,7 +327,7 @@ class model.LemgramProxy extends BaseProxy
                 div = (if $.isPlainObject(data.div) then [data.div] else data.div)
                 output = $.map(div.slice(0, Number(data.count)), (item) ->
                     sense = item.LexicalEntry.Sense
-                    sense = [sense]  unless $.isArray(sense)
+                    sense = [sense] unless $.isArray(sense)
                     _.map sense, (item) ->
                         item.id
 
@@ -437,7 +408,7 @@ class model.StatsProxy extends BaseProxy
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
-                return  unless progressObj?
+                return unless progressObj?
                 callback progressObj
 
             success: (data) ->
@@ -510,7 +481,7 @@ class model.StatsProxy extends BaseProxy
 
 
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
-        return ""  if not value.relative and not value.absolute
+        return "" if not value.relative and not value.absolute
         return """<span>
                         <span class='relStat'>#{util.formatDecimalString(value.relative.toFixed(1), true)}</span>
                         <span class='absStat'>(#{util.prettyNumbers(String(value.absolute))})</span>

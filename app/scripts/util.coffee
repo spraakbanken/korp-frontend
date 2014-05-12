@@ -543,7 +543,7 @@ util.loadCorporaFolderRecursive = (first_level, folder) ->
     if folder #This check makes the code work even if there isn't a ___settings.corporafolders = {};___ in config.js
         # Folders
         $.each folder, (fol, folVal) ->
-            outHTML += "<li>" + util.loadCorporaFolderRecursive(false, folVal) + "</li>"  if fol isnt "contents" and fol isnt "title" and fol isnt "description"
+            outHTML += "<li>" + util.loadCorporaFolderRecursive(false, folVal) + "</li>" if fol isnt "contents" and fol isnt "title" and fol isnt "description"
             return
         
         # Corpora
@@ -606,7 +606,7 @@ util.loadCorpora = ->
         infoPopup: (corpusID) ->
             corpusObj = settings.corpora[corpusID]
             maybeInfo = ""
-            maybeInfo = "<br/><br/>" + corpusObj.description  if corpusObj.description
+            maybeInfo = "<br/><br/>" + corpusObj.description if corpusObj.description
             numTokens = corpusObj.info.Size
             baseLang = settings.corpora[corpusID]?.linked_to
             if baseLang
@@ -627,7 +627,7 @@ util.loadCorpora = ->
             lastUpdate = corpusObj["info"]["Updated"]
             lastUpdate = "?" unless lastUpdate
             sentenceString = "-"
-            sentenceString = util.prettyNumbers(numSentences.toString())  if numSentences
+            sentenceString = util.prettyNumbers(numSentences.toString()) if numSentences
             
             output = """
             <b>
@@ -647,8 +647,8 @@ util.loadCorpora = ->
             <br/><br/>"""
             
             supportsContext = _.keys(corpusObj.context).length > 1
-            output += $("<div>").localeKey("corpselector_supports").html() + "<br>"  if supportsContext
-            output += $("<div>").localeKey("corpselector_limited").html()  if corpusObj.limited_access
+            output += $("<div>").localeKey("corpselector_supports").html() + "<br>" if supportsContext
+            output += $("<div>").localeKey("corpselector_limited").html() if corpusObj.limited_access
             output
 
         infoPopupFolder: (indata) ->
@@ -667,9 +667,9 @@ util.loadCorpora = ->
                 return
 
             totalSentencesString = util.prettyNumbers(totalSentences.toString())
-            totalSentencesString += "+"  if missingSentenceData
+            totalSentencesString += "+" if missingSentenceData
             maybeInfo = ""
-            maybeInfo = desc + "<br/><br/>"  if desc and desc isnt ""
+            maybeInfo = desc + "<br/><br/>" if desc and desc isnt ""
             glueString = ""
             if corporaID.length is 1
                 glueString = util.getLocaleString("corpselector_corporawith_sing")
@@ -699,14 +699,14 @@ util.localizeFloat = (float, nDec) ->
     nDec = nDec or float.toString().split(".")[1].length
     if lang is "sv"
         sep = ","
-    else sep = "."  if lang is "en"
+    else sep = "." if lang is "en"
     $.format("%." + nDec + "f", float).replace ".", sep
 
 util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
     if _.contains(x, ".")
         parts = x.split(".")
         decimalSeparator = util.getLocaleString("util_decimalseparator")
-        return parts[0] + decimalSeparator + parts[1]  if stringOnly
+        return parts[0] + decimalSeparator + parts[1] if stringOnly
         if mode
             util.prettyNumbers(parts[0]) + "<span rel=\"localize[util_decimalseparator]\">" + decimalSeparator + "</span>" + parts[1]
         else

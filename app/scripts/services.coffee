@@ -209,7 +209,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
 
     $rootScope.$watch "_loc.search().search", () =>
-        c.log "watch", $location.search().search
+        c.log "searches service watch", $location.search().search
+
         searchExpr = $location.search().search
         unless searchExpr then return
         [type, value...] = searchExpr?.split("|")
@@ -217,7 +218,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         page = $rootScope.search()["page"] or 0
         c.log "page", page
 
-        view.updateSearchHistory value
+        view.updateSearchHistory value, $location.absUrl()
         # $.when(chained).then () ->
             # $rootScope.$apply () ->
         searches.infoDef.then () ->
@@ -260,6 +261,7 @@ korpApp.service "compareSearches",
                 @key = 'saved_searches_' + currentMode
             else 
                 @key = "saved_searches"
+            c.log "key", @key
             @savedSearches = ($.jStorage.get @key) or []
 
         saveSearch : (searchObj) ->

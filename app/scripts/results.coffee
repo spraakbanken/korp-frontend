@@ -277,14 +277,14 @@ class view.KWICResults extends BaseResults
         newY = window.scrollY
         if wordTop > $(window).height() + window.scrollY
             newY += offset
-        else newY -= offset  if wordTop < window.scrollY
+        else newY -= offset if wordTop < window.scrollY
         $("html, body").stop(true, true).animate scrollTop: newY
         wordLeft = word.offset().left
         area = @$result.find(".table_scrollarea")
         newX = Number(area.scrollLeft())
         if wordLeft > (area.offset().left + area.width())
             newX += offset
-        else newX -= offset  if wordLeft < area.offset().left
+        else newX -= offset if wordLeft < area.offset().left
         area.stop(true, true).animate scrollLeft: newX
 
     buildPager: (number_of_hits) ->
@@ -413,7 +413,7 @@ class view.KWICResults extends BaseResults
     selectPrev: ->
         unless @isReadingMode()
             i = @getCurrentRow().index(@$result.find(".token_selected").get(0))
-            return  if i is 0
+            return if i is 0
             prev = @getCurrentRow().get(i - 1)
             $(prev).click()
         else
@@ -460,7 +460,7 @@ class view.KWICResults extends BaseResults
             output = $(this)
             thisLeft = $(this).offset().left
             thisRight = $(this).offset().left + $(this).width()
-            false  if (xCoor > thisLeft and xCoor < thisRight) or thisLeft > xCoor
+            false if (xCoor > thisLeft and xCoor < thisRight) or thisLeft > xCoor
 
         output
     # TODO: currently out of commission
@@ -487,7 +487,7 @@ class view.KWICResults extends BaseResults
     #     if dir is "down"
     #         pager.data("prevPos", pager.prev()).appendTo @$result
     #     else
-    #         pager.data("prevPos").after pager  if pager.data("prevPos")
+    #         pager.data("prevPos").after pager if pager.data("prevPos")
 
 
 
@@ -825,7 +825,7 @@ newDataInGraph = (dataName, horizontalDiagram) ->
                 totfreq = 0
                 $.each obj["relative"], (wordform, freq) ->
                     numFreq = parseFloat(freq)
-                    totfreq += numFreq  if numFreq
+                    totfreq += numFreq if numFreq
 
                 dataItems.push
                     value: totfreq
@@ -904,7 +904,7 @@ newDataInGraph = (dataName, horizontalDiagram) ->
                                 numFreq = parseInt(freq)
                             else
                                 numFreq = parseFloat(freq)
-                            totfreq += numFreq  if numFreq
+                            totfreq += numFreq if numFreq
 
                         dataItems.push
                             value: totfreq

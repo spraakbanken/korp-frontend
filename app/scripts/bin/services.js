@@ -224,7 +224,7 @@
     searches = new Searches();
     $rootScope.$watch("_loc.search().search", function() {
       var page, searchExpr, type, value, _ref;
-      c.log("watch", $location.search().search);
+      c.log("searches service watch", $location.search().search);
       searchExpr = $location.search().search;
       if (!searchExpr) {
         return;
@@ -233,7 +233,7 @@
       value = value.join("|");
       page = $rootScope.search()["page"] || 0;
       c.log("page", page);
-      view.updateSearchHistory(value);
+      view.updateSearchHistory(value, $location.absUrl());
       return searches.infoDef.then(function() {
         switch (type) {
           case "word":
@@ -271,6 +271,7 @@
       } else {
         this.key = "saved_searches";
       }
+      c.log("key", this.key);
       this.savedSearches = ($.jStorage.get(this.key)) || [];
     }
 

@@ -155,7 +155,7 @@ Sidebar =
                 midsection = a.slice(3).join("/")
                 midsection = "..." + midsection.slice(2)
                 $(this).text ["http:/"].concat(domain, midsection).join("/")
-                break  if midsection is "..."
+                break if midsection is "..."
 
         # @element.css "display", oldDisplay
 
@@ -192,7 +192,7 @@ Sidebar =
         max = Math.round($("#columns").position().top)
         if $(window).scrollTop() < max
             @element.removeClass "fixed"
-        else @element.addClass "fixed"  if $("#left-column").height() > $("#sidebar").height()
+        else @element.addClass "fixed" if $("#left-column").height() > $("#sidebar").height()
 
     show: (mode) ->
 
@@ -211,7 +211,7 @@ Sidebar =
 
 
     hide: ->
-        return  if $("#left-column").css("right") is "0px"
+        return if $("#left-column").css("right") is "0px"
         @element.hide "slide",
             direction: "right"
 
@@ -265,7 +265,7 @@ $.extend $.ui.autocomplete.prototype,
         li = $("<li></li>").data("ui-autocomplete-item", item)
             .append($("<a></a>")[(if @options.html then "html" else "text")](item.label))
             .appendTo(ul)
-        li.addClass "autocomplete-item-disabled"  unless item["enabled"]
+        li.addClass "autocomplete-item-disabled" unless item["enabled"]
         li
 
     _renderMenu: (ul, items) ->
@@ -309,7 +309,7 @@ $.fn.korp_autocomplete = (options) ->
                     input: request.term
                     enabled: true
 
-                out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom")  if has_morphs
+                out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom") if has_morphs
                 out
             )
             dfd.resolve listItems

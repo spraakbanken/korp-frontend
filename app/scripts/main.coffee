@@ -148,7 +148,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
             $("#languages").radioList "select", newLang
         page = Number(search().page)
-        # kwicResults.setPage page  if hasChanged("page") and not hasChanged("search")
+        # kwicResults.setPage page if hasChanged("page") and not hasChanged("search")
         # kwicResults.current_page = page if isInit
 
         display = search().display
@@ -355,7 +355,7 @@ window.initTimeGraph = (def) ->
             normalize = (array) ->
                 _.map array, (item) ->
                     out = [].concat(item)
-                    out[1] = one_px  if out[1] < one_px and out[1] > 0
+                    out[1] = one_px if out[1] < one_px and out[1] > 0
                     out
 
             output = _(settings.corpusListing.selected)

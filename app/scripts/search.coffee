@@ -6,16 +6,16 @@ window.view = {}
 view.lemgramSort = (first, second) ->
     match1 = util.splitLemgram(first)
     match2 = util.splitLemgram(second)
-    return parseInt(match1.index) - parseInt(match2.index)  if match1.form is match2.form
+    return parseInt(match1.index) - parseInt(match2.index) if match1.form is match2.form
     first.length - second.length
 
 view.saldoSort = (first, second) ->
     match1 = util.splitSaldo(first)
     match2 = util.splitSaldo(second)
-    return parseInt(match1[2]) - parseInt(match2[2])  if match1[1] is match2[1]
+    return parseInt(match1[2]) - parseInt(match2[2]) if match1[1] is match2[1]
     first.length - second.length
 
-view.updateSearchHistory = (value) ->
+view.updateSearchHistory = (value, href) ->
     filterParam = (url) ->
         $.grep($.param.fragment(url).split("&"), (item) ->
             item.split("=")[0] is "search" or item.split("=")[0] is "corpus"
@@ -25,10 +25,10 @@ view.updateSearchHistory = (value) ->
     searchLocations = $.map(searches, (item) ->
         filterParam item.location
     )
-    if value? and filterParam(location.href) not in searchLocations
+    if value? and filterParam(href) not in searchLocations
         searches.splice 0, 0,
             label: value
-            location: location.href
+            location: href
 
         $.jStorage.set "searches", searches
     return unless searches.length
@@ -188,7 +188,7 @@ class view.SimpleSearch extends BaseSearch
                             idArray.sort (a, b) ->
                                 first = (if a.split("--").length > 1 then a.split("--")[0] else "saldom")
                                 second = (if b.split("--").length > 1 then b.split("--")[0] else "saldom")
-                                return (freqs[b] or 0) - (freqs[a] or 0)  if first is second
+                                return (freqs[b] or 0) - (freqs[a] or 0) if first is second
                                 second < first
 
                         else
@@ -203,7 +203,7 @@ class view.SimpleSearch extends BaseSearch
                                 input: request.term
                                 enabled: item of freqs
 
-                            out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom")  if has_morphs
+                            out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom") if has_morphs
                             out
                         )
                         dfd.resolve listItems
@@ -244,7 +244,7 @@ class view.SimpleSearch extends BaseSearch
         promise.done (lemgramArray) =>
             $("#lemgram_select").prev("label").andSelf().remove()
             @savedSelect = null
-            return  if lemgramArray.length is 0
+            return if lemgramArray.length is 0
             lemgramArray.sort view.lemgramSort
             lemgramArray = $.map(lemgramArray, (item) ->
                 label: util.lemgramToString(item, true)

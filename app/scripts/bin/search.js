@@ -26,7 +26,7 @@
     return first.length - second.length;
   };
 
-  view.updateSearchHistory = function(value) {
+  view.updateSearchHistory = function(value, href) {
     var clear, filterParam, opts, placeholder, searchLocations, searches, _ref;
     filterParam = function(url) {
       return $.grep($.param.fragment(url).split("&"), function(item) {
@@ -38,10 +38,10 @@
     searchLocations = $.map(searches, function(item) {
       return filterParam(item.location);
     });
-    if ((value != null) && (_ref = filterParam(location.href), __indexOf.call(searchLocations, _ref) < 0)) {
+    if ((value != null) && (_ref = filterParam(href), __indexOf.call(searchLocations, _ref) < 0)) {
       searches.splice(0, 0, {
         label: value,
-        location: location.href
+        location: href
       });
       $.jStorage.set("searches", searches);
     }
