@@ -14,13 +14,14 @@
     }), function(val) {
       return $scope.isCompareSelected = val === 3;
     });
-    return utils.setupHash($scope, [
-      {
-        key: "word_pic",
-        val_out: Boolean,
-        val_in: Boolean
-      }
-    ]);
+    $scope.$watch((function() {
+      return $location.search().word_pic;
+    }), function(val) {
+      return $scope.word_pic = Boolean(val);
+    });
+    return $scope.$watch("word_pic", function(val) {
+      return $location.search("word_pic", Boolean(val) || null);
+    });
   });
 
   korpApp.config(function($tooltipProvider) {

@@ -85,6 +85,8 @@
 	"case_sensitive" : "skiftlägesberoende",
 	"reduce_text" : "sammanställ på",
 	"show_word_pic" : "Visa ordbild",
+	"word_pic_warn" : "Ordbilden är avaktiverad. ",
+	"word_pic_warn_btn" : "Aktivera och sök",
 
 	"is" : "är",
 	"is_not" : "är inte",

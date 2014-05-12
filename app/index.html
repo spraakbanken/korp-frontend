@@ -246,16 +246,21 @@
                     </div>
                   </div>
                 </tab>
-                <tab disabled="!instance.hasData" ng-if="_settings.wordpicture != false">
+                <tab ng-if="_settings.wordpicture != false" ng-controller="wordpicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
+                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc}} 
+                    <div>
+                      <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'word_pic_warn_btn' | loc}}</button>
+                    </div>
+                  </div>
                   <div constr="LemgramResults" constr-name="lemgramResults">
-                    <div id="wordclassChkParent">
+                    <div id="wordclassChkParent" ng-show="word_pic &amp;&amp; instance.hasData">
                       <input id="wordclassChk" type="checkbox">
                       <label for="wordclassChk" rel="localize[show_wordclass]"></label>
                     </div>
-                    <div class="content_target"></div>
+                    <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </tab>
                 <tab active="[true][0]" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">

@@ -13,11 +13,20 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils) ->
             $scope.isCompareSelected = val == 3
     )
 
-    utils.setupHash $scope, [
-            key : "word_pic"
-            val_out : Boolean
-            val_in : Boolean
-    ]
+    $scope.$watch (() -> $location.search().word_pic), (val) ->
+        $scope.word_pic = Boolean(val)
+
+    $scope.$watch "word_pic", (val) ->
+        $location.search("word_pic", Boolean(val) or null)
+
+    # utils.setupHash $scope, [
+    #         key : "word_pic"
+    #         val_out : Boolean
+    #         val_in : Boolean
+    #         default : false
+    #         post_change : () ->
+    #             c.log "post_change word_pic", $scope.word_pic
+    # ]
 
 korpApp.config ($tooltipProvider) ->
     $tooltipProvider.options

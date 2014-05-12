@@ -202,6 +202,23 @@
     };
   });
 
+  korpApp.controller("wordpicCtrl", function($scope, $location, utils, searches) {
+    c.log("$scope", $scope);
+    $scope.word_pic = $location.search().word_pic != null;
+    $scope.$watch((function() {
+      return $location.search().word_pic;
+    }), function(val) {
+      return $scope.word_pic = Boolean(val);
+    });
+    return $scope.activate = function() {
+      var search;
+      $location.search("word_pic", true);
+      search = searches.activeSearch;
+      $scope.instance.showPreloader();
+      return lemgramProxy.makeRequest(search.val, "word", $.proxy($scope.instance.onProgress, $scope.instance));
+    };
+  });
+
   korpApp.controller("graphCtrl", function($scope) {
     return $scope.$parent.active = true;
   });

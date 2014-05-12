@@ -88,6 +88,8 @@
 	"case_sensitive" : "case-sensitive",
 	"reduce_text" : "compile based on",
 	"show_word_pic" : "Show word picture",
+	"word_pic_warn" : "The word picture is disabled. ",
+	"word_pic_warn_btn" : "Enable and search",
 
 	"word_is" : "word is",
 	"word_is_not" : "word is not",

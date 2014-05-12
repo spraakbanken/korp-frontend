@@ -21,7 +21,7 @@ korpApp.factory "utils", ($location) ->
             for obj in config
                 val = $location.search()[obj.key]
                 unless val 
-                    if obj.default then val = obj.default else continue
+                    if obj.default? then val = obj.default else continue
                 
 
                 val = (obj.val_in or _.identity)(val)
@@ -36,8 +36,8 @@ korpApp.factory "utils", ($location) ->
                     scope[obj.key] = val
                 # obj.post_change?(val)
         onWatch()
-        scope.loc = $location
-        scope.$watch 'loc.search()', ->
+        # scope.loc = $location
+        scope.$watch ( () -> $location.search() ), ->
             onWatch()
 
         for obj in config

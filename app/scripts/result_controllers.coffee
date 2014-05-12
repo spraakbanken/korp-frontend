@@ -176,6 +176,21 @@ korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, search
 
 
 
+korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
+    c.log "$scope", $scope
+    $scope.word_pic = $location.search().word_pic?
+    $scope.$watch (() -> $location.search().word_pic), (val) ->
+        $scope.word_pic = Boolean(val)
+
+    $scope.activate = () ->
+        $location.search("word_pic", true)
+        search = searches.activeSearch
+        $scope.instance.showPreloader();
+        lemgramProxy.makeRequest(search.val, "word", $.proxy($scope.instance.onProgress, $scope.instance));
+
+
+        
+
 korpApp.controller "graphCtrl", ($scope) ->
     $scope.$parent.active = true
 

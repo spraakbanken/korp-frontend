@@ -83,17 +83,22 @@ html
                         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
-                tab(disabled="!instance.hasData", ng-if="_settings.wordpicture != false")
+                tab(ng-if="_settings.wordpicture != false", ng-controller="wordpicCtrl")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
+                  div.wordpic_disabled(ng-if="!word_pic")
+                    | {{'word_pic_warn' | loc}} 
+                    div
+                      button.btn.btn-small.activate_word_pic(ng-click="activate()")
+                        | {{'word_pic_warn_btn' | loc}}
                   div(constr='LemgramResults', constr-name='lemgramResults')
-                    #wordclassChkParent
+                    #wordclassChkParent(ng-show="word_pic && instance.hasData")
                       input#wordclassChk(type='checkbox')
                       label(for='wordclassChk', rel='localize[show_wordclass]')
                     //- .progress_container
                     //-   progress(value='{{progress || 0}}', max='100')
-                    .content_target
+                    .content_target(ng-show="word_pic")
 
                 include includes/dynamic_result_tabs
                 

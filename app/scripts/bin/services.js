@@ -22,7 +22,7 @@
             obj = config[_i];
             val = $location.search()[obj.key];
             if (!val) {
-              if (obj["default"]) {
+              if (obj["default"] != null) {
                 val = obj["default"];
               } else {
                 continue;
@@ -40,8 +40,9 @@
           return _results;
         };
         onWatch();
-        scope.loc = $location;
-        scope.$watch('loc.search()', function() {
+        scope.$watch((function() {
+          return $location.search();
+        }), function() {
           return onWatch();
         });
         _results = [];
