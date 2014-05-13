@@ -1583,7 +1583,7 @@ class view.GraphResults extends BaseResults
                     graph.render()
                     $(".exportTimeStatsSection", @$result).hide()
 
-            HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value # use window.statsProxy.valueFormatter instead
+            HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value
 
             time_table_data = []
             time_table_columns_intermediate = {}
@@ -1596,7 +1596,7 @@ class view.GraphResults extends BaseResults
                         "field" : timestamp
                         "formatter" : window.statsProxy.valueFormatter
                     i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
-                    new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y} #util.formatDecimalString item.y.toString(), true
+                    new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
                 time_table_data.push new_time_row
             # Sort columns
             time_table_columns = [
