@@ -445,20 +445,18 @@ class model.StatsProxy extends BaseProxy
                 totalRow =
                     id: "row_total"
                     hit_value: "&Sigma;"
-                    total_value:
-                        absolute: data.total.sums.absolute
-                        relative: data.total.sums.relative
-
-                dataset = [totalRow]
+                    total_value: data.total.sums
+                
                 $.each data.corpora, (corpus, obj) ->
-                    totalRow[corpus + "_value"] =
-                        absolute: obj.sums.absolute
-                        relative: obj.sums.relative
+                    totalRow[corpus + "_value"] = obj.sums
 
                 wordArray = $.keys(data.total.absolute)
 
+                dataset = [totalRow]
+
                 # t = $.now()
                 # $.each wordArray, (i, word) ->
+
                 for word, i in wordArray
                     row =
                         id: "row" + i
@@ -472,8 +470,7 @@ class model.StatsProxy extends BaseProxy
                         row[corpus + "_value"] =
                             absolute: obj.absolute[word]
                             relative: obj.relative[word]
-
-                    dataset.push row
+                    dataset[i+1] = row
 
                 statsResults.savedData = data
                 statsResults.savedWordArray = wordArray

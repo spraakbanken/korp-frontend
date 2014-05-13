@@ -975,7 +975,7 @@
         locstring = "statstable_hitsheader";
       }
       relHitsString = util.getLocaleString("statstable_relfigures_hits");
-      $("<div id='dialog' title='" + topheader + "' />").appendTo("body").append("<br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p>").dialog({
+      $("<div id='dialog' title='" + topheader + "' />").appendTo("body").append("<div id=\"pieDiv\"><br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p></div>").dialog({
         width: 400,
         height: 500,
         resize: function() {
@@ -992,6 +992,9 @@
             $(this).dialog("option", "width", h * 0.80);
           }
           return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
+        },
+        close: function() {
+          return $("#pieDiv").remove();
         }
       }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram");
       $("#dialog").fadeTo(400, 1);
@@ -1241,7 +1244,7 @@
       $("#myGrid").width($(document).width());
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
-        enableColumnReorder: true
+        enableColumnReorder: false
       });
       grid.setSelectionModel(new Slick.RowSelectionModel({
         selectActiveRow: false
@@ -1576,7 +1579,7 @@
         _this.resultError(data);
         return _this.s.loading = false;
       }).done(function(data) {
-        var color, emptyIntervals, first, graph, hoverDetail, item, last, legend, nontime, old_ceil, old_render, old_tickOffsets, palette, s, series, shelving, slider, time, timeunit, toDate, yAxis, _i, _len, _ref;
+        var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
         c.log("data", data);
         if (data.ERROR) {
           _this.resultError(data);
@@ -1590,23 +1593,19 @@
         }
         if (_.isArray(data.combined)) {
           palette = new Rickshaw.Color.Palette("colorwheel");
-          series = (function() {
-            var _i, _len, _ref, _results;
-            _ref = data.combined;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              item = _ref[_i];
-              color = palette.color();
-              _results.push({
-                data: this.getSeriesData(item.relative),
-                color: color,
-                name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
-                cqp: item.cqp || cqp,
-                abs_data: this.getSeriesData(item.absolute)
-              });
-            }
-            return _results;
-          }).call(_this);
+          series = [];
+          _ref = data.combined;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            item = _ref[_i];
+            color = palette.color();
+            series.push({
+              data: _this.getSeriesData(item.relative),
+              color: color,
+              name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
+              cqp: item.cqp || cqp,
+              abs_data: _this.getSeriesData(item.absolute)
+            });
+          }
         } else {
           series = [
             {
@@ -1622,8 +1621,8 @@
         window.data = series[0].data;
         emptyIntervals = _this.getEmptyIntervals(series[0].data);
         _this.s.hasEmptyIntervals = emptyIntervals.length;
-        for (_i = 0, _len = series.length; _i < _len; _i++) {
-          s = series[_i];
+        for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+          s = series[_j];
           s.data = _.filter(s.data, function(item) {
             return item.y !== null;
           });
@@ -1648,17 +1647,19 @@
           }
         }, 200));
         $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
-          var cls, target, val, _j, _len1, _ref;
+          var cls, h, nRows, target, val, _k, _len2, _ref1, _ref2;
           target = event.currentTarget;
           val = $(":checked", target).val();
-          _ref = _this.$result.attr("class").split(" ");
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            cls = _ref[_j];
+          _ref1 = _this.$result.attr("class").split(" ");
+          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+            cls = _ref1[_k];
             if (cls.match(/^form-/)) {
               _this.$result.removeClass(cls);
             }
           }
           _this.$result.addClass("form-" + val);
+          $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
+          $(".time_table", _this.$result.parent()).hide();
           $(".smoothing_switch", _this.$result).button("enable");
           if (val === "bar") {
             if ($(".legend .line", _this.$result).length > 1) {
@@ -1671,13 +1672,111 @@
             }
             $(".smoothing_switch:checked", _this.$result).click();
             $(".smoothing_switch", _this.$result).button("disable");
+          } else if (val === "table") {
+            $(".chart,.zoom_slider,.legend", _this.$result).hide();
+            $(".time_table", _this.$result.parent()).show();
+            $(".smoothing_switch:checked", _this.$result).click();
+            $(".smoothing_switch", _this.$result).button("disable");
+            nRows = series.length || 2;
+            h = (nRows * 2) + 4;
+            h = Math.min(h, 40);
+            $(".time_table:visible", _this.$result).height("" + h + ".1em");
+            if ((_ref2 = _this.time_grid) != null) {
+              _ref2.resizeCanvas();
+            }
+            $(".exportTimeStatsSection", _this.$result).show();
+            $(".timeExportButton", _this.$result).unbind("click");
+            $(".timeExportButton", _this.$result).click(function() {
+              var cell, cells, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
+              selVal = $(".timeKindOfData option:selected", _this.$result).val();
+              selType = $(".timeKindOfFormat option:selected", _this.$result).val();
+              dataDelimiter = selType === "TSV" ? "%09" : ";";
+              header = [util.getLocaleString("stats_hit")];
+              _ref3 = series[0].data;
+              for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                cell = _ref3[_l];
+                header.push(moment(cell.x * 1000).format("YYYY"));
+              }
+              output = [header];
+              for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
+                row = series[_m];
+                cells = [row.name === "&Sigma;" ? "Σ" : row.name];
+                _ref4 = row.data;
+                for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
+                  cell = _ref4[_n];
+                  if (selVal === "relative") {
+                    cells.push(cell.y);
+                  } else {
+                    i = _.indexOf(_.pluck(row.abs_data, "x"), cell.x, true);
+                    cells.push(row.abs_data[i].y);
+                  }
+                }
+                output.push(cells);
+              }
+              output = _.invoke(output, "join", dataDelimiter);
+              output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)));
+              if (selType === "TSV") {
+                return window.open("data:text/tsv;charset=utf-8," + output);
+              } else {
+                return window.open("data:text/csv;charset=utf-8," + output);
+              }
+            });
           }
-          graph.setRenderer(val);
-          return graph.render();
+          if (val !== "table") {
+            graph.setRenderer(val);
+            graph.render();
+            return $(".exportTimeStatsSection", _this.$result).hide();
+          }
         });
-        $(".smoothing_label .ui-button-text", _this.$result).localeKey("smoothing");
+        HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
+          return value;
+        };
+        time_table_data = [];
+        time_table_columns_intermediate = {};
+        for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
+          row = series[_k];
+          new_time_row = {
+            "label": row.name
+          };
+          _ref1 = row.data;
+          for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+            item = _ref1[_l];
+            timestamp = moment(item.x * 1000).format("YYYY");
+            time_table_columns_intermediate[timestamp] = {
+              "name": timestamp,
+              "field": timestamp,
+              "formatter": window.statsProxy.valueFormatter
+            };
+            i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
+            new_time_row[timestamp] = {
+              "relative": item.y,
+              "absolute": row.abs_data[i].y
+            };
+          }
+          time_table_data.push(new_time_row);
+        }
+        time_table_columns = [
+          {
+            "name": "Hit",
+            "field": "label",
+            "formatter": HTMLFormatter
+          }
+        ];
+        _ref2 = _.keys(time_table_columns_intermediate).sort();
+        for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+          key = _ref2[_m];
+          time_table_columns.push(time_table_columns_intermediate[key]);
+        }
+        time_grid = new Slick.Grid($(".time_table"), time_table_data, time_table_columns, {
+          enableCellNavigation: false,
+          enableColumnReorder: false
+        });
+        $(".time_table").width("100%");
+        _this.time_grid = time_grid;
+        $(".smoothing_label .ui-button-text", _this.$result.parent()).localeKey("smoothing");
         $(".form_switch .ui-button:first .ui-button-text", _this.$result).localeKey("line");
-        $(".form_switch .ui-button:last .ui-button-text", _this.$result).localeKey("bar");
+        $(".form_switch .ui-button:eq(1) .ui-button-text", _this.$result).localeKey("bar");
+        $(".form_switch .ui-button:last .ui-button-text", _this.$result).localeKey("table");
         legend = new Rickshaw.Graph.Legend({
           element: $(".legend", _this.$result).get(0),
           graph: graph
@@ -1713,14 +1812,14 @@
             return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
           },
           formatter: _.debounce(function(series, x, y, formattedX, formattedY, d) {
-            var abs_y, i, rel;
+            var abs_y, rel;
             i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
             abs_y = series.abs_data[i].y;
             rel = series.name + ':&nbsp;' + formattedY;
             return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
           }, 100)
         });
-        _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
+        _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
         timeunit = last - first > 100 ? "decade" : _this.zoom;
         toDate = function(sec) {
           return moment(sec * 1000).toDate();
@@ -1756,13 +1855,13 @@
         };
         old_tickOffsets = xAxis.tickOffsets;
         xAxis.tickOffsets = function() {
-          var count, domain, i, offsets, runningTick, tickValue, unit, _j;
+          var count, domain, offsets, runningTick, tickValue, unit, _n;
           domain = xAxis.graph.x.domain();
           unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
           count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
           runningTick = domain[0];
           offsets = [];
-          for (i = _j = 0; 0 <= count ? _j < count : _j > count; i = 0 <= count ? ++_j : --_j) {
+          for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
             tickValue = time.ceil(runningTick, unit);
             runningTick = tickValue + unit.seconds / 2;
             offsets.push({
@@ -1779,9 +1878,10 @@
         });
         yAxis.render();
         _this.hidePreloader();
-        return safeApply(_this.s, function() {
+        safeApply(_this.s, function() {
           return _this.s.loading = false;
         });
+        return $(window).trigger("resize");
       });
     };
 

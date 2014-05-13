@@ -2048,6 +2048,13 @@ line.tick {
     padding: 0.4em 1em 0.4em 2.1em;
 }
 
+.time_table {
+  width : 100%;
+  height : 500px;
+}
+.time_table, .time_table * {
+  box-sizing : content-box;
+}
 #myGrid {
   width : 100%;
   // height : 100%;

@@ -865,12 +865,12 @@ newDataInGraph = (dataName, horizontalDiagram) ->
         relHitsString = util.getLocaleString("statstable_relfigures_hits")
         $("<div id='dialog' title='#{topheader}' />")
         .appendTo("body")
-        .append("""<br/><div id="statistics_switch" style="text-align:center">
+        .append("""<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
                             <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
                             <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
                         </div>
                         <div id="chartFrame" style="height:380"></div>
-                        <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p>"""
+                        <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p></div>"""
         ).dialog(
             width: 400
             height: 500
@@ -887,6 +887,8 @@ newDataInGraph = (dataName, horizontalDiagram) ->
                 else
                     $(this).dialog "option", "width", h * 0.80
                 stats2Instance.pie_widget "resizeDiagram", $(this).width() - 60
+            close: () ->
+                $("#pieDiv").remove()
         ).css("opacity", 0)
         .parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram")
         $("#dialog").fadeTo 400, 1
@@ -1120,7 +1122,7 @@ class view.StatsResults extends BaseResults
         $("#myGrid").width($(document).width())
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
-            enableColumnReorder: true
+            enableColumnReorder: false
 
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
@@ -1450,13 +1452,13 @@ class view.GraphResults extends BaseResults
             else
                 $(".non_time_div").hide()
 
-            
             if _.isArray data.combined
                 palette = new Rickshaw.Color.Palette("colorwheel")
-                series = for item in data.combined
+                series = []
+                for item in data.combined
                     color = palette.color()
                     # @colorToCqp[color] = item.cqp
-                    {
+                    series.push {
                         data : @getSeriesData item.relative
                         color : color
                         # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
@@ -1464,7 +1466,7 @@ class view.GraphResults extends BaseResults
                         cqp : item.cqp or cqp
                         abs_data : @getSeriesData item.absolute
                     }
-            else
+            else # TODO: get rid of code doubling and use seriesData variable
                 # @colorToCqp['steelblue'] = cqp
                 series = [{
                             data: @getSeriesData data.combined.relative
@@ -1473,7 +1475,6 @@ class view.GraphResults extends BaseResults
                             cqp : cqp
                             abs_data : @getSeriesData data.combined.absolute
                         }]
-
             Rickshaw.Series.zeroFill(series)
             window.data = series[0].data
             emptyIntervals = @getEmptyIntervals(series[0].data)
@@ -1525,24 +1526,97 @@ class view.GraphResults extends BaseResults
                 for cls in @$result.attr("class").split(" ")
                     if cls.match(/^form-/) then @$result.removeClass(cls)
                 @$result.addClass("form-" +val)
-
+                $(".chart,.zoom_slider,.legend", @$result.parent()).show()
+                $(".time_table", @$result.parent()).hide()
                 $(".smoothing_switch", @$result).button("enable")
                 if val == "bar"
                     if $(".legend .line", @$result).length > 1
                         $(".legend li:last:not(.disabled) .action", @$result).click()
-
                         if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
                             $(".legend li:first .action", @$result).click()
-
                     $(".smoothing_switch:checked", @$result).click()
                     $(".smoothing_switch", @$result).button("disable")
+                else if val == "table"
+                    $(".chart,.zoom_slider,.legend", @$result).hide()
+                    $(".time_table", @$result.parent()).show()
+                    $(".smoothing_switch:checked", @$result).click()
+                    $(".smoothing_switch", @$result).button("disable")
+                    nRows = series.length or 2
+                    h = (nRows * 2) + 4
+                    h = Math.min h, 40
+                    $(".time_table:visible", @$result).height "#{h}.1em"
+                    @time_grid?.resizeCanvas()
+                    $(".exportTimeStatsSection", @$result).show()
+                    $(".timeExportButton", @$result).unbind "click"
+                    $(".timeExportButton", @$result).click =>
+                        selVal = $(".timeKindOfData option:selected", @$result).val()
+                        selType = $(".timeKindOfFormat option:selected", @$result).val()
+                        dataDelimiter = if selType is "TSV" then "%09" else ";"
 
+                        header = [ util.getLocaleString("stats_hit") ]
 
-                graph.setRenderer val
-                graph.render()
-            $(".smoothing_label .ui-button-text", @$result).localeKey("smoothing")
+                        for cell in series[0].data
+                            header.push moment(cell.x * 1000).format("YYYY")
+
+                        output = [header]
+
+                        for row in series
+                            cells = [ if row.name is "&Sigma;" then "Σ" else row.name ]
+                            for cell in row.data
+                                if selVal is "relative"
+                                    cells.push cell.y
+                                else
+                                    i = _.indexOf (_.pluck row.abs_data, "x"), cell.x, true
+                                    cells.push row.abs_data[i].y
+                            output.push cells
+                        
+                        output = _.invoke output, "join", dataDelimiter
+                        output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
+                        
+                        if selType is "TSV"
+                            window.open "data:text/tsv;charset=utf-8," + (output)
+                        else
+                            window.open "data:text/csv;charset=utf-8," + (output)
+
+                unless val == "table"
+                    graph.setRenderer val
+                    graph.render()
+                    $(".exportTimeStatsSection", @$result).hide()
+
+            HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value # use window.statsProxy.valueFormatter instead
+
+            time_table_data = []
+            time_table_columns_intermediate = {}
+            for row in series
+                new_time_row = {"label" : row.name}
+                for item in row.data
+                    timestamp = moment(item.x * 1000).format("YYYY") # this needs to be fixed for other resolutions
+                    time_table_columns_intermediate[timestamp] =
+                        "name" : timestamp
+                        "field" : timestamp
+                        "formatter" : window.statsProxy.valueFormatter
+                    i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
+                    new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y} #util.formatDecimalString item.y.toString(), true
+                time_table_data.push new_time_row
+            # Sort columns
+            time_table_columns = [
+                                "name" : "Hit"
+                                "field" : "label"
+                                "formatter" : HTMLFormatter
+                                ]
+            for key in _.keys(time_table_columns_intermediate).sort()
+                time_table_columns.push(time_table_columns_intermediate[key])
+
+            time_grid = new Slick.Grid $(".time_table"), time_table_data, time_table_columns,
+                enableCellNavigation: false
+                enableColumnReorder: false
+            #time_grid.autosizeColumns()
+            $(".time_table").width("100%")
+            @time_grid = time_grid
+            $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
             $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
-            $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("bar")
+            $(".form_switch .ui-button:eq(1) .ui-button-text", @$result).localeKey("bar")
+            $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("table")
             legend = new Rickshaw.Graph.Legend
                 element: $(".legend", @$result).get(0)
                 graph: graph
@@ -1652,6 +1726,7 @@ class view.GraphResults extends BaseResults
             safeApply @s, () =>
                 @s.loading = false
 
+            $(window).trigger("resize")
 
 
 

@@ -163,6 +163,7 @@
 	"graph" : "Graph",
 	"line" : "Line",
 	"bar" : "Bar",
+	"table" : "Table",
 	"smoothing" : "Smoothing",
 	"show_diagram" : "Show Trend Diagram",
 	"non_time_before" : "",

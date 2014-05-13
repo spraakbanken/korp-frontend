@@ -166,6 +166,7 @@
 	"graph" : "Trenddiagram",
 	"line" : "Linje",
 	"bar" : "Stapel",
+	"table" : "Tabell",
 	"smoothing" : "Utjämna",
 	"show_diagram" : "Visa trenddiagram",
 	"non_time_before" : "Saknar tidsuppmärkning: ",

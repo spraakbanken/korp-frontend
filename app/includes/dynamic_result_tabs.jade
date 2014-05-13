@@ -20,6 +20,8 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
           label(for='line_input') Linje
           input#bar_input(type='radio', name='form_switch', value='bar')
           label(for="bar_input") Stapel
+          input#table_input(type='radio', name='form_switch', value='table')
+          label(for="table_input") Tabell
         //- label.smoothing_label(for='smoothing_switch') Utjämna
         //- input#smoothing_switch.smoothing_switch(type='checkbox')
         .non_time_div
@@ -37,6 +39,15 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
         | {{'drawing' | loc}}
     .chart
     .zoom_slider
+    .time_table(style="display:none;margin-top:20px")
+    .exportTimeStatsSection(style="display:none")
+      select.timeKindOfData
+        option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
+        option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
+      select.timeKindOfFormat
+        option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
+        option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+      input.timeExportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
 tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc}}

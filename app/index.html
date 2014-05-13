@@ -309,6 +309,8 @@
                           <label for="line_input">Linje</label>
                           <input id="bar_input" type="radio" name="form_switch" value="bar">
                           <label for="bar_input">Stapel</label>
+                          <input id="table_input" type="radio" name="form_switch" value="table">
+                          <label for="table_input">Tabell</label>
                         </div>
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
@@ -322,6 +324,18 @@
                     </div>
                     <div class="chart"></div>
                     <div class="zoom_slider"></div>
+                    <div style="display:none;margin-top:20px" class="time_table"></div>
+                    <div style="display:none" class="exportTimeStatsSection">
+                      <select class="timeKindOfData">
+                        <option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
+                        <option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
+                      </select>
+                      <select class="timeKindOfFormat">
+                        <option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
+                        <option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
+                      </select>
+                      <input value="Exportera" rel="localize[statstable_export]" type="submit" class="timeExportButton">
+                    </div>
                   </div>
                 </tab>
                 <tab active="active" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">

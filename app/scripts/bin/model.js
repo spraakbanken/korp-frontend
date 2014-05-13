@@ -522,19 +522,13 @@
           totalRow = {
             id: "row_total",
             hit_value: "&Sigma;",
-            total_value: {
-              absolute: data.total.sums.absolute,
-              relative: data.total.sums.relative
-            }
+            total_value: data.total.sums
           };
-          dataset = [totalRow];
           $.each(data.corpora, function(corpus, obj) {
-            return totalRow[corpus + "_value"] = {
-              absolute: obj.sums.absolute,
-              relative: obj.sums.relative
-            };
+            return totalRow[corpus + "_value"] = obj.sums;
           });
           wordArray = $.keys(data.total.absolute);
+          dataset = [totalRow];
           for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
             word = wordArray[i];
             row = {
@@ -553,7 +547,7 @@
                 relative: obj.relative[word]
               };
             }
-            dataset.push(row);
+            dataset[i + 1] = row;
           }
           statsResults.savedData = data;
           statsResults.savedWordArray = wordArray;
