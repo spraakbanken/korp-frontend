@@ -97,6 +97,7 @@
       $(document).keydown($.proxy(this.onKeydown, this));
       this.$result.on("click", ".word", function(event) {
         var aux, i, l, obj, paragraph, sent, sent_start, word;
+        _this.s.$root.sidebar_visible = true;
         scope = $(event.currentTarget).scope();
         obj = scope.wd;
         sent = scope.sentence;

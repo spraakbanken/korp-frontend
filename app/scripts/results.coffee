@@ -90,6 +90,7 @@ class view.KWICResults extends BaseResults
 
         # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
         @$result.on "click", ".word", (event) =>
+            @s.$root.sidebar_visible = true
             # c.log "click", obj, event
             # c.log "word click", $(this).scope().wd, event.currentTarget
             scope = $(event.currentTarget).scope()
