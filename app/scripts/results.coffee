@@ -583,7 +583,9 @@ class view.LemgramResults extends BaseResults
 
 
     renderResult: (data, query) ->
-        @resetView()
+        c.log "lemgram renderResult", data, query
+        # @resetView()
+        $(".content_target", @$result).empty()
         resultError = super(data)
         safeApply @s, () =>
             @hidePreloader()
@@ -591,7 +593,7 @@ class view.LemgramResults extends BaseResults
         return if resultError is false
         unless data.relations
             safeApply @s, () =>
-                @hasData = false
+                # @hasData = false
 
             @resultDeferred.reject()
         else if util.isLemgramId(query)
@@ -601,7 +603,7 @@ class view.LemgramResults extends BaseResults
             @renderWordTables query, data.relations
             @resultDeferred.resolve()
 
-    renderHeader: (wordClass, sections) ->
+    renderHeader: (wordClass, isLemgram) ->
 
         wordClass = (_.invert settings.wordpictureTagset)[wordClass.toLowerCase()]
         $(".tableContainer:last .lemgram_section").each((i) ->
@@ -623,7 +625,10 @@ class view.LemgramResults extends BaseResults
                 else
                     # c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
                     label = $(this).data("word") or $(this).tmplItem().lemgram
-                    $("<span class='hit'><b>#{label}</b></span>").appendTo $parent
+                    classes = "hit"
+                    if isLemgram
+                        classes += " lemgram"
+                    $("<span class='#{classes}'><b>#{label}</b></span>").appendTo $parent
         ).append "<div style='clear:both;'/>"
 
     renderWordTables: (word, data) ->
@@ -648,7 +653,7 @@ class view.LemgramResults extends BaseResults
         
         $.each unique_words, (i, [currentWd, pos]) =>
             self.drawTable currentWd, pos, data
-            self.renderHeader pos
+            self.renderHeader pos, false
             content = """
                 #{currentWd} (<span rel="localize[pos]">#{util.getLocaleString(pos)}</span>)
             """
@@ -669,7 +674,7 @@ class view.LemgramResults extends BaseResults
 
         @drawTable lemgram, wordClass, data #, getRelType
         $(".lemgram_result .wordclass_suffix").hide()
-        @renderHeader wordClass
+        @renderHeader wordClass, true
         @hidePreloader()
 
     drawTable: (token, wordClass, data) ->

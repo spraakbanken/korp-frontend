@@ -193,7 +193,7 @@ korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
         search = searches.activeSearch
         # $scope.instance.showPreloader();
         #TODO: should word really be hard coded here?
-        $scope.instance.makeRequest(search.val, "word")
+        $scope.instance.makeRequest(search.val, search.type)
         # lemgramProxy.makeRequest(search.val, "word");
 
 

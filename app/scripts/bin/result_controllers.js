@@ -203,7 +203,7 @@
       var search;
       $location.search("word_pic", true);
       search = searches.activeSearch;
-      return $scope.instance.makeRequest(search.val, "word");
+      return $scope.instance.makeRequest(search.val, search.type);
     };
   });
 

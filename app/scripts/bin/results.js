@@ -657,7 +657,8 @@
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError,
         _this = this;
-      this.resetView();
+      c.log("lemgram renderResult", data, query);
+      $(".content_target", this.$result).empty();
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       safeApply(this.s, function() {
         _this.hidePreloader();
@@ -667,9 +668,7 @@
         return;
       }
       if (!data.relations) {
-        safeApply(this.s, function() {
-          return _this.hasData = false;
-        });
+        safeApply(this.s, function() {});
         return this.resultDeferred.reject();
       } else if (util.isLemgramId(query)) {
         this.renderTables(query, data.relations);
@@ -680,13 +679,13 @@
       }
     };
 
-    LemgramResults.prototype.renderHeader = function(wordClass, sections) {
+    LemgramResults.prototype.renderHeader = function(wordClass, isLemgram) {
       wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
       return $(".tableContainer:last .lemgram_section").each(function(i) {
         var $parent;
         $parent = $(this).find(".lemgram_help");
         return $(this).find(".lemgram_result").each(function(j) {
-          var cell, confObj, label;
+          var cell, classes, confObj, label;
           confObj = settings.wordPictureConf[wordClass][i][j];
           if (confObj !== "_") {
             if (!$(this).find("table").length) {
@@ -703,7 +702,11 @@
             return $(this).addClass(confObj.css_class).css("border-color", $(this).css("background-color"));
           } else {
             label = $(this).data("word") || $(this).tmplItem().lemgram;
-            return $("<span class='hit'><b>" + label + "</b></span>").appendTo($parent);
+            classes = "hit";
+            if (isLemgram) {
+              classes += " lemgram";
+            }
+            return $("<span class='" + classes + "'><b>" + label + "</b></span>").appendTo($parent);
           }
         });
       }).append("<div style='clear:both;'/>");
@@ -743,7 +746,7 @@
         var content, currentWd, pos;
         currentWd = _arg[0], pos = _arg[1];
         self.drawTable(currentWd, pos, data);
-        self.renderHeader(pos);
+        self.renderHeader(pos, false);
         content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
         return $(".tableContainer:last").prepend($("<div>", {
           "class": "header"
@@ -762,7 +765,7 @@
       }
       this.drawTable(lemgram, wordClass, data);
       $(".lemgram_result .wordclass_suffix").hide();
-      this.renderHeader(wordClass);
+      this.renderHeader(wordClass, true);
       return this.hidePreloader();
     };
 
