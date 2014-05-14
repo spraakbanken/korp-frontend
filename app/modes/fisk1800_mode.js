@@ -56,7 +56,7 @@ settings.corporafolders.tidskrifter.tidskrifter1849 = {
 
 settings.corporafolders.tidskrifter.tidskrifter1899 = {
 	title : "Tidskrifter 1850–1899",
-	contents : ["filosofia1850-1899", "litterartidskrift-helsingfors"],
+	contents : ["filosofia1850-1899", "finsktidskrift1800tal", "litterartidskrift-helsingfors"],
 	description : ""
 };
 
@@ -541,6 +541,31 @@ settings.corpora.husmodern = {
 settings.corpora["litterartidskrift-helsingfors"] = {
 	id : "litterartidskrift-helsingfors",
 	title : "Litterär tidskrift utgifven i Helsingfors",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["finsktidskrift1800tal"] = {
+	id : "finsktidskrift1800tal",
+	title : "Finsk Tidskrift 1850–1899",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
