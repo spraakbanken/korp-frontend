@@ -1607,11 +1607,11 @@ class view.GraphResults extends BaseResults
             for key in _.keys(time_table_columns_intermediate).sort()
                 time_table_columns.push(time_table_columns_intermediate[key])
 
-            time_grid = new Slick.Grid $(".time_table"), time_table_data, time_table_columns,
+            time_grid = new Slick.Grid $(".time_table", @$result), time_table_data, time_table_columns,
                 enableCellNavigation: false
                 enableColumnReorder: false
             #time_grid.autosizeColumns()
-            $(".time_table").width("100%")
+            $(".time_table", @$result).width("100%")
             @time_grid = time_grid
             $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
             $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
@@ -1648,7 +1648,7 @@ class view.GraphResults extends BaseResults
                     val = util.formatDecimalString (y.toFixed 2), false, true, true
 
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
-                formatter : _.debounce( (series, x, y, formattedX, formattedY, d) ->
+                formatter : (series, x, y, formattedX, formattedY, d) ->
                     i = _.indexOf (_.pluck series.abs_data, "x"), x, true
                     abs_y = series.abs_data[i].y
 
@@ -1659,7 +1659,7 @@ class view.GraphResults extends BaseResults
                         <br>
                         #{util.getLocaleString 'abs_hits_short'}: #{abs_y}
                     </span>"""
-                , 100)
+                # , 100)
             } )
 
             [first, last] = settings.corpusListing.getTimeInterval()

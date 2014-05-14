@@ -1495,6 +1495,10 @@ label[for=lemgram_select]:before {
   margin-right: 10px;
 }
 
+.exportTimeStatsSection {
+  margin-top : 2em;
+}
+
 .ui-slider-handle {
   @include border-radius(20px);
 }

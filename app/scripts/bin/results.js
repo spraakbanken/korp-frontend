@@ -1767,11 +1767,11 @@
           key = _ref2[_m];
           time_table_columns.push(time_table_columns_intermediate[key]);
         }
-        time_grid = new Slick.Grid($(".time_table"), time_table_data, time_table_columns, {
+        time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
           enableCellNavigation: false,
           enableColumnReorder: false
         });
-        $(".time_table").width("100%");
+        $(".time_table", _this.$result).width("100%");
         _this.time_grid = time_grid;
         $(".smoothing_label .ui-button-text", _this.$result.parent()).localeKey("smoothing");
         $(".form_switch .ui-button:first .ui-button-text", _this.$result).localeKey("line");
@@ -1811,13 +1811,13 @@
             val = util.formatDecimalString(y.toFixed(2), false, true, true);
             return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
           },
-          formatter: _.debounce(function(series, x, y, formattedX, formattedY, d) {
+          formatter: function(series, x, y, formattedX, formattedY, d) {
             var abs_y, rel;
             i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
             abs_y = series.abs_data[i].y;
             rel = series.name + ':&nbsp;' + formattedY;
             return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
-          }, 100)
+          }
         });
         _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
         timeunit = last - first > 100 ? "decade" : _this.zoom;
