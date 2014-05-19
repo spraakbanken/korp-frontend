@@ -56,13 +56,13 @@ settings.corporafolders.tidskrifter.tidskrifter1849 = {
 
 settings.corporafolders.tidskrifter.tidskrifter1899 = {
 	title : "Tidskrifter 1850–1899",
-	contents : ["filosofia1850-1899", "finsktidskrift1800tal", "litterartidskrift-helsingfors"],
+	contents : ["ateneum-1800tal", "filosofia1850-1899", "finsktidskrift1800tal", "landtmannen", "litterartidskrift-helsingfors"],
 	description : ""
 };
 
 settings.corporafolders.tidskrifter.tidskrifter1959 = {
 	title : "Tidskrifter 1900–1959",
-	contents : ["argus", "euterpe", "filosofia1900-1959", "husmodern"],
+	contents : ["astra1920-1959", "ateneum-1900tal", "argus", "euterpe", "filosofia1900-1959", "husmodern"],
 	description : ""
 };
 
@@ -259,6 +259,58 @@ settings.corpora["fsbskonlit1900-1959"] = {
 		"text_title" : {label : "title"},
 		"text_date" : {label : "year"},
 		"text_publisher" : {label : "publisher"}
+	}
+};
+
+settings.corpora["ateneum-1800tal"] = {
+	id : "ateneum-1800tal",
+	title : "Ateneum 1898–1899",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"},
+		"text_issue" : {label : "issue"}
+	}
+};
+
+settings.corpora["ateneum-1900tal"] = {
+	id : "ateneum-1900tal",
+	title : "Ateneum 1900–1903",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"},
+		"text_issue" : {label : "issue"}
 	}
 };
 
@@ -488,6 +540,31 @@ settings.corpora.spanskaflugan = {
 	}
 };
 
+settings.corpora["astra1920-1959"] = {
+	id : "astra1920-1959",
+	title : "Astra 1920–1959",
+	description : "Tidskrift med kvinnoperspektiv.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
+};
+
 settings.corpora.argus = {
 	id : "argus",
 	title : "Argus 1907–1911",
@@ -516,6 +593,31 @@ settings.corpora.argus = {
 settings.corpora.husmodern = {
 	id : "husmodern",
 	title : "Husmodern 1903–1912",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["landtmannen"] = {
+	id : "landtmannen",
+	title : "Landtmannen 1877–1879",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
@@ -602,3 +704,4 @@ settings.corpora.euterpe = {
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
+
