@@ -42,6 +42,12 @@ settings.corporafolders.skonlitteratur = {
 	description : ""
 };
 
+settings.corporafolders.tidningar = {
+	title : "Tidningstexter",
+	contents : ["borgabladet2", "fredrikshamnstidning"],
+	description : ""
+};
+
 settings.corporafolders.tidskrifter = {
 	title : "Tidskrifter",
 	contents : [],
@@ -728,5 +734,52 @@ settings.corpora.euterpe = {
     }
 };
 
+settings.corpora["borgabladet2"] = {
+	id : "borgabladet2",
+	title : "Borgåbladet 1885",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["fredrikshamnstidning"] = {
+	id : "fredrikshamnstidning",
+	title : "Fredrikshamns Tidning 1888–1908",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
 settings.corpusListing = new CorpusListing(settings.corpora);
 
