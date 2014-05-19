@@ -62,7 +62,7 @@ settings.corporafolders.tidskrifter.tidskrifter1899 = {
 
 settings.corporafolders.tidskrifter.tidskrifter1959 = {
 	title : "Tidskrifter 1900–1959",
-	contents : ["astra1920-1959", "ateneum-1900tal", "argus", "euterpe", "filosofia1900-1959", "husmodern"],
+	contents : ["astra1920-1959", "ateneum-1900tal", "argus", "euterpe", "filosofia1900-1959", "finsktidskrift1900tal", "husmodern"],
 	description : ""
 };
 
@@ -686,6 +686,31 @@ settings.corpora["finsktidskrift1800tal"] = {
 	},
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
+		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["finsktidskrift1900tal"] = {
+	id : "finsktidskrift1900tal",
+	title : "Finsk Tidskrift 1900–1912",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_edition" : {label : "issue"},
 		"text_date" : {label : "year"}
 	}
 };
