@@ -12,21 +12,9 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 
-settings.corporafolders.bd1700 = {
-	title : "Brev och dagböcker 1700-tal",
-	contents : ["fsbbrev1700tal"],
-	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
-};
-
-settings.corporafolders.bd1800 = {
-	title : "Brev och dagböcker 1800-tal",
-	contents : ["fsbbrev1800-1849", "fsbbrev1850-1899"],
-	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
-};
-
-settings.corporafolders.bd1900 = {
-	title : "Brev och dagböcker 1900-tal",
-	contents : ["fsbbrev1900tal"],
+settings.corporafolders.brevdagbocker = {
+	title : "Brev och dagböcker",
+	contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal"],
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
@@ -44,7 +32,7 @@ settings.corporafolders.skonlitteratur = {
 
 settings.corporafolders.tidningar = {
 	title : "Tidningstexter",
-	contents : ["borgabladet2", "fredrikshamnstidning", "uleaborgstidning"],
+	contents : ["borgabladet2", "fredrikshamnstidning", "uleaborgstidning", "abotidning"],
 	description : ""
 };
 
@@ -834,6 +822,30 @@ settings.corpora["fredrikshamnstidning"] = {
 settings.corpora["uleaborgstidning"] = {
 	id : "uleaborgstidning",
 	title : "Uleåborgs Tidning 1877–1887",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["abotidning"] = {
+	id : "abotidning",
+	title : "Åbo Tidning 1883–1903",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
