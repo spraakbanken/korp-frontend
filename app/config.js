@@ -832,18 +832,7 @@ settings.corpora.informationstidningar = {
     description : "Material ur informationstidningar som ges ut av kommuner och städer.",
     within : settings.spWithin,
     context : settings.spContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
         text_issue : {label : "issue"},
@@ -882,18 +871,7 @@ settings.corpora.propositioner = {
     description : 'Material ur <a href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
     within : settings.spWithin,
     context : settings.spContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
         text_title : {label : "title"}
@@ -1089,18 +1067,7 @@ settings.corpora.webbnyheter2001 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1115,18 +1082,7 @@ settings.corpora.webbnyheter2002 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1141,18 +1097,7 @@ settings.corpora.webbnyheter2003 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1167,18 +1112,7 @@ settings.corpora.webbnyheter2004 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1193,18 +1127,7 @@ settings.corpora.webbnyheter2005 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1219,18 +1142,7 @@ settings.corpora.webbnyheter2006 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1245,18 +1157,7 @@ settings.corpora.webbnyheter2007 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1271,18 +1172,7 @@ settings.corpora.webbnyheter2008 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1297,18 +1187,7 @@ settings.corpora.webbnyheter2009 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1323,18 +1202,7 @@ settings.corpora.webbnyheter2010 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1349,18 +1217,7 @@ settings.corpora.webbnyheter2011 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1375,18 +1232,7 @@ settings.corpora.webbnyheter2012 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1401,18 +1247,7 @@ settings.corpora.webbnyheter2013 = {
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : sattrs.date,
         text_title : {label : "title"},
@@ -1752,18 +1587,7 @@ settings.corpora["flashback-dator"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1784,18 +1608,7 @@ settings.corpora["flashback-droger"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1816,18 +1629,7 @@ settings.corpora["flashback-fordon"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1848,18 +1650,7 @@ settings.corpora["flashback-hem"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1880,18 +1671,7 @@ settings.corpora["flashback-kultur"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1912,18 +1692,7 @@ settings.corpora["flashback-livsstil"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1944,18 +1713,7 @@ settings.corpora["flashback-mat"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -1976,18 +1734,7 @@ settings.corpora["flashback-politik"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2008,18 +1755,7 @@ settings.corpora["flashback-resor"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2040,18 +1776,7 @@ settings.corpora["flashback-samhalle"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2072,18 +1797,7 @@ settings.corpora["flashback-sex"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2104,18 +1818,7 @@ settings.corpora["flashback-sport"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2136,18 +1839,7 @@ settings.corpora["flashback-vetenskap"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2168,18 +1860,7 @@ settings.corpora["flashback-ovrigt"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2200,18 +1881,7 @@ settings.corpora["flashback-flashback"] = {
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
@@ -2500,18 +2170,7 @@ settings.corpora.storsuc = {
     description : "En samling romaner och andra böcker som har använts i urvalet till SUC. 58 böcker ingår.",
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_id : {label : "text"}
     }
@@ -2545,16 +2204,7 @@ settings.corpora.saltnld_swe = {
 Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
     context: settings.defaultContext,
     within: settings.defaultWithin,
-    attributes: {
-        pos: attrs.pos,
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        saldo: attrs.saldo,
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-    },
+    attributes: modernAttrs,
     struct_attributes : {
     }
 };
@@ -2565,16 +2215,7 @@ settings.corpora["europarl-sv"] = {
     description : "Texter från Europaparlamentets webbsida.",
     context: settings.defaultContext,
     within: settings.defaultWithin,
-    attributes: {
-        pos: attrs.pos,
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        saldo: attrs.saldo,
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-    },
+    attributes: modernAttrs,
     struct_attributes : {
         text_date : {label : "date"},
         text_speaker : {label : "speaker"}
@@ -2963,18 +2604,7 @@ settings.corpora.swefn = {
     description : '',
     within : settings.defaultWithin,
     context : settings.defaultContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         "text_created_by" : {label : "created_by"},
 /*      "element_name" : {label : "element"},
@@ -3079,18 +2709,7 @@ settings.corpora.jft = {
     description : "<a href=\"http://jff.fi/index.asp?page=5\">JFT</a> publiceras av Juridiska Föreningen i Finland r.f. Den är Nordens äldsta utkommande rättsvetenskapliga tidskrift.",
     within : settings.spWithin,
     context : settings.spContext,
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
         text_issue : {label : "issue"}
@@ -3460,18 +3079,7 @@ settings.corpora.sw1203 = {
 	limited_access : true,
 	within : settings.spWithin,
 	context : settings.spContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 	    text_type : {
 	        label : "type",
@@ -3619,18 +3227,7 @@ settings.corpora["twitter-pldebatt-130612"] = {
         "1 sentence" : "1 sentence",
         "1 text" : "1 text"
     },
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         user_username : {label : "username2"},
         user_name : {label : "name"},
@@ -3667,18 +3264,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
         "1 sentence" : "1 sentence",
         "1 text" : "1 text"
     },
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         user_username : {label : "username2"},
         user_name : {label : "name"},
@@ -3715,18 +3301,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
         "1 sentence" : "1 sentence",
         "1 text" : "1 text"
     },
-    attributes : {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix
-    },
+    attributes : modernAttrs,
     struct_attributes : {
         user_username : {label : "username2"},
         user_name : {label : "name"},
@@ -3797,18 +3372,7 @@ settings.corpora.forhor = {
 	limited_access : true,
 	context : settings.spContext,
 	within : settings.spWithin,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix
-	},
+	attributes : modernAttrs,
 	struct_attributes : {
 		"text_fall" : {label : "fall"},
 		"text_hord" : {label : "hord"},
