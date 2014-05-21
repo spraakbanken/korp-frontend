@@ -30,7 +30,7 @@
     "retweets" : "retweets",
     "replytouser" : "reply to",
     "coordinates" : "coordinates",
-    "location" : "tweeted from",
+    "tweet_location" : "tweeted from",
     "username2" : "username",
     "name" : "name",
     "user_location" : "lives at",
@@ -379,5 +379,7 @@
     
     "group" : "group",
     "interviewee" : "interviewee",
-    "part" : "part"
+    "part" : "part",
+    
+    "location" : "location"
 }

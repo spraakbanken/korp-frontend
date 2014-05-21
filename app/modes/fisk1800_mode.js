@@ -14,7 +14,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.brevdagbocker = {
 	title : "Brev och dagböcker",
-	contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal"],
+	contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "dagbocker1700tal", "dagbocker1800-1850", "dagbocker1859-1899", "dagbocker1900-1949"],
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
@@ -173,6 +173,118 @@ settings.corpora.fsbbrev1900tal = {
 		"text_title" : {label : "title"},
 		"text_date" : {label : "date"},
 		"text_source" : {label : "source"},
+		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["dagbocker1700tal"] = {
+	id : "dagbocker1700tal",
+	title : "Dagböcker 1700-tal",
+	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_location" : {label : "location"},
+		"text_source" : {label : "source"},
+		"text_date" : {label : "date"},
+		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["dagbocker1800-1850"] = {
+	id : "dagbocker1800-1850",
+	title : "Dagböcker 1800–1850",
+	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_location" : {label : "location"},
+		"text_source" : {label : "source"},
+		"text_date" : {label : "date"},
+		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["dagbocker1859-1899"] = {
+	id : "dagbocker1859-1899",
+	title : "Dagböcker 1859–1899",
+	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_location" : {label : "location"},
+		"text_source" : {label : "source"},
+		"text_date" : {label : "date"},
+		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["dagbocker1900-1949"] = {
+	id : "dagbocker1900-1949",
+	title : "Dagböcker 1900–1949",
+	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_title" : {label : "title"},
+		"text_location" : {label : "location"},
+		"text_source" : {label : "source"},
+		"text_date" : {label : "date"},
 		"text_archivecode" : {label : "archivecode"}
 	}
 };

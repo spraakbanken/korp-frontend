@@ -3198,7 +3198,7 @@ settings.corpora.twitter = {
         text_hashtags : {label : "hashtags", type : "set"},
         text_mentions : {label : "mentions", type : "set"},
         text_retweets : {label : "retweets"},
-        text_location : {label : "location"},
+        text_location : {label : "tweet_location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
         user_location : {label : "user_location"},

@@ -30,7 +30,7 @@
     "retweets" : "retweets",
     "replytouser" : "svar till",
     "coordinates" : "koordinater",
-    "location" : "tweetat från",
+    "tweet_location" : "tweetat från",
     "username2" : "användarnamn",
     "name" : "namn",
     "user_location" : "bor",
@@ -380,6 +380,8 @@
 
     "group" : "grupp",
     "interviewee" : "intervjuad",
-    "part" : "del"
+    "part" : "del",
+    
+    "location" : "plats"
 
 }
