@@ -32,7 +32,7 @@ settings.corporafolders.skonlitteratur = {
 
 settings.corporafolders.tidningar = {
 	title : "Tidningstexter",
-	contents : ["borgabladet2", "fredrikshamnstidning", "uleaborgstidning", "abotidning", "aland"],
+	contents : ["borgabladet2", "fredrikshamnstidning", "uleaborgstidning", "wiborgstidning", "abotidning", "aland"],
 	description : ""
 };
 
@@ -934,6 +934,30 @@ settings.corpora["fredrikshamnstidning"] = {
 settings.corpora["uleaborgstidning"] = {
 	id : "uleaborgstidning",
 	title : "Uleåborgs Tidning 1877–1887",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["wiborgstidning"] = {
+	id : "wiborgstidning",
+	title : "Wiborgs Tidning 1867–1877",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
