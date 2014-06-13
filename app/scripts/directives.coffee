@@ -116,7 +116,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         $scope.makeSensitive = () ->
             $scope.case = "sensitive"
             delete $scope.orObj.flags?["c"]
-            # $scope.$emit("change_case", "sensitive")
 
         $scope.makeInsensitive = () ->
             flags = ($scope.orObj.flags or {})

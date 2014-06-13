@@ -208,8 +208,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s.removeOr = (token, and_array, i) ->
         if and_array.length > 1
             and_array.splice(i, 1)
-        else
-            token.and_block.splice _.indexOf and_array, 1
+        else if token.and_block.length > 1
+            token.and_block.splice (_.indexOf token.and_block, and_array), 1
 
 
     s.addAnd = (token) ->
@@ -241,9 +241,9 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
             return ""
         s.token.cqp.match(/\[(.*)]/)[1]
 
+    s.onInsertMousedown = (event) ->
+        event.stopPropagation()
 
-    s.$on "change_case", (event, val) ->
-        c.log "change_case", val, s
 
 
 korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->

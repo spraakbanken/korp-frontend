@@ -1,5 +1,5 @@
 <div>
-    <div ui-sortable ng-model="data" ng-controller="ExtendedToken">
+    <div ui-sortable="{ items: '> .token' }" ng-model="data" ng-controller="ExtendedToken">
     <!-- <div>{{data}}</div>
     <div>{{data}}</div>
     <div>{{data}}</div> -->
@@ -81,6 +81,6 @@
             </div>
         <!-- <button ng-click="addToken()">+</button> -->
         </div>
-    <img src="img/plus.png" class="image_button insert_token" ng-click="addToken()">
+    <img src="img/plus.png" class="image_button insert_token" ng-click="addToken()" ng-mousedown="onInsertMousedown($event)">
     </div>
 </div>

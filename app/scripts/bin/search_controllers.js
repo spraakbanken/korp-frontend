@@ -192,8 +192,8 @@
     s.removeOr = function(token, and_array, i) {
       if (and_array.length > 1) {
         return and_array.splice(i, 1);
-      } else {
-        return token.and_block.splice(_.indexOf(and_array, 1));
+      } else if (token.and_block.length > 1) {
+        return token.and_block.splice(_.indexOf(token.and_block, and_array), 1);
       }
     };
     s.addAnd = function(token) {
@@ -228,9 +228,9 @@
       }
       return s.token.cqp.match(/\[(.*)]/)[1];
     };
-    return s.$on("change_case", function(event, val) {
-      return c.log("change_case", val, s);
-    });
+    return s.onInsertMousedown = function(event) {
+      return event.stopPropagation();
+    };
   });
 
   korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
