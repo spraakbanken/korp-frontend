@@ -42,7 +42,7 @@ html
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}') 
               //- tabset.tabbable
-              tabset.tabbable(tab-hash='result_tab')
+              tabset.tabbable(tab-hash='result_tab', ng-click="tabclick()")
                 tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",

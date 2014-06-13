@@ -72,24 +72,29 @@
         };
         init_tab = parseInt($location.search()[attr.tabHash]) || 0;
         w = contentScope.$watch("tabs.length", function(len) {
-          if ((len - 1) >= init_tab) {
+          if (len) {
             s.setSelected(init_tab);
             watchHash();
             return w();
           }
         });
         s.getSelected = function() {
-          var i, p, _i, _len, _ref;
+          var i, out, p, _i, _len, _ref;
+          out = null;
           _ref = contentScope.tabs;
           for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
             p = _ref[i];
             if (p.active) {
-              return i;
+              out = i;
             }
           }
+          if (out == null) {
+            out = contentScope.tabs.length - 1;
+          }
+          return out;
         };
         return s.setSelected = function(index) {
-          var t, _i, _len, _ref;
+          var t, _i, _len, _ref, _ref1;
           _ref = contentScope.tabs;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             t = _ref[_i];
@@ -100,6 +105,8 @@
           }
           if (contentScope.tabs[index]) {
             return contentScope.tabs[index].active = true;
+          } else {
+            return (_ref1 = _.last(contentScope.tabs)) != null ? _ref1.active = true : void 0;
           }
         };
       }

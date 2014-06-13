@@ -47,7 +47,7 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 
         w = contentScope.$watch "tabs.length", (len) ->
-            if (len - 1) >= init_tab
+            if len
                 s.setSelected(init_tab)
                 watchHash()
                 w()
@@ -55,15 +55,22 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 
         s.getSelected = () ->
-
+            out = null
             for p, i in contentScope.tabs
-                return i if p.active
+                out = i if p.active
+
+            unless out? then out = contentScope.tabs.length - 1
+            return out
+        
         s.setSelected = (index) ->
             for t in contentScope.tabs
                 t.active = false
                 t.onDeselect?()
             if contentScope.tabs[index]
                 contentScope.tabs[index].active = true
+            else
+                (_.last contentScope.tabs)?.active = true
+
 
 
 

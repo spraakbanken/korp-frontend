@@ -5,9 +5,8 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("resultContainerCtrl", function($scope, searches) {
-    $scope.searches = searches;
-    return c.log("resultContainerCtrl", $scope);
+  korpApp.controller("resultContainerCtrl", function($scope, searches, $location) {
+    return $scope.searches = searches;
   });
 
   korpApp.controller("kwicCtrl", function($scope, utils) {
@@ -192,7 +191,6 @@
   });
 
   korpApp.controller("wordpicCtrl", function($scope, $location, utils, searches) {
-    c.log("$scope", $scope);
     $scope.word_pic = $location.search().word_pic != null;
     $scope.$watch((function() {
       return $location.search().word_pic;

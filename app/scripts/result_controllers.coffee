@@ -10,15 +10,14 @@ korpApp = angular.module("korpApp")
 #         s.$root.result_tab = val
 
 
-korpApp.controller "resultContainerCtrl", ($scope, searches) ->
+korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
+    # $scope.json_url = ""
+    # $scope.tabclick = () ->
+    #     c.log "click tab", $location.search().result_tab, $scope
+        
 
-    c.log "resultContainerCtrl", $scope
-    # slots = new Array(10000);
-    # actives = {}
-    # $scope.getActive = (obj) ->
-    #     actives[JSON.stringify obj] = true
-    #     actives[JSON.stringify obj]
+
 
 
 korpApp.controller "kwicCtrl", ($scope, utils) ->
@@ -183,7 +182,6 @@ korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, search
 
 
 korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
-    c.log "$scope", $scope
     $scope.word_pic = $location.search().word_pic?
     $scope.$watch (() -> $location.search().word_pic), (val) ->
         $scope.word_pic = Boolean(val)
@@ -191,17 +189,11 @@ korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
     $scope.activate = () ->
         $location.search("word_pic", true)
         search = searches.activeSearch
-        # $scope.instance.showPreloader();
-        #TODO: should word really be hard coded here?
         $scope.instance.makeRequest(search.val, search.type)
-        # lemgramProxy.makeRequest(search.val, "word");
-
-
         
 
 korpApp.controller "graphCtrl", ($scope) ->
     $scope.active = true
-    # $scope.$parent.active = true
 
 
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->
