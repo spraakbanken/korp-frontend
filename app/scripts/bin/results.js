@@ -1110,61 +1110,8 @@
         }
         return (_ref2 = _this.grid) != null ? _ref2.autosizeColumns() : void 0;
       }, 100));
-      $("#exportButton").unbind("click");
-      $("#exportButton").click(function() {
-        var cl, corp, dataDelimiter, fmt, header, output, row, selType, selVal, total, val, values, wd, _i, _len, _ref;
-        selVal = $("#kindOfData option:selected").val();
-        selType = $("#kindOfFormat option:selected").val();
-        dataDelimiter = ";";
-        if (selType === "TSV") {
-          dataDelimiter = "%09";
-        }
-        cl = settings.corpusListing.subsetFactory(_.keys(_this.savedData.corpora));
-        header = [util.getLocaleString("stats_hit"), util.getLocaleString("stats_total")];
-        header = header.concat(_.pluck(cl.corpora, "title"));
-        fmt = function(what) {
-          return util.formatDecimalString(what.toString(), false, true, true);
-        };
-        total = ["Σ", fmt(_this.savedData.total.sums[selVal])];
-        total = total.concat((function() {
-          var _i, _len, _ref, _results;
-          _ref = _.pluck(cl.corpora, "id");
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            corp = _ref[_i];
-            _results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
-          }
-          return _results;
-        }).call(_this));
-        output = [header, total];
-        _ref = _this.savedWordArray;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          wd = _ref[_i];
-          row = [wd, fmt(_this.savedData.total[selVal][wd])];
-          values = (function() {
-            var _j, _len1, _ref1, _results;
-            _ref1 = _.pluck(cl.corpora, "id");
-            _results = [];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              corp = _ref1[_j];
-              val = this.savedData.corpora[corp.toUpperCase()][selVal][wd];
-              if (val) {
-                _results.push(val = fmt(val));
-              } else {
-                _results.push(val = "0");
-              }
-            }
-            return _results;
-          }).call(_this);
-          output.push(row.concat(values));
-        }
-        output = _.invoke(output, "join", dataDelimiter);
-        output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)));
-        if (selType === "TSV") {
-          return window.open("data:text/tsv;charset=utf-8," + output);
-        } else {
-          return window.open("data:text/csv;charset=utf-8," + output);
-        }
+      $("#kindOfData,#kindOfFormat").change(function() {
+        return _this.updateExportBlob();
       });
       if ($("html.msie7,html.msie8").length) {
         $("#showGraph").hide();
@@ -1217,6 +1164,68 @@
       });
     }
 
+    StatsResults.prototype.updateExportBlob = function() {
+      var blob, cl, corp, csv, csvUrl, csvstr, dataDelimiter, fmt, header, output, row, selType, selVal, total, val, values, wd, _i, _len, _ref;
+      selVal = $("#kindOfData option:selected").val();
+      selType = $("#kindOfFormat option:selected").val();
+      dataDelimiter = ";";
+      if (selType === "tsv") {
+        dataDelimiter = "%09";
+      }
+      cl = settings.corpusListing.subsetFactory(_.keys(this.savedData.corpora));
+      header = [util.getLocaleString("stats_hit"), util.getLocaleString("stats_total")];
+      header = header.concat(_.pluck(cl.corpora, "title"));
+      fmt = function(what) {
+        return what.toString();
+      };
+      total = ["Σ", fmt(this.savedData.total.sums[selVal])];
+      total = total.concat((function() {
+        var _i, _len, _ref, _results;
+        _ref = _.pluck(cl.corpora, "id");
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          corp = _ref[_i];
+          _results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
+        }
+        return _results;
+      }).call(this));
+      output = [total];
+      _ref = this.savedWordArray;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wd = _ref[_i];
+        row = [wd, fmt(this.savedData.total[selVal][wd])];
+        values = (function() {
+          var _j, _len1, _ref1, _results;
+          _ref1 = _.pluck(cl.corpora, "id");
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            corp = _ref1[_j];
+            val = this.savedData.corpora[corp.toUpperCase()][selVal][wd];
+            if (val) {
+              _results.push(val = fmt(val));
+            } else {
+              _results.push(val = "0");
+            }
+          }
+          return _results;
+        }).call(this);
+        output.push(row.concat(values));
+      }
+      csv = new CSV(output, {
+        header: header,
+        delimiter: dataDelimiter
+      });
+      csvstr = csv.encode();
+      blob = new Blob([csvstr], {
+        type: "text/" + selType
+      });
+      csvUrl = URL.createObjectURL(blob);
+      return $("#exportButton", this.$result).attr({
+        download: "export." + selType,
+        href: csvUrl
+      });
+    };
+
     StatsResults.prototype.renderResult = function(columns, data) {
       var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
         _this = this;
@@ -1233,6 +1242,7 @@
         return;
       }
       c.log("renderresults");
+      this.updateExportBlob();
       if (data[0].total_value.absolute === 0) {
         this.showNoResults();
         return;
@@ -1309,7 +1319,11 @@
     StatsResults.prototype.resetView = function() {
       StatsResults.__super__.resetView.call(this);
       $("myGrid").empty();
-      return $("#exportStatsSection").show();
+      $("#exportStatsSection").show();
+      return $("#exportButton").attr({
+        download: null,
+        href: null
+      });
     };
 
     StatsResults.prototype.showNoResults = function() {

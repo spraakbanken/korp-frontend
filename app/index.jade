@@ -81,9 +81,10 @@ html
                         option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
                         option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
                       select#kindOfFormat
-                        option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
-                        option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
-                      input#exportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
+                        option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
+                        option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+                      a#exportButton 
+                        button.btn.btn-small {{'statstable_export' | loc}}
                 tab(ng-if="_settings.wordpicture != false", ng-controller="wordpicCtrl")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc}}
@@ -234,6 +235,7 @@ html
     
     script(src='components/moment/moment.js')
     script(src='scripts/jq_extensions.js')
+    script(src='components/comma-separated-values/csv.js')
     //- not used currently
     //- bower:js
     //- endbower

@@ -996,56 +996,11 @@ class view.StatsResults extends BaseResults
             
         , 100)
 
-        $("#exportButton").unbind "click"
-        $("#exportButton").click =>
-            selVal = $("#kindOfData option:selected").val()
-            selType = $("#kindOfFormat option:selected").val()
-            dataDelimiter = ";"
-            dataDelimiter = "%09" if selType is "TSV"
-            cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
-
-            header = [
-                util.getLocaleString("stats_hit"), 
-                util.getLocaleString("stats_total")
-            ]
-            header = header.concat _.pluck cl.corpora, "title"
-            fmt = (what) ->
-                util.formatDecimalString(what.toString(), false, true, true)
-
-            total = ["Σ", fmt @savedData.total.sums[selVal]]
-
-            total = total.concat (fmt @savedData.corpora[corp.toUpperCase()].sums[selVal] for corp in _.pluck cl.corpora, "id")
-
-
-
-            output = [
-                header
-                total
-            ]
-
-            for wd in @savedWordArray
-                row = [wd, fmt @savedData.total[selVal][wd]]
-                values = for corp in _.pluck cl.corpora, "id"
-                    val = @savedData.corpora[corp.toUpperCase()][selVal][wd]
-                    if val 
-                        val = fmt val
-                    else 
-                        val = "0"
-
-                
-                output.push row.concat values
-
-
-
-            output = _.invoke output, "join", dataDelimiter
-            output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
-
-
-            if selType is "TSV"
-                window.open "data:text/tsv;charset=utf-8," + (output)
-            else
-                window.open "data:text/csv;charset=utf-8," + (output)
-
+        # $("#exportButton").unbind "click"
+        # $("#exportButton").click =>
+            
+        $("#kindOfData,#kindOfFormat").change () =>
+            @updateExportBlob()
 
         if $("html.msie7,html.msie8").length
             $("#showGraph").hide()
@@ -1100,6 +1055,67 @@ class view.StatsResults extends BaseResults
                 stroke: "none"
                 transform: "s0.6"
 
+    updateExportBlob : () ->
+        selVal = $("#kindOfData option:selected").val()
+        selType = $("#kindOfFormat option:selected").val()
+        dataDelimiter = ";"
+        dataDelimiter = "%09" if selType is "tsv"
+        cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
+
+        header = [
+            util.getLocaleString("stats_hit"), 
+            util.getLocaleString("stats_total")
+        ]
+        header = header.concat _.pluck cl.corpora, "title"
+
+        fmt = (what) ->
+            what.toString()
+
+        total = ["Σ", fmt @savedData.total.sums[selVal]]
+
+        total = total.concat (fmt @savedData.corpora[corp.toUpperCase()].sums[selVal] for corp in _.pluck cl.corpora, "id")
+
+
+
+        output = [
+            total
+        ]
+
+        for wd in @savedWordArray
+            row = [wd, fmt @savedData.total[selVal][wd]]
+            values = for corp in _.pluck cl.corpora, "id"
+                val = @savedData.corpora[corp.toUpperCase()][selVal][wd]
+                if val 
+                    val = fmt val
+                else 
+                    val = "0"
+
+            
+            output.push row.concat values
+
+
+        csv = new CSV(output, {
+            header : header
+            delimiter : dataDelimiter
+            # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
+        })
+
+        csvstr = csv.encode()
+
+        # if selType is "tsv"
+        #     window.open "data:text/tsv;charset=utf-8," + (csvstr)
+        # else
+        #     window.open "data:text/csv;charset=utf-8," + (csvstr)
+
+        blob = new Blob([csvstr], { type: "text/#{selType}"})
+        csvUrl = URL.createObjectURL(blob)
+
+        $("#exportButton", @$result).attr({
+            download : "export.#{selType}"
+            href : csvUrl    
+        })
+
+
     renderResult: (columns, data) ->
         refreshHeaders = ->
             $(".slick-header-column:nth(2)").click().click()
@@ -1111,6 +1127,7 @@ class view.StatsResults extends BaseResults
         resultError = super(data)
         return if resultError is false
         c.log "renderresults"
+        @updateExportBlob()
         if data[0].total_value.absolute == 0
             @showNoResults()
             return
@@ -1188,6 +1205,10 @@ class view.StatsResults extends BaseResults
         super()
         $("myGrid").empty()
         $("#exportStatsSection").show()
+        $("#exportButton").attr({
+            download : null,
+            href : null
+        })
 
     showNoResults: ->
         c.log "showNoResults", @$result
