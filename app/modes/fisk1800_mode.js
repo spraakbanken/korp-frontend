@@ -18,6 +18,12 @@ settings.corporafolders.brevdagbocker = {
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
+settings.corporafolders.myndighet = {
+	title : "Myndighetstexter",
+	contents : ["fsbmyndighet1800tal"],
+	description : ""
+};
+
 settings.corporafolders.sakprosa = {
 	title : "Sakprosa",
 	contents : ["sakprosa1700-1749", "sakprosa1750-1799", "sakprosa1800-1849", "sakprosa1850-1899", "sakprosa1900-1959"],
@@ -286,6 +292,32 @@ settings.corpora["dagbocker1900-1949"] = {
 		"text_source" : {label : "source"},
 		"text_date" : {label : "date"},
 		"text_archivecode" : {label : "archivecode"}
+	}
+};
+
+settings.corpora["fsbmyndighet1800tal"] = {
+	id : "fsbmyndighet1800tal",
+	title : "Myndighetstexter 1800-tal",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+	},
+	struct_attributes : {
+		"text_source" : {label : "source"},
+		"text_title" : {label : "title"},
+		"text_date" : {label : "year"}
 	}
 };
 
