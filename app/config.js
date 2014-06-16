@@ -654,10 +654,16 @@ settings.corporafolders.socialmedia.forum = {
 	contents : []
 };
 
+settings.corporafolders.socialmedia.forum.familjeliv = {
+	title : "Familjeliv",
+	contents : ["familjeliv-pappagrupp"],
+	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
+};
+
 settings.corporafolders.socialmedia.forum.flashback = {
 	title : "Flashback",
 	contents : ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-samhalle", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
-	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>. Materialet är under uppbyggnad."
+	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>."
 };
 
 settings.corporafolders.socialmedia.twitter = {
@@ -1580,6 +1586,27 @@ settings.corpora.strindbergbrev = {
         text_day : {label : "day"},
         text_volume : {label : "text_volume"}
     }
+};
+
+settings.corpora["familjeliv-pappagrupp"] = {
+	id : "familjeliv-pappagrupp",
+	title : "Familjeliv: Pappagrupp",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
 };
 
 settings.corpora["flashback-dator"] = {
