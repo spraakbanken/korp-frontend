@@ -9,6 +9,19 @@ $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
 
+var fisk1800attrs = {
+		pos : attrs.pos,
+		msd : attrs.msd,
+		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+		saldo : attrs.saldo,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		dephead : attrs.dephead,
+		deprel : attrs.deprel,
+		ref : attrs.ref,
+};
+
 settings.corpora = {};
 settings.corporafolders = {};
 
@@ -38,7 +51,7 @@ settings.corporafolders.skonlitteratur = {
 
 settings.corporafolders.tidningar = {
 	title : "Tidningstexter",
-	contents : ["borgabladet2", "fredrikshamnstidning", "uleaborgstidning", "wiborgstidning", "abotidning", "aland"],
+	contents : ["bjorneborgstidning", "borgabladet2", "fredrikshamnstidning", "dagbladet1866-1886", "hbl1800", "uleaborgstidning", "wiborgstidning", "abotidning", "aland"],
 	description : ""
 };
 
@@ -74,18 +87,7 @@ settings.corpora.fsbbrev1700tal = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_sender" : {label : "sender"},
 		"text_recipient" : {label : "text_recipient"},
@@ -103,18 +105,7 @@ settings.corpora["fsbbrev1800-1849"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_sender" : {label : "sender"},
 		"text_recipient" : {label : "text_recipient"},
@@ -132,18 +123,7 @@ settings.corpora["fsbbrev1850-1899"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_sender" : {label : "sender"},
 		"text_recipient" : {label : "text_recipient"},
@@ -161,18 +141,7 @@ settings.corpora.fsbbrev1900tal = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_sender" : {label : "sender"},
 		"text_recipient" : {label : "text_recipient"},
@@ -190,18 +159,7 @@ settings.corpora["dagbocker1700tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_location" : {label : "location"},
@@ -218,18 +176,7 @@ settings.corpora["dagbocker1800-1849"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_location" : {label : "location"},
@@ -246,18 +193,7 @@ settings.corpora["dagbocker1850-1899"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_location" : {label : "location"},
@@ -274,18 +210,7 @@ settings.corpora["dagbocker1900-1949"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_location" : {label : "location"},
@@ -302,18 +227,7 @@ settings.corpora["fsbmyndighet1800tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_source" : {label : "source"},
 		"text_title" : {label : "title"},
@@ -328,18 +242,7 @@ settings.corpora["fsbskonlit1800-1849"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -354,18 +257,7 @@ settings.corpora["fsbskonlit1850-1899"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -380,18 +272,7 @@ settings.corpora["fsbskonlit1900-1959"] = {
 	morf : 'saldom|dalinm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -407,18 +288,7 @@ settings.corpora["ateneum-1800tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_date" : {label : "year"},
@@ -433,18 +303,7 @@ settings.corpora["ateneum-1900tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_date" : {label : "year"},
@@ -459,18 +318,7 @@ settings.corpora["filosofia1850-1899"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -487,18 +335,7 @@ settings.corpora["filosofia1900-1959"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -515,18 +352,7 @@ settings.corpora["sakprosa1700-1749"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -544,18 +370,7 @@ settings.corpora["sakprosa1750-1799"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -573,18 +388,7 @@ settings.corpora["sakprosa1800-1849"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -602,18 +406,7 @@ settings.corpora["sakprosa1850-1899"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -631,18 +424,7 @@ settings.corpora["sakprosa1900-1959"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_author" : {label : "author"},
 		"text_title" : {label : "title"},
@@ -660,18 +442,7 @@ settings.corpora.spanskaflugan = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_title" : {label : "title"},
 		"text_date" : {label : "year"}
@@ -685,18 +456,7 @@ settings.corpora["astra1920-1959"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -710,18 +470,7 @@ settings.corpora.argus = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -735,18 +484,7 @@ settings.corpora.husmodern = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -760,18 +498,7 @@ settings.corpora["landtmannen"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -785,18 +512,7 @@ settings.corpora["litterartidskrift-helsingfors"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -810,18 +526,7 @@ settings.corpora["typografisktminnesblad"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "year"}
 	}
@@ -834,18 +539,7 @@ settings.corpora["typograftidning"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -859,18 +553,7 @@ settings.corpora["finsktidskrift1800tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_issue" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -884,18 +567,7 @@ settings.corpora["finsktidskrift1900tal"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_edition" : {label : "issue"},
 		"text_date" : {label : "year"}
@@ -922,18 +594,7 @@ settings.corpora["borgabladet2"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
@@ -946,18 +607,7 @@ settings.corpora["fredrikshamnstidning"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
@@ -970,18 +620,7 @@ settings.corpora["uleaborgstidning"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
@@ -994,18 +633,7 @@ settings.corpora["wiborgstidning"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
@@ -1018,18 +646,47 @@ settings.corpora["abotidning"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+
+};
+
+settings.corpora["bjorneborgstidning"] = {
+	id : "bjorneborgstidning",
+	title : "Björneborgs Tidning 1897–1907",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : fisk1800attrs,
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["dagbladet1866-1886"] = {
+	id : "dagbladet1866-1886",
+	title : "Helsingfors Dagblad 1866–1886",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : fisk1800attrs,
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["hbl1800"] = {
+	id : "hbl1800",
+	title : "Hufvudstadsbladet 1893–1903",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
@@ -1042,18 +699,7 @@ settings.corpora["aland"] = {
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
-	attributes : {
-		pos : attrs.pos,
-		msd : attrs.msd,
-		lemma : attrs.baseform,
-		lex : attrs.lemgram,
-		saldo : attrs.saldo,
-		prefix : attrs.prefix,
-		suffix : attrs.suffix,
-		dephead : attrs.dephead,
-		deprel : attrs.deprel,
-		ref : attrs.ref,
-	},
+	attributes : fisk1800attrs,
 	struct_attributes : {
 		"text_date" : {label : "date"}
 	}
