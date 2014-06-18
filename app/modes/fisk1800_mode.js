@@ -51,7 +51,7 @@ settings.corporafolders.skonlitteratur = {
 
 settings.corporafolders.tidningar = {
 	title : "Tidningstexter",
-	contents : ["bjorneborgstidning", "borgabladet2", "fredrikshamnstidning", "dagbladet1866-1886", "hbl1800", "uleaborgstidning", "wiborgstidning", "abotidning", "aland"],
+	contents : ["bjorneborgstidning", "borgabladet2", "fredrikshamnstidning", "dagbladet1866-1886", "hbl1800", "tidningarsallskapetiabo", "uleaborgstidning", "wiborgstidning", "abotidning", "aland"],
 	description : ""
 };
 
@@ -603,6 +603,19 @@ settings.corpora["borgabladet2"] = {
 settings.corpora["fredrikshamnstidning"] = {
 	id : "fredrikshamnstidning",
 	title : "Fredrikshamns Tidning 1888–1908",
+	description : "",
+	morf : 'saldom|dalinm|swedbergm',
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : fisk1800attrs,
+	struct_attributes : {
+		"text_date" : {label : "date"}
+	}
+};
+
+settings.corpora["tidningarsallskapetiabo"] = {
+	id : "tidningarsallskapetiabo",
+	title : "Tidningar Utgifne af et Sällskap i Åbo 1771–1783",
 	description : "",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
