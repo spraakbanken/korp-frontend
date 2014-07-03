@@ -590,13 +590,13 @@ settings.corporafolders.fisk.newspapertexts.pargaskungorelser = {
 
 settings.corporafolders.fisk.newspapertexts.sydosterbotten = {
     title : "Syd-Österbotten",
-    contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013"],
+    contents : ["sydosterbotten2010", "sydosterbotten2011", "sydosterbotten2012", "sydosterbotten2013", "sydosterbotten2014"],
     description : "<a href=\"http://www.sydin.fi\" target=\"_blank\">Syd-Österbotten</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
 settings.corporafolders.fisk.newspapertexts.vasab = {
     title : "Vasabladet",
-    contents : ["vasabladet1991", "vasabladet2012", "vasabladet2013"],
+    contents : ["vasabladet1991", "vasabladet2012", "vasabladet2013", "vasabladet2014"],
     description : "<a href=\"http://www.vasabladet.fi\" target=\"_blank\">Vasabladet</a> är en regional svenskspråkig dagstidning i Österbotten."
 };
 
@@ -608,7 +608,7 @@ settings.corporafolders.fisk.newspapertexts.abounderrattelser = {
 
 settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
     title : "Österbottens Tidning",
-    contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013"],
+    contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013", "osterbottenstidning2014"],
     description : "<a href=\"http://www.ot.fi\" target=\"_blank\">Österbottens Tidning</a> är en regional svenskspråkig tidning i Österbotten."
     // 
 };
@@ -2869,6 +2869,20 @@ settings.corpora.sydosterbotten2013 = {
     }
 };
 
+settings.corpora.sydosterbotten2014 = {
+    id : "sydosterbotten2014",
+    title : "Syd-Österbotten 2014",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : sattrs.date,
+        text_author : {label : "article_author"},
+        text_section : {label : "article_section"}
+    }
+};
+
 settings.corpora.vastranyland = {
     id : "vastranyland",
     title : "Västra Nyland 2012–2013",
@@ -2966,6 +2980,20 @@ settings.corpora.vasabladet2013 = {
     }
 };
 
+settings.corpora.vasabladet2014 = {
+    id : "vasabladet2014",
+    title : "Vasabladet 2014",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : sattrs.date,
+        text_author : {label : "article_author"},
+        text_section : {label : "article_section"}
+    }
+};
+
 settings.corpora.osterbottenstidning2011 = {
     id : "osterbottenstidning2011",
     title : "Österbottens Tidning 2011",
@@ -2999,6 +3027,20 @@ settings.corpora.osterbottenstidning2013 = {
     attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "date"}
+    }
+};
+
+settings.corpora.osterbottenstidning2014 = {
+    id : "osterbottenstidning2014",
+    title : "Österbottens Tidning 2014",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_date : sattrs.date,
+        text_author : {label : "article_author"},
+        text_section : {label : "article_section"}
     }
 };
 
