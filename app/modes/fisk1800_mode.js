@@ -53,19 +53,19 @@ settings.corporafolders.myndighet = {
 settings.corporafolders.sakprosa = {
 	title : "Sakprosa",
 	contents : ["sakprosa1700-1749", "sakprosa1750-1799", "sakprosa1800-1849", "sakprosa1850-1899", "sakprosa1900-1959"],
-	description : ""
+	description : "Samling av facklitteratur, reseskildringar, resebroschyrer och dissertationer m.m."
 };
 
 settings.corporafolders.skonlitteratur = {
 	title : "Skönlitteratur",
 	contents : ["fsbskonlit1800-1849", "fsbskonlit1850-1899", "fsbskonlit1900-1959"],
-	description : ""
+	description : "Samling av material ur skönlitterära verk från tiden 1840-1959."
 };
 
 settings.corporafolders.tidningar = {
 	title : "Tidningstexter",
 	contents : ["bjorneborgstidning", "borgabladet2", "fredrikshamnstidning", "dagbladet1866-1886", "hbl1800", "tidningarsallskapetiabo", "uleaborgstidning", "wasabladet", "wiborgstidning", "abotidning", "aland"],
-	description : ""
+	description : "Nummer ur olika tidningar publicerade under 1700–1900-talet."
 };
 
 settings.corporafolders.tidskrifter = {
@@ -315,7 +315,7 @@ settings.corpora["fsbskonlit1900-1959"] = {
 settings.corpora["ateneum-1800tal"] = {
 	id : "ateneum-1800tal",
 	title : "Ateneum 1898–1899",
-	description : "",
+	description : "Illustrerad tidskrift för literatur, konst och spörsmål af allmänt intresse.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -330,7 +330,7 @@ settings.corpora["ateneum-1800tal"] = {
 settings.corpora["ateneum-1900tal"] = {
 	id : "ateneum-1900tal",
 	title : "Ateneum 1900–1903",
-	description : "",
+	description : "Illustrerad tidskrift för literatur, konst och spörsmål af allmänt intresse.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -497,7 +497,7 @@ settings.corpora["astra1920-1959"] = {
 settings.corpora.argus = {
 	id : "argus",
 	title : "Argus 1907–1911",
-	description : "",
+	description : "Tidskrift för kulturella och samhälleliga frågor. Utkommer sedan 1907.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -511,7 +511,7 @@ settings.corpora.argus = {
 settings.corpora.husmodern = {
 	id : "husmodern",
 	title : "Husmodern 1903–1912",
-	description : "",
+	description : "Utgavs av föreningen Martha 1903–1958. Bytte sedan namn till först Marthabladet och senare Martha (1999–).",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -525,7 +525,7 @@ settings.corpora.husmodern = {
 settings.corpora["landtmannen"] = {
 	id : "landtmannen",
 	title : "Landtmannen 1877–1879",
-	description : "",
+	description : "Notisblad för Finlands jordbruk och dess binäringar.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -539,7 +539,7 @@ settings.corpora["landtmannen"] = {
 settings.corpora["litterartidskrift-helsingfors"] = {
 	id : "litterartidskrift-helsingfors",
 	title : "Litterär tidskrift utgifven i Helsingfors",
-	description : "",
+	description : "Litterär tidskrift med blandat innehåll.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -553,7 +553,7 @@ settings.corpora["litterartidskrift-helsingfors"] = {
 settings.corpora["typografisktminnesblad"] = {
 	id : "typografisktminnesblad",
 	title : "Typografiskt minnesblad 1891",
-	description : "",
+	description : "Utkom 1642–1892.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -566,7 +566,7 @@ settings.corpora["typografisktminnesblad"] = {
 settings.corpora["typograftidning"] = {
 	id : "typograftidning",
 	title : "Typograftidning 1889–1890",
-	description : "",
+	description : "Tidskrift ”utgifven af typografernes förening i Helsingfors”.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -580,7 +580,7 @@ settings.corpora["typograftidning"] = {
 settings.corpora["finsktidskrift1800tal"] = {
 	id : "finsktidskrift1800tal",
 	title : "Finsk Tidskrift 1850–1899",
-	description : "",
+	description : "Tidskrift som grundades 1875. Utkom med sitt första nummer 1876. Nordens äldsta fortsättningsvis utkommande tidskrift.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -594,7 +594,7 @@ settings.corpora["finsktidskrift1800tal"] = {
 settings.corpora["finsktidskrift1900tal"] = {
 	id : "finsktidskrift1900tal",
 	title : "Finsk Tidskrift 1900–1912",
-	description : "",
+	description : "Tidskrift som grundades 1875. Utkom med sitt första nummer 1876. Nordens äldsta fortsättningsvis utkommande tidskrift.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -608,7 +608,7 @@ settings.corpora["finsktidskrift1900tal"] = {
 settings.corpora.euterpe = {
     id : "euterpe",
     title : "Euterpe 1900–1905",
-    description : "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift.",
+    description : "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift som utkom 1902–1905. Föregångare till Argus.",
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
@@ -621,7 +621,7 @@ settings.corpora.euterpe = {
 settings.corpora["borgabladet2"] = {
 	id : "borgabladet2",
 	title : "Borgåbladet 1885",
-	description : "",
+	description : "Tidning som utkom i Borgå 1838–1858.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -634,7 +634,7 @@ settings.corpora["borgabladet2"] = {
 settings.corpora["fredrikshamnstidning"] = {
 	id : "fredrikshamnstidning",
 	title : "Fredrikshamns Tidning 1888–1908",
-	description : "",
+	description : "Tidning som utkom i Fredrikshamn 1884–1910.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -647,7 +647,7 @@ settings.corpora["fredrikshamnstidning"] = {
 settings.corpora["tidningarsallskapetiabo"] = {
 	id : "tidningarsallskapetiabo",
 	title : "Tidningar Utgifne af et Sällskap i Åbo 1771–1783",
-	description : "",
+	description : "Finlands första tidning. Starkt knuten till Aurorasällskapet och Henrik Gabriel Porthan. Utkom i Åbo åren 1771–1778 och 1782–1785.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -673,7 +673,7 @@ settings.corpora["uleaborgstidning"] = {
 settings.corpora["wasabladet"] = {
 	id : "wasabladet",
 	title : "Wasabladet 1866–1896",
-	description : "",
+	description : "Tidning som utkommer i Vasa. Grundad år 1856.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -686,7 +686,7 @@ settings.corpora["wasabladet"] = {
 settings.corpora["wiborgstidning"] = {
 	id : "wiborgstidning",
 	title : "Wiborgs Tidning 1867–1877",
-	description : "",
+	description : "Tidning som utkom i Viborg åren 1864–1881.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -699,7 +699,7 @@ settings.corpora["wiborgstidning"] = {
 settings.corpora["abotidning"] = {
 	id : "abotidning",
 	title : "Åbo Tidning 1883–1903",
-	description : "",
+	description : "Tidning som utkom i Åbo 1864–1881.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -726,7 +726,7 @@ settings.corpora["bjorneborgstidning"] = {
 settings.corpora["dagbladet1866-1886"] = {
 	id : "dagbladet1866-1886",
 	title : "Helsingfors Dagblad 1866–1886",
-	description : "",
+	description : "Liberal tidning som utkom i Helsingfors 1862–1889.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -739,7 +739,7 @@ settings.corpora["dagbladet1866-1886"] = {
 settings.corpora["hbl1800"] = {
 	id : "hbl1800",
 	title : "Hufvudstadsbladet 1893–1903",
-	description : "",
+	description : "Tidning som grundades av August Schauman år 1864.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -752,7 +752,7 @@ settings.corpora["hbl1800"] = {
 settings.corpora["aland"] = {
 	id : "aland",
 	title : "Åland 1891–1911",
-	description : "",
+	description : "Grundades 1891 av Julius Sundblom. Utkommer på Åland.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
