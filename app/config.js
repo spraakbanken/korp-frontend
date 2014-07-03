@@ -3451,7 +3451,9 @@ settings.corpora.forhor = {
 		"text_telefon" : {label : "telefon"},
 		"text_bandat" : {label : "bandat"},
 		"text_samtycke" : {label : "samtycke"},
-		"text_forsvarare" : {label : "forsvarare"}
+		"text_forsvarare" : {label : "forsvarare"},
+		"text_skribent" : {label : "skribent"},
+		"text_tolkat" : {label : "tolkat"}
 	}
 };
 
