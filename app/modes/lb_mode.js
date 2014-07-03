@@ -16,7 +16,7 @@ settings.corpora.lb = {
 	attributes : {
 		pos : attrs.pos,
 		msd : attrs.msd,
-		lemma : attrs.baseform,
+		baseform : attrs.baseform,
 		lex : attrs.lemgram,
 		saldo : attrs.saldo,
 		dephead : attrs.dephead,
