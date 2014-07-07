@@ -469,7 +469,7 @@ settings.corpora["sakprosa1900-1959"] = {
 settings.corpora.spanskaflugan = {
 	id : "spanskaflugan",
 	title : "Spanska Flugan 1839–1841",
-	description : "Spanska Flugan är en polemisk tidskrift, vars redaktör var J.V. Snellman.",
+	description : "Spanska Flugan var en polemisk tidskrift, vars redaktör var J.V. Snellman.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
@@ -608,7 +608,7 @@ settings.corpora["finsktidskrift1900tal"] = {
 settings.corpora.euterpe = {
     id : "euterpe",
     title : "Euterpe 1900–1905",
-    description : "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift som utkom 1902–1905. Föregångare till Argus.",
+    description : "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift som utkom 1900–1905. Föregångare till Argus.",
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
