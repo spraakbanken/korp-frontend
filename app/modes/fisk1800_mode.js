@@ -40,7 +40,7 @@ settings.corporafolders = {};
 
 settings.corporafolders.brevdagbocker = {
 	title : "Brev och dagböcker",
-	contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "parlandbrev", "dagbocker1700tal", "dagbocker1800-1849", "dagbocker1850-1899", "dagbocker1900-1949"],
+	contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "dagbocker1700tal", "dagbocker1800-1849", "dagbocker1850-1899", "dagbocker1900-1949"],
 	description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
@@ -155,24 +155,6 @@ settings.corpora.fsbbrev1900tal = {
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : fisk1800attrs,
-	struct_attributes : {
-		"text_sender" : {label : "sender"},
-		"text_recipient" : {label : "text_recipient"},
-		"text_title" : {label : "title"},
-		"text_date" : {label : "date"},
-		"text_source" : {label : "source"},
-		"text_archivecode" : {label : "archivecode"}
-	}
-};
-
-settings.corpora.parlandbrev = {
-	id : "parlandbrev",
-	title : "Brev till och från Henry Parland",
-	description : "",
-	morf : 'saldom',
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
-	attributes : modernAttrs,
 	struct_attributes : {
 		"text_sender" : {label : "sender"},
 		"text_recipient" : {label : "text_recipient"},
@@ -621,7 +603,7 @@ settings.corpora.euterpe = {
 settings.corpora["borgabladet2"] = {
 	id : "borgabladet2",
 	title : "Borgåbladet 1885",
-	description : "Tidning som utkom i Borgå 1838–1858.",
+	description : "Tidning som utkommer i Borgå.",
 	morf : 'saldom|dalinm|swedbergm',
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
