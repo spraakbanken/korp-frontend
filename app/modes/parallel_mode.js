@@ -136,7 +136,7 @@ settings.corporafolders.europarl = {
 
 settings.corporafolders.salt = {
 	title : "SALT",
-	contents : ["saltnld_swe"]
+	contents : ["saltnld-sv"]
 };
 
 settings.corpora = {};
@@ -366,10 +366,10 @@ settings.corpora["europarl-pt"] = {
 	}
 };
 
-settings.corpora.saltnld_swe = {
-	id : "saltnld_swe",
+settings.corpora["saltnld-sv"] = {
+	id : "saltnld-sv",
 	lang : "swe",
-	linked_to : ["saltnld_nld"],
+	linked_to : ["saltnld-nl"],
 	title: "SALT svenska-nederländska",
 	context: context.defaultAligned,
 	// context : settings.defaultContext,
@@ -404,10 +404,10 @@ settings.corpora.saltnld_swe = {
 		page_n : {label : "page_n"}
 	}
 };
-settings.corpora.saltnld_nld = {
-	id : "saltnld_nld",
+settings.corpora["saltnld-nl"] = {
+	id : "saltnld-nl",
 	lang : "nld",
-	linked_to : ["saltnld_swe"],
+	linked_to : ["saltnld-sv"],
 	title: "SALT svenska-nederländska",
 	context: context.defaultAligned,
 	within: {
