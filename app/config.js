@@ -2106,7 +2106,10 @@ settings.corpora.drama = {
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
-    struct_attributes : {}
+    struct_attributes : {
+        text_author : {label : "author"},
+        text_title : {label : "title"}
+    }
 };
 
 settings.corpora.lasbart = {
@@ -2205,8 +2208,8 @@ settings.corpora.storsuc = {
 };
 
 
-settings.corpora.saltnld_swe = {
-    id : "saltnld_swe",
+settings.corpora["saltnld-sv"] = {
+    id : "saltnld-sv",
     title: "SALT svenska-nederländska",
     description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
 <ul>\
