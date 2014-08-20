@@ -16,15 +16,15 @@
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
-      var _this = this;
       this.num_result.html(util.prettyNumbers(progressObj["total_results"]));
-      return safeApply(this.s, function() {
-        return _this.s.$parent.progress = Math.round(progressObj["stats"]);
-      });
+      return safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.s.$parent.progress = Math.round(progressObj["stats"]);
+        };
+      })(this));
     };
 
     BaseResults.prototype.renderResult = function(data) {
-      var _this = this;
       this.$result.find(".error_msg").remove();
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
@@ -33,9 +33,11 @@
         this.resultError(data);
         return false;
       } else {
-        return safeApply(this.s, function() {
-          return _this.hasData = true;
-        });
+        return safeApply(this.s, (function(_this) {
+          return function() {
+            return _this.hasData = true;
+          };
+        })(this));
       }
     };
 
@@ -73,8 +75,7 @@
     __extends(KWICResults, _super);
 
     function KWICResults(tabSelector, resultSelector, scope) {
-      var self,
-        _this = this;
+      var self;
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
@@ -85,51 +86,55 @@
       this.s = scope;
       this.s.setupReadingHash();
       this.selectionManager = scope.selectionManager;
-      this.$result.click(function() {
-        if (!_this.selectionManager.hasSelected()) {
-          return;
-        }
-        _this.selectionManager.deselect();
-        return safeApply(_this.s.$root, function(s) {
-          return s.$root.word_selected = null;
-        });
-      });
+      this.$result.click((function(_this) {
+        return function() {
+          if (!_this.selectionManager.hasSelected()) {
+            return;
+          }
+          _this.selectionManager.deselect();
+          return safeApply(_this.s.$root, function(s) {
+            return s.$root.word_selected = null;
+          });
+        };
+      })(this));
       $(document).keydown($.proxy(this.onKeydown, this));
-      this.$result.on("click", ".word", function(event) {
-        var aux, i, l, obj, paragraph, sent, sent_start, word;
-        _this.s.$root.sidebar_visible = true;
-        scope = $(event.currentTarget).scope();
-        obj = scope.wd;
-        sent = scope.sentence;
-        event.stopPropagation();
-        word = $(event.target);
-        if ($("#sidebar").data().korpSidebar != null) {
-          $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
-        }
-        if (obj.dephead == null) {
-          scope.selectionManager.select(word, null);
-          safeApply(_this.s.$root, function(s) {
+      this.$result.on("click", ".word", (function(_this) {
+        return function(event) {
+          var aux, i, l, obj, paragraph, sent, sent_start, word;
+          _this.s.$root.sidebar_visible = true;
+          scope = $(event.currentTarget).scope();
+          obj = scope.wd;
+          sent = scope.sentence;
+          event.stopPropagation();
+          word = $(event.target);
+          if ($("#sidebar").data().korpSidebar != null) {
+            $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
+          }
+          if (obj.dephead == null) {
+            scope.selectionManager.select(word, null);
+            safeApply(_this.s.$root, function(s) {
+              return s.$root.word_selected = word;
+            });
+            return;
+          }
+          i = Number(obj.dephead);
+          paragraph = word.closest(".sentence").find(".word");
+          sent_start = 0;
+          if (word.is(".open_sentence")) {
+            sent_start = paragraph.index(word);
+          } else {
+            l = paragraph.filter(function(__, item) {
+              return $(item).is(word) || $(item).is(".open_sentence");
+            });
+            sent_start = paragraph.index(l.eq(l.index(word) - 1));
+          }
+          aux = $(paragraph.get(sent_start + i - 1));
+          scope.selectionManager.select(word, aux);
+          return safeApply(_this.s.$root, function(s) {
             return s.$root.word_selected = word;
           });
-          return;
-        }
-        i = Number(obj.dephead);
-        paragraph = word.closest(".sentence").find(".word");
-        sent_start = 0;
-        if (word.is(".open_sentence")) {
-          sent_start = paragraph.index(word);
-        } else {
-          l = paragraph.filter(function(__, item) {
-            return $(item).is(word) || $(item).is(".open_sentence");
-          });
-          sent_start = paragraph.index(l.eq(l.index(word) - 1));
-        }
-        aux = $(paragraph.get(sent_start + i - 1));
-        scope.selectionManager.select(word, aux);
-        return safeApply(_this.s.$root, function(s) {
-          return s.$root.word_selected = word;
-        });
-      });
+        };
+      })(this));
     }
 
     KWICResults.prototype.resetView = function() {
@@ -145,13 +150,14 @@
     };
 
     KWICResults.prototype.onentry = function() {
-      var _this = this;
       c.log("onentry kwic");
       this.s.$root.sidebar_visible = true;
       this.$result.find(".token_selected").click();
-      _.defer(function() {
-        return _this.centerScrollbar();
-      });
+      _.defer((function(_this) {
+        return function() {
+          return _this.centerScrollbar();
+        };
+      })(this));
     };
 
     KWICResults.prototype.onexit = function() {
@@ -205,12 +211,13 @@
     };
 
     KWICResults.prototype.renderCompleteResult = function(data) {
-      var _this = this;
       c.log("renderCompleteResult", data);
       this.current_page = search().page || 0;
-      safeApply(this.s, function() {
-        return _this.hidePreloader();
-      });
+      safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.hidePreloader();
+        };
+      })(this));
       if (!data.hits) {
         c.log("no kwic results");
         this.showNoResults();
@@ -223,8 +230,7 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref,
-        _this = this;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
       c.log("data", data);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -235,16 +241,18 @@
       }
       c.log("corpus_results");
       isReading = this.isReadingMode();
-      this.s.$apply(function($scope) {
-        c.log("apply kwic search data", data);
-        if (isReading) {
-          $scope.setContextData(data);
-          _this.selectionManager.deselect();
-          return _this.s.$root.word_selected = null;
-        } else {
-          return $scope.setKwicData(data);
-        }
-      });
+      this.s.$apply((function(_this) {
+        return function($scope) {
+          c.log("apply kwic search data", data);
+          if (isReading) {
+            $scope.setContextData(data);
+            _this.selectionManager.deselect();
+            return _this.s.$root.word_selected = null;
+          } else {
+            return $scope.setKwicData(data);
+          }
+        };
+      })(this));
       if (currentMode === "parallel" && !isReading) {
         scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
         _ref = $(".linked_sentence");
@@ -275,8 +283,7 @@
     };
 
     KWICResults.prototype.renderHitsPicture = function(data) {
-      var index, items,
-        _this = this;
+      var index, items;
       items = _.map(data.corpus_order, function(obj) {
         return {
           "rid": obj,
@@ -289,10 +296,12 @@
         return item.abs > 0;
       });
       index = 0;
-      _.each(items, function(obj) {
-        obj.page = Math.floor(index / _this.proxy.prevMisc.hitsPerPage);
-        return index += obj.abs;
-      });
+      _.each(items, (function(_this) {
+        return function(obj) {
+          obj.page = Math.floor(index / _this.proxy.prevMisc.hitsPerPage);
+          return index += obj.abs;
+        };
+      })(this));
       return this.s.$apply(function($scope) {
         return $scope.hitsPictureData = items;
       });
@@ -415,21 +424,22 @@
     };
 
     KWICResults.prototype.makeRequest = function(page_num, cqp) {
-      var isReading, kwicCallback,
-        _this = this;
+      var isReading, kwicCallback;
       this.showPreloader();
       isReading = this.isReadingMode();
-      safeApply(this.s, function() {
-        if (isReading) {
-          return _this.s.setContextData({
-            kwic: []
-          });
-        } else {
-          return _this.s.setKwicData({
-            kwic: []
-          });
-        }
-      });
+      safeApply(this.s, (function(_this) {
+        return function() {
+          if (isReading) {
+            return _this.s.setContextData({
+              kwic: []
+            });
+          } else {
+            return _this.s.setKwicData({
+              kwic: []
+            });
+          }
+        };
+      })(this));
       kwicCallback = $.proxy(this.renderResult, this);
       return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
@@ -567,8 +577,7 @@
     }
 
     ExampleResults.prototype.makeRequest = function() {
-      var items_per_page, opts, prev, progress,
-        _this = this;
+      var items_per_page, opts, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
       items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
       opts = this.s.$parent.queryParams;
@@ -579,21 +588,25 @@
       prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
       _.extend(opts.ajaxParams, prev);
       $.extend(opts, {
-        success: function(data) {
-          c.log("ExampleResults success", data, opts);
-          _this.renderResult(data, opts.cqp);
-          _this.renderCompleteResult(data);
-          safeApply(_this.s, function() {
-            return _this.hidePreloader();
-          });
-          util.setJsonLink(_this.proxy.prevRequest);
-          return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
-        },
-        error: function() {
-          return safeApply(_this.s, function() {
-            return _this.hidePreloader();
-          });
-        }
+        success: (function(_this) {
+          return function(data) {
+            c.log("ExampleResults success", data, opts);
+            _this.renderResult(data, opts.cqp);
+            _this.renderCompleteResult(data);
+            safeApply(_this.s, function() {
+              return _this.hidePreloader();
+            });
+            util.setJsonLink(_this.proxy.prevRequest);
+            return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
+          };
+        })(this),
+        error: (function(_this) {
+          return function() {
+            return safeApply(_this.s, function() {
+              return _this.hidePreloader();
+            });
+          };
+        })(this)
       });
       this.showPreloader();
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
@@ -636,40 +649,45 @@
     };
 
     LemgramResults.prototype.makeRequest = function(word, type) {
-      var def,
-        _this = this;
+      var def;
       this.showPreloader();
-      def = this.proxy.makeRequest(word, type, function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return _this.onProgress.apply(_this, args);
-      });
+      def = this.proxy.makeRequest(word, type, (function(_this) {
+        return function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return _this.onProgress.apply(_this, args);
+        };
+      })(this));
       return def.fail(function(jqXHR, status, errorThrown) {
-        var _this = this;
         c.log("def fail", status);
         if (status === "abort") {
-          return safeApply(lemgramResults.s, function() {
-            return lemgramResults.hidePreloader();
-          });
+          return safeApply(lemgramResults.s, (function(_this) {
+            return function() {
+              return lemgramResults.hidePreloader();
+            };
+          })(this));
         }
       });
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
-      var resultError,
-        _this = this;
+      var resultError;
       c.log("lemgram renderResult", data, query);
       $(".content_target", this.$result).empty();
       resultError = LemgramResults.__super__.renderResult.call(this, data);
-      safeApply(this.s, function() {
-        _this.hidePreloader();
-        return _this.s.$parent.progress = 100;
-      });
+      safeApply(this.s, (function(_this) {
+        return function() {
+          _this.hidePreloader();
+          return _this.s.$parent.progress = 100;
+        };
+      })(this));
       if (resultError === false) {
         return;
       }
       if (!data.relations) {
-        safeApply(this.s, function() {});
+        safeApply(this.s, (function(_this) {
+          return function() {};
+        })(this));
         return this.resultDeferred.reject();
       } else if (util.isLemgramId(query)) {
         this.renderTables(query, data.relations);
@@ -714,8 +732,7 @@
     };
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
-      var self, tagsetTrans, unique_words, wordlist,
-        _this = this;
+      var self, tagsetTrans, unique_words, wordlist;
       self = this;
       wordlist = $.map(data, function(item) {
         var output;
@@ -743,16 +760,18 @@
         this.showNoResults();
         return;
       }
-      $.each(unique_words, function(i, _arg) {
-        var content, currentWd, pos;
-        currentWd = _arg[0], pos = _arg[1];
-        self.drawTable(currentWd, pos, data);
-        self.renderHeader(pos, false);
-        content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
-        return $(".tableContainer:last").prepend($("<div>", {
-          "class": "header"
-        }).html(content)).find(".hit .wordclass_suffix").hide();
-      });
+      $.each(unique_words, (function(_this) {
+        return function(i, _arg) {
+          var content, currentWd, pos;
+          currentWd = _arg[0], pos = _arg[1];
+          self.drawTable(currentWd, pos, data);
+          self.renderHeader(pos, false);
+          content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
+          return $(".tableContainer:last").prepend($("<div>", {
+            "class": "header"
+          }).html(content)).find(".hit .wordclass_suffix").hide();
+        };
+      })(this));
       $(".lemgram_result .wordclass_suffix").hide();
       return this.hidePreloader();
     };
@@ -771,8 +790,7 @@
     };
 
     LemgramResults.prototype.drawTable = function(token, wordClass, data) {
-      var container, getRelType, inArray, orderArrays, tagsetTrans,
-        _this = this;
+      var container, getRelType, inArray, orderArrays, tagsetTrans;
       inArray = function(rel, orderList) {
         var i, type;
         i = _.findIndex(orderList, function(item) {
@@ -796,25 +814,27 @@
         return;
       }
       orderArrays = [[], [], []];
-      $.each(data, function(index, item) {
-        return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
-          var list, rel, ret;
-          list = orderArrays[i];
-          rel = getRelType(item);
-          if (!rel) {
-            return;
-          }
-          ret = inArray(rel, rel_type_list);
-          if (ret.i === -1) {
-            return;
-          }
-          if (!list[ret.i]) {
-            list[ret.i] = [];
-          }
-          item.show_rel = ret.type;
-          return list[ret.i].push(item);
-        });
-      });
+      $.each(data, (function(_this) {
+        return function(index, item) {
+          return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
+            var list, rel, ret;
+            list = orderArrays[i];
+            rel = getRelType(item);
+            if (!rel) {
+              return;
+            }
+            ret = inArray(rel, rel_type_list);
+            if (ret.i === -1) {
+              return;
+            }
+            if (!list[ret.i]) {
+              list[ret.i] = [];
+            }
+            item.show_rel = ret.type;
+            return list[ret.i].push(item);
+          });
+        };
+      })(this));
       $.each(orderArrays, function(i, unsortedList) {
         var toIndex;
         $.each(unsortedList, function(_, list) {
@@ -846,9 +866,11 @@
       c.log("orderArrays", orderArrays);
       $("#lemgramResultsTmpl").tmpl(orderArrays, {
         lemgram: token
-      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click(function(event) {
-        return _this.onClickExample(event);
-      }).end().appendTo(container);
+      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click((function(_this) {
+        return function(event) {
+          return _this.onClickExample(event);
+        };
+      })(this)).end().appendTo(container);
       return $("td:nth-child(2)", this.$result).each(function() {
         var $siblings, hasHomograph, label, prefix, siblingLemgrams;
         $siblings = $(this).parent().siblings().find("td:nth-child(2)");
@@ -1067,8 +1089,7 @@
     __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
-      var paper, self,
-        _this = this;
+      var paper, self;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
       this.gridData = null;
@@ -1098,64 +1119,70 @@
           return scope.$root.kwicTabs.push(opts);
         });
       });
-      $(window).resize(_.debounce(function() {
-        var h, nRows, _ref, _ref1, _ref2;
-        $("#myGrid:visible").width($(window).width() - 40);
-        nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
-        h = (nRows * 2) + 4;
-        h = Math.min(h, 40);
-        $("#myGrid:visible").height("" + h + ".1em");
-        if ((_ref1 = _this.grid) != null) {
-          _ref1.resizeCanvas();
-        }
-        return (_ref2 = _this.grid) != null ? _ref2.autosizeColumns() : void 0;
-      }, 100));
-      $("#kindOfData,#kindOfFormat").change(function() {
-        return _this.updateExportBlob();
-      });
+      $(window).resize(_.debounce((function(_this) {
+        return function() {
+          var h, nRows, _ref, _ref1, _ref2;
+          $("#myGrid:visible").width($(window).width() - 40);
+          nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
+          h = (nRows * 2) + 4;
+          h = Math.min(h, 40);
+          $("#myGrid:visible").height("" + h + ".1em");
+          if ((_ref1 = _this.grid) != null) {
+            _ref1.resizeCanvas();
+          }
+          return (_ref2 = _this.grid) != null ? _ref2.autosizeColumns() : void 0;
+        };
+      })(this), 100));
+      $("#kindOfData,#kindOfFormat").change((function(_this) {
+        return function() {
+          return _this.updateExportBlob();
+        };
+      })(this));
       if ($("html.msie7,html.msie8").length) {
         $("#showGraph").hide();
         return;
       }
-      $("#showGraph").on("click", function() {
-        var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
-        if ($("#showGraph").is(".disabled")) {
-          return;
-        }
-        params = _this.proxy.prevParams;
-        cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
-        reduceVal = params.groupby;
-        isStructAttr = reduceVal in cl.getStructAttrs();
-        subExprs = [];
-        labelMapping = {};
-        showTotal = false;
-        mainCQP = params.cqp;
-        prefix = isStructAttr ? "_." : "";
-        attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
-        op = ((_ref = attrs[reduceVal]) != null ? _ref.type : void 0) === "set" ? "contains" : "=";
-        _ref1 = _this.$result.find(".slick-cell-checkboxsel :checked");
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          chk = _ref1[_i];
-          cell = $(chk).parent();
-          if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
-            showTotal = true;
-            continue;
+      $("#showGraph").on("click", (function(_this) {
+        return function() {
+          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
+          if ($("#showGraph").is(".disabled")) {
+            return;
           }
-          val = _this.gridData[cell.parent().index()].hit_value;
-          cqp = "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(val)) + "']";
-          subExprs.push(cqp);
-          labelMapping[cqp] = cell.next().text();
-        }
-        return _this.s.$apply(function() {
-          return _this.s.onGraphShow({
-            cqp: mainCQP,
-            subcqps: subExprs,
-            labelMapping: labelMapping,
-            showTotal: showTotal,
-            corpusListing: cl
+          params = _this.proxy.prevParams;
+          cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
+          reduceVal = params.groupby;
+          isStructAttr = reduceVal in cl.getStructAttrs();
+          subExprs = [];
+          labelMapping = {};
+          showTotal = false;
+          mainCQP = params.cqp;
+          prefix = isStructAttr ? "_." : "";
+          attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
+          op = ((_ref = attrs[reduceVal]) != null ? _ref.type : void 0) === "set" ? "contains" : "=";
+          _ref1 = _this.$result.find(".slick-cell-checkboxsel :checked");
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            chk = _ref1[_i];
+            cell = $(chk).parent();
+            if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
+              showTotal = true;
+              continue;
+            }
+            val = _this.gridData[cell.parent().index()].hit_value;
+            cqp = "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(val)) + "']";
+            subExprs.push(cqp);
+            labelMapping[cqp] = cell.next().text();
+          }
+          return _this.s.$apply(function() {
+            return _this.s.onGraphShow({
+              cqp: mainCQP,
+              subcqps: subExprs,
+              labelMapping: labelMapping,
+              showTotal: showTotal,
+              corpusListing: cl
+            });
           });
-        });
-      });
+        };
+      })(this));
       paper = new Raphael($(".graph_btn_icon", this.$result).get(0), 33, 24);
       paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z").attr({
         fill: "#666",
@@ -1227,8 +1254,7 @@
     };
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, refreshHeaders, resultError, sortCol,
-        _this = this;
+      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1291,14 +1317,18 @@
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
       $(window).trigger("resize");
-      $.when(timeDeferred).then(function() {
-        return safeApply(_this.s, function() {
-          return _this.updateGraphBtnState();
-        });
-      });
-      return safeApply(this.s, function() {
-        return _this.hidePreloader();
-      });
+      $.when(timeDeferred).then((function(_this) {
+        return function() {
+          return safeApply(_this.s, function() {
+            return _this.updateGraphBtnState();
+          });
+        };
+      })(this));
+      return safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.hidePreloader();
+        };
+      })(this));
     };
 
     StatsResults.prototype.updateGraphBtnState = function() {
@@ -1327,11 +1357,12 @@
     };
 
     StatsResults.prototype.showNoResults = function() {
-      var _this = this;
       c.log("showNoResults", this.$result);
-      safeApply(this.s, function() {
-        return _this.hidePreloader();
-      });
+      safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.hidePreloader();
+        };
+      })(this));
       this.$result.prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
       return $("#exportStatsSection").hide();
     };
@@ -1344,37 +1375,38 @@
     __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector, scope) {
-      var _this = this;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.zoom = "year";
       this.granularity = this.zoom[0];
       this.proxy = new model.GraphProxy();
       this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
-      $(".chart", this.$result).on("click", function(event) {
-        var cqp, end, m, opts, start, target, timecqp, val;
-        target = $(".chart", _this.$result);
-        val = $(".detail .x_label > span", target).data("val");
-        cqp = $(".detail .item.active > span", target).data("cqp");
-        c.log("chart click", cqp, target);
-        if (cqp) {
-          m = moment(val * 1000);
-          start = m.format("YYYYMMDD");
-          end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
-          timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")";
-          cqp = "[(" + (decodeURIComponent(cqp).slice(1, -1)) + ") & " + timecqp + "]";
-          opts = {};
-          opts.ajaxParams = {
-            start: 0,
-            end: 24,
-            command: "query",
-            corpus: _this.s.data.corpusListing.stringifySelected(),
-            cqp: cqp
-          };
-          return safeApply(_this.s.$root, function() {
-            return _this.s.$root.kwicTabs.push(opts);
-          });
-        }
-      });
+      $(".chart", this.$result).on("click", (function(_this) {
+        return function(event) {
+          var cqp, end, m, opts, start, target, timecqp, val;
+          target = $(".chart", _this.$result);
+          val = $(".detail .x_label > span", target).data("val");
+          cqp = $(".detail .item.active > span", target).data("cqp");
+          c.log("chart click", cqp, target);
+          if (cqp) {
+            m = moment(val * 1000);
+            start = m.format("YYYYMMDD");
+            end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
+            timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")";
+            cqp = "[(" + (decodeURIComponent(cqp).slice(1, -1)) + ") & " + timecqp + "]";
+            opts = {};
+            opts.ajaxParams = {
+              start: 0,
+              end: 24,
+              command: "query",
+              corpus: _this.s.data.corpusListing.stringifySelected(),
+              cqp: cqp
+            };
+            return safeApply(_this.s.$root, function() {
+              return _this.s.$root.kwicTabs.push(opts);
+            });
+          }
+        };
+      })(this));
     }
 
     GraphResults.prototype.onentry = function() {};
@@ -1582,321 +1614,326 @@
     };
 
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
-      var _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
       this.s.loading = true;
       this.showPreloader();
-      return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress(function(data) {
-        return _this.onProgress(data);
-      }).fail(function(data) {
-        c.log("graph crash");
-        _this.resultError(data);
-        return _this.s.loading = false;
-      }).done(function(data) {
-        var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
-        c.log("data", data);
-        if (data.ERROR) {
+      return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress((function(_this) {
+        return function(data) {
+          return _this.onProgress(data);
+        };
+      })(this)).fail((function(_this) {
+        return function(data) {
+          c.log("graph crash");
           _this.resultError(data);
-          return;
-        }
-        nontime = _this.getNonTime();
-        if (nontime) {
-          $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
-        } else {
-          $(".non_time_div").hide();
-        }
-        if (_.isArray(data.combined)) {
-          palette = new Rickshaw.Color.Palette("colorwheel");
-          series = [];
-          _ref = data.combined;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            item = _ref[_i];
-            color = palette.color();
-            series.push({
-              data: _this.getSeriesData(item.relative),
-              color: color,
-              name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
-              cqp: item.cqp || cqp,
-              abs_data: _this.getSeriesData(item.absolute)
+          return _this.s.loading = false;
+        };
+      })(this)).done((function(_this) {
+        return function(data) {
+          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
+          c.log("data", data);
+          if (data.ERROR) {
+            _this.resultError(data);
+            return;
+          }
+          nontime = _this.getNonTime();
+          if (nontime) {
+            $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
+          } else {
+            $(".non_time_div").hide();
+          }
+          if (_.isArray(data.combined)) {
+            palette = new Rickshaw.Color.Palette("colorwheel");
+            series = [];
+            _ref = data.combined;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
+              color = palette.color();
+              series.push({
+                data: _this.getSeriesData(item.relative),
+                color: color,
+                name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
+                cqp: item.cqp || cqp,
+                abs_data: _this.getSeriesData(item.absolute)
+              });
+            }
+          } else {
+            series = [
+              {
+                data: _this.getSeriesData(data.combined.relative),
+                color: 'steelblue',
+                name: "&Sigma;",
+                cqp: cqp,
+                abs_data: _this.getSeriesData(data.combined.absolute)
+              }
+            ];
+          }
+          Rickshaw.Series.zeroFill(series);
+          window.data = series[0].data;
+          emptyIntervals = _this.getEmptyIntervals(series[0].data);
+          _this.s.hasEmptyIntervals = emptyIntervals.length;
+          for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+            s = series[_j];
+            s.data = _.filter(s.data, function(item) {
+              return item.y !== null;
             });
           }
-        } else {
-          series = [
+          graph = new Rickshaw.Graph({
+            element: $(".chart", _this.$result).get(0),
+            renderer: 'line',
+            interpolation: "linear",
+            series: series,
+            padding: {
+              top: 0.1,
+              right: 0.01
+            }
+          });
+          graph.render();
+          window._graph = graph;
+          _this.drawIntervals(graph, emptyIntervals);
+          $(window).on("resize", _.throttle(function() {
+            if (_this.$result.is(":visible")) {
+              graph.setSize();
+              return graph.render();
+            }
+          }, 200));
+          $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
+            var cls, h, nRows, target, val, _k, _len2, _ref1, _ref2;
+            target = event.currentTarget;
+            val = $(":checked", target).val();
+            _ref1 = _this.$result.attr("class").split(" ");
+            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+              cls = _ref1[_k];
+              if (cls.match(/^form-/)) {
+                _this.$result.removeClass(cls);
+              }
+            }
+            _this.$result.addClass("form-" + val);
+            $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
+            $(".time_table", _this.$result.parent()).hide();
+            $(".smoothing_switch", _this.$result).button("enable");
+            if (val === "bar") {
+              if ($(".legend .line", _this.$result).length > 1) {
+                $(".legend li:last:not(.disabled) .action", _this.$result).click();
+                if (_.all(_.map($(".legend .line", _this.$result), function(item) {
+                  return $(item).is(".disabled");
+                }))) {
+                  $(".legend li:first .action", _this.$result).click();
+                }
+              }
+              $(".smoothing_switch:checked", _this.$result).click();
+              $(".smoothing_switch", _this.$result).button("disable");
+            } else if (val === "table") {
+              $(".chart,.zoom_slider,.legend", _this.$result).hide();
+              $(".time_table", _this.$result.parent()).show();
+              $(".smoothing_switch:checked", _this.$result).click();
+              $(".smoothing_switch", _this.$result).button("disable");
+              nRows = series.length || 2;
+              h = (nRows * 2) + 4;
+              h = Math.min(h, 40);
+              $(".time_table:visible", _this.$result).height("" + h + ".1em");
+              if ((_ref2 = _this.time_grid) != null) {
+                _ref2.resizeCanvas();
+              }
+              $(".exportTimeStatsSection", _this.$result).show();
+              $(".timeExportButton", _this.$result).unbind("click");
+              $(".timeExportButton", _this.$result).click(function() {
+                var cell, cells, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
+                selVal = $(".timeKindOfData option:selected", _this.$result).val();
+                selType = $(".timeKindOfFormat option:selected", _this.$result).val();
+                dataDelimiter = selType === "TSV" ? "%09" : ";";
+                header = [util.getLocaleString("stats_hit")];
+                _ref3 = series[0].data;
+                for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                  cell = _ref3[_l];
+                  header.push(moment(cell.x * 1000).format("YYYY"));
+                }
+                output = [header];
+                for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
+                  row = series[_m];
+                  cells = [row.name === "&Sigma;" ? "Σ" : row.name];
+                  _ref4 = row.data;
+                  for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
+                    cell = _ref4[_n];
+                    if (selVal === "relative") {
+                      cells.push(cell.y);
+                    } else {
+                      i = _.indexOf(_.pluck(row.abs_data, "x"), cell.x, true);
+                      cells.push(row.abs_data[i].y);
+                    }
+                  }
+                  output.push(cells);
+                }
+                output = _.invoke(output, "join", dataDelimiter);
+                output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)));
+                if (selType === "TSV") {
+                  return window.open("data:text/tsv;charset=utf-8," + output);
+                } else {
+                  return window.open("data:text/csv;charset=utf-8," + output);
+                }
+              });
+            }
+            if (val !== "table") {
+              graph.setRenderer(val);
+              graph.render();
+              return $(".exportTimeStatsSection", _this.$result).hide();
+            }
+          });
+          HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
+            return value;
+          };
+          time_table_data = [];
+          time_table_columns_intermediate = {};
+          for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
+            row = series[_k];
+            new_time_row = {
+              "label": row.name
+            };
+            _ref1 = row.data;
+            for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+              item = _ref1[_l];
+              timestamp = moment(item.x * 1000).format("YYYY");
+              time_table_columns_intermediate[timestamp] = {
+                "name": timestamp,
+                "field": timestamp,
+                "formatter": window.statsProxy.valueFormatter
+              };
+              i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
+              new_time_row[timestamp] = {
+                "relative": item.y,
+                "absolute": row.abs_data[i].y
+              };
+            }
+            time_table_data.push(new_time_row);
+          }
+          time_table_columns = [
             {
-              data: _this.getSeriesData(data.combined.relative),
-              color: 'steelblue',
-              name: "&Sigma;",
-              cqp: cqp,
-              abs_data: _this.getSeriesData(data.combined.absolute)
+              "name": "Hit",
+              "field": "label",
+              "formatter": HTMLFormatter
             }
           ];
-        }
-        Rickshaw.Series.zeroFill(series);
-        window.data = series[0].data;
-        emptyIntervals = _this.getEmptyIntervals(series[0].data);
-        _this.s.hasEmptyIntervals = emptyIntervals.length;
-        for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
-          s = series[_j];
-          s.data = _.filter(s.data, function(item) {
-            return item.y !== null;
+          _ref2 = _.keys(time_table_columns_intermediate).sort();
+          for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+            key = _ref2[_m];
+            time_table_columns.push(time_table_columns_intermediate[key]);
+          }
+          time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
+            enableCellNavigation: false,
+            enableColumnReorder: false
           });
-        }
-        graph = new Rickshaw.Graph({
-          element: $(".chart", _this.$result).get(0),
-          renderer: 'line',
-          interpolation: "linear",
-          series: series,
-          padding: {
-            top: 0.1,
-            right: 0.01
+          $(".time_table", _this.$result).width("100%");
+          _this.time_grid = time_grid;
+          $(".smoothing_label .ui-button-text", _this.$result.parent()).localeKey("smoothing");
+          $(".form_switch .ui-button:first .ui-button-text", _this.$result).localeKey("line");
+          $(".form_switch .ui-button:eq(1) .ui-button-text", _this.$result).localeKey("bar");
+          $(".form_switch .ui-button:last .ui-button-text", _this.$result).localeKey("table");
+          legend = new Rickshaw.Graph.Legend({
+            element: $(".legend", _this.$result).get(0),
+            graph: graph
+          });
+          shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+            graph: graph,
+            legend: legend
+          });
+          if (!showTotal && $(".legend .line", _this.$result).length > 1) {
+            $(".legend .line:last .action", _this.$result).click();
           }
-        });
-        graph.render();
-        window._graph = graph;
-        _this.drawIntervals(graph, emptyIntervals);
-        $(window).on("resize", _.throttle(function() {
-          if (_this.$result.is(":visible")) {
-            graph.setSize();
-            return graph.render();
-          }
-        }, 200));
-        $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
-          var cls, h, nRows, target, val, _k, _len2, _ref1, _ref2;
-          target = event.currentTarget;
-          val = $(":checked", target).val();
-          _ref1 = _this.$result.attr("class").split(" ");
-          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-            cls = _ref1[_k];
-            if (cls.match(/^form-/)) {
-              _this.$result.removeClass(cls);
-            }
-          }
-          _this.$result.addClass("form-" + val);
-          $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
-          $(".time_table", _this.$result.parent()).hide();
-          $(".smoothing_switch", _this.$result).button("enable");
-          if (val === "bar") {
-            if ($(".legend .line", _this.$result).length > 1) {
-              $(".legend li:last:not(.disabled) .action", _this.$result).click();
-              if (_.all(_.map($(".legend .line", _this.$result), function(item) {
-                return $(item).is(".disabled");
-              }))) {
-                $(".legend li:first .action", _this.$result).click();
-              }
-            }
-            $(".smoothing_switch:checked", _this.$result).click();
-            $(".smoothing_switch", _this.$result).button("disable");
-          } else if (val === "table") {
-            $(".chart,.zoom_slider,.legend", _this.$result).hide();
-            $(".time_table", _this.$result.parent()).show();
-            $(".smoothing_switch:checked", _this.$result).click();
-            $(".smoothing_switch", _this.$result).button("disable");
-            nRows = series.length || 2;
-            h = (nRows * 2) + 4;
-            h = Math.min(h, 40);
-            $(".time_table:visible", _this.$result).height("" + h + ".1em");
-            if ((_ref2 = _this.time_grid) != null) {
-              _ref2.resizeCanvas();
-            }
-            $(".exportTimeStatsSection", _this.$result).show();
-            $(".timeExportButton", _this.$result).unbind("click");
-            $(".timeExportButton", _this.$result).click(function() {
-              var cell, cells, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
-              selVal = $(".timeKindOfData option:selected", _this.$result).val();
-              selType = $(".timeKindOfFormat option:selected", _this.$result).val();
-              dataDelimiter = selType === "TSV" ? "%09" : ";";
-              header = [util.getLocaleString("stats_hit")];
-              _ref3 = series[0].data;
-              for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                cell = _ref3[_l];
-                header.push(moment(cell.x * 1000).format("YYYY"));
-              }
-              output = [header];
-              for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
-                row = series[_m];
-                cells = [row.name === "&Sigma;" ? "Σ" : row.name];
-                _ref4 = row.data;
-                for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
-                  cell = _ref4[_n];
-                  if (selVal === "relative") {
-                    cells.push(cell.y);
-                  } else {
-                    i = _.indexOf(_.pluck(row.abs_data, "x"), cell.x, true);
-                    cells.push(row.abs_data[i].y);
-                  }
+          hoverDetail = new Rickshaw.Graph.HoverDetail({
+            graph: graph,
+            xFormatter: function(x) {
+              var d, out, output;
+              d = new Date(x * 1000);
+              output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
+              out = (function() {
+                switch (this.granularity) {
+                  case "y":
+                    return output[0];
+                  case "m":
+                    return output.slice(0, 2).join("\n");
+                  case "d":
+                    return output.join("\n");
                 }
-                output.push(cells);
-              }
-              output = _.invoke(output, "join", dataDelimiter);
-              output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)));
-              if (selType === "TSV") {
-                return window.open("data:text/tsv;charset=utf-8," + output);
-              } else {
-                return window.open("data:text/csv;charset=utf-8," + output);
-              }
-            });
-          }
-          if (val !== "table") {
-            graph.setRenderer(val);
-            graph.render();
-            return $(".exportTimeStatsSection", _this.$result).hide();
-          }
-        });
-        HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
-          return value;
-        };
-        time_table_data = [];
-        time_table_columns_intermediate = {};
-        for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
-          row = series[_k];
-          new_time_row = {
-            "label": row.name
-          };
-          _ref1 = row.data;
-          for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-            item = _ref1[_l];
-            timestamp = moment(item.x * 1000).format("YYYY");
-            time_table_columns_intermediate[timestamp] = {
-              "name": timestamp,
-              "field": timestamp,
-              "formatter": window.statsProxy.valueFormatter
-            };
-            i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
-            new_time_row[timestamp] = {
-              "relative": item.y,
-              "absolute": row.abs_data[i].y
-            };
-          }
-          time_table_data.push(new_time_row);
-        }
-        time_table_columns = [
-          {
-            "name": "Hit",
-            "field": "label",
-            "formatter": HTMLFormatter
-          }
-        ];
-        _ref2 = _.keys(time_table_columns_intermediate).sort();
-        for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
-          key = _ref2[_m];
-          time_table_columns.push(time_table_columns_intermediate[key]);
-        }
-        time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
-          enableCellNavigation: false,
-          enableColumnReorder: false
-        });
-        $(".time_table", _this.$result).width("100%");
-        _this.time_grid = time_grid;
-        $(".smoothing_label .ui-button-text", _this.$result.parent()).localeKey("smoothing");
-        $(".form_switch .ui-button:first .ui-button-text", _this.$result).localeKey("line");
-        $(".form_switch .ui-button:eq(1) .ui-button-text", _this.$result).localeKey("bar");
-        $(".form_switch .ui-button:last .ui-button-text", _this.$result).localeKey("table");
-        legend = new Rickshaw.Graph.Legend({
-          element: $(".legend", _this.$result).get(0),
-          graph: graph
-        });
-        shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-          graph: graph,
-          legend: legend
-        });
-        if (!showTotal && $(".legend .line", _this.$result).length > 1) {
-          $(".legend .line:last .action", _this.$result).click();
-        }
-        hoverDetail = new Rickshaw.Graph.HoverDetail({
-          graph: graph,
-          xFormatter: function(x) {
-            var d, out, output;
-            d = new Date(x * 1000);
-            output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
-            out = (function() {
-              switch (this.granularity) {
-                case "y":
-                  return output[0];
-                case "m":
-                  return output.slice(0, 2).join("\n");
-                case "d":
-                  return output.join("\n");
-              }
-            }).call(_this);
-            return "<span data-val='" + x + "'>" + out + "</span>";
-          },
-          yFormatter: function(y) {
-            var val;
-            val = util.formatDecimalString(y.toFixed(2), false, true, true);
-            return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
-          },
-          formatter: function(series, x, y, formattedX, formattedY, d) {
-            var abs_y, rel;
-            i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
-            abs_y = series.abs_data[i].y;
-            rel = series.name + ':&nbsp;' + formattedY;
-            return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
-          }
-        });
-        _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
-        timeunit = last - first > 100 ? "decade" : _this.zoom;
-        toDate = function(sec) {
-          return moment(sec * 1000).toDate();
-        };
-        time = new Rickshaw.Fixtures.Time();
-        old_ceil = time.ceil;
-        time.ceil = function(time, unit) {
-          var mom, out;
-          if (unit.name === "decade") {
-            out = Math.ceil(time / unit.seconds) * unit.seconds;
-            mom = moment(out * 1000);
-            if (mom.date() === 31) {
-              mom.add("day", 1);
+              }).call(_this);
+              return "<span data-val='" + x + "'>" + out + "</span>";
+            },
+            yFormatter: function(y) {
+              var val;
+              val = util.formatDecimalString(y.toFixed(2), false, true, true);
+              return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
+            },
+            formatter: function(series, x, y, formattedX, formattedY, d) {
+              var abs_y, rel;
+              i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
+              abs_y = series.abs_data[i].y;
+              rel = series.name + ':&nbsp;' + formattedY;
+              return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
             }
-            return mom.unix();
-          } else {
-            return old_ceil(time, unit);
-          }
+          });
+          _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
+          timeunit = last - first > 100 ? "decade" : _this.zoom;
+          toDate = function(sec) {
+            return moment(sec * 1000).toDate();
+          };
+          time = new Rickshaw.Fixtures.Time();
+          old_ceil = time.ceil;
+          time.ceil = function(time, unit) {
+            var mom, out;
+            if (unit.name === "decade") {
+              out = Math.ceil(time / unit.seconds) * unit.seconds;
+              mom = moment(out * 1000);
+              if (mom.date() === 31) {
+                mom.add("day", 1);
+              }
+              return mom.unix();
+            } else {
+              return old_ceil(time, unit);
+            }
+          };
+          window.xAxis = new Rickshaw.Graph.Axis.Time({
+            graph: graph,
+            timeUnit: time.unit(timeunit)
+          });
+          slider = new Rickshaw.Graph.RangeSlider({
+            graph: graph,
+            element: $('.zoom_slider', _this.$result)
+          });
+          old_render = xAxis.render;
+          xAxis.render = function() {
+            old_render.call(xAxis);
+            _this.updateTicks();
+            return _this.drawIntervals(graph, emptyIntervals);
+          };
+          old_tickOffsets = xAxis.tickOffsets;
+          xAxis.tickOffsets = function() {
+            var count, domain, offsets, runningTick, tickValue, unit, _n;
+            domain = xAxis.graph.x.domain();
+            unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
+            count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
+            runningTick = domain[0];
+            offsets = [];
+            for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
+              tickValue = time.ceil(runningTick, unit);
+              runningTick = tickValue + unit.seconds / 2;
+              offsets.push({
+                value: tickValue,
+                unit: unit,
+                _date: moment(tickValue * 1000).toDate()
+              });
+            }
+            return offsets;
+          };
+          xAxis.render();
+          yAxis = new Rickshaw.Graph.Axis.Y({
+            graph: graph
+          });
+          yAxis.render();
+          _this.hidePreloader();
+          safeApply(_this.s, function() {
+            return _this.s.loading = false;
+          });
+          return $(window).trigger("resize");
         };
-        window.xAxis = new Rickshaw.Graph.Axis.Time({
-          graph: graph,
-          timeUnit: time.unit(timeunit)
-        });
-        slider = new Rickshaw.Graph.RangeSlider({
-          graph: graph,
-          element: $('.zoom_slider', _this.$result)
-        });
-        old_render = xAxis.render;
-        xAxis.render = function() {
-          old_render.call(xAxis);
-          _this.updateTicks();
-          return _this.drawIntervals(graph, emptyIntervals);
-        };
-        old_tickOffsets = xAxis.tickOffsets;
-        xAxis.tickOffsets = function() {
-          var count, domain, offsets, runningTick, tickValue, unit, _n;
-          domain = xAxis.graph.x.domain();
-          unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
-          count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
-          runningTick = domain[0];
-          offsets = [];
-          for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
-            tickValue = time.ceil(runningTick, unit);
-            runningTick = tickValue + unit.seconds / 2;
-            offsets.push({
-              value: tickValue,
-              unit: unit,
-              _date: moment(tickValue * 1000).toDate()
-            });
-          }
-          return offsets;
-        };
-        xAxis.render();
-        yAxis = new Rickshaw.Graph.Axis.Y({
-          graph: graph
-        });
-        yAxis.render();
-        _this.hidePreloader();
-        safeApply(_this.s, function() {
-          return _this.s.loading = false;
-        });
-        return $(window).trigger("resize");
-      });
+      })(this));
     };
 
     return GraphResults;
@@ -1905,6 +1942,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=results.js.map
-*/
+//# sourceMappingURL=results.js.map
