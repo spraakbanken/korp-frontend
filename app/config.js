@@ -656,7 +656,7 @@ settings.corporafolders.socialmedia.forum = {
 
 settings.corporafolders.socialmedia.forum.familjeliv = {
 	title : "Familjeliv",
-	contents : ["familjeliv-adoption", "familjeliv-foralder", "familjeliv-pappagrupp", "familjeliv-planerarbarn"],
+	contents : ["familjeliv-adoption", "familjeliv-foralder", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad"],
 	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
 };
 
@@ -1654,6 +1654,27 @@ settings.corpora["familjeliv-pappagrupp"] = {
 settings.corpora["familjeliv-planerarbarn"] = {
 	id : "familjeliv-planerarbarn",
 	title : "Familjeliv: Planerar barn",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["familjeliv-sexsamlevnad"] = {
+	id : "familjeliv-sexsamlevnad",
+	title : "Familjeliv: Sex & samlevnad",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
