@@ -128,7 +128,7 @@ settings.corporafolders.medeltid = {
 };
 
 settings.corporafolders.digidaily = {
-	title : "Digidaily",
+	title : "Kubhist",
 	contents : ["digidaily-dalpilen","digidaily-goteborgsweckoblad","digidaily-gotlandstidning",
                     "digidaily-faluposten","digidaily-fahluweckoblad","digidaily-jonkopingsbladet",
                     "digidaily-folketsrost","digidaily-bollnastidning","digidaily-norraskane",
