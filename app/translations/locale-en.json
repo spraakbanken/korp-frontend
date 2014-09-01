@@ -20,7 +20,7 @@
 	"lang_SK" : "Slovak",
 	"lang_ET" : "Estonian",
 
-	"docs" : "",
+	"docs" : "Manual (Swedish only)",
 	"swedish" : "Svenska",
 	"english" : "English",
 	"korp" : "Korp",
@@ -138,6 +138,7 @@
     "fra" : "french",
     "ita" : "italian",
     "por" : "portuguese",
+    "not_containing" : "Does not contain",
 	"statistics" : "Statistics",
 	"word_picture" : "Word picture",
 	"sort_default" : "sort within corpora",

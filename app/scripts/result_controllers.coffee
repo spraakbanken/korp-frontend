@@ -34,8 +34,14 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
 
     readingChange = () ->
         c.log "reading change"
+        c.log "s.instance", s.instance, s.instance?.getProxy(), s.instance?.getProxy().pendingRequests
+
         if s.instance?.getProxy().pendingRequests.length
+            c.log "when"
+            window.pending = s.instance.getProxy().pendingRequests
+            
             $.when(s.instance.getProxy().pendingRequests...).then () ->
+                c.log "readingchange makeRequest"
                 s.instance.makeRequest()
 
     s.setupReadingHash = () ->

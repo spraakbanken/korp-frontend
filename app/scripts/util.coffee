@@ -180,7 +180,11 @@ class window.CorpusListing
             not item.limited_access
 
     getTitle : (corpus) ->
-        @struct[corpus].title
+        try
+            @struct[corpus].title
+        catch e
+            c.log "gettitle broken", corpus 
+        
 
 
     getAttributeGroups : (lang) ->
@@ -329,6 +333,11 @@ class window.ParallelCorpusListing extends CorpusListing
 
             output.push(pair)
         return output.join(",")
+
+
+    getTitle : (corpus) ->
+        @struct[corpus.split("|")[1]].title
+
 
 
 settings.corpusListing = new CorpusListing(settings.corpora)

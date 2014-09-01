@@ -67,10 +67,7 @@
                 <div id="time_graph"></div>
                 <div id="rest_time_graph"></div>
               </div>
-              <div class="buttons">
-                <button class="btn btn-default btn-sm selectall"><span class="fa fa-check"></span><span rel="localize[corpselector_buttonselectall]"></span><span data-loc="corpselector_buttonselectall"></span></button>
-                <button class="btn btn-default btn-sm selectnone"><span class="fa fa-times"></span><span rel="localize[corpselector_buttonselectnone]"></span></button>
-              </div>
+              <div class="buttons"><a href="javascript:" class="buttonlink ui-state-default ui-corner-all selectall"><span class="ui-icon ui-icon-check"></span><span rel="localize[corpselector_buttonselectall]"></span><span data-loc="corpselector_buttonselectall"></span></a><a href="javascript:" class="selectnone buttonlink ui-state-default ui-corner-all"><span class="ui-icon ui-icon-closethick"></span><span rel="localize[corpselector_buttonselectnone]"></span></a></div>
               <div style="clear: both;"></div>
             </div>
             <div class="checks"></div><br>
@@ -149,7 +146,7 @@
             <tab ng-if="visibleTabs[3]" ng-controller="CompareSearchCtrl">
               <tab-heading>{{'compare' | loc}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></tab-heading>
               <div class="search_compare">
-                <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-sm btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc}}</button>
+                <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-small btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc}}</button>
                 <div ng-show="savedSearches.length &lt; 2">
                   <div class="bs-callout bs-callout-warning">{{'compare_warning' | loc}}</div>
                 </div>
@@ -157,7 +154,7 @@
                   <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>{{'compare_with' | loc}}
                   <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>{{'compare_reduce' | loc}}
                   <select ng-model="reduce" ng-options="obj |              mapper:valfilter as obj.label |              loc group by obj.group |              loc for obj in getAttrs()"></select>
-                  <button ng-click="sendCompare()" class="btn btn-sm search">{{'compare_vb' | loc}}</button>
+                  <button ng-click="sendCompare()" class="btn btn-small search">{{'compare_vb' | loc}}</button>
                 </div>
               </div>
             </tab>

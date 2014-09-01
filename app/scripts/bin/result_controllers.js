@@ -20,10 +20,14 @@
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
     readingChange = function() {
-      var _ref;
+      var _ref, _ref1, _ref2;
       c.log("reading change");
-      if ((_ref = s.instance) != null ? _ref.getProxy().pendingRequests.length : void 0) {
+      c.log("s.instance", s.instance, (_ref = s.instance) != null ? _ref.getProxy() : void 0, (_ref1 = s.instance) != null ? _ref1.getProxy().pendingRequests : void 0);
+      if ((_ref2 = s.instance) != null ? _ref2.getProxy().pendingRequests.length : void 0) {
+        c.log("when");
+        window.pending = s.instance.getProxy().pendingRequests;
         return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
+          c.log("readingchange makeRequest");
           return s.instance.makeRequest();
         });
       }

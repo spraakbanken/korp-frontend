@@ -255,10 +255,13 @@
       })(this));
       if (currentMode === "parallel" && !isReading) {
         scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
-        _ref = $(".linked_sentence");
+        _ref = $(".table_scrollarea > .kwic .linked_sentence");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           linked = _ref[_i];
           mainrow = $(linked).prev();
+          if (!mainrow.length) {
+            continue;
+          }
           firstWord = mainrow.find(".left .word:first");
           if (!firstWord.length) {
             firstWord = mainrow.find(".match .word:first");

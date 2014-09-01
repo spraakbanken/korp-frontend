@@ -9,7 +9,7 @@ korpApp.controller("SearchCtrl", function($scope) {
 });
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 	var s = $scope;
-
+	s.negates = [];
 	s.onSubmit = function() {
 	    $location.search("search", "cqp|" + $rootScope.activeCQP);
 	}
@@ -24,9 +24,12 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 
 	else
 		s.langs = [{lang : "swe"}];
-
+	s.negChange = function() {
+		$location.search("search", null)
+	}
 	s.$watch("langs", function() {
 		var currentLangList = _.pluck(s.langs, "lang");
+		c.log("lang change", currentLangList)
 		settings.corpusListing.setActiveLangs(currentLangList);
 		$location.search("parallel_corpora", currentLangList.join(","))
 		var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
@@ -38,17 +41,19 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
 				}).groupBy("lang").value()
 		}
 
-		var output = s.langs[0].cqp;
+		var output = CQP.expandOperators(s.langs[0].cqp);
 		output += _.map(s.langs.slice(1), function(langobj, i) {
+			var neg = s.negates[i + 1] ? "!" : "";
 			var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
 			var linkedCorpus = _(langMapping[langobj.lang]).pluck("id").invoke("toUpperCase").join("|");
-			return ":LINKED_CORPUS:" + linkedCorpus + " " + langobj.cqp;
+			return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + CQP.expandOperators(langobj.cqp); 
 		}).join("");
 
 		_.each(s.langs, function(langobj, i) {
 			search("cqp_" + langobj.lang , langobj.cqp);
 		})
 		$rootScope.activeCQP = output;
+		s.$broadcast("corpuschooserchange")
 	}, true);
 
 	s.getEnabledLangs = function(i) {
@@ -102,17 +107,17 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 		$("#sidebar").sidebar("updateContent", isLinked ? {} : sentence.structs, data, corpus);
 	},
 
-	renderKwicResult : function(data, sourceCQP) {
-		var self = this;
-		this.renderResult(".results_table.kwic", data, sourceCQP).done(function() {
-			var offset = $(".table_scrollarea").scrollLeft(0);
-			$(".linked_sentence span:first-child").each(function(i, linked) {
-				var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
-				$(linked).parent().css("padding-left", Math.round(mainLeft));
-			});
-			self.centerScrollbar();
-		});
-	}
+	// renderKwicResult : function(data, sourceCQP) {
+	// 	var self = this;
+	// 	this.renderResult(".results_table.kwic", data, sourceCQP).done(function() {
+	// 		var offset = $(".table_scrollarea").scrollLeft(0);
+	// 		$(".linked_sentence span:first-child").each(function(i, linked) {
+	// 			var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
+	// 			$(linked).parent().css("padding-left", Math.round(mainLeft));
+	// 		});
+	// 		self.centerScrollbar();
+	// 	});
+	// }
 
 });
 
@@ -169,6 +174,8 @@ settings.corpora["europarl-sv"] = {
 		text_speakerlang : {
 			label : "lang",
 			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
 			dataset : {
 				"EN" : "engelska",
 				"FI" : "finska",
@@ -396,6 +403,8 @@ settings.corpora["saltnld-sv"] = {
 		text_origlang : {
 			label : "origlang",
 			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
 			dataset: {
 				"swe" : "swedish",
 				"nld" : "dutch"
@@ -422,6 +431,8 @@ settings.corpora["saltnld-nl"] = {
 		text_origlang : {
 			label : "origlang",
 			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
 			dataset: {
 				"swe" : "swedish",
 				"nld" : "dutch"

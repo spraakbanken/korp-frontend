@@ -3,9 +3,8 @@
 
   <div ng-controller="ParallelSearch">
     <div ng-repeat="l in langs" >
-      <select ng-model="l.lang" ng-options="langstr as (langstr | loc) for langstr in getEnabledLangs($index)" >
-        
-      </select>
+      <select ng-model="l.lang" ng-options="langstr as (langstr | loc) for langstr in getEnabledLangs($index)"></select>
+      <label ng-show="!$first" for="negate_chk{{$index}}">{{"not_containing" | loc}}</label> <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="negates[$index]" ng-change="negChange()">
       <div id="query_table" extended_list cqp="l.cqp"></div>
       
     </div>

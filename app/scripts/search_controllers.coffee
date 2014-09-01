@@ -156,7 +156,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     s.valfilter = utils.valfilter
     
-
     s.setDefault = (or_obj) ->
         # assign the first value from the opts 
         or_obj.op = _.values(s.getOpts(or_obj.type))[0][1]
@@ -166,7 +165,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s.getOpts = (type) ->
         confObj = s.typeMapping?[type]
         unless confObj
-            c.log "confObj missing", confObj
+            c.log "confObj missing", type, s.typeMapping
 
         optObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
         if confObj.type == "set"
@@ -187,6 +186,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         c.log "onCorpusChange", selected, s.l
 
         lang = s.$parent.$parent?.l?.lang
+        # c.log "lang", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
         s.typeMapping = _.object _.map s.types, (item) -> 
             if item.isStructAttr

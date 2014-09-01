@@ -246,7 +246,13 @@
     };
 
     CorpusListing.prototype.getTitle = function(corpus) {
-      return this.struct[corpus].title;
+      var e;
+      try {
+        return this.struct[corpus].title;
+      } catch (_error) {
+        e = _error;
+        return c.log("gettitle broken", corpus);
+      }
     };
 
     CorpusListing.prototype.getAttributeGroups = function(lang) {
@@ -463,6 +469,10 @@
         output.push(pair);
       }
       return output.join(",");
+    };
+
+    ParallelCorpusListing.prototype.getTitle = function(corpus) {
+      return this.struct[corpus.split("|")[1]].title;
     };
 
     return ParallelCorpusListing;

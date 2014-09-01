@@ -233,8 +233,9 @@ class view.KWICResults extends BaseResults
 
         if currentMode == "parallel" and not isReading
             scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
-            for linked in $(".linked_sentence")
+            for linked in $(".table_scrollarea > .kwic .linked_sentence")
                 mainrow = $(linked).prev()
+                unless mainrow.length then continue
                 firstWord = mainrow.find(".left .word:first")
                 if not firstWord.length then firstWord = mainrow.find(".match .word:first")
                 offset = (firstWord.position().left + scrollLeft) - 25
