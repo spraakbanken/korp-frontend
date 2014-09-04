@@ -656,7 +656,7 @@ settings.corporafolders.socialmedia.forum = {
 
 settings.corporafolders.socialmedia.forum.familjeliv = {
 	title : "Familjeliv",
-	contents : ["familjeliv-adoption", "familjeliv-foralder", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad"],
+	contents : ["familjeliv-adoption", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
 	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
 };
 
@@ -1630,6 +1630,48 @@ settings.corpora["familjeliv-foralder"] = {
 	}
 };
 
+settings.corpora["familjeliv-gravid"] = {
+	id : "familjeliv-gravid",
+	title : "Familjeliv: Gravid",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["familjeliv-kansliga"] = {
+	id : "familjeliv-kansliga",
+	title : "Familjeliv: Känsliga rummet",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
 settings.corpora["familjeliv-pappagrupp"] = {
 	id : "familjeliv-pappagrupp",
 	title : "Familjeliv: Pappagrupp",
@@ -1675,6 +1717,48 @@ settings.corpora["familjeliv-planerarbarn"] = {
 settings.corpora["familjeliv-sexsamlevnad"] = {
 	id : "familjeliv-sexsamlevnad",
 	title : "Familjeliv: Sex & samlevnad",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["familjeliv-svartattfabarn"] = {
+	id : "familjeliv-svartattfabarn",
+	title : "Familjeliv: Svårt att få barn",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["familjeliv-anglarum"] = {
+	id : "familjeliv-anglarum",
+	title : "Familjeliv: Änglarum",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
