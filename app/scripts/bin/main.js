@@ -301,12 +301,11 @@
   };
 
   window.initTimeGraph = function(def) {
-    var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, time_comb, timestruct;
+    var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, timestruct;
     timestruct = null;
     all_timestruct = null;
     restdata = null;
     restyear = null;
-    time_comb = timeProxy.makeRequest(true);
     onTimeGraphChange = function() {};
     getValByDate = function(date, struct) {
       var output;
@@ -319,10 +318,14 @@
       });
       return output;
     };
-    window.timeDeferred = timeProxy.makeRequest(false).done(function(data) {
+    window.timeDeferred = timeProxy.makeRequest().fail(function(error) {
+      return $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>");
+    }).done(function(_arg) {
+      var all_timestruct, cor, corpus, dataByCorpus, rest, struct;
+      dataByCorpus = _arg[0], all_timestruct = _arg[1], rest = _arg[2];
       c.log("write time");
-      $.each(data, function(corpus, struct) {
-        var cor;
+      for (corpus in dataByCorpus) {
+        struct = dataByCorpus[corpus];
         if (corpus !== "time") {
           cor = settings.corpora[corpus.toLowerCase()];
           timeProxy.expandTimeStruct(struct);
@@ -333,18 +336,15 @@
             if (cor.common_attributes == null) {
               cor.common_attributes = {};
             }
-            return cor.common_attributes.date_interval = true;
+            cor.common_attributes.date_interval = true;
           }
         }
-      });
-      return safeApply($("body").scope(), function(scope) {
+      }
+      safeApply($("body").scope(), function(scope) {
         scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
         return def.resolve();
       });
-    });
-    $.when(time_comb, timeDeferred).then(function(combdata, timedata) {
-      all_timestruct = combdata[0];
-      onTimeGraphChange = function(evt, data) {
+      return onTimeGraphChange = function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;
         one_px = max / 46;
         normalize = function(array) {
@@ -357,9 +357,9 @@
             return out;
           });
         };
-        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg) {
+        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg1) {
           var a, b;
-          a = _arg[0], b = _arg[1];
+          a = _arg1[0], b = _arg1[1];
           if (typeof memo[a] === "undefined") {
             memo[a] = b;
           } else {
@@ -384,7 +384,7 @@
         }, 0);
         plots = [
           {
-            data: normalize([].concat(all_timestruct, [[restyear, combdata[1]]])),
+            data: normalize([].concat(all_timestruct, [[restyear, rest]])),
             bars: {
               fillColor: "lightgrey"
             }
@@ -428,45 +428,45 @@
           }
         });
       };
-      return $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
-        var date, firstrow, header, pTmpl, secondrow, time, total, val;
-        if (item) {
-          date = item.datapoint[0];
-          header = $("<h4>");
-          if (date === restyear) {
-            header.text(util.getLocaleString("corpselector_rest_time"));
-            val = restdata;
-            total = combdata[1];
-          } else {
-            header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0]);
-            val = getValByDate(date, timestruct);
-            total = getValByDate(date, all_timestruct);
-          }
-          c.log("output", timestruct[item.datapoint[0].toString()]);
-          pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
-          firstrow = pTmpl({
-            loc: "corpselector_time_chosen",
-            num: util.prettyNumbers(val || 0)
-          });
-          secondrow = pTmpl({
-            loc: "corpselector_of_total",
-            num: util.prettyNumbers(total)
-          });
-          time = item.datapoint[0];
-          $(".corpusInfoSpace").css({
-            top: $(this).parent().offset().top
-          });
-          return $(".corpusInfoSpace").find("p").empty().append(header, "<span> </span>", firstrow, secondrow).localize().end().fadeIn("fast");
-        } else {
-          return $(".corpusInfoSpace").fadeOut("fast");
-        }
-      }, 100));
     });
+    $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
+      var date, firstrow, header, pTmpl, secondrow, time, total, val;
+      if (item) {
+        date = item.datapoint[0];
+        header = $("<h4>");
+        if (date === restyear) {
+          header.text(util.getLocaleString("corpselector_rest_time"));
+          val = restdata;
+          total = rest;
+        } else {
+          header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0]);
+          val = getValByDate(date, timestruct);
+          total = getValByDate(date, all_timestruct);
+        }
+        c.log("output", timestruct[item.datapoint[0].toString()]);
+        pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
+        firstrow = pTmpl({
+          loc: "corpselector_time_chosen",
+          num: util.prettyNumbers(val || 0)
+        });
+        secondrow = pTmpl({
+          loc: "corpselector_of_total",
+          num: util.prettyNumbers(total)
+        });
+        time = item.datapoint[0];
+        $(".corpusInfoSpace").css({
+          top: $(this).parent().offset().top
+        });
+        return $(".corpusInfoSpace").find("p").empty().append(header, "<span> </span>", firstrow, secondrow).localize().end().fadeIn("fast");
+      } else {
+        return $(".corpusInfoSpace").fadeOut("fast");
+      }
+    }, 100));
     opendfd = $.Deferred();
     $("#corpusbox").one("corpuschooseropen", function() {
       return opendfd.resolve();
     });
-    return $.when(time_comb, time, opendfd).then(function() {
+    return $.when(timeDeferred, opendfd).then(function() {
       $("#corpusbox").bind("corpuschooserchange", onTimeGraphChange);
       return onTimeGraphChange();
     });

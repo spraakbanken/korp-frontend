@@ -527,44 +527,41 @@ class model.AuthenticationProxy
 
 class model.TimeProxy extends BaseProxy
     constructor: ->
-        @data = []
 
 
-    makeRequest: (combined) ->
-        self = this
+    makeRequest: () ->
         dfd = $.Deferred()
 
-        @req =
+
+        xhr = $.ajax
             url: settings.cgi_script
             type: "GET"
             data:
                 command: "timespan"
                 granularity: "y"
-                corpus: settings.corpusListing.stringifySelected()
-                combined : combined
+                corpus: settings.corpusListing.stringifyAll()
 
-        xhr = $.ajax(@req)
-        if combined
-            xhr.done (data, status, xhr) ->
-                if _.keys(data).length < 2 or data.ERROR
-                    c.log "timespan error:", data.ERROR
-                    dfd.reject()
-                    return
+        xhr.done (data, status, xhr) =>
+            c.log "timespan done", data
+            if data.ERROR 
+                c.error "timespan error", data.ERROR
+                dfd.reject(data.ERROR )
+                return
 
-                rest = data.combined[""]
-                delete data.combined[""]
+            rest = data.combined[""]
+            delete data.combined[""]
 
-                self.expandTimeStruct data.combined
-                output = self.compilePlotArray(data.combined)
-                dfd.resolve output, rest
+            @expandTimeStruct data.combined
+            combined = @compilePlotArray(data.combined)
+            # dfd.resolve output, rest
 
-        else
-            xhr.done (data, status, xhr) ->
-                if _.keys(data).length < 2 or data.ERROR
-                    dfd.reject()
-                    return
-                self.corpusdata = data
-                dfd.resolve data
+            if _.keys(data).length < 2 or data.ERROR
+                dfd.reject()
+                return
+            # @corpusdata = data
+            
+            dfd.resolve [data.corpora, combined, rest]
+
 
         xhr.fail ->
             c.log "timeProxy.makeRequest failed", arguments

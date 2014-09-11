@@ -115,6 +115,9 @@ class window.CorpusListing
     stringifySelected: ->
         _(@selected).pluck("id").invoke("toUpperCase").join ","
 
+    stringifyAll: ->
+        _(@corpora).pluck("id").invoke("toUpperCase").join ","
+
     getAttrIntersection: (attr) ->
         struct = _.map(@selected, (corpus) ->
             _.keys corpus[attr]

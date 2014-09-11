@@ -627,49 +627,40 @@
   model.TimeProxy = (function(_super) {
     __extends(TimeProxy, _super);
 
-    function TimeProxy() {
-      this.data = [];
-    }
+    function TimeProxy() {}
 
-    TimeProxy.prototype.makeRequest = function(combined) {
-      var dfd, self, xhr;
-      self = this;
+    TimeProxy.prototype.makeRequest = function() {
+      var dfd, xhr;
       dfd = $.Deferred();
-      this.req = {
+      xhr = $.ajax({
         url: settings.cgi_script,
         type: "GET",
         data: {
           command: "timespan",
           granularity: "y",
-          corpus: settings.corpusListing.stringifySelected(),
-          combined: combined
+          corpus: settings.corpusListing.stringifyAll()
         }
-      };
-      xhr = $.ajax(this.req);
-      if (combined) {
-        xhr.done(function(data, status, xhr) {
-          var output, rest;
-          if (_.keys(data).length < 2 || data.ERROR) {
-            c.log("timespan error:", data.ERROR);
-            dfd.reject();
+      });
+      xhr.done((function(_this) {
+        return function(data, status, xhr) {
+          var combined, rest;
+          c.log("timespan done", data);
+          if (data.ERROR) {
+            c.error("timespan error", data.ERROR);
+            dfd.reject(data.ERROR);
             return;
           }
           rest = data.combined[""];
           delete data.combined[""];
-          self.expandTimeStruct(data.combined);
-          output = self.compilePlotArray(data.combined);
-          return dfd.resolve(output, rest);
-        });
-      } else {
-        xhr.done(function(data, status, xhr) {
+          _this.expandTimeStruct(data.combined);
+          combined = _this.compilePlotArray(data.combined);
           if (_.keys(data).length < 2 || data.ERROR) {
             dfd.reject();
             return;
           }
-          self.corpusdata = data;
-          return dfd.resolve(data);
-        });
-      }
+          return dfd.resolve([data.corpora, combined, rest]);
+        };
+      })(this));
       xhr.fail(function() {
         c.log("timeProxy.makeRequest failed", arguments);
         return dfd.reject();

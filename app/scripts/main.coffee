@@ -304,7 +304,7 @@ window.initTimeGraph = (def) ->
     all_timestruct = null
     restdata = null
     restyear = null
-    time_comb = timeProxy.makeRequest(true)
+    # time_comb = timeProxy.makeRequest(true)
     onTimeGraphChange = () ->
 
     getValByDate = (date, struct) ->
@@ -316,116 +316,116 @@ window.initTimeGraph = (def) ->
 
         return output
 
-    window.timeDeferred = timeProxy.makeRequest(false).done((data) ->
-        c.log "write time"
-        $.each data, (corpus, struct) ->
-            if corpus isnt "time"
-                cor = settings.corpora[corpus.toLowerCase()]
-                timeProxy.expandTimeStruct struct
-                cor.non_time = struct[""]
-                struct = _.omit struct, ""
-                cor.time = struct
-                if _.keys(struct).length > 1
-                    cor.common_attributes ?= {}
-                    cor.common_attributes.date_interval = true
+    window.timeDeferred = timeProxy.makeRequest()
+        .fail (error) ->
+            $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
+        .done ([dataByCorpus, all_timestruct, rest]) ->
+            c.log "write time"
+            # $.each data, (corpus, struct) ->
+            for corpus, struct of dataByCorpus
+                if corpus isnt "time"
+                    cor = settings.corpora[corpus.toLowerCase()]
+                    timeProxy.expandTimeStruct struct
+                    cor.non_time = struct[""]
+                    struct = _.omit struct, ""
+                    cor.time = struct
+                    if _.keys(struct).length > 1
+                        cor.common_attributes ?= {}
+                        cor.common_attributes.date_interval = true
 
-                    
-                #     cor.struct_attributes.date_interval =
-                #         label: "date_interval"
-                #         displayType: "date_interval"
-                #         opts: settings.liteOptions
+                        
+                    #     cor.struct_attributes.date_interval =
+                    #         label: "date_interval"
+                    #         displayType: "date_interval"
+                    #         opts: settings.liteOptions
 
-        # $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
-        # onTimeGraphChange()
-        safeApply $("body").scope(), (scope) ->
-            scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
-            def.resolve()
-        
-    )
+            # $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
+            # onTimeGraphChange()
+            safeApply $("body").scope(), (scope) ->
+                scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
+                def.resolve()
+            
 
-    $.when(time_comb, timeDeferred).then (combdata, timedata) ->
-        all_timestruct = combdata[0]
+            onTimeGraphChange = (evt, data) ->
+                # the 46 here is the presumed value of
+                # the height of the graph
+                one_px = max / 46
+                # c.log "one_px", one_px
 
-        onTimeGraphChange = (evt, data) ->
-            # the 46 here is the presumed value of
-            # the height of the graph
-            one_px = max / 46
-            # c.log "one_px", one_px
+                normalize = (array) ->
+                    _.map array, (item) ->
+                        out = [].concat(item)
+                        out[1] = one_px if out[1] < one_px and out[1] > 0
+                        out
 
-            normalize = (array) ->
-                _.map array, (item) ->
-                    out = [].concat(item)
-                    out[1] = one_px if out[1] < one_px and out[1] > 0
-                    out
+                output = _(settings.corpusListing.selected)
+                    .pluck("time")
+                    .filter(Boolean)
+                    .map(_.pairs)
+                    .flatten(true)
+                    .reduce((memo, [a, b]) -> 
+                        if typeof memo[a] is "undefined"
+                            memo[a] = b
+                        else
+                            memo[a] += b
+                        memo
+                    , {})
 
-            output = _(settings.corpusListing.selected)
-                .pluck("time")
-                .filter(Boolean)
-                .map(_.pairs)
-                .flatten(true)
-                .reduce((memo, [a, b]) -> 
-                    if typeof memo[a] is "undefined"
-                        memo[a] = b
-                    else
-                        memo[a] += b
-                    memo
-                , {})
-
-            max = _.reduce(all_timestruct, (accu, item) ->
-                return item[1] if item[1] > accu
-                return accu
-            , 0)
-
-
-
-            timestruct = timeProxy.compilePlotArray(output)
-            # c.log "output", output
-            # c.log "timestruct", timestruct
-            endyear = all_timestruct.slice(-1)[0][0]
-            yeardiff = endyear - all_timestruct[0][0]
-            restyear = endyear + (yeardiff / 25)
-            restdata = _(settings.corpusListing.selected)
-                .filter((item) ->
-                    item.time
-                ).reduce((accu, corp) ->
-                    accu + parseInt(corp.non_time or "0")
+                max = _.reduce(all_timestruct, (accu, item) ->
+                    return item[1] if item[1] > accu
+                    return accu
                 , 0)
-            plots = [
-                data: normalize([].concat(all_timestruct, [[restyear, combdata[1]]]))
-                bars:
-                    fillColor: "lightgrey"
-            ,
-                data: normalize(timestruct)
-                bars:
-                    fillColor: "navy"
-            ]
-            if restdata
-                plots.push
-                    data: normalize([[restyear, restdata]])
+
+
+
+                timestruct = timeProxy.compilePlotArray(output)
+                # c.log "output", output
+                # c.log "timestruct", timestruct
+                endyear = all_timestruct.slice(-1)[0][0]
+                yeardiff = endyear - all_timestruct[0][0]
+                restyear = endyear + (yeardiff / 25)
+                restdata = _(settings.corpusListing.selected)
+                    .filter((item) ->
+                        item.time
+                    ).reduce((accu, corp) ->
+                        accu + parseInt(corp.non_time or "0")
+                    , 0)
+                plots = [
+                    data: normalize([].concat(all_timestruct, [[restyear, rest]]))
                     bars:
-                        fillColor: "indianred"
+                        fillColor: "lightgrey"
+                ,
+                    data: normalize(timestruct)
+                    bars:
+                        fillColor: "navy"
+                ]
+                if restdata
+                    plots.push
+                        data: normalize([[restyear, restdata]])
+                        bars:
+                            fillColor: "indianred"
 
-            plot = $.plot($("#time_graph"), plots,
-                bars:
-                    show: true
-                    fill: 1
-                    align: "center"
+                plot = $.plot($("#time_graph"), plots,
+                    bars:
+                        show: true
+                        fill: 1
+                        align: "center"
 
-                grid:
+                    grid:
+                        hoverable: true
+                        borderColor: "white"
+
+                    yaxis:
+                        show: false
+
+                    xaxis:
+                        show: true
+
                     hoverable: true
-                    borderColor: "white"
-
-                yaxis:
-                    show: false
-
-                xaxis:
-                    show: true
-
-                hoverable: true
-                colors: ["lightgrey", "navy"]
-            )
-            $.each $("#time_graph .tickLabel"), ->
-                $(this).hide() if parseInt($(this).text()) > new Date().getFullYear()
+                    colors: ["lightgrey", "navy"]
+                )
+                $.each $("#time_graph .tickLabel"), ->
+                    $(this).hide() if parseInt($(this).text()) > new Date().getFullYear()
 
 
 
@@ -437,7 +437,7 @@ window.initTimeGraph = (def) ->
                 if date is restyear
                     header.text util.getLocaleString("corpselector_rest_time")
                     val = restdata
-                    total = combdata[1]
+                    total = rest
                 else
                     header.text util.getLocaleString("corpselector_time") + " " + item.datapoint[0]
                     val = getValByDate(date, timestruct)
@@ -466,7 +466,7 @@ window.initTimeGraph = (def) ->
     $("#corpusbox").one "corpuschooseropen", ->
         opendfd.resolve()
 
-    $.when(time_comb, time, opendfd).then ->
+    $.when(timeDeferred, opendfd).then ->
         $("#corpusbox").bind "corpuschooserchange", onTimeGraphChange
         onTimeGraphChange()
 

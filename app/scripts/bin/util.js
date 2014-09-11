@@ -149,6 +149,10 @@
       return _(this.selected).pluck("id").invoke("toUpperCase").join(",");
     };
 
+    CorpusListing.prototype.stringifyAll = function() {
+      return _(this.corpora).pluck("id").invoke("toUpperCase").join(",");
+    };
+
     CorpusListing.prototype.getAttrIntersection = function(attr) {
       var struct;
       struct = _.map(this.selected, function(corpus) {
