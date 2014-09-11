@@ -5,10 +5,7 @@
     options: {
       displayOrder: ["pos", "posset", "lemma", "lex", "saldo", "variants"].reverse()
     },
-    _init: function() {
-      var dfd;
-      return dfd = $.Deferred();
-    },
+    _init: function() {},
     updateContent: function(sentenceData, wordData, corpus, tokens) {
       var corpusObj;
       this.element.html('<div id="selected_sentence" /><div id="selected_word" />');

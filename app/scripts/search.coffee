@@ -102,6 +102,7 @@ view.updateReduceSelect = ->
     ,
         word_attr: word_attr
         sentence_attr: $.grepObj(sentence_attr, (val, key) ->
+            #TODO: do i need this anymore?
             return false if val.displayType is "date_interval"
             return true
             # val.disabled isnt true

@@ -10,8 +10,6 @@ Sidebar =
         ].reverse()
     }
     _init: () ->
-        dfd = $.Deferred()
-
 
     updateContent: (sentenceData, wordData, corpus, tokens) ->
         @element.html '<div id="selected_sentence" /><div id="selected_word" />'

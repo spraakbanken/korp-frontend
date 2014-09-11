@@ -31,8 +31,8 @@
       | {{'log_out' | loc}}   
     span.usrname 
   #languages
-    a(href='javascript:', rel='localize[swedish]', data-mode='sv', ng-click='lang = \'sv\'') Svenska
-    a(href='javascript:', rel='localize[english]', data-mode='en', ng-click='lang = \'en\'') Engelska
+    a(href='javascript:', data-mode='sv', ng-click="lang = 'sv'") {{'swedish' | loc}}
+    a(href='javascript:', data-mode='en', ng-click="lang = 'en'") {{'english' | loc}}
   #cite
     a(href="javascript:", ng-click="citeClick()") {{"about_cite_header" | loc}}
 
