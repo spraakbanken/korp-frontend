@@ -91,8 +91,11 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 	c3.apply(this, arguments);
 }, {
 
+
+
 	onWordClick : function(word, sentence) {
 		var data = word.tmplItem().data;
+		c.log ("data", data)
 		var currentSentence = sentence.aligned;
 		if(!currentSentence) currentSentence = sentence;
 		var i = Number(data.dephead);
@@ -373,6 +376,15 @@ settings.corpora["europarl-pt"] = {
 	}
 };
 
+var linkref = {
+	label : "linkref",
+	displayType : "hidden"
+}
+var wordlink = {
+	label : "wordlink",
+	displayType : "hidden"
+}
+
 settings.corpora["saltnld-sv"] = {
 	id : "saltnld-sv",
 	lang : "swe",
@@ -393,7 +405,9 @@ settings.corpora["saltnld-sv"] = {
 		deprel: attrs.deprel,
 		ref: attrs.ref,
 		prefix : attrs.prefix,
-		suffix : attrs.suffix
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-nl" : wordlink
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
@@ -422,7 +436,10 @@ settings.corpora["saltnld-nl"] = {
 	within: {
 		"link": "meningspar"
 	},
-	attributes: {},
+	attributes: {
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},

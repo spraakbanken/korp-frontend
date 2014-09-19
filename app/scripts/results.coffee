@@ -87,47 +87,53 @@ class view.KWICResults extends BaseResults
 
         $(document).keydown $.proxy(@onKeydown, this)
 
+        @$result.on "click", ".word", onWordClick
+
 
         # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
-        @$result.on "click", ".word", (event) =>
-            @s.$root.sidebar_visible = true
-            # c.log "click", obj, event
-            # c.log "word click", $(this).scope().wd, event.currentTarget
-            scope = $(event.currentTarget).scope()
-            obj = scope.wd
-            sent = scope.sentence
-            event.stopPropagation()
-            word = $(event.target)
-            # $.sm.send("word.select")
+
+
+    onWordClick : (event) ->
+        
+        @s.$root.sidebar_visible = true
+        # c.log "click", obj, event
+        # c.log "word click", $(this).scope().wd, event.currentTarget
+        scope = $(event.currentTarget).scope()
+        obj = scope.wd
+        sent = scope.sentence
+        event.stopPropagation()
+        word = $(event.target)
+        # $.sm.send("word.select")
 
 
 
-            if $("#sidebar").data().korpSidebar?
-                $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
+        if $("#sidebar").data().korpSidebar?
+            $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
-            if not obj.dephead?
-                scope.selectionManager.select word, null
-                safeApply @s.$root, (s) ->
-                    s.$root.word_selected = word
-                return
-
-            i = Number(obj.dephead)
-            paragraph = word.closest(".sentence").find(".word")
-            sent_start = 0
-            if word.is(".open_sentence")
-                sent_start = paragraph.index(word)
-            else
-
-                l = paragraph.filter((__, item) ->
-                    $(item).is(word) or $(item).is(".open_sentence")
-                )
-                sent_start = paragraph.index(l.eq(l.index(word) - 1))
-            aux = $(paragraph.get(sent_start + i - 1))
-            scope.selectionManager.select word, aux
+        if not obj.dephead?
+            scope.selectionManager.select word, null
             safeApply @s.$root, (s) ->
                 s.$root.word_selected = word
+            return
 
+        i = Number(obj.dephead)
+        paragraph = word.closest(".sentence").find(".word")
+        sent_start = 0
+        if word.is(".open_sentence")
+            sent_start = paragraph.index(word)
+        else
 
+            l = paragraph.filter((__, item) ->
+                $(item).is(word) or $(item).is(".open_sentence")
+            )
+            sent_start = paragraph.index(l.eq(l.index(word) - 1))
+        aux = $(paragraph.get(sent_start + i - 1))
+        scope.selectionManager.select word, aux
+        safeApply @s.$root, (s) ->
+            s.$root.word_selected = word
+
+    selectWord : () ->
+        
 
 
     resetView: ->

@@ -98,44 +98,46 @@
         };
       })(this));
       $(document).keydown($.proxy(this.onKeydown, this));
-      this.$result.on("click", ".word", (function(_this) {
-        return function(event) {
-          var aux, i, l, obj, paragraph, sent, sent_start, word;
-          _this.s.$root.sidebar_visible = true;
-          scope = $(event.currentTarget).scope();
-          obj = scope.wd;
-          sent = scope.sentence;
-          event.stopPropagation();
-          word = $(event.target);
-          if ($("#sidebar").data().korpSidebar != null) {
-            $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
-          }
-          if (obj.dephead == null) {
-            scope.selectionManager.select(word, null);
-            safeApply(_this.s.$root, function(s) {
-              return s.$root.word_selected = word;
-            });
-            return;
-          }
-          i = Number(obj.dephead);
-          paragraph = word.closest(".sentence").find(".word");
-          sent_start = 0;
-          if (word.is(".open_sentence")) {
-            sent_start = paragraph.index(word);
-          } else {
-            l = paragraph.filter(function(__, item) {
-              return $(item).is(word) || $(item).is(".open_sentence");
-            });
-            sent_start = paragraph.index(l.eq(l.index(word) - 1));
-          }
-          aux = $(paragraph.get(sent_start + i - 1));
-          scope.selectionManager.select(word, aux);
-          return safeApply(_this.s.$root, function(s) {
-            return s.$root.word_selected = word;
-          });
-        };
-      })(this));
+      this.$result.on("click", ".word", onWordClick);
     }
+
+    KWICResults.prototype.onWordClick = function(event) {
+      var aux, i, l, obj, paragraph, scope, sent, sent_start, word;
+      this.s.$root.sidebar_visible = true;
+      scope = $(event.currentTarget).scope();
+      obj = scope.wd;
+      sent = scope.sentence;
+      event.stopPropagation();
+      word = $(event.target);
+      if ($("#sidebar").data().korpSidebar != null) {
+        $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
+      }
+      if (obj.dephead == null) {
+        scope.selectionManager.select(word, null);
+        safeApply(this.s.$root, function(s) {
+          return s.$root.word_selected = word;
+        });
+        return;
+      }
+      i = Number(obj.dephead);
+      paragraph = word.closest(".sentence").find(".word");
+      sent_start = 0;
+      if (word.is(".open_sentence")) {
+        sent_start = paragraph.index(word);
+      } else {
+        l = paragraph.filter(function(__, item) {
+          return $(item).is(word) || $(item).is(".open_sentence");
+        });
+        sent_start = paragraph.index(l.eq(l.index(word) - 1));
+      }
+      aux = $(paragraph.get(sent_start + i - 1));
+      scope.selectionManager.select(word, aux);
+      return safeApply(this.s.$root, function(s) {
+        return s.$root.word_selected = word;
+      });
+    };
+
+    KWICResults.prototype.selectWord = function() {};
 
     KWICResults.prototype.resetView = function() {
       return KWICResults.__super__.resetView.call(this);
