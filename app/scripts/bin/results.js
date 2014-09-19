@@ -84,8 +84,8 @@
       this.readingProxy = new model.KWICProxy();
       this.current_page = search().page || 0;
       this.s = scope;
-      this.s.setupReadingHash();
       this.selectionManager = scope.selectionManager;
+      this.setupReadingHash();
       this.$result.click((function(_this) {
         return function() {
           if (!_this.selectionManager.hasSelected()) {
@@ -104,6 +104,10 @@
         };
       })(this));
     }
+
+    KWICResults.prototype.setupReadingHash = function() {
+      return this.s.setupReadingHash();
+    };
 
     KWICResults.prototype.onWordClick = function(event) {
       var obj, scope, sent, word;
@@ -587,15 +591,17 @@
     __extends(ExampleResults, _super);
 
     function ExampleResults(tabSelector, resultSelector, scope) {
+      c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
-      this.s.setupReadingWatch();
       if (this.s.$parent.queryParams) {
         this.makeRequest();
         this.onentry();
       }
       this.current_page = 0;
     }
+
+    ExampleResults.prototype.setupReadingHash = function() {};
 
     ExampleResults.prototype.makeRequest = function() {
       var items_per_page, opts, prev, progress;
@@ -634,7 +640,13 @@
       return this.proxy.makeRequest(opts, null, $.noop, $.noop, progress);
     };
 
+    ExampleResults.prototype.renderResult = function(data) {
+      ExampleResults.__super__.renderResult.call(this, data);
+      return this.s.setupReadingWatch();
+    };
+
     ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
+      c.log("exampleresults.handlePaginationClick");
       this.current_page = new_page_index;
       this.makeRequest();
       return false;
@@ -1134,7 +1146,9 @@
           end: 24,
           command: "query",
           corpus: $(this).data("corpora").join(",").toUpperCase(),
-          cqp: decodeURIComponent(query)
+          cqp: decodeURIComponent(self.proxy.prevParams.cqp),
+          cqp2: decodeURIComponent(query),
+          expand_prequeries: false
         };
         return safeApply(scope.$root, function() {
           return scope.$root.kwicTabs.push(opts);
@@ -1165,7 +1179,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, val, _i, _len, _ref, _ref1;
+          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, v, val, _i, _j, _len, _len1, _ref, _ref1;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1188,8 +1202,13 @@
               showTotal = true;
               continue;
             }
-            val = _this.gridData[cell.parent().index()].hit_value;
-            cqp = "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(val)) + "']";
+            val = _this.gridData[cell.parent().index()].hit_value.split(" ");
+            c.log("val", val);
+            cqp = "";
+            for (_j = 0, _len1 = val.length; _j < _len1; _j++) {
+              v = val[_j];
+              cqp += "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(v)) + "'] ";
+            }
             subExprs.push(cqp);
             labelMapping[cqp] = cell.next().text();
           }
@@ -1401,26 +1420,37 @@
       this.granularity = this.zoom[0];
       this.proxy = new model.GraphProxy();
       this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
+      c.log("adding chart listener");
       $(".chart", this.$result).on("click", (function(_this) {
         return function(event) {
-          var cqp, end, m, opts, start, target, timecqp, val;
+          var cqp, end, m, n_tokens, opts, start, target, timecqp, val, _i, _results;
           target = $(".chart", _this.$result);
           val = $(".detail .x_label > span", target).data("val");
           cqp = $(".detail .item.active > span", target).data("cqp");
-          c.log("chart click", cqp, target);
+          c.log("chart click", cqp, target, _this.s.data.subcqps, _this.s.data.cqp);
           if (cqp) {
             m = moment(val * 1000);
             start = m.format("YYYYMMDD");
             end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
-            timecqp = "(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")";
-            cqp = "[(" + (decodeURIComponent(cqp).slice(1, -1)) + ") & " + timecqp + "]";
+            timecqp = "[(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
+            n_tokens = _this.s.data.cqp.split("]").length - 2;
+            timecqp = ([timecqp].concat(_.map((function() {
+              _results = [];
+              for (var _i = 0; 0 <= n_tokens ? _i < n_tokens : _i > n_tokens; 0 <= n_tokens ? _i++ : _i--){ _results.push(_i); }
+              return _results;
+            }).apply(this), function() {
+              return "[]";
+            }))).join(" ");
             opts = {};
             opts.ajaxParams = {
               start: 0,
               end: 24,
               command: "query",
               corpus: _this.s.data.corpusListing.stringifySelected(),
-              cqp: cqp
+              cqp: _this.s.data.cqp,
+              cqp2: decodeURIComponent(cqp),
+              cqp3: timecqp,
+              expand_prequeries: false
             };
             return safeApply(_this.s.$root, function() {
               return _this.s.$root.kwicTabs.push(opts);

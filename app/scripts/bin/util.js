@@ -604,7 +604,7 @@
 
   util.getLocaleString = function(key) {
     var lang, output;
-    lang = ($("body").scope() ? $("body").scope().lang || "sv" : "sv");
+    lang = search().lang || settings.defaultLanguage || "sv";
     if (loc_data && loc_data[lang]) {
       output = loc_data[lang][key];
     }
@@ -612,25 +612,6 @@
       return key;
     }
     return output;
-  };
-
-  util.initLocalize = function() {
-    return $.localize("init", {
-      packages: ["locale", "corpora"],
-      pathPrefix: "translations",
-      language: ($("body").scope() ? $("body").scope().lang || "sv" : "sv"),
-      callback: function() {
-        var selected;
-        if (this.is(".num_hits")) {
-          selected = this.find("option:selected");
-          c.log("selected", selected, util.getLocaleString(this.data("prefix")) + ": " + selected.text());
-          selected.text(util.getLocaleString(this.data("prefix")) + ": " + selected.text());
-        }
-        this.find("[data-placeholder]").add(this.filter("[data-placeholder]")).each(function() {
-          $(this).attr("placeholder", util.getLocaleString($(this).data("placeholder")));
-        });
-      }
-    });
   };
 
   util.localize = function(root) {

@@ -43,11 +43,17 @@
         }
       ]);
     };
-    s.setupReadingWatch = function() {
+    s.setupReadingWatch = _.once(function() {
+      var init;
+      c.log("setupReadingWatch");
+      init = true;
       return s.$watch("reading_mode", function() {
-        return readingChange();
+        if (!init) {
+          readingChange();
+        }
+        return init = false;
       });
-    };
+    });
     s.toggleReading = function() {
       s.reading_mode = !s.reading_mode;
       return s.instance.centerScrollbar();
@@ -290,9 +296,11 @@
           end: 24,
           ajaxParams: {
             command: "query",
-            cqp: CQP.stringify(cqpobj),
+            cqp: cmp.cqp,
+            cqp2: CQP.stringify(cqpobj),
             corpus: cl.stringifySelected(),
-            show_struct: _.keys(cl.getStructAttrs())
+            show_struct: _.keys(cl.getStructAttrs()),
+            expand_prequeries: false
           }
         };
         return $rootScope.kwicTabs.push(opts);

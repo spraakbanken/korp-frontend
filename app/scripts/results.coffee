@@ -76,9 +76,9 @@ class view.KWICResults extends BaseResults
         @current_page = search().page or 0
 
         @s = scope
-        @s.setupReadingHash()
+        
         @selectionManager = scope.selectionManager
-
+        @setupReadingHash()
         @$result.click =>
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
@@ -92,6 +92,8 @@ class view.KWICResults extends BaseResults
 
         # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
 
+    setupReadingHash : () ->
+        @s.setupReadingHash()
 
     onWordClick : (event) ->
         
@@ -517,19 +519,23 @@ class view.KWICResults extends BaseResults
 
 class view.ExampleResults extends view.KWICResults
     constructor: (tabSelector, resultSelector, scope) ->
+        c.log "ExampleResults constructor", tabSelector, resultSelector, scope
         super tabSelector, resultSelector, scope
         @proxy = new model.KWICProxy()
         # @$result.find(".progress_container,.tab_progress").hide()
         # @$result.add(@$tab).addClass "not_loading customtab"
         # @$result.removeClass "reading_mode"
-        @s.setupReadingWatch()
+        
         if @s.$parent.queryParams
             @makeRequest()
             @onentry()
         @current_page = 0
         # @s.$parent.active = true
 
+    setupReadingHash : () ->
+
     makeRequest: () ->
+        # debugger
         c.log "ExampleResults.makeRequest()", @current_page
         items_per_page = parseInt(@optionWidget.find(".num_hits").val())
         opts = @s.$parent.queryParams
@@ -564,8 +570,12 @@ class view.ExampleResults extends view.KWICResults
         @proxy.makeRequest opts, null, $.noop, $.noop, progress
 
 
+    renderResult : (data) ->
+        super(data)
+        @s.setupReadingWatch()
 
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
+        c.log "exampleresults.handlePaginationClick"
         @current_page = new_page_index
         @makeRequest()
         false
@@ -997,7 +1007,9 @@ class view.StatsResults extends BaseResults
                 end : 24
                 command : "query"
                 corpus : $(this).data("corpora").join(",").toUpperCase()
-                cqp: decodeURIComponent(query)
+                cqp : decodeURIComponent self.proxy.prevParams.cqp
+                cqp2: decodeURIComponent query
+                expand_prequeries : false
             
             safeApply scope.$root, () ->
                 scope.$root.kwicTabs.push opts
@@ -1052,8 +1064,11 @@ class view.StatsResults extends BaseResults
                 if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
-                val = @gridData[cell.parent().index()].hit_value
-                cqp = "[#{prefix + reduceVal} #{op} '#{regescape(val)}']"
+                val = @gridData[cell.parent().index()].hit_value.split(" ")
+                c.log "val", val
+                cqp = ""
+                for v in val
+                    cqp += "[#{prefix + reduceVal} #{op} '#{regescape(v)}'] "
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 
@@ -1259,20 +1274,25 @@ class view.GraphResults extends BaseResults
             @s.data.labelMapping,
             @s.data.showTotal
 
+        c.log "adding chart listener"
+
         $(".chart", @$result).on "click", (event) =>
+
             target = $(".chart", @$result)
             val = $(".detail .x_label > span", target).data "val"
             cqp = $(".detail .item.active > span", target).data("cqp")
-            c.log "chart click", cqp, target
+            c.log "chart click", cqp, target, @s.data.subcqps, @s.data.cqp
             # time =
             if cqp
                 m = moment(val * 1000)
 
                 start = m.format("YYYYMMDD")
                 end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
-                timecqp = "(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})"
-                cqp = "[(#{decodeURIComponent(cqp)[1...-1]}) & #{timecqp}]"
+                timecqp = "[(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
 
+                n_tokens = @s.data.cqp.split("]").length - 2
+
+                timecqp = ([timecqp].concat (_.map [0...n_tokens], () -> "[]")).join(" ")
 
                 opts = {}
                 opts.ajaxParams =
@@ -1280,7 +1300,10 @@ class view.GraphResults extends BaseResults
                     end : 24
                     command : "query"
                     corpus: @s.data.corpusListing.stringifySelected()
-                    cqp : cqp
+                    cqp: @s.data.cqp
+                    cqp2 : decodeURIComponent cqp
+                    cqp3 : timecqp
+                    expand_prequeries : false
 
 
                 safeApply @s.$root, () =>

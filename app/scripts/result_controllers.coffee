@@ -50,9 +50,13 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
                 readingChange()
         ]
 
-    s.setupReadingWatch = () ->
+    s.setupReadingWatch = _.once () ->
+        c.log "setupReadingWatch"
+        init = true
         s.$watch "reading_mode", () ->
-            readingChange()   
+            if not init
+                readingChange()   
+            init = false
 
 
 
@@ -268,9 +272,11 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                 end : 24
                 ajaxParams : 
                     command : "query"
-                    cqp : CQP.stringify cqpobj
+                    cqp : cmp.cqp
+                    cqp2 : CQP.stringify cqpobj
                     corpus : cl.stringifySelected()
                     show_struct : _.keys cl.getStructAttrs()
+                    expand_prequeries : false
 
             }
             $rootScope.kwicTabs.push opts

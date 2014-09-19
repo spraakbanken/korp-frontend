@@ -440,29 +440,11 @@ util.SelectionManager::hasSelected = ->
     @selected.length > 0
 
 util.getLocaleString = (key) ->
-    lang = (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
+    # lang = (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
+    lang = search().lang or settings.defaultLanguage or "sv"
     output = loc_data[lang][key] if loc_data and loc_data[lang]
     return key if not output? and key?
     output
-
-util.initLocalize = ->
-    $.localize "init",
-        packages: [
-            "locale"
-            "corpora"
-        ]
-        pathPrefix: "translations"
-        language: (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
-        callback: ->
-            if @is(".num_hits")
-                selected = @find("option:selected")
-                c.log "selected", selected, util.getLocaleString(@data("prefix")) + ": " + selected.text()
-                selected.text util.getLocaleString(@data("prefix")) + ": " + selected.text()
-            @find("[data-placeholder]").add(@filter("[data-placeholder]")).each ->
-                $(this).attr "placeholder", util.getLocaleString($(this).data("placeholder"))
-                return
-
-            return
 
 
 util.localize = (root) ->

@@ -118,6 +118,19 @@
     fromObj: function(obj) {
       return CQP.parse("[" + obj.type + " " + obj.op + " '" + obj.val + "']");
     },
+    and_merge: function() {
+      var cqpObjs, first, merged, rest, tup, _i, _len, _ref, _ref1, _results;
+      cqpObjs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      _ref = _.zip.apply(_, cqpObjs);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        tup = _ref[_i];
+        first = tup[0], rest = 2 <= tup.length ? __slice.call(tup, 1) : [];
+        merged = (_ref1 = []).concat.apply(_ref1, _.pluck(rest, "and_block"));
+        _results.push(first.and_block = first.and_block.concat(merged));
+      }
+      return _results;
+    },
     concat: function() {
       var cqpObjs, _ref;
       cqpObjs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

@@ -174,6 +174,7 @@
 
     KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
       var corpus, data, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
+      c.log("kwicproxy.makeRequest");
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);

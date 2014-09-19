@@ -87,6 +87,17 @@ window.CQP =
     fromObj : (obj) ->
         CQP.parse "[#{obj.type} #{obj.op} '#{obj.val}']"
 
+    # UNTESTED AND UNUSED
+    and_merge : (cqpObjs...) ->
+
+        for tup in _.zip cqpObjs...
+            [first, rest...] = tup
+            merged = [].concat (_.pluck rest, "and_block")...
+            first.and_block = first.and_block.concat merged
+
+
+
+
     concat : (cqpObjs...) ->
         [].concat cqpObjs...
 

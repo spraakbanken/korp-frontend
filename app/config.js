@@ -3739,9 +3739,12 @@ settings.reduce_stringify = function(type) {
             return _(token.split("|"))
                     .filter(Boolean)
                     .map(function(item) {
-                        var wrapper = $("<div>");
-                        $("<span>").html(util.lemgramToString(item, true)).attr("data-cqp", '[lex contains "' + item + '"]').appendTo(wrapper);
-                        return wrapper.html();
+                        var cqp = "[" + type + " contains '" + item + "']"
+                        // var wrapper = $("<div>");
+                        return $("<span class='link'>").html(util.lemgramToString(item, true))
+                            .attr("data-query", cqp)
+                            .attr("data-corpora", JSON.stringify(corpora))
+                            .outerHTML();
                     })
                     .join(", ");
 
@@ -3756,7 +3759,12 @@ settings.reduce_stringify = function(type) {
         output = _(value.split("|"))
                 .filter(Boolean)
                 .map(function(item) {
-                    return util.saldoToString(item, true);
+                    var cqp = "[saldo contains '" + item + "']"
+                    // return util.saldoToString(item, true);
+                    return $("<span class='link'>").html(util.saldoToString(item, true))
+                        .attr("data-query", cqp)
+                        .attr("data-corpora", JSON.stringify(corpora))
+                        .outerHTML();
                 })
                 .join(", ");
         return appendDiagram(output, corpora, value);

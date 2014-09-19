@@ -130,6 +130,7 @@ class model.KWICProxy extends BaseProxy
         @pendingRequests.pop i unless i is -1
 
     makeRequest: (options, page, callback, successCallback, kwicCallback) ->
+        c.log "kwicproxy.makeRequest"
         self = this
         # unless options.cqp
         #     debugger;
