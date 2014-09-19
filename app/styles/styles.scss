@@ -1052,6 +1052,12 @@ table {
   }
 }
 
+.link_selected {
+  background-color: rgb(68, 85, 150);
+  border-radius : 11px;
+  color : white;
+}
+
 .token_selected {
   color: #fff !important;
   background-color: #666;

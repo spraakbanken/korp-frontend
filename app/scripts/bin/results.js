@@ -98,11 +98,15 @@
         };
       })(this));
       $(document).keydown($.proxy(this.onKeydown, this));
-      this.$result.on("click", ".word", onWordClick);
+      this.$result.on("click", ".word", (function(_this) {
+        return function(event) {
+          return _this.onWordClick(event);
+        };
+      })(this));
     }
 
     KWICResults.prototype.onWordClick = function(event) {
-      var aux, i, l, obj, paragraph, scope, sent, sent_start, word;
+      var obj, scope, sent, word;
       this.s.$root.sidebar_visible = true;
       scope = $(event.currentTarget).scope();
       obj = scope.wd;
@@ -112,6 +116,12 @@
       if ($("#sidebar").data().korpSidebar != null) {
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
       }
+      return this.selectWord(word, scope, sent);
+    };
+
+    KWICResults.prototype.selectWord = function(word, scope) {
+      var aux, i, l, obj, paragraph, sent_start;
+      obj = scope.wd;
       if (obj.dephead == null) {
         scope.selectionManager.select(word, null);
         safeApply(this.s.$root, function(s) {
@@ -136,8 +146,6 @@
         return s.$root.word_selected = word;
       });
     };
-
-    KWICResults.prototype.selectWord = function() {};
 
     KWICResults.prototype.resetView = function() {
       return KWICResults.__super__.resetView.call(this);
@@ -447,6 +455,14 @@
       })(this));
       kwicCallback = $.proxy(this.renderResult, this);
       return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
+    };
+
+    KWICResults.prototype.getActiveData = function() {
+      if (this.isReadingMode()) {
+        return this.s.contextKwic;
+      } else {
+        return this.s.kwic;
+      }
     };
 
     KWICResults.prototype.setPage = function(page) {

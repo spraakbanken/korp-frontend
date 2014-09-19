@@ -89,39 +89,85 @@ $("#num_hits").prepend("<option value='10'>10</option>");
 var c3 = view.KWICResults.prototype.constructor
 view.KWICResults = Subclass(view.KWICResults, function() {
 	c3.apply(this, arguments);
+	this.selected = []
 }, {
 
+	selectWord : function(word, scope, sentence) {
+		c3.prototype.selectWord.apply(this, arguments)
+		this.clearLinks()
+		var self = this
+		var obj = scope.wd
+
+		if(!obj.linkref) return
+
+		var corpus = settings.corpusListing.get(sentence.corpus)
+
+		function findRef(ref, sentence) {
+			var out = null
+			_.each(sentence, function(word) {
+				if(word.linkref == ref.toString()) {
+					out = word
+					return false
+				}
+			})
+			return out
+		}
 
 
-	onWordClick : function(word, sentence) {
-		var data = word.tmplItem().data;
-		c.log ("data", data)
-		var currentSentence = sentence.aligned;
-		if(!currentSentence) currentSentence = sentence;
-		var i = Number(data.dephead);
-		var aux = $(word.closest("tr").find(".word").get(i - 1));
-		this.selectionManager.select(word, aux);
+		if(sentence.isLinked){
+			var sent_index = scope.$parent.$index
+			var data = this.getActiveData()
+			var mainSent = null
+			while(data[sent_index]) {
+			 	var sent = data[sent_index]
+			 	if(!sent.isLinked) {
+			 		mainSent = sent
+			 		break
+			 	}
+				sent_index--
+			}
+ 			c.log( "mainSent", mainSent)
 
-		var isLinked = word.closest("tr").is(".linked_sentence");
-		var corpus = isLinked ? _.keys(sentence.aligned)[0] : sentence.corpus.split("|")[0].toLowerCase();
+ 			var linkNum = Number(obj.linkref)
+ 			var lang = corpus.id.split("-")[1]
+ 			var mainCorpus = mainSent.corpus.split("-")[0]
 
-		this.scrollToShowWord(word);
+			_.each(mainSent.tokens, function(token) {
+				var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
+				if(_.contains(refs, linkNum)) {
+					token._link_selected = true
+					self.selected.push(token)
+				}
+			})
 
-		$("#sidebar").sidebar("updateContent", isLinked ? {} : sentence.structs, data, corpus);
+		} else {
+			var links = _.pick(obj, function(val, key) {
+				return _.str.startsWith(key, "wordlink")
+			})
+			_.each(links, function(val, key) {
+				var wordsToLink = _.each(_.compact(val.split("|")), function(num) {
+					var lang = key.split("-")[1]
+					var mainCorpus = corpus.id.split("-")[0]
+					c.log ("corpus.id", corpus.id)
+
+					var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
+					link._link_selected = true
+					self.selected.push(link)
+					
+				})
+			})
+
+		}
+
+		scope.$apply()
 	},
 
-	// renderKwicResult : function(data, sourceCQP) {
-	// 	var self = this;
-	// 	this.renderResult(".results_table.kwic", data, sourceCQP).done(function() {
-	// 		var offset = $(".table_scrollarea").scrollLeft(0);
-	// 		$(".linked_sentence span:first-child").each(function(i, linked) {
-	// 			var mainLeft = $(linked).closest("tr").prev().find("span:first").offset().left;
-	// 			$(linked).parent().css("padding-left", Math.round(mainLeft));
-	// 		});
-	// 		self.centerScrollbar();
-	// 	});
-	// }
-
+	clearLinks : function() {
+		_.each(this.selected, function(word) {
+			delete word._link_selected
+		})
+		this.selected = []
+	}
 });
 
 model.StatsProxy.prototype.makeRequest = function(){};

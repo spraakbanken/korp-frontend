@@ -13,7 +13,8 @@
           output = {
             reading_match: wd._match,
             punct: wd._punct,
-            match_sentence: wd._matchSentence
+            match_sentence: wd._matchSentence,
+            link_selected: wd._link_selected
           };
           _ref = wd._struct || [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {

@@ -87,7 +87,7 @@ class view.KWICResults extends BaseResults
 
         $(document).keydown $.proxy(@onKeydown, this)
 
-        @$result.on "click", ".word", onWordClick
+        @$result.on "click", ".word", (event) => @onWordClick(event)
 
 
         # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
@@ -104,12 +104,15 @@ class view.KWICResults extends BaseResults
         event.stopPropagation()
         word = $(event.target)
         # $.sm.send("word.select")
-
-
-
         if $("#sidebar").data().korpSidebar?
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
+        
+        @selectWord word, scope, sent
 
+
+
+    selectWord : (word, scope) ->
+        obj = scope.wd
         if not obj.dephead?
             scope.selectionManager.select word, null
             safeApply @s.$root, (s) ->
@@ -131,8 +134,6 @@ class view.KWICResults extends BaseResults
         scope.selectionManager.select word, aux
         safeApply @s.$root, (s) ->
             s.$root.word_selected = word
-
-    selectWord : () ->
         
 
 
@@ -386,6 +387,19 @@ class view.KWICResults extends BaseResults
                            (if isReading then $.noop else $.proxy(@onProgress, this)),
                            $.proxy(@renderCompleteResult, this),
                            kwicCallback
+
+    getActiveData : () ->
+
+        if @isReadingMode()
+            @s.contextKwic
+        else
+            @s.kwic
+
+    # eachWord : (f) ->
+    #     for s in @getActiveData()
+    #         for w in s.tokens
+    #             f(w)
+    #         for w in (_.flatten _.values s.aligned)
 
 
     setPage: (page) ->
