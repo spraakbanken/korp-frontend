@@ -3727,48 +3727,44 @@ settings.reduce_stringify = function(type) {
                 .html(output.join(" "))
             return appendDiagram(link.outerHTML(), corpora, value);
         };
+    case "saldo":
     case "prefix":
     case "suffix":
     case "lex":
         return function(row, cell, value, columnDef, dataContext) {
-        var corpora = getCorpora(dataContext);
-        if(value == "&Sigma;") return appendDiagram(value, corpora, value);
-        // else if(value == "|") return "-";
-        output = _.map(value.split(" "), function(token) {
-            if(token == "|") return "–";
-            return _(token.split("|"))
+            var corpora = getCorpora(dataContext);
+            if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+            // else if(value == "|") return "-";
+
+            var stringify = type == "saldo" ? util.saldoToString : util.lemgramToString;
+            
+            var html = _.map(value[0].split(" "), function(token) {
+                if(token == "|") return "–";
+                return _(token.split("|"))
                     .filter(Boolean)
                     .map(function(item) {
-                        var cqp = "[" + type + " contains '" + item + "']"
-                        // var wrapper = $("<div>");
-                        return $("<span class='link'>").html(util.lemgramToString(item, true))
-                            .attr("data-query", cqp)
-                            .attr("data-corpora", JSON.stringify(corpora))
-                            .outerHTML();
+                        return stringify(item.replace(/:\d+/g, ""), true)
                     })
                     .join(", ");
+            });
 
-        });
-        return appendDiagram(output.join(" "), corpora, value);
+
+            var cqp = _.map(_.zip.apply(null, _.invoke(value, "split", " ")), function(tup) {
+                return "[" + _.map(_.uniq(tup), function(item) {
+                    return "(" + type + " contains '" + item + "')"    
+                }).join(" | ") + "]"
+
+            }).join(" ")
+
+            
+            output = $("<span class='link'>")
+                .attr("data-query", cqp)
+                .attr("data-corpora", JSON.stringify(corpora))
+                .append(html.join(" ")).outerHTML()
+
+            return appendDiagram(output, corpora, value);
         };
-    case "saldo":
-        return function(row, cell, value, columnDef, dataContext) {
-        var corpora = getCorpora(dataContext);
-        if(value == "&Sigma;") return appendDiagram(value, corpora, value);
-        else if(value == "|") return "-";
-        output = _(value.split("|"))
-                .filter(Boolean)
-                .map(function(item) {
-                    var cqp = "[saldo contains '" + item + "']"
-                    // return util.saldoToString(item, true);
-                    return $("<span class='link'>").html(util.saldoToString(item, true))
-                        .attr("data-query", cqp)
-                        .attr("data-corpora", JSON.stringify(corpora))
-                        .outerHTML();
-                })
-                .join(", ");
-        return appendDiagram(output, corpora, value);
-        };
+    
     case "deprel":
         return function(row, cell, value, columnDef, dataContext) {
             var corpora = getCorpora(dataContext);

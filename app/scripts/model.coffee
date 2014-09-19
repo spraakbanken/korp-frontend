@@ -453,24 +453,47 @@ class model.StatsProxy extends BaseProxy
 
                 wordArray = $.keys(data.total.absolute)
 
+                valueGetter = (obj, word) ->
+                    return obj[word]
+
+                wordGetter = (word) ->
+                    return word
+
+                if reduceval in ["lex", "saldo", "baseform"]
+                    groups = _.groupBy wordArray, (item) ->
+                        item.replace(/:\d+/g, "")
+
+
+
+                    combinedWordArray = _.keys groups
+                    c.log "combinedWordArray", combinedWordArray
+                    c.log "groups", groups
+                    add = (a, b) -> a + b
+                        
+                    valueGetter = (obj, word) ->
+                        _.reduce (_.map groups[word], (wd) -> obj[wd]), add
+                    
+                    wordGetter = (word) ->
+                        groups[word]
+
+                    # c.log "combined", wordArray.length, _.keys(combined).length, combined
+
+
                 dataset = [totalRow]
 
-                # t = $.now()
-                # $.each wordArray, (i, word) ->
-
-                for word, i in wordArray
+                for word, i in (combinedWordArray or wordArray)
                     row =
                         id: "row" + i
-                        hit_value: word
+                        hit_value: wordGetter word
                         total_value:
-                            absolute: data.total.absolute[word]
-                            relative: data.total.relative[word]
+                            absolute: (valueGetter data.total.absolute, word)
+                            relative: valueGetter data.total.relative, word
 
                     # $.each data.corpora, (corpus, obj) ->
                     for corpus, obj of data.corpora
                         row[corpus + "_value"] =
-                            absolute: obj.absolute[word]
-                            relative: obj.relative[word]
+                            absolute: (valueGetter obj.absolute, word)
+                            relative: (valueGetter obj.relative, word)
                     dataset[i+1] = row
 
                 statsResults.savedData = data

@@ -1064,11 +1064,12 @@ class view.StatsResults extends BaseResults
                 if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
-                val = @gridData[cell.parent().index()].hit_value.split(" ")
-                c.log "val", val
-                cqp = ""
-                for v in val
-                    cqp += "[#{prefix + reduceVal} #{op} '#{regescape(v)}'] "
+                c.log "clicked val", cell.next().find(" > .link").data("query")
+                cqp = cell.next().find(" > .link").data("query")
+                # val = @gridData[cell.parent().index()].hit_value.split(" ")
+                # cqp = ""
+                # for v in val
+                #     cqp += "[#{prefix + reduceVal} #{op} '#{regescape(v)}'] "
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 

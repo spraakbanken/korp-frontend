@@ -1179,7 +1179,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, v, val, _i, _j, _len, _len1, _ref, _ref1;
+          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, _i, _len, _ref, _ref1;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1202,13 +1202,8 @@
               showTotal = true;
               continue;
             }
-            val = _this.gridData[cell.parent().index()].hit_value.split(" ");
-            c.log("val", val);
-            cqp = "";
-            for (_j = 0, _len1 = val.length; _j < _len1; _j++) {
-              v = val[_j];
-              cqp += "[" + (prefix + reduceVal) + " " + op + " '" + (regescape(v)) + "'] ";
-            }
+            c.log("clicked val", cell.next().find(" > .link").data("query"));
+            cqp = cell.next().find(" > .link").data("query");
             subExprs.push(cqp);
             labelMapping[cqp] = cell.next().text();
           }

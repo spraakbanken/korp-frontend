@@ -488,7 +488,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, corpus, dataset, i, minWidth, obj, row, totalRow, word, wordArray, _i, _len, _ref1;
+          var add, columns, combinedWordArray, corpus, dataset, groups, i, minWidth, obj, row, totalRow, valueGetter, word, wordArray, wordGetter, _i, _len, _ref1, _ref2;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             statsResults.resultError(data);
@@ -531,23 +531,49 @@
             return totalRow[corpus + "_value"] = obj.sums;
           });
           wordArray = $.keys(data.total.absolute);
+          valueGetter = function(obj, word) {
+            return obj[word];
+          };
+          wordGetter = function(word) {
+            return word;
+          };
+          if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
+            groups = _.groupBy(wordArray, function(item) {
+              return item.replace(/:\d+/g, "");
+            });
+            combinedWordArray = _.keys(groups);
+            c.log("combinedWordArray", combinedWordArray);
+            c.log("groups", groups);
+            add = function(a, b) {
+              return a + b;
+            };
+            valueGetter = function(obj, word) {
+              return _.reduce(_.map(groups[word], function(wd) {
+                return obj[wd];
+              }), add);
+            };
+            wordGetter = function(word) {
+              return groups[word];
+            };
+          }
           dataset = [totalRow];
-          for (i = _i = 0, _len = wordArray.length; _i < _len; i = ++_i) {
-            word = wordArray[i];
+          _ref1 = combinedWordArray || wordArray;
+          for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+            word = _ref1[i];
             row = {
               id: "row" + i,
-              hit_value: word,
+              hit_value: wordGetter(word),
               total_value: {
-                absolute: data.total.absolute[word],
-                relative: data.total.relative[word]
+                absolute: valueGetter(data.total.absolute, word),
+                relative: valueGetter(data.total.relative, word)
               }
             };
-            _ref1 = data.corpora;
-            for (corpus in _ref1) {
-              obj = _ref1[corpus];
+            _ref2 = data.corpora;
+            for (corpus in _ref2) {
+              obj = _ref2[corpus];
               row[corpus + "_value"] = {
-                absolute: obj.absolute[word],
-                relative: obj.relative[word]
+                absolute: valueGetter(obj.absolute, word),
+                relative: valueGetter(obj.relative, word)
               };
             }
             dataset[i + 1] = row;
