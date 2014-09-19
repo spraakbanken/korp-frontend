@@ -103,16 +103,16 @@ pie_widget =
 
         r = Raphael(@options.container_id)
         @canvas = r
-        pieTrack = new Array()
+        pieTrack = []
         pieTrack["accumulatedArc"] = 0
         pieTrack["lastArcX"] = 0
         pieTrack["lastArcY"] = 0
-        SVGArcObjects = new Array()
+        SVGArcObjects = []
         first = true
         for fvalue in pieparts
             partOfTotal = fvalue["share"]
             unless partOfTotal is 0
-                bufferPieTrack = new Array()
+                bufferPieTrack = []
                 bufferPieTrack["accumulatedArc"] = pieTrack["accumulatedArc"]
                 bufferPieTrack["lastArcX"] = pieTrack["lastArcX"]
                 bufferPieTrack["lastArcY"] = pieTrack["lastArcY"]
@@ -176,7 +176,7 @@ pie_widget =
             total += fvalue["value"]
 
         # Piece of cake!
-        piePieceDefinitions = new Array()
+        piePieceDefinitions = []
         acc = 0
         colorCount = 0
         for fvalue in sortedData

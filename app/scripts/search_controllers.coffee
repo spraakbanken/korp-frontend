@@ -247,7 +247,10 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
 korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
-    $scope.cqp = "[]"
+    if $location.search().search?.split("|")[0] == "cqp" 
+        $scope.cqp = $location.search().search.split("|")[1] or "[]"
+    else
+        $scope.cqp = "[]"
     $scope.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
             label : name or $rootScope.activeCQP

@@ -931,7 +931,7 @@ newDataInGraph = (dataName, horizontalDiagram) ->
         statsSwitchInstance = $("#statistics_switch").radioList(
             change: ->
                 typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
-                dataItems = new Array()
+                dataItems = []
                 dataName = statsResults["lastDataName"]
                 $.each statsResults.savedData["corpora"], (corpus, obj) ->
                     if dataName is "SIGMA_ALL"
@@ -1057,19 +1057,12 @@ class view.StatsResults extends BaseResults
             attrs = _.extend {}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector),
                  cl.getStructAttrs(settings.reduce_word_attribute_selector)
 
-            op = if attrs[reduceVal]?.type == "set" then "contains" else "="
-
             for chk in @$result.find(".slick-cell-checkboxsel :checked")
                 cell = $(chk).parent()
                 if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
-                c.log "clicked val", cell.next().find(" > .link").data("query")
                 cqp = cell.next().find(" > .link").data("query")
-                # val = @gridData[cell.parent().index()].hit_value.split(" ")
-                # cqp = ""
-                # for v in val
-                #     cqp += "[#{prefix + reduceVal} #{op} '#{regescape(v)}'] "
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 

@@ -125,17 +125,17 @@
       };
       r = Raphael(this.options.container_id);
       this.canvas = r;
-      pieTrack = new Array();
+      pieTrack = [];
       pieTrack["accumulatedArc"] = 0;
       pieTrack["lastArcX"] = 0;
       pieTrack["lastArcY"] = 0;
-      SVGArcObjects = new Array();
+      SVGArcObjects = [];
       first = true;
       for (_i = 0, _len = pieparts.length; _i < _len; _i++) {
         fvalue = pieparts[_i];
         partOfTotal = fvalue["share"];
         if (partOfTotal !== 0) {
-          bufferPieTrack = new Array();
+          bufferPieTrack = [];
           bufferPieTrack["accumulatedArc"] = pieTrack["accumulatedArc"];
           bufferPieTrack["lastArcX"] = pieTrack["lastArcX"];
           bufferPieTrack["lastArcY"] = pieTrack["lastArcY"];
@@ -204,7 +204,7 @@
         fvalue = sortedData[_i];
         total += fvalue["value"];
       }
-      piePieceDefinitions = new Array();
+      piePieceDefinitions = [];
       acc = 0;
       colorCount = 0;
       for (_j = 0, _len1 = sortedData.length; _j < _len1; _j++) {

@@ -178,7 +178,7 @@
               </select>
             </div>
             <div><span rel="localize[statistics]">Statistik </span>: <span id="reduceSelect"></span></div>
-            <div>
+            <div ng-show="settings.wordpicture !== false">
               <input id="word_pic" type="checkbox" ng-model="word_pic">
               <label for="word_pic">{{'show_word_pic' | loc}}</label>
             </div>

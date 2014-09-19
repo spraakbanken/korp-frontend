@@ -1062,7 +1062,7 @@
         change: function() {
           var loc, typestring;
           typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
-          dataItems = new Array();
+          dataItems = [];
           dataName = statsResults["lastDataName"];
           $.each(statsResults.savedData["corpora"], function(corpus, obj) {
             var freq, totfreq;
@@ -1179,7 +1179,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, op, params, prefix, reduceVal, showTotal, subExprs, _i, _len, _ref, _ref1;
+          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, _i, _len, _ref;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1193,16 +1193,14 @@
           mainCQP = params.cqp;
           prefix = isStructAttr ? "_." : "";
           attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
-          op = ((_ref = attrs[reduceVal]) != null ? _ref.type : void 0) === "set" ? "contains" : "=";
-          _ref1 = _this.$result.find(".slick-cell-checkboxsel :checked");
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            chk = _ref1[_i];
+          _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            chk = _ref[_i];
             cell = $(chk).parent();
             if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
               showTotal = true;
               continue;
             }
-            c.log("clicked val", cell.next().find(" > .link").data("query"));
             cqp = cell.next().find(" > .link").data("query");
             subExprs.push(cqp);
             labelMapping[cqp] = cell.next().text();

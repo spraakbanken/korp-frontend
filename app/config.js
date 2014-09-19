@@ -3777,14 +3777,24 @@ settings.reduce_stringify = function(type) {
             return appendDiagram(output, corpora, value);
 
         };
-    default:
+    default: // structural attributes
         return function(row, cell, value, columnDef, dataContext) {
             var corpora = getCorpora(dataContext);
+            var cl = settings.corpusListing.subsetFactory(corpora)
             var query = $.map(dataContext.hit_value.split(" "), function(item) {
-                return $.format('[%s="%s"]', [value, item]);
+                return $.format('[_.%s="%s"]', [type, item]);
             }).join(" ");
-            output = $.format("<span data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
-                    [query, JSON.stringify(corpora),"deprel_" + value, util.getLocaleString(value)]);
+
+            // if(type in cl.getStructAttrs())
+            var attrObj = cl.getStructAttrs()[type]
+
+            var prefix = ""
+            if(!_.isUndefined(attrObj) && value != "&Sigma;" )
+                prefix = attrObj.translationKey
+
+
+            output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
+                    [query, JSON.stringify(corpora), prefix + value, util.getLocaleString(prefix + value)]);
             if(value == "&Sigma;") return appendDiagram(output, corpora, value);
 
             return appendDiagram(output, corpora, value);

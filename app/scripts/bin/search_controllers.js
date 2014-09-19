@@ -235,7 +235,12 @@
   });
 
   korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
-    $scope.cqp = "[]";
+    var _ref;
+    if (((_ref = $location.search().search) != null ? _ref.split("|")[0] : void 0) === "cqp") {
+      $scope.cqp = $location.search().search.split("|")[1] || "[]";
+    } else {
+      $scope.cqp = "[]";
+    }
     $scope.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
         label: name || $rootScope.activeCQP,

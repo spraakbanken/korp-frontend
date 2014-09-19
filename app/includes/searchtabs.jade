@@ -64,6 +64,6 @@ div(ng-controller="SearchCtrl")
       span(rel='localize[statistics]') Statistik 
       | : 
       span#reduceSelect
-    div
+    div(ng-show="settings.wordpicture !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")
       label(for="word_pic") {{'show_word_pic' | loc}}
