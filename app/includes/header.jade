@@ -26,6 +26,8 @@
       a.follow_link(href='http://spraakbanken.gu.se/korp/annoteringslabbet', rel='localize[import_chain]')
     li#login
       a(href='javascript:', rel='localize[log_in]')
+  #news_area
+    div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
   #log_out.link
     span 
       | {{'log_out' | loc}}   

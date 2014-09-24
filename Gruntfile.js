@@ -30,10 +30,10 @@ module.exports = function (grunt) {
       dist: 'dist'
     },
     watch: {
-      bower: {
-        files: ['bower.json'],
-        tasks: ['bowerInstall']
-      },
+      //bower: {
+      //  files: ['bower.json'],
+      //  tasks: ['bowerInstall']
+      //},
       jade : {
         files : ["<%= yeoman.app %>/index.jade", "<%= yeoman.app %>/{includes,views}/*.jade"],
         tasks : ['jade:compile']
@@ -426,7 +426,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'bowerInstall',
+      //'bowerInstall',
       'jade',
       'concurrent:server',
       'copy:dev',

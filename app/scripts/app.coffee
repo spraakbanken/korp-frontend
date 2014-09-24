@@ -10,6 +10,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "uiSlider"
                                             "ui.sortable"
                                             "pasvaz.bindonce"
+                                            "newsdesk"
                                         ])
 
 # korpApp.controller "kwicCtrl", ($scope) ->

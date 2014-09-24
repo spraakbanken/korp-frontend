@@ -318,14 +318,13 @@
     }
 
     ParallelCorpusListing.prototype.select = function(idArray) {
+      var _this = this;
       this.selected = [];
-      $.each(idArray, (function(_this) {
-        return function(i, id) {
-          var corp;
-          corp = _this.struct[id];
-          return _this.selected = _this.selected.concat(_this.getLinked(corp, true, false));
-        };
-      })(this));
+      $.each(idArray, function(i, id) {
+        var corp;
+        corp = _this.struct[id];
+        return _this.selected = _this.selected.concat(_this.getLinked(corp, true, false));
+      });
       return this.selected = _.unique(this.selected);
     };
 
@@ -378,7 +377,8 @@
     };
 
     ParallelCorpusListing.prototype.getEnabledByLang = function(lang, andSelf, flatten) {
-      var corps, output;
+      var corps, output,
+        _this = this;
       if (andSelf == null) {
         andSelf = false;
       }
@@ -388,11 +388,9 @@
       corps = _.filter(this.selected, function(item) {
         return item["lang"] === lang;
       });
-      output = _(corps).map((function(_this) {
-        return function(item) {
-          return _this.getLinked(item, andSelf);
-        };
-      })(this)).value();
+      output = _(corps).map(function(item) {
+        return _this.getLinked(item, andSelf);
+      }).value();
       if (flatten) {
         return _.flatten(output);
       } else {
@@ -1038,4 +1036,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=util.js.map
+/*
+//@ sourceMappingURL=util.js.map
+*/

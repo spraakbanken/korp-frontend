@@ -18,6 +18,7 @@ settings.struct_attribute_selector = "union"
 settings.reduce_word_attribute_selector = "union" 
 settings.reduce_struct_attribute_selector = "intersection"
 
+settings.news_desk_url = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_news/json/korpnews.json";
 
 settings.wordpictureTagset = {
     // supported pos-tags

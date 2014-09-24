@@ -1617,7 +1617,7 @@ class view.GraphResults extends BaseResults
                         for cell in series[0].data
                             header.push moment(cell.x * 1000).format("YYYY")
 
-                        output = [header]
+                        #output = [header]
 
                         for row in series
                             cells = [ if row.name is "&Sigma;" then "Σ" else row.name ]
@@ -1629,13 +1629,26 @@ class view.GraphResults extends BaseResults
                                     cells.push row.abs_data[i].y
                             output.push cells
                         
-                        output = _.invoke output, "join", dataDelimiter
-                        output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
+                        #output = _.invoke output, "join", dataDelimiter
+                        #output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
                         
-                        if selType is "TSV"
-                            window.open "data:text/tsv;charset=utf-8," + (output)
-                        else
-                            window.open "data:text/csv;charset=utf-8," + (output)
+                        #if selType is "TSV"
+                        #    window.open "data:text/tsv;charset=utf-8," + (output)
+                        #else
+                        #    window.open "data:text/csv;charset=utf-8," + (output)
+
+                        csv = new CSV(output, {
+                            header : header
+                            delimiter : dataDelimiter
+                            # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
+                        })
+                        csvstr = csv.encode()
+                        blob = new Blob([csvstr], { type: "text/#{selType}"})
+                        csvUrl = URL.createObjectURL(blob)
+                        $("#exportButton", @$result).attr({
+                            download : "export.#{selType}"
+                            href : csvUrl    
+                        })
 
                 unless val == "table"
                     graph.setRenderer val

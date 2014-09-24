@@ -2342,3 +2342,85 @@ line.tick {
 .dropdown-menu {
   border-radius: 2px;
 }
+
+
+
+/* ----------- Newsdesk ----------- */
+
+#news_area {
+    float:right;
+    margin-right:4px;
+}
+.newsdesk-new-news {
+    font-weight:bold;
+    color:#428bca;
+}
+.newsdesk-new-news div {
+    background-color:red;
+    color:red;
+    position:relative;
+    background:#ff0000;
+}
+.newsdesk-new-news div:after {
+    right:100%;
+    top:50%;
+    border:solid transparent;
+    content:" ";
+    height:0;
+    width:0;
+    position: absolute;
+    pointer-events:none;
+    border-color:rgba(255, 0, 0, 0);
+    border-right-color: #ff0000;
+    border-width:4px;
+    margin-top:-4px;
+}
+.newsdesk-no-new-news {
+    font-weight:normal;
+    color: #ddd;
+}
+.newsdesk-no-new-news div {
+    background-color:#ddd;
+}
+.newsdesk-new-news-item {
+    background-color:#ffeeee;
+    border-radius:5px;
+}
+.newsdesk-new-news-item h4 {
+    color:red;
+}
+.newsdesk-popover {
+    width:480px;
+    max-width:480px;
+    max-height:95%;
+    overflow:scroll;
+}
+.newsdesk-bell {
+    float:left;
+    margin-top:4px;
+    margin-right:3px
+}
+.newsdesk-arrow-box {
+    float:left;
+    padding-left:4px;
+    padding-right:4px;
+    border-radius:3px;
+}
+.newsdesk-arrow-box span {
+    color:#fff;
+}
+.newsdesk-news-item {
+    padding-left:4px;
+    margin-bottom:4px;
+}
+.newsdesk-opener {
+    cursor:pointer;
+}
+.newsdesk-around-items {
+    margin:10px;
+    width:460px;
+}
+.newsdesk-item-date {
+    font-style:italic;
+    color:gray;
+}

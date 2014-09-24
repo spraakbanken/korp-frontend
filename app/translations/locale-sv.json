@@ -264,5 +264,7 @@
  	"swedbergm" : "1600-tal",
  	"fsvm" : "fornsvenska",
         "kioping_texts" : "Kiöpings resor",
-         "runeberg" : "Runebergtidskrifter"
+         "runeberg" : "Runebergtidskrifter",
+
+    "newsdesk-header" : "Nyheter"
 }

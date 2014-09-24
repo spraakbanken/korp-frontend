@@ -263,5 +263,7 @@
     "swedbergm" : "17th century",
     "fsvm" : "old swedish",
     "kioping_texts" : "Kiöping's book of travel",
-    "runeberg" : "Runeberg journal"
+    "runeberg" : "Runeberg journal",
+
+    "newsdesk-header" : "News"
 }

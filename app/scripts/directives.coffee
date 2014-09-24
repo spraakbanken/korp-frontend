@@ -499,3 +499,17 @@ korpApp.directive "clickCover", () ->
             else
                 cover.remove()
                 elem.css("position", pos).removeClass("covered")
+
+korpApp.directive 'toBody', ($compile) ->
+    restrict : "A"
+    compile : (elm, attrs) ->
+        elm.remove()
+        elm.attr("to-body", null)
+        wrapper = $("<div>").append(elm)
+        cmp = $compile(wrapper.html())
+
+        return (scope, iElement, iAttrs) ->
+            newElem = cmp(scope)
+            $("body").append(newElem)
+            scope.$on "$destroy", () ->
+                newElem.remove()

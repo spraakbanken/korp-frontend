@@ -537,6 +537,29 @@
     };
   });
 
+  korpApp.directive('toBody', function($compile) {
+    return {
+      restrict: "A",
+      compile: function(elm, attrs) {
+        var cmp, wrapper;
+        elm.remove();
+        elm.attr("to-body", null);
+        wrapper = $("<div>").append(elm);
+        cmp = $compile(wrapper.html());
+        return function(scope, iElement, iAttrs) {
+          var newElem;
+          newElem = cmp(scope);
+          $("body").append(newElem);
+          return scope.$on("$destroy", function() {
+            return newElem.remove();
+          });
+        };
+      }
+    };
+  });
+
 }).call(this);
 
-//# sourceMappingURL=directives.js.map
+/*
+//@ sourceMappingURL=directives.js.map
+*/
