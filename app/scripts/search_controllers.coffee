@@ -116,7 +116,10 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     s.$watch "cqp", (val) ->
         c.log "cqp change", val
         unless val then return
-        $rootScope.activeCQP = CQP.expandOperators(val)
+        try 
+            $rootScope.activeCQP = CQP.expandOperators(val)
+        catch e
+            c.log "cqp parse error:", e
         $location.search("cqp", val)
 
 

@@ -1781,7 +1781,7 @@
               $(".exportTimeStatsSection", _this.$result).show();
               $(".timeExportButton", _this.$result).unbind("click");
               $(".timeExportButton", _this.$result).click(function() {
-                var cell, cells, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
+                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
                 selVal = $(".timeKindOfData option:selected", _this.$result).val();
                 selType = $(".timeKindOfFormat option:selected", _this.$result).val();
                 dataDelimiter = selType === "TSV" ? "%09" : ";";
@@ -1791,7 +1791,6 @@
                   cell = _ref3[_l];
                   header.push(moment(cell.x * 1000).format("YYYY"));
                 }
-                output = [header];
                 for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
                   row = series[_m];
                   cells = [row.name === "&Sigma;" ? "Σ" : row.name];
@@ -1807,13 +1806,19 @@
                   }
                   output.push(cells);
                 }
-                output = _.invoke(output, "join", dataDelimiter);
-                output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)));
-                if (selType === "TSV") {
-                  return window.open("data:text/tsv;charset=utf-8," + output);
-                } else {
-                  return window.open("data:text/csv;charset=utf-8," + output);
-                }
+                csv = new CSV(output, {
+                  header: header,
+                  delimiter: dataDelimiter
+                });
+                csvstr = csv.encode();
+                blob = new Blob([csvstr], {
+                  type: "text/" + selType
+                });
+                csvUrl = URL.createObjectURL(blob);
+                return $("#exportButton", _this.$result).attr({
+                  download: "export." + selType,
+                  href: csvUrl
+                });
               });
             }
             if (val !== "table") {

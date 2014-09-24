@@ -1,7 +1,7 @@
 (function() {
   angular.module('newsdesk', []).directive("newsDesk", function($window, $document, $rootElement, $http, $location) {
     return {
-      template: '<div>\n    <div ng-if="shouldUseThis()" class="newsdesk-opener" ng-click="togglePopover($event)" ng-class="{\'newsdesk-new-news\': numNewNews != 0, \'newsdesk-no-new-news\' : numNewNews == 0}">\n        <i class="fa fa-bell newsdesk-bell"></i>\n        <div class="newsdesk-arrow-box">\n            <span>{{numNewNews}}</span>\n        </div>\n    </div>\n    <div class="popover newsdesk-popover" ng-click="onPopoverClick($event)" to-body>\n        <div class="arrow"></div>\n        <h2 class="popover-title">{{header | loc}}<span style="float:right;cursor:pointer">×</span></h2>\n        <div class="newsdesk-around-items">\n            <div class="newsdesk-news-item" ng-repeat="item in newsitems" ng-class="{\'newsdesk-new-news-item\': (item.d > lastChecked)}">\n                <h4>{{item.t[currentLang]}}</h4>\n                <span class="newsdesk-item-date">{{item.d}}</span>\n                <div ng-bind-html="item.h[currentLang] | trust"></div>\n            </div>\n        </div>\n    </div>\n</div>',
+      template: '<div>\n    <div ng-if="shouldUseThis()" class="newsdesk-opener" ng-click="togglePopover($event)" ng-class="{\'newsdesk-new-news\': numNewNews != 0, \'newsdesk-no-new-news\' : numNewNews == 0}">\n        <i class="fa fa-bell newsdesk-bell"></i>\n        <div class="newsdesk-arrow-box">\n            <span>{{numNewNews}}</span>\n        </div>\n    </div>\n    <div class="popover newsdesk-popover" ng-click="onPopoverClick($event)" to-body>\n        <div class="arrow"></div>\n        <h2 class="popover-title">{{header | loc}}<span style="float:right;cursor:pointer" ng-click="popHide()">×</span></h2>\n        <div class="newsdesk-around-items">\n            <div class="newsdesk-news-item" ng-repeat="item in newsitems" ng-class="{\'newsdesk-new-news-item\': (item.d > lastChecked)}">\n                <h4>{{item.t[currentLang]}}</h4>\n                <span class="newsdesk-item-date">{{item.d}}</span>\n                <div ng-bind-html="item.h[currentLang] | trust"></div>\n            </div>\n        </div>\n    </div>\n</div>',
       restrict: "EA",
       replace: true,
       scope: {
@@ -15,6 +15,9 @@
           return settings.news_desk_url != null;
         };
         if (s.shouldUseThis()) {
+          s.onPopoverClick = function(event) {
+            return event.stopPropagation();
+          };
           s.newsitems = [];
           s.initData = function() {
             s.lastChecked = localStorage.getItem(s.storage) || "0000-00-00";
@@ -52,7 +55,7 @@
                 });
               },
               error: function(e) {
-                return console.log("error, couldn't get news", e.message);
+                return console.log("error, couldn't fetch news", e.message);
               }
             });
           };

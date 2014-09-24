@@ -2,7 +2,7 @@
   "name": "Korp",
   "version": "2.0",
   "dependencies": {
-    "angular": "v1.3.0-beta.7",
+    "angular": "v1.3.0-beta.11",
     "es5-shim": "~2.0.8",
     "jquery-ui": "~1.10.2",
     "raphael": "~2.1.0",
