@@ -12703,8 +12703,7 @@ line.tick {
 }
 
 .newsdesk-popover {
-  width: 480px;
-  max-width: 480px;
+  width: 440px;
   max-height: 95%;
   overflow: scroll;
 }
@@ -12715,7 +12714,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032398;
+    font-family: \000032397;
   }
 }
 
@@ -12731,7 +12730,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032403;
+    font-family: \000032402;
   }
 }
 
@@ -12748,7 +12747,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032409;
+    font-family: \000032408;
   }
 }
 
@@ -12762,7 +12761,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032412;
+    font-family: \000032411;
   }
 }
 
@@ -12777,7 +12776,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032416;
+    font-family: \000032415;
   }
 }
 
@@ -12791,13 +12790,12 @@ line.tick {
   }
 
   line {
-    font-family: \000032419;
+    font-family: \000032418;
   }
 }
 
 .newsdesk-around-items {
   margin: 10px;
-  width: 460px;
 }
 
 @media -sass-debug-info {
@@ -12806,7 +12804,7 @@ line.tick {
   }
 
   line {
-    font-family: \000032423;
+    font-family: \000032421;
   }
 }
 

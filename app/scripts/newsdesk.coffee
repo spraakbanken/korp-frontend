@@ -8,7 +8,7 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
             <i class="fa fa-bell newsdesk-bell"></i>
             <div class="newsdesk-arrow-box">
                 <span>{{numNewNews}}</span>
-            </div>
+            </div>&nbsp;
         </div>
         <div class="popover newsdesk-popover" ng-click="onPopoverClick($event)" to-body>
             <div class="arrow"></div>
