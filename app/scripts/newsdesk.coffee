@@ -32,6 +32,8 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
             return settings.news_desk_url?
 
         if s.shouldUseThis()
+            s.onPopoverClick = (event) ->
+                event.stopPropagation()
             s.newsitems = []
             s.initData = () ->
                 s.lastChecked = localStorage.getItem(s.storage) or "0000-00-00"
@@ -51,7 +53,7 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
                                 n += 1
                         s.$apply(() -> s.numNewNews = n)
                     error: (e) ->
-                       console.log "error, couldn't get news", e.message
+                       console.log "error, couldn't fetch news", e.message
                 });
 
             s.currentLang = $location.search().lang or "sv"
