@@ -2392,7 +2392,7 @@ line.tick {
 .newsdesk-popover {
     width:440px;
     max-height:95%;
-    overflow:scroll;
+    overflow-y : auto;
 }
 .newsdesk-bell {
     float:left;
