@@ -140,6 +140,7 @@
     "fra" : "french",
     "ita" : "italian",
     "por" : "portuguese",
+	"rus": "russian",
 	"statistics" : "Statistics",
 	"word_picture" : "Word picture",
 	"sort_default" : "sort within corpora",

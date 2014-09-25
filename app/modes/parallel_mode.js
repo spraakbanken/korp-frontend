@@ -193,6 +193,11 @@ settings.corporafolders.salt = {
 	contents : ["saltnld-sv"]
 };
 
+settings.corporafolders.aspac = {
+	title : "ASPAC",
+	contents : ["aspacsvru-sv"]
+};
+
 settings.corpora = {};
 
 settings.corpora["europarl-sv"] = {
@@ -505,6 +510,82 @@ settings.corpora["saltnld-nl"] = {
 	},
 	hide : true
 };
+
+
+settings.corpora["aspacsvru-sv"] = {
+	id : "aspacsvru-sv",
+	lang : "swe",
+	linked_to : ["aspacsvru-ru"],
+	title: "ASPAC svenska-ryska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"rus" : "russian"
+			}
+		}
+	}
+};
+settings.corpora["aspacsvru-ru"] = {
+	id : "aspacsvru-ru",
+	lang : "rus",
+	linked_to : ["saltnld-sv"],
+	title: "ASPAC svenska-ryska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"rus" : "russian"
+			}
+		}
+	},
+	hide : true
+};
+
+
+
+
 
 settings.corpora["espc-sv"] = {
 	id : "espc-sv",
