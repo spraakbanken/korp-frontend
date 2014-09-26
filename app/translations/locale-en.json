@@ -141,6 +141,7 @@
     "ita" : "italian",
     "por" : "portuguese",
 	"rus": "russian",
+	"deu": "german",
 	"statistics" : "Statistics",
 	"word_picture" : "Word picture",
 	"sort_default" : "sort within corpora",
@@ -268,3 +269,4 @@
 
     "newsdesk-header" : "News"
 }
+

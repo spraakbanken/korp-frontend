@@ -195,7 +195,7 @@ settings.corporafolders.salt = {
 
 settings.corporafolders.aspac = {
 	title : "ASPAC",
-	contents : ["aspacsvru-sv"]
+	contents : ["aspacsvru-sv", "aspacsvde-sv"]
 };
 
 settings.corpora = {};
@@ -554,7 +554,7 @@ settings.corpora["aspacsvru-sv"] = {
 settings.corpora["aspacsvru-ru"] = {
 	id : "aspacsvru-ru",
 	lang : "rus",
-	linked_to : ["saltnld-sv"],
+	linked_to : ["aspacsvru-sv"],
 	title: "ASPAC svenska-ryska",
 	context: context.defaultAligned,
 	within: {
@@ -583,7 +583,78 @@ settings.corpora["aspacsvru-ru"] = {
 	hide : true
 };
 
-
+settings.corpora["aspacsvde-sv"] = {
+	id : "aspacsvde-sv",
+	lang : "swe",
+	linked_to : ["aspacsvde-de"],
+	title: "ASPAC svenska-tyska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-de" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"deu" : "german"
+			}
+		}
+	}
+};
+settings.corpora["aspacsvde-de"] = {
+	id : "aspacsvde-de",
+	lang : "deu",
+	linked_to : ["aspacsvde-sv"],
+	title: "ASPAC svenska-tyska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"deu" : "german"
+			}
+		}
+	},
+	hide : true
+};
 
 
 
@@ -639,3 +710,4 @@ settings.corpora["espc-en"] = {
 window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora);
 delete ParallelCorpusListing;
 delete context;
+

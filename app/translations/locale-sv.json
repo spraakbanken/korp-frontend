@@ -144,6 +144,7 @@
 	"ita" : "italienska",
 	"por" : "portugisiska",
 	"rus" : "ryska",
+	"deu" : "tyska",
 	"statistics" : "Statistik",
 	"word_picture" : "Ordbild",
 	"sort_default" : "sortera inom korpus på",
@@ -269,3 +270,4 @@
 
     "newsdesk-header" : "Nyheter"
 }
+
