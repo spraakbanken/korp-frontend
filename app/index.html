@@ -196,32 +196,34 @@
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div id="results-kwic" ng-class="{reading_mode : reading_mode}" constr="KWICResults" constr-name="kwicResults">
-                    <div class="result_controls">
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
-                      <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
-                        <table class="hits_picture_table">
-                          <tbody>
-                            <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    <div ng-class="{loading : loading}" class="fader">
+                      <div class="result_controls">
+                        <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
+                        <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
+                          <table class="hits_picture_table">
+                            <tbody>
+                              <tr>
+                                <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                            even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                    </div>
-                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
-                    <div class="table_scrollarea">
-                      <table cellspacing="0" class="results_table kwic">
-                        <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
-                          <td class="empty_td"></td>
-                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
-                          <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
-                          <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
-                        </tr>
-                      </table>
-                      <div class="results_table reading">
-                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                      <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                      <div ng-class="{paging : paging}" class="table_scrollarea">
+                        <table cellspacing="0" class="results_table kwic">
+                          <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,           not_corpus_info : !sentence.newCorpus,           linked_sentence : sentence.isLinked,           even : $even,           odd : $odd}" class="sentence">
+                            <td class="empty_td"></td>
+                            <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
+                            <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
+                            <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
+                            <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
+                            <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
+                          </tr>
+                        </table>
+                        <div class="results_table reading">
+                          <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,           not_corpus_info : !sentence.newCorpus,           linked_sentence : sentence.isLinked,           even : $even,           odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -231,6 +233,7 @@
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div constr="StatsResults" constr-name="statsResults">
+                    <warning ng-if="no_hits">{{"no_stats_results" | loc}}</warning>
                     <div class="stats_header">
                       <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{graphEnabled ? '' : ('material_warn' | loc)}} " tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"></span>{{'show_diagram' | loc}}</div>
                       <div id="showBarPlot"></div>
@@ -258,7 +261,9 @@
                       <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'word_pic_warn_btn' | loc}}</button>
                     </div>
                   </div>
-                  <div ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading" class="bad_search bs-callout bs-callout-warning">{{'word_pic_bad_search' | loc}} </div>
+                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc}} </warning>
+                  <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
+                  <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc}}</warning>
                   <div constr="LemgramResults" constr-name="lemgramResults">
                     <div id="wordclassChkParent" ng-show="word_pic &amp;&amp; instance.hasData">
                       <input id="wordclassChk" type="checkbox">
@@ -270,32 +275,34 @@
                 <tab active="active" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
-                    <div class="result_controls">
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
-                      <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
-                        <table class="hits_picture_table">
-                          <tbody>
-                            <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    <div ng-class="{loading : loading}" class="fader">
+                      <div class="result_controls">
+                        <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
+                        <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
+                          <table class="hits_picture_table">
+                            <tbody>
+                              <tr>
+                                <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                            even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                    </div>
-                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
-                    <div class="table_scrollarea">
-                      <table cellspacing="0" class="results_table kwic">
-                        <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
-                          <td class="empty_td"></td>
-                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
-                          <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
-                          <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
-                        </tr>
-                      </table>
-                      <div class="results_table reading">
-                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                      <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                      <div ng-class="{paging : paging}" class="table_scrollarea">
+                        <table cellspacing="0" class="results_table kwic">
+                          <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,           not_corpus_info : !sentence.newCorpus,           linked_sentence : sentence.isLinked,           even : $even,           odd : $odd}" class="sentence">
+                            <td class="empty_td"></td>
+                            <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
+                            <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
+                            <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
+                            <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
+                            <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
+                          </tr>
+                        </table>
+                        <div class="results_table reading">
+                          <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,           not_corpus_info : !sentence.newCorpus,           linked_sentence : sentence.isLinked,           even : $even,           odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                        </div>
                       </div>
                     </div>
                   </div>

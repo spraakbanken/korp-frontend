@@ -487,14 +487,18 @@ util.saldoToString = (saldoId, appendIndex) ->
 
 util.sblexArraytoString = (idArray, labelFunction) ->
     labelFunction = labelFunction or util.lemgramToString
-    tempArray = $.map(idArray, (lemgram) ->
-        labelFunction lemgram, false
-    )
-    $.map idArray, (lemgram) ->
-        isAmbigous = $.grep(tempArray, (tempLemgram) ->
-            tempLemgram is labelFunction(lemgram, false)
-        ).length > 1
-        labelFunction lemgram, isAmbigous
+    return _.map idArray, (lemgram) -> labelFunction lemgram, true
+
+    # TODO: remove this if all is well with the lemgram dropdown
+    # tempArray = $.map(idArray, (lemgram) ->
+    #     labelFunction lemgram, false
+    # )
+    # out = $.map idArray, (lemgram) ->
+    #     isAmbigous = $.grep(tempArray, (tempLemgram) ->
+    #         tempLemgram is labelFunction(lemgram, false)
+    #     ).length > 1
+    #     labelFunction lemgram, isAmbigous
+    # return out
 
 
 util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/

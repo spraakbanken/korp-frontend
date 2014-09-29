@@ -657,17 +657,9 @@
   };
 
   util.sblexArraytoString = function(idArray, labelFunction) {
-    var tempArray;
     labelFunction = labelFunction || util.lemgramToString;
-    tempArray = $.map(idArray, function(lemgram) {
-      return labelFunction(lemgram, false);
-    });
-    return $.map(idArray, function(lemgram) {
-      var isAmbigous;
-      isAmbigous = $.grep(tempArray, function(tempLemgram) {
-        return tempLemgram === labelFunction(lemgram, false);
-      }).length > 1;
-      return labelFunction(lemgram, isAmbigous);
+    return _.map(idArray, function(lemgram) {
+      return labelFunction(lemgram, true);
     });
   };
 

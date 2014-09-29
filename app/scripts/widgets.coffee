@@ -289,6 +289,7 @@ $.fn.korp_autocomplete = (options) ->
         select: $.noop
         labelFunction: util.lemgramToString
         middleware: (request, idArray) ->
+
             dfd = $.Deferred()
             has_morphs = settings.corpusListing.getMorphology().split("|").length > 1
             if has_morphs
@@ -311,6 +312,7 @@ $.fn.korp_autocomplete = (options) ->
                 out
             )
             dfd.resolve listItems
+            
             dfd.promise()
     , options)
     selector.preloader(
@@ -329,8 +331,11 @@ $.fn.korp_autocomplete = (options) ->
             then proxy.saldoSearch(request.term, options["sw-forms"])
             else proxy.karpSearch(request.term, options["sw-forms"])
             promise.done((idArray, textstatus, xhr) ->
+                c.log "idArray", idArray.length
                 idArray = $.unique(idArray)
                 options.middleware(request, idArray).done (listItems) ->
+                    
+                    
                     selector.data "dataArray", listItems
                     response listItems
                     if selector.autocomplete("widget").height() > 300
@@ -342,6 +347,7 @@ $.fn.korp_autocomplete = (options) ->
                         .css("font-size", 10)
                         .prependTo selector.autocomplete("widget")
                     selector.preloader "hide"
+                    
 
             ).fail ->
                 c.log "sblex fail", arguments

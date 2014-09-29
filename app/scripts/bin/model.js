@@ -208,7 +208,6 @@
       }, options);
       data = {
         command: "query",
-        corpus: settings.corpusListing.stringifySelected(),
         defaultcontext: _.keys(settings.defaultContext)[0],
         defaultwithin: _.keys(settings.defaultWithin)[0],
         show: [],
@@ -439,7 +438,7 @@
     }
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, reduceval, self, _ref;
+      var data, def, reduceval, self, _ref;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       statsResults.showPreloader();
@@ -467,7 +466,8 @@
         data.within = settings.corpusListing.getWithinQueryString();
       }
       this.prevParams = data;
-      return $.ajax({
+      def = $.Deferred();
+      $.ajax({
         url: settings.cgi_script,
         data: data,
         beforeSend: function(req, settings) {
@@ -477,7 +477,8 @@
         },
         error: function(jqXHR, textStatus, errorThrown) {
           c.log("gettings stats error, status: " + textStatus);
-          return statsResults.hidePreloader();
+          statsResults.hidePreloader();
+          return def.reject();
         },
         progress: function(data, e) {
           var progressObj;
@@ -491,7 +492,7 @@
           var add, columns, combinedWordArray, corpus, dataset, groups, i, minWidth, obj, row, totalRow, valueGetter, word, wordArray, wordGetter, _i, _len, _ref1, _ref2;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
-            statsResults.resultError(data);
+            def.reject(data);
             return;
           }
           minWidth = 100;
@@ -578,11 +579,11 @@
             }
             dataset[i + 1] = row;
           }
-          statsResults.savedData = data;
-          statsResults.savedWordArray = wordArray;
-          return statsResults.renderResult(columns, dataset);
+          c.log("stats resolve");
+          return def.resolve([data, wordArray, columns, dataset]);
         }
       });
+      return def.promise();
     };
 
     StatsProxy.prototype.valueFormatter = function(row, cell, value, columnDef, dataContext) {

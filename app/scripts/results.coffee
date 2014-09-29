@@ -230,7 +230,6 @@ class view.KWICResults extends BaseResults
 
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
-            # kwicResults.hidePreloader()
             c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
@@ -319,6 +318,8 @@ class view.KWICResults extends BaseResults
     
     # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
+        safeApply @s, () =>
+            @s.paging = true
         page = search().page or 0
         c.log "handlePaginationClick", new_page_index, page
         self = this
@@ -328,14 +329,20 @@ class view.KWICResults extends BaseResults
 
             # this.showPreloader();
 
-            @getProxy().makeRequest @buildQueryOptions(), new_page_index, ((progressObj) ->
+            opts = @buildQueryOptions()
+            opts.corpus = @proxy.prevRequest.corpus
+
+            @getProxy().makeRequest opts, new_page_index, ((progressObj) =>
 
                 #progress
-                self.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
-            ), ((data) ->
+                @.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
+            ), ((data) =>
                 #success
-                self.buildPager data.hits
-            ), $.proxy(kwicCallback, this)
+                @buildPager data.hits
+                safeApply @s, () =>
+                    @s.paging = false
+            ), (data) => 
+                self.renderResult(data)
             # $.bbq.pushState page: new_page_index
             safeApply @s, () ->
                 search page: new_page_index
@@ -363,6 +370,7 @@ class view.KWICResults extends BaseResults
 
         opts.ajaxParams = {
             command : "query"
+            corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
             queryData : @proxy.queryData if @proxy.queryData
             context : settings.corpusListing.getContextQueryString() if @isReadingMode() or currentMode == "parallel"
@@ -376,19 +384,26 @@ class view.KWICResults extends BaseResults
         @showPreloader()
         isReading = @isReadingMode()
 
-        safeApply @s, () =>
-            if isReading
-                @s.setContextData({kwic:[]})
-            else
-                @s.setKwicData({kwic:[]})
-                # $scope.kwic = data.kwic
+        # safeApply @s, () =>
+        #     if isReading
+        #         @s.setContextData({kwic:[]})
+        #     else
+        #         @s.setKwicData({kwic:[]})
 
         kwicCallback = $.proxy(@renderResult, this)
         @getProxy().makeRequest @buildQueryOptions(cqp),
-                           page_num,
-                           (if isReading then $.noop else $.proxy(@onProgress, this)),
-                           $.proxy(@renderCompleteResult, this),
-                           kwicCallback
+                            page_num,
+                            (if isReading then $.noop else $.proxy(@onProgress, this)),
+                            (data) =>
+                                # c.log "paging false"
+                                # @s.paging = false
+                                @renderCompleteResult(data)
+                            ,
+                           # $.proxy(@renderCompleteResult, this),
+                            (data) => 
+                                # c.log "paging false"
+                                # @s.paging = false
+                                kwicCallback(data)
 
     getActiveData : () ->
 
@@ -601,17 +616,23 @@ class view.LemgramResults extends BaseResults
     resetView: ->
         super()
         $(".content_target", @$result).empty()
+        safeApply @s, () =>
+            @s.$parent.aborted = false
+            @s.$parent.no_hits = false
 
     makeRequest : (word, type) ->
+        @resetView()
         @showPreloader()
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
 
-        def.fail (jqXHR, status, errorThrown) ->
+        def.fail (jqXHR, status, errorThrown) =>
             c.log "def fail", status
             if status == "abort"
-                safeApply lemgramResults.s, () =>
-                    lemgramResults.hidePreloader()
+                safeApply @s, () =>
+                    @hidePreloader()
+                    c.log "aborted true", @s
+                    @s.$parent.aborted = true
 
 
     renderResult: (data, query) ->
@@ -625,6 +646,7 @@ class view.LemgramResults extends BaseResults
         return if resultError is false
         unless data.relations
             safeApply @s, () =>
+                @s.$parent.no_hits = true
                 # @hasData = false
 
             @resultDeferred.reject()
@@ -838,7 +860,7 @@ class view.LemgramResults extends BaseResults
 
     showNoResults: ->
         @hidePreloader()
-        @$result.find(".content_target").html $("<i />").localeKey("no_lemgram_results")
+        # @$result.find(".content_target").html $("<i />").localeKey("no_lemgram_results")
 
 
 
@@ -1145,6 +1167,22 @@ class view.StatsResults extends BaseResults
             href : csvUrl    
         })
 
+    makeRequest : (cqp) ->
+        @resetView()
+        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
+        ).done( ([data, wordArray, columns, dataset]) =>
+            c.log "stats done", data, wordArray, columns, dataset
+            @savedData = data
+            @savedWordArray = wordArray
+            @renderResult columns, dataset
+
+        ).fail (data) =>
+            c.log "stats fail"
+            @resultError data
+        .always () =>
+            @hidePreloader()
+
+
 
     renderResult: (columns, data) ->
         refreshHeaders = ->
@@ -1152,14 +1190,16 @@ class view.StatsResults extends BaseResults
             $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
 
-        @resetView()
+        
         @gridData = data
         resultError = super(data)
         return if resultError is false
         c.log "renderresults"
         @updateExportBlob()
         if data[0].total_value.absolute == 0
-            @showNoResults()
+            # @hidePreloader()
+            safeApply @s, () =>
+                @s.no_hits = true
             return
 
         checkboxSelector = new Slick.CheckboxSelectColumn
@@ -1239,13 +1279,16 @@ class view.StatsResults extends BaseResults
             download : null,
             href : null
         })
+        # safeApply @s, () ->
+        @s.no_hits = false
 
-    showNoResults: ->
-        c.log "showNoResults", @$result
-        safeApply @s, () =>
-            @hidePreloader()
-        @$result.prepend $("<i/ class='error_msg'>").localeKey("no_stats_results")
-        $("#exportStatsSection").hide()
+    # showNoResults: ->
+    #     c.log "showNoResults", @$result
+    #     safeApply @s, () =>
+    #         @hidePreloader()
+    #     @$result.prepend $("<span class=' bad_search bs-callout bs-callout-warning'>")
+    #         .localeKey("no_stats_results")
+    #     $("#exportStatsSection").hide()
 
     # onProgress : (progressObj) ->
     #     super(progressObj)

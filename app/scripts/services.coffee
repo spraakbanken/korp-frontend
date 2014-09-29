@@ -144,11 +144,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         kwicSearch : (cqp, page) ->
             # simpleSearch.resetView()
             @kwicRequest cqp, page
-            statsProxy?.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
+            statsResults.makeRequest cqp
 
         lemgramSearch : (lemgram, searchPrefix, searchSuffix, page) ->
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
-            statsProxy?.makeRequest cqp, $.proxy(statsResults.onProgress, statsResults)
+            statsResults.makeRequest cqp
             @kwicRequest cqp, page
             
             if settings.wordpicture == false then return

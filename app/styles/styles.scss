@@ -794,11 +794,20 @@ table {
   }
 }
 
+.fader.loading {
+  transition : opacity 200ms;
+  opacity : 0.5;
+}
+
 .table_scrollarea {
   overflow: auto;
   clear: both;
   overflow-y: hidden;
   -ms-overflow-y: hidden;
+  transition : opacity 200ms;
+  &.paging {
+    opacity : 0.5 !important;
+  }
 }
 
 .results_table {
@@ -868,16 +877,6 @@ table {
 .reading_mode .reading_btn.hide {
   display: inline;
 }
-
-.loading .table_scrollarea {
-  opacity : 0;
-  @include transition(opacity 200ms ease);
-}
-.not_loading .table_scrollarea {
-  opacity : 1;
-  @include transition(opacity 200ms ease);
-}
-
 
 .results_table.reading {
   display: none;
@@ -1514,6 +1513,11 @@ label[for=lemgram_select]:before {
 
 .pager-wrapper {
   @include inline-block();
+
+  .ui-button-text-only:active {
+    background : inherit;
+    background-color : $primaryColor;
+  }
 }
 
 // .col_wrapper! {}
@@ -1827,8 +1831,11 @@ slider {
 //   @include inline-block();
 // }
 
-.bad_search {
+.korp-warning {
   max-width : 500px;
+}
+warning ~ * {
+  display : none !important;
 }
 
 #wordclassChkParent {

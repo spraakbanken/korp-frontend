@@ -1,52 +1,53 @@
 
-.result_controls
-  .controls_n
-    span {{'num_results' | loc}}: 
-    span.num-result 0
-  //- .progress_container
-  //-   progress(value='{{progress || 0}}', max='100')
-  .hits_picture(ng-if='hitsPictureData.length > 1')
-    table.hits_picture_table
-      tbody
-        tr
-          td.hits_picture_corp(ng-repeat='corpus in hitsPictureData'
-              ng-style='{width : corpus.relative + "%"}'
-              ng-class='{odd : $index % 2 != 0, \
-                         even : $index % 2 == 0}'
-              ng-click='hitspictureClick(corpus.page)'
-              tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
-              tooltip-placement='{{$last? "left":"top"}}')
-.pager-wrapper
-span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc}}
-span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc}}
-.table_scrollarea
-  table.results_table.kwic(cellspacing='0')
-    tr.sentence(ng-repeat='sentence in kwic'
-      ng-class='{corpus_info : sentence.newCorpus, \
-        not_corpus_info : !sentence.newCorpus, \
-        linked_sentence : sentence.isLinked, \
-        even : $even, \
-        odd : $odd}')
-      td.empty_td
-      td.corpus_title(colspan='0')
-        | {{sentence.newCorpus}}
-        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
-      td.lnk(colspan='3', set-if='sentence.isLinked')
-        span(kwic-word='kwic-word', ng-repeat='wd in sentence.tokens')
-      td.left(set-if='!sentence.newCorpus')
-        span(kwic-word='kwic-word', ng-repeat='wd in selectLeft(sentence)')
-      td.match(set-if='!sentence.newCorpus')
-        span(kwic-word='kwic-word', ng-repeat='wd in selectMatch(sentence)')
-      td.right(set-if='!sentence.newCorpus')
-        span(kwic-word='kwic-word', ng-repeat='wd in selectRight(sentence)')
-  .results_table.reading
-    p.sentence(ng-repeat='sentence in contextKwic'
-      ng-class='{corpus_info : sentence.newCorpus, \
-        not_corpus_info : !sentence.newCorpus, \
-        linked_sentence : sentence.isLinked, \
-        even : $even, \
-        odd : $odd}')
-      span.corpus_title(colspan='0')
-        | {{sentence.newCorpus}}
-        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
-      span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
+.fader(ng-class="{loading : loading}")
+  .result_controls
+    .controls_n
+      span {{'num_results' | loc}}: 
+      span.num-result 0
+    //- .progress_container
+    //-   progress(value='{{progress || 0}}', max='100')
+    .hits_picture(ng-if='hitsPictureData.length > 1')
+      table.hits_picture_table
+        tbody
+          tr
+            td.hits_picture_corp(ng-repeat='corpus in hitsPictureData'
+                ng-style='{width : corpus.relative + "%"}'
+                ng-class='{odd : $index % 2 != 0, \
+                           even : $index % 2 == 0}'
+                ng-click='hitspictureClick(corpus.page)'
+                tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
+                tooltip-placement='{{$last? "left":"top"}}')
+  .pager-wrapper
+  span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc}}
+  span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc}}
+  .table_scrollarea(ng-class="{paging : paging}")
+    table.results_table.kwic(cellspacing='0')
+      tr.sentence(ng-repeat='sentence in kwic'
+        ng-class='{corpus_info : sentence.newCorpus, \
+          not_corpus_info : !sentence.newCorpus, \
+          linked_sentence : sentence.isLinked, \
+          even : $even, \
+          odd : $odd}')
+        td.empty_td
+        td.corpus_title(colspan='0')
+          | {{sentence.newCorpus}}
+          span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
+        td.lnk(colspan='3', set-if='sentence.isLinked')
+          span(kwic-word='kwic-word', ng-repeat='wd in sentence.tokens')
+        td.left(set-if='!sentence.newCorpus')
+          span(kwic-word='kwic-word', ng-repeat='wd in selectLeft(sentence)')
+        td.match(set-if='!sentence.newCorpus')
+          span(kwic-word='kwic-word', ng-repeat='wd in selectMatch(sentence)')
+        td.right(set-if='!sentence.newCorpus')
+          span(kwic-word='kwic-word', ng-repeat='wd in selectRight(sentence)')
+    .results_table.reading
+      p.sentence(ng-repeat='sentence in contextKwic'
+        ng-class='{corpus_info : sentence.newCorpus, \
+          not_corpus_info : !sentence.newCorpus, \
+          linked_sentence : sentence.isLinked, \
+          even : $even, \
+          odd : $odd}')
+        span.corpus_title(colspan='0')
+          | {{sentence.newCorpus}}
+          span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
+        span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')

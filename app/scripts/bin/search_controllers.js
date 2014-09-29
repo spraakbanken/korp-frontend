@@ -62,7 +62,7 @@
           } else {
             return lemgramResults.resetView();
           }
-        } else if (search.type === "lemgram") {
+        } else if (search.type === "lemgram" && settings.wordPicture) {
           s.placeholder = search.val;
           s.simple_text = "";
           return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);

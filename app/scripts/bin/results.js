@@ -379,18 +379,36 @@
     };
 
     KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var isReading, kwicCallback, page, self;
+      var isReading, kwicCallback, opts, page, self;
+      safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.s.paging = true;
+        };
+      })(this));
       page = search().page || 0;
       c.log("handlePaginationClick", new_page_index, page);
       self = this;
       if (new_page_index !== page || !!force_click) {
         isReading = this.isReadingMode();
         kwicCallback = this.renderResult;
-        this.getProxy().makeRequest(this.buildQueryOptions(), new_page_index, (function(progressObj) {
-          return self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
-        }), (function(data) {
-          return self.buildPager(data.hits);
-        }), $.proxy(kwicCallback, this));
+        opts = this.buildQueryOptions();
+        opts.corpus = this.proxy.prevRequest.corpus;
+        this.getProxy().makeRequest(opts, new_page_index, ((function(_this) {
+          return function(progressObj) {
+            return _this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
+          };
+        })(this)), ((function(_this) {
+          return function(data) {
+            _this.buildPager(data.hits);
+            return safeApply(_this.s, function() {
+              return _this.s.paging = false;
+            });
+          };
+        })(this)), (function(_this) {
+          return function(data) {
+            return self.renderResult(data);
+          };
+        })(this));
         safeApply(this.s, function() {
           return search({
             page: new_page_index
@@ -431,6 +449,7 @@
       };
       opts.ajaxParams = {
         command: "query",
+        corpus: settings.corpusListing.stringifySelected(),
         cqp: cqp || this.proxy.prevCQP,
         queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
         context: this.isReadingMode() || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0,
@@ -444,21 +463,16 @@
       var isReading, kwicCallback;
       this.showPreloader();
       isReading = this.isReadingMode();
-      safeApply(this.s, (function(_this) {
-        return function() {
-          if (isReading) {
-            return _this.s.setContextData({
-              kwic: []
-            });
-          } else {
-            return _this.s.setKwicData({
-              kwic: []
-            });
-          }
+      kwicCallback = $.proxy(this.renderResult, this);
+      return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
+        return function(data) {
+          return _this.renderCompleteResult(data);
+        };
+      })(this), (function(_this) {
+        return function(data) {
+          return kwicCallback(data);
         };
       })(this));
-      kwicCallback = $.proxy(this.renderResult, this);
-      return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), $.proxy(this.renderCompleteResult, this), kwicCallback);
     };
 
     KWICResults.prototype.getActiveData = function() {
@@ -678,11 +692,18 @@
 
     LemgramResults.prototype.resetView = function() {
       LemgramResults.__super__.resetView.call(this);
-      return $(".content_target", this.$result).empty();
+      $(".content_target", this.$result).empty();
+      return safeApply(this.s, (function(_this) {
+        return function() {
+          _this.s.$parent.aborted = false;
+          return _this.s.$parent.no_hits = false;
+        };
+      })(this));
     };
 
     LemgramResults.prototype.makeRequest = function(word, type) {
       var def;
+      this.resetView();
       this.showPreloader();
       def = this.proxy.makeRequest(word, type, (function(_this) {
         return function() {
@@ -691,16 +712,18 @@
           return _this.onProgress.apply(_this, args);
         };
       })(this));
-      return def.fail(function(jqXHR, status, errorThrown) {
-        c.log("def fail", status);
-        if (status === "abort") {
-          return safeApply(lemgramResults.s, (function(_this) {
-            return function() {
-              return lemgramResults.hidePreloader();
-            };
-          })(this));
-        }
-      });
+      return def.fail((function(_this) {
+        return function(jqXHR, status, errorThrown) {
+          c.log("def fail", status);
+          if (status === "abort") {
+            return safeApply(_this.s, function() {
+              _this.hidePreloader();
+              c.log("aborted true", _this.s);
+              return _this.s.$parent.aborted = true;
+            });
+          }
+        };
+      })(this));
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
@@ -719,7 +742,9 @@
       }
       if (!data.relations) {
         safeApply(this.s, (function(_this) {
-          return function() {};
+          return function() {
+            return _this.s.$parent.no_hits = true;
+          };
         })(this));
         return this.resultDeferred.reject();
       } else if (util.isLemgramId(query)) {
@@ -966,8 +991,7 @@
     };
 
     LemgramResults.prototype.showNoResults = function() {
-      this.hidePreloader();
-      return this.$result.find(".content_target").html($("<i />").localeKey("no_lemgram_results"));
+      return this.hidePreloader();
     };
 
     LemgramResults.prototype.hideWordclass = function() {
@@ -1286,6 +1310,35 @@
       });
     };
 
+    StatsResults.prototype.makeRequest = function(cqp) {
+      this.resetView();
+      return this.proxy.makeRequest(cqp, ((function(_this) {
+        return function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return _this.onProgress.apply(_this, args);
+        };
+      })(this))).done((function(_this) {
+        return function(_arg) {
+          var columns, data, dataset, wordArray;
+          data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
+          c.log("stats done", data, wordArray, columns, dataset);
+          _this.savedData = data;
+          _this.savedWordArray = wordArray;
+          return _this.renderResult(columns, dataset);
+        };
+      })(this)).fail((function(_this) {
+        return function(data) {
+          c.log("stats fail");
+          return _this.resultError(data);
+        };
+      })(this)).always((function(_this) {
+        return function() {
+          return _this.hidePreloader();
+        };
+      })(this));
+    };
+
     StatsResults.prototype.renderResult = function(columns, data) {
       var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
       refreshHeaders = function() {
@@ -1294,7 +1347,6 @@
           return $(this).localeKey($(this).text());
         });
       };
-      this.resetView();
       this.gridData = data;
       resultError = StatsResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -1303,7 +1355,11 @@
       c.log("renderresults");
       this.updateExportBlob();
       if (data[0].total_value.absolute === 0) {
-        this.showNoResults();
+        safeApply(this.s, (function(_this) {
+          return function() {
+            return _this.s.no_hits = true;
+          };
+        })(this));
         return;
       }
       checkboxSelector = new Slick.CheckboxSelectColumn({
@@ -1383,21 +1439,11 @@
       StatsResults.__super__.resetView.call(this);
       $("myGrid").empty();
       $("#exportStatsSection").show();
-      return $("#exportButton").attr({
+      $("#exportButton").attr({
         download: null,
         href: null
       });
-    };
-
-    StatsResults.prototype.showNoResults = function() {
-      c.log("showNoResults", this.$result);
-      safeApply(this.s, (function(_this) {
-        return function() {
-          return _this.hidePreloader();
-        };
-      })(this));
-      this.$result.prepend($("<i/ class='error_msg'>").localeKey("no_stats_results"));
-      return $("#exportStatsSection").hide();
+      return this.s.no_hits = false;
     };
 
     return StatsResults;

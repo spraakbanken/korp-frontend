@@ -155,15 +155,13 @@
 
       Searches.prototype.kwicSearch = function(cqp, page) {
         this.kwicRequest(cqp, page);
-        return typeof statsProxy !== "undefined" && statsProxy !== null ? statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults)) : void 0;
+        return statsResults.makeRequest(cqp);
       };
 
       Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, page) {
         var cqp;
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
-        if (typeof statsProxy !== "undefined" && statsProxy !== null) {
-          statsProxy.makeRequest(cqp, $.proxy(statsResults.onProgress, statsResults));
-        }
+        statsResults.makeRequest(cqp);
         this.kwicRequest(cqp, page);
         if (settings.wordpicture === false) {
           return;

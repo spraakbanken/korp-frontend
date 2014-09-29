@@ -513,3 +513,9 @@ korpApp.directive 'toBody', ($compile) ->
             $("body").append(newElem)
             scope.$on "$destroy", () ->
                 newElem.remove()
+
+korpApp.directive "warning", () ->
+    restrict : "E"
+    transclude : true
+    template : "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
+

@@ -133,7 +133,7 @@
     });
     prevFragment = {};
     window.onHashChange = function(event, isInit) {
-      var display, hasChanged, newLang, page, showAbout;
+      var display, hasChanged, newLang, showAbout;
       c.log("onHashChange");
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
@@ -154,7 +154,6 @@
         util.localize();
         $("#languages").radioList("select", newLang);
       }
-      page = Number(search().page);
       display = search().display;
       if (display === "about") {
         if ($("#about_content").is(":empty")) {

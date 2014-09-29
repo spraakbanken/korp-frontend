@@ -379,6 +379,7 @@
         c.log("autocomplete type", options.type);
         promise = options.type === "saldo" ? proxy.saldoSearch(request.term, options["sw-forms"]) : proxy.karpSearch(request.term, options["sw-forms"]);
         promise.done(function(idArray, textstatus, xhr) {
+          c.log("idArray", idArray.length);
           idArray = $.unique(idArray);
           return options.middleware(request, idArray).done(function(listItems) {
             selector.data("dataArray", listItems);

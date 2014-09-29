@@ -147,9 +147,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             util.localize()
 
             $("#languages").radioList "select", newLang
-        page = Number(search().page)
-        # kwicResults.setPage page if hasChanged("page") and not hasChanged("search")
-        # kwicResults.current_page = page if isInit
 
         display = search().display
         if display is "about"

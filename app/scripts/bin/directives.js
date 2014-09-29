@@ -558,6 +558,14 @@
     };
   });
 
+  korpApp.directive("warning", function() {
+    return {
+      restrict: "E",
+      transclude: true,
+      template: "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
+    };
+  });
+
 }).call(this);
 
 //# sourceMappingURL=directives.js.map

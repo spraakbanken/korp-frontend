@@ -63,7 +63,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             else  
                 lemgramResults.resetView()
 
-        else if search.type == "lemgram"
+        else if search.type == "lemgram" and settings.wordPicture
             s.placeholder = search.val
             s.simple_text = ""
             searches.lemgramSearch(search.val, s.prefix, s.suffix, page)

@@ -132,8 +132,6 @@ class model.KWICProxy extends BaseProxy
     makeRequest: (options, page, callback, successCallback, kwicCallback) ->
         c.log "kwicproxy.makeRequest"
         self = this
-        # unless options.cqp
-        #     debugger;
         @foundKwic = false
         super()
         successCallback = successCallback or $.proxy(kwicResults.renderCompleteResult, kwicResults)
@@ -174,7 +172,7 @@ class model.KWICProxy extends BaseProxy
         # defaults
         data =
             command: "query"
-            corpus: settings.corpusListing.stringifySelected()
+            # corpus: settings.corpusListing.stringifySelected()
             defaultcontext: _.keys(settings.defaultContext)[0]
             defaultwithin: _.keys(settings.defaultWithin)[0]
             show: []
@@ -297,11 +295,13 @@ class model.LemgramProxy extends BaseProxy
                         dfd.reject()
                         return
                     c.log "karp success", data, sw_forms
+                    
                     div = (if $.isPlainObject(data.div) then [data.div] else data.div)
                     output = $.map(div.slice(0, Number(data.count)), (item) ->
                         item = util.convertLMFFeatsToObjects(item)
                         item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram
                     )
+                    
                     dfd.resolve output, textStatus, xhr
 
                 error: (jqXHR, textStatus, errorThrown) ->
@@ -326,6 +326,7 @@ class model.LemgramProxy extends BaseProxy
                     c.log "saldo search 0 results"
                     return
                 div = (if $.isPlainObject(data.div) then [data.div] else data.div)
+                
                 output = $.map(div.slice(0, Number(data.count)), (item) ->
                     sense = item.LexicalEntry.Sense
                     sense = [sense] unless $.isArray(sense)
@@ -394,6 +395,7 @@ class model.StatsProxy extends BaseProxy
         if $(".within_select").val() != settings.defaultWithin
             data.within = settings.corpusListing.getWithinQueryString()
         @prevParams = data
+        def = $.Deferred()
         $.ajax
             url: settings.cgi_script
             data: data
@@ -406,6 +408,7 @@ class model.StatsProxy extends BaseProxy
             error: (jqXHR, textStatus, errorThrown) ->
                 c.log "gettings stats error, status: " + textStatus
                 statsResults.hidePreloader()
+                def.reject()
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
@@ -415,7 +418,8 @@ class model.StatsProxy extends BaseProxy
             success: (data) ->
                 if data.ERROR?
                     c.log "gettings stats failed with error", $.dump(data.ERROR)
-                    statsResults.resultError data
+                    # statsResults.resultError data
+                    def.reject(data)
                     return
                 minWidth = 100
                 columns = [
@@ -495,10 +499,12 @@ class model.StatsProxy extends BaseProxy
                             absolute: (valueGetter obj.absolute, word)
                             relative: (valueGetter obj.relative, word)
                     dataset[i+1] = row
-
-                statsResults.savedData = data
-                statsResults.savedWordArray = wordArray
-                statsResults.renderResult columns, dataset
+                c.log "stats resolve"
+                def.resolve [data, wordArray, columns, dataset]
+                # statsResults.savedData = data
+                # statsResults.savedWordArray = wordArray
+                # statsResults.renderResult columns, dataset
+        return def.promise()
 
 
     valueFormatter: (row, cell, value, columnDef, dataContext) ->

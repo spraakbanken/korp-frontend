@@ -177,6 +177,7 @@ class view.SimpleSearch extends BaseSearch
 
                 middleware: (request, idArray) =>
                     dfd = $.Deferred()
+                    
                     @lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
                         delete freqs["time"]
 
@@ -196,6 +197,8 @@ class view.SimpleSearch extends BaseSearch
                             idArray.sort (first, second) ->
                                 (freqs[second] or 0) - (freqs[first] or 0)
 
+                        t = $.now()
+                        window.idArray = idArray
                         labelArray = util.sblexArraytoString(idArray, util.lemgramToString)
                         listItems = $.map(idArray, (item, i) ->
                             out =

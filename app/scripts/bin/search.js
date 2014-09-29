@@ -212,7 +212,7 @@
               var dfd;
               dfd = $.Deferred();
               _this.lemgramProxy.lemgramCount(idArray, _this.isSearchPrefix(), _this.isSearchSuffix()).done(function(freqs) {
-                var has_morphs, labelArray, listItems;
+                var has_morphs, labelArray, listItems, t;
                 delete freqs["time"];
                 if (currentMode === "law") {
                   idArray = _.filter(idArray, function(item) {
@@ -235,6 +235,8 @@
                     return (freqs[second] || 0) - (freqs[first] || 0);
                   });
                 }
+                t = $.now();
+                window.idArray = idArray;
                 labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
                 listItems = $.map(idArray, function(item, i) {
                   var out;
