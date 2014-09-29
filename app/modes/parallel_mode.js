@@ -195,7 +195,7 @@ settings.corporafolders.salt = {
 
 settings.corporafolders.aspac = {
 	title : "ASPAC",
-	contents : ["aspacsvru-sv", "aspacsvde-sv"]
+	contents : ["aspacsvru-sv", "aspacsvde-sv", "aspacsven-sv", "aspacsves-sv", "aspacsvfr-sv", "aspacsvit-sv"]
 };
 
 settings.corpora = {};
@@ -656,6 +656,297 @@ settings.corpora["aspacsvde-de"] = {
 	hide : true
 };
 
+settings.corpora["aspacsven-sv"] = {
+	id : "aspacsven-sv",
+	lang : "swe",
+	linked_to : ["aspacsven-en"],
+	title: "ASPAC svenska-engelska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-en" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"eng" : "english"
+			}
+		}
+	}
+};
+settings.corpora["aspacsven-en"] = {
+	id : "aspacsven-en",
+	lang : "eng",
+	linked_to : ["aspacsven-sv"],
+	title: "ASPAC svenska-engelska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"rus" : "english"
+			}
+		}
+	},
+	hide : true
+};
+
+settings.corpora["aspacsves-sv"] = {
+	id : "aspacsves-sv",
+	lang : "swe",
+	linked_to : ["aspacsves-es"],
+	title: "ASPAC svenska-spanska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-es" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"spa" : "spanish"
+			}
+		}
+	}
+};
+settings.corpora["aspacsves-es"] = {
+	id : "aspacsves-es",
+	lang : "spa",
+	linked_to : ["aspacsves-sv"],
+	title: "ASPAC svenska-spanska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"spa" : "spanish"
+			}
+		}
+	},
+	hide : true
+};
+
+settings.corpora["aspacsvfr-sv"] = {
+	id : "aspacsvfr-sv",
+	lang : "swe",
+	linked_to : ["aspacsvfr-fr"],
+	title: "ASPAC svenska-franska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-fr" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"fra" : "french"
+			}
+		}
+	}
+};
+settings.corpora["aspacsvfr-fr"] = {
+	id : "aspacsvfr-fr",
+	lang : "fra",
+	linked_to : ["aspacsvfr-sv"],
+	title: "ASPAC svenska-franska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"fra" : "french"
+			}
+		}
+	},
+	hide : true
+};
+
+settings.corpora["aspacsvit-sv"] = {
+	id : "aspacsvit-sv",
+	lang : "swe",
+	linked_to : ["aspacsvit-it"],
+	title: "ASPAC svenska-italienska",
+	context: context.defaultAligned,
+	// context : settings.defaultContext,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: attrs.pos,
+		msd: attrs.msd,
+		lemma: attrs.baseform,
+		lex: attrs.lemgram,
+		saldo: attrs.saldo,
+		dephead: attrs.dephead,
+		deprel: attrs.deprel,
+		ref: attrs.ref,
+		prefix : attrs.prefix,
+		suffix : attrs.suffix,
+		linkref : linkref,
+		"wordlink-it" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"fra" : "italian"
+			}
+		}
+	}
+};
+settings.corpora["aspacsvit-it"] = {
+	id : "aspacsvit-it",
+	lang : "ita",
+	linked_to : ["aspacsvit-sv"],
+	title: "ASPAC svenska-italienska",
+	context: context.defaultAligned,
+	within: {
+		"link": "meningspar"
+	},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
+		linkref : linkref,
+		"wordlink-sv" : wordlink
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_description : {label : "description"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"swe" : "swedish",
+				"ita" : "italian"
+			}
+		}
+	},
+	hide : true
+};
 
 
 settings.corpora["espc-sv"] = {
