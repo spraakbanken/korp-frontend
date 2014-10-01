@@ -119,6 +119,10 @@ settings.modeConfig = [
     {
         localekey: "lawroom",
         mode: "law",
+    },
+    {
+        localekey: "spanish_texts",
+        mode: "spanish",
     }
  
 ];
