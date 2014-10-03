@@ -40,6 +40,7 @@ settings.interfraStructs = {
 		    controller : selectType.controller,
 		    extended_template : selectType.extended_template
 		},
+		"text_sourceurl" : {label : "source", type : "url"},
 		"text_activity" : {label : "activity"},
 		"text_interviewee" : {label : "interviewee"},
 		"text_activity_date" : {label : "date"}/*,
