@@ -661,7 +661,7 @@ settings.corporafolders.socialmedia.forum = {
 
 settings.corporafolders.socialmedia.forum.familjeliv = {
 	title : "Familjeliv",
-	contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
+	contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-allmanna-kropp", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
 	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
 };
 
@@ -1659,6 +1659,27 @@ settings.corpora["familjeliv-allmanna-hushem"] = {
 settings.corpora["familjeliv-allmanna-husdjur"] = {
 	id : "familjeliv-allmanna-husdjur",
 	title : "Familjeliv: Allmänna rubriker – Husdjur",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : {
+        text_username : {label : "username2"},
+        text_date : {label : "date"},
+        text_links : {label : "postlinks", type : "set"},
+        text_url : {label : "posturl", type : "url"},
+        thread_title : {label : "thread"},
+        thread_postcount : {label : "threadpostcount"},
+        thread_lastpost : {label : "threadlastpost"},
+        thread_url : {label : "thread", type : "url"},
+        forum_title : {label : "forum"},
+        forum_url : {label : "forum", type : "url"}
+	}
+};
+
+settings.corpora["familjeliv-allmanna-kropp"] = {
+	id : "familjeliv-allmanna-kropp",
+	title : "Familjeliv: Allmänna rubriker – Kropp & själ",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
