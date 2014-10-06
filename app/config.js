@@ -650,7 +650,7 @@ settings.corporafolders.socialmedia = {
 
 settings.corporafolders.socialmedia.bloggmix = {
 	title : "Bloggmix",
-	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmixodat"],
+	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmix2014", "bloggmixodat"],
 	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
 };
 
@@ -661,7 +661,7 @@ settings.corporafolders.socialmedia.forum = {
 
 settings.corporafolders.socialmedia.forum.familjeliv = {
 	title : "Familjeliv",
-	contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-allmanna-kropp", "familjeliv-allmanna-noje", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
+	contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-allmanna-kropp", "familjeliv-allmanna-noje", "familjeliv-allmanna-samhalle", "familjeliv-allmanna-sandladan", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
 	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
 };
 
@@ -1593,14 +1593,7 @@ settings.corpora.strindbergbrev = {
     }
 };
 
-settings.corpora["familjeliv-allmanna-ekonomi"] = {
-	id : "familjeliv-allmanna-ekonomi",
-	title : "Familjeliv: Allmänna rubriker – Ekonomi & juridik",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+var familjeliv_structs = {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1611,7 +1604,16 @@ settings.corpora["familjeliv-allmanna-ekonomi"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+};
+
+settings.corpora["familjeliv-allmanna-ekonomi"] = {
+	id : "familjeliv-allmanna-ekonomi",
+	title : "Familjeliv: Allmänna rubriker – Ekonomi & juridik",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-familjeliv"] = {
@@ -1621,18 +1623,7 @@ settings.corpora["familjeliv-allmanna-familjeliv"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-hushem"] = {
@@ -1642,18 +1633,7 @@ settings.corpora["familjeliv-allmanna-hushem"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-husdjur"] = {
@@ -1663,18 +1643,7 @@ settings.corpora["familjeliv-allmanna-husdjur"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-fritid"] = {
@@ -1684,18 +1653,7 @@ settings.corpora["familjeliv-allmanna-fritid"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-kropp"] = {
@@ -1705,18 +1663,7 @@ settings.corpora["familjeliv-allmanna-kropp"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-noje"] = {
@@ -1726,18 +1673,27 @@ settings.corpora["familjeliv-allmanna-noje"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
+};
+
+settings.corpora["familjeliv-allmanna-samhalle"] = {
+	id : "familjeliv-allmanna-samhalle",
+	title : "Familjeliv: Allmänna rubriker – Samhälle",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : familjeliv_structs
+};
+
+settings.corpora["familjeliv-allmanna-sandladan"] = {
+	id : "familjeliv-allmanna-sandladan",
+	title : "Familjeliv: Allmänna rubriker – Sandlådan",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : modernAttrs,
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-adoption"] = {
@@ -1747,18 +1703,7 @@ settings.corpora["familjeliv-adoption"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-expert"] = {
@@ -1768,18 +1713,7 @@ settings.corpora["familjeliv-expert"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-foralder"] = {
@@ -1789,18 +1723,7 @@ settings.corpora["familjeliv-foralder"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-gravid"] = {
@@ -1810,18 +1733,7 @@ settings.corpora["familjeliv-gravid"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-kansliga"] = {
@@ -1831,18 +1743,7 @@ settings.corpora["familjeliv-kansliga"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-allmanna"] = {
@@ -1852,18 +1753,7 @@ settings.corpora["familjeliv-medlem-allmanna"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 
@@ -1874,18 +1764,7 @@ settings.corpora["familjeliv-medlem-foraldrar"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-planerarbarn"] = {
@@ -1895,18 +1774,7 @@ settings.corpora["familjeliv-medlem-planerarbarn"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 
@@ -1917,18 +1785,7 @@ settings.corpora["familjeliv-medlem-vantarbarn"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-pappagrupp"] = {
@@ -1938,18 +1795,7 @@ settings.corpora["familjeliv-pappagrupp"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-planerarbarn"] = {
@@ -1959,18 +1805,7 @@ settings.corpora["familjeliv-planerarbarn"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-sexsamlevnad"] = {
@@ -1980,18 +1815,7 @@ settings.corpora["familjeliv-sexsamlevnad"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-svartattfabarn"] = {
@@ -2001,18 +1825,7 @@ settings.corpora["familjeliv-svartattfabarn"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-anglarum"] = {
@@ -2022,18 +1835,7 @@ settings.corpora["familjeliv-anglarum"] = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : modernAttrs,
-	struct_attributes : {
-        text_username : {label : "username2"},
-        text_date : {label : "date"},
-        text_links : {label : "postlinks", type : "set"},
-        text_url : {label : "posturl", type : "url"},
-        thread_title : {label : "thread"},
-        thread_postcount : {label : "threadpostcount"},
-        thread_lastpost : {label : "threadlastpost"},
-        thread_url : {label : "thread", type : "url"},
-        forum_title : {label : "forum"},
-        forum_url : {label : "forum", type : "url"}
-	}
+	struct_attributes : familjeliv_structs
 };
 
 settings.corpora["flashback-dator"] = {
@@ -2501,6 +2303,15 @@ settings.corpora.bloggmix2011 = {
 settings.corpora.bloggmix2012 = {
     id : "bloggmix2012",
     title : "Bloggmix 2012",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : modernAttrs,
+    struct_attributes : bloggmix_structs
+};
+
+settings.corpora.bloggmix2014 = {
+    id : "bloggmix2014",
+    title : "Bloggmix 2014",
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
