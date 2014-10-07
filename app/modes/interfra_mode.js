@@ -40,7 +40,9 @@ settings.interfraStructs = {
 		    controller : selectType.controller,
 		    extended_template : selectType.extended_template
 		},
-		"text_sourceurl" : {label : "source", type : "url"},
+		"text_xmlurl" : {label : "interview", pattern : '<a href="<%=val%>">XML</a>'},
+		"text_rawurl" : {label : "interview", pattern : '<a href="<%=val%>">TXT</a>'},
+		"text_mp3url" : {label : "interview", pattern : '<a href="<%=val%>">MP3</a>'},
 		"text_activity" : {label : "activity"},
 		"text_interviewee" : {label : "interviewee"},
 		"text_activity_date" : {label : "date"}/*,

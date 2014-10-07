@@ -123,6 +123,10 @@ settings.modeConfig = [
     {
         localekey: "spanish_texts",
         mode: "spanish",
+    },
+    {
+        localekey: "interfra",
+        mode: "interfra"
     }
  
 ];
