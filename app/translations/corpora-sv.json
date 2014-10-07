@@ -1,4 +1,22 @@
 {
+    "modern_texts" : "Moderna",
+    "parallel_texts" : "Parallella",
+    "faroese_texts" : "Färöiska",
+    "old_swedish_texts" : "Fornsvenska",
+    "digidaily" : "Digidaily",
+    "kubhist" : "Kubhist",
+    "1800_texts" : "Bibelstället",
+    "fisk1800_texts" : "Äldre finlandssvenska",
+    "lb_texts" : "Litteraturbanken",
+    "spf_texts" : "Spf 1800–1900",
+    "siberian_texts" : "Sibirientyska",
+    "lawroom" : "Lagrummet",
+    "all_hist" : "Historiskt",
+    "spanish_texts" : "Spanska",
+    "interfra": "InterFra",
+    "kioping_texts" : "Kiöpings resor",
+    "runeberg" : "Runebergtidskrifter",
+
     "saldo" : "betydelse",
     "pos" : "ordklass",
     "msd" : "msd",
@@ -340,22 +358,22 @@
     "threadpostcount" : "antal inlägg i tråd",
     "threadlastpost" : "senaste inlägg i tråd",
 
-	"fall": "fall",
-	"hord": "hörd",
-	"fl1": "förhörsledare 1",
-	"fl2": "förhörsledare 2",
-	"telefon": "telefon",
-	"bandat": "bandat",
-	"samtycke": "samtycke",
-	"forsvarare": "försvarare",
-	"skribent": "skribent",
-	"tolkat": "tolkat",
-	
-	"student" : "student",
-	"a" : "A",
-	"b" : "B",
-	"c/d" : "C/D",
-	"semester" : "termin",
+    "fall": "fall",
+    "hord": "hörd",
+    "fl1": "förhörsledare 1",
+    "fl2": "förhörsledare 2",
+    "telefon": "telefon",
+    "bandat": "bandat",
+    "samtycke": "samtycke",
+    "forsvarare": "försvarare",
+    "skribent": "skribent",
+    "tolkat": "tolkat",
+    
+    "student" : "student",
+    "a" : "A",
+    "b" : "B",
+    "c/d" : "C/D",
+    "semester" : "termin",
 
     "party_all" : "Alliansen",
     "party_c" : "Centerpartiet",
@@ -385,5 +403,4 @@
     "part" : "del",
     
     "location" : "plats"
-
 }
