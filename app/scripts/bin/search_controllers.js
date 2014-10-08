@@ -62,10 +62,15 @@
           } else {
             return lemgramResults.resetView();
           }
-        } else if (search.type === "lemgram" && settings.wordPicture) {
+        } else if (search.type === "lemgram" && s.word_pic) {
           s.placeholder = search.val;
           s.simple_text = "";
-          return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
+          return searches.lemgramSearch("[lex contains '" + search.val + "']", s.prefix, s.suffix, page);
+        } else if (search.type === "lemgram" && !s.word_pic) {
+          c.log("lemgram search", search.val, page);
+          s.placeholder = search.val;
+          s.simple_text = "";
+          return searches.kwicSearch(cqp = "[lex contains '" + search.val + "']", page);
         } else {
           s.placeholder = null;
           s.simple_text = "";
@@ -165,7 +170,13 @@
     cqp = '[]';
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
-      or_obj.op = _.values(s.getOpts(or_obj.type))[0][1];
+      var opts;
+      opts = s.getOpts(or_obj.type);
+      if (!opts) {
+        or_obj.op = "is";
+      } else {
+        or_obj.op = _.values(opts)[0][1];
+      }
       return or_obj.val = "";
     };
     s.getOpts = function(type) {
@@ -173,6 +184,7 @@
       confObj = (_ref = s.typeMapping) != null ? _ref[type] : void 0;
       if (!confObj) {
         c.log("confObj missing", type, s.typeMapping);
+        return;
       }
       optObj = _.extend({}, (confObj != null ? confObj.opts : void 0) || settings.defaultOptions);
       if (confObj.type === "set") {

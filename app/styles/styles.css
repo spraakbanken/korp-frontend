@@ -7948,11 +7948,11 @@ table {
   }
 
   line {
-    font-family: \00003797;
+    font-family: \00003796;
   }
 }
 
-.fader.loading {
+.waiting-first {
   transition: opacity 200ms;
   opacity: 0.5;
 }

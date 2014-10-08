@@ -793,10 +793,10 @@ table {
     margin: 0 0;
   }
 }
-
-.fader.loading {
+.waiting-first {
   transition : opacity 200ms;
   opacity : 0.5;
+
 }
 
 .table_scrollarea {

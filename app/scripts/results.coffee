@@ -228,9 +228,12 @@ class view.KWICResults extends BaseResults
 
 
 
+
+
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
             c.log "apply kwic search data", data
+            @s.gotFirstKwic = true
             if isReading
                 $scope.setContextData(data)
                 @selectionManager.deselect()
@@ -382,6 +385,7 @@ class view.KWICResults extends BaseResults
 
     makeRequest: (page_num, cqp) ->
         @showPreloader()
+        @s.gotFirstKwic = false
         isReading = @isReadingMode()
 
         # safeApply @s, () =>

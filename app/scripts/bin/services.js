@@ -163,10 +163,10 @@
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         statsResults.makeRequest(cqp);
         this.kwicRequest(cqp, page);
+        searchProxy.relatedWordSearch(lemgram);
         if (settings.wordpicture === false) {
           return;
         }
-        searchProxy.relatedWordSearch(lemgram);
         return lemgramResults.makeRequest(lemgram, "lemgram");
       };
 

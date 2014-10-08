@@ -20,7 +20,7 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
 
 
 
-korpApp.controller "kwicCtrl", ($scope, utils) ->
+korpApp.controller "kwicCtrl", ($scope, utils, $location) ->
     c.log "kwicCtrl init", $scope.$parent
     s = $scope
 
@@ -31,6 +31,12 @@ korpApp.controller "kwicCtrl", ($scope, utils) ->
         s.$root.sidebar_visible = false
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
+
+    s.page = Number($location.search().page) + 1 or 1
+
+    s.setPage = ($event, page) ->
+        s.instance.setPage(page)
+        return
 
     readingChange = () ->
         c.log "reading change"

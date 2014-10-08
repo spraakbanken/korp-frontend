@@ -1,7 +1,7 @@
 <div>
 
 
-  <div ng-controller="ParallelSearch">
+  <div ng-controller="ParallelSearch" ng-keydown="keydown($event)">
     <div ng-repeat="l in langs" >
       <select ng-model="l.lang" ng-options="langstr as (langstr | loc) for langstr in getEnabledLangs($index)"></select>
       <label tooltip="{{'negate_explanation' | loc}} " ng-show="!$first" for="negate_chk{{$index}}">{{"not_containing" | loc}}</label> <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="negates[$index]" ng-change="negChange()">
@@ -14,7 +14,7 @@
     <!-- <option value="sentence" rel="localize[within_sentence]">Mening</option> -->
     <!-- <option value="paragraph" rel="localize[within_paragraph]">Stycke</option> -->
     <!-- <search-submit pos="right"></search-submit> -->
-    <button ng-click="onSubmit()" class="btn btn-small">{{'search' | loc}}</button> 
+    <button ng-click="onSubmit()"  class="btn btn-small">{{'search' | loc}}</button> 
   </div>
 
 

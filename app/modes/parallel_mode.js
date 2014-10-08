@@ -7,12 +7,28 @@ korpApp.controller("SearchCtrl", function($scope) {
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
 });
-korpApp.controller("ParallelSearch", function($scope, $location, $rootScope) {
+korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout) {
 	var s = $scope;
 	s.negates = [];
 	s.onSubmit = function() {
-	    $location.search("search", "cqp|" + $rootScope.activeCQP);
+		$location.search("search", null)
+		$timeout( function() {
+		    // within = s.within unless s.within in _.keys settings.defaultWithin
+		    var within;
+		    if(!s.within in _.keys(settings.defaultWithin))
+			    within = s.within
+
+		    $location.search("within", within || null)
+		    $location.search("search", "cqp|" + $rootScope.activeCQP)
+		}, 0)
+	}	
+
+	s.keydown = function($event) {
+		if($event.keyCode == 13) // enter
+			s.onSubmit() 
 	}
+	    
+	
 
 	if($location.search().parallel_corpora)
 		s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {

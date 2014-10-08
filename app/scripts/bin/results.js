@@ -258,6 +258,7 @@
       this.s.$apply((function(_this) {
         return function($scope) {
           c.log("apply kwic search data", data);
+          _this.s.gotFirstKwic = true;
           if (isReading) {
             $scope.setContextData(data);
             _this.selectionManager.deselect();
@@ -462,6 +463,7 @@
     KWICResults.prototype.makeRequest = function(page_num, cqp) {
       var isReading, kwicCallback;
       this.showPreloader();
+      this.s.gotFirstKwic = false;
       isReading = this.isReadingMode();
       kwicCallback = $.proxy(this.renderResult, this);
       return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {

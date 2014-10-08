@@ -63,10 +63,16 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             else  
                 lemgramResults.resetView()
 
-        else if search.type == "lemgram" and settings.wordPicture
+        else if search.type == "lemgram" and s.word_pic
             s.placeholder = search.val
             s.simple_text = ""
-            searches.lemgramSearch(search.val, s.prefix, s.suffix, page)
+            searches.lemgramSearch("[lex contains '#{search.val}']", s.prefix, s.suffix, page)
+            
+        else if search.type == "lemgram" and !s.word_pic
+            c.log "lemgram search", search.val, page
+            s.placeholder = search.val
+            s.simple_text = ""
+            searches.kwicSearch(cqp = "[lex contains '#{search.val}']", page)
         else 
             s.placeholder = null
             s.simple_text = ""
@@ -161,7 +167,13 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     
     s.setDefault = (or_obj) ->
         # assign the first value from the opts 
-        or_obj.op = _.values(s.getOpts(or_obj.type))[0][1]
+        opts = s.getOpts(or_obj.type)
+
+        unless opts
+            or_obj.op = "is"
+        else
+            or_obj.op = _.values(opts)[0][1]
+
 
         or_obj.val = ""
 
@@ -169,6 +181,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         confObj = s.typeMapping?[type]
         unless confObj
             c.log "confObj missing", type, s.typeMapping
+            return
 
         optObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
         if confObj.type == "set"

@@ -147,13 +147,14 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             statsResults.makeRequest cqp
 
         lemgramSearch : (lemgram, searchPrefix, searchSuffix, page) ->
+            #TODO: this is dumb, move the cqp calculations elsewhere
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
             @kwicRequest cqp, page
+            searchProxy.relatedWordSearch lemgram
             
             if settings.wordpicture == false then return
             
-            searchProxy.relatedWordSearch lemgram
             # lemgramResults.showPreloader()
             lemgramResults.makeRequest(lemgram, "lemgram")
             # def = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))

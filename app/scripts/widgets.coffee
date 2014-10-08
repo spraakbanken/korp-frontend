@@ -120,7 +120,7 @@ Sidebar =
 
 
         if attrs.type == "url"
-            return output.append "<a href='#{str_value}' class='exturl sidebar_url'>#{decodeURI(str_value)}</a>"
+            return output.append "<a href='#{str_value}' class='exturl sidebar_url' target='_blank'>#{decodeURI(str_value)}</a>"
 
         else if key == "msd"
             return output.append """<span class='msd'>#{str_value}</span>

@@ -9,7 +9,7 @@
     return $scope.searches = searches;
   });
 
-  korpApp.controller("kwicCtrl", function($scope, utils) {
+  korpApp.controller("kwicCtrl", function($scope, utils, $location) {
     var findMatchSentence, massageData, punctArray, readingChange, s;
     c.log("kwicCtrl init", $scope.$parent);
     s = $scope;
@@ -19,6 +19,10 @@
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
+    s.page = Number($location.search().page) + 1 || 1;
+    s.setPage = function($event, page) {
+      s.instance.setPage(page);
+    };
     readingChange = function() {
       var _ref;
       c.log("reading change");
