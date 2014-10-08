@@ -24,6 +24,12 @@ class BaseResults
             @s.$parent.progress = Math.round(progressObj["stats"])
 
 
+    getSearchTabs : () ->
+        $(".search_tabs > ul").scope().tabs
+
+    getResultTabs : () ->
+        $(".result_tabs > ul").scope().tabs
+
     renderResult: (data) ->
 
         #       this.resetView();
@@ -74,6 +80,7 @@ class view.KWICResults extends BaseResults
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
         @current_page = search().page or 0
+        @tabindex = 0
 
         @s = scope
         
@@ -96,8 +103,9 @@ class view.KWICResults extends BaseResults
         @s.setupReadingHash()
 
     onWordClick : (event) ->
-        
-        @s.$root.sidebar_visible = true
+        c.log "wordclick", @tabindex, @s
+        if @getResultTabs()[@tabindex].active
+            @s.$root.sidebar_visible = true
         # c.log "click", obj, event
         # c.log "word click", $(this).scope().wd, event.currentTarget
         scope = $(event.currentTarget).scope()
@@ -254,7 +262,7 @@ class view.KWICResults extends BaseResults
 
         @$result.localize()
         @centerScrollbar()
-        if not @s.$root.word_selected and not isReading
+        if not @selectionManager.hasSelected() and not isReading
             @$result.find(".match").children().first().click()
 
     showNoResults: ->
@@ -549,6 +557,7 @@ class view.ExampleResults extends view.KWICResults
             @makeRequest()
             @onentry()
         @current_page = 0
+        @tabindex = (@getResultTabs().length - 1) + @s.$parent.$index
         # @s.$parent.active = true
 
     setupReadingHash : () ->
@@ -1068,30 +1077,25 @@ class view.StatsResults extends BaseResults
         $("#showGraph").on "click", () =>
             if $("#showGraph").is(".disabled") then return
             params = @proxy.prevParams
-            cl = settings.corpusListing.subsetFactory(params.corpus.split(","))
-            # instance.corpora = cl
             reduceVal = params.groupby
 
-
-            isStructAttr = reduceVal of cl.getStructAttrs()
             subExprs = []
             labelMapping = {}
             
             showTotal = false
             mainCQP = params.cqp
-            prefix = if isStructAttr then "_." else ""
-            attrs = _.extend {}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector),
-                 cl.getStructAttrs(settings.reduce_word_attribute_selector)
 
             for chk in @$result.find(".slick-cell-checkboxsel :checked")
                 cell = $(chk).parent()
                 if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
                     showTotal = true
                     continue
-                cqp = cell.next().find(" > .link").data("query")
+                cqp = decodeURIComponent cell.next().find(" > .link").data("query")
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
 
+
+            activeCorpora = _.flatten [key for key, val of @savedData.corpora when val.sums.absolute]
 
             @s.$apply () =>
                 @s.onGraphShow
@@ -1099,10 +1103,7 @@ class view.StatsResults extends BaseResults
                     subcqps : subExprs
                     labelMapping : labelMapping
                     showTotal : showTotal
-                    corpusListing : cl
-        #     instance.makeRequest mainCQP, subExprs, labelMapping, showTotal
-        # $("#showGraph .ui-button-text", @$result).localeKey("show_diagram")
-
+                    corpusListing : settings.corpusListing.subsetFactory activeCorpora
 
         paper = new Raphael($(".graph_btn_icon", @$result).get(0), 33, 24)
         paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z")
@@ -1175,7 +1176,6 @@ class view.StatsResults extends BaseResults
         @resetView()
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
         ).done( ([data, wordArray, columns, dataset]) =>
-            c.log "stats done", data, wordArray, columns, dataset
             @savedData = data
             @savedWordArray = wordArray
             @renderResult columns, dataset

@@ -24,6 +24,14 @@
       })(this));
     };
 
+    BaseResults.prototype.getSearchTabs = function() {
+      return $(".search_tabs > ul").scope().tabs;
+    };
+
+    BaseResults.prototype.getResultTabs = function() {
+      return $(".result_tabs > ul").scope().tabs;
+    };
+
     BaseResults.prototype.renderResult = function(data) {
       this.$result.find(".error_msg").remove();
       if (this.$result.is(":visible")) {
@@ -83,6 +91,7 @@
       this.proxy = kwicProxy;
       this.readingProxy = new model.KWICProxy();
       this.current_page = search().page || 0;
+      this.tabindex = 0;
       this.s = scope;
       this.selectionManager = scope.selectionManager;
       this.setupReadingHash();
@@ -111,7 +120,10 @@
 
     KWICResults.prototype.onWordClick = function(event) {
       var obj, scope, sent, word;
-      this.s.$root.sidebar_visible = true;
+      c.log("wordclick", this.tabindex, this.s);
+      if (this.getResultTabs()[this.tabindex].active) {
+        this.s.$root.sidebar_visible = true;
+      }
       scope = $(event.currentTarget).scope();
       obj = scope.wd;
       sent = scope.sentence;
@@ -287,7 +299,7 @@
       }
       this.$result.localize();
       this.centerScrollbar();
-      if (!this.s.$root.word_selected && !isReading) {
+      if (!this.selectionManager.hasSelected() && !isReading) {
         return this.$result.find(".match").children().first().click();
       }
     };
@@ -615,6 +627,7 @@
         this.onentry();
       }
       this.current_page = 0;
+      this.tabindex = (this.getResultTabs().length - 1) + this.s.$parent.$index;
     }
 
     ExampleResults.prototype.setupReadingHash = function() {};
@@ -1205,20 +1218,16 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var attrs, cell, chk, cl, cqp, isStructAttr, labelMapping, mainCQP, params, prefix, reduceVal, showTotal, subExprs, _i, _len, _ref;
+          var activeCorpora, cell, chk, cqp, key, labelMapping, mainCQP, params, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
           params = _this.proxy.prevParams;
-          cl = settings.corpusListing.subsetFactory(params.corpus.split(","));
           reduceVal = params.groupby;
-          isStructAttr = reduceVal in cl.getStructAttrs();
           subExprs = [];
           labelMapping = {};
           showTotal = false;
           mainCQP = params.cqp;
-          prefix = isStructAttr ? "_." : "";
-          attrs = _.extend({}, cl.getCurrentAttributes(settings.reduce_word_attribute_selector), cl.getStructAttrs(settings.reduce_word_attribute_selector));
           _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             chk = _ref[_i];
@@ -1227,17 +1236,31 @@
               showTotal = true;
               continue;
             }
-            cqp = cell.next().find(" > .link").data("query");
+            cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
             subExprs.push(cqp);
             labelMapping[cqp] = cell.next().text();
           }
+          activeCorpora = _.flatten([
+            (function() {
+              var _ref1, _results;
+              _ref1 = this.savedData.corpora;
+              _results = [];
+              for (key in _ref1) {
+                val = _ref1[key];
+                if (val.sums.absolute) {
+                  _results.push(key);
+                }
+              }
+              return _results;
+            }).call(_this)
+          ]);
           return _this.s.$apply(function() {
             return _this.s.onGraphShow({
               cqp: mainCQP,
               subcqps: subExprs,
               labelMapping: labelMapping,
               showTotal: showTotal,
-              corpusListing: cl
+              corpusListing: settings.corpusListing.subsetFactory(activeCorpora)
             });
           });
         };
@@ -1324,7 +1347,6 @@
         return function(_arg) {
           var columns, data, dataset, wordArray;
           data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
-          c.log("stats done", data, wordArray, columns, dataset);
           _this.savedData = data;
           _this.savedWordArray = wordArray;
           return _this.renderResult(columns, dataset);

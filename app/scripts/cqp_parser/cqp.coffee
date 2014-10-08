@@ -21,6 +21,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                         "_=" : [".*" + val + ".*", "="]
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
+                        "!*=" : [val, "!="]
                     }[op] or [val, op]
 
                 flagstr = ""

@@ -1,5 +1,6 @@
 (function() {
-  var korpApp;
+  var korpApp,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   korpApp = angular.module("korpApp");
 
@@ -117,16 +118,19 @@
   korpApp.directive("escaper", function() {
     return {
       link: function($scope, elem, attr) {
-        var escape, unescape;
+        var doNotEscape, escape, unescape;
+        doNotEscape = ["*=", "!*="];
         escape = function(val) {
-          if ($scope.orObj.op !== "*=") {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return regescape(val);
           } else {
             return val;
           }
         };
         unescape = function(val) {
-          if ($scope.orObj.op !== "*=") {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return val.replace(/\\/g, "");
           } else {
             return val;

@@ -49,7 +49,8 @@
     "in_corpus" : "in corpus",
     "cqp_query" : "Custom CQP query",
     "cqp_docs" : "Get the CQP tutorial",
-    "active_cqp" : "Active CQP query in extended",
+    "active_cqp_simple" : "Active CQP query in simple search",
+    "active_cqp_extended" : "Active CQP query in extended",
     "max" : "up to",
     "min" : "at least",
     "and" : "and",
@@ -92,6 +93,7 @@
     "wordclass_starts" : "word class begins with",
     "interval" : "interval",
     "matches" : "regexp",
+    "matches_not" : "not regexp",
 
     "repeat" : "Repeat",
     "to" : "to",

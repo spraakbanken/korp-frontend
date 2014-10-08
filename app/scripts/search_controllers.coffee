@@ -19,6 +19,8 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils) ->
     $scope.$watch "word_pic", (val) ->
         $location.search("word_pic", Boolean(val) or null)
 
+    $scope.showStats = () -> settings.statistics != false
+
     # utils.setupHash $scope, [
     #         key : "word_pic"
     #         val_out : Boolean
@@ -263,10 +265,26 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
 korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
-    if $location.search().search?.split("|")[0] == "cqp" 
-        $scope.cqp = $location.search().search.split("|")[1] or "[]"
+    expr = ""
+    if $location.search().search
+        [type, expr...] = $location.search().search?.split("|")
+        expr = expr.join("|")
+    
+    if type == "cqp" 
+        $scope.cqp = expr or "[]"
     else
         $scope.cqp = "[]"
+
+    # $scope.getSimpleCQP = () -> 
+    #     out = simpleSearch.getCQP()
+    #     c.log "getSimpleCQP", out
+    #     out
+
+    $scope.$watch () -> 
+        simpleSearch.getCQP()
+    , (val) ->
+        $scope.simpleCQP = val
+
     $scope.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
             label : name or $rootScope.activeCQP

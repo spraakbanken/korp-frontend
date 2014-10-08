@@ -171,6 +171,7 @@ settings.defaultOptions = {
     "contains" : "_=",
     "ends_with" : "&=",
     "matches" : "*=",
+    "matches_not" : "!*=",
 }
 settings.liteOptions = {
     "is" : "=",

@@ -134,7 +134,10 @@
             </tab>
             <tab heading="{{&quot;advanced&quot; | loc}}" ng-if="visibleTabs[2]" ng-controller="AdvancedCtrl">
               <div id="advanced">
-                <div class="well well-small">{{'active_cqp' | loc}}:
+                <div class="well well-small">{{'active_cqp_simple' | loc}}:
+                  <pre>{{simpleCQP}}</pre>
+                </div>
+                <div class="well well-small">{{'active_cqp_extended' | loc}}:
                   <pre>{{activeCQP}}</pre>
                 </div>
                 <div class="well well-small">{{'cqp_query' | loc}}:
@@ -180,7 +183,7 @@
                 <option value="random" rel="localize[random_context]">Slumpvis</option>
               </select>
             </div>
-            <div><span rel="localize[statistics]">Statistik </span>: <span id="reduceSelect"></span></div>
+            <div ng-show="showStats()"><span rel="localize[statistics]">Statistik </span>: <span id="reduceSelect"></span></div>
             <div ng-show="settings.wordpicture !== false">
               <input id="word_pic" type="checkbox" ng-model="word_pic">
               <label for="word_pic">{{'show_word_pic' | loc}}</label>
@@ -190,7 +193,7 @@
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
-              <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable">
+              <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>

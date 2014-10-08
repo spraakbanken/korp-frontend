@@ -50,7 +50,8 @@
     "in_corpus" : "i korpus",
     "cqp_query" : "Fullständig CQP-fråga",
     "cqp_docs" : "Hämta CQP-dokumentationen",
-    "active_cqp" : "Aktiv CQP-fråga i utökad",
+    "active_cqp_simple" : "Aktiv CQP-fråga i enkel",
+    "active_cqp_extended" : "Aktiv CQP-fråga i utökad",
     "max" : "upp till",
     "min" : "minst",
     "and" : "och",
@@ -94,6 +95,7 @@
     "wordclass_starts" : "ordklassen börjar med",
     "interval" : "intervall",
     "matches" : "regexp",
+    "matches_not" : "inte regexp",
 
     "repeat" : "Upprepa",
     "to" : "till",

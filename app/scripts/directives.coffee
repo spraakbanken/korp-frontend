@@ -77,14 +77,15 @@ korpApp.directive "tabHash", (utils, $location) ->
 
 korpApp.directive "escaper", () ->
     link : ($scope, elem, attr) ->
+        doNotEscape = ["*=", "!*="]
         escape = (val) ->
-            if $scope.orObj.op != "*="
+            if $scope.orObj.op not in doNotEscape
                 regescape(val)
             else
                 val
 
         unescape = (val) ->
-            if $scope.orObj.op != "*="
+            if $scope.orObj.op not in doNotEscape
                 val.replace(/\\/g, "")
             else
                 val

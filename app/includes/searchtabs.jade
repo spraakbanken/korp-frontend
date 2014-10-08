@@ -8,7 +8,12 @@ div(ng-controller="SearchCtrl")
     tab(heading='{{"advanced" | loc}}', ng-if="visibleTabs[2]", ng-controller="AdvancedCtrl")
       #advanced
         .well.well-small
-          | {{'active_cqp' | loc}}:
+          | {{'active_cqp_simple' | loc}}:
+
+          pre {{simpleCQP}}
+
+        .well.well-small
+          | {{'active_cqp_extended' | loc}}:
 
           pre {{activeCQP}}
         
@@ -60,7 +65,7 @@ div(ng-controller="SearchCtrl")
         option(value='left', rel='localize[left_context]') Vänsterkontext
         option(value='right', rel='localize[right_context]') Högerkontext
         option(value='random', rel='localize[random_context]') Slumpvis
-    div
+    div(ng-show="showStats()")
       span(rel='localize[statistics]') Statistik 
       | : 
       span#reduceSelect

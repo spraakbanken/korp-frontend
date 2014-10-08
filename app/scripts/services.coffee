@@ -113,6 +113,12 @@ korpApp.factory 'backend', ($http, $q, utils) ->
 
         return def.promise
 
+
+    # getFrames : () ->
+    #     params = 
+    #         url : "/"
+    #     "http://spraakbanken.gu.se/ws/karp-sok?sense=gå..1&resource=swefn&mini-entries=true&info=lu&format=json"
+
     # requestGraph : () ->
         # def = $q.defer()
 

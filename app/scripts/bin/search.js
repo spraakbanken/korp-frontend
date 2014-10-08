@@ -411,8 +411,7 @@
 
     SimpleSearch.prototype.getCQP = function(word) {
       var cqp, currentText, lemgram, query, suffix, val, wordArray;
-      c.log("getCQP", word);
-      currentText = $.trim(word || $("#simple_text").val() || "", '"');
+      currentText = $.trim(word || $("#simple_text", this.$main).val() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
         val = "[lex contains \"" + currentText + "\"]";

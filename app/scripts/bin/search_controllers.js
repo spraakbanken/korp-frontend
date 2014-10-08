@@ -1,6 +1,7 @@
 (function() {
   var korpApp,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice;
 
   korpApp = angular.module("korpApp");
 
@@ -19,9 +20,12 @@
     }), function(val) {
       return $scope.word_pic = Boolean(val);
     });
-    return $scope.$watch("word_pic", function(val) {
+    $scope.$watch("word_pic", function(val) {
       return $location.search("word_pic", Boolean(val) || null);
     });
+    return $scope.showStats = function() {
+      return settings.statistics !== false;
+    };
   });
 
   korpApp.config(function($tooltipProvider) {
@@ -253,12 +257,22 @@
   });
 
   korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
-    var _ref;
-    if (((_ref = $location.search().search) != null ? _ref.split("|")[0] : void 0) === "cqp") {
-      $scope.cqp = $location.search().search.split("|")[1] || "[]";
+    var expr, type, _ref, _ref1;
+    expr = "";
+    if ($location.search().search) {
+      _ref1 = (_ref = $location.search().search) != null ? _ref.split("|") : void 0, type = _ref1[0], expr = 2 <= _ref1.length ? __slice.call(_ref1, 1) : [];
+      expr = expr.join("|");
+    }
+    if (type === "cqp") {
+      $scope.cqp = expr || "[]";
     } else {
       $scope.cqp = "[]";
     }
+    $scope.$watch(function() {
+      return simpleSearch.getCQP();
+    }, function(val) {
+      return $scope.simpleCQP = val;
+    });
     $scope.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
         label: name || $rootScope.activeCQP,
