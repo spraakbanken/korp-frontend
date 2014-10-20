@@ -1,13 +1,20 @@
 
 settings.wordpicture = false;
-settings.statistics = false;
+// settings.statistics = false;
 var start_lang = "swe";
 
 korpApp.controller("SearchCtrl", function($scope) {
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
+
+    $scope.settings = settings
+    $scope.showStats = function() {
+        // c.log "showstats", settings.statistics, settings.statistics != false
+        return settings.statistics != false
+    	
+    }
 });
-korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout) {
+korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout, searches) {
 	var s = $scope;
 	s.negates = [];
 	s.onSubmit = function() {
@@ -19,7 +26,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 			    within = s.within
 
 		    $location.search("within", within || null)
-		    $location.search("search", "cqp|" + $rootScope.activeCQP)
+		    $location.search("search", "cqp|" + $rootScope.extendedCQP)
 		}, 0)
 	}	
 
@@ -43,6 +50,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 	s.negChange = function() {
 		$location.search("search", null)
 	}
+	c.log ("add langs watch")
 	s.$watch("langs", function() {
 		var currentLangList = _.pluck(s.langs, "lang");
 		c.log("lang change", currentLangList)
@@ -57,19 +65,32 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 				}).groupBy("lang").value()
 		}
 
-		var output = CQP.expandOperators(s.langs[0].cqp);
+		try {
+			var output = CQP.expandOperators(s.langs[0].cqp);
+		} catch(e) {
+			c.log("parallel cqp parsing error", e)
+			return
+		}
 		output += _.map(s.langs.slice(1), function(langobj, i) {
 			var neg = s.negates[i + 1] ? "!" : "";
 			var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
 			var linkedCorpus = _(langMapping[langobj.lang]).pluck("id").invoke("toUpperCase").join("|");
-			return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + CQP.expandOperators(langobj.cqp); 
+			
+			try {
+				var expanded = CQP.expandOperators(langobj.cqp);
+			} catch(e) {
+				c.log("parallel cqp parsing error", e)
+				return
+			}
+			return ":LINKED_CORPUS:" + linkedCorpus + " " + neg + " " + expanded; 
 		}).join("");
 
 		_.each(s.langs, function(langobj, i) {
 			search("cqp_" + langobj.lang , langobj.cqp);
 		})
-		$rootScope.activeCQP = output;
+		$rootScope.extendedCQP = output;
 		s.$broadcast("corpuschooserchange")
+		searches.langDef.resolve()
 	}, true);
 
 	s.getEnabledLangs = function(i) {
@@ -109,6 +130,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 }, {
 
 	selectWord : function(word, scope, sentence) {
+		c.log ("word, scope, sentence", word, scope, sentence)
 		c3.prototype.selectWord.apply(this, arguments)
 		this.clearLinks()
 		var self = this
@@ -130,8 +152,9 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 		}
 
 
-		if(sentence.isLinked){
+		if(sentence.isLinked){ // a secondary language was clicked
 			var sent_index = scope.$parent.$index
+			c.log ("sent_index", sent_index)
 			var data = this.getActiveData()
 			var mainSent = null
 			while(data[sent_index]) {
@@ -142,8 +165,8 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 			 	}
 				sent_index--
 			}
- 			c.log( "mainSent", mainSent)
 
+ 			c.log( "mainSent", mainSent)
  			var linkNum = Number(obj.linkref)
  			var lang = corpus.id.split("-")[1]
  			var mainCorpus = mainSent.corpus.split("-")[0]
@@ -164,7 +187,6 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 				var wordsToLink = _.each(_.compact(val.split("|")), function(num) {
 					var lang = key.split("-")[1]
 					var mainCorpus = corpus.id.split("-")[0]
-					c.log ("corpus.id", corpus.id)
 
 					var link = findRef(num, sentence.aligned[mainCorpus + "-" + lang])
 					link._link_selected = true
@@ -175,7 +197,8 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
 		}
 
-		scope.$apply()
+		safeApply($("body").scope(), $.noop)
+		
 	},
 
 	clearLinks : function() {
@@ -186,7 +209,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 	}
 });
 
-model.StatsProxy.prototype.makeRequest = function(){};
+// model.StatsProxy.prototype.makeRequest = function(){};
 
 settings.primaryColor = "#FFF3D8";
 settings.primaryLight = "#FFF9EE";
@@ -504,6 +527,8 @@ settings.corpora["saltnld-nl"] = {
 		"link": "meningspar"
 	},
 	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"},
 		linkref : linkref,
 		"wordlink-sv" : wordlink
 	},
