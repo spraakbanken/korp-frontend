@@ -630,7 +630,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
 	title : "Skyddade korpusar",
-	contents : ["ansokningar", "cefr", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
+	contents : ["ansokningar", "coctaill", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -3478,9 +3478,9 @@ settings.corpora.ansokningar = {
     }
 };
 
-settings.corpora.cefr = {
-    id : "cefr",
-    title : "CEFR",
+settings.corpora.coctaill = {
+    id : "coctaill",
+    title : "COCTAILL",
     description : "",
     limited_access : true,
     context : settings.spContext,
