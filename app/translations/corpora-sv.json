@@ -403,5 +403,17 @@
     "interviewee" : "intervjuad",
     "part" : "del",
     
-    "location" : "plats"
+    "location" : "plats",
+
+    "coctaill_level" : "level",
+    "coctaill_genre" : "genre",
+    "coctaill_list_unit" : "list_unit",
+    "coctaill_list_skill" : "list_skill",
+    "coctaill_lessontext_topic" : "lessontext_topic",
+    "coctaill_activity_instruction_skill" : "activity_instruction_skill",
+    "coctaill_activity_instruction_format" : "activity_instruction_format",
+    "coctaill_task_skill" : "task_skill",
+    "coctaill_task_format" : "task_format",
+    "coctaill_language_example_unit" : "language_example_unit",
+    "coctaill_language_example_skill" : "language_example_skill"
 }

@@ -262,12 +262,16 @@ attrs.msd = {
             modal = $modal.open({
                 template : '<div>' +
                                 '<div class="modal-header">' +
-                                    '<h4>{{\'msd_long\' | loc}}</h4>' +
+                                    '<h3 class="modal-title">{{\'msd_long\' | loc}}</h3>' +
+                                    '<span ng-click="clickX()" class="close-x">×</span>' +
                                 '</div>' +
-                                '<div ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
+                                '<div class="modal-body" ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
                             '</div>',
                 scope : $scope
             })
+        }
+        $scope.clickX = function(event) {
+            modal.close()
         }
         $scope.msdClick = function(event) {
             val = $(event.target).parent().data("value")
@@ -629,8 +633,8 @@ settings.corporafolders.fisk.magazines = {
 };
 
 settings.corporafolders.protected = {
-	title : "Skyddade korpusar",
-	contents : ["ansokningar", "coctaill", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
+    title : "Skyddade korpusar",
+    contents : ["ansokningar", "coctaill", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -649,36 +653,36 @@ settings.corporafolders.novels = {
 };
 
 settings.corporafolders.socialmedia = {
-	title : "Sociala medier",
-	contents : []
+    title : "Sociala medier",
+    contents : []
 };
 
 settings.corporafolders.socialmedia.bloggmix = {
-	title : "Bloggmix",
-	contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmix2014", "bloggmixodat"],
-	description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
+    title : "Bloggmix",
+    contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmix2014", "bloggmixodat"],
+    description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
 };
 
 settings.corporafolders.socialmedia.forum = {
-	title : "Diskussionsforum",
-	contents : []
+    title : "Diskussionsforum",
+    contents : []
 };
 
 settings.corporafolders.socialmedia.forum.familjeliv = {
-	title : "Familjeliv",
-	contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-allmanna-kropp", "familjeliv-allmanna-noje", "familjeliv-allmanna-samhalle", "familjeliv-allmanna-sandladan", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
-	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
+    title : "Familjeliv",
+    contents : ["familjeliv-adoption", "familjeliv-allmanna-ekonomi", "familjeliv-allmanna-familjeliv", "familjeliv-allmanna-fritid", "familjeliv-allmanna-hushem", "familjeliv-allmanna-husdjur", "familjeliv-allmanna-kropp", "familjeliv-allmanna-noje", "familjeliv-allmanna-samhalle", "familjeliv-allmanna-sandladan", "familjeliv-expert", "familjeliv-foralder", "familjeliv-gravid", "familjeliv-kansliga", "familjeliv-medlem-allmanna", "familjeliv-medlem-foraldrar", "familjeliv-medlem-planerarbarn", "familjeliv-medlem-vantarbarn", "familjeliv-pappagrupp", "familjeliv-planerarbarn", "familjeliv-sexsamlevnad", "familjeliv-svartattfabarn", "familjeliv-anglarum"],
+    description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.familjeliv.se/\">Familjeliv</a>. Materialet är under uppbyggnad."
 };
 
 settings.corporafolders.socialmedia.forum.flashback = {
-	title : "Flashback",
-	contents : ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-samhalle", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
-	description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>."
+    title : "Flashback",
+    contents : ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-samhalle", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
+    description : "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>."
 };
 
 settings.corporafolders.socialmedia.twitter = {
-	title : "Twitter",
-	contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006", "twitter-pldebatt-140504"]
+    title : "Twitter",
+    contents : ["twitter", "twitter-pldebatt-130612", "twitter-pldebatt-131006", "twitter-pldebatt-140504"]
 };
 
 settings.corporafolders.newspapertexts = {
@@ -1612,245 +1616,245 @@ var familjeliv_structs = {
 };
 
 settings.corpora["familjeliv-allmanna-ekonomi"] = {
-	id : "familjeliv-allmanna-ekonomi",
-	title : "Familjeliv: Allmänna rubriker – Ekonomi & juridik",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-ekonomi",
+    title : "Familjeliv: Allmänna rubriker – Ekonomi & juridik",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-familjeliv"] = {
-	id : "familjeliv-allmanna-familjeliv",
-	title : "Familjeliv: Allmänna rubriker – Familjeliv.se",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-familjeliv",
+    title : "Familjeliv: Allmänna rubriker – Familjeliv.se",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-hushem"] = {
-	id : "familjeliv-allmanna-hushem",
-	title : "Familjeliv: Allmänna rubriker – Hus & hem",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-hushem",
+    title : "Familjeliv: Allmänna rubriker – Hus & hem",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-husdjur"] = {
-	id : "familjeliv-allmanna-husdjur",
-	title : "Familjeliv: Allmänna rubriker – Husdjur",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-husdjur",
+    title : "Familjeliv: Allmänna rubriker – Husdjur",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-fritid"] = {
-	id : "familjeliv-allmanna-fritid",
-	title : "Familjeliv: Allmänna rubriker – Fritid & hobby",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-fritid",
+    title : "Familjeliv: Allmänna rubriker – Fritid & hobby",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-kropp"] = {
-	id : "familjeliv-allmanna-kropp",
-	title : "Familjeliv: Allmänna rubriker – Kropp & själ",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-kropp",
+    title : "Familjeliv: Allmänna rubriker – Kropp & själ",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-noje"] = {
-	id : "familjeliv-allmanna-noje",
-	title : "Familjeliv: Allmänna rubriker – Nöje",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-noje",
+    title : "Familjeliv: Allmänna rubriker – Nöje",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-samhalle"] = {
-	id : "familjeliv-allmanna-samhalle",
-	title : "Familjeliv: Allmänna rubriker – Samhälle",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-samhalle",
+    title : "Familjeliv: Allmänna rubriker – Samhälle",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-sandladan"] = {
-	id : "familjeliv-allmanna-sandladan",
-	title : "Familjeliv: Allmänna rubriker – Sandlådan",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-allmanna-sandladan",
+    title : "Familjeliv: Allmänna rubriker – Sandlådan",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-adoption"] = {
-	id : "familjeliv-adoption",
-	title : "Familjeliv: Adoption",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-adoption",
+    title : "Familjeliv: Adoption",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-expert"] = {
-	id : "familjeliv-expert",
-	title : "Familjeliv: Fråga experten",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-expert",
+    title : "Familjeliv: Fråga experten",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-foralder"] = {
-	id : "familjeliv-foralder",
-	title : "Familjeliv: Förälder",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-foralder",
+    title : "Familjeliv: Förälder",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-gravid"] = {
-	id : "familjeliv-gravid",
-	title : "Familjeliv: Gravid",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-gravid",
+    title : "Familjeliv: Gravid",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-kansliga"] = {
-	id : "familjeliv-kansliga",
-	title : "Familjeliv: Känsliga rummet",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-kansliga",
+    title : "Familjeliv: Känsliga rummet",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-allmanna"] = {
-	id : "familjeliv-medlem-allmanna",
-	title : "Familjeliv: Medlemstrådar – Allmänna",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-medlem-allmanna",
+    title : "Familjeliv: Medlemstrådar – Allmänna",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 
 settings.corpora["familjeliv-medlem-foraldrar"] = {
-	id : "familjeliv-medlem-foraldrar",
-	title : "Familjeliv: Medlemstrådar – Föräldrar",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-medlem-foraldrar",
+    title : "Familjeliv: Medlemstrådar – Föräldrar",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-planerarbarn"] = {
-	id : "familjeliv-medlem-planerarbarn",
-	title : "Familjeliv: Medlemstrådar – Planerar barn",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-medlem-planerarbarn",
+    title : "Familjeliv: Medlemstrådar – Planerar barn",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 
 settings.corpora["familjeliv-medlem-vantarbarn"] = {
-	id : "familjeliv-medlem-vantarbarn",
-	title : "Familjeliv: Medlemstrådar – Väntar barn",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-medlem-vantarbarn",
+    title : "Familjeliv: Medlemstrådar – Väntar barn",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-pappagrupp"] = {
-	id : "familjeliv-pappagrupp",
-	title : "Familjeliv: Pappagrupp",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-pappagrupp",
+    title : "Familjeliv: Pappagrupp",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-planerarbarn"] = {
-	id : "familjeliv-planerarbarn",
-	title : "Familjeliv: Planerar barn",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-planerarbarn",
+    title : "Familjeliv: Planerar barn",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-sexsamlevnad"] = {
-	id : "familjeliv-sexsamlevnad",
-	title : "Familjeliv: Sex & samlevnad",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-sexsamlevnad",
+    title : "Familjeliv: Sex & samlevnad",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-svartattfabarn"] = {
-	id : "familjeliv-svartattfabarn",
-	title : "Familjeliv: Svårt att få barn",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-svartattfabarn",
+    title : "Familjeliv: Svårt att få barn",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["familjeliv-anglarum"] = {
-	id : "familjeliv-anglarum",
-	title : "Familjeliv: Änglarum",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : familjeliv_structs
+    id : "familjeliv-anglarum",
+    title : "Familjeliv: Änglarum",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : familjeliv_structs
 };
 
 settings.corpora["flashback-dator"] = {
-	id : "flashback-dator",
-	title : "Flashback: Dator & IT",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-dator",
+    title : "Flashback: Dator & IT",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1861,17 +1865,17 @@ settings.corpora["flashback-dator"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-droger"] = {
-	id : "flashback-droger",
-	title : "Flashback: Droger",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-droger",
+    title : "Flashback: Droger",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1882,17 +1886,17 @@ settings.corpora["flashback-droger"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-fordon"] = {
-	id : "flashback-fordon",
-	title : "Flashback: Fordon & trafik",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-fordon",
+    title : "Flashback: Fordon & trafik",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1903,17 +1907,17 @@ settings.corpora["flashback-fordon"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-hem"] = {
-	id : "flashback-hem",
-	title : "Flashback: Hem, bostad & familj",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-hem",
+    title : "Flashback: Hem, bostad & familj",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1924,17 +1928,17 @@ settings.corpora["flashback-hem"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-kultur"] = {
-	id : "flashback-kultur",
-	title : "Flashback: Kultur & media",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-kultur",
+    title : "Flashback: Kultur & media",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1945,17 +1949,17 @@ settings.corpora["flashback-kultur"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-livsstil"] = {
-	id : "flashback-livsstil",
-	title : "Flashback: Livsstil",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-livsstil",
+    title : "Flashback: Livsstil",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1966,17 +1970,17 @@ settings.corpora["flashback-livsstil"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-mat"] = {
-	id : "flashback-mat",
-	title : "Flashback: Mat, dryck & tobak",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-mat",
+    title : "Flashback: Mat, dryck & tobak",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -1987,17 +1991,17 @@ settings.corpora["flashback-mat"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-politik"] = {
-	id : "flashback-politik",
-	title : "Flashback: Politik",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-politik",
+    title : "Flashback: Politik",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2008,17 +2012,17 @@ settings.corpora["flashback-politik"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-resor"] = {
-	id : "flashback-resor",
-	title : "Flashback: Resor",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-resor",
+    title : "Flashback: Resor",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2029,17 +2033,17 @@ settings.corpora["flashback-resor"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-samhalle"] = {
-	id : "flashback-samhalle",
-	title : "Flashback: Samhälle",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-samhalle",
+    title : "Flashback: Samhälle",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2050,17 +2054,17 @@ settings.corpora["flashback-samhalle"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-sex"] = {
-	id : "flashback-sex",
-	title : "Flashback: Sex",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-sex",
+    title : "Flashback: Sex",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2071,17 +2075,17 @@ settings.corpora["flashback-sex"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-sport"] = {
-	id : "flashback-sport",
-	title : "Flashback: Sport & träning",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-sport",
+    title : "Flashback: Sport & träning",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2092,17 +2096,17 @@ settings.corpora["flashback-sport"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-vetenskap"] = {
-	id : "flashback-vetenskap",
-	title : "Flashback: Vetenskap & humaniora",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-vetenskap",
+    title : "Flashback: Vetenskap & humaniora",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2113,17 +2117,17 @@ settings.corpora["flashback-vetenskap"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-ovrigt"] = {
-	id : "flashback-ovrigt",
-	title : "Flashback: Övrigt",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-ovrigt",
+    title : "Flashback: Övrigt",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2134,17 +2138,17 @@ settings.corpora["flashback-ovrigt"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 settings.corpora["flashback-flashback"] = {
-	id : "flashback-flashback",
-	title : "Flashback: Om Flashback",
-	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
+    id : "flashback-flashback",
+    title : "Flashback: Om Flashback",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
         text_username : {label : "username2"},
         text_date : {label : "date"},
         text_links : {label : "postlinks", type : "set"},
@@ -2155,7 +2159,7 @@ settings.corpora["flashback-flashback"] = {
         thread_url : {label : "thread", type : "url"},
         forum_title : {label : "forum"},
         forum_url : {label : "forum", type : "url"}
-	}
+    }
 };
 
 var bloggmix_structs = {
@@ -2687,70 +2691,71 @@ settings.corpora.vivill = {
     attributes : modernAttrs,
     struct_attributes : {
         text_year : {label : "year", displayType : "select",
-        extended_template : selectType.extended_template,
-        controller : selectType.controller,
-        dataset : {
-            "1887" : "1887",
-            "1902" : "1902",
-            "1904" : "1904",
-            "1905" : "1905",
-            "1908" : "1908",
-            "1911" : "1911",
-            "1912" : "1912",
-            "1914a|1914b" : "1914",
-            "1917" : "1917",
-            "1919" : "1919",
-            "1920" : "1920",
-            "1921" : "1921",
-            "1924" : "1924",
-            "1928" : "1928",
-            "1932" : "1932",
-            "1933" : "1933",
-            "1934" : "1934",
-            "1936" : "1936",
-            "1940" : "1940",
-            "1944" : "1944",
-            "1946" : "1946",
-            "1948" : "1948",
-            "1951" : "1951",
-            "1952" : "1952",
-            "1953" : "1953",
-            "1956" : "1956",
-            "1958" : "1958",
-            "1959" : "1959",
-            "1960" : "1960",
-            "1961" : "1961",
-            "1962" : "1962",
-            "1964" : "1964",
-            "1967" : "1967",
-            "1968" : "1968",
-            "1969" : "1969",
-            "1970" : "1970",
-            "1972" : "1972",
-            "1973" : "1973",
-            "1975" : "1975",
-            "1976" : "1976",
-            "1979" : "1979",
-            "1981" : "1981",
-            "1982" : "1982",
-            "1984" : "1984",
-            "1985" : "1985",
-            "1987" : "1987",
-            "1988" : "1988",
-            "1990" : "1990",
-            "1991" : "1991",
-            "1993" : "1993",
-            "1994" : "1994",
-            "1997" : "1997",
-            "1998" : "1998",
-            "1999" : "1999",
-            "2000" : "2000",
-            "2001" : "2001",
-            "2002" : "2002",
-            "2005" : "2005",
-            "2006" : "2006",
-            "2010" : "2010"
-        }},
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "1887" : "1887",
+                "1902" : "1902",
+                "1904" : "1904",
+                "1905" : "1905",
+                "1908" : "1908",
+                "1911" : "1911",
+                "1912" : "1912",
+                "1914a|1914b" : "1914",
+                "1917" : "1917",
+                "1919" : "1919",
+                "1920" : "1920",
+                "1921" : "1921",
+                "1924" : "1924",
+                "1928" : "1928",
+                "1932" : "1932",
+                "1933" : "1933",
+                "1934" : "1934",
+                "1936" : "1936",
+                "1940" : "1940",
+                "1944" : "1944",
+                "1946" : "1946",
+                "1948" : "1948",
+                "1951" : "1951",
+                "1952" : "1952",
+                "1953" : "1953",
+                "1956" : "1956",
+                "1958" : "1958",
+                "1959" : "1959",
+                "1960" : "1960",
+                "1961" : "1961",
+                "1962" : "1962",
+                "1964" : "1964",
+                "1967" : "1967",
+                "1968" : "1968",
+                "1969" : "1969",
+                "1970" : "1970",
+                "1972" : "1972",
+                "1973" : "1973",
+                "1975" : "1975",
+                "1976" : "1976",
+                "1979" : "1979",
+                "1981" : "1981",
+                "1982" : "1982",
+                "1984" : "1984",
+                "1985" : "1985",
+                "1987" : "1987",
+                "1988" : "1988",
+                "1990" : "1990",
+                "1991" : "1991",
+                "1993" : "1993",
+                "1994" : "1994",
+                "1997" : "1997",
+                "1998" : "1998",
+                "1999" : "1999",
+                "2000" : "2000",
+                "2001" : "2001",
+                "2002" : "2002",
+                "2005" : "2005",
+                "2006" : "2006",
+                "2010" : "2010"
+            }
+        },
         text_party : {
             label : "party",
             displayType : "select",
@@ -2902,7 +2907,7 @@ settings.corpora.swefn = {
 
 settings.corpora["wikipedia-sv"] = {
     id : "wikipedia-sv",
-    title : "Svenska Wikipedia (april 2014)",
+    title : "Svenska Wikipedia (oktober 2014)",
     description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
     within : settings.spWithin,
     context : settings.spContext,
@@ -3389,16 +3394,16 @@ settings.corpora.talbanken = {
 };
 
 settings.corpora.sw1203 = {
-	id : "sw1203",
-	title : "SW1203-uppsatser",
-	description : "",
-	limited_access : true,
-	within : settings.spWithin,
-	context : settings.spContext,
-	attributes : modernAttrs,
-	struct_attributes : {
-	    text_type : {
-	        label : "type",
+    id : "sw1203",
+    title : "SW1203-uppsatser",
+    description : "",
+    limited_access : true,
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_type : {
+            label : "type",
             displayType : "select",
             extended_template : selectType.extended_template,
             controller : selectType.controller,
@@ -3408,11 +3413,11 @@ settings.corpora.sw1203 = {
                 "C: Slutprovsuppsats" : "C: Slutprovsuppsats"
             }
         },
-	    text_student : {label : "student"},
-	    text_l1 : {label : "tisus_l1"},
-	    text_gender : {
-	        label : "gender",
-	        displayType : "select",
+        text_student : {label : "student"},
+        text_l1 : {label : "tisus_l1"},
+        text_gender : {
+            label : "gender",
+            displayType : "select",
             extended_template : selectType.extended_template,
             controller : selectType.controller,
             dataset : {
@@ -3420,13 +3425,13 @@ settings.corpora.sw1203 = {
                 "M" : "Man"
             }
         },
-	    text_birthyear : {label : "birthyear"},
-	    text_a : {label : "a"},
-	    text_b : {label : "b"},
-	    text_cd : {label : "c/d"},
-	    text_semester : {
-	        label : "semester",
-	        displayType : "select",
+        text_birthyear : {label : "birthyear"},
+        text_a : {label : "a"},
+        text_b : {label : "b"},
+        text_cd : {label : "c/d"},
+        text_semester : {
+            label : "semester",
+            displayType : "select",
             extended_template : selectType.extended_template,
             controller : selectType.controller,
             dataset : {
@@ -3434,7 +3439,7 @@ settings.corpora.sw1203 = {
                 "VT13" : "VT13"
             }
         }
-	}
+    }
 };
 
 settings.corpora.tisus = {
@@ -3489,7 +3494,270 @@ settings.corpora.coctaill = {
     struct_attributes : {
         text_author : {label : "author"},
         text_title : {label : "title"},
-        text_date : {label : "date"}
+        text_date : {label : "date"},
+        lesson_level : {label : "coctaill_level", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "A1" : "A1",
+                "A2" : "A2",
+                "B1" : "B1",
+                "B2" : "B2",
+                "C1" : "C1"}
+        },
+        lessontext_genre : {label : "coctaill_genre", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "evaluation/advertisement" : "evaluation/advertisement",
+                "evaluation/argumentation" : "evaluation/argumentation",
+                "evaluation/discussion" : "evaluation/discussion",
+                "evaluation/exposition" : "evaluation/exposition",
+                "evaluation/personal reflection" : "evaluation/personal reflection",
+                "evaluation/persuasion" : "evaluation/persuasion",
+                "evaluation/review" : "evaluation/review",
+                "facts/autobiography" : "facts/autobiography",
+                "facts/biography" : "facts/biography",
+                "facts/demonstration" : "facts/demonstration",
+                "facts/explanation" : "facts/explanation",
+                "facts/facts" : "facts/facts",
+                "facts/geographical facts" : "facts/geographical facts",
+                "facts/historical facts" : "facts/historical facts",
+                "facts/instruction" : "facts/instruction",
+                "facts/news article" : "facts/news article",
+                "facts/procedures" : "facts/procedures",
+                "facts/report" : "facts/report",
+                "facts/rules" : "facts/rules",
+                "narration/description" : "narration/description",
+                "narration/fiction" : "narration/fiction",
+                "narration/news article" : "narration/news article",
+                "narration/personal story" : "narration/personal story",
+                "other/anecdote" : "other/anecdote",
+                "other/dialogue" : "other/dialogue",
+                "other/language tip" : "other/language tip",
+                "other/letter" : "other/letter",
+                "other/lyrics" : "other/lyrics",
+                "other/notice" : "other/notice",
+                "other/poem" : "other/poem",
+                "other/questionnaire" : "other/questionnaire",
+                "other/quotation" : "other/quotation",
+                "other/recipe" : "other/recipe",
+                "other/rhyme" : "other/rhyme"
+            }
+        },
+        list_unit : {label : "coctaill_list_unit", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "characters" : "characters",
+                "dialogues" : "dialogues",
+                "dictionary_entry" : "dictionary_entry",
+                "full_sentences" : "full_sentences",
+                "incomplete_sentences" : "incomplete_sentences",
+                "numbers" : "numbers",
+                "phrases" : "phrases",
+                "question_answers" : "question_answers",
+                "single_words" : "single_words",
+                "texts" : "texts"
+            }
+        },
+        list_skill : {label : "coctaill_list_skill", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "grammar" : "grammar",
+                "listening" : "listening",
+                "pronunciation" : "pronunciation",
+                "reading" : "reading",
+                "speaking" : "speaking",
+                "spelling" : "spelling",
+                "vocabulary" : "vocabulary",
+                "writing" : "writing"
+            }
+        },
+        lessontext_topic : {label : "coctaill_lessontext_topic", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "animals" : "animals",
+                "arts" : "arts",
+                "clothes and appearances" : "clothes and appearances",
+                "crime and punishment" : "crime and punishment",
+                "culture and traditions" : "culture and traditions",
+                "daily life" : "daily life",
+                "economy" : "economy",
+                "education" : "education",
+                "family and relatives" : "family and relatives",
+                "famous people" : "famous people",
+                "famous_people" : "famous_people",
+                "food and drink" : "food and drink",
+                "free time; entertainment" : "free time; entertainment",
+                "greetings/introductions" : "greetings/introductions",
+                "health and body care" : "health and body care",
+                "history" : "history",
+                "house and home; environment" : "house and home; environment",
+                "jobs and professions" : "jobs and professions",
+                "languages" : "languages",
+                "nature" : "nature",
+                "personal identification" : "personal identification",
+                "places" : "places",
+                "politics and power" : "politics and power",
+                "politics and power,relations with other people" : "politics and power,relations with other people",
+                "relations with other people" : "relations with other people",
+                "religion; myths and legends" : "religion; myths and legends",
+                "science and technology" : "science and technology",
+                "services" : "services",
+                "shopping" : "shopping",
+                "sports" : "sports",
+                "technology" : "technology",
+                "travel" : "travel",
+                "weather" : "weather",
+                "weather and nature" : "weather and nature"
+            }
+        },
+        activity_instruction_skill : {label : "coctaill_activity_instruction_skill", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "grammar" : "grammar",
+                "information_search" : "information_search",
+                "listening" : "listening",
+                "pronunciation" : "pronunciation",
+                "reading" : "reading",
+                "speaking" : "speaking",
+                "spelling" : "spelling",
+                "vocabulary" : "vocabulary",
+                "writing" : "writing"
+            }
+        },
+        activity_instruction_format : {label : "coctaill_activity_instruction_format", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "brainstorming" : "brainstorming",
+                "category identification" : "category identification",
+                "category substitution" : "category substitution",
+                "dialogue" : "dialogue",
+                "dictation" : "dictation",
+                "discussion" : "discussion",
+                "drawing" : " drawing",
+                "error correction" : "error correction",
+                "essay" : "essay",
+                "form manipulation" : "form manipulation",
+                "free writing" : "free writing",
+                "free_answers" : "free_answers",
+                "gaps" : "gaps",
+                "information_search" : "information_search",
+                "matching" : "matching",
+                "monologue" : "monologue",
+                "multiple-choice" : "multiple-choice",
+                "narration" : "narration",
+                "pre-reading" : "pre-reading",
+                "question/answers" : "question/answers",
+                "reading aloud" : "reading aloud",
+                "reordering/restructuring" : "reordering/restructuring",
+                "role-playing" : "role-playing",
+                "sorting" : "sorting",
+                "summary" : "summary",
+                "text questions" : "text questions",
+                "translation" : "translation",
+                "true-false/yes-no" : "true-false/yes-no",
+                "wordbank" : "wordbank"
+            }
+        },
+        task_skill : {label : "coctaill_task_skill", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "essay" : "essay",
+                "grammar" : "grammar",
+                "listening" : "listening",
+                "pronunciation" : "pronunciation",
+                "reading" : "reading",
+                "speaking" : "speaking",
+                "spelling" : "spelling",
+                "vocabulary" : "vocabulary",
+                "writing" : "writing"
+            }
+        },
+        task_format : {label : "coctaill_task_format", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "brainstorming" : "brainstorming",
+                "category identification" : "category identification",
+                "category substitution" : "category substitution",
+                "dialogue" : "dialogue",
+                "dictation" : "dictation",
+                "discussion" : "discussion",
+                "drawing" : "drawing",
+                "error correction" : "error correction",
+                "essay" : "essay",
+                "form manipulation" : "form manipulation",
+                "free writing" : "free writing",
+                "free_answers" : "free_answers",
+                "gaps" : "gaps",
+                "information_search" : "information_search",
+                "matching" : "matching",
+                "monologue" : "monologue",
+                "multiple-choice" : "multiple-choice",
+                "narration" : "narration",
+                "pre-reading" : "pre-reading",
+                "question/answers" : "question/answers",
+                "reading aloud" : "reading aloud",
+                "reordering/restructuring" : "reordering/restructuring",
+                "role-playing" : "role-playing",
+                "sorting" : "sorting",
+                "summary" : "summary",
+                "text questions" : "text questions",
+                "translation" : "translation",
+                "true-false/yes-no" : "true-false/yes-no",
+                "wordbank" : "wordbank"
+            }
+        },
+        language_example_unit : {label : "coctaill_language_example_unit", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "characters" : "characters",
+                "complete_sentences" : "complete_sentences",
+                "dialogues" : "dialogues",
+                "dictionary_entry" : "dictionary_entry",
+                "full_sentences" : "full_sentences",
+                "incomplete_sentences" : "incomplete_sentences",
+                "numbers" : "numbers",
+                "phrases" : "phrases",
+                "phrases single words" : "phrases single words",
+                "question_answers" : "question_answers",
+                "singe words" : "singe words",
+                "single words" : "single words",
+                "single_words" : "single_words",
+                "texts" : "texts"
+            }
+        },
+        language_example_skill : {label : "coctaill_language_example_skill", type : "set", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "grammar" : "grammar",
+                "listening" : "listening",
+                "pronunciation" : "pronunciation",
+                "reading" : "reading",
+                "speaking" : "speaking",
+                "spelling" : "spelling",
+                "vocabulary" : "vocabulary",
+                "writing" : "writing"
+            }
+        },
+        extra_dummy :      {label : "+extra", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        subheading_dummy : {label : "+subheading", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        contents_dummy :   {label : "+contents", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        lessontext_dummy : {label : "+lessontext", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        list_dummy :       {label : "+list", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        activity_instruction_dummy : {label : "+activity_instruction", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        task_dummy : {label : "+task", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        language_example_dummy : {label : "+language_example", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller},
+        lesson_dummy : {label : "+lesson", displayType : "select", dataset : {"-" : "-"}, opts : {}, extended_template : '<input type="hidden">', controller : selectType.controller}
     }
 };
 
@@ -3682,25 +3950,25 @@ settings.corpora.gdc = {
 };
 
 settings.corpora.forhor = {
-	id : "forhor",
-	title : "Förhör",
-	description : '',
-	limited_access : true,
-	context : settings.spContext,
-	within : settings.spWithin,
-	attributes : modernAttrs,
-	struct_attributes : {
-		"text_fall" : {label : "fall"},
-		"text_hord" : {label : "hord"},
-		"text_fl1" : {label : "fl1"},
-		"text_fl2" : {label : "fl2"},
-		"text_telefon" : {label : "telefon"},
-		"text_bandat" : {label : "bandat"},
-		"text_samtycke" : {label : "samtycke"},
-		"text_forsvarare" : {label : "forsvarare"},
-		"text_skribent" : {label : "skribent"},
-		"text_tolkat" : {label : "tolkat"}
-	}
+    id : "forhor",
+    title : "Förhör",
+    description : '',
+    limited_access : true,
+    context : settings.spContext,
+    within : settings.spWithin,
+    attributes : modernAttrs,
+    struct_attributes : {
+        "text_fall" : {label : "fall"},
+        "text_hord" : {label : "hord"},
+        "text_fl1" : {label : "fl1"},
+        "text_fl2" : {label : "fl2"},
+        "text_telefon" : {label : "telefon"},
+        "text_bandat" : {label : "bandat"},
+        "text_samtycke" : {label : "samtycke"},
+        "text_forsvarare" : {label : "forsvarare"},
+        "text_skribent" : {label : "skribent"},
+        "text_tolkat" : {label : "tolkat"}
+    }
 };
 
 settings.corpora.soexempel = {
@@ -3806,13 +4074,19 @@ settings.reduce_stringify = function(type) {
     case "prefix":
     case "suffix":
     case "lex":
+    case "lemma":
         return function(row, cell, value, columnDef, dataContext) {
             var corpora = getCorpora(dataContext);
             if(value == "&Sigma;") return appendDiagram(value, corpora, value);
             // else if(value == "|") return "-";
 
-            var stringify = type == "saldo" ? util.saldoToString : util.lemgramToString;
+            // var stringify = type == "saldo" ? util.saldoToString : util.lemgramToString;
+            if(type == "saldo") stringify = util.saldoToString
+            else if(type == "lemma") stringify = function(lemma) {return lemma.replace(/_/g, " ")}
+            else stringify = util.lemgramToString
             
+            // c.log ("value", value)
+            if(!_.isArray(value)) value = [value]
             var html = _.map(value[0].split(" "), function(token) {
                 if(token == "|") return "–";
                 return _(token.split("|"))
@@ -3840,6 +4114,19 @@ settings.reduce_stringify = function(type) {
             return appendDiagram(output, corpora, value);
         };
     
+    // case "lemma":
+    //     return function(row, cell, value, columnDef, dataContext) {
+    //         var corpora = getCorpora(dataContext);
+    //         if(value == "&Sigma;") return appendDiagram(value, corpora, value);
+
+    //         stringify = function(lemma) {return lemma.replace("_", " "))}
+
+    //         output = $("<span class='link'>")
+    //             .attr("data-query", cqp)
+    //             .attr("data-corpora", JSON.stringify(corpora))
+    //             .append(html.join(" ")).outerHTML()
+            
+    //         return appendDiagram(output, corpora, stringify(value));
     case "deprel":
         return function(row, cell, value, columnDef, dataContext) {
             var corpora = getCorpora(dataContext);
