@@ -59,5 +59,39 @@ settings.corpora["one71"] = {
 	}
 };
 
+/* context and within skickas inte med!
+settings.corpora["cor92"] = {
+	id : "cor92",
+	lang : "spa",
+	title: "Corpus Oral de Referencia del Español Contemporáneo (SOL)",
+	description : "spansk talkorpus",
+	context: {"1 speaker" : "1 speaker"},
+	within : {"speaker" : "speaker"},
+	attributes: {
+		pos: {label : "pos"},
+		lemma: {label : "baseform"}
+	},
+	struct_attributes : {
+		text_title : {label : "title"},
+		text_source : {label : "source"},
+		text_date : {label : "date"},
+		text_location : {label : "location"},
+		text_keywords : {label : "keywords"},
+		speaker_id : {label : "id"},
+		speaker_gender : {label : "gender"},
+		speaker_age : {label : "age"},
+		speaker_info : {label : "info"},
+		text_lang : {
+			label : "lang",
+			displayType : "select",
+			extended_template : selectType.extended_template,
+			controller : selectType.controller,
+			dataset: {
+				"spa" : "spanish"
+			}
+		}
+	}
+};
+*/
 
 settings.corpusListing = new CorpusListing(settings.corpora);
