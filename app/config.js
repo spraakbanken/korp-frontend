@@ -3690,7 +3690,7 @@ settings.corpora.coctaill = {
                 "dialogue" : "dialogue",
                 "dictation" : "dictation",
                 "discussion" : "discussion",
-                "drawing" : "drawing",
+                "drawing" : " drawing",
                 "error correction" : "error correction",
                 "essay" : "essay",
                 "form manipulation" : "form manipulation",
