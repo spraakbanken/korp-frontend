@@ -649,7 +649,7 @@ settings.corporafolders.medical.ltd = {
 
 settings.corporafolders.novels = {
     title : "Skönlitteratur",
-    contents : ["romi", "romii", "rom99", "storsuc", "romg"]
+    contents : ["aspacsv", "romi", "romii", "rom99", "saltnld", "storsuc", "romg"]
 };
 
 settings.corporafolders.socialmedia = {
@@ -2455,7 +2455,7 @@ settings.corpora.storsuc = {
 };
 
 
-settings.corpora["saltnld-sv"] = {
+settings.corpora.saltnld = {
     id : "saltnld-sv",
     title: "SALT svenska-nederländska",
     description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
@@ -2497,6 +2497,21 @@ settings.corpora["europarl-sv"] = {
     struct_attributes : {
         text_date : {label : "date"},
         text_speaker : {label : "speaker"}
+    }
+};
+
+settings.corpora.aspacsv = {
+    id : "aspacsv",
+    title: "ASPAC svenska",
+    description : "Svenska delen av The Amsterdam Slavic Parallel Aligned Corpus",
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+        text_lang : {label : "lang"},
+        text_author : {label : "author"},
+        text_title : {label : "title"},
+        text_description : {label : "description"}
     }
 };
 
