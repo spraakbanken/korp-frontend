@@ -649,7 +649,7 @@ settings.corporafolders.medical.ltd = {
 
 settings.corporafolders.novels = {
     title : "Skönlitteratur",
-    contents : ["aspacsv", "romi", "romii", "rom99", "saltnld", "storsuc", "romg"]
+    contents : ["aspacsv", "romi", "romii", "rom99", "storsuc", "romg"]
 };
 
 settings.corporafolders.socialmedia = {
@@ -2455,7 +2455,7 @@ settings.corpora.storsuc = {
 };
 
 
-settings.corpora.saltnld = {
+settings.corpora["saltnld-sv"] = {
     id : "saltnld-sv",
     title: "SALT svenska-nederländska",
     description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
