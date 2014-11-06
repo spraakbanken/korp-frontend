@@ -109,7 +109,7 @@ class view.KWICResults extends BaseResults
 
     onWordClick : (event) ->
         c.log "wordclick", @tabindex, @s
-        if @getResultTabs()[@tabindex].active
+        if @getResultTabs()[@tabindex]?.active
             @s.$root.sidebar_visible = true
         # c.log "click", obj, event
         # c.log "word click", $(this).scope().wd, event.currentTarget
@@ -1368,7 +1368,7 @@ class view.GraphResults extends BaseResults
             @s.data.labelMapping,
             @s.data.showTotal
 
-        c.log "adding chart listener"
+        c.log "adding chart listener", @$result
 
         $(".chart", @$result).on "click", (event) =>
 
@@ -1579,8 +1579,15 @@ class view.GraphResults extends BaseResults
             .appendTo graph.element
 
 
+    setBarMode : () ->
+        if $(".legend .line", @$result).length > 1
+            $(".legend li:last:not(.disabled) .action", @$result).click()
+            if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
+                $(".legend li:first .action", @$result).click()
+        return
+    setLineMode : () ->
 
-
+    setTableMode : () ->
 
     makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
@@ -1599,7 +1606,7 @@ class view.GraphResults extends BaseResults
 
 
         ).done (data) =>
-            c.log "data", data
+            c.log "graph data", data
                 
             if data.ERROR
                 @resultError data
@@ -1609,7 +1616,7 @@ class view.GraphResults extends BaseResults
             if nontime
                 $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
             else
-                $(".non_time_div").hide()
+                $(".non_time_div", @$result).hide()
 
             if _.isArray data.combined
                 palette = new Rickshaw.Color.Palette("colorwheel")
@@ -1635,7 +1642,7 @@ class view.GraphResults extends BaseResults
                             abs_data : @getSeriesData data.combined.absolute
                         }]
             Rickshaw.Series.zeroFill(series)
-            window.data = series[0].data
+            # window.data = series[0].data
             emptyIntervals = @getEmptyIntervals(series[0].data)
             @s.hasEmptyIntervals = emptyIntervals.length
             # c.log "emptyIntervals", emptyIntervals
@@ -1667,47 +1674,29 @@ class view.GraphResults extends BaseResults
                     graph.render()
             , 200)
 
-            # smoother = new Rickshaw.Graph.Smoother
-            #     graph: graph,
-
-            # $(".smoothing_switch", @$result).button().change ->
-            #     if $(this).is(":checked")
-            #         smoother.setScale(1)
-            #         graph.interpolation = "cardinal"
-            #     else
-            #         smoother.setScale(1)
-            #         graph.interpolation = "linear"
-            #     graph.render()
-
-            $(".form_switch", @$result).buttonset().change (event, ui) =>
-                target = event.currentTarget
-                val = $(":checked", target).val()
+            $(".form_switch", @$result).click (event) =>
+                val = @s.mode
                 for cls in @$result.attr("class").split(" ")
                     if cls.match(/^form-/) then @$result.removeClass(cls)
                 @$result.addClass("form-" +val)
                 $(".chart,.zoom_slider,.legend", @$result.parent()).show()
                 $(".time_table", @$result.parent()).hide()
-                $(".smoothing_switch", @$result).button("enable")
                 if val == "bar"
                     if $(".legend .line", @$result).length > 1
                         $(".legend li:last:not(.disabled) .action", @$result).click()
                         if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
                             $(".legend li:first .action", @$result).click()
-                    $(".smoothing_switch:checked", @$result).click()
-                    $(".smoothing_switch", @$result).button("disable")
                 else if val == "table"
                     $(".chart,.zoom_slider,.legend", @$result).hide()
                     $(".time_table", @$result.parent()).show()
-                    $(".smoothing_switch:checked", @$result).click()
-                    $(".smoothing_switch", @$result).button("disable")
                     nRows = series.length or 2
                     h = (nRows * 2) + 4
                     h = Math.min h, 40
                     $(".time_table:visible", @$result).height "#{h}.1em"
                     @time_grid?.resizeCanvas()
                     $(".exportTimeStatsSection", @$result).show()
-                    $(".timeExportButton", @$result).unbind "click"
-                    $(".timeExportButton", @$result).click =>
+                    
+                    setExportUrl = () ->
                         selVal = $(".timeKindOfData option:selected", @$result).val()
                         selType = $(".timeKindOfFormat option:selected", @$result).val()
                         dataDelimiter = if selType is "TSV" then "%09" else ";"
@@ -1717,7 +1706,7 @@ class view.GraphResults extends BaseResults
                         for cell in series[0].data
                             header.push moment(cell.x * 1000).format("YYYY")
 
-                        #output = [header]
+                        output = [header]
 
                         for row in series
                             cells = [ if row.name is "&Sigma;" then "Σ" else row.name ]
@@ -1729,14 +1718,6 @@ class view.GraphResults extends BaseResults
                                     cells.push row.abs_data[i].y
                             output.push cells
                         
-                        #output = _.invoke output, "join", dataDelimiter
-                        #output = output.join(escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A)))
-                        
-                        #if selType is "TSV"
-                        #    window.open "data:text/tsv;charset=utf-8," + (output)
-                        #else
-                        #    window.open "data:text/csv;charset=utf-8," + (output)
-
                         csv = new CSV(output, {
                             header : header
                             delimiter : dataDelimiter
@@ -1745,10 +1726,17 @@ class view.GraphResults extends BaseResults
                         csvstr = csv.encode()
                         blob = new Blob([csvstr], { type: "text/#{selType}"})
                         csvUrl = URL.createObjectURL(blob)
-                        $("#exportButton", @$result).attr({
+                        $(".exportTimeStatsSection .btn.export", @$result).attr({
                             download : "export.#{selType}"
                             href : csvUrl    
                         })
+
+                    setExportUrl()
+
+                    # $(".timeExportButton", @$result).unbind "click"
+                    # $(".timeExportButton", @$result).click =>
+
+
 
                 unless val == "table"
                     graph.setRenderer val
@@ -1785,10 +1773,10 @@ class view.GraphResults extends BaseResults
             #time_grid.autosizeColumns()
             $(".time_table", @$result).width("100%")
             @time_grid = time_grid
-            $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
-            $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
-            $(".form_switch .ui-button:eq(1) .ui-button-text", @$result).localeKey("bar")
-            $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("table")
+            # $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
+            # $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
+            # $(".form_switch .ui-button:eq(1) .ui-button-text", @$result).localeKey("bar")
+            # $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("table")
             legend = new Rickshaw.Graph.Legend
                 element: $(".legend", @$result).get(0)
                 graph: graph
@@ -1853,7 +1841,7 @@ class view.GraphResults extends BaseResults
                 else 
                     return old_ceil(time, unit)
 
-            window.xAxis = new Rickshaw.Graph.Axis.Time
+            xAxis = new Rickshaw.Graph.Axis.Time
                 graph: graph
                 timeUnit: time.unit(timeunit)
 

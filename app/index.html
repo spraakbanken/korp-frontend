@@ -60,8 +60,9 @@
           <div id="labs_logo"></div>
           <div id="corpusbox" class="scroll_checkboxes inline_block">
             <div class="hp_topframe buttonlink ui-state-default ui-corner-all">
-              <div><span id="hp_corpora_title1"></span><span id="hp_corpora_titleOf" rel="localize[corpselector_of]"> of </span><span id="hp_corpora_titleTotal"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_titleTokens" style="color: #888888;"></span></div>
+              <div class="pull-left"><span id="hp_corpora_title1"></span><span id="hp_corpora_titleOf" rel="localize[corpselector_of]"> of </span><span id="hp_corpora_titleTotal"></span><span id="hp_corpora_title2" rel="localize[corpselector_allselected]"></span><span id="hp_corpora_titleTokens" style="color: #888888;"></span></div>
               <div style="float: right; width: 16px;"><span style="text-align: right; left: auto;" class="ui-icon ui-icon-triangle-2-n-s"></span></div>
+              <div class="clearfix"></div>
             </div>
           </div>
           <div class="popupchecks ui-corner-bottom">
@@ -301,17 +302,14 @@
                   <div constr="GraphResults">
                     <div class="graph_header">
                       <div ng-show="!loading" class="controls">
-                        <div class="form_switch">
-                          <input id="line_input" type="radio" name="form_switch" value="line" checked="checked">
-                          <label for="line_input">Linje</label>
-                          <input id="bar_input" type="radio" name="form_switch" value="bar">
-                          <label for="bar_input">Stapel</label>
-                          <input id="table_input" type="radio" name="form_switch" value="table">
-                          <label for="table_input">Tabell</label>
+                        <div class="btn-group form_switch">
+                          <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-small">{{'line' | loc}}</label>
+                          <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-small">{{'bar' | loc}}</label>
+                          <label ng-model="$parent.mode" btn-radio="'table'" class="btn btn-default btn-small">{{'table' | loc}}</label>
                         </div>
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
-                      <div ng-show="!loading" class="legend">
+                      <div ng-show="!loading &amp;&amp; isGraph()" class="legend">
                         <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc}}" class="line"><a class="action"></a>
                           <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc}} </em></span>
                         </div>
@@ -319,10 +317,10 @@
                       <div style="clear: both;"></div>
                       <div ng-show="loading" class="drawing">{{'drawing' | loc}}</div>
                     </div>
-                    <div class="chart"></div>
-                    <div class="zoom_slider"></div>
-                    <div style="display:none;margin-top:20px" class="time_table"></div>
-                    <div style="display:none" class="exportTimeStatsSection">
+                    <div ng-show="isGraph()" class="chart"></div>
+                    <div ng-show="isGraph()" class="zoom_slider"></div>
+                    <div style="margin-top:20px" ng-show="isTable()" class="time_table"></div>
+                    <div ng-show="isTable()" class="exportTimeStatsSection">
                       <select class="timeKindOfData">
                         <option value="relative" rel="localize[statstable_relfigures]">Relativa tal</option>
                         <option value="absolute" rel="localize[statstable_absfigures]">Absoluta tal</option>
@@ -330,8 +328,7 @@
                       <select class="timeKindOfFormat">
                         <option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
                         <option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
-                      </select>
-                      <input value="Exportera" rel="localize[statstable_export]" type="submit" class="timeExportButton">
+                      </select><a class="export btn btn-default btn-small">{{'statstable_export' | loc}}</a>
                     </div>
                   </div>
                 </tab>

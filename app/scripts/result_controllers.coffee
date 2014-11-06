@@ -191,7 +191,7 @@ korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, search
     s.onGraphShow = (data) ->
         c.log "show graph!", arguments
         $rootScope.graphTabs.push data
-        
+
 
 
 
@@ -207,7 +207,22 @@ korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
         
 
 korpApp.controller "graphCtrl", ($scope) ->
-    $scope.active = true
+    s = $scope
+    s.active = true
+
+    s.mode = "line"
+
+    s.isGraph = () -> s.mode in ["line", "bar"]
+    s.isTable = () -> s.mode == "table"
+
+    # s.$watch "mode", (mode) ->
+    #     c.log "mode", mode
+
+    #     switch mode
+    #         when "bar"
+    #             safeApply s, () ->
+    #                 s.instance.setBarMode()
+
 
 
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->

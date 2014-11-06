@@ -337,7 +337,7 @@
             },
             success: function(data, textStatus, xhr) {
               var div, output;
-              if (data.count === 0) {
+              if (Number(data.count) === 0) {
                 dfd.reject();
                 return;
               }

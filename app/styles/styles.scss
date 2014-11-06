@@ -70,6 +70,10 @@ a {
   }
 }
 
+a.btn {
+  color : #333;
+}
+
 /* unvisited link */
 /* visited link */
 /* mouse over link */
@@ -483,7 +487,8 @@ select.arg_value option {
   color: #222222;
   text-decoration: none;
   position: relative;
-  text-size: .6em;
+  white-space : nowrap;
+  // font-size: .6em;
   &:link, &:visited {
     color: #222222;
   }

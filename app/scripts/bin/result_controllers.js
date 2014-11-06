@@ -219,7 +219,17 @@
   });
 
   korpApp.controller("graphCtrl", function($scope) {
-    return $scope.active = true;
+    var s;
+    s = $scope;
+    s.active = true;
+    s.mode = "line";
+    s.isGraph = function() {
+      var _ref;
+      return (_ref = s.mode) === "line" || _ref === "bar";
+    };
+    return s.isTable = function() {
+      return s.mode === "table";
+    };
   });
 
   korpApp.controller("compareCtrl", function($scope, $rootScope) {

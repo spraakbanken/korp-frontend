@@ -124,9 +124,9 @@
     };
 
     KWICResults.prototype.onWordClick = function(event) {
-      var obj, scope, sent, word;
+      var obj, scope, sent, word, _ref;
       c.log("wordclick", this.tabindex, this.s);
-      if (this.getResultTabs()[this.tabindex].active) {
+      if ((_ref = this.getResultTabs()[this.tabindex]) != null ? _ref.active : void 0) {
         this.s.$root.sidebar_visible = true;
       }
       scope = $(event.currentTarget).scope();
@@ -1540,7 +1540,7 @@
       this.granularity = this.zoom[0];
       this.proxy = new model.GraphProxy();
       this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
-      c.log("adding chart listener");
+      c.log("adding chart listener", this.$result);
       $(".chart", this.$result).on("click", (function(_this) {
         return function(event) {
           var cqp, end, m, n_tokens, opts, start, target, timecqp, val, _i, _results;
@@ -1784,6 +1784,21 @@
       return _results;
     };
 
+    GraphResults.prototype.setBarMode = function() {
+      if ($(".legend .line", this.$result).length > 1) {
+        $(".legend li:last:not(.disabled) .action", this.$result).click();
+        if (_.all(_.map($(".legend .line", this.$result), function(item) {
+          return $(item).is(".disabled");
+        }))) {
+          $(".legend li:first .action", this.$result).click();
+        }
+      }
+    };
+
+    GraphResults.prototype.setLineMode = function() {};
+
+    GraphResults.prototype.setTableMode = function() {};
+
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
       this.s.loading = true;
@@ -1800,8 +1815,8 @@
         };
       })(this)).done((function(_this) {
         return function(data) {
-          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
-          c.log("data", data);
+          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, xAxis, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
+          c.log("graph data", data);
           if (data.ERROR) {
             _this.resultError(data);
             return;
@@ -1810,7 +1825,7 @@
           if (nontime) {
             $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
           } else {
-            $(".non_time_div").hide();
+            $(".non_time_div", _this.$result).hide();
           }
           if (_.isArray(data.combined)) {
             palette = new Rickshaw.Color.Palette("colorwheel");
@@ -1839,7 +1854,6 @@
             ];
           }
           Rickshaw.Series.zeroFill(series);
-          window.data = series[0].data;
           emptyIntervals = _this.getEmptyIntervals(series[0].data);
           _this.s.hasEmptyIntervals = emptyIntervals.length;
           for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
@@ -1867,10 +1881,9 @@
               return graph.render();
             }
           }, 200));
-          $(".form_switch", _this.$result).buttonset().change(function(event, ui) {
-            var cls, h, nRows, target, val, _k, _len2, _ref1, _ref2;
-            target = event.currentTarget;
-            val = $(":checked", target).val();
+          $(".form_switch", _this.$result).click(function(event) {
+            var cls, h, nRows, setExportUrl, val, _k, _len2, _ref1, _ref2;
+            val = _this.s.mode;
             _ref1 = _this.$result.attr("class").split(" ");
             for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
               cls = _ref1[_k];
@@ -1881,7 +1894,6 @@
             _this.$result.addClass("form-" + val);
             $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
             $(".time_table", _this.$result.parent()).hide();
-            $(".smoothing_switch", _this.$result).button("enable");
             if (val === "bar") {
               if ($(".legend .line", _this.$result).length > 1) {
                 $(".legend li:last:not(.disabled) .action", _this.$result).click();
@@ -1891,13 +1903,9 @@
                   $(".legend li:first .action", _this.$result).click();
                 }
               }
-              $(".smoothing_switch:checked", _this.$result).click();
-              $(".smoothing_switch", _this.$result).button("disable");
             } else if (val === "table") {
               $(".chart,.zoom_slider,.legend", _this.$result).hide();
               $(".time_table", _this.$result.parent()).show();
-              $(".smoothing_switch:checked", _this.$result).click();
-              $(".smoothing_switch", _this.$result).button("disable");
               nRows = series.length || 2;
               h = (nRows * 2) + 4;
               h = Math.min(h, 40);
@@ -1906,11 +1914,10 @@
                 _ref2.resizeCanvas();
               }
               $(".exportTimeStatsSection", _this.$result).show();
-              $(".timeExportButton", _this.$result).unbind("click");
-              $(".timeExportButton", _this.$result).click(function() {
-                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
-                selVal = $(".timeKindOfData option:selected", _this.$result).val();
-                selType = $(".timeKindOfFormat option:selected", _this.$result).val();
+              setExportUrl = function() {
+                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
+                selVal = $(".timeKindOfData option:selected", this.$result).val();
+                selType = $(".timeKindOfFormat option:selected", this.$result).val();
                 dataDelimiter = selType === "TSV" ? "%09" : ";";
                 header = [util.getLocaleString("stats_hit")];
                 _ref3 = series[0].data;
@@ -1918,6 +1925,7 @@
                   cell = _ref3[_l];
                   header.push(moment(cell.x * 1000).format("YYYY"));
                 }
+                output = [header];
                 for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
                   row = series[_m];
                   cells = [row.name === "&Sigma;" ? "Σ" : row.name];
@@ -1942,11 +1950,12 @@
                   type: "text/" + selType
                 });
                 csvUrl = URL.createObjectURL(blob);
-                return $("#exportButton", _this.$result).attr({
+                return $(".exportTimeStatsSection .btn.export", this.$result).attr({
                   download: "export." + selType,
                   href: csvUrl
                 });
-              });
+              };
+              setExportUrl();
             }
             if (val !== "table") {
               graph.setRenderer(val);
@@ -1999,10 +2008,6 @@
           });
           $(".time_table", _this.$result).width("100%");
           _this.time_grid = time_grid;
-          $(".smoothing_label .ui-button-text", _this.$result.parent()).localeKey("smoothing");
-          $(".form_switch .ui-button:first .ui-button-text", _this.$result).localeKey("line");
-          $(".form_switch .ui-button:eq(1) .ui-button-text", _this.$result).localeKey("bar");
-          $(".form_switch .ui-button:last .ui-button-text", _this.$result).localeKey("table");
           legend = new Rickshaw.Graph.Legend({
             element: $(".legend", _this.$result).get(0),
             graph: graph
@@ -2065,7 +2070,7 @@
               return old_ceil(time, unit);
             }
           };
-          window.xAxis = new Rickshaw.Graph.Axis.Time({
+          xAxis = new Rickshaw.Graph.Axis.Time({
             graph: graph,
             timeUnit: time.unit(timeunit)
           });

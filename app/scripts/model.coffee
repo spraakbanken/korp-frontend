@@ -299,7 +299,7 @@ class model.LemgramProxy extends BaseProxy
                     "sw-forms": sw_forms
 
                 success: (data, textStatus, xhr) ->
-                    if data.count is 0
+                    if Number(data.count) is 0
                         dfd.reject()
                         return
                     c.log "karp success", data, sw_forms

@@ -13,20 +13,27 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
   div(constr='GraphResults')
     .graph_header
       .controls(ng-show="!loading")
-        .form_switch
-          input#line_input(type='radio', name='form_switch', value='line', checked='checked')
-          label(for='line_input') Linje
-          input#bar_input(type='radio', name='form_switch', value='bar')
-          label(for="bar_input") Stapel
-          input#table_input(type='radio', name='form_switch', value='table')
-          label(for="table_input") Tabell
+        //- .form_switch
+        //-   input#line_input(type='radio', name='form_switch', value='line', checked='checked')
+        //-   label(for='line_input') Linje
+        //-   input#bar_input(type='radio', name='form_switch', value='bar')
+        //-   label(for="bar_input") Stapel
+        //-   input#table_input(type='radio', name='form_switch', value='table')
+        //-   label(for="table_input") Tabell
+
+
+        .btn-group.form_switch
+          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'line'") {{'line' | loc}}
+          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'bar'") {{'bar' | loc}}
+          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'table'") {{'table' | loc}}
+
         //- label.smoothing_label(for='smoothing_switch') Utjämna
         //- input#smoothing_switch.smoothing_switch(type='checkbox')
         .non_time_div
           span(rel='localize[non_time_before]')
           span.non_time
           span(rel='localize[non_time_after]')
-      .legend(ng-show="!loading")
+      .legend(ng-show="!loading && isGraph()")
         .line(ng-show="hasEmptyIntervals", tooltip="{{'graph_material_tooltip' | loc}}")
           a.action
           .swatch(style="background-color: #999")
@@ -35,17 +42,17 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
       div(style='clear: both;')
       .drawing(ng-show="loading")
         | {{'drawing' | loc}}
-    .chart
-    .zoom_slider
-    .time_table(style="display:none;margin-top:20px")
-    .exportTimeStatsSection(style="display:none")
+    .chart(ng-show="isGraph()")
+    .zoom_slider(ng-show="isGraph()")
+    .time_table(style="margin-top:20px", ng-show="isTable()")
+    .exportTimeStatsSection(ng-show="isTable()")
       select.timeKindOfData
         option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
         option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
       select.timeKindOfFormat
         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
-      input.timeExportButton(value='Exportera', rel='localize[statstable_export]', type='submit')
+      a.export.btn.btn-default.btn-small {{'statstable_export' | loc}}
 tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc}}
