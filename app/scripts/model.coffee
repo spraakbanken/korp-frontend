@@ -145,7 +145,7 @@ class model.KWICProxy extends BaseProxy
         
 
         o = $.extend(
-            # cqp: $("body").scope().activeCQP || search().cqp
+            # cqp: $("body").scope().extendedCQP || search().cqp
             queryData: null
             # ajaxParams: @prevAjaxParams
             # success: (data, status, xhr) ->

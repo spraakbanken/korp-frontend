@@ -144,7 +144,11 @@
           }
         }).success(function(data) {
           var e, eNodes, output;
-          eNodes = data.div[0].e;
+          if (angular.isArray(data.div)) {
+            eNodes = data.div[0].e;
+          } else {
+            eNodes = data.div.e;
+          }
           if (!angular.isArray(eNodes)) {
             eNodes = [eNodes];
           }

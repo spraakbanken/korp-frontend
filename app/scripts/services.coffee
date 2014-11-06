@@ -128,7 +128,11 @@ korpApp.factory 'backend', ($http, $q, utils) ->
                 format : "json"
         ).success (data) ->
             # c.log "relatedWordSearch", data.div[0].e.info.info.feat
-            eNodes = data.div[0].e
+
+            if angular.isArray data.div
+                eNodes = data.div[0].e
+            else
+                eNodes = data.div.e
             unless angular.isArray eNodes then eNodes = [eNodes]
             output = for e in eNodes
                 {

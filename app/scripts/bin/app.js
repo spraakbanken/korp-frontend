@@ -9,7 +9,7 @@
     s.word_selected = null;
     s.isLab = window.isLab;
     s.sidebar_visible = false;
-    s.activeCQP = "[]";
+    s.extendedCQP = null;
     s.search = function() {
       return $location.search.apply($location, arguments);
     };

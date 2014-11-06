@@ -417,21 +417,11 @@
         cqp: "="
       },
       link: function($scope, elem, attr) {
-        var e, s;
+        var s, setCQP;
         s = $scope;
-        if (s.cqp == null) {
-          s.cqp = '[]';
-        }
-        if ($location.search().cqp) {
-          try {
-            s.data = CQP.parse($location.search().cqp);
-          } catch (_error) {
-            e = _error;
-            s.data = CQP.parse("[]");
-          }
-        }
-        s.$watch("cqp", function(val) {
+        setCQP = function(val) {
           var error, output, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1, _results;
+          c.log("inner cqp change", val);
           try {
             s.data = CQP.parse(val);
             c.log("s.data", s.data);
@@ -471,9 +461,14 @@
             }
           }
           return _results;
-        });
+        };
+        if (s.cqp == null) {
+          s.cqp = '[]';
+        }
+        setCQP(s.cqp);
         s.$watch('getCQPString()', function(val) {
-          return s.cqp = CQP.stringify(s.data);
+          c.log("getCQPString", val);
+          return s.cqp = val;
         });
         s.getCQPString = function() {
           return (CQP.stringify(s.data)) || "";

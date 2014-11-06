@@ -138,8 +138,8 @@
     s.within = "sentence";
     s.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
-        label: name || $rootScope.activeCQP,
-        cqp: $rootScope.activeCQP,
+        label: name || $rootScope.extendedCQP,
+        cqp: $rootScope.extendedCQP,
         corpora: settings.corpusListing.getSelectedCorpora()
       });
     });
@@ -171,7 +171,7 @@
         return;
       }
       try {
-        $rootScope.activeCQP = CQP.expandOperators(val);
+        $rootScope.extendedCQP = CQP.expandOperators(val);
       } catch (_error) {
         e = _error;
         c.log("cqp parse error:", e);
@@ -313,7 +313,7 @@
     });
     $scope.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
-        label: name || $rootScope.activeCQP,
+        label: name || $rootScope.extendedCQP,
         cqp: $scope.cqp,
         corpora: settings.corpusListing.getSelectedCorpora()
       });

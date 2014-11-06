@@ -408,7 +408,7 @@ class view.SimpleSearch extends BaseSearch
         if event and event.keyCode != 13   
            @s.placeholder = null
         # val = @getCQP()
-        # @s.$root.activeCQP = val
+        # @s.$root.extendedCQP = val
 
     resetView: ->
         $("#similar_lemgrams").empty().height "auto"

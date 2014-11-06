@@ -25,7 +25,7 @@ korpApp.run ($rootScope, $location, utils, searches) ->
 
     s.sidebar_visible = false
 
-    s.activeCQP = "[]"
+    s.extendedCQP = null
     s.search = () -> $location.search arguments...
 
     s.searchtabs = () ->

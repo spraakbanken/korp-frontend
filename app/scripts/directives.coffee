@@ -401,21 +401,17 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
     link : ($scope, elem, attr) ->
         s = $scope
 
-        s.cqp ?= '[]'
-
-
-        if $location.search().cqp
-            try
-                s.data = CQP.parse($location.search().cqp)
-            catch e
-                # TODO: we could traverse the token list, trying to repair parsing, se above
-                s.data = CQP.parse("[]")
+        # if $location.search().cqp
+        #     try
+        #         s.data = CQP.parse($location.search().cqp)
+        #     catch e
+        #         # TODO: we could traverse the token list, trying to repair parsing, se above
+        #         s.data = CQP.parse("[]")
         # else
             # s.data = CQP.parse(val)
 
-
-
-        s.$watch "cqp", (val) ->
+        setCQP = (val) ->
+            c.log "inner cqp change", val
             try
                 s.data = CQP.parse(val)
                 c.log "s.data", s.data
@@ -439,8 +435,17 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
                     token.and_block = CQP.parse('[word = ""]')[0].and_block
 
 
+        # s.$watch "cqp", (val) ->
+
+        s.cqp ?= '[]'
+        setCQP(s.cqp)
+
+
         s.$watch 'getCQPString()', (val) ->
-            s.cqp = CQP.stringify(s.data)
+            c.log "getCQPString", val
+            # if val
+                # setCQP(val)
+            s.cqp = val
             
         s.getCQPString = ->
             return (CQP.stringify s.data) or ""

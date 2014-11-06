@@ -164,8 +164,8 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     s.within = "sentence"
     s.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
-            label : name or $rootScope.activeCQP
-            cqp : $rootScope.activeCQP
+            label : name or $rootScope.extendedCQP
+            cqp : $rootScope.extendedCQP
             corpora : settings.corpusListing.getSelectedCorpora()
 
         }
@@ -193,7 +193,7 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         c.log "cqp change", val
         unless val then return
         try 
-            $rootScope.activeCQP = CQP.expandOperators(val)
+            $rootScope.extendedCQP = CQP.expandOperators(val)
         catch e
             c.log "cqp parse error:", e
         $location.search("cqp", val)
@@ -355,7 +355,7 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout
 
     $scope.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
-            label : name or $rootScope.activeCQP
+            label : name or $rootScope.extendedCQP
             cqp : $scope.cqp
             corpora : settings.corpusListing.getSelectedCorpora()
 
