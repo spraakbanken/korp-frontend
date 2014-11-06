@@ -25,6 +25,7 @@
       return $location.search("word_pic", Boolean(val) || null);
     });
     return $scope.showStats = function() {
+      c.log("showstats", settings.statistics, settings.statistics !== false);
       return settings.statistics !== false;
     };
   });

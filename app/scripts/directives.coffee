@@ -487,8 +487,8 @@ korpApp.directive "tabPreloader", () ->
 
 
 korpApp.directive "clickCover", () ->
-    scope : 
-        clickCover : "="
+    # scope : 
+        # clickCover : "="
     link : (scope, elem, attr) ->
         cover = $("<div>").css(
             position: "absolute"
@@ -498,7 +498,9 @@ korpApp.directive "clickCover", () ->
             bottom : 0
         ).on "click", () -> return false
         pos = elem.css("position") or "static"
-        scope.$watch "clickCover", (val) ->
+        scope.$watch () -> 
+            scope.$eval attr.clickCover
+        , (val) ->
             if val
                 elem.prepend(cover)
                 elem.css("position", "relative").addClass("covered")

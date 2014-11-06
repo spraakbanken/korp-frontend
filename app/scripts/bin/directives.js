@@ -514,9 +514,6 @@
 
   korpApp.directive("clickCover", function() {
     return {
-      scope: {
-        clickCover: "="
-      },
       link: function(scope, elem, attr) {
         var cover, pos;
         cover = $("<div>").css({
@@ -529,7 +526,9 @@
           return false;
         });
         pos = elem.css("position") || "static";
-        return scope.$watch("clickCover", function(val) {
+        return scope.$watch(function() {
+          return scope.$eval(attr.clickCover);
+        }, function(val) {
           if (val) {
             elem.prepend(cover);
             return elem.css("position", "relative").addClass("covered");

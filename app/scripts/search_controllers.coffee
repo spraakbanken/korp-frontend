@@ -21,7 +21,10 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.$watch "word_pic", (val) ->
         $location.search("word_pic", Boolean(val) or null)
 
-    $scope.showStats = () -> settings.statistics != false
+    $scope.showStats = () -> 
+        c.log "showstats", settings.statistics, settings.statistics != false
+        return settings.statistics != false
+        # Boolean(settings.statistics) != false
 
     # utils.setupHash $scope, [
     #         key : "word_pic"
