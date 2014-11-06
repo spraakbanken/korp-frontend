@@ -123,7 +123,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             searches.kwicSearch(cqp, page)
             # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
             if settings.wordpicture != false and s.word_pic and " " not in search.val
-                lemgramResults.makeRequest(search.val, "word");
+                lemgramResults.makeRequest(search.val, "word")
                 # lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
             else  
                 lemgramResults.resetView()
