@@ -34,6 +34,7 @@ body {
 
 ul, ol {
   list-style: none;
+  padding-left : 0;
 }
 
 #welcome {
@@ -630,46 +631,44 @@ select.arg_value option {
   display: table;
 }
 
-#similar_lemgrams {
-  margin-top: 5px;
-  padding: 8px;
-  overflow-y: hidden;
-}
+// #similar_lemgrams {
+//   margin-top: 5px;
+//   padding: 8px;
+//   overflow-y: hidden;
+// }
 
-#similar_wrapper {
-  max-width: 50%;
-}
 
-#similar_lemgrams {
-  &:empty {
-    padding: 0;
-  }
-  p {
-    margin-top: 2px;
-    margin-bottom: 7px;
-  }
-  a {
-    font-size: 12px;
-  }
-  ul {
-    margin: 0;
-    padding-left: 10px;
-  }
-  li {
-    padding: 5px 0;
-  }
-}
 
-#show_more {
-  float: right;
-  position: relative;
-  top: -3px;
-  padding: 2px 2px 0 2px;
-  a {
-    font-size: 12px;
-    font-weight: bold;
-  }
-}
+// #similar_lemgrams {
+//   &:empty {
+//     padding: 0;
+//   }
+//   p {
+//     margin-top: 2px;
+//     margin-bottom: 7px;
+//   }
+//   a {
+//     font-size: 12px;
+//   }
+//   ul {
+//     margin: 0;
+//     padding-left: 10px;
+//   }
+//   li {
+//     padding: 5px 0;
+//   }
+// }
+
+// #show_more {
+//   float: right;
+//   position: relative;
+//   top: -3px;
+//   padding: 2px 2px 0 2px;
+//   a {
+//     font-size: 12px;
+//     font-weight: bold;
+//   }
+// }
 
 // .ui-tabs .ui-tabs-nav li a {
 //   float: left;
@@ -1653,6 +1652,55 @@ label[for=lemgram_select]:before {
     display : inline;
   }
 
+  .simple_form {
+    float : left;
+    margin-bottom : 2em;
+  }
+  
+  #similar_wrapper {
+    // max-width: 50%;
+    float : right;
+    background-color : $primaryLight;
+    
+    padding : 1em;
+    white-space : nowrap;
+    overflow-x: auto;
+    max-height : 180px;
+    // TOOD: we should do an angular ng-repeat animation here instead
+    transition: max-height 200ms;
+    &.open {
+      max-height : 500px;
+    }
+    .col {
+      display: inline-block;
+      vertical-align: top;
+      margin-right : 2em;
+      white-space : normal;
+
+      .header {
+        font-size : 1.1em;
+      }
+    }
+    // button {
+    //   display : block;
+    // }
+    .circle_icon {
+      border: 2px solid #333;
+      border-radius: 22em;
+      width: 20px;
+      height: 20px;
+      padding-left: 5px;
+      padding-top: 2px;
+      float: right;
+      cursor: pointer;
+      transition: all 200ms;
+      &:hover {
+        color : navy;
+        border-color: navy;
+
+      }
+    }
+  }
 }
 
 .search_submit {
@@ -1662,7 +1710,7 @@ label[for=lemgram_select]:before {
 
 .search_tabs {
 
-  li:nth-child(4) {
+  .nav.nav-tabs li:nth-child(4) {
     margin-left : 1em;
   }
   .tab-content {
@@ -2087,6 +2135,12 @@ line.tick {
   display : none;
 }
 
+.ui-widget-header {
+  background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
+}
+.ui-state-hover {
+  background : #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+}
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
   border: 1px solid #AAAAAA;

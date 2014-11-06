@@ -45,6 +45,20 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             cqp : cqp
             corpora : settings.corpusListing.getSelectedCorpora()
         }
+    
+
+    s.stringifyRelatedHeader = (wd) ->
+        wd.replace(/_/g, " ")
+
+    s.stringifyRelated = (wd) ->
+        util.saldoToString(wd)
+
+    s.clickRelated = (wd) ->
+        $location.search("search", "cqp|" + "[saldo contains '#{wd}']")
+
+    s.relatedDefault = 4
+    s.relatedLimit = s.relatedDefault
+
 
     s.searches = searches
     s.$watch "searches.activeSearch", (search) =>
@@ -52,6 +66,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         unless search then return 
         c.log "searches.activeSearch", search
         page = $rootScope.search()["page"] or 0
+        s.relatedObj = null
         if search.type == "word"
             s.placeholder = null
             s.simple_text = search.val
@@ -65,16 +80,18 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             else  
                 lemgramResults.resetView()
 
-        else if search.type == "lemgram" and s.word_pic
+        else if search.type == "lemgram"
             s.placeholder = search.val
             s.simple_text = ""
-            searches.lemgramSearch("[lex contains '#{search.val}']", s.prefix, s.suffix, page)
+            cqp = "[lex contains '#{search.val}']"
+            backend.relatedWordSearch(search.val).then (data) ->
+                s.relatedObj = data
             
-        else if search.type == "lemgram" and !s.word_pic
-            c.log "lemgram search", search.val, page
-            s.placeholder = search.val
-            s.simple_text = ""
-            searches.kwicSearch(cqp = "[lex contains '#{search.val}']", page)
+            if s.word_pic
+                searches.lemgramSearch(lemgram, s.prefix, s.suffix, page)
+            else
+                searches.kwicSearch(cqp, page)
+            
         else 
             s.placeholder = null
             s.simple_text = ""
@@ -281,7 +298,7 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout
     #     out
 
     $scope.$watch () -> 
-        simpleSearch.getCQP()
+        simpleSearch?.getCQP()
     , (val) ->
         $scope.simpleCQP = val
 

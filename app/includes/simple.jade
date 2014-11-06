@@ -1,5 +1,5 @@
 #korp-simple(constr='SimpleSearch', constr-name='simpleSearch', ng-controller='SimpleCtrl')
-  form
+  form.simple_form
     label(for='simple_text') {{'search_for' | loc}}
     input#simple_text(type='text', ng-model='simple_text', placeholder='{{lemgramToString(placeholder)}}'
         autofocus)
@@ -14,23 +14,32 @@
     span  {{'and' | loc}} 
     input#caseChk(type='checkbox', ng-model="isCaseInsensitive") 
     label(for='caseChk')  {{'case_insensitive' | loc}}  
-  table#char_table
-    tbody
-      tr
-        td.ui-state-default.specialkey å
-        td.ui-state-default.specialkey ä
-        td.ui-state-default.specialkey ö
-        td.ui-state-default.specialkey æ
-        td.ui-state-default.specialkey œ
-        td.ui-state-default.specialkey ð
-        td.ui-state-default.specialkey þ
-        td.ui-state-default.specialkey Å
-        td.ui-state-default.specialkey Ä
-        td.ui-state-default.specialkey Ö
-        td.ui-state-default.specialkey Æ
-        td.ui-state-default.specialkey Œ
-        td.ui-state-default.specialkey Ð
-        td.ui-state-default.specialkey Þ
-  #similar_wrapper
-    #similar_lemgrams
+  //- table#char_table
+  //-   tbody
+  //-     tr
+  //-       td.ui-state-default.specialkey å
+  //-       td.ui-state-default.specialkey ä
+  //-       td.ui-state-default.specialkey ö
+  //-       td.ui-state-default.specialkey æ
+  //-       td.ui-state-default.specialkey œ
+  //-       td.ui-state-default.specialkey ð
+  //-       td.ui-state-default.specialkey þ
+  //-       td.ui-state-default.specialkey Å
+  //-       td.ui-state-default.specialkey Ä
+  //-       td.ui-state-default.specialkey Ö
+  //-       td.ui-state-default.specialkey Æ
+  //-       td.ui-state-default.specialkey Œ
+  //-       td.ui-state-default.specialkey Ð
+  //-       td.ui-state-default.specialkey Þ
+  #similar_wrapper(ng-show="relatedObj", ng-class="{open : relatedLimit == 9999}")
+    .col(ng-repeat="obj in relatedObj") 
+        a.header(target="_blank", ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&search=sense%7Cswefn--{{obj.label}}") {{stringifyRelatedHeader(obj.label)}}
+        ul
+          li(ng-repeat="wd in obj.words | limitTo:relatedLimit") 
+              a.link(ng-click="clickRelated(wd)") {{stringifyRelated(wd) + " "}}
+    
+    div(ng-show="relatedLimit != 9999", ng-click="relatedLimit = 9999")
+      i.circle_icon.fa.fa-long-arrow-down
+    div(ng-show="relatedLimit == 9999", ng-click="relatedLimit = relatedDefault")
+      i.circle_icon.fa.fa-long-arrow-up
   .clearfix

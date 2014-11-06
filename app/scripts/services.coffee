@@ -113,6 +113,36 @@ korpApp.factory 'backend', ($http, $q, utils) ->
 
         return def.promise
 
+    relatedWordSearch : (lemgram) ->
+        def = $q.defer()
+        # http://spraakbanken.gu.se/ws/karp-sok?cql=lemgram==/pivot/saldo%20g%C3%A5..vb.1&resource=swefn&mini-entries=true&info=lu​
+        req = $http(
+            url : "http://spraakbanken.gu.se/ws/karp-sok"
+            method: "GET"
+            params :
+                cql : "lemgram==/pivot/saldo " + lemgram
+                # sense : lemma
+                resource : "swefn"
+                "mini-entries" : true
+                info : "lu"
+                format : "json"
+        ).success (data) ->
+            # c.log "relatedWordSearch", data.div[0].e.info.info.feat
+            eNodes = data.div[0].e
+            unless angular.isArray eNodes then eNodes = [eNodes]
+            output = for e in eNodes
+                {
+                    label : e.s.replace("swefn--", "")
+                    words : _.pluck e.info.info.feat, "val"
+                }
+
+            def.resolve output
+
+        return def.promise
+
+
+
+
 
     # getFrames : () ->
     #     params = 
@@ -157,8 +187,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
             @kwicRequest cqp, page
-            searchProxy.relatedWordSearch lemgram
-            
+
             if settings.wordpicture == false then return
             
             # lemgramResults.showPreloader()

@@ -46,6 +46,17 @@
         corpora: settings.corpusListing.getSelectedCorpora()
       });
     });
+    s.stringifyRelatedHeader = function(wd) {
+      return wd.replace(/_/g, " ");
+    };
+    s.stringifyRelated = function(wd) {
+      return util.saldoToString(wd);
+    };
+    s.clickRelated = function(wd) {
+      return $location.search("search", "cqp|" + ("[saldo contains '" + wd + "']"));
+    };
+    s.relatedDefault = 4;
+    s.relatedLimit = s.relatedDefault;
     s.searches = searches;
     s.$watch("searches.activeSearch", (function(_this) {
       return function(search) {
@@ -55,6 +66,7 @@
         }
         c.log("searches.activeSearch", search);
         page = $rootScope.search()["page"] || 0;
+        s.relatedObj = null;
         if (search.type === "word") {
           s.placeholder = null;
           s.simple_text = search.val;
@@ -66,15 +78,18 @@
           } else {
             return lemgramResults.resetView();
           }
-        } else if (search.type === "lemgram" && s.word_pic) {
+        } else if (search.type === "lemgram") {
           s.placeholder = search.val;
           s.simple_text = "";
-          return searches.lemgramSearch("[lex contains '" + search.val + "']", s.prefix, s.suffix, page);
-        } else if (search.type === "lemgram" && !s.word_pic) {
-          c.log("lemgram search", search.val, page);
-          s.placeholder = search.val;
-          s.simple_text = "";
-          return searches.kwicSearch(cqp = "[lex contains '" + search.val + "']", page);
+          cqp = "[lex contains '" + search.val + "']";
+          backend.relatedWordSearch(search.val).then(function(data) {
+            return s.relatedObj = data;
+          });
+          if (s.word_pic) {
+            return searches.lemgramSearch(lemgram, s.prefix, s.suffix, page);
+          } else {
+            return searches.kwicSearch(cqp, page);
+          }
         } else {
           s.placeholder = null;
           s.simple_text = "";
@@ -269,7 +284,7 @@
       $scope.cqp = "[]";
     }
     $scope.$watch(function() {
-      return simpleSearch.getCQP();
+      return typeof simpleSearch !== "undefined" && simpleSearch !== null ? simpleSearch.getCQP() : void 0;
     }, function(val) {
       return $scope.simpleCQP = val;
     });

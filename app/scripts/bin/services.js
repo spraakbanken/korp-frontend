@@ -128,6 +128,41 @@
           return def.resolve([data, cmpObj1, cmpObj2, reduce], xhr);
         });
         return def.promise;
+      },
+      relatedWordSearch: function(lemgram) {
+        var def, req;
+        def = $q.defer();
+        req = $http({
+          url: "http://spraakbanken.gu.se/ws/karp-sok",
+          method: "GET",
+          params: {
+            cql: "lemgram==/pivot/saldo " + lemgram,
+            resource: "swefn",
+            "mini-entries": true,
+            info: "lu",
+            format: "json"
+          }
+        }).success(function(data) {
+          var e, eNodes, output;
+          eNodes = data.div[0].e;
+          if (!angular.isArray(eNodes)) {
+            eNodes = [eNodes];
+          }
+          output = (function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = eNodes.length; _i < _len; _i++) {
+              e = eNodes[_i];
+              _results.push({
+                label: e.s.replace("swefn--", ""),
+                words: _.pluck(e.info.info.feat, "val")
+              });
+            }
+            return _results;
+          })();
+          return def.resolve(output);
+        });
+        return def.promise;
       }
     };
   });
@@ -163,7 +198,6 @@
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         statsResults.makeRequest(cqp);
         this.kwicRequest(cqp, page);
-        searchProxy.relatedWordSearch(lemgram);
         if (settings.wordpicture === false) {
           return;
         }

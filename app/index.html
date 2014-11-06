@@ -90,7 +90,7 @@
           <tabset tab-hash="search_tab" class="tabbable search_tabs">
             <tab heading="{{&quot;simple&quot; | loc}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
-                <form>
+                <form class="simple_form">
                   <label for="simple_text">{{'search_for' | loc}}</label>
                   <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus><span id="keyboard" class="ui-state-default specialkey">ð</span>
                   <search-submit></search-submit><span>
@@ -103,28 +103,14 @@
                   <input id="caseChk" type="checkbox" ng-model="isCaseInsensitive">
                   <label for="caseChk"> {{'case_insensitive' | loc}}  </label>
                 </form>
-                <table id="char_table">
-                  <tbody>
-                    <tr>
-                      <td class="ui-state-default specialkey">å</td>
-                      <td class="ui-state-default specialkey">ä</td>
-                      <td class="ui-state-default specialkey">ö</td>
-                      <td class="ui-state-default specialkey">æ</td>
-                      <td class="ui-state-default specialkey">œ</td>
-                      <td class="ui-state-default specialkey">ð</td>
-                      <td class="ui-state-default specialkey">þ</td>
-                      <td class="ui-state-default specialkey">Å</td>
-                      <td class="ui-state-default specialkey">Ä</td>
-                      <td class="ui-state-default specialkey">Ö</td>
-                      <td class="ui-state-default specialkey">Æ</td>
-                      <td class="ui-state-default specialkey">Œ</td>
-                      <td class="ui-state-default specialkey">Ð</td>
-                      <td class="ui-state-default specialkey">Þ</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div id="similar_wrapper">
-                  <div id="similar_lemgrams"></div>
+                <div id="similar_wrapper" ng-show="relatedObj" ng-class="{open : relatedLimit == 9999}">
+                  <div ng-repeat="obj in relatedObj" class="col"> <a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                    <ul>
+                      <li ng-repeat="wd in obj.words | limitTo:relatedLimit"> <a ng-click="clickRelated(wd)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
+                    </ul>
+                  </div>
+                  <div ng-show="relatedLimit != 9999" ng-click="relatedLimit = 9999"><i class="circle_icon fa fa-long-arrow-down"></i></div>
+                  <div ng-show="relatedLimit == 9999" ng-click="relatedLimit = relatedDefault"><i class="circle_icon fa fa-long-arrow-up"></i></div>
                 </div>
                 <div class="clearfix"></div>
               </div>
