@@ -186,6 +186,7 @@
                   </tab-heading>
                   <div id="results-kwic" ng-class="{reading_mode : reading_mode}" constr="KWICResults" constr-name="kwicResults">
                     <div class="result_controls">
+                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">
@@ -264,6 +265,7 @@
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
                     <div class="result_controls">
+                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">

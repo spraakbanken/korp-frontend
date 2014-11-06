@@ -130,6 +130,7 @@
     s.$on("btn_submit", function() {
       c.log("extended submit");
       $location.search("search", null);
+      $location.search("page", null);
       return $timeout(function() {
         var within, _ref;
         if (_ref = s.within, __indexOf.call(_.keys(settings.defaultWithin), _ref) < 0) {

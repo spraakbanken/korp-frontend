@@ -1,5 +1,7 @@
 
 .result_controls
+  warning(ng-if="aborted && !loading")
+    | {{'search_aborted' | loc}}
   .controls_n
     span {{'num_results' | loc}}: 
     span.num-result 0

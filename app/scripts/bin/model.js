@@ -26,6 +26,7 @@
     }
 
     BaseProxy.prototype.makeRequest = function() {
+      this.abort();
       this.prev = "";
       this.progress = 0;
       this.total_results = 0;
@@ -34,9 +35,14 @@
 
     BaseProxy.prototype.abort = function() {
       if (this.pendingRequests.length) {
-        _.invoke(this.pendingRequests, "abort");
+        return _.invoke(this.pendingRequests, "abort");
       }
-      return this.pendingRequests = [];
+    };
+
+    BaseProxy.prototype.hasPending = function() {
+      return _.any(_.map(this.pendingRequests, function(req) {
+        return req.readyState !== 4 && req.readyState !== 0;
+      }));
     };
 
     BaseProxy.prototype.parseJSON = function(data) {
@@ -172,33 +178,23 @@
       }
     };
 
-    KWICProxy.prototype.makeRequest = function(options, page, callback, successCallback, kwicCallback) {
-      var corpus, data, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
+    KWICProxy.prototype.makeRequest = function(options, page, progressCallback, kwicCallback) {
+      var corpus, data, def, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
       c.log("kwicproxy.makeRequest");
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);
-      successCallback = successCallback || $.proxy(kwicResults.renderCompleteResult, kwicResults);
       kwicCallback = kwicCallback || $.proxy(kwicResults.renderResult, kwicResults);
       self.progress = 0;
       o = $.extend({
         queryData: null,
-        success: function(data, status, xhr) {
-          self.popXhr(xhr);
-          return successCallback(data);
-        },
-        error: function(data, status, xhr) {
-          c.log("kwic error", data);
-          self.popXhr(xhr);
-          return kwicResults.hidePreloader();
-        },
         progress: function(data, e) {
           var progressObj;
           progressObj = self.calcProgress(e);
           if (progressObj == null) {
             return;
           }
-          callback(progressObj);
+          progressCallback(progressObj);
           if (progressObj["struct"].kwic) {
             c.log("found kwic!");
             this.foundKwic = true;
@@ -237,16 +233,16 @@
           });
         }
       }
-      data.show = _.uniq(data.show);
       this.prevCQP = data.cqp;
-      data.show = (_.uniq(data.show)).join(",");
+      data.show = (_.uniq(["sentence"].concat(data.show))).join(",");
+      c.log("data.show", data.show);
       data.show_struct = (_.uniq(data.show_struct)).join(",");
       this.prevRequest = data;
       this.prevMisc = {
         "hitsPerPage": $("#num_hits").val()
       };
       this.prevParams = data;
-      return this.pendingRequests.push($.ajax({
+      def = $.ajax({
         url: settings.cgi_script,
         data: data,
         beforeSend: function(req, settings) {
@@ -256,13 +252,13 @@
         success: function(data, status, jqxhr) {
           self.queryData = data.querydata;
           if (data.incremental === false || !this.foundKwic) {
-            kwicCallback(data);
+            return kwicCallback(data);
           }
-          return o.success(data, data.cqp);
         },
-        error: o.error,
         progress: o.progress
-      }));
+      });
+      this.pendingRequests.push(def);
+      return def;
     };
 
     return KWICProxy;
@@ -307,8 +303,7 @@
         data: params,
         success: function(data) {
           c.log("relations success", data);
-          self.prevRequest = params;
-          return lemgramResults.renderResult(data, word);
+          return self.prevRequest = params;
         },
         progress: function(data, e) {
           var progressObj;
@@ -441,7 +436,6 @@
       var data, def, reduceval, self, _ref;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
-      statsResults.showPreloader();
       reduceval = search().stats_reduce || "word";
       if (reduceval === "word_insensitive") {
         reduceval = "word";

@@ -52,13 +52,13 @@
 
   $(document).keyup(function(event) {
     if (event.keyCode === 27) {
-      if (typeof kwicProxy !== "undefined" && kwicProxy !== null) {
-        kwicProxy.abort();
+      if (typeof kwicResults !== "undefined" && kwicResults !== null) {
+        kwicResults.abort();
       }
-      if (typeof lemgramProxy !== "undefined" && lemgramProxy !== null) {
-        lemgramProxy.abort();
+      if (typeof lemgramResults !== "undefined" && lemgramResults !== null) {
+        lemgramResults.abort();
       }
-      return typeof statsProxy !== "undefined" && statsProxy !== null ? statsProxy.abort() : void 0;
+      return typeof statsResults !== "undefined" && statsResults !== null ? statsResults.abort() : void 0;
     }
   });
 

@@ -24,6 +24,11 @@
       })(this));
     };
 
+    BaseResults.prototype.abort = function() {
+      this.ignoreAbort = false;
+      return this.proxy.abort();
+    };
+
     BaseResults.prototype.getSearchTabs = function() {
       return $(".search_tabs > ul").scope().tabs;
     };
@@ -136,7 +141,7 @@
     };
 
     KWICResults.prototype.selectWord = function(word, scope) {
-      var aux, i, l, obj, paragraph, sent_start;
+      var aux, i, l, obj, paragraph, querySentStart, sent_start;
       obj = scope.wd;
       if (obj.dephead == null) {
         scope.selectionManager.select(word, null);
@@ -148,13 +153,15 @@
       i = Number(obj.dephead);
       paragraph = word.closest(".sentence").find(".word");
       sent_start = 0;
-      if (word.is(".open_sentence")) {
+      querySentStart = ".open_sentence";
+      if (word.is(querySentStart)) {
         sent_start = paragraph.index(word);
       } else {
         l = paragraph.filter(function(__, item) {
-          return $(item).is(word) || $(item).is(".open_sentence");
+          return $(item).is(word) || $(item).is(querySentStart);
         });
         sent_start = paragraph.index(l.eq(l.index(word) - 1));
+        c.log("i", l.index(word), i, sent_start);
       }
       aux = $(paragraph.get(sent_start + i - 1));
       scope.selectionManager.select(word, aux);
@@ -392,7 +399,7 @@
     };
 
     KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var isReading, kwicCallback, opts, page, self;
+      var isReading, kwicCallback, opts, page, req, self;
       safeApply(this.s, (function(_this) {
         return function() {
           return _this.s.paging = true;
@@ -406,22 +413,24 @@
         kwicCallback = this.renderResult;
         opts = this.buildQueryOptions();
         opts.corpus = this.proxy.prevRequest.corpus;
-        this.getProxy().makeRequest(opts, new_page_index, ((function(_this) {
+        req = this.getProxy().makeRequest(opts, new_page_index, ((function(_this) {
           return function(progressObj) {
             return _this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
-          };
-        })(this)), ((function(_this) {
-          return function(data) {
-            _this.buildPager(data.hits);
-            return safeApply(_this.s, function() {
-              return _this.s.paging = false;
-            });
           };
         })(this)), (function(_this) {
           return function(data) {
             return self.renderResult(data);
           };
         })(this));
+        req.success = function(data) {
+          this.buildPager(data.hits);
+          return safeApply(this.s, (function(_this) {
+            return function() {
+              return _this.s.paging = false;
+            };
+          })(this));
+        };
+        req.fail = function(data) {};
         safeApply(this.s, function() {
           return search({
             page: new_page_index
@@ -473,18 +482,41 @@
     };
 
     KWICResults.prototype.makeRequest = function(page_num, cqp) {
-      var isReading, kwicCallback;
+      var isReading, req;
       this.showPreloader();
+      this.s.aborted = false;
+      this.$result.find(".pager-wrapper").empty();
       this.s.gotFirstKwic = false;
+      if (this.proxy.hasPending()) {
+        this.ignoreAbort = true;
+      } else {
+        this.ignoreAbort = false;
+      }
       isReading = this.isReadingMode();
-      kwicCallback = $.proxy(this.renderResult, this);
-      return this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
+      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
         return function(data) {
+          return _this.renderResult(data);
+        };
+      })(this));
+      req.success((function(_this) {
+        return function(data) {
+          _this.hidePreloader();
           return _this.renderCompleteResult(data);
         };
-      })(this), (function(_this) {
-        return function(data) {
-          return kwicCallback(data);
+      })(this));
+      return req.fail((function(_this) {
+        return function(jqXHR, status, errorThrown) {
+          c.log("kwic fail");
+          if (_this.ignoreAbort) {
+            c.log("stats ignoreabort");
+            return;
+          }
+          if (status === "abort") {
+            return safeApply(_this.s, function() {
+              _this.hidePreloader();
+              return _this.s.aborted = true;
+            });
+          }
         };
       })(this));
     };
@@ -718,7 +750,12 @@
 
     LemgramResults.prototype.makeRequest = function(word, type) {
       var def;
-      this.resetView();
+      if (this.proxy.hasPending()) {
+        this.ignoreAbort = true;
+      } else {
+        this.ignoreAbort = false;
+        this.resetView();
+      }
       this.showPreloader();
       def = this.proxy.makeRequest(word, type, (function(_this) {
         return function() {
@@ -727,9 +764,20 @@
           return _this.onProgress.apply(_this, args);
         };
       })(this));
+      def.success((function(_this) {
+        return function(data) {
+          return safeApply(_this.s, function() {
+            return _this.renderResult(data, word);
+          });
+        };
+      })(this));
       return def.fail((function(_this) {
         return function(jqXHR, status, errorThrown) {
           c.log("def fail", status);
+          if (_this.ignoreAbort) {
+            c.log("lemgram ignoreabort");
+            return;
+          }
           if (status === "abort") {
             return safeApply(_this.s, function() {
               _this.hidePreloader();
@@ -746,21 +794,13 @@
       c.log("lemgram renderResult", data, query);
       $(".content_target", this.$result).empty();
       resultError = LemgramResults.__super__.renderResult.call(this, data);
-      safeApply(this.s, (function(_this) {
-        return function() {
-          _this.hidePreloader();
-          return _this.s.$parent.progress = 100;
-        };
-      })(this));
+      this.hidePreloader();
+      this.s.$parent.progress = 100;
       if (resultError === false) {
         return;
       }
       if (!data.relations) {
-        safeApply(this.s, (function(_this) {
-          return function() {
-            return _this.s.$parent.no_hits = true;
-          };
-        })(this));
+        this.s.$parent.no_hits = true;
         return this.resultDeferred.reject();
       } else if (util.isLemgramId(query)) {
         this.renderTables(query, data.relations);
@@ -1336,7 +1376,16 @@
     };
 
     StatsResults.prototype.makeRequest = function(cqp) {
-      this.resetView();
+      c.log("statsrequest makerequest", this.proxy.hasPending(), _.map(this.proxy.pendingRequests, function(item) {
+        return item.readyState;
+      }));
+      if (this.proxy.hasPending()) {
+        this.ignoreAbort = true;
+      } else {
+        this.ignoreAbort = false;
+        this.resetView();
+      }
+      this.showPreloader();
       return this.proxy.makeRequest(cqp, ((function(_this) {
         return function() {
           var args;
@@ -1347,25 +1396,30 @@
         return function(_arg) {
           var columns, data, dataset, wordArray;
           data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
+          safeApply(_this.s, function() {
+            return _this.hidePreloader();
+          });
           _this.savedData = data;
           _this.savedWordArray = wordArray;
           return _this.renderResult(columns, dataset);
         };
       })(this)).fail((function(_this) {
         return function(textStatus, err) {
-          c.log("stats fail");
+          c.log("fail", arguments);
+          c.log("stats fail", _this.s.$parent.loading, _.map(_this.proxy.pendingRequests, function(item) {
+            return item.readyState;
+          }));
+          if (_this.ignoreAbort) {
+            c.log("stats ignoreabort");
+            return;
+          }
           return safeApply(_this.s, function() {
+            _this.hidePreloader();
             if (textStatus === "abort") {
               return _this.s.aborted = true;
             } else {
               return _this.resultError(err);
             }
-          });
-        };
-      })(this)).always((function(_this) {
-        return function() {
-          return safeApply(_this.s, function() {
-            return _this.hidePreloader();
           });
         };
       })(this));

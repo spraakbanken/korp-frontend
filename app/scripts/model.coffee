@@ -18,6 +18,7 @@ class BaseProxy
         @pendingRequests = []
 
     makeRequest: ->
+        @abort()
         @prev = ""
         @progress = 0
         @total_results = 0
@@ -25,7 +26,10 @@ class BaseProxy
 
     abort: ->
         _.invoke @pendingRequests, "abort" if @pendingRequests.length
-        @pendingRequests = []
+        # @pendingRequests = []
+
+    hasPending : () ->
+        _.any _.map @pendingRequests, (req) -> req.readyState != 4 and req.readyState != 0
 
     parseJSON: (data) ->
         try
@@ -129,12 +133,12 @@ class model.KWICProxy extends BaseProxy
         i = $.inArray(@pendingRequests, xhr)
         @pendingRequests.pop i unless i is -1
 
-    makeRequest: (options, page, callback, successCallback, kwicCallback) ->
+    makeRequest: (options, page, progressCallback, kwicCallback) ->
         c.log "kwicproxy.makeRequest"
         self = this
         @foundKwic = false
         super()
-        successCallback = successCallback or $.proxy(kwicResults.renderCompleteResult, kwicResults)
+        # successCallback = successCallback or $.proxy(kwicResults.renderCompleteResult, kwicResults)
         # kwicCallback = kwicCallback or $.proxy(kwicResults.renderKwicResult, kwicResults)
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
@@ -144,21 +148,20 @@ class model.KWICProxy extends BaseProxy
             # cqp: $("body").scope().activeCQP || search().cqp
             queryData: null
             # ajaxParams: @prevAjaxParams
-            success: (data, status, xhr) ->
-                self.popXhr xhr
-                successCallback data
+            # success: (data, status, xhr) ->
+            #     self.popXhr xhr
 
-            error: (data, status, xhr) ->
-                c.log "kwic error", data
-                self.popXhr xhr
-                kwicResults.hidePreloader()
+            # error: (data, status, xhr) ->
+            #     c.log "kwic error", data
+            #     self.popXhr xhr
+            #     kwicResults.hidePreloader()
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
                 return unless progressObj?
 
                 #               c.log("progressObj", progressObj)
-                callback progressObj
+                progressCallback progressObj
                 if progressObj["struct"].kwic
                     c.log "found kwic!"
                     @foundKwic = true
@@ -194,14 +197,15 @@ class model.KWICProxy extends BaseProxy
 
         # if $(".within_select").val() != settings.defaultWithin
         #     data.within = settings.corpusListing.getWithinQueryString()
-        data.show = _.uniq data.show
+        # data.show = _.uniq data.show
         @prevCQP = data.cqp
-        data.show = (_.uniq data.show).join(",")
+        data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
+        c.log "data.show", data.show
         data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
         @prevMisc = {"hitsPerPage" : $("#num_hits").val()}
         @prevParams = data
-        @pendingRequests.push $.ajax(
+        def = $.ajax(
             url: settings.cgi_script
             data: data
             beforeSend: (req, settings) ->
@@ -211,11 +215,13 @@ class model.KWICProxy extends BaseProxy
             success: (data, status, jqxhr) ->
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
-                o.success data, data.cqp
+                # o.success data, data.cqp
 
-            error: o.error
+            # error: o.error
             progress: o.progress
         )
+        @pendingRequests.push def
+        return def
 
 # class model.ExamplesProxy extends model.KWICProxy
 #     constructor: ->
@@ -264,7 +270,7 @@ class model.LemgramProxy extends BaseProxy
             success: (data) ->
                 c.log "relations success", data
                 self.prevRequest = params
-                lemgramResults.renderResult data, word
+                # lemgramResults.renderResult data, word
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
@@ -371,8 +377,6 @@ class model.StatsProxy extends BaseProxy
     makeRequest: (cqp, callback) ->
         self = this
         super()
-        statsResults.showPreloader()
-        # reduceval = $.bbq.getState("stats_reduce") or "word"
         reduceval = search().stats_reduce or "word"
         reduceval = "word" if reduceval is "word_insensitive"
 
@@ -417,7 +421,6 @@ class model.StatsProxy extends BaseProxy
             success: (data) ->
                 if data.ERROR?
                     c.log "gettings stats failed with error", $.dump(data.ERROR)
-                    # statsResults.resultError data
                     def.reject(data)
                     return
                 minWidth = 100
@@ -500,9 +503,6 @@ class model.StatsProxy extends BaseProxy
                     dataset[i+1] = row
                 c.log "stats resolve"
                 def.resolve [data, wordArray, columns, dataset]
-                # statsResults.savedData = data
-                # statsResults.savedWordArray = wordArray
-                # statsResults.renderResult columns, dataset
         return def.promise()
 
 

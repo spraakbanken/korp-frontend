@@ -24,6 +24,11 @@ class BaseResults
             @s.$parent.progress = Math.round(progressObj["stats"])
 
 
+
+    abort : () ->
+        @ignoreAbort = false
+        @proxy.abort()
+
     getSearchTabs : () ->
         $(".search_tabs > ul").scope().tabs
 
@@ -130,16 +135,19 @@ class view.KWICResults extends BaseResults
             return
 
         i = Number(obj.dephead)
+
         paragraph = word.closest(".sentence").find(".word")
         sent_start = 0
-        if word.is(".open_sentence")
+        querySentStart = ".open_sentence"
+        if word.is(querySentStart)
             sent_start = paragraph.index(word)
         else
 
             l = paragraph.filter((__, item) ->
-                $(item).is(word) or $(item).is(".open_sentence")
+                $(item).is(word) or $(item).is(querySentStart)
             )
             sent_start = paragraph.index(l.eq(l.index(word) - 1))
+            c.log "i", l.index(word), i, sent_start
         aux = $(paragraph.get(sent_start + i - 1))
         scope.selectionManager.select word, aux
         safeApply @s.$root, (s) ->
@@ -343,17 +351,19 @@ class view.KWICResults extends BaseResults
             opts = @buildQueryOptions()
             opts.corpus = @proxy.prevRequest.corpus
 
-            @getProxy().makeRequest opts, new_page_index, ((progressObj) =>
-
+            req = @getProxy().makeRequest opts, new_page_index, ((progressObj) =>
                 #progress
                 @.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
-            ), ((data) =>
-                #success
+            ), (data) => 
+                self.renderResult(data)
+
+            req.success = (data) ->
                 @buildPager data.hits
                 safeApply @s, () =>
                     @s.paging = false
-            ), (data) => 
-                self.renderResult(data)
+            
+            req.fail = (data) ->
+
             # $.bbq.pushState page: new_page_index
             safeApply @s, () ->
                 search page: new_page_index
@@ -393,43 +403,48 @@ class view.KWICResults extends BaseResults
 
     makeRequest: (page_num, cqp) ->
         @showPreloader()
+        @s.aborted = false
+        @$result.find(".pager-wrapper").empty()
         @s.gotFirstKwic = false
+
+        if @proxy.hasPending()
+            @ignoreAbort = true
+        else
+            @ignoreAbort = false
+
         isReading = @isReadingMode()
 
-        # safeApply @s, () =>
-        #     if isReading
-        #         @s.setContextData({kwic:[]})
-        #     else
-        #         @s.setKwicData({kwic:[]})
 
-        kwicCallback = $.proxy(@renderResult, this)
-        @getProxy().makeRequest @buildQueryOptions(cqp),
+        req = @getProxy().makeRequest @buildQueryOptions(cqp),
                             page_num,
                             (if isReading then $.noop else $.proxy(@onProgress, this)),
-                            (data) =>
-                                # c.log "paging false"
-                                # @s.paging = false
-                                @renderCompleteResult(data)
-                            ,
-                           # $.proxy(@renderCompleteResult, this),
                             (data) => 
-                                # c.log "paging false"
-                                # @s.paging = false
-                                kwicCallback(data)
+                                @renderResult data
+        req.success (data) =>
+            @hidePreloader()
+            @renderCompleteResult(data)
+        req.fail (jqXHR, status, errorThrown) =>
+            c.log "kwic fail"
+            if @ignoreAbort
+                c.log "stats ignoreabort"
+                return
+            if status == "abort"
+                safeApply @s, () =>
+                    @hidePreloader()
+                    @s.aborted = true
+
+        
+        # req.always () =>
+        #     c.log "req always"
+        #     safeApply @s, () =>
+        #         @hidePreloader()
+
 
     getActiveData : () ->
-
         if @isReadingMode()
             @s.contextKwic
         else
             @s.kwic
-
-    # eachWord : (f) ->
-    #     for s in @getActiveData()
-    #         for w in s.tokens
-    #             f(w)
-    #         for w in (_.flatten _.values s.aligned)
-
 
     setPage: (page) ->
         @$result.find(".pager-wrapper").trigger "setPage", [page]
@@ -634,13 +649,26 @@ class view.LemgramResults extends BaseResults
             @s.$parent.no_hits = false
 
     makeRequest : (word, type) ->
-        @resetView()
+        if @proxy.hasPending()
+            @ignoreAbort = true
+        else
+            @ignoreAbort = false
+            @resetView()
+        
         @showPreloader()
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
 
+        def.success (data) =>
+            safeApply @s, () =>
+                @renderResult(data, word)
+
+
         def.fail (jqXHR, status, errorThrown) =>
             c.log "def fail", status
+            if @ignoreAbort
+                c.log "lemgram ignoreabort"
+                return
             if status == "abort"
                 safeApply @s, () =>
                     @hidePreloader()
@@ -653,13 +681,11 @@ class view.LemgramResults extends BaseResults
         # @resetView()
         $(".content_target", @$result).empty()
         resultError = super(data)
-        safeApply @s, () =>
-            @hidePreloader()
-            @s.$parent.progress = 100
+        @hidePreloader()
+        @s.$parent.progress = 100
         return if resultError is false
         unless data.relations
-            safeApply @s, () =>
-                @s.$parent.no_hits = true
+            @s.$parent.no_hits = true
                 # @hasData = false
 
             @resultDeferred.reject()
@@ -1173,26 +1199,43 @@ class view.StatsResults extends BaseResults
         })
 
     makeRequest : (cqp) ->
+        c.log "statsrequest makerequest", @proxy.hasPending(), _.map @proxy.pendingRequests, (item) -> item.readyState
+        if @proxy.hasPending()
+            @ignoreAbort = true
+        else
+            @ignoreAbort = false
+            @resetView()
 
-        @resetView()
+        @showPreloader()
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
         ).done( ([data, wordArray, columns, dataset]) =>
+            # @s.aborted = false
+            safeApply @s, () =>
+                @hidePreloader()
             @savedData = data
             @savedWordArray = wordArray
             @renderResult columns, dataset
 
         ).fail (textStatus, err) =>
-            c.log "stats fail"
-
+            # _.map(@proxy.pendingRequests, function(item){return item.readyState})
+            c.log "fail", arguments
+            c.log "stats fail", @s.$parent.loading, _.map @proxy.pendingRequests, (item) -> item.readyState
+            # if @proxy.hasPending()
+                # c.log "stats makerequest abort exited"
+                # return
+            if @ignoreAbort
+                c.log "stats ignoreabort"
+                return
             safeApply @s, () =>
+                @hidePreloader()
                 if textStatus == "abort"
                     @s.aborted = true
                 else
                     @resultError err
 
-        .always () =>
-            safeApply @s, () =>
-                @hidePreloader()
+        # .always () =>
+        #     safeApply @s, () =>
+        #         @hidePreloader()
 
 
 
