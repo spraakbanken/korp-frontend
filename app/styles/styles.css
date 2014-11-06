@@ -8610,7 +8610,7 @@ table {
 .link_selected {
   background-color: #445596;
   border-radius: 11px;
-  color: white;
+  color: white !important;
 }
 
 @media -sass-debug-info {

@@ -1057,7 +1057,7 @@ table {
 .link_selected {
   background-color: rgb(68, 85, 150);
   border-radius : 11px;
-  color : white;
+  color : white !important;
 }
 
 .token_selected {

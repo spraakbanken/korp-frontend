@@ -197,7 +197,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
 		}
 		safeApply($("body").scope(), $.noop)
-		
+
 	},
 
 	clearLinks : function() {
