@@ -377,8 +377,8 @@
       });
     };
 
-    KWICResults.prototype.buildPager = function(number_of_hits) {
-      var items_per_page;
+    KWICResults.prototype.buildPager = function(number_of_hits, noTryAgain) {
+      var buttons, items_per_page;
       items_per_page = this.optionWidget.find(".num_hits").val();
       $.onScrollOut("unbind");
       this.$result.find(".pager-wrapper").unbind().empty();
@@ -394,7 +394,15 @@
           current_page: this.current_page || 0
         });
         this.$result.find(".next").attr("rel", "localize[next]");
-        return this.$result.find(".prev").attr("rel", "localize[prev]");
+        this.$result.find(".prev").attr("rel", "localize[prev]");
+        buttons = this.$result.find(".pagination a:visible");
+        if (buttons.length > 20 && !noTryAgain) {
+          return setTimeout((function(_this) {
+            return function() {
+              return _this.buildPager(number_of_hits, true);
+            };
+          })(this), 100);
+        }
       }
     };
 
@@ -480,6 +488,7 @@
 
     KWICResults.prototype.makeRequest = function(page_num, cqp) {
       var isReading, req;
+      c.log("kwicResults.makeRequest", page_num);
       this.showPreloader();
       this.s.aborted = false;
       this.$result.find(".pager-wrapper").empty();
@@ -490,7 +499,7 @@
         this.ignoreAbort = false;
       }
       isReading = this.isReadingMode();
-      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
+      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num || this.current_page, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
         return function(data) {
           return _this.renderResult(data);
         };
@@ -1262,11 +1271,11 @@
           labelMapping = {};
           showTotal = false;
           mainCQP = params.cqp;
-          _ref = _this.$result.find(".slick-cell-checkboxsel :checked");
+          _ref = _this.$result.find(".include_chk:checked");
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             chk = _ref[_i];
             cell = $(chk).parent();
-            if (cell.is(".slick-row:nth-child(1) .slick-cell-checkboxsel")) {
+            if (cell.parent().is(".slick-row:nth-child(1)")) {
               showTotal = true;
               continue;
             }
@@ -1421,7 +1430,7 @@
     };
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, refreshHeaders, resultError, sortCol;
+      var checkboxSelector, grid, log, refreshHeaders, resultError, sortCol;
       refreshHeaders = function() {
         $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
@@ -1460,10 +1469,14 @@
       this.grid.autosizeColumns();
       $("#myGrid").width("100%");
       sortCol = columns[2];
+      log = _.debounce(function() {
+        return c.log("grid sort");
+      }, 200);
       grid.onSort.subscribe(function(e, args) {
         sortCol = args.sortCol;
         data.sort(function(a, b) {
           var ret, x, y;
+          log();
           if (sortCol.field === "hit_value") {
             x = a[sortCol.field];
             y = b[sortCol.field];

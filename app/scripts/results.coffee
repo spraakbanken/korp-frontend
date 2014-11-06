@@ -316,8 +316,9 @@ class view.KWICResults extends BaseResults
         else newX -= offset if wordLeft < area.offset().left
         area.stop(true, true).animate scrollLeft: newX
 
-    buildPager: (number_of_hits) ->
+    buildPager: (number_of_hits, noTryAgain) ->
         items_per_page = @optionWidget.find(".num_hits").val()
+        # c.log "items_per_page", items_per_page, number_of_hits, @$result.find(".pager-wrapper").is(":visible")
         # @movePager "up"
         $.onScrollOut "unbind"
         @$result.find(".pager-wrapper").unbind().empty()
@@ -334,6 +335,12 @@ class view.KWICResults extends BaseResults
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
+
+            buttons = @$result.find(".pagination a:visible")
+            if buttons.length > 20 and not noTryAgain
+                setTimeout( () =>
+                    @buildPager(number_of_hits, true)
+                , 100)
     
     # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
@@ -404,6 +411,7 @@ class view.KWICResults extends BaseResults
 
 
     makeRequest: (page_num, cqp) ->
+        c.log "kwicResults.makeRequest", page_num
         @showPreloader()
         @s.aborted = false
         @$result.find(".pager-wrapper").empty()
@@ -418,7 +426,7 @@ class view.KWICResults extends BaseResults
 
 
         req = @getProxy().makeRequest @buildQueryOptions(cqp),
-                            page_num,
+                            page_num or @current_page,
                             (if isReading then $.noop else $.proxy(@onProgress, this)),
                             (data) => 
                                 @renderResult data
@@ -1112,9 +1120,9 @@ class view.StatsResults extends BaseResults
             showTotal = false
             mainCQP = params.cqp
 
-            for chk in @$result.find(".slick-cell-checkboxsel :checked")
+            for chk in @$result.find(".include_chk:checked")
                 cell = $(chk).parent()
-                if cell.is ".slick-row:nth-child(1) .slick-cell-checkboxsel"
+                if cell.parent().is ".slick-row:nth-child(1)"
                     showTotal = true
                     continue
                 cqp = decodeURIComponent cell.next().find(" > .link").data("query")
@@ -1278,10 +1286,13 @@ class view.StatsResults extends BaseResults
         $("#myGrid").width("100%")
 
         sortCol = columns[2]
-
+        log = _.debounce () ->
+            c.log "grid sort"
+        , 200
         grid.onSort.subscribe (e, args) ->
             sortCol = args.sortCol  
             data.sort (a, b) ->
+                log()
                 if sortCol.field is "hit_value"
                     x = a[sortCol.field]
                     y = b[sortCol.field]

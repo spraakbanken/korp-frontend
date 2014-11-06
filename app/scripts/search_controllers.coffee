@@ -8,7 +8,6 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     searches.langDef.resolve()
     $scope.isCompareSelected = false
 
-    $scope.settings = settings
 
     $scope.$watch( (() -> $location.search().search_tab),
         (val) ->
@@ -21,9 +20,9 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.$watch "word_pic", (val) ->
         $location.search("word_pic", Boolean(val) or null)
 
+    $scope.settings = settings
     $scope.showStats = () -> 
-        c.log "showstats", settings.statistics, settings.statistics != false
-        return settings.statistics != false
+    return settings.statistics != false
         # Boolean(settings.statistics) != false
 
     # utils.setupHash $scope, [

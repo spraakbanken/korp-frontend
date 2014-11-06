@@ -10,7 +10,6 @@
     $scope.extendedTmpl = "views/extended_tmpl.html";
     searches.langDef.resolve();
     $scope.isCompareSelected = false;
-    $scope.settings = settings;
     $scope.$watch((function() {
       return $location.search().search_tab;
     }), function(val) {
@@ -24,10 +23,9 @@
     $scope.$watch("word_pic", function(val) {
       return $location.search("word_pic", Boolean(val) || null);
     });
-    return $scope.showStats = function() {
-      c.log("showstats", settings.statistics, settings.statistics !== false);
-      return settings.statistics !== false;
-    };
+    $scope.settings = settings;
+    $scope.showStats = function() {};
+    return settings.statistics !== false;
   });
 
   korpApp.config(function($tooltipProvider) {

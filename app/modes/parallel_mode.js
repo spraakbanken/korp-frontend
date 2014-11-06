@@ -17,25 +17,6 @@ korpApp.controller("SearchCtrl", function($scope) {
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout, searches) {
 	var s = $scope;
 	s.negates = [];
-	s.onSubmit = function() {
-		$location.search("search", null)
-		$timeout( function() {
-		    // within = s.within unless s.within in _.keys settings.defaultWithin
-		    var within;
-		    if(!s.within in _.keys(settings.defaultWithin))
-			    within = s.within
-
-		    $location.search("within", within || null)
-		    $location.search("search", "cqp|" + $rootScope.extendedCQP)
-		}, 0)
-	}	
-
-	s.keydown = function($event) {
-		if($event.keyCode == 13) // enter
-			s.onSubmit() 
-	}
-	    
-	
 
 	if($location.search().parallel_corpora)
 		s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
@@ -51,7 +32,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 		$location.search("search", null)
 	}
 	c.log ("add langs watch")
-	s.$watch("langs", function() {
+	var onLangChange = function() {
 		var currentLangList = _.pluck(s.langs, "lang");
 		c.log("lang change", currentLangList)
 		settings.corpusListing.setActiveLangs(currentLangList);
@@ -91,7 +72,41 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 		$rootScope.extendedCQP = output;
 		s.$broadcast("corpuschooserchange")
 		searches.langDef.resolve()
+		return output
+	}
+	s.$watch("langs", function() {
+		onLangChange()
+		
 	}, true);
+
+
+	s.onSubmit = function() {
+		$location.search("search", null)
+		$timeout( function() {
+		    // within = s.within unless s.within in _.keys settings.defaultWithin
+		    var within;
+		    if(!s.within in _.keys(settings.defaultWithin))
+			    within = s.within
+
+		    $location.search("within", within || null)
+		    $location.search("search", "cqp|" + onLangChange())
+	    	c.log ("onLangChange", onLangChange())
+		}, 300) // <--
+		// TODO: this is a little hacky. 
+		// if changed, look at ng-model-option debounce value as well
+	}	
+
+
+	s.keydown = function($event) {
+		if($event.keyCode == 13) { // enter
+			// _.defer()
+			var current = $(".arg_value:focus")
+			c.log( "current", current)
+			if(current.length) {
+				s.onSubmit()
+			}
+		} 
+	}
 
 	s.getEnabledLangs = function(i) {
 		if(i === 0) {
@@ -130,7 +145,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 }, {
 
 	selectWord : function(word, scope, sentence) {
-		c.log ("word, scope, sentence", word, scope, sentence)
+		// c.log ("word, scope, sentence", word, scope, sentence)
 		c3.prototype.selectWord.apply(this, arguments)
 		this.clearLinks()
 		var self = this
@@ -154,7 +169,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
 		if(sentence.isLinked){ // a secondary language was clicked
 			var sent_index = scope.$parent.$index
-			c.log ("sent_index", sent_index)
+			// c.log ("sent_index", sent_index)
 			var data = this.getActiveData()
 			var mainSent = null
 			while(data[sent_index]) {
@@ -166,7 +181,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 				sent_index--
 			}
 
- 			c.log( "mainSent", mainSent)
+ 			// c.log( "mainSent", mainSent)
  			var linkNum = Number(obj.linkref)
  			var lang = corpus.id.split("-")[1]
  			var mainCorpus = mainSent.corpus.split("-")[0]

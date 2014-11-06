@@ -506,7 +506,7 @@
               minWidth: minWidth
             }
           ];
-          $.each($.keys(data.corpora).sort(), function(i, corpus) {
+          $.each(_.keys(data.corpora).sort(), function(i, corpus) {
             return columns.push({
               id: corpus,
               name: settings.corpora[corpus.toLowerCase()].title,
@@ -524,7 +524,7 @@
           $.each(data.corpora, function(corpus, obj) {
             return totalRow[corpus + "_value"] = obj.sums;
           });
-          wordArray = $.keys(data.total.absolute);
+          wordArray = _.keys(data.total.absolute);
           valueGetter = function(obj, word) {
             return obj[word];
           };
@@ -536,8 +536,6 @@
               return item.replace(/:\d+/g, "");
             });
             combinedWordArray = _.keys(groups);
-            c.log("combinedWordArray", combinedWordArray);
-            c.log("groups", groups);
             add = function(a, b) {
               return a + b;
             };

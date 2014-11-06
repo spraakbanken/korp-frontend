@@ -10,4 +10,6 @@ if [ $? -eq 0 ]; then
     svn copy https://svn.spraakdata.gu.se/repos/lb/trunk/sbkhs/korp-frontend \
       https://svn.spraakdata.gu.se/repos/lb/trunk/sbkhs/pub/releases/korp\-frontend/"korp $1 $DATE" -m "Release $1"
 
+    git tag "release_$1"
+    git push sb master --tags
 fi

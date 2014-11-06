@@ -427,6 +427,14 @@ class model.StatsProxy extends BaseProxy
                     return
                 minWidth = 100
                 columns = [
+
+                #     id: "chk"
+                #     name: "<input type='checkbox' class='include_all_chk'>"
+                #     field: "hit_chk"
+                #     sortable: false
+                #     formatter: () -> "<input type='checkbox' class='include_chk'>"
+                #     maxWidth : 50
+                # ,
                     id: "hit"
                     name: "stats_hit"
                     field: "hit_value"
@@ -441,7 +449,7 @@ class model.StatsProxy extends BaseProxy
                     formatter: self.valueFormatter
                     minWidth : minWidth
                 ]
-                $.each $.keys(data.corpora).sort(), (i, corpus) ->
+                $.each _.keys(data.corpora).sort(), (i, corpus) ->
                     columns.push
                         id: corpus
                         name: settings.corpora[corpus.toLowerCase()].title
@@ -459,7 +467,7 @@ class model.StatsProxy extends BaseProxy
                 $.each data.corpora, (corpus, obj) ->
                     totalRow[corpus + "_value"] = obj.sums
 
-                wordArray = $.keys(data.total.absolute)
+                wordArray = _.keys(data.total.absolute)
 
                 valueGetter = (obj, word) ->
                     return obj[word]
@@ -474,8 +482,8 @@ class model.StatsProxy extends BaseProxy
 
 
                     combinedWordArray = _.keys groups
-                    c.log "combinedWordArray", combinedWordArray
-                    c.log "groups", groups
+                    # c.log "combinedWordArray", combinedWordArray
+                    # c.log "groups", groups
                     add = (a, b) -> a + b
                         
                     valueGetter = (obj, word) ->
