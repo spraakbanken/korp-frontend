@@ -1370,9 +1370,10 @@
     };
 
     StatsResults.prototype.makeRequest = function(cqp) {
-      c.log("statsrequest makerequest", this.proxy.hasPending(), _.map(this.proxy.pendingRequests, function(item) {
-        return item.readyState;
-      }));
+      c.log("statsrequest makerequest", cqp);
+      if (currentMode === "parallel") {
+        cqp = cqp.replace(/\:LINKED_CORPUS.*/, "");
+      }
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
       } else {

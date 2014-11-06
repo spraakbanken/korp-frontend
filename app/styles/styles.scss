@@ -482,6 +482,8 @@ select.arg_value option {
   vertical-align: bottom;
 }
 
+
+
 .buttonlink {
   padding: .4em 1em .4em 20px;
   color: #222222;
@@ -1510,6 +1512,9 @@ label[for=lemgram_select]:before {
 
 .exportTimeStatsSection {
   margin-top : 2em;
+}
+.export.btn {
+  margin-right : 1em;
 }
 
 .ui-slider-handle {

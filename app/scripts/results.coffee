@@ -1200,7 +1200,11 @@ class view.StatsResults extends BaseResults
         })
 
     makeRequest : (cqp) ->
-        c.log "statsrequest makerequest", @proxy.hasPending(), _.map @proxy.pendingRequests, (item) -> item.readyState
+        c.log "statsrequest makerequest", cqp
+
+        if currentMode == "parallel"
+            cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
+
         if @proxy.hasPending()
             @ignoreAbort = true
         else
