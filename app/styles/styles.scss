@@ -1652,53 +1652,100 @@ label[for=lemgram_select]:before {
     display : inline;
   }
 
+  #simple_text {
+    position: relative;
+    margin-top : 6px;
+  }
+
   .simple_form {
     float : left;
-    margin-bottom : 2em;
+    // display: inline-block;
+    // margin-bottom : 2em;
+  }
+  .opts {
+    // background-color : $primaryLight;
+    // padding : 1em;
+    margin-top : 1em;
+    margin-bottom : 1em;
   }
   
   #similar_wrapper {
-    // max-width: 50%;
-    float : right;
-    background-color : $primaryLight;
+    margin-left : 3em;
+    // display: inline-block;
+    float: right;
+    vertical-align: top;
+    text-align: right;
+
+    .btn_header {
+      font-size: 1.1em;
+    }
     
-    padding : 1em;
-    white-space : nowrap;
-    overflow-x: auto;
-    max-height : 180px;
-    // TOOD: we should do an angular ng-repeat animation here instead
-    transition: max-height 200ms;
-    &.open {
-      max-height : 500px;
+    button {
+      display : block;
     }
-    .col {
-      display: inline-block;
-      vertical-align: top;
-      margin-right : 2em;
-      white-space : normal;
+  }
+}
 
-      .header {
-        font-size : 1.1em;
+.modal {
+  max-height : initial;
+  overflow-y : auto;
+}
+
+.modal.fade.in {
+  top : 30%;
+}
+.modal-header h3 {
+  font-weight : normal;
+}
+
+
+.modal-header {
+  display : block;
+  & > * {
+    display: inline-block;
+    width : 49%;
+  }
+  .close-x {
+    text-align: right;
+    font-size : 2em;
+    cursor: pointer;
+    &:hover {
+      color : darkgrey;
+    }
+  }
+}
+
+.modal-body {
+  
+  max-height : 700px;
+  min-height : 300px;
+}
+
+.related.modal {
+  // max-height : initial;
+  margin-left : -400px;
+  width : 800px;
+
+  
+
+  .modal-body {
+
+    ul {
+      display : flex;
+      flex-direction : column;
+      height : 160px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-content : flex-start;
+      li {
+        // flex : 1 1 auto;
+        margin-right : 1em;
       }
     }
-    // button {
-    //   display : block;
-    // }
-    .circle_icon {
-      border: 2px solid #333;
-      border-radius: 22em;
-      width: 20px;
-      height: 20px;
-      padding-left: 5px;
-      padding-top: 2px;
-      float: right;
-      cursor: pointer;
-      transition: all 200ms;
-      &:hover {
-        color : navy;
-        border-color: navy;
-
-      }
+  }
+  .col {
+    .header {
+      font-size : 1.1em;
     }
   }
 }
@@ -2231,14 +2278,6 @@ line.tick {
 .modal-header_left {
   display : none;
 }
-.modal .modal-header {
-  display : block;
-}
-
-.modal {
-  max-height : 600px;
-  overflow-y : auto;
-}
 
 .compare_result {
   &.loading {
@@ -2350,7 +2389,7 @@ line.tick {
 
 
 .badge {
-  padding-right: 5px;
+  padding-right: 6px;
   padding-left: 6px;
 }
 

@@ -404,39 +404,39 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
         s.cqp ?= '[]'
 
 
-        try
-            s.data = CQP.parse(s.cqp)
-            c.log "s.data", s.data
-        catch error
-            output = []
-            for token in s.cqp.split("[")
-                if not token
-                    continue
-                token = "[" + token
-                try
-                    tokenObj = CQP.parse(token)
-                catch error
-                    tokenObj = [{cqp : token}]
-                output = output.concat(tokenObj)
-
-            s.data = output
-            c.log "crash", s.data
-
-
         if $location.search().cqp
             try
                 s.data = CQP.parse($location.search().cqp)
             catch e
                 # TODO: we could traverse the token list, trying to repair parsing, se above
                 s.data = CQP.parse("[]")
-            
-        else
-            s.data = CQP.parse(s.cqp)
+        # else
+            # s.data = CQP.parse(val)
 
-        for token in s.data
-            if "and_block" not of token or not token.and_block.length
-                token.and_block = CQP.parse('[word = ""]')[0].and_block
 
+
+        s.$watch "cqp", (val) ->
+            try
+                s.data = CQP.parse(val)
+                c.log "s.data", s.data
+            catch error
+                output = []
+                for token in val.split("[")
+                    if not token
+                        continue
+                    token = "[" + token
+                    try
+                        tokenObj = CQP.parse(token)
+                    catch error
+                        tokenObj = [{cqp : token}]
+                    output = output.concat(tokenObj)
+
+                s.data = output
+                c.log "crash", s.data
+
+            for token in s.data
+                if "and_block" not of token or not token.and_block.length
+                    token.and_block = CQP.parse('[word = ""]')[0].and_block
 
 
         s.$watch 'getCQPString()', (val) ->

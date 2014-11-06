@@ -356,11 +356,13 @@ class view.KWICResults extends BaseResults
                 @.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
             ), (data) => 
                 self.renderResult(data)
-
-            req.success = (data) ->
+                c.log "pagination success", data
                 @buildPager data.hits
                 safeApply @s, () =>
                     @s.paging = false
+
+            # req.success = (data) =>
+                
             
             req.fail = (data) ->
 
@@ -591,26 +593,25 @@ class view.ExampleResults extends view.KWICResults
         prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
         _.extend opts.ajaxParams, prev
 
-        $.extend opts,
-            success: (data) =>
-                c.log "ExampleResults success", data, opts
-                @renderResult data, opts.cqp
-                @renderCompleteResult data
-                safeApply @s, () =>
-                    @hidePreloader()
-                util.setJsonLink @proxy.prevRequest
-                @$result.find(".num-result").html util.prettyNumbers(data.hits)
-
-            error: =>
-                safeApply @s, () =>
-                    @hidePreloader()
-
-
         @showPreloader()
 
         #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
         progress = if opts.command == "query" then $.proxy(this.onProgress, this) else $.noop
-        @proxy.makeRequest opts, null, $.noop, $.noop, progress
+        def = @proxy.makeRequest opts, null, progress, (data) => 
+            c.log "first part done", data
+            @renderResult data, opts.cqp
+            @renderCompleteResult data
+            safeApply @s, () =>
+                @hidePreloader()
+            util.setJsonLink @proxy.prevRequest
+            @$result.find(".num-result").html util.prettyNumbers(data.hits)
+
+        # def.success = (data) ->
+
+        def.fail () ->
+            safeApply @s, () =>
+                @hidePreloader()
+
 
 
     renderResult : (data) ->

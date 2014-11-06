@@ -417,38 +417,10 @@
         cqp: "="
       },
       link: function($scope, elem, attr) {
-        var e, error, output, s, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1;
+        var e, s;
         s = $scope;
         if (s.cqp == null) {
           s.cqp = '[]';
-        }
-        try {
-          s.data = CQP.parse(s.cqp);
-          c.log("s.data", s.data);
-        } catch (_error) {
-          error = _error;
-          output = [];
-          _ref = s.cqp.split("[");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            token = _ref[_i];
-            if (!token) {
-              continue;
-            }
-            token = "[" + token;
-            try {
-              tokenObj = CQP.parse(token);
-            } catch (_error) {
-              error = _error;
-              tokenObj = [
-                {
-                  cqp: token
-                }
-              ];
-            }
-            output = output.concat(tokenObj);
-          }
-          s.data = output;
-          c.log("crash", s.data);
         }
         if ($location.search().cqp) {
           try {
@@ -457,16 +429,49 @@
             e = _error;
             s.data = CQP.parse("[]");
           }
-        } else {
-          s.data = CQP.parse(s.cqp);
         }
-        _ref1 = s.data;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          token = _ref1[_j];
-          if (!("and_block" in token) || !token.and_block.length) {
-            token.and_block = CQP.parse('[word = ""]')[0].and_block;
+        s.$watch("cqp", function(val) {
+          var error, output, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1, _results;
+          try {
+            s.data = CQP.parse(val);
+            c.log("s.data", s.data);
+          } catch (_error) {
+            error = _error;
+            output = [];
+            _ref = val.split("[");
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              token = _ref[_i];
+              if (!token) {
+                continue;
+              }
+              token = "[" + token;
+              try {
+                tokenObj = CQP.parse(token);
+              } catch (_error) {
+                error = _error;
+                tokenObj = [
+                  {
+                    cqp: token
+                  }
+                ];
+              }
+              output = output.concat(tokenObj);
+            }
+            s.data = output;
+            c.log("crash", s.data);
           }
-        }
+          _ref1 = s.data;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            token = _ref1[_j];
+            if (!("and_block" in token) || !token.and_block.length) {
+              _results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        });
         s.$watch('getCQPString()', function(val) {
           return s.cqp = CQP.stringify(s.data);
         });
@@ -482,6 +487,7 @@
           return and_array;
         };
         s.addToken = function() {
+          var token;
           token = {
             and_block: [[]]
           };

@@ -28,6 +28,8 @@ korpApp.run ($rootScope, $location, utils, searches) ->
     s.activeCQP = "[]"
     s.search = () -> $location.search arguments...
 
+    s.searchtabs = () ->
+        $(".search_tabs > ul").scope().tabs
 
 
     s._loc = $location

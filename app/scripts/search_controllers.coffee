@@ -37,7 +37,7 @@ korpApp.config ($tooltipProvider) ->
         appendToBody: true
 
 
-korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches) ->
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
     s = $scope
 
     s.$on "popover_submit", (event, name) ->
@@ -55,11 +55,55 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.stringifyRelated = (wd) ->
         util.saldoToString(wd)
 
+    modalInstance = null
     s.clickRelated = (wd) ->
+        modalInstance?.close()
+        c.log "modalInstance", modalInstance
+        $scope.$root.searchtabs()[1].select()
+        s.$root.$broadcast "extended_set", "[saldo contains '#{wd}']"
         $location.search("search", "cqp|" + "[saldo contains '#{wd}']")
 
-    s.relatedDefault = 4
-    s.relatedLimit = s.relatedDefault
+    s.relatedDefault = 3
+    # s.relatedLimit = s.relatedDefault
+    s.clickX = () ->
+        modalInstance.dismiss()
+    s.showAllRelated = () ->
+        modalInstance = $modal.open(
+            template: """
+            <div class="modal-header">
+                <h3 class="modal-title">{{'similar_header' | loc}} (SWE-FN)</h3> 
+                <span ng-click="clickX()" class="close-x">×</span>
+            </div>
+            <div class="modal-body">
+                <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                  <div class="list_wrapper">
+                      <ul>
+                        <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
+                      </ul>
+                  </div>
+                </div>
+            </div>
+            """
+            # <div ng-show="relatedLimit != 9999" ng-click="relatedLimit = 9999"><i class="circle_icon fa fa-long-arrow-down"></i></div>
+            # <div ng-show="relatedLimit == 9999" ng-click="relatedLimit = relatedDefault"><i class="circle_icon fa fa-long-arrow-up"></i></div>
+            scope : s
+            size : 'lg'
+            windowClass : "related"
+            # controller: "ModalInstanceCtrl"
+            # size: size
+            # resolve:
+            #     items: ->
+            #         $scope.items
+        )
+        # modalInstance.result.then (() ->
+        #     # $scope.selected = selectedItem
+        #     c.log "modalInstance.result.then"
+        #     return
+        # ), ->
+        #     # $log.info "Modal dismissed at: " + new Date()
+        #     return
+
+    
 
 
     s.searches = searches
@@ -90,7 +134,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 s.relatedObj = data
             
             if s.word_pic
-                searches.lemgramSearch(lemgram, s.prefix, s.suffix, page)
+                searches.lemgramSearch(search.val, s.prefix, s.suffix, page)
             else
                 searches.kwicSearch(cqp, page)
             
@@ -137,6 +181,10 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
             $location.search("search", "cqp")
         , 0)
 
+
+    s.$on "extended_set", ($event, val) ->
+        c.log "extended_set", val
+        s.cqp = val
 
     if $location.search().cqp
         s.cqp = $location.search().cqp

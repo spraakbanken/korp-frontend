@@ -91,26 +91,25 @@
             <tab heading="{{&quot;simple&quot; | loc}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form class="simple_form">
-                  <label for="simple_text">{{'search_for' | loc}}</label>
-                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus><span id="keyboard" class="ui-state-default specialkey">ð</span>
-                  <search-submit></search-submit><span>
-                     
-                     {{'and_include' | loc}} </span>
-                  <input id="prefixChk" type="checkbox" ng-model="prefix">
-                  <label for="prefixChk"> {{'prefix' | loc}} </label>
-                  <input id="suffixChk" type="checkbox" ng-model="suffix">
-                  <label for="suffixChk"> {{'suffix' | loc}} </label><span> {{'and' | loc}} </span>
-                  <input id="caseChk" type="checkbox" ng-model="isCaseInsensitive">
-                  <label for="caseChk"> {{'case_insensitive' | loc}}  </label>
+                  <input id="simple_text" type="text" ng-model="simple_text" placeholder="{{lemgramToString(placeholder)}}" autofocus>
+                  <search-submit></search-submit>
+                  <div class="opts"><span>
+                       
+                       {{'and_include' | loc}} </span>
+                    <input id="prefixChk" type="checkbox" ng-model="prefix">
+                    <label for="prefixChk"> {{'prefix' | loc}} </label>
+                    <input id="suffixChk" type="checkbox" ng-model="suffix">
+                    <label for="suffixChk"> {{'suffix' | loc}} </label><span> {{'and' | loc}} </span>
+                    <input id="caseChk" type="checkbox" ng-model="isCaseInsensitive">
+                    <label for="caseChk"> {{'case_insensitive' | loc}}  </label>
+                  </div>
                 </form>
                 <div id="similar_wrapper" ng-show="relatedObj" ng-class="{open : relatedLimit == 9999}">
-                  <div ng-repeat="obj in relatedObj" class="col"> <a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
-                    <ul>
-                      <li ng-repeat="wd in obj.words | limitTo:relatedLimit"> <a ng-click="clickRelated(wd)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
-                    </ul>
-                  </div>
-                  <div ng-show="relatedLimit != 9999" ng-click="relatedLimit = 9999"><i class="circle_icon fa fa-long-arrow-down"></i></div>
-                  <div ng-show="relatedLimit == 9999" ng-click="relatedLimit = relatedDefault"><i class="circle_icon fa fa-long-arrow-up"></i></div>
+                  <button ng-click="showAllRelated()" class="btn btn-small"><span class="btn_header">Relaterade ord (SWE-FN)</span><br><span ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault">
+                       
+                      {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><br><span ng-repeat="wd in relatedObj[0].words.slice(relatedDefault) | limitTo:relatedDefault">
+                       
+                      {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><span ng-if="relatedObj[0].words.length &gt; relatedDefault || relatedObj.length &gt; 1">...</span></button>
                 </div>
                 <div class="clearfix"></div>
               </div>

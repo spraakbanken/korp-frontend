@@ -215,7 +215,9 @@ class model.KWICProxy extends BaseProxy
             success: (data, status, jqxhr) ->
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
-                # o.success data, data.cqp
+
+
+
 
             # error: o.error
             progress: o.progress

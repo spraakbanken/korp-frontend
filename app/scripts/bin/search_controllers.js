@@ -35,8 +35,8 @@
     });
   });
 
-  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches) {
-    var s;
+  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) {
+    var modalInstance, s;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
       var cqp;
@@ -53,11 +53,28 @@
     s.stringifyRelated = function(wd) {
       return util.saldoToString(wd);
     };
+    modalInstance = null;
     s.clickRelated = function(wd) {
+      if (modalInstance != null) {
+        modalInstance.close();
+      }
+      c.log("modalInstance", modalInstance);
+      $scope.$root.searchtabs()[1].select();
+      s.$root.$broadcast("extended_set", "[saldo contains '" + wd + "']");
       return $location.search("search", "cqp|" + ("[saldo contains '" + wd + "']"));
     };
-    s.relatedDefault = 4;
-    s.relatedLimit = s.relatedDefault;
+    s.relatedDefault = 3;
+    s.clickX = function() {
+      return modalInstance.dismiss();
+    };
+    s.showAllRelated = function() {
+      return modalInstance = $modal.open({
+        template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc}} (SWE-FN)</h3> \n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
+        scope: s,
+        size: 'lg',
+        windowClass: "related"
+      });
+    };
     s.searches = searches;
     s.$watch("searches.activeSearch", (function(_this) {
       return function(search) {
@@ -87,7 +104,7 @@
             return s.relatedObj = data;
           });
           if (s.word_pic) {
-            return searches.lemgramSearch(lemgram, s.prefix, s.suffix, page);
+            return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
           } else {
             return searches.kwicSearch(cqp, page);
           }
@@ -139,6 +156,10 @@
         $location.search("within", within || null);
         return $location.search("search", "cqp");
       }, 0);
+    });
+    s.$on("extended_set", function($event, val) {
+      c.log("extended_set", val);
+      return s.cqp = val;
     });
     if ($location.search().cqp) {
       s.cqp = $location.search().cqp;

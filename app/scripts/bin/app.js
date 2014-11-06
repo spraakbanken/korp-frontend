@@ -13,6 +13,9 @@
     s.search = function() {
       return $location.search.apply($location, arguments);
     };
+    s.searchtabs = function() {
+      return $(".search_tabs > ul").scope().tabs;
+    };
     s._loc = $location;
     s.$watch("_loc.search()", function() {
       c.log("loc.search() change", $location.search());

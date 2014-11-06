@@ -419,17 +419,14 @@
           };
         })(this)), (function(_this) {
           return function(data) {
-            return self.renderResult(data);
+            self.renderResult(data);
+            c.log("pagination success", data);
+            _this.buildPager(data.hits);
+            return safeApply(_this.s, function() {
+              return _this.s.paging = false;
+            });
           };
         })(this));
-        req.success = function(data) {
-          this.buildPager(data.hits);
-          return safeApply(this.s, (function(_this) {
-            return function() {
-              return _this.s.paging = false;
-            };
-          })(this));
-        };
         req.fail = function(data) {};
         safeApply(this.s, function() {
           return search({
@@ -665,7 +662,7 @@
     ExampleResults.prototype.setupReadingHash = function() {};
 
     ExampleResults.prototype.makeRequest = function() {
-      var items_per_page, opts, prev, progress;
+      var def, items_per_page, opts, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
       items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
       opts = this.s.$parent.queryParams;
@@ -675,30 +672,27 @@
       opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
       prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
       _.extend(opts.ajaxParams, prev);
-      $.extend(opts, {
-        success: (function(_this) {
-          return function(data) {
-            c.log("ExampleResults success", data, opts);
-            _this.renderResult(data, opts.cqp);
-            _this.renderCompleteResult(data);
-            safeApply(_this.s, function() {
-              return _this.hidePreloader();
-            });
-            util.setJsonLink(_this.proxy.prevRequest);
-            return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
-          };
-        })(this),
-        error: (function(_this) {
-          return function() {
-            return safeApply(_this.s, function() {
-              return _this.hidePreloader();
-            });
-          };
-        })(this)
-      });
       this.showPreloader();
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
-      return this.proxy.makeRequest(opts, null, $.noop, $.noop, progress);
+      def = this.proxy.makeRequest(opts, null, progress, (function(_this) {
+        return function(data) {
+          c.log("first part done", data);
+          _this.renderResult(data, opts.cqp);
+          _this.renderCompleteResult(data);
+          safeApply(_this.s, function() {
+            return _this.hidePreloader();
+          });
+          util.setJsonLink(_this.proxy.prevRequest);
+          return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
+        };
+      })(this));
+      return def.fail(function() {
+        return safeApply(this.s, (function(_this) {
+          return function() {
+            return _this.hidePreloader();
+          };
+        })(this));
+      });
     };
 
     ExampleResults.prototype.renderResult = function(data) {
