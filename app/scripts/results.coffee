@@ -1173,6 +1173,7 @@ class view.StatsResults extends BaseResults
         })
 
     makeRequest : (cqp) ->
+
         @resetView()
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
         ).done( ([data, wordArray, columns, dataset]) =>
@@ -1180,11 +1181,18 @@ class view.StatsResults extends BaseResults
             @savedWordArray = wordArray
             @renderResult columns, dataset
 
-        ).fail (data) =>
+        ).fail (textStatus, err) =>
             c.log "stats fail"
-            @resultError data
+
+            safeApply @s, () =>
+                if textStatus == "abort"
+                    @s.aborted = true
+                else
+                    @resultError err
+
         .always () =>
-            @hidePreloader()
+            safeApply @s, () =>
+                @hidePreloader()
 
 
 
@@ -1285,6 +1293,7 @@ class view.StatsResults extends BaseResults
         })
         # safeApply @s, () ->
         @s.no_hits = false
+        @s.aborted = false
 
     # showNoResults: ->
     #     c.log "showNoResults", @$result

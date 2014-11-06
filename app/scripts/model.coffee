@@ -380,7 +380,7 @@ class model.StatsProxy extends BaseProxy
             command: "count"
             groupby: reduceval
             cqp: cqp
-            corpus: settings.corpusListing.stringifySelected()
+            corpus: settings.corpusListing.stringifySelected(true)
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
 
@@ -396,7 +396,7 @@ class model.StatsProxy extends BaseProxy
             data.within = settings.corpusListing.getWithinQueryString()
         @prevParams = data
         def = $.Deferred()
-        $.ajax
+        @pendingRequests.push $.ajax
             url: settings.cgi_script
             data: data
             beforeSend: (req, settings) ->
@@ -407,8 +407,7 @@ class model.StatsProxy extends BaseProxy
 
             error: (jqXHR, textStatus, errorThrown) ->
                 c.log "gettings stats error, status: " + textStatus
-                statsResults.hidePreloader()
-                def.reject()
+                def.reject(textStatus, errorThrown)
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)

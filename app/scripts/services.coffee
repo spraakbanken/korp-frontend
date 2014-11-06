@@ -144,18 +144,6 @@ korpApp.factory 'backend', ($http, $q, utils) ->
 
 
 
-    # getFrames : () ->
-    #     params = 
-    #         url : "/"
-    #     "http://spraakbanken.gu.se/ws/karp-sok?sense=gå..1&resource=swefn&mini-entries=true&info=lu&format=json"
-
-    # requestGraph : () ->
-        # def = $q.defer()
-
-        # new GraphProxy().makeRequest(cqp, subcqps, corpora)
-
-
-
 korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
     class Searches
@@ -165,6 +153,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             timedef = $q.defer()
             @infoDef = def.promise
             @timeDef = timedef.promise
+
+            # is resolved when parallel search controller is loaded
+            @langDef = $q.defer()
             # @modeDef = @getMode()
             # @modeDef.then () =>
             @getInfoData().then () ->
@@ -257,7 +248,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         view.updateSearchHistory value, $location.absUrl()
         # $.when(chained).then () ->
             # $rootScope.$apply () ->
-        searches.infoDef.then () ->
+        $q.all([searches.infoDef, searches.langDef.promise]).then () ->
             switch type
                 when "word"
                     searches.activeSearch = 

@@ -1352,13 +1352,21 @@
           return _this.renderResult(columns, dataset);
         };
       })(this)).fail((function(_this) {
-        return function(data) {
+        return function(textStatus, err) {
           c.log("stats fail");
-          return _this.resultError(data);
+          return safeApply(_this.s, function() {
+            if (textStatus === "abort") {
+              return _this.s.aborted = true;
+            } else {
+              return _this.resultError(err);
+            }
+          });
         };
       })(this)).always((function(_this) {
         return function() {
-          return _this.hidePreloader();
+          return safeApply(_this.s, function() {
+            return _this.hidePreloader();
+          });
         };
       })(this));
     };
@@ -1467,7 +1475,8 @@
         download: null,
         href: null
       });
-      return this.s.no_hits = false;
+      this.s.no_hits = false;
+      return this.s.aborted = false;
     };
 
     return StatsResults;

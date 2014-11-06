@@ -319,13 +319,19 @@ class window.ParallelCorpusListing extends CorpusListing
         @getAttributeQuery("within")
 
 
-    stringifySelected : () ->
-        # currentLangList = _.map($(".lang_select").get(), function(item) {
-        #     return $(item).val();
-        # });
+    stringifySelected : (onlyMain) ->
 
-        struct = settings.corpusListing.getLinksFromLangs(@activeLangs)
-        # c.log ("struct", struct)
+        struct = @getLinksFromLangs(@activeLangs)
+        if onlyMain
+            struct = _.map struct, (pair) =>
+                _.filter pair, (item) =>
+                    c.log "item.lang", item.lang
+                    item.lang == @activeLangs[0]
+
+
+            return _(struct).flatten().pluck("id").invoke("toUpperCase").join ","
+        c.log("struct", struct)
+
         output = []
         # $.each(struct, function(i, item) {
         for item, i in struct

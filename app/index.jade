@@ -53,8 +53,8 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   #results-kwic(ng-class="{reading_mode : reading_mode}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
-                tab(disabled="!instance.hasData", 
-                    ng-controller='StatsResultCtrl', 
+                //- disabled="!instance.hasData && !aborted", 
+                tab(ng-controller='StatsResultCtrl',
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"
                     deselect="instance.onexit()"
@@ -66,6 +66,8 @@ html
                     
                     warning(ng-if="no_hits")
                       | {{"no_stats_results" | loc}}
+                    warning(ng-if="aborted && !loading")
+                      | {{'search_aborted' | loc}}
                     .stats_header
                       #showGraph.button.btn.btn-small(ng-class="{disabled: !graphEnabled}", 
                         tooltip="{{graphEnabled ? '' : ('material_warn' | loc)}} ", tooltip-placement="right"  
@@ -162,12 +164,12 @@ html
       <td title="${$.format("mi: %.2f", mi)}">${freq}</td>
       <td class="example_link"></td>
       </tr>
-    script#similarTmpl(type='text/x-jquery-tmpl').
-      <li>
-      {{each rel}}
-      <a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
-      {{/each}}
-      </li>
+    //- script#similarTmpl(type='text/x-jquery-tmpl').
+    //-   <li>
+    //-   {{each rel}}
+    //-   <a href="javascript:" data-lemgram="${$value}">${util.splitLemgram($value).form}</a>
+    //-   {{/each}}
+    //-   </li>
 
 
     //- scripts

@@ -5,9 +5,10 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("SearchCtrl", function($scope, $location, utils) {
+  korpApp.controller("SearchCtrl", function($scope, $location, utils, searches) {
     $scope.visibleTabs = [true, true, true, true];
     $scope.extendedTmpl = "views/extended_tmpl.html";
+    searches.langDef.resolve();
     $scope.isCompareSelected = false;
     $scope.settings = settings;
     $scope.$watch((function() {

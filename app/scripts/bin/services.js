@@ -177,6 +177,7 @@
         timedef = $q.defer();
         this.infoDef = def.promise;
         this.timeDef = timedef.promise;
+        this.langDef = $q.defer();
         this.getInfoData().then(function() {
           def.resolve();
           return initTimeGraph(timedef);
@@ -266,7 +267,7 @@
         page = $rootScope.search()["page"] || 0;
         c.log("page", page);
         view.updateSearchHistory(value, $location.absUrl());
-        return searches.infoDef.then(function() {
+        return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
           switch (type) {
             case "word":
               return searches.activeSearch = {

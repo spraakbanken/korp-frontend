@@ -460,9 +460,21 @@
       return this.getAttributeQuery("within");
     };
 
-    ParallelCorpusListing.prototype.stringifySelected = function() {
+    ParallelCorpusListing.prototype.stringifySelected = function(onlyMain) {
       var i, item, main, output, pair, struct, _i, _len;
-      struct = settings.corpusListing.getLinksFromLangs(this.activeLangs);
+      struct = this.getLinksFromLangs(this.activeLangs);
+      if (onlyMain) {
+        struct = _.map(struct, (function(_this) {
+          return function(pair) {
+            return _.filter(pair, function(item) {
+              c.log("item.lang", item.lang);
+              return item.lang === _this.activeLangs[0];
+            });
+          };
+        })(this));
+        return _(struct).flatten().pluck("id").invoke("toUpperCase").join(",");
+      }
+      c.log("struct", struct);
       output = [];
       for (i = _i = 0, _len = struct.length; _i < _len; i = ++_i) {
         item = struct[i];

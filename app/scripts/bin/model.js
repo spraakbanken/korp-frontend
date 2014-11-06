@@ -450,7 +450,7 @@
         command: "count",
         groupby: reduceval,
         cqp: cqp,
-        corpus: settings.corpusListing.stringifySelected(),
+        corpus: settings.corpusListing.stringifySelected(true),
         incremental: $.support.ajaxProgress,
         defaultwithin: "sentence"
       };
@@ -467,7 +467,7 @@
       }
       this.prevParams = data;
       def = $.Deferred();
-      $.ajax({
+      this.pendingRequests.push($.ajax({
         url: settings.cgi_script,
         data: data,
         beforeSend: function(req, settings) {
@@ -477,8 +477,7 @@
         },
         error: function(jqXHR, textStatus, errorThrown) {
           c.log("gettings stats error, status: " + textStatus);
-          statsResults.hidePreloader();
-          return def.reject();
+          return def.reject(textStatus, errorThrown);
         },
         progress: function(data, e) {
           var progressObj;
@@ -582,7 +581,7 @@
           c.log("stats resolve");
           return def.resolve([data, wordArray, columns, dataset]);
         }
-      });
+      }));
       return def.promise();
     };
 
