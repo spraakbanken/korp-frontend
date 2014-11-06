@@ -22,7 +22,7 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
 
     $scope.settings = settings
     $scope.showStats = () -> 
-    return settings.statistics != false
+        return settings.statistics != false
         # Boolean(settings.statistics) != false
 
     # utils.setupHash $scope, [

@@ -96,3 +96,4 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
                 popover.hide()
                 $rootElement.off "keydown", handleEscape
                 $rootElement.off "click", s.popHide
+                return

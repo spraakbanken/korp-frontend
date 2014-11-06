@@ -267,4 +267,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=pie-widget.js.map
+/*
+//@ sourceMappingURL=pie-widget.js.map
+*/

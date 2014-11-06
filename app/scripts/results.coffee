@@ -1220,7 +1220,8 @@ class view.StatsResults extends BaseResults
             @resetView()
 
         @showPreloader()
-        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
+        withinArg = settings.corpusListing.getWithinQueryString() if search().within
+        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...)), withinArg
         ).done( ([data, wordArray, columns, dataset]) =>
             # @s.aborted = false
             safeApply @s, () =>

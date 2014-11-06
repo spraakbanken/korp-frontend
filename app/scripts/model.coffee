@@ -168,7 +168,6 @@ class model.KWICProxy extends BaseProxy
                     kwicCallback progressObj["struct"]
         , options)
 
-
         # @prevAjaxParams = o.ajaxParams
 
         #       kwicResults.num_result = 0;
@@ -376,7 +375,7 @@ class model.StatsProxy extends BaseProxy
         @currentPage = 0
         @page_incr = 25
 
-    makeRequest: (cqp, callback) ->
+    makeRequest: (cqp, callback, within) ->
         self = this
         super()
         reduceval = search().stats_reduce or "word"
@@ -398,8 +397,9 @@ class model.StatsProxy extends BaseProxy
                 ignore_case: "word"
 
         # data.within = settings.corpusListing.getWithinQueryString() if $.sm.In("extended") and $(".within_select").val() is "paragraph"
-        if $(".within_select").val() != settings.defaultWithin
-            data.within = settings.corpusListing.getWithinQueryString()
+        #if within_selection isnt "0" #!= settings.defaultWithin
+        #    data.within = settings.corpusListing.getWithinQueryString()
+        data.within = within
         @prevParams = data
         def = $.Deferred()
         @pendingRequests.push $.ajax
