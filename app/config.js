@@ -851,8 +851,8 @@ settings.corpora.informationstidningar = {
     id : "informationstidningar",
     title : "Kommuners och städers informationstidningar 2001–2013",
     description : "Material ur informationstidningar som ges ut av kommuner och städer.",
-    within : settings.spWithin,
-    context : settings.spContext,
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
     attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
@@ -890,8 +890,8 @@ settings.corpora.propositioner = {
     id : "propositioner",
     title : "Propositioner 1993–2013",
     description : 'Material ur <a href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
-    within : settings.spWithin,
-    context : settings.spContext,
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
     attributes : modernAttrs,
     struct_attributes : {
         text_date : {label : "year"},
@@ -4361,6 +4361,7 @@ var fsv_aldrelagar = {
         text_date : {label : "date"}
     }
 };
+
 
 
 
