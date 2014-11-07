@@ -649,7 +649,7 @@ settings.corporafolders.medical.ltd = {
 
 settings.corporafolders.novels = {
     title : "Skönlitteratur",
-    contents : ["aspacsv", "romi", "romii", "rom99", "storsuc", "romg"]
+    contents : ["aspacsv", "romi", "romii", "rom99", "saltnld-sv", "storsuc", "romg"]
 };
 
 settings.corporafolders.socialmedia = {
@@ -2359,6 +2359,19 @@ settings.corpora.drama = {
     }
 };
 
+settings.corpora["europarl-sv"] = {
+    id : "europarl-sv",
+    title: "Europarl svenska",
+    description : "Texter från Europaparlamentets webbsida.",
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+        text_date : {label : "date"},
+        text_speaker : {label : "speaker"}
+    }
+};
+
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
@@ -2484,19 +2497,6 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes : {
-    }
-};
-
-settings.corpora["europarl-sv"] = {
-    id : "europarl-sv",
-    title: "Europarl svenska",
-    description : "Texter från Europaparlamentets webbsida.",
-    context: settings.defaultContext,
-    within: settings.defaultWithin,
-    attributes: modernAttrs,
-    struct_attributes : {
-        text_date : {label : "date"},
-        text_speaker : {label : "speaker"}
     }
 };
 
