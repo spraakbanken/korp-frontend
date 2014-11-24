@@ -55,7 +55,7 @@ settings.interfraStructs = {
 settings.corpora.interfra = {
 	id : "interfra",
 	title : "InterFra",
-	description : "Innehåller c:a 1 233 500 ord",
+	description : '<a target="_blank" href="http://spraakbanken.gu.se/lb/resurser/interfra/">Mer information om korpusen</a><br>Innehåller c:a 1 233 500 ord',
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
@@ -66,7 +66,7 @@ settings.corpora.interfra = {
 settings.corpora["interfra-sv"] = {
 	id : "interfra-sv",
 	title : "InterFra svenska",
-	description : "Innehåller c:a 45 500 ord",
+	description : '<a target="_blank" href="http://spraakbanken.gu.se/lb/resurser/interfra/">Mer information om korpusen</a><br>Innehåller c:a 45 500 ord',
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {

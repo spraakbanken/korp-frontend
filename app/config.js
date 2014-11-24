@@ -649,7 +649,7 @@ settings.corporafolders.medical.ltd = {
 
 settings.corporafolders.novels = {
     title : "Skönlitteratur",
-    contents : ["aspacsv", "romi", "romii", "rom99", "saltnld-sv", "storsuc", "romg"]
+    contents : ["aspacsv", "romi", "romii", "rom99", "storsuc", "romg"]
 };
 
 settings.corporafolders.socialmedia = {
@@ -727,7 +727,7 @@ settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp
 settings.corpora.magmakolumner = {
     id : "magmakolumner",
     title : "Magma kolumner 2009–2012",
-    description : "Material ur kolumner publicerade av <a href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
+    description : "Material ur kolumner publicerade av <a target=\"_blank\" href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -889,7 +889,7 @@ settings.corpora.myndighet = {
 settings.corpora.propositioner = {
     id : "propositioner",
     title : "Propositioner 1993–2013",
-    description : 'Material ur <a href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
+    description : 'Material ur <a target="_blank" href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
@@ -902,7 +902,7 @@ settings.corpora.propositioner = {
 settings.corpora.finsktidskrift = {
     id : "finsktidskrift",
     title : "Finsk tidskrift 2011–2012",
-    description : "<a href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
+    description : "<a target=\"_blank\" href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -915,7 +915,7 @@ settings.corpora.finsktidskrift = {
 settings.corpora.forumfeot = {
     id : "forumfeot",
     title : "Forum för ekonomi och teknik 2008–2012",
-    description : "<a href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
+    description : "<a target=\"_blank\" href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -927,7 +927,7 @@ settings.corpora.forumfeot = {
 settings.corpora.hanken = {
     id : "hanken",
     title : "Hanken 2008–2011",
-    description : "Tidningen <a href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
+    description : "Tidningen <a target=\"_blank\" href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -940,7 +940,7 @@ settings.corpora.hanken = {
 settings.corpora.svenskbygden = {
     id : "svenskbygden",
     title : "Svenskbygden 2010–2011",
-    description : "<a href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
+    description : "<a target=\"_blank\" href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -953,7 +953,7 @@ settings.corpora.svenskbygden = {
 settings.corpora.studentbladet = {
     id : "studentbladet",
     title : "Studentbladet 2011",
-    description : "<a href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
+    description : "<a target=\"_blank\" href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -1059,7 +1059,7 @@ settings.corpora.sweacsam = {
 settings.corpora.attasidor = {
     id : "attasidor",
     title : "8 SIDOR",
-    description : "<a href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
+    description : "<a target=\"_blank\" href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
@@ -2359,19 +2359,6 @@ settings.corpora.drama = {
     }
 };
 
-settings.corpora["europarl-sv"] = {
-    id : "europarl-sv",
-    title: "Europarl svenska",
-    description : "Texter från Europaparlamentets webbsida.",
-    context: settings.defaultContext,
-    within: settings.defaultWithin,
-    attributes: modernAttrs,
-    struct_attributes : {
-        text_date : {label : "date"},
-        text_speaker : {label : "speaker"}
-    }
-};
-
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
@@ -2497,6 +2484,19 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes : {
+    }
+};
+
+settings.corpora["europarl-sv"] = {
+    id : "europarl-sv",
+    title: "Europarl svenska",
+    description : "Texter från Europaparlamentets webbsida.",
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+        text_date : {label : "date"},
+        text_speaker : {label : "speaker"}
     }
 };
 
@@ -2936,7 +2936,7 @@ settings.corpora["wikipedia-sv"] = {
 settings.corpora.astranova = {
     id : "astranova",
     title : "Astra Nova 2008–2010",
-    description : "<a href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
+    description : "<a target=\"_blank\" href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -2962,7 +2962,7 @@ settings.corpora["astra1960-1979"] = {
 settings.corpora.bullen = {
     id : "bullen",
     title : "Bullen 2010–2012",
-    description : "<a href=\"http://www.karen.abo.fi/index.php?u[2]=0&u[3]=70\">Bullen</a> är Åbo Akademis Studentkårs informationsbulletin.",
+    description : "<a target=\"_blank\" href=\"http://www.karen.abo.fi/index.php?u[2]=0&u[3]=70\">Bullen</a> är Åbo Akademis Studentkårs informationsbulletin.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -2974,7 +2974,7 @@ settings.corpora.bullen = {
 settings.corpora.fanbararen = {
     id : "fanbararen",
     title : "Fanbäraren 2011–2012",
-    description : "<a href=\"http://www.nylandsbrigadsgille.fi/sidor/?page_id=813\">Fanbäraren</a> är en tidskrift som utges gemensamt av Nylands brigad och Nylands Brigads Gille, med syfte att öka kännedomen om utbildningen vid Nylands Brigad och öka sammanhållningen mellan Gillets medlemmar.",
+    description : "<a target=\"_blank\" href=\"http://www.nylandsbrigadsgille.fi/sidor/?page_id=813\">Fanbäraren</a> är en tidskrift som utges gemensamt av Nylands brigad och Nylands Brigads Gille, med syfte att öka kännedomen om utbildningen vid Nylands Brigad och öka sammanhållningen mellan Gillets medlemmar.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -2987,7 +2987,7 @@ settings.corpora.fanbararen = {
 settings.corpora.kallan = {
     id : "kallan",
     title : "Källan 2008–2010",
-    description : "<a href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
+    description : "<a target=\"_blank\" href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3000,7 +3000,7 @@ settings.corpora.kallan = {
 settings.corpora.jft = {
     id : "jft",
     title : "JFT 2000–2013",
-    description : "<a href=\"http://jff.fi/index.asp?page=5\">JFT</a> publiceras av Juridiska Föreningen i Finland r.f. Den är Nordens äldsta utkommande rättsvetenskapliga tidskrift.",
+    description : "<a target=\"_blank\" href=\"http://jff.fi/index.asp?page=5\">JFT</a> publiceras av Juridiska Föreningen i Finland r.f. Den är Nordens äldsta utkommande rättsvetenskapliga tidskrift.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3013,7 +3013,7 @@ settings.corpora.jft = {
 settings.corpora.meddelanden = {
     id : "meddelanden",
     title : "Meddelanden från Åbo Akademi 2002–2010",
-    description : "<a href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
+    description : "<a target=\"_blank\" href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3026,7 +3026,7 @@ settings.corpora.meddelanden = {
 settings.corpora.hankeiten = {
     id : "hankeiten",
     title : "Hankeiten 2006–2012",
-    description : "<a href=\"http://www.shsweb.fi/shs/arkiv/hankeiten1\">Hankeiten</a> är Svenska Handelshögskolans Studentkårs tidskrift.",
+    description : "<a target=\"_blank\" href=\"http://www.shsweb.fi/shs/arkiv/hankeiten1\">Hankeiten</a> är Svenska Handelshögskolans Studentkårs tidskrift.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3039,7 +3039,7 @@ settings.corpora.hankeiten = {
 settings.corpora.nyaargus = {
     id : "nyaargus",
     title : "Nya Argus 2010–2011",
-    description : "<a href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
+    description : "<a target=\"_blank\" href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3078,7 +3078,7 @@ settings.corpora.pargaskungorelser2012 = {
 settings.corpora.borgabladet = {
     id : "borgabladet",
     title : "Borgåbladet 2012–2013",
-    description : "<a href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
+    description : "<a target=\"_blank\" href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3152,7 +3152,7 @@ settings.corpora.sydosterbotten2014 = {
 settings.corpora.vastranyland = {
     id : "vastranyland",
     title : "Västra Nyland 2012–2013",
-    description : "<a href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
+    description : "<a target=\"_blank\" href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3164,7 +3164,7 @@ settings.corpora.vastranyland = {
 settings.corpora.ostranyland = {
     id : "ostranyland",
     title : "Östra Nyland 2012–2013",
-    description : "<a href=\"http://www.ostnyland.fi\">Östra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
+    description : "<a target=\"_blank\" href=\"http://www.ostnyland.fi\">Östra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -3201,7 +3201,7 @@ settings.corpora.abounderrattelser2013 = {
 settings.corpora.at2012 = {
     id : "at2012",
     title : "Ålandstidningen 2012",
-    description : "<a href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
+    description : "<a target=\"_blank\" href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : modernAttrs,
@@ -4275,7 +4275,7 @@ settings.fsvvariants = {
     internalSearch : true
 };
 
-settings.fsvdescription ='<a href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
+settings.fsvdescription ='<a target="_blank" href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
 var fsv_yngrelagar = {
     morf : 'fsvm',
     id : "fsv-yngrelagar",
@@ -4361,7 +4361,6 @@ var fsv_aldrelagar = {
         text_date : {label : "date"}
     }
 };
-
 
 
 
