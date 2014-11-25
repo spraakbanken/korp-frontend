@@ -366,6 +366,7 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout
     $scope.$on "btn_submit", () ->
         c.log "advanced cqp", $scope.cqp
         $location.search("search", null)
+        $location.search("page", null)
         $timeout( () ->
             $location.search("search", "cqp|" + $scope.cqp)
         , 0)

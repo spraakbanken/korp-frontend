@@ -320,6 +320,7 @@
     return $scope.$on("btn_submit", function() {
       c.log("advanced cqp", $scope.cqp);
       $location.search("search", null);
+      $location.search("page", null);
       return $timeout(function() {
         return $location.search("search", "cqp|" + $scope.cqp);
       }, 0);
