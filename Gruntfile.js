@@ -216,7 +216,8 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/scripts/{,*/}*.js',
             '<%= yeoman.dist %>/styles/{,*/}*.css',
             '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
-            '<%= yeoman.dist %>/styles/fonts/*'
+            '<%= yeoman.dist %>/styles/fonts/*',
+            '!<%= yeoman.dist %>/scripts/statistics_worker.js'
           ]
         }
       }
@@ -335,6 +336,7 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>',
           src: [
+            'scripts/statistics_worker.js',
             '*.{ico,txt,js,xml}',
             '.htaccess',
             'components/jquery-ui/themes/smoothness/images/*',

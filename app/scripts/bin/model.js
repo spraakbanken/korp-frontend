@@ -461,7 +461,6 @@
         url: settings.cgi_script,
         data: data,
         beforeSend: function(req, settings) {
-          c.log("req", req);
           self.prevRequest = settings;
           return self.addAuthorizationHeader(req);
         },
@@ -478,7 +477,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var add, columns, combinedWordArray, corpus, dataset, groups, i, minWidth, obj, row, totalRow, valueGetter, word, wordArray, wordGetter, _i, _len, _ref1, _ref2;
+          var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, totalRow, wordArray;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             def.reject(data);
@@ -515,69 +514,44 @@
           totalRow = {
             id: "row_total",
             hit_value: "&Sigma;",
-            total_value: data.total.sums
+            total_value: [data.total.sums.absolute, data.total.sums.relative]
           };
           $.each(data.corpora, function(corpus, obj) {
-            return totalRow[corpus + "_value"] = obj.sums;
+            return totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative];
           });
           wordArray = _.keys(data.total.absolute);
-          valueGetter = function(obj, word) {
-            return obj[word];
-          };
-          wordGetter = function(word) {
-            return word;
-          };
           if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
             groups = _.groupBy(wordArray, function(item) {
               return item.replace(/:\d+/g, "");
             });
-            combinedWordArray = _.keys(groups);
-            add = function(a, b) {
-              return a + b;
-            };
-            valueGetter = function(obj, word) {
-              return _.reduce(_.map(groups[word], function(wd) {
-                return obj[wd];
-              }), add);
-            };
-            wordGetter = function(word) {
-              return groups[word];
-            };
+            wordArray = _.keys(groups);
           }
-          dataset = [totalRow];
-          _ref1 = combinedWordArray || wordArray;
-          for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-            word = _ref1[i];
-            row = {
-              id: "row" + i,
-              hit_value: wordGetter(word),
-              total_value: {
-                absolute: valueGetter(data.total.absolute, word),
-                relative: valueGetter(data.total.relative, word)
-              }
-            };
-            _ref2 = data.corpora;
-            for (corpus in _ref2) {
-              obj = _ref2[corpus];
-              row[corpus + "_value"] = {
-                absolute: valueGetter(obj.absolute, word),
-                relative: valueGetter(obj.relative, word)
-              };
-            }
-            dataset[i + 1] = row;
-          }
-          c.log("stats resolve");
-          return def.resolve([data, wordArray, columns, dataset]);
+          sizeOfDataset = wordArray.length;
+          dataset = new Array(sizeOfDataset + 1);
+          dataset[0] = totalRow;
+          statsWorker = new Worker("scripts/statistics_worker.js");
+          statsWorker.onmessage = function(e) {
+            c.log("Called back by the worker!\n");
+            c.log(e);
+            return def.resolve([data, wordArray, columns, e.data]);
+          };
+          return statsWorker.postMessage({
+            "total": data.total,
+            "dataset": dataset,
+            "allrows": wordArray,
+            "corpora": data.corpora,
+            "groups": groups
+          });
         }
       }));
       return def.promise();
     };
 
     StatsProxy.prototype.valueFormatter = function(row, cell, value, columnDef, dataContext) {
-      if (!value.relative && !value.absolute) {
+      if (!value[0] && !value[1]) {
         return "";
       }
-      return "<span>\n      <span class='relStat'>" + (util.formatDecimalString(value.relative.toFixed(1), true)) + "</span>\n      <span class='absStat'>(" + (util.prettyNumbers(String(value.absolute))) + ")</span>\n<span>";
+      return "<span>\n      <span class='relStat'>" + (util.formatDecimalString(value[1].toFixed(1), true)) + "</span>\n      <span class='absStat'>(" + (util.prettyNumbers(String(value[0]))) + ")</span>\n<span>";
     };
 
     return StatsProxy;

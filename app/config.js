@@ -4024,6 +4024,8 @@ settings.arg_groups = {
 
 
 settings.reduce_stringify = function(type) {
+    //return function(row, cell, value, columnDef, dataContext) { return "dummy"; }; // TEST
+
     function filterCorpora(rowObj) {
         return $.grepObj(rowObj, function(value, key) {
             return key != "total_value" && $.isPlainObject(value);

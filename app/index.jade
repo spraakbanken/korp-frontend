@@ -88,8 +88,10 @@ html
                       select#kindOfFormat
                         option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+                      a#generateExportButton 
+                        button.btn.btn-small {{'statstable_gen_export' | loc}}
                       a#exportButton 
-                        button.btn.btn-small {{'statstable_export' | loc}}
+                        &nbsp;{{'statstable_download' | loc}}
                 tab(ng-if="_settings.wordpicture != false", ng-controller="wordpicCtrl")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc}}

@@ -258,6 +258,8 @@
     "statstable_exp_csv" : "CSV (semikolonseparerade värden)",
     "statstable_exp_tsv" : "TSV (tabseparerade värden)",
     "statstable_export" : "Exportera",
+    "statstable_gen_export" : "Generera export",
+    "statstable_download" : "Ladda ner",
 
     "util_decimalseparator" : ",",
     "util_numbergroupseparator" : "&nbsp;",

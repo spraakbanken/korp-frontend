@@ -255,6 +255,8 @@
     "statstable_exp_csv" : "CSV (semicolon separated values)",
     "statstable_exp_tsv" : "TSV (tab separated values)",
     "statstable_export" : "Export",
+    "statstable_gen_export" : "Generate export",
+    "statstable_download" : "Download",
 
     "util_decimalseparator" : ".",
     "util_numbergroupseparator" : ",",

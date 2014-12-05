@@ -406,8 +406,6 @@ class model.StatsProxy extends BaseProxy
             url: settings.cgi_script
             data: data
             beforeSend: (req, settings) ->
-                c.log "req", req
-
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
 
@@ -458,69 +456,75 @@ class model.StatsProxy extends BaseProxy
                         formatter: self.valueFormatter
                         minWidth : minWidth
 
-
                 totalRow =
                     id: "row_total"
                     hit_value: "&Sigma;"
-                    total_value: data.total.sums
+                    total_value: [data.total.sums.absolute, data.total.sums.relative]
                 
                 $.each data.corpora, (corpus, obj) ->
-                    totalRow[corpus + "_value"] = obj.sums
+                    totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative]
+
+                #valueGetter = (obj, word) ->
+                #    return obj[word]
+                #
+                #wordGetter = (word) ->
+                #    return word
 
                 wordArray = _.keys(data.total.absolute)
-
-                valueGetter = (obj, word) ->
-                    return obj[word]
-
-                wordGetter = (word) ->
-                    return word
-
                 if reduceval in ["lex", "saldo", "baseform"]
                     groups = _.groupBy wordArray, (item) ->
                         item.replace(/:\d+/g, "")
 
+                    #combinedWordArray = _.keys groups
+                    wordArray = _.keys groups
 
-
-                    combinedWordArray = _.keys groups
-                    # c.log "combinedWordArray", combinedWordArray
-                    # c.log "groups", groups
-                    add = (a, b) -> a + b
-                        
-                    valueGetter = (obj, word) ->
-                        _.reduce (_.map groups[word], (wd) -> obj[wd]), add
-                    
-                    wordGetter = (word) ->
-                        groups[word]
+                    #add = (a, b) -> a + b
+                    #    
+                    #valueGetter = (obj, word) ->
+                    #    _.reduce (_.map groups[word], (wd) -> obj[wd]), add
+                    #
+                    #wordGetter = (word) ->
+                    #    groups[word]
 
                     # c.log "combined", wordArray.length, _.keys(combined).length, combined
+                    
 
+                sizeOfDataset = wordArray.length
+                dataset = new Array(sizeOfDataset + 1)
+                dataset[0] = totalRow
+                #dataset = [totalRow]
+                #c.log "combinedWordArray.len", combinedWordArray.length
+                #for word, i in (combinedWordArray or wordArray)
+                #    row =
+                #        id: "row" + i
+                #        hit_value: wordGetter word
+                #        total_value:
+                #            absolute: (valueGetter data.total.absolute, word)
+                #            relative: valueGetter data.total.relative, word
+                #
+                #    # $.each data.corpora, (corpus, obj) ->
+                #    for corpus, obj of data.corpora
+                #        row[corpus + "_value"] =
+                #            absolute: (valueGetter obj.absolute, word)
+                #            relative: (valueGetter obj.relative, word)
+                #    dataset[i+1] = row
+                #c.log "stats resolve"
+                statsWorker = new Worker "scripts/statistics_worker.js"
+                statsWorker.onmessage = (e) ->
+                    c.log "Called back by the worker!\n"
+                    c.log e
+                    def.resolve [data, wordArray, columns, e.data]
 
-                dataset = [totalRow]
-
-                for word, i in (combinedWordArray or wordArray)
-                    row =
-                        id: "row" + i
-                        hit_value: wordGetter word
-                        total_value:
-                            absolute: (valueGetter data.total.absolute, word)
-                            relative: valueGetter data.total.relative, word
-
-                    # $.each data.corpora, (corpus, obj) ->
-                    for corpus, obj of data.corpora
-                        row[corpus + "_value"] =
-                            absolute: (valueGetter obj.absolute, word)
-                            relative: (valueGetter obj.relative, word)
-                    dataset[i+1] = row
-                c.log "stats resolve"
-                def.resolve [data, wordArray, columns, dataset]
+                statsWorker.postMessage({"total" : data.total, "dataset" : dataset, "allrows" : (wordArray), "corpora" : data.corpora, "groups" : groups});
         return def.promise()
 
 
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
-        return "" if not value.relative and not value.absolute
+        #return "" if not value.relative and not value.absolute
+        return "" if not value[0] and not value[1]
         return """<span>
-                        <span class='relStat'>#{util.formatDecimalString(value.relative.toFixed(1), true)}</span>
-                        <span class='absStat'>(#{util.prettyNumbers(String(value.absolute))})</span>
+                        <span class='relStat'>#{util.formatDecimalString(value[1].toFixed(1), true)}</span>
+                        <span class='absStat'>(#{util.prettyNumbers(String(value[0]))})</span>
                   <span>"""
 
 class model.AuthenticationProxy

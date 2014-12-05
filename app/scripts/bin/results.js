@@ -1206,18 +1206,21 @@
         });
       });
       $(window).resize(_.debounce(function() {
-        var h, nRows, _ref, _ref1, _ref2;
+        var h, nRows, _ref;
         $("#myGrid:visible").width($(window).width() - 40);
         nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
         h = (nRows * 2) + 4;
         h = Math.min(h, 40);
-        $("#myGrid:visible").height("" + h + ".1em");
-        if ((_ref1 = _this.grid) != null) {
-          _ref1.resizeCanvas();
-        }
-        return (_ref2 = _this.grid) != null ? _ref2.autosizeColumns() : void 0;
+        return $("#myGrid:visible").height("" + h + ".1em");
       }, 100));
       $("#kindOfData,#kindOfFormat").change(function() {
+        $("#exportButton").hide();
+        return $("#generateExportButton").show();
+      });
+      $("#exportButton").hide();
+      $("#generateExportButton").unbind("click").click(function() {
+        $("#exportButton").show();
+        $("#generateExportButton").hide();
         return _this.updateExportBlob();
       });
       if ($("html.msie7,html.msie8").length) {
@@ -1365,6 +1368,7 @@
       }), withinArg).done(function(_arg) {
         var columns, data, dataset, wordArray;
         data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
+        c.log("dataset.length", dataset.length);
         safeApply(_this.s, function() {
           return _this.hidePreloader();
         });
@@ -1395,7 +1399,6 @@
       var checkboxSelector, grid, log, refreshHeaders, resultError, sortCol,
         _this = this;
       refreshHeaders = function() {
-        $(".slick-header-column:nth(2)").click().click();
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
           return $(this).localeKey($(this).text());
         });
@@ -1406,7 +1409,6 @@
         return;
       }
       c.log("renderresults");
-      this.updateExportBlob();
       if (data[0].total_value.absolute === 0) {
         safeApply(this.s, function() {
           return _this.s.no_hits = true;
@@ -1417,18 +1419,20 @@
         cssClass: "slick-cell-checkboxsel"
       });
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
-      $("#myGrid").width($(document).width());
+      $("#myGrid").width(800);
+      $("#myGrid").height(600);
+      c.log("length", data.length);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: false
       });
+      c.log("grid fixad");
       grid.setSelectionModel(new Slick.RowSelectionModel({
         selectActiveRow: false
       }));
       grid.registerPlugin(checkboxSelector);
       this.grid = grid;
       this.grid.autosizeColumns();
-      $("#myGrid").width("100%");
       sortCol = columns[2];
       log = _.debounce(function() {
         return c.log("grid sort");
@@ -1442,8 +1446,8 @@
             x = a[sortCol.field];
             y = b[sortCol.field];
           } else {
-            x = a[sortCol.field].absolute || 0;
-            y = b[sortCol.field].absolute || 0;
+            x = a[sortCol.field][0] || 0;
+            y = b[sortCol.field][0] || 0;
           }
           ret = (x === y ? 0 : (x > y ? 1 : -1));
           if (!args.sortAsc) {
@@ -1460,7 +1464,6 @@
       });
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
-      $(window).trigger("resize");
       $.when(timeDeferred).then(function() {
         return safeApply(_this.s, function() {
           return _this.updateGraphBtnState();

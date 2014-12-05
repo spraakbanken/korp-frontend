@@ -1094,8 +1094,8 @@ class view.StatsResults extends BaseResults
             h = (nRows * 2) + 4
             h = Math.min h, 40
             $("#myGrid:visible").height "#{h}.1em"
-            @grid?.resizeCanvas()
-            @grid?.autosizeColumns()
+            #@grid?.resizeCanvas()
+            #@grid?.autosizeColumns()
             
         , 100)
 
@@ -1103,6 +1103,13 @@ class view.StatsResults extends BaseResults
         # $("#exportButton").click =>
             
         $("#kindOfData,#kindOfFormat").change () =>
+            $("#exportButton").hide();
+            $("#generateExportButton").show();
+
+        $("#exportButton").hide();
+        $("#generateExportButton").unbind("click").click () =>
+            $("#exportButton").show()
+            $("#generateExportButton").hide();
             @updateExportBlob()
 
         if $("html.msie7,html.msie8").length
@@ -1224,10 +1231,12 @@ class view.StatsResults extends BaseResults
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...)), withinArg
         ).done( ([data, wordArray, columns, dataset]) =>
             # @s.aborted = false
+            c.log "dataset.length", dataset.length
             safeApply @s, () =>
                 @hidePreloader()
             @savedData = data
             @savedWordArray = wordArray
+
             @renderResult columns, dataset
 
         ).fail (textStatus, err) =>
@@ -1255,7 +1264,7 @@ class view.StatsResults extends BaseResults
 
     renderResult: (columns, data) ->
         refreshHeaders = ->
-            $(".slick-header-column:nth(2)").click().click()
+            #$(".slick-header-column:nth(2)").click().click()
             $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
 
@@ -1264,7 +1273,9 @@ class view.StatsResults extends BaseResults
         resultError = super(data)
         return if resultError is false
         c.log "renderresults"
-        @updateExportBlob()
+
+        #@updateExportBlob()
+
         if data[0].total_value.absolute == 0
             # @hidePreloader()
             safeApply @s, () =>
@@ -1275,17 +1286,23 @@ class view.StatsResults extends BaseResults
             cssClass: "slick-cell-checkboxsel"
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
-        $("#myGrid").width($(document).width())
+        #$("#myGrid").width($(document).width())
+        $("#myGrid").width(800)
+        $("#myGrid").height(600)
+
+        c.log "length", data.length
+        #return false
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: false
-
+        c.log "grid fixad"
+        
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
         @grid = grid
         @grid.autosizeColumns()
-        $("#myGrid").width("100%")
-
+        #$("#myGrid").width("100%")
+        
         sortCol = columns[2]
         log = _.debounce () ->
             c.log "grid sort"
@@ -1298,8 +1315,10 @@ class view.StatsResults extends BaseResults
                     x = a[sortCol.field]
                     y = b[sortCol.field]
                 else
-                    x = a[sortCol.field].absolute or 0
-                    y = b[sortCol.field].absolute or 0
+                    #x = a[sortCol.field].absolute or 0
+                    #y = b[sortCol.field].absolute or 0
+                    x = a[sortCol.field][0] or 0
+                    y = b[sortCol.field][0] or 0
                 ret = ((if x is y then 0 else ((if x > y then 1 else -1))))
                 ret *= -1 unless args.sortAsc
                 ret
@@ -1315,7 +1334,7 @@ class view.StatsResults extends BaseResults
         # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
         $(".slick-row:first input", @$result).click()
-        $(window).trigger("resize")
+        #$(window).trigger("resize")
 
         $.when(timeDeferred).then =>
             safeApply @s, () =>
