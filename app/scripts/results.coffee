@@ -1127,14 +1127,22 @@ class view.StatsResults extends BaseResults
             showTotal = false
             mainCQP = params.cqp
 
-            for chk in @$result.find(".include_chk:checked")
+            console.log "DOING GRAPH CHECKING"
+            # THIS IS FLAWED AND SHOULD USE 'getSelectedRows()' INSTEAD.
+            # FIXED FOR NOW BUT MIGHT ONLY WORK FOR VISIBLE CHECKBOXES!
+            #for chk in @$result.find(".include_chk:checked")
+            for chk in @$result.find(".slick-cell > input:checked")
                 cell = $(chk).parent()
-                if cell.parent().is ".slick-row:nth-child(1)"
+                #if cell.parent().is ".slick-row:nth-child(1)"
+                #    showTotal = true
+                #    continue
+                cqp = decodeURIComponent cell.next().find(" > .link").data("query")
+                unless cqp isnt "undefined" # TODO: make a better check
                     showTotal = true
                     continue
-                cqp = decodeURIComponent cell.next().find(" > .link").data("query")
                 subExprs.push cqp
                 labelMapping[cqp] = cell.next().text()
+
 
 
             activeCorpora = _.flatten [key for key, val of @savedData.corpora when val.sums.absolute]
@@ -1791,7 +1799,8 @@ class view.GraphResults extends BaseResults
                         "field" : timestamp
                         "formatter" : window.statsProxy.valueFormatter
                     i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
-                    new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
+                    #new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
+                    new_time_row[timestamp] = [item.y, row.abs_data[i].y]
                 time_table_data.push new_time_row
             # Sort columns
             time_table_columns = [

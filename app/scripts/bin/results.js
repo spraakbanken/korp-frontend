@@ -1238,15 +1238,16 @@
         labelMapping = {};
         showTotal = false;
         mainCQP = params.cqp;
-        _ref = _this.$result.find(".include_chk:checked");
+        console.log("DOING GRAPH CHECKING");
+        _ref = _this.$result.find(".slick-cell > input:checked");
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           chk = _ref[_i];
           cell = $(chk).parent();
-          if (cell.parent().is(".slick-row:nth-child(1)")) {
+          cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
+          if (cqp === "undefined") {
             showTotal = true;
             continue;
           }
-          cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
           subExprs.push(cqp);
           labelMapping[cqp] = cell.next().text();
         }
@@ -1952,10 +1953,7 @@
               "formatter": window.statsProxy.valueFormatter
             };
             i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
-            new_time_row[timestamp] = {
-              "relative": item.y,
-              "absolute": row.abs_data[i].y
-            };
+            new_time_row[timestamp] = [item.y, row.abs_data[i].y];
           }
           time_table_data.push(new_time_row);
         }

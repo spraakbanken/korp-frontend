@@ -4024,17 +4024,17 @@ settings.arg_groups = {
 
 
 settings.reduce_stringify = function(type) {
-    //return function(row, cell, value, columnDef, dataContext) { return "dummy"; }; // TEST
 
     function filterCorpora(rowObj) {
         return $.grepObj(rowObj, function(value, key) {
-            return key != "total_value" && $.isPlainObject(value);
+            return key != "total_value" && $.isArray(value);
+            //return key != "total_value" && $.isPlainObject(value);
         });
     }
 
     function getCorpora(dataContext) {
         var corpora = $.grepObj(filterCorpora(dataContext), function(value, key) {
-            return value.relative != null;
+            return value[1] != null; // value[1] is an optimized value.relative
         });
         corpora = $.map($.keys(corpora), function(item) {
             return item.split("_")[0].toLowerCase();
