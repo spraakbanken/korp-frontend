@@ -448,7 +448,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -469,7 +469,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -489,7 +489,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -513,7 +513,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -545,6 +545,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 	context : settings.spContext,
 	attributes : { lemma : settings.fsvlemma,
 	            lex : settings.fsvlex,
+	            pos: attrs.pos
         },
 	struct_attributes : {
 		text_title : {

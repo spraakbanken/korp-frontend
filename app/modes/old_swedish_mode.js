@@ -36,7 +36,7 @@ settings.corporafolders = {};
 // if(isLab){
 settings.corporafolders.fsvb = {
 	title : "Fornsvenska textbanken",
-	contents : ["fsv-profanprosa","fsv-verser"],
+	contents : ["fsv-profanprosa", "fsv-verser"],
 };
 
 
@@ -47,12 +47,12 @@ settings.corporafolders.fsvb.aldre = {
 
 settings.corporafolders.fsvb.yngre = {
 	title : "Yngre fornsvenska",
-	contents : ["fsv-yngrelagar",  "fsv-yngrereligiosprosa", "fsv-yngretankebocker"]
+	contents : ["fsv-yngrelagar", "fsv-yngrereligiosprosa", "fsv-yngretankebocker"]
 };
 
 settings.corporafolders.fsvb.nysvenska = {
 	title : "Nysvenska",
-	contents : ["fsv-nysvensklagar",  "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
+	contents : ["fsv-nysvensklagar", "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
 };
 
 settings.corporafolders.medeltid = {
@@ -293,7 +293,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -314,7 +314,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -334,7 +334,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -358,7 +358,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : {},
+	attributes : {pos: attrs.pos},
 	struct_attributes : {
 		text_title : {
 			label : "title",
@@ -390,6 +390,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 	context : settings.spContext,
 	attributes : { lemma : settings.fsvlemma,
 	            lex : settings.fsvlex,
+	            pos: attrs.pos
         },
 	struct_attributes : {
 		text_title : {
