@@ -388,8 +388,7 @@ settings.corpora["fsv-nysvensklagar"] = {
 	description : settings.fsvdescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : { lemma : settings.fsvlemma,
-	            lex : settings.fsvlex,
+	attributes : {
 	            pos: attrs.pos
         },
 	struct_attributes : {
