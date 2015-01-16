@@ -35,7 +35,8 @@ settings.corpora['bellman'] = {
 	},
 	struct_attributes : {
 		text_author : {label : "author"},
-		text_title : {label : "title"}
+		text_title : {label : "title"},
+		page_n : {label : "page"}
 	}
 };
 
