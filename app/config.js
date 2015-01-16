@@ -127,6 +127,10 @@ settings.modeConfig = [
     {
         localekey: "interfra",
         mode: "interfra"
+    },
+    {
+        localekey: "bellman",
+        mode: "bellman"
     }
  
 ];
