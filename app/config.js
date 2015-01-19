@@ -131,6 +131,10 @@ settings.modeConfig = [
     {
         localekey: "bellman",
         mode: "bellman"
+    },
+    {
+        localekey: "eddan",
+        mode: "eddan"
     }
  
 ];
