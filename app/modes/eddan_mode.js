@@ -19,7 +19,9 @@ settings.corpora.eddan = {
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : {},
-	struct_attributes : {},
+	struct_attributes : {
+	    text_part: {label: "part"}
+	    },
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
