@@ -2710,7 +2710,10 @@ settings.corpora.vivill = {
     title : "Svenska partiprogram och valmanifest 1887–2010",
     description : "",
     within : settings.defaultWithin,
-    context : settings.defaultContext,
+    context : {
+        "1 sentence" : "1 sentence",
+        "5 sentence" : "5 sentences"
+    },
     attributes : modernAttrs,
     struct_attributes : {
         text_year : {label : "year", displayType : "select",
@@ -3940,8 +3943,8 @@ settings.corpora.gdc = {
     limited_access : true,
     within : settings.defaultWithin,
     context : {
-    "1 sentence" : "1 sentence",
-    "3 sentence" : "3 sentences"
+        "1 sentence" : "1 sentence",
+        "3 sentence" : "3 sentences"
     },
     attributes : {
         wordclean : {label : "normalized_wordform"},
