@@ -1302,8 +1302,45 @@ settings.corpora['kvah'] = {
 
 };
 
+settings.corpora['bellman'] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "bellman",
+	title : "Bellmans samlade verk",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+ 		lemma : attrs.baseform,
+ 		lex : attrs.lemgram,
+ 		saldo : attrs.saldo,
+ 		prefix : attrs.prefix,
+ 		suffix : attrs.suffix,
+ 		dephead : attrs.dephead,
+ 		deprel : attrs.deprel,
+ 		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		page_n : {label : "page"}
+	}
+};
 
-
+settings.corpora.eddan = {
+	id : "eddan",
+	title : "Äldre Eddan",
+	description : "",
+	languages : {
+		eddan : "svenska"
+	},
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {},
+	struct_attributes : {
+	    text_part: {label: "part"}
+	    },
+};
 
 
 settings.corpusListing = new CorpusListing(settings.corpora);
