@@ -417,5 +417,7 @@
     "coctaill_task_skill" : "task_skill",
     "coctaill_task_format" : "task_format",
     "coctaill_language_example_unit" : "language_example_unit",
-    "coctaill_language_example_skill" : "language_example_skill"
+    "coctaill_language_example_skill" : "language_example_skill",
+    
+    "librisid" : "Libris-ID"
 }

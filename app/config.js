@@ -2367,6 +2367,19 @@ settings.corpora.drama = {
     }
 };
 
+settings.corpora["europarl-sv"] = {
+    id : "europarl-sv",
+    title: "Europarl svenska",
+    description : "Texter från Europaparlamentets webbsida.",
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+        text_date : {label : "date"},
+        text_speaker : {label : "speaker"}
+    }
+};
+
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
@@ -2411,6 +2424,38 @@ settings.corpora.psalmboken = {
     }
 };
 
+settings.corpora["saltnld-sv"] = {
+    id : "saltnld-sv",
+    title: "SALT svenska-nederländska",
+    description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
+<ul>\
+<li>Bergman, Ingmar: Laterna magica</li>\
+<li>Claus, Hugo: Rykten / De geruchten</li>\
+<li>Dekker, Rudolf och van de Pol, Lotte: Kvinnor i manskläder / Vrouwen en mannekleren</li>\
+<li>Ekman, Kerstin: Händelser vid vatten / Zwart water</li>\
+<li>Froman, Ingmarie: Sverige och Belgien / Zweden und Belgiê</li>\
+<li>Guillou, Jan: Fiendens fiende / De vijand van de vijand</li>\
+<li>Gustafsson, Lars: En kakesättares eftermiddag / De namiddag van een tegelzetter</li>\
+<li>Johanisson, Karin: Den mörka kontinenten / Het duistere continent</li>\
+<li>Krabbé, Tim: De försvunna / Het gouden ei</li>\
+<li>Mankell, Henning: Mördare utan ansikte / Moordenaar zonder gezicht</li>\
+<li>Mulish, Harry: Överfallet / De aanslag</li>\
+<li>Nilson, Peter: Hem till jorden / Terug naar de aarde</li>\
+<li>van Paemel, Monika: Den första stenen / De eersten steen</li>\
+<li>Sjöwall, Maj och Wahlöö, Per: Brandbilen som försvann / De brandweerauto die verdween</li>\
+<li>Swartz, Richard: Room service</li>\
+<li>Tunström, Göran: Tjuven / Die dief</li>\
+<li>Wolkers, Jan: Turkisk konfekt / Turks fruit</li>\
+</ul>\
+\
+Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+    }
+};
+
 settings.corpora.snp7879 = {
     id : "snp7879",
     title : "SNP 78–79 (Riksdagens snabbprotokoll)",
@@ -2419,6 +2464,19 @@ settings.corpora.snp7879 = {
     context : settings.defaultContext,
     attributes : modernAttrs,
     struct_attributes : {}
+};
+
+settings.corpora.sou = {
+    id : "sou",
+    title : "Statens offentliga utredningar",
+    description : "Statens offentliga utredningar (SOU) i digitaliserat format. Samlingen är inte komplett men kommer att uppdateras.",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_id : {label : "id"},
+        text_librisid : {label : "librisid"}
+    }
 };
 
 settings.corpora.suc2 = {
@@ -2459,52 +2517,6 @@ settings.corpora.storsuc = {
     attributes : modernAttrs,
     struct_attributes : {
         text_id : {label : "text"}
-    }
-};
-
-
-settings.corpora["saltnld-sv"] = {
-    id : "saltnld-sv",
-    title: "SALT svenska-nederländska",
-    description : "En samling parallella korpusar (svenska-nederländska), bestående av följande subkorpusar:\
-<ul>\
-<li>Bergman, Ingmar: Laterna magica</li>\
-<li>Claus, Hugo: Rykten / De geruchten</li>\
-<li>Dekker, Rudolf och van de Pol, Lotte: Kvinnor i manskläder / Vrouwen en mannekleren</li>\
-<li>Ekman, Kerstin: Händelser vid vatten / Zwart water</li>\
-<li>Froman, Ingmarie: Sverige och Belgien / Zweden und Belgiê</li>\
-<li>Guillou, Jan: Fiendens fiende / De vijand van de vijand</li>\
-<li>Gustafsson, Lars: En kakesättares eftermiddag / De namiddag van een tegelzetter</li>\
-<li>Johanisson, Karin: Den mörka kontinenten / Het duistere continent</li>\
-<li>Krabbé, Tim: De försvunna / Het gouden ei</li>\
-<li>Mankell, Henning: Mördare utan ansikte / Moordenaar zonder gezicht</li>\
-<li>Mulish, Harry: Överfallet / De aanslag</li>\
-<li>Nilson, Peter: Hem till jorden / Terug naar de aarde</li>\
-<li>van Paemel, Monika: Den första stenen / De eersten steen</li>\
-<li>Sjöwall, Maj och Wahlöö, Per: Brandbilen som försvann / De brandweerauto die verdween</li>\
-<li>Swartz, Richard: Room service</li>\
-<li>Tunström, Göran: Tjuven / Die dief</li>\
-<li>Wolkers, Jan: Turkisk konfekt / Turks fruit</li>\
-</ul>\
-\
-Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
-    context: settings.defaultContext,
-    within: settings.defaultWithin,
-    attributes: modernAttrs,
-    struct_attributes : {
-    }
-};
-
-settings.corpora["europarl-sv"] = {
-    id : "europarl-sv",
-    title: "Europarl svenska",
-    description : "Texter från Europaparlamentets webbsida.",
-    context: settings.defaultContext,
-    within: settings.defaultWithin,
-    attributes: modernAttrs,
-    struct_attributes : {
-        text_date : {label : "date"},
-        text_speaker : {label : "speaker"}
     }
 };
 
@@ -2705,6 +2717,19 @@ settings.corpora.smittskydd = {
     }
 };
 
+settings.corpora.sfs = {
+    id : "sfs",
+    title : "Svensk författningssamling",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_title : {label : "title"},
+        text_date : {label : "date"}
+    }
+};
+
 settings.corpora.vivill = {
     id : "vivill",
     title : "Svenska partiprogram och valmanifest 1887–2010",
@@ -2826,6 +2851,19 @@ settings.corpora.vivill = {
     }
 };
 
+settings.corpora["wikipedia-sv"] = {
+    id : "wikipedia-sv",
+    title : "Svenska Wikipedia (januari 2015)",
+    description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_title : {label : "article"},
+        text_url : {label : "url", type : "url"}
+    }
+};
+
 settings.corpora.strindbergromaner = {
     id : "strindbergromaner",
     title : "August Strindbergs samlade verk",
@@ -2896,19 +2934,6 @@ settings.corpora.rom99 = {
     }
 };
 
-settings.corpora.sfs = {
-    id : "sfs",
-    title : "Svensk författningssamling",
-    description : "",
-    within : settings.spWithin,
-    context : settings.spContext,
-    attributes : modernAttrs,
-    struct_attributes : {
-        text_title : {label : "title"},
-        text_date : {label : "date"}
-    }
-};
-
 settings.corpora.swefn = {
     id : "swefn",
     title : "Svenskt frasnät (SweFN)",
@@ -2934,19 +2959,6 @@ settings.corpora.swefn = {
 /*      "text_lexical_units_saldo" : {label : "lexical_units_saldo"},
         "text_lexical_units_new" : {label : "lexical_units_new"},*/
         "text_notes" : {label : "notes"}
-    }
-};
-
-settings.corpora["wikipedia-sv"] = {
-    id : "wikipedia-sv",
-    title : "Svenska Wikipedia (januari 2015)",
-    description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
-    within : settings.spWithin,
-    context : settings.spContext,
-    attributes : modernAttrs,
-    struct_attributes : {
-        text_title : {label : "article"},
-        text_url : {label : "url", type : "url"}
     }
 };
 
