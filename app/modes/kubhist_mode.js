@@ -3,7 +3,7 @@ settings.primaryColor = "#E0F4F4";
 settings.primaryLight = "#F2FFFF";
 //settings.autocomplete = false;
 settings.lemgramSelect = false;
-settings.wordpicture = false;
+settings.wordpicture = true;
 settings.digidailyattributes = {
 	lemma : attrs.baseform,
 	pos : attrs.pos,
