@@ -17,6 +17,7 @@ settings.fsvattributes = {
 };
 
 //SDHK
+settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>';
 settings.sdhkstructs = {
 	text_id : {
 		label : "fulltext",
@@ -30,7 +31,6 @@ settings.sdhkstructs = {
 };
 
 //DIGI
-
 digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'
 settings.digidailyattributes = {
 	lemma : attrs.baseform,
@@ -52,10 +52,49 @@ settings.digidailystruct_attributes = {
 	},
 	text_date : {label : "date"}
 };
-settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>';
+
+//UB-KVT
+settings.ubkvtattributes = {
+	lemma: attrs.baseform,
+	pos : attrs.pos,
+	msd : attrs.msd,
+	lex : attrs.lemgram,
+	dalinlex : {
+	    label : "dalin-lemgram",
+	    type : "set",
+	    displayType : "autocomplete",
+	    opts : settings.setOptions,
+	    stringify : function(lemgram) {
+	        // if(_.contains(lemgram, " "))
+	        // TODO: what if we're getting more than one consequtive lemgram back?
+	        return util.lemgramToString(_.str.trim(lemgram), true);
+	    },
+	    externalSearch : karpLemgramLink,
+	    internalSearch : true,
+	    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
+	    controller : function($scope) {
+	        $scope.stringify = util.lemgramToString;
+	        $scope.sorter = view.lemgramSort;
+	    }
+	},
+	dephead : attrs.dephead,
+	deprel : attrs.deprel,
+	ref : attrs.ref,
+	saldo : attrs.saldo,
+	prefix : attrs.prefix,
+	suffix : attrs.suffix
+};
+settings.ubkvtstruct_attributes = {
+	text_title : {
+		label : "title",
+		displayType : "select",
+		localize : false,
+ 		opts : settings.liteOptions
+	},
+	text_year : {label : "date"}
+};
 
 //RUNEBERG
-
 settings.runebergattributes = {
 	msd : attrs.msd,
 	lemma : attrs.baseform,
@@ -119,6 +158,12 @@ settings.corporafolders.fsvb.yngre = {
 settings.corporafolders.fsvb.nysvenska = {
 	title : "Nysvenska",
 	contents : ["fsv-nysvensklagar",  "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
+};
+
+settings.corporafolders.ubkvt = {
+	title : "Kvinnotidningar",
+	contents : ["ub-kvt_dagny"],
+        description :'Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>'
 };
 
 settings.corporafolders.medeltid = {
@@ -860,6 +905,17 @@ settings.corpora["sdhk-ovrigt"] = {
 	context : settings.defaultContext,
 	attributes : {},
 	struct_attributes : settings.sdhkstructs
+};
+
+settings.corpora["ub-kvt_dagny"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt_dagny",
+	title : "Dagny",
+	description : "Kvinnotidning Dagny",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["tankebok"] = {

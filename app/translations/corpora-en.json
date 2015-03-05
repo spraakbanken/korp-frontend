@@ -24,6 +24,7 @@
     "msd" : "msd",
     "baseform" : "baseform",
     "lemgram" : "lemgram",
+    "dalin-lemgram" : "dalin-lemgram",
     "dephead" : "dephead",
     "deprel" : "dependency relation",
     "sentence" : "sentence",
