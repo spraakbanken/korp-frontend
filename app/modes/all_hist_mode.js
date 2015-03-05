@@ -913,7 +913,7 @@ settings.corpora["ub-kvt_dagny"] = {
 	title : "Dagny",
 	description : "Kvinnotidning Dagny",
 	within : settings.defaultWithin,
-	context : settings.spContext,
+	context : settings.defaultContext,
 	attributes : settings.ubkvtattributes,
 	struct_attributes : settings.ubkvtstruct_attributes,
 };
