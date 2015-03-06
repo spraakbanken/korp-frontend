@@ -91,7 +91,7 @@ settings.ubkvtstruct_attributes = {
 		localize : false,
  		opts : settings.liteOptions
 	},
-	text_year : {label : "date"},
+	text_year : {label : "year"},
 	page_nr : {label : "page"}
 };
 
