@@ -91,7 +91,8 @@ settings.ubkvtstruct_attributes = {
 		localize : false,
  		opts : settings.liteOptions
 	},
-	text_year : {label : "date"}
+	text_year : {label : "date"},
+	page_nr : {label : "page"}
 };
 
 //RUNEBERG
@@ -163,7 +164,7 @@ settings.corporafolders.fsvb.nysvenska = {
 settings.corporafolders.ubkvt = {
 	title : "Kvinnotidningar",
 	contents : ["ub-kvt_dagny"],
-        description :'Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>'
+        description :'Svenska kvinnotidningar'
 };
 
 settings.corporafolders.medeltid = {
