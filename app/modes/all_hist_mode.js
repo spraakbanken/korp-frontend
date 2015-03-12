@@ -163,7 +163,7 @@ settings.corporafolders.fsvb.nysvenska = {
 
 settings.corporafolders.ubkvt = {
 	title : "Kvinnotidningar",
-	contents : ["ub-kvt_dagny"],
+	contents : ["ub-kvt-dagny"],
         description :'Svenska kvinnotidningar'
 };
 
@@ -908,9 +908,9 @@ settings.corpora["sdhk-ovrigt"] = {
 	struct_attributes : settings.sdhkstructs
 };
 
-settings.corpora["ub-kvt_dagny"] = {
+settings.corpora["ub-kvt-dagny"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "ub-kvt_dagny",
+	id : "ub-kvt-dagny",
 	title : "Dagny",
 	description : "Kvinnotidning Dagny",
 	within : settings.defaultWithin,
