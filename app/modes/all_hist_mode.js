@@ -163,7 +163,7 @@ settings.corporafolders.fsvb.nysvenska = {
 
 settings.corporafolders.ubkvt = {
 	title : "Kvinnotidningar",
-	contents : ["ub-kvt-dagny"],
+	contents : ["ub-kvt-dagny", "ub-kvt-hertha", "ub-kvt-kvt", "ub-kvt-morgonbris"],
         description :'Svenska kvinnotidningar'
 };
 
@@ -913,6 +913,39 @@ settings.corpora["ub-kvt-dagny"] = {
 	id : "ub-kvt-dagny",
 	title : "Dagny",
 	description : "Kvinnotidning Dagny",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
+settings.corpora["ub-kvt-hertha"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-hertha",
+	title : "Hertha",
+	description : "Kvinnotidning Hertha",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
+settings.corpora["ub-kvt-kvt"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-kvt",
+	title : "Kvinnornas Tidning",
+	description : "Kvinnornas Tidning",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
+settings.corpora["ub-kvt-morgonbris"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-morgonbris",
+	title : "Morgonbris",
+	description : "Kvinnotidning Morgonbris",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : settings.ubkvtattributes,
