@@ -163,7 +163,7 @@ settings.corporafolders.fsvb.nysvenska = {
 
 settings.corporafolders.ubkvt = {
 	title : "Kvinnotidningar",
-	contents : ["ub-kvt-dagny", "ub-kvt-hertha", "ub-kvt-kvt", "ub-kvt-morgonbris"],
+	contents : ["ub-kvt-dagny", "ub-kvt-hertha", "ub-kvt-idun", "ub-kvt-kvt", "ub-kvt-morgonbris", "ub-kvt-rostratt", "ub-kvt-tidevarvet"],
         description :'Svenska kvinnotidningar'
 };
 
@@ -923,7 +923,18 @@ settings.corpora["ub-kvt-hertha"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "ub-kvt-hertha",
 	title : "Hertha",
-	description : "Kvinnotidning Hertha",
+	description : "Hertha - Tidskrift för den svenska kvinnorörelsen; utgiven av Fredrika-Bremer-Förbundet",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
+settings.corpora["ub-kvt-idun"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-idun",
+	title : "Idun",
+	description : "Kvinnotidning Idun",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : settings.ubkvtattributes,
@@ -951,6 +962,29 @@ settings.corpora["ub-kvt-morgonbris"] = {
 	attributes : settings.ubkvtattributes,
 	struct_attributes : settings.ubkvtstruct_attributes,
 };
+
+settings.corpora["ub-kvt-rostratt"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-rostratt",
+	title : "Rösträtt för Kvinnor",
+	description : "Kvinnotidning Rösträtt för Kvinnor",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
+settings.corpora["ub-kvt-tidevarvet"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "ub-kvt-tidevarvet",
+	title : "Tidevarvet",
+	description : "Kvinnotidning Tidevarvet",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : settings.ubkvtattributes,
+	struct_attributes : settings.ubkvtstruct_attributes,
+};
+
 
 settings.corpora["tankebok"] = {
     morf : 'swedbergm|dalinm',
