@@ -967,7 +967,7 @@ settings.corpora["ub-kvt-rostratt"] = {
     morf : 'saldom|dalinm|swedbergm',
 	id : "ub-kvt-rostratt",
 	title : "Rösträtt för Kvinnor",
-	description : "Tidning utgiven av landsföreningen för kvinnans politiska rösträtt.",
+	description : "Tidning utgiven av landsföreningen för kvinnans politiska rösträtt",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
 	attributes : settings.ubkvtattributes,
