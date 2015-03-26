@@ -419,5 +419,24 @@
     "coctaill_language_example_unit" : "language_example_unit",
     "coctaill_language_example_skill" : "language_example_skill",
     
-    "librisid" : "Libris-ID"
+    "librisid" : "Libris-ID",
+
+    "edition" : "edition",
+    "periodofpublication" : "period of publication",
+    "holderofpublicationlicense" : "holder of publication license",
+    "publishingfrequency" : "publishing frequency",
+    "publishingdays" : "publishing days",
+    "completetitle" : "complete title",
+    "issn" : "ISSN",
+    "politicaltendency" : "political tendency",
+    "annualprice" : "annual price",
+    "editorialplace" : "editorial place",
+    "typearea" : "type area",
+    "numberofpages" : "number of pages",
+    "publicationtype" : "publication type",
+    "editor" : "editor",
+    "printedin" : "printed in",
+    "printedby" : "printed by",
+    "commentaries" : "commentaries"
 }
+
