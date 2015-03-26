@@ -420,5 +420,23 @@
     "coctaill_language_example_unit" : "language_example_unit",
     "coctaill_language_example_skill" : "language_example_skill",
     
-    "librisid" : "Libris-ID"
+    "librisid" : "Libris-ID",
+
+    "edition" : "utgåva",
+    "periodofpublication" : "publikationsperiod",
+    "holderofpublicationlicense" : "licenshavare",
+    "publishingfrequency" : "publikationsfrekvens",
+    "publishingdays" : "publikationssdagar",
+    "completetitle" : "fullständig titel",
+    "issn" : "ISSN",
+    "politicaltendency" : "politisk tendens",
+    "annualprice" : "årspris",
+    "editorialplace" : "ort", 
+    "typearea" : "storlek",
+    "numberofpages" : "antal sidor",
+    "publicationtype" : "publikationstyp",
+    "editor" : "redaktör",
+    "printedin" : "tryckt i",
+    "printedby" : "tryckt av",
+    "commentaries" : "kommentarer"
 }
