@@ -663,115 +663,621 @@ settings.corpora["kubhist-jonkopingsbladet-1870"] = {
 // 	struct_attributes : settings.digidailystruct_attributes
 // };
 
-settings.corpora["digidaily-norraskane"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-norraskane",
-	title : "Norra Skåne",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
-};
-
-settings.corpora["digidaily-lindesbergsallehanda"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-lindesbergsallehanda",
-	title : "Lindesbergs allehanda",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
-};
-
-settings.corpora["digidaily-postochinrikestidning"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-postochinrikestidning",
-	title : "Post- och Inrikes Tidningar",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
-};
-
-settings.corpora["digidaily-stockholmsposten"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-stockholmsposten",
-	title : "Stockholmsposten",
-	description : digidailydescription,
-	within : settings.defaultWithin,
-	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
-};
-
-settings.corpora["digidaily-kalmar"] = {
-    morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-kalmar",
+settings.corporafolders.kalmar = {
 	title : "Kalmar",
+	// contents : ["kubhist-kalmar-1860", "kubhist-kalmar-1870", "kubhist-kalmar-1880", "kubhist-kalmar-1890", "kubhist-kalmar-1910"]
+	contents : ["kubhist-kalmar-1860", "kubhist-kalmar-1870", "kubhist-kalmar-1880", "kubhist-kalmar-1890", "kubhist-kalmar-1900", "kubhist-kalmar-1910"]
+};
+
+settings.corpora["kubhist-kalmar-1860"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-kalmar-1860",
+	title : "Kalmar 1860-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
 
-settings.corpora["digidaily-wernamotidning"] = {
+settings.corpora["kubhist-kalmar-1870"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-wernamotidning",
-	title : "Wernamo tidning",
+	id : "kubhist-kalmar-1870",
+	title : "Kalmar 1870-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
 
-settings.corpora["digidaily-ostgotaposten"] = {
+settings.corpora["kubhist-kalmar-1880"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-ostgotaposten",
-	title : "Östgötaposten",
+	id : "kubhist-kalmar-1880",
+	title : "Kalmar 1880-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
 
-settings.corpora["digidaily-ostergotlandsveckoblad"] = {
+settings.corpora["kubhist-kalmar-1890"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-ostergotlandsveckoblad",
-	title : "Östergötlands veckoblad",
+	id : "kubhist-kalmar-1890",
+	title : "Kalmar 1890-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
 
-settings.corpora["digidaily-wermlandslanstidning"] = {
+settings.corpora["kubhist-kalmar-1900"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-wermlandslanstidning",
-	title : "Wermlands läns tidning",
+	id : "kubhist-kalmar-1900",
+	title : "Kalmar 1900-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
 
-settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
+settings.corpora["kubhist-kalmar-1910"] = {
     morf : 'saldom|dalinm|swedbergm',
-	id : "digidaily-tidningforwenersborgsstadochlan",
+	id : "kubhist-kalmar-1910",
+	title : "Kalmar 1910-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-kalmar"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-kalmar",
+// 	title : "Kalmar",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.lindesbergsallehanda = {
+	title : "Lindesbergs allehanda",
+	contents : ["kubhist-lindesbergsallehanda-1870", "kubhist-lindesbergsallehanda-1880"]
+};
+
+settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-lindesbergsallehanda-1870",
+	title : "Lindesbergs allehanda 1870-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-lindesbergsallehanda-1880"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-lindesbergsallehanda-1880",
+	title : "Lindesbergs allehanda 1880-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-lindesbergsallehanda"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-lindesbergsallehanda",
+// 	title : "Lindesbergs allehanda",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.norraskane = {
+	title : "Norra Skåne",
+	contents : ["kubhist-norraskane-1880", "kubhist-norraskane-1890"]
+};
+
+settings.corpora["kubhist-norraskane-1880"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-norraskane-1880",
+	title : "Norra Skåne 1880-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-norraskane-1890"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-norraskane-1890",
+	title : "Norra Skåne 1890-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-norraskane"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-norraskane",
+// 	title : "Norra Skåne",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.postochinrikestidning = {
+	title : "Post- och Inrikes Tidningar",
+	contents : ["kubhist-postochinrikestidning-1770", "kubhist-postochinrikestidning-1780", "kubhist-postochinrikestidning-1790", "kubhist-postochinrikestidning-1800",
+		"kubhist-postochinrikestidning-1810", "kubhist-postochinrikestidning-1820", "kubhist-postochinrikestidning-1830", "kubhist-postochinrikestidning-1840", 
+		"kubhist-postochinrikestidning-1850", "kubhist-postochinrikestidning-1860",]
+};
+
+settings.corpora["kubhist-postochinrikestidning-1770"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1770",
+	title : "Post- och Inrikes Tidningar 1770-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1780"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1780",
+	title : "Post- och Inrikes Tidningar 1780-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1790"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1790",
+	title : "Post- och Inrikes Tidningar 1790-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1800"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1800",
+	title : "Post- och Inrikes Tidningar 1800-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1810"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1810",
+	title : "Post- och Inrikes Tidningar 1810-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1820"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1820",
+	title : "Post- och Inrikes Tidningar 1820-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1830"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1830",
+	title : "Post- och Inrikes Tidningar 1830-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1840"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1840",
+	title : "Post- och Inrikes Tidningar 1840-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1850"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1850",
+	title : "Post- och Inrikes Tidningar 1850-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-postochinrikestidning-1860"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-postochinrikestidning-1860",
+	title : "Post- och Inrikes Tidningar 1860-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-postochinrikestidning"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-postochinrikestidning",
+// 	title : "Post- och Inrikes Tidningar",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.stockholmsposten = {
+	title : "Stockholmsposten",
+	contents : ["kubhist-stockholmsposten-1770", "kubhist-stockholmsposten-1780", "kubhist-stockholmsposten-1790", "kubhist-stockholmsposten-1800",
+		"kubhist-stockholmsposten-1810", "kubhist-stockholmsposten-1820", "kubhist-stockholmsposten-1830"]
+};
+
+settings.corpora["kubhist-stockholmsposten-1770"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1770",
+	title : "Stockholmsposten 1770-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1780"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1780",
+	title : "Stockholmsposten 1780-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1790"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1790",
+	title : "Stockholmsposten 1790-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1800"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1800",
+	title : "Stockholmsposten 1800-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1810"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1810",
+	title : "Stockholmsposten 1810-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1820"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1820",
+	title : "Stockholmsposten 1820-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-stockholmsposten-1830"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-stockholmsposten-1830",
+	title : "Stockholmsposten 1830-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-stockholmsposten"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-stockholmsposten",
+// 	title : "Stockholmsposten",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.tidningforwenersborg = {
 	title : "Tidning för Wenersborgs stad och län",
+	contents : ["kubhist-tidningforwenersborg-1840" , "kubhist-tidningforwenersborg-1850", "kubhist-tidningforwenersborg-1860", "kubhist-tidningforwenersborg-1870",
+		"kubhist-tidningforwenersborg-1880", "kubhist-tidningforwenersborg-1890"]
+};
+
+settings.corpora["kubhist-tidningforwenersborg-1840"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1840",
+	title : "Tidning för Wenersborgs stad och län 1840-talet",
 	description : digidailydescription,
 	within : settings.defaultWithin,
 	context : settings.spContext,
-	attributes : settings.digidailyattributes,
-	struct_attributes : settings.digidailystruct_attributes
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
 };
+
+settings.corpora["kubhist-tidningforwenersborg-1850"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1850",
+	title : "Tidning för Wenersborgs stad och län 1850-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-tidningforwenersborg-1860"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1860",
+	title : "Tidning för Wenersborgs stad och län 1860-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-tidningforwenersborg-1870"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1870",
+	title : "Tidning för Wenersborgs stad och län 1870-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-tidningforwenersborg-1880"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1880",
+	title : "Tidning för Wenersborgs stad och län 1880-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-tidningforwenersborg-1890"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-tidningforwenersborg-1890",
+	title : "Tidning för Wenersborgs stad och län 1890-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-tidningforwenersborgsstadochlan"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-tidningforwenersborgsstadochlan",
+// 	title : "Tidning för Wenersborgs stad och län",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.wermlandslanstidning = {
+	title : "Wermlands läns tidning",
+	contents : ["kubhist-wermlandslanstidning-1870"]
+};
+
+settings.corpora["kubhist-wermlandslanstidning-1870"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-wermlandslanstidning-1870",
+	title : "Wermlands läns tidning 1870-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-wermlandslanstidning"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-wermlandslanstidning",
+// 	title : "Wermlands läns tidning",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.wernamotidning = {
+	title : "Wernamo tidning",
+	contents : ["kubhist-wernamotidning-1870", "kubhist-wernamotidning-1880"]
+};
+
+settings.corpora["kubhist-wernamotidning-1870"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-wernamotidning-1870",
+	title : "Wernamo tidning 1870-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-wernamotidning-1880"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-wernamotidning-1880",
+	title : "Wernamo tidning 1880-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-wernamotidning"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-wernamotidning",
+// 	title : "Wernamo tidning",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.ostergotlandsveckoblad = {
+	title : "Östergötlands veckoblad",
+	contents : ["kubhist-ostergotlandsveckoblad-1880", "kubhist-ostergotlandsveckoblad-1890"]
+};
+
+settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-ostergotlandsveckoblad-1880",
+	title : "Östergötlands veckoblad 1880-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-ostergotlandsveckoblad-1890"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-ostergotlandsveckoblad-1890",
+	title : "Östergötlands veckoblad 1890-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-ostergotlandsveckoblad"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-ostergotlandsveckoblad",
+// 	title : "Östergötlands veckoblad",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
+
+settings.corporafolders.ostgotaposten = {
+	title : "Östgötaposten",
+	contents : ["kubhist-ostgotaposten-1890", "kubhist-ostgotaposten-1900", "kubhist-ostgotaposten-1910"]
+};
+
+settings.corpora["kubhist-ostgotaposten-1890"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-ostgotaposten-1890",
+	title : "Östgötaposten 1890-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-ostgotaposten-1900"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-ostgotaposten-1900",
+	title : "Östgötaposten 1900-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+settings.corpora["kubhist-ostgotaposten-1910"] = {
+    morf : 'saldom|dalinm|swedbergm',
+	id : "kubhist-ostgotaposten-1910",
+	title : "Östgötaposten 1910-talet",
+	description : digidailydescription,
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : settings.kubhistattributes,
+	struct_attributes : settings.kubhiststruct_attributes
+};
+
+// settings.corpora["digidaily-ostgotaposten"] = {
+//     morf : 'saldom|dalinm|swedbergm',
+// 	id : "digidaily-ostgotaposten",
+// 	title : "Östgötaposten",
+// 	description : digidailydescription,
+// 	within : settings.defaultWithin,
+// 	context : settings.spContext,
+// 	attributes : settings.digidailyattributes,
+// 	struct_attributes : settings.digidailystruct_attributes
+// };
 
 
 settings.corpora = _(settings.corpora)
