@@ -286,7 +286,9 @@ $.fn.korp_autocomplete = (options) ->
         return
     options = $.extend(
         type: "lem"
-        select: $.noop
+        select: (e) ->
+            # c.log "select", arguments
+            # return false
         labelFunction: util.lemgramToString
         middleware: (request, idArray) ->
 

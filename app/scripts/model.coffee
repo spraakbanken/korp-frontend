@@ -185,7 +185,7 @@ class model.KWICProxy extends BaseProxy
         $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
-                data.show.push key
+                data.show.push _.last key.split(" ")
             for key, val of corpus.attributes
                 data.show.push key
 
@@ -448,13 +448,7 @@ class model.StatsProxy extends BaseProxy
                         formatter: self.valueFormatter
                         minWidth : minWidth
 
-                totalRow =
-                    id: "row_total"
-                    hit_value: "&Sigma;"
-                    total_value: [data.total.sums.absolute, data.total.sums.relative]
                 
-                $.each data.corpora, (corpus, obj) ->
-                    totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative]
 
                 wordArray = _.keys(data.total.absolute)
                 if reduceval in ["lex", "saldo", "baseform"]
@@ -465,7 +459,7 @@ class model.StatsProxy extends BaseProxy
 
                 sizeOfDataset = wordArray.length
                 dataset = new Array(sizeOfDataset + 1)
-                dataset[0] = totalRow
+                
                 statsWorker = new Worker "scripts/statistics_worker.js"
                 statsWorker.onmessage = (e) ->
                     c.log "Called back by the worker!\n"

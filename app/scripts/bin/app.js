@@ -116,7 +116,7 @@
       if (modeId === "default") {
         return location.pathname;
       }
-      return location.pathname + "?mode=" + modeId;
+      return location.pathname + ("?mode=" + modeId + "#lang=" + s.$root.lang);
     };
     s.onSelect = function(modeId) {
       return $location.search("corpus", null);

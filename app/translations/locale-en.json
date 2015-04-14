@@ -160,6 +160,7 @@
     "within_sentence" : "sentence",
     "within_paragraph" : "up to paragraph",
     "within_text" : "up to text",
+    "within_5 sentence" : "5 sentences",
     "within_warn" : "not all selected corpora support extended context",
     "asterix" : "*",
     "appearance_context" : "not sorted",

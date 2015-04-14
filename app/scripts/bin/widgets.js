@@ -329,7 +329,7 @@
     }
     options = $.extend({
       type: "lem",
-      select: $.noop,
+      select: function(e) {},
       labelFunction: util.lemgramToString,
       middleware: function(request, idArray) {
         var dfd, has_morphs, labelArray, listItems;

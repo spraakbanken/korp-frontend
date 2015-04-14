@@ -103,7 +103,11 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 			var current = $(".arg_value:focus")
 			c.log( "current", current)
 			if(current.length) {
-				s.onSubmit()
+
+				$timeout(function() {
+					s.onSubmit()
+				}, 0)
+				
 			}
 		} 
 	}

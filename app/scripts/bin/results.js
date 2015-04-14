@@ -1191,7 +1191,7 @@
           if (typestring === "absolute") {
             loc = "statstable_absfigures_hits";
           } else {
-            loc = "statstable_absfigures_hits";
+            loc = "statstable_relfigures_hits";
           }
           return $("#hitsDescription").localeKey(loc);
         },

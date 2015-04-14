@@ -163,6 +163,7 @@
     "within_sentence" : "mening",
     "within_paragraph" : "upp till stycke",
     "within_text" : "upp till text",
+    "within_5 sentence" : "5 meningar",
     "within_warn" : "vissa valda korpusar stödjer inte utökad kontext",
     "asterix" : "*",
     "appearance_context" : "förekomst",

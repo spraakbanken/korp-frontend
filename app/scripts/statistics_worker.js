@@ -22,6 +22,20 @@ onmessage = function(e) {
 
     }
 
+    var totalRow = {
+        id: "row_total",
+        hit_value: "&Sigma;",
+        total_value: [total.sums.absolute, total.sums.relative],
+        total_display: fmt([total.sums.absolute, total.sums.relative])
+    }
+    
+    for(corpus in allcorpora) {
+        var obj = allcorpora[corpus]
+        totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative]
+        totalRow[corpus + "_display"] = fmt([obj.sums.absolute, obj.sums.relative])
+    }
+
+    dataset[0] = totalRow
     if( groups ) { // WHEN AGGREGATED
 
         function valueGetter(obj, word) {

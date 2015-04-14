@@ -1044,7 +1044,7 @@ newDataInGraph = (dataName, horizontalDiagram) ->
                 if typestring is "absolute"
                     loc = "statstable_absfigures_hits"
                 else
-                    loc = "statstable_absfigures_hits"
+                    loc = "statstable_relfigures_hits"
                 $("#hitsDescription").localeKey loc
 
             selected: "relative"

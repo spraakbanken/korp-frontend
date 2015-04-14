@@ -163,7 +163,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
 korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) ->
     s = $scope
-    s.within = "sentence"
+    s.within = $location.search().within or "sentence"
     s.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
             label : name or $rootScope.extendedCQP

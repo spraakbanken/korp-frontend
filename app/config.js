@@ -2734,13 +2734,10 @@ settings.corpora.vivill = {
     id : "vivill",
     title : "Svenska partiprogram och valmanifest 1887–2010",
     description : "",
-    within : settings.defaultWithin,
-    /*
     within : {
         "sentence" : "sentence",
         "5 sentence" : "5 sentences"
     },
-    */
     context : {
         "1 sentence" : "1 sentence",
         "5 sentence" : "5 sentences"

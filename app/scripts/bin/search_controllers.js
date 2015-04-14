@@ -135,7 +135,7 @@
   korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {
     var s;
     s = $scope;
-    s.within = "sentence";
+    s.within = $location.search().within || "sentence";
     s.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
         label: name || $rootScope.extendedCQP,

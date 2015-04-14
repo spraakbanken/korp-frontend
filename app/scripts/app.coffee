@@ -117,7 +117,7 @@ korpApp.controller "headerCtrl", ($scope, $location) ->
     s.select(currentMode)
     s.getUrl = (modeId) ->
         if modeId is "default" then return location.pathname
-        return location.pathname + "?mode=" + modeId
+        return location.pathname + "?mode=#{modeId}#lang=#{s.$root.lang}"
     s.onSelect = (modeId) ->
         $location.search("corpus", null)
         

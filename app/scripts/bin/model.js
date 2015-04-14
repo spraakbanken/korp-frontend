@@ -218,7 +218,7 @@
         _ref1 = corpus.within;
         for (key in _ref1) {
           val = _ref1[key];
-          data.show.push(key);
+          data.show.push(_.last(key.split(" ")));
         }
         _ref2 = corpus.attributes;
         for (key in _ref2) {
@@ -479,7 +479,7 @@
           return callback(progressObj);
         },
         success: function(data) {
-          var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, totalRow, wordArray;
+          var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
           if (data.ERROR != null) {
             c.log("gettings stats failed with error", $.dump(data.ERROR));
             def.reject(data);
@@ -513,14 +513,6 @@
               minWidth: minWidth
             });
           });
-          totalRow = {
-            id: "row_total",
-            hit_value: "&Sigma;",
-            total_value: [data.total.sums.absolute, data.total.sums.relative]
-          };
-          $.each(data.corpora, function(corpus, obj) {
-            return totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative];
-          });
           wordArray = _.keys(data.total.absolute);
           if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
             groups = _.groupBy(wordArray, function(item) {
@@ -530,7 +522,6 @@
           }
           sizeOfDataset = wordArray.length;
           dataset = new Array(sizeOfDataset + 1);
-          dataset[0] = totalRow;
           statsWorker = new Worker("scripts/statistics_worker.js");
           statsWorker.onmessage = function(e) {
             c.log("Called back by the worker!\n");
