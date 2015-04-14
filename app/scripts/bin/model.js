@@ -208,7 +208,6 @@
         defaultwithin: _.keys(settings.defaultWithin)[0],
         show: [],
         show_struct: [],
-        incremental: $.support.ajaxProgress,
         cache: true
       };
       $.extend(data, kwicResults.getPageInterval(page), o.ajaxParams);

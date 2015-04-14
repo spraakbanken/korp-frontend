@@ -527,3 +527,28 @@ korpApp.directive "warning", () ->
     transclude : true
     template : "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
 
+korpApp.directive "kwicPager", () ->
+    replace: true
+    restrict: "E"
+    scope: false
+    template: """
+    <div class="pager-wrapper" ng-show="gotFirstKwic" ng-if="hits > $root._searchOpts.hits_per_page">
+      <pagination
+         total-items="hits"
+         ng-if="gotFirstKwic"
+         ng-model="$parent.pager"
+         ng-click="pageChange($event, pager)"
+         max-size="15"
+         items-per-page="::$root._searchOpts.hits_per_page"
+         previous-text="‹" next-text="›" first-text="«" last-text="»" 
+         boundary-links="true" 
+         rotate="false" 
+         num-pages="$parent.numPages"> </pagination>
+      <div class="page_input"><span>{{'goto_page' | loc}} </span>
+        <input ng-model="$parent.$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"  ng-click="$event.stopPropagation()" />
+        av {{numPages}}
+      </div>
+
+    </div>
+    """
+

@@ -166,10 +166,10 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                 def.resolve()
                 initTimeGraph(timedef)
 
-        kwicRequest : (cqp) ->
+        kwicRequest : (cqp, isPaging) ->
             
             c.log "kwicRequest", cqp
-            kwicResults.makeRequest(cqp)
+            kwicResults.makeRequest(cqp, isPaging)
 
         
         kwicSearch : (cqp) ->
@@ -248,13 +248,22 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         value = value.join("|")
         # page = $location.search().page or 0
 
+        newValues[1] = Number(newValues[1]) or 0
+        oldValues[1] = Number(oldValues[1]) or 0
+
         c.log "newValues", newValues
         c.log "oldValues", oldValues
-        pageChanged = newValues[1] != oldValues[1]
-        searchChanged = newValues[0] != oldValues[0]
+        if _.isEqual newValues, oldValues
+            pageChanged = false
+            searchChanged = true
+        else
+            pageChanged = newValues[1] != oldValues[1]
+            searchChanged = newValues[0] != oldValues[0]
         c.log "searchChanged", searchChanged
         c.log "pageChanged", pageChanged
 
+
+        pageOnly = pageChanged and not searchChanged
 
         view.updateSearchHistory value, $location.absUrl()
         # $.when(chained).then () ->
@@ -265,11 +274,15 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     searches.activeSearch = 
                         type : type
                         val : value
+                        page: newValues[1]
+                        pageOnly: pageOnly
 
                 when "lemgram"
                     searches.activeSearch = 
                         type : type
                         val : value
+                        page: newValues[1]
+                        pageOnly: pageOnly
 
                     
                     # $.sm.send "submit.lemgram", data
@@ -283,6 +296,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                     searches.activeSearch = 
                         type : type
                         val : value
+                        page: newValues[1]
+                        pageOnly: pageOnly
 
 
                     searches.kwicSearch value

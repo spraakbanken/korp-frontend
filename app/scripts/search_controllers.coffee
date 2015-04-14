@@ -112,9 +112,10 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.$watch "searches.activeSearch", (search) =>
         # if search.type in ["word", "lemgram"]
         unless search then return 
-        c.log "searches.activeSearch", search
+        # c.log "searches.activeSearch", search
+        # c.log "pageOnly", search.page, search.pageOnly
         # page = $rootScope.search()["page"] or 0
-        page = $location.search().page or 0
+        page = Number($location.search().page) or 0
         c.log "activesearch page", page
         s.relatedObj = null
         if search.type == "word"
@@ -122,7 +123,11 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             s.simple_text = search.val
             cqp = simpleSearch.getCQP(search.val)
             c.log "simple search cqp", cqp
-            searches.kwicSearch(cqp, page)
+            if search.pageOnly
+                searches.kwicRequest(cqp, true)
+                return
+            else
+                searches.kwicSearch(cqp)
             # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
             if settings.wordpicture != false and s.word_pic and " " not in search.val
                 lemgramResults.makeRequest(search.val, "word")
@@ -140,7 +145,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             if s.word_pic
                 searches.lemgramSearch(search.val, s.prefix, s.suffix, page)
             else
-                searches.kwicSearch(cqp, page)
+                searches.kwicSearch(cqp)
             
         else 
             s.placeholder = null

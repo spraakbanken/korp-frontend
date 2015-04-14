@@ -183,7 +183,7 @@
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
-                  <div id="results-kwic" ng-class="{reading_mode : reading_mode}" constr="KWICResults" constr-name="kwicResults">
+                  <div ng-class="{reading_mode : reading_mode, loading: loading}" constr="KWICResults" constr-name="kwicResults" class="results-kwic">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
@@ -197,12 +197,8 @@
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper">
-                      <pagination total-items="hits" ng-if="hits" ng-model="pager" ng-click="pageChange(pager)" max-size="15" items-per-page="::$root._searchOpts.hits_per_page" previous-text="‹" next-text="›" first-text="«" last-text="»" boundary-links="true" rotate="false" num-pages="$parent.numPages"> </pagination>
-                      <div class="page_input inline_block"><span>{{'goto_page' | loc}} </span>
-                        <input ng-model="$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage)">
-                      </div>
-                    </div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager>
+                    </kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -218,6 +214,7 @@
                         <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
                       </div>
                     </div>
+                    <kwic-pager></kwic-pager>
                   </div>
                 </tab>
                 <tab ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
@@ -267,9 +264,9 @@
                     <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </tab>
-                <tab active="active" ng-controller="kwicCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
+                <tab active="active" ng-controller="ExampleCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
-                  <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
+                  <div ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}" constr="ExampleResults" class="results-kwic">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
@@ -283,12 +280,8 @@
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper">
-                      <pagination total-items="hits" ng-if="hits" ng-model="pager" ng-click="pageChange(pager)" max-size="15" items-per-page="::$root._searchOpts.hits_per_page" previous-text="‹" next-text="›" first-text="«" last-text="»" boundary-links="true" rotate="false" num-pages="$parent.numPages"> </pagination>
-                      <div class="page_input inline_block"><span>{{'goto_page' | loc}} </span>
-                        <input ng-model="$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage)">
-                      </div>
-                    </div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager>
+                    </kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -304,6 +297,7 @@
                         <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
                       </div>
                     </div>
+                    <kwic-pager></kwic-pager>
                   </div>
                 </tab>
                 <tab active="active" ng-repeat="data in graphTabs" ng-controller="graphCtrl">

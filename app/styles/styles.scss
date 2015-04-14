@@ -8,6 +8,11 @@
   font-family: "Source Sans Pro";
   src: url(SourceSansPro-Regular.otf);
 }
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url(SourceSansPro-Semibold.otf);
+  font-weight : bold;
+}
 
 
 * {
@@ -747,16 +752,6 @@ table {
 
 .result_controls > * {
   @include inline-block(bottom);
-}
-
-.controls_n {
-  margin-right: 5px;
-  min-width: 125px;
-}
-
-.loading .controls_n {
-  color: darkgrey;
-  font-style: italic;
 }
 
 #results-stats {
@@ -1974,23 +1969,59 @@ warning ~ * {
   left: 180px;
   @include transition(width 400ms ease);
 }
-/*
-.progress_container {
-  width: 143px;
-  overflow-x: hidden;
-  @include transition(width 400ms ease);
+
+.results-kwic {
+  .controls_n {
+    margin-right: 5px;
+    min-width: 125px;
+  }
+
+  .pagination {
+    height: auto;
+    margin : 0;
+    margin-bottom : 8px;
+    display: inline-block; 
+    vertical-align: initial;
+
+    li.active {
+      font-weight : bold;
+    }
+    a, span {
+      border-width : 1px;
+      line-height: 18px;
+      padding : 0 8px;
+      color : #555;
+      float: initial;
+      display: inline-block;
+
+    }
+  }
+  
+  .page_input {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left : 1em;
+    span {
+      color : #666;
+    }
+    input {
+      width : 2em;
+    }
+  }
+  &.loading {
+    .controls_n {
+      color: darkgrey;
+      font-style: italic;
+    }
+
+    .pager-wrapper {
+      // display : none;
+    }
+
+  }
 }
 
-#results-kwic.not_loading .progress_container {
-  width: 0;
-  @include transition(width 400ms ease);
-}
 
-
-.not_loading .progress_container {
-  display: none;
-}
-*/
 .arg_value {
   .from, .to {
     width: 50px;
@@ -2276,27 +2307,7 @@ line.tick {
   margin-right : 0;
 }
 
-.pagination {
-  height: 20px;
-  margin : 0;
-  display: inline-block; 
-  vertical-align: middle;
-}
-.page_input {
-  margin-left : 1em;
-  span {
-    color : #666;
-  }
-  input {
-    width : 2em;
-  }
-}
-.pagination a, .pagination span {
-  border-width : 1px;
-  line-height: 18px;
-  padding : 0 8px;
-  color : #555;
-}
+
 
 .modal-header_left {
   display : none;

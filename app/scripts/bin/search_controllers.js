@@ -82,8 +82,7 @@
         if (!search) {
           return;
         }
-        c.log("searches.activeSearch", search);
-        page = $location.search().page || 0;
+        page = Number($location.search().page) || 0;
         c.log("activesearch page", page);
         s.relatedObj = null;
         if (search.type === "word") {
@@ -91,7 +90,12 @@
           s.simple_text = search.val;
           cqp = simpleSearch.getCQP(search.val);
           c.log("simple search cqp", cqp);
-          searches.kwicSearch(cqp, page);
+          if (search.pageOnly) {
+            searches.kwicRequest(cqp, true);
+            return;
+          } else {
+            searches.kwicSearch(cqp);
+          }
           if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
             return lemgramResults.makeRequest(search.val, "word");
           } else {
@@ -107,7 +111,7 @@
           if (s.word_pic) {
             return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
           } else {
-            return searches.kwicSearch(cqp, page);
+            return searches.kwicSearch(cqp);
           }
         } else {
           s.placeholder = null;

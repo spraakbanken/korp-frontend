@@ -1,7 +1,9 @@
 (function() {
-  var korpApp,
+  var ExampleCtrl, KwicCtrl, korpApp,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __slice = [].slice;
+    __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   korpApp = angular.module("korpApp");
 
@@ -9,211 +11,268 @@
     return $scope.searches = searches;
   });
 
-  korpApp.controller("kwicCtrl", function($scope, utils, $location) {
-    var findMatchSentence, massageData, punctArray, readingChange, s;
-    c.log("kwicCtrl init", $scope.$parent);
-    s = $scope;
-    s.active = true;
-    s.onexit = function() {
-      c.log("onexit");
-      return s.$root.sidebar_visible = false;
-    };
-    punctArray = [",", ".", ";", ":", "!", "?", "..."];
-    c.log("$location.search().page", $location.search().page);
-    s.pager = Number($location.search().page) + 1 || 1;
-    s.page = s.pager - 1;
-    s.pageChange = function(page) {
-      c.log("pageChange", arguments);
-      return s.page = page - 1;
-    };
-    utils.setupHash(s, [
-      {
-        key: "page",
-        post_change: function() {
-          c.log("post_change", s.page);
-          return s.pager = s.page + 1;
-        },
-        val_in: Number
-      }
-    ]);
-    s.onPageInput = function($event, page) {
-      if ($event.keyCode === 13) {
-        s.pager = page;
-        s.page = Number(page) - 1;
-        return s.gotoPage = null;
-      }
-    };
-    readingChange = function() {
-      var _ref;
-      c.log("reading change");
-      if ((_ref = s.instance) != null ? _ref.getProxy().pendingRequests.length : void 0) {
-        window.pending = s.instance.getProxy().pendingRequests;
-        return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
-          c.log("readingchange makeRequest");
-          return s.instance.makeRequest();
-        });
-      }
-    };
-    s.setupReadingHash = function() {
-      return utils.setupHash(s, [
+  korpApp.controller("kwicCtrl", KwicCtrl = (function() {
+    KwicCtrl.prototype.setupHash = function() {
+      return this.utils.setupHash(this.scope, [
         {
-          key: "reading_mode",
+          key: "page",
           post_change: (function(_this) {
-            return function(isReading) {
-              c.log("change reading mode", isReading);
-              return readingChange();
+            return function() {
+              c.log("post_change", _this.scope.page);
+              return _this.scope.pager = (_this.scope.page || 0) + 1;
             };
-          })(this)
+          })(this),
+          val_in: Number
         }
       ]);
     };
-    s.setupReadingWatch = _.once(function() {
-      var init;
-      c.log("setupReadingWatch");
-      init = true;
-      return s.$watch("reading_mode", function() {
-        if (!init) {
-          readingChange();
-        }
-        return init = false;
-      });
-    });
-    s.toggleReading = function() {
-      s.reading_mode = !s.reading_mode;
-      return s.instance.centerScrollbar();
+
+    KwicCtrl.prototype.initPage = function() {
+      this.scope.pager = Number(this.location.search().page) + 1 || 1;
+      return this.scope.page = this.scope.pager - 1;
     };
-    s.hitspictureClick = function(pageNumber) {
-      c.log("pageNumber", pageNumber);
-      return s.page = Number(pageNumber);
-    };
-    massageData = function(sentenceArray) {
-      var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
-      currentStruct = [];
-      prevCorpus = "";
-      output = [];
-      for (i = _i = 0, _len = sentenceArray.length; _i < _len; i = ++_i) {
-        sentence = sentenceArray[i];
-        _ref = findMatchSentence(sentence), matchSentenceStart = _ref[0], matchSentenceEnd = _ref[1];
-        _ref1 = sentence.match, start = _ref1.start, end = _ref1.end;
-        for (j = _j = 0, _ref2 = sentence.tokens.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
-          wd = sentence.tokens[j];
-          if ((start <= j && j < end)) {
-            _.extend(wd, {
-              _match: true
-            });
+
+    KwicCtrl.$inject = ['$scope', "utils", "$location"];
+
+    function KwicCtrl(scope, utils, location) {
+      var $location, $scope, findMatchSentence, massageData, punctArray, readingChange, s;
+      this.scope = scope;
+      this.utils = utils;
+      this.location = location;
+      s = this.scope;
+      $scope = this.scope;
+      c.log("kwicCtrl init", $scope.$parent);
+      $location = this.location;
+      s.active = true;
+      s.onexit = function() {
+        c.log("onexit");
+        return s.$root.sidebar_visible = false;
+      };
+      punctArray = [",", ".", ";", ":", "!", "?", "..."];
+      c.log("$location.search().page", $location.search().page);
+      this.initPage();
+      s.pageChange = function($event, page) {
+        c.log("pageChange", arguments);
+        $event.stopPropagation();
+        return s.page = page - 1;
+      };
+      this.setupHash();
+      s.gotoPage = null;
+      s.onPageInput = function($event, page, numPages) {
+        if ($event.keyCode === 13) {
+          c.log("page", page, numPages);
+          if (page > numPages) {
+            page = numPages;
           }
-          if ((matchSentenceStart < j && j < matchSentenceEnd)) {
-            _.extend(wd, {
-              _matchSentence: true
-            });
-          }
-          if (_ref3 = wd.word, __indexOf.call(punctArray, _ref3) >= 0) {
-            _.extend(wd, {
-              _punct: true
-            });
-          }
-          if ((_ref4 = wd.structs) != null ? _ref4.open : void 0) {
-            wd._open = wd.structs.open;
-            currentStruct = [].concat(currentStruct, wd.structs.open);
-          } else if ((_ref5 = wd.structs) != null ? _ref5.close : void 0) {
-            wd._close = wd.structs.close;
-            currentStruct = _.without.apply(_, [currentStruct].concat(__slice.call(wd.structs.close)));
-          }
-          if (currentStruct.length) {
-            _.extend(wd, {
-              _struct: currentStruct
-            });
-          }
+          s.pager = page;
+          s.page = Number(page) - 1;
+          s.gotoPage = null;
+          return c.log("s.$id", s.$id);
         }
-        if (currentMode === "parallel") {
-          mainCorpusId = sentence.corpus.split("|")[0].toLowerCase();
-          linkCorpusId = sentence.corpus.split("|")[1].toLowerCase();
-        } else {
-          mainCorpusId = sentence.corpus.toLowerCase();
-        }
-        id = linkCorpusId || mainCorpusId;
-        if (prevCorpus !== id) {
-          corpus = settings.corpora[id];
-          newSent = {
-            newCorpus: corpus.title,
-            noContext: _.keys(corpus.context).length === 1
-          };
-          output.push(newSent);
-        }
-        if (i % 2 === 0) {
-          sentence._color = settings.primaryColor;
-        } else {
-          sentence._color = settings.primaryLight;
-        }
-        sentence.corpus = mainCorpusId;
-        output.push(sentence);
-        if (sentence.aligned) {
-          _ref6 = _.pairs(sentence.aligned)[0], corpus_aligned = _ref6[0], tokens = _ref6[1];
-          output.push({
-            tokens: tokens,
-            isLinked: true,
-            corpus: corpus_aligned,
-            _color: sentence._color
+      };
+      readingChange = function() {
+        var _ref;
+        c.log("reading change");
+        if ((_ref = s.instance) != null ? _ref.getProxy().pendingRequests.length : void 0) {
+          window.pending = s.instance.getProxy().pendingRequests;
+          return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
+            c.log("readingchange makeRequest");
+            return s.instance.makeRequest();
           });
         }
-        prevCorpus = id;
-      }
-      return output;
-    };
-    findMatchSentence = function(sentence) {
-      var decr, end, incr, span, start, _ref, _ref1, _ref2;
-      span = [];
-      _ref = sentence.match, start = _ref.start, end = _ref.end;
-      decr = start;
-      incr = end;
-      while (decr >= 0) {
-        if (__indexOf.call(((_ref1 = sentence.tokens[decr--].structs) != null ? _ref1.open : void 0) || [], "sentence") >= 0) {
-          span[0] = decr;
-          break;
+      };
+      s.setupReadingHash = (function(_this) {
+        return function() {
+          return _this.utils.setupHash(s, [
+            {
+              key: "reading_mode",
+              post_change: function(isReading) {
+                c.log("change reading mode", isReading);
+                return readingChange();
+              }
+            }
+          ]);
+        };
+      })(this);
+      s.setupReadingWatch = _.once(function() {
+        var init;
+        c.log("setupReadingWatch");
+        init = true;
+        return s.$watch("reading_mode", function() {
+          if (!init) {
+            readingChange();
+          }
+          return init = false;
+        });
+      });
+      s.toggleReading = function() {
+        s.reading_mode = !s.reading_mode;
+        return s.instance.centerScrollbar();
+      };
+      s.hitspictureClick = function(pageNumber) {
+        c.log("pageNumber", pageNumber);
+        return s.page = Number(pageNumber);
+      };
+      massageData = function(sentenceArray) {
+        var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+        currentStruct = [];
+        prevCorpus = "";
+        output = [];
+        for (i = _i = 0, _len = sentenceArray.length; _i < _len; i = ++_i) {
+          sentence = sentenceArray[i];
+          _ref = findMatchSentence(sentence), matchSentenceStart = _ref[0], matchSentenceEnd = _ref[1];
+          _ref1 = sentence.match, start = _ref1.start, end = _ref1.end;
+          for (j = _j = 0, _ref2 = sentence.tokens.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
+            wd = sentence.tokens[j];
+            if ((start <= j && j < end)) {
+              _.extend(wd, {
+                _match: true
+              });
+            }
+            if ((matchSentenceStart < j && j < matchSentenceEnd)) {
+              _.extend(wd, {
+                _matchSentence: true
+              });
+            }
+            if (_ref3 = wd.word, __indexOf.call(punctArray, _ref3) >= 0) {
+              _.extend(wd, {
+                _punct: true
+              });
+            }
+            if ((_ref4 = wd.structs) != null ? _ref4.open : void 0) {
+              wd._open = wd.structs.open;
+              currentStruct = [].concat(currentStruct, wd.structs.open);
+            } else if ((_ref5 = wd.structs) != null ? _ref5.close : void 0) {
+              wd._close = wd.structs.close;
+              currentStruct = _.without.apply(_, [currentStruct].concat(__slice.call(wd.structs.close)));
+            }
+            if (currentStruct.length) {
+              _.extend(wd, {
+                _struct: currentStruct
+              });
+            }
+          }
+          if (currentMode === "parallel") {
+            mainCorpusId = sentence.corpus.split("|")[0].toLowerCase();
+            linkCorpusId = sentence.corpus.split("|")[1].toLowerCase();
+          } else {
+            mainCorpusId = sentence.corpus.toLowerCase();
+          }
+          id = linkCorpusId || mainCorpusId;
+          if (prevCorpus !== id) {
+            corpus = settings.corpora[id];
+            newSent = {
+              newCorpus: corpus.title,
+              noContext: _.keys(corpus.context).length === 1
+            };
+            output.push(newSent);
+          }
+          if (i % 2 === 0) {
+            sentence._color = settings.primaryColor;
+          } else {
+            sentence._color = settings.primaryLight;
+          }
+          sentence.corpus = mainCorpusId;
+          output.push(sentence);
+          if (sentence.aligned) {
+            _ref6 = _.pairs(sentence.aligned)[0], corpus_aligned = _ref6[0], tokens = _ref6[1];
+            output.push({
+              tokens: tokens,
+              isLinked: true,
+              corpus: corpus_aligned,
+              _color: sentence._color
+            });
+          }
+          prevCorpus = id;
         }
-      }
-      while (incr < sentence.tokens.length) {
-        if (__indexOf.call(((_ref2 = sentence.tokens[incr++].structs) != null ? _ref2.close : void 0) || [], "sentence") >= 0) {
-          span[1] = incr;
-          break;
+        return output;
+      };
+      findMatchSentence = function(sentence) {
+        var decr, end, incr, span, start, _ref, _ref1, _ref2;
+        span = [];
+        _ref = sentence.match, start = _ref.start, end = _ref.end;
+        decr = start;
+        incr = end;
+        while (decr >= 0) {
+          if (__indexOf.call(((_ref1 = sentence.tokens[decr--].structs) != null ? _ref1.open : void 0) || [], "sentence") >= 0) {
+            span[0] = decr;
+            break;
+          }
         }
-      }
-      return span;
+        while (incr < sentence.tokens.length) {
+          if (__indexOf.call(((_ref2 = sentence.tokens[incr++].structs) != null ? _ref2.close : void 0) || [], "sentence") >= 0) {
+            span[1] = incr;
+            break;
+          }
+        }
+        return span;
+      };
+      s.kwic = [];
+      s.contextKwic = [];
+      s.setContextData = function(data) {
+        return s.contextKwic = massageData(data.kwic);
+      };
+      s.setKwicData = function(data) {
+        return s.kwic = massageData(data.kwic);
+      };
+      c.log("selectionManager");
+      s.selectionManager = new util.SelectionManager();
+      s.selectLeft = function(sentence) {
+        if (!sentence.match) {
+          return;
+        }
+        return sentence.tokens.slice(0, sentence.match.start);
+      };
+      s.selectMatch = function(sentence) {
+        var from;
+        if (!sentence.match) {
+          return;
+        }
+        from = sentence.match.start;
+        return sentence.tokens.slice(from, sentence.match.end);
+      };
+      s.selectRight = function(sentence) {
+        var from, len;
+        if (!sentence.match) {
+          return;
+        }
+        from = sentence.match.end;
+        len = sentence.tokens.length;
+        return sentence.tokens.slice(from, len);
+      };
+    }
+
+    return KwicCtrl;
+
+  })());
+
+  korpApp.controller("ExampleCtrl", ExampleCtrl = (function(_super) {
+    __extends(ExampleCtrl, _super);
+
+    ExampleCtrl.$inject = ['$scope', "utils", "$location"];
+
+    function ExampleCtrl(scope, utils, $location) {
+      var s;
+      this.scope = scope;
+      ExampleCtrl.__super__.constructor.call(this, this.scope, utils, $location);
+      s = this.scope;
+      s.pageChange = function($event, page) {
+        $event.stopPropagation();
+        s.instance.current_page = page;
+        return s.instance.makeRequest();
+      };
+    }
+
+    ExampleCtrl.prototype.initPage = function() {
+      this.scope.pager = 0;
+      return this.scope.page = 0;
     };
-    s.kwic = [];
-    s.contextKwic = [];
-    s.setContextData = function(data) {
-      return s.contextKwic = massageData(data.kwic);
-    };
-    s.setKwicData = function(data) {
-      return s.kwic = massageData(data.kwic);
-    };
-    c.log("selectionManager");
-    s.selectionManager = new util.SelectionManager();
-    s.selectLeft = function(sentence) {
-      if (!sentence.match) {
-        return;
-      }
-      return sentence.tokens.slice(0, sentence.match.start);
-    };
-    s.selectMatch = function(sentence) {
-      var from;
-      if (!sentence.match) {
-        return;
-      }
-      from = sentence.match.start;
-      return sentence.tokens.slice(from, sentence.match.end);
-    };
-    return s.selectRight = function(sentence) {
-      var from, len;
-      if (!sentence.match) {
-        return;
-      }
-      from = sentence.match.end;
-      len = sentence.tokens.length;
-      return sentence.tokens.slice(from, len);
-    };
-  });
+
+    ExampleCtrl.prototype.setupHash = function() {};
+
+    return ExampleCtrl;
+
+  })(KwicCtrl));
 
   korpApp.controller("StatsResultCtrl", function($scope, utils, $location, backend, searches, $rootScope) {
     var s;

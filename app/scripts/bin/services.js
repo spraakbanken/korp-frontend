@@ -188,9 +188,9 @@
         });
       }
 
-      Searches.prototype.kwicRequest = function(cqp) {
+      Searches.prototype.kwicRequest = function(cqp, isPaging) {
         c.log("kwicRequest", cqp);
-        return kwicResults.makeRequest(cqp);
+        return kwicResults.makeRequest(cqp, isPaging);
       };
 
       Searches.prototype.kwicSearch = function(cqp) {
@@ -260,7 +260,7 @@
     searches = new Searches();
     $rootScope.$watchGroup(["_loc.search().search", "_loc.search().page"], (function(_this) {
       return function(newValues, oldValues) {
-        var pageChanged, searchChanged, searchExpr, type, value, _ref;
+        var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
         c.log("searches service watch", $location.search().search);
         searchExpr = $location.search().search;
         if (!searchExpr) {
@@ -268,24 +268,36 @@
         }
         _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
         value = value.join("|");
+        newValues[1] = Number(newValues[1]) || 0;
+        oldValues[1] = Number(oldValues[1]) || 0;
         c.log("newValues", newValues);
         c.log("oldValues", oldValues);
-        pageChanged = newValues[1] !== oldValues[1];
-        searchChanged = newValues[0] !== oldValues[0];
+        if (_.isEqual(newValues, oldValues)) {
+          pageChanged = false;
+          searchChanged = true;
+        } else {
+          pageChanged = newValues[1] !== oldValues[1];
+          searchChanged = newValues[0] !== oldValues[0];
+        }
         c.log("searchChanged", searchChanged);
         c.log("pageChanged", pageChanged);
+        pageOnly = pageChanged && !searchChanged;
         view.updateSearchHistory(value, $location.absUrl());
         return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
           switch (type) {
             case "word":
               return searches.activeSearch = {
                 type: type,
-                val: value
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
               };
             case "lemgram":
               return searches.activeSearch = {
                 type: type,
-                val: value
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
               };
             case "saldo":
               return extendedSearch.setOneToken("saldo", value);
@@ -296,7 +308,9 @@
               }
               searches.activeSearch = {
                 type: type,
-                val: value
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
               };
               return searches.kwicSearch(value);
           }

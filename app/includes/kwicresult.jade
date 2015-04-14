@@ -17,17 +17,17 @@
               ng-click='hitspictureClick(corpus.page, corpus)'
               tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               tooltip-placement='{{$last? "left":"top"}}')
-.pager-wrapper
-  pagination(total-items="hits", ng-if='hits'
-    ng-model="pager", 
-    ng-click="pageChange(pager)"
-    max-size="15", 
-    items-per-page="::$root._searchOpts.hits_per_page", 
-    previous-text="‹", next-text="›", first-text="«", last-text="»"
-    boundary-links="true", rotate="false", num-pages="$parent.numPages") 
-  .page_input.inline_block
-    span {{'goto_page' | loc}} 
-    input(ng-model="$parent.gotoPage", ng-keyup="onPageInput($event, gotoPage)") 
+kwic-pager
+  //- pagination(total-items="hits", ng-if='hits'
+  //-   ng-model="pager", 
+  //-   ng-click="pageChange(pager)"
+  //-   max-size="15", 
+  //-   items-per-page="::$root._searchOpts.hits_per_page", 
+  //-   previous-text="‹", next-text="›", first-text="«", last-text="»"
+  //-   boundary-links="true", rotate="false", num-pages="$parent.numPages") 
+  //- .page_input
+  //-   span {{'goto_page' | loc}} 
+  //-   input(ng-model="$parent.gotoPage", ng-keyup="onPageInput($event, gotoPage)") 
       
 
 //- input(type="text", ng-model="page", ng-change="setPage($event, page - 1)", ngModelOptions="{ updateOn: 'blur'}")
@@ -64,3 +64,4 @@ span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'sho
         | {{sentence.newCorpus}}
         span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
+kwic-pager

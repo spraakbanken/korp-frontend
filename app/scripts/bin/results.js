@@ -17,6 +17,7 @@
     BaseResults.prototype.onProgress = function(progressObj) {
       safeApply(this.s, (function(_this) {
         return function() {
+          c.log("apply progress");
           return _this.s.hits_display = util.prettyNumbers(progressObj["total_results"]);
         };
       })(this));
@@ -203,7 +204,6 @@
 
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
-      c.log("event", isSpecialKeyDown || $("input, textarea, select").is(":focus"), !this.$result.is(":visible"));
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
       if (isSpecialKeyDown || $("input, textarea, select").is(":focus") || !this.$result.is(":visible")) {
         return;
@@ -392,7 +392,7 @@
       });
     };
 
-    KWICResults.prototype.buildQueryOptions = function(cqp) {
+    KWICResults.prototype.buildQueryOptions = function(cqp, isPaging) {
       var getSortParams, opts;
       c.log("buildQueryOptions", cqp);
       opts = {};
@@ -426,25 +426,30 @@
         cqp: cqp || this.proxy.prevCQP,
         queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
         context: this.isReadingMode() || currentMode === "parallel" ? settings.corpusListing.getContextQueryString() : void 0,
-        within: search().within ? settings.corpusListing.getWithinQueryString() : void 0
+        within: search().within ? settings.corpusListing.getWithinQueryString() : void 0,
+        incremental: !isPaging && $.support.ajaxProgress
       };
       _.extend(opts.ajaxParams, getSortParams());
       return opts;
     };
 
-    KWICResults.prototype.makeRequest = function(cqp) {
-      var isReading, req;
+    KWICResults.prototype.makeRequest = function(cqp, isPaging) {
+      var isReading, params, progressCallback, req;
       c.log("kwicResults.makeRequest");
       this.showPreloader();
       this.s.aborted = false;
-      this.s.gotFirstKwic = false;
+      if (!isPaging) {
+        this.s.gotFirstKwic = false;
+      }
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
       } else {
         this.ignoreAbort = false;
       }
       isReading = this.isReadingMode();
-      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), search().page || 0, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
+      params = this.buildQueryOptions(cqp, isPaging);
+      progressCallback = !params.incremental || isReading ? $.noop : $.proxy(this.onProgress, this);
+      req = this.getProxy().makeRequest(params, search().page || 0, progressCallback, (function(_this) {
         return function(data) {
           return _this.renderResult(data);
         };
@@ -601,11 +606,11 @@
       c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
+      this.current_page = 0;
       if (this.s.$parent.queryParams) {
         this.makeRequest();
         this.onentry();
       }
-      this.current_page = 0;
       this.tabindex = (this.getResultTabs().length - 1) + this.s.$parent.$index;
     }
 
@@ -649,11 +654,11 @@
       return this.s.setupReadingWatch();
     };
 
-    ExampleResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      c.log("exampleresults.handlePaginationClick");
-      this.current_page = new_page_index;
-      this.makeRequest();
-      return false;
+    ExampleResults.prototype.renderCompleteResult = function(data) {
+      var curr;
+      curr = this.current_page;
+      ExampleResults.__super__.renderCompleteResult.call(this, data);
+      return this.current_page = curr;
     };
 
     return ExampleResults;

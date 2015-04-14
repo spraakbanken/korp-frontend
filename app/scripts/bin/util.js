@@ -467,7 +467,6 @@
         struct = _.map(struct, (function(_this) {
           return function(pair) {
             return _.filter(pair, function(item) {
-              c.log("item.lang", item.lang);
               return item.lang === _this.activeLangs[0];
             });
           };

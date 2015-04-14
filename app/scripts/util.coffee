@@ -325,7 +325,6 @@ class window.ParallelCorpusListing extends CorpusListing
         if onlyMain
             struct = _.map struct, (pair) =>
                 _.filter pair, (item) =>
-                    c.log "item.lang", item.lang
                     item.lang == @activeLangs[0]
 
 

@@ -145,16 +145,7 @@ class model.KWICProxy extends BaseProxy
         
 
         o = $.extend(
-            # cqp: $("body").scope().extendedCQP || search().cqp
             queryData: null
-            # ajaxParams: @prevAjaxParams
-            # success: (data, status, xhr) ->
-            #     self.popXhr xhr
-
-            # error: (data, status, xhr) ->
-            #     c.log "kwic error", data
-            #     self.popXhr xhr
-            #     kwicResults.hidePreloader()
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
@@ -168,10 +159,6 @@ class model.KWICProxy extends BaseProxy
                     kwicCallback progressObj["struct"]
         , options)
 
-        # @prevAjaxParams = o.ajaxParams
-
-        #       kwicResults.num_result = 0;
-        # defaults
         data =
             command: "query"
             # corpus: settings.corpusListing.stringifySelected()
@@ -179,7 +166,6 @@ class model.KWICProxy extends BaseProxy
             defaultwithin: _.keys(settings.defaultWithin)[0]
             show: []
             show_struct: []
-            incremental: $.support.ajaxProgress
             cache : true
 
         $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
@@ -194,9 +180,6 @@ class model.KWICProxy extends BaseProxy
                 $.each corpus.struct_attributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
-        # if $(".within_select").val() != settings.defaultWithin
-        #     data.within = settings.corpusListing.getWithinQueryString()
-        # data.show = _.uniq data.show
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show
@@ -223,11 +206,6 @@ class model.KWICProxy extends BaseProxy
         )
         @pendingRequests.push def
         return def
-
-# class model.ExamplesProxy extends model.KWICProxy
-#     constructor: ->
-#         super()
-#         @command = "relations_sentences"
 
 class model.LemgramProxy extends BaseProxy
     constructor: ->

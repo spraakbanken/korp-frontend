@@ -20,188 +20,216 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
 
 
 
-korpApp.controller "kwicCtrl", ($scope, utils, $location) ->
-    c.log "kwicCtrl init", $scope.$parent
-    s = $scope
-
-    s.active = true
-
-    s.onexit = () ->
-        c.log "onexit"
-        s.$root.sidebar_visible = false
-
-    punctArray = [",", ".", ";", ":", "!", "?", "..."]
-
-    c.log "$location.search().page", $location.search().page
-    s.pager = Number($location.search().page) + 1 or 1
-    s.page = s.pager - 1
-
-    s.pageChange = (page) ->
-        c.log "pageChange", arguments
-        s.page = page - 1
-
-    # don't do for exampleResults
-    utils.setupHash s, [
-        key : "page"
-        post_change : () ->
-            c.log "post_change", s.page
-            s.pager = s.page + 1
-        val_in : Number
-    ]
-
-    s.onPageInput = ($event, page) ->
-        if $event.keyCode == 13
-            s.pager = page
-            s.page = Number(page) - 1
-            s.gotoPage = null
-
-    readingChange = () ->
-        c.log "reading change"
-
-        if s.instance?.getProxy().pendingRequests.length
-            window.pending = s.instance.getProxy().pendingRequests
-            
-            $.when(s.instance.getProxy().pendingRequests...).then () ->
-                c.log "readingchange makeRequest"
-                s.instance.makeRequest()
-
-    s.setupReadingHash = () ->
-        utils.setupHash s, [
-            key : "reading_mode",
-            post_change : (isReading) =>
-                c.log "change reading mode", isReading
-                readingChange()
+korpApp.controller "kwicCtrl", class KwicCtrl
+    setupHash : () ->
+        # don't do for exampleResults
+        @utils.setupHash @scope, [
+            key : "page"
+            post_change : () =>
+                c.log "post_change", @scope.page
+                @scope.pager = (@scope.page or 0) + 1
+            val_in : Number
         ]
+    initPage : () ->
+        @scope.pager = Number(@location.search().page) + 1 or 1
+        @scope.page = @scope.pager - 1
 
-    s.setupReadingWatch = _.once () ->
-        c.log "setupReadingWatch"
-        init = true
-        s.$watch "reading_mode", () ->
-            if not init
-                readingChange()   
-            init = false
+    @$inject: ['$scope', "utils", "$location"] 
+    constructor: (@scope, @utils, @location) ->
+        s = @scope
+        $scope = @scope
+        c.log "kwicCtrl init", $scope.$parent
+        $location = @location
+
+        s.active = true
+
+        s.onexit = () ->
+            c.log "onexit"
+            s.$root.sidebar_visible = false
+
+        punctArray = [",", ".", ";", ":", "!", "?", "..."]
+
+        c.log "$location.search().page", $location.search().page
+        @initPage()
+
+        s.pageChange = ($event, page) ->
+            c.log "pageChange", arguments
+            $event.stopPropagation()
+            s.page = page - 1
+
+        @setupHash()
+        s.gotoPage = null
+        s.onPageInput = ($event, page, numPages) ->
+            if $event.keyCode == 13
+                c.log "page", page, numPages
+                if page > numPages then page = numPages
+                s.pager = page
+                s.page = Number(page) - 1
+                s.gotoPage = null
+                c.log "s.$id", s.$id
+
+        readingChange = () ->
+            c.log "reading change"
+
+            if s.instance?.getProxy().pendingRequests.length
+                window.pending = s.instance.getProxy().pendingRequests
+                
+                $.when(s.instance.getProxy().pendingRequests...).then () ->
+                    c.log "readingchange makeRequest"
+                    s.instance.makeRequest()
+
+        s.setupReadingHash = () =>
+            @utils.setupHash s, [
+                key : "reading_mode",
+                post_change : (isReading) =>
+                    c.log "change reading mode", isReading
+                    readingChange()
+            ]
+
+        s.setupReadingWatch = _.once () ->
+            c.log "setupReadingWatch"
+            init = true
+            s.$watch "reading_mode", () ->
+                if not init
+                    readingChange()   
+                init = false
 
 
 
-    s.toggleReading = () ->
-        s.reading_mode = not s.reading_mode
-        s.instance.centerScrollbar()
+        s.toggleReading = () ->
+            s.reading_mode = not s.reading_mode
+            s.instance.centerScrollbar()
 
-    s.hitspictureClick = (pageNumber) ->
-        c.log "pageNumber", pageNumber
-        s.page = Number(pageNumber)
+        s.hitspictureClick = (pageNumber) ->
+            c.log "pageNumber", pageNumber
+            s.page = Number(pageNumber)
 
-    massageData = (sentenceArray) ->
-        currentStruct = []
-        prevCorpus = ""
-        output = []
-        for sentence, i in sentenceArray
-            [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
+        massageData = (sentenceArray) ->
+            currentStruct = []
+            prevCorpus = ""
+            output = []
+            for sentence, i in sentenceArray
+                [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
+                {start, end} = sentence.match
+
+                for j in [0...sentence.tokens.length]
+                    wd = sentence.tokens[j]
+                    if start <= j < end
+                        _.extend wd, {_match : true}
+                    if matchSentenceStart < j < matchSentenceEnd
+                        _.extend wd, {_matchSentence : true}
+                    if wd.word in punctArray
+                        _.extend wd, {_punct : true}
+                    if wd.structs?.open
+                        wd._open = wd.structs.open
+                        currentStruct = [].concat(currentStruct, wd.structs.open)
+                    else if wd.structs?.close
+                        wd._close = wd.structs.close
+                        currentStruct = _.without currentStruct, wd.structs.close...
+
+
+                    _.extend wd, {_struct : currentStruct} if currentStruct.length
+
+                
+                if currentMode == "parallel"
+                    mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
+                    linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
+                else
+                    mainCorpusId = sentence.corpus.toLowerCase()
+
+                id = (linkCorpusId or mainCorpusId)
+
+                if prevCorpus != id
+                    corpus = settings.corpora[id]
+                    newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
+                    output.push newSent
+
+                if i % 2 == 0
+                    sentence._color = settings.primaryColor
+                else
+                    sentence._color = settings.primaryLight
+
+                sentence.corpus = mainCorpusId
+
+                output.push(sentence)
+                if sentence.aligned
+                    [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
+                    output.push
+                        tokens : tokens
+                        isLinked : true
+                        corpus : corpus_aligned
+                        _color : sentence._color
+
+
+                prevCorpus = id
+
+                # return sentence
+            return output
+
+        findMatchSentence = (sentence) ->
+            span = []
             {start, end} = sentence.match
+            decr = start
+            incr = end
+            while decr >= 0
+                if "sentence" in (sentence.tokens[decr--].structs?.open or [])
+                    span[0] = decr
+                    break
+            while incr < sentence.tokens.length
+                if "sentence" in (sentence.tokens[incr++].structs?.close or [])
+                    span[1] = incr
+                    break
 
-            for j in [0...sentence.tokens.length]
-                wd = sentence.tokens[j]
-                if start <= j < end
-                    _.extend wd, {_match : true}
-                if matchSentenceStart < j < matchSentenceEnd
-                    _.extend wd, {_matchSentence : true}
-                if wd.word in punctArray
-                    _.extend wd, {_punct : true}
-                if wd.structs?.open
-                    wd._open = wd.structs.open
-                    currentStruct = [].concat(currentStruct, wd.structs.open)
-                else if wd.structs?.close
-                    wd._close = wd.structs.close
-                    currentStruct = _.without currentStruct, wd.structs.close...
-
-
-                _.extend wd, {_struct : currentStruct} if currentStruct.length
-
-            
-            if currentMode == "parallel"
-                mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
-                linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
-            else
-                mainCorpusId = sentence.corpus.toLowerCase()
-
-            id = (linkCorpusId or mainCorpusId)
-
-            if prevCorpus != id
-                corpus = settings.corpora[id]
-                newSent = {newCorpus : corpus.title, noContext : _.keys(corpus.context).length == 1}
-                output.push newSent
-
-            if i % 2 == 0
-                sentence._color = settings.primaryColor
-            else
-                sentence._color = settings.primaryLight
-
-            sentence.corpus = mainCorpusId
-
-            output.push(sentence)
-            if sentence.aligned
-                [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
-                output.push
-                    tokens : tokens
-                    isLinked : true
-                    corpus : corpus_aligned
-                    _color : sentence._color
-
-
-            prevCorpus = id
-
-            # return sentence
-        return output
-
-    findMatchSentence = (sentence) ->
-        span = []
-        {start, end} = sentence.match
-        decr = start
-        incr = end
-        while decr >= 0
-            if "sentence" in (sentence.tokens[decr--].structs?.open or [])
-                span[0] = decr
-                break
-        while incr < sentence.tokens.length
-            if "sentence" in (sentence.tokens[incr++].structs?.close or [])
-                span[1] = incr
-                break
-
-        return span
+            return span
 
 
 
 
 
-    s.kwic = []
-    s.contextKwic = []
-    s.setContextData = (data) ->
-        s.contextKwic = massageData data.kwic
+        s.kwic = []
+        s.contextKwic = []
+        s.setContextData = (data) ->
+            s.contextKwic = massageData data.kwic
 
-    s.setKwicData = (data) ->
-        s.kwic = massageData(data.kwic)
+        s.setKwicData = (data) ->
+            s.kwic = massageData(data.kwic)
 
-    c.log "selectionManager"
-    s.selectionManager = new util.SelectionManager()
+        c.log "selectionManager"
+        s.selectionManager = new util.SelectionManager()
 
-    s.selectLeft = (sentence) ->
-        if not sentence.match then return
-        # c.log "left", sentence.tokens.slice 0, sentence.match.start
-        sentence.tokens.slice 0, sentence.match.start
+        s.selectLeft = (sentence) ->
+            if not sentence.match then return
+            # c.log "left", sentence.tokens.slice 0, sentence.match.start
+            sentence.tokens.slice 0, sentence.match.start
 
-    s.selectMatch = (sentence) ->
-        if not sentence.match then return
-        from = sentence.match.start
-        sentence.tokens.slice from, sentence.match.end
+        s.selectMatch = (sentence) ->
+            if not sentence.match then return
+            from = sentence.match.start
+            sentence.tokens.slice from, sentence.match.end
 
-    s.selectRight = (sentence) ->
-        if not sentence.match then return
-        from = sentence.match.end
-        len = sentence.tokens.length
-        sentence.tokens.slice from, len
+        s.selectRight = (sentence) ->
+            if not sentence.match then return
+            from = sentence.match.end
+            len = sentence.tokens.length
+            sentence.tokens.slice from, len
 
 
+korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
+    @$inject: ['$scope', "utils", "$location"] 
+    constructor: (@scope, utils, $location) ->
+        super(@scope, utils, $location)
+        s = @scope
 
+        s.pageChange = ($event, page) ->
+            $event.stopPropagation()
+            s.instance.current_page = page
+            s.instance.makeRequest()
+
+
+    initPage : () ->
+        @scope.pager = 0
+        @scope.page = 0
+    setupHash : () ->
 
 korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
     s = $scope

@@ -1,9 +1,9 @@
-tab(active="active", ng-controller='kwicCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
+tab(active="active", ng-controller='ExampleCtrl', ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
   tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
     span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
-  div(ng-class="{reading_mode : reading_mode}", constr='ExampleResults' )
+  .results-kwic(ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
 tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
   tab-heading(ng-class="{not_loading: progress > 99}")
