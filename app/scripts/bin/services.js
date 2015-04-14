@@ -56,6 +56,9 @@
                 val = null;
               }
               $location.search(obj.key, val || null);
+              if (obj.key === "page") {
+                c.log("post change", watch, val);
+              }
               return typeof obj.post_change === "function" ? obj.post_change(val) : void 0;
             };
           })(obj, watch)));

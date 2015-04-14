@@ -22,17 +22,19 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
 
 korpApp.controller "kwicCtrl", class KwicCtrl
     setupHash : () ->
-        # don't do for exampleResults
         @utils.setupHash @scope, [
             key : "page"
             post_change : () =>
                 c.log "post_change", @scope.page
-                @scope.pager = (@scope.page or 0) + 1
+                @scope.pageObj.pager = (@scope.page or 0) + 1
             val_in : Number
         ]
     initPage : () ->
-        @scope.pager = Number(@location.search().page) + 1 or 1
-        @scope.page = @scope.pager - 1
+        # @scope.pager = Number(@location.search().page) + 1 or 1
+        @scope.pageObj = 
+            pager: Number(@location.search().page) + 1 or 1
+        @scope.page = @scope.pageObj.pager - 1
+
 
     @$inject: ['$scope', "utils", "$location"] 
     constructor: (@scope, @utils, @location) ->
@@ -52,10 +54,14 @@ korpApp.controller "kwicCtrl", class KwicCtrl
         c.log "$location.search().page", $location.search().page
         @initPage()
 
+
+
         s.pageChange = ($event, page) ->
             c.log "pageChange", arguments
             $event.stopPropagation()
             s.page = page - 1
+
+
 
         @setupHash()
         s.gotoPage = null
@@ -63,7 +69,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
             if $event.keyCode == 13
                 c.log "page", page, numPages
                 if page > numPages then page = numPages
-                s.pager = page
+                s.pageObj.pager = page
                 s.page = Number(page) - 1
                 s.gotoPage = null
                 c.log "s.$id", s.$id
@@ -227,7 +233,8 @@ korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
 
 
     initPage : () ->
-        @scope.pager = 0
+        @scope.pageObj = 
+            pager : 0
         @scope.page = 0
     setupHash : () ->
 

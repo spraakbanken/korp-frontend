@@ -83,7 +83,7 @@
           return;
         }
         page = Number($location.search().page) || 0;
-        c.log("activesearch page", page);
+        c.log("activesearch", search);
         s.relatedObj = null;
         if (search.type === "word") {
           s.placeholder = null;

@@ -213,7 +213,7 @@
           safeApply(this.s, (function(_this) {
             return function() {
               _this.s.$parent.page++;
-              return _this.s.$parent.pager = _this.s.$parent.page + 1;
+              return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
             };
           })(this));
           return false;
@@ -221,7 +221,7 @@
           safeApply(this.s, (function(_this) {
             return function() {
               _this.s.$parent.page--;
-              return _this.s.$parent.pager = _this.s.$parent.page + 1;
+              return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
             };
           })(this));
           return false;
@@ -252,7 +252,6 @@
       var items_per_page, output;
       items_per_page = Number(this.s.$root._searchOpts.hits_per_page) || settings.hits_per_page_default;
       page = Number(page);
-      c.log("items_per_page", items_per_page, page * items_per_page);
       output = {};
       output.start = (page || 0) * items_per_page;
       output.end = (output.start + items_per_page) - 1;
@@ -328,7 +327,6 @@
     };
 
     KWICResults.prototype.showNoResults = function() {
-      this.$result.find(".pager-wrapper").empty();
       this.hidePreloader();
       this.$result.addClass("zero_results").click();
       return this.$result.find(".hits_picture").html("");
@@ -434,10 +432,11 @@
     };
 
     KWICResults.prototype.makeRequest = function(cqp, isPaging) {
-      var isReading, params, progressCallback, req;
+      var isReading, page, params, progressCallback, req;
       c.log("kwicResults.makeRequest");
       this.showPreloader();
       this.s.aborted = false;
+      page = page = Number(search().page) || 0;
       if (!isPaging) {
         this.s.gotFirstKwic = false;
       }
@@ -449,7 +448,7 @@
       isReading = this.isReadingMode();
       params = this.buildQueryOptions(cqp, isPaging);
       progressCallback = !params.incremental || isReading ? $.noop : $.proxy(this.onProgress, this);
-      req = this.getProxy().makeRequest(params, search().page || 0, progressCallback, (function(_this) {
+      req = this.getProxy().makeRequest(params, page, progressCallback, (function(_this) {
         return function(data) {
           return _this.renderResult(data);
         };

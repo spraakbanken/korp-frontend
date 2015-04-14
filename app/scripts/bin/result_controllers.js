@@ -19,7 +19,7 @@
           post_change: (function(_this) {
             return function() {
               c.log("post_change", _this.scope.page);
-              return _this.scope.pager = (_this.scope.page || 0) + 1;
+              return _this.scope.pageObj.pager = (_this.scope.page || 0) + 1;
             };
           })(this),
           val_in: Number
@@ -28,8 +28,10 @@
     };
 
     KwicCtrl.prototype.initPage = function() {
-      this.scope.pager = Number(this.location.search().page) + 1 || 1;
-      return this.scope.page = this.scope.pager - 1;
+      this.scope.pageObj = {
+        pager: Number(this.location.search().page) + 1 || 1
+      };
+      return this.scope.page = this.scope.pageObj.pager - 1;
     };
 
     KwicCtrl.$inject = ['$scope', "utils", "$location"];
@@ -64,7 +66,7 @@
           if (page > numPages) {
             page = numPages;
           }
-          s.pager = page;
+          s.pageObj.pager = page;
           s.page = Number(page) - 1;
           s.gotoPage = null;
           return c.log("s.$id", s.$id);
@@ -264,7 +266,9 @@
     }
 
     ExampleCtrl.prototype.initPage = function() {
-      this.scope.pager = 0;
+      this.scope.pageObj = {
+        pager: 0
+      };
       return this.scope.page = 0;
     };
 

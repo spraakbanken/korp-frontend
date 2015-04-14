@@ -27,7 +27,7 @@ korpApp.factory "utils", ($location) ->
                 val = (obj.val_in or _.identity)(val)
                 # c.log "obj.val_in", obj.val_in
                 
-
+                # if obj.key == "page" then c.log "page watch", val
                 if "scope_name" of obj
                     scope[obj.scope_name] = val
                 else if "scope_func" of obj
@@ -42,13 +42,14 @@ korpApp.factory "utils", ($location) ->
 
         for obj in config
             watch = obj.expr or obj.scope_name or obj.key
+            # c.log "watch", watch
             scope.$watch watch, do (obj, watch) ->
                 (val) ->
                     # c.log "before val", scope.$eval watch
                     val = (obj.val_out or _.identity)(val)
                     if val == obj.default then val = null
                     $location.search obj.key, val or null
-                    # c.log "post change", watch, val
+                    if obj.key == "page" then c.log "post change", watch, val
                     obj.post_change?(val)
 
 
@@ -174,6 +175,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
         
         kwicSearch : (cqp) ->
             # simpleSearch.resetView()
+            # kwicResults.@            
             @kwicRequest cqp
             statsResults.makeRequest cqp
 

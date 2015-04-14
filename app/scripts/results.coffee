@@ -160,8 +160,6 @@ class view.KWICResults extends BaseResults
 
     resetView: ->
         super()
-        # @$result.find(".results_table,.pager-wrapper").empty()
-        # @$result.find(".pager-wrapper").empty()
 
     getProxy: ->
         # return @readingProxy if @isReadingMode()
@@ -197,12 +195,12 @@ class view.KWICResults extends BaseResults
             when 78 # n
                 safeApply @s, =>
                     @s.$parent.page++
-                    @s.$parent.pager = @s.$parent.page + 1
+                    @s.$parent.pageObj.pager = @s.$parent.page + 1
                 return false
             when 70 # f
                 safeApply @s, =>
                     @s.$parent.page--
-                    @s.$parent.pager = @s.$parent.page + 1
+                    @s.$parent.pageObj.pager = @s.$parent.page + 1
                 return false
         return unless @selectionManager.hasSelected()
         switch event.which
@@ -221,7 +219,6 @@ class view.KWICResults extends BaseResults
     getPageInterval: (page) ->
         items_per_page = Number(@s.$root._searchOpts.hits_per_page) or settings.hits_per_page_default
         page = Number(page)
-        c.log "items_per_page", items_per_page, page * items_per_page
         output = {}
         output.start = (page or 0) * items_per_page
         output.end = (output.start + items_per_page) - 1
@@ -287,7 +284,7 @@ class view.KWICResults extends BaseResults
 
     showNoResults: ->
         # @$result.find(".results_table").empty()
-        @$result.find(".pager-wrapper").empty()
+        # @$result.find(".pager-wrapper").empty()
         @hidePreloader()
         # @$result.find(".num-result").html 0
         @$result.addClass("zero_results").click()
@@ -365,6 +362,7 @@ class view.KWICResults extends BaseResults
         c.log "kwicResults.makeRequest"
         @showPreloader()
         @s.aborted = false
+        page = page = Number(search().page) or 0
         if not isPaging
             @s.gotFirstKwic = false
 
@@ -378,7 +376,7 @@ class view.KWICResults extends BaseResults
         params = @buildQueryOptions(cqp, isPaging)
         progressCallback = if (not params.incremental or isReading) then $.noop else $.proxy(@onProgress, this)
         req = @getProxy().makeRequest params,
-                            search().page or 0,
+                            page,
                             progressCallback,
                             (data) => 
                                 @renderResult data
@@ -396,11 +394,6 @@ class view.KWICResults extends BaseResults
                     @s.aborted = true
 
         
-        # req.always () =>
-        #     c.log "req always"
-        #     safeApply @s, () =>
-        #         @hidePreloader()
-
 
     getActiveData : () ->
         if @isReadingMode()
@@ -408,8 +401,6 @@ class view.KWICResults extends BaseResults
         else
             @s.kwic
 
-    # setPage: (page) ->
-    #     @$result.find(".pager-wrapper").trigger "setPage", [page]
 
     centerScrollbar: ->
         m = @$result.find(".match:first")
