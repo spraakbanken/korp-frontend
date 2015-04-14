@@ -11,6 +11,16 @@ onmessage = function(e) {
     var allcorpora = e.data.corpora;
     var allrows = e.data.allrows;
     var len = allrows.length;
+    var loc = e.data.loc
+
+    var fmt = function(valTup) {
+        if(typeof valTup[0] == "undefined" ) return ""
+        return "<span>" +
+                "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + 
+                "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
+          "<span>"
+
+    }
 
     if( groups ) { // WHEN AGGREGATED
 
@@ -26,21 +36,22 @@ onmessage = function(e) {
 
         for(var i = 0; i < len; i++) {
             var word = allrows[i];
+            var abs = valueGetter(total.absolute, word)
+            var rel = valueGetter(total.relative, word)
             var row = {
                 "id": "row" + i,
                 "hit_value": groups[word],
-                "total_value": [
-                    valueGetter(total.absolute, word),
-                    valueGetter(total.relative, word) 
-                ]
+                "total_value": [abs, rel],
+                "total_display" : fmt([abs, rel])
             }
             for(corpus in allcorpora) {
                 if(allcorpora.hasOwnProperty(corpus)) {
                     var obj = allcorpora[corpus];
-                    row[corpus + "_value"] = [
-                        valueGetter(obj.absolute, word),
-                        valueGetter(obj.relative, word)
-                    ]
+                    var abs = valueGetter(obj.absolute, word)
+                    var rel = valueGetter(obj.relative, word)
+                    
+                    row[corpus + "_value"] = [abs, rel]
+                    row[corpus + "_display"] = fmt([abs,rel])
                 }
             }
             dataset[i+1] = row;
@@ -53,12 +64,14 @@ onmessage = function(e) {
             var row = {
                 "id": "row" + i,
                 "hit_value": word,
-                "total_value": [total.absolute[word], total.relative[word]]
+                "total_value": [total.absolute[word], total.relative[word]],
+                "total_display": fmt([total.absolute[word], total.relative[word]])
             }
             for(var corpus in allcorpora) {
                 if(allcorpora.hasOwnProperty(corpus)) {
                     var obj = allcorpora[corpus];
                     row[corpus + "_value"] = [obj.absolute[word], obj.relative[word]];
+                    row[corpus + "_display"] = fmt([obj.absolute[word], obj.relative[word]]);
                 }
             }
             dataset[i+1] = row;

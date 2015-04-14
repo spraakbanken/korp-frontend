@@ -122,9 +122,9 @@
               address = _.template(attrs.externalSearch, {
                 val: x
               });
-              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>").click(function(event) {
+              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>")).click(function(event) {
                 return event.stopImmediatePropagation();
-              }));
+              });
             }
             if (attrs.internalSearch) {
               li.addClass("link").click(function() {
@@ -203,15 +203,16 @@
       return $.arrayToHTMLList(seq).outerHTML();
     },
     refreshContent: function(mode) {
-      var _this = this;
       if (mode === "lemgramWarning") {
-        return $.Deferred(function(dfd) {
-          return _this.element.load("markup/parse_warning.html", function() {
-            util.localize();
-            _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
-            return dfd.resolve();
-          });
-        }).promise();
+        return $.Deferred((function(_this) {
+          return function(dfd) {
+            return _this.element.load("markup/parse_warning.html", function() {
+              util.localize();
+              _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
+              return dfd.resolve();
+            });
+          };
+        })(this)).promise();
       } else {
         return this.element.removeClass("ui-state-highlight").addClass("kwic_sidebar");
       }
@@ -228,17 +229,20 @@
       }
     },
     show: function(mode) {
-      var _this = this;
-      return $.when(this.element).pipe(function() {
-        return _this.refreshContent(mode);
-      }).done(function() {
-        _this.element.show("slide", {
-          direction: "right"
-        });
-        return $("#left-column").animate({
-          right: 265
-        }, null, null, function() {});
-      });
+      return $.when(this.element).pipe((function(_this) {
+        return function() {
+          return _this.refreshContent(mode);
+        };
+      })(this)).done((function(_this) {
+        return function() {
+          _this.element.show("slide", {
+            direction: "right"
+          });
+          return $("#left-column").animate({
+            right: 265
+          }, null, null, function() {});
+        };
+      })(this));
     },
     hide: function() {
       if ($("#left-column").css("right") === "0px") {
@@ -415,6 +419,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=widgets.js.map
-*/
+//# sourceMappingURL=widgets.js.map

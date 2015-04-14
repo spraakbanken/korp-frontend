@@ -425,14 +425,6 @@ class model.StatsProxy extends BaseProxy
                     return
                 minWidth = 100
                 columns = [
-
-                #     id: "chk"
-                #     name: "<input type='checkbox' class='include_all_chk'>"
-                #     field: "hit_chk"
-                #     sortable: false
-                #     formatter: () -> "<input type='checkbox' class='include_chk'>"
-                #     maxWidth : 50
-                # ,
                     id: "hit"
                     name: "stats_hit"
                     field: "hit_value"
@@ -464,68 +456,39 @@ class model.StatsProxy extends BaseProxy
                 $.each data.corpora, (corpus, obj) ->
                     totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative]
 
-                #valueGetter = (obj, word) ->
-                #    return obj[word]
-                #
-                #wordGetter = (word) ->
-                #    return word
-
                 wordArray = _.keys(data.total.absolute)
                 if reduceval in ["lex", "saldo", "baseform"]
                     groups = _.groupBy wordArray, (item) ->
                         item.replace(/:\d+/g, "")
 
-                    #combinedWordArray = _.keys groups
                     wordArray = _.keys groups
-
-                    #add = (a, b) -> a + b
-                    #    
-                    #valueGetter = (obj, word) ->
-                    #    _.reduce (_.map groups[word], (wd) -> obj[wd]), add
-                    #
-                    #wordGetter = (word) ->
-                    #    groups[word]
-
-                    # c.log "combined", wordArray.length, _.keys(combined).length, combined
-                    
 
                 sizeOfDataset = wordArray.length
                 dataset = new Array(sizeOfDataset + 1)
                 dataset[0] = totalRow
-                #dataset = [totalRow]
-                #c.log "combinedWordArray.len", combinedWordArray.length
-                #for word, i in (combinedWordArray or wordArray)
-                #    row =
-                #        id: "row" + i
-                #        hit_value: wordGetter word
-                #        total_value:
-                #            absolute: (valueGetter data.total.absolute, word)
-                #            relative: valueGetter data.total.relative, word
-                #
-                #    # $.each data.corpora, (corpus, obj) ->
-                #    for corpus, obj of data.corpora
-                #        row[corpus + "_value"] =
-                #            absolute: (valueGetter obj.absolute, word)
-                #            relative: (valueGetter obj.relative, word)
-                #    dataset[i+1] = row
-                #c.log "stats resolve"
                 statsWorker = new Worker "scripts/statistics_worker.js"
                 statsWorker.onmessage = (e) ->
                     c.log "Called back by the worker!\n"
                     c.log e
                     def.resolve [data, wordArray, columns, e.data]
 
-                statsWorker.postMessage({"total" : data.total, "dataset" : dataset, "allrows" : (wordArray), "corpora" : data.corpora, "groups" : groups});
+                statsWorker.postMessage {
+                    "total" : data.total
+                    "dataset" : dataset
+                    "allrows" : (wordArray)
+                    "corpora" : data.corpora
+                    "groups" : groups
+                    loc : {
+                        'sv' : "sv-SE"
+                        'en' : "gb-EN"
+                    }[$("body").scope().lang]
+                }
+
         return def.promise()
 
-
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
-        #return "" if not value.relative and not value.absolute
-        return "" if not value[0] and not value[1]
-        return """<span>
-                        <span class='relStat'>#{util.formatDecimalString(value[1].toFixed(1), true)}</span>
-                        <span class='absStat'>(#{util.prettyNumbers(String(value[0]))})</span>
-                  <span>"""
+        return dataContext[columnDef.id + "_display"]
+
 
 class model.AuthenticationProxy
     constructor: ->

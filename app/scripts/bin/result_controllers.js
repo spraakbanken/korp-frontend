@@ -35,14 +35,15 @@
       }
     };
     s.setupReadingHash = function() {
-      var _this = this;
       return utils.setupHash(s, [
         {
           key: "reading_mode",
-          post_change: function(isReading) {
-            c.log("change reading mode", isReading);
-            return readingChange();
-          }
+          post_change: (function(_this) {
+            return function(isReading) {
+              c.log("change reading mode", isReading);
+              return readingChange();
+            };
+          })(this)
         }
       ]);
     };
@@ -323,6 +324,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=result_controllers.js.map
-*/
+//# sourceMappingURL=result_controllers.js.map

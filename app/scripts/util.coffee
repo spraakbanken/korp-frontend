@@ -584,7 +584,8 @@ util.loadCorporaFolderRecursive = (first_level, folder) ->
 util.prettyNumbers = (numstring) ->
     regex = /(\d+)(\d{3})/
     outStrNum = numstring.toString()
-    outStrNum = outStrNum.replace(regex, "$1" + "<span rel=\"localize[util_numbergroupseparator]\">" + util.getLocaleString("util_numbergroupseparator") + "</span>" + "$2")  while regex.test(outStrNum)
+    outStrNum = outStrNum.replace(regex, "$1" + "<span rel=\"localize[util_numbergroupseparator]\">" + util.getLocaleString("util_numbergroupseparator") + "</span>" + "$2") while regex.test(outStrNum)
+
     outStrNum
 
 util.suffixedNumbers = (num) ->

@@ -1093,7 +1093,11 @@ class view.StatsResults extends BaseResults
             nRows = @gridData?.length or 2
             h = (nRows * 2) + 4
             h = Math.min h, 40
-            $("#myGrid:visible").height "#{h}.1em"
+            # $("#myGrid:visible").height "#{h}.1em"
+            
+            $("#myGrid:visible").height $("#myGrid .slick-viewport").height() + 40
+
+
             #@grid?.resizeCanvas()
             #@grid?.autosizeColumns()
             
@@ -1342,7 +1346,7 @@ class view.StatsResults extends BaseResults
         # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
         $(".slick-row:first input", @$result).click()
-        #$(window).trigger("resize")
+        $(window).trigger("resize")
 
         $.when(timeDeferred).then =>
             safeApply @s, () =>
