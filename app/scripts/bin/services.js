@@ -175,7 +175,8 @@
   });
 
   korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q) {
-    var Searches, searches;
+    var Searches, oldValues, searches,
+      _this = this;
     Searches = (function() {
       function Searches() {
         var def, timedef;
@@ -261,65 +262,70 @@
 
     })();
     searches = new Searches();
-    $rootScope.$watchGroup(["_loc.search().search", "_loc.search().page"], (function(_this) {
-      return function(newValues, oldValues) {
-        var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
-        c.log("searches service watch", $location.search().search);
-        searchExpr = $location.search().search;
-        if (!searchExpr) {
-          return;
+    oldValues = [];
+    $rootScope.$watchGroup([
+      (function() {
+        return $location.search().search;
+      }), "_loc.search().page"
+    ], function(newValues) {
+      var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
+      c.log("searches service watch", $location.search().search);
+      searchExpr = $location.search().search;
+      if (!searchExpr) {
+        return;
+      }
+      _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
+      value = value.join("|");
+      newValues[1] = Number(newValues[1]) || 0;
+      oldValues[1] = Number(oldValues[1]) || 0;
+      c.log("newValues", newValues);
+      c.log("oldValues", oldValues);
+      if (_.isEqual(newValues, oldValues)) {
+        pageChanged = false;
+        searchChanged = true;
+      } else {
+        pageChanged = newValues[1] !== oldValues[1];
+        searchChanged = newValues[0] !== oldValues[0];
+      }
+      pageOnly = pageChanged && !searchChanged;
+      view.updateSearchHistory(value, $location.absUrl());
+      return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
+        switch (type) {
+          case "word":
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            break;
+          case "lemgram":
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            break;
+          case "saldo":
+            extendedSearch.setOneToken("saldo", value);
+            break;
+          case "cqp":
+            c.log("cqp search", value);
+            if (!value) {
+              value = CQP.expandOperators($location.search().cqp);
+            }
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            searches.kwicSearch(value);
         }
-        _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
-        value = value.join("|");
-        newValues[1] = Number(newValues[1]) || 0;
-        oldValues[1] = Number(oldValues[1]) || 0;
-        c.log("newValues", newValues);
-        c.log("oldValues", oldValues);
-        if (_.isEqual(newValues, oldValues)) {
-          pageChanged = false;
-          searchChanged = true;
-        } else {
-          pageChanged = newValues[1] !== oldValues[1];
-          searchChanged = newValues[0] !== oldValues[0];
-        }
-        c.log("searchChanged", searchChanged);
-        c.log("pageChanged", pageChanged);
-        pageOnly = pageChanged && !searchChanged;
-        view.updateSearchHistory(value, $location.absUrl());
-        return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
-          switch (type) {
-            case "word":
-              return searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-            case "lemgram":
-              return searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-            case "saldo":
-              return extendedSearch.setOneToken("saldo", value);
-            case "cqp":
-              c.log("cqp search", value);
-              if (!value) {
-                value = CQP.expandOperators($location.search().cqp);
-              }
-              searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-              return searches.kwicSearch(value);
-          }
-        });
-      };
-    })(this));
+        return oldValues = [].concat(newValues);
+      });
+    });
     return searches;
   });
 
@@ -351,4 +357,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=services.js.map
+/*
+//@ sourceMappingURL=services.js.map
+*/

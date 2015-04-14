@@ -13,4 +13,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=cqp_parser.js.map
+/*
+//@ sourceMappingURL=cqp_parser.js.map
+*/

@@ -35,4 +35,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=corpuslisting.js.map
+/*
+//@ sourceMappingURL=corpuslisting.js.map
+*/

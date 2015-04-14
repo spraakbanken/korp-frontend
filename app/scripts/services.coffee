@@ -240,8 +240,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
     # infoDef = searches.getInfoData()
 
 
-
-    $rootScope.$watchGroup ["_loc.search().search", "_loc.search().page"], (newValues, oldValues) =>
+    oldValues = []
+    $rootScope.$watchGroup [(() -> $location.search().search), "_loc.search().page"], (newValues) =>
         c.log "searches service watch", $location.search().search
 
         searchExpr = $location.search().search
@@ -252,18 +252,19 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
         newValues[1] = Number(newValues[1]) or 0
         oldValues[1] = Number(oldValues[1]) or 0
-
         c.log "newValues", newValues
         c.log "oldValues", oldValues
+
+        # weird workaround for bug that makes oldValues[0] undefined sometimes
+        # if not oldValues[0]?
+        #     oldValues[0] = newValues[0]
+
         if _.isEqual newValues, oldValues
             pageChanged = false
             searchChanged = true
         else
             pageChanged = newValues[1] != oldValues[1]
             searchChanged = newValues[0] != oldValues[0]
-        c.log "searchChanged", searchChanged
-        c.log "pageChanged", pageChanged
-
 
         pageOnly = pageChanged and not searchChanged
 
@@ -303,7 +304,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
 
                     searches.kwicSearch value
-
+            oldValues = [].concat newValues
 
 
     return searches

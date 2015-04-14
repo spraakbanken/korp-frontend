@@ -10,21 +10,9 @@ class BaseResults
         @$result.add(@$tab).addClass "not_loading"
 
     onProgress: (progressObj) ->
-        # c.log "onProgress", progressObj
-        # TODO: this item only exists in the kwic.
-        safeApply @s, () =>
-            c.log "apply progress"
-            @s.hits_display = util.prettyNumbers(progressObj["total_results"])
-        # @num_result.html util.prettyNumbers(progressObj["total_results"])
-        # unless isNaN(progressObj["stats"])
-            # try
-                # @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
-            # catch e
-                # c.log "onprogress error", e
-        # @$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
-
         safeApply @s, () =>
             @s.$parent.progress = Math.round(progressObj["stats"])
+            @s.hits_display = util.prettyNumbers(progressObj["total_results"])
 
 
 
@@ -359,12 +347,14 @@ class view.KWICResults extends BaseResults
 
 
     makeRequest: (cqp, isPaging) ->
-        c.log "kwicResults.makeRequest"
+        c.log "kwicResults.makeRequest", cqp, isPaging
         @showPreloader()
         @s.aborted = false
         page = page = Number(search().page) or 0
         if not isPaging
             @s.gotFirstKwic = false
+            c.log "reset pageObj"
+            @s.$parent.pageObj.pager = 0
 
         if @proxy.hasPending()
             @ignoreAbort = true
@@ -374,7 +364,8 @@ class view.KWICResults extends BaseResults
         isReading = @isReadingMode()
 
         params = @buildQueryOptions(cqp, isPaging)
-        progressCallback = if (not params.incremental or isReading) then $.noop else $.proxy(@onProgress, this)
+        progressCallback = if ((not params.ajaxParams.incremental)) then $.noop else $.proxy(@onProgress, this)
+        # c.log "params.incremental", params.ajaxParams.incremental, isReading
         req = @getProxy().makeRequest params,
                             page,
                             progressCallback,
@@ -503,7 +494,7 @@ class view.ExampleResults extends view.KWICResults
         items_per_page = parseInt(@optionWidget.find(".num_hits").val())
         opts = @s.$parent.queryParams
         @resetView()
-        opts.ajaxParams.incremental = opts.ajaxParams.command == "query"
+        opts.ajaxParams.incremental = false
 
         opts.ajaxParams.start = @current_page * items_per_page
         opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page)

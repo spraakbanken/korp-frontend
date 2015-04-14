@@ -197,8 +197,7 @@
                         </table>
                       </div>
                     </div>
-                    <kwic-pager>
-                    </kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -280,8 +279,7 @@
                         </table>
                       </div>
                     </div>
-                    <kwic-pager>
-                    </kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">

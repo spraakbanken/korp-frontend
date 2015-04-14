@@ -742,17 +742,6 @@ table {
   margin-bottom: 5px;
 }
 
-.result_controls {
-  position: relative;
-}
-
-.result_controls, .pager-wrapper {
-  margin-bottom: 8px;
-}
-
-.result_controls > * {
-  @include inline-block(bottom);
-}
 
 #results-stats {
   overflow-x : hidden;
@@ -1517,17 +1506,6 @@ label[for=lemgram_select]:before {
   @include border-radius(20px);
 }
 
-.pager-wrapper {
-  @include inline-block();
-
-  .ui-button-text-only:active {
-    background : inherit;
-    background-color : $primaryColor;
-  }
-}
-
-// .col_wrapper! {}
-
 .sidebar_url {
   white-space: nowrap;
 }
@@ -1975,7 +1953,20 @@ warning ~ * {
     margin-right: 5px;
     min-width: 125px;
   }
+  .pager-wrapper {
+    display: inline;
+  }
 
+  .result_controls {
+    position: relative;
+    > * {
+      @include inline-block(bottom);
+    }
+  }
+
+  .result_controls, .pager-wrapper {
+    margin-bottom: 8px;
+  }
   .pagination {
     height: auto;
     margin : 0;
@@ -2013,11 +2004,6 @@ warning ~ * {
       color: darkgrey;
       font-style: italic;
     }
-
-    .pager-wrapper {
-      // display : none;
-    }
-
   }
 }
 

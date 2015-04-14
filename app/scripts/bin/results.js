@@ -15,17 +15,11 @@
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
-      safeApply(this.s, (function(_this) {
-        return function() {
-          c.log("apply progress");
-          return _this.s.hits_display = util.prettyNumbers(progressObj["total_results"]);
-        };
-      })(this));
-      return safeApply(this.s, (function(_this) {
-        return function() {
-          return _this.s.$parent.progress = Math.round(progressObj["stats"]);
-        };
-      })(this));
+      var _this = this;
+      return safeApply(this.s, function() {
+        _this.s.$parent.progress = Math.round(progressObj["stats"]);
+        return _this.s.hits_display = util.prettyNumbers(progressObj["total_results"]);
+      });
     };
 
     BaseResults.prototype.abort = function() {
@@ -42,6 +36,7 @@
     };
 
     BaseResults.prototype.renderResult = function(data) {
+      var _this = this;
       this.$result.find(".error_msg").remove();
       if (this.$result.is(":visible")) {
         util.setJsonLink(this.proxy.prevRequest);
@@ -50,11 +45,9 @@
         this.resultError(data);
         return false;
       } else {
-        return safeApply(this.s, (function(_this) {
-          return function() {
-            return _this.hasData = true;
-          };
-        })(this));
+        return safeApply(this.s, function() {
+          return _this.hasData = true;
+        });
       }
     };
 
@@ -92,7 +85,8 @@
     __extends(KWICResults, _super);
 
     function KWICResults(tabSelector, resultSelector, scope) {
-      var self;
+      var self,
+        _this = this;
       self = this;
       this.prevCQP = null;
       KWICResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
@@ -104,23 +98,19 @@
       this.s = scope;
       this.selectionManager = scope.selectionManager;
       this.setupReadingHash();
-      this.$result.click((function(_this) {
-        return function() {
-          if (!_this.selectionManager.hasSelected()) {
-            return;
-          }
-          _this.selectionManager.deselect();
-          return safeApply(_this.s.$root, function(s) {
-            return s.$root.word_selected = null;
-          });
-        };
-      })(this));
+      this.$result.click(function() {
+        if (!_this.selectionManager.hasSelected()) {
+          return;
+        }
+        _this.selectionManager.deselect();
+        return safeApply(_this.s.$root, function(s) {
+          return s.$root.word_selected = null;
+        });
+      });
       $(document).keydown($.proxy(this.onKeydown, this));
-      this.$result.on("click", ".word", (function(_this) {
-        return function(event) {
-          return _this.onWordClick(event);
-        };
-      })(this));
+      this.$result.on("click", ".word", function(event) {
+        return _this.onWordClick(event);
+      });
     }
 
     KWICResults.prototype.setupReadingHash = function() {
@@ -187,14 +177,13 @@
     };
 
     KWICResults.prototype.onentry = function() {
+      var _this = this;
       c.log("onentry kwic");
       this.s.$root.sidebar_visible = true;
       this.$result.find(".token_selected").click();
-      _.defer((function(_this) {
-        return function() {
-          return _this.centerScrollbar();
-        };
-      })(this));
+      _.defer(function() {
+        return _this.centerScrollbar();
+      });
     };
 
     KWICResults.prototype.onexit = function() {
@@ -203,27 +192,24 @@
     };
 
     KWICResults.prototype.onKeydown = function(event) {
-      var isSpecialKeyDown, next;
+      var isSpecialKeyDown, next,
+        _this = this;
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
       if (isSpecialKeyDown || $("input, textarea, select").is(":focus") || !this.$result.is(":visible")) {
         return;
       }
       switch (event.which) {
         case 78:
-          safeApply(this.s, (function(_this) {
-            return function() {
-              _this.s.$parent.page++;
-              return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
-            };
-          })(this));
+          safeApply(this.s, function() {
+            _this.s.$parent.page++;
+            return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
+          });
           return false;
         case 70:
-          safeApply(this.s, (function(_this) {
-            return function() {
-              _this.s.$parent.page--;
-              return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
-            };
-          })(this));
+          safeApply(this.s, function() {
+            _this.s.$parent.page--;
+            return _this.s.$parent.pageObj.pager = _this.s.$parent.page + 1;
+          });
           return false;
       }
       if (!this.selectionManager.hasSelected()) {
@@ -259,15 +245,14 @@
     };
 
     KWICResults.prototype.renderCompleteResult = function(data) {
+      var _this = this;
       c.log("renderCompleteResult", data);
       this.current_page = search().page || 0;
-      safeApply(this.s, (function(_this) {
-        return function() {
-          _this.hidePreloader();
-          _this.s.hits = data.hits;
-          return _this.s.hits_display = util.prettyNumbers(data.hits);
-        };
-      })(this));
+      safeApply(this.s, function() {
+        _this.hidePreloader();
+        _this.s.hits = data.hits;
+        return _this.s.hits_display = util.prettyNumbers(data.hits);
+      });
       if (!data.hits) {
         c.log("no kwic results");
         this.showNoResults();
@@ -278,7 +263,8 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref,
+        _this = this;
       c.log("data", data);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -289,19 +275,17 @@
       }
       c.log("corpus_results");
       isReading = this.isReadingMode();
-      this.s.$apply((function(_this) {
-        return function($scope) {
-          c.log("apply kwic search data", data);
-          _this.s.gotFirstKwic = true;
-          if (isReading) {
-            $scope.setContextData(data);
-            _this.selectionManager.deselect();
-            return _this.s.$root.word_selected = null;
-          } else {
-            return $scope.setKwicData(data);
-          }
-        };
-      })(this));
+      this.s.$apply(function($scope) {
+        c.log("apply kwic search data", data);
+        _this.s.gotFirstKwic = true;
+        if (isReading) {
+          $scope.setContextData(data);
+          _this.selectionManager.deselect();
+          return _this.s.$root.word_selected = null;
+        } else {
+          return $scope.setKwicData(data);
+        }
+      });
       if (currentMode === "parallel" && !isReading) {
         scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
         _ref = $(".table_scrollarea > .kwic .linked_sentence");
@@ -333,7 +317,8 @@
     };
 
     KWICResults.prototype.renderHitsPicture = function(data) {
-      var index, items;
+      var index, items,
+        _this = this;
       items = _.map(data.corpus_order, function(obj) {
         return {
           "rid": obj,
@@ -346,12 +331,10 @@
         return item.abs > 0;
       });
       index = 0;
-      _.each(items, (function(_this) {
-        return function(obj) {
-          obj.page = Math.floor(index / _this.proxy.prevMisc.hitsPerPage);
-          return index += obj.abs;
-        };
-      })(this));
+      _.each(items, function(obj) {
+        obj.page = Math.floor(index / _this.proxy.prevMisc.hitsPerPage);
+        return index += obj.abs;
+      });
       return this.s.$apply(function($scope) {
         return $scope.hitsPictureData = items;
       });
@@ -432,13 +415,16 @@
     };
 
     KWICResults.prototype.makeRequest = function(cqp, isPaging) {
-      var isReading, page, params, progressCallback, req;
-      c.log("kwicResults.makeRequest");
+      var isReading, page, params, progressCallback, req,
+        _this = this;
+      c.log("kwicResults.makeRequest", cqp, isPaging);
       this.showPreloader();
       this.s.aborted = false;
       page = page = Number(search().page) || 0;
       if (!isPaging) {
         this.s.gotFirstKwic = false;
+        c.log("reset pageObj");
+        this.s.$parent.pageObj.pager = 0;
       }
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
@@ -447,33 +433,27 @@
       }
       isReading = this.isReadingMode();
       params = this.buildQueryOptions(cqp, isPaging);
-      progressCallback = !params.incremental || isReading ? $.noop : $.proxy(this.onProgress, this);
-      req = this.getProxy().makeRequest(params, page, progressCallback, (function(_this) {
-        return function(data) {
-          return _this.renderResult(data);
-        };
-      })(this));
-      req.success((function(_this) {
-        return function(data) {
-          _this.hidePreloader();
-          return _this.renderCompleteResult(data);
-        };
-      })(this));
-      return req.fail((function(_this) {
-        return function(jqXHR, status, errorThrown) {
-          c.log("kwic fail");
-          if (_this.ignoreAbort) {
-            c.log("stats ignoreabort");
-            return;
-          }
-          if (status === "abort") {
-            return safeApply(_this.s, function() {
-              _this.hidePreloader();
-              return _this.s.aborted = true;
-            });
-          }
-        };
-      })(this));
+      progressCallback = !params.ajaxParams.incremental ? $.noop : $.proxy(this.onProgress, this);
+      req = this.getProxy().makeRequest(params, page, progressCallback, function(data) {
+        return _this.renderResult(data);
+      });
+      req.success(function(data) {
+        _this.hidePreloader();
+        return _this.renderCompleteResult(data);
+      });
+      return req.fail(function(jqXHR, status, errorThrown) {
+        c.log("kwic fail");
+        if (_this.ignoreAbort) {
+          c.log("stats ignoreabort");
+          return;
+        }
+        if (status === "abort") {
+          return safeApply(_this.s, function() {
+            _this.hidePreloader();
+            return _this.s.aborted = true;
+          });
+        }
+      });
     };
 
     KWICResults.prototype.getActiveData = function() {
@@ -616,35 +596,33 @@
     ExampleResults.prototype.setupReadingHash = function() {};
 
     ExampleResults.prototype.makeRequest = function() {
-      var def, items_per_page, opts, prev, progress;
+      var def, items_per_page, opts, prev, progress,
+        _this = this;
       c.log("ExampleResults.makeRequest()", this.current_page);
       items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
       opts = this.s.$parent.queryParams;
       this.resetView();
-      opts.ajaxParams.incremental = opts.ajaxParams.command === "query";
+      opts.ajaxParams.incremental = false;
       opts.ajaxParams.start = this.current_page * items_per_page;
       opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
       prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
       _.extend(opts.ajaxParams, prev);
       this.showPreloader();
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
-      def = this.proxy.makeRequest(opts, null, progress, (function(_this) {
-        return function(data) {
-          c.log("first part done", data);
-          _this.renderResult(data, opts.cqp);
-          _this.renderCompleteResult(data);
-          safeApply(_this.s, function() {
-            return _this.hidePreloader();
-          });
-          return util.setJsonLink(_this.proxy.prevRequest);
-        };
-      })(this));
+      def = this.proxy.makeRequest(opts, null, progress, function(data) {
+        c.log("first part done", data);
+        _this.renderResult(data, opts.cqp);
+        _this.renderCompleteResult(data);
+        safeApply(_this.s, function() {
+          return _this.hidePreloader();
+        });
+        return util.setJsonLink(_this.proxy.prevRequest);
+      });
       return def.fail(function() {
-        return safeApply(this.s, (function(_this) {
-          return function() {
-            return _this.hidePreloader();
-          };
-        })(this));
+        var _this = this;
+        return safeApply(this.s, function() {
+          return _this.hidePreloader();
+        });
       });
     };
 
@@ -685,18 +663,18 @@
     }
 
     LemgramResults.prototype.resetView = function() {
+      var _this = this;
       LemgramResults.__super__.resetView.call(this);
       $(".content_target", this.$result).empty();
-      return safeApply(this.s, (function(_this) {
-        return function() {
-          _this.s.$parent.aborted = false;
-          return _this.s.$parent.no_hits = false;
-        };
-      })(this));
+      return safeApply(this.s, function() {
+        _this.s.$parent.aborted = false;
+        return _this.s.$parent.no_hits = false;
+      });
     };
 
     LemgramResults.prototype.makeRequest = function(word, type) {
-      var def;
+      var def,
+        _this = this;
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
       } else {
@@ -704,36 +682,30 @@
         this.resetView();
       }
       this.showPreloader();
-      def = this.proxy.makeRequest(word, type, (function(_this) {
-        return function() {
-          var args;
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return _this.onProgress.apply(_this, args);
-        };
-      })(this));
-      def.success((function(_this) {
-        return function(data) {
+      def = this.proxy.makeRequest(word, type, function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return _this.onProgress.apply(_this, args);
+      });
+      def.success(function(data) {
+        return safeApply(_this.s, function() {
+          return _this.renderResult(data, word);
+        });
+      });
+      return def.fail(function(jqXHR, status, errorThrown) {
+        c.log("def fail", status);
+        if (_this.ignoreAbort) {
+          c.log("lemgram ignoreabort");
+          return;
+        }
+        if (status === "abort") {
           return safeApply(_this.s, function() {
-            return _this.renderResult(data, word);
+            _this.hidePreloader();
+            c.log("aborted true", _this.s);
+            return _this.s.$parent.aborted = true;
           });
-        };
-      })(this));
-      return def.fail((function(_this) {
-        return function(jqXHR, status, errorThrown) {
-          c.log("def fail", status);
-          if (_this.ignoreAbort) {
-            c.log("lemgram ignoreabort");
-            return;
-          }
-          if (status === "abort") {
-            return safeApply(_this.s, function() {
-              _this.hidePreloader();
-              c.log("aborted true", _this.s);
-              return _this.s.$parent.aborted = true;
-            });
-          }
-        };
-      })(this));
+        }
+      });
     };
 
     LemgramResults.prototype.renderResult = function(data, query) {
@@ -792,7 +764,8 @@
     };
 
     LemgramResults.prototype.renderWordTables = function(word, data) {
-      var self, tagsetTrans, unique_words, wordlist;
+      var self, tagsetTrans, unique_words, wordlist,
+        _this = this;
       self = this;
       wordlist = $.map(data, function(item) {
         var output;
@@ -820,18 +793,16 @@
         this.showNoResults();
         return;
       }
-      $.each(unique_words, (function(_this) {
-        return function(i, _arg) {
-          var content, currentWd, pos;
-          currentWd = _arg[0], pos = _arg[1];
-          self.drawTable(currentWd, pos, data);
-          self.renderHeader(pos, false);
-          content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
-          return $(".tableContainer:last").prepend($("<div>", {
-            "class": "header"
-          }).html(content)).find(".hit .wordclass_suffix").hide();
-        };
-      })(this));
+      $.each(unique_words, function(i, _arg) {
+        var content, currentWd, pos;
+        currentWd = _arg[0], pos = _arg[1];
+        self.drawTable(currentWd, pos, data);
+        self.renderHeader(pos, false);
+        content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
+        return $(".tableContainer:last").prepend($("<div>", {
+          "class": "header"
+        }).html(content)).find(".hit .wordclass_suffix").hide();
+      });
       $(".lemgram_result .wordclass_suffix").hide();
       return this.hidePreloader();
     };
@@ -850,7 +821,8 @@
     };
 
     LemgramResults.prototype.drawTable = function(token, wordClass, data) {
-      var container, getRelType, inArray, orderArrays, tagsetTrans;
+      var container, getRelType, inArray, orderArrays, tagsetTrans,
+        _this = this;
       inArray = function(rel, orderList) {
         var i, type;
         i = _.findIndex(orderList, function(item) {
@@ -874,27 +846,25 @@
         return;
       }
       orderArrays = [[], [], []];
-      $.each(data, (function(_this) {
-        return function(index, item) {
-          return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
-            var list, rel, ret;
-            list = orderArrays[i];
-            rel = getRelType(item);
-            if (!rel) {
-              return;
-            }
-            ret = inArray(rel, rel_type_list);
-            if (ret.i === -1) {
-              return;
-            }
-            if (!list[ret.i]) {
-              list[ret.i] = [];
-            }
-            item.show_rel = ret.type;
-            return list[ret.i].push(item);
-          });
-        };
-      })(this));
+      $.each(data, function(index, item) {
+        return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
+          var list, rel, ret;
+          list = orderArrays[i];
+          rel = getRelType(item);
+          if (!rel) {
+            return;
+          }
+          ret = inArray(rel, rel_type_list);
+          if (ret.i === -1) {
+            return;
+          }
+          if (!list[ret.i]) {
+            list[ret.i] = [];
+          }
+          item.show_rel = ret.type;
+          return list[ret.i].push(item);
+        });
+      });
       $.each(orderArrays, function(i, unsortedList) {
         var toIndex;
         $.each(unsortedList, function(_, list) {
@@ -926,11 +896,9 @@
       c.log("orderArrays", orderArrays);
       $("#lemgramResultsTmpl").tmpl(orderArrays, {
         lemgram: token
-      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click((function(_this) {
-        return function(event) {
-          return _this.onClickExample(event);
-        };
-      })(this)).end().appendTo(container);
+      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click(function(event) {
+        return _this.onClickExample(event);
+      }).end().appendTo(container);
       return $("td:nth-child(2)", this.$result).each(function() {
         var $siblings, hasHomograph, label, prefix, siblingLemgrams;
         $siblings = $(this).parent().siblings().find("td:nth-child(2)");
@@ -1148,7 +1116,8 @@
     __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
-      var paper, self;
+      var paper, self,
+        _this = this;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
       this.gridData = null;
@@ -1180,84 +1149,76 @@
           return scope.$root.kwicTabs.push(opts);
         });
       });
-      $(window).resize(_.debounce((function(_this) {
-        return function() {
-          var h, nRows, _ref;
-          $("#myGrid:visible").width($(window).width() - 40);
-          nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
-          h = (nRows * 2) + 4;
-          h = Math.min(h, 40);
-          return $("#myGrid:visible").height($("#myGrid .slick-viewport").height() + 40);
-        };
-      })(this), 100));
-      $("#kindOfData,#kindOfFormat").change((function(_this) {
-        return function() {
-          $("#exportButton").hide();
-          return $("#generateExportButton").show();
-        };
-      })(this));
+      $(window).resize(_.debounce(function() {
+        var h, nRows, _ref;
+        $("#myGrid:visible").width($(window).width() - 40);
+        nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
+        h = (nRows * 2) + 4;
+        h = Math.min(h, 40);
+        return $("#myGrid:visible").height($("#myGrid .slick-viewport").height() + 40);
+      }, 100));
+      $("#kindOfData,#kindOfFormat").change(function() {
+        $("#exportButton").hide();
+        return $("#generateExportButton").show();
+      });
       $("#exportButton").hide();
-      $("#generateExportButton").unbind("click").click((function(_this) {
-        return function() {
-          $("#exportButton").show();
-          $("#generateExportButton").hide();
-          return _this.updateExportBlob();
-        };
-      })(this));
+      $("#generateExportButton").unbind("click").click(function() {
+        $("#exportButton").show();
+        $("#generateExportButton").hide();
+        return _this.updateExportBlob();
+      });
       if ($("html.msie7,html.msie8").length) {
         $("#showGraph").hide();
         return;
       }
-      $("#showGraph").on("click", (function(_this) {
-        return function() {
-          var activeCorpora, cell, chk, cqp, key, labelMapping, mainCQP, params, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
-          if ($("#showGraph").is(".disabled")) {
-            return;
+      $("#showGraph").on("click", function() {
+        var activeCorpora, cell, chk, cqp, key, labelMapping, mainCQP, params, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
+        if ($("#showGraph").is(".disabled")) {
+          return;
+        }
+        params = _this.proxy.prevParams;
+        reduceVal = params.groupby;
+        subExprs = [];
+        labelMapping = {};
+        showTotal = false;
+        mainCQP = params.cqp;
+        console.log("DOING GRAPH CHECKING");
+        _ref = _this.$result.find(".slick-cell > input:checked");
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          chk = _ref[_i];
+          cell = $(chk).parent();
+          cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
+          if (cqp === "undefined") {
+            showTotal = true;
+            continue;
           }
-          params = _this.proxy.prevParams;
-          reduceVal = params.groupby;
-          subExprs = [];
-          labelMapping = {};
-          showTotal = false;
-          mainCQP = params.cqp;
-          console.log("DOING GRAPH CHECKING");
-          _ref = _this.$result.find(".slick-cell > input:checked");
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            chk = _ref[_i];
-            cell = $(chk).parent();
-            cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
-            if (cqp === "undefined") {
-              showTotal = true;
-              continue;
-            }
-            subExprs.push(cqp);
-            labelMapping[cqp] = cell.next().text();
-          }
-          activeCorpora = _.flatten([
-            (function() {
-              var _ref1, _results;
-              _ref1 = this.savedData.corpora;
-              _results = [];
-              for (key in _ref1) {
-                val = _ref1[key];
-                if (val.sums.absolute) {
-                  _results.push(key);
-                }
+          subExprs.push(cqp);
+          labelMapping[cqp] = cell.next().text();
+        }
+        activeCorpora = _.flatten([
+          (function() {
+            var _ref1, _results;
+            _ref1 = this.savedData.corpora;
+            _results = [];
+            for (key in _ref1) {
+              val = _ref1[key];
+              if (val.sums.absolute) {
+                _results.push(key);
               }
-              return _results;
-            }).call(_this)
-          ]);
-          return _this.s.$apply(function() {
-            return _this.s.onGraphShow({
-              cqp: mainCQP,
-              subcqps: subExprs,
-              labelMapping: labelMapping,
-              showTotal: showTotal,
-              corpusListing: settings.corpusListing.subsetFactory(activeCorpora)
-            });
+            }
+            return _results;
+          }).call(_this)
+        ]);
+        return _this.s.$apply(function() {
+          return _this.s.onGraphShow({
+            cqp: mainCQP,
+            subcqps: subExprs,
+            labelMapping: labelMapping,
+            showTotal: showTotal,
+            corpusListing: settings.corpusListing.subsetFactory(activeCorpora)
           });
-        };
-      })(this));
+        });
+      });
       paper = new Raphael($(".graph_btn_icon", this.$result).get(0), 33, 24);
       paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z").attr({
         fill: "#666",
@@ -1329,7 +1290,8 @@
     };
 
     StatsResults.prototype.makeRequest = function(cqp) {
-      var withinArg;
+      var withinArg,
+        _this = this;
       c.log("statsrequest makerequest", cqp);
       if (currentMode === "parallel") {
         cqp = cqp.replace(/\:LINKED_CORPUS.*/, "");
@@ -1344,48 +1306,43 @@
       if (search().within) {
         withinArg = settings.corpusListing.getWithinQueryString();
       }
-      return this.proxy.makeRequest(cqp, ((function(_this) {
-        return function() {
-          var args;
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return _this.onProgress.apply(_this, args);
-        };
-      })(this)), withinArg).done((function(_this) {
-        return function(_arg) {
-          var columns, data, dataset, wordArray;
-          data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
-          c.log("dataset.length", dataset.length);
-          safeApply(_this.s, function() {
-            return _this.hidePreloader();
-          });
-          _this.savedData = data;
-          _this.savedWordArray = wordArray;
-          return _this.renderResult(columns, dataset);
-        };
-      })(this)).fail((function(_this) {
-        return function(textStatus, err) {
-          c.log("fail", arguments);
-          c.log("stats fail", _this.s.$parent.loading, _.map(_this.proxy.pendingRequests, function(item) {
-            return item.readyState;
-          }));
-          if (_this.ignoreAbort) {
-            c.log("stats ignoreabort");
-            return;
+      return this.proxy.makeRequest(cqp, (function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return _this.onProgress.apply(_this, args);
+      }), withinArg).done(function(_arg) {
+        var columns, data, dataset, wordArray;
+        data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
+        c.log("dataset.length", dataset.length);
+        safeApply(_this.s, function() {
+          return _this.hidePreloader();
+        });
+        _this.savedData = data;
+        _this.savedWordArray = wordArray;
+        return _this.renderResult(columns, dataset);
+      }).fail(function(textStatus, err) {
+        c.log("fail", arguments);
+        c.log("stats fail", _this.s.$parent.loading, _.map(_this.proxy.pendingRequests, function(item) {
+          return item.readyState;
+        }));
+        if (_this.ignoreAbort) {
+          c.log("stats ignoreabort");
+          return;
+        }
+        return safeApply(_this.s, function() {
+          _this.hidePreloader();
+          if (textStatus === "abort") {
+            return _this.s.aborted = true;
+          } else {
+            return _this.resultError(err);
           }
-          return safeApply(_this.s, function() {
-            _this.hidePreloader();
-            if (textStatus === "abort") {
-              return _this.s.aborted = true;
-            } else {
-              return _this.resultError(err);
-            }
-          });
-        };
-      })(this));
+        });
+      });
     };
 
     StatsResults.prototype.renderResult = function(columns, data) {
-      var checkboxSelector, grid, log, refreshHeaders, resultError, sortCol;
+      var checkboxSelector, grid, log, refreshHeaders, resultError, sortCol,
+        _this = this;
       refreshHeaders = function() {
         return $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each(function() {
           return $(this).localeKey($(this).text());
@@ -1398,11 +1355,9 @@
       }
       c.log("renderresults");
       if (data[0].total_value.absolute === 0) {
-        safeApply(this.s, (function(_this) {
-          return function() {
-            return _this.s.no_hits = true;
-          };
-        })(this));
+        safeApply(this.s, function() {
+          return _this.s.no_hits = true;
+        });
         return;
       }
       checkboxSelector = new Slick.CheckboxSelectColumn({
@@ -1455,18 +1410,14 @@
       refreshHeaders();
       $(".slick-row:first input", this.$result).click();
       $(window).trigger("resize");
-      $.when(timeDeferred).then((function(_this) {
-        return function() {
-          return safeApply(_this.s, function() {
-            return _this.updateGraphBtnState();
-          });
-        };
-      })(this));
-      return safeApply(this.s, (function(_this) {
-        return function() {
-          return _this.hidePreloader();
-        };
-      })(this));
+      $.when(timeDeferred).then(function() {
+        return safeApply(_this.s, function() {
+          return _this.updateGraphBtnState();
+        });
+      });
+      return safeApply(this.s, function() {
+        return _this.hidePreloader();
+      });
     };
 
     StatsResults.prototype.updateGraphBtnState = function() {
@@ -1504,49 +1455,48 @@
     __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector, scope) {
+      var _this = this;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.zoom = "year";
       this.granularity = this.zoom[0];
       this.proxy = new model.GraphProxy();
       this.makeRequest(this.s.data.cqp, this.s.data.subcqps, this.s.data.corpusListing, this.s.data.labelMapping, this.s.data.showTotal);
       c.log("adding chart listener", this.$result);
-      $(".chart", this.$result).on("click", (function(_this) {
-        return function(event) {
-          var cqp, end, m, n_tokens, opts, start, target, timecqp, val, _i, _results;
-          target = $(".chart", _this.$result);
-          val = $(".detail .x_label > span", target).data("val");
-          cqp = $(".detail .item.active > span", target).data("cqp");
-          c.log("chart click", cqp, target, _this.s.data.subcqps, _this.s.data.cqp);
-          if (cqp) {
-            m = moment(val * 1000);
-            start = m.format("YYYYMMDD");
-            end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
-            timecqp = "[(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
-            n_tokens = _this.s.data.cqp.split("]").length - 2;
-            timecqp = ([timecqp].concat(_.map((function() {
-              _results = [];
-              for (var _i = 0; 0 <= n_tokens ? _i < n_tokens : _i > n_tokens; 0 <= n_tokens ? _i++ : _i--){ _results.push(_i); }
-              return _results;
-            }).apply(this), function() {
-              return "[]";
-            }))).join(" ");
-            opts = {};
-            opts.ajaxParams = {
-              start: 0,
-              end: 24,
-              command: "query",
-              corpus: _this.s.data.corpusListing.stringifySelected(),
-              cqp: _this.s.data.cqp,
-              cqp2: decodeURIComponent(cqp),
-              cqp3: timecqp,
-              expand_prequeries: false
-            };
-            return safeApply(_this.s.$root, function() {
-              return _this.s.$root.kwicTabs.push(opts);
-            });
-          }
-        };
-      })(this));
+      $(".chart", this.$result).on("click", function(event) {
+        var cqp, end, m, n_tokens, opts, start, target, timecqp, val, _i, _results;
+        target = $(".chart", _this.$result);
+        val = $(".detail .x_label > span", target).data("val");
+        cqp = $(".detail .item.active > span", target).data("cqp");
+        c.log("chart click", cqp, target, _this.s.data.subcqps, _this.s.data.cqp);
+        if (cqp) {
+          m = moment(val * 1000);
+          start = m.format("YYYYMMDD");
+          end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD");
+          timecqp = "[(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
+          n_tokens = _this.s.data.cqp.split("]").length - 2;
+          timecqp = ([timecqp].concat(_.map((function() {
+            _results = [];
+            for (var _i = 0; 0 <= n_tokens ? _i < n_tokens : _i > n_tokens; 0 <= n_tokens ? _i++ : _i--){ _results.push(_i); }
+            return _results;
+          }).apply(this), function() {
+            return "[]";
+          }))).join(" ");
+          opts = {};
+          opts.ajaxParams = {
+            start: 0,
+            end: 24,
+            command: "query",
+            corpus: _this.s.data.corpusListing.stringifySelected(),
+            cqp: _this.s.data.cqp,
+            cqp2: decodeURIComponent(cqp),
+            cqp3: timecqp,
+            expand_prequeries: false
+          };
+          return safeApply(_this.s.$root, function() {
+            return _this.s.$root.kwicTabs.push(opts);
+          });
+        }
+      });
     }
 
     GraphResults.prototype.onentry = function() {};
@@ -1769,318 +1719,313 @@
     GraphResults.prototype.setTableMode = function() {};
 
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal) {
+      var _this = this;
       c.log("makeRequest", cqp, subcqps, corpora, labelMapping, showTotal);
       this.s.loading = true;
       this.showPreloader();
-      return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress((function(_this) {
-        return function(data) {
-          return _this.onProgress(data);
-        };
-      })(this)).fail((function(_this) {
-        return function(data) {
-          c.log("graph crash");
+      return this.proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress(function(data) {
+        return _this.onProgress(data);
+      }).fail(function(data) {
+        c.log("graph crash");
+        _this.resultError(data);
+        return _this.s.loading = false;
+      }).done(function(data) {
+        var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, xAxis, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
+        c.log("graph data", data);
+        if (data.ERROR) {
           _this.resultError(data);
-          return _this.s.loading = false;
-        };
-      })(this)).done((function(_this) {
-        return function(data) {
-          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, xAxis, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
-          c.log("graph data", data);
-          if (data.ERROR) {
-            _this.resultError(data);
-            return;
-          }
-          nontime = _this.getNonTime();
-          if (nontime) {
-            $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
-          } else {
-            $(".non_time_div", _this.$result).hide();
-          }
-          if (_.isArray(data.combined)) {
-            palette = new Rickshaw.Color.Palette("colorwheel");
-            series = [];
-            _ref = data.combined;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              item = _ref[_i];
-              color = palette.color();
-              series.push({
-                data: _this.getSeriesData(item.relative),
-                color: color,
-                name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
-                cqp: item.cqp || cqp,
-                abs_data: _this.getSeriesData(item.absolute)
-              });
-            }
-          } else {
-            series = [
-              {
-                data: _this.getSeriesData(data.combined.relative),
-                color: 'steelblue',
-                name: "&Sigma;",
-                cqp: cqp,
-                abs_data: _this.getSeriesData(data.combined.absolute)
-              }
-            ];
-          }
-          Rickshaw.Series.zeroFill(series);
-          emptyIntervals = _this.getEmptyIntervals(series[0].data);
-          _this.s.hasEmptyIntervals = emptyIntervals.length;
-          for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
-            s = series[_j];
-            s.data = _.filter(s.data, function(item) {
-              return item.y !== null;
+          return;
+        }
+        nontime = _this.getNonTime();
+        if (nontime) {
+          $(".non_time", _this.$result).text(nontime.toFixed(2) + "%").parent().localize();
+        } else {
+          $(".non_time_div", _this.$result).hide();
+        }
+        if (_.isArray(data.combined)) {
+          palette = new Rickshaw.Color.Palette("colorwheel");
+          series = [];
+          _ref = data.combined;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            item = _ref[_i];
+            color = palette.color();
+            series.push({
+              data: _this.getSeriesData(item.relative),
+              color: color,
+              name: item.cqp ? labelMapping[item.cqp] : "&Sigma;",
+              cqp: item.cqp || cqp,
+              abs_data: _this.getSeriesData(item.absolute)
             });
           }
-          graph = new Rickshaw.Graph({
-            element: $(".chart", _this.$result).get(0),
-            renderer: 'line',
-            interpolation: "linear",
-            series: series,
-            padding: {
-              top: 0.1,
-              right: 0.01
-            }
-          });
-          graph.render();
-          window._graph = graph;
-          _this.drawIntervals(graph, emptyIntervals);
-          $(window).on("resize", _.throttle(function() {
-            if (_this.$result.is(":visible")) {
-              graph.setSize();
-              return graph.render();
-            }
-          }, 200));
-          $(".form_switch", _this.$result).click(function(event) {
-            var cls, h, nRows, setExportUrl, val, _k, _len2, _ref1, _ref2;
-            val = _this.s.mode;
-            _ref1 = _this.$result.attr("class").split(" ");
-            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-              cls = _ref1[_k];
-              if (cls.match(/^form-/)) {
-                _this.$result.removeClass(cls);
-              }
-            }
-            _this.$result.addClass("form-" + val);
-            $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
-            $(".time_table", _this.$result.parent()).hide();
-            if (val === "bar") {
-              if ($(".legend .line", _this.$result).length > 1) {
-                $(".legend li:last:not(.disabled) .action", _this.$result).click();
-                if (_.all(_.map($(".legend .line", _this.$result), function(item) {
-                  return $(item).is(".disabled");
-                }))) {
-                  $(".legend li:first .action", _this.$result).click();
-                }
-              }
-            } else if (val === "table") {
-              $(".chart,.zoom_slider,.legend", _this.$result).hide();
-              $(".time_table", _this.$result.parent()).show();
-              nRows = series.length || 2;
-              h = (nRows * 2) + 4;
-              h = Math.min(h, 40);
-              $(".time_table:visible", _this.$result).height("" + h + ".1em");
-              if ((_ref2 = _this.time_grid) != null) {
-                _ref2.resizeCanvas();
-              }
-              $(".exportTimeStatsSection", _this.$result).show();
-              setExportUrl = function() {
-                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
-                selVal = $(".timeKindOfData option:selected", this.$result).val();
-                selType = $(".timeKindOfFormat option:selected", this.$result).val();
-                dataDelimiter = selType === "TSV" ? "%09" : ";";
-                header = [util.getLocaleString("stats_hit")];
-                _ref3 = series[0].data;
-                for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-                  cell = _ref3[_l];
-                  header.push(moment(cell.x * 1000).format("YYYY"));
-                }
-                output = [header];
-                for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
-                  row = series[_m];
-                  cells = [row.name === "&Sigma;" ? "Σ" : row.name];
-                  _ref4 = row.data;
-                  for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
-                    cell = _ref4[_n];
-                    if (selVal === "relative") {
-                      cells.push(cell.y);
-                    } else {
-                      i = _.indexOf(_.pluck(row.abs_data, "x"), cell.x, true);
-                      cells.push(row.abs_data[i].y);
-                    }
-                  }
-                  output.push(cells);
-                }
-                csv = new CSV(output, {
-                  header: header,
-                  delimiter: dataDelimiter
-                });
-                csvstr = csv.encode();
-                blob = new Blob([csvstr], {
-                  type: "text/" + selType
-                });
-                csvUrl = URL.createObjectURL(blob);
-                return $(".exportTimeStatsSection .btn.export", this.$result).attr({
-                  download: "export." + selType,
-                  href: csvUrl
-                });
-              };
-              setExportUrl();
-            }
-            if (val !== "table") {
-              graph.setRenderer(val);
-              graph.render();
-              return $(".exportTimeStatsSection", _this.$result).hide();
-            }
-          });
-          HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
-            return value;
-          };
-          time_table_data = [];
-          time_table_columns_intermediate = {};
-          for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
-            row = series[_k];
-            new_time_row = {
-              "label": row.name
-            };
-            _ref1 = row.data;
-            for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-              item = _ref1[_l];
-              timestamp = moment(item.x * 1000).format("YYYY");
-              time_table_columns_intermediate[timestamp] = {
-                "name": timestamp,
-                "field": timestamp,
-                "formatter": window.statsProxy.valueFormatter
-              };
-              i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
-              new_time_row[timestamp] = [item.y, row.abs_data[i].y];
-            }
-            time_table_data.push(new_time_row);
-          }
-          time_table_columns = [
+        } else {
+          series = [
             {
-              "name": "Hit",
-              "field": "label",
-              "formatter": HTMLFormatter
+              data: _this.getSeriesData(data.combined.relative),
+              color: 'steelblue',
+              name: "&Sigma;",
+              cqp: cqp,
+              abs_data: _this.getSeriesData(data.combined.absolute)
             }
           ];
-          _ref2 = _.keys(time_table_columns_intermediate).sort();
-          for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
-            key = _ref2[_m];
-            time_table_columns.push(time_table_columns_intermediate[key]);
+        }
+        Rickshaw.Series.zeroFill(series);
+        emptyIntervals = _this.getEmptyIntervals(series[0].data);
+        _this.s.hasEmptyIntervals = emptyIntervals.length;
+        for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+          s = series[_j];
+          s.data = _.filter(s.data, function(item) {
+            return item.y !== null;
+          });
+        }
+        graph = new Rickshaw.Graph({
+          element: $(".chart", _this.$result).get(0),
+          renderer: 'line',
+          interpolation: "linear",
+          series: series,
+          padding: {
+            top: 0.1,
+            right: 0.01
           }
-          time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
-            enableCellNavigation: false,
-            enableColumnReorder: false
-          });
-          $(".time_table", _this.$result).width("100%");
-          _this.time_grid = time_grid;
-          legend = new Rickshaw.Graph.Legend({
-            element: $(".legend", _this.$result).get(0),
-            graph: graph
-          });
-          shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-            graph: graph,
-            legend: legend
-          });
-          if (!showTotal && $(".legend .line", _this.$result).length > 1) {
-            $(".legend .line:last .action", _this.$result).click();
+        });
+        graph.render();
+        window._graph = graph;
+        _this.drawIntervals(graph, emptyIntervals);
+        $(window).on("resize", _.throttle(function() {
+          if (_this.$result.is(":visible")) {
+            graph.setSize();
+            return graph.render();
           }
-          hoverDetail = new Rickshaw.Graph.HoverDetail({
-            graph: graph,
-            xFormatter: function(x) {
-              var d, out, output;
-              d = new Date(x * 1000);
-              output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
-              out = (function() {
-                switch (this.granularity) {
-                  case "y":
-                    return output[0];
-                  case "m":
-                    return output.slice(0, 2).join("\n");
-                  case "d":
-                    return output.join("\n");
-                }
-              }).call(_this);
-              return "<span data-val='" + x + "'>" + out + "</span>";
-            },
-            yFormatter: function(y) {
-              var val;
-              val = util.formatDecimalString(y.toFixed(2), false, true, true);
-              return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
-            },
-            formatter: function(series, x, y, formattedX, formattedY, d) {
-              var abs_y, rel;
-              i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
-              abs_y = series.abs_data[i].y;
-              rel = series.name + ':&nbsp;' + formattedY;
-              return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
+        }, 200));
+        $(".form_switch", _this.$result).click(function(event) {
+          var cls, h, nRows, setExportUrl, val, _k, _len2, _ref1, _ref2;
+          val = _this.s.mode;
+          _ref1 = _this.$result.attr("class").split(" ");
+          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+            cls = _ref1[_k];
+            if (cls.match(/^form-/)) {
+              _this.$result.removeClass(cls);
             }
-          });
-          _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
-          timeunit = last - first > 100 ? "decade" : _this.zoom;
-          toDate = function(sec) {
-            return moment(sec * 1000).toDate();
-          };
-          time = new Rickshaw.Fixtures.Time();
-          old_ceil = time.ceil;
-          time.ceil = function(time, unit) {
-            var mom, out;
-            if (unit.name === "decade") {
-              out = Math.ceil(time / unit.seconds) * unit.seconds;
-              mom = moment(out * 1000);
-              if (mom.date() === 31) {
-                mom.add("day", 1);
+          }
+          _this.$result.addClass("form-" + val);
+          $(".chart,.zoom_slider,.legend", _this.$result.parent()).show();
+          $(".time_table", _this.$result.parent()).hide();
+          if (val === "bar") {
+            if ($(".legend .line", _this.$result).length > 1) {
+              $(".legend li:last:not(.disabled) .action", _this.$result).click();
+              if (_.all(_.map($(".legend .line", _this.$result), function(item) {
+                return $(item).is(".disabled");
+              }))) {
+                $(".legend li:first .action", _this.$result).click();
               }
-              return mom.unix();
-            } else {
-              return old_ceil(time, unit);
             }
-          };
-          xAxis = new Rickshaw.Graph.Axis.Time({
-            graph: graph,
-            timeUnit: time.unit(timeunit)
-          });
-          slider = new Rickshaw.Graph.RangeSlider({
-            graph: graph,
-            element: $('.zoom_slider', _this.$result)
-          });
-          old_render = xAxis.render;
-          xAxis.render = function() {
-            old_render.call(xAxis);
-            _this.updateTicks();
-            return _this.drawIntervals(graph, emptyIntervals);
-          };
-          old_tickOffsets = xAxis.tickOffsets;
-          xAxis.tickOffsets = function() {
-            var count, domain, offsets, runningTick, tickValue, unit, _n;
-            domain = xAxis.graph.x.domain();
-            unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
-            count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
-            runningTick = domain[0];
-            offsets = [];
-            for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
-              tickValue = time.ceil(runningTick, unit);
-              runningTick = tickValue + unit.seconds / 2;
-              offsets.push({
-                value: tickValue,
-                unit: unit,
-                _date: moment(tickValue * 1000).toDate()
+          } else if (val === "table") {
+            $(".chart,.zoom_slider,.legend", _this.$result).hide();
+            $(".time_table", _this.$result.parent()).show();
+            nRows = series.length || 2;
+            h = (nRows * 2) + 4;
+            h = Math.min(h, 40);
+            $(".time_table:visible", _this.$result).height("" + h + ".1em");
+            if ((_ref2 = _this.time_grid) != null) {
+              _ref2.resizeCanvas();
+            }
+            $(".exportTimeStatsSection", _this.$result).show();
+            setExportUrl = function() {
+              var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
+              selVal = $(".timeKindOfData option:selected", this.$result).val();
+              selType = $(".timeKindOfFormat option:selected", this.$result).val();
+              dataDelimiter = selType === "TSV" ? "%09" : ";";
+              header = [util.getLocaleString("stats_hit")];
+              _ref3 = series[0].data;
+              for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                cell = _ref3[_l];
+                header.push(moment(cell.x * 1000).format("YYYY"));
+              }
+              output = [header];
+              for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
+                row = series[_m];
+                cells = [row.name === "&Sigma;" ? "Σ" : row.name];
+                _ref4 = row.data;
+                for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
+                  cell = _ref4[_n];
+                  if (selVal === "relative") {
+                    cells.push(cell.y);
+                  } else {
+                    i = _.indexOf(_.pluck(row.abs_data, "x"), cell.x, true);
+                    cells.push(row.abs_data[i].y);
+                  }
+                }
+                output.push(cells);
+              }
+              csv = new CSV(output, {
+                header: header,
+                delimiter: dataDelimiter
               });
-            }
-            return offsets;
-          };
-          xAxis.render();
-          yAxis = new Rickshaw.Graph.Axis.Y({
-            graph: graph
-          });
-          yAxis.render();
-          _this.hidePreloader();
-          safeApply(_this.s, function() {
-            return _this.s.loading = false;
-          });
-          return $(window).trigger("resize");
+              csvstr = csv.encode();
+              blob = new Blob([csvstr], {
+                type: "text/" + selType
+              });
+              csvUrl = URL.createObjectURL(blob);
+              return $(".exportTimeStatsSection .btn.export", this.$result).attr({
+                download: "export." + selType,
+                href: csvUrl
+              });
+            };
+            setExportUrl();
+          }
+          if (val !== "table") {
+            graph.setRenderer(val);
+            graph.render();
+            return $(".exportTimeStatsSection", _this.$result).hide();
+          }
+        });
+        HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
+          return value;
         };
-      })(this));
+        time_table_data = [];
+        time_table_columns_intermediate = {};
+        for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
+          row = series[_k];
+          new_time_row = {
+            "label": row.name
+          };
+          _ref1 = row.data;
+          for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+            item = _ref1[_l];
+            timestamp = moment(item.x * 1000).format("YYYY");
+            time_table_columns_intermediate[timestamp] = {
+              "name": timestamp,
+              "field": timestamp,
+              "formatter": window.statsProxy.valueFormatter
+            };
+            i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
+            new_time_row[timestamp] = [item.y, row.abs_data[i].y];
+          }
+          time_table_data.push(new_time_row);
+        }
+        time_table_columns = [
+          {
+            "name": "Hit",
+            "field": "label",
+            "formatter": HTMLFormatter
+          }
+        ];
+        _ref2 = _.keys(time_table_columns_intermediate).sort();
+        for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+          key = _ref2[_m];
+          time_table_columns.push(time_table_columns_intermediate[key]);
+        }
+        time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
+          enableCellNavigation: false,
+          enableColumnReorder: false
+        });
+        $(".time_table", _this.$result).width("100%");
+        _this.time_grid = time_grid;
+        legend = new Rickshaw.Graph.Legend({
+          element: $(".legend", _this.$result).get(0),
+          graph: graph
+        });
+        shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+          graph: graph,
+          legend: legend
+        });
+        if (!showTotal && $(".legend .line", _this.$result).length > 1) {
+          $(".legend .line:last .action", _this.$result).click();
+        }
+        hoverDetail = new Rickshaw.Graph.HoverDetail({
+          graph: graph,
+          xFormatter: function(x) {
+            var d, out, output;
+            d = new Date(x * 1000);
+            output = ["<span rel='localize[year]'>" + (util.getLocaleString('year')) + "</span>: <span class='currently'>" + (d.getFullYear()) + "</span>", "<span rel='localize[month]'>" + (util.getLocaleString('month')) + "</span>: <span class='currently'>" + (d.getMonth()) + "</span>", "<span rel='localize[day]'>" + (util.getLocaleString('day')) + "</span>: <span class='currently'>" + (d.getDay()) + "</span>"];
+            out = (function() {
+              switch (this.granularity) {
+                case "y":
+                  return output[0];
+                case "m":
+                  return output.slice(0, 2).join("\n");
+                case "d":
+                  return output.join("\n");
+              }
+            }).call(_this);
+            return "<span data-val='" + x + "'>" + out + "</span>";
+          },
+          yFormatter: function(y) {
+            var val;
+            val = util.formatDecimalString(y.toFixed(2), false, true, true);
+            return ("<br><span rel='localize[rel_hits_short]'>" + (util.getLocaleString('rel_hits_short')) + "</span> ") + val;
+          },
+          formatter: function(series, x, y, formattedX, formattedY, d) {
+            var abs_y, rel;
+            i = _.indexOf(_.pluck(series.abs_data, "x"), x, true);
+            abs_y = series.abs_data[i].y;
+            rel = series.name + ':&nbsp;' + formattedY;
+            return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
+          }
+        });
+        _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
+        timeunit = last - first > 100 ? "decade" : _this.zoom;
+        toDate = function(sec) {
+          return moment(sec * 1000).toDate();
+        };
+        time = new Rickshaw.Fixtures.Time();
+        old_ceil = time.ceil;
+        time.ceil = function(time, unit) {
+          var mom, out;
+          if (unit.name === "decade") {
+            out = Math.ceil(time / unit.seconds) * unit.seconds;
+            mom = moment(out * 1000);
+            if (mom.date() === 31) {
+              mom.add("day", 1);
+            }
+            return mom.unix();
+          } else {
+            return old_ceil(time, unit);
+          }
+        };
+        xAxis = new Rickshaw.Graph.Axis.Time({
+          graph: graph,
+          timeUnit: time.unit(timeunit)
+        });
+        slider = new Rickshaw.Graph.RangeSlider({
+          graph: graph,
+          element: $('.zoom_slider', _this.$result)
+        });
+        old_render = xAxis.render;
+        xAxis.render = function() {
+          old_render.call(xAxis);
+          _this.updateTicks();
+          return _this.drawIntervals(graph, emptyIntervals);
+        };
+        old_tickOffsets = xAxis.tickOffsets;
+        xAxis.tickOffsets = function() {
+          var count, domain, offsets, runningTick, tickValue, unit, _n;
+          domain = xAxis.graph.x.domain();
+          unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
+          count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
+          runningTick = domain[0];
+          offsets = [];
+          for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
+            tickValue = time.ceil(runningTick, unit);
+            runningTick = tickValue + unit.seconds / 2;
+            offsets.push({
+              value: tickValue,
+              unit: unit,
+              _date: moment(tickValue * 1000).toDate()
+            });
+          }
+          return offsets;
+        };
+        xAxis.render();
+        yAxis = new Rickshaw.Graph.Axis.Y({
+          graph: graph
+        });
+        yAxis.render();
+        _this.hidePreloader();
+        safeApply(_this.s, function() {
+          return _this.s.loading = false;
+        });
+        return $(window).trigger("resize");
+      });
     };
 
     return GraphResults;
@@ -2089,4 +2034,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=results.js.map
+/*
+//@ sourceMappingURL=results.js.map
+*/

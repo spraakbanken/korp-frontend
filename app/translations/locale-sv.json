@@ -204,6 +204,7 @@
     "next" : "Nästa",
     "prev" : "Föregående",
     "goto_page" : "Gå till sida",
+    "of" : "av",
     "find" : "Leta efter",
     "get_sentence" : "Hämta kontext",
     "example_dialog_header" : "Belägg",
