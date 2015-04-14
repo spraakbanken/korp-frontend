@@ -1,9 +1,9 @@
 'use strict';
 // var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
 
-// var mountFolder = function (connect, dir) {
-//   return connect.static(require('path').resolve(dir));
-// };
+var mountFolder = function (connect, dir) {
+  return connect.static(require('path').resolve(dir));
+};
 
 module.exports = function (grunt) {
   // load all grunt tasks
@@ -13,10 +13,10 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
 
   // // configurable paths
-  // var yeomanConfig = {
-  //   app: 'app',
-  //   dist: 'dist'
-  // };
+  var yeomanConfig = {
+    app: 'app',
+    dist: 'dist'
+  };
 
   // try {
   //   yeomanConfig.app = require('./component.json').appPath || yeomanConfig.app;
@@ -68,6 +68,35 @@ module.exports = function (grunt) {
         // tasks: ['livereload']
       }
     },
+    protractor: {
+      options: {
+        configFile: "protractor.conf", // Default config file
+        keepAlive: false, // If false, the grunt process stops when the test fails.
+        noColor: false, // If true, protractor will not use colors in its output.
+        chromeOnly : true,
+        args: {
+          // Arguments passed to the command
+        }
+      },
+      test: {
+        options: {
+          configFile: "test/e2e/conf_e2e.js", // Target-specific config file
+          args: {
+            rootElement: 'div'
+          } // Target-specific arguments
+        }
+      }
+    },
+
+    protractor_webdriver: {
+      test : {
+        options: {
+            path: 'node_modules/protractor/bin/',
+            command: './webdriver-manager start',
+          },
+      }
+    },
+
     connect: {
       options: {
           port: 9000,
@@ -98,6 +127,17 @@ module.exports = function (grunt) {
             'test',
             '<%= yeoman.app %>'
           ]
+        }
+      },
+      e2e : {
+        options: {
+          middleware: function (connect) {
+            return [
+              // proxySnippet, 
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, yeomanConfig.app)
+            ];
+          }
         }
       },
       dist: {
@@ -176,8 +216,15 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'test/spec',
-          src: '{,*/}*.coffee',
+          src: '*.coffee',
           dest: 'test/spec',
+          ext: '.js'
+        },
+        {
+          expand: true,
+          cwd: 'test/e2e',
+          src: '*.coffee',
+          dest: 'test/e2e',
           ext: '.js'
         }]
       }
@@ -377,8 +424,8 @@ module.exports = function (grunt) {
         'compass:server'
       ],
       test: [
-        'coffee',
-        'compass'
+        'newer:coffee',
+        'newer:compass'
       ],
       dist: [
         'coffee',
@@ -443,12 +490,26 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
+  // grunt.registerTask('test', [
+  //   'clean:server',
+  //   'concurrent:test',
+  //   'autoprefixer',
+  //   'connect:test',
+  //   'karma'
+  // ]);
+
   grunt.registerTask('test', [
     'clean:server',
+    // 'configureProxies',
     'concurrent:test',
+    'concurrent:server',
     'autoprefixer',
-    'connect:test',
-    'karma'
+    // 'connect:test',
+    // 'karma'
+    
+    'connect:e2e',
+    "protractor_webdriver",
+    'protractor'
   ]);
 
   grunt.registerTask('build', [
