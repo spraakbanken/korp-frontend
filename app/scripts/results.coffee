@@ -348,13 +348,19 @@ class view.KWICResults extends BaseResults
 
     makeRequest: (cqp, isPaging) ->
         c.log "kwicResults.makeRequest", cqp, isPaging
-        @showPreloader()
-        @s.aborted = false
-        page = page = Number(search().page) or 0
+
+        page = Number(search().page) or 0
         if not isPaging
             @s.gotFirstKwic = false
             c.log "reset pageObj"
             @s.$parent.pageObj.pager = 0
+
+        if !@hasInitialized?
+            @s.$parent.pageObj.pager = page + 1
+
+        @hasInitialized ?= false
+        @showPreloader()
+        @s.aborted = false
 
         if @proxy.hasPending()
             @ignoreAbort = true

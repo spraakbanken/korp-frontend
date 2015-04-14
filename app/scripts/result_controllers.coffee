@@ -31,6 +31,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
         ]
     initPage : () ->
         # @scope.pager = Number(@location.search().page) + 1 or 1
+        c.log "initPage", @location.search().page
         @scope.pageObj = 
             pager: Number(@location.search().page) + 1 or 1
         @scope.page = @scope.pageObj.pager - 1

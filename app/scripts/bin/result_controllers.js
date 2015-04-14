@@ -27,6 +27,7 @@
     };
 
     KwicCtrl.prototype.initPage = function() {
+      c.log("initPage", this.location.search().page);
       this.scope.pageObj = {
         pager: Number(this.location.search().page) + 1 || 1
       };

@@ -418,14 +418,20 @@
       var isReading, page, params, progressCallback, req,
         _this = this;
       c.log("kwicResults.makeRequest", cqp, isPaging);
-      this.showPreloader();
-      this.s.aborted = false;
-      page = page = Number(search().page) || 0;
+      page = Number(search().page) || 0;
       if (!isPaging) {
         this.s.gotFirstKwic = false;
         c.log("reset pageObj");
         this.s.$parent.pageObj.pager = 0;
       }
+      if (this.hasInitialized == null) {
+        this.s.$parent.pageObj.pager = page + 1;
+      }
+      if (this.hasInitialized == null) {
+        this.hasInitialized = false;
+      }
+      this.showPreloader();
+      this.s.aborted = false;
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
       } else {
