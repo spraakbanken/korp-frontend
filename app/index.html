@@ -243,7 +243,7 @@
                     </div>
                   </div>
                 </tab>
-                <tab ng-if="_settings.wordpicture != false" ng-controller="wordpicCtrl">
+                <tab ng-if="_settings.wordpicture != false" ng-controller="wordpicCtrl" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
@@ -360,7 +360,7 @@
                     </div>
                   </div>
                 </tab>
-              </tabset><a id="json-link" href="#"><img src="img/json.png"></a>
+              </tabset><a id="json-link" ng-href="{{jsonUrl}}" ng-show="jsonUrl" target="_blank"><img src="img/json.png"></a>
             </div>
             <div id="sidebar" ng-class="{visible : word_selected &amp;&amp; sidebar_visible}" class="ui-corner-all kwic_sidebar"></div>
             <div style="clear: both; float: none;"></div>

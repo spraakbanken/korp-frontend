@@ -183,8 +183,6 @@ Sidebar =
             ).promise()
         else
             @element.removeClass("ui-state-highlight").addClass "kwic_sidebar"
-            # instance = $("#result-container").korptabs("getCurrentInstance")
-            # instance?.selectionManager?.selected?.click()
 
     updatePlacement: ->
         max = Math.round($("#columns").position().top)

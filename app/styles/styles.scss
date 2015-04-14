@@ -800,6 +800,7 @@ table {
   &.paging {
     opacity : 0.5 !important;
   }
+  margin-bottom: 1em;
 }
 
 .results_table {
@@ -1069,7 +1070,7 @@ table {
 
 #json-link {
   float: right;
-  display: none;
+  // display: none;
   img {
     border: 0px;
   }

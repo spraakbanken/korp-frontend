@@ -245,9 +245,11 @@
         data: data,
         beforeSend: function(req, settings) {
           self.prevRequest = settings;
-          return self.addAuthorizationHeader(req);
+          self.addAuthorizationHeader(req);
+          return self.prevUrl = this.url;
         },
         success: function(data, status, jqxhr) {
+          c.log("jqxhr", this);
           self.queryData = data.querydata;
           if (data.incremental === false || !this.foundKwic) {
             return kwicCallback(data);
@@ -313,7 +315,8 @@
         },
         beforeSend: function(req, settings) {
           self.prevRequest = settings;
-          return self.addAuthorizationHeader(req);
+          self.addAuthorizationHeader(req);
+          return self.prevUrl = this.url;
         }
       });
       this.pendingRequests.push(def);
@@ -461,7 +464,8 @@
         data: data,
         beforeSend: function(req, settings) {
           self.prevRequest = settings;
-          return self.addAuthorizationHeader(req);
+          self.addAuthorizationHeader(req);
+          return self.prevUrl = this.url;
         },
         error: function(jqXHR, textStatus, errorThrown) {
           c.log("gettings stats error, status: " + textStatus);
@@ -723,9 +727,10 @@
     };
 
     GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
-      var def, params,
+      var def, params, self,
         _this = this;
       GraphProxy.__super__.makeRequest.call(this);
+      self = this;
       params = {
         command: "count_time",
         cqp: cqp,
@@ -742,7 +747,8 @@
         data: params,
         beforeSend: function(req, settings) {
           _this.prevRequest = settings;
-          return _this.addAuthorizationHeader(req);
+          _this.addAuthorizationHeader(req);
+          return self.prevUrl = _this.url;
         },
         progress: function(data, e) {
           var progressObj;

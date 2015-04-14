@@ -4,10 +4,15 @@ class BaseResults
         # @s.instance = this
         @$tab = $(tabSelector)
         @$result = $(resultSelector)
-        @index = @$tab.index()
         @optionWidget = $("#search_options")
         # @num_result = @$result.find(".num-result")
         @$result.add(@$tab).addClass "not_loading"
+
+        @injector = $("body").injector()
+
+        def = @injector.get("$q").defer()
+        @firstResultDef = def
+
 
     onProgress: (progressObj) ->
         safeApply @s, () =>
@@ -27,15 +32,19 @@ class BaseResults
         $(".result_tabs > ul").scope().tabs
 
     renderResult: (data) ->
-
         #       this.resetView();
         @$result.find(".error_msg").remove()
-        util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
+        # util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
         if data.ERROR
+            safeApply @s, () =>
+                @firstResultDef.reject()
+            
             @resultError data
             return false
         else
             safeApply @s, () =>
+                c.log "firstResultDef.resolve"
+                @firstResultDef.resolve()
                 @hasData = true
 
     resultError: (data) ->
@@ -49,7 +58,7 @@ class BaseResults
             .addClass("inline_block")
             .prependTo(@$result)
             .wrapAll "<div class='error_msg'>"
-        util.setJsonLink @proxy.prevRequest
+        # util.setJsonLink @proxy.prevRequest
 
     showPreloader : () ->
         @s.$parent.loading = true
@@ -63,6 +72,18 @@ class BaseResults
 
     countCorpora : () ->
         @proxy.prevParams?.corpus.split(",").length
+
+    onentry : () ->
+        @s.$root.jsonUrl = null
+        @firstResultDef.promise.then () =>
+            c.log "firstResultDef.then", @isActive()
+            if @isActive() 
+                @s.$root.jsonUrl = @proxy?.prevUrl
+    onexit : () ->
+        @s.$root.jsonUrl = null
+
+    isActive : () ->
+        !!@getResultTabs()[@tabindex]?.active
 
 
 class view.KWICResults extends BaseResults
@@ -100,7 +121,7 @@ class view.KWICResults extends BaseResults
 
     onWordClick : (event) ->
         c.log "wordclick", @tabindex, @s
-        if @getResultTabs()[@tabindex]?.active
+        if @isActive()
             @s.$root.sidebar_visible = true
         # c.log "click", obj, event
         # c.log "word click", $(this).scope().wd, event.currentTarget
@@ -157,6 +178,7 @@ class view.KWICResults extends BaseResults
         @s.reading_mode
 
     onentry: ->
+        super()
         c.log "onentry kwic"
         @s.$root.sidebar_visible = true
 
@@ -168,6 +190,7 @@ class view.KWICResults extends BaseResults
         return
 
     onexit: ->
+        super()
         c.log "onexit kwic"
         @s.$root.sidebar_visible = false
         # $("#sidebar").sidebar("hide")
@@ -232,7 +255,7 @@ class view.KWICResults extends BaseResults
 
 
     renderResult: (data) ->
-        c.log "data", data
+        c.log "data", data, @proxy.prevUrl
         resultError = super(data)
         return if resultError is false
         unless data.kwic then data.kwic = []
@@ -241,7 +264,8 @@ class view.KWICResults extends BaseResults
 
 
 
-
+        if @isActive()
+            @s.$root.jsonUrl = @proxy.prevUrl
 
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
@@ -352,7 +376,6 @@ class view.KWICResults extends BaseResults
         page = Number(search().page) or 0
         if not isPaging
             @s.gotFirstKwic = false
-            c.log "reset pageObj"
             @s.$parent.pageObj.pager = 0
 
         if !@hasInitialized?
@@ -488,8 +511,8 @@ class view.ExampleResults extends view.KWICResults
         
         @current_page = 0
         if @s.$parent.queryParams
-            @makeRequest()
-            @onentry()
+            @makeRequest().then () =>
+                @onentry()
         @tabindex = (@getResultTabs().length - 1) + @s.$parent.$index
 
     setupReadingHash : () ->
@@ -518,7 +541,7 @@ class view.ExampleResults extends view.KWICResults
             @renderCompleteResult data
             safeApply @s, () =>
                 @hidePreloader()
-            util.setJsonLink @proxy.prevRequest
+            # util.setJsonLink @proxy.prevRequest
             # @$result.find(".num-result").html util.prettyNumbers(data.hits)
 
         # def.success = (data) ->
@@ -545,6 +568,7 @@ class view.LemgramResults extends BaseResults
         self = this
         super tabSelector, resultSelector, scope
         @s = scope
+        @tabindex = 2
         #   TODO: figure out what I use this for.
         @resultDeferred = $.Deferred()
         @proxy = new model.LemgramProxy()
@@ -807,11 +831,16 @@ class view.LemgramResults extends BaseResults
             , 5000)
 
     onentry: ->
+        c.log "lemgram onentry"
+        super()
         @resultDeferred.done @showWarning
+        return
 
     onexit: ->
+        super()
         clearTimeout self.timeout
         $("#sidebar").sidebar "hide"
+        return
 
     showNoResults: ->
         @hidePreloader()
@@ -964,6 +993,7 @@ class view.StatsResults extends BaseResults
         super resultSelector, tabSelector, scope
         c.log "StatsResults constr", 
         self = this
+        @tabindex = 1
         @gridData = null
         @proxy = new model.StatsProxy()
         window.statsProxy = @proxy
@@ -1277,9 +1307,10 @@ class view.StatsResults extends BaseResults
     #   .appendTo("#results-stats");
     # },
     onentry : () ->
+        super()
         $(window).trigger("resize")
         return
-    onexit : () ->
+    # onexit : () ->
 
     resetView: ->
         super()
@@ -1359,8 +1390,9 @@ class view.GraphResults extends BaseResults
 
 
 
-    onentry : ->
-    onexit : ->
+    # onentry : () ->
+    #     super
+    # onexit : ->
 
     parseDate : (granularity, time) ->
         [year,month,day] = [null,0,1]

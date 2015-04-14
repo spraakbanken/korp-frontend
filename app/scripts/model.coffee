@@ -193,8 +193,10 @@ class model.KWICProxy extends BaseProxy
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
+                self.prevUrl = this.url
 
             success: (data, status, jqxhr) ->
+                c.log "jqxhr", this
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
 
@@ -259,6 +261,7 @@ class model.LemgramProxy extends BaseProxy
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
+                self.prevUrl = this.url
         @pendingRequests.push def
         return def
 
@@ -386,6 +389,7 @@ class model.StatsProxy extends BaseProxy
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
+                self.prevUrl = this.url
 
             error: (jqXHR, textStatus, errorThrown) ->
                 c.log "gettings stats error, status: " + textStatus
@@ -597,6 +601,7 @@ class model.GraphProxy extends BaseProxy
 
     makeRequest: (cqp, subcqps, corpora) ->
         super()
+        self = this
         params =
             command : "count_time"
             cqp : cqp
@@ -618,6 +623,7 @@ class model.GraphProxy extends BaseProxy
             beforeSend: (req, settings) =>
                 @prevRequest = settings
                 @addAuthorizationHeader req
+                self.prevUrl = this.url
 
             progress: (data, e) =>
                 progressObj = @calcProgress(e)

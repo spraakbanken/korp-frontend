@@ -6,12 +6,15 @@
 
   BaseResults = (function() {
     function BaseResults(resultSelector, tabSelector, scope) {
+      var def;
       this.s = scope;
       this.$tab = $(tabSelector);
       this.$result = $(resultSelector);
-      this.index = this.$tab.index();
       this.optionWidget = $("#search_options");
       this.$result.add(this.$tab).addClass("not_loading");
+      this.injector = $("body").injector();
+      def = this.injector.get("$q").defer();
+      this.firstResultDef = def;
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
@@ -38,14 +41,16 @@
     BaseResults.prototype.renderResult = function(data) {
       var _this = this;
       this.$result.find(".error_msg").remove();
-      if (this.$result.is(":visible")) {
-        util.setJsonLink(this.proxy.prevRequest);
-      }
       if (data.ERROR) {
+        safeApply(this.s, function() {
+          return _this.firstResultDef.reject();
+        });
         this.resultError(data);
         return false;
       } else {
         return safeApply(this.s, function() {
+          c.log("firstResultDef.resolve");
+          _this.firstResultDef.resolve();
           return _this.hasData = true;
         });
       }
@@ -55,8 +60,7 @@
       c.error("json fetch error: ", data);
       this.hidePreloader();
       this.resetView();
-      $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">').append("<img class='korp_fail' src='img/korp_fail.svg'>").add($("<div class='fail_text' />").localeKey("fail_text")).addClass("inline_block").prependTo(this.$result).wrapAll("<div class='error_msg'>");
-      return util.setJsonLink(this.proxy.prevRequest);
+      return $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">').append("<img class='korp_fail' src='img/korp_fail.svg'>").add($("<div class='fail_text' />").localeKey("fail_text")).addClass("inline_block").prependTo(this.$result).wrapAll("<div class='error_msg'>");
     };
 
     BaseResults.prototype.showPreloader = function() {
@@ -75,6 +79,27 @@
     BaseResults.prototype.countCorpora = function() {
       var _ref;
       return (_ref = this.proxy.prevParams) != null ? _ref.corpus.split(",").length : void 0;
+    };
+
+    BaseResults.prototype.onentry = function() {
+      var _this = this;
+      this.s.$root.jsonUrl = null;
+      return this.firstResultDef.promise.then(function() {
+        var _ref;
+        c.log("firstResultDef.then", _this.isActive());
+        if (_this.isActive()) {
+          return _this.s.$root.jsonUrl = (_ref = _this.proxy) != null ? _ref.prevUrl : void 0;
+        }
+      });
+    };
+
+    BaseResults.prototype.onexit = function() {
+      return this.s.$root.jsonUrl = null;
+    };
+
+    BaseResults.prototype.isActive = function() {
+      var _ref;
+      return !!((_ref = this.getResultTabs()[this.tabindex]) != null ? _ref.active : void 0);
     };
 
     return BaseResults;
@@ -118,9 +143,9 @@
     };
 
     KWICResults.prototype.onWordClick = function(event) {
-      var obj, scope, sent, word, _ref;
+      var obj, scope, sent, word;
       c.log("wordclick", this.tabindex, this.s);
-      if ((_ref = this.getResultTabs()[this.tabindex]) != null ? _ref.active : void 0) {
+      if (this.isActive()) {
         this.s.$root.sidebar_visible = true;
       }
       scope = $(event.currentTarget).scope();
@@ -178,6 +203,7 @@
 
     KWICResults.prototype.onentry = function() {
       var _this = this;
+      KWICResults.__super__.onentry.call(this);
       c.log("onentry kwic");
       this.s.$root.sidebar_visible = true;
       this.$result.find(".token_selected").click();
@@ -187,6 +213,7 @@
     };
 
     KWICResults.prototype.onexit = function() {
+      KWICResults.__super__.onexit.call(this);
       c.log("onexit kwic");
       this.s.$root.sidebar_visible = false;
     };
@@ -265,7 +292,7 @@
     KWICResults.prototype.renderResult = function(data) {
       var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref,
         _this = this;
-      c.log("data", data);
+      c.log("data", data, this.proxy.prevUrl);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -275,6 +302,9 @@
       }
       c.log("corpus_results");
       isReading = this.isReadingMode();
+      if (this.isActive()) {
+        this.s.$root.jsonUrl = this.proxy.prevUrl;
+      }
       this.s.$apply(function($scope) {
         c.log("apply kwic search data", data);
         _this.s.gotFirstKwic = true;
@@ -421,7 +451,6 @@
       page = Number(search().page) || 0;
       if (!isPaging) {
         this.s.gotFirstKwic = false;
-        c.log("reset pageObj");
         this.s.$parent.pageObj.pager = 0;
       }
       if (this.hasInitialized == null) {
@@ -588,13 +617,15 @@
     __extends(ExampleResults, _super);
 
     function ExampleResults(tabSelector, resultSelector, scope) {
+      var _this = this;
       c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
       this.current_page = 0;
       if (this.s.$parent.queryParams) {
-        this.makeRequest();
-        this.onentry();
+        this.makeRequest().then(function() {
+          return _this.onentry();
+        });
       }
       this.tabindex = (this.getResultTabs().length - 1) + this.s.$parent.$index;
     }
@@ -619,10 +650,9 @@
         c.log("first part done", data);
         _this.renderResult(data, opts.cqp);
         _this.renderCompleteResult(data);
-        safeApply(_this.s, function() {
+        return safeApply(_this.s, function() {
           return _this.hidePreloader();
         });
-        return util.setJsonLink(_this.proxy.prevRequest);
       });
       return def.fail(function() {
         var _this = this;
@@ -656,6 +686,7 @@
       self = this;
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.s = scope;
+      this.tabindex = 2;
       this.resultDeferred = $.Deferred();
       this.proxy = new model.LemgramProxy();
       window.lemgramProxy = this.proxy;
@@ -958,12 +989,15 @@
     };
 
     LemgramResults.prototype.onentry = function() {
-      return this.resultDeferred.done(this.showWarning);
+      c.log("lemgram onentry");
+      LemgramResults.__super__.onentry.call(this);
+      this.resultDeferred.done(this.showWarning);
     };
 
     LemgramResults.prototype.onexit = function() {
+      LemgramResults.__super__.onexit.call(this);
       clearTimeout(self.timeout);
-      return $("#sidebar").sidebar("hide");
+      $("#sidebar").sidebar("hide");
     };
 
     LemgramResults.prototype.showNoResults = function() {
@@ -1126,6 +1160,7 @@
         _this = this;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
+      this.tabindex = 1;
       this.gridData = null;
       this.proxy = new model.StatsProxy();
       window.statsProxy = this.proxy;
@@ -1436,10 +1471,9 @@
     };
 
     StatsResults.prototype.onentry = function() {
+      StatsResults.__super__.onentry.call(this);
       $(window).trigger("resize");
     };
-
-    StatsResults.prototype.onexit = function() {};
 
     StatsResults.prototype.resetView = function() {
       StatsResults.__super__.resetView.call(this);
@@ -1504,10 +1538,6 @@
         }
       });
     }
-
-    GraphResults.prototype.onentry = function() {};
-
-    GraphResults.prototype.onexit = function() {};
 
     GraphResults.prototype.parseDate = function(granularity, time) {
       var day, month, year, _ref;

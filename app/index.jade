@@ -92,7 +92,10 @@ html
                         button.btn.btn-small {{'statstable_gen_export' | loc}}
                       a#exportButton 
                         &nbsp;{{'statstable_download' | loc}}
-                tab(ng-if="_settings.wordpicture != false", ng-controller="wordpicCtrl")
+                tab(ng-if="_settings.wordpicture != false", 
+                    ng-controller="wordpicCtrl", 
+                    select="instance.onentry()",
+                    deselect="instance.onexit()")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
@@ -118,7 +121,7 @@ html
 
                 include includes/dynamic_result_tabs
                 
-              a#json-link(href='#')
+              a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
             //- ng-class='{visible : word_selected && result_tab == 0}'
             #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
