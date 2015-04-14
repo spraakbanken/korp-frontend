@@ -4193,14 +4193,16 @@ settings.reduce_stringify = function(type) {
 
             // if(type in cl.getStructAttrs())
             var attrObj = cl.getStructAttrs()[type]
+            c.log ("attrObj", attrObj)
 
             var prefix = ""
-            if(!_.isUndefined(attrObj) && value != "&Sigma;" )
+            if(!_.isUndefined(attrObj) && value != "&Sigma;" && attrObj.translationKey )
                 prefix = attrObj.translationKey
 
 
             output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
                     [query, JSON.stringify(corpora), prefix + value, util.getLocaleString(prefix + value)]);
+            c.log("stringify default", prefix, value)
             if(value == "&Sigma;") return appendDiagram(output, corpora, value);
 
             return appendDiagram(output, corpora, value);
