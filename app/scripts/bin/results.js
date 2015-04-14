@@ -11,12 +11,15 @@
       this.$result = $(resultSelector);
       this.index = this.$tab.index();
       this.optionWidget = $("#search_options");
-      this.num_result = this.$result.find(".num-result");
       this.$result.add(this.$tab).addClass("not_loading");
     }
 
     BaseResults.prototype.onProgress = function(progressObj) {
-      this.num_result.html(util.prettyNumbers(progressObj["total_results"]));
+      safeApply(this.s, (function(_this) {
+        return function() {
+          return _this.s.hits_display = util.prettyNumbers(progressObj["total_results"]);
+        };
+      })(this));
       return safeApply(this.s, (function(_this) {
         return function() {
           return _this.s.$parent.progress = Math.round(progressObj["stats"]);
@@ -200,16 +203,27 @@
 
     KWICResults.prototype.onKeydown = function(event) {
       var isSpecialKeyDown, next;
+      c.log("event", isSpecialKeyDown || $("input, textarea, select").is(":focus"), !this.$result.is(":visible"));
       isSpecialKeyDown = event.shiftKey || event.ctrlKey || event.metaKey;
       if (isSpecialKeyDown || $("input, textarea, select").is(":focus") || !this.$result.is(":visible")) {
         return;
       }
       switch (event.which) {
         case 78:
-          this.$result.find(".pager-wrapper .next").click();
+          safeApply(this.s, (function(_this) {
+            return function() {
+              _this.s.$parent.page++;
+              return _this.s.$parent.pager = _this.s.$parent.page + 1;
+            };
+          })(this));
           return false;
         case 70:
-          this.$result.find(".pager-wrapper .prev").click();
+          safeApply(this.s, (function(_this) {
+            return function() {
+              _this.s.$parent.page--;
+              return _this.s.$parent.pager = _this.s.$parent.page + 1;
+            };
+          })(this));
           return false;
       }
       if (!this.selectionManager.hasSelected()) {
@@ -236,7 +250,9 @@
 
     KWICResults.prototype.getPageInterval = function(page) {
       var items_per_page, output;
-      items_per_page = Number(this.optionWidget.find(".num_hits").val());
+      items_per_page = Number(this.s.$root._searchOpts.hits_per_page) || settings.hits_per_page_default;
+      page = Number(page);
+      c.log("items_per_page", items_per_page, page * items_per_page);
       output = {};
       output.start = (page || 0) * items_per_page;
       output.end = (output.start + items_per_page) - 1;
@@ -248,7 +264,9 @@
       this.current_page = search().page || 0;
       safeApply(this.s, (function(_this) {
         return function() {
-          return _this.hidePreloader();
+          _this.hidePreloader();
+          _this.s.hits = data.hits;
+          return _this.s.hits_display = util.prettyNumbers(data.hits);
         };
       })(this));
       if (!data.hits) {
@@ -257,9 +275,7 @@
         return;
       }
       this.$result.removeClass("zero_results");
-      this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
-      this.renderHitsPicture(data);
-      return this.buildPager(data.hits);
+      return this.renderHitsPicture(data);
     };
 
     KWICResults.prototype.renderResult = function(data) {
@@ -314,7 +330,6 @@
     KWICResults.prototype.showNoResults = function() {
       this.$result.find(".pager-wrapper").empty();
       this.hidePreloader();
-      this.$result.find(".num-result").html(0);
       this.$result.addClass("zero_results").click();
       return this.$result.find(".hits_picture").html("");
     };
@@ -377,75 +392,6 @@
       });
     };
 
-    KWICResults.prototype.buildPager = function(number_of_hits, noTryAgain) {
-      var buttons, items_per_page;
-      items_per_page = this.optionWidget.find(".num_hits").val();
-      $.onScrollOut("unbind");
-      this.$result.find(".pager-wrapper").unbind().empty();
-      if (number_of_hits > items_per_page) {
-        this.$result.find(".pager-wrapper").pagination(number_of_hits, {
-          items_per_page: items_per_page,
-          callback: $.proxy(this.handlePaginationClick, this),
-          next_text: util.getLocaleString("next"),
-          prev_text: util.getLocaleString("prev"),
-          link_to: "javascript:void(0)",
-          num_edge_entries: 2,
-          ellipse_text: "..",
-          current_page: this.current_page || 0
-        });
-        this.$result.find(".next").attr("rel", "localize[next]");
-        this.$result.find(".prev").attr("rel", "localize[prev]");
-        buttons = this.$result.find(".pagination a:visible");
-        if (buttons.length > 20 && !noTryAgain) {
-          return setTimeout((function(_this) {
-            return function() {
-              return _this.buildPager(number_of_hits, true);
-            };
-          })(this), 100);
-        }
-      }
-    };
-
-    KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var isReading, kwicCallback, opts, page, req, self;
-      safeApply(this.s, (function(_this) {
-        return function() {
-          return _this.s.paging = true;
-        };
-      })(this));
-      page = search().page || 0;
-      c.log("handlePaginationClick", new_page_index, page);
-      self = this;
-      if (new_page_index !== page || !!force_click) {
-        isReading = this.isReadingMode();
-        kwicCallback = this.renderResult;
-        opts = this.buildQueryOptions();
-        opts.corpus = this.proxy.prevRequest.corpus;
-        req = this.getProxy().makeRequest(opts, new_page_index, ((function(_this) {
-          return function(progressObj) {
-            return _this.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
-          };
-        })(this)), (function(_this) {
-          return function(data) {
-            self.renderResult(data);
-            c.log("pagination success", data);
-            _this.buildPager(data.hits);
-            return safeApply(_this.s, function() {
-              return _this.s.paging = false;
-            });
-          };
-        })(this));
-        req.fail = function(data) {};
-        safeApply(this.s, function() {
-          return search({
-            page: new_page_index
-          });
-        });
-        this.current_page = new_page_index;
-      }
-      return false;
-    };
-
     KWICResults.prototype.buildQueryOptions = function(cqp) {
       var getSortParams, opts;
       c.log("buildQueryOptions", cqp);
@@ -486,12 +432,11 @@
       return opts;
     };
 
-    KWICResults.prototype.makeRequest = function(page_num, cqp) {
+    KWICResults.prototype.makeRequest = function(cqp) {
       var isReading, req;
-      c.log("kwicResults.makeRequest", page_num);
+      c.log("kwicResults.makeRequest");
       this.showPreloader();
       this.s.aborted = false;
-      this.$result.find(".pager-wrapper").empty();
       this.s.gotFirstKwic = false;
       if (this.proxy.hasPending()) {
         this.ignoreAbort = true;
@@ -499,7 +444,7 @@
         this.ignoreAbort = false;
       }
       isReading = this.isReadingMode();
-      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), page_num || this.current_page, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
+      req = this.getProxy().makeRequest(this.buildQueryOptions(cqp), search().page || 0, (isReading ? $.noop : $.proxy(this.onProgress, this)), (function(_this) {
         return function(data) {
           return _this.renderResult(data);
         };
@@ -533,10 +478,6 @@
       } else {
         return this.s.kwic;
       }
-    };
-
-    KWICResults.prototype.setPage = function(page) {
-      return this.$result.find(".pager-wrapper").trigger("setPage", [page]);
     };
 
     KWICResults.prototype.centerScrollbar = function() {
@@ -691,8 +632,7 @@
           safeApply(_this.s, function() {
             return _this.hidePreloader();
           });
-          util.setJsonLink(_this.proxy.prevRequest);
-          return _this.$result.find(".num-result").html(util.prettyNumbers(data.hits));
+          return util.setJsonLink(_this.proxy.prevRequest);
         };
       })(this));
       return def.fail(function() {

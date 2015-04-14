@@ -113,7 +113,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         # if search.type in ["word", "lemgram"]
         unless search then return 
         c.log "searches.activeSearch", search
-        page = $rootScope.search()["page"] or 0
+        # page = $rootScope.search()["page"] or 0
+        page = $location.search().page or 0
+        c.log "activesearch page", page
         s.relatedObj = null
         if search.type == "word"
             s.placeholder = null

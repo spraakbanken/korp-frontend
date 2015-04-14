@@ -134,7 +134,7 @@ class model.KWICProxy extends BaseProxy
         @pendingRequests.pop i unless i is -1
 
     makeRequest: (options, page, progressCallback, kwicCallback) ->
-        c.log "kwicproxy.makeRequest"
+        c.log "kwicproxy.makeRequest", page, kwicResults.getPageInterval(Number(page))
         self = this
         @foundKwic = false
         super()

@@ -9,6 +9,7 @@ var isLab = window.isLab || false;
 settings.lemgramSelect = true;
 settings.autocomplete = true;
 // settings.wordpicture = false;
+settings.hits_per_page_default = 25
 
 // for extended search dropdown, can be 'union' or 'intersection'
 settings.word_attribute_selector = "union"

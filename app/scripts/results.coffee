@@ -6,13 +6,15 @@ class BaseResults
         @$result = $(resultSelector)
         @index = @$tab.index()
         @optionWidget = $("#search_options")
-        @num_result = @$result.find(".num-result")
+        # @num_result = @$result.find(".num-result")
         @$result.add(@$tab).addClass "not_loading"
 
     onProgress: (progressObj) ->
         # c.log "onProgress", progressObj
         # TODO: this item only exists in the kwic.
-        @num_result.html util.prettyNumbers(progressObj["total_results"])
+        safeApply @s, () =>
+            @s.hits_display = util.prettyNumbers(progressObj["total_results"])
+        # @num_result.html util.prettyNumbers(progressObj["total_results"])
         # unless isNaN(progressObj["stats"])
             # try
                 # @$result.find(".progress_container progress").attr "value", Math.round(progressObj["stats"])
@@ -186,15 +188,21 @@ class view.KWICResults extends BaseResults
         return
 
     onKeydown: (event) ->
+        c.log "event", isSpecialKeyDown or $("input, textarea, select").is(":focus"), not @$result.is(":visible")
         isSpecialKeyDown = event.shiftKey or event.ctrlKey or event.metaKey
         return if isSpecialKeyDown or $("input, textarea, select").is(":focus") or
             not @$result.is(":visible")
+
         switch event.which
             when 78 # n
-                @$result.find(".pager-wrapper .next").click()
+                safeApply @s, =>
+                    @s.$parent.page++
+                    @s.$parent.pager = @s.$parent.page + 1
                 return false
             when 70 # f
-                @$result.find(".pager-wrapper .prev").click()
+                safeApply @s, =>
+                    @s.$parent.page--
+                    @s.$parent.pager = @s.$parent.page + 1
                 return false
         return unless @selectionManager.hasSelected()
         switch event.which
@@ -211,7 +219,9 @@ class view.KWICResults extends BaseResults
 
 
     getPageInterval: (page) ->
-        items_per_page = Number(@optionWidget.find(".num_hits").val())
+        items_per_page = Number(@s.$root._searchOpts.hits_per_page) or settings.hits_per_page_default
+        page = Number(page)
+        c.log "items_per_page", items_per_page, page * items_per_page
         output = {}
         output.start = (page or 0) * items_per_page
         output.end = (output.start + items_per_page) - 1
@@ -222,15 +232,18 @@ class view.KWICResults extends BaseResults
         @current_page = search().page or 0
         safeApply @s, () =>
             @hidePreloader()
+            @s.hits = data.hits
+            @s.hits_display  = util.prettyNumbers(data.hits)
         unless data.hits
             c.log "no kwic results"
             @showNoResults()
             return
         # @s.$parent.loading = false
         @$result.removeClass "zero_results"
-        @$result.find(".num-result").html util.prettyNumbers(data.hits)
+        # @$result.find(".num-result").html util.prettyNumbers(data.hits)
         @renderHitsPicture data
-        @buildPager data.hits
+        # @buildPager data.hits
+
 
 
 
@@ -277,7 +290,7 @@ class view.KWICResults extends BaseResults
         # @$result.find(".results_table").empty()
         @$result.find(".pager-wrapper").empty()
         @hidePreloader()
-        @$result.find(".num-result").html 0
+        # @$result.find(".num-result").html 0
         @$result.addClass("zero_results").click()
 
         #   this.$result.find(".sort_select").hide();
@@ -316,68 +329,70 @@ class view.KWICResults extends BaseResults
         else newX -= offset if wordLeft < area.offset().left
         area.stop(true, true).animate scrollLeft: newX
 
-    buildPager: (number_of_hits, noTryAgain) ->
-        items_per_page = @optionWidget.find(".num_hits").val()
-        # c.log "items_per_page", items_per_page, number_of_hits, @$result.find(".pager-wrapper").is(":visible")
-        # @movePager "up"
-        $.onScrollOut "unbind"
-        @$result.find(".pager-wrapper").unbind().empty()
-        if number_of_hits > items_per_page
-            @$result.find(".pager-wrapper").pagination number_of_hits,
-                items_per_page: items_per_page
-                callback: $.proxy(@handlePaginationClick, this)
-                next_text: util.getLocaleString("next")
-                prev_text: util.getLocaleString("prev")
-                link_to: "javascript:void(0)"
-                num_edge_entries: 2
-                ellipse_text: ".."
-                current_page: @current_page or 0
+    # buildPager: (number_of_hits, noTryAgain) ->
+    #     return
+    #     # items_per_page = @optionWidget.find(".num_hits").val()
+    #     # c.log "items_per_page", items_per_page, number_of_hits, @$result.find(".pager-wrapper").is(":visible")
+    #     # @movePager "up"
+    #     $.onScrollOut "unbind"
+    #     @$result.find(".pager-wrapper").unbind().empty()
+    #     if number_of_hits > items_per_page
+    #         @$result.find(".pager-wrapper").pagination number_of_hits,
+    #             items_per_page: items_per_page
+    #             callback: $.proxy(@handlePaginationClick, this)
+    #             next_text: util.getLocaleString("next")
+    #             prev_text: util.getLocaleString("prev")
+    #             link_to: "javascript:void(0)"
+    #             num_edge_entries: 2
+    #             ellipse_text: ".."
+    #             current_page: @current_page or 0
 
-            @$result.find(".next").attr "rel", "localize[next]"
-            @$result.find(".prev").attr "rel", "localize[prev]"
+    #         @$result.find(".next").attr "rel", "localize[next]"
+    #         @$result.find(".prev").attr "rel", "localize[prev]"
 
-            buttons = @$result.find(".pagination a:visible")
-            if buttons.length > 20 and not noTryAgain
-                setTimeout( () =>
-                    @buildPager(number_of_hits, true)
-                , 100)
+    #         buttons = @$result.find(".pagination a:visible")
+    #         if buttons.length > 20 and not noTryAgain
+    #             setTimeout( () =>
+    #                 @buildPager(number_of_hits, true)
+    #             , 100)
     
-    # pagination_container is used by the pagination lib
-    handlePaginationClick: (new_page_index, pagination_container, force_click) ->
-        safeApply @s, () =>
-            @s.paging = true
-        page = search().page or 0
-        c.log "handlePaginationClick", new_page_index, page
-        self = this
-        if new_page_index isnt page or !!force_click
-            isReading = @isReadingMode()
-            kwicCallback = @renderResult
+    # # pagination_container is used by the pagination lib
+    # handlePaginationClick: (new_page_index, pagination_container, force_click) ->
+    #     return
+    #     safeApply @s, () =>
+    #         @s.paging = true
+    #     page = search().page or 0
+    #     c.log "handlePaginationClick", new_page_index, page
+    #     self = this
+    #     if new_page_index isnt page or !!force_click
+    #         isReading = @isReadingMode()
+    #         kwicCallback = @renderResult
 
-            # this.showPreloader();
+    #         # this.showPreloader();
 
-            opts = @buildQueryOptions()
-            opts.corpus = @proxy.prevRequest.corpus
+    #         opts = @buildQueryOptions()
+    #         opts.corpus = @proxy.prevRequest.corpus
 
-            req = @getProxy().makeRequest opts, new_page_index, ((progressObj) =>
-                #progress
-                @.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
-            ), (data) => 
-                self.renderResult(data)
-                c.log "pagination success", data
-                @buildPager data.hits
-                safeApply @s, () =>
-                    @s.paging = false
+    #         req = @getProxy().makeRequest opts, new_page_index, ((progressObj) =>
+    #             #progress
+    #             @.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
+    #         ), (data) => 
+    #             self.renderResult(data)
+    #             c.log "pagination success", data
+    #             @buildPager data.hits
+    #             safeApply @s, () =>
+    #                 @s.paging = false
 
-            # req.success = (data) =>
+    #         # req.success = (data) =>
                 
             
-            req.fail = (data) ->
+    #         req.fail = (data) ->
 
-            # $.bbq.pushState page: new_page_index
-            safeApply @s, () ->
-                search page: new_page_index
-            @current_page = new_page_index
-        false
+    #         # $.bbq.pushState page: new_page_index
+    #         safeApply @s, () ->
+    #             search page: new_page_index
+    #         @current_page = new_page_index
+    #     false
 
     buildQueryOptions: (cqp) ->
         c.log "buildQueryOptions", cqp
@@ -410,11 +425,11 @@ class view.KWICResults extends BaseResults
         return opts
 
 
-    makeRequest: (page_num, cqp) ->
-        c.log "kwicResults.makeRequest", page_num
+    makeRequest: (cqp) ->
+        c.log "kwicResults.makeRequest"
         @showPreloader()
         @s.aborted = false
-        @$result.find(".pager-wrapper").empty()
+        # @$result.find(".pager-wrapper").empty()
         @s.gotFirstKwic = false
 
         if @proxy.hasPending()
@@ -426,7 +441,7 @@ class view.KWICResults extends BaseResults
 
 
         req = @getProxy().makeRequest @buildQueryOptions(cqp),
-                            page_num or @current_page,
+                            search().page or 0,
                             (if isReading then $.noop else $.proxy(@onProgress, this)),
                             (data) => 
                                 @renderResult data
@@ -456,8 +471,8 @@ class view.KWICResults extends BaseResults
         else
             @s.kwic
 
-    setPage: (page) ->
-        @$result.find(".pager-wrapper").trigger "setPage", [page]
+    # setPage: (page) ->
+    #     @$result.find(".pager-wrapper").trigger "setPage", [page]
 
     centerScrollbar: ->
         m = @$result.find(".match:first")
@@ -612,7 +627,7 @@ class view.ExampleResults extends view.KWICResults
             safeApply @s, () =>
                 @hidePreloader()
             util.setJsonLink @proxy.prevRequest
-            @$result.find(".num-result").html util.prettyNumbers(data.hits)
+            # @$result.find(".num-result").html util.prettyNumbers(data.hits)
 
         # def.success = (data) ->
 

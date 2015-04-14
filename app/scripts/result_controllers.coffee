@@ -32,11 +32,28 @@ korpApp.controller "kwicCtrl", ($scope, utils, $location) ->
 
     punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
-    s.page = Number($location.search().page) + 1 or 1
+    c.log "$location.search().page", $location.search().page
+    s.pager = Number($location.search().page) + 1 or 1
+    s.page = s.pager - 1
 
-    s.setPage = ($event, page) ->
-        s.instance.setPage(page)
-        return
+    s.pageChange = (page) ->
+        c.log "pageChange", arguments
+        s.page = page - 1
+
+    # don't do for exampleResults
+    utils.setupHash s, [
+        key : "page"
+        post_change : () ->
+            c.log "post_change", s.page
+            s.pager = s.page + 1
+        val_in : Number
+    ]
+
+    s.onPageInput = ($event, page) ->
+        if $event.keyCode == 13
+            s.pager = page
+            s.page = Number(page) - 1
+            s.gotoPage = null
 
     readingChange = () ->
         c.log "reading change"
@@ -71,7 +88,8 @@ korpApp.controller "kwicCtrl", ($scope, utils, $location) ->
         s.instance.centerScrollbar()
 
     s.hitspictureClick = (pageNumber) ->
-        s.instance.handlePaginationClick(pageNumber, null, true)
+        c.log "pageNumber", pageNumber
+        s.page = Number(pageNumber)
 
     massageData = (sentenceArray) ->
         currentStruct = []

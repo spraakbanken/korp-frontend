@@ -6,6 +6,7 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "template/modal/window.html"
                                             "template/typeahead/typeahead-match.html",
                                             "template/typeahead/typeahead-popup.html"
+                                            "template/pagination/pagination.html"
                                             "angularSpinner"
                                             "uiSlider"
                                             "ui.sortable"
@@ -13,7 +14,6 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "newsdesk"
                                         ])
 
-# korpApp.controller "kwicCtrl", ($scope) ->
 
 korpApp.run ($rootScope, $location, utils, searches) ->
     s = $rootScope
@@ -33,6 +33,7 @@ korpApp.run ($rootScope, $location, utils, searches) ->
 
 
     s._loc = $location
+    s._searchOpts = {}
     s.$watch "_loc.search()", () ->
         c.log "loc.search() change", $location.search()
         _.defer () -> window.onHashChange?()

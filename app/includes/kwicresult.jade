@@ -1,10 +1,9 @@
-
 .result_controls
   warning(ng-if="aborted && !loading")
     | {{'search_aborted' | loc}}
   .controls_n
     span {{'num_results' | loc}}: 
-    span.num-result 0
+    span.num-result(ng-bind-html="hits_display | trust")
   //- .progress_container
   //-   progress(value='{{progress || 0}}', max='100')
   .hits_picture(ng-if='hitsPictureData.length > 1')
@@ -15,10 +14,22 @@
               ng-style='{width : corpus.relative + "%"}'
               ng-class='{odd : $index % 2 != 0, \
                          even : $index % 2 == 0}'
-              ng-click='hitspictureClick(corpus.page)'
+              ng-click='hitspictureClick(corpus.page, corpus)'
               tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
               tooltip-placement='{{$last? "left":"top"}}')
 .pager-wrapper
+  pagination(total-items="hits", ng-if='hits'
+    ng-model="pager", 
+    ng-click="pageChange(pager)"
+    max-size="15", 
+    items-per-page="::$root._searchOpts.hits_per_page", 
+    previous-text="‹", next-text="›", first-text="«", last-text="»"
+    boundary-links="true", rotate="false", num-pages="$parent.numPages") 
+  .page_input.inline_block
+    span {{'goto_page' | loc}} 
+    input(ng-model="$parent.gotoPage", ng-keyup="onPageInput($event, gotoPage)") 
+      
+
 //- input(type="text", ng-model="page", ng-change="setPage($event, page - 1)", ngModelOptions="{ updateOn: 'blur'}")
 span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc}}
 span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc}}

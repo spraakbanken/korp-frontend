@@ -1,5 +1,5 @@
 (function() {
-  window.korpApp = angular.module('korpApp', ["watchFighters", 'ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "angularSpinner", "uiSlider", "ui.sortable", "pasvaz.bindonce", "newsdesk"]);
+  window.korpApp = angular.module('korpApp', ["watchFighters", 'ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "uiSlider", "ui.sortable", "pasvaz.bindonce", "newsdesk"]);
 
   korpApp.run(function($rootScope, $location, utils, searches) {
     var isInit, s;
@@ -17,6 +17,7 @@
       return $(".search_tabs > ul").scope().tabs;
     };
     s._loc = $location;
+    s._searchOpts = {};
     s.$watch("_loc.search()", function() {
       c.log("loc.search() change", $location.search());
       return _.defer(function() {

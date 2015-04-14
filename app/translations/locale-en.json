@@ -201,6 +201,7 @@
     "num_results" : "Results",
     "next" : "Next",
     "prev" : "Previous",
+    "goto_page" : "Go to page",
     "find" : "Search for",
     "get_sentence" : "Hämta kontext",
     "example_dialog_header" : "Example Sentences",

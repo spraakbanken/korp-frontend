@@ -83,7 +83,8 @@
           return;
         }
         c.log("searches.activeSearch", search);
-        page = $rootScope.search()["page"] || 0;
+        page = $location.search().page || 0;
+        c.log("activesearch page", page);
         s.relatedObj = null;
         if (search.type === "word") {
           s.placeholder = null;

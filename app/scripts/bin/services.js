@@ -188,21 +188,21 @@
         });
       }
 
-      Searches.prototype.kwicRequest = function(cqp, page) {
-        c.log("kwicRequest", page, cqp);
-        return kwicResults.makeRequest(page, cqp);
+      Searches.prototype.kwicRequest = function(cqp) {
+        c.log("kwicRequest", cqp);
+        return kwicResults.makeRequest(cqp);
       };
 
-      Searches.prototype.kwicSearch = function(cqp, page) {
-        this.kwicRequest(cqp, page);
+      Searches.prototype.kwicSearch = function(cqp) {
+        this.kwicRequest(cqp);
         return statsResults.makeRequest(cqp);
       };
 
-      Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, page) {
+      Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
         var cqp;
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         statsResults.makeRequest(cqp);
-        this.kwicRequest(cqp, page);
+        this.kwicRequest(cqp);
         if (settings.wordpicture === false) {
           return;
         }
@@ -258,9 +258,9 @@
 
     })();
     searches = new Searches();
-    $rootScope.$watch("_loc.search().search", (function(_this) {
-      return function() {
-        var page, searchExpr, type, value, _ref;
+    $rootScope.$watchGroup(["_loc.search().search", "_loc.search().page"], (function(_this) {
+      return function(newValues, oldValues) {
+        var pageChanged, searchChanged, searchExpr, type, value, _ref;
         c.log("searches service watch", $location.search().search);
         searchExpr = $location.search().search;
         if (!searchExpr) {
@@ -268,8 +268,12 @@
         }
         _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
         value = value.join("|");
-        page = $rootScope.search()["page"] || 0;
-        c.log("page", page);
+        c.log("newValues", newValues);
+        c.log("oldValues", oldValues);
+        pageChanged = newValues[1] !== oldValues[1];
+        searchChanged = newValues[0] !== oldValues[0];
+        c.log("searchChanged", searchChanged);
+        c.log("pageChanged", pageChanged);
         view.updateSearchHistory(value, $location.absUrl());
         return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
           switch (type) {
@@ -294,7 +298,7 @@
                 type: type,
                 val: value
               };
-              return searches.kwicSearch(value, page);
+              return searches.kwicSearch(value);
           }
         });
       };

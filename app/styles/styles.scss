@@ -2279,6 +2279,17 @@ line.tick {
 .pagination {
   height: 20px;
   margin : 0;
+  display: inline-block; 
+  vertical-align: middle;
+}
+.page_input {
+  margin-left : 1em;
+  span {
+    color : #666;
+  }
+  input {
+    width : 2em;
+  }
 }
 .pagination a, .pagination span {
   border-width : 1px;

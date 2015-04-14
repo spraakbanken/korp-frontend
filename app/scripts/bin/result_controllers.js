@@ -19,9 +19,29 @@
       return s.$root.sidebar_visible = false;
     };
     punctArray = [",", ".", ";", ":", "!", "?", "..."];
-    s.page = Number($location.search().page) + 1 || 1;
-    s.setPage = function($event, page) {
-      s.instance.setPage(page);
+    c.log("$location.search().page", $location.search().page);
+    s.pager = Number($location.search().page) + 1 || 1;
+    s.page = s.pager - 1;
+    s.pageChange = function(page) {
+      c.log("pageChange", arguments);
+      return s.page = page - 1;
+    };
+    utils.setupHash(s, [
+      {
+        key: "page",
+        post_change: function() {
+          c.log("post_change", s.page);
+          return s.pager = s.page + 1;
+        },
+        val_in: Number
+      }
+    ]);
+    s.onPageInput = function($event, page) {
+      if ($event.keyCode === 13) {
+        s.pager = page;
+        s.page = Number(page) - 1;
+        return s.gotoPage = null;
+      }
     };
     readingChange = function() {
       var _ref;
@@ -63,7 +83,8 @@
       return s.instance.centerScrollbar();
     };
     s.hitspictureClick = function(pageNumber) {
-      return s.instance.handlePaginationClick(pageNumber, null, true);
+      c.log("pageNumber", pageNumber);
+      return s.page = Number(pageNumber);
     };
     massageData = function(sentenceArray) {
       var corpus, corpus_aligned, currentStruct, end, i, id, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;

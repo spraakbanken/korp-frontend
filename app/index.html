@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text.">
     <!-- build:css styles/korp.css -->
-    <link rel="stylesheet" type="text/css" href="styles/pagination.css">
     <link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
     <link rel="stylesheet" href="components/SlickGrid/slick.grid.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="components/jReject/css/jquery.reject.css" type="text/css" media="screen" charset="utf-8">
@@ -153,7 +152,7 @@
           </tabset>
           <div id="search_options" click-cover="isCompareSelected" class="ui-widget-content ui-corner-bottom">
             <div><span style="font-size: .9em;">KWIC: </span>
-              <select id="num_hits" data-history="hpp" data-prefix="hits_per_page" rel="localize[hits_per_page]" class="num_hits">
+              <select id="num_hits" data-history="hpp" data-prefix="hits_per_page" rel="localize[hits_per_page]" ng-model="$root._searchOpts.hits_per_page" class="num_hits">
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="75">75</option>
@@ -187,18 +186,23 @@
                   <div id="results-kwic" ng-class="{reading_mode : reading_mode}" constr="KWICResults" constr-name="kwicResults">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
+                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">
                           <tbody>
                             <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <div class="pager-wrapper">
+                      <pagination total-items="hits" ng-if="hits" ng-model="pager" ng-click="pageChange(pager)" max-size="15" items-per-page="::$root._searchOpts.hits_per_page" previous-text="‹" next-text="›" first-text="«" last-text="»" boundary-links="true" rotate="false" num-pages="$parent.numPages"> </pagination>
+                      <div class="page_input inline_block"><span>{{'goto_page' | loc}} </span>
+                        <input ng-model="$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage)">
+                      </div>
+                    </div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -268,18 +272,23 @@
                   <div ng-class="{reading_mode : reading_mode}" constr="ExampleResults">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span class="num-result">0</span></div>
+                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">
                           <tbody>
                             <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <div class="pager-wrapper"></div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <div class="pager-wrapper">
+                      <pagination total-items="hits" ng-if="hits" ng-model="pager" ng-click="pageChange(pager)" max-size="15" items-per-page="::$root._searchOpts.hits_per_page" previous-text="‹" next-text="›" first-text="«" last-text="»" boundary-links="true" rotate="false" num-pages="$parent.numPages"> </pagination>
+                      <div class="page_input inline_block"><span>{{'goto_page' | loc}} </span>
+                        <input ng-model="$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage)">
+                      </div>
+                    </div><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">

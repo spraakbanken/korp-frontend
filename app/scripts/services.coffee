@@ -166,22 +166,22 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                 def.resolve()
                 initTimeGraph(timedef)
 
-        kwicRequest : (cqp, page) ->
+        kwicRequest : (cqp) ->
             
-            c.log "kwicRequest", page, cqp
-            kwicResults.makeRequest(page, cqp)
+            c.log "kwicRequest", cqp
+            kwicResults.makeRequest(cqp)
 
         
-        kwicSearch : (cqp, page) ->
+        kwicSearch : (cqp) ->
             # simpleSearch.resetView()
-            @kwicRequest cqp, page
+            @kwicRequest cqp
             statsResults.makeRequest cqp
 
-        lemgramSearch : (lemgram, searchPrefix, searchSuffix, page) ->
+        lemgramSearch : (lemgram, searchPrefix, searchSuffix) ->
             #TODO: this is dumb, move the cqp calculations elsewhere
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
-            @kwicRequest cqp, page
+            @kwicRequest cqp
 
             if settings.wordpicture == false then return
             
@@ -239,15 +239,22 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
 
 
 
-    $rootScope.$watch "_loc.search().search", () =>
+    $rootScope.$watchGroup ["_loc.search().search", "_loc.search().page"], (newValues, oldValues) =>
         c.log "searches service watch", $location.search().search
 
         searchExpr = $location.search().search
         unless searchExpr then return
         [type, value...] = searchExpr?.split("|")
         value = value.join("|")
-        page = $rootScope.search()["page"] or 0
-        c.log "page", page
+        # page = $location.search().page or 0
+
+        c.log "newValues", newValues
+        c.log "oldValues", oldValues
+        pageChanged = newValues[1] != oldValues[1]
+        searchChanged = newValues[0] != oldValues[0]
+        c.log "searchChanged", searchChanged
+        c.log "pageChanged", pageChanged
+
 
         view.updateSearchHistory value, $location.absUrl()
         # $.when(chained).then () ->
@@ -278,7 +285,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                         val : value
 
 
-                    searches.kwicSearch value, page
+                    searches.kwicSearch value
 
 
 

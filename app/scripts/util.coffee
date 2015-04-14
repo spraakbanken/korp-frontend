@@ -362,6 +362,7 @@ window.search = (obj, val) ->
 
     # ret = s.$root.$apply () ->
     ret = safeApply s.$root, () ->
+        # if obj or val
         unless obj then return s.$root.search()
         if _.isObject obj
             obj = _.extend {}, s.$root.search(), obj

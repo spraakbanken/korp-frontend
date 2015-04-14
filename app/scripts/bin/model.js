@@ -180,7 +180,7 @@
 
     KWICProxy.prototype.makeRequest = function(options, page, progressCallback, kwicCallback) {
       var corpus, data, def, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
-      c.log("kwicproxy.makeRequest");
+      c.log("kwicproxy.makeRequest", page, kwicResults.getPageInterval(Number(page)));
       self = this;
       this.foundKwic = false;
       KWICProxy.__super__.makeRequest.call(this);

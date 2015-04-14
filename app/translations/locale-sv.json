@@ -203,6 +203,7 @@
     "num_results" : "Antal träffar",
     "next" : "Nästa",
     "prev" : "Föregående",
+    "goto_page" : "Gå till sida",
     "find" : "Leta efter",
     "get_sentence" : "Hämta kontext",
     "example_dialog_header" : "Belägg",
