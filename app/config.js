@@ -3827,6 +3827,7 @@ settings.corpora.twitter = {
         text_location : {label : "tweet_location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
+        text_url : {label : "url", type : "url"},
         user_location : {label : "user_location"},
         user_followers : {label : "followers"},
         user_following : {label : "following"},
