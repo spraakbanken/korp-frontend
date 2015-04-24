@@ -825,9 +825,14 @@ class view.LemgramResults extends BaseResults
         #   var hasWarned = false;
         unless hasWarned
             $.jStorage.set "lemgram_warning", true
-            $("#sidebar").sidebar "show", "lemgramWarning"
-            self.timeout = setTimeout(->
-                $("#sidebar").sidebar "hide"
+            $("#sidebar").sidebar "refreshContent", "lemgramWarning"
+            safeApply @s, () =>
+                @s.$root.sidebar_visible = true
+            self.timeout = setTimeout(=>
+                # $("#sidebar").sidebar "hide"
+                safeApply @s, () =>
+                    @s.$root.sidebar_visible = false
+                    $("#sidebar").sidebar "refreshContent"
             , 5000)
 
     onentry: ->
@@ -839,7 +844,7 @@ class view.LemgramResults extends BaseResults
     onexit: ->
         super()
         clearTimeout self.timeout
-        $("#sidebar").sidebar "hide"
+        # $("#sidebar").sidebar "hide"
         return
 
     showNoResults: ->

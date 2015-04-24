@@ -227,30 +227,8 @@
         }
       }
     },
-    show: function(mode) {
-      var _this = this;
-      return $.when(this.element).pipe(function() {
-        return _this.refreshContent(mode);
-      }).done(function() {
-        _this.element.show("slide", {
-          direction: "right"
-        });
-        return $("#left-column").animate({
-          right: 265
-        }, null, null, function() {});
-      });
-    },
-    hide: function() {
-      if ($("#left-column").css("right") === "0px") {
-        return;
-      }
-      this.element.hide("slide", {
-        direction: "right"
-      });
-      return $("#left-column").animate({
-        right: 0
-      }, null, null, function() {});
-    }
+    show: function(mode) {},
+    hide: function() {}
   };
 
   $.widget("korp.sidebar", Sidebar);

@@ -82,7 +82,7 @@ module.exports = function (grunt) {
         options: {
           configFile: "test/e2e/conf_e2e.js", // Target-specific config file
           args: {
-            rootElement: 'div'
+            // rootElement: 'div'
           } // Target-specific arguments
         }
       }

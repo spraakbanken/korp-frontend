@@ -27,7 +27,7 @@
     beforeEach(function() {
       browser.ignoreSynchronization = true;
       browser.get("http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C" + (cycleSearch()) + "&page=7");
-      elm = element(By.css(".results-kwic .pagination .active a"));
+      elm = element(By.css(".results-kwic .pager-wrapper:nth-child(2) .active a"));
       return waitFor(elm);
     });
     it("should should bring up the correct page", function() {
@@ -48,6 +48,31 @@
     return it("should should use the correct start/end values", function() {
       expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe(175);
       return expect(browser.executeScript("return kwicResults.proxy.prevParams.end")).toBe(199);
+    });
+  });
+
+  describe("json button", function() {
+    var elm;
+    elm = null;
+    beforeEach(function() {
+      return browser.ignoreSynchronization = true;
+    });
+    it("should display the correct url", function() {
+      var wd;
+      wd = cycleSearch();
+      browser.get("http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C" + wd + "&page=7");
+      elm = element(By.css("#json-link"));
+      waitFor(elm);
+      return expect(elm.getAttribute("href")).toContain("?command=query");
+    });
+    return it("should switch url when changing tab", function() {
+      var wd;
+      wd = cycleSearch();
+      browser.get("http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C" + wd + "&page=7");
+      element(By.css(".result_tabs > ul > li:nth-child(2)")).click();
+      elm = element(By.css("#json-link"));
+      waitFor(elm);
+      return expect(elm.getAttribute("href")).toContain("?command=count");
     });
   });
 

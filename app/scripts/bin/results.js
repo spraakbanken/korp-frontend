@@ -977,13 +977,20 @@
     };
 
     LemgramResults.prototype.showWarning = function() {
-      var hasWarned;
+      var hasWarned,
+        _this = this;
       hasWarned = !!$.jStorage.get("lemgram_warning");
       if (!hasWarned) {
         $.jStorage.set("lemgram_warning", true);
-        $("#sidebar").sidebar("show", "lemgramWarning");
+        $("#sidebar").sidebar("refreshContent", "lemgramWarning");
+        safeApply(this.s, function() {
+          return _this.s.$root.sidebar_visible = true;
+        });
         return self.timeout = setTimeout(function() {
-          return $("#sidebar").sidebar("hide");
+          return safeApply(_this.s, function() {
+            _this.s.$root.sidebar_visible = false;
+            return $("#sidebar").sidebar("refreshContent");
+          });
         }, 5000);
       }
     };
@@ -997,7 +1004,6 @@
     LemgramResults.prototype.onexit = function() {
       LemgramResults.__super__.onexit.call(this);
       clearTimeout(self.timeout);
-      $("#sidebar").sidebar("hide");
     };
 
     LemgramResults.prototype.showNoResults = function() {
