@@ -85,7 +85,7 @@ korpApp.run ($rootScope, $location, utils, searches) ->
             settings.corpusListing.select all_default_corpora
             corpusChooserInstance.corpusChooser "selectItems", all_default_corpora
         
-korpApp.controller "headerCtrl", ($scope, $location) ->
+korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
     s = $scope
 
     s.citeClick = () ->
@@ -124,6 +124,62 @@ korpApp.controller "headerCtrl", ($scope, $location) ->
         
     s.onModeMenuClick = (modeId) ->
         window.location = location.pathname + "?mode=" + modeId
+
+    s.show_modal = false
+
+
+
+    modal = null
+    utils.setupHash s, [
+        key: "display"
+        scope_name: "show_modal"
+        post_change : (val) ->
+            c.log "post change", val
+            if val
+                showModal(val)
+            else
+                c.log "post change modal", modal
+                modal?.close()
+                modal = null
+
+
+    ]
+
+    closeModals = () ->
+        s.login_err = false
+        s.show_modal = false
+
+    showModal = (key) ->
+        tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]
+        modal = $modal.open
+            templateUrl : tmpl
+            scope : s
+            windowClass : key
+
+        modal.result.then (() ->
+            closeModals()
+        ), () ->
+            closeModals()
+
+    s.clickX = () ->
+        closeModals()
+
+
+    s.loginSubmit = (usr, pass) ->
+        s.login_err = false
+        authenticationProxy.makeRequest(login, pass).done((data) ->
+            c.log "authenticationProxy success", data
+            util.setLogin()
+            safeApply s, () ->
+                s.show_modal = null
+            # search "display", null
+        ).fail ->
+            c.log "login fail"
+            # s.show_modal = null
+            safeApply s, () ->
+                s.login_err = true
+            # $(".err_msg", self).show()
+        
 
 
 korpApp.filter "trust", ($sce) ->

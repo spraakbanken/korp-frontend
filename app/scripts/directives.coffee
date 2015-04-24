@@ -70,7 +70,6 @@ korpApp.directive "tabHash", (utils, $location) ->
             if contentScope.tabs[index]
                 contentScope.tabs[index].active = true
                 # contentScope.tabs[index].onSelect()
-                c.log "contentScope.tabs[index].onSelect", contentScope.tabs[index].onSelect
             else
                 (_.last contentScope.tabs)?.active = true
                 # (_.last contentScope.tabs)?.onSelect()

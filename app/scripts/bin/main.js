@@ -2,8 +2,6 @@
   var creds, deferred_domReady, isDev, loc_dfd, t,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  window.searchProxy = new model.SearchProxy();
-
   window.authenticationProxy = new model.AuthenticationProxy();
 
   window.timeProxy = new model.TimeProxy();
@@ -92,23 +90,8 @@
       window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search;
       return false;
     });
-    $("#cog_menu").menu({}).hide().find(".follow_link").click(function() {
+    $("#cog_menu .follow_link").click(function() {
       return window.href = window.open($(this).attr("href"), $(this).attr("target") || "_self");
-    });
-    $("#cog").click(function() {
-      if ($("#cog_menu:visible").length) {
-        return;
-      }
-      $("#cog_menu").fadeIn("fast").position({
-        my: "right top",
-        at: "right bottom",
-        of: "#top_bar",
-        offset: "-8 3"
-      });
-      $("body").one("click", function() {
-        return $("#cog_menu").fadeOut("fast");
-      });
-      return false;
     });
     $("#search_history").change(function(event) {
       var target;
@@ -161,67 +144,6 @@
         $("#languages").radioList("select", newLang);
       }
       display = search().display;
-      if (display === "about") {
-        if ($("#about_content").is(":empty")) {
-          $("#about_content").load("markup/about.html", function() {
-            util.localize(this);
-            return showAbout();
-          });
-        } else {
-          showAbout();
-        }
-      } else if (display === "login") {
-        $("#login_popup").dialog({
-          height: 220,
-          width: 177,
-          modal: true,
-          resizable: false,
-          create: function() {
-            return $(".err_msg", this).hide();
-          },
-          open: function() {
-            return $(".ui-widget-overlay").hide().fadeIn();
-          },
-          beforeClose: function() {
-            $(".ui-widget-overlay").remove();
-            $("<div />", {
-              "class": "ui-widget-overlay"
-            }).css({
-              height: $("body").outerHeight(),
-              width: $("body").outerWidth(),
-              zIndex: 1001
-            }).appendTo("body").fadeOut(function() {
-              return $(this).remove();
-            });
-            search("display", null);
-            return false;
-          }
-        }).show().unbind("submit").submit(function() {
-          var self;
-          self = this;
-          authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done(function(data) {
-            util.setLogin();
-            return search("display", null);
-          }).fail(function() {
-            c.log("login fail");
-            $("#pass", self).val("");
-            return $(".err_msg", self).show();
-          });
-          return false;
-        });
-        $("#ui-dialog-title-login_popup").attr("rel", "localize[log_in]");
-      } else {
-        $(".ui-dialog").fadeTo(400, 0, function() {
-          return $(".ui-dialog-content", this).dialog("destroy");
-        });
-      }
-      if (!isInit && hasChanged("display")) {
-        $("#plot_popup.ui-dialog-content").dialog("destroy").css({
-          opacity: 0,
-          display: "block",
-          height: 0
-        });
-      }
       if (isInit) {
         util.localize();
       }

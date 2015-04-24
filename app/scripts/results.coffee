@@ -1296,7 +1296,6 @@ class view.StatsResults extends BaseResults
 
     updateGraphBtnState : () ->
 
-        # $("#showGraph").button("enable")
         @s.graphEnabled = true
         cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
 

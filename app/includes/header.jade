@@ -11,11 +11,11 @@
            a(ng-href="{{getUrl(mode.mode)}}", ng-click="onModeMenuClick(mode.mode)") 
              | {{mode.localekey | loc}}
       
-  #cog
+  #cog.dropdown-toggle(popper, my="right+10px top+10px", at="bottom right")
 
-  ul#cog_menu
+  ul#cog_menu.dropdown-menu.popper_menu
     li
-      a#about(href='javascript:', rel='localize[about]') About Korp
+      a#about(ng-click="show_about = 'about'", rel='localize[about]') About Korp
     li
       a#docs.follow_link(href='http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning', target='_blank', rel='localize[docs]')
     li#korplink

@@ -132,15 +132,33 @@ html
       #deptree_popup(title='Dependensträd', style='display: none;')
       #plot_popup
         #plot_canvas(style='width: 470px; height: 400px;')
-      #login_popup(title='Logga in')
-        form
-          label(for='usrname', rel='localize[username]') E-postadress
-          input#usrname(type='text')
-          label(for='pass', rel='localize[password]') Lösenord
-          input#pass(type='password')
-          p.err_msg(rel='localize[login_fail_msg]') Login misslyckades, kontrollera användarnamn och lösenord och försök igen.
-          input(type='submit', value='Skicka', rel='localize[send]')
+      //- #login_popup(title='Logga in')
+      //-   form
+      //-     label(for='usrname', rel='localize[username]') E-postadress
+      //-     input#usrname(type='text')
+      //-     label(for='pass', rel='localize[password]') Lösenord
+      //-     input#pass(type='password')
+      //-     p.err_msg(rel='localize[login_fail_msg]') Login misslyckades, kontrollera användarnamn och lösenord och försök igen.
+      //-     input(type='submit', value='Skicka', rel='localize[send]')
     
+
+    script#login_modal(type="text/ng-template").
+      <div class="modal-header">
+        <h2>{{'log_in' | loc}}</h2>
+        <span ng-click="clickX()" class="close-x">×</span>
+
+      </div>
+      <div id="login_popup" class="modal-body">
+        <form ng-submit="loginSubmit(login_usr, login_pass)">
+          <label for="usrname" rel="localize[username]">Epostadress</label>
+          <input id="usrname" ng-model="login_usr" type="text">
+          <label for="pass" rel="localize[password]">Lösenord</label>
+          <input id="pass" ng-model="login_pass" type="password">
+          <p rel="localize[login_fail_msg]" ng-show="login_err" class="err_msg">Login misslyckades, kontrollera användarnamn och lösenord och försök igen.</p>
+          <input class="btn btn-sm" type="submit" value="Logga in" rel="localize[send]" >
+        </form>
+      </div>
+        
 
     script#lemgramResultsTmpl(type='text/x-jquery-tmpl').
       <div class="lemgram_section">
@@ -200,12 +218,12 @@ html
     script(src='components/jquery-ui/ui/jquery.ui.dialog.js')
     script(src='components/jquery-ui/ui/jquery.ui.effect.js')
     script(src='components/jquery-ui/ui/jquery.ui.effect-fade.js')
-    script(src='components/jquery-ui/ui/jquery.ui.effect-slide.js')
+    //- script(src='components/jquery-ui/ui/jquery.ui.effect-slide.js')
     script(src='components/jquery-ui/ui/jquery.ui.menu.js')
     script(src='components/jquery-ui/ui/jquery.ui.mouse.js')
     script(src='components/jquery-ui/ui/jquery.ui.position.js')
     script(src='components/jquery-ui/ui/jquery.ui.sortable.js')
-    script(src='components/jquery-ui/ui/jquery.ui.slider.js')
+    //- script(src='components/jquery-ui/ui/jquery.ui.slider.js')
 
     script(src='components/angular/angular.js')
 
@@ -235,7 +253,7 @@ html
     script(src='components/SlickGrid/slick.grid.js')
     script(src='components/SlickGrid/plugins/slick.checkboxselectcolumn.js')
     script(src='components/SlickGrid/plugins/slick.rowselectionmodel.js')
-    script(src='lib/g.line-min.js')
+    //- script(src='lib/g.line-min.js')
     script(src='lib/jquery.tooltip.pack.js')
 
     

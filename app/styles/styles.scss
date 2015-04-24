@@ -1221,6 +1221,21 @@ a {
   }
 }
 
+#about_body {
+  position: relative;
+  &:after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    bottom : 0;
+    right : 0;
+    background : url("../img/feather.svg") no-repeat;
+    background-size: contain;
+    height: 430px;
+    width : 230px;
+  }
+}
+
 #about_content ul {
   padding-left: 10px;
   margin-top: 8px;
@@ -1230,8 +1245,15 @@ a {
   /*display : none;*/
 }
 
+.modal.login {
+  width: 280px;
+  height : 370px;
+  margin-left : -120px;
+}
+
 #login_popup {
-  display: none;
+  // display: none;
+  min-height: initial;
   * {
     display: block;
   }
@@ -1239,7 +1261,7 @@ a {
     margin-top: 5px;
   }
   .err_msg {
-    display: none;
+    // display: none;
     font-size: .8em;
   }
   input[type=submit] {
@@ -1675,12 +1697,14 @@ label[for=lemgram_select]:before {
 .modal {
   max-height : initial;
   overflow-y : auto;
+  border-radius: 3px;
+  font-size : 1.3em;
 }
 
 .modal.fade.in {
   top : 30%;
 }
-.modal-header h3 {
+.modal-header h3, .modal-header h2 {
   font-weight : normal;
 }
 

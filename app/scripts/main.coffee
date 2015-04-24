@@ -1,5 +1,5 @@
 
-window.searchProxy = new model.SearchProxy()
+# window.searchProxy = new model.SearchProxy()
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
 creds = $.jStorage.get("creds")
@@ -52,10 +52,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     if corpus
         settings.corpusListing.select corpus.split(",")
     
-    # window.advancedSearch = new view.AdvancedSearch('#korp-advanced')
-    # window.extendedSearch = new view.ExtendedSearch('#korp-extended')
-    # window.simpleSearch = new view.SimpleSearch('#korp-simple')
-
     $("body").addClass "lab" if isLab
     
     $("body").addClass "mode-" + currentMode
@@ -80,23 +76,9 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
 
     #TODO: why do i have to do this?
-    $("#cog_menu").menu({}).hide().find(".follow_link").click ->
+    $("#cog_menu .follow_link").click ->
         window.href = window.open($(this).attr("href"), $(this).attr("target") or "_self")
 
-    $("#cog").click ->
-        return if $("#cog_menu:visible").length
-        $("#cog_menu").fadeIn("fast").position
-            my: "right top"
-            at: "right bottom"
-            of: "#top_bar"
-            offset: "-8 3"
-
-        $("body").one "click", ->
-            $("#cog_menu").fadeOut "fast"
-
-        false
-
-    # $("#searchbar").html searchbar_html[0]
     $("#search_history").change (event) ->
         c.log "select", $(this).find(":selected")
         target = $(this).find(":selected")
@@ -151,61 +133,61 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             $("#languages").radioList "select", newLang
 
         display = search().display
-        if display is "about"
-            if $("#about_content").is(":empty")
-                $("#about_content").load "markup/about.html", ->
-                    util.localize this
-                    showAbout()
+        # if display is "about"
+            # if $("#about_content").is(":empty")
+            #     $("#about_content").load "markup/about.html", ->
+            #         util.localize this
+                    # showAbout()
 
-            else
-                showAbout()
-        else if display is "login"
-            $("#login_popup").dialog(
-                height: 220
-                width: 177
-                modal: true
-                resizable: false
-                create: ->
-                    $(".err_msg", this).hide()
+            # else
+                # showAbout()
+        # if display is "login"
+        #     $("#login_popup").dialog(
+        #         height: 220
+        #         width: 177
+        #         modal: true
+        #         resizable: false
+        #         create: ->
+        #             $(".err_msg", this).hide()
 
-                open: ->
-                    $(".ui-widget-overlay").hide().fadeIn()
+        #         open: ->
+        #             $(".ui-widget-overlay").hide().fadeIn()
 
-                beforeClose: ->
-                    $(".ui-widget-overlay").remove()
-                    $("<div />",
-                        class: "ui-widget-overlay"
-                    ).css(
-                        height: $("body").outerHeight()
-                        width: $("body").outerWidth()
-                        zIndex: 1001
-                    ).appendTo("body").fadeOut ->
-                        $(this).remove()
+        #         beforeClose: ->
+        #             $(".ui-widget-overlay").remove()
+        #             $("<div />",
+        #                 class: "ui-widget-overlay"
+        #             ).css(
+        #                 height: $("body").outerHeight()
+        #                 width: $("body").outerWidth()
+        #                 zIndex: 1001
+        #             ).appendTo("body").fadeOut ->
+        #                 $(this).remove()
 
-                    search "display", null
-                    false
-            ).show().unbind("submit").submit ->
-                self = this
-                authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done((data) ->
-                    util.setLogin()
-                    search "display", null
-                ).fail ->
-                    c.log "login fail"
-                    $("#pass", self).val ""
-                    $(".err_msg", self).show()
+        #             search "display", null
+        #             false
+        #     ).show().unbind("submit").submit ->
+        #         self = this
+        #         authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done((data) ->
+        #             util.setLogin()
+        #             search "display", null
+        #         ).fail ->
+        #             c.log "login fail"
+        #             $("#pass", self).val ""
+        #             $(".err_msg", self).show()
 
-                false
+        #         false
 
-            $("#ui-dialog-title-login_popup").attr "rel", "localize[log_in]"
-        else
-            $(".ui-dialog").fadeTo 400, 0, ->
-                $(".ui-dialog-content", this).dialog "destroy"
+        #     $("#ui-dialog-title-login_popup").attr "rel", "localize[log_in]"
+        # else
+        #     $(".ui-dialog").fadeTo 400, 0, ->
+        #         $(".ui-dialog-content", this).dialog "destroy"
 
-        if not isInit and hasChanged("display")
-            $("#plot_popup.ui-dialog-content").dialog("destroy").css
-                opacity: 0
-                display: "block"
-                height: 0
+        # if not isInit and hasChanged("display")
+        #     $("#plot_popup.ui-dialog-content").dialog("destroy").css
+        #         opacity: 0
+        #         display: "block"
+        #         height: 0
 
 
         if isInit

@@ -106,8 +106,7 @@
             }
           }
           if (contentScope.tabs[index]) {
-            contentScope.tabs[index].active = true;
-            return c.log("contentScope.tabs[index].onSelect", contentScope.tabs[index].onSelect);
+            return contentScope.tabs[index].active = true;
           } else {
             return (_ref1 = _.last(contentScope.tabs)) != null ? _ref1.active = true : void 0;
           }

@@ -76,8 +76,8 @@
     });
   });
 
-  korpApp.controller("headerCtrl", function($scope, $location) {
-    var N_VISIBLE, i, s;
+  korpApp.controller("headerCtrl", function($scope, $location, $modal, utils) {
+    var N_VISIBLE, closeModals, i, modal, s, showModal;
     s = $scope;
     s.citeClick = function() {
       $location.search("display", "about");
@@ -122,8 +122,67 @@
     s.onSelect = function(modeId) {
       return $location.search("corpus", null);
     };
-    return s.onModeMenuClick = function(modeId) {
+    s.onModeMenuClick = function(modeId) {
       return window.location = location.pathname + "?mode=" + modeId;
+    };
+    s.show_modal = false;
+    modal = null;
+    utils.setupHash(s, [
+      {
+        key: "display",
+        scope_name: "show_modal",
+        post_change: function(val) {
+          c.log("post change", val);
+          if (val) {
+            return showModal(val);
+          } else {
+            c.log("post change modal", modal);
+            if (modal != null) {
+              modal.close();
+            }
+            return modal = null;
+          }
+        }
+      }
+    ]);
+    closeModals = function() {
+      s.login_err = false;
+      return s.show_modal = false;
+    };
+    showModal = function(key) {
+      var tmpl;
+      tmpl = {
+        about: 'markup/about.html',
+        login: 'login_modal'
+      }[key];
+      modal = $modal.open({
+        templateUrl: tmpl,
+        scope: s,
+        windowClass: key
+      });
+      return modal.result.then((function() {
+        return closeModals();
+      }), function() {
+        return closeModals();
+      });
+    };
+    s.clickX = function() {
+      return closeModals();
+    };
+    return s.loginSubmit = function(usr, pass) {
+      s.login_err = false;
+      return authenticationProxy.makeRequest(login, pass).done(function(data) {
+        c.log("authenticationProxy success", data);
+        util.setLogin();
+        return safeApply(s, function() {
+          return s.show_modal = null;
+        });
+      }).fail(function() {
+        c.log("login fail");
+        return safeApply(s, function() {
+          return s.login_err = true;
+        });
+      });
     };
   });
 

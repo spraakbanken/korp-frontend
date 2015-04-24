@@ -338,69 +338,6 @@
       return $("<select id='lemgram_select' />").html(optionElems).data("dataprovider", lemgrams);
     };
 
-    SimpleSearch.prototype.renderSimilarHeader = function(selectedItem, data) {
-      var count, div, index, isSliced, lemgrams, list, self, sliced;
-      c.log("renderSimilarHeader");
-      self = this;
-      $("#similar_lemgrams").empty().append("<div id='similar_header' />");
-      $("<p/>").localeKey("similar_header").css("float", "left").appendTo("#similar_header");
-      lemgrams = this.savedSelect || $("#simple_text").data("dataArray");
-      this.savedSelect = null;
-      if ((lemgrams != null) && lemgrams.length) {
-        this.buildLemgramSelect(lemgrams).appendTo("#similar_header").css("float", "right").change(function() {
-          self.savedSelect = lemgrams;
-          return self.selectLemgram($(this).val());
-        }).val(selectedItem);
-        $("#simple_text").data("dataArray", null);
-      }
-      $("<div name='wrapper' style='clear : both;' />").appendTo("#similar_header");
-      data = $.grep(data, function(item) {
-        return !!item.rel.length;
-      });
-      count = 0;
-      index = 0;
-      sliced = $.extend(true, [], data);
-      isSliced = false;
-      $.each(sliced, function(i, item) {
-        index = i;
-        if (count + item.rel.length > 30) {
-          item.rel = item.rel.slice(0, 30 - count);
-          isSliced = true;
-          return false;
-        }
-        return count += item.rel.length;
-      });
-      list = $("<ul />").appendTo("#similar_lemgrams");
-      $("#similarTmpl").tmpl(sliced.slice(0, index + 1)).appendTo(list).find("a").click(function() {
-        return self.selectLemgram($(this).data("lemgram"));
-      });
-      $("#show_more").remove();
-      div = $("#similar_lemgrams").show().height("auto").slideUp(0);
-      if (isSliced) {
-        div.after($("<div id='show_more' />").css("background-color", settings.primaryColor).append($("<a href='javascript:' />").localeKey("show_more")).click(function() {
-          var h, newH;
-          $(this).remove();
-          h = $("#similar_lemgrams").outerHeight();
-          list.html($("#similarTmpl").tmpl(data)).find("a").click(function() {
-            return self.selectLemgram($(this).data("lemgram"));
-          });
-          $("#similar_lemgrams").height("auto");
-          newH = $("#similar_lemgrams").outerHeight();
-          $("#similar_lemgrams").height(h);
-          return $("#similar_lemgrams").animate({
-            height: newH
-          }, "fast");
-        }));
-      }
-      return div.slideDown("fast");
-    };
-
-    SimpleSearch.prototype.removeSimilarHeader = function() {
-      return $("#similar_lemgrams").slideUp(function() {
-        return $(this).empty();
-      });
-    };
-
     SimpleSearch.prototype.getCQP = function(word) {
       var cqp, currentText, lemgram, query, suffix, val, wordArray;
       currentText = $.trim(word || $("#simple_text", this.$main).val() || "", '"');

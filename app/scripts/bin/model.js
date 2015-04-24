@@ -119,45 +119,6 @@
 
   })();
 
-  model.SearchProxy = (function(_super) {
-    __extends(SearchProxy, _super);
-
-    function SearchProxy() {}
-
-    SearchProxy.prototype.relatedWordSearch = function(lemgram) {
-      return $.ajax({
-        url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram,
-        success: function(data) {
-          var hasAnyFreq, lemgrams;
-          c.log("related words success");
-          lemgrams = [];
-          $.each(data, function(i, item) {
-            return lemgrams = lemgrams.concat(item.rel);
-          });
-          hasAnyFreq = false;
-          return lemgramProxy.lemgramCount(lemgrams).done(function(freqs) {
-            $.each(data, function(i, item) {
-              return item.rel = $.grep(item.rel, function(lemgram) {
-                if (freqs[lemgram]) {
-                  hasAnyFreq = true;
-                }
-                return !!freqs[lemgram];
-              });
-            });
-            if (hasAnyFreq) {
-              return simpleSearch.renderSimilarHeader(lemgram, data);
-            } else {
-              return simpleSearch.removeSimilarHeader();
-            }
-          });
-        }
-      });
-    };
-
-    return SearchProxy;
-
-  })(BaseProxy);
-
   model.KWICProxy = (function(_super) {
     __extends(KWICProxy, _super);
 
