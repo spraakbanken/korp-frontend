@@ -50,39 +50,6 @@
 		return $(this).clone().wrap('<div></div>').parent().html();
 	};
 
-	$.fn.svgpreloader = function() {
-
-		$(this)
-				.each(
-						function() {
-							var r = Raphael(this, 20, 20), sectorsCount = 12, color = "#000", width = 15, r1 = 2, r2 = 4, cx = 10, cy = 10,
-
-							sectors = [], opacity = [], beta = 2 * Math.PI / sectorsCount,
-
-							pathParams = {
-								stroke : color,
-								"stroke-width" : width,
-								"stroke-linecap" : "round"
-							};
-							for ( var i = 0; i < sectorsCount; i++) {
-								var alpha = beta * i - Math.PI / 2, cos = Math
-										.cos(alpha), sin = Math.sin(alpha);
-								opacity[i] = 1 / sectorsCount * i;
-								sectors[i] = r.path(pathParams)// .attr("stroke",
-								// Raphael.getColor())
-								.moveTo(cx + r1 * cos, cy + r1 * sin).lineTo(
-										cx + r2 * cos, cy + r2 * sin);
-							}
-							(function ticker() {
-								opacity.unshift(opacity.pop());
-								for ( var i = 0; i < sectorsCount; i++) {
-									sectors[i].attr("opacity", opacity[i]);
-								}
-								r.safari();
-								setTimeout(ticker, 1000 / sectorsCount);
-							})();
-						});
-	};
 
 })(jQuery);
 

@@ -171,8 +171,7 @@
     };
     return s.loginSubmit = function(usr, pass) {
       s.login_err = false;
-      return authenticationProxy.makeRequest(login, pass).done(function(data) {
-        c.log("authenticationProxy success", data);
+      return authenticationProxy.makeRequest(usr, pass).done(function(data) {
         util.setLogin();
         return safeApply(s, function() {
           return s.show_modal = null;

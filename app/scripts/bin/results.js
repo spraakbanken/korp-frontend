@@ -1,5 +1,5 @@
 (function() {
-  var BaseResults, newDataInGraph,
+  var BaseResults,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __slice = [].slice;
@@ -1024,149 +1024,11 @@
 
   })(BaseResults);
 
-  newDataInGraph = function(dataName, horizontalDiagram) {
-    var corpusArray, dataItems, locstring, relHitsString, stats2Instance, statsSwitchInstance, topheader, wordArray;
-    c.log("dataName, horizontalDiagram", dataName, horizontalDiagram);
-    dataItems = [];
-    wordArray = [];
-    corpusArray = [];
-    statsResults["lastDataName"] = dataName;
-    if (horizontalDiagram) {
-      $.each(statsResults.savedData["corpora"], function(corpus, obj) {
-        var freq, totfreq;
-        if (dataName === "SIGMA_ALL") {
-          totfreq = 0;
-          $.each(obj["relative"], function(wordform, freq) {
-            var numFreq;
-            numFreq = parseFloat(freq);
-            if (numFreq) {
-              return totfreq += numFreq;
-            }
-          });
-          return dataItems.push({
-            value: totfreq,
-            caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString()),
-            shape_id: "sigma_all"
-          });
-        } else {
-          freq = parseFloat(obj["relative"][dataName]);
-          if (freq) {
-            return dataItems.push({
-              value: freq,
-              caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString()),
-              shape_id: dataName
-            });
-          } else {
-            return dataItems.push({
-              value: 0,
-              caption: "",
-              shape_id: dataName
-            });
-          }
-        }
-      });
-      $("#dialog").remove();
-      if (dataName === "SIGMA_ALL") {
-        topheader = util.getLocaleString("statstable_hitsheader_lemgram");
-        locstring = "statstable_hitsheader_lemgram";
-      } else {
-        topheader = util.getLocaleString("statstable_hitsheader") + ("<i>" + dataName + "</i>");
-        locstring = "statstable_hitsheader";
-      }
-      relHitsString = util.getLocaleString("statstable_relfigures_hits");
-      $("<div id='dialog' title='" + topheader + "' />").appendTo("body").append("<div id=\"pieDiv\"><br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p></div>").dialog({
-        width: 400,
-        height: 500,
-        resize: function() {
-          $("#chartFrame").css("height", $("#chartFrame").parent().width() - 20);
-          return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
-        },
-        resizeStop: function(event, ui) {
-          var h, w;
-          w = $(this).dialog("option", "width");
-          h = $(this).dialog("option", "height");
-          if (this.width * 1.25 > this.height) {
-            $(this).dialog("option", "height", w * 1.25);
-          } else {
-            $(this).dialog("option", "width", h * 0.80);
-          }
-          return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
-        },
-        close: function() {
-          return $("#pieDiv").remove();
-        }
-      }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram");
-      $("#dialog").fadeTo(400, 1);
-      $("#dialog").find("a").blur();
-      stats2Instance = $("#chartFrame").pie_widget({
-        container_id: "chartFrame",
-        data_items: dataItems
-      });
-      return statsSwitchInstance = $("#statistics_switch").radioList({
-        change: function() {
-          var loc, typestring;
-          typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
-          dataItems = [];
-          dataName = statsResults["lastDataName"];
-          $.each(statsResults.savedData["corpora"], function(corpus, obj) {
-            var freq, totfreq;
-            if (dataName === "SIGMA_ALL") {
-              totfreq = 0;
-              $.each(obj[typestring], function(wordform, freq) {
-                var numFreq;
-                if (typestring === "absolute") {
-                  numFreq = parseInt(freq);
-                } else {
-                  numFreq = parseFloat(freq);
-                }
-                if (numFreq) {
-                  return totfreq += numFreq;
-                }
-              });
-              return dataItems.push({
-                value: totfreq,
-                caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(), false),
-                shape_id: "sigma_all"
-              });
-            } else {
-              if (typestring === "absolute") {
-                freq = parseInt(obj[typestring][dataName]);
-              } else {
-                freq = parseFloat(obj[typestring][dataName]);
-              }
-              if (freq) {
-                return dataItems.push({
-                  value: freq,
-                  caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(), false),
-                  shape_id: dataName
-                });
-              } else {
-                return dataItems.push({
-                  value: 0,
-                  caption: "",
-                  shape_id: dataName
-                });
-              }
-            }
-          });
-          stats2Instance.pie_widget("newData", dataItems);
-          if (typestring === "absolute") {
-            loc = "statstable_absfigures_hits";
-          } else {
-            loc = "statstable_relfigures_hits";
-          }
-          return $("#hitsDescription").localeKey(loc);
-        },
-        selected: "relative"
-      });
-    }
-  };
-
   view.StatsResults = (function(_super) {
     __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
-      var paper, self,
+      var self,
         _this = this;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
@@ -1178,9 +1040,9 @@
         var parts;
         parts = $(event.currentTarget).attr("id").split("__");
         if (parts[1] !== "Σ") {
-          return newDataInGraph(parts[1], true);
+          return _this.newDataInGraph(parts[1]);
         } else {
-          return newDataInGraph("SIGMA_ALL", true);
+          return _this.newDataInGraph("SIGMA_ALL");
         }
       });
       this.$result.on("click", ".slick-cell.l1.r1 .link", function() {
@@ -1269,12 +1131,6 @@
             corpusListing: settings.corpusListing.subsetFactory(activeCorpora)
           });
         });
-      });
-      paper = new Raphael($(".graph_btn_icon", this.$result).get(0), 33, 24);
-      paper.path("M3.625,25.062c-0.539-0.115-0.885-0.646-0.77-1.187l0,0L6.51,6.584l2.267,9.259l1.923-5.188l3.581,3.741l3.883-13.103l2.934,11.734l1.96-1.509l5.271,11.74c0.226,0.504,0,1.095-0.505,1.321l0,0c-0.505,0.227-1.096,0-1.322-0.504l0,0l-4.23-9.428l-2.374,1.826l-1.896-7.596l-2.783,9.393l-3.754-3.924L8.386,22.66l-1.731-7.083l-1.843,8.711c-0.101,0.472-0.515,0.794-0.979,0.794l0,0C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062z").attr({
-        fill: "#666",
-        stroke: "none",
-        transform: "s0.6"
       });
     }
 
@@ -1404,7 +1260,6 @@
       if (resultError === false) {
         return;
       }
-      c.log("renderresults");
       if (data[0].total_value.absolute === 0) {
         safeApply(this.s, function() {
           return _this.s.no_hits = true;
@@ -1417,12 +1272,10 @@
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
       $("#myGrid").width(800);
       $("#myGrid").height(600);
-      c.log("length", data.length);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: false
       });
-      c.log("grid fixad");
       grid.setSelectionModel(new Slick.RowSelectionModel({
         selectActiveRow: false
       }));
@@ -1478,6 +1331,141 @@
       if (!(_.compact(cl.getTimeInterval())).length) {
         return this.s.graphEnabled = false;
       }
+    };
+
+    StatsResults.prototype.newDataInGraph = function(dataName) {
+      var corpusArray, dataItems, wordArray;
+      dataItems = [];
+      wordArray = [];
+      corpusArray = [];
+      this.lastDataName = dataName;
+      return $.each(this.savedData["corpora"], function(corpus, obj) {
+        var freq, locstring, relHitsString, stats2Instance, statsSwitchInstance, topheader, totfreq,
+          _this = this;
+        if (dataName === "SIGMA_ALL") {
+          totfreq = 0;
+          $.each(obj["relative"], function(wordform, freq) {
+            var numFreq;
+            numFreq = parseFloat(freq);
+            if (numFreq) {
+              return totfreq += numFreq;
+            }
+          });
+          dataItems.push({
+            value: totfreq,
+            caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString()),
+            shape_id: "sigma_all"
+          });
+        } else {
+          freq = parseFloat(obj["relative"][dataName]);
+          if (freq) {
+            dataItems.push({
+              value: freq,
+              caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString()),
+              shape_id: dataName
+            });
+          } else {
+            dataItems.push({
+              value: 0,
+              caption: "",
+              shape_id: dataName
+            });
+          }
+        }
+        $("#dialog").remove();
+        if (dataName === "SIGMA_ALL") {
+          topheader = util.getLocaleString("statstable_hitsheader_lemgram");
+          locstring = "statstable_hitsheader_lemgram";
+        } else {
+          topheader = util.getLocaleString("statstable_hitsheader") + ("<i>" + dataName + "</i>");
+          locstring = "statstable_hitsheader";
+        }
+        relHitsString = util.getLocaleString("statstable_relfigures_hits");
+        $("<div id='dialog' title='" + topheader + "' />").appendTo("body").append("<div id=\"pieDiv\"><br/><div id=\"statistics_switch\" style=\"text-align:center\">\n    <a href=\"javascript:\" rel=\"localize[statstable_relfigures]\" data-mode=\"relative\">Relativa frekvenser</a>\n    <a href=\"javascript:\" rel=\"localize[statstable_absfigures]\" data-mode=\"absolute\">Absoluta frekvenser</a>\n</div>\n<div id=\"chartFrame\" style=\"height:380\"></div>\n<p id=\"hitsDescription\" style=\"text-align:center\" rel=\"localize[statstable_absfigures_hits]\">" + relHitsString + "</p></div>").dialog({
+          width: 400,
+          height: 500,
+          resize: function() {
+            $("#chartFrame").css("height", $("#chartFrame").parent().width() - 20);
+            return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
+          },
+          resizeStop: function(event, ui) {
+            var h, w;
+            w = $(this).dialog("option", "width");
+            h = $(this).dialog("option", "height");
+            if (this.width * 1.25 > this.height) {
+              $(this).dialog("option", "height", w * 1.25);
+            } else {
+              $(this).dialog("option", "width", h * 0.80);
+            }
+            return stats2Instance.pie_widget("resizeDiagram", $(this).width() - 60);
+          },
+          close: function() {
+            return $("#pieDiv").remove();
+          }
+        }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram");
+        $("#dialog").fadeTo(400, 1);
+        $("#dialog").find("a").blur();
+        stats2Instance = $("#chartFrame").pie_widget({
+          container_id: "chartFrame",
+          data_items: dataItems
+        });
+        return statsSwitchInstance = $("#statistics_switch").radioList({
+          change: function() {
+            var loc, typestring;
+            typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode");
+            dataItems = [];
+            dataName = _this.lastDataName;
+            $.each(_this.savedData["corpora"], function(corpus, obj) {
+              if (dataName === "SIGMA_ALL") {
+                totfreq = 0;
+                $.each(obj[typestring], function(wordform, freq) {
+                  var numFreq;
+                  if (typestring === "absolute") {
+                    numFreq = parseInt(freq);
+                  } else {
+                    numFreq = parseFloat(freq);
+                  }
+                  if (numFreq) {
+                    return totfreq += numFreq;
+                  }
+                });
+                return dataItems.push({
+                  value: totfreq,
+                  caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(), false),
+                  shape_id: "sigma_all"
+                });
+              } else {
+                if (typestring === "absolute") {
+                  freq = parseInt(obj[typestring][dataName]);
+                } else {
+                  freq = parseFloat(obj[typestring][dataName]);
+                }
+                if (freq) {
+                  return dataItems.push({
+                    value: freq,
+                    caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(), false),
+                    shape_id: dataName
+                  });
+                } else {
+                  return dataItems.push({
+                    value: 0,
+                    caption: "",
+                    shape_id: dataName
+                  });
+                }
+              }
+            });
+            stats2Instance.pie_widget("newData", dataItems);
+            if (typestring === "absolute") {
+              loc = "statstable_absfigures_hits";
+            } else {
+              loc = "statstable_relfigures_hits";
+            }
+            return $("#hitsDescription").localeKey(loc);
+          },
+          selected: "relative"
+        });
+      });
     };
 
     StatsResults.prototype.onentry = function() {

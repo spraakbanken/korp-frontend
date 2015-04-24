@@ -521,6 +521,7 @@
 
     AuthenticationProxy.prototype.makeRequest = function(usr, pass) {
       var auth, dfd, self;
+      c.log("makeRequest: (usr, pass", usr, pass);
       self = this;
       if (window.btoa) {
         auth = window.btoa(usr + ":" + pass);

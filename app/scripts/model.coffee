@@ -471,6 +471,7 @@ class model.AuthenticationProxy
         @loginObj = {}
 
     makeRequest: (usr, pass) ->
+        c.log "makeRequest: (usr, pass", usr, pass
         self = this
         if window.btoa
             auth = window.btoa(usr + ":" + pass)

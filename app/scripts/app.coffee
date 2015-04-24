@@ -167,19 +167,14 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
 
     s.loginSubmit = (usr, pass) ->
         s.login_err = false
-        authenticationProxy.makeRequest(login, pass).done((data) ->
-            c.log "authenticationProxy success", data
+        authenticationProxy.makeRequest(usr, pass).done((data) ->
             util.setLogin()
             safeApply s, () ->
                 s.show_modal = null
-            # search "display", null
         ).fail ->
             c.log "login fail"
-            # s.show_modal = null
             safeApply s, () ->
                 s.login_err = true
-            # $(".err_msg", self).show()
-        
 
 
 korpApp.filter "trust", ($sce) ->
