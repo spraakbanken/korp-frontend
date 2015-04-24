@@ -1080,6 +1080,7 @@ class view.StatsResults extends BaseResults
         $("#myGrid").height(600)
 
         #return false
+        console.log "grad data", data
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: false
@@ -1692,6 +1693,7 @@ class view.GraphResults extends BaseResults
 
             HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value
 
+
             time_table_data = []
             time_table_columns_intermediate = {}
             for row in series
@@ -1701,7 +1703,18 @@ class view.GraphResults extends BaseResults
                     time_table_columns_intermediate[timestamp] =
                         "name" : timestamp
                         "field" : timestamp
-                        "formatter" : window.statsProxy.valueFormatter
+                        "formatter" : (row, cell, value, columnDef, dataContext) ->
+                            loc = {
+                                'sv' : "sv-SE"
+                                'en' : "gb-EN"
+                            }[$("body").scope().lang]
+                            fmt = (valTup) ->
+                                if typeof valTup[0] == "undefined" then return ""
+                                return "<span>" +
+                                        "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + 
+                                        "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
+                                  "<span>"
+                            return fmt(value)
                     i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
                     #new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
                     new_time_row[timestamp] = [item.y, row.abs_data[i].y]
