@@ -190,33 +190,6 @@ Sidebar =
             @element.removeClass "fixed"
         else @element.addClass "fixed" if $("#left-column").height() > $("#sidebar").height()
 
-    show: (mode) ->
-
-        # make sure that both hide animation and content load is done before showing
-        # $.when(@element).pipe(=>
-        #     @refreshContent mode
-        # ).done =>
-        #     @element.show "slide",
-        #         direction: "right"
-
-        #     $("#left-column").animate
-        #         right: 265
-        #     , null, null, ->
-                # $.sm.send "sidebar.show.end"
-
-
-
-    hide: ->
-        # return if $("#left-column").css("right") is "0px"
-        # @element.hide "slide", {direction: "right"}
-
-        # $("#left-column").animate
-        #     right: 0
-        # , null, null, ->
-            # $.sm.send "sidebar.hide.end"
-
-
-
 
 $.widget("korp.sidebar", Sidebar)
 

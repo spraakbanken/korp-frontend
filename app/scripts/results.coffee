@@ -183,7 +183,6 @@ class view.KWICResults extends BaseResults
         @s.$root.sidebar_visible = true
 
         @$result.find(".token_selected").click()
-        # $("#sidebar").sidebar("show")
         _.defer () => @centerScrollbar()
         # @centerScrollbar()
         # $(document).keydown $.proxy(@onKeydown, this)
@@ -193,7 +192,6 @@ class view.KWICResults extends BaseResults
         super()
         c.log "onexit kwic"
         @s.$root.sidebar_visible = false
-        # $("#sidebar").sidebar("hide")
         # $(document).unbind "keydown", @onKeydown
         return
 
@@ -829,7 +827,6 @@ class view.LemgramResults extends BaseResults
             safeApply @s, () =>
                 @s.$root.sidebar_visible = true
             self.timeout = setTimeout(=>
-                # $("#sidebar").sidebar "hide"
                 safeApply @s, () =>
                     @s.$root.sidebar_visible = false
                     $("#sidebar").sidebar "refreshContent"
@@ -844,7 +841,8 @@ class view.LemgramResults extends BaseResults
     onexit: ->
         super()
         clearTimeout self.timeout
-        # $("#sidebar").sidebar "hide"
+        safeApply @s, () =>
+            @s.$root.sidebar_visible = false
         return
 
     showNoResults: ->

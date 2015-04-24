@@ -226,9 +226,7 @@
           return this.element.addClass("fixed");
         }
       }
-    },
-    show: function(mode) {},
-    hide: function() {}
+    }
   };
 
   $.widget("korp.sidebar", Sidebar);

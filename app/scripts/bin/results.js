@@ -1002,8 +1002,12 @@
     };
 
     LemgramResults.prototype.onexit = function() {
+      var _this = this;
       LemgramResults.__super__.onexit.call(this);
       clearTimeout(self.timeout);
+      safeApply(this.s, function() {
+        return _this.s.$root.sidebar_visible = false;
+      });
     };
 
     LemgramResults.prototype.showNoResults = function() {
