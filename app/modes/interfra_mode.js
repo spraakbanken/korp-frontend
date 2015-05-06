@@ -59,6 +59,7 @@ settings.corpora.interfra = {
 	within : settings.spWithin,
 	context : settings.spContext,
 	attributes : {
+	  "type" : {label : "type"}
 	},
 	struct_attributes : settings.interfraStructs,
 };
