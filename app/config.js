@@ -2932,8 +2932,8 @@ settings.corpora.rom99 = {
     }
 };
 
-settings.corpora.swefn = {
-    id : "swefn",
+settings.corpora["swefn-ex"] = {
+    id : "swefn-ex",
     title : "Svenskt frasnät (SweFN)",
     description : '',
     within : settings.defaultWithin,
