@@ -325,6 +325,24 @@ attrs.lemgram = {
         $scope.sorter = view.lemgramSort;
     }
 };
+attrs.dalinlemgram : {
+    label : "dalin-lemgram",
+    type : "set",
+    displayType : "autocomplete",
+    opts : settings.setOptions,
+    stringify : function(lemgram) {
+        // if(_.contains(lemgram, " "))
+        // TODO: what if we're getting more than one consequtive lemgram back?
+        return util.lemgramToString(_.str.trim(lemgram), true);
+    },
+    externalSearch : karpLemgramLink,
+    internalSearch : true,
+    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
+    controller : function($scope) {
+        $scope.stringify = util.lemgramToString;
+        $scope.sorter = view.lemgramSort;
+    }
+};
 attrs.saldo = {
     label : "saldo",
     type : "set",
