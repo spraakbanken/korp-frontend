@@ -437,6 +437,8 @@
     "editor" : "editor",
     "printedin" : "printed in",
     "printedby" : "printed by",
-    "commentaries" : "commentaries"
+    "commentaries" : "commentaries",
+
+    "published" : "published"
 }
 

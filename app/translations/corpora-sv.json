@@ -438,5 +438,7 @@
     "editor" : "redaktör",
     "printedin" : "tryckt i",
     "printedby" : "tryckt av",
-    "commentaries" : "kommentarer"
+    "commentaries" : "kommentarer",
+
+    "published" : "publicerat"
 }

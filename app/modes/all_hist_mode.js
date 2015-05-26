@@ -35,24 +35,7 @@ settings.kubhistattributes = {
 	lemma : attrs.baseform,
 	pos : attrs.pos,
 	lex : attrs.lemgram,
-	dalinlex : {
-	    label : "dalin-lemgram",
-	    type : "set",
-	    displayType : "autocomplete",
-	    opts : settings.setOptions,
-	    stringify : function(lemgram) {
-	        // if(_.contains(lemgram, " "))
-	        // TODO: what if we're getting more than one consequtive lemgram back?
-	        return util.lemgramToString(_.str.trim(lemgram), true);
-	    },
-	    externalSearch : karpLemgramLink,
-	    internalSearch : true,
-	    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-	    controller : function($scope) {
-	        $scope.stringify = util.lemgramToString;
-	        $scope.sorter = view.lemgramSort;
-	    }
-	},
+	dalinlex : attrs.dalinlemgram,
 	dephead : attrs.dephead,
 	deprel : attrs.deprel,
 	ref : attrs.ref,
@@ -111,24 +94,7 @@ settings.ubkvtattributes = {
 	pos : attrs.pos,
 	msd : attrs.msd,
 	lex : attrs.lemgram,
-	dalinlex : {
-	    label : "dalin-lemgram",
-	    type : "set",
-	    displayType : "autocomplete",
-	    opts : settings.setOptions,
-	    stringify : function(lemgram) {
-	        // if(_.contains(lemgram, " "))
-	        // TODO: what if we're getting more than one consequtive lemgram back?
-	        return util.lemgramToString(_.str.trim(lemgram), true);
-	    },
-	    externalSearch : karpLemgramLink,
-	    internalSearch : true,
-	    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-	    controller : function($scope) {
-	        $scope.stringify = util.lemgramToString;
-	        $scope.sorter = view.lemgramSort;
-	    }
-	},
+	dalinlex : attrs.dalinlemgram,
 	dephead : attrs.dephead,
 	deprel : attrs.deprel,
 	ref : attrs.ref,
@@ -385,6 +351,31 @@ settings.corpora['bellman'] = {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
 		page_n : {label : "page"}
+	}
+};
+
+settings.corpora['vasabrev'] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "vasabrev",
+	title : "Gustav Vasas Brevproduktion",
+	description : "Konung Gustaf den förstes registratur",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+ 		lemma : attrs.baseform,
+ 		lex : attrs.lemgram,
+		dalinlex : attrs.dalinlemgram,
+ 		saldo : attrs.saldo,
+ 		prefix : attrs.prefix,
+ 		suffix : attrs.suffix,
+ 		dephead : attrs.dephead,
+ 		deprel : attrs.deprel,
+ 		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_title : {label : "title"},
+		text_published : {label : "published"}
 	}
 };
 
