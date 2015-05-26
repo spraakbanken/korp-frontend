@@ -325,7 +325,7 @@ attrs.lemgram = {
         $scope.sorter = view.lemgramSort;
     }
 };
-attrs.dalinlemgram : {
+attrs.dalinlemgram = {
     label : "dalin-lemgram",
     type : "set",
     displayType : "autocomplete",
