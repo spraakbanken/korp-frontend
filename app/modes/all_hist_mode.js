@@ -375,7 +375,9 @@ settings.corpora['vasabrev'] = {
 	},
 	struct_attributes : {
 		text_title : {label : "title"},
-		text_published : {label : "published"}
+		text_published : {label : "published"},
+		text_fromyear : {label : "year_from"},
+		text_toyear : {label : "year_to"}
 	}
 };
 
