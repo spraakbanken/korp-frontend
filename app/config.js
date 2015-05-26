@@ -114,8 +114,8 @@ settings.modeConfig = [
     },
  
     {
-        localekey: "1800_texts",
-        mode: "1800",
+        localekey: "bible_texts",
+        mode: "bible",
     },
     {
         localekey: "lawroom",

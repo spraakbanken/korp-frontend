@@ -318,8 +318,8 @@ settings.corporafolders.lag = {
 };
 settings.corporafolders.bibel = {
 	title : "Äldre biblar",
-	contents : ["bibel1917", "bibel1873dalin"],
-        description : "Bibeln, 1873 och 1917 års utgåvor"
+	contents : ["bibel1917", "bibel1873dalin", "vasabibel-nt"],
+        description : "Bibeln, 1873 och 1917 års utgåvor och Gustav Vasas Bibel (nya testamentet)"
 };
 
 settings.corporafolders.akerbruk1700 = {
@@ -2013,6 +2013,33 @@ settings.corpora.bibel1873dalin = {
 		"chapter_name" : {label : "chapter"},
 		"verse_name" : {label : "verse"},
 		"text_date" : {label : "year"}
+	}
+};
+
+settings.corpora["vasabibel-nt"] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "vasabibel-nt",
+	title : "Gustaf Vasas Bibel - Nya Testamentet",
+	description : "",
+	within : settings.spWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+ 		lemma : attrs.baseform,
+ 		lex : attrs.lemgram,
+		dalinlex : attrs.dalinlemgram,
+ 		saldo : attrs.saldo,
+ 		prefix : attrs.prefix,
+ 		suffix : attrs.suffix,
+ 		dephead : attrs.dephead,
+ 		deprel : attrs.deprel,
+ 		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_title : {label : "title"},
+		text_publisher : {label : "publisher"},
+		text_published : {label : "published"},
+		text_year : {label : "year"}
 	}
 };
 
