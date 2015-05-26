@@ -82,7 +82,7 @@ settings.corpora["vasabibel-nt"] = {
     morf : 'swedbergm|dalinm|saldom',
     id : "vasabibel-nt",
     title : "Gustaf Vasas bibel - Nya testamentet",
-    description : "",
+    description : "'Nya Testamentet i Gustaf Vasas Bibel /under jämförelse med texten av år 1526 utgivet av Natan Lindqvist' från 1941",
     within : settings.spWithin,
     context : settings.spContext,
     attributes : {
@@ -104,5 +104,6 @@ settings.corpora["vasabibel-nt"] = {
         text_year : {label : "year"}
     }
 };
+
 
 settings.corpusListing = new CorpusListing(settings.corpora);

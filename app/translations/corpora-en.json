@@ -39,9 +39,6 @@
     "party" : "party",
     "normalized_wordform" : "normalized word form",
     
-    "year_from" : "starting year",
-    "year_to" : "ending year",
-    
     "url" : "url",
     "referensnummer" : "reference number",
     
@@ -188,8 +185,8 @@
     
     "example" : "Example",
     "page_num" : "page number",
-    "year_to"  : "date (to)",
-    "year_from"  : "date (from)",
+    "year_to"  : "year (to)",
+    "year_from"  : "year (from)",
     
     "rel_AT" : "Pre-modifier",
     "rel_ET" : "Post-modifier",

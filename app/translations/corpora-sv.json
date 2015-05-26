@@ -39,9 +39,6 @@
     "party" : "parti",
     "normalized_wordform" : "normaliserad ordform",
     
-    "year_from" : "startår",
-    "year_to" : "slutår",
-    
     "url" : "url",
     "referensnummer" : "referensnummer",
     
@@ -188,8 +185,8 @@
     
     "example" : "Exempel",
     "page_num" : "sidonummer",
-    "year_to"  : "datum (start)",
-    "year_from"  : "datum (slut)",
+    "year_to"  : "år (slut)",
+    "year_from"  : "år (start)",
     
     "rel_AT" : "Attribut",
     "rel_ET" : "Efterställt attribut",
