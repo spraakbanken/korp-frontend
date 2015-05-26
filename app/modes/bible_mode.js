@@ -81,7 +81,7 @@ settings.corpora.bibel1873dalin = {
 settings.corpora["vasabibel-nt"] = {
     morf : 'swedbergm|dalinm|saldom',
     id : "vasabibel-nt",
-    title : "Gustaf Vasas Bibel - Nya Testamentet",
+    title : "Gustaf Vasas bibel - Nya testamentet",
     description : "",
     within : settings.spWithin,
     context : settings.spContext,

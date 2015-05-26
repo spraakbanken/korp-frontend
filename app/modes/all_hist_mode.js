@@ -357,7 +357,7 @@ settings.corpora['bellman'] = {
 settings.corpora['vasabrev'] = {
 	morf : 'swedbergm|dalinm|saldom',
 	id : "vasabrev",
-	title : "Gustav Vasas Brevproduktion",
+	title : "Gustav Vasas brevproduktion",
 	description : "Konung Gustaf den förstes registratur",
 	within : settings.spWithin,
 	context : settings.spContext,
@@ -2019,7 +2019,7 @@ settings.corpora.bibel1873dalin = {
 settings.corpora["vasabibel-nt"] = {
 	morf : 'swedbergm|dalinm|saldom',
 	id : "vasabibel-nt",
-	title : "Gustaf Vasas Bibel - Nya Testamentet",
+	title : "Gustaf Vasas bibel - Nya testamentet",
 	description : "",
 	within : settings.spWithin,
 	context : settings.spContext,
