@@ -2869,7 +2869,7 @@ settings.corpora.vivill = {
 
 settings.corpora["wikipedia-sv"] = {
     id : "wikipedia-sv",
-    title : "Svenska Wikipedia (april 2015)",
+    title : "Svenska Wikipedia (augusti 2015)",
     description : "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
     within : settings.spWithin,
     context : settings.spContext,
