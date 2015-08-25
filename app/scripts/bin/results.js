@@ -1272,6 +1272,7 @@
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
       $("#myGrid").width(800);
       $("#myGrid").height(600);
+      console.log("grad data", data);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: false
@@ -1929,7 +1930,20 @@
             time_table_columns_intermediate[timestamp] = {
               "name": timestamp,
               "field": timestamp,
-              "formatter": window.statsProxy.valueFormatter
+              "formatter": function(row, cell, value, columnDef, dataContext) {
+                var fmt, loc;
+                loc = {
+                  'sv': "sv-SE",
+                  'en': "gb-EN"
+                }[$("body").scope().lang];
+                fmt = function(valTup) {
+                  if (typeof valTup[0] === "undefined") {
+                    return "";
+                  }
+                  return "<span>" + "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " + "<span>";
+                };
+                return fmt(value);
+              }
             };
             i = _.indexOf(_.pluck(row.abs_data, "x"), item.x, true);
             new_time_row[timestamp] = [item.y, row.abs_data[i].y];
