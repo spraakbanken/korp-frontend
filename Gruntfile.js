@@ -397,10 +397,9 @@ module.exports = function (grunt) {
             'styles/styles.css',
             "components/font-awesome/fonts/*",
             'components/d3/d3.min.js',
-            'components/rickshaw/rickshaw.js',
+            'components/rickshaw/rickshaw.min.js',
+            'lib/jquery.tooltip.pack.js',
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css'
-            // 'scripts/jq_extensions.js',
-            // 'scripts/bin/controllers/controllers.js',
           ]
         },
         {

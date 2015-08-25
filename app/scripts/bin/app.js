@@ -1,5 +1,5 @@
 (function() {
-  window.korpApp = angular.module('korpApp', ["watchFighters", 'ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "uiSlider", "ui.sortable", "pasvaz.bindonce", "newsdesk"]);
+  window.korpApp = angular.module('korpApp', ['ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "uiSlider", "ui.sortable", "newsdesk"]);
 
   korpApp.run(function($rootScope, $location, utils, searches) {
     var isInit, s;
@@ -193,6 +193,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=app.js.map
-*/
+//# sourceMappingURL=app.js.map

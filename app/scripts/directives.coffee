@@ -2,8 +2,8 @@ korpApp = angular.module("korpApp")
 
 korpApp.directive 'kwicWord', ->
     replace: true
-    template : """<span class="word" ng-class="getClassObj(wd)"
-                    set-text="wd.word + ' '" ></span>
+    template : """<span class="word" ng-class="getClassObj(wd)">
+                    {{::wd.word}} </span>
                 """ #ng-click="wordClick($event, wd, sentence)"
     link : (scope, element) ->
         scope.getClassObj = (wd) ->
@@ -175,7 +175,7 @@ korpApp.directive "korpAutocomplete", () ->
         
         setVal = (lemgram) ->
             $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
-                .val("").blur().placeholder()
+                .val("").blur()
         if scope.model
             setVal(scope.model)
         arg_value = elem.korp_autocomplete(
@@ -198,7 +198,7 @@ korpApp.directive "korpAutocomplete", () ->
             setTimeout (->
 
                 if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
-                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder()
+                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null)
                 else
                     $(input).removeClass("invalid_input")
                 # self._trigger "change"

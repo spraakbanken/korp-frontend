@@ -7,7 +7,7 @@
   korpApp.directive('kwicWord', function() {
     return {
       replace: true,
-      template: "<span class=\"word\" ng-class=\"getClassObj(wd)\"\nset-text=\"wd.word + ' '\" ></span>",
+      template: "<span class=\"word\" ng-class=\"getClassObj(wd)\">\n{{::wd.word}} </span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
           var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
@@ -215,7 +215,7 @@
       link: function(scope, elem, attr) {
         var arg_value, setVal;
         setVal = function(lemgram) {
-          return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur().placeholder();
+          return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur();
         };
         if (scope.model) {
           setVal(scope.model);
@@ -240,7 +240,7 @@
           input = this;
           return setTimeout((function() {
             if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
-              return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null).placeholder();
+              return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null);
             } else {
               return $(input).removeClass("invalid_input");
             }
@@ -581,6 +581,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=directives.js.map
-*/
+//# sourceMappingURL=directives.js.map

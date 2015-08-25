@@ -202,15 +202,15 @@
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
                           <td class="empty_td"></td>
-                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
-                          <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
-                          <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
+                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" ng-if="::sentence.noContext" class="corpus_title_warn"></span></td>
+                          <td colspan="3" ng-if="::sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
                         </tr>
                       </table>
                       <div class="results_table reading">
-                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" ng-if="::sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
                       </div>
                     </div>
                     <kwic-pager></kwic-pager>
@@ -284,15 +284,15 @@
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
                           <td class="empty_td"></td>
-                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></td>
-                          <td colspan="3" set-if="sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
-                          <td set-if="!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
-                          <td set-if="!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
+                          <td colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" ng-if="::sentence.noContext" class="corpus_title_warn"></span></td>
+                          <td colspan="3" ng-if="::sentence.isLinked" class="lnk"><span kwic-word="kwic-word" ng-repeat="wd in sentence.tokens"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="left"><span kwic-word="kwic-word" ng-repeat="wd in selectLeft(sentence)"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="match"><span kwic-word="kwic-word" ng-repeat="wd in selectMatch(sentence)"></span></td>
+                          <td ng-if="::!sentence.newCorpus" class="right"><span kwic-word="kwic-word" ng-repeat="wd in selectRight(sentence)"></span></td>
                         </tr>
                       </table>
                       <div class="results_table reading">
-                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" set-if="sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
+                        <p ng-repeat="sentence in contextKwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence"><span colspan="0" class="corpus_title">{{sentence.newCorpus}}<span rel="localize[no_context_support]" ng-if="::sentence.noContext" class="corpus_title_warn"></span></span><span ng-repeat="wd in sentence.tokens" kwic-word="kwic-word"></span></p>
                       </div>
                     </div>
                     <kwic-pager></kwic-pager>
@@ -447,22 +447,22 @@
     <script src="components/jquery-ui/ui/jquery.ui.sortable.js"></script>
     <script src="components/jquery-ui/ui/jquery.ui.slider.js"></script>
     <script src="components/angular/angular.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="components/spin.js/spin.js"></script>
+    <script src="components/angular-spinner/angular-spinner.js"></script>
+    <script src="components/angular-slider/angular-slider.js"></script>
+    <script src="lib/angular-sortable.js"></script>
     <script src="lib/jquery.localize.js"></script>
     <script src="components/raphael/raphael.js"></script>
     <script src="components/jReject/js/jquery.reject.js"></script>
     <script src="lib/jquery.raphael.spinner.js"></script>
-    <script src="lib/watch-fighters.js"></script>
     <script src="lib/jquery.format.js"></script>
     <script src="components/modernizr/modernizr.js"></script>
-    <script src="components/yepnope/yepnope.js"></script>
     <script src="components/jquery-bbq/jquery.ba-bbq.js"></script>
-    <script src="lib/jstorage.js"></script>
+    <script src="components/jstorage/jstorage.js"></script>
     <script src="lib/jquery.hoverIntent.js"></script>
     <script src="lib/jquery.ui.preloader.min.js"></script>
     <script src="lib/jquery.tmpl.js"></script>
-    <script src="lib/jquery.dump.js"></script>
-    <script src="lib/jquery.placeholder.js"></script>
-    <script src="lib/jquery.pagination.js"></script>
     <script src="lib/flot/jquery.flot.min.js"></script>
     <script src="lib/flot/jquery.flot.stack.js"></script>
     <script src="components/SlickGrid/slick.core.js"></script>
@@ -470,22 +470,19 @@
     <script src="components/SlickGrid/slick.grid.js"></script>
     <script src="components/SlickGrid/plugins/slick.checkboxselectcolumn.js"></script>
     <script src="components/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
-    <script src="lib/jquery.tooltip.pack.js"></script>
-    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="components/lodash/dist/lodash.compat.js"></script>
-    <script src="components/underscore.string/lib/underscore.string.js"></script>
-    <script src="components/spin.js/spin.js"></script>
-    <script src="components/angular-spinner/angular-spinner.js"></script>
-    <script src="components/angular-bindonce/bindonce.js"></script>
-    <script src="components/angular-slider/angular-slider.js"></script>
-    <script src="lib/angular-sortable.js"></script>
-    <script src="components/moment/moment.js"></script>
     <script src="scripts/jq_extensions.js"></script>
+    <script src="components/lodash/dist/lodash.js"></script>
+    <script src="components/underscore.string/lib/underscore.string.js"></script>
+    <script src="components/moment/moment.js"></script>
     <script src="components/comma-separated-values/csv.js"></script>
     <!-- endbuild  -->
+    <script src="lib/jquery.tooltip.pack.js"></script>
     <script src="components/d3/d3.min.js"></script>
-    <script src="components/rickshaw/rickshaw.js"></script>
-    <script>window.currentMode = $.deparam.querystring().mode || "default"</script>
+    <script src="components/rickshaw/rickshaw.min.js"></script>
+    <script>
+      window.currentMode = $.deparam.querystring().mode || "default"
+      
+    </script>
     <script src="config.js"></script>
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/cqp_parser/CQPParser.js"></script>

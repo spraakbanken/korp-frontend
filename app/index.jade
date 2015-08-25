@@ -200,7 +200,6 @@ html
     // build:js scripts/korp_lib.js 
     script(src='components/json3/lib/json3.js')
     script(src='components/jquery/dist/jquery.js')
-    //- script(src='components/jquery-ui/ui/jquery-ui.custom.js')
     script(src='components/jquery-ui/ui/jquery.ui.core.js')
     script(src='components/jquery-ui/ui/jquery.ui.widget.js')
     script(src='components/jquery-ui/ui/jquery.ui.autocomplete.js')
@@ -208,7 +207,6 @@ html
     script(src='components/jquery-ui/ui/jquery.ui.dialog.js')
     script(src='components/jquery-ui/ui/jquery.ui.effect.js')
     script(src='components/jquery-ui/ui/jquery.ui.effect-fade.js')
-    //- script(src='components/jquery-ui/ui/jquery.ui.effect-slide.js')
     script(src='components/jquery-ui/ui/jquery.ui.menu.js')
     script(src='components/jquery-ui/ui/jquery.ui.mouse.js')
     script(src='components/jquery-ui/ui/jquery.ui.position.js')
@@ -217,64 +215,54 @@ html
 
     script(src='components/angular/angular.js')
 
+    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/spin.js/spin.js')
+    script(src='components/angular-spinner/angular-spinner.js')
+    script(src='components/angular-slider/angular-slider.js')
+    script(src='lib/angular-sortable.js')
+
+
     script(src='lib/jquery.localize.js')
     script(src='components/raphael/raphael.js')
     script(src='components/jReject/js/jquery.reject.js')
     script(src='lib/jquery.raphael.spinner.js')
-    script(src='lib/watch-fighters.js')
     script(src='lib/jquery.format.js')
 
     script(src='components/modernizr/modernizr.js')
-    script(src='components/yepnope/yepnope.js')
     script(src='components/jquery-bbq/jquery.ba-bbq.js')
-    //- script(src='components/jquery-deparam/jquery-deparam.js')
-    script(src='lib/jstorage.js')
+
+    script(src='components/jstorage/jstorage.js')
     script(src='lib/jquery.hoverIntent.js')
     script(src='lib/jquery.ui.preloader.min.js')
     script(src='lib/jquery.tmpl.js')
-    script(src='lib/jquery.dump.js')
-    script(src='lib/jquery.placeholder.js')
-    script(src='lib/jquery.pagination.js')
+    //- script(src='lib/jquery.pagination.js')
     script(src='lib/flot/jquery.flot.min.js')
     script(src='lib/flot/jquery.flot.stack.js')
-    //- here
+
     script(src='components/SlickGrid/slick.core.js')
     script(src='lib/jquery.event.drag-2.2.js')
     script(src='components/SlickGrid/slick.grid.js')
     script(src='components/SlickGrid/plugins/slick.checkboxselectcolumn.js')
     script(src='components/SlickGrid/plugins/slick.rowselectionmodel.js')
-    //- script(src='lib/g.line-min.js')
-    script(src='lib/jquery.tooltip.pack.js')
 
-    
-    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    //- script(src='components/angular-bootstrap/dist/ui-bootstrap-tpls-0.11.js')
-    script(src='components/lodash/dist/lodash.compat.js')
+    script(src='scripts/jq_extensions.js')
+    script(src='components/lodash/dist/lodash.js')
     script(src="components/underscore.string/lib/underscore.string.js")
-    script(src='components/spin.js/spin.js')
-    script(src='components/angular-spinner/angular-spinner.js')
-
-    script(src='components/angular-bindonce/bindonce.js')
-    script(src='components/angular-slider/angular-slider.js')
-    script(src='lib/angular-sortable.js')
     
     script(src='components/moment/moment.js')
-    script(src='scripts/jq_extensions.js')
     script(src='components/comma-separated-values/csv.js')
     //- not used currently
     //- bower:js
     //- endbower
     // endbuild  
+    
+    script(src='lib/jquery.tooltip.pack.js')
     script(src='components/d3/d3.min.js')
-    script(src='components/rickshaw/rickshaw.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap.js')
-    //- script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/rickshaw/rickshaw.min.js')
+
     script.
       window.currentMode = $.deparam.querystring().mode || "default"
-    //-   yepnope({
-    //-   test: $("html.msie7,html.msie8").length,
-    //-   nope: 'components/d3/d3.js'
-    //-   });
+    
     script(src='config.js')
     // build:js scripts/scripts.js 
        

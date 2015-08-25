@@ -78,6 +78,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=spec_e2e.js.map
-*/
+//# sourceMappingURL=spec_e2e.js.map

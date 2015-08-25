@@ -13,14 +13,15 @@
 
   korpApp.controller("kwicCtrl", KwicCtrl = (function() {
     KwicCtrl.prototype.setupHash = function() {
-      var _this = this;
       return this.utils.setupHash(this.scope, [
         {
           key: "page",
-          post_change: function() {
-            c.log("post_change", _this.scope.page);
-            return _this.scope.pageObj.pager = (_this.scope.page || 0) + 1;
-          },
+          post_change: (function(_this) {
+            return function() {
+              c.log("post_change", _this.scope.page);
+              return _this.scope.pageObj.pager = (_this.scope.page || 0) + 1;
+            };
+          })(this),
           val_in: Number
         }
       ]);
@@ -37,8 +38,7 @@
     KwicCtrl.$inject = ['$scope', "utils", "$location"];
 
     function KwicCtrl(scope, utils, location) {
-      var $location, $scope, findMatchSentence, massageData, punctArray, readingChange, s,
-        _this = this;
+      var $location, $scope, findMatchSentence, massageData, punctArray, readingChange, s;
       this.scope = scope;
       this.utils = utils;
       this.location = location;
@@ -84,17 +84,19 @@
           });
         }
       };
-      s.setupReadingHash = function() {
-        return _this.utils.setupHash(s, [
-          {
-            key: "reading_mode",
-            post_change: function(isReading) {
-              c.log("change reading mode", isReading);
-              return readingChange();
+      s.setupReadingHash = (function(_this) {
+        return function() {
+          return _this.utils.setupHash(s, [
+            {
+              key: "reading_mode",
+              post_change: function(isReading) {
+                c.log("change reading mode", isReading);
+                return readingChange();
+              }
             }
-          }
-        ]);
-      };
+          ]);
+        };
+      })(this);
       s.setupReadingWatch = _.once(function() {
         var init;
         c.log("setupReadingWatch");
@@ -407,6 +409,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=result_controllers.js.map
-*/
+//# sourceMappingURL=result_controllers.js.map

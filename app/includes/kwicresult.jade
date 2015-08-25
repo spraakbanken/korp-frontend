@@ -33,14 +33,14 @@ span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'sho
       td.empty_td
       td.corpus_title(colspan='0')
         | {{sentence.newCorpus}}
-        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
-      td.lnk(colspan='3', set-if='sentence.isLinked')
+        span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
+      td.lnk(colspan='3', ng-if='::sentence.isLinked')
         span(kwic-word='kwic-word', ng-repeat='wd in sentence.tokens')
-      td.left(set-if='!sentence.newCorpus')
+      td.left(ng-if='::!sentence.newCorpus')
         span(kwic-word='kwic-word', ng-repeat='wd in selectLeft(sentence)')
-      td.match(set-if='!sentence.newCorpus')
+      td.match(ng-if='::!sentence.newCorpus')
         span(kwic-word='kwic-word', ng-repeat='wd in selectMatch(sentence)')
-      td.right(set-if='!sentence.newCorpus')
+      td.right(ng-if='::!sentence.newCorpus')
         span(kwic-word='kwic-word', ng-repeat='wd in selectRight(sentence)')
   .results_table.reading
     p.sentence(ng-repeat='sentence in contextKwic'
@@ -51,6 +51,6 @@ span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'sho
         odd : $odd}')
       span.corpus_title(colspan='0')
         | {{sentence.newCorpus}}
-        span.corpus_title_warn(rel='localize[no_context_support]', set-if='sentence.noContext')
+        span.corpus_title_warn(rel='localize[no_context_support]', ng-if='::sentence.noContext')
       span(ng-repeat='wd in sentence.tokens', kwic-word='kwic-word')
 kwic-pager

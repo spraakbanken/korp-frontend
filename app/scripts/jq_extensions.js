@@ -1,5 +1,5 @@
 (function($) {
-
+    
 	$.arrayToHTMLList = function(array, listType) {
 		listType = listType || "ul";
 		var lis = $.map(array, function(item) {

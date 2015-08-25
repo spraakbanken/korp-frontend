@@ -1,4 +1,4 @@
-window.korpApp = angular.module('korpApp', ["watchFighters"
+window.korpApp = angular.module('korpApp', [
                                             'ui.bootstrap',
                                             "template/tabs/tabset.html"
                                             "template/tabs/tab.html"
@@ -10,7 +10,6 @@ window.korpApp = angular.module('korpApp', ["watchFighters"
                                             "angularSpinner"
                                             "uiSlider"
                                             "ui.sortable"
-                                            "pasvaz.bindonce"
                                             "newsdesk"
                                         ])
 

@@ -1,6 +1,5 @@
 (function() {
   var prio, stringifyCqp,
-    _this = this,
     __slice = [].slice;
 
   window.c = console;
@@ -108,9 +107,11 @@
   };
 
   window.CQP = {
-    parse: function() {
-      return CQPParser.parse.apply(CQPParser, arguments);
-    },
+    parse: (function(_this) {
+      return function() {
+        return CQPParser.parse.apply(CQPParser, arguments);
+      };
+    })(this),
     stringify: stringifyCqp,
     expandOperators: function(cqpstr) {
       return CQP.stringify(CQP.parse(cqpstr), true);
@@ -196,6 +197,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=cqp.js.map
-*/
+//# sourceMappingURL=cqp.js.map

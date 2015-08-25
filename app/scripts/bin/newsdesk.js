@@ -105,6 +105,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=newsdesk.js.map
-*/
+//# sourceMappingURL=newsdesk.js.map

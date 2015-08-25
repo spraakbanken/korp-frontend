@@ -72,26 +72,27 @@
     };
 
     BaseProxy.prototype.calcProgress = function(e) {
-      var newText, stats, struct, _ref,
-        _this = this;
+      var newText, stats, struct, _ref;
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
         struct = this.parseJSON(newText);
       } catch (_error) {}
-      $.each(struct, function(key, val) {
-        var currentCorpus, sum;
-        if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
-          currentCorpus = val.corpus || val;
-          sum = _(currentCorpus.split("|")).map(function(corpus) {
-            return Number(settings.corpora[corpus.toLowerCase()].info.Size);
-          }).reduce(function(a, b) {
-            return a + b;
-          }, 0);
-          _this.progress += sum;
-          return _this.total_results += parseInt(val.hits);
-        }
-      });
+      $.each(struct, (function(_this) {
+        return function(key, val) {
+          var currentCorpus, sum;
+          if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
+            currentCorpus = val.corpus || val;
+            sum = _(currentCorpus.split("|")).map(function(corpus) {
+              return Number(settings.corpora[corpus.toLowerCase()].info.Size);
+            }).reduce(function(a, b) {
+              return a + b;
+            }, 0);
+            _this.progress += sum;
+            return _this.total_results += parseInt(val.hits);
+          }
+        };
+      })(this));
       stats = (this.progress / this.total) * 100;
       if ((this.total == null) && ((_ref = struct.progress_corpora) != null ? _ref.length : void 0)) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
@@ -285,38 +286,39 @@
     };
 
     LemgramProxy.prototype.karpSearch = function(word, sw_forms) {
-      var deferred,
-        _this = this;
-      deferred = $.Deferred(function(dfd) {
-        return _this.pendingRequests.push($.ajax({
-          url: "http://spraakbanken.gu.se/ws/karp-sok",
-          data: {
-            wf: word,
-            resource: settings.corpusListing.getMorphology(),
-            format: "json",
-            "sms-forms": false,
-            "sw-forms": sw_forms
-          },
-          success: function(data, textStatus, xhr) {
-            var div, output;
-            if (Number(data.count) === 0) {
-              dfd.reject();
-              return;
+      var deferred;
+      deferred = $.Deferred((function(_this) {
+        return function(dfd) {
+          return _this.pendingRequests.push($.ajax({
+            url: "http://spraakbanken.gu.se/ws/karp-sok",
+            data: {
+              wf: word,
+              resource: settings.corpusListing.getMorphology(),
+              format: "json",
+              "sms-forms": false,
+              "sw-forms": sw_forms
+            },
+            success: function(data, textStatus, xhr) {
+              var div, output;
+              if (Number(data.count) === 0) {
+                dfd.reject();
+                return;
+              }
+              c.log("karp success", data, sw_forms);
+              div = ($.isPlainObject(data.div) ? [data.div] : data.div);
+              output = $.map(div.slice(0, Number(data.count)), function(item) {
+                item = util.convertLMFFeatsToObjects(item);
+                return item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram;
+              });
+              return dfd.resolve(output, textStatus, xhr);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              c.log("karp error", jqXHR, textStatus, errorThrown);
+              return dfd.reject();
             }
-            c.log("karp success", data, sw_forms);
-            div = ($.isPlainObject(data.div) ? [data.div] : data.div);
-            output = $.map(div.slice(0, Number(data.count)), function(item) {
-              item = util.convertLMFFeatsToObjects(item);
-              return item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram;
-            });
-            return dfd.resolve(output, textStatus, xhr);
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            c.log("karp error", jqXHR, textStatus, errorThrown);
-            return dfd.reject();
-          }
-        }));
-      }).promise();
+          }));
+        };
+      })(this)).promise();
       return deferred;
     };
 
@@ -443,7 +445,7 @@
         success: function(data) {
           var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
           if (data.ERROR != null) {
-            c.log("gettings stats failed with error", $.dump(data.ERROR));
+            c.log("gettings stats failed with error", data.ERROR);
             def.reject(data);
             return;
           }
@@ -576,8 +578,7 @@
     function TimeProxy() {}
 
     TimeProxy.prototype.makeRequest = function() {
-      var dfd, xhr,
-        _this = this;
+      var dfd, xhr;
       dfd = $.Deferred();
       xhr = $.ajax({
         url: settings.cgi_script,
@@ -588,24 +589,26 @@
           corpus: settings.corpusListing.stringifyAll()
         }
       });
-      xhr.done(function(data, status, xhr) {
-        var combined, rest;
-        c.log("timespan done", data);
-        if (data.ERROR) {
-          c.error("timespan error", data.ERROR);
-          dfd.reject(data.ERROR);
-          return;
-        }
-        rest = data.combined[""];
-        delete data.combined[""];
-        _this.expandTimeStruct(data.combined);
-        combined = _this.compilePlotArray(data.combined);
-        if (_.keys(data).length < 2 || data.ERROR) {
-          dfd.reject();
-          return;
-        }
-        return dfd.resolve([data.corpora, combined, rest]);
-      });
+      xhr.done((function(_this) {
+        return function(data, status, xhr) {
+          var combined, rest;
+          c.log("timespan done", data);
+          if (data.ERROR) {
+            c.error("timespan error", data.ERROR);
+            dfd.reject(data.ERROR);
+            return;
+          }
+          rest = data.combined[""];
+          delete data.combined[""];
+          _this.expandTimeStruct(data.combined);
+          combined = _this.compilePlotArray(data.combined);
+          if (_.keys(data).length < 2 || data.ERROR) {
+            dfd.reject();
+            return;
+          }
+          return dfd.resolve([data.corpora, combined, rest]);
+        };
+      })(this));
       xhr.fail(function() {
         c.log("timeProxy.makeRequest failed", arguments);
         return dfd.reject();
@@ -689,8 +692,7 @@
     };
 
     GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
-      var def, params, self,
-        _this = this;
+      var def, params, self;
       GraphProxy.__super__.makeRequest.call(this);
       self = this;
       params = {
@@ -707,19 +709,23 @@
         url: settings.cgi_script,
         dataType: "json",
         data: params,
-        beforeSend: function(req, settings) {
-          _this.prevRequest = settings;
-          _this.addAuthorizationHeader(req);
-          return self.prevUrl = _this.url;
-        },
-        progress: function(data, e) {
-          var progressObj;
-          progressObj = _this.calcProgress(e);
-          if (progressObj == null) {
-            return;
-          }
-          return def.notify(progressObj);
-        },
+        beforeSend: (function(_this) {
+          return function(req, settings) {
+            _this.prevRequest = settings;
+            _this.addAuthorizationHeader(req);
+            return self.prevUrl = _this.url;
+          };
+        })(this),
+        progress: (function(_this) {
+          return function(data, e) {
+            var progressObj;
+            progressObj = _this.calcProgress(e);
+            if (progressObj == null) {
+              return;
+            }
+            return def.notify(progressObj);
+          };
+        })(this),
         error: function(jqXHR, textStatus, errorThrown) {
           return def.reject(textStatus);
         },
@@ -736,6 +742,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=model.js.map
-*/
+//# sourceMappingURL=model.js.map

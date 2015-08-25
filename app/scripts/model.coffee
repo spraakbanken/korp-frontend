@@ -402,7 +402,7 @@ class model.StatsProxy extends BaseProxy
 
             success: (data) ->
                 if data.ERROR?
-                    c.log "gettings stats failed with error", $.dump(data.ERROR)
+                    c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
                 minWidth = 100

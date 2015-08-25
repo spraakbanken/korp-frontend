@@ -122,9 +122,9 @@
               address = _.template(attrs.externalSearch, {
                 val: x
               });
-              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>").click(function(event) {
+              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>")).click(function(event) {
                 return event.stopImmediatePropagation();
-              }));
+              });
             }
             if (attrs.internalSearch) {
               li.addClass("link").click(function() {
@@ -203,15 +203,16 @@
       return $.arrayToHTMLList(seq).outerHTML();
     },
     refreshContent: function(mode) {
-      var _this = this;
       if (mode === "lemgramWarning") {
-        return $.Deferred(function(dfd) {
-          return _this.element.load("markup/parse_warning.html", function() {
-            util.localize();
-            _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
-            return dfd.resolve();
-          });
-        }).promise();
+        return $.Deferred((function(_this) {
+          return function(dfd) {
+            return _this.element.load("markup/parse_warning.html", function() {
+              util.localize();
+              _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
+              return dfd.resolve();
+            });
+          };
+        })(this)).promise();
       } else {
         return this.element.removeClass("ui-state-highlight").addClass("kwic_sidebar");
       }
@@ -391,6 +392,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=widgets.js.map
-*/
+//# sourceMappingURL=widgets.js.map

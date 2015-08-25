@@ -5708,7 +5708,6 @@
 }
 
 * {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -10605,7 +10604,7 @@ ol {
   -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-content: flex-start;
-  align-content: flex-start;
+          align-content: flex-start;
 }
 
 @media -sass-debug-info {
@@ -12055,7 +12054,6 @@ line.tick {
 
 .time_table,
 .time_table * {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 
@@ -12086,7 +12084,6 @@ line.tick {
 
 #myGrid,
 #myGrid * {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 

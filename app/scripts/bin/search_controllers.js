@@ -36,8 +36,7 @@
   });
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) {
-    var modalInstance, s,
-      _this = this;
+    var modalInstance, s;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
       var cqp;
@@ -77,48 +76,50 @@
       });
     };
     s.searches = searches;
-    s.$watch("searches.activeSearch", function(search) {
-      var cqp, page;
-      if (!search) {
-        return;
-      }
-      page = Number($location.search().page) || 0;
-      c.log("activesearch", search);
-      s.relatedObj = null;
-      if (search.type === "word") {
-        s.placeholder = null;
-        s.simple_text = search.val;
-        cqp = simpleSearch.getCQP(search.val);
-        c.log("simple search cqp", cqp);
-        if (search.pageOnly) {
-          searches.kwicRequest(cqp, true);
+    s.$watch("searches.activeSearch", (function(_this) {
+      return function(search) {
+        var cqp, page;
+        if (!search) {
           return;
-        } else {
-          searches.kwicSearch(cqp);
         }
-        if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
-          return lemgramResults.makeRequest(search.val, "word");
+        page = Number($location.search().page) || 0;
+        c.log("activesearch", search);
+        s.relatedObj = null;
+        if (search.type === "word") {
+          s.placeholder = null;
+          s.simple_text = search.val;
+          cqp = simpleSearch.getCQP(search.val);
+          c.log("simple search cqp", cqp);
+          if (search.pageOnly) {
+            searches.kwicRequest(cqp, true);
+            return;
+          } else {
+            searches.kwicSearch(cqp);
+          }
+          if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
+            return lemgramResults.makeRequest(search.val, "word");
+          } else {
+            return lemgramResults.resetView();
+          }
+        } else if (search.type === "lemgram") {
+          s.placeholder = search.val;
+          s.simple_text = "";
+          cqp = "[lex contains '" + search.val + "']";
+          backend.relatedWordSearch(search.val).then(function(data) {
+            return s.relatedObj = data;
+          });
+          if (s.word_pic) {
+            return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
+          } else {
+            return searches.kwicSearch(cqp);
+          }
         } else {
+          s.placeholder = null;
+          s.simple_text = "";
           return lemgramResults.resetView();
         }
-      } else if (search.type === "lemgram") {
-        s.placeholder = search.val;
-        s.simple_text = "";
-        cqp = "[lex contains '" + search.val + "']";
-        backend.relatedWordSearch(search.val).then(function(data) {
-          return s.relatedObj = data;
-        });
-        if (s.word_pic) {
-          return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
-        } else {
-          return searches.kwicSearch(cqp);
-        }
-      } else {
-        s.placeholder = null;
-        s.simple_text = "";
-        return lemgramResults.resetView();
-      }
-    });
+      };
+    })(this));
     s.lemgramToString = function(lemgram) {
       if (!lemgram) {
         return;
@@ -372,6 +373,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=search_controllers.js.map
-*/
+//# sourceMappingURL=search_controllers.js.map
