@@ -140,9 +140,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 s.relatedObj = data
             
             if s.word_pic
-                searches.lemgramSearch(search.val, s.prefix, s.suffix, page)
+                searches.lemgramSearch(search.val, s.prefix, s.suffix, search.pageOnly)
             else
-                searches.kwicSearch(cqp)
+                searches.kwicSearch(cqp, search.pageOnly)
             
         else 
             s.placeholder = null

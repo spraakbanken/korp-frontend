@@ -22,11 +22,13 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
 
 korpApp.controller "kwicCtrl", class KwicCtrl
     setupHash : () ->
+        c.log "setupHash", @scope.$id
         @utils.setupHash @scope, [
             key : "page"
             post_change : () =>
-                c.log "post_change", @scope.page
+                c.log "post_change page hash", @scope.page
                 @scope.pageObj.pager = (@scope.page or 0) + 1
+                c.log "@scope.pageObj.pager", @scope.pageObj.pager
             val_in : Number
         ]
     initPage : () ->
@@ -52,8 +54,10 @@ korpApp.controller "kwicCtrl", class KwicCtrl
 
         punctArray = [",", ".", ";", ":", "!", "?", "..."]
 
-        c.log "$location.search().page", $location.search().page
         @initPage()
+
+        s.$watch "pageObj.pager", (val) ->
+            c.log "pageobj watch", val
 
 
 
@@ -68,7 +72,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
         s.gotoPage = null
         s.onPageInput = ($event, page, numPages) ->
             if $event.keyCode == 13
-                c.log "page", page, numPages
+                c.log "page input", page, numPages
                 if page > numPages then page = numPages
                 s.pageObj.pager = page
                 s.page = Number(page) - 1

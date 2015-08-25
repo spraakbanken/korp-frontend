@@ -320,14 +320,18 @@
       this.s.$apply((function(_this) {
         return function($scope) {
           c.log("apply kwic search data", data);
-          _this.s.gotFirstKwic = true;
           if (isReading) {
             $scope.setContextData(data);
             _this.selectionManager.deselect();
-            return _this.s.$root.word_selected = null;
+            _this.s.$root.word_selected = null;
           } else {
-            return $scope.setKwicData(data);
+            $scope.setKwicData(data);
           }
+          return setTimeout(function() {
+            return safeApply(_this.s, function() {
+              return _this.s.gotFirstKwic = true;
+            });
+          }, 0);
         };
       })(this));
       if (currentMode === "parallel" && !isReading) {
@@ -463,12 +467,13 @@
       var isReading, page, params, progressCallback, req;
       c.log("kwicResults.makeRequest", cqp, isPaging);
       page = Number(search().page) || 0;
-      if (!isPaging) {
+      if (this.hasInitialized == null) {
+        c.log("not init set page", page + 1);
+        this.s.$parent.pageObj.pager = page + 1;
+      } else if (!isPaging) {
         this.s.gotFirstKwic = false;
         this.s.$parent.pageObj.pager = 0;
-      }
-      if (this.hasInitialized == null) {
-        this.s.$parent.pageObj.pager = page + 1;
+        c.log("not isPaging page reset");
       }
       if (this.hasInitialized == null) {
         this.hasInitialized = false;

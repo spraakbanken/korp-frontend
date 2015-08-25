@@ -268,13 +268,18 @@ class view.KWICResults extends BaseResults
         # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
             c.log "apply kwic search data", data
-            @s.gotFirstKwic = true
             if isReading
                 $scope.setContextData(data)
                 @selectionManager.deselect()
                 @s.$root.word_selected = null
             else
                 $scope.setKwicData(data)
+
+            setTimeout(() =>
+                safeApply @s, () =>
+                    @s.gotFirstKwic = true
+                
+            , 0)
             # @hidePreloader()    
 
         if currentMode == "parallel" and not isReading
@@ -372,12 +377,14 @@ class view.KWICResults extends BaseResults
         c.log "kwicResults.makeRequest", cqp, isPaging
 
         page = Number(search().page) or 0
-        if not isPaging
+        
+        if !@hasInitialized?
+            c.log "not init set page", page + 1
+            @s.$parent.pageObj.pager = page + 1
+        else if not isPaging
             @s.gotFirstKwic = false
             @s.$parent.pageObj.pager = 0
-
-        if !@hasInitialized?
-            @s.$parent.pageObj.pager = page + 1
+            c.log "not isPaging page reset"
 
         @hasInitialized ?= false
         @showPreloader()

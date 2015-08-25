@@ -109,9 +109,9 @@
             return s.relatedObj = data;
           });
           if (s.word_pic) {
-            return searches.lemgramSearch(search.val, s.prefix, s.suffix, page);
+            return searches.lemgramSearch(search.val, s.prefix, s.suffix, search.pageOnly);
           } else {
-            return searches.kwicSearch(cqp);
+            return searches.kwicSearch(cqp, search.pageOnly);
           }
         } else {
           s.placeholder = null;

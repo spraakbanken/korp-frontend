@@ -196,16 +196,16 @@
         return kwicResults.makeRequest(cqp, isPaging);
       };
 
-      Searches.prototype.kwicSearch = function(cqp) {
-        this.kwicRequest(cqp);
+      Searches.prototype.kwicSearch = function(cqp, isPaging) {
+        this.kwicRequest(cqp, isPaging);
         return statsResults.makeRequest(cqp);
       };
 
-      Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
+      Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, isPaging) {
         var cqp;
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         statsResults.makeRequest(cqp);
-        this.kwicRequest(cqp);
+        this.kwicRequest(cqp, isPaging);
         if (settings.wordpicture === false) {
           return;
         }
@@ -321,7 +321,7 @@
                 page: newValues[1],
                 pageOnly: pageOnly
               };
-              searches.kwicSearch(value);
+              searches.kwicSearch(value, pageOnly);
           }
           return oldValues = [].concat(newValues);
         });

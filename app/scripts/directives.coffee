@@ -534,7 +534,7 @@ korpApp.directive "kwicPager", () ->
     restrict: "E"
     scope: false
     template: """
-    <div class="pager-wrapper" ng-show="gotFirstKwic" ng-if="hits > $root._searchOpts.hits_per_page">
+    <div class="pager-wrapper" ng-show="gotFirstKwic" >
       <pagination
          total-items="hits"
          ng-if="gotFirstKwic"

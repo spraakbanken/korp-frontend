@@ -173,17 +173,17 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             kwicResults.makeRequest(cqp, isPaging)
 
         
-        kwicSearch : (cqp) ->
+        kwicSearch : (cqp, isPaging) ->
             # simpleSearch.resetView()
             # kwicResults.@            
-            @kwicRequest cqp
+            @kwicRequest cqp, isPaging
             statsResults.makeRequest cqp
 
-        lemgramSearch : (lemgram, searchPrefix, searchSuffix) ->
+        lemgramSearch : (lemgram, searchPrefix, searchSuffix, isPaging) ->
             #TODO: this is dumb, move the cqp calculations elsewhere
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
-            @kwicRequest cqp
+            @kwicRequest cqp, isPaging
 
             if settings.wordpicture == false then return
             
@@ -303,7 +303,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
                         pageOnly: pageOnly
 
 
-                    searches.kwicSearch value
+                    searches.kwicSearch value, pageOnly
             oldValues = [].concat newValues
 
 
