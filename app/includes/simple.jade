@@ -26,7 +26,8 @@
       span(ng-repeat="wd in relatedObj[0].words.slice(relatedDefault) | limitTo:relatedDefault") 
         | {{stringifyRelated(wd)}}
         span(ng-if="!$last"), 
-      span(ng-if="relatedObj[0].words.length > relatedDefault || relatedObj.length > 1")...
+      span(ng-if="relatedObj[0].words.length > relatedDefault || relatedObj.length > 1")
+        | ...
 
 
 

@@ -290,18 +290,6 @@
   }
 }
 
-@-ms-keyframes spin {
-  /* line 24, ../components/font-awesome/scss/_spinning.scss */
-  0% {
-    -ms-transform: rotate(0deg);
-  }
-
-  /* line 25, ../components/font-awesome/scss/_spinning.scss */
-  100% {
-    -ms-transform: rotate(359deg);
-  }
-}
-
 @keyframes spin {
   /* line 28, ../components/font-awesome/scss/_spinning.scss */
   0% {
@@ -6954,7 +6942,6 @@ select.arg_value option {
 }
 
 .close_token {
-  -o-border-radius: 20px;
   border-radius: 20px;
   color: black;
   background-color: #f2f7ff;
@@ -8520,7 +8507,6 @@ table {
 }
 
 .word_selected {
-  -o-border-radius: 10px;
   border-radius: 10px;
   padding-left: 3px;
   margin-left: -3px;
@@ -9275,7 +9261,6 @@ label[for=lemgram_select]:before {
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
-  -o-border-radius: 5px;
   border-radius: 5px;
 }
 
@@ -9688,7 +9673,6 @@ label[for=lemgram_select]:before {
 }
 
 .query_arg {
-  -o-border-radius: 2px;
   border-radius: 2px;
   padding: 5px;
   background-color: #f7fceb;
@@ -9950,7 +9934,6 @@ label[for=lemgram_select]:before {
 }
 
 .ui-slider-handle {
-  -o-border-radius: 20px;
   border-radius: 20px;
 }
 
@@ -12571,7 +12554,6 @@ line.tick {
 }
 
 .popover {
-  -o-border-radius: 2px;
   border-radius: 2px;
 }
 

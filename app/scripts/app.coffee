@@ -88,8 +88,9 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
     s = $scope
 
     s.citeClick = () ->
-        $location.search("display", "about")
-        onHashChange()
+        s.show_modal = 'about'
+        # $location.search("display", "about")
+        # onHashChange()
 
     N_VISIBLE = settings.visibleModes
 

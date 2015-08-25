@@ -4,16 +4,10 @@
 
 </div>
 <div id="about_body" class="modal-body" >
-	<p rel="localize[about_body]">
-	Korp är Språkbanken i Göteborgs konkordansverktyg.
-	För mer information, kommentarer eller förslag, kontakta <a href="mailto:sb-info@svenska.gu.se">Språkbanken</a>.
-	</p>
-	<b rel="localize[about_cite_header]">
-		
-	</b>
-	<p rel="localize[about_cite]">
+	<p ng-bind-html="'about_body' | loc | trust" ></p>
 	
-	</p>
+	<b ng-bind-html="'about_cite_header' | loc | trust"></b>
+	<p ng-bind-html="'about_cite' | loc | trust"></p>
 
 	<div>
 		<b rel="localize[about_man]">

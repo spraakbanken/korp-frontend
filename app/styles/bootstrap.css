@@ -6420,18 +6420,6 @@ a.badge:hover {
   }
 }
 
-@-ms-keyframes progress-bar-stripes {
-  /* line 23, compass_twitter_bootstrap/_progress-bars.scss */
-  from {
-    background-position: 40px 0;
-  }
-
-  /* line 24, compass_twitter_bootstrap/_progress-bars.scss */
-  to {
-    background-position: 0 0;
-  }
-}
-
 @keyframes progress-bar-stripes {
   /* line 35, compass_twitter_bootstrap/_progress-bars.scss */
   from {
@@ -6535,7 +6523,6 @@ a.badge:hover {
 
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
-  -ms-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 

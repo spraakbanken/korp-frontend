@@ -212,7 +212,6 @@ korpApp.directive "constr", ($window, searches) ->
     scope : true
 
     link : (scope, elem, attr) ->
-        # searches.modeDef.then () ->
         instance = new $window.view[attr.constr](elem, elem, scope)
         if attr.constrName
             $window[attr.constrName] = instance
@@ -220,8 +219,6 @@ korpApp.directive "constr", ($window, searches) ->
         scope.instance = instance
         scope.$parent.instance = instance
             
-
-        # c.log "$window[attr.constrName]", $window[attr.constrName], elem
 
 
 
