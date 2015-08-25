@@ -11,5 +11,5 @@ if [ $? -eq 0 ]; then
       https://svn.spraakdata.gu.se/repos/lb/trunk/sbkhs/pub/releases/korp\-frontend/"korp $1 $DATE" -m "Release $1"
 
     git tag "release_$1"
-    git push sb master --tags
+    git push --force sb master --tags
 fi
