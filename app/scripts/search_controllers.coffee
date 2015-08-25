@@ -253,7 +253,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
         or_obj.val = ""
 
-    s.getOpts = (type) ->
+    # returning new array each time kills angular, hence the memoizing
+    s.getOpts = _.memoize (type) ->
         confObj = s.typeMapping?[type]
         unless confObj
             c.log "confObj missing", type, s.typeMapping
@@ -263,8 +264,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         if confObj.type == "set"
             optObj.is = "contains"
 
-        _.pairs optObj
-
+        pairs = _.pairs optObj
 
 
     onCorpusChange = (event, selected) ->
@@ -280,6 +280,10 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         lang = s.$parent.$parent?.l?.lang
         # c.log "lang", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
+        # "obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in types"
+        # s.typeOpts = []
+        # for obj in types
+        #     utils.valfilter obj
         s.typeMapping = _.object _.map s.types, (item) -> 
             if item.isStructAttr
                 ["_." + item.value, item]

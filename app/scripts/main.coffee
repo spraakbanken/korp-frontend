@@ -47,16 +47,22 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     # angular.element(document).ready () ->
     angular.bootstrap(document, ['korpApp'])
+    # $("body").scope().$apply()
 
-    corpus = search()["corpus"]
-    if corpus
-        settings.corpusListing.select corpus.split(",")
+    try 
+        corpus = search()["corpus"]
+        if corpus
+            settings.corpusListing.select corpus.split(",")
+        view.updateSearchHistory()
+    catch e
+        c.warn "ERROR setting corpora from location"
+    
     
     $("body").addClass "lab" if isLab
     
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
-    view.updateSearchHistory()
+    
 
     $("#logo").click ->
         window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search
@@ -103,14 +109,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
         c.log "onHashChange"
         hasChanged = (key) ->
             prevFragment[key] isnt search()[key]
-        showAbout = ->
-            $("#about_content").dialog(beforeClose: ->
-                search "display", null
-                false
-            ).css("opacity", 0)
-            .parent().find(".ui-dialog-title").localeKey("about")
-            $("#about_content").fadeTo 400, 1
-            $("#about_content").find("a").blur() # Prevents the focus of the first link in the "dialog"
         if hasChanged("lang")
             newLang = search().lang || settings.defaultLanguage
             $("body").scope().lang = newLang
@@ -121,62 +119,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             $("#languages").radioList "select", newLang
 
         display = search().display
-        # if display is "about"
-            # if $("#about_content").is(":empty")
-            #     $("#about_content").load "markup/about.html", ->
-            #         util.localize this
-                    # showAbout()
-
-            # else
-                # showAbout()
-        # if display is "login"
-        #     $("#login_popup").dialog(
-        #         height: 220
-        #         width: 177
-        #         modal: true
-        #         resizable: false
-        #         create: ->
-        #             $(".err_msg", this).hide()
-
-        #         open: ->
-        #             $(".ui-widget-overlay").hide().fadeIn()
-
-        #         beforeClose: ->
-        #             $(".ui-widget-overlay").remove()
-        #             $("<div />",
-        #                 class: "ui-widget-overlay"
-        #             ).css(
-        #                 height: $("body").outerHeight()
-        #                 width: $("body").outerWidth()
-        #                 zIndex: 1001
-        #             ).appendTo("body").fadeOut ->
-        #                 $(this).remove()
-
-        #             search "display", null
-        #             false
-        #     ).show().unbind("submit").submit ->
-        #         self = this
-        #         authenticationProxy.makeRequest($("#usrname", this).val(), $("#pass", this).val()).done((data) ->
-        #             util.setLogin()
-        #             search "display", null
-        #         ).fail ->
-        #             c.log "login fail"
-        #             $("#pass", self).val ""
-        #             $(".err_msg", self).show()
-
-        #         false
-
-        #     $("#ui-dialog-title-login_popup").attr "rel", "localize[log_in]"
-        # else
-        #     $(".ui-dialog").fadeTo 400, 0, ->
-        #         $(".ui-dialog-content", this).dialog "destroy"
-
-        # if not isInit and hasChanged("display")
-        #     $("#plot_popup.ui-dialog-content").dialog("destroy").css
-        #         opacity: 0
-        #         display: "block"
-        #         height: 0
-
 
         if isInit
             util.localize()

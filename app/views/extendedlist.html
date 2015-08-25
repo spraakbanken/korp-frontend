@@ -1,5 +1,5 @@
-<div>
-    <div ui-sortable="{ items: '> .token' }" ng-model="data" ng-controller="ExtendedToken">
+<div ng-controller="ExtendedToken">
+    <div ui-sortable="{ items: '> .token' }" ng-model="data">
     <!-- <div>{{data}}</div>
     <div>{{data}}</div>
     <div>{{data}}</div> -->
@@ -23,7 +23,8 @@
                             <div class="right_col inline_block" style="margin-left: 5px;">
                                 <div class="arg_selects">
                                     <select class="arg_type" 
-                                        ng-options="obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in types" ng-model="or.type" ng-change="setDefault(or)"></select>
+                                        ng-options="obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in types" 
+                                        ng-model="or.type" ng-change="setDefault(or)"></select>
                                     
                                     <select class="arg_opts" 
                                         ng-options="pair[1] as pair[0] | loc for pair in getOpts(or.type)" 

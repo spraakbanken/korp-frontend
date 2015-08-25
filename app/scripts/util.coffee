@@ -446,11 +446,11 @@ util.SelectionManager::hasSelected = ->
     @selected.length > 0
 
 util.getLocaleString = (key) ->
-    # lang = (if $("body").scope() then $("body").scope().lang or "sv" else "sv")
-    lang = search().lang or settings.defaultLanguage or "sv"
-    output = loc_data[lang][key] if loc_data and loc_data[lang]
-    return key if not output? and key?
-    output
+    lang = (if $("body").scope() then $("body").scope().lang) or settings.defaultLanguage or "sv"
+    try
+        return loc_data[lang][key] or key
+    catch e
+        return key
 
 
 util.localize = (root) ->
@@ -474,6 +474,7 @@ util.lemgramToString = (lemgram, appendIndex) ->
             type = lemgram.split("_")[1].toLowerCase()
         catch e
             c.log "lemgramToString broken for ", lemgram
+            return lemgram
     $.format "%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
         concept
         infixIndex

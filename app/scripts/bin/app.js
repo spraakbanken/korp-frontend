@@ -148,6 +148,13 @@
       s.login_err = false;
       return s.show_modal = false;
     };
+    $("body").on("click", ".modal-backdrop", function() {
+      var scp;
+      scp = $(this).next().scope();
+      return scp.$apply(function() {
+        return scp.$close();
+      });
+    });
     showModal = function(key) {
       var tmpl;
       tmpl = {

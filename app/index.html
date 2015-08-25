@@ -182,11 +182,11 @@
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
               <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
-                <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()">
+                <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
-                  <div ng-class="{reading_mode : reading_mode, loading: loading}" constr="KWICResults" constr-name="kwicResults" ng-controller="kwicCtrl" class="results-kwic">
+                  <div ng-class="{reading_mode : reading_mode, loading: loading}" constr="KWICResults" constr-name="kwicResults" class="results-kwic">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
                       <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>

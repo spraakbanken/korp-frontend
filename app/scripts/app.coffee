@@ -149,6 +149,12 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
         s.login_err = false
         s.show_modal = false
 
+    #hack for buggy backdrop, remove when angular bootstrap fixes bug
+    $("body").on "click", ".modal-backdrop", () -> 
+        scp = $(this).next().scope()
+        scp.$apply () ->
+            scp.$close()
+
     showModal = (key) ->
         tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]
         modal = $modal.open

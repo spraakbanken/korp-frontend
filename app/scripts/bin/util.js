@@ -614,15 +614,14 @@
   };
 
   util.getLocaleString = function(key) {
-    var lang, output;
-    lang = search().lang || settings.defaultLanguage || "sv";
-    if (loc_data && loc_data[lang]) {
-      output = loc_data[lang][key];
-    }
-    if ((output == null) && (key != null)) {
+    var e, lang;
+    lang = ($("body").scope() ? $("body").scope().lang : void 0) || settings.defaultLanguage || "sv";
+    try {
+      return loc_data[lang][key] || key;
+    } catch (_error) {
+      e = _error;
       return key;
     }
-    return output;
   };
 
   util.localize = function(root) {
@@ -650,6 +649,7 @@
       } catch (_error) {
         e = _error;
         c.log("lemgramToString broken for ", lemgram);
+        return lemgram;
       }
     }
     return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [concept, infixIndex, type, util.getLocaleString(type)]);

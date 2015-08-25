@@ -4212,7 +4212,6 @@ settings.reduce_stringify = function(type) {
 
             // if(type in cl.getStructAttrs())
             var attrObj = cl.getStructAttrs()[type]
-            c.log ("attrObj", attrObj)
 
             var prefix = ""
             if(!_.isUndefined(attrObj) && value != "&Sigma;" && attrObj.translationKey )

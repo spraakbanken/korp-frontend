@@ -1,6 +1,6 @@
 (function() {
   var creds, deferred_domReady, isDev, loc_dfd, t,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.authenticationProxy = new model.AuthenticationProxy();
 
@@ -61,19 +61,24 @@
   });
 
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
-    var corpus, prevFragment, tab_a_selector;
+    var corpus, e, prevFragment, tab_a_selector;
     c.log("preloading done, t = ", $.now() - t);
     angular.bootstrap(document, ['korpApp']);
-    corpus = search()["corpus"];
-    if (corpus) {
-      settings.corpusListing.select(corpus.split(","));
+    try {
+      corpus = search()["corpus"];
+      if (corpus) {
+        settings.corpusListing.select(corpus.split(","));
+      }
+      view.updateSearchHistory();
+    } catch (_error) {
+      e = _error;
+      c.warn("ERROR setting corpora from location");
     }
     if (isLab) {
       $("body").addClass("lab");
     }
     $("body").addClass("mode-" + currentMode);
     util.browserWarn();
-    view.updateSearchHistory();
     $("#logo").click(function() {
       window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search;
       return false;
@@ -110,20 +115,10 @@
     });
     prevFragment = {};
     window.onHashChange = function(event, isInit) {
-      var display, hasChanged, newLang, showAbout;
+      var display, hasChanged, newLang;
       c.log("onHashChange");
       hasChanged = function(key) {
         return prevFragment[key] !== search()[key];
-      };
-      showAbout = function() {
-        $("#about_content").dialog({
-          beforeClose: function() {
-            search("display", null);
-            return false;
-          }
-        }).css("opacity", 0).parent().find(".ui-dialog-title").localeKey("about");
-        $("#about_content").fadeTo(400, 1);
-        return $("#about_content").find("a").blur();
       };
       if (hasChanged("lang")) {
         newLang = search().lang || settings.defaultLanguage;
@@ -191,7 +186,7 @@
   window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     var leftPart, outCorpora, posOfPeriod, rightPart;
     outCorpora = [];
-    while (__indexOf.call(folderOrCorpus, ".") >= 0) {
+    while (indexOf.call(folderOrCorpus, ".") >= 0) {
       posOfPeriod = _.indexOf(folderOrCorpus, ".");
       leftPart = folderOrCorpus.substr(0, posOfPeriod);
       rightPart = folderOrCorpus.substr(posOfPeriod + 1);
@@ -235,9 +230,9 @@
     };
     window.timeDeferred = timeProxy.makeRequest().fail(function(error) {
       return $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>");
-    }).done(function(_arg) {
+    }).done(function(arg) {
       var all_timestruct, cor, corpus, dataByCorpus, rest, struct;
-      dataByCorpus = _arg[0], all_timestruct = _arg[1], rest = _arg[2];
+      dataByCorpus = arg[0], all_timestruct = arg[1], rest = arg[2];
       c.log("write time");
       for (corpus in dataByCorpus) {
         struct = dataByCorpus[corpus];
@@ -272,9 +267,9 @@
             return out;
           });
         };
-        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg1) {
+        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, arg1) {
           var a, b;
-          a = _arg1[0], b = _arg1[1];
+          a = arg1[0], b = arg1[1];
           if (typeof memo[a] === "undefined") {
             memo[a] = b;
           } else {
