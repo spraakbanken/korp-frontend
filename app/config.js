@@ -140,6 +140,16 @@ settings.modeConfig = [
  
 ];
 
+if(isLab) {
+    settings.modeConfig.splice(1, 0,
+        {
+            localekey: "swedish_texts",
+            mode: "swedish"
+        }
+    );
+}
+
+
 settings.languages = ["sv", "en"];
 
 
@@ -738,13 +748,14 @@ settings.corporafolders.magazines = {
 };
 
 
-/* 
+
+/*
  * PRESELECTED CORPORA
  * Folders will be expanded to all corpora. Optionally prefix folders with __ , which will be ignored.
  */
 // TODO: this should be moved when modern texts are moved to their own mode
-if(window.currentMode == "default") 
-settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk", 
+if(window.currentMode == "default")
+settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk",
                                 "fof", "twitter", "__socialmedia.bloggmix", "romi", "romii", "rom99", "storsuc"];
 
 /*
@@ -4051,6 +4062,11 @@ settings.corpora.soexempel = {
     }
 };
 
+/*
+ * TODO add all other copora settings here
+ */
+
+
 
 /*
  * MISC
@@ -4147,7 +4163,7 @@ settings.reduce_stringify = function(type) {
             if(type == "saldo") stringify = util.saldoToString
             else if(type == "lemma") stringify = function(lemma) {return lemma.replace(/_/g, " ")}
             else stringify = util.lemgramToString
-            
+
             // c.log ("value", value)
             if(!_.isArray(value)) value = [value]
             var html = _.map(value[0].split(" "), function(token) {
@@ -4163,12 +4179,12 @@ settings.reduce_stringify = function(type) {
 
             var cqp = _.map(_.zip.apply(null, _.invoke(value, "split", " ")), function(tup) {
                 return "[" + _.map(_.uniq(tup), function(item) {
-                    return "(" + type + " contains '" + item + "')"    
+                    return "(" + type + " contains '" + item + "')"
                 }).join(" | ") + "]"
 
             }).join(" ")
 
-            
+
             output = $("<span class='link'>")
                 .attr("data-query", cqp)
                 .attr("data-corpora", JSON.stringify(corpora))
@@ -4176,7 +4192,7 @@ settings.reduce_stringify = function(type) {
 
             return appendDiagram(output, corpora, value);
         };
-    
+
     // case "lemma":
     //     return function(row, cell, value, columnDef, dataContext) {
     //         var corpora = getCorpora(dataContext);
@@ -4188,7 +4204,7 @@ settings.reduce_stringify = function(type) {
     //             .attr("data-query", cqp)
     //             .attr("data-corpora", JSON.stringify(corpora))
     //             .append(html.join(" ")).outerHTML()
-            
+
     //         return appendDiagram(output, corpora, stringify(value));
     case "deprel":
         return function(row, cell, value, columnDef, dataContext) {
@@ -4325,6 +4341,7 @@ settings.fsvvariants = {
 };
 
 settings.fsvdescription ='<a target="_blank" href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
+
 var fsv_yngrelagar = {
     morf : 'fsvm',
     id : "fsv-yngrelagar",
