@@ -317,13 +317,14 @@
     };
 
     SimpleSearch.prototype.onSubmit = function() {
+      var wordInput;
       SimpleSearch.__super__.onSubmit.call(this);
       c.log("onSubmit");
-      $("#simple_text.ui-autocomplete-input").korp_autocomplete("abort");
-      if ($("#simple_text").val() !== "") {
-        return util.searchHash("word", $("#simple_text").val());
+      wordInput = $("#simple_text > div > .new_simple_text").val();
+      if (wordInput !== "") {
+        return util.searchHash("word", wordInput);
       } else {
-        return this.selectLemgram(this.s.placeholder);
+        return this.selectLemgram(this.s.model);
       }
     };
 

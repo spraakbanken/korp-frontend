@@ -305,17 +305,8 @@ attrs.msd = {
 attrs.baseform = {
     label : "baseform",
     type : "set",
-    displayType : "autocomplete",
-    stringify : function(baseform) {
-        return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
-    },
     opts : settings.setOptions,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='baseform' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    }
-
+    extended_template : "<input ng-model='model' >"
 };
 attrs.lemgram = {
     label : "lemgram",
@@ -329,11 +320,7 @@ attrs.lemgram = {
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    }
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
 };
 attrs.dalinlemgram = {
     label : "dalin-lemgram",
@@ -363,11 +350,7 @@ attrs.saldo = {
     },
     externalSearch : "http://spraakbanken.gu.se/karp/#search-tab-1&search=cql|(saldo+%3D+<%= val %>)",
     internalSearch : true,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='saldo' >",
-    controller : function($scope) {
-        $scope.stringify = util.saldoToString;
-        $scope.sorter = view.saldoSort;
-    }
+    extended_template : "<autoc model='model' placeholder='placeholder' type='sense'/>",
 };
 attrs.dephead = {
     label : "dephead",
@@ -458,11 +441,7 @@ attrs.prefix = {
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    }
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
 };
 attrs.suffix = {
     label : "suffix",
@@ -474,11 +453,7 @@ attrs.suffix = {
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    }
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
 };
 attrs.ref = {
     label : "ref",

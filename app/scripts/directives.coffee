@@ -165,45 +165,45 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             elem.html(tmplElem).addClass("arg_value")
 
 
-korpApp.directive "korpAutocomplete", () ->
-    scope : 
-        model : "="
-        stringify : "="
-        sorter : "="
-        type : "@"
-    link : (scope, elem, attr) ->
-        
-        setVal = (lemgram) ->
-            $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
-                .val("").blur()
-        if scope.model
-            setVal(scope.model)
-        arg_value = elem.korp_autocomplete(
-            labelFunction: scope.stringify
-            sortFunction: scope.sorter
-            type: scope.type
-            select: (lemgram) ->
-                # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
-                setVal(lemgram)
-                scope.$apply () ->
-                    if scope.type == "baseform"
-                        scope.model = lemgram.split(".")[0]
-                    else 
-                        scope.model = lemgram
-
-            "sw-forms": true
-        )
-        .blur(->
-            input = this
-            setTimeout (->
-
-                if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
-                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null)
-                else
-                    $(input).removeClass("invalid_input")
-                # self._trigger "change"
-            ), 100
-        )
+#korpApp.directive "korpAutocomplete", () ->
+#    scope : 
+#        model : "="
+#        stringify : "="
+#        sorter : "="
+#        type : "@"
+#    link : (scope, elem, attr) ->
+#        
+#        setVal = (lemgram) ->
+#            $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
+#                .val("").blur()
+#        if scope.model
+#            setVal(scope.model)
+#        arg_value = elem.korp_autocomplete(
+#            labelFunction: scope.stringify
+#            sortFunction: scope.sorter
+#            type: scope.type
+#            select: (lemgram) ->
+#                # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
+#                setVal(lemgram)
+#                scope.$apply () ->
+#                    if scope.type == "baseform"
+#                        scope.model = lemgram.split(".")[0]
+#                    else 
+#                        scope.model = lemgram
+#
+#            "sw-forms": true
+#        )
+#        .blur(->
+#            input = this
+#            setTimeout (->
+#
+#                if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
+#                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null)
+#                else
+#                    $(input).removeClass("invalid_input")
+#                # self._trigger "change"
+#            ), 100
+#        )
 
 
 
@@ -552,3 +552,114 @@ korpApp.directive "kwicPager", () ->
     </div>
     """
 
+korpApp.directive "autoc", ($q, $http, lexicons) ->
+    replace: true
+    restrict: "E"
+    scope:
+        "placeholder" : "="
+        "model" : "="
+        "type" : "@"
+        "variant" : "@"
+    template: """
+        <div>
+            <script type="text/ng-template" id="lemgramautocomplete.html">
+                <a style="cursor:pointer">
+                    <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : match.model.count == 0}">
+                        <span ng-if="match.model.parts.namespace" class="label">{{match.model.parts.namespace | loc}}</span>
+                        <span>{{match.model.parts.main}}</span>
+                        <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
+                        <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
+                        <span ng-if="match.model.desc" style="color:gray;margin-left:6px">{{match.model.desc.main}}</span>
+                        <sup ng-if="match.model.desc && match.model.desc.index != 1" style="color:gray">{{match.model.desc.index}}</sup>
+                        <span class="num-to-find" ng-if="match.model.count && match.model.count > 0">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}
+                        </span>
+                    </span>
+                </a>
+            </script>
+            <div style="float:left"><input
+                class="new_simple_text"
+                type="text" class="form-control"
+                ng-model="textInField"
+                typeahead="row for row in getRows($viewValue)"
+                typeahead-wait-ms="500"
+                typeahead-template-url="lemgramautocomplete.html"
+                typeahead-loading="isLoading"
+                typeahead-on-select="selectedItem($item, $model, $label)"
+                placeholder="{{lemgramToString(placeholder)}}"></div>
+            <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+        </div>
+    """
+    link : (scope, elem, attr) ->
+        scope.lemgramify = (lemgram) ->
+            lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
+            match = lemgram.match lemgramRegExp
+            unless match then return false
+            return {
+                "main" : match[2].replace(/_/g, " "),
+                "pos" : util.getLocaleString(match[3].slice(0, 2)),
+                "index" : match[4],
+                "namespace" : if match[1] then match[1].slice(0, -2) else "" }
+
+        scope.sensify = (sense) ->
+            senseParts = sense.split ".."
+            return {
+                "main" : senseParts[0].replace(/_/g, " "),
+                "index" : senseParts[1]
+            }
+
+        scope.lemgramToString = (lemgram) ->
+            unless lemgram then return
+            util.lemgramToString(lemgram).replace(/<.*?>/g, "")
+
+        scope.formatPlaceholder = (input) ->
+            lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
+            match = input.match lemgramRegExp
+            if match # Lemgram
+                return scope.lemgramToString(input)
+            else # Sense
+                return input
+
+        scope.selectedItem = (item, model, label) ->
+            scope.placeholder = model.lemgram
+            scope.model = model.lemgram
+            scope.textInField = ""
+
+        scope.getMorphologies = (corporaIDs) ->
+            morphologies = []
+            for corporaID in corporaIDs
+                morfs = settings.corpora[corporaID].morf?.split("|") or []
+                for morf in morfs
+                    unless morf in morphologies then morphologies.push morf
+            if morphologies.length is 0 then morphologies.push "saldom"
+            return morphologies
+
+        scope.getRows = (input) ->
+            corporaIDs = _.pluck settings.corpusListing.selected, "id"
+            morphologies = scope.getMorphologies corporaIDs
+            if scope.type is "lemgram"
+                lemgrams = scope.getLemgrams input, morphologies, corporaIDs
+                return lemgrams
+            else if scope.type is "sense"
+                return scope.getSenses input, morphologies, corporaIDs
+        scope.getLemgrams = (input, morphologies, corporaIDs) ->
+            deferred = $q.defer()
+            http = lexicons.getLemgrams input, (morphologies.join "|"), corporaIDs, (scope.variant is "affix")
+            http.then (data) ->
+                data.forEach (item) ->
+                    if scope.variant is 'affix' then item.count = -1
+                    item.parts = scope.lemgramify(item.lemgram)
+                data.sort (a, b) -> b.count - a.count
+                deferred.resolve data
+            return deferred.promise
+
+        scope.getSenses = (input, morphologies, corporaIDs) ->
+            deferred = $q.defer()
+            http = lexicons.getSenses input, (morphologies.join "|"), corporaIDs
+            http.then (data) ->
+                data.forEach (item) ->
+                    item.parts = scope.sensify(item.sense)
+                    if item.desc then item.desc = scope.sensify(item.desc)
+                data.sort (a, b) -> b.count - a.count
+                deferred.resolve data
+            return deferred.promise

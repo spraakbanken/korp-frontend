@@ -247,99 +247,100 @@ $.extend $.ui.autocomplete.prototype,
 
 
 
-$.fn.korp_autocomplete = (options) ->
-    selector = $(this)
-    proxy = new model.LemgramProxy()
-    if typeof options is "string" and options is "abort"
-        proxy.abort()
-        selector.preloader "hide"
-        return
-    options = $.extend(
-        type: "lem"
-        select: (e) ->
-            # c.log "select", arguments
-            # return false
-        labelFunction: util.lemgramToString
-        middleware: (request, idArray) ->
-
-            dfd = $.Deferred()
-            has_morphs = settings.corpusListing.getMorphology().split("|").length > 1
-            if has_morphs
-                idArray.sort (a, b) ->
-                    first = (if a.split("--").length > 1 then a.split("--")[0] else "saldom")
-                    second = (if b.split("--").length > 1 then b.split("--")[0] else "saldom")
-                    second < first
-
-            else
-                idArray.sort options.sortFunction or view.lemgramSort
-            labelArray = util.sblexArraytoString(idArray, options.labelFunction)
-            listItems = $.map(idArray, (item, i) ->
-                out =
-                    label: labelArray[i]
-                    value: item
-                    input: request.term
-                    enabled: true
-
-                out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom") if has_morphs
-                out
-            )
-            dfd.resolve listItems
-            
-            dfd.promise()
-    , options)
-    selector.preloader(
-        timeout: 500
-        position:
-            my: "right center"
-            at: "right center"
-            offset: "-1 0"
-            collision: "none"
-    ).autocomplete
-        html: true
-        source: (request, response) ->
-            c.log "autocomplete request", request
-            c.log "autocomplete type", options.type
-            promise = if options.type is "saldo"
-            then proxy.saldoSearch(request.term, options["sw-forms"])
-            else proxy.karpSearch(request.term, options["sw-forms"])
-            promise.done((idArray, textstatus, xhr) ->
-                c.log "idArray", idArray.length
-                idArray = $.unique(idArray)
-                options.middleware(request, idArray).done (listItems) ->
-                    
-                    
-                    selector.data "dataArray", listItems
-                    response listItems
-                    if selector.autocomplete("widget").height() > 300
-                        selector.autocomplete("widget").addClass "ui-autocomplete-tall"
-                    $("#autocomplete_header").remove()
-                    $("<li id='autocomplete_header' />")
-                        .localeKey("autocomplete_header")
-                        .css("font-weight", "bold")
-                        .css("font-size", 10)
-                        .prependTo selector.autocomplete("widget")
-                    selector.preloader "hide"
-                    
-
-            ).fail ->
-                c.log "sblex fail", arguments
-                selector.preloader "hide"
-
-            selector.data "promise", promise
-
-        search: ->
-            selector.preloader "show"
-
-        minLength: 1
-        select: (event, ui) ->
-            event.preventDefault()
-            selectedItem = ui.item.value
-            $.proxy(options.select, selector) selectedItem
-
-        close: (event) ->
-            false
-
-        focus: ->
-            false
-
-    selector
+#$.fn.korp_autocomplete = (options) ->
+#    selector = $(this)
+#    proxy = new model.LemgramProxy()
+#    if typeof options is "string" and options is "abort"
+#        proxy.abort()
+#        selector.preloader "hide"
+#        return
+#    options = $.extend(
+#        type: "lem"
+#        select: (e) ->
+#            # c.log "select", arguments
+#            # return false
+#        labelFunction: util.lemgramToString
+#        middleware: (request, idArray) ->
+#
+#            dfd = $.Deferred()
+#            has_morphs = settings.corpusListing.getMorphology().split("|").length > 1
+#            if has_morphs
+#                idArray.sort (a, b) ->
+#                    first = (if a.split("--").length > 1 then a.split("--")[0] else "saldom")
+#                    second = (if b.split("--").length > 1 then b.split("--")[0] else "saldom")
+#                    second < first
+#
+#            else
+#                idArray.sort options.sortFunction or view.lemgramSort
+#            labelArray = util.sblexArraytoString(idArray, options.labelFunction)
+#            listItems = $.map(idArray, (item, i) ->
+#                out =
+#                    label: labelArray[i]
+#                    value: item
+#                    input: request.term
+#                    enabled: true
+#
+#                out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom") if has_morphs
+#                out
+#            )
+#            dfd.resolve listItems
+#            
+#            dfd.promise()
+#    , options)
+#    selector.preloader(
+#        timeout: 500
+#        position:
+#            my: "right center"
+#            at: "right center"
+#            offset: "-1 0"
+#            collision: "none"
+#    ).autocomplete
+#        html: true
+#        source: (request, response) ->
+#            c.log "autocomplete request", request
+#            c.log "autocomplete type", options.type
+#            promise = if options.type is "saldo"
+#            then proxy.saldoSearch(request.term, options["sw-forms"])
+#            else proxy.karpSearch(request.term, options["sw-forms"])
+#            promise.done((idArray, textstatus, xhr) ->
+#                c.log "idArray", idArray.length
+#                idArray = $.unique(idArray)
+#                options.middleware(request, idArray).done (listItems) ->
+#                    
+#                    
+#                    selector.data "dataArray", listItems
+#                    response listItems
+#                    if selector.autocomplete("widget").height() > 300
+#                        selector.autocomplete("widget").addClass "ui-autocomplete-tall"
+#                    $("#autocomplete_header").remove()
+#                    $("<li id='autocomplete_header' />")
+#                        .localeKey("autocomplete_header")
+#                        .css("font-weight", "bold")
+#                        .css("font-size", 10)
+#                        .prependTo selector.autocomplete("widget")
+#                    selector.preloader "hide"
+#                    
+#
+#            ).fail ->
+#                c.log "sblex fail", arguments
+#                selector.preloader "hide"
+#
+#            selector.data "promise", promise
+#
+#        search: ->
+#            selector.preloader "show"
+#
+#        minLength: 1
+#        select: (event, ui) ->
+#            event.preventDefault()
+#            selectedItem = ui.item.value
+#            $.proxy(options.select, selector) selectedItem
+#
+#        close: (event) ->
+#            false
+#
+#        focus: ->
+#            false
+#
+#    selector
+#

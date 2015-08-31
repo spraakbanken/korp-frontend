@@ -329,3 +329,93 @@ korpApp.service "compareSearches",
             $.jStorage.set @key, @savedSearches
 
 
+korpApp.factory "lexicons", ($q, $http) ->
+    getLemgrams: (wf, resources, corporaIDs, restrictToSingleWords) ->
+        deferred = $q.defer()
+        swforms = if restrictToSingleWords then "true" else "false"
+        args =
+            "cql" : "wf==" + wf
+            "resurs" : resources
+            "lemgram-ac" : "true"
+            "format" : "json"
+            "sw-forms" : swforms
+            "sms-forms" : "false"
+        $http(
+                method: 'GET'
+                url: "http://spraakbanken.gu.se/ws/karp-sok"
+                params : args
+            ).success((data, status, headers, config) =>
+                if data is null
+                    deferred.resolve []
+                else
+                    unless angular.isArray(data) then data = [data]
+                    karpLemgrams = data
+                    korpargs =
+                        "command" : "lemgram_count"
+                        "lemgram" : data
+                        "count" : "lemgram"
+                        "corpus" : corporaIDs
+                    $http(
+                        method: 'POST'
+                        url: settings.cgi_script
+                        params : korpargs
+                    ).success((data, status, headers, config) =>
+                        delete data.time
+                        allLemgrams = []
+                        for lemgram, count of data
+                            allLemgrams.push {"lemgram" : lemgram, "count" : count}
+                        for klemgram in karpLemgrams
+                            unless data[klemgram]
+                                allLemgrams.push {"lemgram" : klemgram, "count" : 0}
+                        deferred.resolve allLemgrams
+                    ).error (data, status, headers, config) ->
+                        deferred.resolve []
+            ).error (data, status, headers, config) ->
+                deferred.resolve []
+        return deferred.promise
+    getSenses: (wf) ->
+        deferred = $q.defer()
+        args =
+            "cql" : "wf==" + wf
+            "resurs" : "saldom"
+            "lemgram-ac" : "true"
+            "format" : "json"
+            "sw-forms" : "false"
+            "sms-forms" : "false"
+        $http(
+            method: 'GET'
+            url: "http://spraakbanken.gu.se/ws/karp-sok"
+            params : args
+        ).success((data, status, headers, config) =>
+            if data is null
+                deferred.resolve []
+            else
+                unless angular.isArray(data) then data = [data]
+                senseargs =
+                    "cql" : "lemgram == " + data.join(" or lemgram == ")
+                    "resurs" : "saldo"
+                    "format" : "json"
+                    "mini-entries" : "true"
+                    "info" : "primary"
+                $http(
+                    method: 'POST'
+                    url: "http://spraakbanken.gu.se/ws/karp-sok"
+                    params : senseargs
+                ).success((data, status, headers, config) ->
+                    console.log "sense data", data
+                    unless data?.div?.e
+                        deferred.resolve []
+                        return null
+                    unless $.isArray(data?.div.e) then data.div.e = [data.div.e]
+                    senses = _.map data.div.e, (obj) ->
+                        {
+                            "sense" : obj.s,
+                            "desc" : obj.info?.info?.SenseRelation?.targets
+                        }
+                    console.log "OUTSENSES", senses
+                    deferred.resolve senses
+                ).error (data, status, headers, config) ->
+                    deferred.resolve []
+        ).error (data, status, headers, config) ->
+            deferred.resolve []
+        return deferred.promise

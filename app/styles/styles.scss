@@ -2567,3 +2567,19 @@ line.tick {
     font-style:italic;
     color:gray;
 }
+
+/* ----------- Autocompletion ----------- */
+
+.none-to-find {
+    color: #aaa;
+}
+.num-to-find {
+    visibility: hidden;
+    font-size:x-small;
+}
+li.active a span .num-to-find {
+    visibility: visible;
+}
+.autoc-spinner {
+    margin-left:-20px;margin-top:2px;float:left
+}

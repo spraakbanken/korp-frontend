@@ -175,7 +175,8 @@
   });
 
   korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q) {
-    var Searches, oldValues, searches;
+    var Searches, oldValues, searches,
+      _this = this;
     Searches = (function() {
       function Searches() {
         var def, timedef;
@@ -266,67 +267,65 @@
       (function() {
         return $location.search().search;
       }), "_loc.search().page"
-    ], (function(_this) {
-      return function(newValues) {
-        var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
-        c.log("searches service watch", $location.search().search);
-        searchExpr = $location.search().search;
-        if (!searchExpr) {
-          return;
+    ], function(newValues) {
+      var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
+      c.log("searches service watch", $location.search().search);
+      searchExpr = $location.search().search;
+      if (!searchExpr) {
+        return;
+      }
+      _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
+      value = value.join("|");
+      newValues[1] = Number(newValues[1]) || 0;
+      oldValues[1] = Number(oldValues[1]) || 0;
+      c.log("newValues", newValues);
+      c.log("oldValues", oldValues);
+      if (_.isEqual(newValues, oldValues)) {
+        pageChanged = false;
+        searchChanged = true;
+      } else {
+        pageChanged = newValues[1] !== oldValues[1];
+        searchChanged = newValues[0] !== oldValues[0];
+      }
+      pageOnly = pageChanged && !searchChanged;
+      view.updateSearchHistory(value, $location.absUrl());
+      return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
+        switch (type) {
+          case "word":
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            break;
+          case "lemgram":
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            break;
+          case "saldo":
+            extendedSearch.setOneToken("saldo", value);
+            break;
+          case "cqp":
+            c.log("cqp search", value);
+            if (!value) {
+              value = CQP.expandOperators($location.search().cqp);
+            }
+            searches.activeSearch = {
+              type: type,
+              val: value,
+              page: newValues[1],
+              pageOnly: pageOnly
+            };
+            searches.kwicSearch(value, pageOnly);
         }
-        _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
-        value = value.join("|");
-        newValues[1] = Number(newValues[1]) || 0;
-        oldValues[1] = Number(oldValues[1]) || 0;
-        c.log("newValues", newValues);
-        c.log("oldValues", oldValues);
-        if (_.isEqual(newValues, oldValues)) {
-          pageChanged = false;
-          searchChanged = true;
-        } else {
-          pageChanged = newValues[1] !== oldValues[1];
-          searchChanged = newValues[0] !== oldValues[0];
-        }
-        pageOnly = pageChanged && !searchChanged;
-        view.updateSearchHistory(value, $location.absUrl());
-        return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
-          switch (type) {
-            case "word":
-              searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-              break;
-            case "lemgram":
-              searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-              break;
-            case "saldo":
-              extendedSearch.setOneToken("saldo", value);
-              break;
-            case "cqp":
-              c.log("cqp search", value);
-              if (!value) {
-                value = CQP.expandOperators($location.search().cqp);
-              }
-              searches.activeSearch = {
-                type: type,
-                val: value,
-                page: newValues[1],
-                pageOnly: pageOnly
-              };
-              searches.kwicSearch(value, pageOnly);
-          }
-          return oldValues = [].concat(newValues);
-        });
-      };
-    })(this));
+        return oldValues = [].concat(newValues);
+      });
+    });
     return searches;
   });
 
@@ -356,6 +355,142 @@
 
   })());
 
+  korpApp.factory("lexicons", function($q, $http) {
+    return {
+      getLemgrams: function(wf, resources, corporaIDs, restrictToSingleWords) {
+        var args, deferred, swforms,
+          _this = this;
+        deferred = $q.defer();
+        swforms = restrictToSingleWords ? "true" : "false";
+        args = {
+          "cql": "wf==" + wf,
+          "resurs": resources,
+          "lemgram-ac": "true",
+          "format": "json",
+          "sw-forms": swforms,
+          "sms-forms": "false"
+        };
+        $http({
+          method: 'GET',
+          url: "http://spraakbanken.gu.se/ws/karp-sok",
+          params: args
+        }).success(function(data, status, headers, config) {
+          var karpLemgrams, korpargs;
+          if (data === null) {
+            return deferred.resolve([]);
+          } else {
+            if (!angular.isArray(data)) {
+              data = [data];
+            }
+            karpLemgrams = data;
+            korpargs = {
+              "command": "lemgram_count",
+              "lemgram": data,
+              "count": "lemgram",
+              "corpus": corporaIDs
+            };
+            return $http({
+              method: 'POST',
+              url: settings.cgi_script,
+              params: korpargs
+            }).success(function(data, status, headers, config) {
+              var allLemgrams, count, klemgram, lemgram, _i, _len;
+              delete data.time;
+              allLemgrams = [];
+              for (lemgram in data) {
+                count = data[lemgram];
+                allLemgrams.push({
+                  "lemgram": lemgram,
+                  "count": count
+                });
+              }
+              for (_i = 0, _len = karpLemgrams.length; _i < _len; _i++) {
+                klemgram = karpLemgrams[_i];
+                if (!data[klemgram]) {
+                  allLemgrams.push({
+                    "lemgram": klemgram,
+                    "count": 0
+                  });
+                }
+              }
+              return deferred.resolve(allLemgrams);
+            }).error(function(data, status, headers, config) {
+              return deferred.resolve([]);
+            });
+          }
+        }).error(function(data, status, headers, config) {
+          return deferred.resolve([]);
+        });
+        return deferred.promise;
+      },
+      getSenses: function(wf) {
+        var args, deferred,
+          _this = this;
+        deferred = $q.defer();
+        args = {
+          "cql": "wf==" + wf,
+          "resurs": "saldom",
+          "lemgram-ac": "true",
+          "format": "json",
+          "sw-forms": "false",
+          "sms-forms": "false"
+        };
+        $http({
+          method: 'GET',
+          url: "http://spraakbanken.gu.se/ws/karp-sok",
+          params: args
+        }).success(function(data, status, headers, config) {
+          var senseargs;
+          if (data === null) {
+            return deferred.resolve([]);
+          } else {
+            if (!angular.isArray(data)) {
+              data = [data];
+            }
+            senseargs = {
+              "cql": "lemgram == " + data.join(" or lemgram == "),
+              "resurs": "saldo",
+              "format": "json",
+              "mini-entries": "true",
+              "info": "primary"
+            };
+            return $http({
+              method: 'POST',
+              url: "http://spraakbanken.gu.se/ws/karp-sok",
+              params: senseargs
+            }).success(function(data, status, headers, config) {
+              var senses, _ref;
+              console.log("sense data", data);
+              if (!(data != null ? (_ref = data.div) != null ? _ref.e : void 0 : void 0)) {
+                deferred.resolve([]);
+                return null;
+              }
+              if (!$.isArray(data != null ? data.div.e : void 0)) {
+                data.div.e = [data.div.e];
+              }
+              senses = _.map(data.div.e, function(obj) {
+                var _ref1, _ref2, _ref3;
+                return {
+                  "sense": obj.s,
+                  "desc": (_ref1 = obj.info) != null ? (_ref2 = _ref1.info) != null ? (_ref3 = _ref2.SenseRelation) != null ? _ref3.targets : void 0 : void 0 : void 0
+                };
+              });
+              console.log("OUTSENSES", senses);
+              return deferred.resolve(senses);
+            }).error(function(data, status, headers, config) {
+              return deferred.resolve([]);
+            });
+          }
+        }).error(function(data, status, headers, config) {
+          return deferred.resolve([]);
+        });
+        return deferred.promise;
+      }
+    };
+  });
+
 }).call(this);
 
-//# sourceMappingURL=services.js.map
+/*
+//@ sourceMappingURL=services.js.map
+*/

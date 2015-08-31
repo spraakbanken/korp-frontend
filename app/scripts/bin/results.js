@@ -1015,7 +1015,8 @@
     };
 
     LemgramResults.prototype.showWarning = function() {
-      var hasWarned;
+      var hasWarned,
+        _this = this;
       hasWarned = !!$.jStorage.get("lemgram_warning");
       if (!hasWarned) {
         $.jStorage.set("lemgram_warning", true);
@@ -1043,6 +1044,7 @@
     };
 
     LemgramResults.prototype.onexit = function() {
+      var _this = this;
       LemgramResults.__super__.onexit.call(this);
       clearTimeout(self.timeout);
       safeApply(this.s, (function(_this) {

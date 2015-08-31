@@ -1,6 +1,6 @@
 (function() {
   var korpApp,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   korpApp = angular.module("korpApp");
 
@@ -10,39 +10,39 @@
       template: "<span class=\"word\" ng-class=\"getClassObj(wd)\">\n{{::wd.word}} </span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
-          var j, k, l, len1, len2, len3, output, ref, ref1, ref2, struct, x, y;
+          var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
           output = {
             reading_match: wd._match,
             punct: wd._punct,
             match_sentence: wd._matchSentence,
             link_selected: wd._link_selected
           };
-          ref = wd._struct || [];
-          for (j = 0, len1 = ref.length; j < len1; j++) {
-            struct = ref[j];
+          _ref = wd._struct || [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            struct = _ref[_i];
             output["struct_" + struct] = true;
           }
-          ref1 = wd._open || [];
-          for (k = 0, len2 = ref1.length; k < len2; k++) {
-            struct = ref1[k];
+          _ref1 = wd._open || [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            struct = _ref1[_j];
             output["open_" + struct] = true;
           }
-          ref2 = wd._close || [];
-          for (l = 0, len3 = ref2.length; l < len3; l++) {
-            struct = ref2[l];
+          _ref2 = wd._close || [];
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            struct = _ref2[_k];
             output["close_" + struct] = true;
           }
           return ((function() {
-            var len4, m, ref3, ref4, results;
-            ref3 = _.pairs(output);
-            results = [];
-            for (m = 0, len4 = ref3.length; m < len4; m++) {
-              ref4 = ref3[m], x = ref4[0], y = ref4[1];
+            var _l, _len3, _ref3, _ref4, _results;
+            _ref3 = _.pairs(output);
+            _results = [];
+            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+              _ref4 = _ref3[_l], x = _ref4[0], y = _ref4[1];
               if (y) {
-                results.push(x);
+                _results.push(x);
               }
             }
-            return results;
+            return _results;
           })()).join(" ");
         };
       }
@@ -81,11 +81,11 @@
           }
         });
         s.getSelected = function() {
-          var i, j, len1, out, p, ref;
+          var i, out, p, _i, _len, _ref;
           out = null;
-          ref = contentScope.tabs;
-          for (i = j = 0, len1 = ref.length; j < len1; i = ++j) {
-            p = ref[i];
+          _ref = contentScope.tabs;
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            p = _ref[i];
             if (p.active) {
               out = i;
             }
@@ -96,10 +96,10 @@
           return out;
         };
         return s.setSelected = function(index) {
-          var j, len1, ref, ref1, t;
-          ref = contentScope.tabs;
-          for (j = 0, len1 = ref.length; j < len1; j++) {
-            t = ref[j];
+          var t, _i, _len, _ref, _ref1;
+          _ref = contentScope.tabs;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            t = _ref[_i];
             t.active = false;
             if (typeof t.onDeselect === "function") {
               t.onDeselect();
@@ -108,7 +108,7 @@
           if (contentScope.tabs[index]) {
             return contentScope.tabs[index].active = true;
           } else {
-            return (ref1 = _.last(contentScope.tabs)) != null ? ref1.active = true : void 0;
+            return (_ref1 = _.last(contentScope.tabs)) != null ? _ref1.active = true : void 0;
           }
         };
       }
@@ -121,16 +121,16 @@
         var doNotEscape, escape, unescape;
         doNotEscape = ["*=", "!*="];
         escape = function(val) {
-          var ref;
-          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return regescape(val);
           } else {
             return val;
           }
         };
         unescape = function(val) {
-          var ref;
-          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return val.replace(/\\/g, "");
           } else {
             return val;
@@ -151,9 +151,9 @@
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
         $scope.makeSensitive = function() {
-          var ref;
+          var _ref;
           $scope["case"] = "sensitive";
-          return (ref = $scope.orObj.flags) != null ? delete ref["c"] : void 0;
+          return (_ref = $scope.orObj.flags) != null ? delete _ref["c"] : void 0;
         };
         return $scope.makeInsensitive = function() {
           var flags;
@@ -204,52 +204,6 @@
     };
   });
 
-  korpApp.directive("korpAutocomplete", function() {
-    return {
-      scope: {
-        model: "=",
-        stringify: "=",
-        sorter: "=",
-        type: "@"
-      },
-      link: function(scope, elem, attr) {
-        var arg_value, setVal;
-        setVal = function(lemgram) {
-          return $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, "")).val("").blur();
-        };
-        if (scope.model) {
-          setVal(scope.model);
-        }
-        return arg_value = elem.korp_autocomplete({
-          labelFunction: scope.stringify,
-          sortFunction: scope.sorter,
-          type: scope.type,
-          select: function(lemgram) {
-            setVal(lemgram);
-            return scope.$apply(function() {
-              if (scope.type === "baseform") {
-                return scope.model = lemgram.split(".")[0];
-              } else {
-                return scope.model = lemgram;
-              }
-            });
-          },
-          "sw-forms": true
-        }).blur(function() {
-          var input;
-          input = this;
-          return setTimeout((function() {
-            if (($(input).val().length && !util.isLemgramId($(input).val())) || $(input).data("value") === null) {
-              return $(input).addClass("invalid_input").attr("placeholder", null).data("value", null);
-            } else {
-              return $(input).removeClass("invalid_input");
-            }
-          }), 100);
-        });
-      }
-    };
-  });
-
   korpApp.directive("constr", function($window, searches) {
     return {
       scope: true,
@@ -271,7 +225,7 @@
       restrict: "E",
       replace: true,
       link: function(scope, elem, attr) {
-        var at, horizontal, my, onEscape, popover, ref, s, trans;
+        var at, horizontal, my, onEscape, popover, s, trans, _ref;
         s = scope;
         s.pos = attr.pos || "bottom";
         s.togglePopover = function(event) {
@@ -297,7 +251,7 @@
           right: "left",
           left: "right"
         };
-        horizontal = (ref = s.pos) === "top" || ref === "bottom";
+        horizontal = (_ref = s.pos) === "top" || _ref === "bottom";
         if (horizontal) {
           my = "center " + trans[s.pos];
           at = "center " + s.pos + "+10";
@@ -357,7 +311,7 @@
           scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
         }
         scope.loglike = Math.abs(scope.meter[1]);
-        scope.tooltipHTML = (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
+        scope.tooltipHTML = "" + (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
         w = elem.parent().width();
         part = scope.loglike / (Math.abs(scope.max));
         return bkg.width(Math.round(part * w));
@@ -420,7 +374,7 @@
         var s, setCQP;
         s = $scope;
         setCQP = function(val) {
-          var error, j, k, len1, len2, output, ref, ref1, results, token, tokenObj;
+          var error, output, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1, _results;
           c.log("inner cqp change", val);
           try {
             s.data = CQP.parse(val);
@@ -428,9 +382,9 @@
           } catch (_error) {
             error = _error;
             output = [];
-            ref = val.split("[");
-            for (j = 0, len1 = ref.length; j < len1; j++) {
-              token = ref[j];
+            _ref = val.split("[");
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              token = _ref[_i];
               if (!token) {
                 continue;
               }
@@ -450,17 +404,17 @@
             s.data = output;
             c.log("crash", s.data);
           }
-          ref1 = s.data;
-          results = [];
-          for (k = 0, len2 = ref1.length; k < len2; k++) {
-            token = ref1[k];
+          _ref1 = s.data;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            token = _ref1[_j];
             if (!("and_block" in token) || !token.and_block.length) {
-              results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
+              _results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
             } else {
-              results.push(void 0);
+              _results.push(void 0);
             }
           }
-          return results;
+          return _results;
         };
         if (s.cqp == null) {
           s.cqp = '[]';
@@ -579,6 +533,132 @@
     };
   });
 
+  korpApp.directive("autoc", function($q, $http, lexicons) {
+    return {
+      replace: true,
+      restrict: "E",
+      scope: {
+        "placeholder": "=",
+        "model": "=",
+        "type": "@",
+        "variant": "@"
+      },
+      template: "<div>\n    <script type=\"text/ng-template\" id=\"lemgramautocomplete.html\">\n        <a style=\"cursor:pointer\">\n            <span ng-class=\"{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : match.model.count == 0}\">\n                <span ng-if=\"match.model.parts.namespace\" class=\"label\">{{match.model.parts.namespace | loc}}</span>\n                <span>{{match.model.parts.main}}</span>\n                <sup ng-if=\"match.model.parts.index != 1\">{{match.model.parts.index}}</sup>\n                <span ng-if=\"match.model.parts.pos\">({{match.model.parts.pos}})</span>\n                <span ng-if=\"match.model.desc\" style=\"color:gray;margin-left:6px\">{{match.model.desc.main}}</span>\n                <sup ng-if=\"match.model.desc && match.model.desc.index != 1\" style=\"color:gray\">{{match.model.desc.index}}</sup>\n                <span class=\"num-to-find\" ng-if=\"match.model.count && match.model.count > 0\">\n                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}\n                </span>\n            </span>\n        </a>\n    </script>\n    <div style=\"float:left\"><input\n        class=\"new_simple_text\"\n        type=\"text\" class=\"form-control\"\n        ng-model=\"textInField\"\n        typeahead=\"row for row in getRows($viewValue)\"\n        typeahead-wait-ms=\"500\"\n        typeahead-template-url=\"lemgramautocomplete.html\"\n        typeahead-loading=\"isLoading\"\n        typeahead-on-select=\"selectedItem($item, $model, $label)\"\n        placeholder=\"{{lemgramToString(placeholder)}}\"></div>\n    <div style=\"margin-left:-20px;margin-top:2px;float:left\" ng-if=\"isLoading\"><i class=\"fa fa-spinner fa-pulse\"></i></div>\n</div>",
+      link: function(scope, elem, attr) {
+        scope.lemgramify = function(lemgram) {
+          var lemgramRegExp, match;
+          lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/;
+          match = lemgram.match(lemgramRegExp);
+          if (!match) {
+            return false;
+          }
+          return {
+            "main": match[2].replace(/_/g, " "),
+            "pos": util.getLocaleString(match[3].slice(0, 2)),
+            "index": match[4],
+            "namespace": match[1] ? match[1].slice(0, -2) : ""
+          };
+        };
+        scope.sensify = function(sense) {
+          var senseParts;
+          senseParts = sense.split("..");
+          return {
+            "main": senseParts[0].replace(/_/g, " "),
+            "index": senseParts[1]
+          };
+        };
+        scope.lemgramToString = function(lemgram) {
+          if (!lemgram) {
+            return;
+          }
+          return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
+        };
+        scope.formatPlaceholder = function(input) {
+          var lemgramRegExp, match;
+          lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/;
+          match = input.match(lemgramRegExp);
+          if (match) {
+            return scope.lemgramToString(input);
+          } else {
+            return input;
+          }
+        };
+        scope.selectedItem = function(item, model, label) {
+          scope.placeholder = model.lemgram;
+          scope.model = model.lemgram;
+          return scope.textInField = "";
+        };
+        scope.getMorphologies = function(corporaIDs) {
+          var corporaID, morf, morfs, morphologies, _i, _j, _len, _len1, _ref;
+          morphologies = [];
+          for (_i = 0, _len = corporaIDs.length; _i < _len; _i++) {
+            corporaID = corporaIDs[_i];
+            morfs = ((_ref = settings.corpora[corporaID].morf) != null ? _ref.split("|") : void 0) || [];
+            for (_j = 0, _len1 = morfs.length; _j < _len1; _j++) {
+              morf = morfs[_j];
+              if (__indexOf.call(morphologies, morf) < 0) {
+                morphologies.push(morf);
+              }
+            }
+          }
+          if (morphologies.length === 0) {
+            morphologies.push("saldom");
+          }
+          return morphologies;
+        };
+        scope.getRows = function(input) {
+          var corporaIDs, lemgrams, morphologies;
+          corporaIDs = _.pluck(settings.corpusListing.selected, "id");
+          morphologies = scope.getMorphologies(corporaIDs);
+          if (scope.type === "lemgram") {
+            lemgrams = scope.getLemgrams(input, morphologies, corporaIDs);
+            return lemgrams;
+          } else if (scope.type === "sense") {
+            return scope.getSenses(input, morphologies, corporaIDs);
+          }
+        };
+        scope.getLemgrams = function(input, morphologies, corporaIDs) {
+          var deferred, http;
+          deferred = $q.defer();
+          http = lexicons.getLemgrams(input, morphologies.join("|"), corporaIDs, scope.variant === "affix");
+          http.then(function(data) {
+            data.forEach(function(item) {
+              if (scope.variant === 'affix') {
+                item.count = -1;
+              }
+              return item.parts = scope.lemgramify(item.lemgram);
+            });
+            data.sort(function(a, b) {
+              return b.count - a.count;
+            });
+            return deferred.resolve(data);
+          });
+          return deferred.promise;
+        };
+        return scope.getSenses = function(input, morphologies, corporaIDs) {
+          var deferred, http;
+          deferred = $q.defer();
+          http = lexicons.getSenses(input, morphologies.join("|"), corporaIDs);
+          http.then(function(data) {
+            data.forEach(function(item) {
+              item.parts = scope.sensify(item.sense);
+              if (item.desc) {
+                return item.desc = scope.sensify(item.desc);
+              }
+            });
+            data.sort(function(a, b) {
+              return b.count - a.count;
+            });
+            return deferred.resolve(data);
+          });
+          return deferred.promise;
+        };
+      }
+    };
+  });
+
 }).call(this);
 
-//# sourceMappingURL=directives.js.map
+/*
+//@ sourceMappingURL=directives.js.map
+*/

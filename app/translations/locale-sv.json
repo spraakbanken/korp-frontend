@@ -71,7 +71,6 @@
     "show_deptree" : "Visa dependensträd",
     "dep_tree" : "Dependensträd",
 
-    "any_word_placeholder" : "<vilket ord som helst>",
     "case_insensitive" : "skiftlägesoberoende",
     "case_sensitive" : "skiftlägesberoende",
     "reduce_text" : "sammanställ på",

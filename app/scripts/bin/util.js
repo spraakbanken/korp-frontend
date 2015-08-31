@@ -630,9 +630,12 @@
   };
 
   util.lemgramToString = function(lemgram, appendIndex) {
-    var concept, e, infixIndex, match, type;
+    var concept, infixIndex, match, type;
     lemgram = _.str.trim(lemgram);
     infixIndex = "";
+    concept = lemgram;
+    infixIndex = "";
+    type = "";
     if (util.isLemgramId(lemgram)) {
       match = util.splitLemgram(lemgram);
       if ((appendIndex != null) && match.index !== "1") {
