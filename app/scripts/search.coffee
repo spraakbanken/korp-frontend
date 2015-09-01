@@ -243,33 +243,33 @@ class view.SimpleSearch extends BaseSearch
     isSearchSuffix: ->
         $("#suffixChk").is ":checked"
 
-    makeLemgramSelect: (lemgram) ->
-        self = this
-        promise = $("#simple_text").data("promise") or @lemgramProxy.karpSearch(lemgram or $("#simple_text").val(), false)
-        promise.done (lemgramArray) =>
-            $("#lemgram_select").prev("label").andSelf().remove()
-            @savedSelect = null
-            return if lemgramArray.length is 0
-            lemgramArray.sort view.lemgramSort
-            lemgramArray = $.map(lemgramArray, (item) ->
-                label: util.lemgramToString(item, true)
-                value: item
-            )
-            select = @buildLemgramSelect(lemgramArray)
-            .appendTo("#korp-simple")
-            .addClass("lemgram_select")
-            .prepend($("<option>").localeKey("none_selected"))
-            .change ->
-                unless self.selectedIndex is 0
-                    self.savedSelect = lemgramArray
-                    self.selectLemgram $(this).val()
-                $(this).prev("label").andSelf().remove()
-
-            # select.get(0).selectedIndex = 0
-            label = $("<label />", for: "lemgram_select")
-            .html("<i>#{$("#simple_text").val()}</i> <span rel='localize[autocomplete_header]'>#{util.getLocaleString("autocomplete_header")}</span>")
-            .css("margin-right", 8)
-            select.before label
+    #makeLemgramSelect: (lemgram) ->
+    #    self = this
+    #    promise = $("#simple_text").data("promise") or @lemgramProxy.karpSearch(lemgram or $("#simple_text").val(), false)
+    #    promise.done (lemgramArray) =>
+    #        $("#lemgram_select").prev("label").andSelf().remove()
+    #        @savedSelect = null
+    #        return if lemgramArray.length is 0
+    #        lemgramArray.sort view.lemgramSort
+    #        lemgramArray = $.map(lemgramArray, (item) ->
+    #            label: util.lemgramToString(item, true)
+    #            value: item
+    #        )
+    #        select = @buildLemgramSelect(lemgramArray)
+    #        .appendTo("#korp-simple")
+    #        .addClass("lemgram_select")
+    #        .prepend($("<option>").localeKey("none_selected"))
+    #        .change ->
+    #            unless self.selectedIndex is 0
+    #                self.savedSelect = lemgramArray
+    #                self.selectLemgram $(this).val()
+    #            $(this).prev("label").andSelf().remove()
+    #
+    #        # select.get(0).selectedIndex = 0
+    #        label = $("<label />", for: "lemgram_select")
+    #        .html("<i>#{$("#simple_text").val()}</i> <span rel='localize[autocomplete_header]'>#{util.getLocaleString("autocomplete_header")}</span>")
+    #        .css("margin-right", 8)
+    #        select.before label
 
 
     onSubmit: ->

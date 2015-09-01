@@ -182,96 +182,29 @@
     __extends(SimpleSearch, _super);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var textinput;
+      var textinput,
+        _this = this;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keyup((function(_this) {
-        return function(event) {
-          return _this.s.$apply(function() {
-            return _this.onSimpleChange(event);
-          });
-        };
-      })(this));
+      $("#simple_text").keyup(function(event) {
+        return _this.s.$apply(function() {
+          return _this.onSimpleChange(event);
+        });
+      });
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
       textinput = $("#simple_text");
       if (settings.autocomplete) {
-        textinput.korp_autocomplete({
-          type: "lem",
-          select: (function(_this) {
-            return function(lemgram) {
-              return _this.s.$apply(function() {
-                _this.s.placeholder = lemgram;
-                return _this.s.simple_text = "";
-              });
-            };
-          })(this),
-          middleware: (function(_this) {
-            return function(request, idArray) {
-              var dfd;
-              dfd = $.Deferred();
-              _this.lemgramProxy.lemgramCount(idArray, _this.isSearchPrefix(), _this.isSearchSuffix()).done(function(freqs) {
-                var has_morphs, labelArray, listItems, t;
-                delete freqs["time"];
-                if (currentMode === "law") {
-                  idArray = _.filter(idArray, function(item) {
-                    return item in freqs;
-                  });
-                }
-                has_morphs = settings.corpusListing.getMorphology().split("|").length > 1;
-                if (has_morphs) {
-                  idArray.sort(function(a, b) {
-                    var first, second;
-                    first = (a.split("--").length > 1 ? a.split("--")[0] : "saldom");
-                    second = (b.split("--").length > 1 ? b.split("--")[0] : "saldom");
-                    if (first === second) {
-                      return (freqs[b] || 0) - (freqs[a] || 0);
-                    }
-                    return second < first;
-                  });
-                } else {
-                  idArray.sort(function(first, second) {
-                    return (freqs[second] || 0) - (freqs[first] || 0);
-                  });
-                }
-                t = $.now();
-                window.idArray = idArray;
-                labelArray = util.sblexArraytoString(idArray, util.lemgramToString);
-                listItems = $.map(idArray, function(item, i) {
-                  var out;
-                  out = {
-                    label: labelArray[i],
-                    value: item,
-                    input: request.term,
-                    enabled: item in freqs
-                  };
-                  if (has_morphs) {
-                    out["category"] = (item.split("--").length > 1 ? item.split("--")[0] : "saldom");
-                  }
-                  return out;
-                });
-                return dfd.resolve(listItems);
-              }).fail(function() {
-                c.log("reject");
-                dfd.reject();
-                return textinput.preloader("hide");
-              });
-              return dfd.promise();
-            };
-          })(this),
-          "sw-forms": false
-        });
+        null;
       }
-      $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
-        return function() {
-          if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
-            return _this.enableSubmit();
-          } else {
-            return _this.onSimpleChange();
-          }
-        };
-      })(this));
+      $("#prefixChk, #suffixChk, #caseChk").click(function() {
+        if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
+          return _this.enableSubmit();
+        } else {
+          return _this.onSimpleChange();
+        }
+      });
     }
 
     SimpleSearch.prototype.isSearchPrefix = function() {
@@ -280,40 +213,6 @@
 
     SimpleSearch.prototype.isSearchSuffix = function() {
       return $("#suffixChk").is(":checked");
-    };
-
-    SimpleSearch.prototype.makeLemgramSelect = function(lemgram) {
-      var promise, self;
-      self = this;
-      promise = $("#simple_text").data("promise") || this.lemgramProxy.karpSearch(lemgram || $("#simple_text").val(), false);
-      return promise.done((function(_this) {
-        return function(lemgramArray) {
-          var label, select;
-          $("#lemgram_select").prev("label").andSelf().remove();
-          _this.savedSelect = null;
-          if (lemgramArray.length === 0) {
-            return;
-          }
-          lemgramArray.sort(view.lemgramSort);
-          lemgramArray = $.map(lemgramArray, function(item) {
-            return {
-              label: util.lemgramToString(item, true),
-              value: item
-            };
-          });
-          select = _this.buildLemgramSelect(lemgramArray).appendTo("#korp-simple").addClass("lemgram_select").prepend($("<option>").localeKey("none_selected")).change(function() {
-            if (self.selectedIndex !== 0) {
-              self.savedSelect = lemgramArray;
-              self.selectLemgram($(this).val());
-            }
-            return $(this).prev("label").andSelf().remove();
-          });
-          label = $("<label />", {
-            "for": "lemgram_select"
-          }).html("<i>" + ($("#simple_text").val()) + "</i> <span rel='localize[autocomplete_header]'>" + (util.getLocaleString("autocomplete_header")) + "</span>").css("margin-right", 8);
-          return select.before(label);
-        };
-      })(this));
     };
 
     SimpleSearch.prototype.onSubmit = function() {
@@ -412,4 +311,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=search.js.map
+/*
+//@ sourceMappingURL=search.js.map
+*/
