@@ -22,6 +22,7 @@
 
     "saldo" : "sense",
     "pos" : "part-of-speech",
+    "posset" : "homograph set",
     "msd" : "msd",
     "baseform" : "baseform",
     "lemgram" : "lemgram",
