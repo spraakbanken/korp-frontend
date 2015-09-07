@@ -4232,7 +4232,7 @@ delete ref;
 
 settings.posset = {
    type : "set",
-   label : "pos",
+   label : "posset",
    displayType : "select",
    opts : settings.setOptions,
    translationKey : "pos_",
