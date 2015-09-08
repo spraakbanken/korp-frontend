@@ -311,15 +311,16 @@ settings.corporafolders.runeberg = {
         description : "Tidskrifter från Projekt Runeberg"
 }
 
-settings.corporafolders.lag = {
-	title : "Äldre lagtexter",
-	contents : ["tankebok", "lag1734","forarbeten1734", "lag1800"],
-        description : "Lagtexter från 1600- ,1700- och 1800-talet."
-};
 settings.corporafolders.bibel = {
 	title : "Äldre biblar",
 	contents : ["bibel1917", "bibel1873dalin", "vasabibel-nt"],
         description : "Bibeln, 1873 och 1917 års utgåvor och Gustav Vasas Bibel (nya testamentet)"
+};
+
+settings.corporafolders.lag = {
+	title : "Äldre lagtexter",
+	contents : ["tankebok", "lag1734","forarbeten1734", "lag1800"],
+        description : "Lagtexter från 1600- ,1700- och 1800-talet."
 };
 
 settings.corporafolders.akerbruk1700 = {
@@ -2288,6 +2289,19 @@ settings.corpora.eddan = {
 	    },
 };
 
+settings.corpora.romg = {
+    id : "romg",
+    title : "Äldre svenska romaner",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_author : {label : "author"},
+        text_title : {label : "title"},
+        text_date : {label : "year"}
+    }
+};
 
 settings.corpusListing = new CorpusListing(settings.corpora);
 
