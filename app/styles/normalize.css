@@ -454,7 +454,6 @@ input[disabled] {
 
 input[type="checkbox"],
 input[type="radio"] {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   /* 1 */
   padding: 0;
@@ -475,7 +474,6 @@ input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
   /* 2 */
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 
