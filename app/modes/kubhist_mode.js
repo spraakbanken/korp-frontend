@@ -43,7 +43,19 @@ settings.kubhiststruct_attributes = {
 	text_printedin : {label : "printedin"},
 	text_printedby : {label : "printedby"},
 	text_commentaries : {label : "commentaries"},
-	page_no : {label : "page"}
+	page_no : {label : "page"},
+	text_kbid : {
+		label : "source",
+		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://magasin.kb.se/searchinterface/page.jsp?issue_id=<%= struct_attrs.text_kbid %>&sequence_number=<%= struct_attrs.page_no %>' target='_blank'><img src='http://magasin.kb.se:8080/fedora/get/kb:<%= parseInt((struct_attrs.text_kbid).split(':')[1]) + parseInt(struct_attrs.page_no) %>/WEBIMAGE'></img></a></div></div>"
+	}
+};
+
+var aftonbladet_custom_attributes = {
+	text_kbid : {
+		label: "source",
+		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://tidningar.kb.se/?newspaper=AFTONBLADET&from=<%= struct_attrs.text_date %>&to=<%= struct_attrs.text_date %>' target='_blank'><img src='http://tidningar.kb.se/4112678/<%= struct_attrs.text_date %>/edition/0/part/1/page/<%= struct_attrs.page_no %>_thumb.jpg'></img></a></div></div>",
+		custom_type : "struct"
+	}
 };
 
 settings.aftonbladstruct_attributes = {
@@ -58,7 +70,7 @@ settings.aftonbladstruct_attributes = {
 	page_no : {label : "page"}
 };
 
-digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'	
+digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'
 
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
@@ -82,7 +94,8 @@ settings.corpora["kubhist-aftonbladet-1830"] = {
     within : settings.defaultWithin,
     context : settings.spContext,
     attributes : settings.kubhistattributes,
-    struct_attributes : settings.aftonbladstruct_attributes
+    struct_attributes : settings.aftonbladstruct_attributes,
+	custom_attributes : aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1840"] = {
@@ -93,7 +106,8 @@ settings.corpora["kubhist-aftonbladet-1840"] = {
     within : settings.defaultWithin,
     context : settings.spContext,
     attributes : settings.kubhistattributes,
-    struct_attributes : settings.aftonbladstruct_attributes
+    struct_attributes : settings.aftonbladstruct_attributes,
+	custom_attributes : aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1850"] = {
@@ -104,7 +118,8 @@ settings.corpora["kubhist-aftonbladet-1850"] = {
     within : settings.defaultWithin,
     context : settings.spContext,
     attributes : settings.kubhistattributes,
-    struct_attributes : settings.aftonbladstruct_attributes
+    struct_attributes : settings.aftonbladstruct_attributes,
+	custom_attributes : aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1860"] = {
@@ -115,7 +130,8 @@ settings.corpora["kubhist-aftonbladet-1860"] = {
     within : settings.defaultWithin,
     context : settings.spContext,
     attributes : settings.kubhistattributes,
-    struct_attributes : settings.aftonbladstruct_attributes
+    struct_attributes : settings.aftonbladstruct_attributes,
+	custom_attributes : aftonbladet_custom_attributes
 };
 
 
@@ -168,8 +184,6 @@ settings.corpora["kubhist-blekingsposten-1880"] = {
     attributes : settings.kubhistattributes,
     struct_attributes : settings.kubhiststruct_attributes
 };
-
-
 
 settings.corporafolders.bollnastidning = {
 	title : "Bollnäs tidning",
@@ -731,7 +745,7 @@ settings.corpora["kubhist-norraskane-1890"] = {
 settings.corporafolders.postochinrikestidning = {
 	title : "Post- och Inrikes Tidningar",
 	contents : ["kubhist-postochinrikestidning-1770", "kubhist-postochinrikestidning-1780", "kubhist-postochinrikestidning-1790", "kubhist-postochinrikestidning-1800",
-		"kubhist-postochinrikestidning-1810", "kubhist-postochinrikestidning-1820", "kubhist-postochinrikestidning-1830", "kubhist-postochinrikestidning-1840", 
+		"kubhist-postochinrikestidning-1810", "kubhist-postochinrikestidning-1820", "kubhist-postochinrikestidning-1830", "kubhist-postochinrikestidning-1840",
 		"kubhist-postochinrikestidning-1850", "kubhist-postochinrikestidning-1860",]
 };
 
@@ -1120,8 +1134,6 @@ settings.corpora["kubhist-ostgotaposten-1910"] = {
 	struct_attributes : settings.kubhiststruct_attributes
 };
 
-
-
 settings.corpora = _(settings.corpora)
 						.sortBy("title")
 						.map(function(item) {return [item.id, item]})
@@ -1129,14 +1141,3 @@ settings.corpora = _(settings.corpora)
 						.value()
 
 settings.corpusListing = new CorpusListing(settings.corpora);
-
-// function getAnnotationRank(anno) {
-// 	return {
-// 		"word" : 1,
-// 		"gf" : 2,
-// 		"lemgram" : 3,
-// 		"sense" : 4
-// 	}[anno] || 5;
-// }
-
-

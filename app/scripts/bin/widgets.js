@@ -7,17 +7,22 @@
     },
     _init: function() {},
     updateContent: function(sentenceData, wordData, corpus, tokens) {
-      var corpusObj;
+      var corpusObj, sentence, word, _ref;
       this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
       corpusObj = settings.corpora[corpus];
       $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>" + corpusObj.title + "</p>").prependTo("#selected_sentence");
       if (!$.isEmptyObject(corpusObj.attributes)) {
         $("#selected_word").append($("<h4>").localeKey("word_attr"));
-        this.renderContent(wordData, corpusObj.attributes).appendTo("#selected_word");
+        this.renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes).appendTo("#selected_word");
       }
       if (!$.isEmptyObject(corpusObj.struct_attributes)) {
         $("#selected_sentence").append($("<h4>").localeKey("sentence_attr"));
-        this.renderContent(sentenceData, corpusObj.struct_attributes).appendTo("#selected_sentence");
+        this.renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes).appendTo("#selected_sentence");
+      }
+      if (!$.isEmptyObject(corpusObj.custom_attributes)) {
+        _ref = this.renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes), word = _ref[0], sentence = _ref[1];
+        word.appendTo("#selected_word");
+        sentence.appendTo("#selected_sentence");
       }
       this.element.localize();
       this.applyEllipse();
@@ -36,9 +41,9 @@
           wnd = this.contentWindow;
           tokens = tokens;
           return wnd.draw_deptree.call(wnd, tokens, function(msg) {
-            var ref, type, val;
-            ref = _.head(_.pairs(msg)), type = ref[0], val = ref[1];
-            return info.empty().append($("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey(type + "_" + val));
+            var type, val, _ref;
+            _ref = _.head(_.pairs(msg)), type = _ref[0], val = _ref[1];
+            return info.empty().append($("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey("" + type + "_" + val));
           });
         });
         return $("#deptree_popup").empty().append(info, iframe).dialog({
@@ -47,35 +52,54 @@
         }).parent().find(".ui-dialog-title").localeKey("dep_tree");
       }).appendTo(this.element);
     },
-    renderContent: function(wordData, corpus_attrs) {
+    renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs) {
       var items, key, order, pairs, value;
-      pairs = _.pairs(wordData);
+      if (type === "struct") {
+        pairs = _.pairs(sentenceData);
+      } else if (type === "pos") {
+        pairs = _.pairs(wordData);
+      }
       order = this.options.displayOrder;
-      pairs.sort(function(arg, arg1) {
+      pairs.sort(function(_arg, _arg1) {
         var a, b;
-        a = arg[0];
-        b = arg1[0];
+        a = _arg[0];
+        b = _arg1[0];
         return $.inArray(b, order) - $.inArray(a, order);
       });
       items = (function() {
-        var j, len, ref, results;
-        results = [];
-        for (j = 0, len = pairs.length; j < len; j++) {
-          ref = pairs[j], key = ref[0], value = ref[1];
+        var _i, _len, _ref, _results;
+        _results = [];
+        for (_i = 0, _len = pairs.length; _i < _len; _i++) {
+          _ref = pairs[_i], key = _ref[0], value = _ref[1];
           if (corpus_attrs[key]) {
-            results.push(this.renderItem(key, value, corpus_attrs[key]));
+            _results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData));
           }
         }
-        return results;
+        return _results;
       }).call(this);
       return $(items);
     },
-    renderItem: function(key, value, attrs) {
+    renderCustomContent: function(wordData, sentenceData, corpus_attrs) {
+      var attrs, key, output, pos_items, struct_items;
+      struct_items = [];
+      pos_items = [];
+      for (key in corpus_attrs) {
+        attrs = corpus_attrs[key];
+        output = this.renderItem(key, null, attrs, wordData, sentenceData);
+        if (attrs.custom_type === "struct") {
+          struct_items.push(output);
+        } else if (attrs.custom_type === "pos") {
+          pos_items.push(output);
+        }
+      }
+      return [$(pos_items), $(struct_items)];
+    },
+    renderItem: function(key, value, attrs, wordData, sentenceData) {
       var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, str_value, ul, val, valueArray, x;
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }
-      output = $("<p><span rel='localize[" + attrs.label + "]'>" + key + "</span>: </p>");
+      output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
       output.data("attrs", attrs);
       if (value === "|" || value === "") {
         output.append("<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>");
@@ -101,10 +125,10 @@
         }
         itr = _.isArray(valueArray) ? valueArray : _.values(valueArray);
         lis = (function() {
-          var j, len, results;
-          results = [];
-          for (j = 0, len = itr.length; j < len; j++) {
-            x = itr[j];
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = itr.length; _i < _len; _i++) {
+            x = itr[_i];
             if (!x.length) {
               continue;
             }
@@ -135,9 +159,9 @@
                 });
               });
             }
-            results.push(li);
+            _results.push(li);
           }
-          return results;
+          return _results;
         })();
         ul.append(lis);
         output.append(ul);
@@ -151,7 +175,9 @@
       } else if (attrs.pattern) {
         return output.append(_.template(attrs.pattern, {
           key: key,
-          val: str_value
+          val: str_value,
+          pos_attrs: wordData,
+          struct_attrs: sentenceData
         }));
       } else {
         if (attrs.translationKey) {
@@ -165,8 +191,8 @@
       var totalWidth;
       totalWidth = this.element.width();
       return this.element.find(".sidebar_url").css("white-space", "nowrap").each(function() {
-        var a, domain, midsection, oldtext, results;
-        results = [];
+        var a, domain, midsection, oldtext, _results;
+        _results = [];
         while ($(this).width() > totalWidth) {
           oldtext = $(this).text();
           a = $.trim(oldtext, "/").replace("...", "").split("/");
@@ -177,10 +203,10 @@
           if (midsection === "...") {
             break;
           } else {
-            results.push(void 0);
+            _results.push(void 0);
           }
         }
-        return results;
+        return _results;
       });
     },
     _parseLemma: function(attr, tmplVal) {

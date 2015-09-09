@@ -19,11 +19,16 @@ Sidebar =
         unless $.isEmptyObject(corpusObj.attributes)
             $("#selected_word").append $("<h4>").localeKey("word_attr")
 
-            @renderContent(wordData, corpusObj.attributes).appendTo "#selected_word"
+            @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes).appendTo "#selected_word"
         unless $.isEmptyObject(corpusObj.struct_attributes)
             $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")
 
-            @renderContent(sentenceData, corpusObj.struct_attributes).appendTo "#selected_sentence"
+            @renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes).appendTo "#selected_sentence"
+
+        unless $.isEmptyObject(corpusObj.custom_attributes)
+            [word, sentence] = @renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes)
+            word.appendTo "#selected_word"
+            sentence.appendTo "#selected_sentence"
 
         @element.localize()
         @applyEllipse()
@@ -51,24 +56,33 @@ Sidebar =
 
         ).appendTo(@element)
 
-
-
-
-
-    renderContent: (wordData, corpus_attrs) ->
-        pairs = _.pairs(wordData)
+    renderCorpusContent: (type, wordData, sentenceData, corpus_attrs) ->
+        if type == "struct"
+          pairs = _.pairs(sentenceData)
+        else if type == "pos"
+          pairs = _.pairs(wordData)
         order = @options.displayOrder
         pairs.sort ([a], [b]) ->
             $.inArray(b, order) - $.inArray(a, order)
         items = for [key, value] in pairs when corpus_attrs[key]
-            @renderItem key, value, corpus_attrs[key]
-
+            @renderItem key, value, corpus_attrs[key], wordData, sentenceData
         return $(items)
 
-    renderItem: (key, value, attrs) ->
+    renderCustomContent: (wordData, sentenceData, corpus_attrs) ->
+        struct_items = []
+        pos_items = []
+        for key, attrs of corpus_attrs
+            output = @renderItem(key, null, attrs, wordData, sentenceData)
+            if attrs.custom_type == "struct"
+                struct_items.push output
+            else if attrs.custom_type == "pos"
+                pos_items.push output
+        return [$(pos_items), $(struct_items)]
+
+    renderItem: (key, value, attrs, wordData, sentenceData) ->
         if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
             return ""
-        output = $("<p><span rel='localize[#{attrs.label}]'>#{key}</span>: </p>")
+        output = $("<p><span rel='localize[#{attrs.label}]'></span>: </p>")
         output.data("attrs", attrs)
         if value == "|" or value == ""
             output.append "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
@@ -130,14 +144,13 @@ Sidebar =
                                     </span>
                                 """
         else if attrs.pattern
-            return output.append _.template(attrs.pattern, {key : key, val : str_value})
+            return output.append _.template attrs.pattern, {key : key, val : str_value, pos_attrs : wordData, struct_attrs : sentenceData }
 
         else
             if attrs.translationKey
                 return output.append "<span rel='localize[#{attrs.translationKey}#{value}]'></span>"
             else
                 return output.append "<span>#{str_value || ''}</span>"
-
 
     applyEllipse: ->
         # oldDisplay = @element.css("display")
@@ -246,7 +259,6 @@ $.extend $.ui.autocomplete.prototype,
             that._renderItem ul, item
 
 
-
 #$.fn.korp_autocomplete = (options) ->
 #    selector = $(this)
 #    proxy = new model.LemgramProxy()
@@ -284,7 +296,7 @@ $.extend $.ui.autocomplete.prototype,
 #                out
 #            )
 #            dfd.resolve listItems
-#            
+#
 #            dfd.promise()
 #    , options)
 #    selector.preloader(
@@ -306,8 +318,8 @@ $.extend $.ui.autocomplete.prototype,
 #                c.log "idArray", idArray.length
 #                idArray = $.unique(idArray)
 #                options.middleware(request, idArray).done (listItems) ->
-#                    
-#                    
+#
+#
 #                    selector.data "dataArray", listItems
 #                    response listItems
 #                    if selector.autocomplete("widget").height() > 300
@@ -319,7 +331,7 @@ $.extend $.ui.autocomplete.prototype,
 #                        .css("font-size", 10)
 #                        .prependTo selector.autocomplete("widget")
 #                    selector.preloader "hide"
-#                    
+#
 #
 #            ).fail ->
 #                c.log "sblex fail", arguments
