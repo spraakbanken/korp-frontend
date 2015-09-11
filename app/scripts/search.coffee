@@ -368,7 +368,7 @@ class view.SimpleSearch extends BaseSearch
 
     getCQP : (word) ->
         # c.log "getCQP", word
-        currentText = $.trim(word or $("#simple_text", @$main).val() or "", '"')
+        currentText = $.trim(word or $(".new_simple_text", @$main).val() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
         if util.isLemgramId(currentText) # if the input is a lemgram, do lemgram search.
             val = "[lex contains \"#{currentText}\"]"
