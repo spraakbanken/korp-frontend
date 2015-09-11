@@ -1,6 +1,6 @@
 (function() {
   var CompareSearches, korpApp,
-    __slice = [].slice;
+    slice = [].slice;
 
   korpApp = angular.module("korpApp");
 
@@ -14,12 +14,12 @@
         }
       },
       setupHash: function(scope, config) {
-        var obj, onWatch, watch, _i, _len, _results;
+        var i, len, obj, onWatch, results, watch;
         onWatch = function() {
-          var obj, val, _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = config.length; _i < _len; _i++) {
-            obj = config[_i];
+          var i, len, obj, results, val;
+          results = [];
+          for (i = 0, len = config.length; i < len; i++) {
+            obj = config[i];
             val = $location.search()[obj.key];
             if (!val) {
               if (obj["default"] != null) {
@@ -30,14 +30,14 @@
             }
             val = (obj.val_in || _.identity)(val);
             if ("scope_name" in obj) {
-              _results.push(scope[obj.scope_name] = val);
+              results.push(scope[obj.scope_name] = val);
             } else if ("scope_func" in obj) {
-              _results.push(scope[obj.scope_func](val));
+              results.push(scope[obj.scope_func](val));
             } else {
-              _results.push(scope[obj.key] = val);
+              results.push(scope[obj.key] = val);
             }
           }
-          return _results;
+          return results;
         };
         onWatch();
         scope.$watch((function() {
@@ -45,11 +45,11 @@
         }), function() {
           return onWatch();
         });
-        _results = [];
-        for (_i = 0, _len = config.length; _i < _len; _i++) {
-          obj = config[_i];
+        results = [];
+        for (i = 0, len = config.length; i < len; i++) {
+          obj = config[i];
           watch = obj.expr || obj.scope_name || obj.key;
-          _results.push(scope.$watch(watch, (function(obj, watch) {
+          results.push(scope.$watch(watch, (function(obj, watch) {
             return function(val) {
               val = (obj.val_out || _.identity)(val);
               if (val === obj["default"]) {
@@ -63,7 +63,7 @@
             };
           })(obj, watch)));
         }
-        return _results;
+        return results;
       }
     };
   });
@@ -156,16 +156,16 @@
             eNodes = [eNodes];
           }
           output = (function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = eNodes.length; _i < _len; _i++) {
-              e = eNodes[_i];
-              _results.push({
+            var i, len, results;
+            results = [];
+            for (i = 0, len = eNodes.length; i < len; i++) {
+              e = eNodes[i];
+              results.push({
                 label: e.s.replace("swefn--", ""),
                 words: _.pluck(e.info.info.feat, "val")
               });
             }
-            return _results;
+            return results;
           })();
           return def.resolve(output);
         });
@@ -175,8 +175,7 @@
   });
 
   korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q) {
-    var Searches, oldValues, searches,
-      _this = this;
+    var Searches, oldValues, searches;
     Searches = (function() {
       function Searches() {
         var def, timedef;
@@ -244,11 +243,11 @@
             corpus: _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join(",")
           }
         }).success(function(data) {
-          var corpus, _i, _len, _ref;
+          var corpus, i, len, ref;
           c.log("data", data);
-          _ref = settings.corpusListing.corpora;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            corpus = _ref[_i];
+          ref = settings.corpusListing.corpora;
+          for (i = 0, len = ref.length; i < len; i++) {
+            corpus = ref[i];
             corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"];
           }
           c.log("loadCorpora");
@@ -267,65 +266,67 @@
       (function() {
         return $location.search().search;
       }), "_loc.search().page"
-    ], function(newValues) {
-      var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
-      c.log("searches service watch", $location.search().search);
-      searchExpr = $location.search().search;
-      if (!searchExpr) {
-        return;
-      }
-      _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
-      value = value.join("|");
-      newValues[1] = Number(newValues[1]) || 0;
-      oldValues[1] = Number(oldValues[1]) || 0;
-      c.log("newValues", newValues);
-      c.log("oldValues", oldValues);
-      if (_.isEqual(newValues, oldValues)) {
-        pageChanged = false;
-        searchChanged = true;
-      } else {
-        pageChanged = newValues[1] !== oldValues[1];
-        searchChanged = newValues[0] !== oldValues[0];
-      }
-      pageOnly = pageChanged && !searchChanged;
-      view.updateSearchHistory(value, $location.absUrl());
-      return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
-        switch (type) {
-          case "word":
-            searches.activeSearch = {
-              type: type,
-              val: value,
-              page: newValues[1],
-              pageOnly: pageOnly
-            };
-            break;
-          case "lemgram":
-            searches.activeSearch = {
-              type: type,
-              val: value,
-              page: newValues[1],
-              pageOnly: pageOnly
-            };
-            break;
-          case "saldo":
-            extendedSearch.setOneToken("saldo", value);
-            break;
-          case "cqp":
-            c.log("cqp search", value);
-            if (!value) {
-              value = CQP.expandOperators($location.search().cqp);
-            }
-            searches.activeSearch = {
-              type: type,
-              val: value,
-              page: newValues[1],
-              pageOnly: pageOnly
-            };
-            searches.kwicSearch(value, pageOnly);
+    ], (function(_this) {
+      return function(newValues) {
+        var pageChanged, pageOnly, ref, searchChanged, searchExpr, type, value;
+        c.log("searches service watch", $location.search().search);
+        searchExpr = $location.search().search;
+        if (!searchExpr) {
+          return;
         }
-        return oldValues = [].concat(newValues);
-      });
-    });
+        ref = searchExpr != null ? searchExpr.split("|") : void 0, type = ref[0], value = 2 <= ref.length ? slice.call(ref, 1) : [];
+        value = value.join("|");
+        newValues[1] = Number(newValues[1]) || 0;
+        oldValues[1] = Number(oldValues[1]) || 0;
+        c.log("newValues", newValues);
+        c.log("oldValues", oldValues);
+        if (_.isEqual(newValues, oldValues)) {
+          pageChanged = false;
+          searchChanged = true;
+        } else {
+          pageChanged = newValues[1] !== oldValues[1];
+          searchChanged = newValues[0] !== oldValues[0];
+        }
+        pageOnly = pageChanged && !searchChanged;
+        view.updateSearchHistory(value, $location.absUrl());
+        return $q.all([searches.infoDef, searches.langDef.promise]).then(function() {
+          switch (type) {
+            case "word":
+              searches.activeSearch = {
+                type: type,
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
+              };
+              break;
+            case "lemgram":
+              searches.activeSearch = {
+                type: type,
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
+              };
+              break;
+            case "saldo":
+              extendedSearch.setOneToken("saldo", value);
+              break;
+            case "cqp":
+              c.log("cqp search", value);
+              if (!value) {
+                value = CQP.expandOperators($location.search().cqp);
+              }
+              searches.activeSearch = {
+                type: type,
+                val: value,
+                page: newValues[1],
+                pageOnly: pageOnly
+              };
+              searches.kwicSearch(value, pageOnly);
+          }
+          return oldValues = [].concat(newValues);
+        });
+      };
+    })(this));
     return searches;
   });
 
@@ -346,8 +347,8 @@
     };
 
     CompareSearches.prototype.flush = function() {
-      var _ref;
-      [].splice.apply(this.savedSearches, [0, 9e9].concat(_ref = [])), _ref;
+      var ref;
+      [].splice.apply(this.savedSearches, [0, 9e9].concat(ref = [])), ref;
       return $.jStorage.set(this.key, this.savedSearches);
     };
 
@@ -358,8 +359,7 @@
   korpApp.factory("lexicons", function($q, $http) {
     return {
       getLemgrams: function(wf, resources, corporaIDs, restrictToSingleWords) {
-        var args, deferred, swforms,
-          _this = this;
+        var args, deferred, swforms;
         deferred = $q.defer();
         swforms = restrictToSingleWords ? "true" : "false";
         args = {
@@ -374,58 +374,59 @@
           method: 'GET',
           url: "http://spraakbanken.gu.se/ws/karp-sok",
           params: args
-        }).success(function(data, status, headers, config) {
-          var karpLemgrams, korpargs;
-          if (data === null) {
-            return deferred.resolve([]);
-          } else {
-            if (!angular.isArray(data)) {
-              data = [data];
-            }
-            karpLemgrams = data;
-            korpargs = {
-              "command": "lemgram_count",
-              "lemgram": data,
-              "count": "lemgram",
-              "corpus": corporaIDs
-            };
-            return $http({
-              method: 'POST',
-              url: settings.cgi_script,
-              params: korpargs
-            }).success(function(data, status, headers, config) {
-              var allLemgrams, count, klemgram, lemgram, _i, _len;
-              delete data.time;
-              allLemgrams = [];
-              for (lemgram in data) {
-                count = data[lemgram];
-                allLemgrams.push({
-                  "lemgram": lemgram,
-                  "count": count
-                });
+        }).success((function(_this) {
+          return function(data, status, headers, config) {
+            var karpLemgrams, korpargs;
+            if (data === null) {
+              return deferred.resolve([]);
+            } else {
+              if (!angular.isArray(data)) {
+                data = [data];
               }
-              for (_i = 0, _len = karpLemgrams.length; _i < _len; _i++) {
-                klemgram = karpLemgrams[_i];
-                if (!data[klemgram]) {
+              karpLemgrams = data;
+              korpargs = {
+                "command": "lemgram_count",
+                "lemgram": data,
+                "count": "lemgram",
+                "corpus": corporaIDs
+              };
+              return $http({
+                method: 'POST',
+                url: settings.cgi_script,
+                params: korpargs
+              }).success(function(data, status, headers, config) {
+                var allLemgrams, count, i, klemgram, lemgram, len;
+                delete data.time;
+                allLemgrams = [];
+                for (lemgram in data) {
+                  count = data[lemgram];
                   allLemgrams.push({
-                    "lemgram": klemgram,
-                    "count": 0
+                    "lemgram": lemgram,
+                    "count": count
                   });
                 }
-              }
-              return deferred.resolve(allLemgrams);
-            }).error(function(data, status, headers, config) {
-              return deferred.resolve([]);
-            });
-          }
-        }).error(function(data, status, headers, config) {
+                for (i = 0, len = karpLemgrams.length; i < len; i++) {
+                  klemgram = karpLemgrams[i];
+                  if (!data[klemgram]) {
+                    allLemgrams.push({
+                      "lemgram": klemgram,
+                      "count": 0
+                    });
+                  }
+                }
+                return deferred.resolve(allLemgrams);
+              }).error(function(data, status, headers, config) {
+                return deferred.resolve([]);
+              });
+            }
+          };
+        })(this)).error(function(data, status, headers, config) {
           return deferred.resolve([]);
         });
         return deferred.promise;
       },
       getSenses: function(wf) {
-        var args, deferred,
-          _this = this;
+        var args, deferred;
         deferred = $q.defer();
         args = {
           "cql": "wf==" + wf,
@@ -439,49 +440,51 @@
           method: 'GET',
           url: "http://spraakbanken.gu.se/ws/karp-sok",
           params: args
-        }).success(function(data, status, headers, config) {
-          var senseargs;
-          if (data === null) {
-            return deferred.resolve([]);
-          } else {
-            if (!angular.isArray(data)) {
-              data = [data];
-            }
-            senseargs = {
-              "cql": "lemgram == " + data.join(" or lemgram == "),
-              "resurs": "saldo",
-              "format": "json",
-              "mini-entries": "true",
-              "info": "primary"
-            };
-            return $http({
-              method: 'POST',
-              url: "http://spraakbanken.gu.se/ws/karp-sok",
-              params: senseargs
-            }).success(function(data, status, headers, config) {
-              var senses, _ref;
-              console.log("sense data", data);
-              if (!(data != null ? (_ref = data.div) != null ? _ref.e : void 0 : void 0)) {
-                deferred.resolve([]);
-                return null;
-              }
-              if (!$.isArray(data != null ? data.div.e : void 0)) {
-                data.div.e = [data.div.e];
-              }
-              senses = _.map(data.div.e, function(obj) {
-                var _ref1, _ref2, _ref3;
-                return {
-                  "sense": obj.s,
-                  "desc": (_ref1 = obj.info) != null ? (_ref2 = _ref1.info) != null ? (_ref3 = _ref2.SenseRelation) != null ? _ref3.targets : void 0 : void 0 : void 0
-                };
-              });
-              console.log("OUTSENSES", senses);
-              return deferred.resolve(senses);
-            }).error(function(data, status, headers, config) {
+        }).success((function(_this) {
+          return function(data, status, headers, config) {
+            var senseargs;
+            if (data === null) {
               return deferred.resolve([]);
-            });
-          }
-        }).error(function(data, status, headers, config) {
+            } else {
+              if (!angular.isArray(data)) {
+                data = [data];
+              }
+              senseargs = {
+                "cql": "lemgram == " + data.join(" or lemgram == "),
+                "resurs": "saldo",
+                "format": "json",
+                "mini-entries": "true",
+                "info": "primary"
+              };
+              return $http({
+                method: 'POST',
+                url: "http://spraakbanken.gu.se/ws/karp-sok",
+                params: senseargs
+              }).success(function(data, status, headers, config) {
+                var ref, senses;
+                console.log("sense data", data);
+                if (!(data != null ? (ref = data.div) != null ? ref.e : void 0 : void 0)) {
+                  deferred.resolve([]);
+                  return null;
+                }
+                if (!$.isArray(data != null ? data.div.e : void 0)) {
+                  data.div.e = [data.div.e];
+                }
+                senses = _.map(data.div.e, function(obj) {
+                  var ref1, ref2, ref3;
+                  return {
+                    "sense": obj.s,
+                    "desc": (ref1 = obj.info) != null ? (ref2 = ref1.info) != null ? (ref3 = ref2.SenseRelation) != null ? ref3.targets : void 0 : void 0 : void 0
+                  };
+                });
+                console.log("OUTSENSES", senses);
+                return deferred.resolve(senses);
+              }).error(function(data, status, headers, config) {
+                return deferred.resolve([]);
+              });
+            }
+          };
+        })(this)).error(function(data, status, headers, config) {
           return deferred.resolve([]);
         });
         return deferred.promise;
@@ -491,6 +494,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=services.js.map
-*/
+//# sourceMappingURL=services.js.map

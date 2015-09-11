@@ -1663,6 +1663,8 @@ label[for=lemgram_select]:before {
   #simple_text {
     position: relative;
     margin-top : 6px;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   .simple_form {
@@ -2486,6 +2488,8 @@ line.tick {
 
 .dropdown-menu {
   border-radius: 2px;
+  max-height : 575px;
+  overflow-y: auto;
 }
 
 

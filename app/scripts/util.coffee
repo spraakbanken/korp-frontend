@@ -469,16 +469,7 @@ util.lemgramToString = (lemgram, appendIndex) ->
         infixIndex = $.format("<sup>%s</sup>", match.index) if appendIndex? and match.index isnt "1"
         concept = match.form.replace(/_/g, " ")
         type = match.pos.slice(0, 2)
-    #else # missing from saldo, and has the form word_NN instead.
-    #    concept = ""
-    #    type = ""
-    #    try
-    #        concept = lemgram.split("_")[0]
-    #        type = lemgram.split("_")[1].toLowerCase()
-    #    catch e
-    #        c.log "lemgramToString broken for ", lemgram
-            return lemgram
-    $.format "%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
+    return $.format "%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [
         concept
         infixIndex
         type

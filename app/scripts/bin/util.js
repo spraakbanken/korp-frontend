@@ -643,17 +643,6 @@
       }
       concept = match.form.replace(/_/g, " ");
       type = match.pos.slice(0, 2);
-    } else {
-      concept = "";
-      type = "";
-      try {
-        concept = lemgram.split("_")[0];
-        type = lemgram.split("_")[1].toLowerCase();
-      } catch (_error) {
-        e = _error;
-        c.log("lemgramToString broken for ", lemgram);
-        return lemgram;
-      }
     }
     return $.format("%s%s <span class='wordclass_suffix'>(<span rel='localize[%s]'>%s</span>)</span>", [concept, infixIndex, type, util.getLocaleString(type)]);
   };
