@@ -1227,7 +1227,7 @@ a {
     content: "";
     z-index: -1;
     position: absolute;
-    bottom : 0;
+    top : 300px;
     right : 0;
     background : url("../img/feather.svg") no-repeat;
     background-size: contain;
@@ -1703,9 +1703,6 @@ label[for=lemgram_select]:before {
   font-size : 1.3em;
 }
 
-.modal.fade.in {
-  top : 30%;
-}
 .modal-header h3, .modal-header h2 {
   font-weight : normal;
 }
@@ -1727,10 +1724,18 @@ label[for=lemgram_select]:before {
   }
 }
 
+.modal.fade.in {
+  top : 50%;
+}
+body.modal-open {
+  overflow: hidden;
+}
 .modal-body {
   
-  max-height : 710px;
+  // max-height : 710px;
+  max-height : 71vh;
   min-height : 300px;
+
 }
 
 .related.modal {
