@@ -129,7 +129,6 @@ input[type="submit"] {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Library\/Mobile\%20Documents\/com\~apple\~CloudDocs\/dev\/korp\/app\/styles\/compass_twitter_bootstrap\/_reset\.scss}line{font-family:\00003119}}
 input[type="search"] {
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
   -webkit-appearance: textfield;
 }
@@ -547,7 +546,6 @@ button.close {
   width: 100%;
   padding-left: 0;
   padding-right: 0;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -2740,7 +2738,6 @@ a.label:hover, a.badge:hover {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1498da', endColorstr='#047db9', GradientType=0);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   transition: width 0.6s ease;
 }
@@ -2912,6 +2909,5 @@ a.label:hover, a.badge:hover {
   display: block;
   width: 100%;
   min-height: 30px;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }

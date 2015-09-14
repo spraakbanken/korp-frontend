@@ -47,7 +47,7 @@ div(ng-controller="SearchCtrl")
             ng-options='obj | \
              mapper:valfilter as obj.label | \
              loc group by obj.group | \
-             loc for obj in getAttrs()')
+             loc for obj in currentAttrs')
           button.btn.btn-small.search(ng-click='sendCompare()') {{'compare_vb' | loc}}
   #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div

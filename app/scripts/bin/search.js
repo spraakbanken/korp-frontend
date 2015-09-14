@@ -182,15 +182,16 @@
     __extends(SimpleSearch, _super);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var textinput,
-        _this = this;
+      var textinput;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keyup(function(event) {
-        return _this.s.$apply(function() {
-          return _this.onSimpleChange(event);
-        });
-      });
+      $("#simple_text").keyup((function(_this) {
+        return function(event) {
+          return _this.s.$apply(function() {
+            return _this.onSimpleChange(event);
+          });
+        };
+      })(this));
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
@@ -198,13 +199,15 @@
       if (settings.autocomplete) {
         null;
       }
-      $("#prefixChk, #suffixChk, #caseChk").click(function() {
-        if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
-          return _this.enableSubmit();
-        } else {
-          return _this.onSimpleChange();
-        }
-      });
+      $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
+        return function() {
+          if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
+            return _this.enableSubmit();
+          } else {
+            return _this.onSimpleChange();
+          }
+        };
+      })(this));
     }
 
     SimpleSearch.prototype.isSearchPrefix = function() {
@@ -311,6 +314,4 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=search.js.map
-*/
+//# sourceMappingURL=search.js.map
