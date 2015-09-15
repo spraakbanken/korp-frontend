@@ -409,10 +409,10 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
         s.cmp2 = compareSearches.savedSearches[1]
         unless s.cmp1 and s.cmp2 then return
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
-        s.getAttrs = listing.getAttributeGroups()
+        s.currentAttrs = listing.getAttributeGroups()
 
     s.reduce = 'word'
-    s.getAttrs = []
+    s.currentAttrs = []
 
     s.sendCompare = () ->
         $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, s.reduce)

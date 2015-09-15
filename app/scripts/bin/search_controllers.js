@@ -352,10 +352,10 @@
         return;
       }
       listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
-      return s.getAttrs = listing.getAttributeGroups();
+      return s.currentAttrs = listing.getAttributeGroups();
     });
     s.reduce = 'word';
-    s.getAttrs = [];
+    s.currentAttrs = [];
     s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, s.reduce));
     };
