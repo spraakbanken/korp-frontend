@@ -1108,6 +1108,8 @@ table {
     right: 8px;
     position: fixed;
     top: 8px;
+    overflow-y: auto;
+    max-height: 100%;
   }
   &:empty {
     padding: 0;
