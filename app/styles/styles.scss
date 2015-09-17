@@ -1229,7 +1229,7 @@ a {
     content: "";
     z-index: -1;
     position: absolute;
-    top : 300px;
+    top : 245px;
     right : 0;
     background : url("../img/feather.svg") no-repeat;
     background-size: contain;
@@ -1727,7 +1727,8 @@ label[for=lemgram_select]:before {
 }
 
 .modal.fade.in {
-  top : 50%;
+  top : 90px;
+  margin-top : 0;
 }
 body.modal-open {
   overflow: hidden;
