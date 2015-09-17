@@ -438,6 +438,10 @@
     "printedby" : "printed by",
     "commentaries" : "commentaries",
 
-    "published" : "published"
+    "published" : "published",
+
+    "ne_expr" : "Namn entity expression",
+    "ne_type" : "Name entity type",
+    "ne_subtype" : "Name entity subtype"
 }
 

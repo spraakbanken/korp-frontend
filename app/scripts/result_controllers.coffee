@@ -119,6 +119,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
             currentStruct = []
             prevCorpus = ""
             output = []
+            isOpen = false
             for sentence, i in sentenceArray
                 [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
                 {start, end} = sentence.match
@@ -134,12 +135,20 @@ korpApp.controller "kwicCtrl", class KwicCtrl
                     if wd.structs?.open
                         wd._open = wd.structs.open
                         currentStruct = [].concat(currentStruct, wd.structs.open)
-                    else if wd.structs?.close
+                        # c.log "currentStruct open", currentStruct
+                        isOpen = true
+                    else if isOpen and wd.structs?.close
                         wd._close = wd.structs.close
                         currentStruct = _.without currentStruct, wd.structs.close...
+                        # c.log "currentStruct close", currentStruct, wd.structs.close
+
+                    if isOpen
+                        _.extend wd, {_struct : currentStruct} if currentStruct.length
 
 
-                    _.extend wd, {_struct : currentStruct} if currentStruct.length
+                    if wd.structs?.close
+                        currentStruct = []
+                        isOpen = false
 
                 
                 if currentMode == "parallel"

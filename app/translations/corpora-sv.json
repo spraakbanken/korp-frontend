@@ -439,5 +439,9 @@
     "printedby" : "tryckt av",
     "commentaries" : "kommentarer",
 
-    "published" : "publicerat"
+    "published" : "publicerat",
+
+    "ne_expr" : "Namnentitetsuttryck",
+    "ne_type" : "Namnentitetstyp",
+    "ne_subtype" : "Namnentitetsundertyp"
 }

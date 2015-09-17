@@ -58,9 +58,15 @@ Sidebar =
 
     renderCorpusContent: (type, wordData, sentenceData, corpus_attrs) ->
         if type == "struct"
-          pairs = _.pairs(sentenceData)
+            pairs = _.pairs(sentenceData)
         else if type == "pos"
-          pairs = _.pairs(wordData)
+            pairs = _.pairs(wordData)
+            for item in (wordData._struct or [])
+                [key, val] = item.split(" ")
+                if key of corpus_attrs
+                    pairs.push([key, val])
+
+          # c.log "wordData", wordData._struct
         order = @options.displayOrder
         pairs.sort ([a], [b]) ->
             $.inArray(b, order) - $.inArray(a, order)

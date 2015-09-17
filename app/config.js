@@ -2506,7 +2506,11 @@ settings.corpora.suc3 = {
     context : {
         "1 sentence" : "1 sentence"
     },
-    attributes : modernAttrs,
+    attributes : _.extend({}, modernAttrs, {
+        ne_ex : {label: "ne_expr"},
+        ne_type : {label: "ne_type"},
+        ne_subtype : {label: "ne_subtype"}
+    }),
     struct_attributes : {
         text_id : {label : "text"}
     }
