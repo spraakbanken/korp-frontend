@@ -69,15 +69,11 @@ korpApp.controller "kwicCtrl", class KwicCtrl
 
 
         @setupHash()
-        s.gotoPage = null
         s.onPageInput = ($event, page, numPages) ->
             if $event.keyCode == 13
-                c.log "page input", page, numPages
                 if page > numPages then page = numPages
                 s.pageObj.pager = page
                 s.page = Number(page) - 1
-                s.gotoPage = null
-                c.log "s.$id", s.$id
 
         readingChange = () ->
             c.log "reading change"

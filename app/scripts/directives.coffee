@@ -544,7 +544,7 @@ korpApp.directive "kwicPager", () ->
          rotate="false" 
          num-pages="$parent.numPages"> </pagination>
       <div class="page_input"><span>{{'goto_page' | loc}} </span>
-        <input ng-model="$parent.$parent.gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)" 
+        <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)" 
             ng-click="$event.stopPropagation()" />
         {{'of' | loc}} {{numPages}}
       </div>
