@@ -870,6 +870,10 @@ class view.StatsResults extends BaseResults
         self = this
         @tabindex = 1
         @gridData = null
+        
+        @doSort = true
+        @sortColumn = null 
+        
         @proxy = new model.StatsProxy()
         window.statsProxy = @proxy
         @$result.on "click", ".arcDiagramPicture", (event) =>
@@ -900,7 +904,8 @@ class view.StatsResults extends BaseResults
 
 
         $(window).resize _.debounce( () =>
-            $("#myGrid:visible").width($(window).width() - 40)
+            @resizeGrid()
+
             nRows = @gridData?.length or 2
             h = (nRows * 2) + 4
             h = Math.min h, 40
@@ -1060,13 +1065,11 @@ class view.StatsResults extends BaseResults
                 else
                     @resultError err
 
-
     renderResult: (columns, data) ->
         refreshHeaders = ->
             #$(".slick-header-column:nth(2)").click().click()
             $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
-
         
         @gridData = data
         resultError = super(data)
@@ -1102,25 +1105,41 @@ class view.StatsResults extends BaseResults
         log = _.debounce () ->
             c.log "grid sort"
         , 200
-        grid.onSort.subscribe (e, args) ->
-            sortCol = args.sortCol  
-            data.sort (a, b) ->
-                log()
-                if sortCol.field is "hit_value"
-                    x = a[sortCol.field]
-                    y = b[sortCol.field]
+        grid.onSort.subscribe (e, args) =>
+            if @doSort
+                sortColumns = grid.getSortColumns()[0]
+                @sortColumn = sortColumns.columnId
+                @sortAsc = sortColumns.sortAsc
+                sortCol = args.sortCol  
+                data.sort (a, b) ->
+                    log()
+                    if sortCol.field is "hit_value"
+                        x = a[sortCol.field]
+                        y = b[sortCol.field]
+                    else
+                        x = a[sortCol.field][0] or 0
+                        y = b[sortCol.field][0] or 0
+                    ret = ((if x is y then 0 else ((if x > y then 1 else -1))))
+                    ret *= -1 unless args.sortAsc
+                    ret
+    
+                grid.setData data
+                grid.updateRowCount()
+                grid.render()
+            else
+                if @sortColumn
+                    grid.setSortColumn @sortColumn, @sortAsc
                 else
-                    #x = a[sortCol.field].absolute or 0
-                    #y = b[sortCol.field].absolute or 0
-                    x = a[sortCol.field][0] or 0
-                    y = b[sortCol.field][0] or 0
-                ret = ((if x is y then 0 else ((if x > y then 1 else -1))))
-                ret *= -1 unless args.sortAsc
-                ret
+                    grid.setSortColumns []
 
-            grid.setData data
-            grid.updateRowCount()
-            grid.render()
+        grid.onColumnsResized.subscribe (e, args) =>
+            @doSort = false # if sort event triggered, sorting will not occur
+            @resizeGrid()
+            e.stopImmediatePropagation()
+            
+        grid.onHeaderClick.subscribe (e, args) =>
+            @doSort = true # enable sorting again, resize is done
+            e.stopImmediatePropagation()
 
         grid.onHeaderCellRendered.subscribe (e, args) ->
             refreshHeaders()
@@ -1144,6 +1163,14 @@ class view.StatsResults extends BaseResults
 
         if not (_.compact cl.getTimeInterval()).length
             @s.graphEnabled = false
+
+    resizeGrid : () ->
+        width = 0;
+        $('.slick-header-column').each () ->
+            width += $(this).outerWidth true
+        if width > $(window).width()
+            width = $(window).width() - 40
+        $("#myGrid:visible").width(width)
 
     newDataInGraph : (dataName) ->
         dataItems = []

@@ -1075,6 +1075,8 @@
       c.log("StatsResults constr", self = this);
       this.tabindex = 1;
       this.gridData = null;
+      this.doSort = true;
+      this.sortColumn = null;
       this.proxy = new model.StatsProxy();
       window.statsProxy = this.proxy;
       this.$result.on("click", ".arcDiagramPicture", (function(_this) {
@@ -1108,7 +1110,7 @@
       $(window).resize(_.debounce((function(_this) {
         return function() {
           var h, nRows, _ref;
-          $("#myGrid:visible").width($(window).width() - 40);
+          _this.resizeGrid();
           nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
           h = (nRows * 2) + 4;
           h = Math.min(h, 40);
@@ -1344,28 +1346,55 @@
       log = _.debounce(function() {
         return c.log("grid sort");
       }, 200);
-      grid.onSort.subscribe(function(e, args) {
-        sortCol = args.sortCol;
-        data.sort(function(a, b) {
-          var ret, x, y;
-          log();
-          if (sortCol.field === "hit_value") {
-            x = a[sortCol.field];
-            y = b[sortCol.field];
+      grid.onSort.subscribe((function(_this) {
+        return function(e, args) {
+          var sortColumns;
+          if (_this.doSort) {
+            sortColumns = grid.getSortColumns()[0];
+            _this.sortColumn = sortColumns.columnId;
+            _this.sortAsc = sortColumns.sortAsc;
+            sortCol = args.sortCol;
+            data.sort(function(a, b) {
+              var ret, x, y;
+              log();
+              if (sortCol.field === "hit_value") {
+                x = a[sortCol.field];
+                y = b[sortCol.field];
+              } else {
+                x = a[sortCol.field][0] || 0;
+                y = b[sortCol.field][0] || 0;
+              }
+              ret = (x === y ? 0 : (x > y ? 1 : -1));
+              if (!args.sortAsc) {
+                ret *= -1;
+              }
+              return ret;
+            });
+            grid.setData(data);
+            grid.updateRowCount();
+            return grid.render();
           } else {
-            x = a[sortCol.field][0] || 0;
-            y = b[sortCol.field][0] || 0;
+            if (_this.sortColumn) {
+              return grid.setSortColumn(_this.sortColumn, _this.sortAsc);
+            } else {
+              return grid.setSortColumns([]);
+            }
           }
-          ret = (x === y ? 0 : (x > y ? 1 : -1));
-          if (!args.sortAsc) {
-            ret *= -1;
-          }
-          return ret;
-        });
-        grid.setData(data);
-        grid.updateRowCount();
-        return grid.render();
-      });
+        };
+      })(this));
+      grid.onColumnsResized.subscribe((function(_this) {
+        return function(e, args) {
+          _this.doSort = false;
+          _this.resizeGrid();
+          return e.stopImmediatePropagation();
+        };
+      })(this));
+      grid.onHeaderClick.subscribe((function(_this) {
+        return function(e, args) {
+          _this.doSort = true;
+          return e.stopImmediatePropagation();
+        };
+      })(this));
       grid.onHeaderCellRendered.subscribe(function(e, args) {
         return refreshHeaders();
       });
@@ -1393,6 +1422,18 @@
       if (!(_.compact(cl.getTimeInterval())).length) {
         return this.s.graphEnabled = false;
       }
+    };
+
+    StatsResults.prototype.resizeGrid = function() {
+      var width;
+      width = 0;
+      $('.slick-header-column').each(function() {
+        return width += $(this).outerWidth(true);
+      });
+      if (width > $(window).width()) {
+        width = $(window).width() - 40;
+      }
+      return $("#myGrid:visible").width(width);
     };
 
     StatsResults.prototype.newDataInGraph = function(dataName) {
