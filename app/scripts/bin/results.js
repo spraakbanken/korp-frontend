@@ -1425,7 +1425,7 @@
     };
 
     StatsResults.prototype.resizeGrid = function() {
-      var width;
+      var width, _ref, _ref1;
       width = 0;
       $('.slick-header-column').each(function() {
         return width += $(this).outerWidth(true);
@@ -1433,7 +1433,11 @@
       if (width > $(window).width()) {
         width = $(window).width() - 40;
       }
-      return $("#myGrid:visible").width(width);
+      $("#myGrid:visible").width(width);
+      if ((_ref = this.grid) != null) {
+        _ref.resizeCanvas();
+      }
+      return (_ref1 = this.grid) != null ? _ref1.invalidate() : void 0;
     };
 
     StatsResults.prototype.newDataInGraph = function(dataName) {

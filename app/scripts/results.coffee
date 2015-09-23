@@ -1171,6 +1171,8 @@ class view.StatsResults extends BaseResults
         if width > $(window).width()
             width = $(window).width() - 40
         $("#myGrid:visible").width(width)
+        @grid?.resizeCanvas()
+        @grid?.invalidate()
 
     newDataInGraph : (dataName) ->
         dataItems = []
