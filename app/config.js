@@ -16,7 +16,7 @@ settings.word_attribute_selector = "union"
 settings.struct_attribute_selector = "union"
 
 // for 'compile statistics by' selector, can be 'union' or 'intersection'
-settings.reduce_word_attribute_selector = "union" 
+settings.reduce_word_attribute_selector = "union"
 settings.reduce_struct_attribute_selector = "intersection"
 
 settings.news_desk_url = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_news/json/korpnews.json";
@@ -42,24 +42,24 @@ settings.wordpictureTagset = {
 
 settings.wordPictureConf = {
     verb : [[
-        {rel : "subject", css_class : "color_blue"}, 
+        {rel : "subject", css_class : "color_blue"},
         "_",
         {rel : "object", css_class : "color_purple"},
         {rel : "adverbial", css_class : "color_green"}
     ]],
     noun : [
-        [{rel : "preposition_rel", css_class : "color_yellow", field_reverse: true}, 
-         {rel : "pre_modifier", css_class : "color_azure"}, 
-         "_", 
-         {rel : "post_modifier", css_class : "color_red"}], 
+        [{rel : "preposition_rel", css_class : "color_yellow", field_reverse: true},
+         {rel : "pre_modifier", css_class : "color_azure"},
+         "_",
+         {rel : "post_modifier", css_class : "color_red"}],
 
-        ["_", {rel : "subject", css_class : "color_blue", field_reverse: true, alt_label : "vb"}], 
+        ["_", {rel : "subject", css_class : "color_blue", field_reverse: true, alt_label : "vb"}],
         [{rel : "object", css_class : "color_purple", field_reverse: true, alt_label : "vb"}, "_"]
     ],
     adjective : [["_", {rel: "pre_modifier", css_class : "color_yellow", field_reverse : true}]],
     adverb : [["_", {rel: "adverbial", css_class : "color_yellow", field_reverse : true}]],
     preposition : [["_", {rel: "preposition_rel", css_class : "color_green"}]]
-    
+
 }
 
 settings.visibleModes = 6
@@ -112,7 +112,7 @@ settings.modeConfig = [
         localekey: "runeberg",
         mode: "runeberg",
     },
- 
+
     {
         localekey: "bible_texts",
         mode: "bible",
@@ -137,7 +137,7 @@ settings.modeConfig = [
         localekey: "eddan",
         mode: "eddan"
     }
- 
+
 ];
 
 if(isLab) {
@@ -217,7 +217,7 @@ var selectType = {
         $scope.translationKey = $scope.translationKey || "";
         var dataset;
         if(_.isArray($scope.dataset)) {
-            // convert array datasets into objects 
+            // convert array datasets into objects
             dataset = _.object(_.map($scope.dataset, function(item) {
                 return [item, item];
             }));
@@ -462,6 +462,104 @@ attrs.ref = {
 attrs.link = {
     label : "sentence_link"
 };
+attrs.ne_ex = {
+    label: "ne_expr",
+    translationKey : "ne_expr_",
+    extended_template : selectType.extended_template,
+    controller : selectType.controller,
+    isStructAttr : true,
+    dataset: [
+       "ENAMEX",
+       "TIMEX",
+       "NUMEX",
+   ]
+};
+attrs.ne_type = {
+    label: "ne_type",
+    translationKey : "ne_type_",
+    extended_template : selectType.extended_template,
+    controller : selectType.controller,
+    isStructAttr : true,
+    dataset: [
+       "LOC",
+       "PRS",
+       "ORG",
+       "EVN",
+       "WRK",
+       "OBJ",
+       "MSR",
+       "TME"
+   ]
+};
+attrs.ne_subtype = {
+    label: "ne_subtype",
+    translationKey : "ne_subtype_",
+    extended_template : selectType.extended_template,
+    controller : selectType.controller,
+    isStructAttr : true,
+    dataset: [
+        "AST",
+        "GPL",
+        "PPL",
+        "FNC",
+        "STR",
+        "HUM",
+        "MTH",
+        "ANM",
+        "CLC",
+        "FIN",
+        "ATH",
+        "CLT",
+        "PLT",
+        "TVR",
+        "EDU",
+        "TRN",
+        "CRP",
+        "HPL",
+        "WTH",
+        "CLU",
+        "ATL",
+        "RLG",
+        "WRT",
+        "RTV",
+        "WAO",
+        "PRJ",
+        "WMD",
+        "WAE",
+        "MDC",
+        "FWP",
+        "CMP",
+        "VHA",
+        "VHG",
+        "VHW",
+        "PRZ",
+        "PRD",
+        "VLM",
+        "TMP",
+        "INX",
+        "DST",
+        "PRC",
+        "CUR",
+        "DEN",
+        "DSG",
+        "SPD",
+        "FRQ",
+        "AGE",
+        "MSU",
+        "WMU",
+        "CMU",
+        "WEB",
+        "PSS",
+        "CVU",
+        "IDX",
+        "LST",
+        "DAT",
+        "PER"
+   ],
+   stringify : function(val) {
+       return util.getLocaleString("ne_subtype_" + val);
+   }
+};
 sattrs.date = {
     label : "date",
     displayType : "date"
@@ -479,7 +577,7 @@ settings.common_struct_types = {
         controller : function($scope, searches, $timeout) {
             c.log( "searches", searches)
             var s = $scope
-            
+
             searches.timeDef.then(function() {
                 var all_years = _(settings.corpusListing.selected)
                             .pluck("time")
@@ -494,7 +592,7 @@ settings.common_struct_types = {
 
                 $timeout(function() {
                     s.floor = Math.min.apply(null, all_years)
-                    s.ceiling = Math.max.apply(null, all_years) 
+                    s.ceiling = Math.max.apply(null, all_years)
                     if(!s.model) {
                         s.values.low = s.floor;
                         s.values.high = s.ceiling;
@@ -517,13 +615,13 @@ settings.common_struct_types = {
                         s.values.high.toString() + "1231"
                     ].join(",")
                 })
-                
+
                 s.$on("$destroy", function() {
                     w();
                 })
-                
+
             })
-                
+
         }
     }
 
@@ -636,7 +734,7 @@ settings.corporafolders.fisk.newspapertexts.osterbottenstidning = {
     title : "Österbottens Tidning",
     contents : ["osterbottenstidning2011", "osterbottenstidning2012", "osterbottenstidning2013", "osterbottenstidning2014"],
     description : "<a href=\"http://www.ot.fi\" target=\"_blank\">Österbottens Tidning</a> är en regional svenskspråkig tidning i Österbotten."
-    // 
+    //
 };
 
 settings.corporafolders.fisk.magazines = {
@@ -2507,9 +2605,9 @@ settings.corpora.suc3 = {
         "1 sentence" : "1 sentence"
     },
     attributes : _.extend({}, modernAttrs, {
-        ne_ex : {label: "ne_expr"},
-        ne_type : {label: "ne_type"},
-        ne_subtype : {label: "ne_subtype"}
+        ne_ex : attrs.ne_ex,
+        ne_type : attrs.ne_type,
+        ne_subtype : attrs.ne_subtype
     }),
     struct_attributes : {
         text_id : {label : "text"}
@@ -4212,7 +4310,6 @@ settings.reduce_stringify = function(type) {
             if(!_.isUndefined(attrObj) && value != "&Sigma;" && attrObj.translationKey )
                 prefix = attrObj.translationKey
 
-
             output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
                     [query, JSON.stringify(corpora), prefix + value, util.getLocaleString(prefix + value)]);
             c.log("stringify default", prefix, value)
@@ -4406,7 +4503,3 @@ var fsv_aldrelagar = {
         text_date : {label : "date"}
     }
 };
-
-
-
-

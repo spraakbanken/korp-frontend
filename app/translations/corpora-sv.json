@@ -40,10 +40,10 @@
     "day" : "dag",
     "party" : "parti",
     "normalized_wordform" : "normaliserad ordform",
-    
+
     "url" : "url",
     "referensnummer" : "referensnummer",
-    
+
     "weekday" : "veckodag",
     "hashtags" : "hashtaggar",
     "mentions" : "omnämnda",
@@ -61,12 +61,12 @@
     "description" : "beskrivning",
     "tweets" : "tweets",
     "website" : "webbsida",
-    
+
     "id" : "id",
-    
+
     "imprintyear" : "tryckår",
     "pagelink" : "sidlänk",
-    
+
     "tisus_l1" : "modersmål",
     "tisus_lf1" : "läsförståelse, del 1",
     "tisus_lf2" : "läsförståelse, del 2",
@@ -77,7 +77,7 @@
     "finalgrade" : "slutgiltigt betyg",
     "sum" : "summa",
     "proficiencylevel" : "kunskapsnivå",
-    
+
     "text_year" : "år",
     "text_party" : "parti",
     "date" : "datum",
@@ -97,20 +97,20 @@
     "article_topic" : "artikelns ämne/tema",
     "text_volume" : "band",
     "subject" : "ämne",
-    
+
     "sentence_link" : "meningslänk",
     "text_issue" : "utgåva",
-    
+
     "sender" : "avsändare",
     "archivecode" : "arkivkod",
     "text_recipient" : "mottagare",
     "text_sv" : "verksnummer",
-    
+
     "oneSentence" : "en mening",
-    
+
     "source" : "källa",
     "age" : "ålder",
-    
+
     "blog_title" : "bloggtitel",
     "blog_url" : "bloggaddress",
     "author_age" : "författarens ålder",
@@ -119,7 +119,7 @@
     "tags" : "nyckelord",
     "post_url" : "inläggsadress",
     "categories" : "kategorier",
-    
+
     "page" : "sida",
     "author_type" : "författartyp",
     "gender" : "kön",
@@ -130,14 +130,14 @@
     "female" : "kvinna",
     "unknown" : "okänd",
     "male_female" : "man och kvinna",
-    
+
     "entryword" : "uppslagsord",
     "entryno" : "uppslagsord (nummer)",
     "sense1" : "huvudbetydelse",
     "sense2" : "betydelsenyans",
-    
-    
-    "pos_AB" : "adverb", 
+
+
+    "pos_AB" : "adverb",
     "pos_MAD" : "interpunktion",
     "pos_MID" : "interpunktion",
     "pos_PAD" : "interpunktion",
@@ -165,31 +165,31 @@
     "pos_UO" : "utländskt ord",
     "pos_VB" : "verb",
     "pos_E" : "e",
-    
-    "nn" : "substantiv", 
-    "av" : "adjektiv", 
-    "jj" : "adjektiv", 
-    "vb" : "verb", 
-    "pm" : "egennamn", 
-    "ab" : "adverb", 
-    "in" : "interjektion", 
-    "pp" : "preposition", 
-    "nl" : "numeral", 
-    "pn" : "pronomen", 
-    "sn" : "subjunktion", 
-    "kn" : "konjunktion", 
-    "al" : "artikel", 
+
+    "nn" : "substantiv",
+    "av" : "adjektiv",
+    "jj" : "adjektiv",
+    "vb" : "verb",
+    "pm" : "egennamn",
+    "ab" : "adverb",
+    "in" : "interjektion",
+    "pp" : "preposition",
+    "nl" : "numeral",
+    "pn" : "pronomen",
+    "sn" : "subjunktion",
+    "kn" : "konjunktion",
+    "al" : "artikel",
     "ie" : "infinitivmärke",
     "e" : "e",
-    
+
     "mx" : "flerordsprefix",
     "sx" : "prefix",
-    
+
     "example" : "Exempel",
     "page_num" : "sidonummer",
     "year_to"  : "år (slut)",
     "year_from"  : "år (start)",
-    
+
     "rel_AT" : "Attribut",
     "rel_ET" : "Efterställt attribut",
     "rel_IO" : "Indirekt objekt",
@@ -203,7 +203,7 @@
     "rel_ADV" : "Adverbial",
     "rel_PA" : "Preposition",
     "rel_head" : "Huvud",
-    
+
     "deprel_ROOT" : "ROOT",
     "deprel_++" : "Samordnande konjunktion",
     "deprel_+A" : "Konjuktionellt adverb",
@@ -270,11 +270,11 @@
     "deprel_PA" : "Prepositions komplement",
     "deprel_UA" : "Underordnad sats (bisats), utom subjunktion",
     "deprel_VG" : "Verbgrupp",
-    
+
     "INF" : "Infinitiv",
     "INFINIT" : "Particip",
     "FINIT" : "Finit verb",
-    
+
     "origlang" : "originalspråk",
     "page_n" : "sidonummer",
     "paragraph_marginal" : "marginalnoter",
@@ -297,7 +297,7 @@
     "fab_kustod" : "kustod",
     "fab_unclear" : "oläsligt",
     "datering" : "datering",
-    
+
     "sst_koncept" : "Stockholms stads tänkebok - Koncept",
     "sst_notariat" : "Stockholms stads tänkebok - Notariat",
     "sst_renskr" : "Stockholms stads tänkebok - Renskr",
@@ -322,7 +322,7 @@
     "krLnyskrivna" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
     "meL" : "Magnus Erikssons Landslag",
     "meSt" : "Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
-    
+
     "activity" : "aktivitet",
     "activity1" : "aktivitet 1",
     "activity2" : "aktivitet 2",
@@ -330,13 +330,13 @@
     "duration" : "längd",
     "project" : "projekt",
     "speaker" : "talare",
-    
+
     "verk" : "länk till boken",
     "lang" : "språk",
     "fulltext" : "heltext",
-    
+
     "album" : "album",
-    "album_year" : "år (album)", 
+    "album_year" : "år (album)",
     "song_title" : "låttitel",
     "song_year" : "år (låt)",
     "newspaper" : "tidning",
@@ -352,7 +352,7 @@
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
     "notes": "anteckningar",
-    
+
     "thread" : "tråd",
     "forum" : "forum",
     "postlinks" : "länkar i inlägg",
@@ -370,7 +370,7 @@
     "forsvarare": "försvarare",
     "skribent": "skribent",
     "tolkat": "tolkat",
-    
+
     "student" : "student",
     "a" : "A",
     "b" : "B",
@@ -404,7 +404,7 @@
     "interview" : "intervju",
     "interviewee" : "intervjuad",
     "part" : "del",
-    
+
     "location" : "plats",
 
     "coctaill_level" : "level",
@@ -418,7 +418,7 @@
     "coctaill_task_format" : "task_format",
     "coctaill_language_example_unit" : "language_example_unit",
     "coctaill_language_example_skill" : "language_example_skill",
-    
+
     "librisid" : "Libris-ID",
 
     "edition" : "utgåva",
@@ -430,7 +430,7 @@
     "issn" : "ISSN",
     "politicaltendency" : "politisk tendens",
     "annualprice" : "årspris",
-    "editorialplace" : "ort", 
+    "editorialplace" : "ort",
     "typearea" : "storlek",
     "numberofpages" : "antal sidor",
     "publicationtype" : "publikationstyp",
@@ -441,7 +441,75 @@
 
     "published" : "publicerat",
 
-    "ne_expr" : "Namnentitetsuttryck",
-    "ne_type" : "Namnentitetstyp",
-    "ne_subtype" : "Namnentitetsundertyp"
+    "ne_expr" : "namnentitet",
+    "ne_type" : "namnentitetstyp",
+    "ne_subtype" : "namnentitetsundertyp",
+    "ne_expr_ENAMEX": "namnuttryck",
+    "ne_expr_TIMEX": "tidsuttryck",
+    "ne_expr_NUMEX": "numeriskt uttryck",
+    "ne_type_LOC" : "platsnamn",
+    "ne_type_PRS" : "personnamm",
+    "ne_type_ORG" : "organisationsnamn",
+    "ne_type_EVN" : "händelsenamn",
+    "ne_type_WRK" : "verks- eller konstnamn",
+    "ne_type_OBJ" : "objektnamn",
+    "ne_type_MSR" : "måttnamn",
+    "ne_type_TME" : "tid",
+    "ne_subtype_AST" : "astronomisk",
+    "ne_subtype_GPL" : "geografisk/geologisk",
+    "ne_subtype_PPL" : "geo-social-politisk entitet",
+    "ne_subtype_FNC" : "facilitetsentitet",
+    "ne_subtype_STR" : "gata/väg/postadress",
+    "ne_subtype_HUM" : "människa/fiktiv mänsklig karaktär",
+    "ne_subtype_MTH" : "helgon/apostel/gud/mytiskt namm/humanoid",
+    "ne_subtype_ANM" : "djur/husdjur/mytiskt odjur",
+    "ne_subtype_CLC" : "stam/dynasti/etniskt namn",
+    "ne_subtype_FIN" : "finansiell",
+    "ne_subtype_ATH" : "atletisk",
+    "ne_subtype_CLT" : "kulturell",
+    "ne_subtype_PLT" : "politisk",
+    "ne_subtype_TVR" : "media",
+    "ne_subtype_EDU" : "utbildning",
+    "ne_subtype_TRN" : "transport",
+    "ne_subtype_CRP" : "företag/organisation",
+    "ne_subtype_HPL" : "historisk/politisk",
+    "ne_subtype_WTH" : "natur",
+    "ne_subtype_CLU" : "kulturell",
+    "ne_subtype_ATL" : "atletisk",
+    "ne_subtype_RLG" : "religiös",
+    "ne_subtype_WRT" : "skrivet material",
+    "ne_subtype_RTV" : "radio/tv-program",
+    "ne_subtype_WAO" : "fysiskt verk eller konst",
+    "ne_subtype_PRJ" : "projekt/överenskommelse/initiativ",
+    "ne_subtype_WMD" : "skriven media",
+    "ne_subtype_WAE" : "opera/teaterpjäs/symfoni",
+    "ne_subtype_MDC" : "medicinsk",
+    "ne_subtype_FWP" : "mat/dryck",
+    "ne_subtype_CMP" : "datorprodukt/telefoni",
+    "ne_subtype_VHA" : "luft-/rymdfarkost",
+    "ne_subtype_VHG" : "fordon",
+    "ne_subtype_VHW" : "fartyg",
+    "ne_subtype_PRZ" : "pris/stipendium/utmärkelse",
+    "ne_subtype_PRD" : "produkt/artefakt/växt",
+    "ne_subtype_VLM" : "volym",
+    "ne_subtype_TMP" : "temperatur",
+    "ne_subtype_INX" : "index",
+    "ne_subtype_IDX" : "index",
+    "ne_subtype_DST" : "avstånd",
+    "ne_subtype_PRC" : "procent",
+    "ne_subtype_CUR" : "valuta",
+    "ne_subtype_DEN" : "densitet",
+    "ne_subtype_DSG" : "dosering",
+    "ne_subtype_SPD" : "hastighet",
+    "ne_subtype_FRQ" : "frekvens",
+    "ne_subtype_AGE" : "ålder",
+    "ne_subtype_MSU" : "ytmått",
+    "ne_subtype_WMU" : "vikt- eller massaenhet",
+    "ne_subtype_CMU" : "datorenhet",
+    "ne_subtype_WEB" : "webb",
+    "ne_subtype_PSS" : "tryck",
+    "ne_subtype_CVU" : "kapacitet/volym",
+    "ne_subtype_LST" : "lista",
+    "ne_subtype_DAT" : "datum",
+    "ne_subtype_PER" : "period"
 }

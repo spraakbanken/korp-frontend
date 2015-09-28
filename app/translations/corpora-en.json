@@ -40,10 +40,10 @@
     "day" : "day",
     "party" : "party",
     "normalized_wordform" : "normalized word form",
-    
+
     "url" : "url",
     "referensnummer" : "reference number",
-    
+
     "weekday" : "weekday",
     "hashtags" : "hashtags",
     "mentions" : "mentions",
@@ -61,12 +61,12 @@
     "description" : "description",
     "tweets" : "tweets",
     "website" : "website",
-    
+
     "id" : "id",
-    
+
     "imprintyear" : "imprint year",
     "pagelink" : "page link",
-    
+
     "tisus_l1" : "native language",
     "tisus_lf1" : "reading comprehension, part 1",
     "tisus_lf2" : "reading comprehension, part 2",
@@ -77,7 +77,7 @@
     "finalgrade" : "final grade",
     "sum" : "sum",
     "proficiencylevel" : "proficiency level",
-    
+
     "text_year" : "year",
     "text_party" : "party",
     "date" : "date",
@@ -97,20 +97,20 @@
     "article_topic" : "article topic",
     "text_volume" : "volume",
     "subject" : "subject",
-    
+
     "sentence_link" : "sentence link",
     "text_issue" : "issue",
-    
+
     "sender" : "sender",
     "archivecode" : "archive code",
     "text_recipient" : "recipient",
     "text_sv" : "work number",
-    
+
     "oneSentence" : "one sentence",
-    
+
     "source" : "source",
     "age" : "age",
-    
+
     "blog_title" : "blog title",
     "blog_url" : "blog address",
     "author_age" : "author age",
@@ -119,7 +119,7 @@
     "tags" : "tags",
     "post_url" : "post address",
     "categories" : "categories",
-    
+
     "page" : "page",
     "author_type" : "author type",
     "gender" : "gender",
@@ -130,13 +130,13 @@
     "female" : "female",
     "unknown" : "unknown",
     "male_female" : "both",
-    
+
     "entryword" : "entry word",
     "entryno" : "entry word (number)",
     "sense1" : "sense 1",
     "sense2" : "sense 2",
-    
-    
+
+
     "pos_AB" : "adverb",
     "pos_MAD" : "punctuation",
     "pos_MID" : "punctuation",
@@ -165,31 +165,31 @@
     "pos_UO" : "foreign word",
     "pos_VB" : "verb",
     "pos_E" : "e",
-    
-    "nn" : "noun", 
-    "av" : "adjective", 
-    "jj" : "adjective", 
-    "vb" : "verb", 
-    "pm" : "proper noun", 
-    "ab" : "adverb", 
-    "in" : "interjection", 
-    "pp" : "preposition", 
-    "nl" : "numeral", 
-    "pn" : "pronoun", 
-    "sn" : "subjunction", 
-    "kn" : "conjunction", 
-    "al" : "article", 
+
+    "nn" : "noun",
+    "av" : "adjective",
+    "jj" : "adjective",
+    "vb" : "verb",
+    "pm" : "proper noun",
+    "ab" : "adverb",
+    "in" : "interjection",
+    "pp" : "preposition",
+    "nl" : "numeral",
+    "pn" : "pronoun",
+    "sn" : "subjunction",
+    "kn" : "conjunction",
+    "al" : "article",
     "ie" : "infinitive particle",
     "e" : "e",
-    
+
     "mx" : "flerordsprefix",
     "sx" : "prefix",
-    
+
     "example" : "Example",
     "page_num" : "page number",
     "year_to"  : "year (to)",
     "year_from"  : "year (from)",
-    
+
     "rel_AT" : "Pre-modifier",
     "rel_ET" : "Post-modifier",
     "rel_IO" : "Indirect object",
@@ -202,7 +202,7 @@
     "rel_ADV" : "Adverbial",
     "rel_PA" : "Preposition",
     "rel_head" : "Head",
-    
+
     "deprel_ROOT" : "ROOT",
     "deprel_++" : "Coordinating conjunction",
     "deprel_+A" : "Conjunctional adverbial",
@@ -269,11 +269,11 @@
     "deprel_PA" : "Complement of preposition",
     "deprel_UA" : "Subordinate clause minus subordinating conjunction",
     "deprel_VG" : "Verb group",
-    
+
     "INF" : "Non-finite verb",
     "INFINIT" : "Participle",
     "FINIT" : "Finite verb",
-    
+
     "origlang" : "original language",
     "page_n" : "page number",
     "paragraph_marginal" : "margin notes",
@@ -296,7 +296,7 @@
     "fab_kustod" : "catchword",
     "fab_unclear" : "unreadable",
     "datering" : "dating",
-    
+
     "sst_koncept" : "Stockholms stads tänkebok - Koncept",
     "sst_notariat" : "Stockholms stads tänkebok - Notariat",
     "sst_renskr" : "Stockholms stads tänkebok - Renskr",
@@ -321,7 +321,7 @@
     "krLnyskrivna" : "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
     "meL" : "Magnus Erikssons Landslag",
     "meSt" : "Magnus Erikssons Stadslag, exklusiva stadslagsflockar",
-    
+
     "activity1" : "activity",
     "activity1" : "activity 1",
     "activity2" : "activity 2",
@@ -329,17 +329,17 @@
     "duration" : "duration",
     "project" : "project",
     "speaker" : "speaker",
-    
+
     "verk" : "book location",
     "lang" : "language",
     "fulltext" : "full text",
-    
+
     "album" : "album",
-    "album_year" : "album year", 
+    "album_year" : "album year",
     "song_title" : "song title",
     "song_year" : "song year",
     "newspaper" : "newspaper",
-    
+
     "created_by" : "created by",
     "element" : "element",
     "lexical_unit": "lexical unit",
@@ -351,14 +351,14 @@
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
     "notes": "notes",
-    
+
     "thread" : "thread",
     "forum" : "forum",
     "postlinks" : "links in post",
     "posturl" : "post",
     "threadpostcount" : "number of posts in thread",
     "threadlastpost" : "most recent post in thread",
-    
+
     "fall": "case",
     "hord": "questioned",
     "fl1": "interrogator 1",
@@ -369,7 +369,7 @@
     "forsvarare": "defender",
     "skribent": "writer",
     "tolkat": "interpreted",
-    
+
     "student" : "student",
     "a" : "A",
     "b" : "B",
@@ -398,12 +398,12 @@
     "party_lp" : "Sveriges liberala parti",
     "party_s" : "Sveriges socialdemokratiska arbetareparti",
     "party_v" : "Vänsterpartiet",
-    
+
     "group" : "group",
     "interview" : "interview",
     "interviewee" : "interviewee",
     "part" : "part",
-    
+
     "location" : "location",
 
     "coctaill_level" : "level",
@@ -417,7 +417,7 @@
     "coctaill_task_format" : "task_format",
     "coctaill_language_example_unit" : "language_example_unit",
     "coctaill_language_example_skill" : "language_example_skill",
-    
+
     "librisid" : "Libris-ID",
 
     "edition" : "edition",
@@ -440,8 +440,75 @@
 
     "published" : "published",
 
-    "ne_expr" : "Namn entity expression",
-    "ne_type" : "Name entity type",
-    "ne_subtype" : "Name entity subtype"
+    "ne_expr" : "named entity",
+    "ne_type" : "named entity type",
+    "ne_subtype" : "named entity subtype",
+    "ne_expr_ENAMEX": "name expression",
+    "ne_expr_TIMEX": "time expression",
+    "ne_expr_NUMEX": "numerical expression",
+    "ne_type_LOC" : "location name",
+    "ne_type_PRS" : "person name",
+    "ne_type_ORG" : "organization name",
+    "ne_type_EVN" : "event name",
+    "ne_type_WRK" : "work or art name",
+    "ne_type_OBJ" : "object name",
+    "ne_type_MSR" : "measure name",
+    "ne_type_TME" : "time",
+    "ne_subtype_AST" : "astronomical",
+    "ne_subtype_GPL" : "geographical/geological",
+    "ne_subtype_PPL" : "geo-social-political entity",
+    "ne_subtype_FNC" : "facility entity",
+    "ne_subtype_STR" : "street/road/postal address",
+    "ne_subtype_HUM" : "human being/fictional human character",
+    "ne_subtype_MTH" : "saint/apostle/god/mythical name/humanoid",
+    "ne_subtype_ANM" : "animal/pet/mythical beasts",
+    "ne_subtype_CLC" : "tribe/dynasty/ethnical or race name",
+    "ne_subtype_FIN" : "financial",
+    "ne_subtype_ATH" : "athletic",
+    "ne_subtype_CLT" : "cultural",
+    "ne_subtype_PLT" : "political",
+    "ne_subtype_TVR" : "media",
+    "ne_subtype_EDU" : "educational",
+    "ne_subtype_TRN" : "transportation",
+    "ne_subtype_CRP" : "corporation/organization",
+    "ne_subtype_HPL" : "historical/political",
+    "ne_subtype_WTH" : "natural",
+    "ne_subtype_CLU" : "cultural",
+    "ne_subtype_ATL" : "athletic",
+    "ne_subtype_RLG" : "religious",
+    "ne_subtype_WRT" : "written material",
+    "ne_subtype_RTV" : "radio/tv-programs",
+    "ne_subtype_WAO" : "physical work or art",
+    "ne_subtype_PRJ" : "project/agreement/initiative",
+    "ne_subtype_WMD" : "written media",
+    "ne_subtype_WAE" : "opera/theater play/symphony",
+    "ne_subtype_MDC" : "medical",
+    "ne_subtype_FWP" : "food/beverage",
+    "ne_subtype_CMP" : "computer product/telephony",
+    "ne_subtype_VHA" : "air/space vehicle",
+    "ne_subtype_VHG" : "land vehicle",
+    "ne_subtype_VHW" : "water vehicle",
+    "ne_subtype_PRZ" : "prize/scholarship/honour",
+    "ne_subtype_PRD" : "product/artefact/flower/plant",
+    "ne_subtype_VLM" : "volume",
+    "ne_subtype_TMP" : "temperature",
+    "ne_subtype_INX" : "index",
+    "ne_subtype_IDX" : "index",
+    "ne_subtype_DST" : "distance",
+    "ne_subtype_PRC" : "percent",
+    "ne_subtype_CUR" : "currency",
+    "ne_subtype_DEN" : "density",
+    "ne_subtype_DSG" : "dosage",
+    "ne_subtype_SPD" : "speed",
+    "ne_subtype_FRQ" : "frequency",
+    "ne_subtype_AGE" : "age",
+    "ne_subtype_MSU" : "metric surface unit",
+    "ne_subtype_WMU" : "weight or mass unit",
+    "ne_subtype_CMU" : "computer unit",
+    "ne_subtype_WEB" : "web",
+    "ne_subtype_PSS" : "pressure",
+    "ne_subtype_CVU" : "capacity/volume",
+    "ne_subtype_LST" : "list",
+    "ne_subtype_DAT" : "date",
+    "ne_subtype_PER" : "period"
 }
-
