@@ -2,14 +2,14 @@ tab(active="active", ng-controller='ExampleCtrl', ng-repeat='queryParams in kwic
   tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
-    span(ng-click='kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
+    span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   .results-kwic(ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
 tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
   tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
-    span(ng-click='graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
+    span(ng-click='$event.preventDefault();graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
   div(constr='GraphResults')
     .graph_header
       .controls(ng-show="!loading")
@@ -56,7 +56,7 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
 tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc}}
-    span(tab-spinner='tab-spinner', ng-click='compareTabs.splice($index, 1)')
+    span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
   .compare_result(ng-class='{loading : loading}')
     .error_msg(ng-if="error")
       object.korp_fail.inline_block(type='image/svg+xml', data='img/korp_fail.svg')
