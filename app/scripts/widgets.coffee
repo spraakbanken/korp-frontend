@@ -92,6 +92,7 @@ Sidebar =
         output.data("attrs", attrs)
         if value == "|" or value == ""
             output.append "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
+            return output
 
 
         if attrs.type == "set"
