@@ -4366,33 +4366,17 @@ settings.posset = {
             }
 };
 settings.fsvlemma = {
-    //pattern : "<a href='http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= key %>%22)+sortBy+wf'><%= val %></a>",
     type : "set",
     label : "baseform",
-    displayType : "autocomplete",
     opts : settings.setOptions,
-    stringify : function(baseform) {
-        return baseform.replace(/:\d+$/,'').replace(/_/g,' ');
-    },
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    },
-//      externalSearch : "http://spraakbanken.gu.se/karp/#search=cql%7C(gf+%3D+%22<%= val %>%22)+sortBy+lemgram",
-//  internalSearch : true
-
+    extended_template : "<input ng-model='model' >"
 };
 settings.fsvlex = {
     type : "set",
     label : "lemgram",
     displayType : "autocomplete",
     opts : settings.setOptions,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    },
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     stringify : function(str) {
         return util.lemgramToString(str, true);
     },
@@ -4406,15 +4390,12 @@ settings.fsvvariants = {
         return util.lemgramToString(str, true);
     },
     displayType : "autocomplete",
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    },
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     opts : settings.setOptions,
     externalSearch : karpLemgramLink,
     internalSearch : true
 };
+
 
 settings.fsvdescription ='<a target="_blank" href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
 
