@@ -182,7 +182,7 @@
             </div>
             <div>
               <input id="show_map" type="checkbox" ng-model="show_map">
-              <label for="show_map">{{'show_map' | loc}}      </label>
+              <label for="show_map">{{'show_map' | loc:lang}}      </label>
             </div>
           </div>
         </div>
@@ -277,14 +277,14 @@
                 <tab ng-controller="MapCtrl">
                   <tab-heading>{{'map' | loc }}</tab-heading>
                   <div>
-                    <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc}} 
+                    <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc:lang}} 
                       <div>
-                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_activate_btn' | loc}}</button>
+                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_activate_btn' | loc:lang}}</button>
                       </div>
                     </div>
-                    <div ng-if="showMap &amp;&amp; !hasResult" class="map_disabled">{{'map_warn' | loc}} 
+                    <div ng-if="showMap &amp;&amp; !hasResult" class="map_disabled">{{'map_warn' | loc:lang}} 
                       <div>
-                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_warn_btn' | loc}}</button>
+                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_warn_btn' | loc:lang}}</button>
                       </div>
                     </div>
                     <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading" class="name_map">
