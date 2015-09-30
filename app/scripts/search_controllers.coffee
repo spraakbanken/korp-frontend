@@ -69,7 +69,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         modalInstance = $modal.open(
             template: """
             <div class="modal-header">
-                <h3 class="modal-title">{{'similar_header' | loc}} (SWE-FN)</h3>
+                <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>
                 <span ng-click="clickX()" class="close-x">×</span>
             </div>
             <div class="modal-body">
@@ -107,6 +107,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.searches = searches
     s.$watch "searches.activeSearch", (search) =>
         # if search.type in ["word", "lemgram"]
+        c.log "search", search
         unless search then return
         page = Number($location.search().page) or 0
         c.log "activesearch", search
@@ -131,7 +132,8 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         else if search.type == "lemgram"
             s.placeholder = search.val
             s.simple_text = ""
-            cqp = "[lex contains '#{search.val}']"
+            # cqp = "[lex contains '#{search.val}']"
+            cqp = simpleSearch.getCQP()
             backend.relatedWordSearch(search.val).then (data) ->
                 s.relatedObj = data
 
@@ -143,7 +145,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         else
             s.placeholder = null
             s.simple_text = ""
-            lemgramResults.resetView()
+            lemgramResults?.resetView()
 
 
     s.lemgramToString = (lemgram) ->
@@ -276,7 +278,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         lang = s.$parent.$parent?.l?.lang
         # c.log "lang", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
-        # "obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in types"
+        # "obj | mapper:valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in types"
         # s.typeOpts = []
         # for obj in types
         #     utils.valfilter obj
@@ -423,5 +425,6 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
 
 
 korpApp.filter "loc", ($rootScope) ->
-    (translationKey) ->
+    (translationKey, lang) ->
         return util.getLocaleString translationKey
+

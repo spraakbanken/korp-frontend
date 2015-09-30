@@ -97,13 +97,16 @@
     CorpusListing.prototype.getStructAttrs = function() {
       var attrs, rest, withDataset;
       attrs = this.mapSelectedCorpora(function(corpus) {
-        var key, ref, value;
+        var key, pos_attrs, ref, value;
         ref = corpus.struct_attributes;
         for (key in ref) {
           value = ref[key];
           value["isStructAttr"] = true;
         }
-        return corpus.struct_attributes;
+        pos_attrs = _.pick(corpus.attributes, function(val, key) {
+          return val.isStructAttr;
+        });
+        return _.extend({}, pos_attrs, corpus.struct_attributes);
       });
       rest = this._invalidateAttrs(attrs);
       withDataset = _.filter(_.pairs(rest), function(item) {
@@ -119,6 +122,9 @@
             ds = origStruct[key].dataset;
             if ($.isArray(ds)) {
               ds = _.object(ds, ds);
+            }
+            if (_.isArray(val.dataset)) {
+              val.dataset = _.object(val.dataset, val.dataset);
             }
             return $.extend(val.dataset, ds);
           }

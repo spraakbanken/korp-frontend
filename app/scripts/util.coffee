@@ -77,8 +77,10 @@ class window.CorpusListing
         attrs = @mapSelectedCorpora((corpus) ->
             for key, value of corpus.struct_attributes
                 value["isStructAttr"] = true
-
-            corpus.struct_attributes
+            
+            pos_attrs = _.pick corpus.attributes, (val, key) ->
+                val.isStructAttr
+            _.extend {}, pos_attrs, corpus.struct_attributes
         )
         rest = @_invalidateAttrs(attrs)
 
@@ -93,6 +95,8 @@ class window.CorpusListing
                 if origStruct[key]?.dataset
                     ds = origStruct[key].dataset
                     ds = _.object(ds, ds) if $.isArray(ds)
+
+                    val.dataset = (_.object val.dataset, val.dataset) if _.isArray val.dataset
                     $.extend val.dataset, ds
 
 
@@ -447,6 +451,7 @@ util.SelectionManager::hasSelected = ->
 
 util.getLocaleString = (key) ->
     lang = (if $("body").scope() then $("body").scope().lang) or settings.defaultLanguage or "sv"
+
     try
         return loc_data[lang][key] or key
     catch e

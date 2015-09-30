@@ -29,12 +29,12 @@
           <ul id="mode_switch">
             <li ng-repeat="mode in visible" ng-class="{selected: mode.selected}" class="visible"><a ng-href="{{getUrl(mode.mode)}}" ng-click="onSelect(mode.mode)">
                  
-                {{mode.localekey | loc}}</a></li>
+                {{mode.localekey | loc:lang}}</a></li>
             <li ng-if="menu.length" class="menu_more visible"> <a popper my="right+15% top+10" at="bottom right" href="javascript:" class="dropdown-toggle">Fler<i class="fa fa-angle-double-down"></i></a>
               <ul class="dropdown-menu popper_menu">
                 <li ng-repeat="mode in menu"><a ng-href="{{getUrl(mode.mode)}}" ng-click="onModeMenuClick(mode.mode)">
                      
-                    {{mode.localekey | loc}}</a></li>
+                    {{mode.localekey | loc:lang}}</a></li>
               </ul>
             </li>
           </ul>
@@ -52,9 +52,9 @@
           </div>
           <div id="log_out" class="link"><span>
                
-              {{'log_out' | loc}}   </span><span class="usrname"> </span></div>
-          <div id="languages"><a href="javascript:" data-mode="sv" ng-click="lang = 'sv'">{{'swedish' | loc}}</a><a href="javascript:" data-mode="en" ng-click="lang = 'en'">{{'english' | loc}}</a></div>
-          <div id="cite"><a href="javascript:" ng-click="citeClick()">{{"about_cite_header" | loc}}</a></div>
+              {{'log_out' | loc:lang}}   </span><span class="usrname"> </span></div>
+          <div id="languages"><a href="javascript:" data-mode="sv" ng-click="lang = 'sv'">{{'swedish' | loc:lang}}</a><a href="javascript:" data-mode="en" ng-click="lang = 'en'">{{'english' | loc:lang}}</a></div>
+          <div id="cite"><a href="javascript:" ng-click="citeClick()">{{"about_cite_header" | loc:lang}}</a></div>
           <div class="clearfix"></div>
         </div>
         <div id="header_left"><a id="logo"><img src="img/korplogo.png"></a>
@@ -90,7 +90,7 @@
       <div id="content">
         <div ng-controller="SearchCtrl">
           <tabset tab-hash="search_tab" class="tabbable search_tabs">
-            <tab heading="{{&quot;simple&quot; | loc}}" ng-if="visibleTabs[0]">
+            <tab heading="{{&quot;simple&quot; | loc:lang}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form class="simple_form">
                   <autoc id="simple_text" placeholder="placeholder" type="lemgram" model="model"></autoc>
@@ -99,13 +99,13 @@
                   <search-submit></search-submit>
                   <div class="opts"><span>
                        
-                       {{'and_include' | loc}} </span>
+                       {{'and_include' | loc:lang}} </span>
                     <input id="prefixChk" type="checkbox" ng-model="prefix">
-                    <label for="prefixChk"> {{'prefix' | loc}} </label>
+                    <label for="prefixChk"> {{'prefix' | loc:lang}} </label>
                     <input id="suffixChk" type="checkbox" ng-model="suffix">
-                    <label for="suffixChk"> {{'suffix' | loc}} </label><span> {{'and' | loc}} </span>
+                    <label for="suffixChk"> {{'suffix' | loc:lang}} </label><span> {{'and' | loc:lang}} </span>
                     <input id="caseChk" type="checkbox" ng-model="isCaseInsensitive">
-                    <label for="caseChk"> {{'case_insensitive' | loc}}  </label>
+                    <label for="caseChk"> {{'case_insensitive' | loc:lang}}  </label>
                   </div>
                 </form>
                 <div id="similar_wrapper" ng-show="relatedObj" ng-class="{open : relatedLimit == 9999}">
@@ -121,38 +121,38 @@
                 <div class="clearfix"></div>
               </div>
             </tab>
-            <tab heading="{{&quot;detailed&quot; | loc}}" ng-if="visibleTabs[1]">
+            <tab heading="{{&quot;detailed&quot; | loc:lang}}" ng-if="visibleTabs[1]">
               <div ng-include="extendedTmpl" class="extended"></div>
             </tab>
-            <tab heading="{{&quot;advanced&quot; | loc}}" ng-if="visibleTabs[2]" ng-controller="AdvancedCtrl">
+            <tab heading="{{&quot;advanced&quot; | loc:lang}}" ng-if="visibleTabs[2]" ng-controller="AdvancedCtrl">
               <div id="advanced">
-                <div class="well well-small">{{'active_cqp_simple' | loc}}:
+                <div class="well well-small">{{'active_cqp_simple' | loc:lang}}:
                   <pre>{{simpleCQP}}</pre>
                 </div>
-                <div class="well well-small">{{'active_cqp_extended' | loc}}:
+                <div class="well well-small">{{'active_cqp_extended' | loc:lang}}:
                   <pre>{{extendedCQP}}</pre>
                 </div>
-                <div class="well well-small">{{'cqp_query' | loc}}:
+                <div class="well well-small">{{'cqp_query' | loc:lang}}:
                   <div class="pull-right"><i class="fa fa-file-o"></i><a href="http://cwb.sourceforge.net/files/CQP_Tutorial.pdf">
                        
-                      {{'cqp_docs' | loc}}</a></div>
+                      {{'cqp_docs' | loc:lang}}</a></div>
                   <textarea id="cqp_string" ng-model="cqp"></textarea>
                 </div>
                 <search-submit pos="right"></search-submit>
               </div>
             </tab>
             <tab ng-if="visibleTabs[3]" ng-controller="CompareSearchCtrl">
-              <tab-heading>{{'compare' | loc}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></tab-heading>
+              <tab-heading>{{'compare' | loc:lang}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></tab-heading>
               <div class="search_compare">
-                <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-small btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc}}</button>
+                <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-small btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc:lang}}</button>
                 <div ng-show="savedSearches.length &lt; 2">
-                  <div class="bs-callout bs-callout-warning">{{'compare_warning' | loc}}</div>
+                  <div class="bs-callout bs-callout-warning">{{'compare_warning' | loc:lang}}</div>
                 </div>
-                <div ng-show="savedSearches.length &gt; 1">{{'compare_vb' | loc}}
-                  <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>{{'compare_with' | loc}}
-                  <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>{{'compare_reduce' | loc}}
+                <div ng-show="savedSearches.length &gt; 1">{{'compare_vb' | loc:lang}}
+                  <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>{{'compare_with' | loc:lang}}
+                  <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>{{'compare_reduce' | loc:lang}}
                   <select ng-model="reduce" ng-options="obj |              mapper:valfilter as obj.label |              loc group by obj.group |              loc for obj in currentAttrs"></select>
-                  <button ng-click="sendCompare()" class="btn btn-small search">{{'compare_vb' | loc}}</button>
+                  <button ng-click="sendCompare()" class="btn btn-small search">{{'compare_vb' | loc:lang}}</button>
                 </div>
               </div>
             </tab>
@@ -178,7 +178,7 @@
             <div ng-show="showStats()"><span rel="localize[statistics]">Statistik</span>: <span id="reduceSelect"></span></div>
             <div ng-show="settings.wordpicture !== false">
               <input id="word_pic" type="checkbox" ng-model="word_pic">
-              <label for="word_pic">{{'show_word_pic' | loc}}</label>
+              <label for="word_pic">{{'show_word_pic' | loc:lang}}</label>
             </div>
             <div>
               <input id="show_map" type="checkbox" ng-model="show_map">
@@ -196,8 +196,8 @@
                   </tab-heading>
                   <div ng-class="{reading_mode : reading_mode, loading: loading}" constr="KWICResults" constr-name="kwicResults" class="results-kwic">
                     <div class="result_controls">
-                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
+                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
+                      <div class="controls_n"><span>{{'num_results' | loc:lang}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">
                           <tbody>
@@ -208,7 +208,7 @@
                         </table>
                       </div>
                     </div>
-                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc:lang}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -228,14 +228,14 @@
                   </div>
                 </tab>
                 <tab ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc}}
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div constr="StatsResults" constr-name="statsResults">
-                    <warning ng-if="no_hits">{{"no_stats_results" | loc}}</warning>
-                    <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
+                    <warning ng-if="no_hits">{{"no_stats_results" | loc:lang}}</warning>
+                    <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                     <div class="stats_header">
-                      <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{graphEnabled ? '' : ('material_warn' | loc)}} " tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"><svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg></span>{{'show_diagram' | loc}}</div>
+                      <div id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} " tooltip-placement="right" class="button btn btn-small"><span class="graph_btn_icon"><svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg></span>{{'show_diagram' | loc:lang}}</div>
                       <div id="showBarPlot"></div>
                     </div>
                     <div id="myGrid"></div>
@@ -248,24 +248,24 @@
                         <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
                         <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
                       </select><a id="generateExportButton"> 
-                        <button class="btn btn-small">{{'statstable_gen_export' | loc}}</button></a><a id="exportButton">
+                        <button class="btn btn-small">{{'statstable_gen_export' | loc:lang}}</button></a><a id="exportButton">
                          
-                        &nbsp;{{'statstable_download' | loc}}</a>
+                        &nbsp;{{'statstable_download' | loc:lang}}</a>
                     </div>
                   </div>
                 </tab>
                 <tab ng-if="_settings.wordpicture != false" ng-controller="wordpicCtrl" select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc}}
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
-                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc}} 
+                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}} 
                     <div>
-                      <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'word_pic_warn_btn' | loc}}</button>
+                      <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'word_pic_warn_btn' | loc:lang}}</button>
                     </div>
                   </div>
-                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc}} </warning>
-                  <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
-                  <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc}}</warning>
+                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc:lang}} </warning>
+                  <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
+                  <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc:lang}}</warning>
                   <div constr="LemgramResults" constr-name="lemgramResults">
                     <div id="wordclassChkParent" ng-show="word_pic &amp;&amp; instance.hasData">
                       <input id="wordclassChk" type="checkbox">
@@ -296,8 +296,8 @@
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="$event.preventDefault();kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}" constr="ExampleResults" class="results-kwic">
                     <div class="result_controls">
-                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc}}</warning>
-                      <div class="controls_n"><span>{{'num_results' | loc}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
+                      <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
+                      <div class="controls_n"><span>{{'num_results' | loc:lang}}: </span><span ng-bind-html="hits_display | trust" class="num-result"></span></div>
                       <div ng-if="hitsPictureData.length &gt; 1" class="hits_picture">
                         <table class="hits_picture_table">
                           <tbody>
@@ -308,7 +308,7 @@
                         </table>
                       </div>
                     </div>
-                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc:lang}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -328,7 +328,7 @@
                   </div>
                 </tab>
                 <tab active="active" ng-repeat="data in graphTabs" ng-controller="graphCtrl">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc}}
+                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc:lang}}
                     <div style="width:{{progress || 0}}%" ng-show="loading" class="tab_progress"></div><span ng-click="$event.preventDefault();graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
                   </tab-heading>
                   <div constr="GraphResults">
@@ -336,19 +336,19 @@
                       <div ng-show="!loading" class="controls">
                         
                         <div class="btn-group form_switch">
-                          <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-small">{{'line' | loc}}</label>
-                          <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-small">{{'bar' | loc}}</label>
-                          <label ng-model="$parent.mode" btn-radio="'table'" class="btn btn-default btn-small">{{'table' | loc}}</label>
+                          <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-small">{{'line' | loc:lang}}</label>
+                          <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-small">{{'bar' | loc:lang}}</label>
+                          <label ng-model="$parent.mode" btn-radio="'table'" class="btn btn-default btn-small">{{'table' | loc:lang}}</label>
                         </div>
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
                       <div ng-show="!loading &amp;&amp; isGraph()" class="legend">
-                        <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc}}" class="line"><a class="action"></a>
-                          <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc}} </em></span>
+                        <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc:lang}}" class="line"><a class="action"></a>
+                          <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc:lang}} </em></span>
                         </div>
                       </div>
                       <div style="clear: both;"></div>
-                      <div ng-show="loading" class="drawing">{{'drawing' | loc}}</div>
+                      <div ng-show="loading" class="drawing">{{'drawing' | loc:lang}}</div>
                     </div>
                     <div ng-show="isGraph()" class="chart"></div>
                     <div ng-show="isGraph()" class="zoom_slider"></div>
@@ -361,19 +361,19 @@
                       <select class="timeKindOfFormat">
                         <option value="CSV" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
                         <option value="TSV" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
-                      </select><a class="export btn btn-default btn-small">{{'statstable_export' | loc}}</a>
+                      </select><a class="export btn btn-default btn-small">{{'statstable_export' | loc:lang}}</a>
                     </div>
                   </div>
                 </tab>
                 <tab active="active" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">
-                  <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc}}<span tab-spinner="tab-spinner" ng-click="$event.preventDefault();compareTabs.splice($index, 1)"></span></tab-heading>
+                  <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="$event.preventDefault();compareTabs.splice($index, 1)"></span></tab-heading>
                   <div ng-class="{loading : loading}" class="compare_result">
                     <div ng-if="error" class="error_msg">
                       <object type="image/svg+xml" data="img/korp_fail.svg" class="korp_fail inline_block"><img src="img/korp_fail.svg" class="korp_fail"></object>
                       <div rel="localize[fail_text]" class="fail_text inline_block">Ett fel har uppstått. </div>
                     </div>
                     <div ng-if="!error" class="column column_1">
-                      <h2>{{'compare_distinctive' | loc}} <em>{{cmp1.label}}</em></h2>
+                      <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp1.label}}</em></h2>
                       <ul>
                         <li ng-repeat="tuple in tables.negative" ng-click="rowClick(tuple, 0)">
                           <div meter="tuple" max="max[1]" stringify="stringify" class="meter"></div>
@@ -381,7 +381,7 @@
                       </ul>
                     </div>
                     <div class="column column_2">
-                      <h2>{{'compare_distinctive' | loc}} <em>{{cmp2.label}}</em></h2>
+                      <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp2.label}}</em></h2>
                       <ul>
                         <li ng-repeat="tuple in tables.positive" ng-click="rowClick(tuple, 1)">
                           <div meter="tuple" max="max[1]" stringify="stringify" class="meter"></div>
@@ -405,7 +405,7 @@
     </div>
     <script id="login_modal" type="text/ng-template">
       <div class="modal-header">
-        <h2>{{'log_in' | loc}}</h2>
+        <h2>{{'log_in' | loc:lang}}</h2>
         <span ng-click="clickX()" class="close-x">×</span>
       
       </div>

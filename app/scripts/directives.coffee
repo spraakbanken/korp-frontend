@@ -99,7 +99,7 @@ korpApp.directive "escaper", () ->
 
 korpApp.directive "tokenValue", ($compile, $controller) ->
     # defaultTmpl = "<input ng-model='model' 
-    #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc}} '>"
+    #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc:lang}} '>"
     
     getDefaultTmpl = _.template """
                 <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
@@ -109,8 +109,8 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
                         Aa
                 </span> 
                 <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc}}</a></li>
+                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
+                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
                 </ul>
                 """
     defaultController = ["$scope", ($scope) ->
@@ -155,7 +155,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             # valueObj.controller?(scope, _.omit valueObj)
             if valueObj.value == "word"
-                tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc}}>'"""}
+                tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
             else
                 tmplObj = {maybe_placeholder : ""}
 
@@ -226,20 +226,20 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     template : '''
     <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">{{'search' | loc}}</button>
+            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">{{'search' | loc:lang}}</button>
             <button class="btn btn-small opener" ng-click="togglePopover($event)">
                 <span class="caret"></span>
             </button>
         </div>
         <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">
             <div class="arrow"></div>
-            <h3 class="popover-title">{{'compare_save_header' | loc}}</h3>
+            <h3 class="popover-title">{{'compare_save_header' | loc:lang}}</h3>
             <form class="popover-content" ng-submit="onSubmit()">
                 <div>
-                    <label for="cmp_input">{{'compare_name' | loc}} :</label> <input id="cmp_input" ng-model="name">
+                    <label for="cmp_input">{{'compare_name' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-small">{{'compare_save' | loc}}</button>
+                    <button class="btn btn-primary btn-small">{{'compare_save' | loc:lang}}</button>
                 </div>
             </form>
         </div>
@@ -542,10 +542,10 @@ korpApp.directive "kwicPager", () ->
          boundary-links="true" 
          rotate="false" 
          num-pages="$parent.numPages"> </pagination>
-      <div class="page_input"><span>{{'goto_page' | loc}} </span>
+      <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
         <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)" 
             ng-click="$event.stopPropagation()" />
-        {{'of' | loc}} {{numPages}}
+        {{'of' | loc:lang}} {{numPages}}
       </div>
 
     </div>

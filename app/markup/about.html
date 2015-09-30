@@ -4,10 +4,10 @@
 
 </div>
 <div id="about_body" class="modal-body" >
-	<p ng-bind-html="'about_body' | loc | trust" ></p>
+	<p ng-bind-html="'about_body' | loc:lang | trust" ></p>
 	
-	<b ng-bind-html="'about_cite_header' | loc | trust"></b>
-	<p ng-bind-html="'about_cite' | loc | trust"></p>
+	<b ng-bind-html="'about_cite_header' | loc:lang | trust"></b>
+	<p ng-bind-html="'about_cite' | loc:lang | trust"></p>
 
 	<div>
 		<b rel="localize[about_man]">

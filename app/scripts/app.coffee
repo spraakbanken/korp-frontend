@@ -18,7 +18,7 @@ window.korpApp = angular.module('korpApp', [
 korpApp.run ($rootScope, $location, utils, searches) ->
     s = $rootScope
     s._settings = settings
-    s.lang = "sv"
+    window.lang = s.lang = $location.search().lang or settings.defaultLang
     s.word_selected = null
     s.isLab = window.isLab;
 

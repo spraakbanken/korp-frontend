@@ -1,54 +1,54 @@
 div(ng-controller="SearchCtrl")
   tabset.tabbable.search_tabs(tab-hash='search_tab')
-    tab(heading='{{"simple" | loc}}', ng-if="visibleTabs[0]")
+    tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       include simple
-    tab(heading='{{"detailed" | loc}}', ng-if="visibleTabs[1]")
+    tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
       .extended(ng-include='extendedTmpl')
 
-    tab(heading='{{"advanced" | loc}}', ng-if="visibleTabs[2]", ng-controller="AdvancedCtrl")
+    tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", ng-controller="AdvancedCtrl")
       #advanced
         .well.well-small
-          | {{'active_cqp_simple' | loc}}:
+          | {{'active_cqp_simple' | loc:lang}}:
 
           pre {{simpleCQP}}
 
         .well.well-small
-          | {{'active_cqp_extended' | loc}}:
+          | {{'active_cqp_extended' | loc:lang}}:
 
           pre {{extendedCQP}}
         
         .well.well-small
-          {{'cqp_query' | loc}}:
+          {{'cqp_query' | loc:lang}}:
           .pull-right
             i.fa.fa-file-o
             a(href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf') 
-              | {{'cqp_docs' | loc}}
+              | {{'cqp_docs' | loc:lang}}
           textarea#cqp_string(ng-model="cqp")
         search-submit(pos='right')
-        //- button.btn.btn-small#sendBtn {{'search' | loc}}
+        //- button.btn.btn-small#sendBtn {{'search' | loc:lang}}
     tab(ng-if="visibleTabs[3]", ng-controller='CompareSearchCtrl')
       tab-heading
-        | {{'compare' | loc}} 
+        | {{'compare' | loc:lang}} 
         span.badge(ng-if='savedSearches.length') {{savedSearches.length}}
       .search_compare()
         button.btn.btn-small.btn-danger.delete(ng-click='deleteCompares()', ng-show='savedSearches.length > 1') 
           i.fa.fa-trash-o
-          | {{'compare_delete' | loc}}
+          | {{'compare_delete' | loc:lang}}
         div(ng-show='savedSearches.length < 2')
           .bs-callout.bs-callout-warning
-            | {{'compare_warning' | loc}}
+            | {{'compare_warning' | loc:lang}}
         div(ng-show='savedSearches.length > 1')
-          | {{'compare_vb' | loc}}
+          | {{'compare_vb' | loc:lang}}
           select(ng-options='search.label for search in savedSearches', ng-model='cmp1')
-          | {{'compare_with' | loc}}
+          | {{'compare_with' | loc:lang}}
           select(ng-options='search.label for search in savedSearches', ng-model='cmp2')
-          | {{'compare_reduce' | loc}}
+          | {{'compare_reduce' | loc:lang}}
           select(ng-model='reduce', 
             ng-options='obj | \
              mapper:valfilter as obj.label | \
              loc group by obj.group | \
              loc for obj in currentAttrs')
-          button.btn.btn-small.search(ng-click='sendCompare()') {{'compare_vb' | loc}}
+          button.btn.btn-small.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
   #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div
       span(style='font-size: .9em;') KWIC: 
@@ -71,7 +71,7 @@ div(ng-controller="SearchCtrl")
       span#reduceSelect
     div(ng-show="settings.wordpicture !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")
-      label(for="word_pic") {{'show_word_pic' | loc}}
+      label(for="word_pic") {{'show_word_pic' | loc:lang}}
     div()
       input#show_map(type="checkbox", ng-model="show_map")
-      label(for="show_map") {{'show_map' | loc}}      
+      label(for="show_map") {{'show_map' | loc:lang}}      

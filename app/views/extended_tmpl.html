@@ -2,5 +2,5 @@
 <div ng-controller="ExtendedSearch">
   <div id="query_table" extended-list="extended-list" cqp="cqp"></div>
   <search-submit pos="right"></search-submit><span rel="localize[within]"></span>
-  <select ng-model="within" ng-options="item.value as ('within_' + item.value | loc) for item in withins" class="within_select"></select>
+  <select ng-model="within" ng-options="item.value as ('within_' + item.value | loc:lang) for item in withins" class="within_select"></select>
 </div>

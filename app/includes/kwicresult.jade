@@ -1,8 +1,8 @@
 .result_controls
   warning(ng-if="aborted && !loading")
-    | {{'search_aborted' | loc}}
+    | {{'search_aborted' | loc:lang}}
   .controls_n
-    span {{'num_results' | loc}}: 
+    span {{'num_results' | loc:lang}}: 
     span.num-result(ng-bind-html="hits_display | trust")
   //- .progress_container
   //-   progress(value='{{progress || 0}}', max='100')
@@ -20,8 +20,8 @@
 kwic-pager
 
 //- input(type="text", ng-model="page", ng-change="setPage($event, page - 1)", ngModelOptions="{ updateOn: 'blur'}")
-span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc}}
-span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc}}
+span.reading_btn.show.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc:lang}}
+span.reading_btn.hide.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc:lang}}
 .table_scrollarea(ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}")
   table.results_table.kwic(cellspacing='0')
     tr.sentence(ng-repeat='sentence in kwic'

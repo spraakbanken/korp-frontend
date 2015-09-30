@@ -23,11 +23,11 @@
                             <div class="right_col inline_block" style="margin-left: 5px;">
                                 <div class="arg_selects">
                                     <select class="arg_type" 
-                                        ng-options="obj | mapper:valfilter as obj.label | loc group by obj.group | loc for obj in types" 
+                                        ng-options="obj | mapper:valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in types" 
                                         ng-model="or.type" ng-change="setDefault(or)"></select>
                                     
                                     <select class="arg_opts" 
-                                        ng-options="pair[1] as pair[0] | loc for pair in getOpts(or.type)" 
+                                        ng-options="pair[1] as pair[0] | loc:lang for pair in getOpts(or.type)" 
                                         ng-model="or.op" ></select>
                                 </div>
                                 <!-- <input class="arg_value" ng-model="or.val"> -->
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="arg_footer">
-                        <span class="link" ng-click="addOr(and)">{{'or' | loc}}</span>
+                        <span class="link" ng-click="addOr(and)">{{'or' | loc:lang}}</span>
                         <div style="clear:both;"></div>
                     </div>
                 </div>
@@ -49,19 +49,19 @@
                     <button popper class="btn btn-mini"><i class="fa fa-cog"></i></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
-                            <a ng-click="toggleRepeat(token)" rel="localize[repeat]">{{'repeat' | loc}}</a>
+                            <a ng-click="toggleRepeat(token)" rel="localize[repeat]">{{'repeat' | loc:lang}}</a>
                         </li>
-                        <li><a ng-click="toggleStart(token)" rel="localize[sent_start]">{{'sent_start' | loc}}</a></li>
-                        <li><a ng-click="toggleEnd(token)" rel="localize[sent_end]">{{'sent_end' | loc}}</a></li>
+                        <li><a ng-click="toggleStart(token)" rel="localize[sent_start]">{{'sent_start' | loc:lang}}</a></li>
+                        <li><a ng-click="toggleEnd(token)" rel="localize[sent_end]">{{'sent_end' | loc:lang}}</a></li>
                     </ul>
         
             
                     <div class="repeat" ng-show="token.repeat">
-                        <span rel="localize[repeat]">{{'repeat' | loc}}</span>
+                        <span rel="localize[repeat]">{{'repeat' | loc:lang}}</span>
                         <input type="number" ng-model="token.repeat[0]" >
-                        <span rel="localize[to]">{{'to' | loc}}</span>
+                        <span rel="localize[to]">{{'to' | loc:lang}}</span>
                         <input type="number" ng-model="token.repeat[1]">
-                        <span rel="localize[times]">{{'times' | loc}}</span>
+                        <span rel="localize[times]">{{'times' | loc:lang}}</span>
                     </div>
             
                     <div style="clear:both;"></div>
@@ -69,11 +69,11 @@
             
                 <div class="lower_footer">
                     <span  class="lbound close_token" ng-show="token.bound.lbound">
-                        <span rel="localize[sent_start]">{{'sent_start' | loc}}</span>
+                        <span rel="localize[sent_start]">{{'sent_start' | loc:lang}}</span>
                         <i class="fa fa-1 fa-times" ng-click="toggleStart(token)"></i>
                     </span>
                     <span class="rbound close_token" ng-show="token.bound.rbound">
-                        <span rel="localize[sent_end]">{{'sent_end' | loc}}</span>
+                        <span rel="localize[sent_end]">{{'sent_end' | loc:lang}}</span>
                         <i class="fa fa-1 fa-times" ng-click="toggleEnd(token)"></i>
                     </span>
                 </div>

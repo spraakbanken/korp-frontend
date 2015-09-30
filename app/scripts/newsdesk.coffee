@@ -12,7 +12,7 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
         </div>
         <div class="popover newsdesk-popover" ng-click="onPopoverClick($event)" to-body>
             <div class="arrow"></div>
-            <h2 class="popover-title">{{header | loc}}<span style="float:right;cursor:pointer" ng-click="popHide()">×</span></h2>
+            <h2 class="popover-title">{{header | loc:lang}}<span style="float:right;cursor:pointer" ng-click="popHide()">×</span></h2>
             <div class="newsdesk-around-items">
                 <div class="newsdesk-news-item" ng-repeat="item in newsitems" ng-class="{'newsdesk-new-news-item': (item.d > lastChecked)}">
                     <h4>{{item.t[currentLang]}}</h4>

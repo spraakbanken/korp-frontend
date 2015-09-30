@@ -11,6 +11,9 @@ settings.autocomplete = true;
 // settings.wordpicture = false;
 settings.hits_per_page_default = 25
 
+settings.languages = ["sv", "en"];
+settings.defaultLanguage = "sv";
+
 // for extended search dropdown, can be 'union' or 'intersection'
 settings.word_attribute_selector = "union"
 settings.struct_attribute_selector = "union"
@@ -150,9 +153,6 @@ if(isLab) {
 }
 
 
-settings.languages = ["sv", "en"];
-
-
 var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(lemgram+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
 
 settings.primaryColor = "rgb(221, 233, 255)";
@@ -174,7 +174,7 @@ settings.spWithin = {
     "paragraph" : "paragraph"
 };
 
-settings.defaultLanguage = "sv";
+
 
 /*
  * ATTRIBUTES
@@ -281,7 +281,7 @@ attrs.msd = {
             modal = $modal.open({
                 template : '<div>' +
                                 '<div class="modal-header">' +
-                                    '<h3 class="modal-title">{{\'msd_long\' | loc}}</h3>' +
+                                    '<h3 class="modal-title">{{\'msd_long\' | loc:lang}}</h3>' +
                                     '<span ng-click="clickX()" class="close-x">×</span>' +
                                 '</div>' +
                                 '<div class="modal-body" ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +

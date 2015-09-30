@@ -123,6 +123,7 @@
       if (hasChanged("lang")) {
         newLang = search().lang || settings.defaultLanguage;
         $("body").scope().lang = newLang;
+        window.lang = newLang;
         util.localize();
         $("#languages").radioList("select", newLang);
       }

@@ -45,9 +45,7 @@ $(document).keyup (event) ->
 $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     c.log "preloading done, t = ", $.now() - t
 
-    # angular.element(document).ready () ->
     angular.bootstrap(document, ['korpApp'])
-    # $("body").scope().$apply()
 
     try 
         corpus = search()["corpus"]
@@ -112,6 +110,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
         if hasChanged("lang")
             newLang = search().lang || settings.defaultLanguage
             $("body").scope().lang = newLang
+            window.lang = newLang
             # loc_dfd = util.initLocalize()
             # loc_dfd.done ->
             util.localize()
