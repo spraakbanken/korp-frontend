@@ -174,7 +174,29 @@
     };
   });
 
-  korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q) {
+  korpApp.factory('nameEntitySearch', function($rootScope, $q) {
+    var NameEntities;
+    NameEntities = (function() {
+      function NameEntities() {}
+
+      NameEntities.prototype.request = function(cqp) {
+        this.def = $q.defer();
+        this.promise = this.def.promise;
+        $rootScope.$broadcast('map_data_available', cqp, settings.corpusListing.stringifySelected(true));
+        return new model.NameProxy().makeRequest(cqp).then((function(_this) {
+          return function(data) {
+            return _this.def.resolve(data);
+          };
+        })(this));
+      };
+
+      return NameEntities;
+
+    })();
+    return new NameEntities();
+  });
+
+  korpApp.factory('searches', function(utils, $location, $rootScope, $http, $q, nameEntitySearch) {
     var Searches, oldValues, searches;
     Searches = (function() {
       function Searches() {
@@ -198,7 +220,8 @@
 
       Searches.prototype.kwicSearch = function(cqp, isPaging) {
         this.kwicRequest(cqp, isPaging);
-        return statsResults.makeRequest(cqp);
+        statsResults.makeRequest(cqp);
+        return this.nameEntitySearch(cqp);
       };
 
       Searches.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix, isPaging) {
@@ -206,10 +229,17 @@
         cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix);
         statsResults.makeRequest(cqp);
         this.kwicRequest(cqp, isPaging);
+        this.nameEntitySearch(cqp);
         if (settings.wordpicture === false) {
           return;
         }
         return lemgramResults.makeRequest(lemgram, "lemgram");
+      };
+
+      Searches.prototype.nameEntitySearch = function(cqp) {
+        if ($location.search().show_map != null) {
+          return nameEntitySearch.request(cqp);
+        }
       };
 
       Searches.prototype.getMode = function() {

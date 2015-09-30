@@ -415,6 +415,122 @@
     });
   });
 
+  korpApp.controller("MapCtrl", function($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, geocoder) {
+    var getCqpExpr, s, updateMapData;
+    s = $scope;
+    s.loading = false;
+    s.hasResult = false;
+    s.$watch((function() {
+      return $location.search().result_tab;
+    }), function(val) {
+      return $timeout((function() {
+        return s.tabVisible = val === 1;
+      }), 0);
+    });
+    s.showMap = $location.search().show_map != null;
+    s.$watch((function() {
+      return $location.search().show_map;
+    }), function(val) {
+      var currentCorpora, currentCqp, _ref, _ref1;
+      s.showMap = Boolean(val);
+      if (s.showMap) {
+        currentCqp = getCqpExpr();
+        currentCorpora = settings.corpusListing.stringifySelected(true);
+        if (currentCqp !== ((_ref = s.lastSearch) != null ? _ref.cqp : void 0) || currentCorpora !== ((_ref1 = s.lastSearch) != null ? _ref1.corpora : void 0)) {
+          return s.hasResult = false;
+        }
+      }
+    });
+    s.activate = function() {
+      var cqpExpr;
+      $location.search("show_map", true);
+      s.showMap = true;
+      cqpExpr = getCqpExpr();
+      if (cqpExpr) {
+        return nameEntitySearch.request(cqpExpr);
+      }
+    };
+    getCqpExpr = function() {
+      var cqpExpr, search;
+      search = searches.activeSearch;
+      cqpExpr = null;
+      if ((search != null ? search.type : void 0) === "word") {
+        cqpExpr = simpleSearch.getCQP(search.val);
+      } else if ((search != null ? search.type : void 0) === "lemgram") {
+        cqpExpr = "[lex contains '" + search.val + "']";
+      }
+      return cqpExpr;
+    };
+    s.center = {
+      lat: 62.99515845212052,
+      lng: 16.69921875,
+      zoom: 4
+    };
+    s.hoverTemplate = "<div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n<div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{abs_occurrences}}</span></div>\n<div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{rel_occurrences}}</span></div>";
+    s.markers = {};
+    s.showTime = true;
+    s.$on("map_data_available", function(_event, cqp, corpora) {
+      if (s.showMap) {
+        s.lastSearch = {
+          cqp: cqp,
+          corpora: corpora
+        };
+        s.loading = true;
+        updateMapData();
+        return s.hasResult = true;
+      }
+    });
+    return updateMapData = function() {
+      return nameEntitySearch.promise.then(function(data) {
+        if (data.count !== 0) {
+          markers(data.total.relative).then(function(markersResult) {
+            var key, mrks, value, _fn;
+            mrks = markersResult.markers;
+            _fn = function(key, value) {
+              var html, message, newScope;
+              message = value.message;
+              html = '<span class="link" ng-click="newKWICSearch()">' + message + '</span>';
+              newScope = s.$new();
+              newScope.name = message;
+              newScope.abs_occurrences = data.total.absolute[message];
+              newScope.rel_occurrences = Math.round((data.total.relative[message] + 0.00001) * 1000) / 1000;
+              newScope.newKWICSearch = function() {
+                var cl, opts;
+                cl = settings.corpusListing;
+                opts = {
+                  start: 0,
+                  end: 24,
+                  ajaxParams: {
+                    command: "query",
+                    cqp: getCqpExpr(),
+                    cqp2: "[word='" + message + "' & pos='PM']",
+                    corpus: cl.stringifySelected(),
+                    show_struct: _.keys(cl.getStructAttrs()),
+                    expand_prequeries: true
+                  }
+                };
+                return $rootScope.kwicTabs.push(opts);
+              };
+              value.message = html;
+              return value.getMessageScope = function() {
+                return newScope;
+              };
+            };
+            for (key in mrks) {
+              if (!__hasProp.call(mrks, key)) continue;
+              value = mrks[key];
+              _fn(key, value);
+            }
+            return s.markers = mrks;
+          });
+        } else {
+          s.markers = {};
+        }
+        return s.loading = false;
+      });
+    };
+  });
+
 }).call(this);
 
 //# sourceMappingURL=result_controllers.js.map

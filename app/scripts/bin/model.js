@@ -395,6 +395,79 @@
       this.page_incr = 25;
     }
 
+    StatsProxy.prototype.processData = function(def, data, reduceval) {
+      var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
+      minWidth = 100;
+      columns = [
+        {
+          id: "hit",
+          name: "stats_hit",
+          field: "hit_value",
+          sortable: true,
+          formatter: settings.reduce_stringify(reduceval),
+          minWidth: minWidth
+        }, {
+          id: "total",
+          name: "stats_total",
+          field: "total_value",
+          sortable: true,
+          formatter: this.valueFormatter,
+          minWidth: minWidth
+        }
+      ];
+      $.each(_.keys(data.corpora).sort(), (function(_this) {
+        return function(i, corpus) {
+          return columns.push({
+            id: corpus,
+            name: settings.corpora[corpus.toLowerCase()].title,
+            field: corpus + "_value",
+            sortable: true,
+            formatter: _this.valueFormatter,
+            minWidth: minWidth
+          });
+        };
+      })(this));
+      wordArray = _.keys(data.total.absolute);
+      if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
+        groups = _.groupBy(wordArray, function(item) {
+          return item.replace(/:\d+/g, "");
+        });
+        wordArray = _.keys(groups);
+      }
+      sizeOfDataset = wordArray.length;
+      dataset = new Array(sizeOfDataset + 1);
+      statsWorker = new Worker("scripts/statistics_worker.js");
+      statsWorker.onmessage = function(e) {
+        c.log("Called back by the worker!\n");
+        c.log(e);
+        return def.resolve([data, wordArray, columns, e.data]);
+      };
+      return statsWorker.postMessage({
+        "total": data.total,
+        "dataset": dataset,
+        "allrows": wordArray,
+        "corpora": data.corpora,
+        "groups": groups,
+        loc: {
+          'sv': "sv-SE",
+          'en': "gb-EN"
+        }[$("body").scope().lang]
+      });
+    };
+
+    StatsProxy.prototype.makeParameters = function(reduceval, cqp) {
+      var parameters;
+      parameters = {
+        command: "count",
+        groupby: reduceval,
+        cqp: cqp,
+        corpus: settings.corpusListing.stringifySelected(true),
+        incremental: $.support.ajaxProgress,
+        defaultwithin: "sentence"
+      };
+      return parameters;
+    };
+
     StatsProxy.prototype.makeRequest = function(cqp, callback, within) {
       var data, def, reduceval, self, _ref;
       self = this;
@@ -403,14 +476,7 @@
       if (reduceval === "word_insensitive") {
         reduceval = "word";
       }
-      data = {
-        command: "count",
-        groupby: reduceval,
-        cqp: cqp,
-        corpus: settings.corpusListing.stringifySelected(true),
-        incremental: $.support.ajaxProgress,
-        defaultwithin: "sentence"
-      };
+      data = this.makeParameters(reduceval, cqp);
       if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
         data.split = reduceval;
       }
@@ -440,70 +506,18 @@
           if (progressObj == null) {
             return;
           }
-          return callback(progressObj);
+          return typeof callback === "function" ? callback(progressObj) : void 0;
         },
-        success: function(data) {
-          var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
-          if (data.ERROR != null) {
-            c.log("gettings stats failed with error", data.ERROR);
-            def.reject(data);
-            return;
-          }
-          minWidth = 100;
-          columns = [
-            {
-              id: "hit",
-              name: "stats_hit",
-              field: "hit_value",
-              sortable: true,
-              formatter: settings.reduce_stringify(reduceval),
-              minWidth: minWidth
-            }, {
-              id: "total",
-              name: "stats_total",
-              field: "total_value",
-              sortable: true,
-              formatter: self.valueFormatter,
-              minWidth: minWidth
+        success: (function(_this) {
+          return function(data) {
+            if (data.ERROR != null) {
+              c.log("gettings stats failed with error", data.ERROR);
+              def.reject(data);
+              return;
             }
-          ];
-          $.each(_.keys(data.corpora).sort(), function(i, corpus) {
-            return columns.push({
-              id: corpus,
-              name: settings.corpora[corpus.toLowerCase()].title,
-              field: corpus + "_value",
-              sortable: true,
-              formatter: self.valueFormatter,
-              minWidth: minWidth
-            });
-          });
-          wordArray = _.keys(data.total.absolute);
-          if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
-            groups = _.groupBy(wordArray, function(item) {
-              return item.replace(/:\d+/g, "");
-            });
-            wordArray = _.keys(groups);
-          }
-          sizeOfDataset = wordArray.length;
-          dataset = new Array(sizeOfDataset + 1);
-          statsWorker = new Worker("scripts/statistics_worker.js");
-          statsWorker.onmessage = function(e) {
-            c.log("Called back by the worker!\n");
-            c.log(e);
-            return def.resolve([data, wordArray, columns, e.data]);
+            return _this.processData(def, data, reduceval);
           };
-          return statsWorker.postMessage({
-            "total": data.total,
-            "dataset": dataset,
-            "allrows": wordArray,
-            "corpora": data.corpora,
-            "groups": groups,
-            loc: {
-              'sv': "sv-SE",
-              'en': "gb-EN"
-            }[$("body").scope().lang]
-          });
-        }
+        })(this)
       }));
       return def.promise();
     };
@@ -515,6 +529,28 @@
     return StatsProxy;
 
   })(BaseProxy);
+
+  model.NameProxy = (function(_super) {
+    __extends(NameProxy, _super);
+
+    function NameProxy() {
+      NameProxy.__super__.constructor.call(this);
+    }
+
+    NameProxy.prototype.makeParameters = function(reduceval, cqp) {
+      var parameters;
+      parameters = NameProxy.__super__.makeParameters.call(this, reduceval, cqp);
+      parameters.cqp2 = "[pos='PM']";
+      return parameters;
+    };
+
+    NameProxy.prototype.processData = function(def, data, reduceval) {
+      return def.resolve(data);
+    };
+
+    return NameProxy;
+
+  })(model.StatsProxy);
 
   model.AuthenticationProxy = (function() {
     function AuthenticationProxy() {

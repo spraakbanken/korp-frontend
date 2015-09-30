@@ -145,11 +145,21 @@ korpApp.factory 'backend', ($http, $q, utils) ->
 
         return def.promise
 
+korpApp.factory 'nameEntitySearch', ($rootScope, $q) ->
+    
+    class NameEntities 
+        constructor: () ->
+      
+        request: (cqp) ->
+            @def = $q.defer()
+            @promise = @def.promise 
+            $rootScope.$broadcast 'map_data_available', cqp, settings.corpusListing.stringifySelected(true)
+            new model.NameProxy().makeRequest(cqp).then (data) =>
+                @def.resolve data
+    
+    return new NameEntities()
 
-
-
-
-korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
+korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntitySearch) ->
 
     class Searches
         constructor : () ->
@@ -178,12 +188,15 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             # kwicResults.@            
             @kwicRequest cqp, isPaging
             statsResults.makeRequest cqp
+            @nameEntitySearch cqp
+            
 
         lemgramSearch : (lemgram, searchPrefix, searchSuffix, isPaging) ->
             #TODO: this is dumb, move the cqp calculations elsewhere
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
             @kwicRequest cqp, isPaging
+            @nameEntitySearch cqp 
 
             if settings.wordpicture == false then return
             
@@ -197,6 +210,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q) ->
             #         safeApply lemgramResults.s, () =>
             #             lemgramResults.hidePreloader()
 
+        nameEntitySearch : (cqp) ->
+            if $location.search().show_map?
+                nameEntitySearch.request cqp
 
         getMode : () ->
             def = $q.defer()

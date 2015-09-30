@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="components/rickshaw/rickshaw.css">
     <!-- endbuild -->
     <link type="text/css" href="components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="components/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="components/geokorp/dist/styles/geokorp.min.css">
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
     <title>Korp</title>
@@ -175,12 +177,16 @@
               <input id="word_pic" type="checkbox" ng-model="word_pic">
               <label for="word_pic">{{'show_word_pic' | loc}}</label>
             </div>
+            <div>
+              <input id="show_map" type="checkbox" ng-model="show_map">
+              <label for="show_map">{{'show_map' | loc}}      </label>
+            </div>
           </div>
         </div>
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
-              <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
+              <tabset tab-hash="result_tab" class="tabbable result_tabs">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
@@ -263,6 +269,24 @@
                       <label for="wordclassChk" rel="localize[show_wordclass]"></label>
                     </div>
                     <div ng-show="word_pic" class="content_target"></div>
+                  </div>
+                </tab>
+                <tab ng-controller="MapCtrl">
+                  <tab-heading>{{'map' | loc }}</tab-heading>
+                  <div>
+                    <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc}} 
+                      <div>
+                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_activate_btn' | loc}}</button>
+                      </div>
+                    </div>
+                    <div ng-if="showMap &amp;&amp; !hasResult" class="map_disabled">{{'map_warn' | loc}} 
+                      <div>
+                        <button ng-click="activate()" class="btn btn-small activate_word_pic">{{'map_warn_btn' | loc}}</button>
+                      </div>
+                    </div>
+                    <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading" class="name_map">
+                      <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-hover-template="hoverTemplate"></sb-map>
+                    </div>
                   </div>
                 </tab>
                 <tab active="active" ng-controller="ExampleCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
@@ -481,6 +505,12 @@
     <script src="lib/jquery.tooltip.pack.js"></script>
     <script src="components/d3/d3.min.js"></script>
     <script src="components/rickshaw/rickshaw.min.js"></script>
+    <script src="components/angular-simple-logger/dist/index.js"></script>
+    <script src="components/leaflet/dist/leaflet.js"></script>
+    <script src="components/leaflet/dist/leaflet-src.js"></script>
+    <script src="components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="components/leaflet-providers/leaflet-providers.js"></script>
+    <script src="components/geokorp/dist/scripts/geokorp.min.js"></script>
     <script>
       window.currentMode = $.deparam.querystring().mode || "default"
       

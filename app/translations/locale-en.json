@@ -85,6 +85,16 @@
     "word_pic_bad_search" : "Could not generate a word picture from you search. Only single word searches or lemgram searches are currenly supported.",
     "search_aborted" : "The search was aborted",
 
+    "show_map" : "Show map",
+    "map_activate" : "The map is disabled",
+    "map_activate_btn" : "Enable and search",
+    "map_warn" : "No data available for current search",
+    "map_warn_btn" : "Search",
+    "map_name" : "Name",
+    "map_abs_occurrences" : "Absolute occurrences",
+    "map_rel_occurrences" : "Relative occurrences",
+
+
     "word_is" : "word is",
     "word_is_not" : "word is not",
     "word_beginswith" : "word begins with",
@@ -152,6 +162,7 @@
     "svm" : "Molise Slavic",
     "statistics" : "Statistics",
     "word_picture" : "Word picture",
+    "map" : "Map",
     "sort_default" : "sort within corpora",
     "within" : "within",
     "context" : "contex",

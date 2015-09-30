@@ -11,6 +11,7 @@ window.korpApp = angular.module('korpApp', [
                                             "uiSlider"
                                             "ui.sortable"
                                             "newsdesk"
+                                            "sbMap"
                                         ])
 
 

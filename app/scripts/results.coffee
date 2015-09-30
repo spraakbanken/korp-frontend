@@ -38,7 +38,7 @@ class BaseResults
         if data.ERROR
             safeApply @s, () =>
                 @firstResultDef.reject()
-            
+
             @resultError data
             return false
         else
@@ -62,7 +62,7 @@ class BaseResults
 
     showPreloader : () ->
         @s.$parent.loading = true
-    
+
     hidePreloader : () ->
         @s.$parent.loading = false
 
@@ -77,7 +77,7 @@ class BaseResults
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
             c.log "firstResultDef.then", @isActive()
-            if @isActive() 
+            if @isActive()
                 @s.$root.jsonUrl = @proxy?.prevUrl
     onexit : () ->
         @s.$root.jsonUrl = null
@@ -100,7 +100,7 @@ class view.KWICResults extends BaseResults
         @tabindex = 0
 
         @s = scope
-        
+
         @selectionManager = scope.selectionManager
         @setupReadingHash()
         @$result.click =>
@@ -133,7 +133,7 @@ class view.KWICResults extends BaseResults
         # $.sm.send("word.select")
         if $("#sidebar").data().korpSidebar?
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
-        
+
         @selectWord word, scope, sent
 
 
@@ -164,7 +164,7 @@ class view.KWICResults extends BaseResults
         scope.selectionManager.select word, aux
         safeApply @s.$root, (s) ->
             s.$root.word_selected = word
-        
+
 
 
     resetView: ->
@@ -278,9 +278,9 @@ class view.KWICResults extends BaseResults
             setTimeout(() =>
                 safeApply @s, () =>
                     @s.gotFirstKwic = true
-                
+
             , 0)
-            # @hidePreloader()    
+            # @hidePreloader()
 
         if currentMode == "parallel" and not isReading
             scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
@@ -344,7 +344,7 @@ class view.KWICResults extends BaseResults
     buildQueryOptions: (cqp, isPaging) ->
         c.log "buildQueryOptions", cqp
         opts = {}
-        getSortParams = () -> 
+        getSortParams = () ->
             sort = search().sort
             unless sort then return {}
             if sort == "random"
@@ -377,7 +377,7 @@ class view.KWICResults extends BaseResults
         c.log "kwicResults.makeRequest", cqp, isPaging
 
         page = Number(search().page) or 0
-        
+
         if !@hasInitialized?
             c.log "not init set page", page + 1
             @s.$parent.pageObj.pager = page + 1
@@ -403,7 +403,7 @@ class view.KWICResults extends BaseResults
         req = @getProxy().makeRequest params,
                             page,
                             progressCallback,
-                            (data) => 
+                            (data) =>
                                 @renderResult data
         req.success (data) =>
             @hidePreloader()
@@ -418,7 +418,7 @@ class view.KWICResults extends BaseResults
                     @hidePreloader()
                     @s.aborted = true
 
-        
+
 
     getActiveData : () ->
         if @isReadingMode()
@@ -513,7 +513,7 @@ class view.ExampleResults extends view.KWICResults
         c.log "ExampleResults constructor", tabSelector, resultSelector, scope
         super tabSelector, resultSelector, scope
         @proxy = new model.KWICProxy()
-        
+
         @current_page = 0
         if @s.$parent.queryParams
             @makeRequest().then () =>
@@ -540,7 +540,7 @@ class view.ExampleResults extends view.KWICResults
 
         #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
         progress = if opts.command == "query" then $.proxy(this.onProgress, this) else $.noop
-        def = @proxy.makeRequest opts, null, progress, (data) => 
+        def = @proxy.makeRequest opts, null, progress, (data) =>
             c.log "first part done", data
             @renderResult data, opts.cqp
             @renderCompleteResult data
@@ -584,7 +584,7 @@ class view.LemgramResults extends BaseResults
             else
                 $(".lemgram_result .wordclass_suffix", self.$result).hide()
 
-        
+
 
     resetView: ->
         super()
@@ -599,7 +599,7 @@ class view.LemgramResults extends BaseResults
         else
             @ignoreAbort = false
             @resetView()
-        
+
         @showPreloader()
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
@@ -681,14 +681,14 @@ class view.LemgramResults extends BaseResults
             word + pos
 
         tagsetTrans = _.invert settings.wordpictureTagset
-        unique_words = _.filter unique_words, ([currentWd, pos]) -> 
+        unique_words = _.filter unique_words, ([currentWd, pos]) ->
             settings.wordPictureConf[tagsetTrans[pos]]?
         if not unique_words.length
             @showNoResults()
             return
-            
-        
-        
+
+
+
         $.each unique_words, (i, [currentWd, pos]) =>
             self.drawTable currentWd, pos, data
             self.renderHeader pos, false
@@ -698,7 +698,7 @@ class view.LemgramResults extends BaseResults
             $(".tableContainer:last").prepend($("<div>",
                 class: "header"
             ).html(content)).find(".hit .wordclass_suffix").hide()
-                
+
         $(".lemgram_result .wordclass_suffix").hide()
         @hidePreloader()
 
@@ -718,14 +718,14 @@ class view.LemgramResults extends BaseResults
     drawTable: (token, wordClass, data) ->
         # c.log "token, wordClass", token, wordClass
         inArray = (rel, orderList) ->
-            i = _.findIndex orderList, (item) -> 
+            i = _.findIndex orderList, (item) ->
                 (item.field_reverse or false) == (rel.field_reverse or false) and item.rel == rel.rel
             type = (if rel.field_reverse then "head" else "dep")
             i : i
             type : type
 
 
-        
+
         tagsetTrans = _.invert settings.wordpictureTagset
         getRelType = (item) ->
             return {rel : tagsetTrans[item.rel.toLowerCase()] , field_reverse : item.dep == token}
@@ -795,7 +795,7 @@ class view.LemgramResults extends BaseResults
             data = $(this).tmplItem().data
             if not data.dep
                 label = "&mdash;"
-            else 
+            else
                 label = util.lemgramToString($(this).data("lemgram"), hasHomograph)
             $(this).html prefix + label
 
@@ -807,7 +807,7 @@ class view.LemgramResults extends BaseResults
         $target = $(event.currentTarget)
         c.log "onClickExample", $target
         data = $target.parent().tmplItem().data
-        
+
         opts = {}
         opts.ajaxParams =
             start : 0
@@ -866,7 +866,7 @@ class view.LemgramResults extends BaseResults
 class view.StatsResults extends BaseResults
     constructor: (resultSelector, tabSelector, scope) ->
         super resultSelector, tabSelector, scope
-        c.log "StatsResults constr", 
+        c.log "StatsResults constr",
         self = this
         @tabindex = 1
         @gridData = null
@@ -886,7 +886,7 @@ class view.StatsResults extends BaseResults
 
         @$result.on "click", ".slick-cell.l1.r1 .link", () ->
             query = $(this).data("query")
-            
+
             opts = {}
             opts.ajaxParams =
                 start : 0
@@ -896,7 +896,7 @@ class view.StatsResults extends BaseResults
                 cqp : decodeURIComponent self.proxy.prevParams.cqp
                 cqp2: decodeURIComponent query
                 expand_prequeries : false
-            
+
             safeApply scope.$root, () ->
                 scope.$root.kwicTabs.push opts
 
@@ -909,7 +909,7 @@ class view.StatsResults extends BaseResults
             nRows = @gridData?.length or 2
             h = (nRows * 2) + 4
             h = Math.min h, 40
-            
+
             $("#myGrid:visible").height $("#myGrid .slick-viewport").height() + 40
 
         , 100)
@@ -935,7 +935,7 @@ class view.StatsResults extends BaseResults
 
             subExprs = []
             labelMapping = {}
-            
+
             showTotal = false
             mainCQP = params.cqp
 
@@ -976,7 +976,7 @@ class view.StatsResults extends BaseResults
         cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
 
         header = [
-            util.getLocaleString("stats_hit"), 
+            util.getLocaleString("stats_hit"),
             util.getLocaleString("stats_total")
         ]
         header = header.concat _.pluck cl.corpora, "title"
@@ -998,12 +998,12 @@ class view.StatsResults extends BaseResults
             row = [wd, fmt @savedData.total[selVal][wd]]
             values = for corp in _.pluck cl.corpora, "id"
                 val = @savedData.corpora[corp.toUpperCase()][selVal][wd]
-                if val 
+                if val
                     val = fmt val
-                else 
+                else
                     val = "0"
 
-            
+
             output.push row.concat values
 
 
@@ -1020,7 +1020,7 @@ class view.StatsResults extends BaseResults
 
         $("#exportButton", @$result).attr({
             download : "export.#{selType}"
-            href : csvUrl    
+            href : csvUrl
         })
 
     makeRequest : (cqp) ->
@@ -1070,7 +1070,7 @@ class view.StatsResults extends BaseResults
             #$(".slick-header-column:nth(2)").click().click()
             $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
-        
+
         @gridData = data
         resultError = super(data)
         return if resultError is false
@@ -1094,13 +1094,13 @@ class view.StatsResults extends BaseResults
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: false
-        
+
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
         @grid = grid
         @grid.autosizeColumns()
         #$("#myGrid").width("100%")
-        
+
         sortCol = columns[2]
         log = _.debounce () ->
             c.log "grid sort"
@@ -1152,7 +1152,7 @@ class view.StatsResults extends BaseResults
 
         $.when(timeDeferred).then =>
             safeApply @s, () =>
-                @updateGraphBtnState()            
+                @updateGraphBtnState()
         safeApply @s, () =>
             @hidePreloader()
 
@@ -1437,7 +1437,7 @@ class view.GraphResults extends BaseResults
                 lastYVal = maybeCurrent
             else
                 newMoments.push {x : newMoment, y : lastYVal}
-                
+
 
         return [].concat data, newMoments
 
@@ -1490,11 +1490,11 @@ class view.GraphResults extends BaseResults
         secondTick = ticks.eq(1)
 
         margin = 5
-        
+
         if not firstTick.length or not secondTick.length then return
         if firstTick.offset().left + firstTick.width() + margin > secondTick.offset().left
             @hideNthTick $(".chart", @$result)
-            @updateTicks()  
+            @updateTicks()
 
 
     getNonTime : () ->
@@ -1543,7 +1543,7 @@ class view.GraphResults extends BaseResults
         unless $(".zoom_slider", @$result).is ".ui-slider"
             return
         [from, to] = $('.zoom_slider', @$result).slider("values")
-        
+
         unitSpan = moment.unix(to).diff(moment.unix(from), @zoom)
         unitWidth = graph.width / unitSpan
 
@@ -1591,12 +1591,12 @@ class view.GraphResults extends BaseResults
 
         ).done (data) =>
             c.log "graph data", data
-                
+
             if data.ERROR
                 @resultError data
                 return
             nontime = @getNonTime()
-            
+
             if nontime
                 $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
             else
@@ -1646,8 +1646,8 @@ class view.GraphResults extends BaseResults
                 # min : "auto"
             graph.render()
             window._graph = graph
-            
-            
+
+
 
             @drawIntervals(graph, emptyIntervals)
 
@@ -1679,7 +1679,7 @@ class view.GraphResults extends BaseResults
                     $(".time_table:visible", @$result).height "#{h}.1em"
                     @time_grid?.resizeCanvas()
                     $(".exportTimeStatsSection", @$result).show()
-                    
+
                     setExportUrl = () ->
                         selVal = $(".timeKindOfData option:selected", @$result).val()
                         selType = $(".timeKindOfFormat option:selected", @$result).val()
@@ -1701,7 +1701,7 @@ class view.GraphResults extends BaseResults
                                     i = _.indexOf (_.pluck row.abs_data, "x"), cell.x, true
                                     cells.push row.abs_data[i].y
                             output.push cells
-                        
+
                         csv = new CSV(output, {
                             header : header
                             delimiter : dataDelimiter
@@ -1712,7 +1712,7 @@ class view.GraphResults extends BaseResults
                         csvUrl = URL.createObjectURL(blob)
                         $(".exportTimeStatsSection .btn.export", @$result).attr({
                             download : "export.#{selType}"
-                            href : csvUrl    
+                            href : csvUrl
                         })
 
                     setExportUrl()
@@ -1747,7 +1747,7 @@ class view.GraphResults extends BaseResults
                             fmt = (valTup) ->
                                 if typeof valTup[0] == "undefined" then return ""
                                 return "<span>" +
-                                        "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + 
+                                        "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " +
                                         "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
                                   "<span>"
                             return fmt(value)
@@ -1835,7 +1835,7 @@ class view.GraphResults extends BaseResults
                     if mom.date() == 31
                         mom.add("day", 1)
                     return mom.unix()
-                else 
+                else
                     return old_ceil(time, unit)
 
             xAxis = new Rickshaw.Graph.Axis.Time
@@ -1851,7 +1851,7 @@ class view.GraphResults extends BaseResults
                 old_render.call xAxis
                 @updateTicks()
                 @drawIntervals(graph, emptyIntervals)
-            
+
 
             old_tickOffsets = xAxis.tickOffsets
             xAxis.tickOffsets = () =>
@@ -1884,10 +1884,3 @@ class view.GraphResults extends BaseResults
                 @s.loading = false
 
             $(window).trigger("resize")
-
-
-
-
-
-
-

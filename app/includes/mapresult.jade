@@ -1,0 +1,15 @@
+div.map_disabled(ng-if="!showMap")
+	| {{'map_activate' | loc}} 
+	div
+		button.btn.btn-small.activate_word_pic(ng-click="activate()")
+			| {{'map_activate_btn' | loc}}
+
+div.map_disabled(ng-if="showMap && !hasResult")
+	| {{'map_warn' | loc}} 
+	div
+		button.btn.btn-small.activate_word_pic(ng-click="activate()")
+			| {{'map_warn_btn' | loc}}
+
+div.name_map(ng-if="showMap && tabVisible && hasResult && !loading")
+	sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate")
+

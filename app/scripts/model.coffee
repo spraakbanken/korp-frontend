@@ -356,19 +356,79 @@ class model.StatsProxy extends BaseProxy
         @currentPage = 0
         @page_incr = 25
 
-    makeRequest: (cqp, callback, within) ->
-        self = this
-        super()
-        reduceval = search().stats_reduce or "word"
-        reduceval = "word" if reduceval is "word_insensitive"
+    processData: (def, data, reduceval) ->
+        minWidth = 100
+        columns = [
+            id: "hit"
+            name: "stats_hit"
+            field: "hit_value"
+            sortable: true
+            formatter: settings.reduce_stringify(reduceval)
+            minWidth : minWidth
+        ,
+            id: "total"
+            name: "stats_total"
+            field: "total_value"
+            sortable: true
+            formatter: @valueFormatter
+            minWidth : minWidth
+        ]
+        $.each _.keys(data.corpora).sort(), (i, corpus) =>
+            columns.push
+                id: corpus
+                name: settings.corpora[corpus.toLowerCase()].title
+                field: corpus + "_value"
+                sortable: true
+                formatter: @valueFormatter
+                minWidth : minWidth
 
-        data =
+        
+
+        wordArray = _.keys(data.total.absolute)
+        if reduceval in ["lex", "saldo", "baseform"]
+            groups = _.groupBy wordArray, (item) ->
+                item.replace(/:\d+/g, "")
+
+            wordArray = _.keys groups
+
+        sizeOfDataset = wordArray.length
+        dataset = new Array(sizeOfDataset + 1)
+        
+        statsWorker = new Worker "scripts/statistics_worker.js"
+        statsWorker.onmessage = (e) ->
+            c.log "Called back by the worker!\n"
+            c.log e
+            def.resolve [data, wordArray, columns, e.data]
+
+        statsWorker.postMessage {
+            "total" : data.total
+            "dataset" : dataset
+            "allrows" : (wordArray)
+            "corpora" : data.corpora
+            "groups" : groups
+            loc : {
+                'sv' : "sv-SE"
+                'en' : "gb-EN"
+            }[$("body").scope().lang]
+        }
+
+    makeParameters: (reduceval, cqp) ->
+        parameters = 
             command: "count"
             groupby: reduceval
             cqp: cqp
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
+        return parameters
+
+    makeRequest: (cqp, callback, within) ->
+        self = this
+        super()
+        reduceval = search().stats_reduce or "word"
+        reduceval = "word" if reduceval is "word_insensitive"
+
+        data = @makeParameters(reduceval, cqp)
 
         if settings.corpusListing.getCurrentAttributes()[reduceval]?.type == "set"
             data.split = reduceval
@@ -398,73 +458,33 @@ class model.StatsProxy extends BaseProxy
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
                 return unless progressObj?
-                callback progressObj
+                callback? progressObj
 
-            success: (data) ->
+            success: (data) =>
                 if data.ERROR?
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                minWidth = 100
-                columns = [
-                    id: "hit"
-                    name: "stats_hit"
-                    field: "hit_value"
-                    sortable: true
-                    formatter: settings.reduce_stringify(reduceval)
-                    minWidth : minWidth
-                ,
-                    id: "total"
-                    name: "stats_total"
-                    field: "total_value"
-                    sortable: true
-                    formatter: self.valueFormatter
-                    minWidth : minWidth
-                ]
-                $.each _.keys(data.corpora).sort(), (i, corpus) ->
-                    columns.push
-                        id: corpus
-                        name: settings.corpora[corpus.toLowerCase()].title
-                        field: corpus + "_value"
-                        sortable: true
-                        formatter: self.valueFormatter
-                        minWidth : minWidth
-
+                @processData(def, data, reduceval)
                 
-
-                wordArray = _.keys(data.total.absolute)
-                if reduceval in ["lex", "saldo", "baseform"]
-                    groups = _.groupBy wordArray, (item) ->
-                        item.replace(/:\d+/g, "")
-
-                    wordArray = _.keys groups
-
-                sizeOfDataset = wordArray.length
-                dataset = new Array(sizeOfDataset + 1)
-                
-                statsWorker = new Worker "scripts/statistics_worker.js"
-                statsWorker.onmessage = (e) ->
-                    c.log "Called back by the worker!\n"
-                    c.log e
-                    def.resolve [data, wordArray, columns, e.data]
-
-                statsWorker.postMessage {
-                    "total" : data.total
-                    "dataset" : dataset
-                    "allrows" : (wordArray)
-                    "corpora" : data.corpora
-                    "groups" : groups
-                    loc : {
-                        'sv' : "sv-SE"
-                        'en' : "gb-EN"
-                    }[$("body").scope().lang]
-                }
 
         return def.promise()
 
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
         return dataContext[columnDef.id + "_display"]
 
+class model.NameProxy extends model.StatsProxy
+    constructor: ->
+        super()    
+        
+    makeParameters: (reduceval, cqp) ->
+        parameters = super(reduceval, cqp)
+        parameters.cqp2 = "[pos='PM']"
+        return parameters
+    
+    processData: (def, data, reduceval) ->
+        def.resolve data
+    
 
 class model.AuthenticationProxy
     constructor: ->

@@ -1,24 +1,7 @@
 korpApp = angular.module("korpApp")
 
-# korpApp.controller "resultTabCtrl", ($scope) ->
-#     s = $scope
-    
-#     s.selectTab = (i) ->
-#         s.$broadcast "tabselect", i
-
-#     s.$watch "getSelected()", (val) ->
-#         s.$root.result_tab = val
-
-
 korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
-    # $scope.json_url = ""
-    # $scope.tabclick = () ->
-    #     c.log "click tab", $location.search().result_tab, $scope
-        
-
-
-
 
 korpApp.controller "kwicCtrl", class KwicCtrl
     setupHash : () ->
@@ -34,12 +17,12 @@ korpApp.controller "kwicCtrl", class KwicCtrl
     initPage : () ->
         # @scope.pager = Number(@location.search().page) + 1 or 1
         c.log "initPage", @location.search().page
-        @scope.pageObj = 
+        @scope.pageObj =
             pager: Number(@location.search().page) + 1 or 1
         @scope.page = @scope.pageObj.pager - 1
 
 
-    @$inject: ['$scope', "utils", "$location"] 
+    @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, @utils, @location) ->
         s = @scope
         $scope = @scope
@@ -80,7 +63,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
 
             if s.instance?.getProxy().pendingRequests.length
                 window.pending = s.instance.getProxy().pendingRequests
-                
+
                 $.when(s.instance.getProxy().pendingRequests...).then () ->
                     c.log "readingchange makeRequest"
                     s.instance.makeRequest()
@@ -98,7 +81,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
             init = true
             s.$watch "reading_mode", () ->
                 if not init
-                    readingChange()   
+                    readingChange()
                 init = false
 
 
@@ -146,7 +129,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
                         currentStruct = []
                         isOpen = false
 
-                
+
                 if currentMode == "parallel"
                     mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
                     linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
@@ -231,7 +214,7 @@ korpApp.controller "kwicCtrl", class KwicCtrl
 
 
 korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
-    @$inject: ['$scope', "utils", "$location"] 
+    @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
         super(@scope, utils, $location)
         s = @scope
@@ -243,7 +226,7 @@ korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
 
 
     initPage : () ->
-        @scope.pageObj = 
+        @scope.pageObj =
             pager : 0
         @scope.page = 0
     setupHash : () ->
@@ -267,7 +250,7 @@ korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
         $location.search("word_pic", true)
         search = searches.activeSearch
         $scope.instance.makeRequest(search.val, search.type)
-        
+
 
 korpApp.controller "graphCtrl", ($scope) ->
     s = $scope
@@ -337,24 +320,24 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
             c.log "triple", triple, cmp
 
             cqps = []
-            
+
             for token in triple[0].split(" ")
                 if type == "set" and token == "|"
                     cqps.push "[ambiguity(#{reduce}) = 0]"
                 else
-                    cqps.push CQP.fromObj 
+                    cqps.push CQP.fromObj
                         type : reduce
                         op : op
                         val : token
-            
+
             cqpobj = CQP.concat cqps...
 
             cl = settings.corpusListing.subsetFactory cmp.corpora
-            
+
             opts = {
                 start : 0
                 end : 24
-                ajaxParams : 
+                ajaxParams :
                     command : "query"
                     cqp : cmp.cqp
                     cqp2 : CQP.stringify cqpobj
@@ -364,3 +347,95 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
             }
             $rootScope.kwicTabs.push opts
+
+korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, geocoder) ->
+    s = $scope
+    s.loading = false
+    s.hasResult = false
+
+
+    s.$watch (() -> $location.search().result_tab), (val) ->        
+        $timeout (() -> s.tabVisible = val == 1), 0 
+
+    s.showMap = $location.search().show_map?
+    s.$watch (() -> $location.search().show_map), (val) ->
+        s.showMap = Boolean(val)
+        if s.showMap
+            currentCqp = getCqpExpr()
+            currentCorpora = settings.corpusListing.stringifySelected(true)
+            if currentCqp != s.lastSearch?.cqp or currentCorpora != s.lastSearch?.corpora
+                s.hasResult = false
+
+    s.activate = () ->
+        $location.search("show_map", true)
+        s.showMap = true
+        cqpExpr = getCqpExpr()
+        if cqpExpr
+            nameEntitySearch.request cqpExpr
+
+    getCqpExpr = () ->
+        # TODO currently copy pasted from watch on "searches.activeSearch"
+        search = searches.activeSearch
+        cqpExpr = null
+        if search?.type == "word"
+            cqpExpr = simpleSearch.getCQP(search.val)
+        else if search?.type == "lemgram"
+            cqpExpr = "[lex contains '#{search.val}']"
+        cqpExpr
+
+    s.center =
+      lat: 62.99515845212052
+      lng: 16.69921875
+      zoom: 4
+    s.hoverTemplate = """<div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
+                         <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{abs_occurrences}}</span></div>
+                         <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{rel_occurrences}}</span></div>"""
+    s.markers = {}
+    s.showTime = true
+    
+    s.$on "map_data_available", (_event, cqp, corpora) ->
+        if s.showMap
+            s.lastSearch = { cqp: cqp, corpora: corpora }
+            s.loading = true
+            updateMapData()
+            s.hasResult = true
+        
+    updateMapData = () ->
+        nameEntitySearch.promise.then (data) ->            
+            if data.count != 0 
+                markers(data.total.relative).then (markersResult) ->
+                    mrks = markersResult.markers
+                    for own key, value of mrks
+                        do (key, value) ->
+                            message = value.message
+                            html = '<span class="link" ng-click="newKWICSearch()">' + message + '</span>'
+                            
+                            newScope = s.$new()
+                            newScope.name = message
+                            newScope.abs_occurrences = data.total.absolute[message]
+                            newScope.rel_occurrences = Math.round((data.total.relative[message] + 0.00001) * 1000) / 1000 
+                            newScope.newKWICSearch = () ->
+                                cl = settings.corpusListing
+                                                                
+                                opts = {
+                                    start : 0
+                                    end : 24
+                                    ajaxParams :
+                                        command : "query"
+                                        cqp : getCqpExpr()
+                                        cqp2 : "[word='" + message + "' & pos='PM']"
+                                        corpus : cl.stringifySelected()
+                                        show_struct : _.keys cl.getStructAttrs()
+                                        expand_prequeries : true                      
+                                }
+                                $rootScope.kwicTabs.push opts
+                            
+                            value.message = html
+                            value.getMessageScope = () -> newScope
+                            
+                    s.markers = mrks
+            else
+                s.markers = {}
+            s.loading = false
+              
+            

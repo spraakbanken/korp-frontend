@@ -20,19 +20,15 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.$watch "word_pic", (val) ->
         $location.search("word_pic", Boolean(val) or null)
 
+    $scope.$watch (() -> $location.search().show_map), (val) ->
+        $scope.show_map = Boolean(val)
+
+    $scope.$watch "show_map", (val) ->
+        $location.search("show_map", Boolean(val) or null)
+
     $scope.settings = settings
     $scope.showStats = () ->
         return settings.statistics != false
-        # Boolean(settings.statistics) != false
-
-    # utils.setupHash $scope, [
-    #         key : "word_pic"
-    #         val_out : Boolean
-    #         val_in : Boolean
-    #         default : false
-    #         post_change : () ->
-    #             c.log "post_change word_pic", $scope.word_pic
-    # ]
 
 korpApp.config ($tooltipProvider) ->
     $tooltipProvider.options

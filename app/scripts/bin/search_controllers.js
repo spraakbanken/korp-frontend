@@ -23,6 +23,14 @@
     $scope.$watch("word_pic", function(val) {
       return $location.search("word_pic", Boolean(val) || null);
     });
+    $scope.$watch((function() {
+      return $location.search().show_map;
+    }), function(val) {
+      return $scope.show_map = Boolean(val);
+    });
+    $scope.$watch("show_map", function(val) {
+      return $location.search("show_map", Boolean(val) || null);
+    });
     $scope.settings = settings;
     return $scope.showStats = function() {
       return settings.statistics !== false;
