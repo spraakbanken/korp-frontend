@@ -1,9 +1,9 @@
 (function() {
   var added_corpora_ids,
-    __slice = [].slice,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    slice = [].slice,
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.util = {};
 
@@ -31,7 +31,7 @@
     CorpusListing.prototype.subsetFactory = function(idArray) {
       var cl;
       idArray = _.invoke(idArray, "toLowerCase");
-      cl = new CorpusListing(_.pick.apply(_, [this.struct].concat(__slice.call(idArray))));
+      cl = new CorpusListing(_.pick.apply(_, [this.struct].concat(slice.call(idArray))));
       cl.selected = cl.corpora;
       return cl;
     };
@@ -52,8 +52,8 @@
       return _.reduce(mappingArray, (function(a, b) {
         var keys_intersect, to_mergea, to_mergeb;
         keys_intersect = _.intersection(_.keys(a), _.keys(b));
-        to_mergea = _.pick.apply(_, [a].concat(__slice.call(keys_intersect)));
-        to_mergeb = _.pick.apply(_, [b].concat(__slice.call(keys_intersect)));
+        to_mergea = _.pick.apply(_, [a].concat(slice.call(keys_intersect)));
+        to_mergeb = _.pick.apply(_, [b].concat(slice.call(keys_intersect)));
         return _.merge({}, to_mergea, to_mergeb);
       }) || {});
     };
@@ -83,10 +83,10 @@
     CorpusListing.prototype.getStructAttrsIntersection = function() {
       var attrs;
       attrs = this.mapSelectedCorpora(function(corpus) {
-        var key, value, _ref;
-        _ref = corpus.struct_attributes;
-        for (key in _ref) {
-          value = _ref[key];
+        var key, ref, value;
+        ref = corpus.struct_attributes;
+        for (key in ref) {
+          value = ref[key];
           value["isStructAttr"] = true;
         }
         return corpus.struct_attributes;
@@ -97,10 +97,10 @@
     CorpusListing.prototype.getStructAttrs = function() {
       var attrs, rest, withDataset;
       attrs = this.mapSelectedCorpora(function(corpus) {
-        var key, value, _ref;
-        _ref = corpus.struct_attributes;
-        for (key in _ref) {
-          value = _ref[key];
+        var key, ref, value;
+        ref = corpus.struct_attributes;
+        for (key in ref) {
+          value = ref[key];
           value["isStructAttr"] = true;
         }
         return corpus.struct_attributes;
@@ -114,8 +114,8 @@
         key = item[0];
         val = item[1];
         return $.each(attrs, function(j, origStruct) {
-          var ds, _ref;
-          if ((_ref = origStruct[key]) != null ? _ref.dataset : void 0) {
+          var ds, ref;
+          if ((ref = origStruct[key]) != null ? ref.dataset : void 0) {
             ds = origStruct[key].dataset;
             if ($.isArray(ds)) {
               ds = _.object(ds, ds);
@@ -172,27 +172,27 @@
     CorpusListing.prototype.getContextQueryString = function(prefer) {
       var context, contexts, corpus, output;
       output = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.selected;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          corpus = _ref[_i];
+        var k, len, ref, results;
+        ref = this.selected;
+        results = [];
+        for (k = 0, len = ref.length; k < len; k++) {
+          corpus = ref[k];
           contexts = _.keys(corpus.context);
-          _results.push((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (_j = 0, _len1 = contexts.length; _j < _len1; _j++) {
-              context = contexts[_j];
+          results.push((function() {
+            var l, len1, results1;
+            results1 = [];
+            for (l = 0, len1 = contexts.length; l < len1; l++) {
+              context = contexts[l];
               if (context && !(context in settings.defaultContext)) {
-                _results1.push(corpus.id.toUpperCase() + ":" + context);
+                results1.push(corpus.id.toUpperCase() + ":" + context);
               } else {
-                _results1.push(false);
+                results1.push(false);
               }
             }
-            return _results1;
+            return results1;
           })());
         }
-        return _results;
+        return results;
       }).call(this);
       return _(output).flatten().compact().join();
     };
@@ -200,27 +200,27 @@
     CorpusListing.prototype.getWithinQueryString = function() {
       var corpus, output, within, withins;
       output = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.selected;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          corpus = _ref[_i];
+        var k, len, ref, results;
+        ref = this.selected;
+        results = [];
+        for (k = 0, len = ref.length; k < len; k++) {
+          corpus = ref[k];
           withins = _.keys(corpus.within);
-          _results.push((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (_j = 0, _len1 = withins.length; _j < _len1; _j++) {
-              within = withins[_j];
+          results.push((function() {
+            var l, len1, results1;
+            results1 = [];
+            for (l = 0, len1 = withins.length; l < len1; l++) {
+              within = withins[l];
               if (within && !(within in settings.defaultWithin)) {
-                _results1.push(corpus.id.toUpperCase() + ":" + within);
+                results1.push(corpus.id.toUpperCase() + ":" + within);
               } else {
-                _results1.push(false);
+                results1.push(false);
               }
             }
-            return _results1;
+            return results1;
           })());
         }
-        return _results;
+        return results;
       }).call(this);
       return _(output).flatten().compact().join();
     };
@@ -267,38 +267,38 @@
         label: "word"
       };
       attrs = (function() {
-        var _ref, _results;
-        _ref = this.getCurrentAttributes(lang);
-        _results = [];
-        for (key in _ref) {
-          obj = _ref[key];
+        var ref, results;
+        ref = this.getCurrentAttributes(lang);
+        results = [];
+        for (key in ref) {
+          obj = ref[key];
           if (obj.displayType !== "hidden") {
-            _results.push(_.extend({
+            results.push(_.extend({
               group: "word_attr",
               value: key
             }, obj));
           }
         }
-        return _results;
+        return results;
       }).call(this);
       common_keys = _.compact(_.flatten(_.map(this.selected, function(corp) {
         return _.keys(corp.common_attributes);
       })));
-      common = _.pick.apply(_, [settings.common_struct_types].concat(__slice.call(common_keys)));
+      common = _.pick.apply(_, [settings.common_struct_types].concat(slice.call(common_keys)));
       sent_attrs = (function() {
-        var _ref, _results;
-        _ref = _.extend({}, common, this.getStructAttrs(lang));
-        _results = [];
-        for (key in _ref) {
-          obj = _ref[key];
+        var ref, results;
+        ref = _.extend({}, common, this.getStructAttrs(lang));
+        results = [];
+        for (key in ref) {
+          obj = ref[key];
           if (obj.displayType !== "hidden") {
-            _results.push(_.extend({
+            results.push(_.extend({
               group: "sentence_attr",
               value: key
             }, obj));
           }
         }
-        return _results;
+        return results;
       }).call(this);
       sent_attrs = _.sortBy(sent_attrs, function(item) {
         return util.getLocaleString(item.label);
@@ -310,8 +310,8 @@
 
   })();
 
-  window.ParallelCorpusListing = (function(_super) {
-    __extends(ParallelCorpusListing, _super);
+  window.ParallelCorpusListing = (function(superClass) {
+    extend(ParallelCorpusListing, superClass);
 
     function ParallelCorpusListing(corpora) {
       ParallelCorpusListing.__super__.constructor.call(this, corpora);
@@ -368,8 +368,8 @@
       }
       target = only_selected ? this.selected : this.struct;
       output = _.filter(target, function(item) {
-        var _ref;
-        return _ref = item.id, __indexOf.call(corp.linked_to || [], _ref) >= 0;
+        var ref;
+        return ref = item.id, indexOf.call(corp.linked_to || [], ref) >= 0;
       });
       if (andSelf) {
         output = [corp].concat(output);
@@ -401,7 +401,7 @@
     };
 
     ParallelCorpusListing.prototype.getLinksFromLangs = function(activeLangs) {
-      var cps, lang, linked, main, other, output, _i, _j, _len, _len1, _ref;
+      var cps, k, l, lang, len, len1, linked, main, other, output, ref;
       if (activeLangs.length === 1) {
         return this.getEnabledByLang(activeLangs[0], true, false);
       }
@@ -409,17 +409,17 @@
         return corp.lang === activeLangs[0];
       });
       output = [];
-      _ref = activeLangs.slice(1);
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        lang = _ref[_i];
+      ref = activeLangs.slice(1);
+      for (k = 0, len = ref.length; k < len; k++) {
+        lang = ref[k];
         other = _.filter(this.selected, function(corp) {
           return corp.lang === lang;
         });
-        for (_j = 0, _len1 = other.length; _j < _len1; _j++) {
-          cps = other[_j];
+        for (l = 0, len1 = other.length; l < len1; l++) {
+          cps = other[l];
           linked = _(main).filter(function(mainCorpus) {
-            var _ref1;
-            return _ref1 = cps.id, __indexOf.call(mainCorpus.linked_to, _ref1) >= 0;
+            var ref1;
+            return ref1 = cps.id, indexOf.call(mainCorpus.linked_to, ref1) >= 0;
           }).value();
           output = output.concat(_.map(linked, function(item) {
             return [item, cps];
@@ -461,7 +461,7 @@
     };
 
     ParallelCorpusListing.prototype.stringifySelected = function(onlyMain) {
-      var i, item, main, output, pair, struct, _i, _len;
+      var i, item, k, len, main, output, pair, struct;
       struct = this.getLinksFromLangs(this.activeLangs);
       if (onlyMain) {
         struct = _.map(struct, (function(_this) {
@@ -475,7 +475,7 @@
       }
       c.log("struct", struct);
       output = [];
-      for (i = _i = 0, _len = struct.length; _i < _len; i = ++_i) {
+      for (i = k = 0, len = struct.length; k < len; i = ++k) {
         item = struct[i];
         main = item[0];
         pair = _.map(item.slice(1), function(corp) {
@@ -523,17 +523,17 @@
   };
 
   window.initLocales = function() {
-    var def, defs, lang, packages, pkg, prefix, _fn, _i, _j, _len, _len1, _ref;
+    var def, defs, fn1, k, l, lang, len, len1, packages, pkg, prefix, ref;
     packages = ["locale", "corpora"];
     prefix = "translations";
     defs = [];
     window.loc_data = {};
     def = $.Deferred();
-    _ref = settings.languages;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      lang = _ref[_i];
+    ref = settings.languages;
+    for (k = 0, len = ref.length; k < len; k++) {
+      lang = ref[k];
       loc_data[lang] = {};
-      _fn = function(lang, pkg) {
+      fn1 = function(lang, pkg) {
         var file;
         file = pkg + "-" + lang + '.json';
         file = prefix + "/" + file;
@@ -546,9 +546,9 @@
           }
         }));
       };
-      for (_j = 0, _len1 = packages.length; _j < _len1; _j++) {
-        pkg = packages[_j];
-        _fn(lang, pkg);
+      for (l = 0, len1 = packages.length; l < len1; l++) {
+        pkg = packages[l];
+        fn1(lang, pkg);
       }
     }
     $.when.apply($, defs).then(function() {
@@ -566,11 +566,11 @@
   };
 
   window.util.setLogin = function() {
-    var corp, _i, _len, _ref;
+    var corp, k, len, ref;
     $("body").toggleClass("logged_in not_logged_in");
-    _ref = authenticationProxy.loginObj.credentials;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      corp = _ref[_i];
+    ref = authenticationProxy.loginObj.credentials;
+    for (k = 0, len = ref.length; k < len; k++) {
+      corp = ref[k];
       $("#hpcorpus_" + (corp.toLowerCase())).closest(".boxdiv.disabled").removeClass("disabled");
     }
     if (window.corpusChooserInstance) {
@@ -777,18 +777,18 @@
     window.corpusChooserInstance = $("#corpusbox").corpusChooser({
       template: outStr,
       infoPopup: function(corpusID) {
-        var baseLang, baseLangSentenceHTML, baseLangTokenHTML, corpusObj, lang, lastUpdate, maybeInfo, numSentences, numTokens, output, sentenceString, supportsContext, _ref;
+        var baseLang, baseLangSentenceHTML, baseLangTokenHTML, corpusObj, lang, lastUpdate, maybeInfo, numSentences, numTokens, output, ref, sentenceString, supportsContext;
         corpusObj = settings.corpora[corpusID];
         maybeInfo = "";
         if (corpusObj.description) {
           maybeInfo = "<br/><br/>" + corpusObj.description;
         }
         numTokens = corpusObj.info.Size;
-        baseLang = (_ref = settings.corpora[corpusID]) != null ? _ref.linked_to : void 0;
+        baseLang = (ref = settings.corpora[corpusID]) != null ? ref.linked_to : void 0;
         if (baseLang) {
           lang = " (" + util.getLocaleString(settings.corpora[corpusID].lang) + ")";
-          baseLangTokenHTML = "" + (util.getLocaleString("corpselector_numberoftokens")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Size)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
-          baseLangSentenceHTML = "" + (util.getLocaleString("corpselector_numberofsentences")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Sentences)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
+          baseLangTokenHTML = (util.getLocaleString("corpselector_numberoftokens")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Size)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
+          baseLangSentenceHTML = (util.getLocaleString("corpselector_numberofsentences")) + ": <b>" + (util.prettyNumbers(settings.corpora[baseLang].info.Sentences)) + "\n</b> (" + (util.getLocaleString(settings.corpora[baseLang].lang)) + ")<br/>";
         } else {
           lang = "";
           baseLangTokenHTML = "";

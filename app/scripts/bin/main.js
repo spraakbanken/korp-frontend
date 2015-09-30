@@ -1,6 +1,6 @@
 (function() {
   var creds, deferred_domReady, isDev, loc_dfd, t,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.authenticationProxy = new model.AuthenticationProxy();
 
@@ -186,7 +186,7 @@
   window.getAllCorporaInFolders = function(lastLevel, folderOrCorpus) {
     var leftPart, outCorpora, posOfPeriod, rightPart;
     outCorpora = [];
-    while (__indexOf.call(folderOrCorpus, ".") >= 0) {
+    while (indexOf.call(folderOrCorpus, ".") >= 0) {
       posOfPeriod = _.indexOf(folderOrCorpus, ".");
       leftPart = folderOrCorpus.substr(0, posOfPeriod);
       rightPart = folderOrCorpus.substr(posOfPeriod + 1);
@@ -230,9 +230,9 @@
     };
     window.timeDeferred = timeProxy.makeRequest().fail(function(error) {
       return $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>");
-    }).done(function(_arg) {
+    }).done(function(arg) {
       var all_timestruct, cor, corpus, dataByCorpus, rest, struct;
-      dataByCorpus = _arg[0], all_timestruct = _arg[1], rest = _arg[2];
+      dataByCorpus = arg[0], all_timestruct = arg[1], rest = arg[2];
       c.log("write time");
       for (corpus in dataByCorpus) {
         struct = dataByCorpus[corpus];
@@ -267,9 +267,9 @@
             return out;
           });
         };
-        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, _arg1) {
+        output = _(settings.corpusListing.selected).pluck("time").filter(Boolean).map(_.pairs).flatten(true).reduce(function(memo, arg1) {
           var a, b;
-          a = _arg1[0], b = _arg1[1];
+          a = arg1[0], b = arg1[1];
           if (typeof memo[a] === "undefined") {
             memo[a] = b;
           } else {
