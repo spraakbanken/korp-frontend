@@ -334,7 +334,7 @@ attrs.dalinlemgram = {
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
 };
 attrs.saldo = {
     label : "saldo",
