@@ -1,8 +1,8 @@
 (function() {
   var BaseResults,
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty,
-    slice = [].slice;
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   BaseResults = (function() {
     function BaseResults(resultSelector, tabSelector, scope) {
@@ -81,18 +81,18 @@
     };
 
     BaseResults.prototype.countCorpora = function() {
-      var ref;
-      return (ref = this.proxy.prevParams) != null ? ref.corpus.split(",").length : void 0;
+      var _ref;
+      return (_ref = this.proxy.prevParams) != null ? _ref.corpus.split(",").length : void 0;
     };
 
     BaseResults.prototype.onentry = function() {
       this.s.$root.jsonUrl = null;
       return this.firstResultDef.promise.then((function(_this) {
         return function() {
-          var ref;
+          var _ref;
           c.log("firstResultDef.then", _this.isActive());
           if (_this.isActive()) {
-            return _this.s.$root.jsonUrl = (ref = _this.proxy) != null ? ref.prevUrl : void 0;
+            return _this.s.$root.jsonUrl = (_ref = _this.proxy) != null ? _ref.prevUrl : void 0;
           }
         };
       })(this));
@@ -103,16 +103,16 @@
     };
 
     BaseResults.prototype.isActive = function() {
-      var ref;
-      return !!((ref = this.getResultTabs()[this.tabindex]) != null ? ref.active : void 0);
+      var _ref;
+      return !!((_ref = this.getResultTabs()[this.tabindex]) != null ? _ref.active : void 0);
     };
 
     return BaseResults;
 
   })();
 
-  view.KWICResults = (function(superClass) {
-    extend(KWICResults, superClass);
+  view.KWICResults = (function(_super) {
+    __extends(KWICResults, _super);
 
     function KWICResults(tabSelector, resultSelector, scope) {
       var self;
@@ -303,7 +303,7 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var firstWord, isReading, k, len, linked, mainrow, offset, ref, resultError, scrollLeft;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
       c.log("data", data, this.proxy.prevUrl);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -336,9 +336,9 @@
       })(this));
       if (currentMode === "parallel" && !isReading) {
         scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
-        ref = $(".table_scrollarea > .kwic .linked_sentence");
-        for (k = 0, len = ref.length; k < len; k++) {
-          linked = ref[k];
+        _ref = $(".table_scrollarea > .kwic .linked_sentence");
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          linked = _ref[_i];
           mainrow = $(linked).prev();
           if (!mainrow.length) {
             continue;
@@ -638,8 +638,8 @@
 
   })(BaseResults);
 
-  view.ExampleResults = (function(superClass) {
-    extend(ExampleResults, superClass);
+  view.ExampleResults = (function(_super) {
+    __extends(ExampleResults, _super);
 
     function ExampleResults(tabSelector, resultSelector, scope) {
       c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
@@ -706,8 +706,8 @@
 
   })(view.KWICResults);
 
-  view.LemgramResults = (function(superClass) {
-    extend(LemgramResults, superClass);
+  view.LemgramResults = (function(_super) {
+    __extends(LemgramResults, _super);
 
     function LemgramResults(tabSelector, resultSelector, scope) {
       var self;
@@ -750,7 +750,7 @@
       def = this.proxy.makeRequest(word, type, (function(_this) {
         return function() {
           var args;
-          args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           return _this.onProgress.apply(_this, args);
         };
       })(this));
@@ -848,15 +848,15 @@
         }
         return output;
       });
-      unique_words = _.uniq(wordlist, function(arg) {
+      unique_words = _.uniq(wordlist, function(_arg) {
         var pos, word;
-        word = arg[0], pos = arg[1];
+        word = _arg[0], pos = _arg[1];
         return word + pos;
       });
       tagsetTrans = _.invert(settings.wordpictureTagset);
-      unique_words = _.filter(unique_words, function(arg) {
+      unique_words = _.filter(unique_words, function(_arg) {
         var currentWd, pos;
-        currentWd = arg[0], pos = arg[1];
+        currentWd = _arg[0], pos = _arg[1];
         return settings.wordPictureConf[tagsetTrans[pos]] != null;
       });
       if (!unique_words.length) {
@@ -864,12 +864,12 @@
         return;
       }
       $.each(unique_words, (function(_this) {
-        return function(i, arg) {
+        return function(i, _arg) {
           var content, currentWd, pos;
-          currentWd = arg[0], pos = arg[1];
+          currentWd = _arg[0], pos = _arg[1];
           self.drawTable(currentWd, pos, data);
           self.renderHeader(pos, false);
-          content = currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
+          content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
           return $(".tableContainer:last").prepend($("<div>", {
             "class": "header"
           }).html(content)).find(".hit .wordclass_suffix").hide();
@@ -1066,8 +1066,8 @@
 
   })(BaseResults);
 
-  view.StatsResults = (function(superClass) {
-    extend(StatsResults, superClass);
+  view.StatsResults = (function(_super) {
+    __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
       var self;
@@ -1109,9 +1109,9 @@
       });
       $(window).resize(_.debounce((function(_this) {
         return function() {
-          var h, nRows, ref;
+          var h, nRows, _ref;
           _this.resizeGrid();
-          nRows = ((ref = _this.gridData) != null ? ref.length : void 0) || 2;
+          nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
           h = (nRows * 2) + 4;
           h = Math.min(h, 40);
           return $("#myGrid:visible").height($("#myGrid .slick-viewport").height() + 40);
@@ -1137,7 +1137,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var activeCorpora, cell, chk, cqp, k, key, labelMapping, len, mainCQP, params, reduceVal, ref, showTotal, subExprs, val;
+          var activeCorpora, cell, chk, cqp, key, labelMapping, mainCQP, params, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1148,9 +1148,9 @@
           showTotal = false;
           mainCQP = params.cqp;
           console.log("DOING GRAPH CHECKING");
-          ref = _this.$result.find(".slick-cell > input:checked");
-          for (k = 0, len = ref.length; k < len; k++) {
-            chk = ref[k];
+          _ref = _this.$result.find(".slick-cell > input:checked");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            chk = _ref[_i];
             cell = $(chk).parent();
             cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
             if (cqp === "undefined") {
@@ -1162,16 +1162,16 @@
           }
           activeCorpora = _.flatten([
             (function() {
-              var ref1, results;
-              ref1 = this.savedData.corpora;
-              results = [];
-              for (key in ref1) {
-                val = ref1[key];
+              var _ref1, _results;
+              _ref1 = this.savedData.corpora;
+              _results = [];
+              for (key in _ref1) {
+                val = _ref1[key];
                 if (val.sums.absolute) {
-                  results.push(key);
+                  _results.push(key);
                 }
               }
-              return results;
+              return _results;
             }).call(_this)
           ]);
           return _this.s.$apply(function() {
@@ -1188,7 +1188,7 @@
     }
 
     StatsResults.prototype.updateExportBlob = function() {
-      var blob, cl, corp, csv, csvUrl, csvstr, dataDelimiter, fmt, header, k, len, output, ref, row, selType, selVal, total, val, values, wd;
+      var blob, cl, corp, csv, csvUrl, csvstr, dataDelimiter, fmt, header, output, row, selType, selVal, total, val, values, wd, _i, _len, _ref;
       selVal = $("#kindOfData option:selected").val();
       selType = $("#kindOfFormat option:selected").val();
       dataDelimiter = ";";
@@ -1203,34 +1203,34 @@
       };
       total = ["Σ", fmt(this.savedData.total.sums[selVal])];
       total = total.concat((function() {
-        var k, len, ref, results;
-        ref = _.pluck(cl.corpora, "id");
-        results = [];
-        for (k = 0, len = ref.length; k < len; k++) {
-          corp = ref[k];
-          results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
+        var _i, _len, _ref, _results;
+        _ref = _.pluck(cl.corpora, "id");
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          corp = _ref[_i];
+          _results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
         }
-        return results;
+        return _results;
       }).call(this));
       output = [total];
-      ref = this.savedWordArray;
-      for (k = 0, len = ref.length; k < len; k++) {
-        wd = ref[k];
+      _ref = this.savedWordArray;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wd = _ref[_i];
         row = [wd, fmt(this.savedData.total[selVal][wd])];
         values = (function() {
-          var len1, o, ref1, results;
-          ref1 = _.pluck(cl.corpora, "id");
-          results = [];
-          for (o = 0, len1 = ref1.length; o < len1; o++) {
-            corp = ref1[o];
+          var _j, _len1, _ref1, _results;
+          _ref1 = _.pluck(cl.corpora, "id");
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            corp = _ref1[_j];
             val = this.savedData.corpora[corp.toUpperCase()][selVal][wd];
             if (val) {
-              results.push(val = fmt(val));
+              _results.push(val = fmt(val));
             } else {
-              results.push(val = "0");
+              _results.push(val = "0");
             }
           }
-          return results;
+          return _results;
         }).call(this);
         output.push(row.concat(values));
       }
@@ -1268,13 +1268,13 @@
       return this.proxy.makeRequest(cqp, ((function(_this) {
         return function() {
           var args;
-          args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           return _this.onProgress.apply(_this, args);
         };
       })(this)), withinArg).done((function(_this) {
-        return function(arg) {
+        return function(_arg) {
           var columns, data, dataset, wordArray;
-          data = arg[0], wordArray = arg[1], columns = arg[2], dataset = arg[3];
+          data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
           c.log("dataset.length", dataset.length);
           safeApply(_this.s, function() {
             return _this.hidePreloader();
@@ -1425,7 +1425,7 @@
     };
 
     StatsResults.prototype.resizeGrid = function() {
-      var ref, ref1, width;
+      var width, _ref, _ref1;
       width = 0;
       $('.slick-header-column').each(function() {
         return width += $(this).outerWidth(true);
@@ -1434,10 +1434,10 @@
         width = $(window).width() - 40;
       }
       $("#myGrid:visible").width(width);
-      if ((ref = this.grid) != null) {
-        ref.resizeCanvas();
+      if ((_ref = this.grid) != null) {
+        _ref.resizeCanvas();
       }
-      return (ref1 = this.grid) != null ? ref1.invalidate() : void 0;
+      return (_ref1 = this.grid) != null ? _ref1.invalidate() : void 0;
     };
 
     StatsResults.prototype.newDataInGraph = function(dataName) {
@@ -1597,8 +1597,8 @@
 
   })(BaseResults);
 
-  view.GraphResults = (function(superClass) {
-    extend(GraphResults, superClass);
+  view.GraphResults = (function(_super) {
+    __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector, scope) {
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
@@ -1609,7 +1609,7 @@
       c.log("adding chart listener", this.$result);
       $(".chart", this.$result).on("click", (function(_this) {
         return function(event) {
-          var cqp, end, k, m, n_tokens, opts, results, start, target, timecqp, val;
+          var cqp, end, m, n_tokens, opts, start, target, timecqp, val, _i, _results;
           target = $(".chart", _this.$result);
           val = $(".detail .x_label > span", target).data("val");
           cqp = $(".detail .item.active > span", target).data("cqp");
@@ -1621,9 +1621,9 @@
             timecqp = "[(int(_.text_datefrom) >= " + start + " & int(_.text_dateto) <= " + end + ")]";
             n_tokens = _this.s.data.cqp.split("]").length - 2;
             timecqp = ([timecqp].concat(_.map((function() {
-              results = [];
-              for (var k = 0; 0 <= n_tokens ? k < n_tokens : k > n_tokens; 0 <= n_tokens ? k++ : k--){ results.push(k); }
-              return results;
+              _results = [];
+              for (var _i = 0; 0 <= n_tokens ? _i < n_tokens : _i > n_tokens; 0 <= n_tokens ? _i++ : _i--){ _results.push(_i); }
+              return _results;
             }).apply(this), function() {
               return "[]";
             }))).join(" ");
@@ -1647,8 +1647,8 @@
     }
 
     GraphResults.prototype.parseDate = function(granularity, time) {
-      var day, month, ref, year;
-      ref = [null, 0, 1], year = ref[0], month = ref[1], day = ref[2];
+      var day, month, year, _ref;
+      _ref = [null, 0, 1], year = _ref[0], month = _ref[1], day = _ref[2];
       switch (granularity) {
         case "y":
           year = time;
@@ -1666,7 +1666,7 @@
     };
 
     GraphResults.prototype.fillMissingDate = function(data) {
-      var dateArray, diff, duration, i, k, lastYVal, max, maybeCurrent, min, momentMapping, n_diff, newMoment, newMoments, ref;
+      var dateArray, diff, duration, i, lastYVal, max, maybeCurrent, min, momentMapping, n_diff, newMoment, newMoments, _i;
       dateArray = _.pluck(data, "x");
       min = _.min(dateArray, function(mom) {
         return mom.toDate();
@@ -1698,7 +1698,7 @@
         return [moment(item.x).unix(), item.y];
       }));
       newMoments = [];
-      for (i = k = 0, ref = n_diff; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+      for (i = _i = 0; 0 <= n_diff ? _i <= n_diff : _i >= n_diff; i = 0 <= n_diff ? ++_i : --_i) {
         newMoment = moment(min).add(diff, i);
         maybeCurrent = momentMapping[newMoment.unix()];
         if (typeof maybeCurrent !== 'undefined') {
@@ -1714,19 +1714,19 @@
     };
 
     GraphResults.prototype.getSeriesData = function(data) {
-      var first, firstVal, hasFirstValue, hasLastValue, k, last, lastVal, len, mom, output, ref, tuple, x, y;
+      var first, firstVal, hasFirstValue, hasLastValue, last, lastVal, mom, output, tuple, x, y, _i, _len, _ref;
       delete data[""];
-      ref = settings.corpusListing.getTimeInterval(), first = ref[0], last = ref[1];
+      _ref = settings.corpusListing.getTimeInterval(), first = _ref[0], last = _ref[1];
       firstVal = this.parseDate("y", first);
       lastVal = this.parseDate("y", last.toString());
       hasFirstValue = false;
       hasLastValue = false;
       output = (function() {
-        var k, len, ref1, ref2, results;
-        ref1 = _.pairs(data);
-        results = [];
-        for (k = 0, len = ref1.length; k < len; k++) {
-          ref2 = ref1[k], x = ref2[0], y = ref2[1];
+        var _i, _len, _ref1, _ref2, _results;
+        _ref1 = _.pairs(data);
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          _ref2 = _ref1[_i], x = _ref2[0], y = _ref2[1];
           mom = this.parseDate(this.granularity, x);
           if (mom.isSame(firstVal)) {
             hasFirstValue = true;
@@ -1734,12 +1734,12 @@
           if (mom.isSame(lastVal)) {
             hasLastValue = true;
           }
-          results.push({
+          _results.push({
             x: mom,
             y: y
           });
         }
-        return results;
+        return _results;
       }).call(this);
       if (!hasFirstValue) {
         output.push({
@@ -1752,8 +1752,8 @@
         return a.x.unix() - b.x.unix();
       });
       output.splice(output.length - 1, 1);
-      for (k = 0, len = output.length; k < len; k++) {
-        tuple = output[k];
+      for (_i = 0, _len = output.length; _i < _len; _i++) {
+        tuple = output[_i];
         tuple.x = tuple.x.unix();
       }
       return output;
@@ -1820,30 +1820,30 @@
     };
 
     GraphResults.prototype.drawIntervals = function(graph, intervals) {
-      var from, k, len, list, max, min, offset, ref, results, to, unitSpan, unitWidth;
+      var from, list, max, min, offset, to, unitSpan, unitWidth, _i, _len, _ref, _results;
       if (!$(".zoom_slider", this.$result).is(".ui-slider")) {
         return;
       }
-      ref = $('.zoom_slider', this.$result).slider("values"), from = ref[0], to = ref[1];
+      _ref = $('.zoom_slider', this.$result).slider("values"), from = _ref[0], to = _ref[1];
       unitSpan = moment.unix(to).diff(moment.unix(from), this.zoom);
       unitWidth = graph.width / unitSpan;
       $(".empty_area", this.$result).remove();
-      results = [];
-      for (k = 0, len = intervals.length; k < len; k++) {
-        list = intervals[k];
+      _results = [];
+      for (_i = 0, _len = intervals.length; _i < _len; _i++) {
+        list = intervals[_i];
         max = _.max(list, "x");
         min = _.min(list, "x");
         from = Math.round(graph.x(min.x));
         to = Math.round(graph.x(max.x));
         offset = 8;
-        results.push($("<div>", {
+        _results.push($("<div>", {
           "class": "empty_area"
         }).css({
           left: from - unitWidth / 2,
           width: (to - from) + unitWidth
         }).appendTo(graph.element));
       }
-      return results;
+      return _results;
     };
 
     GraphResults.prototype.setBarMode = function() {
@@ -1877,7 +1877,7 @@
         };
       })(this)).done((function(_this) {
         return function(data) {
-          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, k, key, last, legend, len, len1, len2, len3, len4, new_time_row, nontime, o, old_ceil, old_render, old_tickOffsets, p, palette, q, r, ref, ref1, ref2, ref3, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, xAxis, yAxis;
+          var HTMLFormatter, color, emptyIntervals, first, graph, hoverDetail, i, item, key, last, legend, new_time_row, nontime, old_ceil, old_render, old_tickOffsets, palette, row, s, series, shelving, slider, time, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, timeunit, toDate, xAxis, yAxis, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3;
           c.log("graph data", data);
           if (data.ERROR) {
             _this.resultError(data);
@@ -1892,9 +1892,9 @@
           if (_.isArray(data.combined)) {
             palette = new Rickshaw.Color.Palette("colorwheel");
             series = [];
-            ref = data.combined;
-            for (k = 0, len = ref.length; k < len; k++) {
-              item = ref[k];
+            _ref = data.combined;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
               color = palette.color();
               series.push({
                 data: _this.getSeriesData(item.relative),
@@ -1918,8 +1918,8 @@
           Rickshaw.Series.zeroFill(series);
           emptyIntervals = _this.getEmptyIntervals(series[0].data);
           _this.s.hasEmptyIntervals = emptyIntervals.length;
-          for (o = 0, len1 = series.length; o < len1; o++) {
-            s = series[o];
+          for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+            s = series[_j];
             s.data = _.filter(s.data, function(item) {
               return item.y !== null;
             });
@@ -1944,11 +1944,11 @@
             }
           }, 200));
           $(".form_switch", _this.$result).click(function(event) {
-            var cls, h, len2, nRows, p, ref1, ref2, setExportUrl, val;
+            var cls, h, nRows, setExportUrl, val, _k, _len2, _ref1, _ref2;
             val = _this.s.mode;
-            ref1 = _this.$result.attr("class").split(" ");
-            for (p = 0, len2 = ref1.length; p < len2; p++) {
-              cls = ref1[p];
+            _ref1 = _this.$result.attr("class").split(" ");
+            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+              cls = _ref1[_k];
               if (cls.match(/^form-/)) {
                 _this.$result.removeClass(cls);
               }
@@ -1971,29 +1971,29 @@
               nRows = series.length || 2;
               h = (nRows * 2) + 4;
               h = Math.min(h, 40);
-              $(".time_table:visible", _this.$result).height(h + ".1em");
-              if ((ref2 = _this.time_grid) != null) {
-                ref2.resizeCanvas();
+              $(".time_table:visible", _this.$result).height("" + h + ".1em");
+              if ((_ref2 = _this.time_grid) != null) {
+                _ref2.resizeCanvas();
               }
               $(".exportTimeStatsSection", _this.$result).show();
               setExportUrl = function() {
-                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, len3, len4, len5, output, q, r, ref3, ref4, row, selType, selVal, t;
+                var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, output, row, selType, selVal, _l, _len3, _len4, _len5, _m, _n, _ref3, _ref4;
                 selVal = $(".timeKindOfData option:selected", this.$result).val();
                 selType = $(".timeKindOfFormat option:selected", this.$result).val();
                 dataDelimiter = selType === "TSV" ? "%09" : ";";
                 header = [util.getLocaleString("stats_hit")];
-                ref3 = series[0].data;
-                for (q = 0, len3 = ref3.length; q < len3; q++) {
-                  cell = ref3[q];
+                _ref3 = series[0].data;
+                for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                  cell = _ref3[_l];
                   header.push(moment(cell.x * 1000).format("YYYY"));
                 }
                 output = [header];
-                for (r = 0, len4 = series.length; r < len4; r++) {
-                  row = series[r];
+                for (_m = 0, _len4 = series.length; _m < _len4; _m++) {
+                  row = series[_m];
                   cells = [row.name === "&Sigma;" ? "Σ" : row.name];
-                  ref4 = row.data;
-                  for (t = 0, len5 = ref4.length; t < len5; t++) {
-                    cell = ref4[t];
+                  _ref4 = row.data;
+                  for (_n = 0, _len5 = _ref4.length; _n < _len5; _n++) {
+                    cell = _ref4[_n];
                     if (selVal === "relative") {
                       cells.push(cell.y);
                     } else {
@@ -2030,14 +2030,14 @@
           };
           time_table_data = [];
           time_table_columns_intermediate = {};
-          for (p = 0, len2 = series.length; p < len2; p++) {
-            row = series[p];
+          for (_k = 0, _len2 = series.length; _k < _len2; _k++) {
+            row = series[_k];
             new_time_row = {
               "label": row.name
             };
-            ref1 = row.data;
-            for (q = 0, len3 = ref1.length; q < len3; q++) {
-              item = ref1[q];
+            _ref1 = row.data;
+            for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
+              item = _ref1[_l];
               timestamp = moment(item.x * 1000).format("YYYY");
               time_table_columns_intermediate[timestamp] = {
                 "name": timestamp,
@@ -2069,9 +2069,9 @@
               "formatter": HTMLFormatter
             }
           ];
-          ref2 = _.keys(time_table_columns_intermediate).sort();
-          for (r = 0, len4 = ref2.length; r < len4; r++) {
-            key = ref2[r];
+          _ref2 = _.keys(time_table_columns_intermediate).sort();
+          for (_m = 0, _len4 = _ref2.length; _m < _len4; _m++) {
+            key = _ref2[_m];
             time_table_columns.push(time_table_columns_intermediate[key]);
           }
           time_grid = new Slick.Grid($(".time_table", _this.$result), time_table_data, time_table_columns, {
@@ -2122,7 +2122,7 @@
               return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
             }
           });
-          ref3 = settings.corpusListing.getTimeInterval(), first = ref3[0], last = ref3[1];
+          _ref3 = settings.corpusListing.getTimeInterval(), first = _ref3[0], last = _ref3[1];
           timeunit = last - first > 100 ? "decade" : _this.zoom;
           toDate = function(sec) {
             return moment(sec * 1000).toDate();
@@ -2158,13 +2158,13 @@
           };
           old_tickOffsets = xAxis.tickOffsets;
           xAxis.tickOffsets = function() {
-            var count, domain, offsets, ref4, runningTick, t, tickValue, unit;
+            var count, domain, offsets, runningTick, tickValue, unit, _n;
             domain = xAxis.graph.x.domain();
             unit = xAxis.fixedTimeUnit || xAxis.appropriateTimeUnit();
             count = Math.ceil((domain[1] - domain[0]) / unit.seconds);
             runningTick = domain[0];
             offsets = [];
-            for (i = t = 0, ref4 = count; 0 <= ref4 ? t < ref4 : t > ref4; i = 0 <= ref4 ? ++t : --t) {
+            for (i = _n = 0; 0 <= count ? _n < count : _n > count; i = 0 <= count ? ++_n : --_n) {
               tickValue = time.ceil(runningTick, unit);
               runningTick = tickValue + unit.seconds / 2;
               offsets.push({

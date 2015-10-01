@@ -377,10 +377,10 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
         # TODO currently copy pasted from watch on "searches.activeSearch"
         search = searches.activeSearch
         cqpExpr = null
-        if search?.type == "word"
+        if search?.type == "word" or search?.type == "lemgram"
             cqpExpr = simpleSearch.getCQP(search.val)
-        else if search?.type == "lemgram"
-            cqpExpr = "[lex contains '#{search.val}']"
+        else
+            cqpExpr = search.val
         cqpExpr
 
     s.center =
