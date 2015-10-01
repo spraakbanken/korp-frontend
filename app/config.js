@@ -334,11 +334,7 @@ attrs.dalinlemgram = {
     },
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    extended_template : "<input korp-autocomplete model='model' stringify='stringify' sorter='sorter' type='lem' >",
-    controller : function($scope) {
-        $scope.stringify = util.lemgramToString;
-        $scope.sorter = view.lemgramSort;
-    }
+    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
 };
 attrs.saldo = {
     label : "saldo",
