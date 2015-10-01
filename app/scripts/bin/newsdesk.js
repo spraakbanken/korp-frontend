@@ -29,23 +29,23 @@
               contentType: "application/json",
               dataType: "jsonp",
               success: function(json) {
-                var currentDate, i, len, n, n_item, newsitem, ref;
+                var currentDate, n, n_item, newsitem, _i, _len, _ref;
                 currentDate = new Date().toISOString().slice(0, 10);
                 s.newsitems = (function() {
-                  var i, len, results;
-                  results = [];
-                  for (i = 0, len = json.length; i < len; i++) {
-                    newsitem = json[i];
+                  var _i, _len, _results;
+                  _results = [];
+                  for (_i = 0, _len = json.length; _i < _len; _i++) {
+                    newsitem = json[_i];
                     if ((newsitem.e == null) || (newsitem.e >= currentDate)) {
-                      results.push(newsitem);
+                      _results.push(newsitem);
                     }
                   }
-                  return results;
+                  return _results;
                 })();
                 n = 0;
-                ref = s.newsitems;
-                for (i = 0, len = ref.length; i < len; i++) {
-                  n_item = ref[i];
+                _ref = s.newsitems;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  n_item = _ref[_i];
                   if (n_item.d > s.lastChecked) {
                     n += 1;
                   }

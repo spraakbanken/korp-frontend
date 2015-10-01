@@ -5,7 +5,7 @@
     var isInit, s;
     s = $rootScope;
     s._settings = settings;
-    s.lang = "sv";
+    window.lang = s.lang = $location.search().lang || settings.defaultLang;
     s.word_selected = null;
     s.isLab = window.isLab;
     s.sidebar_visible = false;
