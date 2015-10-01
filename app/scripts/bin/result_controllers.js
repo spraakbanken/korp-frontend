@@ -415,8 +415,8 @@
     });
   });
 
-  korpApp.controller("MapCtrl", function($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, geocoder) {
-    var getCqpExpr, s, updateMapData;
+  korpApp.controller("MapCtrl", function($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) {
+    var fixData, getCqpExpr, s, updateMapData;
     s = $scope;
     s.loading = false;
     s.hasResult = false;
@@ -466,7 +466,7 @@
       lng: 16.69921875,
       zoom: 4
     };
-    s.hoverTemplate = "<div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n<div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{abs_occurrences}}</span></div>\n<div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{rel_occurrences}}</span></div>";
+    s.hoverTemplate = "<div class=\"hover-info\" ng-repeat=\"(name, values) in names\">\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>\n</div>";
     s.markers = {};
     s.showTime = true;
     s.$on("map_data_available", function(_event, cqp, corpora) {
@@ -480,21 +480,36 @@
         return s.hasResult = true;
       }
     });
+    fixData = function(data) {
+      var abs, fixedData, name, names, rel, _i, _len;
+      fixedData = {};
+      abs = data.total.absolute;
+      rel = data.total.relative;
+      names = _.keys(abs);
+      for (_i = 0, _len = names.length; _i < _len; _i++) {
+        name = names[_i];
+        fixedData[name] = {
+          rel_occurrences: Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
+          abs_occurrences: data.total.absolute[name]
+        };
+      }
+      return fixedData;
+    };
     return updateMapData = function() {
       return nameEntitySearch.promise.then(function(data) {
+        var fixedData;
         if (data.count !== 0) {
-          markers(data.total.relative).then(function(markersResult) {
-            var key, mrks, value, _fn;
-            mrks = markersResult.markers;
+          fixedData = fixData(data);
+          markers(fixedData).then(function(markers) {
+            var key, value, _fn;
             _fn = function(key, value) {
-              var html, message, newScope;
-              message = value.message;
-              html = '<span class="link" ng-click="newKWICSearch()">' + message + '</span>';
-              newScope = s.$new();
-              newScope.name = message;
-              newScope.abs_occurrences = data.total.absolute[message];
-              newScope.rel_occurrences = Math.round((data.total.relative[message] + 0.00001) * 1000) / 1000;
-              newScope.newKWICSearch = function() {
+              var html, msgScope, name;
+              html = "";
+              msgScope = value.getMessageScope();
+              for (name in msgScope.names) {
+                html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>';
+              }
+              msgScope.newKWICSearch = function(query) {
                 var cl, opts;
                 cl = settings.corpusListing;
                 opts = {
@@ -503,7 +518,7 @@
                   ajaxParams: {
                     command: "query",
                     cqp: getCqpExpr(),
-                    cqp2: "[word='" + message + "' & pos='PM']",
+                    cqp2: "[word='" + query + "' & pos='PM']",
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()),
                     expand_prequeries: true
@@ -511,17 +526,14 @@
                 };
                 return $rootScope.kwicTabs.push(opts);
               };
-              value.message = html;
-              return value.getMessageScope = function() {
-                return newScope;
-              };
+              return markers[key]["message"] = html;
             };
-            for (key in mrks) {
-              if (!__hasProp.call(mrks, key)) continue;
-              value = mrks[key];
+            for (key in markers) {
+              if (!__hasProp.call(markers, key)) continue;
+              value = markers[key];
               _fn(key, value);
             }
-            return s.markers = mrks;
+            return s.markers = markers;
           });
         } else {
           s.markers = {};

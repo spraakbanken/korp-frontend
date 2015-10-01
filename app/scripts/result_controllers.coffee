@@ -348,14 +348,14 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
             }
             $rootScope.kwicTabs.push opts
 
-korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, geocoder) ->
+korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
     s = $scope
     s.loading = false
     s.hasResult = false
 
 
-    s.$watch (() -> $location.search().result_tab), (val) ->        
-        $timeout (() -> s.tabVisible = val == 1), 0 
+    s.$watch (() -> $location.search().result_tab), (val) ->
+        $timeout (() -> s.tabVisible = val == 1), 0
 
     s.showMap = $location.search().show_map?
     s.$watch (() -> $location.search().show_map), (val) ->
@@ -387,55 +387,69 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
       lat: 62.99515845212052
       lng: 16.69921875
       zoom: 4
-    s.hoverTemplate = """<div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
-                         <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{abs_occurrences}}</span></div>
-                         <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{rel_occurrences}}</span></div>"""
+    # s.hoverTemplate = "<div><h1>test</h1></div>"
+    s.hoverTemplate = """<div class="hover-info" ng-repeat="(name, values) in names">
+                          <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
+                          <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
+                          <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
+                       </div>"""
     s.markers = {}
     s.showTime = true
-    
+
     s.$on "map_data_available", (_event, cqp, corpora) ->
         if s.showMap
             s.lastSearch = { cqp: cqp, corpora: corpora }
             s.loading = true
             updateMapData()
             s.hasResult = true
-        
+
+    fixData = (data) ->
+        fixedData = {}
+        abs = data.total.absolute
+        rel = data.total.relative
+        names = _.keys abs
+        for name in names
+            fixedData[name] = {
+                rel_occurrences : (Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000)
+                abs_occurrences : data.total.absolute[name]
+            }
+        return fixedData
+
     updateMapData = () ->
-        nameEntitySearch.promise.then (data) ->            
-            if data.count != 0 
-                markers(data.total.relative).then (markersResult) ->
-                    mrks = markersResult.markers
-                    for own key, value of mrks
+        nameEntitySearch.promise.then (data) ->
+            if data.count != 0
+
+                fixedData = fixData data
+
+                markers(fixedData).then (markers) ->
+                    for own key, value of markers
                         do (key, value) ->
-                            message = value.message
-                            html = '<span class="link" ng-click="newKWICSearch()">' + message + '</span>'
-                            
-                            newScope = s.$new()
-                            newScope.name = message
-                            newScope.abs_occurrences = data.total.absolute[message]
-                            newScope.rel_occurrences = Math.round((data.total.relative[message] + 0.00001) * 1000) / 1000 
-                            newScope.newKWICSearch = () ->
+                            html = ""
+                            msgScope = value.getMessageScope()
+                            for name of msgScope.names
+                                html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>'
+
+                            msgScope.newKWICSearch = (query) ->
                                 cl = settings.corpusListing
-                                                                
+
                                 opts = {
                                     start : 0
                                     end : 24
                                     ajaxParams :
                                         command : "query"
                                         cqp : getCqpExpr()
-                                        cqp2 : "[word='" + message + "' & pos='PM']"
+                                        cqp2 : "[word='" + query + "' & pos='PM']"
                                         corpus : cl.stringifySelected()
                                         show_struct : _.keys cl.getStructAttrs()
-                                        expand_prequeries : true                      
+                                        expand_prequeries : true
                                 }
                                 $rootScope.kwicTabs.push opts
-                            
-                            value.message = html
-                            value.getMessageScope = () -> newScope
-                            
-                    s.markers = mrks
+                            markers[key]["message"] = html
+
+
+                    s.markers = markers
             else
                 s.markers = {}
             s.loading = false
-              
-            
+
+
