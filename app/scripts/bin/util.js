@@ -619,9 +619,11 @@
     return this.selected.length > 0;
   };
 
-  util.getLocaleString = function(key) {
-    var e, lang;
-    lang = ($("body").scope() ? $("body").scope().lang : void 0) || settings.defaultLanguage || "sv";
+  util.getLocaleString = function(key, lang) {
+    var e;
+    if (!lang) {
+      lang = window.lang || settings.defaultLanguage || "sv";
+    }
     try {
       return loc_data[lang][key] || key;
     } catch (_error) {

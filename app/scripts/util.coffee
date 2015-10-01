@@ -78,6 +78,7 @@ class window.CorpusListing
             for key, value of corpus.struct_attributes
                 value["isStructAttr"] = true
             
+            # if a position attribute is declared as structural, include here
             pos_attrs = _.pick corpus.attributes, (val, key) ->
                 val.isStructAttr
             _.extend {}, pos_attrs, corpus.struct_attributes
@@ -449,8 +450,10 @@ util.SelectionManager::deselect = ->
 util.SelectionManager::hasSelected = ->
     @selected.length > 0
 
-util.getLocaleString = (key) ->
-    lang = (if $("body").scope() then $("body").scope().lang) or settings.defaultLanguage or "sv"
+util.getLocaleString = (key, lang) ->
+    # lang = (if $("body").scope() then $("body").scope().lang) or settings.defaultLanguage or "sv"
+    unless lang
+        lang = window.lang or settings.defaultLanguage or "sv"
 
     try
         return loc_data[lang][key] or key

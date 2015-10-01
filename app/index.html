@@ -30,7 +30,7 @@
             <li ng-repeat="mode in visible" ng-class="{selected: mode.selected}" class="visible"><a ng-href="{{getUrl(mode.mode)}}" ng-click="onSelect(mode.mode)">
                  
                 {{mode.localekey | loc:lang}}</a></li>
-            <li ng-if="menu.length" class="menu_more visible"> <a popper my="right+15% top+10" at="bottom right" href="javascript:" class="dropdown-toggle">Fler<i class="fa fa-angle-double-down"></i></a>
+            <li ng-if="menu.length" class="menu_more visible"> <a popper my="right+15% top+10" at="bottom right" href="javascript:" class="dropdown-toggle">{{'more' | loc:lang}}<i class="fa fa-angle-double-down"></i></a>
               <ul class="dropdown-menu popper_menu">
                 <li ng-repeat="mode in menu"><a ng-href="{{getUrl(mode.mode)}}" ng-click="onModeMenuClick(mode.mode)">
                      

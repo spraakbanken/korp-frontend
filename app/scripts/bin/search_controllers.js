@@ -1,7 +1,7 @@
 (function() {
   var korpApp,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __slice = [].slice;
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    slice = [].slice;
 
   korpApp = angular.module("korpApp");
 
@@ -77,7 +77,7 @@
     };
     s.showAllRelated = function() {
       return modalInstance = $modal.open({
-        template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc}} (SWE-FN)</h3>\n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
+        template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc:lang}} (SWE-FN)</h3>\n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
         scope: s,
         size: 'lg',
         windowClass: "related"
@@ -87,6 +87,7 @@
     s.$watch("searches.activeSearch", (function(_this) {
       return function(search) {
         var cqp, page;
+        c.log("search", search);
         if (!search) {
           return;
         }
@@ -104,7 +105,7 @@
           } else {
             searches.kwicSearch(cqp);
           }
-          if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
+          if (settings.wordpicture !== false && s.word_pic && indexOf.call(search.val, " ") < 0) {
             return lemgramResults.makeRequest(search.val, "word");
           } else {
             return lemgramResults.resetView();
@@ -112,7 +113,7 @@
         } else if (search.type === "lemgram") {
           s.placeholder = search.val;
           s.simple_text = "";
-          cqp = "[lex contains '" + search.val + "']";
+          cqp = simpleSearch.getCQP();
           backend.relatedWordSearch(search.val).then(function(data) {
             return s.relatedObj = data;
           });
@@ -124,7 +125,7 @@
         } else {
           s.placeholder = null;
           s.simple_text = "";
-          return lemgramResults.resetView();
+          return typeof lemgramResults !== "undefined" && lemgramResults !== null ? lemgramResults.resetView() : void 0;
         }
       };
     })(this));
@@ -162,8 +163,8 @@
       $location.search("search", null);
       $location.search("page", null);
       return $timeout(function() {
-        var within, _ref;
-        if (_ref = s.within, __indexOf.call(_.keys(settings.defaultWithin), _ref) < 0) {
+        var ref, within;
+        if (ref = s.within, indexOf.call(_.keys(settings.defaultWithin), ref) < 0) {
           within = s.within;
         }
         $location.search("within", within || null);
@@ -193,7 +194,7 @@
     });
     s.withins = [];
     s.getWithins = function() {
-      var intersect, obj, output, union, _i, _len, _ref;
+      var intersect, j, len, obj, output, ref, union;
       intersect = settings.corpusListing.getAttrIntersection("within");
       union = settings.corpusListing.getAttrUnion("within");
       output = _.map(union, function(item) {
@@ -202,9 +203,9 @@
         };
       });
       if (union.length > intersect.length) {
-        for (_i = 0, _len = output.length; _i < _len; _i++) {
-          obj = output[_i];
-          if (_ref = obj.value, __indexOf.call(intersect, _ref) < 0) {
+        for (j = 0, len = output.length; j < len; j++) {
+          obj = output[j];
+          if (ref = obj.value, indexOf.call(intersect, ref) < 0) {
             obj.partial = true;
           } else {
             obj.partial = false;
@@ -235,8 +236,8 @@
       return or_obj.val = "";
     };
     s.getOpts = _.memoize(function(type) {
-      var confObj, optObj, pairs, _ref;
-      confObj = (_ref = s.typeMapping) != null ? _ref[type] : void 0;
+      var confObj, optObj, pairs, ref;
+      confObj = (ref = s.typeMapping) != null ? ref[type] : void 0;
       if (!confObj) {
         c.log("confObj missing", type, s.typeMapping);
         return;
@@ -248,9 +249,9 @@
       return pairs = _.pairs(optObj);
     });
     onCorpusChange = function(event, selected) {
-      var lang, _ref, _ref1;
+      var lang, ref, ref1;
       c.log("onCorpusChange", selected, s.l);
-      lang = (_ref = s.$parent.$parent) != null ? (_ref1 = _ref.l) != null ? _ref1.lang : void 0 : void 0;
+      lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
       s.types = settings.corpusListing.getAttributeGroups(lang);
       s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
@@ -274,13 +275,13 @@
       return token.and_block.push(s.addOr([]));
     };
     toggleBound = function(token, bnd) {
-      var boundObj, _ref, _ref1;
-      if (!((_ref = token.bound) != null ? _ref[bnd] : void 0)) {
+      var boundObj, ref, ref1;
+      if (!((ref = token.bound) != null ? ref[bnd] : void 0)) {
         boundObj = {};
         boundObj[bnd] = true;
         return token.bound = _.extend(token.bound || {}, boundObj);
       } else {
-        return (_ref1 = token.bound) != null ? delete _ref1[bnd] : void 0;
+        return (ref1 = token.bound) != null ? delete ref1[bnd] : void 0;
       }
     };
     s.toggleStart = function(token) {
@@ -308,10 +309,10 @@
   });
 
   korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
-    var expr, type, _ref, _ref1;
+    var expr, ref, ref1, type;
     expr = "";
     if ($location.search().search) {
-      _ref1 = (_ref = $location.search().search) != null ? _ref.split("|") : void 0, type = _ref1[0], expr = 2 <= _ref1.length ? __slice.call(_ref1, 1) : [];
+      ref1 = (ref = $location.search().search) != null ? ref.split("|") : void 0, type = ref1[0], expr = 2 <= ref1.length ? slice.call(ref1, 1) : [];
       expr = expr.join("|");
     }
     if (type === "cqp") {
@@ -373,8 +374,8 @@
   });
 
   korpApp.filter("loc", function($rootScope) {
-    return function(translationKey) {
-      return util.getLocaleString(translationKey);
+    return function(translationKey, lang) {
+      return util.getLocaleString(translationKey, lang);
     };
   });
 

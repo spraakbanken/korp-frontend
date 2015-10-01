@@ -4,7 +4,7 @@
       a(ng-href="{{getUrl(mode.mode)}}", ng-click="onSelect(mode.mode)") 
         | {{mode.localekey | loc:lang}}
     li.menu_more.visible(ng-if="menu.length") 
-      a.dropdown-toggle(popper, my="right+15% top+10", at="bottom right", href="javascript:") Fler
+      a.dropdown-toggle(popper, my="right+15% top+10", at="bottom right", href="javascript:") {{'more' | loc:lang}}
         i.fa.fa-angle-double-down
       ul.dropdown-menu.popper_menu
          li(ng-repeat="mode in menu")

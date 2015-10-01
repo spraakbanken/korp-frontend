@@ -426,5 +426,5 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
 
 korpApp.filter "loc", ($rootScope) ->
     (translationKey, lang) ->
-        return util.getLocaleString translationKey
+        return util.getLocaleString translationKey, lang
 
