@@ -15,13 +15,13 @@ html
     link(rel='stylesheet', href='components/rickshaw/rickshaw.css')
     //- link(rel='stylesheet', type='text/css', href='components/font-awesome/css/font-awesome.css')
     
+    link(rel='stylesheet', type='text/css', href='components/leaflet/dist/leaflet.css')
+    link(rel='stylesheet', type='text/css', href='components/geokorp/dist/styles/geokorp.min.css')
     //- bower:css
     //- endbower
     // endbuild 
     link(type='text/css', href='components/jquery-ui/themes/smoothness/jquery-ui.min.css', rel='stylesheet')
     
-    link(rel='stylesheet', type='text/css', href='components/leaflet/dist/leaflet.css')
-    link(rel='stylesheet', type='text/css', href='components/geokorp/dist/styles/geokorp.min.css')
     
     link(rel='stylesheet', type='text/css', href='styles/styles.css')
     link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
@@ -265,18 +265,18 @@ html
     //- not used currently
     //- bower:js
     //- endbower
-    // endbuild  
-    
-    script(src='lib/jquery.tooltip.pack.js')
-    script(src='components/d3/d3.min.js')
-    script(src='components/rickshaw/rickshaw.min.js')
-    
     script(src='components/angular-simple-logger/dist/index.js')
     script(src='components/leaflet/dist/leaflet.js')
     script(src='components/leaflet/dist/leaflet-src.js')
     script(src='components/angular-leaflet-directive/dist/angular-leaflet-directive.js')
     script(src='components/leaflet-providers/leaflet-providers.js')
     script(src='components/geokorp/dist/scripts/geokorp.min.js')
+    // endbuild  
+    
+    script(src='lib/jquery.tooltip.pack.js')
+    script(src='components/d3/d3.min.js')
+    script(src='components/rickshaw/rickshaw.min.js')
+    
 
     script.
       window.currentMode = $.deparam.querystring().mode || "default"

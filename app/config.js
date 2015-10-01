@@ -12,7 +12,7 @@ settings.autocomplete = true;
 settings.hits_per_page_default = 25
 
 settings.languages = ["sv", "en"];
-settings.defaultLang = "sv";
+settings.defaultLanguage = "sv";
 
 // for extended search dropdown, can be 'union' or 'intersection'
 settings.word_attribute_selector = "union"

@@ -1801,6 +1801,8 @@ body.modal-open {
   }
 }
 
+option[value^='? string:sentence ?'] {display : none;}
+
 .nav-tabs li.disabled {
   opacity : 0.6;
 }

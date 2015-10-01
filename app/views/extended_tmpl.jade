@@ -9,7 +9,7 @@ div(ng-controller='ExtendedSearch')
   span(rel='localize[within]')
 
   select.within_select(ng-model="within"
-                       ng-options="item.value as ('within_' + item.value | loc:lang) for item in withins")
+      ng-options="item.value as ('within_' + item.value | loc:lang) for item in withins")
 
   //- select.within_select
   //-   option(value='sentence', rel='localize[within_sentence]') Mening

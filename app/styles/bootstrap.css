@@ -2703,14 +2703,6 @@ a.label:hover, a.badge:hover {
     background-position: 0 0;
   }
 }
-@-ms-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -2765,7 +2757,6 @@ a.label:hover, a.badge:hover {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/anne\/korp\/korp-frontend\/app\/styles\/compass_twitter_bootstrap\/_progress-bars\.scss}line{font-family:\0000379}}
 .progress.active .bar {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
-  -ms-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 

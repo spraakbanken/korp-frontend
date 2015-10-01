@@ -173,7 +173,18 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: {
+        files: {
+          src: [
+          '.tmp',
+          "app/scripts/bin/**/*",
+          "app/index.html",
+          "app/styles/styles.css"
+          ]
+        }
+
+        
+      }
     },
     autoprefixer: {
       options: {
@@ -399,7 +410,10 @@ module.exports = function (grunt) {
             'components/d3/d3.min.js',
             'components/rickshaw/rickshaw.min.js',
             'lib/jquery.tooltip.pack.js',
-            'components/jquery-ui/themes/smoothness/jquery-ui.min.css'
+            'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+            'components/geokorp/dist/templates/sb_map.html',
+            'components/geokorp/dist/data/places.json',
+            'components/geokorp/dist/data/name_mapping.json'
           ]
         },
         {
