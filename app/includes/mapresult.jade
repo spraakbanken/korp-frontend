@@ -1,14 +1,17 @@
 div.map_disabled(ng-if="!showMap")
-	| {{'map_activate' | loc:lang}} 
+	| {{'map_activate' | loc:lang}}
 	div
 		button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
 			| {{'map_activate_btn' | loc:lang}}
 
 div.map_disabled(ng-if="showMap && !hasResult")
-	| {{'map_warn' | loc:lang}} 
+	| {{'map_warn' | loc:lang}}
 	div
 		button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
 			| {{'map_warn_btn' | loc:lang}}
+
+warning(ng-if="aborted && !loading")
+	| {{'search_aborted' | loc:lang}}
 
 div.name_map(ng-if="showMap && tabVisible && hasResult && !loading")
 	sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate")

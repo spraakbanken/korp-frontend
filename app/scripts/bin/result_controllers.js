@@ -420,6 +420,19 @@
     s = $scope;
     s.loading = false;
     s.hasResult = false;
+    s.aborted = false;
+    $(document).keyup(function(event) {
+      var _ref;
+      if (event.keyCode === 27 && s.showMap) {
+        if ((_ref = s.proxy) != null) {
+          _ref.abort();
+        }
+        return $timeout((function() {
+          s.aborted = true;
+          return s.loading = false;
+        }), 0);
+      }
+    });
     s.$watch((function() {
       return $location.search().result_tab;
     }), function(val) {
@@ -475,9 +488,11 @@
     s.markers = {};
     s.showTime = true;
     s.$on("map_progress", function(event, progress) {
-      return s.progress = Math.round(progress["stats"]);
+      s.progress = Math.round(progress["stats"]);
+      return c.log("## progress ", s.progress);
     });
     s.$on("map_data_available", function(event, cqp, corpora) {
+      s.aborted = false;
       if (s.showMap) {
         s.proxy = nameEntitySearch.proxy;
         s.lastSearch = {

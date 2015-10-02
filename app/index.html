@@ -279,16 +279,17 @@
                     <tab-preloader ng-if="loading" value="progress" spinner="countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
                   <div>
-                    <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc:lang}} 
+                    <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc:lang}}
                       <div>
                         <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'map_activate_btn' | loc:lang}}</button>
                       </div>
                     </div>
-                    <div ng-if="showMap &amp;&amp; !hasResult" class="map_disabled">{{'map_warn' | loc:lang}} 
+                    <div ng-if="showMap &amp;&amp; !hasResult" class="map_disabled">{{'map_warn' | loc:lang}}
                       <div>
                         <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'map_warn_btn' | loc:lang}}</button>
                       </div>
                     </div>
+                    <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                     <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading" class="name_map">
                       <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-hover-template="hoverTemplate"></sb-map>
                     </div>

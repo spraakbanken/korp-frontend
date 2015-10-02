@@ -352,7 +352,14 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
     s = $scope
     s.loading = false
     s.hasResult = false
+    s.aborted = false
 
+    $(document).keyup (event) ->
+        if event.keyCode == 27 and s.showMap
+            s.proxy?.abort()
+            $timeout (() ->
+                s.aborted = true
+                s.loading = false), 0
 
     s.$watch (() -> $location.search().result_tab), (val) ->
         $timeout (() -> s.tabVisible = val == 1), 0
@@ -404,6 +411,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
         s.progress = Math.round(progress["stats"])
 
     s.$on "map_data_available", (event, cqp, corpora) ->
+        s.aborted = false
         if s.showMap
             s.proxy = nameEntitySearch.proxy
             s.lastSearch = { cqp: cqp, corpora: corpora }
