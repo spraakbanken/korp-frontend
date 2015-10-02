@@ -488,8 +488,7 @@
     s.markers = {};
     s.showTime = true;
     s.$on("map_progress", function(event, progress) {
-      s.progress = Math.round(progress["stats"]);
-      return c.log("## progress ", s.progress);
+      return s.progress = Math.round(progress["stats"]);
     });
     s.$on("map_data_available", function(event, cqp, corpora) {
       s.aborted = false;
