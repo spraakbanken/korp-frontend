@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="Med Korp kan den språkligt nyfikna göra avancerade sökningar i stora mängder av skriven text.">
-    <!-- build:css styles/korp.css -->
+    <!-- build:css styles/korp.css-->
     <link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
     <link rel="stylesheet" href="components/SlickGrid/slick.grid.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="components/jReject/css/jquery.reject.css" type="text/css" media="screen" charset="utf-8">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="components/rickshaw/rickshaw.css">
     <link rel="stylesheet" type="text/css" href="components/leaflet/dist/leaflet.css">
     <link rel="stylesheet" type="text/css" href="components/geokorp/dist/styles/geokorp.min.css">
-    <!-- endbuild -->
+    <!-- endbuild-->
     <link type="text/css" href="components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="shortcut icon" type="image/ico" href="img/korp_icon.ico">
@@ -119,9 +119,6 @@
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><span ng-if="relatedObj[0].words.length &gt; relatedDefault || relatedObj.length &gt; 1">
                        
                       ...</span></button>
-                  
-                  
-                  
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -193,7 +190,7 @@
         </div>
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
-            <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}"> 
+            <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}">
               <tabset tab-hash="result_tab" class="tabbable result_tabs">
                 <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
@@ -252,7 +249,7 @@
                       <select id="kindOfFormat">
                         <option value="csv" rel="localize[statstable_exp_csv]">CSV (kommaseparerade värden)</option>
                         <option value="tsv" rel="localize[statstable_exp_tsv]">TSV (tabseparerade värden)</option>
-                      </select><a id="generateExportButton"> 
+                      </select><a id="generateExportButton">
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:lang}}</button></a><a id="exportButton" class="btn btn-sm btn-default">{{'statstable_export' | loc:lang}}</a>
                     </div>
                   </div>
@@ -261,12 +258,12 @@
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
-                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}} 
+                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}}
                     <div>
                       <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'word_pic_warn_btn' | loc:lang}}</button>
                     </div>
                   </div>
-                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc:lang}} </warning>
+                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc:lang}}</warning>
                   <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                   <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc:lang}}</warning>
                   <div constr="LemgramResults" constr-name="lemgramResults">
@@ -278,7 +275,9 @@
                   </div>
                 </tab>
                 <tab ng-controller="MapCtrl">
-                  <tab-heading>{{'map' | loc }}</tab-heading>
+                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; countCorpora() &lt; 2 }">{{'map' | loc:lang }}
+                    <tab-preloader ng-if="loading" value="progress" spinner="countCorpora() &lt; 2"></tab-preloader>
+                  </tab-heading>
                   <div>
                     <div ng-if="!showMap" class="map_disabled">{{'map_activate' | loc:lang}} 
                       <div>
@@ -337,7 +336,6 @@
                   <div constr="GraphResults" class="graph_tab">
                     <div class="graph_header">
                       <div class="controls">
-                        
                         <div class="btn-group form_switch">
                           <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-sm">{{'line' | loc:lang}}</label>
                           <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-sm">{{'bar' | loc:lang}}</label>
@@ -412,7 +410,7 @@
       <div class="modal-header">
         <h2>{{'log_in' | loc:lang}}</h2>
         <span ng-click="clickX()" class="close-x">×</span>
-      
+        
       </div>
       <div id="login_popup" class="modal-body">
         <form ng-submit="loginSubmit(login_usr, login_pass)">
@@ -424,7 +422,7 @@
           <input class="btn btn-sm btn-primary" type="submit" value="Logga in" rel="localize[send]" >
         </form>
       </div>
-        
+      
       
     </script>
     <script id="lemgramResultsTmpl" type="text/x-jquery-tmpl">
@@ -457,19 +455,16 @@
       <td class="example_link"></td>
       </tr>
     </script>
-    
-    
-    
-    
-    <!--if lte IE 8script(language='javascript', src='lib/flot/excanvas.min.js')
-    -->
+    <!--[if lte IE 8]>
+    <script language="javascript" src="lib/flot/excanvas.min.js"></script>
+    <![endif]-->
     <script>
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
       window.c = window.console;
       
     </script>
-    <!-- build:js scripts/korp_lib.js -->
+    <!-- build:js scripts/korp_lib.js-->
     <script src="components/json3/lib/json3.js"></script>
     <script src="components/jquery/dist/jquery.js"></script>
     <script src="components/jquery-ui/ui/jquery.ui.core.js"></script>
@@ -522,7 +517,7 @@
     <script src="components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="components/leaflet-providers/leaflet-providers.js"></script>
     <script src="components/geokorp/dist/scripts/geokorp.min.js"></script>
-    <!-- endbuild  -->
+    <!-- endbuild-->
     <script src="lib/jquery.tooltip.pack.js"></script>
     <script src="components/d3/d3.min.js"></script>
     <script src="components/rickshaw/rickshaw.min.js"></script>
@@ -531,7 +526,7 @@
       
     </script>
     <script src="config.js"></script>
-    <!-- build:js scripts/scripts.js -->
+    <!-- build:js scripts/scripts.js-->
     <script src="scripts/cqp_parser/CQPParser2.js"></script>
     <script src="scripts/bin/cqp_parser/cqp.js"></script>
     <script src="scripts/bin/util.js"></script>
@@ -548,6 +543,6 @@
     <script src="scripts/bin/services.js"></script>
     <script src="scripts/bin/directives.js"></script>
     <script src="scripts/bin/newsdesk.js"></script>
-    <!-- endbuild -->
+    <!-- endbuild-->
   </body>
 </html>

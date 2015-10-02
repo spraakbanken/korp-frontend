@@ -1,6 +1,6 @@
 (function() {
   var korpApp,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   korpApp = angular.module("korpApp");
 
@@ -10,39 +10,39 @@
       template: "<span class=\"word\" ng-class=\"getClassObj(wd)\">\n{{::wd.word}} </span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
-          var j, k, l, len1, len2, len3, output, ref, ref1, ref2, struct, x, y;
+          var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
           output = {
             reading_match: wd._match,
             punct: wd._punct,
             match_sentence: wd._matchSentence,
             link_selected: wd._link_selected
           };
-          ref = wd._struct || [];
-          for (j = 0, len1 = ref.length; j < len1; j++) {
-            struct = ref[j];
+          _ref = wd._struct || [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            struct = _ref[_i];
             output["struct_" + struct] = true;
           }
-          ref1 = wd._open || [];
-          for (k = 0, len2 = ref1.length; k < len2; k++) {
-            struct = ref1[k];
+          _ref1 = wd._open || [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            struct = _ref1[_j];
             output["open_" + struct] = true;
           }
-          ref2 = wd._close || [];
-          for (l = 0, len3 = ref2.length; l < len3; l++) {
-            struct = ref2[l];
+          _ref2 = wd._close || [];
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            struct = _ref2[_k];
             output["close_" + struct] = true;
           }
           return ((function() {
-            var len4, n, ref3, ref4, results;
-            ref3 = _.pairs(output);
-            results = [];
-            for (n = 0, len4 = ref3.length; n < len4; n++) {
-              ref4 = ref3[n], x = ref4[0], y = ref4[1];
+            var _l, _len3, _ref3, _ref4, _results;
+            _ref3 = _.pairs(output);
+            _results = [];
+            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+              _ref4 = _ref3[_l], x = _ref4[0], y = _ref4[1];
               if (y) {
-                results.push(x);
+                _results.push(x);
               }
             }
-            return results;
+            return _results;
           })()).join(" ");
         };
       }
@@ -81,11 +81,11 @@
           }
         });
         s.getSelected = function() {
-          var i, j, len1, out, p, ref;
+          var i, out, p, _i, _len, _ref;
           out = null;
-          ref = contentScope.tabs;
-          for (i = j = 0, len1 = ref.length; j < len1; i = ++j) {
-            p = ref[i];
+          _ref = contentScope.tabs;
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            p = _ref[i];
             if (p.active) {
               out = i;
             }
@@ -96,10 +96,10 @@
           return out;
         };
         return s.setSelected = function(index) {
-          var j, len1, ref, ref1, t;
-          ref = contentScope.tabs;
-          for (j = 0, len1 = ref.length; j < len1; j++) {
-            t = ref[j];
+          var t, _i, _len, _ref, _ref1;
+          _ref = contentScope.tabs;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            t = _ref[_i];
             t.active = false;
             if (typeof t.onDeselect === "function") {
               t.onDeselect();
@@ -108,7 +108,7 @@
           if (contentScope.tabs[index]) {
             return contentScope.tabs[index].active = true;
           } else {
-            return (ref1 = _.last(contentScope.tabs)) != null ? ref1.active = true : void 0;
+            return (_ref1 = _.last(contentScope.tabs)) != null ? _ref1.active = true : void 0;
           }
         };
       }
@@ -121,30 +121,26 @@
         var doNotEscape, escape, unescape;
         doNotEscape = ["*=", "!*="];
         escape = function(val) {
-          var ref;
-          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return regescape(val);
           } else {
             return val;
           }
         };
         unescape = function(val) {
-          var ref;
-          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
+          var _ref;
+          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
             return val.replace(/\\/g, "");
           } else {
             return val;
           }
         };
         $scope.input = unescape($scope.model);
-        c.log("escaper", $scope.$id);
         $scope.inputChange = function() {
-          c.log("inputChange", $scope.input, escape($scope.input));
-          $scope.model = escape($scope.input);
-          return c.log("$scope", $scope.$id);
+          return $scope.model = escape($scope.input);
         };
         return $scope.$watch("orObj.op", function() {
-          c.log("operator change");
           return $scope.model = escape($scope.input);
         });
       }
@@ -158,9 +154,9 @@
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
         $scope.makeSensitive = function() {
-          var ref;
+          var _ref;
           $scope["case"] = "sensitive";
-          return (ref = $scope.orObj.flags) != null ? delete ref["c"] : void 0;
+          return (_ref = $scope.orObj.flags) != null ? delete _ref["c"] : void 0;
         };
         return $scope.makeInsensitive = function() {
           var flags;
@@ -200,9 +196,7 @@
           prevScope = null;
           current = valueObj;
           childScope = scope.$new(false, scope);
-          c.log("tokenValue watch", scope.$id, "child", childScope.$id);
           childWatch = childScope.$watch("model", function(val) {
-            c.log("model watch", val);
             return scope.model = val;
           });
           childScope.orObj = scope.orObj;
@@ -250,7 +244,7 @@
       restrict: "E",
       replace: true,
       link: function(scope, elem, attr) {
-        var at, horizontal, my, onEscape, popover, ref, s, trans;
+        var at, horizontal, my, onEscape, popover, s, trans, _ref;
         s = scope;
         s.pos = attr.pos || "bottom";
         s.togglePopover = function(event) {
@@ -276,7 +270,7 @@
           right: "left",
           left: "right"
         };
-        horizontal = (ref = s.pos) === "top" || ref === "bottom";
+        horizontal = (_ref = s.pos) === "top" || _ref === "bottom";
         if (horizontal) {
           my = "center " + trans[s.pos];
           at = "center " + s.pos + "+10";
@@ -336,7 +330,7 @@
           scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
         }
         scope.loglike = Math.abs(scope.meter[1]);
-        scope.tooltipHTML = (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
+        scope.tooltipHTML = "" + (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
         w = elem.parent().width();
         part = scope.loglike / (Math.abs(scope.max));
         return bkg.width(Math.round(part * w));
@@ -405,7 +399,7 @@
         var s, setCQP;
         s = $scope;
         setCQP = function(val) {
-          var error, j, k, len1, len2, output, ref, ref1, results, token, tokenObj;
+          var error, output, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1, _results;
           c.log("inner cqp change", val);
           try {
             s.data = CQP.parse(val);
@@ -413,9 +407,9 @@
           } catch (_error) {
             error = _error;
             output = [];
-            ref = val.split("[");
-            for (j = 0, len1 = ref.length; j < len1; j++) {
-              token = ref[j];
+            _ref = val.split("[");
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              token = _ref[_i];
               if (!token) {
                 continue;
               }
@@ -435,17 +429,17 @@
             s.data = output;
             c.log("crash", s.data);
           }
-          ref1 = s.data;
-          results = [];
-          for (k = 0, len2 = ref1.length; k < len2; k++) {
-            token = ref1[k];
+          _ref1 = s.data;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            token = _ref1[_j];
             if (!("and_block" in token) || !token.and_block.length) {
-              results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
+              _results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
             } else {
-              results.push(void 0);
+              _results.push(void 0);
             }
           }
-          return results;
+          return _results;
         };
         if (s.cqp == null) {
           s.cqp = '[]';
@@ -623,17 +617,17 @@
           return scope.textInField = "";
         };
         scope.getMorphologies = function(corporaIDs) {
-          var corporaID, j, k, len1, len2, morf, morfs, morphologies, ref;
+          var corporaID, morf, morfs, morphologies, _i, _j, _len, _len1, _ref;
           morphologies = [];
           if (scope.variant === "dalin") {
             morphologies.push("dalinm");
           } else {
-            for (j = 0, len1 = corporaIDs.length; j < len1; j++) {
-              corporaID = corporaIDs[j];
-              morfs = ((ref = settings.corpora[corporaID].morf) != null ? ref.split("|") : void 0) || [];
-              for (k = 0, len2 = morfs.length; k < len2; k++) {
-                morf = morfs[k];
-                if (indexOf.call(morphologies, morf) < 0) {
+            for (_i = 0, _len = corporaIDs.length; _i < _len; _i++) {
+              corporaID = corporaIDs[_i];
+              morfs = ((_ref = settings.corpora[corporaID].morf) != null ? _ref.split("|") : void 0) || [];
+              for (_j = 0, _len1 = morfs.length; _j < _len1; _j++) {
+                morf = morfs[_j];
+                if (__indexOf.call(morphologies, morf) < 0) {
                   morphologies.push(morf);
                 }
               }
@@ -715,13 +709,13 @@
           return s.isOpen = true;
         };
         time_units = ["hour", "minute"];
-        return w = s.$watchGroup(["dateModel", "timeModel"], function(arg) {
-          var date, j, len1, m, m_time, t, time;
-          date = arg[0], time = arg[1];
+        return w = s.$watchGroup(["dateModel", "timeModel"], function(_arg) {
+          var date, m, m_time, t, time, _i, _len;
+          date = _arg[0], time = _arg[1];
           if (date && time) {
             m = moment(moment(date).format("YYYY-MM-DD"));
-            for (j = 0, len1 = time_units.length; j < len1; j++) {
-              t = time_units[j];
+            for (_i = 0, _len = time_units.length; _i < _len; _i++) {
+              t = time_units[_i];
               m_time = moment(time);
               m.add(m_time[t](), t);
             }
