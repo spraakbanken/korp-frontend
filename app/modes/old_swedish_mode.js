@@ -463,6 +463,14 @@ settings.corpora.ogl = {
     within : settings.defaultWithin,
 	context: {"1 section" : "1 section"},
     attributes : {
+		baseform : {
+		    label : "baseform",
+		    type : "set",
+			extended_template : "<input ng-model='model' >",
+			opts : settings.setOptions,
+			externalSearch : "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
+		    // internalSearch : true,
+		},
 		pos : {
 			label : "pos",
 			displayType : "select",
@@ -960,13 +968,6 @@ settings.corpora.ogl = {
 				"V-3ppxa----i",
 				"V-3pxxa----i"
 		    ]
-		},
-		baseform : {
-		    label : "baseform",
-		    type : "set",
-			externalSearch : "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
-		    internalSearch : true,
-		    extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>"
 		},
 		annotation : {
 			label : "annotation",
