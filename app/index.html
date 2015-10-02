@@ -119,6 +119,9 @@
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><span ng-if="relatedObj[0].words.length &gt; relatedDefault || relatedObj.length &gt; 1">
                        
                       ...</span></button>
+                  
+                  
+                  
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -337,6 +340,7 @@
                   <div constr="GraphResults" class="graph_tab">
                     <div class="graph_header">
                       <div class="controls">
+                        
                         <div class="btn-group form_switch">
                           <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-sm">{{'line' | loc:lang}}</label>
                           <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-sm">{{'bar' | loc:lang}}</label>
@@ -411,7 +415,7 @@
       <div class="modal-header">
         <h2>{{'log_in' | loc:lang}}</h2>
         <span ng-click="clickX()" class="close-x">×</span>
-        
+      
       </div>
       <div id="login_popup" class="modal-body">
         <form ng-submit="loginSubmit(login_usr, login_pass)">
@@ -456,9 +460,12 @@
       <td class="example_link"></td>
       </tr>
     </script>
-    <!--[if lte IE 8]>
-    <script language="javascript" src="lib/flot/excanvas.min.js"></script>
-    <![endif]-->
+    
+    
+    
+    
+    <!--if lte IE 8script(language='javascript', src='lib/flot/excanvas.min.js')
+    -->
     <script>
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
