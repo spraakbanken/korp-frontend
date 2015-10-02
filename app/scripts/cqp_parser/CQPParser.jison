@@ -5,22 +5,20 @@
 %lex
 %%
 
-"int(_.text_datefrom)"  return "DATE_TIME_KEY"
-"int(_.text_dateto)"  return "DATE_TIME_KEY"
-"int(_.text_timefrom)"  return "DATE_TIME_KEY"
-"int(_.text_timeto)"  return "DATE_TIME_KEY"
+
 \d{6,8}                 return "DATE_TIME_VAL"
-"<="                  return "DATE_OP"
-">="                  return "DATE_OP"
-"<"                   return "DATE_OP"
-">"                   return "DATE_OP"
-"="                   return "DATE_OP"
+"int"                return "int"
+// "<="                  return "DATE_OP"
+// ">="                  return "DATE_OP"
+// "<"                   return "DATE_OP"
+// ">"                   return "DATE_OP"
+// "="                   return "DATE_OP"
 ' contains '          return 'contains'
 'lbound'              return "FUNC"
 'rbound'              return "FUNC"
 'sentence'            return "FUNCVAL"
-%"("                   /* skip */
-%")"                   /* skip */
+"("                   "("
+")"                   ")"
 \s+                   /* skip whitespace */
 \%[cd]+               return "FLAG"
 'not'                 return 'not'
@@ -112,19 +110,8 @@ bound_block
 or_block
     : or
         {$$ = [$1]}
-    | or '|' or_block
+    | "(" or '|' or_block ")"
         {$$ = [].concat([$1], $3)}
-
-    | date_time_expr
-        {
-            for(key in $1) {
-                $1[key] = Math.min.apply(null, $1[key])
-            }
-            var val = [$1["fromdate"], $1["todate"], $1["fromtime"], $1["totime"]].join(",");
-            $$ = {type : "date_interval", op : "=", val: val}
-            // var op = $2 == '<' ? "!=" : "=";
-            // $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
-        }
     ;
 
 bool
@@ -147,6 +134,17 @@ or
                 
             $$ = $1;
         }
+
+    // | date_time_expr
+    //     {
+    //         for(key in $1) {
+    //             $1[key] = Math.min.apply(null, $1[key])
+    //         }
+    //         var val = [$1["fromdate"], $1["todate"], $1["fromtime"], $1["totime"]].join(",");
+    //         $$ = {type : "date_interval", op : "=", val: val}
+    //         // var op = $2 == '<' ? "!=" : "=";
+    //         // $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
+    //     }
     
 
     ;
@@ -169,18 +167,24 @@ date_time_expr
 
 
 date
-    : DATE_TIME_KEY DATE_OP DATE_VAL
+    : date_key DATE_OP DATE_VAL
         {
             if(!$$) $$ = {}
-            var key = $1.split("_")[$1.split("_").length - 1]
-            if(!key in $$) $$[key] = []
+            
+            if(!$1 in $$) $$[$1] = []
 
             if($2 == "=")
-                $$[key].push($3)
+                $$[$1].push($3)
 
         }
     ;
 
+date_key
+    : "int" "(" TYPE ")"
+        {
+            $$ = $3
+        }
+    ;
 
 bound
     : FUNC FUNCVAL

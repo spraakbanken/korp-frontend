@@ -75,6 +75,7 @@ var CQPParser = (function(){
 var parser = {trace: function trace() { },
 yy: {},
 <<<<<<< HEAD
+<<<<<<< HEAD
 symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":8,"and_block":9,"]":10,"repeat":11,"{":12,"INT":13,",":14,"}":15,"or_block":16,"bound_block":17,"&":18,"bound":19,"or":20,"|":21,"bool":22,"TYPE":23,"infix_op":24,"VALUE":25,"FLAG":26,"DATE_FROM":27,"DATE_OP":28,"DATE_VAL":29,"DATE_TO":30,"FUNC":31,"FUNCVAL":32,"=":33,"!=":34,"contains":35,"not":36,"^=":37,"&=":38,"*=":39,"!*=":40,"_=":41,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",10:"]",12:"{",13:"INT",14:",",15:"}",18:"&",21:"|",23:"TYPE",25:"VALUE",26:"FLAG",27:"DATE_FROM",28:"DATE_OP",29:"DATE_VAL",30:"DATE_TO",31:"FUNC",32:"FUNCVAL",33:"=",34:"!=",35:"contains",36:"not",37:"^=",38:"&=",39:"*=",40:"!*=",41:"_="},
 productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,3],[6,2],[11,5],[11,4],[9,1],[9,1],[9,3],[17,1],[17,3],[16,1],[16,3],[22,1],[22,1],[20,3],[20,2],[20,7],[19,2],[24,1],[24,1],[24,1],[24,2],[24,1],[24,1],[24,1],[24,1],[24,1]],
@@ -83,6 +84,11 @@ symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":
 terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",10:"]",12:"{",13:"INT",14:",",15:"}",18:"&",21:"|",24:"TYPE",26:"VALUE",27:"FLAG",29:"DATE_TIME_KEY",30:"DATE_OP",31:"DATE_VAL",32:"FUNC",33:"FUNCVAL",34:"=",35:"!=",36:"contains",37:"not",38:"^=",39:"&=",40:"*=",41:"_="},
 productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,3],[6,2],[11,5],[11,4],[9,1],[9,1],[9,3],[17,1],[17,3],[16,1],[16,3],[16,1],[23,1],[23,1],[20,3],[20,2],[22,1],[22,3],[28,3],[19,2],[25,1],[25,1],[25,1],[25,2],[25,1],[25,1],[25,1],[25,1]],
 >>>>>>> ambiguos grammar with ampersand, will try paren approach
+=======
+symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":8,"and_block":9,"]":10,"repeat":11,"{":12,"INT":13,",":14,"}":15,"or_block":16,"bound_block":17,"&":18,"bound":19,"or":20,"(":21,"|":22,")":23,"bool":24,"TYPE":25,"infix_op":26,"VALUE":27,"FLAG":28,"date_time_expr":29,"date":30,"date_key":31,"DATE_OP":32,"DATE_VAL":33,"int":34,"FUNC":35,"FUNCVAL":36,"=":37,"!=":38,"contains":39,"not":40,"^=":41,"&=":42,"*=":43,"_=":44,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",10:"]",12:"{",13:"INT",14:",",15:"}",18:"&",21:"(",22:"|",23:")",25:"TYPE",27:"VALUE",28:"FLAG",32:"DATE_OP",33:"DATE_VAL",34:"int",35:"FUNC",36:"FUNCVAL",37:"=",38:"!=",39:"contains",40:"not",41:"^=",42:"&=",43:"*=",44:"_="},
+productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,3],[6,2],[11,5],[11,4],[9,1],[9,1],[9,3],[17,1],[17,3],[16,1],[16,5],[24,1],[24,1],[20,3],[20,2],[29,1],[29,3],[30,3],[31,4],[19,2],[26,1],[26,1],[26,1],[26,2],[26,1],[26,1],[26,1],[26,1]],
+>>>>>>> cqp parser rewrite in progress
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -117,25 +123,15 @@ case 13:this.$ = $$[$0]; $$[$0][$$[$0-2]] = true
 break;
 case 14:this.$ = [$$[$0]]
 break;
-case 15:this.$ = [].concat([$$[$0-2]], $$[$0])
+case 15:this.$ = [].concat([$$[$0-4]], $$[$0-2])
 break;
-case 16:
-            for(key in $$[$0]) {
-                $$[$0][key] = Math.min.apply(null, $$[$0][key])
-            }
-            var val = [$$[$0]["fromdate"], $$[$0]["todate"], $$[$0]["fromtime"], $$[$0]["totime"]].join(",");
-            this.$ = {type : "date_interval", op : "=", val: val}
-            // var op = $$[$01] == '<' ? "!=" : "=";
-            // this.$ =  {type : "date_interval", op : op, val: $$[$02] + "," + $$[$06]}
-        
+case 16:this.$ = $$[$0]
 break;
 case 17:this.$ = $$[$0]
 break;
-case 18:this.$ = $$[$0]
+case 18:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
 break;
-case 19:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
-break;
-case 20:
+case 19:
             var chars = $$[$0].slice(1).split("");
             $$[$0-1].flags = {};
             for(var i = 0; i < chars.length; i++)
@@ -144,25 +140,29 @@ case 20:
             this.$ = $$[$0-1];
         
 break;
-case 21:
+case 20:
             this.$ = $$[$0];
         
 break;
-case 22:
+case 21:
             this.$ = {};
             for(key in $$[$0-2]) {
                 this.$[key] = $$[$0-2][key].concat($$[$0-2]);
             }
         
 break;
-case 23:
+case 22:
             if(!this.$) this.$ = {}
-            var key = $$[$0-2].split("_")[$$[$0-2].split("_").length - 1]
-            if(!key in this.$) this.$[key] = []
+            
+            if(!$$[$0-2] in this.$) this.$[$$[$0-2]] = []
 
             if($$[$0-1] == "=")
-                this.$[key].push($$[$0])
+                this.$[$$[$0-2]].push($$[$0])
 
+        
+break;
+case 23:
+            this.$ = $$[$0-1]
         
 break;
 case 24: this.$ = $$[$0-1]
@@ -195,9 +195,14 @@ case 32:this.$ = "_="
 break;
 }
 },
+<<<<<<< HEAD
 table: [{3:1,4:2,6:3,7:[1,4],8:[1,5]},{1:[3]},{5:[1,6]},{4:7,5:[2,2],6:3,7:[1,4],8:[1,5],11:8,12:[1,9]},{5:[2,4],7:[2,4],8:[2,4],12:[2,4]},{9:10,16:11,17:12,19:15,20:13,22:14,24:[1,16],28:17,29:[1,19],32:[1,18]},{1:[2,1]},{5:[2,3]},{5:[2,6],7:[2,6],8:[2,6],12:[2,6]},{13:[1,20]},{10:[1,21]},{10:[2,9],18:[1,22]},{10:[2,10]},{10:[2,14],18:[2,14],21:[1,23],27:[1,24]},{10:[2,16],18:[2,16]},{10:[2,12],18:[1,25]},{25:26,34:[1,27],35:[1,28],36:[1,29],37:[1,30],38:[1,31],39:[1,32],40:[1,33],41:[1,34]},{10:[2,21],18:[1,37],21:[1,36],23:35},{33:[1,38]},{30:[1,39]},{14:[1,40]},{5:[2,5],7:[2,5],8:[2,5],12:[2,5]},{9:41,16:11,17:12,19:15,20:13,22:14,24:[1,16],28:17,29:[1,19],32:[1,18]},{16:42,20:13,22:14,24:[1,16],28:17,29:[1,19]},{10:[2,20],18:[2,20],21:[2,20],27:[2,20]},{17:43,19:15,32:[1,18]},{26:[1,44]},{26:[2,25]},{26:[2,26]},{26:[2,27]},{36:[1,45]},{26:[2,29]},{26:[2,30]},{26:[2,31]},{26:[2,32]},{22:46,28:17,29:[1,19]},{29:[2,17]},{29:[2,18]},{10:[2,24],18:[2,24]},{31:[1,47]},{13:[1,48],15:[1,49]},{10:[2,11]},{10:[2,15],18:[2,15]},{10:[2,13]},{10:[2,19],18:[2,19],21:[2,19],27:[2,19]},{26:[2,28]},{10:[2,22],18:[2,22]},{10:[2,23],18:[2,23],21:[2,23]},{15:[1,50]},{5:[2,8],7:[2,8],8:[2,8],12:[2,8]},{5:[2,7],7:[2,7],8:[2,7],12:[2,7]}],
 defaultActions: {6:[2,1],7:[2,3],12:[2,10],27:[2,25],28:[2,26],29:[2,27],31:[2,29],32:[2,30],33:[2,31],34:[2,32],36:[2,17],37:[2,18],41:[2,11],43:[2,13],45:[2,28]},
 >>>>>>> ambiguos grammar with ampersand, will try paren approach
+=======
+table: [{3:1,4:2,6:3,7:[1,4],8:[1,5]},{1:[3]},{5:[1,6]},{4:7,5:[2,2],6:3,7:[1,4],8:[1,5],11:8,12:[1,9]},{5:[2,4],7:[2,4],8:[2,4],12:[2,4]},{9:10,16:11,17:12,19:15,20:13,21:[1,14],25:[1,16],35:[1,17]},{1:[2,1]},{5:[2,3]},{5:[2,6],7:[2,6],8:[2,6],12:[2,6]},{13:[1,18]},{10:[1,19]},{10:[2,9],18:[1,20]},{10:[2,10]},{10:[2,14],18:[2,14],23:[2,14],28:[1,21]},{20:22,25:[1,16]},{10:[2,12],18:[1,23]},{26:24,37:[1,25],38:[1,26],39:[1,27],40:[1,28],41:[1,29],42:[1,30],43:[1,31],44:[1,32]},{36:[1,33]},{14:[1,34]},{5:[2,5],7:[2,5],8:[2,5],12:[2,5]},{9:35,16:11,17:12,19:15,20:13,21:[1,14],25:[1,16],35:[1,17]},{10:[2,19],18:[2,19],22:[2,19],23:[2,19],28:[2,19]},{22:[1,36],28:[1,21]},{17:37,19:15,35:[1,17]},{27:[1,38]},{27:[2,25]},{27:[2,26]},{27:[2,27]},{39:[1,39]},{27:[2,29]},{27:[2,30]},{27:[2,31]},{27:[2,32]},{10:[2,24],18:[2,24]},{13:[1,40],15:[1,41]},{10:[2,11]},{16:42,20:13,21:[1,14],25:[1,16]},{10:[2,13]},{10:[2,18],18:[2,18],22:[2,18],23:[2,18],28:[2,18]},{27:[2,28]},{15:[1,43]},{5:[2,8],7:[2,8],8:[2,8],12:[2,8]},{23:[1,44]},{5:[2,7],7:[2,7],8:[2,7],12:[2,7]},{10:[2,15],18:[2,15],23:[2,15]}],
+defaultActions: {6:[2,1],7:[2,3],12:[2,10],25:[2,25],26:[2,26],27:[2,27],29:[2,29],30:[2,30],31:[2,31],32:[2,32],35:[2,11],37:[2,13],39:[2,28]},
+>>>>>>> cqp parser rewrite in progress
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -663,50 +668,35 @@ performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return "DATE_TIME_KEY"
+case 0:return "DATE_TIME_VAL"
 break;
-case 1:return "DATE_TIME_KEY"
+case 1:return "int"
 break;
-case 2:return "DATE_TIME_KEY"
+case 2:return 39
 break;
-case 3:return "DATE_TIME_KEY"
+case 3:return "FUNC"
 break;
-case 4:return "DATE_TIME_VAL"
+case 4:return "FUNC"
 break;
-case 5:return "DATE_OP"
+case 5:return "FUNCVAL"
 break;
-case 6:return "DATE_OP"
+case 6:"("
 break;
-case 7:return "DATE_OP"
+case 7:")"
 break;
-case 8:return "DATE_OP"
+case 8:/* skip whitespace */
 break;
-case 9:return "DATE_OP"
+case 9:return "FLAG"
 break;
-case 10:return 36
+case 10:return 40
 break;
-case 11:return "FUNC"
+case 11:return 38
 break;
-case 12:return "FUNC"
+case 12:return 41
 break;
-case 13:return "FUNCVAL"
+case 13:return 42
 break;
-case 14:/* skip */
-break;
-case 15:/* skip */
-break;
-case 16:/* skip whitespace */
-break;
-case 17:return "FLAG"
-break;
-case 18:return 37
-break;
-case 19:return 35
-break;
-case 20:return 38
-break;
-case 21:return 39
-break;
+<<<<<<< HEAD
 <<<<<<< HEAD
 case 19:return 41
 break;
@@ -748,42 +738,50 @@ rules: [/^(?:int\(_\.text_datefrom\))/,/^(?:int\(_\.text_dateto\))/,/^(?:\d{8})/
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],"inclusive":true}}
 =======
 case 22:return 41
+=======
+case 14:return 44
+>>>>>>> cqp parser rewrite in progress
 break;
-case 23:return 40
+case 15:return 43
 break;
-case 24:return 34
+case 16:return 37
 break;
-case 25:return 24
+case 17:return 25
 break;
-case 26:return 26
+case 18:return 27
 break;
-case 27:return 7
+case 19:return 7
 break;
-case 28:return 8
+case 20:return 8
 break;
-case 29:return 10
+case 21:return 10
 break;
-case 30:return 21
+case 22:return 22
 break;
-case 31:return 18
+case 23:return 18
 break;
-case 32:return 12
+case 24:return 12
 break;
-case 33:return 15
+case 25:return 15
 break;
-case 34:return "INT"
+case 26:return "INT"
 break;
-case 35:return 14
+case 27:return 14
 break;
-case 36:return "%"
+case 28:return "%"
 break;
-case 37:return 5
+case 29:return 5
 break;
 }
 },
+<<<<<<< HEAD
 rules: [/^(?:int\(_\.text_datefrom\))/,/^(?:int\(_\.text_dateto\))/,/^(?:int\(_\.text_timefrom\))/,/^(?:int\(_\.text_timeto\))/,/^(?:\d{6,8})/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?: contains )/,/^(?:lbound\b)/,/^(?:rbound\b)/,/^(?:sentence\b)/,/^(?:\()/,/^(?:\))/,/^(?:\s+)/,/^(?:%[cd]+)/,/^(?:not\b)/,/^(?:!=)/,/^(?:\^=)/,/^(?:&=)/,/^(?:_=)/,/^(?:\*=)/,/^(?:=)/,/^(?:(_.)?[A-Za-z_]+)/,/^(?:["'].*?['"])/,/^(?:\[\s*\])/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:&)/,/^(?:\{)/,/^(?:\})/,/^(?:\d+)/,/^(?:,)/,/^(?:%)/,/^(?:$)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37],"inclusive":true}}
 >>>>>>> ambiguos grammar with ampersand, will try paren approach
+=======
+rules: [/^(?:\d{6,8})/,/^(?:int\b)/,/^(?: contains )/,/^(?:lbound\b)/,/^(?:rbound\b)/,/^(?:sentence\b)/,/^(?:\()/,/^(?:\))/,/^(?:\s+)/,/^(?:%[cd]+)/,/^(?:not\b)/,/^(?:!=)/,/^(?:\^=)/,/^(?:&=)/,/^(?:_=)/,/^(?:\*=)/,/^(?:=)/,/^(?:(_.)?[A-Za-z_]+)/,/^(?:["'].*?['"])/,/^(?:\[\s*\])/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:&)/,/^(?:\{)/,/^(?:\})/,/^(?:\d+)/,/^(?:,)/,/^(?:%)/,/^(?:$)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29],"inclusive":true}}
+>>>>>>> cqp parser rewrite in progress
 };
 return lexer;
 })();
