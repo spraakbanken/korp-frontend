@@ -2,7 +2,54 @@ window.c = console
 
 prio = settings.cqp_prio or ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word']
 
-stringifyCqp = (cqp_obj, translate_ops = false) ->
+
+parseDateInterval = (op, val, expanded_format) ->
+    val = _.invoke val, "toString"
+    unless expanded_format
+        return "$date_interval #{op} '#{val.join(",")}'"
+
+    [fromdate, todate, fromtime, totime] = val
+
+    m_from = moment(fromdate, "YYYYMMDD")
+    m_to = moment(todate, "YYYYMMDD")
+
+    fieldMapping = 
+        fromdate : fromdate
+        todate : todate
+        fromtime : fromtime
+        totime : totime
+
+    op = (field, operator, valfield) ->
+        val = if valfield then fieldMapping[valfield] else fieldMapping[field]
+        "int(_.#{field}) #{operator} #{val}"
+
+
+    days_diff = m_from.diff(m_to, "days")
+
+    if days_diff == 0  # same day
+        out = "#{op('fromdate', '=')} &
+        #{op('fromtime', '=>')} &
+        #{op('todate', '=')} &
+        #{op('totime', '<=')}"
+        
+    else if days_diff == -1 # one day apart
+        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | #{op('fromdate', '=', 'todate')}) &
+        (#{op('todate', '=', 'fromdate')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+        
+
+    else
+        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | 
+        (#{op('fromdate', '>')} & #{op('fromdate', '<=', 'todate')})) &
+        (#{op('todate', '<')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+        
+
+    out = out.replace(/\s+/g, " ")
+
+    unless fromdate and todate then out = ""
+
+    return out
+
+stringifyCqp = (cqp_obj, expanded_format = false) ->
     output = []
     cqp_obj = CQP.prioSort _.cloneDeep cqp_obj
 
@@ -15,7 +62,7 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
             for {type, op, val, flags} in and_array
                 # if op != "*="
                 #     val = regescape val
-                if translate_ops
+                if expanded_format
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]
@@ -31,63 +78,8 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                 if type == "word" and val == ""
                     out = ""
                 else if type == "date_interval"
-
-                    [fromdate, todate, fromtime, totime] = val.split(",")
-
-                    m_from = moment(fromdate, "YYYYMMDD")
-                    m_to = moment(todate, "YYYYMMDD")
-
-                    fieldMapping = 
-                        fromdate : fromdate
-                        todate : todate
-                        fromtime : fromtime
-                        totime : totime
-
-                    op = (field, operator, valfield) ->
-                        val = if valfield then fieldMapping[valfield] else fieldMapping[field]
-                        "int(_.#{field}) #{operator} #{val}"
-
-
-                    days_diff = m_from.diff(m_to, "days")
-
-                    if days_diff == 0  # same day
-                        out = "#{op('fromdate', '=')} &
-                        #{op('fromtime', '=>')} &
-                        #{op('todate', '=')} &
-                        #{op('totime', '<=')}"
-                        
-                    else if days_diff == -1 # one day apart
-                        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | #{op('fromdate', '=', 'todate')}) &
-                        (#{op('todate', '=', 'fromdate')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
-                        
-
-                    else
-                        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | 
-                        (#{op('fromdate', '>')} & #{op('fromdate', '<=', 'todate')})) &
-                        (#{op('todate', '<')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
-                        
-
-                    out = out.replace(/\s+/g, " ")
-
-                    unless fromdate and todate then out = ""
-                # else if type == "date_interval"
-                #     [from, to] = val.split(",")
-                #     operator1 = ">="
-                #     operator2 = "<="
-                #     bool = "&"
-                #     if op == "!="
-                #         operator1 = "<"
-                #         operator2 = ">"
-                #         bool = "|"
-
-                #     tmpl = _.template("(int(_.text_datefrom) <%= op1 %> <%= from %> <%= bool %> int(_.text_dateto) <%= op2 %> <%= to %>)")
-                #     out = tmpl
-                #          op1 : operator1,
-                #          op2 : operator2,
-                #          bool : bool,
-                #          from : from,
-                #          to : to
-                #     unless from and to then out = ""
+                    out = parseDateInterval(op, val, expanded_format)
+                    
                 else 
                     out = "#{type} #{op} \"#{val}\"" 
 

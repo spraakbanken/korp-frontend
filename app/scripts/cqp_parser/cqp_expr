@@ -1,1 +1,1 @@
-[(((int(_.fromdate) = 20140101 & int(_.fromtime) => 120000) | (int(_.fromdate) > 20140101 & int(_.fromdate) <= 20140105)) & (int(_.todate) < 20140105 | (int(_.todate) = 20140105 & int(_.totime) <= 160000))) | (word &= "ge" | pos = "JJ")]
+[(word = "c" | word = "d") & (word = "a" | word = "b")]

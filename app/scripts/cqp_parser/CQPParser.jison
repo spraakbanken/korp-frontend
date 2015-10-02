@@ -52,6 +52,8 @@
 %left "&" "|"
 // %left "|"
 
+%ebnf
+
 %start expressions
 
 %% /* language grammar */
@@ -77,11 +79,12 @@ token
         {$$ = {"and_block":[[{type:"word",op:"=",val:""}]]}}
     // | '[' and_block ']'
     //     {$$ = $2}
-    | '[' expr1 ']'
+    | '[' expr1 ('&' expr1)* ']'
+    // | '[' expr3 ']'
         {$$ = $2}
         
-    | token repeat
-        {$$ = $1; $1.repeat = $2}
+    // | token repeat
+    //     {$$ = $1; $1.repeat = $2}
     ;
 
 repeat
@@ -200,17 +203,77 @@ date
 
 expr0
     : date
-        {$$ = {date : $1}}
+        // {$$ = {date : $1}}
     | or
-        {$$ = {or : $1}}
+        // {$$ = {or : $1}}
     | "(" expr1 ")"
         {$$ = $2}
     ;
 
+
 expr1
-    : expr1 bool expr0
+    : expr0
         {
-            c.log("expr0", $expr0)
+            // if(!_.isArray($expr0))
+            //     // $$ = [(_.values($expr0)[0])]
+            //     $$ = [($expr0)]
+            // else
+            $$ = $expr0
+        }
+    | expr1 bool expr0
+        {  
+            c.log("has child", !!$expr1.child)
+
+            if($bool == "|")
+                $$ = [$expr1]
+
+            // if(typeof $expr1.parent == "undefined") 
+            //     $expr1.parent = []
+            // if(typeof $expr1.sibling == "undefined") 
+            //     $expr1.sibling = []
+
+            // if($bool == "&")
+            //     $expr1.parent.push($expr0)
+            // else if($bool == "|")
+            //     $expr1.sibling.push($expr0)
+            // $expr0.bool = $bool
+            // $expr1.child = $expr0;
+
+            return;
+            var isTerminal = !_.isArray($expr0)
+
+            function stripKey(item) {
+                if("or" in item || "date" in item)
+                    return _.values(item)[0]
+                else 
+                    return item
+            }
+            // $$ = output.map(stripKey);
+
+            // isTerminal
+
+            if($bool == "&")
+                c.log("expr", $expr1, $expr0, isTerminal)
+
+            output = [].concat($expr1, $expr0)
+            $$ = output
+
+            // c.log("expr", $expr1, $bool, $expr0 )
+            // c.log("expr", isTerminal, $expr0 )
+            // var output = []
+            if(_.isArray($expr0))
+                output = [].concat($expr1, $expr0)
+            else {
+                $expr1.push($expr0)
+                output = $expr1
+            }
+            
+
+            // c.log("expr0", $expr1)
+            $$ = output
+            // if("date" in $expr0) {
+                
+            // }
         }
     ;
 

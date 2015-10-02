@@ -77,6 +77,7 @@ yy: {},
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":8,"and_block":9,"]":10,"repeat":11,"{":12,"INT":13,",":14,"}":15,"or_block":16,"bound_block":17,"&":18,"bound":19,"or":20,"|":21,"bool":22,"TYPE":23,"infix_op":24,"VALUE":25,"FLAG":26,"DATE_FROM":27,"DATE_OP":28,"DATE_VAL":29,"DATE_TO":30,"FUNC":31,"FUNCVAL":32,"=":33,"!=":34,"contains":35,"not":36,"^=":37,"&=":38,"*=":39,"!*=":40,"_=":41,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",10:"]",12:"{",13:"INT",14:",",15:"}",18:"&",21:"|",23:"TYPE",25:"VALUE",26:"FLAG",27:"DATE_FROM",28:"DATE_OP",29:"DATE_VAL",30:"DATE_TO",31:"FUNC",32:"FUNCVAL",33:"=",34:"!=",35:"contains",36:"not",37:"^=",38:"&=",39:"*=",40:"!*=",41:"_="},
 productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,3],[6,2],[11,5],[11,4],[9,1],[9,1],[9,3],[17,1],[17,3],[16,1],[16,3],[22,1],[22,1],[20,3],[20,2],[20,7],[19,2],[24,1],[24,1],[24,1],[24,2],[24,1],[24,1],[24,1],[24,1],[24,1]],
@@ -95,6 +96,11 @@ symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":
 terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",10:"]",12:"{",13:"INT",14:",",15:"}",18:"&",21:"date_time_expr[dte]",22:"|",23:"(",24:")",26:"TYPE",28:"VALUE",29:"FLAG",32:"date_time_expr[dte1]",33:"date_time_expr[dte2]",34:"int",36:"DATE_TIME_VAL",37:"FUNC",38:"FUNCVAL",39:"DATE_OP",40:"=",41:"INFIX_OP",42:"contains",43:"not"},
 productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,3],[6,2],[11,5],[11,4],[9,1],[9,1],[9,3],[17,1],[17,3],[16,1],[16,1],[16,3],[16,3],[25,1],[25,1],[20,3],[20,2],[30,1],[30,5],[31,6],[19,2],[35,1],[35,1],[27,1],[27,1],[27,1],[27,2]],
 >>>>>>> before major parser overhaul
+=======
+symbols_: {"error":2,"expressions":3,"tokens":4,"EOF":5,"token":6,"EMPTY":7,"[":8,"expr1":9,"token_repetition0":10,"]":11,"repeat":12,"{":13,"INT":14,",":15,"}":16,"and_block":17,"or_block":18,"bound_block":19,"&":20,"bound":21,"or":22,"date_time_expr[dte]":23,"|":24,"(":25,")":26,"bool":27,"TYPE":28,"infix_op":29,"VALUE":30,"FLAG":31,"date_time_expr":32,"date":33,"date_time_expr[dte1]":34,"date_time_expr[dte2]":35,"int":36,"date_op":37,"DATE_TIME_VAL":38,"expr0":39,"FUNC":40,"FUNCVAL":41,"DATE_OP":42,"=":43,"INFIX_OP":44,"contains":45,"not":46,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"EMPTY",8:"[",11:"]",13:"{",14:"INT",15:",",16:"}",20:"&",23:"date_time_expr[dte]",24:"|",25:"(",26:")",28:"TYPE",30:"VALUE",31:"FLAG",34:"date_time_expr[dte1]",35:"date_time_expr[dte2]",36:"int",38:"DATE_TIME_VAL",40:"FUNC",41:"FUNCVAL",42:"DATE_OP",43:"=",44:"INFIX_OP",45:"contains",46:"not"},
+productions_: [0,[3,2],[4,1],[4,2],[6,1],[6,4],[12,5],[12,4],[17,1],[17,1],[17,3],[19,1],[19,3],[18,1],[18,1],[18,3],[18,3],[27,1],[27,1],[22,3],[22,2],[32,1],[32,5],[33,6],[39,1],[39,1],[39,3],[9,1],[9,3],[21,2],[37,1],[37,1],[29,1],[29,1],[29,1],[29,2],[10,0],[10,3]],
+>>>>>>> finished parser rewrite, time for graphical stuff
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -109,27 +115,25 @@ case 3:this.$ = [].concat([$$[$0-1]], $$[$0])
 break;
 case 4:this.$ = {"and_block":[[{type:"word",op:"=",val:""}]]}
 break;
-case 5:this.$ = $$[$0-1]
+case 5:this.$ = $$[$0-2]
 break;
-case 6:this.$ = $$[$0-1]; $$[$0-1].repeat = $$[$0]
+case 6:this.$ =  [Number($$[$0-3]), Number($$[$0-1])]
 break;
-case 7:this.$ =  [Number($$[$0-3]), Number($$[$0-1])]
+case 7:this.$ = [Number($$[$0-2])]
 break;
-case 8:this.$ = [Number($$[$0-2])]
+case 8:this.$ = {"and_block" : [$$[$0]]}
 break;
-case 9:this.$ = {"and_block" : [$$[$0]]}
+case 9:this.$ = {"bound" : $$[$0], "and_block" : []}
 break;
-case 10:this.$ = {"bound" : $$[$0], "and_block" : []}
+case 10:$$[$0].and_block.push($$[$0-2]); this.$ = $$[$0];
 break;
-case 11:$$[$0].and_block.push($$[$0-2]); this.$ = $$[$0];
+case 11:this.$ = {}; this.$[$$[$0]] = true
 break;
-case 12:this.$ = {}; this.$[$$[$0]] = true
+case 12:this.$ = $$[$0]; $$[$0][$$[$0-2]] = true
 break;
-case 13:this.$ = $$[$0]; $$[$0][$$[$0-2]] = true
+case 13:this.$ = [$$[$0]]
 break;
-case 14:this.$ = [$$[$0]]
-break;
-case 15:
+case 14:
             for(key in $$[$0]) {
                 if($$[$0][key].length > 1)
                     $$[$0][key] = $$[$0][key].filter(function(item) {
@@ -141,17 +145,17 @@ case 15:
             this.$ = [{type : "date_interval", op : "=", val: val}]
         
 break;
-case 16:this.$ = [].concat([$$[$0-2]], $$[$0])
+case 15:this.$ = [].concat([$$[$0-2]], $$[$0])
 break;
-case 17:this.$ = $$[$0-1]
+case 16:this.$ = $$[$0-1]
+break;
+case 17:this.$ = $$[$0]
 break;
 case 18:this.$ = $$[$0]
 break;
-case 19:this.$ = $$[$0]
+case 19:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
 break;
-case 20:this.$ =  {type : $$[$0-2], op : $$[$0-1], val: $$[$0].slice(1, -1)}
-break;
-case 21:
+case 20:
             var chars = $$[$0].slice(1).split("");
             $$[$0-1].flags = {};
             for(var i = 0; i < chars.length; i++)
@@ -160,17 +164,17 @@ case 21:
             this.$ = $$[$0-1];
         
 break;
-case 22:
+case 21:
             this.$ = $$[$0];
         
 break;
-case 23:
+case 22:
             this.$ = _.merge({}, $$[$0-3], $$[$0-1], function(a, b) {
               return _.isArray(a) ? a.concat(b) : undefined;
             });
         
 break;
-case 24:
+case 23:
             // console.log("DATE_TIME_VAL", $$[$0])
             if(!_.isPlainObject(this.$)) this.$ = {}
             
@@ -182,18 +186,84 @@ case 24:
 
         
 break;
-case 25: this.$ = $$[$0-1]
+case 26:this.$ = $$[$0-1]
 break;
-case 26:this.$ = $$[$0]
+case 27:
+            // if(!_.isArray($$[$0]))
+            //     // this.$ = [(_.values($$[$0])[0])]
+            //     this.$ = [($$[$0])]
+            // else
+            this.$ = $$[$0]
+        
 break;
-case 27:this.$ = "="
+case 28:  
+            c.log("has child", !!$$[$0-2].child)
+
+            if($$[$0-1] == "|")
+                this.$ = [$$[$0-2]]
+
+            // if(typeof $$[$0-2].parent == "undefined") 
+            //     $$[$0-2].parent = []
+            // if(typeof $$[$0-2].sibling == "undefined") 
+            //     $$[$0-2].sibling = []
+
+            // if($$[$0-1] == "&")
+            //     $$[$0-2].parent.push($$[$0])
+            // else if($$[$0-1] == "|")
+            //     $$[$0-2].sibling.push($$[$0])
+            // $$[$0].bool = $$[$0-1]
+            // $$[$0-2].child = $$[$0];
+
+            return;
+            var isTerminal = !_.isArray($$[$0])
+
+            function stripKey(item) {
+                if("or" in item || "date" in item)
+                    return _.values(item)[0]
+                else 
+                    return item
+            }
+            // this.$ = output.map(stripKey);
+
+            // isTerminal
+
+            if($$[$0-1] == "&")
+                c.log("expr", $$[$0-2], $$[$0], isTerminal)
+
+            output = [].concat($$[$0-2], $$[$0])
+            this.$ = output
+
+            // c.log("expr", $$[$0-2], $$[$0-1], $$[$0] )
+            // c.log("expr", isTerminal, $$[$0] )
+            // var output = []
+            if(_.isArray($$[$0]))
+                output = [].concat($$[$0-2], $$[$0])
+            else {
+                $$[$0-2].push($$[$0])
+                output = $$[$0-2]
+            }
+            
+
+            // c.log("expr0", $$[$0-2])
+            this.$ = output
+            // if("date" in $$[$0]) {
+                
+            // }
+        
 break;
-case 28:this.$ = "="
+case 29: this.$ = $$[$0-1]
 break;
-case 29:this.$ = $$[$0]
+case 30:this.$ = $$[$0]
 break;
-case 30:this.$ = "contains"
+case 31:this.$ = "="
 break;
+case 32:this.$ = "="
+break;
+case 33:this.$ = $$[$0]
+break;
+case 34:this.$ = "contains"
+break;
+<<<<<<< HEAD
 <<<<<<< HEAD
 case 30:this.$ = "&="
 break;
@@ -229,6 +299,18 @@ break;
 table: [{3:1,4:2,6:3,7:[1,4],8:[1,5]},{1:[3]},{5:[1,6]},{4:7,5:[2,2],6:3,7:[1,4],8:[1,5],11:8,12:[1,9]},{5:[2,4],7:[2,4],8:[2,4],12:[2,4]},{9:10,16:11,17:12,19:16,20:13,23:[1,15],26:[1,17],30:14,31:18,34:[1,20],37:[1,19]},{1:[2,1]},{5:[2,3]},{5:[2,6],7:[2,6],8:[2,6],12:[2,6]},{13:[1,21]},{10:[1,22]},{10:[2,9],18:[1,23]},{10:[2,10]},{10:[2,14],18:[2,14],22:[1,24],24:[2,14],29:[1,25]},{10:[2,15],18:[2,15],24:[2,15]},{16:26,20:13,23:[1,15],26:[1,17],30:27,31:18,34:[1,20]},{10:[2,12],18:[1,28]},{27:29,40:[1,30],41:[1,31],42:[1,32],43:[1,33]},{10:[2,22],18:[2,22],22:[2,22],24:[2,22]},{38:[1,34]},{23:[1,35]},{14:[1,36]},{5:[2,5],7:[2,5],8:[2,5],12:[2,5]},{9:37,16:11,17:12,19:16,20:13,23:[1,15],26:[1,17],30:14,31:18,34:[1,20],37:[1,19]},{16:38,20:13,23:[1,15],26:[1,17],30:14,31:18,34:[1,20]},{10:[2,21],18:[2,21],22:[2,21],24:[2,21],29:[2,21]},{24:[1,39]},{18:[1,41],22:[1,42],24:[2,15],25:40},{17:43,19:16,37:[1,19]},{28:[1,44]},{28:[2,28]},{28:[2,29]},{28:[2,30]},{42:[1,45]},{10:[2,25],18:[2,25]},{26:[1,46]},{13:[1,47],15:[1,48]},{10:[2,11]},{10:[2,16],18:[2,16],24:[2,16]},{10:[2,17],18:[2,17],24:[2,17]},{23:[1,50],30:49,31:18,34:[1,20]},{23:[2,18],34:[2,18]},{23:[2,19],34:[2,19]},{10:[2,13]},{10:[2,20],18:[2,20],22:[2,20],24:[2,20],29:[2,20]},{28:[2,31]},{24:[1,51]},{15:[1,52]},{5:[2,8],7:[2,8],8:[2,8],12:[2,8]},{24:[1,53]},{23:[1,50],30:54,31:18,34:[1,20]},{35:55,39:[1,56],40:[1,57]},{5:[2,7],7:[2,7],8:[2,7],12:[2,7]},{10:[2,23],18:[2,23],22:[2,23],24:[2,23]},{18:[1,41],22:[1,42],25:40},{36:[1,58]},{36:[2,26]},{36:[2,27]},{10:[2,24],18:[2,24],22:[2,24],24:[2,24]}],
 defaultActions: {6:[2,1],7:[2,3],12:[2,10],30:[2,28],31:[2,29],32:[2,30],37:[2,11],43:[2,13],45:[2,31],56:[2,26],57:[2,27]},
 >>>>>>> before major parser overhaul
+=======
+case 35:this.$ = "not contains"
+break;
+case 36:this.$ = [];
+break;
+case 37:$$[$0-2].push($$[$0-1]);
+break;
+}
+},
+table: [{3:1,4:2,6:3,7:[1,4],8:[1,5]},{1:[3]},{5:[1,6]},{4:7,5:[2,2],6:3,7:[1,4],8:[1,5]},{5:[2,4],7:[2,4],8:[2,4]},{9:8,22:11,25:[1,12],28:[1,14],33:10,36:[1,13],39:9},{1:[2,1]},{5:[2,3]},{10:15,11:[2,36],20:[1,17],24:[1,18],27:16},{11:[2,27],20:[2,27],24:[2,27],26:[2,27]},{11:[2,24],20:[2,24],24:[2,24],26:[2,24]},{11:[2,25],20:[2,25],24:[2,25],26:[2,25],31:[1,19]},{9:20,22:11,25:[1,12],28:[1,14],33:10,36:[1,13],39:9},{25:[1,21]},{29:22,43:[1,23],44:[1,24],45:[1,25],46:[1,26]},{11:[1,27],20:[1,28]},{22:11,25:[1,12],28:[1,14],33:10,36:[1,13],39:29},{25:[2,17],28:[2,17],36:[2,17]},{25:[2,18],28:[2,18],36:[2,18]},{11:[2,20],20:[2,20],24:[2,20],26:[2,20],31:[2,20]},{20:[1,17],24:[1,18],26:[1,30],27:16},{28:[1,31]},{30:[1,32]},{30:[2,32]},{30:[2,33]},{30:[2,34]},{45:[1,33]},{5:[2,5],7:[2,5],8:[2,5]},{9:34,22:11,25:[1,12],28:[1,14],33:10,36:[1,13],39:9},{11:[2,28],20:[2,28],24:[2,28],26:[2,28]},{11:[2,26],20:[2,26],24:[2,26],26:[2,26]},{26:[1,35]},{11:[2,19],20:[2,19],24:[2,19],26:[2,19],31:[2,19]},{30:[2,35]},{11:[2,37],20:[2,37],24:[1,18],27:16},{37:36,42:[1,37],43:[1,38]},{38:[1,39]},{38:[2,30]},{38:[2,31]},{11:[2,23],20:[2,23],24:[2,23],26:[2,23]}],
+defaultActions: {6:[2,1],7:[2,3],23:[2,32],24:[2,33],25:[2,34],33:[2,35],37:[2,30],38:[2,31]},
+>>>>>>> finished parser rewrite, time for graphical stuff
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -371,112 +453,7 @@ parse: function parse(input) {
 if(typeof require != "undefined")
     var _ = require("../../components/lodash/lodash")._
 
-
-// var _ = {};
-// _.isArray = function(value) {
-//   return value ? (typeof value == 'object' && toString.call(value) == arrayClass) : false;
-// };
-// _.isObject = function(value) {
-//   // check if the value is the ECMAScript language type of Object
-//   // http://es5.github.com/#x8
-//   // and avoid a V8 bug
-//   // http://code.google.com/p/v8/issues/detail?id=2291
-//   return value ? objectTypes[typeof value] : false;
-// }
-// _.isPlainObject = function(value) {
-//   if (!(value && toString.call(value) == objectClass) || (!support.argsClass && isArguments(value))) {
-//     return false;
-//   }
-//   var valueOf = value.valueOf,
-//       objProto = typeof valueOf == 'function' && (objProto = getPrototypeOf(valueOf)) && getPrototypeOf(objProto);
-
-//   return objProto
-//     ? (value == objProto || getPrototypeOf(value) == objProto)
-//     : shimIsPlainObject(value);
-// };
-// _.merge = function(object, source, deepIndicator) {
-//   var args = arguments,
-//       index = 0,
-//       length = 2;
-
-//   if (!isObject(object)) {
-//     return object;
-//   }
-//   if (deepIndicator === indicatorObject) {
-//     var callback = args[3],
-//         stackA = args[4],
-//         stackB = args[5];
-//   } else {
-//     stackA = [];
-//     stackB = [];
-
-//     // allows working with `_.reduce` and `_.reduceRight` without
-//     // using their `callback` arguments, `index|key` and `collection`
-//     if (typeof deepIndicator != 'number') {
-//       length = args.length;
-//     }
-//     if (length > 3 && typeof args[length - 2] == 'function') {
-//       callback = lodash.createCallback(args[--length - 1], args[length--], 2);
-//     } else if (length > 2 && typeof args[length - 1] == 'function') {
-//       callback = args[--length];
-//     }
-//   }
-//   while (++index < length) {
-//     (_.isArray(args[index]) ? forEach : forOwn)(args[index], function(source, key) {
-//       var found,
-//           isArr,
-//           result = source,
-//           value = object[key];
-
-//       if (source && ((isArr = _.isArray(source)) || isPlainObject(source))) {
-//         // avoid merging previously merged cyclic sources
-//         var stackLength = stackA.length;
-//         while (stackLength--) {
-//           if ((found = stackA[stackLength] == source)) {
-//             value = stackB[stackLength];
-//             break;
-//           }
-//         }
-//         if (!found) {
-//           var isShallow;
-//           if (callback) {
-//             result = callback(value, source);
-//             if ((isShallow = typeof result != 'undefined')) {
-//               value = result;
-//             }
-//           }
-//           if (!isShallow) {
-//             value = isArr
-//               ? (_.isArray(value) ? value : [])
-//               : (isPlainObject(value) ? value : {});
-//           }
-//           // add `source` and associated `value` to the stack of traversed objects
-//           stackA.push(source);
-//           stackB.push(value);
-
-//           // recursively merge objects and arrays (susceptible to call stack limits)
-//           if (!isShallow) {
-//             value = merge(value, source, indicatorObject, callback, stackA, stackB);
-//           }
-//         }
-//       }
-//       else {
-//         if (callback) {
-//           result = callback(value, source);
-//           if (typeof result == 'undefined') {
-//             result = source;
-//           }
-//         }
-//         if (typeof result != 'undefined') {
-//           value = result;
-//         }
-//       }
-//       object[key] = value;
-//     });
-//   }
-//   return object;
-// }
-/* generated by jison-lex 0.2.1 */
+var c = console;/* generated by jison-lex 0.2.1 */
 var lexer = (function(){
 var lexer = {
 
@@ -816,7 +793,7 @@ case 4:return "DATE_OP"
 break;
 case 5:return "DATE_OP"
 break;
-case 6:return 42
+case 6:return 45
 break;
 case 7:return "FUNC"
 break;
@@ -832,14 +809,15 @@ case 12:/* skip whitespace */
 break;
 case 13:return "FLAG"
 break;
-case 14:return 43
+case 14:return 46
 break;
-case 15:return 41
+case 15:return 44
 break;
-case 16:return 41
+case 16:return 44
 break;
-case 17:return 41
+case 17:return 44
 break;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -889,32 +867,35 @@ case 14:return 44
 =======
 case 18:return 41
 >>>>>>> before major parser overhaul
+=======
+case 18:return 44
+>>>>>>> finished parser rewrite, time for graphical stuff
 break;
-case 19:return 41
+case 19:return 44
 break;
-case 20:return 40
+case 20:return 43
 break;
-case 21:return 26
+case 21:return 28
 break;
-case 22:return 28
+case 22:return 30
 break;
 case 23:return 7
 break;
 case 24:return 8
 break;
-case 25:return 10
+case 25:return 11
 break;
-case 26:return 22
+case 26:return 24
 break;
-case 27:return 18
+case 27:return 20
 break;
-case 28:return 12
+case 28:return 13
 break;
-case 29:return 15
+case 29:return 16
 break;
 case 30:return "INT"
 break;
-case 31:return 14
+case 31:return 15
 break;
 case 32:return "%"
 break;

@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
           '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+          '{.tmp,<%= yeoman.app %>}/scripts/**/*.js',
           '{.tmp,<%= yeoman.app %>}/modes/{,*/}*.js',
           '{.tmp,<%= yeoman.app %>}/config.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
@@ -212,7 +212,7 @@ module.exports = function (grunt) {
     },
     coffee: {
       options: {
-        sourceMap: true,
+        sourceMap: false,
         sourceRoot: '..'
       },
       dist: {
