@@ -46,14 +46,14 @@ settings.kubhiststruct_attributes = {
 	page_no : {label : "page"},
 	text_kbid : {
 		label : "source",
-		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://magasin.kb.se/searchinterface/page.jsp?issue_id=<%= struct_attrs.text_kbid %>&sequence_number=<%= struct_attrs.page_no %>' target='_blank'><img src='http://magasin.kb.se:8080/fedora/get/kb:<%= parseInt((struct_attrs.text_kbid).split(':')[1]) + parseInt(struct_attrs.page_no) %>/WEBIMAGE'></img></a></div></div>"
+		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://magasin.kb.se/searchinterface/page.jsp?issue_id=<%= struct_attrs.text_kbid %>&sequence_number=<%= struct_attrs.page_no %>' target='_blank'><img src='http://magasin.kb.se:8080/fedora/get/kb:<%= parseInt((struct_attrs.text_kbid).split(':')[1]) + parseInt(struct_attrs.page_no) %>/WEBIMAGE' width='100%'></img></a></div></div>"
 	}
 };
 
 var aftonbladet_custom_attributes = {
 	text_kbid : {
 		label: "source",
-		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://tidningar.kb.se/?newspaper=AFTONBLADET&from=<%= struct_attrs.text_date %>&to=<%= struct_attrs.text_date %>' target='_blank'><img src='http://tidningar.kb.se/4112678/<%= struct_attrs.text_date %>/edition/0/part/1/page/<%= struct_attrs.page_no %>_thumb.jpg'></img></a></div></div>",
+		pattern : "<div><div>Kungliga Biblioteket</div><div><a href='http://tidningar.kb.se/?newspaper=AFTONBLADET&from=<%= struct_attrs.text_date %>&to=<%= struct_attrs.text_date %>' target='_blank'><img src='http://tidningar.kb.se/4112678/<%= struct_attrs.text_date %>/edition/0/part/1/page/<%= struct_attrs.page_no %>_thumb.jpg' width='100%'></img></a></div></div>",
 		custom_type : "struct"
 	}
 };

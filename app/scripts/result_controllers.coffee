@@ -355,7 +355,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
     s.aborted = false
 
     $(document).keyup (event) ->
-        if event.keyCode == 27 and s.showMap
+        if event.keyCode == 27 and s.showMap and s.loading
             s.proxy?.abort()
             $timeout (() ->
                 s.aborted = true
@@ -465,10 +465,10 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                                 $rootScope.kwicTabs.push opts
                             markers[key]["message"] = html
 
-
                     s.markers = markers
+                    s.loading = false
             else
                 s.markers = {}
-            s.loading = false
+                s.loading = false
 
 
