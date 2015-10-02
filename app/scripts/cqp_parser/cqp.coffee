@@ -14,10 +14,10 @@ parseDateInterval = (op, val, expanded_format) ->
     m_to = moment(todate, "YYYYMMDD")
 
     fieldMapping = 
-        fromdate : fromdate
-        todate : todate
-        fromtime : fromtime
-        totime : totime
+        text_datefrom : fromdate
+        text_dateto : todate
+        text_timefrom : fromtime
+        text_timeto : totime
 
     op = (field, operator, valfield) ->
         val = if valfield then fieldMapping[valfield] else fieldMapping[field]
@@ -25,22 +25,23 @@ parseDateInterval = (op, val, expanded_format) ->
 
 
     days_diff = m_from.diff(m_to, "days")
+    c.log "days_diff", days_diff
 
     if days_diff == 0  # same day
-        out = "#{op('fromdate', '=')} &
-        #{op('fromtime', '=>')} &
-        #{op('todate', '=')} &
-        #{op('totime', '<=')}"
+        out = "#{op('text_datefrom', '=')} &
+        #{op('text_timefrom', '>=')} &
+        #{op('text_dateto', '=')} &
+        #{op('text_timeto', '<=')}"
         
     else if days_diff == -1 # one day apart
-        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | #{op('fromdate', '=', 'todate')}) &
-        (#{op('todate', '=', 'fromdate')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+        out = "((#{op('text_datefrom', '=')} & #{op('text_timefrom', '>=')}) | #{op('text_datefrom', '=', 'text_dateto')}) &
+        (#{op('text_dateto', '=', 'text_datefrom')} | (#{op('text_dateto', '=')} & #{op('text_timeto', '<=')}))"
         
 
     else
-        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | 
-        (#{op('fromdate', '>')} & #{op('fromdate', '<=', 'todate')})) &
-        (#{op('todate', '<')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+        out = "((#{op('text_datefrom', '=')} & #{op('text_timefrom', '>=')}) | 
+        (#{op('text_datefrom', '>')} & #{op('text_datefrom', '<=', 'text_dateto')})) &
+        (#{op('text_dateto', '<')} | (#{op('text_dateto', '=')} & #{op('text_timeto', '<=')}))"
         
 
     out = out.replace(/\s+/g, " ")

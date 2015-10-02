@@ -357,11 +357,16 @@ korpApp.directive "popper", ($rootElement) ->
         closePopup = () ->
             popup.hide()
         
-        popup.on "click", (event) ->
-            closePopup()
-            return false
+        c.log "attrs.noCloseOnClick", attrs.noCloseOnClick?
+        if !attrs.noCloseOnClick?
+            popup.on "click", (event) ->
+                closePopup()
+                return false
 
         elem.on "click", (event) ->
+            other = $(".popper_menu:visible").not(popup)
+            if other.length
+                other.hide()
             if popup.is(":visible") then closePopup()
             else popup.show()
 
@@ -675,17 +680,21 @@ korpApp.directive "timeInterval", () ->
         dateModel : "="
         timeModel : "="
         model : "="
+        minDate : "="
+        maxDate : "="
+
     restrict : "E"
     template : """
-        <div class="form-inline">
-          <div class="input-group">
-            <input type="text" datepicker-popup ng-model="dateModel" is-open="isOpen" min-date="minDate" max-date="&quot;2015-06-22&quot;" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" class="form-control"/>
-                <span class="input-group-btn">
-                    <button type="button" ng-click="open($event)" class="btn btn-default"><i class="fa fa-calendar"></i></button>
-                </span>
-          </div>
+        <div>
+            <datepicker class="well well-sm" ng-model="dateModel" 
+                min-date="minDate" max-date="maxDate" init-date="minDate"
+                show-weeks="true" starting-day="1"></datepicker>
+
+            <div class="time">
+                <i class="fa fa-3x fa-clock-o"></i><timepicker class="timepicker" ng-model="timeModel" 
+                    hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+            </div>
         </div>
-        <timepicker ng-model="timeModel" hour-step="1" minute-step="1" show-meridian="false"></timepicker>
         """
 
     link : (s, elem, attr) ->
@@ -695,7 +704,7 @@ korpApp.directive "timeInterval", () ->
             event.stopPropagation()
             s.isOpen = true 
 
-        s.model = null
+        # s.model = null
 
         time_units = ["hour", "minute"]
 
@@ -706,7 +715,6 @@ korpApp.directive "timeInterval", () ->
                     m_time = moment(time)
                     m.add(t, m_time[t]())
 
-                c.log m.toString()
                 s.model = m
 
 

@@ -38,8 +38,7 @@ html
       #header
         include includes/header
       #content
-        time-interval(date-model="date", time-model="time", model="combined")
-        {{date.getDate()}} ---- {{time}} ----- {{combined}}
+        
         //- datepicker(ng-model="dt", min-date="minDate", show-weeks="true", class="well well-sm")
         //- .form-inline
         //-   .input-group
@@ -86,7 +85,7 @@ html
                     warning(ng-if="aborted && !loading")
                       | {{'search_aborted' | loc:lang}}
                     .stats_header
-                      #showGraph.button.btn.btn-small(ng-class="{disabled: !graphEnabled}", 
+                      button#showGraph.btn.btn-sm.btn-default(ng-class="{disabled: !graphEnabled}", 
                         tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", tooltip-placement="right"  
                       )
                         span.graph_btn_icon
@@ -108,7 +107,7 @@ html
                         option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       a#generateExportButton 
                         button.btn.btn-small {{'statstable_gen_export' | loc:lang}}
-                      a#exportButton 
+                      input#exportButton.btn.btn-xs.btn-default(value='statstable_export | loc:lang', type='submit')
                         &nbsp;{{'statstable_download' | loc:lang}}
                 tab(ng-if="_settings.wordpicture != false", 
                     ng-controller="wordpicCtrl", 
@@ -120,7 +119,7 @@ html
                   div.wordpic_disabled(ng-if="!word_pic")
                     | {{'word_pic_warn' | loc:lang}} 
                     div
-                      button.btn.btn-small.activate_word_pic(ng-click="activate()")
+                      button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
                         | {{'word_pic_warn_btn' | loc:lang}}
                   
                   warning(ng-if="word_pic && !instance.hasData && !loading && !aborted")
@@ -248,8 +247,10 @@ html
     script(src='lib/jquery.localize.js')
     script(src='components/raphael/raphael.js')
     script(src='components/jReject/js/jquery.reject.js')
+    script(src='components/angular-dynamic-locale/src/tmhDynamicLocale.js')
     script(src='lib/jquery.raphael.spinner.js')
     script(src='lib/jquery.format.js')
+    //- script(src='lib/angular-locale_sv-se.js')
 
     script(src='components/modernizr/modernizr.js')
     script(src='components/jquery-bbq/jquery.ba-bbq.js')
@@ -290,7 +291,6 @@ html
     script(src='components/leaflet-providers/leaflet-providers.js')
     script(src='components/geokorp/dist/scripts/geokorp.min.js')
     // endbuild  
-    
     script(src='lib/jquery.tooltip.pack.js')
     script(src='components/d3/d3.min.js')
     script(src='components/rickshaw/rickshaw.min.js')

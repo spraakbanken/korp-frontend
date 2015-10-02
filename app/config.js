@@ -273,7 +273,7 @@ attrs.msd = {
     label : "msd",
     opts : settings.defaultOptions,
     extended_template : '<input class="arg_value" ng-model="input" escaper>' +
-    '<span ng-click="onIconClick()" class="ui-icon ui-icon-info"></span>',
+    '<span ng-click="onIconClick()" class="fa fa-info-circle"></span>',
     controller : function($scope, $modal) {
         var modal = null;
 

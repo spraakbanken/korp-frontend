@@ -1,0 +1,3 @@
+/Users/johan/Dropbox/Development/workspace_juno/korp/node_modules/.bin/pegjs -e CQPParser CQPParser2.peg
+
+#/Users/johan/Dropbox/Development/workspace_juno/korp/node_modules/.bin/pegjs CQPParser2.peg

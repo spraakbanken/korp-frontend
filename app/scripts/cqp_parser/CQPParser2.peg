@@ -1,0 +1,167 @@
+{
+  function makeObj(type, op, val) {
+    return {type : type, op : op, val: val}
+  }
+
+  function unpack(target, source) {
+    var output = [].concat(target)
+    source.forEach(function(item) {
+      output.push(item[1])
+    })
+    return output
+  }
+
+  if(typeof require != "undefined")
+      var _ = require("../../components/lodash/lodash")._
+  else
+    var _ = window._
+
+  var c = console
+  
+}
+
+
+start
+  = tokens
+
+tokens 
+  = t1:token t2:(" " t2:token)*
+  {
+    return unpack([t1], t2)
+  }
+
+
+token
+  = "[" "]" // empty token
+    {return {"and_block":[[{type:"word",op:"=",val:""}]]}}
+  / "[" left:and right:(" & " and)* "]" repeat:repeat? {
+    // var output = {and_block : unpack([left], right)}
+    var output = left
+    // c.log("token", unpack([left], right))
+
+    right.forEach(function(item) {
+      var val = item[1]
+      output = _.merge(output, val, function(a, b) {
+        return _.isArray(a) ? a.concat(b) : undefined;
+      })
+      
+    })
+
+
+    if(repeat)
+      output.repeat = repeat
+    return output
+ }
+
+repeat
+   = "{" from:[0-9]+ "," to:[0-9]* "}"
+    {
+      var output = [Number(from.join(""))]
+      if(to.length)
+        output.push(Number(to.join("")))
+
+      return output
+    }
+
+
+bound = val:("lbound" / "rbound") "(" "sentence" ")" {
+  return val
+}
+
+
+bound_block
+  = first:bound rest:(" & " bound)*
+  {
+    return unpack([first], rest)
+  }
+
+and 
+  =  left:or right:(" | " or)* {
+    // c.log("and", unpack([left], right))
+    return {and_block : [unpack([left], right)]} 
+  }
+  / bound:bound_block {
+    bound = _.object(bound.map(function(item) {
+      return [item, true]
+    }))
+    return {"bound" : bound, "and_block" : []}
+  }
+  / "(" and:and ")" {return and}
+
+
+or
+  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:[A-Za-z0-9\._]* ['"] {
+    var prefix = ""
+    if(lhs[0])
+      prefix = lhs[0]
+    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join("")) 
+  }
+  // / "(" first:date_expr rest:(bool date_expr)* ")" {
+  // / "%" first:date_expr rest:(bool date_expr)* "%%" {
+  // / "%" des:date_expr_seq "%%" {
+  // / "(" des:date_expr_seq ")" {
+  //   console.log("dates", des)
+
+  //   return des
+  //   // return _.extend.apply(null, unpack([first], rest))
+  // }
+  / date
+
+
+// date_expr
+
+date 
+  = "$" "date_interval" " "? op:("!=" / "=") " "? ["'] val:([0-9]+ "," [0-9]+ "," [0-9]+ "," [0-9]+) ['"]
+{
+
+  val = _.filter(val, _.isArray).map(function(item) {
+    return Number(item.join(""))
+  })
+  return makeObj("date_interval", op, val)
+}
+
+// date_expr_seq
+//  = first:date_expr rest:(bool date_expr)* {
+//   return unpack([first], rest)
+//  }
+//  / "(" des:date_expr_seq ")" {return des}
+
+// date_expr
+//   = first:date rest:(bool date)* {
+//     var list = unpack([first], rest)
+//     c.log ("list", list)
+//     // c.log ("_.extend.apply(list)", _.extend.apply(null, list))
+//     return _.extend.apply(null, list)
+//   }
+//   / "(" de:date_expr ")" {return de}
+
+
+// date
+//   = "int(" date_type:("_."[A-Za-z]+) ")" op:date_op val:[0-9]+ {
+//     var output = {}
+//     output[date_type[1].join("")] = [op, Number(val.join(""))]
+//     return output
+//   }
+
+
+infix_op
+  = "^="
+  / "&="
+  / "_="
+  / "*="
+  / "!="
+  / "="
+  / "not contains"
+  / "contains"
+
+date_op
+  = " <= "
+  / " => "
+  / " > "
+  / " = "
+  / " < " 
+
+
+bool
+  = " & "
+  / " | "

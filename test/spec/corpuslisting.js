@@ -34,5 +34,8 @@
   });
 
 }).call(this);
+<<<<<<< HEAD
 
 //# sourceMappingURL=corpuslisting.js.map
+=======
+>>>>>>> removed old bootstrap files, added angular i18n stuff

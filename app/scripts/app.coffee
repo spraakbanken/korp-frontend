@@ -12,16 +12,19 @@ window.korpApp = angular.module('korpApp', [
                                             "ui.sortable"
                                             "newsdesk"
                                             "sbMap"
+                                            "tmh.dynamicLocale"
                                         ])
 
 
-korpApp.run ($rootScope, $location, utils, searches) ->
+korpApp.config (tmhDynamicLocaleProvider) ->
+    tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
+
+korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout) ->
     s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang or settings.defaultLanguage
     s.word_selected = null
     s.isLab = window.isLab;
-
 
     s.sidebar_visible = false
 
@@ -31,12 +34,15 @@ korpApp.run ($rootScope, $location, utils, searches) ->
     s.searchtabs = () ->
         $(".search_tabs > ul").scope().tabs
 
+    tmhDynamicLocale.set("en")
 
     s._loc = $location
     s._searchOpts = {}
     s.$watch "_loc.search()", () ->
         c.log "loc.search() change", $location.search()
         _.defer () -> window.onHashChange?()
+
+        tmhDynamicLocale.set($location.search().lang or "sv")
 
 
 

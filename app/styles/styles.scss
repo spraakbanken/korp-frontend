@@ -47,6 +47,18 @@ ul, ol {
   padding: 0.2em;
 }
 
+.radio, .checkbox {
+  // bootstrap override
+  display: inherit;
+  min-height: initial;
+  margin-top: initial;
+  margin-bottom: initial;
+}
+label {
+  font-weight : initial;
+  margin-bottom : 0;
+}
+
 .welcome-header {
   padding: 0.7em;
 }
@@ -295,13 +307,39 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 
 .extended .search_submit {
   display: inline;
-<<<<<<< HEAD
   vertical-align: super;
   .btn-group {
     display: inline;
   }
-=======
->>>>>>> going crazy with datepicker. super broken
+}
+.date_interval_arg_type {
+  .section {
+    margin-top : 1em;
+  }
+  button {
+    min-width : 70px;
+    text-align : left;
+  }
+}
+.date_interval.popper_menu {
+  width: auto;
+  padding : 1em;
+}
+
+time-interval {
+ .timepicker {
+    display : inline-block;
+    vertical-align : middle;
+  }
+ .fa-clock-o {
+    vertical-align : middle;
+    color : #333;
+  } 
+
+  .time {
+    margin : 0 auto;
+    width : 60%;  
+  }
 }
 
 #advanced pre {
@@ -341,127 +379,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
   display: inline;
 }
 
-.remove_arg {
-  position: relative;
-  top: 15px;
-  opacity: 1;
-  @include transition(opacity 200ms ease);
-}
-
-.insert_arg {
-  margin-top: 4px;
-  float: left;
-}
-
-.insert_token {
-  position: relative;
-  top: 54px;
-  margin-left: 10px;
-}
-
-// .arg_selects! {}
-
-.arg_type {
-  @include inline-block();
-  width : 160px;
-}
-
-.arg_opts {
-  margin-left: 5px;
-}
-
-input.arg_value {
-  width: 95%;
-}
-
-.arg_value {
-  max-width: 300px;
-}
-
-select.arg_value option {
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
-
-.btn-icon {
-  vertical-align: top;
-  @include inline-block();
-  cursor: pointer;
-  position: relative;
-  right: -4px;
-  top: -5px;
-}
-
-.query_token {
-  .left_col {
-    @include inline-block(top);
-    min-width : 16px;
-  }
-  button {
-    width: 20px;
-    height: 20px;
-    float: right;
-    i {
-      position: relative;
-      top: 0px;
-      left: -2px;
-      font-size: 14px;
-    }
-  }
-  .repeat {
-    float: right;
-    margin-right: 25px;
-    input {
-      max-width: 30px;
-    }
-  }
-}
-
-.token_header {
-  padding-bottom : 3px;
-}
-.token_footer {
-  // position: relative;
-  font-size: .8em;
-
-  // ul {
-  //   margin-top: -5px;
-  //   background-color: white;
-  //   position: absolute;
-  //   display: none;
-  // }
-}
-
-// .token_footer ul, li {
-//   margin: 0;
-//   padding: 0;
-// }
-
-.close_token {
-
-  @include border-radius(20px);
-  color: black;
-  background-color: rgb(242, 247, 255);
-  border: thin lightgrey solid;
-  padding-left: 5px;
-  padding-right: 2px;
-  cursor: default;
-  i {
-    cursor : pointer;
-  }
-}
-
-.lower_footer {
-  text-align: right;
-  margin-top: 2px;
-}
-
-#opt_menu {
-  display: none;
-  font-size: .8em;
-  cursor: pointer;
-  width: 100px;
-}
 
 
 // .repeat, .lower_footer > * {
@@ -502,24 +419,45 @@ select.arg_value option {
   white-space : nowrap;
   // font-size: .6em;
   &:link, &:visited {
-    color: #222222;
-  }
-  &:hover {
-    color: #444444;
-  }
-  span.ui-icon {
-    margin: 0 5px 0 0;
-    position: absolute;
-    left: .2em;
-    top: 50%;
-    margin-top: -8px;
-  }
+.numberOfChildren {
+  color: #888888;
 }
 
+.webkit .hp_topframe > div {
+  margin-top: 1px;
+}
+$corpusbox-width : 480px;
+
+#corpusbox {
+  cursor: pointer;
+  .hp_topframe {
+    // height: 16px;
+    width: $corpusbox-width;
+    padding: .5em 1em .5em 20px;
+    color: #222222;
+    text-decoration: none;
+    position: relative;
+    text-size: .6em;
+    &:link, &:visited {
+      color: #222222;
+    }
+    &:hover {
+      color: #444444;
+    }
+    span.ui-icon {
+      margin: 0 5px 0 0;
+      position: absolute;
+      left: .2em;
+      top: 50%;
+      margin-top: -8px;
+    }
+  }
+
+}
 .popupchecks {
   z-index: 9999;
   max-height: 600px;
-  width: 446px;
+  width: $corpusbox-width;
   border: solid thin #CCCCCC;
   background-color: #FEFEFE;
   overflow-y: auto;
@@ -531,31 +469,17 @@ select.arg_value option {
     margin: 10px 0;
     @include inline-block(top);
     font-size: .8em;
-    a {
+    button {
       display: block;
       margin-bottom: 5px;
+      width : 100%;
+      text-align : left;
+      .fa {
+        margin-right : 3px;
+      }
     }
   }
   // .header! {}
-}
-
-.numberOfChildren {
-  color: #888888;
-}
-
-.hp_topframe {
-  // height: 16px;
-  width: 446px;
-  padding-top: 7px;
-  // padding-bottom: 7px;
-}
-
-.webkit .hp_topframe > div {
-  margin-top: 1px;
-}
-
-#corpusbox {
-  cursor: pointer;
 }
 
 .corpusInfoSpace {
@@ -622,13 +546,13 @@ select.arg_value option {
   height: 12px;
   @include inline-block();
   &.checked {
-    background-image: url("../img/checked.png");
+    background: url("../img/checked.png") no-repeat;
   }
   &.unchecked {
-    background-image: url("../img/unchecked.png");
+    background: url("../img/unchecked.png") no-repeat;
   }
   &.intermediate {
-    background-image: url("../img/intermediate.png");
+    background: url("../img/intermediate.png") no-repeat;
   }
 }
 
@@ -724,21 +648,139 @@ table {
   padding: 0px 5px;
 }
 
+.insert_token {
+  position: relative;
+  top: 54px;
+  margin-left: 10px;
+}
+
 .query_token {
   background-color: #e1e1e1;
-  display: inline-table;
-  *display: inline;
-  vertical-align: top;
+  @include inline-block(top);
   padding: 5px;
   border: 1px solid #999;
-  cursor: move;
   margin-left: 0;
   margin-right: 10px;
   margin-bottom: 5px;
   box-shadow: 2px 2px 3px grey;
-  &.ui-sortable-helper {
-    width: 275px !important;
+
+  .close_btn {
+    cursor : pointer;
+    float: right;
+    opacity: 1;
+    @include transition(opacity 200ms ease);
+    font-size : 15px;
   }
+  &:only-of-type .close_btn {
+    opacity: 0;
+    cursor: default;
+    @include transition(opacity 200ms ease);
+  }
+  
+  .remove_arg {
+    position: relative;
+    top: 15px;
+    opacity: 1;
+    @include transition(opacity 200ms ease);
+  }
+
+  .insert_arg {
+    margin-top: 4px;
+    float: left;
+  }
+
+  // .arg_selects! {}
+
+  .arg_type {
+    @include inline-block();
+    width : 160px;
+  }
+
+  .arg_opts {
+    margin-left: 5px;
+  }
+
+  input.arg_value {
+    width: 95%;
+  }
+
+  .arg_value {
+    max-width: 300px;
+  }
+
+  select.arg_value option {
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+
+  .btn-icon {
+    vertical-align: top;
+    @include inline-block();
+    cursor: pointer;
+    position: relative;
+    right: -4px;
+    top: -5px;
+  }
+
+  .left_col {
+    @include inline-block(top);
+    min-width : 16px;
+  }
+  .repeat {
+    float: right;
+    margin-right: 25px;
+    input {
+      max-width: 30px;
+    }
+  }
+
+  .token_header {
+    padding-bottom : 3px;
+    cursor: move;
+  }
+  .token_footer {
+    // position: relative;
+    font-size: .8em;
+    button {
+      width: 20px;
+      height: 20px;
+      float: right;
+      i {
+        position: relative;
+        top: 0px;
+        left: -2px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .close_token {
+
+    @include border-radius(20px);
+    color: black;
+    background-color: rgb(242, 247, 255);
+    border: thin lightgrey solid;
+    padding-left: 5px;
+    padding-right: 2px;
+    cursor: default;
+    i {
+      cursor : pointer;
+    }
+  }
+
+  .lower_footer {
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  #opt_menu {
+    display: none;
+    font-size: .8em;
+    cursor: pointer;
+    width: 100px;
+  }
+
+
 }
 
 .cqp_toggle {
@@ -1414,23 +1456,6 @@ label[for=lemgram_select]:before {
   top: 3px;
 }
 
-.query_token {
-  .logic_switcher {
-    float: left;
-  }
-  .close_btn {
-    cursor : pointer;
-    float: right;
-    opacity: 1;
-    @include transition(opacity 200ms ease);
-    font-size : 15px;
-  }
-  &:only-of-type .close_btn {
-    opacity: 0;
-    cursor: default;
-    @include transition(opacity 200ms ease);
-  }
-}
 
 .right_col {
   padding-right: 2px;
@@ -1450,9 +1475,9 @@ label[for=lemgram_select]:before {
 
 .or_arg {
   margin-bottom: 5px;
-  .ui-icon-info {
-    @include inline-block(text-bottom);
+  .fa-info-circle {
     cursor: pointer;
+    margin-left : 5px;
   }
 }
 
@@ -2347,21 +2372,11 @@ line.tick {
   .meter {
     cursor: pointer;
     position: relative;
-    // box-shadow: none;
     border: 1px solid rgba($primaryColor, 0);
     @include transition(all 200ms ease);
-    // -webkit-transform: scale(1,1);
     &:hover {
       color : navy;
-      // @include box-shadow(4px 4px 7px 1px grey);
       border: 1px solid rgba(darken($primaryColor, 10%), 1);
-      // @include transition(all 200ms ease);
-      // -webkit-transform: scale(1.05,1.05);
-      // -webkit-transform-origin: 5px 0 0;
-      .background {
-        // @include transition(all 400ms ease);
-        // padding: 10px 0; 
-      }
     }
   }
   .badge {

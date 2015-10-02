@@ -253,6 +253,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     # returning new array each time kills angular, hence the memoizing
     s.getOpts = _.memoize (type) ->
+        unless type of s.typeMapping then return
         confObj = s.typeMapping?[type]
         unless confObj
             c.log "confObj missing", type, s.typeMapping

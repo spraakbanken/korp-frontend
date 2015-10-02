@@ -1,5 +1,5 @@
-<div ng-controller="ExtendedToken">
-    <div ui-sortable="{ items: '> .token' }" ng-model="data">
+<div>
+    <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="data" ng-controller="ExtendedToken">
     <!-- <div>{{data}}</div>
     <div>{{data}}</div>
     <div>{{data}}</div> -->
@@ -46,7 +46,7 @@
                 <div>
                     <img src="img/plus.png" class="image_button insert_arg" ng-click="addAnd(token)">
         
-                    <button popper class="btn btn-mini"><i class="fa fa-cog"></i></button>
+                    <button popper class="btn btn-xs btn-default"><i class="fa fa-cog"></i></button>
                     <ul class="popper_menu dropdown-menu">
                         <li>
                             <a ng-click="toggleRepeat(token)" rel="localize[repeat]">{{'repeat' | loc:lang}}</a>

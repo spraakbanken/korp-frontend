@@ -857,3 +857,93 @@ util.findoutType = (variable) ->
         typeof (variable)
 
 
+
+settings.common_struct_types = 
+    date_interval:
+        label: "date_interval"
+        displayType: "date_interval"
+        opts: settings.liteOptions
+        # extended_template: "<slider floor=\"{{floor}}\" ceiling=\"{{ceiling}}\" " + "ng-model-low=\"values.low\" ng-model-high=\"values.high\"></slider>" + "<div><input ng-model=\"values.low\" class=\"from\"> <input class=\"to\" ng-model=\"values.high\"></div>"
+        extended_template : '<div class="date_interval_arg_type">
+            <div class="section">
+                <button class="btn btn-default btn-small" popper no-close-on-click my="left top" at="right top">
+                    <i class="fa fa-calendar"></i>
+                    Från    
+                </button>
+                    {{combined.format("YYYY-MM-DD HH:mm")}}
+                <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" 
+                    date-model="from_date" time-model="from_time" model="combined" 
+                    min-date="minDate" max-date="maxDate">
+                </time-interval>
+            </div>
+            
+            <div class="section">
+                <button class="btn btn-default btn-small" popper no-close-on-click my="left top" at="right top">
+                    <i class="fa fa-calendar"></i>
+                    Till    
+                </button>
+                    {{combined2.format("YYYY-MM-DD HH:mm")}}
+                <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" 
+                    date-model="to_date" time-model="to_time" model="combined2" my="left top" at="right top"
+                    min-date="minDate" max-date="maxDate">
+                </time-interval>
+            </div>
+        </div>'
+        
+
+        controller: ($scope, searches, $timeout) ->
+
+            s = $scope
+
+            updateIntervals = () ->
+                [from, to] = settings.corpusListing.getTimeInterval()
+
+                s.minDate = moment(from.toString(), "YYYY").toDate()
+                s.maxDate = moment(to.toString(), "YYYY").toDate()
+                
+            s.$on "corpuschooserchange", () ->
+                updateIntervals()
+
+
+            updateIntervals()
+
+            s.from_click = (event) ->
+                event.originalEvent.preventDefault()
+                event.originalEvent.stopPropagation()
+
+            c.log "model", s.model
+
+            unless s.model
+                s.from_date = s.minDate
+
+                s.to_date = s.maxDate
+                s.from_time = moment("0", "h").toDate()
+                s.to_time = moment("23:59", "hh:mm").toDate()
+
+                # s.model = [
+                #     moment(s.minDate).format("YYYMMDD")
+                #     moment(s.maxDate).format("YYYMMDD")
+                #     moment(s.minDate).format("YYYMMDD")
+                #     moment(s.minDate).format("YYYMMDD")
+            # ]
+
+            getYear = (val) ->
+                moment(val.toString(), "YYYYMMDD").toDate()
+
+            getTime = (val) ->
+                moment(val.toString(), "HHmmss").toDate()
+
+            if s.model.length == 4
+                [s.from_date, s.to_date] = _.map s.model[..2], getYear
+                [s.from_time, s.to_time] = _.map s.model[2..], getTime
+                    # moment(item.toString(), )
+            # s.from_date = moment()
+
+            s.$watchGroup ["combined", "combined2"], (val) ->
+
+                s.model = [
+                    moment(s.from_date).format("YYYYMMDD"),
+                    moment(s.to_date).format("YYYYMMDD"),
+                    moment(s.from_time).format("HHmmss"),
+                    moment(s.to_time).format("HHmmss")
+                ]

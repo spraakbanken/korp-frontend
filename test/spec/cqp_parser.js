@@ -12,5 +12,8 @@
   });
 
 }).call(this);
+<<<<<<< HEAD
 
 //# sourceMappingURL=cqp_parser.js.map
+=======
+>>>>>>> removed old bootstrap files, added angular i18n stuff
