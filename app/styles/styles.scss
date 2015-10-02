@@ -1302,14 +1302,15 @@ a {
 }
 
 .modal.login {
-  width: 280px;
-  height : 370px;
-  margin-left : -120px;
+  // width: 280px;
+  // height : 370px;
+  // margin-left : -120px;
+
 }
 
 #login_popup {
   // display: none;
-  min-height: initial;
+  min-height: 210px;
   * {
     display: block;
   }
@@ -1698,7 +1699,7 @@ label[for=lemgram_select]:before {
 
   #simple_text {
     position: relative;
-    margin-top : 6px;
+    margin-top : 2px;
     display: inline-block;
     vertical-align: middle;
   }
