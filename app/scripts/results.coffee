@@ -1628,7 +1628,97 @@ class view.GraphResults extends BaseResults
         return
     setLineMode : () ->
 
-    setTableMode : () ->
+    setTableMode : (series) ->
+        $(".chart,.zoom_slider,.legend", @$result).hide()
+        $(".time_table", @$result.parent()).show()
+        nRows = series.length or 2
+        h = (nRows * 2) + 4
+        h = Math.min h, 40
+        $(".time_table:visible", @$result).height "#{h}.1em"
+        @time_grid?.resizeCanvas()
+        $(".exportTimeStatsSection", @$result).show()
+        
+        setExportUrl = () ->
+            selVal = $(".timeKindOfData option:selected", @$result).val()
+            selType = $(".timeKindOfFormat option:selected", @$result).val()
+            dataDelimiter = if selType is "TSV" then "%09" else ";"
+
+            header = [ util.getLocaleString("stats_hit") ]
+
+            for cell in series[0].data
+                header.push moment(cell.x * 1000).format("YYYY")
+
+            output = [header]
+
+            for row in series
+                cells = [ if row.name is "&Sigma;" then "Σ" else row.name ]
+                for cell in row.data
+                    if selVal is "relative"
+                        cells.push cell.y
+                    else
+                        i = _.indexOf (_.pluck row.abs_data, "x"), cell.x, true
+                        cells.push row.abs_data[i].y
+                output.push cells
+            
+            csv = new CSV(output, {
+                header : header
+                delimiter : dataDelimiter
+                # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
+            })
+            csvstr = csv.encode()
+            blob = new Blob([csvstr], { type: "text/#{selType}"})
+            csvUrl = URL.createObjectURL(blob)
+            $(".exportTimeStatsSection .btn.export", @$result).attr({
+                download : "export.#{selType}"
+                href : csvUrl    
+            })
+
+        setExportUrl()
+
+    renderTable : (series) ->
+        HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value
+
+
+        time_table_data = []
+        time_table_columns_intermediate = {}
+        for row in series
+            new_time_row = {"label" : row.name}
+            for item in row.data
+                timestamp = moment(item.x * 1000).format("YYYY") # this needs to be fixed for other resolutions
+                time_table_columns_intermediate[timestamp] =
+                    "name" : timestamp
+                    "field" : timestamp
+                    "formatter" : (row, cell, value, columnDef, dataContext) ->
+                        loc = {
+                            'sv' : "sv-SE"
+                            'en' : "gb-EN"
+                        }[$("body").scope().lang]
+                        fmt = (valTup) ->
+                            if typeof valTup[0] == "undefined" then return ""
+                            return "<span>" +
+                                    "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + 
+                                    "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
+                              "<span>"
+                        return fmt(value)
+                i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
+                #new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
+                new_time_row[timestamp] = [item.y, row.abs_data[i].y]
+            time_table_data.push new_time_row
+        # Sort columns
+        time_table_columns = [
+                            "name" : "Hit"
+                            "field" : "label"
+                            "formatter" : HTMLFormatter
+                            ]
+        for key in _.keys(time_table_columns_intermediate).sort()
+            time_table_columns.push(time_table_columns_intermediate[key])
+
+        time_grid = new Slick.Grid $(".time_table", @$result), time_table_data, time_table_columns,
+            enableCellNavigation: false
+            enableColumnReorder: false
+        #time_grid.autosizeColumns()
+        $(".time_table", @$result).width("100%")
+        @time_grid = time_grid
 
     makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
@@ -1724,56 +1814,14 @@ class view.GraphResults extends BaseResults
                 $(".chart,.zoom_slider,.legend", @$result.parent()).show()
                 $(".time_table", @$result.parent()).hide()
                 if val == "bar"
-                    if $(".legend .line", @$result).length > 1
-                        $(".legend li:last:not(.disabled) .action", @$result).click()
-                        if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
-                            $(".legend li:first .action", @$result).click()
+                    @setBarMode()
+                    # if $(".legend .line", @$result).length > 1
+                    #     $(".legend li:last:not(.disabled) .action", @$result).click()
+                    #     if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
+                    #         $(".legend li:first .action", @$result).click()
                 else if val == "table"
-                    $(".chart,.zoom_slider,.legend", @$result).hide()
-                    $(".time_table", @$result.parent()).show()
-                    nRows = series.length or 2
-                    h = (nRows * 2) + 4
-                    h = Math.min h, 40
-                    $(".time_table:visible", @$result).height "#{h}.1em"
-                    @time_grid?.resizeCanvas()
-                    $(".exportTimeStatsSection", @$result).show()
-
-                    setExportUrl = () ->
-                        selVal = $(".timeKindOfData option:selected", @$result).val()
-                        selType = $(".timeKindOfFormat option:selected", @$result).val()
-                        dataDelimiter = if selType is "TSV" then "%09" else ";"
-
-                        header = [ util.getLocaleString("stats_hit") ]
-
-                        for cell in series[0].data
-                            header.push moment(cell.x * 1000).format("YYYY")
-
-                        output = [header]
-
-                        for row in series
-                            cells = [ if row.name is "&Sigma;" then "Σ" else row.name ]
-                            for cell in row.data
-                                if selVal is "relative"
-                                    cells.push cell.y
-                                else
-                                    i = _.indexOf (_.pluck row.abs_data, "x"), cell.x, true
-                                    cells.push row.abs_data[i].y
-                            output.push cells
-
-                        csv = new CSV(output, {
-                            header : header
-                            delimiter : dataDelimiter
-                            # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
-                        })
-                        csvstr = csv.encode()
-                        blob = new Blob([csvstr], { type: "text/#{selType}"})
-                        csvUrl = URL.createObjectURL(blob)
-                        $(".exportTimeStatsSection .btn.export", @$result).attr({
-                            download : "export.#{selType}"
-                            href : csvUrl
-                        })
-
-                    setExportUrl()
+                    @setTableMode(series)
+                    @renderTable(series)
 
                     # $(".timeExportButton", @$result).unbind "click"
                     # $(".timeExportButton", @$result).click =>
@@ -1785,49 +1833,8 @@ class view.GraphResults extends BaseResults
                     graph.render()
                     $(".exportTimeStatsSection", @$result).hide()
 
-            HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value
+            
 
-
-            time_table_data = []
-            time_table_columns_intermediate = {}
-            for row in series
-                new_time_row = {"label" : row.name}
-                for item in row.data
-                    timestamp = moment(item.x * 1000).format("YYYY") # this needs to be fixed for other resolutions
-                    time_table_columns_intermediate[timestamp] =
-                        "name" : timestamp
-                        "field" : timestamp
-                        "formatter" : (row, cell, value, columnDef, dataContext) ->
-                            loc = {
-                                'sv' : "sv-SE"
-                                'en' : "gb-EN"
-                            }[$("body").scope().lang]
-                            fmt = (valTup) ->
-                                if typeof valTup[0] == "undefined" then return ""
-                                return "<span>" +
-                                        "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " +
-                                        "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
-                                  "<span>"
-                            return fmt(value)
-                    i = _.indexOf (_.pluck row.abs_data, "x"), item.x, true
-                    #new_time_row[timestamp] = {"relative" : item.y, "absolute" : row.abs_data[i].y}
-                    new_time_row[timestamp] = [item.y, row.abs_data[i].y]
-                time_table_data.push new_time_row
-            # Sort columns
-            time_table_columns = [
-                                "name" : "Hit"
-                                "field" : "label"
-                                "formatter" : HTMLFormatter
-                                ]
-            for key in _.keys(time_table_columns_intermediate).sort()
-                time_table_columns.push(time_table_columns_intermediate[key])
-
-            time_grid = new Slick.Grid $(".time_table", @$result), time_table_data, time_table_columns,
-                enableCellNavigation: false
-                enableColumnReorder: false
-            #time_grid.autosizeColumns()
-            $(".time_table", @$result).width("100%")
-            @time_grid = time_grid
             # $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
             # $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
             # $(".form_switch .ui-button:eq(1) .ui-button-text", @$result).localeKey("bar")
