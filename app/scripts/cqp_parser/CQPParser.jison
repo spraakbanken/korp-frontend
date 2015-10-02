@@ -19,8 +19,8 @@
 'lbound'              return "FUNC"
 'rbound'              return "FUNC"
 'sentence'            return "FUNCVAL"
-"("                   /* skip */
-")"                   /* skip */
+%"("                   /* skip */
+%")"                   /* skip */
 \s+                   /* skip whitespace */
 \%[cd]+               return "FLAG"
 'not'                 return 'not'
@@ -128,9 +128,9 @@ or_block
     ;
 
 bool
-    : "|"
+    : "&"
         {$$ = $1}
-    | "&"
+    | "|"
         {$$ = $1}
     ;
 
