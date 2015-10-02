@@ -33,7 +33,7 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
           span(rel='localize[non_time_before]')
           span.non_time
           span(rel='localize[non_time_after]')
-      .legend(ng-show="!loading && isGraph()")
+      .legend(ng-style='{visibility : !loading && isGraph() ? "visible" : "hidden"}')
         .line(ng-show="hasEmptyIntervals", tooltip="{{'graph_material_tooltip' | loc:lang}}")
           a.action
           .swatch(style="background-color: #999")

@@ -342,9 +342,15 @@
                         </div>
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
+<<<<<<< HEAD
                       <div ng-show="!loading &amp;&amp; isGraph()" class="legend">
                         <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc:lang}}" class="line"><a class="action"></a>
                           <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc:lang}} </em></span>
+=======
+                      <div ng-style="{visibility : !loading &amp;&amp; isGraph() ? &quot;visible&quot; : &quot;hidden&quot;}" class="legend">
+                        <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc}}" class="line"><a class="action"></a>
+                          <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc}} </em></span>
+>>>>>>> finished up major graph work, rebasing time
                         </div>
                       </div>
                       <div style="clear: both;"></div>

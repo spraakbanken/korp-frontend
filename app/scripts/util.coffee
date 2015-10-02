@@ -207,7 +207,7 @@ class window.CorpusListing
         unless tos.length
             to = null
         else
-            to = _.min tos, toUnix
+            to = _.max tos, toUnix
         
         # c.log "first", infoGetter("FirstDate")
         [from, to]

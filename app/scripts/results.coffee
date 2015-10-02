@@ -1407,8 +1407,9 @@ class view.GraphResults extends BaseResults
         @proxy = new model.GraphProxy()
 
         [from, to] = settings.corpusListing.getMomentInterval()
+        c.log "from, to", from, to
 
-        @checkZoomLevel(from, to)
+        @checkZoomLevel(from, to, true)
 
 
         c.log "adding chart listener", @$result
@@ -1423,9 +1424,24 @@ class view.GraphResults extends BaseResults
             if cqp
                 m = moment(val * 1000)
 
-                start = m.format("YYYYMMDD")
-                end = m.add(1, "year").subtract(1, "day").format("YYYYMMDD")
-                timecqp = "[(int(_.text_datefrom) >= #{start} & int(_.text_dateto) <= #{end})]"
+
+                datefrom = moment(m).startOf(@zoom).format("YYYYMMDD")
+                dateto = moment(m).endOf(@zoom).format("YYYYMMDD")
+                if (@validZoomLevels.indexOf @zoom) < 3 # year, month, day
+                    timecqp = "[(int(_.text_datefrom) >= #{datefrom} & int(_.text_dateto) <= #{dateto})]"
+
+
+                else # hour, minute, second
+                    timefrom = moment(m).startOf(@zoom).format("HHmmss")
+                    timeto = moment(m).endOf(@zoom).format("HHmmss")
+                    c.log "timefrom", timefrom, timeto
+                    
+                    timecqp = """[(int(_.text_datefrom) = #{datefrom} & int(_.text_timefrom) >= #{timefrom} & int(_.text_dateto) <= #{dateto} & int(_.text_timeto) <= #{timeto}) |
+                     ((int(_.text_datefrom) < #{datefrom} | (int(_.text_datefrom) = #{datefrom} & int(_.text_timefrom) <= #{timefrom})) & (int(_.text_dateto) > #{dateto} | (int(_.text_dateto) = #{dateto} & int(_.text_timeto) >= #{timeto})))]"""
+
+                    # (datefrom == 20140101 & timefrom >= 120000 & dateto == 20140101 & timeto <= 160000)
+                    # |
+                    # ((datefrom < 20140101 | (datefrom == 20140101 & timefrom <= 120000)) & (dateto > 20140101 | (dateto == 20140101 & timeto >= 160000)))
 
                 n_tokens = @s.data.cqp.split("]").length - 2
 
@@ -1465,9 +1481,12 @@ class view.GraphResults extends BaseResults
         #     width : 0;
         
     drawPreloader : (from, to) ->
-        unless @graph then return
-        left = @graph.x from.unix()
-        width = (@graph.x to.unix()) - left
+        if @graph
+            left = @graph.x from.unix()
+            width = (@graph.x to.unix()) - left
+        else 
+            left = 0
+            width = "100%"
 
         $(".preloader", @$result).css
             left : left
@@ -1475,7 +1494,7 @@ class view.GraphResults extends BaseResults
 
     setZoom : (zoom, from, to) ->
         @zoom = zoom
-        fmt = "YYYYMMDDhhmmss"
+        fmt = "YYYYMMDDHHmmss"
 
         @drawPreloader from, to
         @proxy.granularity = @granularities[zoom]
@@ -1488,24 +1507,33 @@ class view.GraphResults extends BaseResults
             to.format(fmt)
 
 
-    checkZoomLevel : (from, to) ->
-        unless from
+    checkZoomLevel : (from, to, forceSearch) ->
+        unless from?
             {x : [from, to]} = @graph.renderer.domain()
             from = moment.unix(from)
+            from.start
             to = moment.unix(to)
         
 
         oldZoom = @zoom
 
         newZoom = null
-        for zoom in @validZoomLevels
+        idealNumHits = 1000
+        newZoom = _.min @validZoomLevels, (zoom) ->
             nPoints = to.diff(from, zoom)
-            if 1500 > nPoints > 150
-                c.log "zoom sweet spot:", zoom, nPoints
-                newZoom = zoom
-                break
+            return Math.abs(idealNumHits - nPoints)
 
-        if newZoom and (oldZoom != newZoom)
+
+        # for zoom in @validZoomLevels
+        #     nPoints = to.diff(from, zoom)
+        #     c.log "nPoints", nPoints
+        #     if 3600 > nPoints > 100
+        #         c.log "zoom sweet spot:", zoom, nPoints
+        #         newZoom = zoom
+        #         break
+
+        c.log "newZoom", newZoom
+        if (newZoom and (oldZoom != newZoom) or forceSearch)
             @setZoom(newZoom, from, to)
 
 
@@ -1519,11 +1547,11 @@ class view.GraphResults extends BaseResults
             when "day"
                 return moment(time, "YYYYMMDD")
             when "hour"
-                return moment(time, "YYYYMMDDhh")
+                return moment(time, "YYYYMMDDHH")
             when "minute"
-                return moment(time, "YYYYMMDDhhmm")
+                return moment(time, "YYYYMMDDHHmm")
             when "second"
-                return moment(time, "YYYYMMDDhhmmss")
+                return moment(time, "YYYYMMDDHHmmss")
 
 
 
@@ -1536,7 +1564,7 @@ class view.GraphResults extends BaseResults
         max = _.max dateArray, (mom) -> mom.toDate()
 
         min.startOf(@zoom)
-        max.startOf(@zoom)
+        max.endOf(@zoom)
 
         n_diff = moment(max).diff min, @zoom
         # c.log "n_diff", n_diff
@@ -1548,7 +1576,7 @@ class view.GraphResults extends BaseResults
 
         newMoments = []
         for i in [0..n_diff]
-            newMoment = moment(min).add(@zoom, i)
+            newMoment = moment(min).add(i, @zoom)
 
             maybeCurrent = momentMapping[newMoment.unix()]
             if typeof maybeCurrent != 'undefined'
@@ -1570,12 +1598,12 @@ class view.GraphResults extends BaseResults
         # firstVal = @parseDate @granularity, first
         # lastVal = @parseDate @granularity, last.toString()
 
-        hasFirstValue = false
-        hasLastValue = false
+        # hasFirstValue = false
+        # hasLastValue = false
         output = for [x, y] in (_.pairs data)
             mom = (@parseDate @zoom, x)
-            if mom.isSame firstVal then hasFirstValue = true
-            if mom.isSame lastVal then hasLastValue = true
+            # if mom.isSame firstVal then hasFirstValue = true
+            # if mom.isSame lastVal then hasLastValue = true
             {x : mom, y : y}
 
         # if (not hasFirstValue) and showSelectedCorporasStartDate
@@ -1583,7 +1611,7 @@ class view.GraphResults extends BaseResults
             # output.push {x : firstVal, y:0}
 
         prettyDate = (item) ->
-            moment(item.x).format("YYYYMMDD:hhmmss")
+            moment(item.x).format("YYYYMMDD:HHmmss")
         # c.log "firstVal", prettyDate(firstVal)
 
         # c.log "output before", (_.map output, prettyDate).join(" | ")
@@ -1607,7 +1635,7 @@ class view.GraphResults extends BaseResults
     hideNthTick : (graphDiv) ->
         $(".x_tick:visible", graphDiv).hide()
         .filter((n) ->
-            return n % 2 == 0
+            return ((n % 2) or (n % 3) or (n % 5)) == 0
             # return Number($(this).text()) % 5 == 0
         ).show()
 
@@ -1666,11 +1694,8 @@ class view.GraphResults extends BaseResults
 
 
     drawIntervals : (graph) ->
-        # c.log "unitWidth", unitWidth
-        # unless $(".zoom_slider", @$result).is ".ui-slider"
-            # return
-        # [from, to] = $('.zoom_slider', @$result).slider("values")
-        emptyIntervals = @getEmptyIntervals(graph.series[0].data)
+        # emptyIntervals = @getEmptyIntervals(graph.series[0].data)
+        emptyIntervals = graph.series[0].emptyIntervals
         @s.hasEmptyIntervals = emptyIntervals.length
         {x : [from, to]} = graph.renderer.domain()
 
@@ -1792,7 +1817,7 @@ class view.GraphResults extends BaseResults
         @time_grid = time_grid
 
 
-    makeSeries : (data, cqp, zoom) ->
+    makeSeries : (data, cqp, labelMapping, zoom) ->
         [from, to] = CQP.getTimeInterval(CQP.parse(cqp)) or [null, null]
         showSelectedCorporasStartDate = !from
         if _.isArray data.combined
@@ -1805,7 +1830,7 @@ class view.GraphResults extends BaseResults
                     data : @getSeriesData item.relative, showSelectedCorporasStartDate, zoom
                     color : color
                     # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
-                    name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
+                    name : if item.cqp then @s.data.labelMapping[item.cqp] else "&Sigma;"
                     cqp : item.cqp or cqp
                     abs_data : @getSeriesData item.absolute, showSelectedCorporasStartDate, zoom
                 }
@@ -1823,8 +1848,12 @@ class view.GraphResults extends BaseResults
         
         # c.log "emptyIntervals", emptyIntervals
 
+        emptyIntervals = @getEmptyIntervals(series[0].data)
+        series[0].emptyIntervals = emptyIntervals
+
         for s in series
             s.data = _.filter s.data, (item) -> item.y != null
+            s.abs_data = _.filter s.abs_data, (item) -> item.y != null
 
         return series
 
@@ -1838,26 +1867,30 @@ class view.GraphResults extends BaseResults
             c.log "last", moment.unix(last).format()
             startSplice = false
             from = 0
-            to = -1
+            n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length
             for {x}, i in seriesObj.data
                 if (x >= first) and (not startSplice)
                     startSplice = true
                     from = i
-                    c.log "from", from
+                    c.log "from", from, moment.unix(seriesObj.data[from].x).format()
                     j = 0
                 if startSplice
-                    if x > last
-                        to = from + (j - 1)
-                        c.log "to", to
+                    if x >= last
+                        n_elems = (j + 1)
+                        c.log "n_elems", n_elems
+                        # c.log "to", to, moment.unix(seriesObj.data[to].x).format()
                         break
                     # seriesObj.data[i] = newSeries[seriesIndex].data[j]
                     j++
 
 
             # c.log "splicing from, to", from, to, moment.unix(seriesObj.data[from].x).format(), moment.unix(seriesObj.data[to].x).format()
-
+            c.log "n_elems after", n_elems #, moment.unix(seriesObj.data[to].x).format()
             c.log "seriesObj.data", seriesObj.data.length
-            seriesObj.data[from..to] = newSeries[seriesIndex].data
+            seriesObj.data.splice(from, n_elems, newSeries[seriesIndex].data...)
+            seriesObj.abs_data.splice(from, n_elems, newSeries[seriesIndex].abs_data...)
+            # seriesObj.data[..] = _.sortBy seriesObj.data, "x"
+            # seriesObj.abs_data[from..to] = newSeries[seriesIndex].abs_data
             c.log "seriesObj.data", seriesObj.data.length
 
 
@@ -1880,7 +1913,10 @@ class view.GraphResults extends BaseResults
         for zoomLevel, points of grouped
             if zoomLevel != @zoom
                 from = moment.unix(points[0].x)
+                from.startOf(@zoom)
                 to = moment.unix((_.last points).x)
+                to.endOf(@zoom)
+                # to.add(3, @zoom)
                 @setZoom @zoom, from, to
 
         # _.filter visibleData[0], (item) ->
@@ -1919,9 +1955,7 @@ class view.GraphResults extends BaseResults
 
             c.log "graph cqp", cqp
                 
-            if data.ERROR
-                @resultError data
-                return
+
             
             done = () =>
                 @resetPreloader()
@@ -1931,8 +1965,16 @@ class view.GraphResults extends BaseResults
 
                 $(window).trigger("resize")
 
+            if data.ERROR
+                @resultError data
+                return
+            # if data.combined.sums.absolute == 0 and data.combined.sums.relative == 0
+            #     c.log "no results from graph", data
+            #     done()
+            #     return
+
             if @graph
-                series = @makeSeries(data, cqp, currentZoom)
+                series = @makeSeries(data, cqp, labelMapping, currentZoom)
                 @spliceData series
                 # @graph.series[...] = series
                 @drawIntervals(@graph)
@@ -1948,7 +1990,7 @@ class view.GraphResults extends BaseResults
             else
                 $(".non_time_div", @$result).hide()
 
-            series = @makeSeries(data, cqp, currentZoom)
+            series = @makeSeries(data, cqp, labelMapping, currentZoom)
 
 
             graph = new Rickshaw.Graph
@@ -1971,6 +2013,12 @@ class view.GraphResults extends BaseResults
                 if @$result.is(":visible")
                     graph.setSize()
                     graph.render()
+
+                    # @preview.configure
+                    #     width : @$result.width() - 20
+                    #     height : 80
+
+                    # @preview.render()
             , 200)
 
             $(".form_switch", @$result).click (event) =>
@@ -2019,7 +2067,7 @@ class view.GraphResults extends BaseResults
                     #     when "m" then output[0..1].join("\n")
                     #     when "d" then output.join("\n")
 
-                    return "<span data-val='#{x}'>#{m.format('YYYY-MM-DD hh:mm:ss')}</span>"
+                    return "<span data-val='#{x}'>#{m.format('YYYY-MM-DD HH:mm:ss')}</span>"
 
 
                 yFormatter: (y) ->
@@ -2027,9 +2075,14 @@ class view.GraphResults extends BaseResults
 
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
                 formatter : (series, x, y, formattedX, formattedY, d) ->
-                    i = _.indexOf (_.pluck series.abs_data, "x"), x, true
-                    abs_y = series.abs_data[i].y
-
+                    i = _.indexOf (_.pluck series.data, "x"), x, true
+                    try 
+                        abs_y = series.abs_data[i].y
+                    catch e
+                        c.log "i", i, x
+                    
+                    if not abs_y
+                        c.log "abs_y", i, x
 
                     rel = series.name + ':&nbsp;' + formattedY
                     return """<span data-cqp="#{encodeURIComponent(series.cqp)}">
@@ -2063,14 +2116,15 @@ class view.GraphResults extends BaseResults
 
             xAxis = new Rickshaw.Graph.Axis.Time
                 graph: graph
-                timeUnit: time.unit(@zoom) # TODO: bring back decade
+                # timeUnit: time.unit("month") # TODO: bring back decade
+                # timeFixture: new Rickshaw.Fixtures.Time()
 
             # slider = new Rickshaw.Graph.RangeSlider
             #     graph: graph,
             #     element: $('.zoom_slider', @$result)
 
 
-            preview = new Rickshaw.Graph.RangeSlider.Preview
+            @preview = new Rickshaw.Graph.RangeSlider.Preview
                 graph: graph
                 element: $(".preview", @$result).get(0)
 
@@ -2078,10 +2132,16 @@ class view.GraphResults extends BaseResults
             $("body").on "mouseup", ".preview .middle_handle", () =>
                 @previewPanStop()
 
+            $("body").on "mouseup", ".preview .left_handle, .preview .right_handle", () =>
+                if not @s.loading
+                    @previewPanStop()
+
+
 
 
             # expanedCQP = CQP.expandOperators cqp
 
+            window._xaxis = xAxis
 
             old_render = xAxis.render
             xAxis.render = _.throttle () =>
@@ -2092,7 +2152,7 @@ class view.GraphResults extends BaseResults
                 
                 @checkZoomLevel()
 
-            , 200
+            , 20
             
 
             # old_tickOffsets = xAxis.tickOffsets

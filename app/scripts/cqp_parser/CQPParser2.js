@@ -121,7 +121,7 @@ CQPParser = (function() {
             var prefix = ""
             if(lhs[0])
               prefix = lhs[0]
-            console.log("rhs", rhs)
+            
             rhs = _.map(rhs, _.last)
             return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join("")) 
           },
