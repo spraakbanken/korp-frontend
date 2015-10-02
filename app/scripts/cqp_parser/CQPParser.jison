@@ -5,13 +5,16 @@
 %lex
 %%
 
-"int(_.text_datefrom)"  return "DATE_FROM"
-"int(_.text_dateto)"  return "DATE_TO"
-\d{8}                 return "DATE_VAL"
+"int(_.text_datefrom)"  return "DATE_TIME_KEY"
+"int(_.text_dateto)"  return "DATE_TIME_KEY"
+"int(_.text_timefrom)"  return "DATE_TIME_KEY"
+"int(_.text_timeto)"  return "DATE_TIME_KEY"
+\d{6,8}                 return "DATE_TIME_VAL"
 "<="                  return "DATE_OP"
 ">="                  return "DATE_OP"
 "<"                   return "DATE_OP"
 ">"                   return "DATE_OP"
+"="                   return "DATE_OP"
 ' contains '          return 'contains'
 'lbound'              return "FUNC"
 'rbound'              return "FUNC"
@@ -111,12 +114,23 @@ or_block
         {$$ = [$1]}
     | or '|' or_block
         {$$ = [].concat([$1], $3)}
+
+    | date_time_expr
+        {
+            for(key in $1) {
+                $1[key] = Math.min.apply(null, $1[key])
+            }
+            var val = [$1["fromdate"], $1["todate"], $1["fromtime"], $1["totime"]].join(",");
+            $$ = {type : "date_interval", op : "=", val: val}
+            // var op = $2 == '<' ? "!=" : "=";
+            // $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
+        }
     ;
 
 bool
-    : "&"
+    : "|"
         {$$ = $1}
-    | "|"
+    | "&"
         {$$ = $1}
     ;
 
@@ -124,7 +138,7 @@ or
     : TYPE infix_op VALUE
         {$$ =  {type : $1, op : $2, val: $3.slice(1, -1)}}
 
-    | or 'FLAG'
+    | or FLAG
         {
             var chars = $2.slice(1).split("");
             $1.flags = {};
@@ -133,15 +147,39 @@ or
                 
             $$ = $1;
         }
-    | DATE_FROM DATE_OP DATE_VAL bool DATE_TO DATE_OP DATE_VAL
-        {
-            var op = $2 == '<' ? "!=" : "=";
-
-            $$ =  {type : "date_interval", op : op, val: $3 + "," + $7}
-        }
+    
 
     ;
 
+
+date_time_expr 
+    : date 
+        {
+            $$ = $1;
+        }
+    | date bool date_time_expr
+        {
+            $$ = {};
+            for(key in $1) {
+                $$[key] = $1[key].concat($1);
+            }
+        }
+    ;
+
+
+
+date
+    : DATE_TIME_KEY DATE_OP DATE_VAL
+        {
+            if(!$$) $$ = {}
+            var key = $1.split("_")[$1.split("_").length - 1]
+            if(!key in $$) $$[key] = []
+
+            if($2 == "=")
+                $$[key].push($3)
+
+        }
+    ;
 
 
 bound
