@@ -137,7 +137,14 @@
           }
         };
         $scope.input = unescape($scope.model);
-        return $scope.$watch("orObj.op + input", function() {
+        c.log("escaper", $scope.$id);
+        $scope.inputChange = function() {
+          c.log("inputChange", $scope.input, escape($scope.input));
+          $scope.model = escape($scope.input);
+          return c.log("$scope", $scope.$id);
+        };
+        return $scope.$watch("orObj.op", function() {
+          c.log("operator change");
           return $scope.model = escape($scope.input);
         });
       }
@@ -146,7 +153,7 @@
 
   korpApp.directive("tokenValue", function($compile, $controller) {
     var defaultController, getDefaultTmpl;
-    getDefaultTmpl = _.template("<input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: \"default blur\"}'\n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>\n</ul>");
+    getDefaultTmpl = _.template("<input ng-model='input' ng-change=\"inputChange()\" class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: \"default blur\"}'\n<%= maybe_placeholder %>>\n<span class='val_mod' popper\n    ng-class='{sensitive : case == \"sensitive\", insensitive : case == \"insensitive\"}'>\n        Aa\n</span> \n<ul class='mod_menu popper_menu dropdown-menu'>\n    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>\n    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>\n</ul>");
     defaultController = [
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
@@ -167,7 +174,7 @@
     return {
       scope: {
         tokenValue: "=",
-        model: "=ngModel",
+        model: "=model",
         orObj: "=orObj"
       },
       template: "<div>{{tokenValue.label}}</div>",
@@ -178,6 +185,12 @@
         childWatch = null;
         return scope.$watch("tokenValue", function(valueObj) {
           var childScope, defaultTmpl, locals, tmplElem, tmplObj;
+          if (!valueObj) {
+            return;
+          }
+          if (valueObj.value === (current != null ? current.value : void 0)) {
+            return;
+          }
           if (prevScope != null) {
             prevScope.$destroy();
           }
@@ -185,15 +198,11 @@
             childWatch();
           }
           prevScope = null;
-          if (!valueObj) {
-            return;
-          }
-          if (valueObj.value === (current != null ? current.value : void 0)) {
-            return;
-          }
           current = valueObj;
-          childScope = scope.$new();
+          childScope = scope.$new(false, scope);
+          c.log("tokenValue watch", scope.$id, "child", childScope.$id);
           childWatch = childScope.$watch("model", function(val) {
+            c.log("model watch", val);
             return scope.model = val;
           });
           childScope.orObj = scope.orObj;

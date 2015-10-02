@@ -92,7 +92,10 @@ korpApp.directive "escaper", () ->
                 val
 
         $scope.input = unescape $scope.model
-        $scope.$watch "orObj.op + input", () ->
+        $scope.inputChange = () ->
+            $scope.model = escape($scope.input)
+        
+        $scope.$watch "orObj.op", () ->
             $scope.model = escape($scope.input)
 
 
@@ -102,7 +105,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc:lang}} '>"
     
     getDefaultTmpl = _.template """
-                <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
+                <input ng-model='input' ng-change="inputChange()" class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
                 <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
@@ -134,7 +137,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     # require:'ngModel',
     scope :
         tokenValue : "="
-        model : "=ngModel"
+        model : "=model"
         orObj : "=orObj"
     template : """
         <div>{{tokenValue.label}}</div>
@@ -144,18 +147,16 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         prevScope = null
         childWatch = null
         scope.$watch "tokenValue", (valueObj) ->
+            unless valueObj then return
+            if valueObj.value == current?.value then return
             prevScope?.$destroy()
             childWatch?()
             prevScope = null
-            unless valueObj then return
-            # c.log "$scope tokenValue link", valueObj
-            if valueObj.value == current?.value then return
             current = valueObj
 
             
 
-            # childScope = _.extend scope, valueObj
-            childScope = scope.$new()
+            childScope = scope.$new(false, scope)
             childWatch = childScope.$watch "model", (val) ->
                 scope.model = val
             childScope.orObj = scope.orObj
