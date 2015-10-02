@@ -182,6 +182,7 @@ class window.CorpusListing
 
 
         return [_.first(all), _.last(all)]
+        
 
     getMomentInterval : () ->
         toUnix = (item) -> item.unix()

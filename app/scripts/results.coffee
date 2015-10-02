@@ -1383,7 +1383,8 @@ class view.GraphResults extends BaseResults
     constructor : (tabSelector, resultSelector, scope) ->
         super(tabSelector, resultSelector, scope)
 
-        @zoom = "year"
+        @zoom = "day"
+        # values: y m d h n s
         @granularity = @zoom[0]
         # @corpora = null
         @proxy = new model.GraphProxy()
@@ -1455,6 +1456,9 @@ class view.GraphResults extends BaseResults
         min = _.min dateArray, (mom) -> mom.toDate()
         max = _.max dateArray, (mom) -> mom.toDate()
 
+        min.startOf(@zoom)
+        max.startOf(@zoom)
+
 
         duration = switch @granularity
             when "y"
@@ -1468,13 +1472,17 @@ class view.GraphResults extends BaseResults
                 diff = "day"
 
         n_diff = moment(max).diff min, diff
+        # c.log "n_diff", n_diff
 
-        momentMapping = _.object _.map data, (item) ->
-            [moment(item.x).unix(), item.y]
+        momentMapping = _.object _.map data, (item) =>
+            mom = moment(item.x)
+            mom.startOf(@zoom)
+            [mom.unix(), item.y]
 
         newMoments = []
         for i in [0..n_diff]
             newMoment = moment(min).add(diff, i)
+
             maybeCurrent = momentMapping[newMoment.unix()]
             if typeof maybeCurrent != 'undefined'
                 lastYVal = maybeCurrent
@@ -1490,9 +1498,10 @@ class view.GraphResults extends BaseResults
     getSeriesData : (data) ->
         delete data[""]
         # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
-        [first, last] = settings.corpusListing.getTimeInterval()
-        firstVal = @parseDate "y", first
-        lastVal = @parseDate "y", last.toString()
+        # [first, last] = settings.corpusListing.getTimeInterval()
+        [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
+        # firstVal = @parseDate @granularity, first
+        # lastVal = @parseDate @granularity, last.toString()
 
         hasFirstValue = false
         hasLastValue = false
@@ -1505,8 +1514,13 @@ class view.GraphResults extends BaseResults
         unless hasFirstValue
             output.push {x : firstVal, y:0}
 
-        output = @fillMissingDate output
+        prettyDate = (item) ->
+            return {
+                x : moment(item.x).format()
+                y: item.y
+            }
 
+        output = @fillMissingDate output 
 
         output =  output.sort (a, b) ->
             a.x.unix() - b.x.unix()
@@ -1621,6 +1635,7 @@ class view.GraphResults extends BaseResults
         # hidden = $(".progress_container", @$result).nextAll().hide()
         @s.loading = true
         @showPreloader()
+        @proxy.granularity = @granularity
         @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress( (data) =>
             @onProgress(data)
 
@@ -1862,9 +1877,10 @@ class view.GraphResults extends BaseResults
                 # , 100)
             } )
 
-            [first, last] = settings.corpusListing.getTimeInterval()
+            # [first, last] = settings.corpusListing.getTimeInterval()
+            [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
 
-            timeunit = if last - first > 100 then "decade" else @zoom
+            # timeunit = if last - first > 100 then "decade" else @zoom
 
             toDate = (sec) ->
                 moment(sec * 1000).toDate()
@@ -1883,7 +1899,7 @@ class view.GraphResults extends BaseResults
 
             xAxis = new Rickshaw.Graph.Axis.Time
                 graph: graph
-                timeUnit: time.unit(timeunit)
+                timeUnit: time.unit(@zoom) # TODO: bring back decade
 
             slider = new Rickshaw.Graph.RangeSlider
                 graph: graph,

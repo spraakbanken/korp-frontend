@@ -1,5 +1,5 @@
-<div>
-    <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="data" ng-controller="ExtendedToken">
+<div ng-controller="ExtendedToken">
+    <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="data" >
         <div class="token query_token" ng-repeat="token in data track by $index" >
             <div class="token_header">
                 <i class="close_btn fa fa-times-circle-o fa-1"

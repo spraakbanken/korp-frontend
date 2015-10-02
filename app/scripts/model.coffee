@@ -459,12 +459,12 @@ class model.StatsProxy extends BaseProxy
                     return
                 @processData(def, data, reduceval)
                 
-                $.each data.corpora, (corpus, obj) ->
-                    totalRow[corpus + "_value"] = obj.sums
+                # $.each data.corpora, (corpus, obj) ->
+                    # totalRow[corpus + "_value"] = obj.sums
 
                 wordArray = _.keys(data.total.absolute)
 
-                dataset = [totalRow]
+                # dataset = [totalRow]
 
         return def.promise()
 
