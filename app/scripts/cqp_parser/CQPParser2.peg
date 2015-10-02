@@ -90,10 +90,12 @@ and
 
 
 or
-  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:[A-Za-z0-9\._]* ['"] {
+  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:(!["'] .)* ["'] {
     var prefix = ""
     if(lhs[0])
       prefix = lhs[0]
+    console.log("rhs", rhs)
+    rhs = _.map(rhs, _.last)
     return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join("")) 
   }
   // / "(" first:date_expr rest:(bool date_expr)* ")" {

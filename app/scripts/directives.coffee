@@ -141,7 +141,12 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
     """
     link : (scope, elem, attr) ->
         current = null
+        prevScope = null
+        childWatch = null
         scope.$watch "tokenValue", (valueObj) ->
+            prevScope?.$destroy()
+            childWatch?()
+            prevScope = null
             unless valueObj then return
             # c.log "$scope tokenValue link", valueObj
             if valueObj.value == current?.value then return
@@ -149,8 +154,15 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             
 
-            # _.extend scope, (_.pick valueObj, "dataset", "translationKey")
-            locals = {$scope : _.extend scope, valueObj} 
+            # childScope = _.extend scope, valueObj
+            childScope = scope.$new()
+            childWatch = childScope.$watch "model", (val) ->
+                scope.model = val
+            childScope.orObj = scope.orObj
+            _.extend childScope, valueObj
+
+            locals = {$scope : childScope} 
+            prevScope = childScope
             $controller(valueObj.controller or defaultController, locals)
 
             # valueObj.controller?(scope, _.omit valueObj)
@@ -160,7 +172,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
                 tmplObj = {maybe_placeholder : ""}
 
             defaultTmpl = getDefaultTmpl(tmplObj)
-            tmplElem = $compile(valueObj.extended_template or defaultTmpl)(scope)
+            tmplElem = $compile(valueObj.extended_template or defaultTmpl)(childScope)
             elem.html(tmplElem).addClass("arg_value")
 
 
@@ -357,7 +369,6 @@ korpApp.directive "popper", ($rootElement) ->
         closePopup = () ->
             popup.hide()
         
-        c.log "attrs.noCloseOnClick", attrs.noCloseOnClick?
         if !attrs.noCloseOnClick?
             popup.on "click", (event) ->
                 closePopup()
@@ -704,18 +715,20 @@ korpApp.directive "timeInterval", () ->
             event.stopPropagation()
             s.isOpen = true 
 
-        # s.model = null
+           # s.model = null
 
         time_units = ["hour", "minute"]
-
-        s.$watchGroup ["dateModel", "timeModel"], ([date, time]) ->
+        w = s.$watchGroup ["dateModel", "timeModel"], ([date, time]) ->
             if date and time
-                m = moment(date)
+                m = moment(moment(date).format("YYYY-MM-DD"))
+                # c.log "time", time, date, s
                 for t in time_units
                     m_time = moment(time)
-                    m.add(t, m_time[t]())
+                    # c.log "add", m_time[t](), t
+                    m.add(m_time[t](), t)
 
                 s.model = m
+                # c.log "s.model", s.model
 
 
 angular.module("template/datepicker/day.html", []).run ($templateCache) ->

@@ -183,6 +183,36 @@ class window.CorpusListing
 
         return [_.first(all), _.last(all)]
 
+    getMomentInterval : () ->
+        toUnix = (item) -> item.unix()
+
+        infoGetter = (prop) =>
+            # TODO: change to selected
+            return _(@selected) 
+            .pluck("info")
+            .pluck(prop)
+            .compact()
+            .map(moment)
+            .value()
+        
+
+
+        froms = infoGetter("FirstDate")
+        tos = infoGetter("LastDate")
+
+        unless froms.length
+            from = null
+        else
+            from = _.min froms, toUnix
+        unless tos.length
+            to = null
+        else
+            to = _.min tos, toUnix
+        
+        # c.log "first", infoGetter("FirstDate")
+        [from, to]
+
+
     getNonProtected : () ->
         _.filter @corpora, (item) ->
             not item.limited_access
@@ -894,12 +924,17 @@ settings.common_struct_types =
         controller: ($scope, searches, $timeout) ->
 
             s = $scope
-
+            cl = settings.corpusListing
             updateIntervals = () ->
-                [from, to] = settings.corpusListing.getTimeInterval()
+                moments = cl.getMomentInterval()
+                if moments.length
+                    [s.minDate, s.maxDate] = _.invoke moments, "toDate"
+                else 
+                    # TODO: ideally, all corpora should have momentinterval soon and this block may be removed
+                    [from, to] = cl.getTimeInterval()
+                    s.minDate = moment(from.toString(), "YYYY").toDate()
+                    s.maxDate = moment(to.toString(), "YYYY").toDate()
 
-                s.minDate = moment(from.toString(), "YYYY").toDate()
-                s.maxDate = moment(to.toString(), "YYYY").toDate()
                 
             s.$on "corpuschooserchange", () ->
                 updateIntervals()
@@ -913,37 +948,36 @@ settings.common_struct_types =
 
             c.log "model", s.model
 
-            unless s.model
-                s.from_date = s.minDate
-
-                s.to_date = s.maxDate
-                s.from_time = moment("0", "h").toDate()
-                s.to_time = moment("23:59", "hh:mm").toDate()
-
-                # s.model = [
-                #     moment(s.minDate).format("YYYMMDD")
-                #     moment(s.maxDate).format("YYYMMDD")
-                #     moment(s.minDate).format("YYYMMDD")
-                #     moment(s.minDate).format("YYYMMDD")
-            # ]
-
             getYear = (val) ->
                 moment(val.toString(), "YYYYMMDD").toDate()
 
             getTime = (val) ->
+                c.log "getTime", val, moment(val.toString(), "HHmmss").toDate()
                 moment(val.toString(), "HHmmss").toDate()
 
-            if s.model.length == 4
+            unless s.model
+                s.from_date = s.minDate
+
+                s.to_date = s.maxDate
+                [s.from_time, s.to_time] = _.invoke cl.getMomentInterval(), "toDate"
+                # s.from_time = moment("0", "h").toDate()
+                # s.to_time = moment("23:59", "hh:mm").toDate()
+            else if s.model.length == 4
                 [s.from_date, s.to_date] = _.map s.model[..2], getYear
                 [s.from_time, s.to_time] = _.map s.model[2..], getTime
+
+
+            
                     # moment(item.toString(), )
             # s.from_date = moment()
 
-            s.$watchGroup ["combined", "combined2"], (val) ->
-
+            s.$watchGroup ["combined", "combined2"], ([combined, combined2]) ->
+                c.log "combined", combined
+                c.log "combined2", combined2
                 s.model = [
                     moment(s.from_date).format("YYYYMMDD"),
                     moment(s.to_date).format("YYYYMMDD"),
                     moment(s.from_time).format("HHmmss"),
                     moment(s.to_time).format("HHmmss")
                 ]
+                c.log "s.model", s.model

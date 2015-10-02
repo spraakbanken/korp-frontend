@@ -259,11 +259,12 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
             c.log "confObj missing", type, s.typeMapping
             return
 
-        optObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
-        if confObj.type == "set"
-            optObj.is = "contains"
+        confObj = _.extend {}, (confObj?.opts or settings.defaultOptions)
 
-        pairs = _.pairs optObj
+        if confObj.type == "set"
+            confObj.is = "contains"
+        
+        return _.pairs confObj
 
 
     onCorpusChange = (event, selected) ->

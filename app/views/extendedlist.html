@@ -1,8 +1,5 @@
 <div>
     <div ui-sortable="{ items: '> .token', delay : 100 }" ng-model="data" ng-controller="ExtendedToken">
-    <!-- <div>{{data}}</div>
-    <div>{{data}}</div>
-    <div>{{data}}</div> -->
         <div class="token query_token" ng-repeat="token in data track by $index" >
             <div class="token_header">
                 <i class="close_btn fa fa-times-circle-o fa-1"
@@ -30,7 +27,6 @@
                                         ng-options="pair[1] as pair[0] | loc:lang for pair in getOpts(or.type)" 
                                         ng-model="or.op" ></select>
                                 </div>
-                                <!-- <input class="arg_value" ng-model="or.val"> -->
                                 <div token-value="typeMapping[or.type]" ng-model="or.val" or-obj="or" class="arg_val_container"></div>
                             </div>
                         </div>
@@ -78,9 +74,7 @@
                     </span>
                 </div>
             
-                <!-- <button  ng-click="addAnd()">and</button> -->
             </div>
-        <!-- <button ng-click="addToken()">+</button> -->
         </div>
     <img src="img/plus.png" class="image_button insert_token" ng-click="addToken()" ng-mousedown="onInsertMousedown($event)">
     </div>

@@ -3,7 +3,8 @@
 var parser = require("CQPParser2.js")
 
 var cqp = 
-    "[_.text_word = 'ge']"
+    // "[_.text_word = 'ge']"
+    "[word = \"är\" & $date_interval = '20030616,20140718,000000,235900']"
 //"[%(int(_.fromdate) = 20140101 & int(_.fromtime) => 120000) | (int(_.fromdate) = 20140101 & int(_.fromtime) => 120000)%% | %(int(_.fromdate) = 20140101 & int(_.fromtime) => 120000)%% | word = 'apa' & lex = 'hej']"
 // "[((int(_.fromdate) = 20140101 & int(_.fromtime) => 120000) | (int(_.fromdate) = 20140101 & int(_.fromtime) => 120000)) | ((int(_.fromdate) = 20140101 & int(_.fromtime) => 120000)) | word = 'apa' & lex = 'hej']"
 // '[(((int(_.fromdate) = 20140101 & int(_.fromtime) => 120000) | (int(_.fromdate) > 20140101 & int(_.fromdate) <= 20140105)))]'

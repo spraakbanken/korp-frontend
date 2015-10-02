@@ -8,7 +8,7 @@ window.korpApp = angular.module('korpApp', [
                                             "template/typeahead/typeahead-popup.html"
                                             "template/pagination/pagination.html"
                                             "angularSpinner"
-                                            "uiSlider"
+                                            "ui.slider"
                                             "ui.sortable"
                                             "newsdesk"
                                             "sbMap"
