@@ -697,7 +697,10 @@ table {
     float: left;
   }
 
-  // .arg_selects! {}
+  .arg_selects.date_interval .arg_opts {
+    display: none;
+
+  }
 
   .arg_type {
     @include inline-block();

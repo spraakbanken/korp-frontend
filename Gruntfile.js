@@ -400,7 +400,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'components/jquery-ui/themes/smoothness/images/*',
             'components/SlickGrid/images/*',
-            'translations/*.json',
+            'translations/*',
             // 'markup/*',
             'modes/*',
             'img/*',

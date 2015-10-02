@@ -892,7 +892,7 @@ settings.common_struct_types =
     date_interval:
         label: "date_interval"
         displayType: "date_interval"
-        opts: settings.liteOptions
+        opts: false
         # extended_template: "<slider floor=\"{{floor}}\" ceiling=\"{{ceiling}}\" " + "ng-model-low=\"values.low\" ng-model-high=\"values.high\"></slider>" + "<div><input ng-model=\"values.low\" class=\"from\"> <input class=\"to\" ng-model=\"values.high\"></div>"
         extended_template : '<div class="date_interval_arg_type">
             <div class="section">
@@ -921,7 +921,7 @@ settings.common_struct_types =
         </div>'
         
 
-        controller: ($scope, searches, $timeout) ->
+        controller: ["$scope", "searches", "$timeout", ($scope, searches, $timeout) ->
 
             s = $scope
             cl = settings.corpusListing
@@ -981,3 +981,4 @@ settings.common_struct_types =
                     moment(s.to_time).format("HHmmss")
                 ]
                 c.log "s.model", s.model
+        ]

@@ -1421,14 +1421,20 @@ class view.GraphResults extends BaseResults
             cqp = $(".detail .item.active > span", target).data("cqp")
             c.log "chart click", cqp, target, @s.data.subcqps, @s.data.cqp
             # time =
+
+
             if cqp
+                cqp = CQP.expandOperators decodeURIComponent cqp
+                c.log "cqp", cqp
                 m = moment(val * 1000)
 
 
                 datefrom = moment(m).startOf(@zoom).format("YYYYMMDD")
                 dateto = moment(m).endOf(@zoom).format("YYYYMMDD")
                 if (@validZoomLevels.indexOf @zoom) < 3 # year, month, day
-                    timecqp = "[(int(_.text_datefrom) >= #{datefrom} & int(_.text_dateto) <= #{dateto})]"
+                    timecqp = """[(int(_.text_datefrom) >= #{datefrom} & int(_.text_dateto) <= #{dateto}) | 
+                        (int(_.text_datefrom) <= #{datefrom} & int(_.text_dateto) >= #{dateto})
+                    ]"""
 
 
                 else # hour, minute, second
@@ -1454,8 +1460,8 @@ class view.GraphResults extends BaseResults
                     command : "query"
                     corpus: @s.data.corpusListing.stringifySelected()
                     cqp: @s.data.cqp
-                    cqp2 : decodeURIComponent cqp
-                    cqp3 : timecqp
+                    # cqp2 : cqp
+                    cqp2 : timecqp
                     expand_prequeries : false
 
 
