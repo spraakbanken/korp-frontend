@@ -2165,6 +2165,38 @@ warning ~ * {
     margin-left : -8px;
   }
 }
+
+.chart_container {
+  position: relative;
+  .preloader {
+    position: absolute;
+    left : 0;
+    top : 0;
+    bottom : 0;
+    width : 100%;
+    background-color : transparentize(steelblue, 0.3);
+    text-align: center;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity : 0;
+    transition: opacity 500ms; 
+
+    &.loading {
+      opacity : 1;
+      transition: opacity 500ms; 
+    }
+    
+    i {
+      z-index : 1000;
+      // flex
+    }
+  }
+}
+.graph_tab {
+  min-height : 430px;
+}
 .graph_header {
   .controls {
     float : left;
@@ -2178,6 +2210,10 @@ warning ~ * {
   }
 }
 .reading_mode .show_deptree {
+  display : none;
+}
+
+.form-table .preview {
   display : none;
 }
 

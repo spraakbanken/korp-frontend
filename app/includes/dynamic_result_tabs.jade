@@ -10,9 +10,9 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='$event.preventDefault();graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
-  div(constr='GraphResults')
+  div.graph_tab(constr='GraphResults')
     .graph_header
-      .controls(ng-show="!loading")
+      .controls()
         //- .form_switch
         //-   input#line_input(type='radio', name='form_switch', value='line', checked='checked')
         //-   label(for='line_input') Linje
@@ -40,10 +40,12 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
           span.label 
             em {{'graph_material' | loc:lang}} 
       div(style='clear: both;')
-      .drawing(ng-show="loading")
-        | {{'drawing' | loc:lang}}
-    .chart(ng-show="isGraph()")
-    //- .zoom_slider(ng-show="isGraph()")
+      //- .drawing(ng-show="loading")
+      //-   | {{'drawing' | loc}}
+    .chart_container
+      .preloader(ng-class="{loading: loading}")
+        i.fa.fa-spinner.fa-spin.fa-5x
+      .chart(ng-show="isGraph()")
     .preview
     .time_table(style="margin-top:20px", ng-show="isTable()")
     .exportTimeStatsSection(ng-show="isTable()")

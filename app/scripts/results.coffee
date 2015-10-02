@@ -1382,17 +1382,34 @@ class view.GraphResults extends BaseResults
     constructor : (tabSelector, resultSelector, scope) ->
         super(tabSelector, resultSelector, scope)
 
-        @zoom = "day"
+
+        @validZoomLevels = [
+            "year"
+            "month"
+            "day"
+            "hour"
+            "minute"
+            "second"
+        ]
+        @granularities = {
+            "year" : "y"
+            "month" : "m"
+            "day" : "d"
+            "hour" : "h"
+            "minute" : "n"
+            "second" : "s"
+        }
+
+        @zoom = "year"
         # values: y m d h n s
-        @granularity = @zoom[0]
+        # @granularity = @zoom[0]
         # @corpora = null
         @proxy = new model.GraphProxy()
 
-        @makeRequest @s.data.cqp,
-            @s.data.subcqps,
-            @s.data.corpusListing,
-            @s.data.labelMapping,
-            @s.data.showTotal
+        [from, to] = settings.corpusListing.getMomentInterval()
+
+        @checkZoomLevel(from, to)
+
 
         c.log "adding chart listener", @$result
 
@@ -1435,19 +1452,82 @@ class view.GraphResults extends BaseResults
     #     super
     # onexit : ->
 
-    parseDate : (granularity, time) ->
-        [year,month,day] = [null,0,1]
-        switch granularity
-            when "y" then year = time
-            when "m"
-                year = time[0...4]
-                month = time[4...6]
-            when "d"
-                year = time[0...4]
-                month = time[4...6]
-                day = time[6...8]
+    # getNextZoom : () ->
+    #     i = @validZoomLevels.indexOf @zoom
+    #     return @validZoomLevels[i + 1]
+    # getPrevZoom : () ->
+    #     i = @validZoomLevels.indexOf @zoom
+    #     return @validZoomLevels[i - 1]
 
-        return moment([Number(year), Number(month) - 1, Number(day) - 1])
+
+    resetPreloader : () ->
+        # $(".preloader", @$result).css
+        #     width : 0;
+        
+    drawPreloader : (from, to) ->
+        unless @graph then return
+        left = @graph.x from.unix()
+        width = (@graph.x to.unix()) - left
+
+        $(".preloader", @$result).css
+            left : left
+            width : width
+
+    setZoom : (zoom, from, to) ->
+        @zoom = zoom
+        fmt = "YYYYMMDDhhmmss"
+
+        @drawPreloader from, to
+        @proxy.granularity = @granularities[zoom]
+        @makeRequest @s.data.cqp,
+            @s.data.subcqps,
+            @s.data.corpusListing,
+            @s.data.labelMapping,
+            @s.data.showTotal,
+            from.format(fmt),
+            to.format(fmt)
+
+
+    checkZoomLevel : (from, to) ->
+        unless from
+            {x : [from, to]} = @graph.renderer.domain()
+            from = moment.unix(from)
+            to = moment.unix(to)
+        
+
+        oldZoom = @zoom
+
+        newZoom = null
+        for zoom in @validZoomLevels
+            nPoints = to.diff(from, zoom)
+            if 1500 > nPoints > 150
+                c.log "zoom sweet spot:", zoom, nPoints
+                newZoom = zoom
+                break
+
+        if newZoom and (oldZoom != newZoom)
+            @setZoom(newZoom, from, to)
+
+
+
+    parseDate : (zoom, time) ->
+        switch zoom
+            when "year"
+                return moment(time, "YYYY")
+            when "month"
+                return moment(time, "YYYYMM")
+            when "day"
+                return moment(time, "YYYYMMDD")
+            when "hour"
+                return moment(time, "YYYYMMDDhh")
+            when "minute"
+                return moment(time, "YYYYMMDDhhmm")
+            when "second"
+                return moment(time, "YYYYMMDDhhmmss")
+
+
+
+        # return moment([Number(year), Number(month) - 1, Number(day) - 1])
 
 
     fillMissingDate : (data) ->
@@ -1458,19 +1538,7 @@ class view.GraphResults extends BaseResults
         min.startOf(@zoom)
         max.startOf(@zoom)
 
-
-        duration = switch @granularity
-            when "y"
-                duration = moment.duration year :  1
-                diff = "year"
-            when "m"
-                duration = moment.duration month :  1
-                diff = "month"
-            when "d"
-                duration = moment.duration day :  1
-                diff = "day"
-
-        n_diff = moment(max).diff min, diff
+        n_diff = moment(max).diff min, @zoom
         # c.log "n_diff", n_diff
 
         momentMapping = _.object _.map data, (item) =>
@@ -1480,7 +1548,7 @@ class view.GraphResults extends BaseResults
 
         newMoments = []
         for i in [0..n_diff]
-            newMoment = moment(min).add(diff, i)
+            newMoment = moment(min).add(@zoom, i)
 
             maybeCurrent = momentMapping[newMoment.unix()]
             if typeof maybeCurrent != 'undefined'
@@ -1494,7 +1562,7 @@ class view.GraphResults extends BaseResults
 
 
 
-    getSeriesData : (data, showSelectedCorporasStartDate) ->
+    getSeriesData : (data, showSelectedCorporasStartDate, zoom) ->
         delete data[""]
         # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
         # [first, last] = settings.corpusListing.getTimeInterval()
@@ -1505,30 +1573,33 @@ class view.GraphResults extends BaseResults
         hasFirstValue = false
         hasLastValue = false
         output = for [x, y] in (_.pairs data)
-            mom = (@parseDate @granularity, x)
+            mom = (@parseDate @zoom, x)
             if mom.isSame firstVal then hasFirstValue = true
             if mom.isSame lastVal then hasLastValue = true
             {x : mom, y : y}
 
-        if not hasFirstValue and showSelectedCorporasStartDate
-            output.push {x : firstVal, y:0}
+        # if (not hasFirstValue) and showSelectedCorporasStartDate
+        # if showSelectedCorporasStartDate # Don't remove first value for now
+            # output.push {x : firstVal, y:0}
 
         prettyDate = (item) ->
-            return {
-                x : moment(item.x).format()
-                y: item.y
-            }
+            moment(item.x).format("YYYYMMDD:hhmmss")
+        # c.log "firstVal", prettyDate(firstVal)
 
-        output = @fillMissingDate output 
+        # c.log "output before", (_.map output, prettyDate).join(" | ")
+        output = @fillMissingDate output
+        # c.log "output before", (_.map output, prettyDate).join(" | ")
+        
 
         output =  output.sort (a, b) ->
             a.x.unix() - b.x.unix()
 
-        #remove last element
-        output.splice(output.length-1, 1)
+        #remove last element WHY WOULD I DO THIS
+        # output.splice(output.length-1, 1)
 
         for tuple in output
             tuple.x = tuple.x.unix()
+            tuple.zoom = zoom
 
         return output
 
@@ -1594,18 +1665,20 @@ class view.GraphResults extends BaseResults
         return intervals
 
 
-    drawIntervals : (graph, intervals) ->
+    drawIntervals : (graph) ->
         # c.log "unitWidth", unitWidth
         # unless $(".zoom_slider", @$result).is ".ui-slider"
             # return
         # [from, to] = $('.zoom_slider', @$result).slider("values")
+        emptyIntervals = @getEmptyIntervals(graph.series[0].data)
+        @s.hasEmptyIntervals = emptyIntervals.length
         {x : [from, to]} = graph.renderer.domain()
 
         unitSpan = moment.unix(to).diff(moment.unix(from), @zoom)
         unitWidth = graph.width / unitSpan
 
         $(".empty_area", @$result).remove()
-        for list in intervals
+        for list in emptyIntervals
             max = _.max list, "x"
             min = _.min list, "x"
             from = graph.x min.x
@@ -1718,13 +1791,119 @@ class view.GraphResults extends BaseResults
         $(".time_table", @$result).width("100%")
         @time_grid = time_grid
 
-    makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal) ->
+
+    makeSeries : (data, cqp, zoom) ->
+        [from, to] = CQP.getTimeInterval(CQP.parse(cqp)) or [null, null]
+        showSelectedCorporasStartDate = !from
+        if _.isArray data.combined
+            palette = new Rickshaw.Color.Palette("colorwheel")
+            series = []
+            for item in data.combined
+                color = palette.color()
+                # @colorToCqp[color] = item.cqp
+                series.push {
+                    data : @getSeriesData item.relative, showSelectedCorporasStartDate, zoom
+                    color : color
+                    # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
+                    name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
+                    cqp : item.cqp or cqp
+                    abs_data : @getSeriesData item.absolute, showSelectedCorporasStartDate, zoom
+                }
+        else # TODO: get rid of code doubling and use seriesData variable
+            # @colorToCqp['steelblue'] = cqp
+            series = [{
+                        data: @getSeriesData data.combined.relative, showSelectedCorporasStartDate, zoom
+                        color: 'steelblue'
+                        name : "&Sigma;"
+                        cqp : cqp
+                        abs_data : @getSeriesData data.combined.absolute, showSelectedCorporasStartDate, zoom
+                    }]
+        Rickshaw.Series.zeroFill(series)
+        # window.data = series[0].data
+        
+        # c.log "emptyIntervals", emptyIntervals
+
+        for s in series
+            s.data = _.filter s.data, (item) -> item.y != null
+
+        return series
+
+
+
+    spliceData : (newSeries) ->
+        for seriesObj, seriesIndex in @graph.series
+            first = newSeries[seriesIndex].data[0].x
+            c.log "first", first, moment.unix(first).format()
+            last = (_.last newSeries[seriesIndex].data).x
+            c.log "last", moment.unix(last).format()
+            startSplice = false
+            from = 0
+            to = -1
+            for {x}, i in seriesObj.data
+                if (x >= first) and (not startSplice)
+                    startSplice = true
+                    from = i
+                    c.log "from", from
+                    j = 0
+                if startSplice
+                    if x > last
+                        to = from + (j - 1)
+                        c.log "to", to
+                        break
+                    # seriesObj.data[i] = newSeries[seriesIndex].data[j]
+                    j++
+
+
+            # c.log "splicing from, to", from, to, moment.unix(seriesObj.data[from].x).format(), moment.unix(seriesObj.data[to].x).format()
+
+            c.log "seriesObj.data", seriesObj.data.length
+            seriesObj.data[from..to] = newSeries[seriesIndex].data
+            c.log "seriesObj.data", seriesObj.data.length
+
+
+    previewPanStop : () ->
+        c.log "pan stop"
+
+        # {x : [from, to]} = graph.renderer.domain()
+
+        visibleData = @graph.stackData()
+        c.log "visibleData", visibleData
+
+        count = _.countBy visibleData[0], (coor) ->
+            coor.zoom
+        c.log "count", count
+
+        # @validZoomLevels.indexOf z
+
+        grouped = _.groupBy visibleData[0], "zoom"
+
+        for zoomLevel, points of grouped
+            if zoomLevel != @zoom
+                from = moment.unix(points[0].x)
+                to = moment.unix((_.last points).x)
+                @setZoom @zoom, from, to
+
+        # _.filter visibleData[0], (item) ->
+        #     item
+
+
+
+
+        #if we have dots in graph of wrong granularity
+            # fetch and splice
+
+
+
+
+
+    makeRequest : (cqp, subcqps, corpora, labelMapping, showTotal, from, to) ->
         c.log "makeRequest", cqp, subcqps, corpora, labelMapping, showTotal
         # hidden = $(".progress_container", @$result).nextAll().hide()
         @s.loading = true
         @showPreloader()
-        @proxy.granularity = @granularity
-        @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected()).progress( (data) =>
+        currentZoom = @zoom
+        # @proxy.granularity = @granularity
+        @proxy.makeRequest(cqp, subcqps, corpora.stringifySelected(), from, to).progress( (data) =>
             @onProgress(data)
 
 
@@ -1743,51 +1922,37 @@ class view.GraphResults extends BaseResults
             if data.ERROR
                 @resultError data
                 return
-            nontime = @getNonTime()
+            
+            done = () =>
+                @resetPreloader()
+                @hidePreloader()
+                safeApply @s, () =>
+                    @s.loading = false
 
-            [from, to] = CQP.getTimeInterval(CQP.parse(cqp)) or [null, null]
-            showSelectedCorporasStartDate = !from
+                $(window).trigger("resize")
+
+            if @graph
+                series = @makeSeries(data, cqp, currentZoom)
+                @spliceData series
+                # @graph.series[...] = series
+                @drawIntervals(@graph)
+                @graph.render()
+                done()
+                return
+
+
+            nontime = @getNonTime()
             
             if nontime
-                $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
+                $(".non_time", @$result).empty().text(nontime.toFixed(2) + "%").parent().localize()
             else
                 $(".non_time_div", @$result).hide()
 
-            if _.isArray data.combined
-                palette = new Rickshaw.Color.Palette("colorwheel")
-                series = []
-                for item in data.combined
-                    color = palette.color()
-                    # @colorToCqp[color] = item.cqp
-                    series.push {
-                        data : @getSeriesData item.relative, showSelectedCorporasStartDate
-                        color : color
-                        # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
-                        name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
-                        cqp : item.cqp or cqp
-                        abs_data : @getSeriesData item.absolute, showSelectedCorporasStartDate
-                    }
-            else # TODO: get rid of code doubling and use seriesData variable
-                # @colorToCqp['steelblue'] = cqp
-                series = [{
-                            data: @getSeriesData data.combined.relative, showSelectedCorporasStartDate
-                            color: 'steelblue'
-                            name : "&Sigma;"
-                            cqp : cqp
-                            abs_data : @getSeriesData data.combined.absolute, showSelectedCorporasStartDate
-                        }]
-            Rickshaw.Series.zeroFill(series)
-            # window.data = series[0].data
-            emptyIntervals = @getEmptyIntervals(series[0].data)
-            @s.hasEmptyIntervals = emptyIntervals.length
-            # c.log "emptyIntervals", emptyIntervals
-
-            for s in series
-                s.data = _.filter s.data, (item) -> item.y != null
+            series = @makeSeries(data, cqp, currentZoom)
 
 
             graph = new Rickshaw.Graph
-                element: $(".chart", @$result).get(0)
+                element: $(".chart", @$result).empty().get(0)
                 renderer: 'line'
                 interpolation : "linear"
                 series: series
@@ -1799,8 +1964,7 @@ class view.GraphResults extends BaseResults
             window._graph = @graph = graph
             
             
-
-            @drawIntervals(graph, emptyIntervals)
+            @drawIntervals(graph)
 
 
             $(window).on "resize", _.throttle(() =>
@@ -1843,17 +2007,19 @@ class view.GraphResults extends BaseResults
                 graph: graph
                 xFormatter: (x) =>
                     # d = new Date(x * 1000)
-                    m = moment(x * 1000)
-                    output = ["<span rel='localize[year]'>#{util.getLocaleString('year')}</span>: <span class='currently'>#{m.year()}</span>",
-                              "<span rel='localize[month]'>#{util.getLocaleString('month')}</span>: <span class='currently'>#{m.month() + 1}</span>",
-                              "<span rel='localize[day]'>#{util.getLocaleString('day')}</span>: <span class='currently'>#{m.date() + 1}</span>"
-                              ]
-                    out = switch @granularity
-                        when "y" then output[0]
-                        when "m" then output[0..1].join("\n")
-                        when "d" then output.join("\n")
+                    # m = moment()
+                    # m = @parseDate(@zoom, String(x))
+                    m = moment.unix(String(x))
+                    # output = ["<span rel='localize[year]'>#{util.getLocaleString('year')}</span>: <span class='currently'>#{m.year()}</span>",
+                    #           "<span rel='localize[month]'>#{util.getLocaleString('month')}</span>: <span class='currently'>#{m.month() + 1}</span>",
+                    #           "<span rel='localize[day]'>#{util.getLocaleString('day')}</span>: <span class='currently'>#{m.date() + 1}</span>"
+                    #           ]
+                    # out = switch @granularity
+                    #     when "y" then output[0]
+                    #     when "m" then output[0..1].join("\n")
+                    #     when "d" then output.join("\n")
 
-                    return "<span data-val='#{x}'>#{out}</span>"
+                    return "<span data-val='#{x}'>#{m.format('YYYY-MM-DD hh:mm:ss')}</span>"
 
 
                 yFormatter: (y) ->
@@ -1909,34 +2075,44 @@ class view.GraphResults extends BaseResults
                 element: $(".preview", @$result).get(0)
 
 
+            $("body").on "mouseup", ".preview .middle_handle", () =>
+                @previewPanStop()
+
+
+
             # expanedCQP = CQP.expandOperators cqp
 
 
             old_render = xAxis.render
-            xAxis.render = () =>
+            xAxis.render = _.throttle () =>
                 old_render.call xAxis
-                @updateTicks()
-                @drawIntervals(graph, emptyIntervals)
+                # @updateTicks()
+                @drawIntervals(graph)
 
+                
+                @checkZoomLevel()
 
-            old_tickOffsets = xAxis.tickOffsets
-            xAxis.tickOffsets = () =>
-                domain = xAxis.graph.x.domain()
+            , 200
+            
 
-                unit = xAxis.fixedTimeUnit or xAxis.appropriateTimeUnit()
-                count = Math.ceil((domain[1] - domain[0]) / unit.seconds)
+            # old_tickOffsets = xAxis.tickOffsets
+            # xAxis.tickOffsets = () =>
+            #     domain = xAxis.graph.x.domain()
 
-                runningTick = domain[0]
+            #     unit = xAxis.fixedTimeUnit or xAxis.appropriateTimeUnit()
+            #     count = Math.ceil((domain[1] - domain[0]) / unit.seconds)
 
-                offsets = []
+            #     runningTick = domain[0]
 
-                for i in [0...count]
-                    tickValue = time.ceil(runningTick, unit)
-                    runningTick = tickValue + unit.seconds / 2
+            #     offsets = []
 
-                    offsets.push( { value: tickValue, unit: unit, _date: moment(tickValue * 1000).toDate() } )
+            #     for i in [0...count]
+            #         tickValue = time.ceil(runningTick, unit)
+            #         runningTick = tickValue + unit.seconds / 2
 
-                return offsets
+            #         offsets.push( { value: tickValue, unit: unit, _date: moment(tickValue * 1000).toDate() } )
+
+            #     return offsets
 
             xAxis.render()
 
@@ -1945,8 +2121,5 @@ class view.GraphResults extends BaseResults
 
             yAxis.render()
             # hidden.fadeIn()
-            @hidePreloader()
-            safeApply @s, () =>
-                @s.loading = false
 
-            $(window).trigger("resize")
+            done()

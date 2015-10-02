@@ -624,7 +624,7 @@ class model.GraphProxy extends BaseProxy
             ["subcqp#{p}#{i}", cqp]
         return _.object array
 
-    makeRequest: (cqp, subcqps, corpora) ->
+    makeRequest: (cqp, subcqps, corpora, from, to) ->
         super()
         self = this
         params =
@@ -633,6 +633,11 @@ class model.GraphProxy extends BaseProxy
             corpus : corpora
             granularity : @granularity
             incremental: $.support.ajaxProgress
+        
+        if from
+            params.from = from
+        if to
+            params.to = to
 
         #TODO: fix this for struct attrs
         _.extend params, @expandSubCqps subcqps
