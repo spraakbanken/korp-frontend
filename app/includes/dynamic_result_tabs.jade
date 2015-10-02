@@ -23,9 +23,9 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
 
 
         .btn-group.form_switch
-          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'line'") {{'line' | loc:lang}}
-          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'bar'") {{'bar' | loc:lang}}
-          label.btn.btn-default.btn-small(ng-model="$parent.mode", btn-radio="'table'") {{'table' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'line'") {{'line' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'bar'") {{'bar' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'table'") {{'table' | loc:lang}}
 
         //- label.smoothing_label(for='smoothing_switch') Utjämna
         //- input#smoothing_switch.smoothing_switch(type='checkbox')
@@ -55,7 +55,7 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
       select.timeKindOfFormat
         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
-      a.export.btn.btn-default.btn-small {{'statstable_export' | loc:lang}}
+      a.export.btn.btn-default.btn-sm {{'statstable_export' | loc:lang}}
 tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareCtrl')
   tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}

@@ -38,18 +38,6 @@ html
       #header
         include includes/header
       #content
-        
-        //- datepicker(ng-model="dt", min-date="minDate", show-weeks="true", class="well well-sm")
-        //- .form-inline
-        //-   .input-group
-        //-     input.form-control(type='text', datepicker-popup='{{format}}', ng-model='dt', is-open='isOpen', min-date='minDate', max-date='"2015-06-22"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='true', close-text='Close')
-        //-     span.input-group-btn
-        //-       button.btn.btn-default(type='button', ng-click='isOpen = true && $event.stopPropagation()')
-        //-         i.fa.fa-calendar
-
-        //- timepicker(ng-model="mytime", ng-change="changed()", hour-step="1", minute-step="1", show-meridian="false")
-
-
         include includes/searchtabs
         
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length', ng-controller='resultContainerCtrl')
@@ -106,7 +94,7 @@ html
                         option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       a#generateExportButton 
-                        button.btn.btn-sm {{'statstable_gen_export' | loc:lang}}
+                        button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
                       a#exportButton.btn.btn-sm.btn-default
                         | {{'statstable_export' | loc:lang}}
                 tab(ng-if="_settings.wordpicture != false", 

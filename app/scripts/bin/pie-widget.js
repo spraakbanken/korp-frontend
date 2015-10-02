@@ -101,7 +101,7 @@
       }
     },
     _makeSVGPie: function(pieparts, radius) {
-      var SVGArcObjects, bufferPieTrack, first, fvalue, mouseEnter, mouseExit, newPiece, newPieceDOMNode, nowthis, origPath, partOfTotal, pieTrack, r, _i, _len;
+      var SVGArcObjects, bufferPieTrack, first, fvalue, i, len, mouseEnter, mouseExit, newPiece, newPieceDOMNode, nowthis, origPath, partOfTotal, pieTrack, r;
       nowthis = this;
       mouseEnter = function(event) {
         var callback;
@@ -131,8 +131,8 @@
       pieTrack["lastArcY"] = 0;
       SVGArcObjects = [];
       first = true;
-      for (_i = 0, _len = pieparts.length; _i < _len; _i++) {
-        fvalue = pieparts[_i];
+      for (i = 0, len = pieparts.length; i < len; i++) {
+        fvalue = pieparts[i];
         partOfTotal = fvalue["share"];
         if (partOfTotal !== 0) {
           bufferPieTrack = [];
@@ -194,21 +194,21 @@
       });
     },
     initDiagram: function(indata) {
-      var acc, colorCount, defaultOptions, fvalue, itemCaption, itemID, piePieceDefinitions, relative, sortedData, total, _i, _j, _len, _len1;
+      var acc, colorCount, defaultOptions, fvalue, i, itemCaption, itemID, j, len, len1, piePieceDefinitions, relative, sortedData, total;
       defaultOptions = {
         colors: ["90-#C0C7E0-#D0D7F0:50-#D0D7F0", "90-#E7C1D4-#F7D1E4:50-#F7D1E4", "90-#DDECC5-#EDFCD5:50-#EDFCD5", "90-#EFE3C8-#FFF3D8:50-#FFF3D8", "90-#BADED8-#CAEEE8:50-#CAEEE8", "90-#EFCDC8-#FFDDD8:50-#FFDDD8"]
       };
       sortedData = this.options.sort_desc ? this._sortDataDescending(indata) : indata;
       total = 0;
-      for (_i = 0, _len = sortedData.length; _i < _len; _i++) {
-        fvalue = sortedData[_i];
+      for (i = 0, len = sortedData.length; i < len; i++) {
+        fvalue = sortedData[i];
         total += fvalue["value"];
       }
       piePieceDefinitions = [];
       acc = 0;
       colorCount = 0;
-      for (_j = 0, _len1 = sortedData.length; _j < _len1; _j++) {
-        fvalue = sortedData[_j];
+      for (j = 0, len1 = sortedData.length; j < len1; j++) {
+        fvalue = sortedData[j];
         relative = fvalue["value"] / total;
         acc += fvalue["value"];
         itemID = fvalue["shape_id"];
@@ -266,5 +266,3 @@
   $.widget("hp.pie_widget", pie_widget);
 
 }).call(this);
-
-//# sourceMappingURL=pie-widget.js.map

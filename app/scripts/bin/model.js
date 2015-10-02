@@ -1,8 +1,9 @@
 (function() {
+  "use strict";
   var BaseProxy,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.model = {};
 
@@ -24,6 +25,10 @@
       this.total_results = 0;
       this.pendingRequests = [];
     }
+
+    BaseProxy.prototype.expandCQP = function(cqp) {
+      return CQP.expandOperators(cqp);
+    };
 
     BaseProxy.prototype.makeRequest = function() {
       this.abort();
@@ -72,7 +77,7 @@
     };
 
     BaseProxy.prototype.calcProgress = function(e) {
-      var newText, stats, struct, _ref;
+      var newText, ref, stats, struct;
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
@@ -94,7 +99,7 @@
         };
       })(this));
       stats = (this.progress / this.total) * 100;
-      if ((this.total == null) && ((_ref = struct.progress_corpora) != null ? _ref.length : void 0)) {
+      if ((this.total == null) && ((ref = struct.progress_corpora) != null ? ref.length : void 0)) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
           if (!corpus.length) {
             return;
@@ -120,8 +125,8 @@
 
   })();
 
-  model.KWICProxy = (function(_super) {
-    __extends(KWICProxy, _super);
+  model.KWICProxy = (function(superClass) {
+    extend(KWICProxy, superClass);
 
     function KWICProxy() {
       KWICProxy.__super__.constructor.call(this);
@@ -140,7 +145,7 @@
     };
 
     KWICProxy.prototype.makeRequest = function(options, page, progressCallback, kwicCallback) {
-      var corpus, data, def, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
+      var corpus, data, def, j, key, len, o, ref, ref1, ref2, self, val;
       c.log("kwicproxy.makeRequest", page, kwicResults.getPageInterval(Number(page)));
       self = this;
       this.foundKwic = false;
@@ -172,17 +177,17 @@
         cache: true
       };
       $.extend(data, kwicResults.getPageInterval(page), o.ajaxParams);
-      _ref = settings.corpusListing.selected;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        corpus = _ref[_i];
-        _ref1 = corpus.within;
-        for (key in _ref1) {
-          val = _ref1[key];
+      ref = settings.corpusListing.selected;
+      for (j = 0, len = ref.length; j < len; j++) {
+        corpus = ref[j];
+        ref1 = corpus.within;
+        for (key in ref1) {
+          val = ref1[key];
           data.show.push(_.last(key.split(" ")));
         }
-        _ref2 = corpus.attributes;
-        for (key in _ref2) {
-          val = _ref2[key];
+        ref2 = corpus.attributes;
+        for (key in ref2) {
+          val = ref2[key];
           data.show.push(key);
         }
         if (corpus.struct_attributes != null) {
@@ -193,6 +198,7 @@
           });
         }
       }
+      data.cqp = this.expandCQP(data.cqp);
       this.prevCQP = data.cqp;
       data.show = (_.uniq(["sentence"].concat(data.show))).join(",");
       c.log("data.show", data.show);
@@ -227,25 +233,12 @@
 
   })(BaseProxy);
 
-  model.LemgramProxy = (function(_super) {
-    __extends(LemgramProxy, _super);
+  model.LemgramProxy = (function(superClass) {
+    extend(LemgramProxy, superClass);
 
     function LemgramProxy() {
       LemgramProxy.__super__.constructor.call(this);
     }
-
-    LemgramProxy.prototype.buildAffixQuery = function(isValid, key, value) {
-      if (!isValid) {
-        return "";
-      }
-      return $.format("| (%s contains \"%s\")", [key, value]);
-    };
-
-    LemgramProxy.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
-      var cqp;
-      cqp = $.format("[(lex contains \"%s\")%s%s]", [lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram)]);
-      return cqp;
-    };
 
     LemgramProxy.prototype.makeRequest = function(word, type, callback) {
       var def, params, self;
@@ -384,8 +377,8 @@
 
   })(BaseProxy);
 
-  model.StatsProxy = (function(_super) {
-    __extends(StatsProxy, _super);
+  model.StatsProxy = (function(superClass) {
+    extend(StatsProxy, superClass);
 
     function StatsProxy() {
       StatsProxy.__super__.constructor.call(this);
@@ -460,7 +453,7 @@
       parameters = {
         command: "count",
         groupby: reduceval,
-        cqp: cqp,
+        cqp: this.expandCQP(cqp),
         corpus: settings.corpusListing.stringifySelected(true),
         incremental: $.support.ajaxProgress,
         defaultwithin: "sentence"
@@ -469,7 +462,7 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback, within) {
-      var data, def, reduceval, self, _ref;
+      var data, def, reduceval, ref, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
@@ -477,7 +470,7 @@
         reduceval = "word";
       }
       data = this.makeParameters(reduceval, cqp);
-      if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
+      if (((ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? ref.type : void 0) === "set") {
         data.split = reduceval;
       }
       if ($("#reduceSelect select").val() === "word_insensitive") {
@@ -486,6 +479,7 @@
         });
       }
       data.within = within;
+      this.prevNonExpandedCQP = cqp;
       this.prevParams = data;
       def = $.Deferred();
       this.pendingRequests.push($.ajax({
@@ -510,12 +504,14 @@
         },
         success: (function(_this) {
           return function(data) {
+            var wordArray;
             if (data.ERROR != null) {
               c.log("gettings stats failed with error", data.ERROR);
               def.reject(data);
               return;
             }
-            return _this.processData(def, data, reduceval);
+            _this.processData(def, data, reduceval);
+            return wordArray = _.keys(data.total.absolute);
           };
         })(this)
       }));
@@ -530,8 +526,8 @@
 
   })(BaseProxy);
 
-  model.NameProxy = (function(_super) {
-    __extends(NameProxy, _super);
+  model.NameProxy = (function(superClass) {
+    extend(NameProxy, superClass);
 
     function NameProxy() {
       NameProxy.__super__.constructor.call(this);
@@ -597,19 +593,19 @@
     };
 
     AuthenticationProxy.prototype.hasCred = function(corpusId) {
-      var _ref;
+      var ref;
       if (!this.loginObj.credentials) {
         return false;
       }
-      return _ref = corpusId.toUpperCase(), __indexOf.call(this.loginObj.credentials, _ref) >= 0;
+      return ref = corpusId.toUpperCase(), indexOf.call(this.loginObj.credentials, ref) >= 0;
     };
 
     return AuthenticationProxy;
 
   })();
 
-  model.TimeProxy = (function(_super) {
-    __extends(TimeProxy, _super);
+  model.TimeProxy = (function(superClass) {
+    extend(TimeProxy, superClass);
 
     function TimeProxy() {}
 
@@ -668,7 +664,7 @@
     };
 
     TimeProxy.prototype.expandTimeStruct = function(struct) {
-      var maxYear, minYear, prevVal, thisVal, y, years, _i, _results;
+      var j, maxYear, minYear, prevVal, ref, ref1, results, thisVal, y, years;
       years = _.map(_.pairs(_.omit(struct, "")), function(item) {
         return Number(item[0]);
       });
@@ -681,24 +677,24 @@
         c.log("expandTimestruct broken, years:", years);
         return;
       }
-      _results = [];
-      for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
+      results = [];
+      for (y = j = ref = minYear, ref1 = maxYear; ref <= ref1 ? j <= ref1 : j >= ref1; y = ref <= ref1 ? ++j : --j) {
         thisVal = struct[y];
         if (typeof thisVal === "undefined") {
-          _results.push(struct[y] = prevVal);
+          results.push(struct[y] = prevVal);
         } else {
-          _results.push(prevVal = thisVal);
+          results.push(prevVal = thisVal);
         }
       }
-      return _results;
+      return results;
     };
 
     return TimeProxy;
 
   })(BaseProxy);
 
-  model.GraphProxy = (function(_super) {
-    __extends(GraphProxy, _super);
+  model.GraphProxy = (function(superClass) {
+    extend(GraphProxy, superClass);
 
     function GraphProxy() {
       GraphProxy.__super__.constructor.call(this);
@@ -706,38 +702,44 @@
     }
 
     GraphProxy.prototype.expandSubCqps = function(subArray) {
-      var array, cqp, i, p, padding, _i, _ref, _results;
+      var array, cqp, i, j, p, padding, ref, results;
       padding = _.map((function() {
-        _results = [];
-        for (var _i = 0, _ref = subArray.length.toString().length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
-        return _results;
+        results = [];
+        for (var j = 0, ref = subArray.length.toString().length; 0 <= ref ? j < ref : j > ref; 0 <= ref ? j++ : j--){ results.push(j); }
+        return results;
       }).apply(this), function() {
         return "0";
       });
       array = (function() {
-        var _j, _len, _results1;
-        _results1 = [];
-        for (i = _j = 0, _len = subArray.length; _j < _len; i = ++_j) {
+        var k, len, results1;
+        results1 = [];
+        for (i = k = 0, len = subArray.length; k < len; i = ++k) {
           cqp = subArray[i];
           p = padding.slice(i.toString().length).join("");
-          _results1.push(["subcqp" + p + i, cqp]);
+          results1.push(["subcqp" + p + i, cqp]);
         }
-        return _results1;
+        return results1;
       })();
       return _.object(array);
     };
 
-    GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora) {
+    GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora, from, to) {
       var def, params, self;
       GraphProxy.__super__.makeRequest.call(this);
       self = this;
       params = {
         command: "count_time",
-        cqp: cqp,
+        cqp: this.expandCQP(cqp),
         corpus: corpora,
         granularity: this.granularity,
         incremental: $.support.ajaxProgress
       };
+      if (from) {
+        params.from = from;
+      }
+      if (to) {
+        params.to = to;
+      }
       _.extend(params, this.expandSubCqps(subcqps));
       this.prevParams = params;
       def = $.Deferred();
@@ -777,5 +779,3 @@
   })(BaseProxy);
 
 }).call(this);
-
-//# sourceMappingURL=model.js.map

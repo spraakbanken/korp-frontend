@@ -380,6 +380,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
         if search?.type == "word" or search?.type == "lemgram"
             cqpExpr = simpleSearch.getCQP(search.val)
         else
+            # TODO: this crashes on browser reload :(
             cqpExpr = search.val
         cqpExpr
 

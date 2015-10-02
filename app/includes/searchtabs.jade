@@ -25,7 +25,7 @@ div(ng-controller="SearchCtrl")
               | {{'cqp_docs' | loc:lang}}
           textarea#cqp_string(ng-model="cqp")
         search-submit(pos='right')
-        //- button.btn.btn-small#sendBtn {{'search' | loc:lang}}
+        //- button.btn.btn-sm#sendBtn {{'search' | loc:lang}}
     tab(ng-if="visibleTabs[3]", ng-controller='CompareSearchCtrl')
       tab-heading
         | {{'compare' | loc:lang}} 

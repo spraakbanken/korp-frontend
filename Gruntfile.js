@@ -179,7 +179,8 @@ module.exports = function (grunt) {
           '.tmp',
           "app/scripts/bin/**/*",
           "app/index.html",
-          "app/styles/styles.css"
+          "app/styles/styles.css",
+          "app/styles/bootstrap.css"
           ]
         }
 

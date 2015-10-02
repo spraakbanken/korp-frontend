@@ -1444,6 +1444,7 @@ label[for=lemgram_select]:before {
 }
 
 .hits_picture_table {
+  border : 1px solid lightgrey;
   /*    opacity: .3; */
   width: 100%;
   padding: 0px;
@@ -2060,6 +2061,10 @@ warning ~ * {
       float: initial;
       display: inline-block;
 
+    }
+
+    .active a {
+      color : white;
     }
   }
   

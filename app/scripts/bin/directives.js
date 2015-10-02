@@ -1,6 +1,6 @@
 (function() {
   var korpApp,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   korpApp = angular.module("korpApp");
 
@@ -10,39 +10,39 @@
       template: "<span class=\"word\" ng-class=\"getClassObj(wd)\">\n{{::wd.word}} </span>",
       link: function(scope, element) {
         return scope.getClassObj = function(wd) {
-          var output, struct, x, y, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+          var j, k, l, len1, len2, len3, output, ref, ref1, ref2, struct, x, y;
           output = {
             reading_match: wd._match,
             punct: wd._punct,
             match_sentence: wd._matchSentence,
             link_selected: wd._link_selected
           };
-          _ref = wd._struct || [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            struct = _ref[_i];
+          ref = wd._struct || [];
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            struct = ref[j];
             output["struct_" + struct] = true;
           }
-          _ref1 = wd._open || [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            struct = _ref1[_j];
+          ref1 = wd._open || [];
+          for (k = 0, len2 = ref1.length; k < len2; k++) {
+            struct = ref1[k];
             output["open_" + struct] = true;
           }
-          _ref2 = wd._close || [];
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            struct = _ref2[_k];
+          ref2 = wd._close || [];
+          for (l = 0, len3 = ref2.length; l < len3; l++) {
+            struct = ref2[l];
             output["close_" + struct] = true;
           }
           return ((function() {
-            var _l, _len3, _ref3, _ref4, _results;
-            _ref3 = _.pairs(output);
-            _results = [];
-            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-              _ref4 = _ref3[_l], x = _ref4[0], y = _ref4[1];
+            var len4, n, ref3, ref4, results;
+            ref3 = _.pairs(output);
+            results = [];
+            for (n = 0, len4 = ref3.length; n < len4; n++) {
+              ref4 = ref3[n], x = ref4[0], y = ref4[1];
               if (y) {
-                _results.push(x);
+                results.push(x);
               }
             }
-            return _results;
+            return results;
           })()).join(" ");
         };
       }
@@ -81,11 +81,11 @@
           }
         });
         s.getSelected = function() {
-          var i, out, p, _i, _len, _ref;
+          var i, j, len1, out, p, ref;
           out = null;
-          _ref = contentScope.tabs;
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            p = _ref[i];
+          ref = contentScope.tabs;
+          for (i = j = 0, len1 = ref.length; j < len1; i = ++j) {
+            p = ref[i];
             if (p.active) {
               out = i;
             }
@@ -96,10 +96,10 @@
           return out;
         };
         return s.setSelected = function(index) {
-          var t, _i, _len, _ref, _ref1;
-          _ref = contentScope.tabs;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            t = _ref[_i];
+          var j, len1, ref, ref1, t;
+          ref = contentScope.tabs;
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            t = ref[j];
             t.active = false;
             if (typeof t.onDeselect === "function") {
               t.onDeselect();
@@ -108,7 +108,7 @@
           if (contentScope.tabs[index]) {
             return contentScope.tabs[index].active = true;
           } else {
-            return (_ref1 = _.last(contentScope.tabs)) != null ? _ref1.active = true : void 0;
+            return (ref1 = _.last(contentScope.tabs)) != null ? ref1.active = true : void 0;
           }
         };
       }
@@ -121,16 +121,16 @@
         var doNotEscape, escape, unescape;
         doNotEscape = ["*=", "!*="];
         escape = function(val) {
-          var _ref;
-          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
+          var ref;
+          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
             return regescape(val);
           } else {
             return val;
           }
         };
         unescape = function(val) {
-          var _ref;
-          if (_ref = $scope.orObj.op, __indexOf.call(doNotEscape, _ref) < 0) {
+          var ref;
+          if (ref = $scope.orObj.op, indexOf.call(doNotEscape, ref) < 0) {
             return val.replace(/\\/g, "");
           } else {
             return val;
@@ -151,9 +151,9 @@
       "$scope", function($scope) {
         $scope["case"] = "sensitive";
         $scope.makeSensitive = function() {
-          var _ref;
+          var ref;
           $scope["case"] = "sensitive";
-          return (_ref = $scope.orObj.flags) != null ? delete _ref["c"] : void 0;
+          return (ref = $scope.orObj.flags) != null ? delete ref["c"] : void 0;
         };
         return $scope.makeInsensitive = function() {
           var flags;
@@ -172,10 +172,19 @@
       },
       template: "<div>{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
-        var current;
+        var childWatch, current, prevScope;
         current = null;
+        prevScope = null;
+        childWatch = null;
         return scope.$watch("tokenValue", function(valueObj) {
-          var defaultTmpl, locals, tmplElem, tmplObj;
+          var childScope, defaultTmpl, locals, tmplElem, tmplObj;
+          if (prevScope != null) {
+            prevScope.$destroy();
+          }
+          if (typeof childWatch === "function") {
+            childWatch();
+          }
+          prevScope = null;
           if (!valueObj) {
             return;
           }
@@ -183,9 +192,16 @@
             return;
           }
           current = valueObj;
+          childScope = scope.$new();
+          childWatch = childScope.$watch("model", function(val) {
+            return scope.model = val;
+          });
+          childScope.orObj = scope.orObj;
+          _.extend(childScope, valueObj);
           locals = {
-            $scope: _.extend(scope, valueObj)
+            $scope: childScope
           };
+          prevScope = childScope;
           $controller(valueObj.controller || defaultController, locals);
           if (valueObj.value === "word") {
             tmplObj = {
@@ -197,7 +213,7 @@
             };
           }
           defaultTmpl = getDefaultTmpl(tmplObj);
-          tmplElem = $compile(valueObj.extended_template || defaultTmpl)(scope);
+          tmplElem = $compile(valueObj.extended_template || defaultTmpl)(childScope);
           return elem.html(tmplElem).addClass("arg_value");
         });
       }
@@ -221,11 +237,11 @@
 
   korpApp.directive("searchSubmit", function($window, $document, $rootElement) {
     return {
-      template: '<div class="search_submit">\n    <div class="btn-group">\n        <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">{{\'search\' | loc:lang}}</button>\n        <button class="btn btn-small opener" ng-click="togglePopover($event)">\n            <span class="caret"></span>\n        </button>\n    </div>\n    <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">\n        <div class="arrow"></div>\n        <h3 class="popover-title">{{\'compare_save_header\' | loc:lang}}</h3>\n        <form class="popover-content" ng-submit="onSubmit()">\n            <div>\n                <label for="cmp_input">{{\'compare_name\' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">\n            </div>\n            <div class="btn_container">\n                <button class="btn btn-primary btn-small">{{\'compare_save\' | loc:lang}}</button>\n            </div>\n        </form>\n    </div>\n</div>',
+      template: '<div class="search_submit">\n    <div class="btn-group">\n        <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()">{{\'search\' | loc:lang}}</button>\n        <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)">\n            <span class="caret"></span>\n        </button>\n    </div>\n    <div class="popover compare {{pos}}" ng-click="onPopoverClick($event)">\n        <div class="arrow"></div>\n        <h3 class="popover-title">{{\'compare_save_header\' | loc:lang}}</h3>\n        <form class="popover-content" ng-submit="onSubmit()">\n            <div>\n                <label for="cmp_input">{{\'compare_name\' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">\n            </div>\n            <div class="btn_container">\n                <button class="btn btn-primary btn-sm">{{\'compare_save\' | loc:lang}}</button>\n            </div>\n        </form>\n    </div>\n</div>',
       restrict: "E",
       replace: true,
       link: function(scope, elem, attr) {
-        var at, horizontal, my, onEscape, popover, s, trans, _ref;
+        var at, horizontal, my, onEscape, popover, ref, s, trans;
         s = scope;
         s.pos = attr.pos || "bottom";
         s.togglePopover = function(event) {
@@ -251,7 +267,7 @@
           right: "left",
           left: "right"
         };
-        horizontal = (_ref = s.pos) === "top" || _ref === "bottom";
+        horizontal = (ref = s.pos) === "top" || ref === "bottom";
         if (horizontal) {
           my = "center " + trans[s.pos];
           at = "center " + s.pos + "+10";
@@ -311,7 +327,7 @@
           scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
         }
         scope.loglike = Math.abs(scope.meter[1]);
-        scope.tooltipHTML = "" + (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
+        scope.tooltipHTML = (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
         w = elem.parent().width();
         part = scope.loglike / (Math.abs(scope.max));
         return bkg.width(Math.round(part * w));
@@ -329,12 +345,18 @@
         closePopup = function() {
           return popup.hide();
         };
-        popup.on("click", function(event) {
-          closePopup();
-          return false;
-        });
+        if (attrs.noCloseOnClick == null) {
+          popup.on("click", function(event) {
+            closePopup();
+            return false;
+          });
+        }
         elem.on("click", function(event) {
-          var pos;
+          var other, pos;
+          other = $(".popper_menu:visible").not(popup);
+          if (other.length) {
+            other.hide();
+          }
           if (popup.is(":visible")) {
             closePopup();
           } else {
@@ -374,7 +396,7 @@
         var s, setCQP;
         s = $scope;
         setCQP = function(val) {
-          var error, output, token, tokenObj, _i, _j, _len, _len1, _ref, _ref1, _results;
+          var error, j, k, len1, len2, output, ref, ref1, results, token, tokenObj;
           c.log("inner cqp change", val);
           try {
             s.data = CQP.parse(val);
@@ -382,9 +404,9 @@
           } catch (_error) {
             error = _error;
             output = [];
-            _ref = val.split("[");
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              token = _ref[_i];
+            ref = val.split("[");
+            for (j = 0, len1 = ref.length; j < len1; j++) {
+              token = ref[j];
               if (!token) {
                 continue;
               }
@@ -404,17 +426,17 @@
             s.data = output;
             c.log("crash", s.data);
           }
-          _ref1 = s.data;
-          _results = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            token = _ref1[_j];
+          ref1 = s.data;
+          results = [];
+          for (k = 0, len2 = ref1.length; k < len2; k++) {
+            token = ref1[k];
             if (!("and_block" in token) || !token.and_block.length) {
-              _results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
+              results.push(token.and_block = CQP.parse('[word = ""]')[0].and_block);
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         };
         if (s.cqp == null) {
           s.cqp = '[]';
@@ -592,17 +614,17 @@
           return scope.textInField = "";
         };
         scope.getMorphologies = function(corporaIDs) {
-          var corporaID, morf, morfs, morphologies, _i, _j, _len, _len1, _ref;
+          var corporaID, j, k, len1, len2, morf, morfs, morphologies, ref;
           morphologies = [];
           if (scope.variant === "dalin") {
             morphologies.push("dalinm");
           } else {
-            for (_i = 0, _len = corporaIDs.length; _i < _len; _i++) {
-              corporaID = corporaIDs[_i];
-              morfs = ((_ref = settings.corpora[corporaID].morf) != null ? _ref.split("|") : void 0) || [];
-              for (_j = 0, _len1 = morfs.length; _j < _len1; _j++) {
-                morf = morfs[_j];
-                if (__indexOf.call(morphologies, morf) < 0) {
+            for (j = 0, len1 = corporaIDs.length; j < len1; j++) {
+              corporaID = corporaIDs[j];
+              morfs = ((ref = settings.corpora[corporaID].morf) != null ? ref.split("|") : void 0) || [];
+              for (k = 0, len2 = morfs.length; k < len2; k++) {
+                morf = morfs[k];
+                if (indexOf.call(morphologies, morf) < 0) {
                   morphologies.push(morf);
                 }
               }
@@ -664,6 +686,57 @@
     };
   });
 
-}).call(this);
+  korpApp.directive("timeInterval", function() {
+    return {
+      scope: {
+        dateModel: "=",
+        timeModel: "=",
+        model: "=",
+        minDate: "=",
+        maxDate: "="
+      },
+      restrict: "E",
+      template: "<div>\n    <datepicker class=\"well well-sm\" ng-model=\"dateModel\" \n        min-date=\"minDate\" max-date=\"maxDate\" init-date=\"minDate\"\n        show-weeks=\"true\" starting-day=\"1\"></datepicker>\n\n    <div class=\"time\">\n        <i class=\"fa fa-3x fa-clock-o\"></i><timepicker class=\"timepicker\" ng-model=\"timeModel\" \n            hour-step=\"1\" minute-step=\"1\" show-meridian=\"false\"></timepicker>\n    </div>\n</div>",
+      link: function(s, elem, attr) {
+        var time_units, w;
+        s.isOpen = false;
+        s.open = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          return s.isOpen = true;
+        };
+        time_units = ["hour", "minute"];
+        return w = s.$watchGroup(["dateModel", "timeModel"], function(arg) {
+          var date, j, len1, m, m_time, t, time;
+          date = arg[0], time = arg[1];
+          if (date && time) {
+            m = moment(moment(date).format("YYYY-MM-DD"));
+            for (j = 0, len1 = time_units.length; j < len1; j++) {
+              t = time_units[j];
+              m_time = moment(time);
+              m.add(m_time[t](), t);
+            }
+            return s.model = m;
+          }
+        });
+      }
+    };
+  });
 
-//# sourceMappingURL=directives.js.map
+  angular.module("template/datepicker/day.html", []).run(function($templateCache) {
+    return $templateCache.put("template/datepicker/day.html", "<table role=\"grid\" aria-labelledby=\"{{uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\"\n  <thead>\n    <tr>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-left\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-left\"></i></button></th>\n      <th colspan=\"{{5 + showWeeks}}\">\n        <button id=\"{{uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" class=\"btn btn-default btn-sm\" ng-click=\"toggleMode()\" tabindex=\"-1\" style=\"width:100%;\">\n            <strong>{{title}}</strong>\n        </button>\n      </th>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-right\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-right\"></i></button></th>\n    </tr>\n    <tr>\n      <th ng-show=\"showWeeks\" class=\"text-center\"></th>\n      <th ng-repeat=\"label in labels track by $index\" class=\"text-center\"><small aria-label=\"{{label.full}}\">{{label.abbr}}</small></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr ng-repeat=\"row in rows track by $index\">\n      <td ng-show=\"showWeeks\" class=\"text-center h6\"><em>{{ weekNumbers[$index] }}</em></td>\n      <td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{dt.uid}}\" aria-disabled=\"{{!!dt.disabled}}\">\n        <button type=\"button\" style=\"width:100%;\" class=\"btn btn-default btn-sm\" ng-class=\"{'btn-info': dt.selected, active: isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\">\n            <span ng-class=\"{'text-muted': dt.secondary, 'text-info': dt.current}\">{{dt.label}}</span>\n        </button>\n      </td>\n    </tr>\n  </tbody>\n</table");
+  });
+
+  angular.module("template/datepicker/month.html", []).run(function($templateCache) {
+    return $templateCache.put("template/datepicker/month.html", "<table role=\"grid\" aria-labelledby=\"{{uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\">\n  <thead>\n    <tr>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-left\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-left\"></i></button></th>\n      <th><button id=\"{{uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" class=\"btn btn-default btn-sm\" ng-click=\"toggleMode()\" tabindex=\"-1\" style=\"width:100%;\"><strong>{{title}}</strong></button></th>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-right\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-right\"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr ng-repeat=\"row in rows track by $index\">\n      <td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{dt.uid}}\" aria-disabled=\"{{!!dt.disabled}}\">\n        <button type=\"button\" style=\"width:100%;\" class=\"btn btn-default\" ng-class=\"{'btn-info': dt.selected, active: isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"{'text-info': dt.current}\">{{dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>");
+  });
+
+  angular.module("template/datepicker/year.html", []).run(function($templateCache) {
+    return $templateCache.put("template/datepicker/year.html", "<table role=\"grid\" aria-labelledby=\"{{uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\">\n  <thead>\n    <tr>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-left\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-left\"></i></button></th>\n      <th colspan=\"3\"><button id=\"{{uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" class=\"btn btn-default btn-sm\" ng-click=\"toggleMode()\" tabindex=\"-1\" style=\"width:100%;\"><strong>{{title}}</strong></button></th>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-right\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-right\"></i></button></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr ng-repeat=\"row in rows track by $index\">\n      <td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{dt.uid}}\" aria-disabled=\"{{!!dt.disabled}}\">\n        <button type=\"button\" style=\"width:100%;\" class=\"btn btn-default\" ng-class=\"{'btn-info': dt.selected, active: isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"{'text-info': dt.current}\">{{dt.label}}</span></button>\n      </td>\n    </tr>\n  </tbody>\n</table>");
+  });
+
+  angular.module("template/timepicker/timepicker.html", []).run(function($templateCache) {
+    return $templateCache.put("template/timepicker/timepicker.html", "<table>\n   <tbody>\n       <tr class=\"text-center\">\n           <td><a ng-click=\"incrementHours()\" class=\"btn btn-link\"><span class=\"fa fa-chevron-up\"></span></a></td>\n           <td>&nbsp;</td>\n           <td><a ng-click=\"incrementMinutes()\" class=\"btn btn-link\"><span class=\"fa fa-chevron-up\"></span></a></td>\n           <td ng-show=\"showMeridian\"></td>\n       </tr>\n       <tr>\n           <td style=\"width:50px;\" class=\"form-group\" ng-class=\"{'has-error': invalidHours}\">\n               <input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"form-control text-center\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\">\n           </td>\n           <td>:</td>\n           <td style=\"width:50px;\" class=\"form-group\" ng-class=\"{'has-error': invalidMinutes}\">\n               <input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"form-control text-center\" ng-readonly=\"readonlyInput\" maxlength=\"2\">\n           </td>\n           <td ng-show=\"showMeridian\"><button type=\"button\" class=\"btn btn-default text-center\" ng-click=\"toggleMeridian()\">{{meridian}}</button></td>\n       </tr>\n       <tr class=\"text-center\">\n           <td><a ng-click=\"decrementHours()\" class=\"btn btn-link\"><span class=\"fa fa-chevron-down\"></span></a></td>\n           <td>&nbsp;</td>\n           <td><a ng-click=\"decrementMinutes()\" class=\"btn btn-link\"><span class=\"fa fa-chevron-down\"></span></a></td>\n           <td ng-show=\"showMeridian\"></td>\n       </tr>\n   </tbody>\n</table>");
+  });
+
+}).call(this);
