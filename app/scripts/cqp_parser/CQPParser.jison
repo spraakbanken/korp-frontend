@@ -75,7 +75,9 @@ tokens
 token
     : 'EMPTY'
         {$$ = {"and_block":[[{type:"word",op:"=",val:""}]]}}
-    | '[' and_block ']'
+    // | '[' and_block ']'
+    //     {$$ = $2}
+    | '[' expr1 ']'
         {$$ = $2}
         
     | token repeat
@@ -196,6 +198,23 @@ date
     ;
 
 
+expr0
+    : date
+        {$$ = {date : $1}}
+    | or
+        {$$ = {or : $1}}
+    | "(" expr1 ")"
+        {$$ = $2}
+    ;
+
+expr1
+    : expr1 bool expr0
+        {
+            c.log("expr0", $expr0)
+        }
+    ;
+
+
 bound
     : FUNC FUNCVAL
         { $$ = $1}
@@ -237,108 +256,4 @@ infix_op
 if(typeof require != "undefined")
     var _ = require("../../components/lodash/lodash")._
 
-
-// var _ = {};
-// _.isArray = function(value) {
-//   return value ? (typeof value == 'object' && toString.call(value) == arrayClass) : false;
-// };
-// _.isObject = function(value) {
-//   // check if the value is the ECMAScript language type of Object
-//   // http://es5.github.com/#x8
-//   // and avoid a V8 bug
-//   // http://code.google.com/p/v8/issues/detail?id=2291
-//   return value ? objectTypes[typeof value] : false;
-// }
-// _.isPlainObject = function(value) {
-//   if (!(value && toString.call(value) == objectClass) || (!support.argsClass && isArguments(value))) {
-//     return false;
-//   }
-//   var valueOf = value.valueOf,
-//       objProto = typeof valueOf == 'function' && (objProto = getPrototypeOf(valueOf)) && getPrototypeOf(objProto);
-
-//   return objProto
-//     ? (value == objProto || getPrototypeOf(value) == objProto)
-//     : shimIsPlainObject(value);
-// };
-// _.merge = function(object, source, deepIndicator) {
-//   var args = arguments,
-//       index = 0,
-//       length = 2;
-
-//   if (!isObject(object)) {
-//     return object;
-//   }
-//   if (deepIndicator === indicatorObject) {
-//     var callback = args[3],
-//         stackA = args[4],
-//         stackB = args[5];
-//   } else {
-//     stackA = [];
-//     stackB = [];
-
-//     // allows working with `_.reduce` and `_.reduceRight` without
-//     // using their `callback` arguments, `index|key` and `collection`
-//     if (typeof deepIndicator != 'number') {
-//       length = args.length;
-//     }
-//     if (length > 3 && typeof args[length - 2] == 'function') {
-//       callback = lodash.createCallback(args[--length - 1], args[length--], 2);
-//     } else if (length > 2 && typeof args[length - 1] == 'function') {
-//       callback = args[--length];
-//     }
-//   }
-//   while (++index < length) {
-//     (_.isArray(args[index]) ? forEach : forOwn)(args[index], function(source, key) {
-//       var found,
-//           isArr,
-//           result = source,
-//           value = object[key];
-
-//       if (source && ((isArr = _.isArray(source)) || isPlainObject(source))) {
-//         // avoid merging previously merged cyclic sources
-//         var stackLength = stackA.length;
-//         while (stackLength--) {
-//           if ((found = stackA[stackLength] == source)) {
-//             value = stackB[stackLength];
-//             break;
-//           }
-//         }
-//         if (!found) {
-//           var isShallow;
-//           if (callback) {
-//             result = callback(value, source);
-//             if ((isShallow = typeof result != 'undefined')) {
-//               value = result;
-//             }
-//           }
-//           if (!isShallow) {
-//             value = isArr
-//               ? (_.isArray(value) ? value : [])
-//               : (isPlainObject(value) ? value : {});
-//           }
-//           // add `source` and associated `value` to the stack of traversed objects
-//           stackA.push(source);
-//           stackB.push(value);
-
-//           // recursively merge objects and arrays (susceptible to call stack limits)
-//           if (!isShallow) {
-//             value = merge(value, source, indicatorObject, callback, stackA, stackB);
-//           }
-//         }
-//       }
-//       else {
-//         if (callback) {
-//           result = callback(value, source);
-//           if (typeof result == 'undefined') {
-//             result = source;
-//           }
-//         }
-//         if (typeof result != 'undefined') {
-//           value = result;
-//         }
-//       }
-//       object[key] = value;
-//     });
-//   }
-//   return object;
-// }
+var c = console;
