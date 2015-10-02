@@ -19,14 +19,6 @@
 		return output;
 	};
 
-	$.keys = function(obj) {
-		var output = [];
-		$.each(obj, function(key, item) {
-			output.push(key);
-		});
-		return output;
-	};
-
 	$.objMap = function(obj, f) {
 		var output = {};
 		$.each(obj, function(k, v) {
@@ -244,12 +236,6 @@ $.fn.localeKey = function(key) {
 };
 
 
-$._oldtrim = $.trim;
-$.trim = function(string, char) {
-	if(char == null) return $._oldtrim(string);
-	return string.replace(new RegExp($.format("(^%s+)|(%s+$)", [char, char]), "g"), "");
-};
-
 // for filtering objects
 $.grepObj = function(array, callback, invert) {
 	var output = {};
@@ -259,12 +245,6 @@ $.grepObj = function(array, callback, invert) {
 	});
 	return output;
 
-};
-// filters the object keys in the keys array from obj.
-$.exclude = function(obj, keys) {
-	return $.grepObj(obj, function(value, key) {
-		return $.inArray(key, keys) == -1;
-	});
 };
 
 $.onScrollOut = function(upOpts, downOpts) {
@@ -322,22 +302,7 @@ $.fn.uncover = function() {
 	return this;
 };
 
-$.fn.quickLocalize = function() {
-	util.localize(this.selector);
-	return this;
-};
 
-jQuery.sortedEach = function(obj, eachFunc, sortFunc) {
-	var keys = $.keys(obj);
-
-	if(sortFunc) keys.sort(sortFunc);
-	else keys.sort();
-
-	$.each(keys, function(i, key) {
-		return eachFunc(key, obj[key]);
-	});
-
-};
 jQuery.fn.customSelect = function() {
     
 	this.change(function() {

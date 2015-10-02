@@ -168,7 +168,7 @@ Sidebar =
         @element.find(".sidebar_url").css("white-space", "nowrap").each ->
             while $(this).width() > totalWidth
                 oldtext = $(this).text()
-                a = $.trim(oldtext, "/").replace("...", "").split("/")
+                a = _.str.trim(oldtext, "/").replace("...", "").split("/")
                 domain = a.slice(2, 3)
                 midsection = a.slice(3).join("/")
                 midsection = "..." + midsection.slice(2)

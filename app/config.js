@@ -4176,7 +4176,7 @@ settings.reduce_stringify = function(type) {
         var corpora = $.grepObj(filterCorpora(dataContext), function(value, key) {
             return value[1] != null; // value[1] is an optimized value.relative
         });
-        corpora = $.map($.keys(corpora), function(item) {
+        corpora = $.map(_.keys(corpora), function(item) {
             return item.split("_")[0].toLowerCase();
         });
         return corpora;

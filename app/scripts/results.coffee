@@ -340,6 +340,49 @@ class view.KWICResults extends BaseResults
         else newX -= offset if wordLeft < area.offset().left
         area.stop(true, true).animate scrollLeft: newX
 
+    buildPager: (number_of_hits) ->
+        items_per_page = @optionWidget.find(".num_hits").val()
+        # @movePager "up"
+        # $.onScrollOut "unbind"
+        @$result.find(".pager-wrapper").unbind().empty()
+        if number_of_hits > items_per_page
+            @$result.find(".pager-wrapper").pagination number_of_hits,
+                items_per_page: items_per_page
+                callback: $.proxy(@handlePaginationClick, this)
+                next_text: util.getLocaleString("next")
+                prev_text: util.getLocaleString("prev")
+                link_to: "javascript:void(0)"
+                num_edge_entries: 2
+                ellipse_text: ".."
+                current_page: @current_page or 0
+
+            @$result.find(".next").attr "rel", "localize[next]"
+            @$result.find(".prev").attr "rel", "localize[prev]"
+    
+    # pagination_container is used by the pagination lib
+    handlePaginationClick: (new_page_index, pagination_container, force_click) ->
+        page = search().page or 0
+        c.log "handlePaginationClick", new_page_index, page
+        self = this
+        if new_page_index isnt page or !!force_click
+            isReading = @isReadingMode()
+            kwicCallback = @renderResult
+
+            # this.showPreloader();
+
+            @getProxy().makeRequest @buildQueryOptions(), new_page_index, ((progressObj) ->
+
+                #progress
+                self.$tab.find(".tab_progress").css "width", Math.round(progressObj["stats"]).toString() + "%"
+            ), ((data) ->
+                #success
+                self.buildPager data.hits
+            ), $.proxy(kwicCallback, this)
+            # $.bbq.pushState page: new_page_index
+            safeApply @s, () ->
+                search page: new_page_index
+            @current_page = new_page_index
+        false
 
     buildQueryOptions: (cqp, isPaging) ->
         c.log "buildQueryOptions", cqp

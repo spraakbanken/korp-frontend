@@ -214,14 +214,6 @@ class model.LemgramProxy extends BaseProxy
         super()
         # @pendingRequest = abort: $.noop
 
-    buildAffixQuery: (isValid, key, value) ->
-        return "" unless isValid
-        $.format "| (%s contains \"%s\")", [key, value]
-
-    lemgramSearch: (lemgram, searchPrefix, searchSuffix) ->
-        cqp = $.format("[(lex contains \"%s\")%s%s]", [lemgram, @buildAffixQuery(searchPrefix, "prefix", lemgram), @buildAffixQuery(searchSuffix, "suffix", lemgram)])
-        cqp
-
     makeRequest: (word, type, callback) ->
         super()
         self = this
@@ -467,6 +459,12 @@ class model.StatsProxy extends BaseProxy
                     return
                 @processData(def, data, reduceval)
                 
+                $.each data.corpora, (corpus, obj) ->
+                    totalRow[corpus + "_value"] = obj.sums
+
+                wordArray = _.keys(data.total.absolute)
+
+                dataset = [totalRow]
 
         return def.promise()
 
