@@ -38,6 +38,13 @@ html
       #header
         include includes/header
       #content
+        //- datepicker(ng-model="dt", min-date="minDate", show-weeks="true", class="well well-sm")
+        .input-group
+          input.form-control(type='text', datepicker-popup='{{format}}', ng-model='dt', is-open='isOpen', min-date='minDate', max-date='"2015-06-22"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='true', close-text='Close')
+          span.input-group-btn
+            button.btn.btn-default(type='button', ng-click='isOpen = true && $event.stopPropagation()')
+              i.fa.fa-calendar
+
 
         include includes/searchtabs
         
@@ -259,6 +266,12 @@ html
     script(src='scripts/jq_extensions.js')
     script(src='components/lodash/dist/lodash.js')
     script(src="components/underscore.string/lib/underscore.string.js")
+    script(src='components/spin.js/spin.js')
+    script(src='components/angular-spinner/angular-spinner.js')
+
+    //- script(src='components/angular-bindonce/bindonce.js')
+    script(src='components/angular-slider/angular-slider.js')
+    script(src='lib/angular-sortable.js')
     
     script(src='components/moment/moment.js')
     script(src='components/comma-separated-values/csv.js')

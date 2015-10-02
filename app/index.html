@@ -88,6 +88,10 @@
         <div style="clear: both;"></div>
       </div>
       <div id="content">
+        <div class="input-group">
+          <input type="text" datepicker-popup="{{format}}" ng-model="dt" is-open="isOpen" min-date="minDate" max-date="&quot;2015-06-22&quot;" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" class="form-control"><span class="input-group-btn">
+            <button type="button" ng-click="isOpen = true &amp;&amp; $event.stopPropagation()" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>
+        </div>
         <div ng-controller="SearchCtrl">
           <tabset tab-hash="search_tab" class="tabbable search_tabs">
             <tab heading="{{&quot;simple&quot; | loc:lang}}" ng-if="visibleTabs[0]">
@@ -499,6 +503,13 @@
     <script src="scripts/jq_extensions.js"></script>
     <script src="components/lodash/dist/lodash.js"></script>
     <script src="components/underscore.string/lib/underscore.string.js"></script>
+<<<<<<< HEAD
+=======
+    <script src="components/spin.js/spin.js"></script>
+    <script src="components/angular-spinner/angular-spinner.js"></script>
+    <script src="components/angular-slider/angular-slider.js"></script>
+    <script src="lib/angular-sortable.js"></script>
+>>>>>>> dicking around with datepicker
     <script src="components/moment/moment.js"></script>
     <script src="components/comma-separated-values/csv.js"></script>
     <script src="components/angular-simple-logger/dist/index.js"></script>
