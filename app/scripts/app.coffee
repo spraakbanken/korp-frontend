@@ -13,7 +13,7 @@ window.korpApp = angular.module 'korpApp', [
                                             "newsdesk"
                                             "sbMap"
                                             "tmh.dynamicLocale"
-                                        ])
+                                        ]
 
 
 korpApp.config (tmhDynamicLocaleProvider) ->

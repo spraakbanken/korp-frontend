@@ -106,9 +106,9 @@ html
                         option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
                         option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
                       a#generateExportButton 
-                        button.btn.btn-small {{'statstable_gen_export' | loc:lang}}
-                      input#exportButton.btn.btn-xs.btn-default(value='statstable_export | loc:lang', type='submit')
-                        &nbsp;{{'statstable_download' | loc:lang}}
+                        button.btn.btn-sm {{'statstable_gen_export' | loc:lang}}
+                      a#exportButton.btn.btn-sm.btn-default
+                        | {{'statstable_export' | loc:lang}}
                 tab(ng-if="_settings.wordpicture != false", 
                     ng-controller="wordpicCtrl", 
                     select="instance.onentry()",
