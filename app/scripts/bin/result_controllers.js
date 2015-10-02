@@ -1,9 +1,9 @@
 (function() {
   var ExampleCtrl, KwicCtrl, korpApp,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    slice = [].slice,
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   korpApp = angular.module("korpApp");
 
@@ -39,10 +39,10 @@
 
     KwicCtrl.$inject = ['$scope', "utils", "$location"];
 
-    function KwicCtrl(scope, utils1, location) {
+    function KwicCtrl(scope, utils, location) {
       var $location, $scope, findMatchSentence, massageData, punctArray, readingChange, s;
       this.scope = scope;
-      this.utils = utils1;
+      this.utils = utils;
       this.location = location;
       s = this.scope;
       $scope = this.scope;
@@ -74,9 +74,9 @@
         }
       };
       readingChange = function() {
-        var ref;
+        var _ref;
         c.log("reading change");
-        if ((ref = s.instance) != null ? ref.getProxy().pendingRequests.length : void 0) {
+        if ((_ref = s.instance) != null ? _ref.getProxy().pendingRequests.length : void 0) {
           window.pending = s.instance.getProxy().pendingRequests;
           return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
             c.log("readingchange makeRequest");
@@ -117,16 +117,16 @@
         return s.page = Number(pageNumber);
       };
       massageData = function(sentenceArray) {
-        var corpus, corpus_aligned, currentStruct, end, i, id, isOpen, j, k, l, len1, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, sentence, start, tokens, wd;
+        var corpus, corpus_aligned, currentStruct, end, i, id, isOpen, j, linkCorpusId, mainCorpusId, matchSentenceEnd, matchSentenceStart, newSent, output, prevCorpus, sentence, start, tokens, wd, _i, _j, _len, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
         currentStruct = [];
         prevCorpus = "";
         output = [];
         isOpen = false;
-        for (i = k = 0, len1 = sentenceArray.length; k < len1; i = ++k) {
+        for (i = _i = 0, _len = sentenceArray.length; _i < _len; i = ++_i) {
           sentence = sentenceArray[i];
-          ref = findMatchSentence(sentence), matchSentenceStart = ref[0], matchSentenceEnd = ref[1];
-          ref1 = sentence.match, start = ref1.start, end = ref1.end;
-          for (j = l = 0, ref2 = sentence.tokens.length; 0 <= ref2 ? l < ref2 : l > ref2; j = 0 <= ref2 ? ++l : --l) {
+          _ref = findMatchSentence(sentence), matchSentenceStart = _ref[0], matchSentenceEnd = _ref[1];
+          _ref1 = sentence.match, start = _ref1.start, end = _ref1.end;
+          for (j = _j = 0, _ref2 = sentence.tokens.length; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
             wd = sentence.tokens[j];
             if ((start <= j && j < end)) {
               _.extend(wd, {
@@ -138,18 +138,18 @@
                 _matchSentence: true
               });
             }
-            if (ref3 = wd.word, indexOf.call(punctArray, ref3) >= 0) {
+            if (_ref3 = wd.word, __indexOf.call(punctArray, _ref3) >= 0) {
               _.extend(wd, {
                 _punct: true
               });
             }
-            if ((ref4 = wd.structs) != null ? ref4.open : void 0) {
+            if ((_ref4 = wd.structs) != null ? _ref4.open : void 0) {
               wd._open = wd.structs.open;
               currentStruct = [].concat(currentStruct, wd.structs.open);
               isOpen = true;
-            } else if (isOpen && ((ref5 = wd.structs) != null ? ref5.close : void 0)) {
+            } else if (isOpen && ((_ref5 = wd.structs) != null ? _ref5.close : void 0)) {
               wd._close = wd.structs.close;
-              currentStruct = _.without.apply(_, [currentStruct].concat(slice.call(wd.structs.close)));
+              currentStruct = _.without.apply(_, [currentStruct].concat(__slice.call(wd.structs.close)));
             }
             if (isOpen) {
               if (currentStruct.length) {
@@ -158,7 +158,7 @@
                 });
               }
             }
-            if ((ref6 = wd.structs) != null ? ref6.close : void 0) {
+            if ((_ref6 = wd.structs) != null ? _ref6.close : void 0) {
               currentStruct = [];
               isOpen = false;
             }
@@ -186,7 +186,7 @@
           sentence.corpus = mainCorpusId;
           output.push(sentence);
           if (sentence.aligned) {
-            ref7 = _.pairs(sentence.aligned)[0], corpus_aligned = ref7[0], tokens = ref7[1];
+            _ref7 = _.pairs(sentence.aligned)[0], corpus_aligned = _ref7[0], tokens = _ref7[1];
             output.push({
               tokens: tokens,
               isLinked: true,
@@ -199,19 +199,19 @@
         return output;
       };
       findMatchSentence = function(sentence) {
-        var decr, end, incr, ref, ref1, ref2, span, start;
+        var decr, end, incr, span, start, _ref, _ref1, _ref2;
         span = [];
-        ref = sentence.match, start = ref.start, end = ref.end;
+        _ref = sentence.match, start = _ref.start, end = _ref.end;
         decr = start;
         incr = end;
         while (decr >= 0) {
-          if (indexOf.call(((ref1 = sentence.tokens[decr--].structs) != null ? ref1.open : void 0) || [], "sentence") >= 0) {
+          if (__indexOf.call(((_ref1 = sentence.tokens[decr--].structs) != null ? _ref1.open : void 0) || [], "sentence") >= 0) {
             span[0] = decr;
             break;
           }
         }
         while (incr < sentence.tokens.length) {
-          if (indexOf.call(((ref2 = sentence.tokens[incr++].structs) != null ? ref2.close : void 0) || [], "sentence") >= 0) {
+          if (__indexOf.call(((_ref2 = sentence.tokens[incr++].structs) != null ? _ref2.close : void 0) || [], "sentence") >= 0) {
             span[1] = incr;
             break;
           }
@@ -257,8 +257,8 @@
 
   })());
 
-  korpApp.controller("ExampleCtrl", ExampleCtrl = (function(superClass) {
-    extend(ExampleCtrl, superClass);
+  korpApp.controller("ExampleCtrl", ExampleCtrl = (function(_super) {
+    __extends(ExampleCtrl, _super);
 
     ExampleCtrl.$inject = ['$scope', "utils", "$location"];
 
@@ -317,8 +317,8 @@
     s.active = true;
     s.mode = "line";
     s.isGraph = function() {
-      var ref;
-      return (ref = s.mode) === "line" || ref === "bar";
+      var _ref;
+      return (_ref = s.mode) === "line" || _ref === "bar";
     };
     return s.isTable = function() {
       return s.mode === "table";
@@ -330,32 +330,32 @@
     s = $scope;
     s.loading = true;
     s.active = true;
-    return s.promise.then(function(arg, xhr) {
-      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, ref, ref1, type;
-      data = arg[0], cmp1 = arg[1], cmp2 = arg[2], reduce = arg[3];
+    return s.promise.then(function(_arg, xhr) {
+      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, type, _ref, _ref1;
+      data = _arg[0], cmp1 = _arg[1], cmp2 = _arg[2], reduce = _arg[3];
       s.loading = false;
       if (data.ERROR) {
         s.error = true;
         return;
       }
       pairs = _.pairs(data.loglike);
-      s.tables = _.groupBy(pairs, function(arg1) {
+      s.tables = _.groupBy(pairs, function(_arg1) {
         var val, word;
-        word = arg1[0], val = arg1[1];
+        word = _arg1[0], val = _arg1[1];
         if (val > 0) {
           return "positive";
         } else {
           return "negative";
         }
       });
-      s.tables.negative = _.map(s.tables.negative, function(arg1) {
+      s.tables.negative = _.map(s.tables.negative, function(_arg1) {
         var val, word;
-        word = arg1[0], val = arg1[1];
+        word = _arg1[0], val = _arg1[1];
         return [word, val, data.set1[word]];
       });
-      s.tables.positive = _.map(s.tables.positive, function(arg1) {
+      s.tables.positive = _.map(s.tables.positive, function(_arg1) {
         var val, word;
-        word = arg1[0], val = arg1[1];
+        word = _arg1[0], val = _arg1[1];
         return [word, val, data.set2[word]];
       });
       s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
@@ -367,25 +367,25 @@
       s.reduce = reduce;
       cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
       attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
-      s.stringify = ((ref = attributes[_.str.strip(reduce, "_.")]) != null ? ref.stringify : void 0) || angular.identity;
-      s.max = _.max(pairs, function(arg1) {
+      s.stringify = ((_ref = attributes[_.str.strip(reduce, "_.")]) != null ? _ref.stringify : void 0) || angular.identity;
+      s.max = _.max(pairs, function(_arg1) {
         var val, word;
-        word = arg1[0], val = arg1[1];
+        word = _arg1[0], val = _arg1[1];
         return Math.abs(val);
       });
       s.cmp1 = cmp1;
       s.cmp2 = cmp2;
-      type = (ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? ref1.type : void 0;
+      type = (_ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? _ref1.type : void 0;
       op = type === "set" ? "contains" : "=";
       cmps = [cmp1, cmp2];
       return s.rowClick = function(triple, cmp_index) {
-        var cmp, cqpobj, cqps, k, len1, opts, ref2, token;
+        var cmp, cqpobj, cqps, opts, token, _i, _len, _ref2;
         cmp = cmps[cmp_index];
         c.log("triple", triple, cmp);
         cqps = [];
-        ref2 = triple[0].split(" ");
-        for (k = 0, len1 = ref2.length; k < len1; k++) {
-          token = ref2[k];
+        _ref2 = triple[0].split(" ");
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          token = _ref2[_i];
           if (type === "set" && token === "|") {
             cqps.push("[ambiguity(" + reduce + ") = 0]");
           } else {
@@ -422,10 +422,10 @@
     s.hasResult = false;
     s.aborted = false;
     $(document).keyup(function(event) {
-      var ref;
-      if (event.keyCode === 27 && s.showMap) {
-        if ((ref = s.proxy) != null) {
-          ref.abort();
+      var _ref;
+      if (event.keyCode === 27 && s.showMap && s.loading) {
+        if ((_ref = s.proxy) != null) {
+          _ref.abort();
         }
         return $timeout((function() {
           s.aborted = true;
@@ -444,7 +444,7 @@
     s.$watch((function() {
       return $location.search().show_map;
     }), function(val) {
-      var currentCorpora, currentCqp, ref, ref1;
+      var currentCorpora, currentCqp, _ref, _ref1;
       if (val === s.showMap) {
         return;
       }
@@ -452,7 +452,7 @@
       if (s.showMap) {
         currentCqp = getCqpExpr();
         currentCorpora = settings.corpusListing.stringifySelected(true);
-        if (currentCqp !== ((ref = s.lastSearch) != null ? ref.cqp : void 0) || currentCorpora !== ((ref1 = s.lastSearch) != null ? ref1.corpora : void 0)) {
+        if (currentCqp !== ((_ref = s.lastSearch) != null ? _ref.cqp : void 0) || currentCorpora !== ((_ref1 = s.lastSearch) != null ? _ref1.corpora : void 0)) {
           return s.hasResult = false;
         }
       }
@@ -504,17 +504,17 @@
       }
     });
     s.countCorpora = function() {
-      var ref;
-      return (ref = s.proxy.prevParams) != null ? ref.corpus.split(",").length : void 0;
+      var _ref;
+      return (_ref = s.proxy.prevParams) != null ? _ref.corpus.split(",").length : void 0;
     };
     fixData = function(data) {
-      var abs, fixedData, k, len1, name, names, rel;
+      var abs, fixedData, name, names, rel, _i, _len;
       fixedData = {};
       abs = data.total.absolute;
       rel = data.total.relative;
       names = _.keys(abs);
-      for (k = 0, len1 = names.length; k < len1; k++) {
-        name = names[k];
+      for (_i = 0, _len = names.length; _i < _len; _i++) {
+        name = names[_i];
         fixedData[name] = {
           rel_occurrences: Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
           abs_occurrences: data.total.absolute[name]
@@ -527,9 +527,9 @@
         var fixedData;
         if (data.count !== 0) {
           fixedData = fixData(data);
-          markers(fixedData).then(function(markers) {
-            var fn, key, value;
-            fn = function(key, value) {
+          return markers(fixedData).then(function(markers) {
+            var key, value, _fn;
+            _fn = function(key, value) {
               var html, msgScope, name;
               html = "";
               msgScope = value.getMessageScope();
@@ -556,16 +556,17 @@
               return markers[key]["message"] = html;
             };
             for (key in markers) {
-              if (!hasProp.call(markers, key)) continue;
+              if (!__hasProp.call(markers, key)) continue;
               value = markers[key];
-              fn(key, value);
+              _fn(key, value);
             }
-            return s.markers = markers;
+            s.markers = markers;
+            return s.loading = false;
           });
         } else {
           s.markers = {};
+          return s.loading = false;
         }
-        return s.loading = false;
       });
     };
   });

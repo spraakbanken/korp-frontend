@@ -1,6 +1,6 @@
 (function() {
   var CompareSearches, korpApp,
-    slice = [].slice;
+    __slice = [].slice;
 
   korpApp = angular.module("korpApp");
 
@@ -14,12 +14,12 @@
         }
       },
       setupHash: function(scope, config) {
-        var i, len, obj, onWatch, results, watch;
+        var obj, onWatch, watch, _i, _len, _results;
         onWatch = function() {
-          var i, len, obj, results, val;
-          results = [];
-          for (i = 0, len = config.length; i < len; i++) {
-            obj = config[i];
+          var obj, val, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = config.length; _i < _len; _i++) {
+            obj = config[_i];
             val = $location.search()[obj.key];
             if (!val) {
               if (obj["default"] != null) {
@@ -30,14 +30,14 @@
             }
             val = (obj.val_in || _.identity)(val);
             if ("scope_name" in obj) {
-              results.push(scope[obj.scope_name] = val);
+              _results.push(scope[obj.scope_name] = val);
             } else if ("scope_func" in obj) {
-              results.push(scope[obj.scope_func](val));
+              _results.push(scope[obj.scope_func](val));
             } else {
-              results.push(scope[obj.key] = val);
+              _results.push(scope[obj.key] = val);
             }
           }
-          return results;
+          return _results;
         };
         onWatch();
         scope.$watch((function() {
@@ -45,11 +45,11 @@
         }), function() {
           return onWatch();
         });
-        results = [];
-        for (i = 0, len = config.length; i < len; i++) {
-          obj = config[i];
+        _results = [];
+        for (_i = 0, _len = config.length; _i < _len; _i++) {
+          obj = config[_i];
           watch = obj.expr || obj.scope_name || obj.key;
-          results.push(scope.$watch(watch, (function(obj, watch) {
+          _results.push(scope.$watch(watch, (function(obj, watch) {
             return function(val) {
               val = (obj.val_out || _.identity)(val);
               if (val === obj["default"]) {
@@ -63,7 +63,7 @@
             };
           })(obj, watch)));
         }
-        return results;
+        return _results;
       }
     };
   });
@@ -156,16 +156,16 @@
             eNodes = [eNodes];
           }
           output = (function() {
-            var i, len, results;
-            results = [];
-            for (i = 0, len = eNodes.length; i < len; i++) {
-              e = eNodes[i];
-              results.push({
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = eNodes.length; _i < _len; _i++) {
+              e = eNodes[_i];
+              _results.push({
                 label: e.s.replace("swefn--", ""),
                 words: _.pluck(e.info.info.feat, "val")
               });
             }
-            return results;
+            return _results;
           })();
           return def.resolve(output);
         });
@@ -278,11 +278,11 @@
             corpus: _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join(",")
           }
         }).success(function(data) {
-          var corpus, i, len, ref;
+          var corpus, _i, _len, _ref;
           c.log("data", data);
-          ref = settings.corpusListing.corpora;
-          for (i = 0, len = ref.length; i < len; i++) {
-            corpus = ref[i];
+          _ref = settings.corpusListing.corpora;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            corpus = _ref[_i];
             corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"];
           }
           c.log("loadCorpora");
@@ -303,13 +303,13 @@
       }), "_loc.search().page"
     ], (function(_this) {
       return function(newValues) {
-        var pageChanged, pageOnly, ref, searchChanged, searchExpr, type, value;
+        var pageChanged, pageOnly, searchChanged, searchExpr, type, value, _ref;
         c.log("searches service watch", $location.search().search);
         searchExpr = $location.search().search;
         if (!searchExpr) {
           return;
         }
-        ref = searchExpr != null ? searchExpr.split("|") : void 0, type = ref[0], value = 2 <= ref.length ? slice.call(ref, 1) : [];
+        _ref = searchExpr != null ? searchExpr.split("|") : void 0, type = _ref[0], value = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
         value = value.join("|");
         newValues[1] = Number(newValues[1]) || 0;
         oldValues[1] = Number(oldValues[1]) || 0;
@@ -381,8 +381,8 @@
     };
 
     CompareSearches.prototype.flush = function() {
-      var ref;
-      [].splice.apply(this.savedSearches, [0, 9e9].concat(ref = [])), ref;
+      var _ref;
+      [].splice.apply(this.savedSearches, [0, 9e9].concat(_ref = [])), _ref;
       return $.jStorage.set(this.key, this.savedSearches);
     };
 
@@ -429,7 +429,7 @@
                 url: settings.cgi_script,
                 params: korpargs
               }).success(function(data, status, headers, config) {
-                var allLemgrams, count, i, klemgram, lemgram, len;
+                var allLemgrams, count, klemgram, lemgram, _i, _len;
                 delete data.time;
                 allLemgrams = [];
                 for (lemgram in data) {
@@ -439,8 +439,8 @@
                     "count": count
                   });
                 }
-                for (i = 0, len = karpLemgrams.length; i < len; i++) {
-                  klemgram = karpLemgrams[i];
+                for (_i = 0, _len = karpLemgrams.length; _i < _len; _i++) {
+                  klemgram = karpLemgrams[_i];
                   if (!data[klemgram]) {
                     allLemgrams.push({
                       "lemgram": klemgram,
@@ -495,9 +495,9 @@
                 url: "http://spraakbanken.gu.se/ws/karp-sok",
                 params: senseargs
               }).success(function(data, status, headers, config) {
-                var ref, senses;
+                var senses, _ref;
                 console.log("sense data", data);
-                if (!(data != null ? (ref = data.div) != null ? ref.e : void 0 : void 0)) {
+                if (!(data != null ? (_ref = data.div) != null ? _ref.e : void 0 : void 0)) {
                   deferred.resolve([]);
                   return null;
                 }
@@ -505,10 +505,10 @@
                   data.div.e = [data.div.e];
                 }
                 senses = _.map(data.div.e, function(obj) {
-                  var ref1, ref2, ref3;
+                  var _ref1, _ref2, _ref3;
                   return {
                     "sense": obj.s,
-                    "desc": (ref1 = obj.info) != null ? (ref2 = ref1.info) != null ? (ref3 = ref2.SenseRelation) != null ? ref3.targets : void 0 : void 0 : void 0
+                    "desc": (_ref1 = obj.info) != null ? (_ref2 = _ref1.info) != null ? (_ref3 = _ref2.SenseRelation) != null ? _ref3.targets : void 0 : void 0 : void 0
                   };
                 });
                 console.log("OUTSENSES", senses);
