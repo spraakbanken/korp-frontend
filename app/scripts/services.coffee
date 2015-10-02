@@ -20,13 +20,13 @@ korpApp.factory "utils", ($location) ->
         onWatch = () ->
             for obj in config
                 val = $location.search()[obj.key]
-                unless val 
+                unless val
                     if obj.default? then val = obj.default else continue
-                
+
 
                 val = (obj.val_in or _.identity)(val)
                 # c.log "obj.val_in", obj.val_in
-                
+
                 # if obj.key == "page" then c.log "page watch", val
                 if "scope_name" of obj
                     scope[obj.scope_name] = val
@@ -61,7 +61,7 @@ korpApp.factory "debounce", ($timeout) ->
         thisArg = null
         timeoutDeferred = null
         trailing = true
-        
+
         delayed = ->
             inited = timeoutDeferred = null
             result = func.apply(thisArg, args) if trailing
@@ -86,7 +86,7 @@ korpApp.factory 'backend', ($http, $q, utils) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
         def = $q.defer()
         # c.log "reduce", reduce, reduce.replace(/^_\./, "")
-        params = 
+        params =
             command : "loglike"
             groupby : reduce.replace(/^_\./, "")
             set1_corpus : cmpObj1.corpora.join(",").toUpperCase()
@@ -95,7 +95,7 @@ korpApp.factory 'backend', ($http, $q, utils) ->
             set2_cqp : cmpObj2.cqp
             max : 50
 
-        conf = 
+        conf =
             url : settings.cgi_script
             params : params
             method : "GET"
@@ -146,17 +146,21 @@ korpApp.factory 'backend', ($http, $q, utils) ->
         return def.promise
 
 korpApp.factory 'nameEntitySearch', ($rootScope, $q) ->
-    
-    class NameEntities 
+
+    class NameEntities
         constructor: () ->
-      
+
         request: (cqp) ->
             @def = $q.defer()
-            @promise = @def.promise 
+            @promise = @def.promise
+            @proxy = new model.NameProxy()
             $rootScope.$broadcast 'map_data_available', cqp, settings.corpusListing.stringifySelected(true)
-            new model.NameProxy().makeRequest(cqp).then (data) =>
+            @proxy.makeRequest(cqp, @progressCallback).then (data) =>
                 @def.resolve data
-    
+
+        progressCallback: (progress) ->
+            $rootScope.$broadcast 'map_progress', progress
+
     return new NameEntities()
 
 korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntitySearch) ->
@@ -178,28 +182,28 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                 initTimeGraph(timedef)
 
         kwicRequest : (cqp, isPaging) ->
-            
+
             c.log "kwicRequest", cqp
             kwicResults.makeRequest(cqp, isPaging)
 
-        
+
         kwicSearch : (cqp, isPaging) ->
             # simpleSearch.resetView()
-            # kwicResults.@            
+            # kwicResults.@
             @kwicRequest cqp, isPaging
             statsResults.makeRequest cqp
             @nameEntitySearch cqp
-            
+
 
         lemgramSearch : (lemgram, searchPrefix, searchSuffix, isPaging) ->
             #TODO: this is dumb, move the cqp calculations elsewhere
             cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
             statsResults.makeRequest cqp
             @kwicRequest cqp, isPaging
-            @nameEntitySearch cqp 
+            @nameEntitySearch cqp
 
             if settings.wordpicture == false then return
-            
+
             # lemgramResults.showPreloader()
             lemgramResults.makeRequest(lemgram, "lemgram")
             # def = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))
@@ -290,20 +294,20 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
         $q.all([searches.infoDef, searches.langDef.promise]).then () ->
             switch type
                 when "word"
-                    searches.activeSearch = 
+                    searches.activeSearch =
                         type : type
                         val : value
                         page: newValues[1]
                         pageOnly: pageOnly
 
                 when "lemgram"
-                    searches.activeSearch = 
+                    searches.activeSearch =
                         type : type
                         val : value
                         page: newValues[1]
                         pageOnly: pageOnly
 
-                    
+
                     # $.sm.send "submit.lemgram", data
                 when "saldo"
                     extendedSearch.setOneToken "saldo", value
@@ -313,7 +317,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                     # if not value then value = CQP.expandOperators $location.search().cqp
                     if not value then value = $location.search().cqp
                     # c.log "cqp search", value, $location.search().cqp
-                    searches.activeSearch = 
+                    searches.activeSearch =
                         type : type
                         val : value
                         page: newValues[1]
@@ -332,7 +336,7 @@ korpApp.service "compareSearches",
         constructor : () ->
             if currentMode != "default"
                 @key = 'saved_searches_' + currentMode
-            else 
+            else
                 @key = "saved_searches"
             c.log "key", @key
             @savedSearches = ($.jStorage.get @key) or []

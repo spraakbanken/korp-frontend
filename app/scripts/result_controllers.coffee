@@ -397,12 +397,19 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
     s.markers = {}
     s.showTime = true
 
-    s.$on "map_data_available", (_event, cqp, corpora) ->
+    s.$on "map_progress", (event, progress) ->
+        s.progress = Math.round(progress["stats"])
+
+    s.$on "map_data_available", (event, cqp, corpora) ->
         if s.showMap
+            s.proxy = nameEntitySearch.proxy
             s.lastSearch = { cqp: cqp, corpora: corpora }
             s.loading = true
             updateMapData()
             s.hasResult = true
+
+    s.countCorpora = () ->
+        s.proxy.prevParams?.corpus.split(",").length
 
     fixData = (data) ->
         fixedData = {}
