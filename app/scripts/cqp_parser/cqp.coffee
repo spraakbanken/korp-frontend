@@ -135,6 +135,26 @@ window.CQP =
     concat : (cqpObjs...) ->
         [].concat cqpObjs...
 
+    getTimeInterval : (obj) ->
+        from = []
+        to = []
+        for token in obj
+            for or_block in token.and_block
+                for item in or_block
+                    if item.type == "date_interval"
+                        from.push moment("#{item.val[0]}#{item.val[2]}", "YYYYMMDDhhmmss")
+                        to.push moment("#{item.val[1]}#{item.val[3]}", "YYYYMMDDhhmmss")
+
+        unless from.length then return
+        from = _.min from, (mom) -> mom.toDate()
+        to = _.max to, (mom) -> mom.toDate()
+
+        return [from, to]
+
+
+
+
+
     prioSort : (cqpObjs) ->
         getPrio = (and_array) ->
             numbers = _.map and_array, (item) ->

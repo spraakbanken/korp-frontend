@@ -188,12 +188,11 @@ class window.CorpusListing
         toUnix = (item) -> item.unix()
 
         infoGetter = (prop) =>
-            # TODO: change to selected
             return _(@selected) 
             .pluck("info")
             .pluck(prop)
             .compact()
-            .map(moment)
+            .map((item) -> moment(item))
             .value()
         
 

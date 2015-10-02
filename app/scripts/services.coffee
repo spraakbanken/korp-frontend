@@ -310,8 +310,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                     # $.sm.send "submit.cqp", data
                 when "cqp"
                     # advancedSearch.setCQP value
-                    c.log "cqp search", value
-                    if not value then value = CQP.expandOperators $location.search().cqp
+                    # if not value then value = CQP.expandOperators $location.search().cqp
+                    if not value then value = $location.search().cqp
+                    # c.log "cqp search", value, $location.search().cqp
                     searches.activeSearch = 
                         type : type
                         val : value

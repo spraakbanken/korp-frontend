@@ -43,7 +43,8 @@ tab(active="active", ng-repeat='data in graphTabs', ng-controller='graphCtrl')
       .drawing(ng-show="loading")
         | {{'drawing' | loc:lang}}
     .chart(ng-show="isGraph()")
-    .zoom_slider(ng-show="isGraph()")
+    //- .zoom_slider(ng-show="isGraph()")
+    .preview
     .time_table(style="margin-top:20px", ng-show="isTable()")
     .exportTimeStatsSection(ng-show="isTable()")
       select.timeKindOfData

@@ -980,7 +980,6 @@ class view.StatsResults extends BaseResults
             labelMapping = {}
 
             showTotal = false
-            mainCQP = params.cqp
 
             console.log "DOING GRAPH CHECKING"
             # THIS IS FLAWED AND SHOULD USE 'getSelectedRows()' INSTEAD.
@@ -1004,7 +1003,7 @@ class view.StatsResults extends BaseResults
 
             @s.$apply () =>
                 @s.onGraphShow
-                    cqp : mainCQP
+                    cqp : @proxy.prevNonExpandedCQP
                     subcqps : subExprs
                     labelMapping : labelMapping
                     showTotal : showTotal
@@ -1448,7 +1447,7 @@ class view.GraphResults extends BaseResults
                 month = time[4...6]
                 day = time[6...8]
 
-        return moment([Number(year), Number(month), Number(day)])
+        return moment([Number(year), Number(month) - 1, Number(day) - 1])
 
 
     fillMissingDate : (data) ->
@@ -1495,7 +1494,7 @@ class view.GraphResults extends BaseResults
 
 
 
-    getSeriesData : (data) ->
+    getSeriesData : (data, showSelectedCorporasStartDate) ->
         delete data[""]
         # TODO: getTimeInterval should take the corpora of this parent tab instead of the global ones.
         # [first, last] = settings.corpusListing.getTimeInterval()
@@ -1511,7 +1510,7 @@ class view.GraphResults extends BaseResults
             if mom.isSame lastVal then hasLastValue = true
             {x : mom, y : y}
 
-        unless hasFirstValue
+        if not hasFirstValue and showSelectedCorporasStartDate
             output.push {x : firstVal, y:0}
 
         prettyDate = (item) ->
@@ -1597,9 +1596,10 @@ class view.GraphResults extends BaseResults
 
     drawIntervals : (graph, intervals) ->
         # c.log "unitWidth", unitWidth
-        unless $(".zoom_slider", @$result).is ".ui-slider"
-            return
-        [from, to] = $('.zoom_slider', @$result).slider("values")
+        # unless $(".zoom_slider", @$result).is ".ui-slider"
+            # return
+        # [from, to] = $('.zoom_slider', @$result).slider("values")
+        {x : [from, to]} = graph.renderer.domain()
 
         unitSpan = moment.unix(to).diff(moment.unix(from), @zoom)
         unitWidth = graph.width / unitSpan
@@ -1608,12 +1608,10 @@ class view.GraphResults extends BaseResults
         for list in intervals
             max = _.max list, "x"
             min = _.min list, "x"
-            from = Math.round graph.x min.x
-            to = Math.round graph.x max.x
+            from = graph.x min.x
+            to = graph.x max.x
             # c.log "from", from, to
-            offset = 8
             $("<div>", {class : "empty_area"}).css
-                # left : ((from + unitWidth / 2) - offset)
                 left : from - unitWidth / 2
                 # width : (to - from) - unitWidth / 2
                 width : (to - from) + unitWidth
@@ -1629,7 +1627,7 @@ class view.GraphResults extends BaseResults
     setLineMode : () ->
 
     setTableMode : (series) ->
-        $(".chart,.zoom_slider,.legend", @$result).hide()
+        $(".chart,.legend", @$result).hide()
         $(".time_table", @$result.parent()).show()
         nRows = series.length or 2
         h = (nRows * 2) + 4
@@ -1740,11 +1738,16 @@ class view.GraphResults extends BaseResults
         ).done (data) =>
             c.log "graph data", data
 
+            c.log "graph cqp", cqp
+                
             if data.ERROR
                 @resultError data
                 return
             nontime = @getNonTime()
 
+            [from, to] = CQP.getTimeInterval(CQP.parse(cqp)) or [null, null]
+            showSelectedCorporasStartDate = !from
+            
             if nontime
                 $(".non_time", @$result).text(nontime.toFixed(2) + "%").parent().localize()
             else
@@ -1757,21 +1760,21 @@ class view.GraphResults extends BaseResults
                     color = palette.color()
                     # @colorToCqp[color] = item.cqp
                     series.push {
-                        data : @getSeriesData item.relative
+                        data : @getSeriesData item.relative, showSelectedCorporasStartDate
                         color : color
                         # name : item.cqp?.replace(/(\\)|\|/g, "") || "&Sigma;"
                         name : if item.cqp then labelMapping[item.cqp] else "&Sigma;"
                         cqp : item.cqp or cqp
-                        abs_data : @getSeriesData item.absolute
+                        abs_data : @getSeriesData item.absolute, showSelectedCorporasStartDate
                     }
             else # TODO: get rid of code doubling and use seriesData variable
                 # @colorToCqp['steelblue'] = cqp
                 series = [{
-                            data: @getSeriesData data.combined.relative
+                            data: @getSeriesData data.combined.relative, showSelectedCorporasStartDate
                             color: 'steelblue'
                             name : "&Sigma;"
                             cqp : cqp
-                            abs_data : @getSeriesData data.combined.absolute
+                            abs_data : @getSeriesData data.combined.absolute, showSelectedCorporasStartDate
                         }]
             Rickshaw.Series.zeroFill(series)
             # window.data = series[0].data
@@ -1791,11 +1794,11 @@ class view.GraphResults extends BaseResults
                 padding :
                     top : 0.1
                     right : 0.01
-                # min : "auto"
+                # min : 
             graph.render()
-            window._graph = graph
-
-
+            window._graph = @graph = graph
+            
+            
 
             @drawIntervals(graph, emptyIntervals)
 
@@ -1811,22 +1814,13 @@ class view.GraphResults extends BaseResults
                 for cls in @$result.attr("class").split(" ")
                     if cls.match(/^form-/) then @$result.removeClass(cls)
                 @$result.addClass("form-" +val)
-                $(".chart,.zoom_slider,.legend", @$result.parent()).show()
+                $(".chart,.legend", @$result.parent()).show()
                 $(".time_table", @$result.parent()).hide()
                 if val == "bar"
                     @setBarMode()
-                    # if $(".legend .line", @$result).length > 1
-                    #     $(".legend li:last:not(.disabled) .action", @$result).click()
-                    #     if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
-                    #         $(".legend li:first .action", @$result).click()
                 else if val == "table"
                     @setTableMode(series)
                     @renderTable(series)
-
-                    # $(".timeExportButton", @$result).unbind "click"
-                    # $(".timeExportButton", @$result).click =>
-
-
 
                 unless val == "table"
                     graph.setRenderer val
@@ -1834,11 +1828,6 @@ class view.GraphResults extends BaseResults
                     $(".exportTimeStatsSection", @$result).hide()
 
             
-
-            # $(".smoothing_label .ui-button-text", @$result.parent()).localeKey("smoothing")
-            # $(".form_switch .ui-button:first .ui-button-text", @$result).localeKey("line")
-            # $(".form_switch .ui-button:eq(1) .ui-button-text", @$result).localeKey("bar")
-            # $(".form_switch .ui-button:last .ui-button-text", @$result).localeKey("table")
             legend = new Rickshaw.Graph.Legend
                 element: $(".legend", @$result).get(0)
                 graph: graph
@@ -1853,10 +1842,11 @@ class view.GraphResults extends BaseResults
             hoverDetail = new Rickshaw.Graph.HoverDetail( {
                 graph: graph
                 xFormatter: (x) =>
-                    d = new Date(x * 1000)
-                    output = ["<span rel='localize[year]'>#{util.getLocaleString('year')}</span>: <span class='currently'>#{d.getFullYear()}</span>",
-                              "<span rel='localize[month]'>#{util.getLocaleString('month')}</span>: <span class='currently'>#{d.getMonth()}</span>",
-                              "<span rel='localize[day]'>#{util.getLocaleString('day')}</span>: <span class='currently'>#{d.getDay()}</span>"
+                    # d = new Date(x * 1000)
+                    m = moment(x * 1000)
+                    output = ["<span rel='localize[year]'>#{util.getLocaleString('year')}</span>: <span class='currently'>#{m.year()}</span>",
+                              "<span rel='localize[month]'>#{util.getLocaleString('month')}</span>: <span class='currently'>#{m.month() + 1}</span>",
+                              "<span rel='localize[day]'>#{util.getLocaleString('day')}</span>: <span class='currently'>#{m.date() + 1}</span>"
                               ]
                     out = switch @granularity
                         when "y" then output[0]
@@ -1885,8 +1875,9 @@ class view.GraphResults extends BaseResults
             } )
 
             # [first, last] = settings.corpusListing.getTimeInterval()
-            [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
+            # [firstVal, lastVal] = settings.corpusListing.getMomentInterval()
 
+            # TODO: fix decade again
             # timeunit = if last - first > 100 then "decade" else @zoom
 
             toDate = (sec) ->
@@ -1908,9 +1899,18 @@ class view.GraphResults extends BaseResults
                 graph: graph
                 timeUnit: time.unit(@zoom) # TODO: bring back decade
 
-            slider = new Rickshaw.Graph.RangeSlider
-                graph: graph,
-                element: $('.zoom_slider', @$result)
+            # slider = new Rickshaw.Graph.RangeSlider
+            #     graph: graph,
+            #     element: $('.zoom_slider', @$result)
+
+
+            preview = new Rickshaw.Graph.RangeSlider.Preview
+                graph: graph
+                element: $(".preview", @$result).get(0)
+
+
+            # expanedCQP = CQP.expandOperators cqp
+
 
             old_render = xAxis.render
             xAxis.render = () =>

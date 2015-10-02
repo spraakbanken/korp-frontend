@@ -1,3 +1,4 @@
+"use strict"
 window.model = {}
 
 model.getAuthorizationHeader = () ->
@@ -16,6 +17,9 @@ class BaseProxy
         @total
         @total_results = 0
         @pendingRequests = []
+
+    expandCQP : (cqp) ->
+        return CQP.expandOperators cqp
 
     makeRequest: ->
         @abort()
@@ -180,6 +184,7 @@ class model.KWICProxy extends BaseProxy
                 $.each corpus.struct_attributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
+        data.cqp = @expandCQP(data.cqp)
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show
@@ -408,7 +413,7 @@ class model.StatsProxy extends BaseProxy
         parameters = 
             command: "count"
             groupby: reduceval
-            cqp: cqp
+            cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: $.support.ajaxProgress
             defaultwithin: "sentence"
@@ -433,6 +438,7 @@ class model.StatsProxy extends BaseProxy
         #if within_selection isnt "0" #!= settings.defaultWithin
         #    data.within = settings.corpusListing.getWithinQueryString()
         data.within = within
+        @prevNonExpandedCQP = cqp
         @prevParams = data
         def = $.Deferred()
         @pendingRequests.push $.ajax
@@ -623,7 +629,7 @@ class model.GraphProxy extends BaseProxy
         self = this
         params =
             command : "count_time"
-            cqp : cqp
+            cqp : @expandCQP cqp
             corpus : corpora
             granularity : @granularity
             incremental: $.support.ajaxProgress

@@ -2243,10 +2243,13 @@ line.tick {
 .rickshaw_graph .x_tick {
 }
 
-.zoom_slider {
+// .zoom_slider {
+//   width : 100% !important;
+// } 
+
+.preview {
   margin-top : 30px;
-  width : 100% !important;
-} 
+}
 
 #main > #msd_popup {
   display : none !important;
