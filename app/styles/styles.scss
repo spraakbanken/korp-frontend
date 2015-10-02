@@ -419,6 +419,14 @@ time-interval {
   white-space : nowrap;
   // font-size: .6em;
   &:link, &:visited {
+    color: #222222;
+  }
+  &:hover {
+    color: #444444;
+  }
+}
+
+
 .numberOfChildren {
   color: #888888;
 }
@@ -2517,10 +2525,6 @@ line.tick {
   max-height : 575px;
   overflow-y: auto;
 }
-
-<<<<<<< HEAD
-
-<<<<<<< HEAD
 
 /* ----------- Newsdesk ----------- */
 
