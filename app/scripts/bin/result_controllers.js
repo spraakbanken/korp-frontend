@@ -432,6 +432,9 @@
       return $location.search().show_map;
     }), function(val) {
       var currentCorpora, currentCqp, _ref, _ref1;
+      if (val === s.showMap) {
+        return;
+      }
       s.showMap = Boolean(val);
       if (s.showMap) {
         currentCqp = getCqpExpr();
@@ -454,10 +457,12 @@
       var cqpExpr, search;
       search = searches.activeSearch;
       cqpExpr = null;
-      if ((search != null ? search.type : void 0) === "word" || (search != null ? search.type : void 0) === "lemgram") {
-        cqpExpr = simpleSearch.getCQP(search.val);
-      } else {
-        cqpExpr = search.val;
+      if (search) {
+        if (search.type === "word" || search.type === "lemgram") {
+          cqpExpr = simpleSearch.getCQP(search.val);
+        } else {
+          cqpExpr = search.val;
+        }
       }
       return cqpExpr;
     };

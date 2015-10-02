@@ -359,6 +359,9 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
 
     s.showMap = $location.search().show_map?
     s.$watch (() -> $location.search().show_map), (val) ->
+        if val == s.showMap
+            return
+
         s.showMap = Boolean(val)
         if s.showMap
             currentCqp = getCqpExpr()
@@ -377,18 +380,18 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
         # TODO currently copy pasted from watch on "searches.activeSearch"
         search = searches.activeSearch
         cqpExpr = null
-        if search?.type == "word" or search?.type == "lemgram"
-            cqpExpr = simpleSearch.getCQP(search.val)
-        else
-            # TODO: this crashes on browser reload :(
-            cqpExpr = search.val
-        cqpExpr
+        if search
+            if search.type == "word" or search.type == "lemgram"
+                cqpExpr = simpleSearch.getCQP(search.val)
+            else
+                cqpExpr = search.val
+        return cqpExpr
 
     s.center =
       lat: 62.99515845212052
       lng: 16.69921875
       zoom: 4
-    # s.hoverTemplate = "<div><h1>test</h1></div>"
+
     s.hoverTemplate = """<div class="hover-info" ng-repeat="(name, values) in names">
                           <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
                           <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
