@@ -4,6 +4,7 @@
 
 
 
+
 @font-face {
   font-family: "Source Sans Pro";
   src: url(SourceSansPro-Regular.otf);
@@ -294,10 +295,13 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 
 .extended .search_submit {
   display: inline;
+<<<<<<< HEAD
   vertical-align: super;
   .btn-group {
     display: inline;
   }
+=======
+>>>>>>> going crazy with datepicker. super broken
 }
 
 #advanced pre {
@@ -1658,9 +1662,6 @@ label[for=lemgram_select]:before {
 }
 
 #korp-simple {
-  .btn-group {
-    display : inline;
-  }
 
   #simple_text {
     position: relative;
@@ -2502,6 +2503,7 @@ line.tick {
   overflow-y: auto;
 }
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 

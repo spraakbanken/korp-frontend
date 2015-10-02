@@ -31,23 +31,63 @@ stringifyCqp = (cqp_obj, translate_ops = false) ->
                 if type == "word" and val == ""
                     out = ""
                 else if type == "date_interval"
-                    [from, to] = val.split(",")
-                    operator1 = ">="
-                    operator2 = "<="
-                    bool = "&"
-                    if op == "!="
-                        operator1 = "<"
-                        operator2 = ">"
-                        bool = "|"
 
-                    tmpl = _.template("(int(_.text_datefrom) <%= op1 %> <%= from %> <%= bool %> int(_.text_dateto) <%= op2 %> <%= to %>)")
-                    out = tmpl
-                         op1 : operator1,
-                         op2 : operator2,
-                         bool : bool,
-                         from : from,
-                         to : to
-                    unless from and to then out = ""
+                    [fromdate, todate, fromtime, totime] = val.split(",")
+
+                    m_from = moment(fromdate, "YYYYMMDD")
+                    m_to = moment(todate, "YYYYMMDD")
+
+                    fieldMapping = 
+                        fromdate : fromdate
+                        todate : todate
+                        fromtime : fromtime
+                        totime : totime
+
+                    op = (field, operator, valfield) ->
+                        val = if valfield then fieldMapping[valfield] else fieldMapping[field]
+                        "int(_.#{field}) #{operator} #{val}"
+
+
+                    days_diff = m_from.diff(m_to, "days")
+
+                    if days_diff == 0  # same day
+                        out = "#{op('fromdate', '=')} &
+                        #{op('fromtime', '=>')} &
+                        #{op('todate', '=')} &
+                        #{op('totime', '<=')}"
+                        
+                    else if days_diff == -1 # one day apart
+                        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | #{op('fromdate', '=', 'todate')}) &
+                        (#{op('todate', '=', 'fromdate')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+                        
+
+                    else
+                        out = "((#{op('fromdate', '=')} & #{op('fromtime', '=>')}) | 
+                        (#{op('fromdate', '>')} & #{op('fromdate', '<=', 'todate')})) &
+                        (#{op('todate', '<')} | (#{op('todate', '=')} & #{op('totime', '<=')}))"
+                        
+
+                    out = out.replace(/\s+/g, " ")
+
+                    unless fromdate and todate then out = ""
+                # else if type == "date_interval"
+                #     [from, to] = val.split(",")
+                #     operator1 = ">="
+                #     operator2 = "<="
+                #     bool = "&"
+                #     if op == "!="
+                #         operator1 = "<"
+                #         operator2 = ">"
+                #         bool = "|"
+
+                #     tmpl = _.template("(int(_.text_datefrom) <%= op1 %> <%= from %> <%= bool %> int(_.text_dateto) <%= op2 %> <%= to %>)")
+                #     out = tmpl
+                #          op1 : operator1,
+                #          op2 : operator2,
+                #          bool : bool,
+                #          from : from,
+                #          to : to
+                #     unless from and to then out = ""
                 else 
                     out = "#{type} #{op} \"#{val}\"" 
 

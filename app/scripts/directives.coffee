@@ -226,8 +226,8 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     template : '''
     <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-small" id="sendBtn" ng-click="onSendClick()">{{'search' | loc:lang}}</button>
-            <button class="btn btn-small opener" ng-click="togglePopover($event)">
+            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()">{{'search' | loc:lang}}</button>
+            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)">
                 <span class="caret"></span>
             </button>
         </div>
@@ -239,7 +239,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
                     <label for="cmp_input">{{'compare_name' | loc:lang}} :</label> <input id="cmp_input" ng-model="name">
                 </div>
                 <div class="btn_container">
-                    <button class="btn btn-primary btn-small">{{'compare_save' | loc:lang}}</button>
+                    <button class="btn btn-primary btn-sm">{{'compare_save' | loc:lang}}</button>
                 </div>
             </form>
         </div>
@@ -669,6 +669,47 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             return deferred.promise
 
 
+
+korpApp.directive "timeInterval", () ->
+    scope : 
+        dateModel : "="
+        timeModel : "="
+        model : "="
+    restrict : "E"
+    template : """
+        <div class="form-inline">
+          <div class="input-group">
+            <input type="text" datepicker-popup ng-model="dateModel" is-open="isOpen" min-date="minDate" max-date="&quot;2015-06-22&quot;" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" class="form-control"/>
+                <span class="input-group-btn">
+                    <button type="button" ng-click="open($event)" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                </span>
+          </div>
+        </div>
+        <timepicker ng-model="timeModel" hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+        """
+
+    link : (s, elem, attr) ->
+        s.isOpen = false
+        s.open = (event) ->
+            event.preventDefault()
+            event.stopPropagation()
+            s.isOpen = true 
+
+        s.model = null
+
+        time_units = ["hour", "minute"]
+
+        s.$watchGroup ["dateModel", "timeModel"], ([date, time]) ->
+            if date and time
+                m = moment(date)
+                for t in time_units
+                    m_time = moment(time)
+                    m.add(t, m_time[t]())
+
+                c.log m.toString()
+                s.model = m
+
+
 angular.module("template/datepicker/day.html", []).run ($templateCache) ->
     $templateCache.put "template/datepicker/day.html", """
         <table role="grid" aria-labelledby="{{uniqueId}}-title" aria-activedescendant="{{activeDateId}}"
@@ -738,5 +779,36 @@ angular.module("template/datepicker/year.html", []).run ($templateCache) ->
           </td>
         </tr>
       </tbody>
+    </table>
+    """
+
+
+angular.module("template/timepicker/timepicker.html", []).run ($templateCache) ->
+  $templateCache.put "template/timepicker/timepicker.html", """
+    <table>
+       <tbody>
+           <tr class="text-center">
+               <td><a ng-click="incrementHours()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+               <td>&nbsp;</td>
+               <td><a ng-click="incrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-up"></span></a></td>
+               <td ng-show="showMeridian"></td>
+           </tr>
+           <tr>
+               <td style="width:50px;" class="form-group" ng-class="{'has-error': invalidHours}">
+                   <input type="text" ng-model="hours" ng-change="updateHours()" class="form-control text-center" ng-mousewheel="incrementHours()" ng-readonly="readonlyInput" maxlength="2">
+               </td>
+               <td>:</td>
+               <td style="width:50px;" class="form-group" ng-class="{'has-error': invalidMinutes}">
+                   <input type="text" ng-model="minutes" ng-change="updateMinutes()" class="form-control text-center" ng-readonly="readonlyInput" maxlength="2">
+               </td>
+               <td ng-show="showMeridian"><button type="button" class="btn btn-default text-center" ng-click="toggleMeridian()">{{meridian}}</button></td>
+           </tr>
+           <tr class="text-center">
+               <td><a ng-click="decrementHours()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+               <td>&nbsp;</td>
+               <td><a ng-click="decrementMinutes()" class="btn btn-link"><span class="fa fa-chevron-down"></span></a></td>
+               <td ng-show="showMeridian"></td>
+           </tr>
+       </tbody>
     </table>
     """

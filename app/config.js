@@ -561,6 +561,9 @@ sattrs.date = {
     displayType : "date"
 };
 
+
+
+/*
 settings.common_struct_types = {
     date_interval : {
         label: "date_interval",
@@ -622,6 +625,8 @@ settings.common_struct_types = {
     }
 
 }
+
+*/
 
 var modernAttrs = {
     pos : attrs.pos,

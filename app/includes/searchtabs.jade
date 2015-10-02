@@ -31,7 +31,7 @@ div(ng-controller="SearchCtrl")
         | {{'compare' | loc:lang}} 
         span.badge(ng-if='savedSearches.length') {{savedSearches.length}}
       .search_compare()
-        button.btn.btn-small.btn-danger.delete(ng-click='deleteCompares()', ng-show='savedSearches.length > 1') 
+        button.btn.btn-sm.btn-danger.delete(ng-click='deleteCompares()', ng-show='savedSearches.length > 1') 
           i.fa.fa-trash-o
           | {{'compare_delete' | loc:lang}}
         div(ng-show='savedSearches.length < 2')
@@ -48,7 +48,7 @@ div(ng-controller="SearchCtrl")
              mapper:valfilter as obj.label | \
              loc group by obj.group | \
              loc for obj in currentAttrs')
-          button.btn.btn-small.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
+          button.btn.btn-sm.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
   #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div
       span(style='font-size: .9em;') KWIC: 

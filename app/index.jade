@@ -38,12 +38,17 @@ html
       #header
         include includes/header
       #content
+        time-interval(date-model="date", time-model="time", model="combined")
+        {{date.getDate()}} ---- {{time}} ----- {{combined}}
         //- datepicker(ng-model="dt", min-date="minDate", show-weeks="true", class="well well-sm")
-        .input-group
-          input.form-control(type='text', datepicker-popup='{{format}}', ng-model='dt', is-open='isOpen', min-date='minDate', max-date='"2015-06-22"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='true', close-text='Close')
-          span.input-group-btn
-            button.btn.btn-default(type='button', ng-click='isOpen = true && $event.stopPropagation()')
-              i.fa.fa-calendar
+        //- .form-inline
+        //-   .input-group
+        //-     input.form-control(type='text', datepicker-popup='{{format}}', ng-model='dt', is-open='isOpen', min-date='minDate', max-date='"2015-06-22"', datepicker-options='dateOptions', date-disabled='disabled(date, mode)', ng-required='true', close-text='Close')
+        //-     span.input-group-btn
+        //-       button.btn.btn-default(type='button', ng-click='isOpen = true && $event.stopPropagation()')
+        //-         i.fa.fa-calendar
+
+        //- timepicker(ng-model="mytime", ng-change="changed()", hour-step="1", minute-step="1", show-meridian="false")
 
 
         include includes/searchtabs
