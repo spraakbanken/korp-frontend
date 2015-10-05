@@ -607,6 +607,8 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         </div>
     """
     link : (scope, elem, attr) ->
+        c.log "autoc link", scope.model
+
         scope.noVariant = () ->
             return variant isnt 'dalin'
         scope.lemgramify = (lemgram) ->
@@ -642,6 +644,9 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             scope.placeholder = model.lemgram
             scope.model = model.lemgram
             scope.textInField = ""
+
+        if scope.model
+            scope.selectedItem null, {lemgram : scope.model }
 
         scope.getMorphologies = (corporaIDs) ->
             morphologies = []

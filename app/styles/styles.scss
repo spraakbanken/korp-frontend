@@ -2235,7 +2235,9 @@ warning ~ * {
     opacity : 0.2;
     z-index : 1;
   }
-
+  .detail .x_label {
+    top : -26px;
+  }
   .x_tick {
     border-left : none;
     .title {
