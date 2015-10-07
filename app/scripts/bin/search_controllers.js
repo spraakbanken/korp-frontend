@@ -1,7 +1,7 @@
 (function() {
   var korpApp,
-    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    slice = [].slice;
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice;
 
   korpApp = angular.module("korpApp");
 
@@ -105,7 +105,7 @@
           } else {
             searches.kwicSearch(cqp);
           }
-          if (settings.wordpicture !== false && s.word_pic && indexOf.call(search.val, " ") < 0) {
+          if (settings.wordpicture !== false && s.word_pic && __indexOf.call(search.val, " ") < 0) {
             return lemgramResults.makeRequest(search.val, "word");
           } else {
             return lemgramResults.resetView();
@@ -163,8 +163,8 @@
       $location.search("search", null);
       $location.search("page", null);
       return $timeout(function() {
-        var ref, within;
-        if (ref = s.within, indexOf.call(_.keys(settings.defaultWithin), ref) < 0) {
+        var within, _ref;
+        if (_ref = s.within, __indexOf.call(_.keys(settings.defaultWithin), _ref) < 0) {
           within = s.within;
         }
         $location.search("within", within || null);
@@ -194,7 +194,7 @@
     });
     s.withins = [];
     s.getWithins = function() {
-      var intersect, j, len, obj, output, ref, union;
+      var intersect, obj, output, union, _i, _len, _ref;
       intersect = settings.corpusListing.getAttrIntersection("within");
       union = settings.corpusListing.getAttrUnion("within");
       output = _.map(union, function(item) {
@@ -203,9 +203,9 @@
         };
       });
       if (union.length > intersect.length) {
-        for (j = 0, len = output.length; j < len; j++) {
-          obj = output[j];
-          if (ref = obj.value, indexOf.call(intersect, ref) < 0) {
+        for (_i = 0, _len = output.length; _i < _len; _i++) {
+          obj = output[_i];
+          if (_ref = obj.value, __indexOf.call(intersect, _ref) < 0) {
             obj.partial = true;
           } else {
             obj.partial = false;
@@ -236,11 +236,11 @@
       return or_obj.val = "";
     };
     s.getOpts = _.memoize(function(type) {
-      var confObj, ref;
+      var confObj, _ref;
       if (!(type in s.typeMapping)) {
         return;
       }
-      confObj = (ref = s.typeMapping) != null ? ref[type] : void 0;
+      confObj = (_ref = s.typeMapping) != null ? _ref[type] : void 0;
       if (!confObj) {
         c.log("confObj missing", type, s.typeMapping);
         return;
@@ -252,9 +252,9 @@
       return _.pairs(confObj);
     });
     onCorpusChange = function(event, selected) {
-      var lang, ref, ref1;
+      var lang, _ref, _ref1;
       c.log("onCorpusChange", selected, s.l);
-      lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
+      lang = (_ref = s.$parent.$parent) != null ? (_ref1 = _ref.l) != null ? _ref1.lang : void 0 : void 0;
       s.types = settings.corpusListing.getAttributeGroups(lang);
       s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
@@ -278,13 +278,13 @@
       return token.and_block.push(s.addOr([]));
     };
     toggleBound = function(token, bnd) {
-      var boundObj, ref, ref1;
-      if (!((ref = token.bound) != null ? ref[bnd] : void 0)) {
+      var boundObj, _ref, _ref1;
+      if (!((_ref = token.bound) != null ? _ref[bnd] : void 0)) {
         boundObj = {};
         boundObj[bnd] = true;
         return token.bound = _.extend(token.bound || {}, boundObj);
       } else {
-        return (ref1 = token.bound) != null ? delete ref1[bnd] : void 0;
+        return (_ref1 = token.bound) != null ? delete _ref1[bnd] : void 0;
       }
     };
     s.toggleStart = function(token) {
@@ -312,10 +312,10 @@
   });
 
   korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
-    var expr, ref, ref1, type;
+    var expr, type, _ref, _ref1;
     expr = "";
     if ($location.search().search) {
-      ref1 = (ref = $location.search().search) != null ? ref.split("|") : void 0, type = ref1[0], expr = 2 <= ref1.length ? slice.call(ref1, 1) : [];
+      _ref1 = (_ref = $location.search().search) != null ? _ref.split("|") : void 0, type = _ref1[0], expr = 2 <= _ref1.length ? __slice.call(_ref1, 1) : [];
       expr = expr.join("|");
     }
     if (type === "cqp") {

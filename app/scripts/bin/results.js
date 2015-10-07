@@ -1,8 +1,8 @@
 (function() {
   var BaseResults,
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty,
-    slice = [].slice;
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __slice = [].slice;
 
   BaseResults = (function() {
     function BaseResults(resultSelector, tabSelector, scope) {
@@ -81,18 +81,18 @@
     };
 
     BaseResults.prototype.countCorpora = function() {
-      var ref;
-      return (ref = this.proxy.prevParams) != null ? ref.corpus.split(",").length : void 0;
+      var _ref;
+      return (_ref = this.proxy.prevParams) != null ? _ref.corpus.split(",").length : void 0;
     };
 
     BaseResults.prototype.onentry = function() {
       this.s.$root.jsonUrl = null;
       return this.firstResultDef.promise.then((function(_this) {
         return function() {
-          var ref;
+          var _ref;
           c.log("firstResultDef.then", _this.isActive());
           if (_this.isActive()) {
-            return _this.s.$root.jsonUrl = (ref = _this.proxy) != null ? ref.prevUrl : void 0;
+            return _this.s.$root.jsonUrl = (_ref = _this.proxy) != null ? _ref.prevUrl : void 0;
           }
         };
       })(this));
@@ -103,16 +103,16 @@
     };
 
     BaseResults.prototype.isActive = function() {
-      var ref;
-      return !!((ref = this.getResultTabs()[this.tabindex]) != null ? ref.active : void 0);
+      var _ref;
+      return !!((_ref = this.getResultTabs()[this.tabindex]) != null ? _ref.active : void 0);
     };
 
     return BaseResults;
 
   })();
 
-  view.KWICResults = (function(superClass) {
-    extend(KWICResults, superClass);
+  view.KWICResults = (function(_super) {
+    __extends(KWICResults, _super);
 
     function KWICResults(tabSelector, resultSelector, scope) {
       var self;
@@ -303,7 +303,7 @@
     };
 
     KWICResults.prototype.renderResult = function(data) {
-      var firstWord, isReading, k, len, linked, mainrow, offset, ref, resultError, scrollLeft;
+      var firstWord, isReading, linked, mainrow, offset, resultError, scrollLeft, _i, _len, _ref;
       c.log("data", data, this.proxy.prevUrl);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
@@ -336,9 +336,9 @@
       })(this));
       if (currentMode === "parallel" && !isReading) {
         scrollLeft = $(".table_scrollarea", this.$result).scrollLeft() || 0;
-        ref = $(".table_scrollarea > .kwic .linked_sentence");
-        for (k = 0, len = ref.length; k < len; k++) {
-          linked = ref[k];
+        _ref = $(".table_scrollarea > .kwic .linked_sentence");
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          linked = _ref[_i];
           mainrow = $(linked).prev();
           if (!mainrow.length) {
             continue;
@@ -681,8 +681,8 @@
 
   })(BaseResults);
 
-  view.ExampleResults = (function(superClass) {
-    extend(ExampleResults, superClass);
+  view.ExampleResults = (function(_super) {
+    __extends(ExampleResults, _super);
 
     function ExampleResults(tabSelector, resultSelector, scope) {
       c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
@@ -749,8 +749,8 @@
 
   })(view.KWICResults);
 
-  view.LemgramResults = (function(superClass) {
-    extend(LemgramResults, superClass);
+  view.LemgramResults = (function(_super) {
+    __extends(LemgramResults, _super);
 
     function LemgramResults(tabSelector, resultSelector, scope) {
       var self;
@@ -793,7 +793,7 @@
       def = this.proxy.makeRequest(word, type, (function(_this) {
         return function() {
           var args;
-          args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           return _this.onProgress.apply(_this, args);
         };
       })(this));
@@ -891,15 +891,15 @@
         }
         return output;
       });
-      unique_words = _.uniq(wordlist, function(arg) {
+      unique_words = _.uniq(wordlist, function(_arg) {
         var pos, word;
-        word = arg[0], pos = arg[1];
+        word = _arg[0], pos = _arg[1];
         return word + pos;
       });
       tagsetTrans = _.invert(settings.wordpictureTagset);
-      unique_words = _.filter(unique_words, function(arg) {
+      unique_words = _.filter(unique_words, function(_arg) {
         var currentWd, pos;
-        currentWd = arg[0], pos = arg[1];
+        currentWd = _arg[0], pos = _arg[1];
         return settings.wordPictureConf[tagsetTrans[pos]] != null;
       });
       if (!unique_words.length) {
@@ -907,12 +907,12 @@
         return;
       }
       $.each(unique_words, (function(_this) {
-        return function(i, arg) {
+        return function(i, _arg) {
           var content, currentWd, pos;
-          currentWd = arg[0], pos = arg[1];
+          currentWd = _arg[0], pos = _arg[1];
           self.drawTable(currentWd, pos, data);
           self.renderHeader(pos, false);
-          content = currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
+          content = "" + currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
           return $(".tableContainer:last").prepend($("<div>", {
             "class": "header"
           }).html(content)).find(".hit .wordclass_suffix").hide();
@@ -1109,8 +1109,8 @@
 
   })(BaseResults);
 
-  view.StatsResults = (function(superClass) {
-    extend(StatsResults, superClass);
+  view.StatsResults = (function(_super) {
+    __extends(StatsResults, _super);
 
     function StatsResults(resultSelector, tabSelector, scope) {
       var self;
@@ -1152,9 +1152,9 @@
       });
       $(window).resize(_.debounce((function(_this) {
         return function() {
-          var h, nRows, ref;
+          var h, nRows, _ref;
           _this.resizeGrid();
-          nRows = ((ref = _this.gridData) != null ? ref.length : void 0) || 2;
+          nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
           h = (nRows * 2) + 4;
           h = Math.min(h, 40);
           return $("#myGrid:visible").height($("#myGrid .slick-viewport").height() + 40);
@@ -1180,7 +1180,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var activeCorpora, cell, chk, cqp, k, key, labelMapping, len, params, reduceVal, ref, showTotal, subExprs, val;
+          var activeCorpora, cell, chk, cqp, key, labelMapping, params, reduceVal, showTotal, subExprs, val, _i, _len, _ref;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1190,9 +1190,9 @@
           labelMapping = {};
           showTotal = false;
           console.log("DOING GRAPH CHECKING");
-          ref = _this.$result.find(".slick-cell > input:checked");
-          for (k = 0, len = ref.length; k < len; k++) {
-            chk = ref[k];
+          _ref = _this.$result.find(".slick-cell > input:checked");
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            chk = _ref[_i];
             cell = $(chk).parent();
             cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
             if (cqp === "undefined") {
@@ -1204,16 +1204,16 @@
           }
           activeCorpora = _.flatten([
             (function() {
-              var ref1, results;
-              ref1 = this.savedData.corpora;
-              results = [];
-              for (key in ref1) {
-                val = ref1[key];
+              var _ref1, _results;
+              _ref1 = this.savedData.corpora;
+              _results = [];
+              for (key in _ref1) {
+                val = _ref1[key];
                 if (val.sums.absolute) {
-                  results.push(key);
+                  _results.push(key);
                 }
               }
-              return results;
+              return _results;
             }).call(_this)
           ]);
           return _this.s.$apply(function() {
@@ -1230,7 +1230,7 @@
     }
 
     StatsResults.prototype.updateExportBlob = function() {
-      var blob, cl, corp, csv, csvUrl, csvstr, dataDelimiter, fmt, header, k, len, output, ref, row, selType, selVal, total, val, values, wd;
+      var blob, cl, corp, csv, csvUrl, csvstr, dataDelimiter, fmt, header, output, row, selType, selVal, total, val, values, wd, _i, _len, _ref;
       selVal = $("#kindOfData option:selected").val();
       selType = $("#kindOfFormat option:selected").val();
       dataDelimiter = ";";
@@ -1245,34 +1245,34 @@
       };
       total = ["Σ", fmt(this.savedData.total.sums[selVal])];
       total = total.concat((function() {
-        var k, len, ref, results;
-        ref = _.pluck(cl.corpora, "id");
-        results = [];
-        for (k = 0, len = ref.length; k < len; k++) {
-          corp = ref[k];
-          results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
+        var _i, _len, _ref, _results;
+        _ref = _.pluck(cl.corpora, "id");
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          corp = _ref[_i];
+          _results.push(fmt(this.savedData.corpora[corp.toUpperCase()].sums[selVal]));
         }
-        return results;
+        return _results;
       }).call(this));
       output = [total];
-      ref = this.savedWordArray;
-      for (k = 0, len = ref.length; k < len; k++) {
-        wd = ref[k];
+      _ref = this.savedWordArray;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        wd = _ref[_i];
         row = [wd, fmt(this.savedData.total[selVal][wd])];
         values = (function() {
-          var len1, o, ref1, results;
-          ref1 = _.pluck(cl.corpora, "id");
-          results = [];
-          for (o = 0, len1 = ref1.length; o < len1; o++) {
-            corp = ref1[o];
+          var _j, _len1, _ref1, _results;
+          _ref1 = _.pluck(cl.corpora, "id");
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            corp = _ref1[_j];
             val = this.savedData.corpora[corp.toUpperCase()][selVal][wd];
             if (val) {
-              results.push(val = fmt(val));
+              _results.push(val = fmt(val));
             } else {
-              results.push(val = "0");
+              _results.push(val = "0");
             }
           }
-          return results;
+          return _results;
         }).call(this);
         output.push(row.concat(values));
       }
@@ -1310,13 +1310,13 @@
       return this.proxy.makeRequest(cqp, ((function(_this) {
         return function() {
           var args;
-          args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           return _this.onProgress.apply(_this, args);
         };
       })(this)), withinArg).done((function(_this) {
-        return function(arg) {
+        return function(_arg) {
           var columns, data, dataset, wordArray;
-          data = arg[0], wordArray = arg[1], columns = arg[2], dataset = arg[3];
+          data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
           c.log("dataset.length", dataset.length);
           safeApply(_this.s, function() {
             return _this.hidePreloader();
@@ -1467,7 +1467,7 @@
     };
 
     StatsResults.prototype.resizeGrid = function() {
-      var ref, ref1, width;
+      var width, _ref, _ref1;
       width = 0;
       $('.slick-header-column').each(function() {
         return width += $(this).outerWidth(true);
@@ -1476,10 +1476,10 @@
         width = $(window).width() - 40;
       }
       $("#myGrid:visible").width(width);
-      if ((ref = this.grid) != null) {
-        ref.resizeCanvas();
+      if ((_ref = this.grid) != null) {
+        _ref.resizeCanvas();
       }
-      return (ref1 = this.grid) != null ? ref1.invalidate() : void 0;
+      return (_ref1 = this.grid) != null ? _ref1.invalidate() : void 0;
     };
 
     StatsResults.prototype.newDataInGraph = function(dataName) {
@@ -1639,11 +1639,11 @@
 
   })(BaseResults);
 
-  view.GraphResults = (function(superClass) {
-    extend(GraphResults, superClass);
+  view.GraphResults = (function(_super) {
+    __extends(GraphResults, _super);
 
     function GraphResults(tabSelector, resultSelector, scope) {
-      var from, ref, to;
+      var from, to, _ref;
       GraphResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.validZoomLevels = ["year", "month", "day", "hour", "minute", "second"];
       this.granularities = {
@@ -1656,13 +1656,13 @@
       };
       this.zoom = "year";
       this.proxy = new model.GraphProxy();
-      ref = settings.corpusListing.getMomentInterval(), from = ref[0], to = ref[1];
+      _ref = settings.corpusListing.getMomentInterval(), from = _ref[0], to = _ref[1];
       c.log("from, to", from, to);
       this.checkZoomLevel(from, to, true);
       c.log("adding chart listener", this.$result);
       $(".chart", this.$result).on("click", (function(_this) {
         return function(event) {
-          var cqp, datefrom, dateto, k, m, n_tokens, opts, results, target, timecqp, timefrom, timeto, val;
+          var cqp, datefrom, dateto, m, n_tokens, opts, target, timecqp, timefrom, timeto, val, _i, _results;
           target = $(".chart", _this.$result);
           val = $(".detail .x_label > span", target).data("val");
           cqp = $(".detail .item.active > span", target).data("cqp");
@@ -1683,9 +1683,9 @@
             }
             n_tokens = _this.s.data.cqp.split("]").length - 2;
             timecqp = ([timecqp].concat(_.map((function() {
-              results = [];
-              for (var k = 0; 0 <= n_tokens ? k < n_tokens : k > n_tokens; 0 <= n_tokens ? k++ : k--){ results.push(k); }
-              return results;
+              _results = [];
+              for (var _i = 0; 0 <= n_tokens ? _i < n_tokens : _i > n_tokens; 0 <= n_tokens ? _i++ : _i--){ _results.push(_i); }
+              return _results;
             }).apply(this), function() {
               return "[]";
             }))).join(" ");
@@ -1734,9 +1734,9 @@
     };
 
     GraphResults.prototype.checkZoomLevel = function(from, to, forceSearch) {
-      var idealNumHits, newZoom, oldZoom, ref;
+      var idealNumHits, newZoom, oldZoom, _ref;
       if (from == null) {
-        ref = this.graph.renderer.domain().x, from = ref[0], to = ref[1];
+        _ref = this.graph.renderer.domain().x, from = _ref[0], to = _ref[1];
         from = moment.unix(from);
         from.start;
         to = moment.unix(to);
@@ -1773,7 +1773,7 @@
     };
 
     GraphResults.prototype.fillMissingDate = function(data) {
-      var dateArray, i, k, lastYVal, max, maybeCurrent, min, momentMapping, n_diff, newMoment, newMoments, ref;
+      var dateArray, i, lastYVal, max, maybeCurrent, min, momentMapping, n_diff, newMoment, newMoments, _i;
       dateArray = _.pluck(data, "x");
       min = _.min(dateArray, function(mom) {
         return mom.toDate();
@@ -1793,7 +1793,7 @@
         };
       })(this)));
       newMoments = [];
-      for (i = k = 0, ref = n_diff; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+      for (i = _i = 0; 0 <= n_diff ? _i <= n_diff : _i >= n_diff; i = 0 <= n_diff ? ++_i : --_i) {
         newMoment = moment(min).add(i, this.zoom);
         maybeCurrent = momentMapping[newMoment.unix()];
         if (typeof maybeCurrent !== 'undefined') {
@@ -1809,22 +1809,22 @@
     };
 
     GraphResults.prototype.getSeriesData = function(data, showSelectedCorporasStartDate, zoom) {
-      var firstVal, k, lastVal, len, mom, output, prettyDate, ref, tuple, x, y;
+      var firstVal, lastVal, mom, output, prettyDate, tuple, x, y, _i, _len, _ref;
       delete data[""];
-      ref = settings.corpusListing.getMomentInterval(), firstVal = ref[0], lastVal = ref[1];
+      _ref = settings.corpusListing.getMomentInterval(), firstVal = _ref[0], lastVal = _ref[1];
       output = (function() {
-        var k, len, ref1, ref2, results;
-        ref1 = _.pairs(data);
-        results = [];
-        for (k = 0, len = ref1.length; k < len; k++) {
-          ref2 = ref1[k], x = ref2[0], y = ref2[1];
+        var _i, _len, _ref1, _ref2, _results;
+        _ref1 = _.pairs(data);
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          _ref2 = _ref1[_i], x = _ref2[0], y = _ref2[1];
           mom = this.parseDate(this.zoom, x);
-          results.push({
+          _results.push({
             x: mom,
             y: y
           });
         }
-        return results;
+        return _results;
       }).call(this);
       prettyDate = function(item) {
         return moment(item.x).format("YYYYMMDD:HHmmss");
@@ -1833,8 +1833,8 @@
       output = output.sort(function(a, b) {
         return a.x.unix() - b.x.unix();
       });
-      for (k = 0, len = output.length; k < len; k++) {
-        tuple = output[k];
+      for (_i = 0, _len = output.length; _i < _len; _i++) {
+        tuple = output[_i];
         tuple.x = tuple.x.unix();
         tuple.zoom = zoom;
       }
@@ -1902,28 +1902,28 @@
     };
 
     GraphResults.prototype.drawIntervals = function(graph) {
-      var emptyIntervals, from, k, len, list, max, min, ref, results, to, unitSpan, unitWidth;
+      var emptyIntervals, from, list, max, min, to, unitSpan, unitWidth, _i, _len, _ref, _results;
       emptyIntervals = graph.series[0].emptyIntervals;
       this.s.hasEmptyIntervals = emptyIntervals.length;
-      ref = graph.renderer.domain().x, from = ref[0], to = ref[1];
+      _ref = graph.renderer.domain().x, from = _ref[0], to = _ref[1];
       unitSpan = moment.unix(to).diff(moment.unix(from), this.zoom);
       unitWidth = graph.width / unitSpan;
       $(".empty_area", this.$result).remove();
-      results = [];
-      for (k = 0, len = emptyIntervals.length; k < len; k++) {
-        list = emptyIntervals[k];
+      _results = [];
+      for (_i = 0, _len = emptyIntervals.length; _i < _len; _i++) {
+        list = emptyIntervals[_i];
         max = _.max(list, "x");
         min = _.min(list, "x");
         from = graph.x(min.x);
         to = graph.x(max.x);
-        results.push($("<div>", {
+        _results.push($("<div>", {
           "class": "empty_area"
         }).css({
           left: from - unitWidth / 2,
           width: (to - from) + unitWidth
         }).appendTo(graph.element));
       }
-      return results;
+      return _results;
     };
 
     GraphResults.prototype.setBarMode = function() {
@@ -1940,35 +1940,35 @@
     GraphResults.prototype.setLineMode = function() {};
 
     GraphResults.prototype.setTableMode = function(series) {
-      var h, nRows, ref, setExportUrl;
+      var h, nRows, setExportUrl, _ref;
       $(".chart,.legend", this.$result).hide();
       $(".time_table", this.$result.parent()).show();
       nRows = series.length || 2;
       h = (nRows * 2) + 4;
       h = Math.min(h, 40);
-      $(".time_table:visible", this.$result).height(h + ".1em");
-      if ((ref = this.time_grid) != null) {
-        ref.resizeCanvas();
+      $(".time_table:visible", this.$result).height("" + h + ".1em");
+      if ((_ref = this.time_grid) != null) {
+        _ref.resizeCanvas();
       }
       $(".exportTimeStatsSection", this.$result).show();
       setExportUrl = function() {
-        var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, k, len, len1, len2, o, output, p, ref1, ref2, row, selType, selVal;
+        var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, output, row, selType, selVal, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2;
         selVal = $(".timeKindOfData option:selected", this.$result).val();
         selType = $(".timeKindOfFormat option:selected", this.$result).val();
         dataDelimiter = selType === "TSV" ? "%09" : ";";
         header = [util.getLocaleString("stats_hit")];
-        ref1 = series[0].data;
-        for (k = 0, len = ref1.length; k < len; k++) {
-          cell = ref1[k];
+        _ref1 = series[0].data;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          cell = _ref1[_i];
           header.push(moment(cell.x * 1000).format("YYYY"));
         }
         output = [header];
-        for (o = 0, len1 = series.length; o < len1; o++) {
-          row = series[o];
+        for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+          row = series[_j];
           cells = [row.name === "&Sigma;" ? "Σ" : row.name];
-          ref2 = row.data;
-          for (p = 0, len2 = ref2.length; p < len2; p++) {
-            cell = ref2[p];
+          _ref2 = row.data;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            cell = _ref2[_k];
             if (selVal === "relative") {
               cells.push(cell.y);
             } else {
@@ -1996,20 +1996,20 @@
     };
 
     GraphResults.prototype.renderTable = function(series) {
-      var HTMLFormatter, i, item, k, key, len, len1, len2, new_time_row, o, p, ref, ref1, row, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp;
+      var HTMLFormatter, i, item, key, new_time_row, row, time_grid, time_table_columns, time_table_columns_intermediate, time_table_data, timestamp, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
       HTMLFormatter = function(row, cell, value, columnDef, dataContext) {
         return value;
       };
       time_table_data = [];
       time_table_columns_intermediate = {};
-      for (k = 0, len = series.length; k < len; k++) {
-        row = series[k];
+      for (_i = 0, _len = series.length; _i < _len; _i++) {
+        row = series[_i];
         new_time_row = {
           "label": row.name
         };
-        ref = row.data;
-        for (o = 0, len1 = ref.length; o < len1; o++) {
-          item = ref[o];
+        _ref = row.data;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          item = _ref[_j];
           timestamp = moment(item.x * 1000).format("YYYY");
           time_table_columns_intermediate[timestamp] = {
             "name": timestamp,
@@ -2041,9 +2041,9 @@
           "formatter": HTMLFormatter
         }
       ];
-      ref1 = _.keys(time_table_columns_intermediate).sort();
-      for (p = 0, len2 = ref1.length; p < len2; p++) {
-        key = ref1[p];
+      _ref1 = _.keys(time_table_columns_intermediate).sort();
+      for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+        key = _ref1[_k];
         time_table_columns.push(time_table_columns_intermediate[key]);
       }
       time_grid = new Slick.Grid($(".time_table", this.$result), time_table_data, time_table_columns, {
@@ -2055,15 +2055,15 @@
     };
 
     GraphResults.prototype.makeSeries = function(data, cqp, labelMapping, zoom) {
-      var color, emptyIntervals, from, item, k, len, len1, o, palette, ref, ref1, s, series, showSelectedCorporasStartDate, to;
-      ref = CQP.getTimeInterval(CQP.parse(cqp)) || [null, null], from = ref[0], to = ref[1];
+      var color, emptyIntervals, from, item, palette, s, series, showSelectedCorporasStartDate, to, _i, _j, _len, _len1, _ref, _ref1;
+      _ref = CQP.getTimeInterval(CQP.parse(cqp)) || [null, null], from = _ref[0], to = _ref[1];
       showSelectedCorporasStartDate = !from;
       if (_.isArray(data.combined)) {
         palette = new Rickshaw.Color.Palette("colorwheel");
         series = [];
-        ref1 = data.combined;
-        for (k = 0, len = ref1.length; k < len; k++) {
-          item = ref1[k];
+        _ref1 = data.combined;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          item = _ref1[_i];
           color = palette.color();
           series.push({
             data: this.getSeriesData(item.relative, showSelectedCorporasStartDate, zoom),
@@ -2087,8 +2087,8 @@
       Rickshaw.Series.zeroFill(series);
       emptyIntervals = this.getEmptyIntervals(series[0].data);
       series[0].emptyIntervals = emptyIntervals;
-      for (o = 0, len1 = series.length; o < len1; o++) {
-        s = series[o];
+      for (_j = 0, _len1 = series.length; _j < _len1; _j++) {
+        s = series[_j];
         s.data = _.filter(s.data, function(item) {
           return item.y !== null;
         });
@@ -2100,11 +2100,11 @@
     };
 
     GraphResults.prototype.spliceData = function(newSeries) {
-      var first, from, i, j, k, last, len, len1, n_elems, o, ref, ref1, ref2, ref3, results, seriesIndex, seriesObj, startSplice, x;
-      ref = this.graph.series;
-      results = [];
-      for (seriesIndex = k = 0, len = ref.length; k < len; seriesIndex = ++k) {
-        seriesObj = ref[seriesIndex];
+      var first, from, i, j, last, n_elems, seriesIndex, seriesObj, startSplice, x, _i, _j, _len, _len1, _ref, _ref1, _ref2, _ref3, _results;
+      _ref = this.graph.series;
+      _results = [];
+      for (seriesIndex = _i = 0, _len = _ref.length; _i < _len; seriesIndex = ++_i) {
+        seriesObj = _ref[seriesIndex];
         first = newSeries[seriesIndex].data[0].x;
         c.log("first", first, moment.unix(first).format());
         last = (_.last(newSeries[seriesIndex].data)).x;
@@ -2112,9 +2112,9 @@
         startSplice = false;
         from = 0;
         n_elems = seriesObj.data.length + newSeries[seriesIndex].data.length;
-        ref1 = seriesObj.data;
-        for (i = o = 0, len1 = ref1.length; o < len1; i = ++o) {
-          x = ref1[i].x;
+        _ref1 = seriesObj.data;
+        for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
+          x = _ref1[i].x;
           if ((x >= first) && (!startSplice)) {
             startSplice = true;
             from = i;
@@ -2132,15 +2132,15 @@
         }
         c.log("n_elems after", n_elems);
         c.log("seriesObj.data", seriesObj.data.length);
-        (ref2 = seriesObj.data).splice.apply(ref2, [from, n_elems].concat(slice.call(newSeries[seriesIndex].data)));
-        (ref3 = seriesObj.abs_data).splice.apply(ref3, [from, n_elems].concat(slice.call(newSeries[seriesIndex].abs_data)));
-        results.push(c.log("seriesObj.data", seriesObj.data.length));
+        (_ref2 = seriesObj.data).splice.apply(_ref2, [from, n_elems].concat(__slice.call(newSeries[seriesIndex].data)));
+        (_ref3 = seriesObj.abs_data).splice.apply(_ref3, [from, n_elems].concat(__slice.call(newSeries[seriesIndex].abs_data)));
+        _results.push(c.log("seriesObj.data", seriesObj.data.length));
       }
-      return results;
+      return _results;
     };
 
     GraphResults.prototype.previewPanStop = function() {
-      var count, from, grouped, points, results, to, visibleData, zoomLevel;
+      var count, from, grouped, points, to, visibleData, zoomLevel, _results;
       c.log("pan stop");
       visibleData = this.graph.stackData();
       c.log("visibleData", visibleData);
@@ -2149,7 +2149,7 @@
       });
       c.log("count", count);
       grouped = _.groupBy(visibleData[0], "zoom");
-      results = [];
+      _results = [];
       for (zoomLevel in grouped) {
         points = grouped[zoomLevel];
         if (zoomLevel !== this.zoom) {
@@ -2157,12 +2157,12 @@
           from.startOf(this.zoom);
           to = moment.unix((_.last(points)).x);
           to.endOf(this.zoom);
-          results.push(this.setZoom(this.zoom, from, to));
+          _results.push(this.setZoom(this.zoom, from, to));
         } else {
-          results.push(void 0);
+          _results.push(void 0);
         }
       }
-      return results;
+      return _results;
     };
 
     GraphResults.prototype.makeRequest = function(cqp, subcqps, corpora, labelMapping, showTotal, from, to) {
@@ -2233,11 +2233,11 @@
             }
           }, 200));
           $(".form_switch", _this.$result).click(function(event) {
-            var cls, k, len, ref, val;
+            var cls, val, _i, _len, _ref;
             val = _this.s.mode;
-            ref = _this.$result.attr("class").split(" ");
-            for (k = 0, len = ref.length; k < len; k++) {
-              cls = ref[k];
+            _ref = _this.$result.attr("class").split(" ");
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              cls = _ref[_i];
               if (cls.match(/^form-/)) {
                 _this.$result.removeClass(cls);
               }
