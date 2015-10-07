@@ -5,3 +5,4 @@ node_modules
 /.tmp
 /app/components/angular-bootstrap/template
 *.map
+.vscode

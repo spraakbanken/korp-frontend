@@ -133,7 +133,7 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              // proxySnippet, 
+              // proxySnippet,
               mountFolder(connect, '.tmp'),
               mountFolder(connect, yeomanConfig.app)
             ];
@@ -184,7 +184,7 @@ module.exports = function (grunt) {
           ]
         }
 
-        
+
       }
     },
     autoprefixer: {
@@ -412,7 +412,6 @@ module.exports = function (grunt) {
             'components/rickshaw/rickshaw.min.js',
             'lib/jquery.tooltip.pack.js',
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
-            'components/geokorp/dist/templates/sb_map.html',
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json'
           ]
@@ -482,7 +481,7 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run([
-        // 'build', 
+        // 'build',
         'connect:dist:keepalive'
       ]);
     }
@@ -520,7 +519,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     // 'connect:test',
     // 'karma'
-    
+
     'connect:e2e',
     "protractor_webdriver",
     'protractor'
