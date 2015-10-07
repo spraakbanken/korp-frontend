@@ -94,6 +94,7 @@
     "map_name" : "Name",
     "map_abs_occurrences" : "Absolute occurrences",
     "map_rel_occurrences" : "Relative occurrences",
+    "map_num_results" : "Locations",
 
 
     "word_is" : "word is",

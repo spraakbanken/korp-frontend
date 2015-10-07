@@ -88,6 +88,7 @@
     "map_name" : "Namn",
     "map_abs_occurrences" : "Absoluta förekomster",
     "map_rel_occurrences" : "Relativa förekomster",
+    "map_num_results" : "Platser",
 
     "search_aborted" : "Sökningen avbröts",
 

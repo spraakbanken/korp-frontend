@@ -405,6 +405,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                           <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
                        </div>"""
     s.markers = {}
+    s.numResults = 0
     s.showTime = true
 
     s.$on "map_progress", (event, progress) ->
@@ -466,9 +467,11 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                             markers[key]["message"] = html
 
                     s.markers = markers
+                    s.numResults = _.keys(markers).length
                     s.loading = false
             else
                 s.markers = {}
+                s.numResults = 0
                 s.loading = false
 
 
