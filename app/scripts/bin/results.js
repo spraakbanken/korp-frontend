@@ -1152,12 +1152,7 @@
       });
       $(window).resize(_.debounce((function(_this) {
         return function() {
-          var h, nRows, _ref;
-          _this.resizeGrid();
-          nRows = ((_ref = _this.gridData) != null ? _ref.length : void 0) || 2;
-          h = (nRows * 2) + 4;
-          h = Math.min(h, 40);
-          return $("#myGrid:visible").height($("#myGrid .slick-viewport").height() + 40);
+          return _this.resizeGrid();
         };
       })(this), 100));
       $("#kindOfData,#kindOfFormat").change((function(_this) {
@@ -1467,19 +1462,25 @@
     };
 
     StatsResults.prototype.resizeGrid = function() {
-      var width, _ref, _ref1;
-      width = 0;
+      var height, width, _ref, _ref1, _ref2;
+      height = $(window).height() - 600;
+      $("#myGrid:visible").height(height);
+      if (((_ref = this.gridData) != null ? _ref.length : void 0) * 20 >= height) {
+        width = 20;
+      } else {
+        width = 0;
+      }
       $('.slick-header-column').each(function() {
         return width += $(this).outerWidth(true);
       });
-      if (width > $(window).width()) {
+      if (width > ($(window).width() - 40)) {
         width = $(window).width() - 40;
       }
       $("#myGrid:visible").width(width);
-      if ((_ref = this.grid) != null) {
-        _ref.resizeCanvas();
+      if ((_ref1 = this.grid) != null) {
+        _ref1.resizeCanvas();
       }
-      return (_ref1 = this.grid) != null ? _ref1.invalidate() : void 0;
+      return (_ref2 = this.grid) != null ? _ref2.invalidate() : void 0;
     };
 
     StatsResults.prototype.newDataInGraph = function(dataName) {

@@ -948,13 +948,6 @@ class view.StatsResults extends BaseResults
 
         $(window).resize _.debounce( () =>
             @resizeGrid()
-
-            nRows = @gridData?.length or 2
-            h = (nRows * 2) + 4
-            h = Math.min h, 40
-
-            $("#myGrid:visible").height $("#myGrid .slick-viewport").height() + 40
-
         , 100)
 
         $("#kindOfData,#kindOfFormat").change () =>
@@ -1207,12 +1200,21 @@ class view.StatsResults extends BaseResults
             @s.graphEnabled = false
 
     resizeGrid : () ->
-        width = 0;
+        height = $(window).height() - 600
+        $("#myGrid:visible").height height
+        
+        # adding 20 px to width if vertical scrollbar appears
+        if @gridData?.length * 20 >= height
+            width = 20
+        else
+            width = 0
+
         $('.slick-header-column').each () ->
             width += $(this).outerWidth true
-        if width > $(window).width()
+        if width > ($(window).width() - 40)
             width = $(window).width() - 40
-        $("#myGrid:visible").width(width)
+        $("#myGrid:visible").width width
+        
         @grid?.resizeCanvas()
         @grid?.invalidate()
 
