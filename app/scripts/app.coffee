@@ -124,13 +124,13 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
 
     s.select(currentMode)
     s.getUrl = (modeId) ->
-        if modeId is "default" then return location.pathname
-        return location.pathname + "?mode=#{modeId}#lang=#{s.$root.lang}"
-    s.onSelect = (modeId) ->
-        $location.search("corpus", null)
-        
+        langParam = "#lang=#{s.$root.lang}"
+        if modeId is "default" 
+            return location.pathname + langParam
+        return location.pathname + "?mode=#{modeId}" + langParam
+
     s.onModeMenuClick = (modeId) ->
-        window.location = location.pathname + "?mode=" + modeId
+        window.location = s.getUrl modeId
 
     s.show_modal = false
 

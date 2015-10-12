@@ -119,16 +119,15 @@
     };
     s.select(currentMode);
     s.getUrl = function(modeId) {
+      var langParam;
+      langParam = "#lang=" + s.$root.lang;
       if (modeId === "default") {
-        return location.pathname;
+        return location.pathname + langParam;
       }
-      return location.pathname + ("?mode=" + modeId + "#lang=" + s.$root.lang);
-    };
-    s.onSelect = function(modeId) {
-      return $location.search("corpus", null);
+      return location.pathname + ("?mode=" + modeId) + langParam;
     };
     s.onModeMenuClick = function(modeId) {
-      return window.location = location.pathname + "?mode=" + modeId;
+      return window.location = s.getUrl(modeId);
     };
     s.show_modal = false;
     modal = null;
