@@ -1,8 +1,8 @@
 (function() {
   var BaseSearch,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   window.view = {};
 
@@ -27,7 +27,7 @@
   };
 
   view.updateSearchHistory = function(value, href) {
-    var clear, filterParam, opts, placeholder, searchLocations, searches, _ref;
+    var clear, filterParam, opts, placeholder, ref, searchLocations, searches;
     filterParam = function(url) {
       return $.grep($.param.fragment(url).split("&"), function(item) {
         return item.split("=")[0] === "search" || item.split("=")[0] === "corpus";
@@ -38,7 +38,7 @@
     searchLocations = $.map(searches, function(item) {
       return filterParam(item.location);
     });
-    if ((value != null) && (_ref = filterParam(href), __indexOf.call(searchLocations, _ref) < 0)) {
+    if ((value != null) && (ref = filterParam(href), indexOf.call(searchLocations, ref) < 0)) {
       searches.splice(0, 0, {
         label: value,
         location: href
@@ -178,8 +178,8 @@
 
   })();
 
-  view.SimpleSearch = (function(_super) {
-    __extends(SimpleSearch, _super);
+  view.SimpleSearch = (function(superClass) {
+    extend(SimpleSearch, superClass);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
       var textinput;

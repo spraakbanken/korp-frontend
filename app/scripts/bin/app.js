@@ -52,7 +52,7 @@
       return isInit = false;
     });
     return searches.infoDef.then(function() {
-      var all_default_corpora, corp_array, corpus, pre_item, processed_corp_array, _i, _len, _ref, _ref1;
+      var all_default_corpora, corp_array, corpus, j, len, pre_item, processed_corp_array, ref, ref1;
       corpus = $location.search().corpus;
       if (corpus) {
         corp_array = corpus.split(",");
@@ -64,13 +64,13 @@
         corpusChooserInstance.corpusChooser("selectItems", processed_corp_array);
         return $("#select_corpus").val(corpus);
       } else {
-        if (!((_ref = settings.preselected_corpora) != null ? _ref.length : void 0)) {
+        if (!((ref = settings.preselected_corpora) != null ? ref.length : void 0)) {
           all_default_corpora = _.pluck(settings.corpusListing.corpora, "id");
         } else {
           all_default_corpora = [];
-          _ref1 = settings.preselected_corpora;
-          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            pre_item = _ref1[_i];
+          ref1 = settings.preselected_corpora;
+          for (j = 0, len = ref1.length; j < len; j++) {
+            pre_item = ref1[j];
             pre_item = pre_item.replace(/^__/g, '');
             all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item));
           }
@@ -103,19 +103,19 @@
       s.menu.splice(i, 1);
     }
     s.select = function(modeId) {
-      var mode, _i, _len, _ref, _results;
-      _ref = s.modes;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        mode = _ref[_i];
+      var j, len, mode, ref, results;
+      ref = s.modes;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        mode = ref[j];
         mode.selected = false;
         if (mode.mode === modeId) {
-          _results.push(mode.selected = true);
+          results.push(mode.selected = true);
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
     s.select(currentMode);
     s.getUrl = function(modeId) {
