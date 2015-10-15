@@ -108,14 +108,21 @@
   korpApp.factory('backend', function($http, $q, utils) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
-        var conf, def, params, xhr;
+        var conf, corpora1, corpora2, corpusListing, def, filterFun, params, xhr;
+        reduce = reduce.replace(/^_\./, "");
+        filterFun = function(item) {
+          return settings.corpusListing.corpusHasAttr(item, reduce);
+        };
+        corpora1 = _.filter(cmpObj1.corpora, filterFun);
+        corpora2 = _.filter(cmpObj2.corpora, filterFun);
+        corpusListing = settings.corpusListing.subsetFactory(cmpObj1.corpora);
         def = $q.defer();
         params = {
           command: "loglike",
-          groupby: reduce.replace(/^_\./, ""),
-          set1_corpus: cmpObj1.corpora.join(",").toUpperCase(),
+          groupby: reduce,
+          set1_corpus: corpora1.join(",").toUpperCase(),
           set1_cqp: cmpObj1.cqp,
-          set2_corpus: cmpObj2.corpora.join(",").toUpperCase(),
+          set2_corpus: corpora2.join(",").toUpperCase(),
           set2_cqp: cmpObj2.cqp,
           max: 50
         };

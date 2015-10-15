@@ -84,14 +84,22 @@ korpApp.factory "debounce", ($timeout) ->
 
 korpApp.factory 'backend', ($http, $q, utils) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
+        reduce = reduce.replace(/^_\./, "")
+        
+        # remove all corpora which do not include the "reduce"-attribute
+        filterFun = (item) -> settings.corpusListing.corpusHasAttr item, reduce
+        corpora1 = _.filter cmpObj1.corpora, filterFun
+        corpora2 = _.filter cmpObj2.corpora, filterFun
+         
+        corpusListing = settings.corpusListing.subsetFactory cmpObj1.corpora
+        
         def = $q.defer()
-        # c.log "reduce", reduce, reduce.replace(/^_\./, "")
         params =
             command : "loglike"
-            groupby : reduce.replace(/^_\./, "")
-            set1_corpus : cmpObj1.corpora.join(",").toUpperCase()
+            groupby : reduce
+            set1_corpus : corpora1.join(",").toUpperCase()
             set1_cqp : cmpObj1.cqp
-            set2_corpus : cmpObj2.corpora.join(",").toUpperCase()
+            set2_corpus : corpora2.join(",").toUpperCase()
             set2_cqp : cmpObj2.cqp
             max : 50
 

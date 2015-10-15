@@ -416,12 +416,10 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
 
     s.sendCompare = () ->
         $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, s.reduce)
-        # tab = $("#results-wrapper .nav.nav-tabs").scope().tabs[-1..][0]
 
     s.deleteCompares = () ->
         compareSearches.flush()
 
-    # s.sendCompare()
 
 
 
