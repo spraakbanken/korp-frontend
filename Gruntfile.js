@@ -131,13 +131,11 @@ module.exports = function (grunt) {
       },
       e2e : {
         options: {
-          middleware: function (connect) {
-            return [
-              // proxySnippet,
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, yeomanConfig.app)
-            ];
-          }
+          base: [
+            '.tmp',
+            'test',
+            '<%= yeoman.app %>'
+          ]
         }
       },
       dist: {
@@ -514,7 +512,9 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     // 'configureProxies',
+    "jade",
     'concurrent:test',
+    'copy:dev',
     'concurrent:server',
     'autoprefixer',
     // 'connect:test',

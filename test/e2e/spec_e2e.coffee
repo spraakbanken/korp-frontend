@@ -30,7 +30,7 @@ describe "page", () ->
         expect(EC.textToBePresentInElement(elm, "9"))
 
     it "should go back to 0 when searching anew", () ->
-        input = element(By.id('simple_text'))
+        input = element(By.model('textInField'))
         input.sendKeys("gå")
         input.sendKeys(protractor.Key.ENTER)
         expect(browser.executeScript("return search().page")).toBe 0    
@@ -60,5 +60,3 @@ describe "json button", () ->
         elm = element(By.css("#json-link"))
         waitFor(elm)
         expect(elm.getAttribute("href")).toContain "?command=count"
-
-        

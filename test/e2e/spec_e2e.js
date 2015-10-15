@@ -40,7 +40,7 @@
     });
     it("should go back to 0 when searching anew", function() {
       var input;
-      input = element(By.id('simple_text'));
+      input = element(By.model('textInField'));
       input.sendKeys("gå");
       input.sendKeys(protractor.Key.ENTER);
       return expect(browser.executeScript("return search().page")).toBe(0);
