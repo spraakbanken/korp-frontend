@@ -1742,7 +1742,7 @@ class view.GraphResults extends BaseResults
         @time_grid?.resizeCanvas()
         $(".exportTimeStatsSection", @$result).show()
         
-        setExportUrl = () ->
+        setExportUrl = () =>
             selVal = $(".timeKindOfData option:selected", @$result).val()
             selType = $(".timeKindOfFormat option:selected", @$result).val()
             dataDelimiter = if selType is "TSV" then "%09" else ";"
@@ -1750,7 +1750,8 @@ class view.GraphResults extends BaseResults
             header = [ util.getLocaleString("stats_hit") ]
 
             for cell in series[0].data
-                header.push moment(cell.x * 1000).format("YYYY")
+                stampformat = @zoomLevelToFormat(cell.zoom)
+                header.push moment(cell.x * 1000).format(stampformat)
 
             output = [header]
 
@@ -1765,7 +1766,7 @@ class view.GraphResults extends BaseResults
                 output.push cells
             
             csv = new CSV(output, {
-                header : header
+                #header : header
                 delimiter : dataDelimiter
                 # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
             })
@@ -1779,7 +1780,18 @@ class view.GraphResults extends BaseResults
 
         setExportUrl()
 
+    zoomLevelToFormat : (zoom) ->
+        stampFormats =
+            "second" : "YYYY-MM-DD hh:mm:ss"
+            "minute" : "YYYY-MM-DD hh:mm"
+            "hour" : "YYYY-MM-DD hh"
+            "day" : "YYYY-MM-DD"
+            "month" : "YYYY-MM"
+            "year" : "YYYY"
+        return stampFormats[zoom]
+
     renderTable : (series) ->
+        console.log "**************** series", series
         HTMLFormatter = (row, cell, value, columnDef, dataContext) -> value
 
 
@@ -1788,7 +1800,8 @@ class view.GraphResults extends BaseResults
         for row in series
             new_time_row = {"label" : row.name}
             for item in row.data
-                timestamp = moment(item.x * 1000).format("YYYY") # this needs to be fixed for other resolutions
+                stampformat = @zoomLevelToFormat(item.zoom)
+                timestamp = moment(item.x * 1000).format(stampformat) # this needs to be fixed for other resolutions
                 time_table_columns_intermediate[timestamp] =
                     "name" : timestamp
                     "field" : timestamp
@@ -2039,8 +2052,8 @@ class view.GraphResults extends BaseResults
                 if val == "bar"
                     @setBarMode()
                 else if val == "table"
-                    @setTableMode(series)
                     @renderTable(series)
+                    @setTableMode(series)
 
                 unless val == "table"
                     graph.setRenderer val
