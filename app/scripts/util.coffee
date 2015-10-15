@@ -554,14 +554,6 @@ util.splitLemgram = (lemgram) ->
 util.splitSaldo = (saldo) ->
     saldo.match util.saldoRegExp
 
-util.setJsonLink = (settings) ->
-    unless settings?
-        c.log "failed to update json link"
-        return
-    $("#json-link").attr "href", settings.url
-    $("#json-link").show()
-    return
-
 util.searchHash = (type, value) ->
     search
         search: type + "|" + value

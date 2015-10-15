@@ -757,7 +757,7 @@
       self = this;
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.s = scope;
-      this.tabindex = 2;
+      this.tabindex = 3;
       this.resultDeferred = $.Deferred();
       this.proxy = new model.LemgramProxy();
       window.lemgramProxy = this.proxy;
@@ -1116,7 +1116,7 @@
       var self;
       StatsResults.__super__.constructor.call(this, resultSelector, tabSelector, scope);
       c.log("StatsResults constr", self = this);
-      this.tabindex = 1;
+      this.tabindex = 2;
       this.gridData = null;
       this.doSort = true;
       this.sortColumn = null;

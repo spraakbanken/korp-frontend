@@ -34,7 +34,6 @@ class BaseResults
     renderResult: (data) ->
         #       this.resetView();
         @$result.find(".error_msg").remove()
-        # util.setJsonLink @proxy.prevRequest if @$result.is(":visible")
         if data.ERROR
             safeApply @s, () =>
                 @firstResultDef.reject()
@@ -58,7 +57,6 @@ class BaseResults
             .addClass("inline_block")
             .prependTo(@$result)
             .wrapAll "<div class='error_msg'>"
-        # util.setJsonLink @proxy.prevRequest
 
     showPreloader : () ->
         @s.$parent.loading = true
@@ -589,7 +587,6 @@ class view.ExampleResults extends view.KWICResults
             @renderCompleteResult data
             safeApply @s, () =>
                 @hidePreloader()
-            # util.setJsonLink @proxy.prevRequest
             # @$result.find(".num-result").html util.prettyNumbers(data.hits)
 
         # def.success = (data) ->
@@ -616,7 +613,7 @@ class view.LemgramResults extends BaseResults
         self = this
         super tabSelector, resultSelector, scope
         @s = scope
-        @tabindex = 2
+        @tabindex = 3
         #   TODO: figure out what I use this for.
         @resultDeferred = $.Deferred()
         @proxy = new model.LemgramProxy()
@@ -911,7 +908,7 @@ class view.StatsResults extends BaseResults
         super resultSelector, tabSelector, scope
         c.log "StatsResults constr",
         self = this
-        @tabindex = 1
+        @tabindex = 2
         @gridData = null
         
         @doSort = true

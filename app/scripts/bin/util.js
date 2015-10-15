@@ -721,15 +721,6 @@
     return saldo.match(util.saldoRegExp);
   };
 
-  util.setJsonLink = function(settings) {
-    if (settings == null) {
-      c.log("failed to update json link");
-      return;
-    }
-    $("#json-link").attr("href", settings.url);
-    $("#json-link").show();
-  };
-
   util.searchHash = function(type, value) {
     search({
       search: type + "|" + value,
