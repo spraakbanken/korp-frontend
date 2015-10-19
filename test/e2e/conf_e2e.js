@@ -1,6 +1,6 @@
 
 
-var HtmlReporter = require('protractor-html-screenshot-reporter');
+// var HtmlReporter = require('protractor-html-screenshot-reporter');
 
 exports.config = {
   // The address of a running selenium server.
@@ -20,7 +20,8 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 10000
-  }
+  },
+  directConnect: true
 
  //  onPrepare: function() {
  //    jasmine.getEnv().addReporter(new HtmlReporter({

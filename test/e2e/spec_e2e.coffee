@@ -56,7 +56,10 @@ describe "json button", () ->
     it "should switch url when changing tab", () ->
         wd = cycleSearch()
         browser.get "http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
+        # make sure lemgram dropdown doesn't cover stats tab
+        element(By.model('textInField')).sendKeys(protractor.Key.ESCAPE)
         element(By.css(".result_tabs > ul > li:nth-child(2)")).click()
+        
         elm = element(By.css("#json-link"))
         waitFor(elm)
         expect(elm.getAttribute("href")).toContain "?command=count"
