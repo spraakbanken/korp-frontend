@@ -405,6 +405,8 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                           <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
                        </div>"""
     s.markers = {}
+    s.mapSettings = 
+        baseLayer : "Open Street Map"
     s.numResults = 0
     s.showTime = true
 

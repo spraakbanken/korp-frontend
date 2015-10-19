@@ -292,7 +292,7 @@
                     <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                     <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading"><span>{{'map_num_results' | loc:lang}}: </span><span>{{numResults}}</span></div>
                     <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading &amp;&amp; numResults != 0">
-                      <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-hover-template="hoverTemplate"></sb-map>
+                      <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-hover-template="hoverTemplate" sb-base-layer="mapSettings.baseLayer"></sb-map>
                     </div>
                   </div>
                 </tab>

@@ -18,5 +18,6 @@ div(ng-if="showMap && tabVisible && hasResult && !loading")
 	span() {{numResults}}
 
 div(ng-if="showMap && tabVisible && hasResult && !loading && numResults != 0")
-	sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate")
+	sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate", sb-base-layer="mapSettings.baseLayer")
+
 
