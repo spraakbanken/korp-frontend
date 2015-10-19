@@ -595,6 +595,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             </script>
             <div style="float:left"><input
                 class="new_simple_text"
+                autofocus
                 type="text" class="form-control"
                 ng-model="textInField"
                 typeahead="row for row in getRows($viewValue)"
