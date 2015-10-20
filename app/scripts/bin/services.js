@@ -156,8 +156,10 @@
           var e, eNodes, output;
           if (angular.isArray(data.div)) {
             eNodes = data.div[0].e;
-          } else {
+          } else if (data.div) {
             eNodes = data.div.e;
+          } else {
+            eNodes = [];
           }
           if (!angular.isArray(eNodes)) {
             eNodes = [eNodes];

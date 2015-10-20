@@ -25,27 +25,22 @@ korpApp.factory "utils", ($location) ->
 
 
                 val = (obj.val_in or _.identity)(val)
-                # c.log "obj.val_in", obj.val_in
 
-                # if obj.key == "page" then c.log "page watch", val
                 if "scope_name" of obj
                     scope[obj.scope_name] = val
                 else if "scope_func" of obj
                     scope[obj.scope_func](val)
                 else
                     scope[obj.key] = val
-                # obj.post_change?(val)
+
         onWatch()
-        # scope.loc = $location
         scope.$watch ( () -> $location.search() ), ->
             onWatch()
 
         for obj in config
             watch = obj.expr or obj.scope_name or obj.key
-            # c.log "watch", watch
             scope.$watch watch, do (obj, watch) ->
                 (val) ->
-                    # c.log "before val", scope.$eval watch
                     val = (obj.val_out or _.identity)(val)
                     if val == obj.default then val = null
                     $location.search obj.key, val or null
@@ -130,18 +125,18 @@ korpApp.factory 'backend', ($http, $q, utils) ->
             method: "GET"
             params :
                 cql : "lemgram==/pivot/saldo " + lemgram
-                # sense : lemma
                 resource : "swefn"
                 "mini-entries" : true
                 info : "lu"
                 format : "json"
         ).success (data) ->
-            # c.log "relatedWordSearch", data.div[0].e.info.info.feat
 
             if angular.isArray data.div
                 eNodes = data.div[0].e
-            else
+            else if data.div
                 eNodes = data.div.e
+            else 
+                eNodes = []
             unless angular.isArray eNodes then eNodes = [eNodes]
             output = for e in eNodes
                 {
