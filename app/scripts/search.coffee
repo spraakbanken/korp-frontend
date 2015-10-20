@@ -281,7 +281,8 @@ class view.SimpleSearch extends BaseSearch
             util.searchHash "word", wordInput
             #console.log "modily", @s.model
         else
-            @selectLemgram @s.model
+            if @s.model
+                @selectLemgram @s.model 
 
     selectLemgram: (lemgram) ->
         return if $("#search-tab").data("cover")?

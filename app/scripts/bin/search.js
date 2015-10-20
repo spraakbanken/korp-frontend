@@ -223,7 +223,9 @@
       if (wordInput !== "") {
         return util.searchHash("word", wordInput);
       } else {
-        return this.selectLemgram(this.s.model);
+        if (this.s.model) {
+          return this.selectLemgram(this.s.model);
+        }
       }
     };
 
