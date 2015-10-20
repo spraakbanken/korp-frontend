@@ -50,6 +50,9 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
     isInit = true
+                
+        
+    s.searchDisabled = false
     s.$on "corpuschooserchange", (event, corpora) ->
         c.log "corpuschooserchange", corpora
         settings.corpusListing.select corpora
@@ -67,6 +70,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
 
         isInit = false
 
+        s.searchDisabled = settings.corpusListing.selected.length == 0
 
     searches.infoDef.then () ->
         corpus = $location.search().corpus

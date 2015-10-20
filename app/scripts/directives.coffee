@@ -239,8 +239,8 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
     template : '''
     <div class="search_submit">
         <div class="btn-group">
-            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()">{{'search' | loc:lang}}</button>
-            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)">
+            <button class="btn btn-sm btn-default" id="sendBtn" ng-click="onSendClick()" ng-disabled="searchDisabled">{{'search' | loc:lang}}</button>
+            <button class="btn btn-sm btn-default opener" ng-click="togglePopover($event)" ng-disabled="searchDisabled">
                 <span class="caret"></span>
             </button>
         </div>

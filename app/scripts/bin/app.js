@@ -34,6 +34,7 @@
     $rootScope.compareTabs = [];
     $rootScope.graphTabs = [];
     isInit = true;
+    s.searchDisabled = false;
     s.$on("corpuschooserchange", function(event, corpora) {
       var enableSearch, nonprotected;
       c.log("corpuschooserchange", corpora);
@@ -49,7 +50,8 @@
       }
       enableSearch = !!corpora.length;
       view.enableSearch(enableSearch);
-      return isInit = false;
+      isInit = false;
+      return s.searchDisabled = settings.corpusListing.selected.length === 0;
     });
     return searches.infoDef.then(function() {
       var all_default_corpora, corp_array, corpus, pre_item, processed_corp_array, _i, _len, _ref, _ref1;

@@ -927,7 +927,6 @@ settings.common_struct_types =
                     s.minDate = moment(from.toString(), "YYYY").toDate()
                     s.maxDate = moment(to.toString(), "YYYY").toDate()
 
-                
             s.$on "corpuschooserchange", () ->
                 updateIntervals()
 
