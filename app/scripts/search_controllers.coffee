@@ -30,10 +30,6 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.showStats = () ->
         return settings.statistics != false
 
-korpApp.config ($tooltipProvider) ->
-    $tooltipProvider.options
-        appendToBody: true
-
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
     s = $scope

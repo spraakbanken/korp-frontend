@@ -163,8 +163,16 @@ class view.SimpleSearch extends BaseSearch
 
         @lemgramProxy = new model.LemgramProxy()
         
+        @s.$watch "textInField", () =>
+            c.log "textInField", @s.textInField
 
-        textinput = $("#simple_text")
+
+        [type, val] = search().search.split("|")
+
+        # if type == "word"
+            # TODO: bring back word to input field
+            # input_field = val
+
         
         if settings.autocomplete
             null

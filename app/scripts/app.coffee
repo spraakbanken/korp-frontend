@@ -19,6 +19,10 @@ window.korpApp = angular.module 'korpApp', [
 korpApp.config (tmhDynamicLocaleProvider) ->
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
 
+korpApp.config ($tooltipProvider) ->
+    $tooltipProvider.options
+        appendToBody: true
+
 korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout) ->
     s = $rootScope
     s._settings = settings

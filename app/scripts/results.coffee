@@ -568,6 +568,7 @@ class view.ExampleResults extends view.KWICResults
         c.log "ExampleResults.makeRequest()", @current_page
         items_per_page = parseInt(@optionWidget.find(".num_hits").val())
         opts = @s.$parent.queryParams
+        c.log "opts", opts
         @resetView()
         opts.ajaxParams.incremental = false
 
@@ -854,7 +855,6 @@ class view.LemgramResults extends BaseResults
             end : 24
             command : "relations_sentences"
             source : data.source.join(",")
-            corpus : null
             head: data.head
             dep: data.dep
             rel: data.rel

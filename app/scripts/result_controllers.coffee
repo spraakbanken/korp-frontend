@@ -219,8 +219,13 @@ korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
         super(@scope, utils, $location)
         s = @scope
 
+        s.hitspictureClick = (pageNumber) ->
+            s.page = Number(pageNumber)
+            s.pageChange(null, pageNumber)
+
+
         s.pageChange = ($event, page) ->
-            $event.stopPropagation()
+            $event?.stopPropagation()
             s.instance.current_page = page
             s.instance.makeRequest()
 

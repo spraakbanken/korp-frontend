@@ -904,12 +904,12 @@ table {
 }
 
 .reading_btn {
-  .show {
+  .show_reading {
     line-height: 1.1;
   }
   margin-left: 1em;
   display: none;
-  vertical-align: top;
+  vertical-align: middle;
   margin-top: 3px;
   white-space : nowrap;
 }
@@ -918,13 +918,13 @@ table {
   display: inline;
 }
 
-.reading_mode .reading_btn.show,
-.reading_btn.hide,
+.reading_mode .reading_btn.show_reading,
+.reading_btn.hide_reading,
 .zero_results .reading_btn {
   display: none;
 }
 
-.reading_mode .reading_btn.hide {
+.reading_mode .reading_btn.hide_reading {
   display: inline;
 }
 

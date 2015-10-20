@@ -138,7 +138,7 @@ class model.KWICProxy extends BaseProxy
         @pendingRequests.pop i unless i is -1
 
     makeRequest: (options, page, progressCallback, kwicCallback) ->
-        c.log "kwicproxy.makeRequest", page, kwicResults.getPageInterval(Number(page))
+        c.log "kwicproxy.makeRequest", options, page, kwicResults.getPageInterval(Number(page))
         self = this
         @foundKwic = false
         super()
@@ -184,7 +184,9 @@ class model.KWICProxy extends BaseProxy
                 $.each corpus.struct_attributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
-        data.cqp = @expandCQP(data.cqp)
+        # c.log "data.cqp", data.cqp
+        if data.cqp
+            data.cqp = @expandCQP(data.cqp)
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show

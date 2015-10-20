@@ -110,13 +110,16 @@
                   </div>
                 </form>
                 <div id="similar_wrapper" ng-show="relatedObj" ng-class="{open : relatedLimit == 9999}">
-                  <button ng-click="showAllRelated()" class="btn btn-sm"><span class="btn_header">Relaterade ord (SWE-FN)</span><br><span ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault">
+                  <button ng-click="showAllRelated()" class="btn btn-sm btn-default"><span class="btn_header">Relaterade ord (SWE-FN)</span><br><span ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault">
                        
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><br><span ng-repeat="wd in relatedObj[0].words.slice(relatedDefault) | limitTo:relatedDefault">
                        
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><span ng-if="relatedObj[0].words.length &gt; relatedDefault || relatedObj.length &gt; 1">
                        
                       ...</span></button>
+                  
+                  
+                  
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -202,13 +205,13 @@
                         <table class="hits_picture_table">
                           <tbody>
                             <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" append-to-body="false" class="hits_picture_corp"></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc:lang}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show_reading link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide_reading link">{{'show_kwic' | loc:lang}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -304,13 +307,13 @@
                         <table class="hits_picture_table">
                           <tbody>
                             <tr>
-                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" class="hits_picture_corp"></td>
+                              <td ng-repeat="corpus in hitsPictureData" ng-style="{width : corpus.relative + &quot;%&quot;}" ng-class="{odd : $index % 2 != 0,                          even : $index % 2 == 0}" ng-click="hitspictureClick(corpus.page, corpus)" tooltip="{{corpus.rtitle}}: {{corpus.abs}}" tooltip-placement="{{$last? &quot;left&quot;:&quot;top&quot;}}" append-to-body="false" class="hits_picture_corp"></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide link">{{'show_kwic' | loc:lang}}</span>
+                    <kwic-pager></kwic-pager><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn show_reading link">{{'show_reading' | loc:lang}}</span><span ng-hide="loading" ng-click="toggleReading()" class="reading_btn hide_reading link">{{'show_kwic' | loc:lang}}</span>
                     <div ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}" class="table_scrollarea">
                       <table cellspacing="0" class="results_table kwic">
                         <tr ng-repeat="sentence in kwic" ng-class="{corpus_info : sentence.newCorpus,         not_corpus_info : !sentence.newCorpus,         linked_sentence : sentence.isLinked,         even : $even,         odd : $odd}" class="sentence">
@@ -336,6 +339,7 @@
                   <div constr="GraphResults" class="graph_tab">
                     <div class="graph_header">
                       <div class="controls">
+                        
                         <div class="btn-group form_switch">
                           <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-sm">{{'line' | loc:lang}}</label>
                           <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-sm">{{'bar' | loc:lang}}</label>
@@ -410,7 +414,7 @@
       <div class="modal-header">
         <h2>{{'log_in' | loc:lang}}</h2>
         <span ng-click="clickX()" class="close-x">×</span>
-        
+      
       </div>
       <div id="login_popup" class="modal-body">
         <form ng-submit="loginSubmit(login_usr, login_pass)">
@@ -455,9 +459,12 @@
       <td class="example_link"></td>
       </tr>
     </script>
-    <!--[if lte IE 8]>
-    <script language="javascript" src="lib/flot/excanvas.min.js"></script>
-    <![endif]-->
+    
+    
+    
+    
+    <!--if lte IE 8script(language='javascript', src='lib/flot/excanvas.min.js')
+    -->
     <script>
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
