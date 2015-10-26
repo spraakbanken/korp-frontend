@@ -1,8 +1,8 @@
 (function() {
   var BaseSearch,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   window.view = {};
 
@@ -27,7 +27,7 @@
   };
 
   view.updateSearchHistory = function(value, href) {
-    var clear, filterParam, opts, placeholder, searchLocations, searches, _ref;
+    var clear, filterParam, opts, placeholder, ref, searchLocations, searches;
     filterParam = function(url) {
       return $.grep($.param.fragment(url).split("&"), function(item) {
         return item.split("=")[0] === "search" || item.split("=")[0] === "corpus";
@@ -38,7 +38,7 @@
     searchLocations = $.map(searches, function(item) {
       return filterParam(item.location);
     });
-    if ((value != null) && (_ref = filterParam(href), __indexOf.call(searchLocations, _ref) < 0)) {
+    if ((value != null) && (ref = filterParam(href), indexOf.call(searchLocations, ref) < 0)) {
       searches.splice(0, 0, {
         label: value,
         location: href
@@ -178,33 +178,41 @@
 
   })();
 
-  view.SimpleSearch = (function(_super) {
-    __extends(SimpleSearch, _super);
+  view.SimpleSearch = (function(superClass) {
+    extend(SimpleSearch, superClass);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var textinput,
-        _this = this;
+      var ref, type, val;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
-      $("#simple_text").keyup(function(event) {
-        return _this.s.$apply(function() {
-          return _this.onSimpleChange(event);
-        });
-      });
+      $("#simple_text").keyup((function(_this) {
+        return function(event) {
+          return _this.s.$apply(function() {
+            return _this.onSimpleChange(event);
+          });
+        };
+      })(this));
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
-      textinput = $("#simple_text");
+      this.s.$watch("textInField", (function(_this) {
+        return function() {
+          return c.log("textInField", _this.s.textInField);
+        };
+      })(this));
+      ref = search().search.split("|"), type = ref[0], val = ref[1];
       if (settings.autocomplete) {
         null;
       }
-      $("#prefixChk, #suffixChk, #caseChk").click(function() {
-        if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
-          return _this.enableSubmit();
-        } else {
-          return _this.onSimpleChange();
-        }
-      });
+      $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
+        return function() {
+          if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
+            return _this.enableSubmit();
+          } else {
+            return _this.onSimpleChange();
+          }
+        };
+      })(this));
     }
 
     SimpleSearch.prototype.isSearchPrefix = function() {
