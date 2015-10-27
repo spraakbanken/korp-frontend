@@ -226,6 +226,7 @@ korpApp.directive "constr", ($window, searches) ->
     link : (scope, elem, attr) ->
         instance = new $window.view[attr.constr](elem, elem, scope)
         if attr.constrName
+            c.log "attr.constrName", attr.constrName
             $window[attr.constrName] = instance
 
         scope.instance = instance

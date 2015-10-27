@@ -182,7 +182,6 @@
     extend(SimpleSearch, superClass);
 
     function SimpleSearch(mainDivId, _mainDiv, scope) {
-      var ref, type, val;
       SimpleSearch.__super__.constructor.call(this, mainDivId, scope);
       $("#similar_lemgrams").css("background-color", settings.primaryColor);
       $("#simple_text").keyup((function(_this) {
@@ -200,7 +199,6 @@
           return c.log("textInField", _this.s.textInField);
         };
       })(this));
-      ref = search().search.split("|"), type = ref[0], val = ref[1];
       if (settings.autocomplete) {
         null;
       }

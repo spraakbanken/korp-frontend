@@ -167,7 +167,7 @@ class view.SimpleSearch extends BaseSearch
             c.log "textInField", @s.textInField
 
 
-        [type, val] = search().search.split("|")
+        # [type, val] = search().search.split("|")
 
         # if type == "word"
             # TODO: bring back word to input field
