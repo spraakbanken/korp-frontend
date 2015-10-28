@@ -139,6 +139,10 @@ settings.modeConfig = [
     {
         localekey: "eddan",
         mode: "eddan"
+    },
+    {
+        localekey: "somali",
+        mode: "somali",
     }
 
 ];
