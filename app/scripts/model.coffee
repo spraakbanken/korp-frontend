@@ -166,7 +166,7 @@ class model.KWICProxy extends BaseProxy
         data =
             command: "query"
             # corpus: settings.corpusListing.stringifySelected()
-            defaultcontext: _.keys(settings.defaultContext)[0]
+            defaultcontext: settings.defaultOverviewContext
             defaultwithin: _.keys(settings.defaultWithin)[0]
             show: []
             show_struct: []

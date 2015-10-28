@@ -59,7 +59,6 @@ settings.corpora["one71"] = {
 	}
 };
 
-/* context and within skickas inte med!
 settings.corpora["cor92"] = {
 	id : "cor92",
 	lang : "spa",
@@ -92,6 +91,5 @@ settings.corpora["cor92"] = {
 		}
 	}
 };
-*/
 
 settings.corpusListing = new CorpusListing(settings.corpora);

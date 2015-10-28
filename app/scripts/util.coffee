@@ -123,34 +123,21 @@ class window.CorpusListing
     stringifyAll: ->
         _(@corpora).pluck("id").invoke("toUpperCase").join ","
 
-    getAttrIntersection: (attr) ->
+    getWithinKeys: () ->
         struct = _.map(@selected, (corpus) ->
-            _.keys corpus[attr]
-        )
-        _.intersection.apply null, struct
-
-    getAttrUnion: (attr) ->
-        struct = _.map(@selected, (corpus) ->
-            _.keys corpus[attr]
+            _.keys corpus.within
         )
         _.union struct...
 
-    getContextQueryString: (prefer) ->
+    getContextQueryString: (prefer, avoid) ->
         output = for corpus in @selected
             contexts = _.keys(corpus.context)
-
-            # if prefer in contexts and prefer not of settings.defaultContext
-            #     corpus.id.toUpperCase() + ":" + prefer
-
-            for context in contexts
-                if context and context not of settings.defaultContext
-                    corpus.id.toUpperCase() + ":" + context
-                else
-                    false
-
-        _(output).flatten().compact().join()
-
-
+            if prefer not in contexts
+                if contexts.length > 1 and avoid in contexts
+                    contexts.splice (contexts.indexOf avoid), 1
+                corpus.id.toUpperCase() + ":" + contexts[0]
+        return _(output).compact().join()
+        
 
     getWithinQueryString: ->
         output = for corpus in @selected
@@ -160,6 +147,7 @@ class window.CorpusListing
                     corpus.id.toUpperCase() + ":" + within
                 else
                     false
+                    
 
         _(output).flatten().compact().join()
 
@@ -346,9 +334,6 @@ class window.ParallelCorpusListing extends CorpusListing
         output.push pair
 
       output.join ","
-
-    getContextQueryString: ->
-        @getAttributeQuery("context")
 
     getWithinQueryString: ->
         @getAttributeQuery("within")

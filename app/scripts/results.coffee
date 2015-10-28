@@ -401,12 +401,22 @@ class view.KWICResults extends BaseResults
                 }
             return {sort : sort}
 
+        if @isReadingMode()
+            preferredContext = settings.defaultReadingContext
+            avoidContext = settings.defaultOverviewContext
+        else
+            preferredContext = settings.defaultOverviewContext
+            avoidContext = settings.defaultReadingContext
+            
+        context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+
         opts.ajaxParams = {
             command : "query"
             corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
             queryData : @proxy.queryData if @proxy.queryData
-            context : settings.corpusListing.getContextQueryString() if @isReadingMode() or currentMode == "parallel"
+            context : context
+            defaultcontext : preferredContext
             within : settings.corpusListing.getWithinQueryString() if search().within
             incremental: !isPaging and $.support.ajaxProgress
         }
