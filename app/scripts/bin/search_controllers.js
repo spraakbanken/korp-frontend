@@ -128,7 +128,7 @@
       }
       return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
     };
-    return utils.setupHash(s, [
+    utils.setupHash(s, [
       {
         key: "prefix"
       }, {
@@ -137,12 +137,14 @@
         key: "isCaseInsensitive"
       }
     ]);
+    return $scope.$on("btn_submit", function() {
+      return $location.search("within", null);
+    });
   });
 
   korpApp.controller("ExtendedSearch", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) {
     var s;
     s = $scope;
-    s.within = $location.search().within || "sentence";
     s.$on("popover_submit", function(event, name) {
       return compareSearches.saveSearch({
         label: name || $rootScope.extendedCQP,
@@ -157,11 +159,11 @@
       $location.search("page", null);
       return $timeout(function() {
         var within, _ref;
+        $location.search("search", "cqp");
         if (_ref = s.within, __indexOf.call(_.keys(settings.defaultWithin), _ref) < 0) {
           within = s.within;
         }
-        $location.search("within", within || null);
-        return $location.search("search", "cqp");
+        return $location.search("within", within);
       }, 0);
     });
     s.$on("extended_set", function($event, val) {
@@ -188,7 +190,7 @@
     s.withins = [];
     s.getWithins = function() {
       var output, union;
-      union = settings.corpusListing.getWithinKeys("within");
+      union = settings.corpusListing.getWithinKeys();
       output = _.map(union, function(item) {
         return {
           value: item
@@ -197,7 +199,9 @@
       return output;
     };
     return s.$on("corpuschooserchange", function() {
-      return s.withins = s.getWithins();
+      var _ref;
+      s.withins = s.getWithins();
+      return s.within = (_ref = s.withins[0]) != null ? _ref.value : void 0;
     });
   });
 
@@ -321,6 +325,7 @@
       c.log("advanced cqp", $scope.cqp);
       $location.search("search", null);
       $location.search("page", null);
+      $location.search("within", null);
       return $timeout(function() {
         return $location.search("search", "cqp|" + $scope.cqp);
       }, 0);

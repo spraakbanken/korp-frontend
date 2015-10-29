@@ -190,8 +190,9 @@
       return _(output).compact().join();
     };
 
-    CorpusListing.prototype.getWithinQueryString = function() {
-      var corpus, output, within, withins;
+    CorpusListing.prototype.getWithinParameters = function() {
+      var corpus, defaultWithin, output, within, withins;
+      defaultWithin = search().within || _.keys(settings.defaultWithin)[0];
       output = (function() {
         var _i, _len, _ref, _results;
         _ref = this.selected;
@@ -199,23 +200,19 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           corpus = _ref[_i];
           withins = _.keys(corpus.within);
-          _results.push((function() {
-            var _j, _len1, _results1;
-            _results1 = [];
-            for (_j = 0, _len1 = withins.length; _j < _len1; _j++) {
-              within = withins[_j];
-              if (within && !(within in settings.defaultWithin)) {
-                _results1.push(corpus.id.toUpperCase() + ":" + within);
-              } else {
-                _results1.push(false);
-              }
-            }
-            return _results1;
-          })());
+          if (__indexOf.call(withins, defaultWithin) < 0) {
+            _results.push(corpus.id.toUpperCase() + ":" + withins[0]);
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
       }).call(this);
-      return _(output).flatten().compact().join();
+      within = _(output).compact().join();
+      return {
+        defaultwithin: defaultWithin,
+        within: within
+      };
     };
 
     CorpusListing.prototype.getMorphology = function() {
@@ -444,33 +441,6 @@
         }
       }
       return output;
-    };
-
-    ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
-      var output, struct;
-      struct = this.getLinksFromLangs(this.activeLangs);
-      output = [];
-      $.each(struct, function(i, corps) {
-        var mainId, mainIsPivot, other, pair;
-        mainId = corps[0].id.toUpperCase();
-        mainIsPivot = !!corps[0].pivot;
-        other = corps.slice(1);
-        pair = _.map(other, function(corp) {
-          var a;
-          if (mainIsPivot) {
-            a = _.keys(corp[attr])[0];
-          } else {
-            a = _.keys(corps[0][attr])[0];
-          }
-          return mainId + "|" + corp.id.toUpperCase() + ":" + a;
-        });
-        return output.push(pair);
-      });
-      return output.join(",");
-    };
-
-    ParallelCorpusListing.prototype.getWithinQueryString = function() {
-      return this.getAttributeQuery("within");
     };
 
     ParallelCorpusListing.prototype.stringifySelected = function(onlyMain) {

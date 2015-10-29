@@ -493,7 +493,6 @@
         queryData: this.proxy.queryData ? this.proxy.queryData : void 0,
         context: context,
         defaultcontext: preferredContext,
-        within: search().within ? settings.corpusListing.getWithinQueryString() : void 0,
         incremental: !isPaging && $.support.ajaxProgress
       };
       _.extend(opts.ajaxParams, getSortParams());
@@ -501,7 +500,7 @@
     };
 
     KWICResults.prototype.makeRequest = function(cqp, isPaging) {
-      var isReading, page, params, progressCallback, req,
+      var page, params, progressCallback, req,
         _this = this;
       c.log("kwicResults.makeRequest", cqp, isPaging);
       page = Number(search().page) || 0;
@@ -523,7 +522,6 @@
       } else {
         this.ignoreAbort = false;
       }
-      isReading = this.isReadingMode();
       params = this.buildQueryOptions(cqp, isPaging);
       progressCallback = !params.ajaxParams.incremental ? $.noop : $.proxy(this.onProgress, this);
       req = this.getProxy().makeRequest(params, page, progressCallback, function(data) {
@@ -1250,8 +1248,7 @@
     };
 
     StatsResults.prototype.makeRequest = function(cqp) {
-      var withinArg,
-        _this = this;
+      var _this = this;
       c.log("statsrequest makerequest", cqp);
       if (currentMode === "parallel") {
         cqp = cqp.replace(/\:LINKED_CORPUS.*/, "");
@@ -1263,14 +1260,11 @@
         this.resetView();
       }
       this.showPreloader();
-      if (search().within) {
-        withinArg = settings.corpusListing.getWithinQueryString();
-      }
       return this.proxy.makeRequest(cqp, (function() {
         var args;
         args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         return _this.onProgress.apply(_this, args);
-      }), withinArg).done(function(_arg) {
+      })).done(function(_arg) {
         var columns, data, dataset, wordArray;
         data = _arg[0], wordArray = _arg[1], columns = _arg[2], dataset = _arg[3];
         c.log("dataset.length", dataset.length);
@@ -1325,7 +1319,6 @@
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
       $("#myGrid").width(800);
       $("#myGrid").height(600);
-      console.log("grad data", data);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: false

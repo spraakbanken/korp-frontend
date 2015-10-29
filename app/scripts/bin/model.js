@@ -167,10 +167,10 @@
           }
         }
       }, options);
+      _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters());
       data = {
         command: "query",
         defaultcontext: settings.defaultOverviewContext,
-        defaultwithin: _.keys(settings.defaultWithin)[0],
         show: [],
         show_struct: [],
         cache: true
@@ -454,13 +454,13 @@
         groupby: reduceval,
         cqp: this.expandCQP(cqp),
         corpus: settings.corpusListing.stringifySelected(true),
-        incremental: $.support.ajaxProgress,
-        defaultwithin: "sentence"
+        incremental: $.support.ajaxProgress
       };
+      _.extend(parameters, settings.corpusListing.getWithinParameters());
       return parameters;
     };
 
-    StatsProxy.prototype.makeRequest = function(cqp, callback, within) {
+    StatsProxy.prototype.makeRequest = function(cqp, callback) {
       var data, def, reduceval, self, _ref,
         _this = this;
       self = this;
@@ -478,7 +478,6 @@
           ignore_case: "word"
         });
       }
-      data.within = within;
       this.prevNonExpandedCQP = cqp;
       this.prevParams = data;
       def = $.Deferred();
