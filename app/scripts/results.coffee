@@ -407,7 +407,7 @@ class view.KWICResults extends BaseResults
         else
             preferredContext = settings.defaultOverviewContext
             avoidContext = settings.defaultReadingContext
-            
+
         context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
 
         opts.ajaxParams = {
@@ -417,12 +417,11 @@ class view.KWICResults extends BaseResults
             queryData : @proxy.queryData if @proxy.queryData
             context : context
             defaultcontext : preferredContext
-            within : settings.corpusListing.getWithinQueryString() if search().within
             incremental: !isPaging and $.support.ajaxProgress
         }
+
         _.extend opts.ajaxParams, getSortParams()
         return opts
-
 
     makeRequest: (cqp, isPaging) ->
         c.log "kwicResults.makeRequest", cqp, isPaging
@@ -446,11 +445,9 @@ class view.KWICResults extends BaseResults
         else
             @ignoreAbort = false
 
-        isReading = @isReadingMode()
-
         params = @buildQueryOptions(cqp, isPaging)
         progressCallback = if ((not params.ajaxParams.incremental)) then $.noop else $.proxy(@onProgress, this)
-        # c.log "params.incremental", params.ajaxParams.incremental, isReading
+
         req = @getProxy().makeRequest params,
                             page,
                             progressCallback,
@@ -1078,8 +1075,7 @@ class view.StatsResults extends BaseResults
             @resetView()
 
         @showPreloader()
-        withinArg = settings.corpusListing.getWithinQueryString() if search().within
-        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...)), withinArg
+        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
         ).done( ([data, wordArray, columns, dataset]) =>
             # @s.aborted = false
             c.log "dataset.length", dataset.length
@@ -1131,8 +1127,6 @@ class view.StatsResults extends BaseResults
         $("#myGrid").width(800)
         $("#myGrid").height(600)
 
-        #return false
-        console.log "grad data", data
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: false

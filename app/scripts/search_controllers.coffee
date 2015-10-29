@@ -30,7 +30,6 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.showStats = () ->
         return settings.statistics != false
 
-
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
     s = $scope
 
@@ -156,12 +155,12 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
             key : "isCaseInsensitive"
     ]
 
-
+    $scope.$on "btn_submit", () ->
+        $location.search "within", null
 
 
 korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) ->
     s = $scope
-    s.within = $location.search().within or "sentence"
     s.$on "popover_submit", (event, name) ->
         compareSearches.saveSearch {
             label : name or $rootScope.extendedCQP
@@ -176,9 +175,9 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         $location.search("search", null)
         $location.search("page", null)
         $timeout( () ->
-            within = s.within unless s.within in _.keys settings.defaultWithin
-            $location.search("within", within or null)
             $location.search("search", "cqp")
+            within = s.within if s.within not in _.keys settings.defaultWithin
+            $location.search "within", within
         , 0)
 
 
@@ -204,14 +203,13 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     s.withins = []
 
     s.getWithins = () ->
-        union = settings.corpusListing.getWithinKeys("within")
+        union = settings.corpusListing.getWithinKeys()
         output = _.map union, (item) -> {value : item}
         return output
 
     s.$on "corpuschooserchange", () ->
         s.withins = s.getWithins()
-
-
+        s.within = s.withins[0]?.value
 
 
 korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
@@ -355,10 +353,11 @@ korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout
 
     $scope.$on "btn_submit", () ->
         c.log "advanced cqp", $scope.cqp
-        $location.search("search", null)
-        $location.search("page", null)
+        $location.search "search", null
+        $location.search "page", null
+        $location.search "within", null
         $timeout( () ->
-            $location.search("search", "cqp|" + $scope.cqp)
+            $location.search "search", "cqp|" + $scope.cqp
         , 0)
 
 

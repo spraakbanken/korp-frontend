@@ -131,26 +131,23 @@ class window.CorpusListing
 
     getContextQueryString: (prefer, avoid) ->
         output = for corpus in @selected
-            contexts = _.keys(corpus.context)
+            contexts = _.keys corpus.context
             if prefer not in contexts
                 if contexts.length > 1 and avoid in contexts
                     contexts.splice (contexts.indexOf avoid), 1
                 corpus.id.toUpperCase() + ":" + contexts[0]
         return _(output).compact().join()
-        
 
-    getWithinQueryString: ->
+    getWithinParameters: () ->
+        defaultWithin = search().within or _.keys(settings.defaultWithin)[0]
+
         output = for corpus in @selected
-            withins = _.keys(corpus.within)
-            for within in withins
-                if within and within not of settings.defaultWithin
-                    corpus.id.toUpperCase() + ":" + within
-                else
-                    false
-                    
-
-        _(output).flatten().compact().join()
-
+            withins = _.keys corpus.within
+            if defaultWithin not in withins
+                corpus.id.toUpperCase() + ":" + withins[0]
+        within = _(output).compact().join()
+        return { defaultwithin : defaultWithin, within : within }
+    
     getMorphology: ->
         _(@selected).map((corpus) ->
             morf = corpus.morf or "saldom"
@@ -309,35 +306,6 @@ class window.ParallelCorpusListing extends CorpusListing
                 output = output.concat _.map linked, (item) -> [item, cps]
 
         output
-
-
-    getAttributeQuery : (attr) ->
-      
-      #gets the within and context queries
-
-      struct = @getLinksFromLangs(@activeLangs)
-      output = []
-      $.each struct, (i, corps) ->
-
-        mainId = corps[0].id.toUpperCase()
-        mainIsPivot = !!corps[0].pivot
-
-        other = corps.slice(1)
-
-        pair = _.map(other, (corp) ->
-            if mainIsPivot
-                a = _.keys(corp[attr])[0]
-            else
-                a = _.keys(corps[0][attr])[0]
-            mainId + "|" + corp.id.toUpperCase() + ":" + a
-        )
-        output.push pair
-
-      output.join ","
-
-    getWithinQueryString: ->
-        @getAttributeQuery("within")
-
 
     stringifySelected : (onlyMain) ->
 

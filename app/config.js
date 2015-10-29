@@ -4321,7 +4321,6 @@ settings.reduce_stringify = function(type) {
 
             output = $.format("<span class='link' data-query='%s' data-corpora='%s' rel='localize[%s]'>%s</span> ",
                     [query, JSON.stringify(corpora), prefix + value, util.getLocaleString(prefix + value)]);
-            c.log("stringify default", prefix, value)
             if(value == "&Sigma;") return appendDiagram(output, corpora, value);
 
             return appendDiagram(output, corpora, value);
