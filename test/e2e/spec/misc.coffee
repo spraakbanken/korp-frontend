@@ -17,7 +17,7 @@ describe "page", () ->
     
     beforeEach () ->
         browser.ignoreSynchronization = true
-        browser.get "http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{cycleSearch()}&page=7"
+        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{cycleSearch()}&page=7"
         elm = element(By.css(".results-kwic .pager-wrapper:nth-child(2) .active a"))
         waitFor(elm)
 
@@ -48,18 +48,19 @@ describe "json button", () ->
 
     it "should display the correct url", () ->
         wd = cycleSearch()
-        browser.get "http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
-        elm = element(By.css("#json-link"))
-        waitFor(elm)
+        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
+        elm = element By.css("#json-link")
+        waitFor elm
         expect(elm.getAttribute("href")).toContain "?command=query"
     
     it "should switch url when changing tab", () ->
         wd = cycleSearch()
-        browser.get "http://localhost:9000/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
-        # make sure lemgram dropdown doesn't cover stats tab
-        element(By.model('textInField')).sendKeys(protractor.Key.ESCAPE)
-        element(By.css(".result_tabs > ul > li:nth-child(2)")).click()
+        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
+
+        elem = element By.css(".result_tabs > ul > li:nth-child(2)")
+        waitFor elem
+        elem.click()
         
-        elm = element(By.css("#json-link"))
-        waitFor(elm)
+        elm = element By.css("#json-link")
+        waitFor elm
         expect(elm.getAttribute("href")).toContain "?command=count"

@@ -1,23 +1,24 @@
-div(ng-if="!showMap")
-	| {{'map_activate' | loc:lang}}
-	div
-		button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
-			| {{'map_activate_btn' | loc:lang}}
-
-div(ng-if="showMap && !hasResult")
-	| {{'map_warn' | loc:lang}}
-	div
-		button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
-			| {{'map_warn_btn' | loc:lang}}
-
-warning(ng-if="aborted && !loading")
-	| {{'search_aborted' | loc:lang}}
-
-div(ng-if="showMap && tabVisible && hasResult && !loading")
-	span() {{'map_num_results' | loc:lang}}: 
-	span() {{numResults}}
-
-div(ng-if="showMap && tabVisible && hasResult && !loading && numResults != 0")
-	sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate", sb-base-layer="mapSettings.baseLayer")
+#mapTab
+	div(ng-if="!showMap")
+		| {{'map_activate' | loc:lang}}
+		div
+			button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
+				| {{'map_activate_btn' | loc:lang}}
+	
+	div(ng-if="showMap && !hasResult")
+		| {{'map_warn' | loc:lang}}
+		div
+			button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
+				| {{'map_warn_btn' | loc:lang}}
+	
+	warning(ng-if="aborted && !loading")
+		| {{'search_aborted' | loc:lang}}
+	
+	#mapHits(ng-if="showMap && tabVisible && hasResult && !loading")
+		span() {{'map_num_results' | loc:lang}}: 
+		span() {{numResults}}
+	
+	div(ng-if="showMap && tabVisible && hasResult && !loading && numResults != 0")
+		sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate", sb-base-layer="mapSettings.baseLayer")
 
 

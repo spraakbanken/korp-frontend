@@ -70,7 +70,6 @@ module.exports = function (grunt) {
     },
     protractor: {
       options: {
-        configFile: "protractor.conf", // Default config file
         keepAlive: false, // If false, the grunt process stops when the test fails.
         noColor: false, // If true, protractor will not use colors in its output.
         chromeOnly : true,
@@ -85,15 +84,6 @@ module.exports = function (grunt) {
             // rootElement: 'div'
           } // Target-specific arguments
         }
-      }
-    },
-
-    protractor_webdriver: {
-      test : {
-        options: {
-            path: 'node_modules/protractor/bin/',
-            command: './webdriver-manager start',
-          },
       }
     },
 
@@ -131,6 +121,7 @@ module.exports = function (grunt) {
       },
       e2e : {
         options: {
+          port: 9001,
           base: [
             '.tmp',
             'test',
@@ -181,8 +172,13 @@ module.exports = function (grunt) {
           "app/styles/bootstrap.css"
           ]
         }
-
-
+      },
+      e2e: {
+        files: {
+          src: [
+            'test/e2e/bin'
+          ]
+        }
       }
     },
     autoprefixer: {
@@ -232,9 +228,9 @@ module.exports = function (grunt) {
         },
         {
           expand: true,
-          cwd: 'test/e2e',
+          cwd: 'test/e2e/spec',
           src: '*.coffee',
-          dest: 'test/e2e',
+          dest: 'test/e2e/bin',
           ext: '.js'
         }]
       }
@@ -436,11 +432,11 @@ module.exports = function (grunt) {
         'compass:server'
       ],
       test: [
-        'newer:coffee',
+        'newer:coffee:test',
         'newer:compass'
       ],
       dist: [
-        'coffee',
+        'coffee:dist',
         'compass:dist',
         'imagemin',
         'svgmin'
@@ -522,8 +518,8 @@ module.exports = function (grunt) {
     // 'karma'
 
     'connect:e2e',
-    "protractor_webdriver",
-    'protractor'
+    'protractor',
+    'clean:e2e'
   ]);
 
   grunt.registerTask('build', [
