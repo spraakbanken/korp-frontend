@@ -1,9 +1,9 @@
 (function() {
   "use strict";
   var BaseProxy,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   window.model = {};
 
@@ -77,28 +77,29 @@
     };
 
     BaseProxy.prototype.calcProgress = function(e) {
-      var newText, stats, struct, _ref,
-        _this = this;
+      var newText, ref, stats, struct;
       newText = e.target.responseText.slice(this.prev.length);
       struct = {};
       try {
         struct = this.parseJSON(newText);
       } catch (_error) {}
-      $.each(struct, function(key, val) {
-        var currentCorpus, sum;
-        if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
-          currentCorpus = val.corpus || val;
-          sum = _(currentCorpus.split("|")).map(function(corpus) {
-            return Number(settings.corpora[corpus.toLowerCase()].info.Size);
-          }).reduce(function(a, b) {
-            return a + b;
-          }, 0);
-          _this.progress += sum;
-          return _this.total_results += parseInt(val.hits);
-        }
-      });
+      $.each(struct, (function(_this) {
+        return function(key, val) {
+          var currentCorpus, sum;
+          if (key !== "progress_corpora" && key.split("_")[0] === "progress") {
+            currentCorpus = val.corpus || val;
+            sum = _(currentCorpus.split("|")).map(function(corpus) {
+              return Number(settings.corpora[corpus.toLowerCase()].info.Size);
+            }).reduce(function(a, b) {
+              return a + b;
+            }, 0);
+            _this.progress += sum;
+            return _this.total_results += parseInt(val.hits);
+          }
+        };
+      })(this));
       stats = (this.progress / this.total) * 100;
-      if ((this.total == null) && ((_ref = struct.progress_corpora) != null ? _ref.length : void 0)) {
+      if ((this.total == null) && ((ref = struct.progress_corpora) != null ? ref.length : void 0)) {
         this.total = $.reduce($.map(struct["progress_corpora"], function(corpus) {
           if (!corpus.length) {
             return;
@@ -124,8 +125,8 @@
 
   })();
 
-  model.KWICProxy = (function(_super) {
-    __extends(KWICProxy, _super);
+  model.KWICProxy = (function(superClass) {
+    extend(KWICProxy, superClass);
 
     function KWICProxy() {
       KWICProxy.__super__.constructor.call(this);
@@ -144,7 +145,7 @@
     };
 
     KWICProxy.prototype.makeRequest = function(options, page, progressCallback, kwicCallback) {
-      var corpus, data, def, key, o, self, val, _i, _len, _ref, _ref1, _ref2;
+      var corpus, data, def, j, key, len, o, ref, ref1, ref2, self, val;
       c.log("kwicproxy.makeRequest", options, page, kwicResults.getPageInterval(Number(page)));
       self = this;
       this.foundKwic = false;
@@ -176,17 +177,17 @@
         cache: true
       };
       $.extend(data, kwicResults.getPageInterval(page), o.ajaxParams);
-      _ref = settings.corpusListing.selected;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        corpus = _ref[_i];
-        _ref1 = corpus.within;
-        for (key in _ref1) {
-          val = _ref1[key];
+      ref = settings.corpusListing.selected;
+      for (j = 0, len = ref.length; j < len; j++) {
+        corpus = ref[j];
+        ref1 = corpus.within;
+        for (key in ref1) {
+          val = ref1[key];
           data.show.push(_.last(key.split(" ")));
         }
-        _ref2 = corpus.attributes;
-        for (key in _ref2) {
-          val = _ref2[key];
+        ref2 = corpus.attributes;
+        for (key in ref2) {
+          val = ref2[key];
           data.show.push(key);
         }
         if (corpus.struct_attributes != null) {
@@ -234,8 +235,8 @@
 
   })(BaseProxy);
 
-  model.LemgramProxy = (function(_super) {
-    __extends(LemgramProxy, _super);
+  model.LemgramProxy = (function(superClass) {
+    extend(LemgramProxy, superClass);
 
     function LemgramProxy() {
       LemgramProxy.__super__.constructor.call(this);
@@ -280,38 +281,39 @@
     };
 
     LemgramProxy.prototype.karpSearch = function(word, sw_forms) {
-      var deferred,
-        _this = this;
-      deferred = $.Deferred(function(dfd) {
-        return _this.pendingRequests.push($.ajax({
-          url: "http://spraakbanken.gu.se/ws/karp-sok",
-          data: {
-            wf: word,
-            resource: settings.corpusListing.getMorphology(),
-            format: "json",
-            "sms-forms": false,
-            "sw-forms": sw_forms
-          },
-          success: function(data, textStatus, xhr) {
-            var div, output;
-            if (Number(data.count) === 0) {
-              dfd.reject();
-              return;
+      var deferred;
+      deferred = $.Deferred((function(_this) {
+        return function(dfd) {
+          return _this.pendingRequests.push($.ajax({
+            url: "http://spraakbanken.gu.se/ws/karp-sok",
+            data: {
+              wf: word,
+              resource: settings.corpusListing.getMorphology(),
+              format: "json",
+              "sms-forms": false,
+              "sw-forms": sw_forms
+            },
+            success: function(data, textStatus, xhr) {
+              var div, output;
+              if (Number(data.count) === 0) {
+                dfd.reject();
+                return;
+              }
+              c.log("karp success", data, sw_forms);
+              div = ($.isPlainObject(data.div) ? [data.div] : data.div);
+              output = $.map(div.slice(0, Number(data.count)), function(item) {
+                item = util.convertLMFFeatsToObjects(item);
+                return item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram;
+              });
+              return dfd.resolve(output, textStatus, xhr);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              c.log("karp error", jqXHR, textStatus, errorThrown);
+              return dfd.reject();
             }
-            c.log("karp success", data, sw_forms);
-            div = ($.isPlainObject(data.div) ? [data.div] : data.div);
-            output = $.map(div.slice(0, Number(data.count)), function(item) {
-              item = util.convertLMFFeatsToObjects(item);
-              return item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram;
-            });
-            return dfd.resolve(output, textStatus, xhr);
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            c.log("karp error", jqXHR, textStatus, errorThrown);
-            return dfd.reject();
-          }
-        }));
-      }).promise();
+          }));
+        };
+      })(this)).promise();
       return deferred;
     };
 
@@ -377,8 +379,8 @@
 
   })(BaseProxy);
 
-  model.StatsProxy = (function(_super) {
-    __extends(StatsProxy, _super);
+  model.StatsProxy = (function(superClass) {
+    extend(StatsProxy, superClass);
 
     function StatsProxy() {
       StatsProxy.__super__.constructor.call(this);
@@ -389,8 +391,7 @@
     }
 
     StatsProxy.prototype.processData = function(def, data, reduceval) {
-      var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray,
-        _this = this;
+      var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
       minWidth = 100;
       columns = [
         {
@@ -409,16 +410,18 @@
           minWidth: minWidth
         }
       ];
-      $.each(_.keys(data.corpora).sort(), function(i, corpus) {
-        return columns.push({
-          id: corpus,
-          name: settings.corpora[corpus.toLowerCase()].title,
-          field: corpus + "_value",
-          sortable: true,
-          formatter: _this.valueFormatter,
-          minWidth: minWidth
-        });
-      });
+      $.each(_.keys(data.corpora).sort(), (function(_this) {
+        return function(i, corpus) {
+          return columns.push({
+            id: corpus,
+            name: settings.corpora[corpus.toLowerCase()].title,
+            field: corpus + "_value",
+            sortable: true,
+            formatter: _this.valueFormatter,
+            minWidth: minWidth
+          });
+        };
+      })(this));
       wordArray = _.keys(data.total.absolute);
       if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
         groups = _.groupBy(wordArray, function(item) {
@@ -461,8 +464,7 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, def, reduceval, self, _ref,
-        _this = this;
+      var data, def, reduceval, ref, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
@@ -470,7 +472,7 @@
         reduceval = "word";
       }
       data = this.makeParameters(reduceval, cqp);
-      if (((_ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? _ref.type : void 0) === "set") {
+      if (((ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? ref.type : void 0) === "set") {
         data.split = reduceval;
       }
       if ($("#reduceSelect select").val() === "word_insensitive") {
@@ -501,16 +503,18 @@
           }
           return typeof callback === "function" ? callback(progressObj) : void 0;
         },
-        success: function(data) {
-          var wordArray;
-          if (data.ERROR != null) {
-            c.log("gettings stats failed with error", data.ERROR);
-            def.reject(data);
-            return;
-          }
-          _this.processData(def, data, reduceval);
-          return wordArray = _.keys(data.total.absolute);
-        }
+        success: (function(_this) {
+          return function(data) {
+            var wordArray;
+            if (data.ERROR != null) {
+              c.log("gettings stats failed with error", data.ERROR);
+              def.reject(data);
+              return;
+            }
+            _this.processData(def, data, reduceval);
+            return wordArray = _.keys(data.total.absolute);
+          };
+        })(this)
       }));
       return def.promise();
     };
@@ -523,8 +527,8 @@
 
   })(BaseProxy);
 
-  model.NameProxy = (function(_super) {
-    __extends(NameProxy, _super);
+  model.NameProxy = (function(superClass) {
+    extend(NameProxy, superClass);
 
     function NameProxy() {
       NameProxy.__super__.constructor.call(this);
@@ -590,25 +594,24 @@
     };
 
     AuthenticationProxy.prototype.hasCred = function(corpusId) {
-      var _ref;
+      var ref;
       if (!this.loginObj.credentials) {
         return false;
       }
-      return _ref = corpusId.toUpperCase(), __indexOf.call(this.loginObj.credentials, _ref) >= 0;
+      return ref = corpusId.toUpperCase(), indexOf.call(this.loginObj.credentials, ref) >= 0;
     };
 
     return AuthenticationProxy;
 
   })();
 
-  model.TimeProxy = (function(_super) {
-    __extends(TimeProxy, _super);
+  model.TimeProxy = (function(superClass) {
+    extend(TimeProxy, superClass);
 
     function TimeProxy() {}
 
     TimeProxy.prototype.makeRequest = function() {
-      var dfd, xhr,
-        _this = this;
+      var dfd, xhr;
       dfd = $.Deferred();
       xhr = $.ajax({
         url: settings.cgi_script,
@@ -619,24 +622,26 @@
           corpus: settings.corpusListing.stringifyAll()
         }
       });
-      xhr.done(function(data, status, xhr) {
-        var combined, rest;
-        c.log("timespan done", data);
-        if (data.ERROR) {
-          c.error("timespan error", data.ERROR);
-          dfd.reject(data.ERROR);
-          return;
-        }
-        rest = data.combined[""];
-        delete data.combined[""];
-        _this.expandTimeStruct(data.combined);
-        combined = _this.compilePlotArray(data.combined);
-        if (_.keys(data).length < 2 || data.ERROR) {
-          dfd.reject();
-          return;
-        }
-        return dfd.resolve([data.corpora, combined, rest]);
-      });
+      xhr.done((function(_this) {
+        return function(data, status, xhr) {
+          var combined, rest;
+          c.log("timespan done", data);
+          if (data.ERROR) {
+            c.error("timespan error", data.ERROR);
+            dfd.reject(data.ERROR);
+            return;
+          }
+          rest = data.combined[""];
+          delete data.combined[""];
+          _this.expandTimeStruct(data.combined);
+          combined = _this.compilePlotArray(data.combined);
+          if (_.keys(data).length < 2 || data.ERROR) {
+            dfd.reject();
+            return;
+          }
+          return dfd.resolve([data.corpora, combined, rest]);
+        };
+      })(this));
       xhr.fail(function() {
         c.log("timeProxy.makeRequest failed", arguments);
         return dfd.reject();
@@ -660,7 +665,7 @@
     };
 
     TimeProxy.prototype.expandTimeStruct = function(struct) {
-      var maxYear, minYear, prevVal, thisVal, y, years, _i, _results;
+      var j, maxYear, minYear, prevVal, ref, ref1, results, thisVal, y, years;
       years = _.map(_.pairs(_.omit(struct, "")), function(item) {
         return Number(item[0]);
       });
@@ -673,24 +678,24 @@
         c.log("expandTimestruct broken, years:", years);
         return;
       }
-      _results = [];
-      for (y = _i = minYear; minYear <= maxYear ? _i <= maxYear : _i >= maxYear; y = minYear <= maxYear ? ++_i : --_i) {
+      results = [];
+      for (y = j = ref = minYear, ref1 = maxYear; ref <= ref1 ? j <= ref1 : j >= ref1; y = ref <= ref1 ? ++j : --j) {
         thisVal = struct[y];
         if (typeof thisVal === "undefined") {
-          _results.push(struct[y] = prevVal);
+          results.push(struct[y] = prevVal);
         } else {
-          _results.push(prevVal = thisVal);
+          results.push(prevVal = thisVal);
         }
       }
-      return _results;
+      return results;
     };
 
     return TimeProxy;
 
   })(BaseProxy);
 
-  model.GraphProxy = (function(_super) {
-    __extends(GraphProxy, _super);
+  model.GraphProxy = (function(superClass) {
+    extend(GraphProxy, superClass);
 
     function GraphProxy() {
       GraphProxy.__super__.constructor.call(this);
@@ -698,30 +703,29 @@
     }
 
     GraphProxy.prototype.expandSubCqps = function(subArray) {
-      var array, cqp, i, p, padding, _i, _ref, _results;
+      var array, cqp, i, j, p, padding, ref, results;
       padding = _.map((function() {
-        _results = [];
-        for (var _i = 0, _ref = subArray.length.toString().length; 0 <= _ref ? _i < _ref : _i > _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
-        return _results;
+        results = [];
+        for (var j = 0, ref = subArray.length.toString().length; 0 <= ref ? j < ref : j > ref; 0 <= ref ? j++ : j--){ results.push(j); }
+        return results;
       }).apply(this), function() {
         return "0";
       });
       array = (function() {
-        var _j, _len, _results1;
-        _results1 = [];
-        for (i = _j = 0, _len = subArray.length; _j < _len; i = ++_j) {
+        var k, len, results1;
+        results1 = [];
+        for (i = k = 0, len = subArray.length; k < len; i = ++k) {
           cqp = subArray[i];
           p = padding.slice(i.toString().length).join("");
-          _results1.push(["subcqp" + p + i, cqp]);
+          results1.push(["subcqp" + p + i, cqp]);
         }
-        return _results1;
+        return results1;
       })();
       return _.object(array);
     };
 
     GraphProxy.prototype.makeRequest = function(cqp, subcqps, corpora, from, to) {
-      var def, params, self,
-        _this = this;
+      var def, params, self;
       GraphProxy.__super__.makeRequest.call(this);
       self = this;
       params = {
@@ -744,19 +748,23 @@
         url: settings.cgi_script,
         dataType: "json",
         data: params,
-        beforeSend: function(req, settings) {
-          _this.prevRequest = settings;
-          _this.addAuthorizationHeader(req);
-          return self.prevUrl = _this.url;
-        },
-        progress: function(data, e) {
-          var progressObj;
-          progressObj = _this.calcProgress(e);
-          if (progressObj == null) {
-            return;
-          }
-          return def.notify(progressObj);
-        },
+        beforeSend: (function(_this) {
+          return function(req, settings) {
+            _this.prevRequest = settings;
+            _this.addAuthorizationHeader(req);
+            return self.prevUrl = _this.url;
+          };
+        })(this),
+        progress: (function(_this) {
+          return function(data, e) {
+            var progressObj;
+            progressObj = _this.calcProgress(e);
+            if (progressObj == null) {
+              return;
+            }
+            return def.notify(progressObj);
+          };
+        })(this),
         error: function(jqXHR, textStatus, errorThrown) {
           return def.reject(textStatus);
         },
