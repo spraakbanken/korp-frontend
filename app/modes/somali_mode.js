@@ -96,7 +96,7 @@ settings.corpora["somali-sheekooyin"] = {
 
 settings.corpora["wikipedia-so"] = {
 	id : "wikipedia-so",
-	title : "Wikipedia",
+	title : "Somaliska Wikipedia",
 	description : "",
 	within : settings.defaultWithin,
 	context : settings.defaultContext,
