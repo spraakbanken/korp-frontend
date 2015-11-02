@@ -199,9 +199,9 @@
           return c.log("textInField", _this.s.textInField);
         };
       })(this));
-      if (settings.autocomplete) {
-        null;
-      }
+      this.s.autocSettings = {
+        enableLemgramSuggestion: settings.autocomplete
+      };
       $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
         return function() {
           if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
