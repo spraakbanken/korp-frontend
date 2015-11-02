@@ -24,7 +24,7 @@ settings.corpora["somali-1971-79"] = {
 		text_publisher : {label : "publisher"},
 		text_source : {label : "source", type : "url"},
 		page_n : {label : "page"},
-		page_purl : {label : "page", type : "url"}
+		page_purl : {label : "pagesource", type : "url"}
 	}
 };
 
