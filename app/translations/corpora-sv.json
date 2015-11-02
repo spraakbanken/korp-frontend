@@ -441,6 +441,9 @@
     "commentaries" : "kommentarer",
 
     "published" : "publicerat",
+    
+    "sponsor" : "sponsor",
+    "place" : "plats",
 
     "ne_expr" : "namnentitet",
     "ne_type" : "namnentitetstyp",

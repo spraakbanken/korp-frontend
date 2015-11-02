@@ -440,6 +440,9 @@
     "commentaries" : "commentaries",
 
     "published" : "published",
+    
+    "sponsor" : "sponsor",
+    "place" : "place",
 
     "ne_expr" : "named entity",
     "ne_type" : "named entity type",
