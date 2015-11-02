@@ -1,7 +1,4 @@
 describe "map", () ->
-    
-    beforeEach () ->
-        browser.get "http://localhost:9001"
 
     it "should show the correct markers", () ->
         browser.get "http://localhost:9001/#?lang=sv&cqp=%5B%5D&corpus=suc2&page=0&show_map&search=lemgram%7Cskog..nn.1&result_tab=1"
