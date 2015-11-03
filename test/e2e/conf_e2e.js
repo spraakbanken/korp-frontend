@@ -11,7 +11,7 @@ exports.config = {
   },
 
   // Spec patterns are relative to the current working directly when protractor is called.
-  specs: ['bin/misc.js','bin/map.js', 'bin/autocomplete.js'],
+  specs: ['bin/misc.js','bin/map.js'],
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
