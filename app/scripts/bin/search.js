@@ -194,9 +194,9 @@
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
-      this.s.autocSettings = {
-        enableLemgramSuggestion: settings.autocomplete
-      };
+      if (settings.autocomplete) {
+        null;
+      }
       $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
         return function() {
           if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
