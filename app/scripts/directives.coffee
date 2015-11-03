@@ -577,6 +577,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         "model" : "="
         "type" : "@"
         "variant" : "@"
+        "autocSettings" : "=" 
     template: """
         <div>
             <script type="text/ng-template" id="lemgramautocomplete.html">
@@ -594,18 +595,25 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                     </span>
                 </a>
             </script>
-            <div style="float:left"><input
-                class="new_simple_text"
-                autofocus
-                type="text" class="form-control"
-                ng-model="textInField"
-                typeahead="row for row in getRows($viewValue)"
-                typeahead-wait-ms="500"
-                typeahead-template-url="lemgramautocomplete.html"
-                typeahead-loading="isLoading"
-                typeahead-on-select="selectedItem($item, $model, $label)"
-                placeholder="{{lemgramToString(placeholder)}}"></div>
-            <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+            <div ng-show="autocSettings.enableLemgramSuggestion">
+                <div style="float:left"><input
+                    class="autocomplete_searchbox"
+                    autofocus
+                    type="text" class="form-control"
+                    ng-model="textInField"
+                    typeahead="row for row in getRows($viewValue)"
+                    typeahead-wait-ms="500"
+                    typeahead-template-url="lemgramautocomplete.html"
+                    typeahead-loading="isLoading"
+                    typeahead-on-select="selectedItem($item, $model, $label)"
+                    placeholder="{{lemgramToString(placeholder)}}"></div>
+                <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+            </div>
+            <div ng-show="!autocSettings.enableLemgramSuggestion">
+                <div style="float:left"> 
+                    <input class="standard_searchbox" autofocus type="text" class="form-control">
+                </div>
+            </div>
         </div>
     """
     link : (scope, elem, attr) ->

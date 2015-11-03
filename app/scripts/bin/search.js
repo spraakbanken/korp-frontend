@@ -194,9 +194,9 @@
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
-      if (settings.autocomplete) {
-        null;
-      }
+      this.s.autocSettings = {
+        enableLemgramSuggestion: settings.autocomplete
+      };
       $("#prefixChk, #suffixChk, #caseChk").click((function(_this) {
         return function() {
           if ($("#simple_text").attr("placeholder") && $("#simple_text").text() === "") {
@@ -220,7 +220,11 @@
       var wordInput;
       SimpleSearch.__super__.onSubmit.call(this);
       c.log("onSubmit");
-      wordInput = $("#simple_text > div > .new_simple_text").val();
+      if (this.s.autocSettings.enableLemgramSuggestion) {
+        wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val();
+      } else {
+        wordInput = $("#simple_text > div > div > .standard_searchbox").val();
+      }
       if (wordInput !== "") {
         return util.searchHash("word", wordInput);
       } else {

@@ -169,61 +169,7 @@ class view.SimpleSearch extends BaseSearch
             # TODO: bring back word to input field
             # input_field = val
 
-        
-        if settings.autocomplete
-            null
-            #textinput.korp_autocomplete
-            #    type: "lem"
-            #    # select: $.proxy(@selectLemgram, this)
-            #    select: (lemgram) =>
-            #        @s.$apply () =>
-            #            @s.placeholder = lemgram
-            #            @s.simple_text = ""
-            #
-            #    middleware: (request, idArray) =>
-            #        dfd = $.Deferred()
-            #        
-            #        @lemgramProxy.lemgramCount(idArray, @isSearchPrefix(), @isSearchSuffix()).done((freqs) ->
-            #            delete freqs["time"]
-            #
-            #            if currentMode is "law"
-            #                idArray = _.filter(idArray, (item) ->
-            #                    item of freqs
-            #                )
-            #            has_morphs = settings.corpusListing.getMorphology().split("|").length > 1
-            #            if has_morphs
-            #                idArray.sort (a, b) ->
-            #                    first = (if a.split("--").length > 1 then a.split("--")[0] else "saldom")
-            #                    second = (if b.split("--").length > 1 then b.split("--")[0] else "saldom")
-            #                    return (freqs[b] or 0) - (freqs[a] or 0) if first is second
-            #                    second < first
-            #
-            #            else
-            #                idArray.sort (first, second) ->
-            #                    (freqs[second] or 0) - (freqs[first] or 0)
-            #
-            #            t = $.now()
-            #            window.idArray = idArray
-            #            labelArray = util.sblexArraytoString(idArray, util.lemgramToString)
-            #            listItems = $.map(idArray, (item, i) ->
-            #                out =
-            #                    label: labelArray[i]
-            #                    value: item
-            #                    input: request.term
-            #                    enabled: item of freqs
-            #
-            #                out["category"] = (if item.split("--").length > 1 then item.split("--")[0] else "saldom") if has_morphs
-            #                out
-            #            )
-            #            dfd.resolve listItems
-            #        ).fail ->
-            #            c.log "reject"
-            #            dfd.reject()
-            #            textinput.preloader "hide"
-            #
-            #        dfd.promise()
-            #
-            #    "sw-forms": false
+        @s.autocSettings = { enableLemgramSuggestion : settings.autocomplete }
 
         $("#prefixChk, #suffixChk, #caseChk").click =>
             if $("#simple_text").attr("placeholder") and $("#simple_text").text() is ""
@@ -279,8 +225,10 @@ class view.SimpleSearch extends BaseSearch
     onSubmit: ->
         super()
         c.log "onSubmit"
-        #$("#simple_text.ui-autocomplete-input").korp_autocomplete "abort"
-        wordInput = $("#simple_text > div > .new_simple_text").val()
+        if @s.autocSettings.enableLemgramSuggestion
+            wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val()
+        else
+            wordInput = $("#simple_text > div > div > .standard_searchbox").val()
         unless wordInput is ""
             util.searchHash "word", wordInput
             #console.log "modily", @s.model
