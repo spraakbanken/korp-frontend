@@ -162,10 +162,6 @@ class view.SimpleSearch extends BaseSearch
         @savedSelect = null
 
         @lemgramProxy = new model.LemgramProxy()
-        
-        @s.$watch "textInField", () =>
-            c.log "textInField", @s.textInField
-
 
         # [type, val] = search().search.split("|")
 

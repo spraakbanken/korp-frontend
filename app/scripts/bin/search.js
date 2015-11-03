@@ -194,11 +194,6 @@
       $("#similar_lemgrams").hide();
       this.savedSelect = null;
       this.lemgramProxy = new model.LemgramProxy();
-      this.s.$watch("textInField", (function(_this) {
-        return function() {
-          return c.log("textInField", _this.s.textInField);
-        };
-      })(this));
       this.s.autocSettings = {
         enableLemgramSuggestion: settings.autocomplete
       };
