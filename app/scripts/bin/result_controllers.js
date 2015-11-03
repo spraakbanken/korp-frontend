@@ -8,7 +8,8 @@
   korpApp = angular.module("korpApp");
 
   korpApp.controller("resultContainerCtrl", function($scope, searches, $location) {
-    return $scope.searches = searches;
+    $scope.searches = searches;
+    return $scope.enableMap = settings.enableMap;
   });
 
   korpApp.controller("kwicCtrl", KwicCtrl = (function() {

@@ -183,7 +183,7 @@
               <input id="word_pic" type="checkbox" ng-model="word_pic">
               <label for="word_pic">{{'show_word_pic' | loc:lang}}</label>
             </div>
-            <div>
+            <div ng-show="settings.enableMap">
               <input id="show_map" type="checkbox" ng-model="show_map">
               <label for="show_map">{{'show_map' | loc:lang}}      </label>
             </div>
@@ -275,7 +275,7 @@
                     <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </tab>
-                <tab ng-controller="MapCtrl">
+                <tab ng-show="enableMap" ng-controller="MapCtrl">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; countCorpora() &lt; 2 }">{{'map' | loc:lang }}
                     <tab-preloader ng-if="loading" value="progress" spinner="countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>

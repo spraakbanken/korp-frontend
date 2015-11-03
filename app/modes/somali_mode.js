@@ -3,6 +3,7 @@ settings.primaryLight = "#FFF4EB";
 settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
+settings.enableMap = false;
 
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();

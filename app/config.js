@@ -8,6 +8,7 @@ var isLab = window.isLab || false;
 
 settings.lemgramSelect = true;
 settings.autocomplete = true;
+settings.enableMap = true;
 // settings.wordpicture = false;
 settings.hits_per_page_default = 25
 

@@ -2,6 +2,7 @@ korpApp = angular.module("korpApp")
 
 korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
+    $scope.enableMap = settings.enableMap
 
 korpApp.controller "kwicCtrl", class KwicCtrl
     setupHash : () ->
