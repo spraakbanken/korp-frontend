@@ -224,8 +224,7 @@ class view.SimpleSearch extends BaseSearch
 
     onSubmit: ->
         super()
-        c.log "onSubmit"
-        if @s.autocSettings.enableLemgramSuggestion
+        if settings.autocomplete
             wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val()
         else
             wordInput = $("#simple_text > div > div > .standard_searchbox").val()

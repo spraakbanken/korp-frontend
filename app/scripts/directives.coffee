@@ -577,7 +577,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         "model" : "="
         "type" : "@"
         "variant" : "@"
-        "autocSettings" : "=" 
+        "disableLemgramAutocomplete" : "=" 
     template: """
         <div>
             <script type="text/ng-template" id="lemgramautocomplete.html">
@@ -595,11 +595,11 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                     </span>
                 </a>
             </script>
-            <div ng-show="autocSettings.enableLemgramSuggestion">
+            <div ng-show="!disableLemgramAutocomplete">
                 <div style="float:left"><input
                     class="autocomplete_searchbox"
                     autofocus
-                    type="text" class="form-control"
+                    type="text" 
                     ng-model="textInField"
                     typeahead="row for row in getRows($viewValue)"
                     typeahead-wait-ms="500"
@@ -609,9 +609,9 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                     placeholder="{{lemgramToString(placeholder)}}"></div>
                 <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
-            <div ng-show="!autocSettings.enableLemgramSuggestion">
+            <div ng-show="disableLemgramAutocomplete">
                 <div style="float:left"> 
-                    <input class="standard_searchbox" autofocus type="text" class="form-control">
+                    <input class="standard_searchbox" autofocus type="text">
                 </div>
             </div>
         </div>

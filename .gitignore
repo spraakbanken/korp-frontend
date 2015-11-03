@@ -6,3 +6,4 @@ node_modules
 /app/components/angular-bootstrap/template
 *.map
 .vscode
+test/e2e/bin/

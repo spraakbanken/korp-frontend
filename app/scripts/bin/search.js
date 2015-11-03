@@ -219,8 +219,7 @@
     SimpleSearch.prototype.onSubmit = function() {
       var wordInput;
       SimpleSearch.__super__.onSubmit.call(this);
-      c.log("onSubmit");
-      if (this.s.autocSettings.enableLemgramSuggestion) {
+      if (settings.autocomplete) {
         wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val();
       } else {
         wordInput = $("#simple_text > div > div > .standard_searchbox").val();
