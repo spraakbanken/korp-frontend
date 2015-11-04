@@ -148,7 +148,7 @@
     };
 
     CorpusListing.prototype.corpusHasAttr = function(corpus, attr) {
-      return attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].struct_attributes);
+      return attr === "word" || attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].struct_attributes);
     };
 
     CorpusListing.prototype.stringifySelected = function() {

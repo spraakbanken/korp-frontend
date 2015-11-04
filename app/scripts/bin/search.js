@@ -219,17 +219,21 @@
     SimpleSearch.prototype.onSubmit = function() {
       var wordInput;
       SimpleSearch.__super__.onSubmit.call(this);
-      if (settings.autocomplete) {
-        wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val();
-      } else {
-        wordInput = $("#simple_text > div > div > .standard_searchbox").val();
-      }
+      wordInput = this.getWordInput();
       if (wordInput !== "") {
         return util.searchHash("word", wordInput);
       } else {
         if (this.s.model) {
           return this.selectLemgram(this.s.model);
         }
+      }
+    };
+
+    SimpleSearch.prototype.getWordInput = function() {
+      if (settings.autocomplete) {
+        return $("#simple_text > div > div > .autocomplete_searchbox").val();
+      } else {
+        return $("#simple_text > div > div > .standard_searchbox").val();
       }
     };
 
@@ -254,7 +258,7 @@
 
     SimpleSearch.prototype.getCQP = function(word) {
       var cqp, currentText, lemgram, query, suffix, val, wordArray;
-      currentText = $.trim(word || $(".new_simple_text", this.$main).val() || "", '"');
+      currentText = $.trim(word || this.getWordInput() || "", '"');
       suffix = ($("#caseChk").is(":checked") ? " %c" : "");
       if (util.isLemgramId(currentText)) {
         val = "[lex contains \"" + currentText + "\"]";

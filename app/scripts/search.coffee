@@ -224,16 +224,19 @@ class view.SimpleSearch extends BaseSearch
 
     onSubmit: ->
         super()
-        if settings.autocomplete
-            wordInput = $("#simple_text > div > div > .autocomplete_searchbox").val()
-        else
-            wordInput = $("#simple_text > div > div > .standard_searchbox").val()
+        wordInput = @getWordInput()
         unless wordInput is ""
             util.searchHash "word", wordInput
             #console.log "modily", @s.model
         else
             if @s.model
                 @selectLemgram @s.model 
+    
+    getWordInput: () ->
+        if settings.autocomplete
+            return $("#simple_text > div > div > .autocomplete_searchbox").val()
+        else
+            return $("#simple_text > div > div > .standard_searchbox").val()
 
     selectLemgram: (lemgram) ->
         return if $("#search-tab").data("cover")?
@@ -255,7 +258,7 @@ class view.SimpleSearch extends BaseSearch
 
     getCQP : (word) ->
         # c.log "getCQP", word
-        currentText = $.trim(word or $(".new_simple_text", @$main).val() or "", '"')
+        currentText = $.trim(word or @getWordInput() or "", '"')
         suffix = (if $("#caseChk").is(":checked") then " %c" else "")
         if util.isLemgramId(currentText) # if the input is a lemgram, do lemgram search.
             val = "[lex contains \"#{currentText}\"]"

@@ -113,9 +113,9 @@ class window.CorpusListing
                 delete value["disabled"]
 
         union
-
+        
     corpusHasAttr: (corpus, attr) ->
-        attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].struct_attributes)
+        return attr == "word" or attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].struct_attributes)
 
     stringifySelected: ->
         _(@selected).pluck("id").invoke("toUpperCase").join ","
