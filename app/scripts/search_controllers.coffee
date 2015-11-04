@@ -57,9 +57,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         $location.search("search", "cqp|" + "[saldo contains '#{wd}']")
 
     s.relatedDefault = 3
-    # s.relatedLimit = s.relatedDefault
     s.clickX = () ->
         modalInstance.dismiss()
+
     s.showAllRelated = () ->
         modalInstance = $modal.open(
             template: """
@@ -77,27 +77,10 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 </div>
             </div>
             """
-            # <div ng-show="relatedLimit != 9999" ng-click="relatedLimit = 9999"><i class="circle_icon fa fa-long-arrow-down"></i></div>
-            # <div ng-show="relatedLimit == 9999" ng-click="relatedLimit = relatedDefault"><i class="circle_icon fa fa-long-arrow-up"></i></div>
             scope : s
             size : 'lg'
             windowClass : "related"
-            # controller: "ModalInstanceCtrl"
-            # size: size
-            # resolve:
-            #     items: ->
-            #         $scope.items
         )
-        # modalInstance.result.then (() ->
-        #     # $scope.selected = selectedItem
-        #     c.log "modalInstance.result.then"
-        #     return
-        # ), ->
-        #     # $log.info "Modal dismissed at: " + new Date()
-        #     return
-
-
-
 
     s.searches = searches
     s.$watch "searches.activeSearch", (search) =>

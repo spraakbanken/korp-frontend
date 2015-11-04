@@ -1784,14 +1784,9 @@ body.modal-open {
 }
 
 .related.modal {
-  // max-height : initial;
-  margin-left : -400px;
-  width : 800px;
-
-  
 
   .modal-body {
-
+    overflow: auto;
     ul {
       display : flex;
       flex-direction : column;
@@ -1800,7 +1795,6 @@ body.modal-open {
       justify-content: flex-start;
       align-content : flex-start;
       li {
-        // flex : 1 1 auto;
         margin-right : 1em;
       }
     }

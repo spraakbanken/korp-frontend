@@ -109,17 +109,15 @@
                     <label for="caseChk"> {{'case_insensitive' | loc:lang}}  </label>
                   </div>
                 </form>
-                <div id="similar_wrapper" ng-show="relatedObj" ng-class="{open : relatedLimit == 9999}">
-                  <button ng-click="showAllRelated()" class="btn btn-sm btn-default"><span class="btn_header">Relaterade ord (SWE-FN)</span><br><span ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault">
+                <div id="similar_wrapper" ng-show="relatedObj">
+                  <button ng-click="showAllRelated()" ng-if="relatedObj.length != 0" class="btn btn-sm btn-default"><span class="btn_header">{{ 'similar_header' | loc:lang }} (SWE-FN)</span><br><span ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault">
                        
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><br><span ng-repeat="wd in relatedObj[0].words.slice(relatedDefault) | limitTo:relatedDefault">
                        
                       {{stringifyRelated(wd)}}<span ng-if="!$last">, </span></span><span ng-if="relatedObj[0].words.length &gt; relatedDefault || relatedObj.length &gt; 1">
                        
                       ...</span></button>
-                  
-                  
-                  
+                  <div ng-if="relatedObj.length == 0" class="btn btn-sm btn-default"><span class="btn_header">{{ 'similar_header' | loc:lang }} (SWE-FN)</span><br><span>{{'no_related_words' | loc:lang}}</span></div>
                 </div>
                 <div class="clearfix"></div>
               </div>

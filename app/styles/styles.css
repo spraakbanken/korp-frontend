@@ -4842,12 +4842,11 @@ body.modal-open {
   min-height: 300px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031786}}
-.related.modal {
-  margin-left: -400px;
-  width: 800px;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031788}}
+.related.modal .modal-body {
+  overflow: auto;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031795}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031790}}
 .related.modal .modal-body ul {
   display: flex;
   flex-direction: column;
@@ -4856,85 +4855,85 @@ body.modal-open {
   justify-content: flex-start;
   align-content: flex-start;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031802}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031797}}
 .related.modal .modal-body ul li {
   margin-right: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031809}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031803}}
 .related.modal .col .header {
   font-size: 1.1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031815}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031809}}
 .search_submit {
   display: inline;
   margin-right: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031822}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031816}}
 .search_tabs .nav.nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031825}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031819}}
 .search_tabs .tab-content {
   overflow: visible;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031828}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031822}}
 .search_tabs .search_compare {
   padding-top: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031830}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031824}}
 .search_tabs .search_compare button.delete {
   float: right;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031832}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031826}}
 .search_tabs .search_compare button.delete .fa, .search_tabs .search_compare button.delete .boxdiv.disabled .checkbox, .boxdiv.disabled .search_tabs .search_compare button.delete .checkbox,
 .search_tabs .search_compare button.delete .tree.disabled > label .checkbox,
 .tree.disabled > label .search_tabs .search_compare button.delete .checkbox {
   margin-right: 0.8em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031836}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031830}}
 .search_tabs .search_compare button.search {
   margin-top: 2em;
   display: block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031840}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031834}}
 .search_tabs .search_compare select {
   margin: 0 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031846}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031840}}
 option[value^='? string:sentence ?'] {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031848}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031842}}
 .nav-tabs li.disabled {
   opacity: 0.6;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031852}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031846}}
 #results-wrapper .nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031856}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031850}}
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031860}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031854}}
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031869}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031863}}
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031874}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031868}}
 .val_mod {
   letter-spacing: 1px;
   font-size: .8em;
@@ -4942,14 +4941,14 @@ option[value^='? string:sentence ?'] {
   margin-right: 1px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031881}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031875}}
 .mod_menu {
   cursor: default;
   position: absolute;
   font-size: .9em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031889}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031883}}
 slider {
   display: inline-block;
   position: relative;
@@ -4958,19 +4957,19 @@ slider {
   margin: 25px 5px 25px 5px;
   vertical-align: middle;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031897}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031891}}
 slider span {
   white-space: nowrap;
   position: absolute;
   display: inline-block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031901}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031895}}
 slider span.base {
   width: 100%;
   height: 100%;
   padding: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031906}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031900}}
 slider span.bar {
   width: 100%;
   height: 100%;
@@ -4981,7 +4980,7 @@ slider span.bar {
   background-image: linear-gradient(to top, #cccccc, #ffffff);
   box-shadow: inset 0 1px 3px rgba(10, 10, 10, 0.5);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031913}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031907}}
 slider span.bar.selection {
   width: 0%;
   z-index: 1;
@@ -4990,7 +4989,7 @@ slider span.bar.selection {
   background-image: linear-gradient(to top, #ababab, #c6c6c6);
   box-shadow: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031920}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031914}}
 slider span.pointer {
   cursor: pointer;
   width: 15px;
@@ -5004,19 +5003,19 @@ slider span.pointer {
   border-radius: 1em/1em;
   box-shadow: 2px 2px 3px grey;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031934}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031928}}
 slider span.pointer:after {
   box-shadow: inset 2px 2px 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031938}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031932}}
 slider span.pointer:hover:after {
   background-color: #000;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031941}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031935}}
 slider span.pointer.active:hover:after {
   background-color: #f00;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031946}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031940}}
 slider span.bubble {
   cursor: default;
   top: -22px;
@@ -5024,67 +5023,67 @@ slider span.bubble {
   font-size: 0.7em;
   font-family: sans-serif;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031952}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031946}}
 slider span.bubble.selection {
   top: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031955}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031949}}
 slider span.bubble.limit {
   color: #808080;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031964}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031958}}
 .val_mod.insensitive {
   color: lightgrey;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031967}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031961}}
 .val_mod.sensitive {
   color: black;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031969}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031963}}
 .val_mod.sensitive + .mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031973}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031967}}
 .val_mod.insensitive + .mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031978}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031972}}
 .enumerate {
   counter-increment: wordpic;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031980}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031974}}
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031985}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031979}}
 #showBarPlot {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031993}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031987}}
 .korp-warning {
   max-width: 500px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031996}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031990}}
 warning ~ * {
   display: none !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032000}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000031994}}
 #wordclassChkParent {
   float: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032006}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032000}}
 .nav-tabs li {
   position: relative;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032010}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032004}}
 .tab_progress {
   height: 2px;
   background-color: darkblue;
@@ -5096,31 +5095,31 @@ warning ~ * {
   bottom: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032021}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032015}}
 .not_loading .tab_progress {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032025}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032019}}
 .not_loading .hits_picture {
   left: 180px;
   transition: width 400ms ease;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032031}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032025}}
 .results-kwic .controls_n {
   margin-right: 5px;
   min-width: 125px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032035}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032029}}
 .results-kwic .pager-wrapper {
   display: inline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032033}}
 .results-kwic .result_controls {
   position: relative;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032041}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032035}}
 .results-kwic .result_controls > * {
   display: inline-block;
   vertical-align: bottom;
@@ -5128,11 +5127,11 @@ warning ~ * {
   *zoom: 1;
   *display: inline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032046}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032040}}
 .results-kwic .result_controls, .results-kwic .pager-wrapper {
   margin-bottom: 8px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032049}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032043}}
 .results-kwic .pagination {
   height: auto;
   margin: 0;
@@ -5140,11 +5139,11 @@ warning ~ * {
   display: inline-block;
   vertical-align: initial;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032056}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032050}}
 .results-kwic .pagination li.active {
   font-weight: bold;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032059}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032053}}
 .results-kwic .pagination a, .results-kwic .pagination span {
   border-width: 1px;
   line-height: 18px;
@@ -5153,54 +5152,54 @@ warning ~ * {
   float: initial;
   display: inline-block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032069}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032063}}
 .results-kwic .pagination .active a {
   color: white;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032074}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032068}}
 .results-kwic .page_input {
   display: inline-block;
   vertical-align: middle;
   margin-left: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032078}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032072}}
 .results-kwic .page_input span {
   color: #666;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032081}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032075}}
 .results-kwic .page_input input {
   width: 2em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032086}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032080}}
 .results-kwic.loading .controls_n {
   color: darkgrey;
   font-style: italic;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032095}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032089}}
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032098}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032092}}
 .arg_value .from {
   float: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032095}}
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032108}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032102}}
 .arg_val_container {
   margin-top: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032110}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032104}}
 .arg_val_container select {
   max-width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032109}}
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -5208,73 +5207,73 @@ warning ~ * {
   letter-spacing: 1.1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032122}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032116}}
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032128}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032122}}
 #char_table {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032132}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032126}}
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032133}}
 #deptree_popup {
   overflow-y: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032141}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032135}}
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032145}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032139}}
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032151}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032145}}
 .smoother.ui-slider {
   width: 200px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032155}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032149}}
 .legend {
   float: right;
   margin-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032158}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032152}}
 .legend .action {
   opacity: 0.5 !important;
   color: white;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032164}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032158}}
 .slick-viewport .slick-cell-checkboxsel input {
   margin-left: 6px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032171}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032165}}
 .graph_btn_icon svg {
   margin-top: -6px;
   margin-bottom: -6px;
   margin-left: -8px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032178}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032172}}
 .chart_container {
   position: relative;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032180}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032174}}
 .chart_container .preloader {
   position: absolute;
   left: 0;
@@ -5290,31 +5289,31 @@ warning ~ * {
   opacity: 0;
   transition: opacity 500ms;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032195}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032189}}
 .chart_container .preloader.loading {
   opacity: 1;
   transition: opacity 500ms;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032200}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032194}}
 .chart_container .preloader i {
   z-index: 1000;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032206}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032200}}
 .graph_tab {
   min-height: 430px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032210}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032204}}
 .graph_header .controls {
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032215}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032209}}
 .stats_header {
   margin-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032217}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032211}}
 .stats_header > * {
   display: inline-block;
   vertical-align: middle;
@@ -5323,17 +5322,17 @@ warning ~ * {
   *display: inline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032221}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032215}}
 .reading_mode .show_deptree {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032225}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032219}}
 .form-table .preview {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032230}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032224}}
 .rickshaw_graph .empty_area {
   background-color: #999;
   position: absolute;
@@ -5342,50 +5341,50 @@ warning ~ * {
   opacity: 0.2;
   z-index: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032238}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032232}}
 .rickshaw_graph .detail .x_label {
   top: -26px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032241}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032235}}
 .rickshaw_graph .x_tick {
   border-left: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032243}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032237}}
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
   left: -1.3em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032250}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032244}}
 .rickshaw_graph .detail {
   z-index: 101;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032254}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032248}}
 .rickshaw_graph svg {
   position: relative;
   z-index: 100;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032261}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032255}}
 .rickshaw_legend .line {
   white-space: nowrap;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032266}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032260}}
 .form-bar .rickshaw_graph .x_tick .title {
   left: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032271}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032265}}
 .y_ticks.plain g:first-of-type text {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032275}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032269}}
 .form-bar .legend li:last-child:not(:only-child) {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032278}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032272}}
 .form_switch {
   display: inline-block;
   vertical-align: bottom;
@@ -5394,84 +5393,84 @@ warning ~ * {
   *display: inline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032282}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032276}}
 line.tick {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032286}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032280}}
 .dot.active {
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032297}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032291}}
 .preview {
   margin-top: 30px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032301}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032295}}
 #main > #msd_popup {
   display: none !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032305}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032299}}
 .popupchecks .header {
   white-space: nowrap;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032309}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032303}}
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032306}}
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032309}}
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032313}}
 .time_table {
   width: 100%;
   height: 500px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032317}}
 .time_table, .time_table * {
   box-sizing: content-box;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032326}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032320}}
 #myGrid {
   width: 100%;
   height: 500px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032325}}
 #myGrid, #myGrid * {
   box-sizing: content-box;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032328}}
 .loading .exportStatsSection {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032338}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032332}}
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032341}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032335}}
 .ui-state-hover {
   background: #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032344}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032338}}
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
   border: 1px solid #AAAAAA;
@@ -5479,42 +5478,42 @@ line.tick {
   color: #222222;
   padding-top: 0.2em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032352}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032346}}
 .nav.nav-tabs li {
   cursor: pointer;
   margin-right: 0.2em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032356}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032350}}
 .nav.nav-tabs .badge {
   margin-left: 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032359}}
 .tabbable {
   border: 1px solid #AAAAAA;
   border-radius: 2px 2px 2px 2px;
   color: #222222;
   padding: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032370}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032364}}
 .tabbable .single {
   margin-right: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032373}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032367}}
 .tabbable .tab-content {
   padding: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032376}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032370}}
 .tabbable .close_icon {
   cursor: pointer;
   padding-left: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032380}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032374}}
 .tabbable .nav.nav-tabs {
   margin: 0;
   padding-left: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032383}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032377}}
 .tabbable .nav.nav-tabs li {
   background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
   border: 1px solid #D3D3D3;
@@ -5522,11 +5521,11 @@ line.tick {
   font-weight: normal;
   margin-bottom: -1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032389}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032383}}
 .tabbable .nav.nav-tabs li:first-child {
   margin-left: 0.5em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032392}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032386}}
 .tabbable .nav.nav-tabs li a {
   padding-bottom: 0.3em !important;
   padding-top: 0.3em !important;
@@ -5534,39 +5533,39 @@ line.tick {
   color: #555555;
   margin-bottom: -1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032399}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032393}}
 .tabbable .nav.nav-tabs li.active {
   border-bottom-color: transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032406}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032400}}
 .search_tabs.tabbable {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032411}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032405}}
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   border-radius: 0;
   border-color: transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032416}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032410}}
 .nav-tabs > li > a, .nav-pills > li > a {
   margin-right: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032422}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032416}}
 .modal-header_left {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032427}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032421}}
 .compare_result.loading {
   visibility: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032430}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032424}}
 .compare_result .column {
   display: inline-block;
   vertical-align: top;
@@ -5574,116 +5573,116 @@ line.tick {
   *zoom: 1;
   *display: inline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032433}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032427}}
 .compare_result .meter {
   cursor: pointer;
   position: relative;
   border: 1px solid rgba(221, 233, 255, 0);
   transition: all 200ms ease;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032438}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032432}}
 .compare_result .meter:hover {
   color: navy;
   border: 1px solid #aac8ff;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032443}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032437}}
 .compare_result .badge {
   position: absolute;
   right: 0;
   top: 4px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032448}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032442}}
 .compare_result .background {
   padding: 5px 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032452}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032446}}
 .compare_result .column_1 ul {
   background-color: #f1f6ff;
   border: 1px solid #dde9ff;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032455}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032449}}
 .compare_result .column_1 ul .background {
   background-color: #dde9ff;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032459}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032453}}
 .compare_result .column_2 ul {
   background-color: #fff9ec;
   border: 1px solid #FFF3D8;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032462}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032456}}
 .compare_result .column_2 ul .background {
   background-color: #FFF3D8;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032466}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032460}}
 .compare_result ul {
   padding: 2px;
   margin-right: 2em;
   width: 400px;
   font-size: 1.1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032473}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032467}}
 .compare_result ul li {
   margin-bottom: 0.5em;
   white-space: nowrap;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032488}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032482}}
 .popover {
   border-radius: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032490}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032484}}
 .popover .popover-content {
   padding: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032493}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032487}}
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032499}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032493}}
 .tab_preloaders {
   display: inline-block;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032501}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032495}}
 .tab_preloaders .preloader_spinner {
   width: 9px;
   display: inline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032510}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032504}}
 .close_icon {
   display: inline;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032513}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032507}}
 .tab_spinner {
   display: none;
   width: 13px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032517}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032511}}
 .loading .tab_spinner {
   display: inline-block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032520}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032514}}
 .loading .close_icon {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032525}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032519}}
 .badge {
   padding-right: 6px;
   padding-left: 6px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032530}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032524}}
 .popper_menu {
   width: 130px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032534}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032528}}
 .tab-content {
   overflow: hidden;
 }
@@ -5691,49 +5690,49 @@ line.tick {
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032546}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032540}}
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032551}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032545}}
 .bs-callout h4 {
   margin-top: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032554}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032548}}
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032557}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032551}}
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032563}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032557}}
 .bs-callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032567}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032561}}
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032571}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032565}}
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032576}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032570}}
 .dropdown-menu {
   border-radius: 2px;
   max-height: 575px;
@@ -5741,19 +5740,19 @@ line.tick {
 }
 
 /* ----------- Newsdesk ----------- */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032584}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032578}}
 #news_area {
   float: right;
   margin-right: 4px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032588}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032582}}
 .newsdesk-new-news {
   font-weight: bold;
   color: #428bca;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032592}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032586}}
 .newsdesk-new-news div {
   background-color: red;
   color: red;
@@ -5761,7 +5760,7 @@ line.tick {
   background: #ff0000;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032598}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032592}}
 .newsdesk-new-news div:after {
   right: 100%;
   top: 50%;
@@ -5777,43 +5776,43 @@ line.tick {
   margin-top: -4px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032612}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032606}}
 .newsdesk-no-new-news {
   font-weight: normal;
   color: #ddd;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032616}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032610}}
 .newsdesk-no-new-news div {
   background-color: #ddd;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032619}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032613}}
 .newsdesk-new-news-item {
   background-color: #ffeeee;
   border-radius: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032623}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032617}}
 .newsdesk-new-news-item h4 {
   color: red;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032626}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032620}}
 .newsdesk-popover {
   width: 440px;
   max-height: 95%;
   overflow-y: auto;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032631}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032625}}
 .newsdesk-bell {
   float: left;
   margin-top: 4px;
   margin-right: 3px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032636}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032630}}
 .newsdesk-arrow-box {
   float: left;
   padding-left: 4px;
@@ -5821,58 +5820,58 @@ line.tick {
   border-radius: 3px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032642}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032636}}
 .newsdesk-arrow-box span {
   color: #fff;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032645}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032639}}
 .newsdesk-news-item {
   padding-left: 4px;
   margin-bottom: 4px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032649}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032643}}
 .newsdesk-opener {
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032652}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032646}}
 .newsdesk-around-items {
   margin: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032655}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032649}}
 .newsdesk-item-date {
   font-style: italic;
   color: gray;
 }
 
 /* ----------- Autocompletion ----------- */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032662}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032656}}
 .none-to-find {
   color: #aaa;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032665}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032659}}
 .num-to-find {
   visibility: hidden;
   font-size: x-small;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032669}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032663}}
 li.active a span .num-to-find {
   visibility: visible;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032672}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032666}}
 .autoc-spinner {
   margin-left: -20px;
   margin-top: 2px;
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032676}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032670}}
 .name_map {
   max-width: 1000px;
 }

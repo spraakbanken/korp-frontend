@@ -185,6 +185,7 @@
     "autocomplete_header" : "is a word form in",
     "no_lemgram_results" : "No examples found.",
     "no_stats_results" : "The search generated no results.",
+    "no_related_words" : "No hits",
 
     "graph" : "Graph",
     "line" : "Line",

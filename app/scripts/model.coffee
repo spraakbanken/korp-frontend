@@ -97,32 +97,6 @@ class BaseProxy
         stats: stats
         total_results: @total_results
 
-# class model.SearchProxy extends BaseProxy
-#     constructor: ->
-
-#     relatedWordSearch: (lemgram) ->
-#         $.ajax
-#             url: "http://spraakbanken.gu.se/ws/saldo-ws/grel/json/" + lemgram
-#             success: (data) ->
-#                 c.log "related words success"
-#                 lemgrams = []
-#                 $.each data, (i, item) ->
-#                     lemgrams = lemgrams.concat(item.rel)
-
-#                 hasAnyFreq = false
-#                 lemgramProxy.lemgramCount(lemgrams).done (freqs) ->
-#                     $.each data, (i, item) ->
-#                         item.rel = $.grep(item.rel, (lemgram) ->
-#                             hasAnyFreq = true if freqs[lemgram]
-#                             !!freqs[lemgram]
-#                         )
-
-                    # if hasAnyFreq
-                    #     simpleSearch.renderSimilarHeader lemgram, data
-                    # else
-                    #     simpleSearch.removeSimilarHeader()
-
-
 
 class model.KWICProxy extends BaseProxy
     constructor: ->

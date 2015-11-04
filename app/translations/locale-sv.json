@@ -186,6 +186,7 @@
     "autocomplete_header" : "är en ordform i",
     "no_lemgram_results" : "Hittade inga förekomster.",
     "no_stats_results" : "Sökningen gav inga träffar.",
+    "no_related_words" : "Inga träffar",
 
     "graph" : "Trenddiagram",
     "line" : "Linje",

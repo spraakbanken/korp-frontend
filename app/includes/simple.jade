@@ -13,10 +13,10 @@
       input#caseChk(type='checkbox', ng-model="isCaseInsensitive") 
       label(for='caseChk')  {{'case_insensitive' | loc:lang}}  
 
-  #similar_wrapper(ng-show="relatedObj", ng-class="{open : relatedLimit == 9999}")
-    button.btn.btn-sm.btn-default(ng-click="showAllRelated()")
+  #similar_wrapper(ng-show="relatedObj")
+    button.btn.btn-sm.btn-default(ng-click="showAllRelated()" ng-if="relatedObj.length != 0")
       span.btn_header
-        | Relaterade ord (SWE-FN)
+        | {{ 'similar_header' | loc:lang }} (SWE-FN)
       br
       span(ng-repeat="wd in relatedObj[0].words | limitTo:relatedDefault") 
         | {{stringifyRelated(wd)}}
@@ -27,23 +27,12 @@
         span(ng-if="!$last") , 
       span(ng-if="relatedObj[0].words.length > relatedDefault || relatedObj.length > 1") 
         | ...
-
-
-
-
-    //- .col(ng-repeat="obj in relatedObj")
-    //-     a.header(target="_blank", ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&search=sense%7Cswefn--{{obj.label}}") {{stringifyRelatedHeader(obj.label)}}
-    //-     ul
-    //-       li(ng-repeat="wd in obj.words | limitTo:relatedLimit") 
-    //-           a.link(ng-click="clickRelated(wd)") {{stringifyRelated(wd) + " "}}
-    
-    //- div(ng-show="relatedLimit != 9999", ng-click="relatedLimit = 9999")
-    //-   i.circle_icon.fa.fa-long-arrow-down
-    //- div(ng-show="relatedLimit == 9999", ng-click="relatedLimit = relatedDefault")
-    //-   i.circle_icon.fa.fa-long-arrow-up
-
-
-
+    div.btn.btn-sm.btn-default(ng-if="relatedObj.length == 0")
+      span.btn_header
+        | {{ 'similar_header' | loc:lang }} (SWE-FN)
+      br
+      span
+        | {{'no_related_words' | loc:lang}}
 
     //- label(for='simple_text') {{'search_for' | loc:lang}}
     //- span#keyboard.ui-state-default.specialkey ð
