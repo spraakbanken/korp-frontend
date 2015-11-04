@@ -71,7 +71,7 @@
     };
     s.showAllRelated = function() {
       return modalInstance = $modal.open({
-        template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc:lang}} (SWE-FN)</h3>\n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
+        template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc:lang}} (SWE-FN)</h3>\n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#?lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
         scope: s,
         size: 'lg',
         windowClass: "related"
@@ -89,7 +89,7 @@
         c.log("activesearch", search);
         s.relatedObj = null;
         if (search.type === "word") {
-          s.placeholder = null;
+          $("#simple_text input").val(search.val);
           s.simple_text = search.val;
           cqp = simpleSearch.getCQP(search.val);
           c.log("simple search cqp", cqp);

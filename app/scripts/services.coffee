@@ -77,7 +77,7 @@ korpApp.factory "debounce", ($timeout) ->
                 timeoutDeferred = $timeout(delayed, wait)
             result
 
-korpApp.factory 'backend', ($http, $q, utils) ->
+korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
         reduce = reduce.replace(/^_\./, "")
         
@@ -118,35 +118,43 @@ korpApp.factory 'backend', ($http, $q, utils) ->
         return def.promise
 
     relatedWordSearch : (lemgram) ->
-        def = $q.defer()
-        # http://spraakbanken.gu.se/ws/karp-sok?cql=lemgram==/pivot/saldo%20g%C3%A5..vb.1&resource=swefn&mini-entries=true&info=lu​
-        req = $http(
-            url : "http://spraakbanken.gu.se/ws/karp-sok"
-            method: "GET"
-            params :
-                cql : "lemgram==/pivot/saldo " + lemgram
-                resource : "swefn"
-                "mini-entries" : true
-                info : "lu"
-                format : "json"
-        ).success (data) ->
-
-            if angular.isArray data.div
-                eNodes = data.div[0].e
-            else if data.div
-                eNodes = data.div.e
-            else 
-                eNodes = []
-            unless angular.isArray eNodes then eNodes = [eNodes]
-            output = for e in eNodes
-                {
-                    label : e.s.replace("swefn--", "")
-                    words : _.pluck e.info.info.feat, "val"
-                }
-
-            def.resolve output
-
-        return def.promise
+        return lexicons.relatedWordSearch(lemgram)
+        #def = $q.defer()
+        #lexicons.relatedWordSearch(lemgram)
+        #return def.promise
+        #def = $q.defer()
+        ## http://spraakbanken.gu.se/ws/karp-sok?cql=lemgram==/pivot/saldo%20g%C3%A5..vb.1&resource=swefn&mini-entries=true&info=lu​
+        #req = $http(
+        #    #url : "http://spraakbanken.gu.se/ws/karp-sok"
+        #    #method: "GET"
+        #    #params :
+        #    #    cql : "lemgram==/pivot/saldo " + lemgram
+        #    #    resource : "swefn"
+        #    #    "mini-entries" : true
+        #    #    info : "lu"
+        #    #    format : "json"
+        #    url : "https://ws.spraakbanken.gu.se/ws/karp/v1/query"
+        #    method : "GET"
+        #    params :
+        #
+        #).success (data) ->
+        #
+        #    if angular.isArray data.div
+        #        eNodes = data.div[0].e
+        #    else if data.div
+        #        eNodes = data.div.e
+        #    else 
+        #        eNodes = []
+        #    unless angular.isArray eNodes then eNodes = [eNodes]
+        #    output = for e in eNodes
+        #        {
+        #            label : e.s.replace("swefn--", "")
+        #            words : _.pluck e.info.info.feat, "val"
+        #        }
+        #
+        #    def.resolve output
+        #
+        #return def.promise
 
 korpApp.factory 'nameEntitySearch', ($rootScope, $q) ->
 
@@ -354,49 +362,52 @@ korpApp.service "compareSearches",
 
 
 korpApp.factory "lexicons", ($q, $http) ->
-    getLemgrams: (wf, resources, corporaIDs, restrictToSingleWords) ->
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v1"
+    getLemgrams: (wf, resources, corporaIDs) ->
         deferred = $q.defer()
-        swforms = if restrictToSingleWords then "true" else "false"
+
         args =
-            "cql" : "wf==" + wf
-            "resurs" : resources
-            "lemgram-ac" : "true"
-            "format" : "json"
-            "sw-forms" : swforms
-            "sms-forms" : "false"
+            "q" : wf
+            "resource" : if $.isArray(resources) then resources.join(",") else resources
+
         $http(
-                method: 'GET'
-                url: "http://spraakbanken.gu.se/ws/karp-sok"
-                params : args
-            ).success((data, status, headers, config) =>
-                if data is null
-                    deferred.resolve []
-                else
-                    unless angular.isArray(data) then data = [data]
-                    karpLemgrams = data
-                    korpargs =
-                        "command" : "lemgram_count"
-                        "lemgram" : data
-                        "count" : "lemgram"
-                        "corpus" : corporaIDs
-                    $http(
-                        method: 'POST'
-                        url: settings.cgi_script
-                        params : korpargs
-                    ).success((data, status, headers, config) =>
-                        delete data.time
-                        allLemgrams = []
-                        for lemgram, count of data
-                            allLemgrams.push {"lemgram" : lemgram, "count" : count}
-                        for klemgram in karpLemgrams
-                            unless data[klemgram]
-                                allLemgrams.push {"lemgram" : klemgram, "count" : 0}
-                        deferred.resolve allLemgrams
-                    ).error (data, status, headers, config) ->
-                        deferred.resolve []
-            ).error (data, status, headers, config) ->
+            method : "GET"
+            url : "#{karpURL}/autocomplete"
+            params : args
+        ).success((data, status, headers, config) ->
+            if data is null
                 deferred.resolve []
+            else
+
+                # Pick the lemgrams. Would be nice if this was done by the backend instead.
+                karpLemgrams = _.map data.hits.hits, (entry) -> entry._source.FormRepresentations[0].lemgram
+
+                if karpLemgrams.length is 0
+                    deferred.resolve []
+                    return
+
+                lemgram = karpLemgrams.join(",")
+                corpora = corporaIDs.join(",")
+                $http(
+                    method: 'POST'
+                    url: settings.cgi_script
+                    data : "command=lemgram_count&lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
+                    headers : {
+                        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                    }
+                ).success (data, status, headers, config) =>
+                    delete data.time
+                    allLemgrams = []
+                    for lemgram, count of data
+                        allLemgrams.push {"lemgram" : lemgram, "count" : count}
+                    for klemgram in karpLemgrams
+                        unless data[klemgram]
+                            allLemgrams.push {"lemgram" : klemgram, "count" : 0}
+                    deferred.resolve allLemgrams
+        ).error (data, status, headers, config) ->
+            deferred.resolve []
         return deferred.promise
+
     getSenses: (wf) ->
         deferred = $q.defer()
         args =
@@ -406,40 +417,86 @@ korpApp.factory "lexicons", ($q, $http) ->
             "format" : "json"
             "sw-forms" : "false"
             "sms-forms" : "false"
+
+        args =
+            "q" : wf
+            "resource" : "saldom"
+
         $http(
             method: 'GET'
-            url: "http://spraakbanken.gu.se/ws/karp-sok"
+            url: "#{karpURL}/autocomplete"
             params : args
         ).success((data, status, headers, config) =>
             if data is null
                 deferred.resolve []
             else
-                unless angular.isArray(data) then data = [data]
+                #unless angular.isArray(data) then data = [data]
+
+                karpLemgrams = _.map data.hits.hits, (entry) -> entry._source.FormRepresentations[0].lemgram
+                if karpLemgrams.length is 0
+                    deferred.resolve []
+                    return
+
                 senseargs =
-                    "cql" : "lemgram == " + data.join(" or lemgram == ")
-                    "resurs" : "saldo"
-                    "format" : "json"
-                    "mini-entries" : "true"
-                    "info" : "primary"
+                    "q" : "extended||and|lemgram|equals|#{karpLemgrams.join('|')}"
+                    "resource" : "saldo"
+                    "show" : "sense,primary"
+                    "size" : 500
+
                 $http(
-                    method: 'POST'
-                    url: "http://spraakbanken.gu.se/ws/karp-sok"
+                    method: 'GET'
+                    url: "#{karpURL}/minientry"
                     params : senseargs
                 ).success((data, status, headers, config) ->
-                    console.log "sense data", data
-                    unless data?.div?.e
+                    if data.hits.total is 0
                         deferred.resolve []
-                        return null
-                    unless $.isArray(data?.div.e) then data.div.e = [data.div.e]
-                    senses = _.map data.div.e, (obj) ->
+                        return
+                    senses = _.map data.hits.hits, (entry) ->
                         {
-                            "sense" : obj.s,
-                            "desc" : obj.info?.info?.SenseRelation?.targets
+                            "sense" : entry._source.Sense[0].senseid,
+                            "desc" : entry._source.Sense[0].SenseRelations?.primary
                         }
-                    console.log "OUTSENSES", senses
                     deferred.resolve senses
                 ).error (data, status, headers, config) ->
                     deferred.resolve []
         ).error (data, status, headers, config) ->
             deferred.resolve []
         return deferred.promise
+
+    relatedWordSearch : (lemgram) ->
+        def = $q.defer()
+        req = $http(
+            url : "#{karpURL}/minientry"
+            method : "GET"
+            params :
+                q : "extended||and|lemgram|equals|#{lemgram}"
+                show : "sense"
+                resource : "saldo"
+        ).success (data) ->
+            if data.hits.total is 0
+                def.resolve []
+                return
+            else
+                senses = _.map data.hits.hits, (entry) -> entry._source.Sense[0].senseid
+
+                http = $http(
+                    url : "#{karpURL}/minientry"
+                    method : "GET"
+                    params :
+                        q : "extended||and|LU|equals|#{senses.join('|')}"
+                        show : "LU,sense"
+                        resource : "swefn"
+                ).success (data) ->
+                    if data.hits.total is 0
+                        def.resolve []
+                        return
+                    else
+                        eNodes = _.map data.hits.hits, (entry) ->
+                            {
+                                "label" : entry._source.Sense[0].senseid.replace("swefn--", "")
+                                "words" : entry._source.Sense[0].LU
+                            }
+
+                        def.resolve eNodes
+
+        return def.promise

@@ -157,8 +157,7 @@ if(isLab) {
     );
 }
 
-
-var karpLemgramLink = "http://spraakbanken.gu.se/karp/#search=cql%7C(lemgram+%3D+%22<%= val.replace(/:\\d+/, '') %>%22)+sortBy+lemgram";
+var karpLemgramLink = "http://spraakbanken.gu.se/karp/#?search=extended||and|lemgram|equals|<%= val.replace(/:\\d+/, '') %>";
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
@@ -353,7 +352,7 @@ attrs.saldo = {
     stringify : function(saldo) {
         return util.saldoToString(saldo, true);
     },
-    externalSearch : "http://spraakbanken.gu.se/karp/#search-tab-1&search=cql|(saldo+%3D+<%= val %>)",
+    externalSearch : "http://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='sense'/>",
 };

@@ -105,7 +105,7 @@
     };
   });
 
-  korpApp.factory('backend', function($http, $q, utils) {
+  korpApp.factory('backend', function($http, $q, utils, lexicons) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
         var conf, corpora1, corpora2, corpusListing, def, filterFun, params, xhr;
@@ -140,45 +140,7 @@
         return def.promise;
       },
       relatedWordSearch: function(lemgram) {
-        var def, req;
-        def = $q.defer();
-        req = $http({
-          url: "http://spraakbanken.gu.se/ws/karp-sok",
-          method: "GET",
-          params: {
-            cql: "lemgram==/pivot/saldo " + lemgram,
-            resource: "swefn",
-            "mini-entries": true,
-            info: "lu",
-            format: "json"
-          }
-        }).success(function(data) {
-          var e, eNodes, output;
-          if (angular.isArray(data.div)) {
-            eNodes = data.div[0].e;
-          } else if (data.div) {
-            eNodes = data.div.e;
-          } else {
-            eNodes = [];
-          }
-          if (!angular.isArray(eNodes)) {
-            eNodes = [eNodes];
-          }
-          output = (function() {
-            var i, len, results;
-            results = [];
-            for (i = 0, len = eNodes.length; i < len; i++) {
-              e = eNodes[i];
-              results.push({
-                label: e.s.replace("swefn--", ""),
-                words: _.pluck(e.info.info.feat, "val")
-              });
-            }
-            return results;
-          })();
-          return def.resolve(output);
-        });
-        return def.promise;
+        return lexicons.relatedWordSearch(lemgram);
       }
     };
   });
@@ -400,45 +362,44 @@
   })());
 
   korpApp.factory("lexicons", function($q, $http) {
+    var karpURL;
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v1";
     return {
-      getLemgrams: function(wf, resources, corporaIDs, restrictToSingleWords) {
-        var args, deferred, swforms;
+      getLemgrams: function(wf, resources, corporaIDs) {
+        var args, deferred;
         deferred = $q.defer();
-        swforms = restrictToSingleWords ? "true" : "false";
         args = {
-          "cql": "wf==" + wf,
-          "resurs": resources,
-          "lemgram-ac": "true",
-          "format": "json",
-          "sw-forms": swforms,
-          "sms-forms": "false"
+          "q": wf,
+          "resource": $.isArray(resources) ? resources.join(",") : resources
         };
         $http({
-          method: 'GET',
-          url: "http://spraakbanken.gu.se/ws/karp-sok",
+          method: "GET",
+          url: karpURL + "/autocomplete",
           params: args
-        }).success((function(_this) {
-          return function(data, status, headers, config) {
-            var karpLemgrams, korpargs;
-            if (data === null) {
-              return deferred.resolve([]);
-            } else {
-              if (!angular.isArray(data)) {
-                data = [data];
+        }).success(function(data, status, headers, config) {
+          var corpora, karpLemgrams, lemgram;
+          if (data === null) {
+            return deferred.resolve([]);
+          } else {
+            karpLemgrams = _.map(data.hits.hits, function(entry) {
+              return entry._source.FormRepresentations[0].lemgram;
+            });
+            if (karpLemgrams.length === 0) {
+              deferred.resolve([]);
+              return;
+            }
+            lemgram = karpLemgrams.join(",");
+            corpora = corporaIDs.join(",");
+            return $http({
+              method: 'POST',
+              url: settings.cgi_script,
+              data: "command=lemgram_count&lemgram=" + lemgram + "&count=lemgram&corpus=" + corpora,
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
               }
-              karpLemgrams = data;
-              korpargs = {
-                "command": "lemgram_count",
-                "lemgram": data,
-                "count": "lemgram",
-                "corpus": corporaIDs
-              };
-              return $http({
-                method: 'POST',
-                url: settings.cgi_script,
-                params: korpargs
-              }).success(function(data, status, headers, config) {
-                var allLemgrams, count, i, klemgram, lemgram, len;
+            }).success((function(_this) {
+              return function(data, status, headers, config) {
+                var allLemgrams, count, i, klemgram, len;
                 delete data.time;
                 allLemgrams = [];
                 for (lemgram in data) {
@@ -458,12 +419,10 @@
                   }
                 }
                 return deferred.resolve(allLemgrams);
-              }).error(function(data, status, headers, config) {
-                return deferred.resolve([]);
-              });
-            }
-          };
-        })(this)).error(function(data, status, headers, config) {
+              };
+            })(this));
+          }
+        }).error(function(data, status, headers, config) {
           return deferred.resolve([]);
         });
         return deferred.promise;
@@ -479,48 +438,50 @@
           "sw-forms": "false",
           "sms-forms": "false"
         };
+        args = {
+          "q": wf,
+          "resource": "saldom"
+        };
         $http({
           method: 'GET',
-          url: "http://spraakbanken.gu.se/ws/karp-sok",
+          url: karpURL + "/autocomplete",
           params: args
         }).success((function(_this) {
           return function(data, status, headers, config) {
-            var senseargs;
+            var karpLemgrams, senseargs;
             if (data === null) {
               return deferred.resolve([]);
             } else {
-              if (!angular.isArray(data)) {
-                data = [data];
+              karpLemgrams = _.map(data.hits.hits, function(entry) {
+                return entry._source.FormRepresentations[0].lemgram;
+              });
+              if (karpLemgrams.length === 0) {
+                deferred.resolve([]);
+                return;
               }
               senseargs = {
-                "cql": "lemgram == " + data.join(" or lemgram == "),
-                "resurs": "saldo",
-                "format": "json",
-                "mini-entries": "true",
-                "info": "primary"
+                "q": "extended||and|lemgram|equals|" + (karpLemgrams.join('|')),
+                "resource": "saldo",
+                "show": "sense,primary",
+                "size": 500
               };
               return $http({
-                method: 'POST',
-                url: "http://spraakbanken.gu.se/ws/karp-sok",
+                method: 'GET',
+                url: karpURL + "/minientry",
                 params: senseargs
               }).success(function(data, status, headers, config) {
-                var ref, senses;
-                console.log("sense data", data);
-                if (!(data != null ? (ref = data.div) != null ? ref.e : void 0 : void 0)) {
+                var senses;
+                if (data.hits.total === 0) {
                   deferred.resolve([]);
-                  return null;
+                  return;
                 }
-                if (!$.isArray(data != null ? data.div.e : void 0)) {
-                  data.div.e = [data.div.e];
-                }
-                senses = _.map(data.div.e, function(obj) {
-                  var ref1, ref2, ref3;
+                senses = _.map(data.hits.hits, function(entry) {
+                  var ref;
                   return {
-                    "sense": obj.s,
-                    "desc": (ref1 = obj.info) != null ? (ref2 = ref1.info) != null ? (ref3 = ref2.SenseRelation) != null ? ref3.targets : void 0 : void 0 : void 0
+                    "sense": entry._source.Sense[0].senseid,
+                    "desc": (ref = entry._source.Sense[0].SenseRelations) != null ? ref.primary : void 0
                   };
                 });
-                console.log("OUTSENSES", senses);
                 return deferred.resolve(senses);
               }).error(function(data, status, headers, config) {
                 return deferred.resolve([]);
@@ -531,6 +492,51 @@
           return deferred.resolve([]);
         });
         return deferred.promise;
+      },
+      relatedWordSearch: function(lemgram) {
+        var def, req;
+        def = $q.defer();
+        req = $http({
+          url: karpURL + "/minientry",
+          method: "GET",
+          params: {
+            q: "extended||and|lemgram|equals|" + lemgram,
+            show: "sense",
+            resource: "saldo"
+          }
+        }).success(function(data) {
+          var http, senses;
+          if (data.hits.total === 0) {
+            def.resolve([]);
+          } else {
+            senses = _.map(data.hits.hits, function(entry) {
+              return entry._source.Sense[0].senseid;
+            });
+            return http = $http({
+              url: karpURL + "/minientry",
+              method: "GET",
+              params: {
+                q: "extended||and|LU|equals|" + (senses.join('|')),
+                show: "LU,sense",
+                resource: "swefn"
+              }
+            }).success(function(data) {
+              var eNodes;
+              if (data.hits.total === 0) {
+                def.resolve([]);
+              } else {
+                eNodes = _.map(data.hits.hits, function(entry) {
+                  return {
+                    "label": entry._source.Sense[0].senseid.replace("swefn--", ""),
+                    "words": entry._source.Sense[0].LU
+                  };
+                });
+                return def.resolve(eNodes);
+              }
+            });
+          }
+        });
+        return def.promise;
       }
     };
   });

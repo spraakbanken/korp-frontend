@@ -68,7 +68,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 <span ng-click="clickX()" class="close-x">×</span>
             </div>
             <div class="modal-body">
-                <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#lexicon=swefn&amp;search=sense%7Cswefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#?lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
                   <div class="list_wrapper">
                       <ul>
                         <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
@@ -91,7 +91,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         c.log "activesearch", search
         s.relatedObj = null
         if search.type == "word"
-            s.placeholder = null
+            $("#simple_text input").val(search.val) # Necessary for displaying the wordform if it came from the URL
             s.simple_text = search.val
             cqp = simpleSearch.getCQP(search.val)
             c.log "simple search cqp", cqp

@@ -570,12 +570,9 @@
         "variant": "@",
         "disableLemgramAutocomplete": "="
       },
-      template: "<div>\n    <script type=\"text/ng-template\" id=\"lemgramautocomplete.html\">\n        <a style=\"cursor:pointer\">\n            <span ng-class=\"{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : match.model.count == 0 && noVariant()}\">\n                <span ng-if=\"match.model.parts.namespace\" class=\"label\">{{match.model.parts.namespace | loc}}</span>\n                <span>{{match.model.parts.main}}</span>\n                <sup ng-if=\"match.model.parts.index != 1\">{{match.model.parts.index}}</sup>\n                <span ng-if=\"match.model.parts.pos\">({{match.model.parts.pos}})</span>\n                <span ng-if=\"match.model.desc\" style=\"color:gray;margin-left:6px\">{{match.model.desc.main}}</span>\n                <sup ng-if=\"match.model.desc && match.model.desc.index != 1\" style=\"color:gray\">{{match.model.desc.index}}</sup>\n                <span class=\"num-to-find\" ng-if=\"match.model.count && match.model.count > 0\">\n                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}\n                </span>\n            </span>\n        </a>\n    </script>\n    <div ng-show=\"!disableLemgramAutocomplete\">\n        <div style=\"float:left\"><input\n            class=\"autocomplete_searchbox\"\n            autofocus\n            type=\"text\" \n            ng-model=\"textInField\"\n            typeahead=\"row for row in getRows($viewValue)\"\n            typeahead-wait-ms=\"500\"\n            typeahead-template-url=\"lemgramautocomplete.html\"\n            typeahead-loading=\"isLoading\"\n            typeahead-on-select=\"selectedItem($item, $model, $label)\"\n            placeholder=\"{{lemgramToString(placeholder)}}\"></div>\n        <div style=\"margin-left:-20px;margin-top:2px;float:left\" ng-if=\"isLoading\"><i class=\"fa fa-spinner fa-pulse\"></i></div>\n    </div>\n    <div ng-show=\"disableLemgramAutocomplete\">\n        <div style=\"float:left\"> \n            <input class=\"standard_searchbox\" autofocus type=\"text\">\n        </div>\n    </div>\n</div>",
+      template: "<div>\n    <script type=\"text/ng-template\" id=\"lemgramautocomplete.html\">\n        <a style=\"cursor:pointer\">\n            <span ng-class=\"{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}\">\n                <span ng-if=\"match.model.parts.namespace\" class=\"label\">{{match.model.parts.namespace | loc}}</span>\n                <span>{{match.model.parts.main}}</span>\n                <sup ng-if=\"match.model.parts.index != 1\">{{match.model.parts.index}}</sup>\n                <span ng-if=\"match.model.parts.pos\">({{match.model.parts.pos}})</span>\n                <span ng-if=\"match.model.desc\" style=\"color:gray;margin-left:6px\">{{match.model.desc.main}}</span>\n                <sup ng-if=\"match.model.desc && match.model.desc.index != 1\" style=\"color:gray\">{{match.model.desc.index}}</sup>\n                <span class=\"num-to-find\" ng-if=\"match.model.count && match.model.count > 0\">\n                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}\n                </span>\n            </span>\n        </a>\n    </script>\n    <div ng-show=\"!disableLemgramAutocomplete\">\n        <div style=\"float:left\"><input\n            class=\"autocomplete_searchbox\"\n            autofocus\n            type=\"text\" \n            ng-model=\"textInField\"\n            typeahead=\"row for row in getRows($viewValue)\"\n            typeahead-wait-ms=\"500\"\n            typeahead-template-url=\"lemgramautocomplete.html\"\n            typeahead-loading=\"isLoading\"\n            typeahead-on-select=\"selectedItem($item, $model, $label)\"\n            placeholder=\"{{placeholderToString(placeholder)}}\"></div>\n        <div style=\"margin-left:-20px;margin-top:2px;float:left\" ng-if=\"isLoading\"><i class=\"fa fa-spinner fa-pulse\"></i></div>\n    </div>\n    <div ng-show=\"disableLemgramAutocomplete\">\n        <div style=\"float:left\"> \n            <input class=\"standard_searchbox\" autofocus type=\"text\">\n        </div>\n    </div>\n</div>",
       link: function(scope, elem, attr) {
         c.log("autoc link", scope.model);
-        scope.noVariant = function() {
-          return variant !== 'dalin';
-        };
         scope.lemgramify = function(lemgram) {
           var lemgramRegExp, match;
           lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/;
@@ -598,11 +595,15 @@
             "index": senseParts[1]
           };
         };
-        scope.lemgramToString = function(lemgram) {
-          if (!lemgram) {
+        scope.placeholderToString = function(placeholder) {
+          if (!placeholder) {
             return;
           }
-          return util.lemgramToString(lemgram).replace(/<.*?>/g, "");
+          if (scope.type === "lemgram") {
+            return util.lemgramToString(placeholder).replace(/<.*?>/g, "");
+          } else {
+            return util.saldoToString(placeholder);
+          }
         };
         scope.formatPlaceholder = function(input) {
           var lemgramRegExp, match;
@@ -615,8 +616,13 @@
           }
         };
         scope.selectedItem = function(item, model, label) {
-          scope.placeholder = model.lemgram;
-          scope.model = model.lemgram;
+          if (scope.type === "lemgram") {
+            scope.placeholder = model.lemgram;
+            scope.model = model.lemgram;
+          } else {
+            scope.placeholder = model.sense;
+            scope.model = model.sense;
+          }
           return scope.textInField = "";
         };
         if (scope.model) {
@@ -647,12 +653,11 @@
           return morphologies;
         };
         scope.getRows = function(input) {
-          var corporaIDs, lemgrams, morphologies;
+          var corporaIDs, morphologies;
           corporaIDs = _.pluck(settings.corpusListing.selected, "id");
           morphologies = scope.getMorphologies(corporaIDs);
           if (scope.type === "lemgram") {
-            lemgrams = scope.getLemgrams(input, morphologies, corporaIDs);
-            return lemgrams;
+            return scope.getLemgrams(input, morphologies, corporaIDs);
           } else if (scope.type === "sense") {
             return scope.getSenses(input, morphologies, corporaIDs);
           }
@@ -660,13 +665,14 @@
         scope.getLemgrams = function(input, morphologies, corporaIDs) {
           var deferred, http;
           deferred = $q.defer();
-          http = lexicons.getLemgrams(input, morphologies.join("|"), corporaIDs, scope.variant === "affix");
+          http = lexicons.getLemgrams(input, morphologies, corporaIDs, scope.variant === "affix");
           http.then(function(data) {
             data.forEach(function(item) {
               if (scope.variant === 'affix') {
                 item.count = -1;
               }
-              return item.parts = scope.lemgramify(item.lemgram);
+              item.parts = scope.lemgramify(item.lemgram);
+              return item.variant = scope.variant;
             });
             data.sort(function(a, b) {
               return b.count - a.count;
@@ -683,11 +689,16 @@
             data.forEach(function(item) {
               item.parts = scope.sensify(item.sense);
               if (item.desc) {
-                return item.desc = scope.sensify(item.desc);
+                item.desc = scope.sensify(item.desc);
               }
+              return item.variant = scope.variant;
             });
             data.sort(function(a, b) {
-              return b.count - a.count;
+              if (a.parts.main === b.parts.main) {
+                return b.parts.index < a.parts.index;
+              } else {
+                return a.sense.length - b.sense.length;
+              }
             });
             return deferred.resolve(data);
           });
