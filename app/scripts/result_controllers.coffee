@@ -412,7 +412,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                        </div>"""
     s.markers = {}
     s.mapSettings = 
-        baseLayer : "Open Street Map"
+        baseLayer : "Stamen Watercolor"
     s.numResults = 0
     s.showTime = true
 

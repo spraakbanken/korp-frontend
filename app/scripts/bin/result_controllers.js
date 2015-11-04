@@ -494,7 +494,7 @@
     s.hoverTemplate = "<div class=\"hover-info\" ng-repeat=\"(name, values) in names\">\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>\n</div>";
     s.markers = {};
     s.mapSettings = {
-      baseLayer: "Open Street Map"
+      baseLayer: "Stamen Watercolor"
     };
     s.numResults = 0;
     s.showTime = true;
