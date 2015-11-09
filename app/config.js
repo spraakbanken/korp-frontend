@@ -2468,7 +2468,7 @@ settings.corpora.bloggmixodat = {
 
 settings.corpora.drama = {
     id : "drama",
-    title : "Dramawebben (demo)",
+    title : "Dramawebben",
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
