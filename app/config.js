@@ -3942,7 +3942,7 @@ settings.corpora.twitter = {
         text_location : {label : "tweet_location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
-        text_url : {label : "url", type : "url"},
+        text_id : {label : "id"},
         user_location : {label : "user_location"},
         user_followers : {label : "followers"},
         user_following : {label : "following"},
@@ -3954,6 +3954,13 @@ settings.corpora.twitter = {
         user_url : {label : "website", type : "url"},
         user_created : {label : "user_since"},
         user_trstrank : {label : "trstrank"},
+    },
+    custom_attributes : {
+	    text_url : {
+		    label: "url",
+		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+		    custom_type : "struct"
+		    }
     }
 };
 
