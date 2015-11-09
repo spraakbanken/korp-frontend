@@ -3981,6 +3981,7 @@ settings.corpora["twitter-pldebatt-130612"] = {
         text_location : {label : "location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
+        text_id : {label : "id"},
         user_location : {label : "user_location"},
         user_followers : {label : "followers"},
         user_following : {label : "following"},
@@ -3991,6 +3992,13 @@ settings.corpora["twitter-pldebatt-130612"] = {
             },
         user_url : {label : "website", type : "url"},
         user_created : {label : "user_since"}
+    },
+    custom_attributes : {
+	    text_url : {
+		    label: "url",
+		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+		    custom_type : "struct"
+		    }
     }
 };
 
@@ -4018,6 +4026,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
         text_location : {label : "location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
+        text_id : {label : "id"},
         user_location : {label : "user_location"},
         user_followers : {label : "followers"},
         user_following : {label : "following"},
@@ -4028,6 +4037,13 @@ settings.corpora["twitter-pldebatt-131006"] = {
             },
         user_url : {label : "website", type : "url"},
         user_created : {label : "user_since"}
+    },
+    custom_attributes : {
+	    text_url : {
+		    label: "url",
+		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+		    custom_type : "struct"
+		    }
     }
 };
 
@@ -4055,6 +4071,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
         text_location : {label : "location"},
         text_coordinates : {label : "coordinates"},
         text_replytouser : {label : "replytouser"},
+        text_id : {label : "id"},
         user_location : {label : "user_location"},
         user_followers : {label : "followers"},
         user_following : {label : "following"},
@@ -4065,6 +4082,13 @@ settings.corpora["twitter-pldebatt-140504"] = {
             },
         user_url : {label : "website", type : "url"},
         user_created : {label : "user_since"}
+    },
+    custom_attributes : {
+	    text_url : {
+		    label: "url",
+		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+		    custom_type : "struct"
+		    }
     }
 };
 

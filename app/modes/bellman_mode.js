@@ -26,6 +26,7 @@ settings.corpora['bellman'] = {
 		msd : attrs.msd,
  		lemma : attrs.baseform,
  		lex : attrs.lemgram,
+ 		dalinlex : attrs.dalinlemgram,
  		saldo : attrs.saldo,
  		prefix : attrs.prefix,
  		suffix : attrs.suffix,
