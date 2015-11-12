@@ -2667,6 +2667,12 @@ li.active a span .num-to-find {
     margin-left:-20px;margin-top:2px;float:left
 }
 
+/* Map */
+
 .name_map {
     max-width: 1000px;
+}
+
+.leaflet-control-layers-toggle {
+    background-image: url(../components/leaflet/dist/images/layers.png);
 }
