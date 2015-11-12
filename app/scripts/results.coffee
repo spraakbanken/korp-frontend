@@ -1123,9 +1123,6 @@ class view.StatsResults extends BaseResults
             cssClass: "slick-cell-checkboxsel"
 
         columns = [checkboxSelector.getColumnDefinition()].concat(columns)
-        #$("#myGrid").width($(document).width())
-        $("#myGrid").width(800)
-        $("#myGrid").height(600)
 
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
@@ -1135,7 +1132,6 @@ class view.StatsResults extends BaseResults
         grid.registerPlugin(checkboxSelector)
         @grid = grid
         @grid.autosizeColumns()
-        #$("#myGrid").width("100%")
 
         sortCol = columns[2]
         log = _.debounce () ->
@@ -1201,11 +1197,14 @@ class view.StatsResults extends BaseResults
             @s.graphEnabled = false
 
     resizeGrid : () ->
-        height = $(window).height() - 600
-        $("#myGrid:visible").height height
+        height = 0
+        $('.slick-row').each () ->
+            height += $(this).outerHeight true
+        c.log "## height ", height
+        $("#myGrid:visible.slick-viewport").height height
         
         # adding 20 px to width if vertical scrollbar appears
-        if @gridData?.length * 20 >= height
+        if @gridData?.length * 25 >= height
             width = 20
         else
             width = 0
@@ -1214,7 +1213,8 @@ class view.StatsResults extends BaseResults
             width += $(this).outerWidth true
         if width > ($(window).width() - 40)
             width = $(window).width() - 40
-        $("#myGrid:visible").width width
+        c.log "## width ", width
+        $("#myGrid:visible.slick-viewport").width width
         
         @grid?.resizeCanvas()
         @grid?.invalidate()

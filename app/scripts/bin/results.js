@@ -1369,8 +1369,6 @@
         cssClass: "slick-cell-checkboxsel"
       });
       columns = [checkboxSelector.getColumnDefinition()].concat(columns);
-      $("#myGrid").width(800);
-      $("#myGrid").height(600);
       grid = new Slick.Grid($("#myGrid"), data, columns, {
         enableCellNavigation: false,
         enableColumnReorder: false
@@ -1465,9 +1463,13 @@
 
     StatsResults.prototype.resizeGrid = function() {
       var height, ref, ref1, ref2, width;
-      height = $(window).height() - 600;
-      $("#myGrid:visible").height(height);
-      if (((ref = this.gridData) != null ? ref.length : void 0) * 20 >= height) {
+      height = 0;
+      $('.slick-row').each(function() {
+        return height += $(this).outerHeight(true);
+      });
+      c.log("## height ", height);
+      $("#myGrid:visible.slick-viewport").height(height);
+      if (((ref = this.gridData) != null ? ref.length : void 0) * 25 >= height) {
         width = 20;
       } else {
         width = 0;
@@ -1478,7 +1480,8 @@
       if (width > ($(window).width() - 40)) {
         width = $(window).width() - 40;
       }
-      $("#myGrid:visible").width(width);
+      c.log("## width ", width);
+      $("#myGrid:visible.slick-viewport").width(width);
       if ((ref1 = this.grid) != null) {
         ref1.resizeCanvas();
       }

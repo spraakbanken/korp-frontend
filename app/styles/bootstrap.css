@@ -2160,7 +2160,6 @@ tbody.collapse.in {
   right: 0;
   left: 0;
   z-index: 1030;
-  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 @media (min-width: 768px) {
@@ -3092,15 +3091,6 @@ a.thumbnail.active {
 .alert-danger .alert-link {
   color: #843534;
 }
-
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -3143,7 +3133,6 @@ a.thumbnail.active {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Library\/Mobile\%20Documents\/com\~apple\~CloudDocs\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000365}}
 .progress.active .progress-bar,
 .progress-bar.active {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
@@ -3944,14 +3933,11 @@ button.close {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Library\/Mobile\%20Documents\/com\~apple\~CloudDocs\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_modals\.scss}line{font-family:\0000332}}
 .modal.fade .modal-dialog {
-  -webkit-transform: translate3d(0, -25%, 0);
   transform: translate3d(0, -25%, 0);
-  transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Library\/Mobile\%20Documents\/com\~apple\~CloudDocs\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_modals\.scss}line{font-family:\0000336}}
 .modal.in .modal-dialog {
-  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
@@ -4406,7 +4392,6 @@ button.close {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Library\/Mobile\%20Documents\/com\~apple\~CloudDocs\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_utilities\.scss}line{font-family:\0000354}}
 .affix {
   position: fixed;
-  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
