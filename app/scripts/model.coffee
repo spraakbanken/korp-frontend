@@ -19,7 +19,11 @@ class BaseProxy
         @pendingRequests = []
 
     expandCQP : (cqp) ->
-        return CQP.expandOperators cqp
+        try
+            return CQP.expandOperators cqp
+        catch e
+            c.warn "CQP expansion failed", cqp
+            return cqp
 
     makeRequest: ->
         @abort()

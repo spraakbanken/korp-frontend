@@ -27,7 +27,14 @@
     }
 
     BaseProxy.prototype.expandCQP = function(cqp) {
-      return CQP.expandOperators(cqp);
+      var e;
+      try {
+        return CQP.expandOperators(cqp);
+      } catch (_error) {
+        e = _error;
+        c.warn("CQP expansion failed", cqp);
+        return cqp;
+      }
     };
 
     BaseProxy.prototype.makeRequest = function() {
