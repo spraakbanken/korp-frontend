@@ -453,8 +453,9 @@ class model.NameProxy extends model.StatsProxy
     constructor: ->
         super()    
         
-    makeParameters: (reduceval, cqp) ->
-        parameters = super(reduceval, cqp)
+    makeParameters: (reduceVal, cqp) ->
+        # ignore reduceVal, map only works for word
+        parameters = super("word", cqp)
         parameters.cqp2 = "[pos='PM']"
         return parameters
     

@@ -541,9 +541,9 @@
       NameProxy.__super__.constructor.call(this);
     }
 
-    NameProxy.prototype.makeParameters = function(reduceval, cqp) {
+    NameProxy.prototype.makeParameters = function(reduceVal, cqp) {
       var parameters;
-      parameters = NameProxy.__super__.makeParameters.call(this, reduceval, cqp);
+      parameters = NameProxy.__super__.makeParameters.call(this, "word", cqp);
       parameters.cqp2 = "[pos='PM']";
       return parameters;
     };
