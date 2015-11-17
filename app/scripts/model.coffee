@@ -329,14 +329,15 @@ class model.StatsProxy extends BaseProxy
         @currentPage = 0
         @page_incr = 25
 
-    processData: (def, data, reduceval) ->
+    processData: (def, data, reduceVals) ->
         minWidth = 100
+
         columns = [
             id: "hit"
             name: "stats_hit"
             field: "hit_value"
             sortable: true
-            formatter: settings.reduce_stringify(reduceval)
+            formatter: settings.reduce_statistics reduceVals
             minWidth : minWidth
         ,
             id: "total"
@@ -358,11 +359,11 @@ class model.StatsProxy extends BaseProxy
         
 
         wordArray = _.keys(data.total.absolute)
-        if reduceval in ["lex", "saldo", "baseform"]
-            groups = _.groupBy wordArray, (item) ->
-                item.replace(/:\d+/g, "")
 
-            wordArray = _.keys groups
+        groups = _.groupBy wordArray, (item) ->
+            item.replace(/:\d+/g, "")
+
+        wordArray = _.keys groups
 
         sizeOfDataset = wordArray.length
         dataset = new Array(sizeOfDataset + 1)
@@ -385,10 +386,10 @@ class model.StatsProxy extends BaseProxy
             }[$("body").scope().lang]
         }
 
-    makeParameters: (reduceval, cqp) ->
+    makeParameters: (reduceVals, cqp) ->
         parameters = 
             command: "count"
-            groupby: reduceval
+            groupby: reduceVals.join ','
             cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: $.support.ajaxProgress
@@ -399,14 +400,20 @@ class model.StatsProxy extends BaseProxy
         self = this
         super()
         reduceval = search().stats_reduce or "word"
-        reduceval = "word" if reduceval is "word_insensitive"
+        ignoreCase = false
+        if reduceval is "word_insensitive"
+            ignoreCase = true
+            reduceval = "word" 
+        
+        ## todo: now supports multipe reduce parameters to backend 
+        reduceVals = [reduceval]
 
-        data = @makeParameters(reduceval, cqp)
+        data = @makeParameters(reduceVals, cqp)
 
-        if settings.corpusListing.getCurrentAttributes()[reduceval]?.type == "set"
-            data.split = reduceval
+        data.split = _.filter(reduceVals, (reduceVal) -> 
+            settings.corpusListing.getCurrentAttributes()[reduceVal]?.type == "set").join(',')
 
-        if $("#reduceSelect select").val() is "word_insensitive"
+        if ignoreCase
             $.extend data,
                 ignore_case: "word"
 
@@ -435,14 +442,7 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                @processData(def, data, reduceval)
-                
-                # $.each data.corpora, (corpus, obj) ->
-                    # totalRow[corpus + "_value"] = obj.sums
-
-                wordArray = _.keys(data.total.absolute)
-
-                # dataset = [totalRow]
+                @processData(def, data, reduceVals)
 
         return def.promise()
 
@@ -455,7 +455,7 @@ class model.NameProxy extends model.StatsProxy
         
     makeParameters: (reduceVal, cqp) ->
         # ignore reduceVal, map only works for word
-        parameters = super("word", cqp)
+        parameters = super(["word"], cqp)
         parameters.cqp2 = "[pos='PM']"
         return parameters
     

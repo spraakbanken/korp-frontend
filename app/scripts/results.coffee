@@ -1200,9 +1200,8 @@ class view.StatsResults extends BaseResults
         height = 0
         $('.slick-row').each () ->
             height += $(this).outerHeight true
-        c.log "## height ", height
         $("#myGrid:visible.slick-viewport").height height
-        
+
         # adding 20 px to width if vertical scrollbar appears
         if @gridData?.length * 25 >= height
             width = 20
@@ -1213,7 +1212,6 @@ class view.StatsResults extends BaseResults
             width += $(this).outerWidth true
         if width > ($(window).width() - 40)
             width = $(window).width() - 40
-        c.log "## width ", width
         $("#myGrid:visible.slick-viewport").width width
         
         @grid?.resizeCanvas()

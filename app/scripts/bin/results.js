@@ -1467,7 +1467,6 @@
       $('.slick-row').each(function() {
         return height += $(this).outerHeight(true);
       });
-      c.log("## height ", height);
       $("#myGrid:visible.slick-viewport").height(height);
       if (((ref = this.gridData) != null ? ref.length : void 0) * 25 >= height) {
         width = 20;
@@ -1480,7 +1479,6 @@
       if (width > ($(window).width() - 40)) {
         width = $(window).width() - 40;
       }
-      c.log("## width ", width);
       $("#myGrid:visible.slick-viewport").width(width);
       if ((ref1 = this.grid) != null) {
         ref1.resizeCanvas();

@@ -397,7 +397,7 @@
       this.page_incr = 25;
     }
 
-    StatsProxy.prototype.processData = function(def, data, reduceval) {
+    StatsProxy.prototype.processData = function(def, data, reduceVals) {
       var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
       minWidth = 100;
       columns = [
@@ -406,7 +406,7 @@
           name: "stats_hit",
           field: "hit_value",
           sortable: true,
-          formatter: settings.reduce_stringify(reduceval),
+          formatter: settings.reduce_statistics(reduceVals),
           minWidth: minWidth
         }, {
           id: "total",
@@ -430,12 +430,10 @@
         };
       })(this));
       wordArray = _.keys(data.total.absolute);
-      if (reduceval === "lex" || reduceval === "saldo" || reduceval === "baseform") {
-        groups = _.groupBy(wordArray, function(item) {
-          return item.replace(/:\d+/g, "");
-        });
-        wordArray = _.keys(groups);
-      }
+      groups = _.groupBy(wordArray, function(item) {
+        return item.replace(/:\d+/g, "");
+      });
+      wordArray = _.keys(groups);
       sizeOfDataset = wordArray.length;
       dataset = new Array(sizeOfDataset + 1);
       statsWorker = new Worker("scripts/statistics_worker.js");
@@ -457,11 +455,11 @@
       });
     };
 
-    StatsProxy.prototype.makeParameters = function(reduceval, cqp) {
+    StatsProxy.prototype.makeParameters = function(reduceVals, cqp) {
       var parameters;
       parameters = {
         command: "count",
-        groupby: reduceval,
+        groupby: reduceVals.join(','),
         cqp: this.expandCQP(cqp),
         corpus: settings.corpusListing.stringifySelected(true),
         incremental: $.support.ajaxProgress
@@ -471,18 +469,22 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, def, reduceval, ref, self;
+      var data, def, ignoreCase, reduceVals, reduceval, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
+      ignoreCase = false;
       if (reduceval === "word_insensitive") {
+        ignoreCase = true;
         reduceval = "word";
       }
-      data = this.makeParameters(reduceval, cqp);
-      if (((ref = settings.corpusListing.getCurrentAttributes()[reduceval]) != null ? ref.type : void 0) === "set") {
-        data.split = reduceval;
-      }
-      if ($("#reduceSelect select").val() === "word_insensitive") {
+      reduceVals = [reduceval];
+      data = this.makeParameters(reduceVals, cqp);
+      data.split = _.filter(reduceVals, function(reduceVal) {
+        var ref;
+        return ((ref = settings.corpusListing.getCurrentAttributes()[reduceVal]) != null ? ref.type : void 0) === "set";
+      }).join(',');
+      if (ignoreCase) {
         $.extend(data, {
           ignore_case: "word"
         });
@@ -512,14 +514,12 @@
         },
         success: (function(_this) {
           return function(data) {
-            var wordArray;
             if (data.ERROR != null) {
               c.log("gettings stats failed with error", data.ERROR);
               def.reject(data);
               return;
             }
-            _this.processData(def, data, reduceval);
-            return wordArray = _.keys(data.total.absolute);
+            return _this.processData(def, data, reduceVals);
           };
         })(this)
       }));
@@ -543,7 +543,7 @@
 
     NameProxy.prototype.makeParameters = function(reduceVal, cqp) {
       var parameters;
-      parameters = NameProxy.__super__.makeParameters.call(this, "word", cqp);
+      parameters = NameProxy.__super__.makeParameters.call(this, ["word"], cqp);
       parameters.cqp2 = "[pos='PM']";
       return parameters;
     };
