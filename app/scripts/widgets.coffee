@@ -177,21 +177,6 @@ Sidebar =
 
         # @element.css "display", oldDisplay
 
-    _parseLemma: (attr, tmplVal) ->
-        seq = []
-        if attr?
-            seq = $.map(attr.split("|"), (item) ->
-                lemma = item.split(":")[0]
-                if tmplVal.pattern
-                    $.format tmplVal.pattern, [lemma, lemma]
-                else
-                    lemma
-            )
-        seq = $.grep(seq, (itm) ->
-            itm and itm.length
-        )
-        $.arrayToHTMLList(seq).outerHTML()
-
     refreshContent: (mode) ->
         if mode is "lemgramWarning"
             $.Deferred((dfd) =>
@@ -247,20 +232,3 @@ $.widget "korp.radioList",
 
     getSelected: ->
         @element.find ".radioList_selected"
-
-$.extend $.ui.autocomplete.prototype,
-    _renderItem: (ul, item) ->
-        li = $("<li></li>").data("ui-autocomplete-item", item)
-            .append($("<a></a>")[(if @options.html then "html" else "text")](item.label))
-            .appendTo(ul)
-        li.addClass "autocomplete-item-disabled" unless item["enabled"]
-        li
-
-    _renderMenu: (ul, items) ->
-        that = this
-        currentCategory = ""
-        $.each items, (index, item) ->
-            if item.category and item.category isnt currentCategory
-                ul.append $("<li class='ui-autocomplete-category'></li>").localeKey(item.category)
-                currentCategory = item.category
-            that._renderItem ul, item

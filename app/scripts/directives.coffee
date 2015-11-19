@@ -176,50 +176,6 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             tmplElem = $compile(valueObj.extended_template or defaultTmpl)(childScope)
             elem.html(tmplElem).addClass("arg_value")
 
-
-#korpApp.directive "korpAutocomplete", () ->
-#    scope : 
-#        model : "="
-#        stringify : "="
-#        sorter : "="
-#        type : "@"
-#    link : (scope, elem, attr) ->
-#        
-#        setVal = (lemgram) ->
-#            $(elem).attr("placeholder", scope.stringify(lemgram, true).replace(/<\/?[^>]+>/g, ""))
-#                .val("").blur()
-#        if scope.model
-#            setVal(scope.model)
-#        arg_value = elem.korp_autocomplete(
-#            labelFunction: scope.stringify
-#            sortFunction: scope.sorter
-#            type: scope.type
-#            select: (lemgram) ->
-#                # $(this).data "value", (if data.label is "baseform" then lemgram.split(".")[0] else lemgram)
-#                setVal(lemgram)
-#                scope.$apply () ->
-#                    if scope.type == "baseform"
-#                        scope.model = lemgram.split(".")[0]
-#                    else 
-#                        scope.model = lemgram
-#
-#            "sw-forms": true
-#        )
-#        .blur(->
-#            input = this
-#            setTimeout (->
-#
-#                if ($(input).val().length and not util.isLemgramId($(input).val())) or $(input).data("value") is null
-#                    $(input).addClass("invalid_input").attr("placeholder", null).data("value", null)
-#                else
-#                    $(input).removeClass("invalid_input")
-#                # self._trigger "change"
-#            ), 100
-#        )
-
-
-
-
 korpApp.directive "constr", ($window, searches) ->
     scope : true
 

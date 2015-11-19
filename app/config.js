@@ -4216,19 +4216,23 @@ settings.reduce_helpers = {
             return item.split("_")[0].toLowerCase();
         });
         return corpora;
-    },
-    appendDiagram: function (output, corpora, value) {
-        return output + $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
     }
 };
 
-settings.reduce_statistics = function(types) {
+settings.reduce_statistics_pie_chart = function(row, cell, value, columnDef, dataContext) {
+    if(value != "&Sigma;")
+        value = value[0].replace(/:\d+/g, "")
+    return $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
+};
+
+settings.reduce_statistics = function(types, ignoreCase) {
     
     return function(row, cell, value, columnDef, dataContext) {
+        
         var corpora = settings.reduce_helpers.getCorpora(dataContext);
         
         if(value == "&Sigma;")
-            return settings.reduce_helpers.appendDiagram(value, corpora, value)
+            return "&Sigma;";
 
         var tokenLists = _.map(value, function(val) {
             var tmp = val.split('/');
@@ -4237,11 +4241,8 @@ settings.reduce_statistics = function(types) {
             });
         });
         
-        var linkInnerHTML = _.map(_.zip(types,tokenLists[0]), function (input) {
-            var type = input[0];
-            var tokenList = input[1];
-            return settings.reduce_stringify(type, tokenList, corpora);
-        }).join(" | ");
+        var typeIdx = types.indexOf(columnDef.id);
+        var linkInnerHTML = settings.reduce_stringify(columnDef.id, tokenLists[0][typeIdx], corpora);
         
         var totalQuery = []
 
@@ -4255,7 +4256,7 @@ settings.reduce_statistics = function(types) {
                 var elems = _.map(tokenLists, function(tokenList) {
                     return tokenList[typeIdx][tokenIdx];
                 });
-                andParts.push(settings.reduce_cqp(type, _.unique(elems)));
+                andParts.push(settings.reduce_cqp(type, _.unique(elems), ignoreCase));
             }
             totalQuery.push("[" + andParts.join(" & ") + "]");
         }
@@ -4268,7 +4269,7 @@ settings.reduce_statistics = function(types) {
             "data-corpora" : JSON.stringify(corpora)
             }).html(linkInnerHTML).outerHTML();
         
-        return settings.reduce_helpers.appendDiagram(output, corpora, value);
+        return output;
     }
 
 };
@@ -4329,7 +4330,7 @@ settings.reduce_stringify = function(type, values, corpora) {
 
 // Get the cqp (part of) expression for linking in the statistics table
 // input type [{type:?,value:? }]
-settings.reduce_cqp = function(type, tokens) {
+settings.reduce_cqp = function(type, tokens, ignoreCase) {
 
     if(!tokens) {
         return "";
@@ -4344,6 +4345,10 @@ settings.reduce_cqp = function(type, tokens) {
                 return "(" + type + " contains '" + token + "')"
             }).join(" | ");
         case "word":
+            s = $.format('word="%s"', [tokens[0]]);
+            if(ignoreCase)
+                s = s + ' %c'
+            return s
         case "pos":
         case "deprel":
         case "msd":

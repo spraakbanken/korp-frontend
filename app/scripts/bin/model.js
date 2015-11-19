@@ -397,26 +397,42 @@
       this.page_incr = 25;
     }
 
-    StatsProxy.prototype.processData = function(def, data, reduceVals) {
-      var columns, dataset, groups, minWidth, sizeOfDataset, statsWorker, wordArray;
+    StatsProxy.prototype.processData = function(def, data, reduceVals, reduceValLabels, ignoreCase) {
+      var columns, corpus, corpusData, dataset, groups, j, len, minWidth, newAbsolute, newRelative, reduceVal, reduceValLabel, ref, ref1, ref2, sizeOfDataset, statsWorker, summarizedData, wordArray;
       minWidth = 100;
-      columns = [
-        {
-          id: "hit",
-          name: "stats_hit",
+      columns = [];
+      ref = _.zip(reduceVals, reduceValLabels);
+      for (j = 0, len = ref.length; j < len; j++) {
+        ref1 = ref[j], reduceVal = ref1[0], reduceValLabel = ref1[1];
+        columns.push({
+          id: reduceVal,
+          name: reduceValLabel,
           field: "hit_value",
           sortable: true,
-          formatter: settings.reduce_statistics(reduceVals),
-          minWidth: minWidth
-        }, {
-          id: "total",
-          name: "stats_total",
-          field: "total_value",
-          sortable: true,
-          formatter: this.valueFormatter,
-          minWidth: minWidth
-        }
-      ];
+          formatter: settings.reduce_statistics(reduceVals, ignoreCase),
+          minWidth: minWidth,
+          cssClass: "parameter-column",
+          headerCssClass: "localized-header"
+        });
+      }
+      columns.push({
+        id: "pieChart",
+        name: "",
+        field: "hit_value",
+        sortable: false,
+        formatter: settings.reduce_statistics_pie_chart,
+        maxWidth: 25,
+        minWidth: 25
+      });
+      columns.push({
+        id: "total",
+        name: "stats_total",
+        field: "total_value",
+        sortable: true,
+        formatter: this.valueFormatter,
+        minWidth: minWidth,
+        headerCssClass: "localized-header"
+      });
       $.each(_.keys(data.corpora).sort(), (function(_this) {
         return function(i, corpus) {
           return columns.push({
@@ -429,18 +445,40 @@
           });
         };
       })(this));
-      wordArray = _.keys(data.total.absolute);
-      groups = _.groupBy(wordArray, function(item) {
+      groups = _.groupBy(_.keys(data.total.absolute), function(item) {
         return item.replace(/:\d+/g, "");
       });
       wordArray = _.keys(groups);
       sizeOfDataset = wordArray.length;
       dataset = new Array(sizeOfDataset + 1);
+      summarizedData = {};
+      ref2 = data.corpora;
+      for (corpus in ref2) {
+        corpusData = ref2[corpus];
+        newAbsolute = _.reduce(corpusData.absolute, (function(result, value, key) {
+          var currentValue, newKey;
+          newKey = key.replace(/:\d+/g, "");
+          currentValue = result[newKey] || 0;
+          result[newKey] = currentValue + value;
+          return result;
+        }), {});
+        newRelative = _.reduce(corpusData.relative, (function(result, value, key) {
+          var currentValue, newKey;
+          newKey = key.replace(/:\d+/g, "");
+          currentValue = result[newKey] || 0;
+          result[newKey] = currentValue + value;
+          return result;
+        }), {});
+        summarizedData[corpus] = {
+          absolute: newAbsolute,
+          relative: newRelative
+        };
+      }
       statsWorker = new Worker("scripts/statistics_worker.js");
       statsWorker.onmessage = function(e) {
         c.log("Called back by the worker!\n");
         c.log(e);
-        return def.resolve([data, wordArray, columns, e.data]);
+        return def.resolve([data, wordArray, columns, e.data, summarizedData]);
       };
       return statsWorker.postMessage({
         "total": data.total,
@@ -469,7 +507,7 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, def, ignoreCase, reduceVals, reduceval, self;
+      var data, def, ignoreCase, reduceValLabels, reduceVals, reduceval, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
@@ -479,6 +517,12 @@
         reduceval = "word";
       }
       reduceVals = [reduceval];
+      reduceValLabels = _.map(reduceVals, function(reduceVal) {
+        if (reduceVal === "word") {
+          return "word";
+        }
+        return settings.corpusListing.getCurrentAttributes()[reduceVal].label;
+      });
       data = this.makeParameters(reduceVals, cqp);
       data.split = _.filter(reduceVals, function(reduceVal) {
         var ref;
@@ -519,7 +563,7 @@
               def.reject(data);
               return;
             }
-            return _this.processData(def, data, reduceVals);
+            return _this.processData(def, data, reduceVals, reduceValLabels, ignoreCase);
           };
         })(this)
       }));

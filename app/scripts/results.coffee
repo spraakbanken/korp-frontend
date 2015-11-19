@@ -927,11 +927,11 @@ class view.StatsResults extends BaseResults
             parts = $(event.currentTarget).attr("id").split("__")
 
             if parts[1] != "Σ"
-                @newDataInGraph(parts[1])
+                @newDataInGraph parts[1]
             else # The ∑ row
-                @newDataInGraph("SIGMA_ALL")
+                @newDataInGraph "SIGMA_ALL"
 
-        @$result.on "click", ".slick-cell.l1.r1 .link", () ->
+        @$result.on "click", ".slick-cell .link", () ->
             query = $(this).data("query")
 
             opts = {}
@@ -940,7 +940,7 @@ class view.StatsResults extends BaseResults
                 end : 24
                 command : "query"
                 corpus : $(this).data("corpora").join(",").toUpperCase()
-                cqp : decodeURIComponent self.proxy.prevParams.cqp
+                cqp : self.proxy.prevParams.cqp
                 cqp2: decodeURIComponent query
                 expand_prequeries : false
 
@@ -1076,12 +1076,11 @@ class view.StatsResults extends BaseResults
 
         @showPreloader()
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
-        ).done( ([data, wordArray, columns, dataset]) =>
-            # @s.aborted = false
-            c.log "dataset.length", dataset.length
+        ).done( ([data, wordArray, columns, dataset, summarizedData]) =>
             safeApply @s, () =>
                 @hidePreloader()
             @savedData = data
+            @savedSummarizedData = summarizedData
             @savedWordArray = wordArray
 
             @renderResult columns, dataset
@@ -1105,8 +1104,7 @@ class view.StatsResults extends BaseResults
 
     renderResult: (columns, data) ->
         refreshHeaders = ->
-            #$(".slick-header-column:nth(2)").click().click()
-            $(".slick-column-name:nth(1),.slick-column-name:nth(2)").not("[rel^=localize]").each ->
+            $(".localized-header .slick-column-name").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
 
         @gridData = data
@@ -1222,7 +1220,8 @@ class view.StatsResults extends BaseResults
         wordArray = []
         corpusArray = []
         @lastDataName = dataName
-        $.each @savedData["corpora"], (corpus, obj) ->
+
+        $.each @savedSummarizedData, (corpus, obj) =>
             if dataName is "SIGMA_ALL"
 
                 # ∑ selected
@@ -1237,7 +1236,6 @@ class view.StatsResults extends BaseResults
                     shape_id: "sigma_all"
 
             else
-
                 # Individual wordform selected
                 freq = parseFloat(obj["relative"][dataName])
                 if freq
@@ -1253,99 +1251,81 @@ class view.StatsResults extends BaseResults
                         shape_id: dataName
 
 
-            $("#dialog").remove()
-            if dataName is "SIGMA_ALL"
-                topheader = util.getLocaleString("statstable_hitsheader_lemgram")
-                locstring = "statstable_hitsheader_lemgram"
-            else
-                topheader = util.getLocaleString("statstable_hitsheader") + "<i>#{dataName}</i>"
-                locstring = "statstable_hitsheader"
-            relHitsString = util.getLocaleString("statstable_relfigures_hits")
-            $("<div id='dialog' title='#{topheader}' />")
-            .appendTo("body")
-            .append("""<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
-                                <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
-                                <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
-                            </div>
-                            <div id="chartFrame" style="height:380"></div>
-                            <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p></div>"""
-            ).dialog(
-                width: 400
-                height: 500
-                resize: ->
-                    $("#chartFrame").css "height", $("#chartFrame").parent().width() - 20
-                    stats2Instance.pie_widget "resizeDiagram", $(this).width() - 60
-                    # false
+        $("#dialog").remove()
 
-                resizeStop: (event, ui) ->
-                    w = $(this).dialog("option", "width")
-                    h = $(this).dialog("option", "height")
-                    if @width * 1.25 > @height
-                        $(this).dialog "option", "height", w * 1.25
+        relHitsString = util.getLocaleString("statstable_relfigures_hits")
+        $("<div id='dialog' />")
+        .appendTo("body")
+        .append("""<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
+                            <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
+                            <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
+                        </div>
+                        <div id="chartFrame" style="height:380"></div>
+                        <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p></div>"""
+        ).dialog(
+            width: 400
+            height: 500
+            close: () ->
+                $("#pieDiv").remove()
+        ).css("opacity", 0)
+        .parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram")
+        $("#dialog").fadeTo 400, 1
+        $("#dialog").find("a").blur() # Prevents the focus of the first link in the "dialog"
+        stats2Instance = $("#chartFrame").pie_widget(
+            container_id: "chartFrame"
+            data_items: dataItems
+        )
+        statsSwitchInstance = $("#statistics_switch").radioList(
+            change: =>
+                typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
+                dataItems = []
+                dataName = @lastDataName
+                $.each @savedSummarizedData, (corpus, obj) ->
+                    if dataName is "SIGMA_ALL"
+
+                        # sigma selected
+                        totfreq = 0
+                        $.each obj[typestring], (wordform, freq) ->
+                            if typestring is "absolute"
+                                numFreq = parseInt(freq)
+                            else
+                                numFreq = parseFloat(freq)
+                            totfreq += numFreq if numFreq
+
+                        dataItems.push
+                            value: totfreq
+                            caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(), false)
+                            shape_id: "sigma_all"
+
                     else
-                        $(this).dialog "option", "width", h * 0.80
-                    stats2Instance.pie_widget "resizeDiagram", $(this).width() - 60
-                close: () ->
-                    $("#pieDiv").remove()
-            ).css("opacity", 0)
-            .parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram")
-            $("#dialog").fadeTo 400, 1
-            $("#dialog").find("a").blur() # Prevents the focus of the first link in the "dialog"
-            stats2Instance = $("#chartFrame").pie_widget(
-                container_id: "chartFrame"
-                data_items: dataItems
-            )
-            statsSwitchInstance = $("#statistics_switch").radioList(
-                change: =>
-                    typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
-                    dataItems = []
-                    dataName = @lastDataName
-                    $.each @savedData["corpora"], (corpus, obj) ->
-                        if dataName is "SIGMA_ALL"
 
-                            # sigma selected
-                            totfreq = 0
-                            $.each obj[typestring], (wordform, freq) ->
-                                if typestring is "absolute"
-                                    numFreq = parseInt(freq)
-                                else
-                                    numFreq = parseFloat(freq)
-                                totfreq += numFreq if numFreq
-
+                        # Individual wordform selected
+                        if typestring is "absolute"
+                            freq = parseInt(obj[typestring][dataName])
+                        else
+                            freq = parseFloat(obj[typestring][dataName])
+                        if freq
                             dataItems.push
-                                value: totfreq
-                                caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(), false)
-                                shape_id: "sigma_all"
+                                value: freq
+                                caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(), false)
+                                shape_id: dataName
 
                         else
-
-                            # Individual wordform selected
-                            if typestring is "absolute"
-                                freq = parseInt(obj[typestring][dataName])
-                            else
-                                freq = parseFloat(obj[typestring][dataName])
-                            if freq
-                                dataItems.push
-                                    value: freq
-                                    caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(), false)
-                                    shape_id: dataName
-
-                            else
-                                dataItems.push
-                                    value: 0
-                                    caption: ""
-                                    shape_id: dataName
+                            dataItems.push
+                                value: 0
+                                caption: ""
+                                shape_id: dataName
 
 
-                    stats2Instance.pie_widget "newData", dataItems
-                    if typestring is "absolute"
-                        loc = "statstable_absfigures_hits"
-                    else
-                        loc = "statstable_relfigures_hits"
-                    $("#hitsDescription").localeKey loc
+                stats2Instance.pie_widget "newData", dataItems
+                if typestring is "absolute"
+                    loc = "statstable_absfigures_hits"
+                else
+                    loc = "statstable_relfigures_hits"
+                $("#hitsDescription").localeKey loc
 
-                selected: "relative"
-            )
+            selected: "relative"
+        )
 
     onentry : () ->
         super()

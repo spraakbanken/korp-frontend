@@ -2333,6 +2333,14 @@ line.tick {
   display : none;
 }
 
+#myGrid .parameter-column {
+  background-color: rgb(242, 247, 255);
+}
+
+#myGrid .slick-row:hover .parameter-column {
+  background-color: rgb(230, 235, 255);
+}
+
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
 }

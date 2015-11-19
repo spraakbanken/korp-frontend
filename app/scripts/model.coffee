@@ -329,24 +329,40 @@ class model.StatsProxy extends BaseProxy
         @currentPage = 0
         @page_incr = 25
 
-    processData: (def, data, reduceVals) ->
+    processData: (def, data, reduceVals, reduceValLabels, ignoreCase) ->
         minWidth = 100
 
-        columns = [
-            id: "hit"
-            name: "stats_hit"
+        columns = []
+
+        for [reduceVal, reduceValLabel] in _.zip reduceVals, reduceValLabels
+            columns.push
+                id: reduceVal
+                name: reduceValLabel
+                field: "hit_value"
+                sortable: true
+                formatter: settings.reduce_statistics reduceVals, ignoreCase 
+                minWidth: minWidth
+                cssClass: "parameter-column"
+                headerCssClass: "localized-header"
+
+        columns.push
+            id: "pieChart"
+            name: ""
             field: "hit_value"
-            sortable: true
-            formatter: settings.reduce_statistics reduceVals
-            minWidth : minWidth
-        ,
+            sortable: false
+            formatter: settings.reduce_statistics_pie_chart
+            maxWidth: 25
+            minWidth: 25
+            
+        columns.push  
             id: "total"
             name: "stats_total"
             field: "total_value"
             sortable: true
             formatter: @valueFormatter
             minWidth : minWidth
-        ]
+            headerCssClass: "localized-header"
+        
         $.each _.keys(data.corpora).sort(), (i, corpus) =>
             columns.push
                 id: corpus
@@ -356,23 +372,35 @@ class model.StatsProxy extends BaseProxy
                 formatter: @valueFormatter
                 minWidth : minWidth
 
-        
-
-        wordArray = _.keys(data.total.absolute)
-
-        groups = _.groupBy wordArray, (item) ->
+        groups = _.groupBy _.keys(data.total.absolute), (item) ->
             item.replace(/:\d+/g, "")
 
         wordArray = _.keys groups
 
         sizeOfDataset = wordArray.length
         dataset = new Array(sizeOfDataset + 1)
+
+        summarizedData = {}
+        for corpus, corpusData of data.corpora
+            newAbsolute = _.reduce corpusData.absolute, ((result, value, key) ->
+                    newKey = key.replace(/:\d+/g, "")
+                    currentValue = result[newKey] or 0
+                    result[newKey] = currentValue + value
+                    return result;
+                ), {}
+            newRelative = _.reduce corpusData.relative, ((result, value, key) ->
+                    newKey = key.replace(/:\d+/g, "")
+                    currentValue = result[newKey] or 0
+                    result[newKey] = currentValue + value
+                    return result;
+                ), {}
+            summarizedData[corpus] = { absolute: newAbsolute, relative: newRelative }
         
         statsWorker = new Worker "scripts/statistics_worker.js"
         statsWorker.onmessage = (e) ->
             c.log "Called back by the worker!\n"
             c.log e
-            def.resolve [data, wordArray, columns, e.data]
+            def.resolve [data, wordArray, columns, e.data, summarizedData]
 
         statsWorker.postMessage {
             "total" : data.total
@@ -407,6 +435,9 @@ class model.StatsProxy extends BaseProxy
         
         ## todo: now supports multipe reduce parameters to backend 
         reduceVals = [reduceval]
+        reduceValLabels = _.map reduceVals, (reduceVal) ->
+            return "word" if reduceVal == "word"
+            return settings.corpusListing.getCurrentAttributes()[reduceVal].label
 
         data = @makeParameters(reduceVals, cqp)
 
@@ -442,7 +473,7 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                @processData(def, data, reduceVals)
+                @processData(def, data, reduceVals, reduceValLabels, ignoreCase)
 
         return def.promise()
 
