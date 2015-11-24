@@ -339,38 +339,37 @@ window.initTimeGraph = (def) ->
 
 
 
-        $("#time_graph,#rest_time_graph").bind "plothover", _.throttle((event, pos, item) ->
-            if item
-                # c.log "hover", pos, item, item.datapoint
-                date = item.datapoint[0]
-                header = $("<h4>")
-                if date is restyear
-                    header.text util.getLocaleString("corpselector_rest_time")
-                    val = restdata
-                    total = rest
+            $("#time_graph,#rest_time_graph").bind "plothover", _.throttle((event, pos, item) ->
+                if item
+                    # c.log "hover", pos, item, item.datapoint
+                    date = item.datapoint[0]
+                    header = $("<h4>")
+                    if date is restyear
+                        header.text util.getLocaleString("corpselector_rest_time")
+                        val = restdata
+                        total = rest
+                    else
+                        header.text util.getLocaleString("corpselector_time") + " " + item.datapoint[0]
+                        val = getValByDate(date, timestruct)
+                        total = getValByDate(date, all_timestruct)
+                    pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>")
+                    firstrow = pTmpl(
+                        loc: "corpselector_time_chosen"
+                        num: util.prettyNumbers(val or 0)
+                    )
+                    secondrow = pTmpl(
+                        loc: "corpselector_of_total"
+                        num: util.prettyNumbers(total)
+                    )
+                    time = item.datapoint[0]
+                    $(".corpusInfoSpace").css top: $(this).parent().offset().top
+                    $(".corpusInfoSpace").find("p").empty()
+                    .append(header, "<span> </span>", firstrow, secondrow)
+                    .localize().end()
+                    .fadeIn "fast"
                 else
-                    header.text util.getLocaleString("corpselector_time") + " " + item.datapoint[0]
-                    val = getValByDate(date, timestruct)
-                    total = getValByDate(date, all_timestruct)
-                c.log "output", timestruct[item.datapoint[0].toString()]
-                pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>")
-                firstrow = pTmpl(
-                    loc: "corpselector_time_chosen"
-                    num: util.prettyNumbers(val or 0)
-                )
-                secondrow = pTmpl(
-                    loc: "corpselector_of_total"
-                    num: util.prettyNumbers(total)
-                )
-                time = item.datapoint[0]
-                $(".corpusInfoSpace").css top: $(this).parent().offset().top
-                $(".corpusInfoSpace").find("p").empty()
-                .append(header, "<span> </span>", firstrow, secondrow)
-                .localize().end()
-                .fadeIn "fast"
-            else
-                $(".corpusInfoSpace").fadeOut "fast"
-        , 100)
+                    $(".corpusInfoSpace").fadeOut "fast"
+            , 100)
 
     opendfd = $.Deferred()
     $("#corpusbox").one "corpuschooseropen", ->

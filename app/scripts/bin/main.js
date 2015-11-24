@@ -255,7 +255,7 @@
         scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
         return def.resolve();
       });
-      return onTimeGraphChange = function(evt, data) {
+      onTimeGraphChange = function(evt, data) {
         var endyear, max, normalize, one_px, output, plot, plots, yeardiff;
         one_px = max / 46;
         normalize = function(array) {
@@ -339,40 +339,39 @@
           }
         });
       };
-    });
-    $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
-      var date, firstrow, header, pTmpl, secondrow, time, total, val;
-      if (item) {
-        date = item.datapoint[0];
-        header = $("<h4>");
-        if (date === restyear) {
-          header.text(util.getLocaleString("corpselector_rest_time"));
-          val = restdata;
-          total = rest;
+      return $("#time_graph,#rest_time_graph").bind("plothover", _.throttle(function(event, pos, item) {
+        var date, firstrow, header, pTmpl, secondrow, time, total, val;
+        if (item) {
+          date = item.datapoint[0];
+          header = $("<h4>");
+          if (date === restyear) {
+            header.text(util.getLocaleString("corpselector_rest_time"));
+            val = restdata;
+            total = rest;
+          } else {
+            header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0]);
+            val = getValByDate(date, timestruct);
+            total = getValByDate(date, all_timestruct);
+          }
+          pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
+          firstrow = pTmpl({
+            loc: "corpselector_time_chosen",
+            num: util.prettyNumbers(val || 0)
+          });
+          secondrow = pTmpl({
+            loc: "corpselector_of_total",
+            num: util.prettyNumbers(total)
+          });
+          time = item.datapoint[0];
+          $(".corpusInfoSpace").css({
+            top: $(this).parent().offset().top
+          });
+          return $(".corpusInfoSpace").find("p").empty().append(header, "<span> </span>", firstrow, secondrow).localize().end().fadeIn("fast");
         } else {
-          header.text(util.getLocaleString("corpselector_time") + " " + item.datapoint[0]);
-          val = getValByDate(date, timestruct);
-          total = getValByDate(date, all_timestruct);
+          return $(".corpusInfoSpace").fadeOut("fast");
         }
-        c.log("output", timestruct[item.datapoint[0].toString()]);
-        pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>");
-        firstrow = pTmpl({
-          loc: "corpselector_time_chosen",
-          num: util.prettyNumbers(val || 0)
-        });
-        secondrow = pTmpl({
-          loc: "corpselector_of_total",
-          num: util.prettyNumbers(total)
-        });
-        time = item.datapoint[0];
-        $(".corpusInfoSpace").css({
-          top: $(this).parent().offset().top
-        });
-        return $(".corpusInfoSpace").find("p").empty().append(header, "<span> </span>", firstrow, secondrow).localize().end().fadeIn("fast");
-      } else {
-        return $(".corpusInfoSpace").fadeOut("fast");
-      }
-    }, 100));
+      }, 100));
+    });
     opendfd = $.Deferred();
     $("#corpusbox").one("corpuschooseropen", function() {
       return opendfd.resolve();
