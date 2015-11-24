@@ -281,7 +281,7 @@ attrs.pos = {
 attrs.msd = {
     label : "msd",
     opts : settings.defaultOptions,
-    extended_template : '<input class="arg_value" ng-model="input" escaper>' +
+    extended_template : '<input class="arg_value" ng-model="model" escaper>' +
     '<span ng-click="onIconClick()" class="fa fa-info-circle"></span>',
     controller : function($scope, $modal) {
         var modal = null;
