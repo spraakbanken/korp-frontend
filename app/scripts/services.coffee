@@ -79,24 +79,28 @@ korpApp.factory "debounce", ($timeout) ->
 
 korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
-        reduce = reduce.replace(/^_\./, "")
+        reduce = _.map reduce, (item) -> item.replace(/^_\./, "")
         
-        # remove all corpora which do not include the "reduce"-attribute
-        filterFun = (item) -> settings.corpusListing.corpusHasAttr item, reduce
+        # remove all corpora which do not include all the "reduce"-attributes
+        filterFun = (item) -> settings.corpusListing.corpusHasAttrs item, reduce
         corpora1 = _.filter cmpObj1.corpora, filterFun
         corpora2 = _.filter cmpObj2.corpora, filterFun
          
         corpusListing = settings.corpusListing.subsetFactory cmpObj1.corpora
-        
+
+        split = _.filter(reduce, (r) -> 
+            settings.corpusListing.getCurrentAttributes()[r]?.type == "set").join(',')
+
         def = $q.defer()
         params =
             command : "loglike"
-            groupby : reduce
+            groupby : reduce.join ','
             set1_corpus : corpora1.join(",").toUpperCase()
             set1_cqp : cmpObj1.cqp
             set2_corpus : corpora2.join(",").toUpperCase()
             set2_cqp : cmpObj2.cqp
             max : 50
+            split : split
 
         conf =
             url : settings.cgi_script
@@ -111,9 +115,54 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         xhr = $http(conf)
 
         xhr.success (data) ->
-            def.resolve [data, cmpObj1, cmpObj2, reduce], xhr
 
+            if data.ERROR
+                def.reject()
+                return
 
+            loglikeValues = data.loglike
+
+            objs = _.map loglikeValues, (value, key) ->
+                return {
+                    value: key
+                    loglike: value
+                }
+            
+            tables = _.groupBy objs, (obj) ->
+                if obj.loglike > 0
+                    obj.abs = data.set2[obj.value] 
+                    return "positive" 
+                else 
+                    obj.abs = data.set1[obj.value]
+                    return "negative"
+
+            groupAndSum = (table, currentMax) ->
+                groups = _.groupBy table, (obj) ->
+                    obj.value.replace(/:\d+/g, "")
+
+                res = _.map groups, (value, key) ->
+                    tokenLists = _.map key.split("/"), (tokens) ->
+                        return tokens.split(" ")
+
+                    loglike = 0
+                    abs = 0
+                    cqp = []
+                    elems = []
+                    
+                    _.map value, (val) ->
+                        abs += val.abs
+                        loglike += val.loglike
+                        elems.push val.value
+                    if loglike > currentMax
+                        currentMax = loglike
+                    { key: key, loglike : loglike, abs : abs, elems : elems, tokenLists: tokenLists }
+
+                return [res, currentMax]
+
+            [tables.positive, max] = groupAndSum tables.positive, 0
+            [tables.negative, max] = groupAndSum tables.negative, max
+
+            def.resolve [tables, max, cmpObj1, cmpObj2, reduce], xhr
 
         return def.promise
 

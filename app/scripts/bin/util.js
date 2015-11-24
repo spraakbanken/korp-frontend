@@ -147,8 +147,15 @@
       return union;
     };
 
-    CorpusListing.prototype.corpusHasAttr = function(corpus, attr) {
-      return attr === "word" || attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].struct_attributes);
+    CorpusListing.prototype.corpusHasAttrs = function(corpus, attrs) {
+      var attr, k, len;
+      for (k = 0, len = attrs.length; k < len; k++) {
+        attr = attrs[k];
+        if (!(attr === "word" || attr in $.extend({}, this.struct[corpus].attributes, this.struct[corpus].struct_attributes))) {
+          return false;
+        }
+      }
+      return true;
     };
 
     CorpusListing.prototype.stringifySelected = function() {

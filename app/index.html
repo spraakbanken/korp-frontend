@@ -382,16 +382,16 @@
                     <div ng-if="!error" class="column column_1">
                       <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp1.label}}</em></h2>
                       <ul>
-                        <li ng-repeat="tuple in tables.negative" ng-click="rowClick(tuple, 0)">
-                          <div meter="tuple" max="max[1]" stringify="stringify" class="meter"></div>
+                        <li ng-repeat="row in tables.negative | orderBy:resultOrder:true" ng-click="rowClick(row, 0)">
+                          <div meter="row" max="max" stringify="stringify" class="meter"></div>
                         </li>
                       </ul>
                     </div>
                     <div class="column column_2">
                       <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp2.label}}</em></h2>
                       <ul>
-                        <li ng-repeat="tuple in tables.positive" ng-click="rowClick(tuple, 1)">
-                          <div meter="tuple" max="max[1]" stringify="stringify" class="meter"></div>
+                        <li ng-repeat="row in tables.positive | orderBy:resultOrder:true" ng-click="rowClick(row, 1)">
+                          <div meter="row" max="max" stringify="stringify" class="meter"></div>
                         </li>
                       </ul>
                     </div>

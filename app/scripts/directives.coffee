@@ -284,7 +284,7 @@ korpApp.directive "meter", () ->
     template: '''
         <div>
             <div class="background" ng-bind-html="displayWd | trust"></div>
-            <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter[2]}}</div>
+            <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter.abs}}</div>
         </div>
     '''
     replace: true
@@ -293,20 +293,19 @@ korpApp.directive "meter", () ->
         max : "="
         stringify : "="
     link : (scope, elem, attr) ->
-        wds = scope.meter[0]
 
-        bkg = elem.find(".background")
-        # bkg.html (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
-        if wds == "|"
-            scope.displayWd = "&mdash;"
-        else
-            scope.displayWd = (_.map (_.compact wds.split("|")), scope.stringify).join(", ")
-        
-        scope.loglike = Math.abs scope.meter[1]
+        zipped = _.zip scope.meter.tokenLists, scope.stringify
+        scope.displayWd = (_.map zipped, ([tokens, stringify]) ->
+            (_.map tokens, (token) ->
+                if token == "|"
+                    return "&mdash;"
+                else
+                    return stringify(token)).join " ").join ";"
 
+        scope.loglike = Math.abs scope.meter.loglike
 
         scope.tooltipHTML = """
-            #{util.getLocaleString('statstable_absfreq')}: #{scope.meter[2]}
+            #{util.getLocaleString('statstable_absfreq')}: #{scope.meter.abs}
             <br>
             loglike: #{scope.loglike}
         """
@@ -314,6 +313,7 @@ korpApp.directive "meter", () ->
         w = elem.parent().width()
         part = ((scope.loglike) / (Math.abs scope.max))
 
+        bkg = elem.find(".background")
         bkg.width Math.round (part * w)
 
 

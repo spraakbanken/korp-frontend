@@ -108,23 +108,30 @@
   korpApp.factory('backend', function($http, $q, utils, lexicons) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
-        var conf, corpora1, corpora2, corpusListing, def, filterFun, params, xhr;
-        reduce = reduce.replace(/^_\./, "");
+        var conf, corpora1, corpora2, corpusListing, def, filterFun, params, split, xhr;
+        reduce = _.map(reduce, function(item) {
+          return item.replace(/^_\./, "");
+        });
         filterFun = function(item) {
-          return settings.corpusListing.corpusHasAttr(item, reduce);
+          return settings.corpusListing.corpusHasAttrs(item, reduce);
         };
         corpora1 = _.filter(cmpObj1.corpora, filterFun);
         corpora2 = _.filter(cmpObj2.corpora, filterFun);
         corpusListing = settings.corpusListing.subsetFactory(cmpObj1.corpora);
+        split = _.filter(reduce, function(r) {
+          var ref;
+          return ((ref = settings.corpusListing.getCurrentAttributes()[r]) != null ? ref.type : void 0) === "set";
+        }).join(',');
         def = $q.defer();
         params = {
           command: "loglike",
-          groupby: reduce,
+          groupby: reduce.join(','),
           set1_corpus: corpora1.join(",").toUpperCase(),
           set1_cqp: cmpObj1.cqp,
           set2_corpus: corpora2.join(",").toUpperCase(),
           set2_cqp: cmpObj2.cqp,
-          max: 50
+          max: 50,
+          split: split
         };
         conf = {
           url: settings.cgi_script,
@@ -135,7 +142,62 @@
         _.extend(conf.headers, model.getAuthorizationHeader());
         xhr = $http(conf);
         xhr.success(function(data) {
-          return def.resolve([data, cmpObj1, cmpObj2, reduce], xhr);
+          var groupAndSum, loglikeValues, max, objs, ref, ref1, tables;
+          if (data.ERROR) {
+            def.reject();
+            return;
+          }
+          loglikeValues = data.loglike;
+          objs = _.map(loglikeValues, function(value, key) {
+            return {
+              value: key,
+              loglike: value
+            };
+          });
+          tables = _.groupBy(objs, function(obj) {
+            if (obj.loglike > 0) {
+              obj.abs = data.set2[obj.value];
+              return "positive";
+            } else {
+              obj.abs = data.set1[obj.value];
+              return "negative";
+            }
+          });
+          groupAndSum = function(table, currentMax) {
+            var groups, res;
+            groups = _.groupBy(table, function(obj) {
+              return obj.value.replace(/:\d+/g, "");
+            });
+            res = _.map(groups, function(value, key) {
+              var abs, cqp, elems, loglike, tokenLists;
+              tokenLists = _.map(key.split("/"), function(tokens) {
+                return tokens.split(" ");
+              });
+              loglike = 0;
+              abs = 0;
+              cqp = [];
+              elems = [];
+              _.map(value, function(val) {
+                abs += val.abs;
+                loglike += val.loglike;
+                return elems.push(val.value);
+              });
+              if (loglike > currentMax) {
+                currentMax = loglike;
+              }
+              return {
+                key: key,
+                loglike: loglike,
+                abs: abs,
+                elems: elems,
+                tokenLists: tokenLists
+              };
+            });
+            return [res, currentMax];
+          };
+          ref = groupAndSum(tables.positive, 0), tables.positive = ref[0], max = ref[1];
+          ref1 = groupAndSum(tables.negative, max), tables.negative = ref1[0], max = ref1[1];
+          return def.resolve([tables, max, cmpObj1, cmpObj2, reduce], xhr);
         });
         return def.promise;
       },

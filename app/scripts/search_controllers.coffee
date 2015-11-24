@@ -375,11 +375,13 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
         s.currentAttrs = listing.getAttributeGroups()
 
+    
     s.reduce = 'word'
     s.currentAttrs = []
 
     s.sendCompare = () ->
-        $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, s.reduce)
+        ## todo backend supports multiple reduce parameters
+        $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, [s.reduce])
 
     s.deleteCompares = () ->
         compareSearches.flush()

@@ -4235,8 +4235,7 @@ settings.reduce_statistics = function(types, ignoreCase) {
             return "&Sigma;";
 
         var tokenLists = _.map(value, function(val) {
-            var tmp = val.split('/');
-            return _.map(tmp, function(as) {
+            return _.map(val.split('/'), function(as) {
                 return as.split(" ");
             });
         });
@@ -4341,9 +4340,13 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
         case "suffix":
         case "lex":
         case "lemma":
-            return _.map(tokens, function(token) {
-                return "(" + type + " contains '" + token + "')"
-            }).join(" | ");
+            if(tokens[0] == "|") 
+                return "ambiguity(" + type + ") = 0"
+            else
+                res = _.map(tokens, function(token) {
+                    return "'" + token + "'"
+                }).join(" | ");
+                return type + " contains " + res 
         case "word":
             s = $.format('word="%s"', [tokens[0]]);
             if(ignoreCase)

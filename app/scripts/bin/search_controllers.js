@@ -357,7 +357,7 @@
     s.reduce = 'word';
     s.currentAttrs = [];
     s.sendCompare = function() {
-      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, s.reduce));
+      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]));
     };
     return s.deleteCompares = function() {
       return compareSearches.flush();

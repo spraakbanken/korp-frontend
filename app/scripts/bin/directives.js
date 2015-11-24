@@ -314,7 +314,7 @@
 
   korpApp.directive("meter", function() {
     return {
-      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter[2]}}</div>\n</div>',
+      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter.abs}}</div>\n</div>',
       replace: true,
       scope: {
         meter: "=",
@@ -322,18 +322,24 @@
         stringify: "="
       },
       link: function(scope, elem, attr) {
-        var bkg, part, w, wds;
-        wds = scope.meter[0];
-        bkg = elem.find(".background");
-        if (wds === "|") {
-          scope.displayWd = "&mdash;";
-        } else {
-          scope.displayWd = (_.map(_.compact(wds.split("|")), scope.stringify)).join(", ");
-        }
-        scope.loglike = Math.abs(scope.meter[1]);
-        scope.tooltipHTML = (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter[2] + "\n<br>\nloglike: " + scope.loglike;
+        var bkg, part, w, zipped;
+        zipped = _.zip(scope.meter.tokenLists, scope.stringify);
+        scope.displayWd = (_.map(zipped, function(arg) {
+          var stringify, tokens;
+          tokens = arg[0], stringify = arg[1];
+          return (_.map(tokens, function(token) {
+            if (token === "|") {
+              return "&mdash;";
+            } else {
+              return stringify(token);
+            }
+          })).join(" ");
+        })).join(";");
+        scope.loglike = Math.abs(scope.meter.loglike);
+        scope.tooltipHTML = (util.getLocaleString('statstable_absfreq')) + ": " + scope.meter.abs + "\n<br>\nloglike: " + scope.loglike;
         w = elem.parent().width();
         part = scope.loglike / (Math.abs(scope.max));
+        bkg = elem.find(".background");
         return bkg.width(Math.round(part * w));
       }
     };

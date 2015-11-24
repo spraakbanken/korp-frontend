@@ -337,73 +337,68 @@
     s = $scope;
     s.loading = true;
     s.active = true;
-    return s.promise.then(function(arg, xhr) {
-      var attributes, cl, cmp1, cmp2, cmps, data, op, pairs, reduce, ref, ref1, type;
-      data = arg[0], cmp1 = arg[1], cmp2 = arg[2], reduce = arg[3];
+    s.resultOrder = function(item) {
+      return Math.abs(item.loglike);
+    };
+    return s.promise.then((function(arg, xhr) {
+      var attributes, cl, cmp1, cmp2, cmps, max, reduce, tables;
+      tables = arg[0], max = arg[1], cmp1 = arg[2], cmp2 = arg[3], reduce = arg[4];
       s.loading = false;
-      if (data.ERROR) {
-        s.error = true;
-        return;
-      }
-      pairs = _.pairs(data.loglike);
-      s.tables = _.groupBy(pairs, function(arg1) {
-        var val, word;
-        word = arg1[0], val = arg1[1];
-        if (val > 0) {
-          return "positive";
-        } else {
-          return "negative";
-        }
-      });
-      s.tables.negative = _.map(s.tables.negative, function(arg1) {
-        var val, word;
-        word = arg1[0], val = arg1[1];
-        return [word, val, data.set1[word]];
-      });
-      s.tables.positive = _.map(s.tables.positive, function(arg1) {
-        var val, word;
-        word = arg1[0], val = arg1[1];
-        return [word, val, data.set2[word]];
-      });
-      s.tables.positive = _.sortBy(s.tables.positive, function(tuple) {
-        return tuple[1] * -1;
-      });
-      s.tables.negative = _.sortBy(s.tables.negative, function(tuple) {
-        return (Math.abs(tuple[1])) * -1;
-      });
+      s.tables = tables;
       s.reduce = reduce;
       cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
       attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
-      s.stringify = ((ref = attributes[_.str.strip(reduce, "_.")]) != null ? ref.stringify : void 0) || angular.identity;
-      s.max = _.max(pairs, function(arg1) {
-        var val, word;
-        word = arg1[0], val = arg1[1];
-        return Math.abs(val);
+      s.stringify = _.map(reduce, function(item) {
+        var ref;
+        return ((ref = attributes[_.str.strip(item, "_.")]) != null ? ref.stringify : void 0) || angular.identity;
       });
+      s.max = max;
       s.cmp1 = cmp1;
       s.cmp2 = cmp2;
-      type = (ref1 = attributes[_.str.strip(reduce, "_.")]) != null ? ref1.type : void 0;
-      op = type === "set" ? "contains" : "=";
       cmps = [cmp1, cmp2];
-      return s.rowClick = function(triple, cmp_index) {
-        var cmp, cqpobj, cqps, k, len1, opts, ref2, token;
+      return s.rowClick = function(row, cmp_index) {
+        var cmp, cqp, cqps, k, opts, ref, results, splitTokens, tokenLength, tokens;
         cmp = cmps[cmp_index];
-        c.log("triple", triple, cmp);
-        cqps = [];
-        ref2 = triple[0].split(" ");
-        for (k = 0, len1 = ref2.length; k < len1; k++) {
-          token = ref2[k];
-          if (type === "set" && token === "|") {
-            cqps.push("[ambiguity(" + reduce + ") = 0]");
-          } else {
-            cqps.push(CQP.fromObj({
-              type: reduce,
-              op: op,
-              val: token
+        splitTokens = _.map(row.elems, function(elem) {
+          return _.map(elem.split("/"), function(tokens) {
+            return tokens.split(" ");
+          });
+        });
+        tokenLength = splitTokens[0][0].length;
+        tokens = _.map((function() {
+          results = [];
+          for (var k = 0, ref = tokenLength - 1; 0 <= ref ? k <= ref : k >= ref; 0 <= ref ? k++ : k--){ results.push(k); }
+          return results;
+        }).apply(this), function(tokenIdx) {
+          tokens = _.map(reduce, function(reduceAttr, attrIdx) {
+            return _.unique(_.map(splitTokens, function(res) {
+              return res[attrIdx][tokenIdx];
             }));
-          }
-        }
-        cqpobj = CQP.concat.apply(CQP, cqps);
+          });
+          return tokens;
+        });
+        cqps = _.map(tokens, function(token) {
+          var cqpAnd, l, ref1, results1;
+          cqpAnd = _.map((function() {
+            results1 = [];
+            for (var l = 0, ref1 = token.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; 0 <= ref1 ? l++ : l--){ results1.push(l); }
+            return results1;
+          }).apply(this), function(attrI) {
+            var attrKey, attrVal, op, ref2, type, val;
+            attrKey = reduce[attrI];
+            attrVal = token[attrI];
+            type = (ref2 = attributes[_.str.strip(attrKey, "_.")]) != null ? ref2.type : void 0;
+            op = type === "set" ? "contains" : "=";
+            val = attrVal.join(" | ");
+            if (type === "set" && val === "|") {
+              return "ambiguity(" + attrKey + ") = 0";
+            } else {
+              return attrKey + " " + op + " " + val;
+            }
+          });
+          return "[" + cqpAnd.join(" & ") + "]";
+        });
+        cqp = cqps.join(" ");
         cl = settings.corpusListing.subsetFactory(cmp.corpora);
         opts = {
           start: 0,
@@ -411,7 +406,7 @@
           ajaxParams: {
             command: "query",
             cqp: cmp.cqp,
-            cqp2: CQP.stringify(cqpobj),
+            cqp2: cqp,
             corpus: cl.stringifySelected(),
             show_struct: _.keys(cl.getStructAttrs()),
             expand_prequeries: false
@@ -419,6 +414,9 @@
         };
         return $rootScope.kwicTabs.push(opts);
       };
+    }), function() {
+      s.loading = false;
+      return s.error = true;
     });
   });
 

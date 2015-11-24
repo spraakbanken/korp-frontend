@@ -276,67 +276,71 @@ korpApp.controller "graphCtrl", ($scope) ->
     #                 s.instance.setBarMode()
 
 
-
 korpApp.controller "compareCtrl", ($scope, $rootScope) ->
     s = $scope
     s.loading = true
     s.active = true
 
 
+    s.resultOrder = (item) ->
+        return Math.abs item.loglike
 
-    s.promise.then ([data, cmp1, cmp2, reduce], xhr) ->
+    s.promise.then (([tables, max, cmp1, cmp2, reduce], xhr) ->
         s.loading = false
-        if data.ERROR
-            s.error = true
-            return
 
-        pairs = _.pairs data.loglike
-        s.tables = _.groupBy  (pairs), ([word, val]) ->
-            if val > 0 then "positive" else "negative"
-
-        s.tables.negative = _.map s.tables.negative, ([word, val]) ->
-            [word, val, data.set1[word]]
-        s.tables.positive = _.map s.tables.positive, ([word, val]) ->
-            [word, val, data.set2[word]]
-
-
-
-        s.tables.positive = _.sortBy s.tables.positive, (tuple) -> tuple[1] * -1
-        s.tables.negative = _.sortBy s.tables.negative, (tuple) -> (Math.abs tuple[1]) * -1
+        s.tables = tables
         s.reduce = reduce
 
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
         attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
-        s.stringify = attributes[_.str.strip(reduce, "_.")]?.stringify or angular.identity
+        
+        s.stringify = _.map reduce, (item) -> 
+            return attributes[_.str.strip item, "_."]?.stringify or angular.identity
 
-        s.max = _.max pairs, ([word, val]) ->
-            Math.abs val
+        s.max = max
 
         s.cmp1 = cmp1
         s.cmp2 = cmp2
 
-        type = attributes[_.str.strip(reduce, "_.")]?.type
-
-        op = if type == "set" then "contains" else "="
         cmps = [cmp1, cmp2]
 
-        s.rowClick = (triple, cmp_index) ->
+        s.rowClick = (row, cmp_index) ->
             cmp = cmps[cmp_index]
 
-            c.log "triple", triple, cmp
+            splitTokens = _.map row.elems, (elem) ->
+                _.map (elem.split "/"), (tokens) ->
+                    tokens.split " "
 
-            cqps = []
+            # number of tokens in search
+            tokenLength = splitTokens[0][0].length
+            
+            # transform result from grouping on attribute to grouping on token place
+            tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
+                       tokens = _.map reduce, (reduceAttr, attrIdx) ->
+                           return _.unique _.map(splitTokens, (res) ->
+                               return res[attrIdx][tokenIdx])
+                       return tokens
 
-            for token in triple[0].split(" ")
-                if type == "set" and token == "|"
-                    cqps.push "[ambiguity(#{reduce}) = 0]"
-                else
-                    cqps.push CQP.fromObj
-                        type : reduce
-                        op : op
-                        val : token
 
-            cqpobj = CQP.concat cqps...
+            cqps = _.map tokens, (token) -> 
+                cqpAnd = _.map [0..token.length-1], (attrI) ->
+                    attrKey = reduce[attrI]
+                    attrVal = token[attrI]
+
+                    type = attributes[_.str.strip(attrKey, "_.")]?.type
+
+                    op = if type == "set" then "contains" else "="
+                
+                    val = attrVal.join " | "
+                
+                    if type == "set" and val == "|"
+                        return "ambiguity(#{attrKey}) = 0"
+                    else
+                        return "#{attrKey} #{op} #{val}"
+
+                return "[" + cqpAnd.join(" & ") + "]"
+
+            cqp = cqps.join " "
 
             cl = settings.corpusListing.subsetFactory cmp.corpora
 
@@ -346,13 +350,16 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                 ajaxParams :
                     command : "query"
                     cqp : cmp.cqp
-                    cqp2 : CQP.stringify cqpobj
+                    cqp2 : cqp
                     corpus : cl.stringifySelected()
                     show_struct : _.keys cl.getStructAttrs()
                     expand_prequeries : false
 
             }
-            $rootScope.kwicTabs.push opts
+            $rootScope.kwicTabs.push opts),
+        () ->
+            s.loading = false
+            s.error = true
 
 korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
     s = $scope
