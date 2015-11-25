@@ -336,7 +336,7 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                     if type == "set" and val == "|"
                         return "ambiguity(#{attrKey}) = 0"
                     else
-                        return "#{attrKey} #{op} #{val}"
+                        return "#{attrKey} #{op} \"#{val}\""
 
                 return "[" + cqpAnd.join(" & ") + "]"
 

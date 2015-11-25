@@ -393,7 +393,7 @@
             if (type === "set" && val === "|") {
               return "ambiguity(" + attrKey + ") = 0";
             } else {
-              return attrKey + " " + op + " " + val;
+              return attrKey + " " + op + " \"" + val + "\"";
             }
           });
           return "[" + cqpAnd.join(" & ") + "]";
