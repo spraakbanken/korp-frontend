@@ -384,12 +384,20 @@
             for (var l = 0, ref1 = token.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; 0 <= ref1 ? l++ : l--){ results1.push(l); }
             return results1;
           }).apply(this), function(attrI) {
-            var attrKey, attrVal, op, ref2, type, val;
+            var attrKey, attrVal, key, op, ref2, type, val, variants;
             attrKey = reduce[attrI];
             attrVal = token[attrI];
             type = (ref2 = attributes[_.str.strip(attrKey, "_.")]) != null ? ref2.type : void 0;
             op = type === "set" ? "contains" : "=";
-            val = attrVal.join(" | ");
+            if (type === "set" && attrVal.length > 1) {
+              variants = _.flatten(_.map(attrVal, function(val) {
+                return val.split(":")[1];
+              }));
+              key = attrVal[0].split(":")[0];
+              val = key + ":" + "(" + variants.join("|") + ")";
+            } else {
+              val = attrVal[0];
+            }
             if (type === "set" && val === "|") {
               return "ambiguity(" + attrKey + ") = 0";
             } else {

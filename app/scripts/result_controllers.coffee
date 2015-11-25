@@ -331,7 +331,13 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
                     op = if type == "set" then "contains" else "="
                 
-                    val = attrVal.join " | "
+                    if type == "set" and attrVal.length > 1
+                        variants = _.flatten _.map(attrVal, (val) ->
+                            val.split(":")[1])
+                        key  = attrVal[0].split(":")[0]
+                        val = key + ":" + "(" + variants.join("|") + ")"
+                    else
+                        val = attrVal[0]
                 
                     if type == "set" and val == "|"
                         return "ambiguity(#{attrKey}) = 0"
