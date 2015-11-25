@@ -206,7 +206,7 @@
     "rel_PA" : "Preposition",
     "rel_head" : "Huvud",
 
-    "deprel_ROOT" : "ROOT",
+    "deprel_ROOT" : "Rot",
     "deprel_++" : "Samordnande konjunktion",
     "deprel_+A" : "Konjuktionellt adverb",
     "deprel_+F" : "Koordination på huvudsatsnivå",
@@ -442,7 +442,7 @@
     "commentaries" : "kommentarer",
 
     "published" : "publicerat",
-    
+
     "sponsor" : "sponsor",
     "place" : "plats",
 

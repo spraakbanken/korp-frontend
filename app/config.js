@@ -28,7 +28,7 @@ settings.news_desk_url = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_ne
 settings.wordpictureTagset = {
     // supported pos-tags
     verb : "vb",
-    
+
     noun : "nn",
     adjective : "jj",
     adverb : "ab",
@@ -432,7 +432,8 @@ attrs.deprel = {
         "IF" : "IF",
         "PA" : "PA",
         "UA" : "UA",
-        "VG" : "VG"
+        "VG" : "VG",
+        "ROOT" : "ROOT"
     },
     opts : settings.liteOptions
 };
@@ -4226,11 +4227,11 @@ settings.reduce_statistics_pie_chart = function(row, cell, value, columnDef, dat
 };
 
 settings.reduce_statistics = function(types, ignoreCase) {
-    
+
     return function(row, cell, value, columnDef, dataContext) {
-        
+
         var corpora = settings.reduce_helpers.getCorpora(dataContext);
-        
+
         if(value == "&Sigma;")
             return "&Sigma;";
 
@@ -4239,10 +4240,10 @@ settings.reduce_statistics = function(types, ignoreCase) {
                 return as.split(" ");
             });
         });
-        
+
         var typeIdx = types.indexOf(columnDef.id);
         var linkInnerHTML = settings.reduce_stringify(columnDef.id, tokenLists[0][typeIdx], corpora);
-        
+
         var totalQuery = []
 
         // create one query part for each token
@@ -4267,7 +4268,7 @@ settings.reduce_statistics = function(types, ignoreCase) {
             "data-query" : encodeURIComponent(query),
             "data-corpora" : JSON.stringify(corpora)
             }).html(linkInnerHTML).outerHTML();
-        
+
         return output;
     }
 
@@ -4292,16 +4293,16 @@ settings.reduce_stringify = function(type, values, corpora) {
         case "suffix":
         case "lex":
         case "lemma":
-            
-            if(type == "saldo") 
+
+            if(type == "saldo")
                 stringify = util.saldoToString
-            else if(type == "lemma") 
+            else if(type == "lemma")
                 stringify = function(lemma) {return lemma.replace(/_/g, " ")}
-            else 
+            else
                 stringify = util.lemgramToString
 
             var html = _.map(values, function(token) {
-                if(token == "|") 
+                if(token == "|")
                     return "–";
                 return stringify(token.replace(/:\d+/g, ""), true);
             });
@@ -4310,7 +4311,7 @@ settings.reduce_stringify = function(type, values, corpora) {
 
         case "deprel":
             var mapped = _.map(values, function (value) {
-               "deprel_" + value, util.getLocaleString("deprel_" + value) 
+               "deprel_" + value, util.getLocaleString("deprel_" + value)
             });
             return mapped.join(" ");
         default: // structural attributes
@@ -4333,14 +4334,14 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
 
     if(!tokens) {
         return "";
-    } 
+    }
     switch(type) {
         case "saldo":
         case "prefix":
         case "suffix":
         case "lex":
         case "lemma":
-            if(tokens[0] == "|") 
+            if(tokens[0] == "|")
                 return "ambiguity(" + type + ") = 0";
             else
                 var res;
@@ -4350,7 +4351,7 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
                         return val.split(":")[1];
                     }));
                     res = key + ":" + "(" + variants.join("|") + ")";
-                } 
+                }
                 else {
                     res = key;
                 }
