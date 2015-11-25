@@ -4341,12 +4341,20 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
         case "lex":
         case "lemma":
             if(tokens[0] == "|") 
-                return "ambiguity(" + type + ") = 0"
+                return "ambiguity(" + type + ") = 0";
             else
-                res = _.map(tokens, function(token) {
-                    return "'" + token + "'"
-                }).join(" | ");
-                return type + " contains " + res 
+                var res;
+                var key = tokens[0].split(":")[0];
+                if(tokens.length > 1) {
+                    var variants = _.flatten(_.map(tokens, function(val) {
+                        return val.split(":")[1];
+                    }));
+                    res = key + ":" + "(" + variants.join("|") + ")";
+                } 
+                else {
+                    res = key;
+                }
+                return type + " contains '" + res + "'";
         case "word":
             s = $.format('word="%s"', [tokens[0]]);
             if(ignoreCase)
