@@ -382,6 +382,17 @@
       });
     };
 
+    LemgramProxy.prototype.lemgramSearch = function(lemgram, searchPrefix, searchSuffix) {
+      return $.format("[(lex contains \"%s\")%s%s]", [lemgram, this.buildAffixQuery(searchPrefix, "prefix", lemgram), this.buildAffixQuery(searchSuffix, "suffix", lemgram)]);
+    };
+
+    LemgramProxy.prototype.buildAffixQuery = function(isValid, key, value) {
+      if (!isValid) {
+        return "";
+      }
+      return $.format("| (%s contains \"%s\")", [key, value]);
+    };
+
     return LemgramProxy;
 
   })(BaseProxy);
