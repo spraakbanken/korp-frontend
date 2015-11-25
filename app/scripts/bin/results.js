@@ -1182,7 +1182,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var activeCorpora, cell, chk, cqp, k, key, labelMapping, len, params, reduceVal, ref, showTotal, subExprs, val;
+          var activeCorpora, cell, chk, cqp, k, key, labelMapping, len, params, reduceVal, ref, showTotal, subExprs, texts, val;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1202,7 +1202,10 @@
               continue;
             }
             subExprs.push(cqp);
-            labelMapping[cqp] = cell.next().text();
+            texts = $.map(cell.parent().find('.parameter-column'), function(elem) {
+              return $(elem).text();
+            });
+            labelMapping[cqp] = texts.join(", ");
           }
           activeCorpora = _.flatten([
             (function() {

@@ -992,7 +992,9 @@ class view.StatsResults extends BaseResults
                     showTotal = true
                     continue
                 subExprs.push cqp
-                labelMapping[cqp] = cell.next().text()
+                texts = $.map cell.parent().find('.parameter-column'), (elem) ->
+                    $(elem).text()
+                labelMapping[cqp] = texts.join ", "
 
 
 
@@ -1952,11 +1954,8 @@ class view.GraphResults extends BaseResults
 
         ).done (data) =>
             c.log "graph data", data
-
             c.log "graph cqp", cqp
-                
 
-            
             done = () =>
                 @resetPreloader()
                 @hidePreloader()
