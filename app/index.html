@@ -381,7 +381,7 @@
                     </div>
                     <div ng-if="!error" class="column column_1">
                       <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp1.label}}</em></h2>
-                      <ul>
+                      <ul class="negative">
                         <li ng-repeat="row in tables.negative | orderBy:resultOrder:true" ng-click="rowClick(row, 0)">
                           <div meter="row" max="max" stringify="stringify" class="meter"></div>
                         </li>
@@ -389,7 +389,7 @@
                     </div>
                     <div class="column column_2">
                       <h2>{{'compare_distinctive' | loc:lang}} <em>{{cmp2.label}}</em></h2>
-                      <ul>
+                      <ul class="positive">
                         <li ng-repeat="row in tables.positive | orderBy:resultOrder:true" ng-click="rowClick(row, 1)">
                           <div meter="row" max="max" stringify="stringify" class="meter"></div>
                         </li>

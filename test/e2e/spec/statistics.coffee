@@ -4,6 +4,7 @@ describe "stats table", () ->
         browser.get "http://localhost:9001/#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
 
         rows = element.all (By.css '.slick-row')
+        browser.sleep 500
         expect(rows.count()).toBe 11
         
         # expect a column for hit, total, suc2, suc3

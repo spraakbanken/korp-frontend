@@ -71,13 +71,13 @@ tab(active="active", ng-repeat='promise in compareTabs', ng-controller='compareC
       h2
         | {{'compare_distinctive' | loc:lang}} 
         em {{cmp1.label}}
-      ul
+      ul.negative
         li(ng-repeat='row in tables.negative | orderBy:resultOrder:true', ng-click="rowClick(row, 0)")
           .meter(meter='row', max='max', stringify='stringify')
     .column.column_2
       h2
         | {{'compare_distinctive' | loc:lang}} 
         em {{cmp2.label}}
-      ul
+      ul.positive
         li(ng-repeat='row in tables.positive | orderBy:resultOrder:true', ng-click="rowClick(row, 1)")
           .meter(meter='row', max='max', stringify='stringify')
