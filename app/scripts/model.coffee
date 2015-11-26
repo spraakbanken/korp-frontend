@@ -441,7 +441,7 @@ class model.StatsProxy extends BaseProxy
             reduceval = "word" 
         
         ## todo: now supports multipe reduce parameters to backend 
-        reduceVals = [reduceval]
+        reduceVals = reduceval.split ","
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"
             return settings.corpusListing.getCurrentAttributes()[reduceVal].label

@@ -527,7 +527,7 @@
         ignoreCase = true;
         reduceval = "word";
       }
-      reduceVals = [reduceval];
+      reduceVals = reduceval.split(",");
       reduceValLabels = _.map(reduceVals, function(reduceVal) {
         if (reduceVal === "word") {
           return "word";
