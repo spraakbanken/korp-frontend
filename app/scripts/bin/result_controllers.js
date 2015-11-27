@@ -384,10 +384,19 @@
             for (var l = 0, ref1 = token.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; 0 <= ref1 ? l++ : l--){ results1.push(l); }
             return results1;
           }).apply(this), function(attrI) {
-            var attrKey, attrVal, key, op, ref2, type, val, variants;
+            var attrKey, attrVal, attribute, key, op, type, val, variants;
             attrKey = reduce[attrI];
             attrVal = token[attrI];
-            type = (ref2 = attributes[_.str.strip(attrKey, "_.")]) != null ? ref2.type : void 0;
+            if (indexOf.call(attrKey, "_.") >= 0) {
+              c.log("error, attribute key contains _.");
+            }
+            attribute = attributes[attrKey];
+            if (attribute) {
+              type = attribute.type;
+              if (attribute.isStructAttr) {
+                attrKey = "_." + attrKey;
+              }
+            }
             op = type === "set" ? "contains" : "=";
             if (type === "set" && attrVal.length > 1) {
               variants = _.flatten(_.map(attrVal, function(val) {

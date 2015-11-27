@@ -327,7 +327,15 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                     attrKey = reduce[attrI]
                     attrVal = token[attrI]
 
-                    type = attributes[_.str.strip(attrKey, "_.")]?.type
+                    
+                    if "_." in attrKey
+                        c.log "error, attribute key contains _."
+                    
+                    attribute = attributes[attrKey]
+                    if attribute 
+                        type = attribute.type
+                        attrKey = "_." + attrKey if attribute.isStructAttr
+
 
                     op = if type == "set" then "contains" else "="
                 
