@@ -4366,7 +4366,8 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
         case "pos":
         case "deprel":
         case "msd":
-            return $.format('%s="%s"', [type, tokens[0]]);
+            val = tokens[0].replace(/\+/g, "\\+");
+            return $.format('%s="%s"', [type, val]);
         default: // structural attributes
             return $.format('_.%s="%s"', [type, tokens[0]]);
     }
