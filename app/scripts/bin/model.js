@@ -532,7 +532,11 @@
         if (reduceVal === "word") {
           return "word";
         }
-        return settings.corpusListing.getCurrentAttributes()[reduceVal].label;
+        if (settings.corpusListing.getCurrentAttributes()[reduceVal]) {
+          return settings.corpusListing.getCurrentAttributes()[reduceVal].label;
+        } else {
+          return settings.corpusListing.getStructAttrs()[reduceVal].label;
+        }
       });
       data = this.makeParameters(reduceVals, cqp);
       data.split = _.filter(reduceVals, function(reduceVal) {

@@ -4310,10 +4310,12 @@ settings.reduce_stringify = function(type, values, corpora) {
             return html.join(" ")
 
         case "deprel":
-            var mapped = _.map(values, function (value) {
-               "deprel_" + value, util.getLocaleString("deprel_" + value)
-            });
-            return mapped.join(" ");
+            var output =  _.map(values, function(token) {
+                return $("<span>")
+                .localeKey("deprel_" + token)
+                .outerHTML()
+            }).join(" ");
+            return output;
         default: // structural attributes
             var cl = settings.corpusListing.subsetFactory(corpora)
             var attrObj = cl.getStructAttrs()[type]
@@ -4321,7 +4323,7 @@ settings.reduce_stringify = function(type, values, corpora) {
             if(!_.isUndefined(attrObj) && attrObj.translationKey )
                 prefix = attrObj.translationKey
             var mapped = _.map(values, function (value) {
-                util.getLocaleString(prefix + value)
+                return util.getLocaleString(prefix + value)
             });
             return mapped.join(" ");
     }
@@ -4345,15 +4347,15 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
                 return "ambiguity(" + type + ") = 0";
             else
                 var res;
-                var key = tokens[0].split(":")[0];
                 if(tokens.length > 1) {
+                    var key = tokens[0].split(":")[0];
                     var variants = _.flatten(_.map(tokens, function(val) {
                         return val.split(":")[1];
                     }));
                     res = key + ":" + "(" + variants.join("|") + ")";
                 }
                 else {
-                    res = key;
+                    res = tokens[0];
                 }
                 return type + " contains '" + res + "'";
         case "word":

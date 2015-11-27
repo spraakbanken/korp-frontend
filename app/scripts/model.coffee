@@ -444,7 +444,10 @@ class model.StatsProxy extends BaseProxy
         reduceVals = reduceval.split ","
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"
-            return settings.corpusListing.getCurrentAttributes()[reduceVal].label
+            if settings.corpusListing.getCurrentAttributes()[reduceVal]
+                return settings.corpusListing.getCurrentAttributes()[reduceVal].label
+            else
+                return settings.corpusListing.getStructAttrs()[reduceVal].label
 
         data = @makeParameters(reduceVals, cqp)
 
