@@ -41,7 +41,8 @@ settings.corpora["somali-2001"] = {
 		text_title : {label : "title"},
 		text_sponsor : {label : "sponsor"},
 		text_place : {label : "place"},
-		page_n : {label : "page"}
+		page_n : {label : "page"},
+		text_edition : {label : "edition"}
 	}
 };
 
