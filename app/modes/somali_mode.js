@@ -83,8 +83,8 @@ settings.corpora["somali-radioden2014"] = {
 	id : "somali-radioden2014",
 	title : "Raadiyaha Denmark 2014",
 	description : "",
-	within : settings.spWithin,
-	context : settings.spContext,
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
 	attributes : {},
 	struct_attributes : {
 	    text_publisher : {label : "publisher"},
