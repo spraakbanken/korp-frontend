@@ -161,9 +161,6 @@ class model.KWICProxy extends BaseProxy
 
         if data.cqp
             data.cqp = @expandCQP(data.cqp)
-            # escape +
-            data.cqp = data.cqp.replace /\+/g, "\\+"
-
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show

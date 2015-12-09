@@ -207,7 +207,6 @@
       }
       if (data.cqp) {
         data.cqp = this.expandCQP(data.cqp);
-        data.cqp = data.cqp.replace(/\+/g, "\\+");
       }
       this.prevCQP = data.cqp;
       data.show = (_.uniq(["sentence"].concat(data.show))).join(",");
