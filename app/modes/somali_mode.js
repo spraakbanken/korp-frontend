@@ -8,7 +8,7 @@ settings.enableMap = false;
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
-settings.preselected_corpora = ["somali-1971-79", "somali-2001", "somali-bulsho", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
+settings.preselected_corpora = ["somali-1971-79", "somali-2001", "somali-bulsho", "somali-cilmi", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
 
 settings.corpora = {};
 settings.corporafolders = {};
@@ -59,6 +59,24 @@ settings.corpora["somali-bulsho"] = {
 		text_source : {label : "source", type : "url"},
 		text_publisher : {label : "publisher"},
 		text_place : {label : "place"}
+	}
+};
+
+settings.corpora["somali-cilmi"] = {
+	id : "somali-cilmi",
+	title : "Cilmi-Afeed",
+	description : "",
+	within : settings.defaultWithin,
+	context : settings.defaultContext,
+	attributes : {},
+	struct_attributes : {
+		text_year : {label : "year"},
+		text_title : {label : "title"},
+		text_editor : {label : "editor"},
+		text_publisher : {label : "publisher"},
+		text_place : {label : "place"},
+		text_edition : {label : "edition"},
+		page_n : {label : "page"}
 	}
 };
 
