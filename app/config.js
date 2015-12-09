@@ -304,7 +304,7 @@ attrs.msd = {
         $scope.msdClick = function(event) {
             val = $(event.target).parent().data("value")
             if(!val) return;
-            $scope.input = val;
+            $scope.model = val;
 
 
             modal.close();
