@@ -98,6 +98,7 @@
     "article_topic" : "artikelns ämne/tema",
     "text_volume" : "band",
     "subject" : "ämne",
+    "volume": "band",
 
     "sentence_link" : "meningslänk",
     "text_issue" : "utgåva",
@@ -112,6 +113,9 @@
     "source" : "källa",
     "pagesource" : "sidkälla",
     "age" : "ålder",
+    
+    "languagefamily": "språkfamilj",
+    "subfamily": "underfamilj",
 
     "blog_title" : "bloggtitel",
     "blog_url" : "bloggaddress",
@@ -442,7 +446,7 @@
     "commentaries" : "kommentarer",
 
     "published" : "publicerat",
-
+    
     "sponsor" : "sponsor",
     "place" : "plats",
 

@@ -98,6 +98,7 @@
     "article_topic" : "article topic",
     "text_volume" : "volume",
     "subject" : "subject",
+    "volume": "volume",
 
     "sentence_link" : "sentence link",
     "text_issue" : "issue",
@@ -112,6 +113,9 @@
     "source" : "source",
     "pagesource" : "page source",
     "age" : "age",
+    
+    "languagefamily": "language family",
+    "subfamily": "subfamily",
 
     "blog_title" : "blog title",
     "blog_url" : "blog address",
@@ -441,9 +445,10 @@
     "commentaries" : "commentaries",
 
     "published" : "published",
-
+    
     "sponsor" : "sponsor",
     "place" : "place",
+    "subtitle": "subtitle",
 
     "ne_expr" : "named entity",
     "ne_type" : "named entity type",
