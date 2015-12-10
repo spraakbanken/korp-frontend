@@ -27,7 +27,13 @@ settings.corpora.lsi = {
         deprel : {label : "deprel"},
         ref : attrs.ref
     },
-	struct_attributes : {},
+	struct_attributes : {
+	    "page_pno": {label: "page"},
+	    "page_languagefamily": {label: "languagefamily"},
+	    "page_subfamily": {label: "subfamily"},
+	    "corpus_vol": {label: "volume"},
+	    "corpus_part": {label: "part"}
+	},
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
