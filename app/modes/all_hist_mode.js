@@ -5,8 +5,8 @@ settings.lemgramSelect = false;
 settings.wordpicture = false;
 
 settings.struct_attribute_selector = "intersection"
-settings.word_attribute_selector   = "intersection" 
-settings.reduce_word_attribute_selector = "intersection" 
+settings.word_attribute_selector   = "intersection"
+settings.reduce_word_attribute_selector = "intersection"
 
 // FSV
 settings.fsvattributes = {
@@ -85,7 +85,7 @@ settings.aftonbladstruct_attributes = {
 	page_no : {label : "page"}
 };
 
-digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'	
+digidailydescription = '<a href="http://digidaily.kb.se/">Digidaily</a> är ett utvecklingsprojekt där Riksarkivet, Kungliga biblioteket och Mittuniversitetet tillsammans ska utveckla rationella metoder och processer för digitalisering av dagstidningar.'
 
 
 //UB-KVT
@@ -257,7 +257,7 @@ settings.corporafolders.kubhist.norraskane = {
 settings.corporafolders.kubhist.postochinrikestidning = {
 	title : "Post- och Inrikes Tidningar",
 	contents : ["kubhist-postochinrikestidning-1770", "kubhist-postochinrikestidning-1780", "kubhist-postochinrikestidning-1790", "kubhist-postochinrikestidning-1800",
-		"kubhist-postochinrikestidning-1810", "kubhist-postochinrikestidning-1820", "kubhist-postochinrikestidning-1830", "kubhist-postochinrikestidning-1840", 
+		"kubhist-postochinrikestidning-1810", "kubhist-postochinrikestidning-1820", "kubhist-postochinrikestidning-1830", "kubhist-postochinrikestidning-1840",
 		"kubhist-postochinrikestidning-1850", "kubhist-postochinrikestidning-1860",]
 };
 
@@ -341,6 +341,7 @@ settings.corpora['bellman'] = {
 		msd : attrs.msd,
  		lemma : attrs.baseform,
  		lex : attrs.lemgram,
+		dalinlex : attrs.dalinlemgram,
  		saldo : attrs.saldo,
  		prefix : attrs.prefix,
  		suffix : attrs.suffix,
@@ -351,6 +352,39 @@ settings.corpora['bellman'] = {
 	struct_attributes : {
 		text_author : {label : "author"},
 		text_title : {label : "title"},
+		page_n : {label : "page"}
+	}
+};
+
+settings.corpora['betankande'] = {
+	morf : 'swedbergm|dalinm|saldom',
+	id : "betankande",
+	title : "Betänkande angående likformig uppställning",
+	description : "",
+	within : settings.spWithin,
+	context : {
+	    "1 sentence" : "1 sentence",
+	    "1 page" : "1 page"
+	},
+	attributes : {
+		msd : attrs.msd,
+ 		lemma : attrs.baseform,
+		lex : attrs.lemgram,
+ 		dalinlex : attrs.dalinlemgram,
+ 		saldo : attrs.saldo,
+ 		prefix : attrs.prefix,
+ 		suffix : attrs.suffix,
+ 		dephead : attrs.dephead,
+ 		deprel : attrs.deprel,
+ 		ref : attrs.ref
+	},
+	struct_attributes : {
+		text_author : {label : "author"},
+		text_title : {label : "title"},
+		text_subtitle : {label : "subtitle"},
+		text_year : {label : "year"},
+		text_place : {label : "place"},
+		text_publisher : {label : "publisher"},
 		page_n : {label : "page"}
 	}
 };
@@ -658,7 +692,7 @@ settings.corpora["fsv-yngretankebocker"] = {
 };
 
 settings.corpora["fsv-nysvenskbibel"] = {
- 
+
 	id : "fsv-nysvenskbibel",
 	title : "Nysvenska bibelböcker – Fornsvenska textbankens material",
 	description : settings.fsvdescription,
@@ -2007,7 +2041,7 @@ settings.corpora.bibel1873dalin = {
 		dephead : attrs.dephead,
 		deprel : attrs.deprel,
 		ref : attrs.ref
-		
+
 	},
 	struct_attributes : {
 		"text_title" : {label : "title"},
@@ -2160,7 +2194,7 @@ settings.corpora.kioping = {
 					//"kustod"
 				],
 				opts : settings.liteOptions
-        	
+
                 }
 	},
 
@@ -2212,7 +2246,7 @@ settings.corpora['akerbruk'] = {
                                 "Engelska Åker-Mannen.",
                                 "En kort beskrifning om jordförbättring med gräsfröen.",
                                 "En Grundelig Kundskap Om Swenska Åkerbruket / Först I Gemen."
-	
+
 		],
 			opts : settings.liteOptions
 		},
@@ -2264,7 +2298,7 @@ settings.corpora['kvah'] = {
 				"Rön om Åkerbrukets nyttiga främjande medelst Utsädets och Gödslens wissa besparning. Framgifwit af SACHARIAS WESTBECK, Kyrkoherde uti Öst-Löfsta Församling i .",
 				" Försök til Säds utsåning med Machine, anstälde på Fullerö Sätesgård, år 1759, Af CARL JOHAN CRONSTEDT.",
 				"Om en ny påfunnen Tuf-Plog."
-	
+
 		],
 			opts : settings.liteOptions
 		},
@@ -2304,4 +2338,3 @@ settings.corpora.romg = {
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
-
