@@ -359,7 +359,7 @@ settings.corpora['bellman'] = {
 settings.corpora['betankande'] = {
 	morf : 'swedbergm|dalinm|saldom',
 	id : "betankande",
-	title : "Betänkande angående likformig uppställning",
+	title : "Betänkande angående likformig uppställning av grammatiska läroböcker",
 	description : "",
 	within : settings.spWithin,
 	context : {
@@ -379,13 +379,11 @@ settings.corpora['betankande'] = {
  		ref : attrs.ref
 	},
 	struct_attributes : {
-		text_author : {label : "author"},
 		text_title : {label : "title"},
-		text_subtitle : {label : "subtitle"},
 		text_year : {label : "year"},
 		text_place : {label : "place"},
 		text_publisher : {label : "publisher"},
-		page_n : {label : "page"}
+		page_nr : {label : "page"}
 	}
 };
 
