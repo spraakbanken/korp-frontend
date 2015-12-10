@@ -466,18 +466,18 @@
       ref2 = data.corpora;
       for (corpus in ref2) {
         corpusData = ref2[corpus];
-        newAbsolute = _.reduce(corpusData.absolute, (function(result, value, key) {
+        newAbsolute = _.reduce(_.keys(corpusData.absolute), (function(result, key) {
           var currentValue, newKey;
           newKey = key.replace(/:\d+/g, "");
           currentValue = result[newKey] || 0;
-          result[newKey] = currentValue + value;
+          result[newKey] = currentValue + corpusData.absolute[key];
           return result;
         }), {});
-        newRelative = _.reduce(corpusData.relative, (function(result, value, key) {
+        newRelative = _.reduce(_.keys(corpusData.relative), (function(result, key) {
           var currentValue, newKey;
           newKey = key.replace(/:\d+/g, "");
           currentValue = result[newKey] || 0;
-          result[newKey] = currentValue + value;
+          result[newKey] = currentValue + corpusData.relative[key];
           return result;
         }), {});
         summarizedData[corpus] = {

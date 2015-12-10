@@ -389,16 +389,16 @@ class model.StatsProxy extends BaseProxy
 
         summarizedData = {}
         for corpus, corpusData of data.corpora
-            newAbsolute = _.reduce corpusData.absolute, ((result, value, key) ->
+            newAbsolute = _.reduce _.keys(corpusData.absolute), ((result, key) ->
                     newKey = key.replace(/:\d+/g, "")
                     currentValue = result[newKey] or 0
-                    result[newKey] = currentValue + value
+                    result[newKey] = currentValue + corpusData.absolute[key]
                     return result;
                 ), {}
-            newRelative = _.reduce corpusData.relative, ((result, value, key) ->
+            newRelative = _.reduce _.keys(corpusData.relative), ((result, key) ->
                     newKey = key.replace(/:\d+/g, "")
                     currentValue = result[newKey] or 0
-                    result[newKey] = currentValue + value
+                    result[newKey] = currentValue + corpusData.relative[key]
                     return result;
                 ), {}
             summarizedData[corpus] = { absolute: newAbsolute, relative: newRelative }
