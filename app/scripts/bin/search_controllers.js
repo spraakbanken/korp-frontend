@@ -86,7 +86,6 @@
           return;
         }
         page = Number($location.search().page) || 0;
-        c.log("activesearch", search);
         s.relatedObj = null;
         if (search.type === "word") {
           $("#simple_text input").val(search.val);
@@ -107,6 +106,7 @@
         } else if (search.type === "lemgram") {
           s.placeholder = search.val;
           s.simple_text = "";
+          s.model = search.val;
           cqp = simpleSearch.getCQP();
           backend.relatedWordSearch(search.val).then(function(data) {
             return s.relatedObj = data;

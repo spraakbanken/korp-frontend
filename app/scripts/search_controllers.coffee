@@ -84,11 +84,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
     s.searches = searches
     s.$watch "searches.activeSearch", (search) =>
-        # if search.type in ["word", "lemgram"]
         c.log "search", search
         unless search then return
         page = Number($location.search().page) or 0
-        c.log "activesearch", search
         s.relatedObj = null
         if search.type == "word"
             $("#simple_text input").val(search.val) # Necessary for displaying the wordform if it came from the URL
@@ -100,17 +98,15 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 return
             else
                 searches.kwicSearch(cqp)
-            # simpleSearch.makeLemgramSelect() if settings.lemgramSelect
             if settings.wordpicture != false and s.word_pic and " " not in search.val
                 lemgramResults.makeRequest(search.val, "word")
-                # lemgramProxy.makeRequest(search.val, "word", $.proxy(lemgramResults.onProgress, lemgramResults));
             else
                 lemgramResults.resetView()
 
         else if search.type == "lemgram"
             s.placeholder = search.val
             s.simple_text = ""
-            # cqp = "[lex contains '#{search.val}']"
+            s.model = search.val
             cqp = simpleSearch.getCQP()
             backend.relatedWordSearch(search.val).then (data) ->
                 s.relatedObj = data
