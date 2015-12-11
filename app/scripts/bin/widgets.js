@@ -114,7 +114,7 @@
         return output;
       }
       if (attrs.type === "set") {
-        pattern = attrs.pattern || '<span data-key="<% key %>"><%= val %></span>';
+        pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>';
         ul = $("<ul>");
         getStringVal = function(str) {
           return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), function(a, b) {
@@ -150,23 +150,21 @@
               prefix = attrs.translationKey || "";
               inner.localeKey(prefix + val);
             }
-            li = $("<li></li>").data("key", x).append(inner);
-            if (attrs.externalSearch) {
-              address = _.template(attrs.externalSearch, {
-                val: x
-              });
-              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>")).click(function(event) {
-                return event.stopImmediatePropagation();
-              });
-            }
             if (attrs.internalSearch) {
-              li.addClass("link").click(function() {
+              inner.addClass("link").click(function() {
                 var cqpVal;
                 cqpVal = $(this).data("key");
                 return search({
                   "search": "cqp|[" + key + " contains '" + cqpVal + "']"
                 });
               });
+            }
+            li = $("<li></li>").data("key", x).append(inner);
+            if (attrs.externalSearch) {
+              address = _.template(attrs.externalSearch, {
+                val: x
+              });
+              li.append($("<a href='" + address + "' class='external_link' target='_blank'></a>"));
             }
             results.push(li);
           }

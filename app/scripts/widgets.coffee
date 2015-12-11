@@ -96,7 +96,7 @@ Sidebar =
 
 
         if attrs.type == "set"
-            pattern = attrs.pattern or '<span data-key="<% key %>"><%= val %></span>'
+            pattern = attrs.pattern or '<span data-key="<%= key %>"><%= val %></span>'
             ul = $("<ul>")
             getStringVal = (str) ->
                 return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), (a,b) -> a + b);
@@ -119,15 +119,16 @@ Sidebar =
                 if attrs.translationKey?
                     prefix = attrs.translationKey or ""
                     inner.localeKey(prefix + val)
+                    
+                if attrs.internalSearch
+                    inner.addClass("link").click ->
+                        cqpVal = $(this).data("key")
+                        search({"search": "cqp|[#{key} contains '#{cqpVal}']"})
+                    
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
                     address = _.template(attrs.externalSearch, {val : x})
                     li.append $("<a href='#{address}' class='external_link' target='_blank'></a>")
-                                                    .click (event) -> event.stopImmediatePropagation()
-                if attrs.internalSearch
-                    li.addClass("link").click ->
-                        cqpVal = $(this).data("key")
-                        search({"search": "cqp|[#{key} contains '#{cqpVal}']"})
 
 
                 li
