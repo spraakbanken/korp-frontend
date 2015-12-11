@@ -212,11 +212,12 @@
   };
 
   window.initTimeGraph = function(def) {
-    var all_timestruct, getValByDate, onTimeGraphChange, opendfd, restdata, restyear, timestruct;
+    var all_timestruct, getValByDate, hasRest, onTimeGraphChange, opendfd, restdata, restyear, timestruct;
     timestruct = null;
     all_timestruct = null;
     restdata = null;
     restyear = null;
+    hasRest = false;
     onTimeGraphChange = function() {};
     getValByDate = function(date, struct) {
       var output;
@@ -234,7 +235,6 @@
     }).done(function(arg) {
       var all_timestruct, cor, corpus, dataByCorpus, rest, struct;
       dataByCorpus = arg[0], all_timestruct = arg[1], rest = arg[2];
-      c.log("write time");
       for (corpus in dataByCorpus) {
         struct = dataByCorpus[corpus];
         if (corpus !== "time") {
@@ -293,6 +293,7 @@
         }).reduce(function(accu, corp) {
           return accu + parseInt(corp.non_time || "0");
         }, 0);
+        hasRest = yeardiff > 0;
         plots = [
           {
             data: normalize([].concat(all_timestruct, [[restyear, rest]])),
@@ -328,7 +329,8 @@
             show: false
           },
           xaxis: {
-            show: true
+            show: true,
+            tickDecimals: 0
           },
           hoverable: true,
           colors: ["lightgrey", "navy"]
@@ -344,7 +346,7 @@
         if (item) {
           date = item.datapoint[0];
           header = $("<h4>");
-          if (date === restyear) {
+          if (date === restyear && hasRest) {
             header.text(util.getLocaleString("corpselector_rest_time"));
             val = restdata;
             total = rest;

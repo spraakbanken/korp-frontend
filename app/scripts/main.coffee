@@ -214,7 +214,8 @@ window.initTimeGraph = (def) ->
     all_timestruct = null
     restdata = null
     restyear = null
-    # time_comb = timeProxy.makeRequest(true)
+    hasRest = false
+    
     onTimeGraphChange = () ->
 
     getValByDate = (date, struct) ->
@@ -230,8 +231,7 @@ window.initTimeGraph = (def) ->
         .fail (error) ->
             $("#time_graph").html("<i>Could not draw graph due to a backend error.</i>")
         .done ([dataByCorpus, all_timestruct, rest]) ->
-            c.log "write time"
-            # $.each data, (corpus, struct) ->
+
             for corpus, struct of dataByCorpus
                 if corpus isnt "time"
                     cor = settings.corpora[corpus.toLowerCase()]
@@ -243,14 +243,6 @@ window.initTimeGraph = (def) ->
                         cor.common_attributes ?= {}
                         cor.common_attributes.date_interval = true
 
-                        
-                    #     cor.struct_attributes.date_interval =
-                    #         label: "date_interval"
-                    #         displayType: "date_interval"
-                    #         opts: settings.liteOptions
-
-            # $("#corpusbox").trigger "corpuschooserchange", [settings.corpusListing.getSelectedCorpora()]
-            # onTimeGraphChange()
             safeApply $("body").scope(), (scope) ->
                 scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
                 def.resolve()
@@ -260,7 +252,6 @@ window.initTimeGraph = (def) ->
                 # the 46 here is the presumed value of
                 # the height of the graph
                 one_px = max / 46
-                # c.log "one_px", one_px
 
                 normalize = (array) ->
                     _.map array, (item) ->
@@ -289,8 +280,6 @@ window.initTimeGraph = (def) ->
 
 
                 timestruct = timeProxy.compilePlotArray(output)
-                # c.log "output", output
-                # c.log "timestruct", timestruct
                 endyear = all_timestruct.slice(-1)[0][0]
                 yeardiff = endyear - all_timestruct[0][0]
                 restyear = endyear + (yeardiff / 25)
@@ -300,6 +289,9 @@ window.initTimeGraph = (def) ->
                     ).reduce((accu, corp) ->
                         accu + parseInt(corp.non_time or "0")
                     , 0)
+
+                hasRest = yeardiff > 0
+
                 plots = [
                     data: normalize([].concat(all_timestruct, [[restyear, rest]]))
                     bars:
@@ -330,6 +322,7 @@ window.initTimeGraph = (def) ->
 
                     xaxis:
                         show: true
+                        tickDecimals: 0
 
                     hoverable: true
                     colors: ["lightgrey", "navy"]
@@ -341,10 +334,9 @@ window.initTimeGraph = (def) ->
 
             $("#time_graph,#rest_time_graph").bind "plothover", _.throttle((event, pos, item) ->
                 if item
-                    # c.log "hover", pos, item, item.datapoint
                     date = item.datapoint[0]
                     header = $("<h4>")
-                    if date is restyear
+                    if date is restyear && hasRest
                         header.text util.getLocaleString("corpselector_rest_time")
                         val = restdata
                         total = rest
@@ -352,6 +344,7 @@ window.initTimeGraph = (def) ->
                         header.text util.getLocaleString("corpselector_time") + " " + item.datapoint[0]
                         val = getValByDate(date, timestruct)
                         total = getValByDate(date, all_timestruct)
+
                     pTmpl = _.template("<p><span rel='localize[<%= loc %>]'></span>: <%= num %> <span rel='localize[corpselector_tokens]' </p>")
                     firstrow = pTmpl(
                         loc: "corpselector_time_chosen"
