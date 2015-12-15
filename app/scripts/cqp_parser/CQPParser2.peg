@@ -17,14 +17,14 @@
     var _ = window._
 
   var c = console
-  
+
 }
 
 
 start
   = tokens
 
-tokens 
+tokens
   = t1:token t2:(" " t2:token)*
   {
     return unpack([t1], t2)
@@ -44,7 +44,7 @@ token
       output = _.merge(output, val, function(a, b) {
         return _.isArray(a) ? a.concat(b) : undefined;
       })
-      
+
     })
 
 
@@ -75,10 +75,10 @@ bound_block
     return unpack([first], rest)
   }
 
-and 
+and
   =  left:or right:(" | " or)* {
     // c.log("and", unpack([left], right))
-    return {and_block : [unpack([left], right)]} 
+    return {and_block : [unpack([left], right)]}
   }
   / bound:bound_block {
     bound = _.object(bound.map(function(item) {
@@ -96,7 +96,7 @@ or
       prefix = lhs[0]
     console.log("rhs", rhs)
     rhs = _.map(rhs, _.last)
-    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join("")) 
+    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join(""))
   }
   // / "(" first:date_expr rest:(bool date_expr)* ")" {
   // / "%" first:date_expr rest:(bool date_expr)* "%%" {
@@ -112,7 +112,7 @@ or
 
 // date_expr
 
-date 
+date
   = "$" "date_interval" " "? op:("!=" / "=") " "? ["'] val:([0-9]+ "," [0-9]+ "," [0-9]+ "," [0-9]+) ['"]
 {
 
@@ -153,6 +153,7 @@ infix_op
   / "*="
   / "!="
   / "="
+  / "!*="
   / "not contains"
   / "contains"
 
@@ -161,7 +162,7 @@ date_op
   / " => "
   / " > "
   / " = "
-  / " < " 
+  / " < "
 
 
 bool
