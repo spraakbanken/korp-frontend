@@ -293,7 +293,7 @@ attrs.msd = {
                                     '<h3 class="modal-title">{{\'msd_long\' | loc:lang}}</h3>' +
                                     '<span ng-click="clickX()" class="close-x">×</span>' +
                                 '</div>' +
-                                '<div class="modal-body" ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
+                                '<div class="modal-body msd-modal" ng-click="msdClick($event)" ng-include="\'markup/msd.html\'"></div>' +
                             '</div>',
                 scope : $scope
             })
