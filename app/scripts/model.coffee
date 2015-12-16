@@ -22,7 +22,7 @@ class BaseProxy
         try
             return CQP.expandOperators cqp
         catch e
-            c.warn "CQP expansion failed", cqp
+            c.warn "CQP expansion failed", cqp, e
             return cqp
 
     makeRequest: ->
@@ -87,7 +87,7 @@ class BaseProxy
         stats = (@progress / @total) * 100
         if not @total? and struct.progress_corpora?.length
             @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
-                return if not corpus.length 
+                return if not corpus.length
                 _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
@@ -122,7 +122,7 @@ class model.KWICProxy extends BaseProxy
         super()
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
-        
+
 
         o = $.extend(
             queryData: null
@@ -137,7 +137,7 @@ class model.KWICProxy extends BaseProxy
                     @foundKwic = true
                     kwicCallback progressObj["struct"]
         , options)
-        
+
         _.extend options.ajaxParams, settings.corpusListing.getWithinParameters()
 
         data =
@@ -216,10 +216,10 @@ class model.LemgramProxy extends BaseProxy
             # error: (data, status) ->
             #     c.log "relationsearch abort", arguments
             #     if status == "abort"
-                    
+
             #     else
             #         lemgramResults.resultError()
-                    
+
 
             success: (data) ->
                 c.log "relations success", data
@@ -256,13 +256,13 @@ class model.LemgramProxy extends BaseProxy
                         dfd.reject()
                         return
                     c.log "karp success", data, sw_forms
-                    
+
                     div = (if $.isPlainObject(data.div) then [data.div] else data.div)
                     output = $.map(div.slice(0, Number(data.count)), (item) ->
                         item = util.convertLMFFeatsToObjects(item)
                         item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram
                     )
-                    
+
                     dfd.resolve output, textStatus, xhr
 
                 error: (jqXHR, textStatus, errorThrown) ->
@@ -287,7 +287,7 @@ class model.LemgramProxy extends BaseProxy
                     c.log "saldo search 0 results"
                     return
                 div = (if $.isPlainObject(data.div) then [data.div] else data.div)
-                
+
                 output = $.map(div.slice(0, Number(data.count)), (item) ->
                     sense = item.LexicalEntry.Sense
                     sense = [sense] unless $.isArray(sense)
@@ -319,10 +319,10 @@ class model.LemgramProxy extends BaseProxy
                 self.addAuthorizationHeader req
 
             method: "POST"
-            
+
     lemgramSearch: (lemgram, searchPrefix, searchSuffix) ->
         return $.format("[(lex contains \"%s\")%s%s]", [lemgram, @buildAffixQuery(searchPrefix, "prefix", lemgram), @buildAffixQuery(searchSuffix, "suffix", lemgram)])
-        
+
     buildAffixQuery: (isValid, key, value) ->
         return "" unless isValid
         $.format "| (%s contains \"%s\")", [key, value]
@@ -347,7 +347,7 @@ class model.StatsProxy extends BaseProxy
                 name: reduceValLabel
                 field: "hit_value"
                 sortable: true
-                formatter: settings.reduce_statistics reduceVals, ignoreCase 
+                formatter: settings.reduce_statistics reduceVals, ignoreCase
                 minWidth: minWidth
                 cssClass: "parameter-column"
                 headerCssClass: "localized-header"
@@ -360,8 +360,8 @@ class model.StatsProxy extends BaseProxy
             formatter: settings.reduce_statistics_pie_chart
             maxWidth: 25
             minWidth: 25
-            
-        columns.push  
+
+        columns.push
             id: "total"
             name: "stats_total"
             field: "total_value"
@@ -369,7 +369,7 @@ class model.StatsProxy extends BaseProxy
             formatter: @valueFormatter
             minWidth : minWidth
             headerCssClass: "localized-header"
-        
+
         $.each _.keys(data.corpora).sort(), (i, corpus) =>
             columns.push
                 id: corpus
@@ -402,7 +402,7 @@ class model.StatsProxy extends BaseProxy
                     return result;
                 ), {}
             summarizedData[corpus] = { absolute: newAbsolute, relative: newRelative }
-        
+
         statsWorker = new Worker "scripts/statistics_worker.js"
         statsWorker.onmessage = (e) ->
             c.log "Called back by the worker!\n"
@@ -422,7 +422,7 @@ class model.StatsProxy extends BaseProxy
         }
 
     makeParameters: (reduceVals, cqp) ->
-        parameters = 
+        parameters =
             command: "count"
             groupby: reduceVals.join ','
             cqp: @expandCQP cqp
@@ -438,9 +438,9 @@ class model.StatsProxy extends BaseProxy
         ignoreCase = false
         if reduceval is "word_insensitive"
             ignoreCase = true
-            reduceval = "word" 
-        
-        ## todo: now supports multipe reduce parameters to backend 
+            reduceval = "word"
+
+        ## todo: now supports multipe reduce parameters to backend
         reduceVals = reduceval.split ","
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"
@@ -451,7 +451,7 @@ class model.StatsProxy extends BaseProxy
 
         data = @makeParameters(reduceVals, cqp)
 
-        data.split = _.filter(reduceVals, (reduceVal) -> 
+        data.split = _.filter(reduceVals, (reduceVal) ->
             settings.corpusListing.getCurrentAttributes()[reduceVal]?.type == "set").join(',')
 
         if ignoreCase
@@ -492,17 +492,17 @@ class model.StatsProxy extends BaseProxy
 
 class model.NameProxy extends model.StatsProxy
     constructor: ->
-        super()    
-        
+        super()
+
     makeParameters: (reduceVal, cqp) ->
         # ignore reduceVal, map only works for word
         parameters = super(["word"], cqp)
         parameters.cqp2 = "[pos='PM']"
         return parameters
-    
+
     processData: (def, data, reduceval) ->
         def.resolve data
-    
+
 
 class model.AuthenticationProxy
     constructor: ->
@@ -564,7 +564,7 @@ class model.TimeProxy extends BaseProxy
 
         xhr.done (data, status, xhr) =>
             c.log "timespan done", data
-            if data.ERROR 
+            if data.ERROR
                 c.error "timespan error", data.ERROR
                 dfd.reject(data.ERROR )
                 return
@@ -580,7 +580,7 @@ class model.TimeProxy extends BaseProxy
                 dfd.reject()
                 return
             # @corpusdata = data
-            
+
             dfd.resolve [data.corpora, combined, rest]
 
 
@@ -647,7 +647,7 @@ class model.GraphProxy extends BaseProxy
             corpus : corpora
             granularity : @granularity
             incremental: $.support.ajaxProgress
-        
+
         if from
             params.from = from
         if to

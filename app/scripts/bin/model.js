@@ -32,7 +32,7 @@
         return CQP.expandOperators(cqp);
       } catch (_error) {
         e = _error;
-        c.warn("CQP expansion failed", cqp);
+        c.warn("CQP expansion failed", cqp, e);
         return cqp;
       }
     };
