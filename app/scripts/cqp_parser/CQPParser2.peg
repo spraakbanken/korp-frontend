@@ -1,6 +1,6 @@
 {
-  function makeObj(type, op, val) {
-    return {type : type, op : op, val: val}
+  function makeObj(type, op, val, flags) {
+    return {type : type, op : op, val: val, flags: flags}
   }
 
   function unpack(target, source) {
@@ -83,13 +83,15 @@ and
 
 
 or
-  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:(!["'] .)* ["'] {
+  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:(!["'] .)* ["'] flags:(" %"[cd]+)? {
     var prefix = ""
     if(lhs[0])
       prefix = lhs[0]
-    console.log("rhs", rhs)
     rhs = _.map(rhs, _.last)
-    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join(""))
+
+    if(flags)
+      flags = _.zipObject(flags[1], _.map(flags[1], function() { return true; }));
+    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join(""), flags)
   }
   / date
 
