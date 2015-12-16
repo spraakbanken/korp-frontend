@@ -83,18 +83,26 @@ and
 
 
 or
-  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? ["'] rhs:(!["'] .)* ["'] flags:(" %"[cd]+)? {
+  = lhs:("_."? [A-Za-z_]+) " "? infix_op:infix_op " "? rhs:value_expr flags:(" %"[cd]+)? {
     var prefix = ""
     if(lhs[0])
       prefix = lhs[0]
-    rhs = _.map(rhs, _.last)
 
     if(flags)
       flags = _.zipObject(flags[1], _.map(flags[1], function() { return true; }));
-    return makeObj(prefix + lhs[1].join(""), infix_op, rhs.join(""), flags)
+    return makeObj(prefix + lhs[1].join(""), infix_op, rhs, flags)
   }
   / date
 
+value_expr
+    = ["] rhs:(!["] .)* ["] {
+        rhs = _.map(rhs, _.last);
+        return rhs.join("");
+    }
+    / ['] rhs:(!['] .)* ['] {
+        rhs = _.map(rhs, _.last);
+        return rhs.join("");
+    }
 
 // date_expr
 
