@@ -1,0 +1,6 @@
+Install pegjs:
+npm install -g pegjs
+
+Rebuild parser:
+pegjs -e CQPParser CQPParser2.peg
+
