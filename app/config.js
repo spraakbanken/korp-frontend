@@ -2618,10 +2618,54 @@ settings.corpora.suc3 = {
     attributes : _.extend({}, modernAttrs, {
         ne_ex : attrs.ne_ex,
         ne_type : attrs.ne_type,
-        ne_subtype : attrs.ne_subtype
+        ne_subtype : attrs.ne_subtype,
+        complemgram : {label : "complemgram",
+                       displayType : "hidden",
+                       type : "set"},
+        lemprob : {label : "lemprob",
+                   displayType : "hidden",
+                   type : "set"},
+        compwf : {label : "compwf",
+                  type : "set"}
     }),
     struct_attributes : {
         text_id : {label : "text"}
+    },
+    custom_attributes : {
+        complemgram: {
+            label : "complemgram",
+            renderItem : function(key, value, attrs, wordData, sentenceData) {
+                var compLemgrams = wordData.complemgram
+                var lemProbs = wordData.lemprob
+                compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
+                        return comp.split("+")
+                    });
+                lemProbs = _.filter(lemProbs.split("|"), Boolean);
+                rows = _.zip(compLemgrams, lemProbs);
+
+                var ul = $("<ul style='list-style:initial'>")
+                var lis = _.map(rows, function(row) {
+                    var lemgrams = row[0];
+                    var prob = row[1];
+                    var li = $("<li></li>")
+                    _.map(lemgrams, function(lemgram) {
+                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram) + " </span>")
+                        lemgramSpan.click(function () {
+                            value = $(this).data("value")
+                            search({"search": "cqp|[lex contains '" + value + "']"})
+                        });
+                        li.append(lemgramSpan);
+                    });
+                    li.append("<span>(" + prob + ")</span>");
+                    return li
+                });
+
+                ul.append(lis);
+
+                return ul
+            },
+            custom_type : "pos"
+        }
     }
 };
 

@@ -113,7 +113,7 @@
     "source" : "source",
     "pagesource" : "page source",
     "age" : "age",
-    
+
     "languagefamily": "language family",
     "subfamily": "subfamily",
 
@@ -445,7 +445,7 @@
     "commentaries" : "commentaries",
 
     "published" : "published",
-    
+
     "sponsor" : "sponsor",
     "place" : "place",
     "subtitle": "subtitle",
@@ -1000,5 +1000,8 @@
     "ogl_msd_V-3spxm----i": "verb oklart modus 3e person singularis presens s-form",
     "ogl_msd_V-3suxa----i": "verb oklart modus 3e person singularis preteritum aktiv",
     "ogl_msd_V-3ppxa----i": "verb oklart modus 3e person pluralis presens aktiv",
-    "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv"
+    "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv",
+
+    "complemgram" : "compound lemgrams",
+    "compwf" : "compound word forms"
 }

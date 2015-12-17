@@ -86,9 +86,13 @@ Sidebar =
         return [$(pos_items), $(struct_items)]
 
     renderItem: (key, value, attrs, wordData, sentenceData) ->
+
         if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
             return ""
         output = $("<p><span rel='localize[#{attrs.label}]'></span>: </p>")
+        if attrs.renderItem
+            return output.append(attrs.renderItem key, value, attrs, wordData, sentenceData)
+
         output.data("attrs", attrs)
         if value == "|" or value == ""
             output.append "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
@@ -119,12 +123,12 @@ Sidebar =
                 if attrs.translationKey?
                     prefix = attrs.translationKey or ""
                     inner.localeKey(prefix + val)
-                    
+
                 if attrs.internalSearch
                     inner.addClass("link").click ->
                         cqpVal = $(this).data("key")
                         search({"search": "cqp|[#{key} contains '#{cqpVal}']"})
-                    
+
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
                     address = _.template(attrs.externalSearch, {val : x})

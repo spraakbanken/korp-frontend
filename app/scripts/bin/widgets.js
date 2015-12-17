@@ -108,6 +108,9 @@
         return "";
       }
       output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
+      if (attrs.renderItem) {
+        return output.append(attrs.renderItem(key, value, attrs, wordData, sentenceData));
+      }
       output.data("attrs", attrs);
       if (value === "|" || value === "") {
         output.append("<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>");

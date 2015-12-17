@@ -113,7 +113,7 @@
     "source" : "källa",
     "pagesource" : "sidkälla",
     "age" : "ålder",
-    
+
     "languagefamily": "språkfamilj",
     "subfamily": "underfamilj",
 
@@ -446,7 +446,7 @@
     "commentaries" : "kommentarer",
 
     "published" : "publicerat",
-    
+
     "sponsor" : "sponsor",
     "place" : "plats",
 
@@ -1000,5 +1000,8 @@
     "ogl_msd_V-3spxm----i": "verb oklart modus 3e person singularis presens s-form",
     "ogl_msd_V-3suxa----i": "verb oklart modus 3e person singularis preteritum aktiv",
     "ogl_msd_V-3ppxa----i": "verb oklart modus 3e person pluralis presens aktiv",
-    "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv"
+    "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv",
+
+    "complemgram" : "sammansatta lemgram",
+    "compwf" : "sammansatta ordformer"
 }
