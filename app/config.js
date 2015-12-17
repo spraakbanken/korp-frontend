@@ -2649,7 +2649,7 @@ settings.corpora.suc3 = {
                     var prob = row[1];
                     var li = $("<li></li>")
                     _.map(lemgrams, function(lemgram) {
-                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram) + " </span>")
+                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + " </span>")
                         lemgramSpan.click(function () {
                             value = $(this).data("value")
                             search({"search": "cqp|[lex contains '" + value + "']"})
