@@ -4226,7 +4226,7 @@ settings.reduce_statistics_pie_chart = function(row, cell, value, columnDef, dat
     return $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
 };
 
-settings.reduce_statistics = function(types, ignoreCase) {
+settings.reduce_statistics = function(types, ignoreCase,tokensLength) {
 
     return function(row, cell, value, columnDef, dataContext) {
 
@@ -4237,7 +4237,25 @@ settings.reduce_statistics = function(types, ignoreCase) {
 
         var tokenLists = _.map(value, function(val) {
             return _.map(val.split('/'), function(as) {
-                return as.split(" ");
+                parts = as.split(" ");
+                if(tokensLength == parts.length) {
+                    return parts;
+                } else {
+                    // Trying to match against expected number of tokens
+                    // in case token length and length if splitted tokens differ
+                    var newParts = []
+                    var chunkSize = parts.length / tokensLength
+                    if(chunkSize == 0) {
+                        // Give up
+                        return parts;
+                    }
+                    for (var i = 0, j = parts.length; i < j; i += chunkSize) {
+                        res = parts.slice(i, i + chunkSize).join(" ");
+                        newParts.push(res);
+                    }
+                    return newParts;
+                }
+
             });
         });
 
