@@ -509,7 +509,7 @@ korpApp.directive "kwicPager", () ->
     restrict: "E"
     scope: false
     template: """
-    <div class="pager-wrapper" ng-show="gotFirstKwic" >
+    <div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
       <pagination
          total-items="hits"
          ng-if="gotFirstKwic"
