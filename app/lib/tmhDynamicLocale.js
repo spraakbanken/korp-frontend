@@ -113,7 +113,7 @@ angular.module('tmh.dynamicLocale', []).provider('tmhDynamicLocale', function() 
         localeCache.put(localeId, externalLocale);
         delete promiseCache[localeId];
 
-        $rootScope.$apply(function () {
+        safeApply($rootScope, function () {
           $rootScope.$broadcast('$localeChangeSuccess', localeId, $locale);
           storage.put(storeKey, localeId);
           deferred.resolve($locale);
@@ -121,7 +121,7 @@ angular.module('tmh.dynamicLocale', []).provider('tmhDynamicLocale', function() 
       }, function () {
         delete promiseCache[localeId];
 
-        $rootScope.$apply(function () {
+        safeApply($rootScope, function () {
           $rootScope.$broadcast('$localeChangeError', localeId);
           deferred.reject(localeId);
         });

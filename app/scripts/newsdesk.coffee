@@ -51,7 +51,9 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
                         for n_item in s.newsitems
                             if n_item.d > s.lastChecked
                                 n += 1
-                        s.$apply(() -> s.numNewNews = n)
+                        # s.$apply(() -> s.numNewNews = n)
+                        safeApply s, (() -> s.numNewNews = n)
+
                     error: (e) ->
                        console.log "error, couldn't fetch news", e.message
                 });
