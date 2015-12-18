@@ -1003,5 +1003,7 @@
     "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv",
 
     "complemgram" : "compound lemgrams",
-    "compwf" : "compound word forms"
+    "compwf" : "compound word forms",
+    "complemgram_show_one" : "Show less",
+    "complemgram_show_all" : "Show more"
 }

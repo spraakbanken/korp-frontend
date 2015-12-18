@@ -2644,24 +2644,55 @@ settings.corpora.suc3 = {
                 rows = _.zip(compLemgrams, lemProbs);
 
                 var ul = $("<ul style='list-style:initial'>")
-                var lis = _.map(rows, function(row) {
+                var lis = _.map(rows, function(row, i) {
                     var lemgrams = row[0];
                     var prob = row[1];
                     var li = $("<li></li>")
-                    _.map(lemgrams, function(lemgram) {
-                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + " </span>")
+                    if(i != 0) {
+                        li.css('display', 'none');
+                    }
+                    _.map(lemgrams, function(lemgram, j) {
+                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + "</span>");
                         lemgramSpan.click(function () {
                             value = $(this).data("value")
                             search({"search": "cqp|[lex contains '" + value + "']"})
                         });
                         li.append(lemgramSpan);
+                        if(j < lemgrams.length -1) {
+                            li.append("<span> + </span>");
+                        }
+                        return lemgramSpan;
                     });
-                    li.append("<span>(" + prob + ")</span>");
+                    li.append("<span> (" + prob + ")</span>");
                     return li
                 });
 
                 ul.append(lis);
+                
+                showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
+                ul.append(showAll);
 
+                showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+                showOne.css("display", "none");
+                ul.append(showOne);
+
+                showAll.click(function () {
+                    _.map(lis, function(li) {
+                        showAll.css("display", "none");
+                        showOne.css("display", "inline");
+                        li.css("display", "list-item");
+                    })
+                });
+
+                showOne.click(function () {
+                    _.map(lis, function(li, i) {
+                        if(i != 0) {
+                            li.css("display", "none");
+                            showAll.css("display", "inline");
+                            showOne.css("display", "none");
+                        }
+                    });
+                });
                 return ul
             },
             custom_type : "pos"

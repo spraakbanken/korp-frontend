@@ -1003,5 +1003,7 @@
     "ogl_msd_V-3pxxa----i": "verb oklart modus 3e person pluralis oklart tempus aktiv",
 
     "complemgram" : "sammansatta lemgram",
-    "compwf" : "sammansatta ordformer"
+    "compwf" : "sammansatta ordformer",
+    "complemgram_show_one" : "Visa färre",
+    "complemgram_show_all" : "Visa fler"
 }
