@@ -434,6 +434,32 @@ settings.corpora.ekeblad = {
 	}
 };
 
+settings.corpora.fragelistor = {
+	id : "fragelistor",
+	title : "Etnologiska frågelistor",
+	description : "Nordiska museets etnologiska frågelistor",
+	within : settings.defaultWithin,
+	context : settings.spContext,
+	attributes : {
+		msd : attrs.msd,
+ 		lemma : attrs.baseform,
+ 		lex : attrs.lemgram,
+		dalinlex : attrs.dalinlemgram,
+ 		saldo : attrs.saldo,
+ 		prefix : attrs.prefix,
+ 		suffix : attrs.suffix,
+ 		dephead : attrs.dephead,
+ 		deprel : attrs.deprel,
+ 		ref : attrs.ref
+	},
+	struct_attributes : {
+		"text_topicname" : {label : "topic"},
+		"text_topicid" : {label : "topicid"},
+		"text_source" : {label : "source"},
+		"document_id" : {label : "document_id"}
+	}
+};
+
 settings.corpora.lb = {
 	id : "lb",
 	title : "Litteraturbanken",

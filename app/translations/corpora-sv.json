@@ -1005,5 +1005,9 @@
     "complemgram" : "sammansatta lemgram",
     "compwf" : "sammansatta ordformer",
     "complemgram_show_one" : "Visa färre",
-    "complemgram_show_all" : "Visa fler"
+    "complemgram_show_all" : "Visa fler",
+    
+    "topic" : "ämne",
+    "topicid" : "ämnes-ID",
+    "document_id" : "dokument-ID"
 }

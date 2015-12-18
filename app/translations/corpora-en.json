@@ -1005,5 +1005,9 @@
     "complemgram" : "compound lemgrams",
     "compwf" : "compound word forms",
     "complemgram_show_one" : "Show less",
-    "complemgram_show_all" : "Show more"
+    "complemgram_show_all" : "Show more",
+
+    "topic" : "topic",
+    "topicid" : "topic ID",
+    "document_id" : "document ID"
 }
