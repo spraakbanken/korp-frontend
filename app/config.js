@@ -831,6 +831,12 @@ settings.corporafolders.magazines = {
     contents : ["fof"]
 };
 
+settings.corporafolders.governmental = {
+    title : "Myndighetstexter",
+    contents : ["klarsprak", "sou", "sfs"]
+};
+
+
 
 
 /*
@@ -3624,6 +3630,25 @@ settings.corpora.talbanken = {
     context : settings.defaultContext,
     attributes : modernAttrs,
     struct_attributes : {
+    }
+};
+
+settings.corpora.klarsprak = {
+    id : "klarsprak",
+    title : "Förvaltningsmyndigheters texter",
+    description : "",
+    within : settings.spWithin,
+    context : settings.spContext,
+    attributes : modernAttrs,
+    struct_attributes : {
+        text_title : {label : "title"},
+        text_textid : {label : "id"},
+        text_organisation : {label : "organization"},
+        text_author : {label : "author"},
+        text_genre : {label : "genre"},
+        text_textcategory : {label : "category"},
+        text_year : {label : "year"},
+        text_month : {label : "month"}
     }
 };
 
