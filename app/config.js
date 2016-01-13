@@ -2503,7 +2503,7 @@ settings.corpora["europarl-sv"] = {
 settings.corpora["frageladan"] = {
     id : "frageladan",
     title: "Frågelådan",
-    description : "",
+    description : "Spåkrådets rådgivningsmejl",
     limited_access : true,
     context: {
         "1 sentence" : "1 sentence",
