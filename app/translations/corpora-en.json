@@ -64,7 +64,7 @@
     "website": "website",
 
     "id": "id",
-    
+
     "organization": "organization",
 
     "imprintyear": "imprint year",
@@ -115,7 +115,7 @@
     "source": "source",
     "pagesource": "page source",
     "age": "age",
-    
+
     "languagefamily": "language family",
     "subfamily": "subfamily",
 
@@ -1012,5 +1012,9 @@
 
     "topic" : "topic",
     "topicid" : "topic ID",
-    "document_id" : "document ID"
+    "document_id" : "document ID",
+
+    "sendername" : "sender (name)",
+    "sendermail" : "sender (e-mail)",
+    "receivername" : "receiver"
 }

@@ -755,7 +755,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
     title : "Skyddade korpusar",
-    contents : ["ansokningar", "coctaill", "forhor", "gdc", "soexempel", "sw1203", "tisus"]
+    contents : ["ansokningar", "coctaill", "forhor", "frageladan", "gdc", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.medical = {
@@ -2500,6 +2500,26 @@ settings.corpora["europarl-sv"] = {
     }
 };
 
+settings.corpora["frageladan"] = {
+    id : "frageladan",
+    title: "Frågelådan",
+    description : "",
+    limited_access : true,
+    context: {
+        "1 sentence" : "1 sentence",
+        "1 text" : "1 text"
+    },
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes : {
+        text_topic : {label : "topic"},
+        text_datetime : {label : "date"},
+        text_sendername : {label : "sendername"},
+        text_sendermail : {label : "sendermail"},
+        text_receivername : {label : "receivername"}
+    }
+};
+
 settings.corpora.lasbart = {
     id : "lasbart",
     title : "LäSBarT – Lättläst svenska och barnbokstext",
@@ -2674,7 +2694,7 @@ settings.corpora.suc3 = {
                 });
 
                 ul.append(lis);
-                
+
                 showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
                 ul.append(showAll);
 

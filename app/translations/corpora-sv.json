@@ -64,7 +64,7 @@
     "website": "webbsida",
 
     "id": "id",
-    
+
     "organization": "organisation",
 
     "imprintyear": "tryckår",
@@ -449,7 +449,7 @@
     "commentaries": "kommentarer",
 
     "published": "publicerat",
-    
+
     "sponsor": "sponsor",
     "place": "plats",
 
@@ -1009,8 +1009,12 @@
     "compwf" : "sammansatta ordformer",
     "complemgram_show_one" : "Visa färre",
     "complemgram_show_all" : "Visa fler",
-    
+
     "topic" : "ämne",
     "topicid" : "ämnes-ID",
-    "document_id" : "dokument-ID"
+    "document_id" : "dokument-ID",
+
+    "sendername" : "avsändare (namm)",
+    "sendermail" : "avsändare (e-post)",
+    "receivername" : "mottagare"
 }
