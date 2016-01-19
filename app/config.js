@@ -2503,7 +2503,7 @@ settings.corpora["europarl-sv"] = {
 settings.corpora["frageladan"] = {
     id : "frageladan",
     title: "Frågelådan",
-    description : "Spåkrådets rådgivningsmejl",
+    description : 'Spåkrådets rådgivningsmejl<br><br>För åtkomst kontakta <a href="mailto:per-anders.jande@sprakochfolkminnen.se">Per-Anders Jande</a>.',
     limited_access : true,
     context: {
         "1 sentence" : "1 sentence",
@@ -3675,7 +3675,7 @@ settings.corpora.klarsprak = {
 settings.corpora.sw1203 = {
     id : "sw1203",
     title : "SW1203-uppsatser",
-    description : "",
+    description : 'För åtkomst kontakta <a href="mailto:ingegerd.enstroem@svenska.gu.se">Ingegerd Enström</a>.',
     limited_access : true,
     within : settings.spWithin,
     context : settings.spContext,
@@ -3724,7 +3724,7 @@ settings.corpora.sw1203 = {
 settings.corpora.tisus = {
     id : "tisus",
     title : "TISUS-texter",
-    description : "",
+    description : 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
     limited_access : true,
     within : settings.spWithin,
     context : settings.spContext,
@@ -3750,7 +3750,7 @@ settings.corpora.tisus = {
 settings.corpora.ansokningar = {
     id : "ansokningar",
     title : "Ansökningar",
-    description : "",
+    description : 'För åtkomst kontakta <a href="mailto:lena.rogstroem@svenska.gu.se">Lena Rogström</a>.',
     limited_access : true,
     context : settings.defaultContext,
     within : settings.defaultWithin,
@@ -3765,7 +3765,7 @@ settings.corpora.ansokningar = {
 settings.corpora.coctaill = {
     id : "coctaill",
     title : "COCTAILL",
-    description : "",
+    description : 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
     limited_access : true,
     context : settings.spContext,
     within : settings.spWithin,
@@ -4263,7 +4263,7 @@ settings.corpora.gdc = {
 settings.corpora.forhor = {
     id : "forhor",
     title : "Förhör",
-    description : '',
+    description : 'För åtkomst kontakta <a href="mailto:ylva.byrman@svenska.gu.se">Ylva Byrman</a>.',
     limited_access : true,
     context : settings.spContext,
     within : settings.spWithin,

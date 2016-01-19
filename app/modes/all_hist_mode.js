@@ -434,6 +434,7 @@ settings.corpora.ekeblad = {
 	}
 };
 
+if(isLab){
 settings.corpora.fragelistor = {
 	id : "fragelistor",
 	title : "Etnologiska frågelistor",
@@ -469,6 +470,7 @@ settings.corpora.fragelistor = {
 		}
 	}
 };
+} // end if(isLab)
 
 settings.corpora.lb = {
 	id : "lb",
