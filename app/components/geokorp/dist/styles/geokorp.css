@@ -9,7 +9,7 @@ sb-map {
   /* Responsive: Portrait tablets and up */
 }
 /* line 6, ../../app/styles/geokorp.scss */
-sb-map .leaflet-marker-icon.leaflet-div-icon.leaflet-zoom-animated.leaflet-clickable {
+sb-map .leaflet-marker-icon.leaflet-div-icon.leaflet-clickable {
   background-color: red;
   border: none;
   border-radius: 10px;
@@ -129,8 +129,9 @@ sb-map #hover-info {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 100;
 }
-/* line 129, ../../app/styles/geokorp.scss */
+/* line 130, ../../app/styles/geokorp.scss */
 sb-map .hover-info {
   opacity: 1;
   transition: opacity 500ms;
