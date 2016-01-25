@@ -177,9 +177,9 @@
             name = names[_i];
             mappedName = null;
             nameLow = name.toLowerCase();
-            if (nameLow in nameMapperResponse.data) {
+            if (nameMapperResponse.data.hasOwnProperty(nameLow)) {
               mappedName = nameMapperResponse.data[nameLow];
-            } else if (nameLow in placeResponse.data) {
+            } else if (placeResponse.data.hasOwnProperty(nameLow)) {
               mappedName = nameLow;
             }
             if (mappedName) {
