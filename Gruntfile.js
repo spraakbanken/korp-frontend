@@ -405,10 +405,11 @@ module.exports = function (grunt) {
             'components/d3/d3.min.js',
             'components/rickshaw/rickshaw.min.js',
             'lib/jquery.tooltip.pack.js',
+            'lib/leaflet-settings.js',
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json',
-            'components/leaflet/dist/images/layers.png' 
+            'components/leaflet/dist/images/layers.png'
           ]
         },
         {
