@@ -717,6 +717,88 @@ korpApp.directive "timeInterval", () ->
                 s.model = m
                 # c.log "s.model", s.model
 
+korpApp.directive 'reduceSelect', ($timeout) ->
+    restrict: 'AE'
+    scope:
+      items: '=reduceItems'
+      selected: '=reduceSelected'
+      lang: '=reduceLang'
+    replace : true
+    template: '''
+                  <div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
+                    <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">
+                      <div class="reduce-dropdown-button-text">
+                        <span>{{ "reduce_text" | loc:lang }}:</span>
+                        <span ng-if="showAllSelected" ng-repeat="item in items | filter:{selected: true}">
+                          {{item.label | loc:lang}}
+                        </span>
+                        <span ng-if="!showAllSelected">
+                          {{ numberAttributes }} {{"attr" | loc:lang}}
+                        </span>
+                        <span class="caret"></span>
+                      </div>
+                    </div>
+                    <div class="reduce-dropdown-menu dropdown-menu">
+                      <ul>
+                        <li ng-repeat="item in items | filter:{ group: 'word' }:true"
+                            ng-click="toggleSelected(item.value)"
+                            ng-class="item.selected ? 'selected':''" class="attribute">
+                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                        </li>
+                        <b ng-if="hasWordAttrs">{{'word_attr' | loc:lang}}</b>
+                        <li ng-repeat="item in items | filter:{ group: 'word_attr' }"
+                            ng-click="toggleSelected(item.value)"
+                            ng-class="item.selected ? 'selected':''" class="attribute">
+                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                        </li>
+                        <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:lang}}</b>
+                        <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
+                            ng-click="toggleSelected(item.value)"
+                            ng-class="item.selected ? 'selected':''" class="attribute">
+                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>'''
+    link: (scope, element, attribute) ->
+
+        scope.$watchCollection 'selected', (() ->
+            if scope.selected
+                scope.numberAttributes = scope.selected.length
+                scope.showAllSelected = scope.numberAttributes < 2
+                _.map scope.items, (elem) ->
+                    elem.selected = elem.value in scope.selected), true
+
+        scope.$watchCollection 'items', (() ->
+            if scope.items
+                scope.hasWordAttrs = _.filter(scope.items, { 'group': 'word_attr' }).length > 0
+                scope.hasStructAttrs = _.filter(scope.items, { 'group': 'sentence_attr' }).length > 0
+
+                # if items changed, it is possible that the current selected values
+                # have not changed and we need to check if they still are
+                # applicable and also set the selected value on the item for
+                # highlighting to be visible
+                possibleVals = _.pluck scope.items, "value"
+                newSelected = _.filter scope.selected, (elem) ->
+                    elem in possibleVals
+                if newSelected.length == 0
+                    newSelected.push "word"
+                if "#{newSelected}" is "#{scope.selected}"
+                   _.map scope.items, (elem) ->
+                       elem.selected = elem.value in scope.selected
+                $timeout (() -> scope.selected = newSelected))
+
+        scope.toggleSelected = (value) ->
+            if value  in scope.selected
+                scope.selected.splice (scope.selected.indexOf value), 1
+            else
+                scope.selected.push value
+
+        scope.toggled = (open) ->
+            # if no element is selected when closing popop, select word
+            if not open and scope.numberAttributes == 0
+                $timeout (() -> scope.selected.push "word"), 0
+
 
 angular.module("template/datepicker/day.html", []).run ($templateCache) ->
     $templateCache.put "template/datepicker/day.html", """

@@ -23,12 +23,23 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.$watch (() -> $location.search().show_map), (val) ->
         $scope.show_map = Boolean(val)
 
-    $scope.$watch "show_map", (val) ->
-        $location.search("show_map", Boolean(val) or null)
+    $scope.$watch "show_map", (val) -> $location.search("show_map", Boolean(val) or null)
 
     $scope.settings = settings
     $scope.showStats = () ->
         return settings.statistics != false
+
+    unless $location.search().stats_reduce
+        $location.search 'stats_reduce', ("word")
+
+    $scope.$on "corpuschooserchange", () ->
+        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
+        $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
+
+    $scope.$watch 'statSelectedAttrs', ((selected) ->
+        if selected and selected.length > 0
+            $location.search 'stats_reduce', ($scope.statSelectedAttrs.join ',')
+    ), true
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
     s = $scope
@@ -222,7 +233,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
         if confObj.type == "set"
             confObj.is = "contains"
-        
+
         return _.pairs confObj
 
 
@@ -368,15 +379,14 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
         s.cmp1 = compareSearches.savedSearches[0]
         s.cmp2 = compareSearches.savedSearches[1]
         unless s.cmp1 and s.cmp2 then return
+
         listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
         s.currentAttrs = listing.getAttributeGroups()
 
-    
+    # s.selectedAttrs = ['word']
     s.reduce = 'word'
-    s.currentAttrs = []
 
     s.sendCompare = () ->
-        ## todo backend supports multiple reduce parameters
         $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, [s.reduce])
 
     s.deleteCompares = () ->
@@ -389,4 +399,3 @@ korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $roo
 korpApp.filter "loc", ($rootScope) ->
     (translationKey, lang) ->
         return util.getLocaleString translationKey, lang
-

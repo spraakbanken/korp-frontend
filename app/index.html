@@ -169,21 +169,23 @@
                 <option value="1000">1000</option>
               </select>
               <select data-history="sort" data-prefix="sort_default" class="sort_select">
-                <option value="" rel="localize[appearance_context]">Förekomst</option>
-                <option value="keyword" rel="localize[word_context]">Ordkontext</option>
-                <option value="left" rel="localize[left_context]">Vänsterkontext</option>
-                <option value="right" rel="localize[right_context]">Högerkontext</option>
-                <option value="random" rel="localize[random_context]">Slumpvis</option>
+                <option value="" rel="localize[appearance_context]"> </option>
+                <option value="keyword" rel="localize[word_context]"> </option>
+                <option value="left" rel="localize[left_context]"> </option>
+                <option value="right" rel="localize[right_context]"> </option>
+                <option value="random" rel="localize[random_context]"> </option>
               </select>
             </div>
-            <div ng-show="showStats()"><span rel="localize[statistics]">Statistik</span>: <span id="reduceSelect"></span></div>
+            <div ng-show="showStats()"><span rel="localize[statistics]"> </span>: 
+              <reduce-select reduce-items="statCurrentAttrs" reduce-selected="statSelectedAttrs" reduce-lang="lang" style="width: 200px"></reduce-select>
+            </div>
             <div ng-show="settings.wordpicture !== false">
               <input id="word_pic" type="checkbox" ng-model="word_pic">
               <label for="word_pic">{{'show_word_pic' | loc:lang}}</label>
             </div>
             <div ng-show="settings.enableMap">
               <input id="show_map" type="checkbox" ng-model="show_map">
-              <label for="show_map">{{'show_map' | loc:lang}}      </label>
+              <label for="show_map">{{'show_map' | loc:lang}}     </label>
             </div>
           </div>
         </div>
@@ -486,7 +488,8 @@
     <script src="components/jquery-ui/ui/jquery.ui.position.js"></script>
     <script src="components/jquery-ui/ui/jquery.ui.sortable.js"></script>
     <script src="components/angular/angular.js"></script>
-    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <!-- warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap-->
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/spin.js/spin.js"></script>
     <script src="components/angular-spinner/angular-spinner.js"></script>
     <script src="lib/angular-sortable.js"></script>
@@ -526,6 +529,7 @@
     <script src="components/leaflet-providers/leaflet-providers.js"></script>
     <script src="components/geokorp/dist/scripts/geokorp-templates.js"></script>
     <script src="components/geokorp/dist/scripts/geokorp.js"></script>
+    <script src="components/angular-filter/dist/angular-filter.js"></script>
     <!-- endbuild-->
     <script src="lib/jquery.tooltip.pack.js"></script>
     <script src="components/d3/d3.min.js"></script>

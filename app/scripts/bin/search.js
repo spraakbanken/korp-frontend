@@ -65,7 +65,6 @@
   view.initSearchOptions = function() {
     var selects;
     selects = $("#search_options > div:first select").customSelect();
-    view.updateReduceSelect();
     $("#search_options select").each(function() {
       var state;
       state = search()[$(this).data("history")];
@@ -94,49 +93,6 @@
         return search("search", null);
       }
     });
-  };
-
-  view.updateReduceSelect = function() {
-    var cl, groups, prevVal, select, sentence_attr, word_attr;
-    cl = settings.corpusListing;
-    if ((settings.reduce_word_attribute_selector || "union") === "union") {
-      word_attr = cl.getCurrentAttributes();
-    } else if (settings.reduce_word_attribute_selector === "intersection") {
-      word_attr = cl.getCurrentAttributesIntersection();
-    }
-    if ((settings.reduce_struct_attribute_selector || "union") === "union") {
-      sentence_attr = cl.getStructAttrs();
-    } else if (settings.reduce_struct_attribute_selector === "intersection") {
-      sentence_attr = cl.getStructAttrsIntersection();
-    }
-    groups = $.extend({
-      word: {
-        word: {
-          label: "word"
-        },
-        word_insensitive: {
-          label: "word_insensitive"
-        }
-      }
-    }, {
-      word_attr: word_attr,
-      sentence_attr: $.grepObj(sentence_attr, function(val, key) {
-        if (val.displayType === "date_interval") {
-          return false;
-        }
-        return true;
-      })
-    });
-    prevVal = $("#reduceSelect select").val();
-    select = util.makeAttrSelect(groups);
-    $("#reduceSelect").html(select);
-    c.log("updateReduceSelect", groups, select);
-    select.attr("data-history", "stats_reduce").attr("data-prefix", "reduce_text").customSelect();
-    if (prevVal) {
-      select.val(prevVal);
-      select.trigger("change");
-    }
-    return select;
   };
 
   BaseSearch = (function() {

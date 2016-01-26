@@ -29,8 +29,8 @@ deferred_domReady = $.Deferred((dfd) ->
                 dfd.resolve()
         else
             dfd.resolve()
-                
-            
+
+
 
     return dfd
 ).promise()
@@ -47,20 +47,20 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     angular.bootstrap(document, ['korpApp'])
 
-    try 
+    try
         corpus = search()["corpus"]
         if corpus
             settings.corpusListing.select corpus.split(",")
         view.updateSearchHistory()
     catch e
         c.warn "ERROR setting corpora from location"
-    
-    
+
+
     $("body").addClass "lab" if isLab
-    
+
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
-    
+
 
     $("#logo").click ->
         window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search
@@ -81,7 +81,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             $.jStorage.set("searches", [])
             view.updateSearchHistory()
 
-    
+
     creds = $.jStorage.get("creds")
     if creds
         util.setLogin()
@@ -156,7 +156,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $(document).click ->
         $("#simple_text.ui-autocomplete-input").autocomplete "close"
 
-    setTimeout(() -> 
+    setTimeout(() ->
         view.initSearchOptions()
         onHashChange null, true
     , 0)
@@ -215,7 +215,7 @@ window.initTimeGraph = (def) ->
     restdata = null
     restyear = null
     hasRest = false
-    
+
     onTimeGraphChange = () ->
 
     getValByDate = (date, struct) ->
@@ -244,9 +244,9 @@ window.initTimeGraph = (def) ->
                         cor.common_attributes.date_interval = true
 
             safeApply $("body").scope(), (scope) ->
-                scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
+                # scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
                 def.resolve()
-            
+
 
             onTimeGraphChange = (evt, data) ->
                 # the 46 here is the presumed value of
@@ -264,7 +264,7 @@ window.initTimeGraph = (def) ->
                     .filter(Boolean)
                     .map(_.pairs)
                     .flatten(true)
-                    .reduce((memo, [a, b]) -> 
+                    .reduce((memo, [a, b]) ->
                         if typeof memo[a] is "undefined"
                             memo[a] = b
                         else
@@ -371,4 +371,3 @@ window.initTimeGraph = (def) ->
     $.when(timeDeferred, opendfd).then ->
         $("#corpusbox").bind "corpuschooserchange", onTimeGraphChange
         onTimeGraphChange()
-

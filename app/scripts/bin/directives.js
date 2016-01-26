@@ -756,6 +756,72 @@
     };
   });
 
+  korpApp.directive('reduceSelect', function($timeout) {
+    return {
+      restrict: 'AE',
+      scope: {
+        items: '=reduceItems',
+        selected: '=reduceSelected',
+        lang: '=reduceLang'
+      },
+      replace: true,
+      template: '<div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">\n  <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">\n    <div class="reduce-dropdown-button-text">\n      <span>{{ "reduce_text" | loc:lang }}:</span>\n      <span ng-if="showAllSelected" ng-repeat="item in items | filter:{selected: true}">\n        {{item.label | loc:lang}}\n      </span>\n      <span ng-if="!showAllSelected">\n        {{ numberAttributes }} {{"attr" | loc:lang}}\n      </span>\n      <span class="caret"></span>\n    </div>\n  </div>\n  <div class="reduce-dropdown-menu dropdown-menu">\n    <ul>\n      <li ng-repeat="item in items | filter:{ group: \'word\' }:true"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n      <b ng-if="hasWordAttrs">{{\'word_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'word_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n      <b ng-if="hasStructAttrs">{{\'sentence_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'sentence_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n    </ul>\n  </div>\n</div>',
+      link: function(scope, element, attribute) {
+        scope.$watchCollection('selected', (function() {
+          if (scope.selected) {
+            scope.numberAttributes = scope.selected.length;
+            scope.showAllSelected = scope.numberAttributes < 2;
+            return _.map(scope.items, function(elem) {
+              var ref;
+              return elem.selected = (ref = elem.value, indexOf.call(scope.selected, ref) >= 0);
+            });
+          }
+        }), true);
+        scope.$watchCollection('items', (function() {
+          var newSelected, possibleVals;
+          if (scope.items) {
+            scope.hasWordAttrs = _.filter(scope.items, {
+              'group': 'word_attr'
+            }).length > 0;
+            scope.hasStructAttrs = _.filter(scope.items, {
+              'group': 'sentence_attr'
+            }).length > 0;
+            possibleVals = _.pluck(scope.items, "value");
+            newSelected = _.filter(scope.selected, function(elem) {
+              return indexOf.call(possibleVals, elem) >= 0;
+            });
+            if (newSelected.length === 0) {
+              newSelected.push("word");
+            }
+            if (("" + newSelected) === ("" + scope.selected)) {
+              _.map(scope.items, function(elem) {
+                var ref;
+                return elem.selected = (ref = elem.value, indexOf.call(scope.selected, ref) >= 0);
+              });
+            }
+            return $timeout((function() {
+              return scope.selected = newSelected;
+            }));
+          }
+        }));
+        scope.toggleSelected = function(value) {
+          if (indexOf.call(scope.selected, value) >= 0) {
+            return scope.selected.splice(scope.selected.indexOf(value), 1);
+          } else {
+            return scope.selected.push(value);
+          }
+        };
+        return scope.toggled = function(open) {
+          if (!open && scope.numberAttributes === 0) {
+            return $timeout((function() {
+              return scope.selected.push("word");
+            }), 0);
+          }
+        };
+      }
+    };
+  });
+
   angular.module("template/datepicker/day.html", []).run(function($templateCache) {
     return $templateCache.put("template/datepicker/day.html", "<table role=\"grid\" aria-labelledby=\"{{uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\"\n  <thead>\n    <tr>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-left\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-left\"></i></button></th>\n      <th colspan=\"{{5 + showWeeks}}\">\n        <button id=\"{{uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" class=\"btn btn-default btn-sm\" ng-click=\"toggleMode()\" tabindex=\"-1\" style=\"width:100%;\">\n            <strong>{{title}}</strong>\n        </button>\n      </th>\n      <th><button type=\"button\" class=\"btn btn-default btn-sm pull-right\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"fa fa-chevron-right\"></i></button></th>\n    </tr>\n    <tr>\n      <th ng-show=\"showWeeks\" class=\"text-center\"></th>\n      <th ng-repeat=\"label in labels track by $index\" class=\"text-center\"><small aria-label=\"{{label.full}}\">{{label.abbr}}</small></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr ng-repeat=\"row in rows track by $index\">\n      <td ng-show=\"showWeeks\" class=\"text-center h6\"><em>{{ weekNumbers[$index] }}</em></td>\n      <td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{dt.uid}}\" aria-disabled=\"{{!!dt.disabled}}\">\n        <button type=\"button\" style=\"width:100%;\" class=\"btn btn-default btn-sm\" ng-class=\"{'btn-info': dt.selected, active: isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\">\n            <span ng-class=\"{'text-muted': dt.secondary, 'text-info': dt.current}\">{{dt.label}}</span>\n        </button>\n      </td>\n    </tr>\n  </tbody>\n</table");
   });

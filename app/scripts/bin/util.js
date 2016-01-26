@@ -283,19 +283,37 @@
       }
     };
 
-    CorpusListing.prototype.getAttributeGroups = function(lang) {
-      var attrs, common, common_keys, key, obj, sent_attrs, word;
+    CorpusListing.prototype.getWordGroup = function(withCaseInsentive) {
+      var word, wordInsensitive;
       word = {
         group: "word",
         value: "word",
         label: "word"
       };
+      if (withCaseInsentive) {
+        wordInsensitive = {
+          group: "word",
+          value: "word_insensitive",
+          label: "word_insensitive"
+        };
+        return [word, wordInsensitive];
+      } else {
+        return [word];
+      }
+    };
+
+    CorpusListing.prototype.getWordAttributeGroups = function(lang, setOperator) {
+      var allAttrs, attrs, key, obj;
+      if (setOperator === 'union') {
+        allAttrs = this.getCurrentAttributes();
+      } else {
+        allAttrs = this.getCurrentAttributesIntersection();
+      }
       attrs = (function() {
-        var ref, results;
-        ref = this.getCurrentAttributes(lang);
+        var results;
         results = [];
-        for (key in ref) {
-          obj = ref[key];
+        for (key in allAttrs) {
+          obj = allAttrs[key];
           if (obj.displayType !== "hidden") {
             results.push(_.extend({
               group: "word_attr",
@@ -304,14 +322,24 @@
           }
         }
         return results;
-      }).call(this);
+      })();
+      return attrs;
+    };
+
+    CorpusListing.prototype.getStructAttributeGroups = function(lang, setOperator) {
+      var allAttrs, common, common_keys, key, obj, sentAttrs;
+      if (setOperator === 'union') {
+        allAttrs = this.getStructAttrs();
+      } else {
+        allAttrs = this.getStructAttrsIntersection();
+      }
       common_keys = _.compact(_.flatten(_.map(this.selected, function(corp) {
         return _.keys(corp.common_attributes);
       })));
       common = _.pick.apply(_, [settings.common_struct_types].concat(slice.call(common_keys)));
-      sent_attrs = (function() {
+      sentAttrs = (function() {
         var ref, results;
-        ref = _.extend({}, common, this.getStructAttrs(lang));
+        ref = _.extend({}, common, allAttrs);
         results = [];
         for (key in ref) {
           obj = ref[key];
@@ -323,11 +351,32 @@
           }
         }
         return results;
-      }).call(this);
-      sent_attrs = _.sortBy(sent_attrs, function(item) {
+      })();
+      sentAttrs = _.sortBy(sentAttrs, function(item) {
         return util.getLocaleString(item.label);
       });
-      return [word].concat(attrs, sent_attrs);
+      return sentAttrs;
+    };
+
+    CorpusListing.prototype.getAttributeGroups = function(lang) {
+      var attrs, sentAttrs, words;
+      words = this.getWordGroup(false);
+      attrs = this.getWordAttributeGroups(lang, 'union');
+      sentAttrs = this.getStructAttributeGroups(lang, 'union');
+      return words.concat(attrs, sentAttrs);
+    };
+
+    CorpusListing.prototype.getStatsAttributeGroups = function(lang) {
+      var attrs, sentAttrs, structOp, wordOp, words;
+      words = this.getWordGroup(true);
+      wordOp = settings.reduce_word_attribute_selector || "union";
+      attrs = this.getWordAttributeGroups(lang, wordOp);
+      structOp = settings.reduce_struct_attribute_selector || "union";
+      sentAttrs = this.getStructAttributeGroups(lang, structOp);
+      sentAttrs = _.filter(sentAttrs, function(attr) {
+        return attr.displayType !== "date_interval";
+      });
+      return words.concat(attrs, sentAttrs);
     };
 
     return CorpusListing;

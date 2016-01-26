@@ -213,27 +213,66 @@ class window.CorpusListing
             c.log "gettitle broken", corpus 
         
 
-
-    getAttributeGroups : (lang) ->
+    getWordGroup : (withCaseInsentive) ->
         word =
             group : "word"
             value : "word"
             label : "word"
-        
-        attrs = for key, obj of @getCurrentAttributes(lang) when obj.displayType != "hidden"
-            _.extend({group : "word_attr", value : key}, obj)
+        if withCaseInsentive
+            wordInsensitive = 
+                group : "word"
+                value : "word_insensitive"
+                label : "word_insensitive"
+            return [word, wordInsensitive]
+        else 
+            return [word]
+
+    getWordAttributeGroups : (lang, setOperator) ->
+        if setOperator == 'union'
+            allAttrs = @getCurrentAttributes()
+        else 
+            allAttrs = @getCurrentAttributesIntersection()
+            
+        attrs = for key, obj of allAttrs when obj.displayType != "hidden"
+                    _.extend({group : "word_attr", value : key}, obj)
+        return attrs
+
+    getStructAttributeGroups : (lang, setOperator) ->
+        if setOperator == 'union'
+            allAttrs = @getStructAttrs()
+        else 
+            allAttrs = @getStructAttrsIntersection() 
 
         common_keys = _.compact _.flatten _.map @selected, (corp) -> _.keys corp.common_attributes
         common = _.pick settings.common_struct_types, common_keys...
 
-        sent_attrs = for key, obj of (_.extend {}, common, @getStructAttrs(lang)) when obj.displayType != "hidden"
-            _.extend({group : "sentence_attr", value : key}, obj)
+        sentAttrs = for key, obj of (_.extend {}, common, allAttrs) when obj.displayType != "hidden"
+                         _.extend({group : "sentence_attr", value : key}, obj)
 
-        sent_attrs = _.sortBy sent_attrs, (item) ->
+        sentAttrs = _.sortBy sentAttrs, (item) ->
             util.getLocaleString(item.label)
 
-        return [word].concat(attrs, sent_attrs)
+        return sentAttrs
 
+    getAttributeGroups : (lang) ->
+        words = @getWordGroup false
+        attrs = @getWordAttributeGroups lang, 'union'
+        sentAttrs = @getStructAttributeGroups lang, 'union'
+        return words.concat attrs, sentAttrs
+
+    getStatsAttributeGroups : (lang) ->
+        words = @getWordGroup true
+
+        wordOp = settings.reduce_word_attribute_selector or "union"
+        attrs = @getWordAttributeGroups lang, wordOp
+
+        structOp = settings.reduce_struct_attribute_selector or "union"
+        sentAttrs = @getStructAttributeGroups lang, structOp
+
+        # todo check if this is neccessary?
+        sentAttrs = _.filter sentAttrs, (attr) -> attr.displayType isnt "date_interval"
+
+        return words.concat attrs, sentAttrs
 
 
 class window.ParallelCorpusListing extends CorpusListing

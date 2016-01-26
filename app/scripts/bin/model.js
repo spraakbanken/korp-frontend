@@ -522,12 +522,15 @@
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
-      ignoreCase = false;
-      if (reduceval === "word_insensitive") {
-        ignoreCase = true;
-        reduceval = "word";
-      }
       reduceVals = reduceval.split(",");
+      ignoreCase = false;
+      if (indexOf.call(reduceVals, "word_insensitive") >= 0) {
+        ignoreCase = true;
+        reduceVals.splice(reduceVals.indexOf("word_insensitive"), 1);
+        if (indexOf.call(reduceVals, "word") < 0) {
+          reduceVals.push("word");
+        }
+      }
       reduceValLabels = _.map(reduceVals, function(reduceVal) {
         if (reduceVal === "word") {
           return "word";

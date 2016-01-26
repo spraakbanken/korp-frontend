@@ -13,6 +13,7 @@ window.korpApp = angular.module 'korpApp', [
                                             "newsdesk"
                                             "sbMap"
                                             "tmh.dynamicLocale"
+                                            "angular.filter"
                                         ]
 
 
@@ -54,8 +55,8 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
     isInit = true
-                
-        
+
+
     s.searchDisabled = false
     s.$on "corpuschooserchange", (event, corpora) ->
         c.log "corpuschooserchange", corpora
@@ -66,8 +67,6 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
             $location.search "corpus", corpora.join(",")
         else
             $location.search "corpus", null
-        if corpora.length
-            view.updateReduceSelect()
 
         enableSearch = !!corpora.length
         view.enableSearch enableSearch
@@ -98,7 +97,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
             settings.preselected_corpora = all_default_corpora
             settings.corpusListing.select all_default_corpora
             corpusChooserInstance.corpusChooser "selectItems", all_default_corpora
-        
+
 korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
     s = $scope
 
@@ -120,7 +119,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
 
     i = $.inArray currentMode, (_.pluck s.menu, "mode")
     if i != -1
-        s.visible.push s.menu[i] 
+        s.visible.push s.menu[i]
         s.menu.splice(i, 1)
 
 
@@ -133,7 +132,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
     s.select(currentMode)
     s.getUrl = (modeId) ->
         langParam = "#lang=#{s.$root.lang}"
-        if modeId is "default" 
+        if modeId is "default"
             return location.pathname + langParam
         return location.pathname + "?mode=#{modeId}" + langParam
 
@@ -165,7 +164,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
         s.show_modal = false
 
     #hack for buggy backdrop, remove when angular bootstrap fixes bug
-    $("body").on "click", ".modal-backdrop", () -> 
+    $("body").on "click", ".modal-backdrop", () ->
         scp = $(this).next().scope()
         scp.$apply () ->
             scp.$close()
@@ -201,4 +200,3 @@ korpApp.controller "headerCtrl", ($scope, $location, $modal, utils) ->
 korpApp.filter "trust", ($sce) ->
     return (input) ->
         $sce.trustAsHtml input
-

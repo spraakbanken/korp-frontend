@@ -43,11 +43,15 @@ div(ng-controller="SearchCtrl")
           | {{'compare_with' | loc:lang}}
           select(ng-options='search.label for search in savedSearches', ng-model='cmp2')
           | {{'compare_reduce' | loc:lang}}
+
           select(ng-model='reduce', 
-            ng-options='obj | \
+             ng-options='obj | \
              mapper:valfilter as obj.label | \
              loc group by obj.group | \
              loc for obj in currentAttrs')
+
+          //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')
+
           button.btn.btn-sm.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
   #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div
@@ -60,18 +64,19 @@ div(ng-controller="SearchCtrl")
         option(value='500') 500
         option(value='1000') 1000
       select.sort_select(data-history='sort', data-prefix='sort_default')
-        option(value='', rel='localize[appearance_context]') Förekomst
-        option(value='keyword', rel='localize[word_context]') Ordkontext
-        option(value='left', rel='localize[left_context]') Vänsterkontext
-        option(value='right', rel='localize[right_context]') Högerkontext
-        option(value='random', rel='localize[random_context]') Slumpvis
+        option(value='', rel='localize[appearance_context]') 
+        option(value='keyword', rel='localize[word_context]') 
+        option(value='left', rel='localize[left_context]') 
+        option(value='right', rel='localize[right_context]') 
+        option(value='random', rel='localize[random_context]') 
+
     div(ng-show="showStats()")
-      span(rel='localize[statistics]') Statistik
+      span(rel='localize[statistics]') 
       | : 
-      span#reduceSelect
+      reduce-select(reduce-items="statCurrentAttrs", reduce-selected="statSelectedAttrs", reduce-lang="lang", style='width: 200px')
     div(ng-show="settings.wordpicture !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")
       label(for="word_pic") {{'show_word_pic' | loc:lang}}
     div(ng-show="settings.enableMap")
       input#show_map(type="checkbox", ng-model="show_map")
-      label(for="show_map") {{'show_map' | loc:lang}}      
+      label(for="show_map") {{'show_map' | loc:lang}}     

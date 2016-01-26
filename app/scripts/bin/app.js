@@ -1,5 +1,5 @@
 (function() {
-  window.korpApp = angular.module('korpApp', ['ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "ui.sortable", "newsdesk", "sbMap", "tmh.dynamicLocale"]);
+  window.korpApp = angular.module('korpApp', ['ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "ui.sortable", "newsdesk", "sbMap", "tmh.dynamicLocale", "angular.filter"]);
 
   korpApp.config(function(tmhDynamicLocaleProvider) {
     return tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js");
@@ -50,9 +50,6 @@
         $location.search("corpus", corpora.join(","));
       } else {
         $location.search("corpus", null);
-      }
-      if (corpora.length) {
-        view.updateReduceSelect();
       }
       enableSearch = !!corpora.length;
       view.enableSearch(enableSearch);

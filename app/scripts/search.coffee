@@ -54,8 +54,7 @@ view.enableSearch = (bool) ->
 
 view.initSearchOptions = ->
     selects = $("#search_options > div:first select").customSelect()
-    # c.log "selects", selects
-    view.updateReduceSelect()
+
     $("#search_options select").each ->
         state = search()[$(this).data("history")]
 
@@ -67,7 +66,7 @@ view.initSearchOptions = ->
     $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
         # simpleSearch.enableSubmit()
         target = $(event.target)
-        unless target.data("history") then return 
+        unless target.data("history") then return
         state = {}
         state[target.data("history")] = target.val()
         unless target.prop("selectedIndex") is 0
@@ -78,45 +77,6 @@ view.initSearchOptions = ->
 
         if isInit is true
             search("search", null)
-
-
-view.updateReduceSelect = ->
-    cl = settings.corpusListing
-    if (settings.reduce_word_attribute_selector or "union") == "union"
-        word_attr = cl.getCurrentAttributes()
-    else if settings.reduce_word_attribute_selector == "intersection"
-        word_attr = cl.getCurrentAttributesIntersection()
-    
-    if (settings.reduce_struct_attribute_selector or "union") == "union"
-        sentence_attr = cl.getStructAttrs()
-    else if settings.reduce_struct_attribute_selector == "intersection"
-        sentence_attr = cl.getStructAttrsIntersection()
-
-    groups = $.extend(
-        word:
-            word:
-                label: "word"
-
-            word_insensitive:
-                label: "word_insensitive"
-    ,
-        word_attr: word_attr
-        sentence_attr: $.grepObj(sentence_attr, (val, key) ->
-            #TODO: do i need this anymore?
-            return false if val.displayType is "date_interval"
-            return true
-            # val.disabled isnt true
-        )
-    )
-    prevVal = $("#reduceSelect select").val()
-    select = util.makeAttrSelect(groups)
-    $("#reduceSelect").html select
-    c.log "updateReduceSelect", groups, select
-    select.attr("data-history", "stats_reduce").attr("data-prefix", "reduce_text").customSelect()
-    if prevVal
-        select.val prevVal
-        select.trigger "change"
-    select
 
 class BaseSearch
     constructor: (mainDivId, scope) ->
@@ -230,8 +190,8 @@ class view.SimpleSearch extends BaseSearch
             #console.log "modily", @s.model
         else
             if @s.model
-                @selectLemgram @s.model 
-    
+                @selectLemgram @s.model
+
     getWordInput: () ->
         if settings.autocomplete
             return $("#simple_text > div > div > .autocomplete_searchbox").val()
@@ -297,8 +257,8 @@ class view.SimpleSearch extends BaseSearch
         if event and event.keyCode is 27 #escape
             c.log "key", event.keyCode
             return
-        
-        if event and event.keyCode != 13   
+
+        if event and event.keyCode != 13
            @s.placeholder = null
         # val = @getCQP()
         # @s.$root.extendedCQP = val

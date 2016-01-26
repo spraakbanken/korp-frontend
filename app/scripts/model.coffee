@@ -435,13 +435,15 @@ class model.StatsProxy extends BaseProxy
         self = this
         super()
         reduceval = search().stats_reduce or "word"
-        ignoreCase = false
-        if reduceval is "word_insensitive"
-            ignoreCase = true
-            reduceval = "word"
-
-        ## todo: now supports multipe reduce parameters to backend
         reduceVals = reduceval.split ","
+
+        ignoreCase = false
+        if "word_insensitive" in reduceVals
+            ignoreCase = true
+            reduceVals.splice (reduceVals.indexOf "word_insensitive"), 1
+            if "word" not in reduceVals
+                reduceVals.push "word"
+
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"
             if settings.corpusListing.getCurrentAttributes()[reduceVal]

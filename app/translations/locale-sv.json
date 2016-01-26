@@ -206,6 +206,7 @@
     "word_insensitive" : "ord (skiftlägesoberoende)",
     "sentence_attr" : "Textattribut",
     "word_attr" : "Ordattribut",
+    "attr" : "attribut",
 
     "similar_header" : "Relaterade ord",
     "show_wordclass" : "Visa ordklass",

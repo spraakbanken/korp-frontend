@@ -206,6 +206,7 @@
     "word_insensitive" : "word (case insensitive)",
     "sentence_attr" : "Text attributes",
     "word_attr" : "Word attributes",
+    "attr" : "attributes",
 
     "similar_header" : "Related words",
     "show_wordclass" : "Show word class",

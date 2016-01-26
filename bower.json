@@ -24,7 +24,9 @@
     "jquery-bbq": "https://github.com/cowboy/jquery-bbq.git#1.2.1",
     "jstorage": "~0.4.12",
     "comma-separated-values": "~3.2.0",
-    "bootstrap-sass-official": "~3.2.0"
+    "bootstrap-sass-official": "~3.2.0",
+    "angular-dynamic-locale": "https://github.com/lgalfaso/angular-dynamic-locale.git#~0.1.17",
+    "angular-filter": "~0.5.7"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

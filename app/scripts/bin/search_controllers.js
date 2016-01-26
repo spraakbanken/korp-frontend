@@ -32,9 +32,21 @@
       return $location.search("show_map", Boolean(val) || null);
     });
     $scope.settings = settings;
-    return $scope.showStats = function() {
+    $scope.showStats = function() {
       return settings.statistics !== false;
     };
+    if (!$location.search().stats_reduce) {
+      $location.search('stats_reduce', "word");
+    }
+    $scope.$on("corpuschooserchange", function() {
+      $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
+      return $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
+    });
+    return $scope.$watch('statSelectedAttrs', (function(selected) {
+      if (selected && selected.length > 0) {
+        return $location.search('stats_reduce', $scope.statSelectedAttrs.join(','));
+      }
+    }), true);
   });
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) {
@@ -355,7 +367,6 @@
       return s.currentAttrs = listing.getAttributeGroups();
     });
     s.reduce = 'word';
-    s.currentAttrs = [];
     s.sendCompare = function() {
       return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]));
     };
