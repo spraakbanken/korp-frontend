@@ -2345,6 +2345,16 @@ line.tick {
   background-color: rgb(230, 235, 255);
 }
 
+#myGrid .statistics-link {
+    color: navy;
+    cursor: pointer;
+}
+
+#myGrid .slick-row:hover .statistics-link {
+    color: indianred;
+}
+
+
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
 }

@@ -356,7 +356,7 @@ class view.KWICResults extends BaseResults
 
             @$result.find(".next").attr "rel", "localize[next]"
             @$result.find(".prev").attr "rel", "localize[prev]"
-    
+
     # pagination_container is used by the pagination lib
     handlePaginationClick: (new_page_index, pagination_container, force_click) ->
         page = search().page or 0
@@ -917,10 +917,10 @@ class view.StatsResults extends BaseResults
         self = this
         @tabindex = 2
         @gridData = null
-        
+
         @doSort = true
-        @sortColumn = null 
-        
+        @sortColumn = null
+
         @proxy = new model.StatsProxy()
         window.statsProxy = @proxy
         @$result.on "click", ".arcDiagramPicture", (event) =>
@@ -931,7 +931,7 @@ class view.StatsResults extends BaseResults
             else # The ∑ row
                 @newDataInGraph "SIGMA_ALL"
 
-        @$result.on "click", ".slick-cell .link", () ->
+        @$result.on "click", ".slick-cell .statistics-link", () ->
             query = $(this).data("query")
 
             opts = {}
@@ -1036,9 +1036,9 @@ class view.StatsResults extends BaseResults
         ]
 
         for wd in @savedWordArray
-            row = [wd, fmt @savedData.total[selVal][wd]]
+            row = [wd, fmt @savedSummarizedData.total[selVal][wd]]
             values = for corp in _.pluck cl.corpora, "id"
-                val = @savedData.corpora[corp.toUpperCase()][selVal][wd]
+                val = @savedSummarizedData[corp.toUpperCase()][selVal][wd]
                 if val
                     val = fmt val
                 else
@@ -1142,19 +1142,23 @@ class view.StatsResults extends BaseResults
                 sortColumns = grid.getSortColumns()[0]
                 @sortColumn = sortColumns.columnId
                 @sortAsc = sortColumns.sortAsc
-                sortCol = args.sortCol  
+                sortCol = args.sortCol
                 data.sort (a, b) ->
+                    if(a.id == "row_total")
+                        return -1
+                    if(b.id == "row_total")
+                        return -1
                     log()
                     if sortCol.field is "hit_value"
-                        x = a[sortCol.field]
-                        y = b[sortCol.field]
+                        x = a[sortColumns.columnId]
+                        y = b[sortColumns.columnId]
                     else
                         x = a[sortCol.field][0] or 0
                         y = b[sortCol.field][0] or 0
                     ret = ((if x is y then 0 else ((if x > y then 1 else -1))))
                     ret *= -1 unless args.sortAsc
                     ret
-    
+
                 grid.setData data
                 grid.updateRowCount()
                 grid.render()
@@ -1168,7 +1172,7 @@ class view.StatsResults extends BaseResults
             @doSort = false # if sort event triggered, sorting will not occur
             @resizeGrid()
             e.stopImmediatePropagation()
-            
+
         grid.onHeaderClick.subscribe (e, args) =>
             @doSort = true # enable sorting again, resize is done
             e.stopImmediatePropagation()
@@ -1213,7 +1217,7 @@ class view.StatsResults extends BaseResults
         if width > ($(window).width() - 40)
             width = $(window).width() - 40
         $("#myGrid:visible.slick-viewport").width width
-        
+
         @grid?.resizeCanvas()
         @grid?.invalidate()
 
@@ -1415,7 +1419,7 @@ class view.GraphResults extends BaseResults
                 datefrom = moment(m).startOf(@zoom).format("YYYYMMDD")
                 dateto = moment(m).endOf(@zoom).format("YYYYMMDD")
                 if (@validZoomLevels.indexOf @zoom) < 3 # year, month, day
-                    timecqp = """[(int(_.text_datefrom) >= #{datefrom} & int(_.text_dateto) <= #{dateto}) | 
+                    timecqp = """[(int(_.text_datefrom) >= #{datefrom} & int(_.text_dateto) <= #{dateto}) |
                         (int(_.text_datefrom) <= #{datefrom} & int(_.text_dateto) >= #{dateto})
                     ]"""
 
@@ -1424,7 +1428,7 @@ class view.GraphResults extends BaseResults
                     timefrom = moment(m).startOf(@zoom).format("HHmmss")
                     timeto = moment(m).endOf(@zoom).format("HHmmss")
                     c.log "timefrom", timefrom, timeto
-                    
+
                     timecqp = """[(int(_.text_datefrom) = #{datefrom} & int(_.text_timefrom) >= #{timefrom} & int(_.text_dateto) <= #{dateto} & int(_.text_timeto) <= #{timeto}) |
                      ((int(_.text_datefrom) < #{datefrom} | (int(_.text_datefrom) = #{datefrom} & int(_.text_timefrom) <= #{timefrom})) & (int(_.text_dateto) > #{dateto} | (int(_.text_dateto) = #{dateto} & int(_.text_timeto) >= #{timeto})))]"""
 
@@ -1468,12 +1472,12 @@ class view.GraphResults extends BaseResults
     resetPreloader : () ->
         # $(".preloader", @$result).css
         #     width : 0;
-        
+
     drawPreloader : (from, to) ->
         if @graph
             left = @graph.x from.unix()
             width = (@graph.x to.unix()) - left
-        else 
+        else
             left = 0
             width = "100%"
 
@@ -1502,7 +1506,7 @@ class view.GraphResults extends BaseResults
             from = moment.unix(from)
             from.start
             to = moment.unix(to)
-        
+
 
         oldZoom = @zoom
 
@@ -1606,7 +1610,7 @@ class view.GraphResults extends BaseResults
         # c.log "output before", (_.map output, prettyDate).join(" | ")
         output = @fillMissingDate output
         # c.log "output before", (_.map output, prettyDate).join(" | ")
-        
+
 
         output =  output.sort (a, b) ->
             a.x.unix() - b.x.unix()
@@ -1722,7 +1726,7 @@ class view.GraphResults extends BaseResults
         $(".time_table:visible", @$result).height "#{h}.1em"
         @time_grid?.resizeCanvas()
         $(".exportTimeStatsSection", @$result).show()
-        
+
         setExportUrl = () =>
             selVal = $(".timeKindOfData option:selected", @$result).val()
             selType = $(".timeKindOfFormat option:selected", @$result).val()
@@ -1745,7 +1749,7 @@ class view.GraphResults extends BaseResults
                         i = _.indexOf (_.pluck row.abs_data, "x"), cell.x, true
                         cells.push row.abs_data[i].y
                 output.push cells
-            
+
             csv = new CSV(output, {
                 #header : header
                 delimiter : dataDelimiter
@@ -1756,7 +1760,7 @@ class view.GraphResults extends BaseResults
             csvUrl = URL.createObjectURL(blob)
             $(".exportTimeStatsSection .btn.export", @$result).attr({
                 download : "export.#{selType}"
-                href : csvUrl    
+                href : csvUrl
             })
 
         setExportUrl()
@@ -1794,7 +1798,7 @@ class view.GraphResults extends BaseResults
                         fmt = (valTup) ->
                             if typeof valTup[0] == "undefined" then return ""
                             return "<span>" +
-                                    "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " + 
+                                    "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " +
                                     "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
                               "<span>"
                         return fmt(value)
@@ -1847,7 +1851,7 @@ class view.GraphResults extends BaseResults
                     }]
         Rickshaw.Series.zeroFill(series)
         # window.data = series[0].data
-        
+
         # c.log "emptyIntervals", emptyIntervals
 
         emptyIntervals = @getEmptyIntervals(series[0].data)
@@ -1983,7 +1987,7 @@ class view.GraphResults extends BaseResults
 
 
             nontime = @getNonTime()
-            
+
             if nontime
                 $(".non_time", @$result).empty().text(nontime.toFixed(2) + "%").parent().localize()
             else
@@ -2000,11 +2004,11 @@ class view.GraphResults extends BaseResults
                 padding :
                     top : 0.1
                     right : 0.01
-                # min : 
+                # min :
             graph.render()
             window._graph = @graph = graph
-            
-            
+
+
             @drawIntervals(graph)
 
 
@@ -2038,7 +2042,7 @@ class view.GraphResults extends BaseResults
                     graph.render()
                     $(".exportTimeStatsSection", @$result).hide()
 
-            
+
             legend = new Rickshaw.Graph.Legend
                 element: $(".legend", @$result).get(0)
                 graph: graph
@@ -2075,11 +2079,11 @@ class view.GraphResults extends BaseResults
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
                 formatter : (series, x, y, formattedX, formattedY, d) ->
                     i = _.indexOf (_.pluck series.data, "x"), x, true
-                    try 
+                    try
                         abs_y = series.abs_data[i].y
                     catch e
                         c.log "i", i, x
-                    
+
                     if not abs_y
                         c.log "abs_y", i, x
 
@@ -2148,11 +2152,11 @@ class view.GraphResults extends BaseResults
                 # @updateTicks()
                 @drawIntervals(graph)
 
-                
+
                 @checkZoomLevel()
 
             , 20
-            
+
 
             # old_tickOffsets = xAxis.tickOffsets
             # xAxis.tickOffsets = () =>

@@ -244,7 +244,7 @@ window.initTimeGraph = (def) ->
                         cor.common_attributes.date_interval = true
 
             safeApply $("body").scope(), (scope) ->
-                # scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
+                scope.$broadcast("corpuschooserchange", corpusChooserInstance.corpusChooser("selectedItems"));
                 def.resolve()
 
 

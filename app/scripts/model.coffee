@@ -387,27 +387,11 @@ class model.StatsProxy extends BaseProxy
         sizeOfDataset = wordArray.length
         dataset = new Array(sizeOfDataset + 1)
 
-        summarizedData = {}
-        for corpus, corpusData of data.corpora
-            newAbsolute = _.reduce _.keys(corpusData.absolute), ((result, key) ->
-                    newKey = key.replace(/:\d+/g, "")
-                    currentValue = result[newKey] or 0
-                    result[newKey] = currentValue + corpusData.absolute[key]
-                    return result;
-                ), {}
-            newRelative = _.reduce _.keys(corpusData.relative), ((result, key) ->
-                    newKey = key.replace(/:\d+/g, "")
-                    currentValue = result[newKey] or 0
-                    result[newKey] = currentValue + corpusData.relative[key]
-                    return result;
-                ), {}
-            summarizedData[corpus] = { absolute: newAbsolute, relative: newRelative }
-
         statsWorker = new Worker "scripts/statistics_worker.js"
         statsWorker.onmessage = (e) ->
             c.log "Called back by the worker!\n"
             c.log e
-            def.resolve [data, wordArray, columns, e.data, summarizedData]
+            def.resolve [data, wordArray, columns, e.data.dataset, e.data.summarizedData]
 
         statsWorker.postMessage {
             "total" : data.total
@@ -419,6 +403,7 @@ class model.StatsProxy extends BaseProxy
                 'sv' : "sv-SE"
                 'en' : "gb-EN"
             }[$("body").scope().lang]
+            "attrs" : reduceVals
         }
 
     makeParameters: (reduceVals, cqp) ->
@@ -440,9 +425,12 @@ class model.StatsProxy extends BaseProxy
         ignoreCase = false
         if "word_insensitive" in reduceVals
             ignoreCase = true
-            reduceVals.splice (reduceVals.indexOf "word_insensitive"), 1
-            if "word" not in reduceVals
-                reduceVals.push "word"
+            if "word" in reduceVals
+                # remove "word_insensitive"
+                reduceVals.splice 1, 1
+            else
+                # replace "word_insensitive" with "word"
+                reduceVals.splice 0, 1, "word"
 
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"

@@ -1140,7 +1140,7 @@
           }
         };
       })(this));
-      this.$result.on("click", ".slick-cell .link", function() {
+      this.$result.on("click", ".slick-cell .statistics-link", function() {
         var opts, query;
         query = $(this).data("query");
         opts = {};
@@ -1263,14 +1263,14 @@
       ref = this.savedWordArray;
       for (k = 0, len = ref.length; k < len; k++) {
         wd = ref[k];
-        row = [wd, fmt(this.savedData.total[selVal][wd])];
+        row = [wd, fmt(this.savedSummarizedData.total[selVal][wd])];
         values = (function() {
           var len1, o, ref1, results;
           ref1 = _.pluck(cl.corpora, "id");
           results = [];
           for (o = 0, len1 = ref1.length; o < len1; o++) {
             corp = ref1[o];
-            val = this.savedData.corpora[corp.toUpperCase()][selVal][wd];
+            val = this.savedSummarizedData[corp.toUpperCase()][selVal][wd];
             if (val) {
               results.push(val = fmt(val));
             } else {
@@ -1396,10 +1396,16 @@
             sortCol = args.sortCol;
             data.sort(function(a, b) {
               var ret, x, y;
+              if (a.id === "row_total") {
+                return -1;
+              }
+              if (b.id === "row_total") {
+                return -1;
+              }
               log();
               if (sortCol.field === "hit_value") {
-                x = a[sortCol.field];
-                y = b[sortCol.field];
+                x = a[sortColumns.columnId];
+                y = b[sortColumns.columnId];
               } else {
                 x = a[sortCol.field][0] || 0;
                 y = b[sortCol.field][0] || 0;
@@ -1662,7 +1668,7 @@
             datefrom = moment(m).startOf(_this.zoom).format("YYYYMMDD");
             dateto = moment(m).endOf(_this.zoom).format("YYYYMMDD");
             if ((_this.validZoomLevels.indexOf(_this.zoom)) < 3) {
-              timecqp = "[(int(_.text_datefrom) >= " + datefrom + " & int(_.text_dateto) <= " + dateto + ") | \n    (int(_.text_datefrom) <= " + datefrom + " & int(_.text_dateto) >= " + dateto + ")\n]";
+              timecqp = "[(int(_.text_datefrom) >= " + datefrom + " & int(_.text_dateto) <= " + dateto + ") |\n    (int(_.text_datefrom) <= " + datefrom + " & int(_.text_dateto) >= " + dateto + ")\n]";
             } else {
               timefrom = moment(m).startOf(_this.zoom).format("HHmmss");
               timeto = moment(m).endOf(_this.zoom).format("HHmmss");

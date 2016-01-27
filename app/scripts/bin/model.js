@@ -409,7 +409,7 @@
     }
 
     StatsProxy.prototype.processData = function(def, data, reduceVals, reduceValLabels, ignoreCase, tokensLength) {
-      var columns, corpus, corpusData, dataset, groups, j, len, minWidth, newAbsolute, newRelative, reduceVal, reduceValLabel, ref, ref1, ref2, sizeOfDataset, statsWorker, summarizedData, wordArray;
+      var columns, dataset, groups, j, len, minWidth, reduceVal, reduceValLabel, ref, ref1, sizeOfDataset, statsWorker, wordArray;
       minWidth = 100;
       columns = [];
       ref = _.zip(reduceVals, reduceValLabels);
@@ -462,34 +462,11 @@
       wordArray = _.keys(groups);
       sizeOfDataset = wordArray.length;
       dataset = new Array(sizeOfDataset + 1);
-      summarizedData = {};
-      ref2 = data.corpora;
-      for (corpus in ref2) {
-        corpusData = ref2[corpus];
-        newAbsolute = _.reduce(_.keys(corpusData.absolute), (function(result, key) {
-          var currentValue, newKey;
-          newKey = key.replace(/:\d+/g, "");
-          currentValue = result[newKey] || 0;
-          result[newKey] = currentValue + corpusData.absolute[key];
-          return result;
-        }), {});
-        newRelative = _.reduce(_.keys(corpusData.relative), (function(result, key) {
-          var currentValue, newKey;
-          newKey = key.replace(/:\d+/g, "");
-          currentValue = result[newKey] || 0;
-          result[newKey] = currentValue + corpusData.relative[key];
-          return result;
-        }), {});
-        summarizedData[corpus] = {
-          absolute: newAbsolute,
-          relative: newRelative
-        };
-      }
       statsWorker = new Worker("scripts/statistics_worker.js");
       statsWorker.onmessage = function(e) {
         c.log("Called back by the worker!\n");
         c.log(e);
-        return def.resolve([data, wordArray, columns, e.data, summarizedData]);
+        return def.resolve([data, wordArray, columns, e.data.dataset, e.data.summarizedData]);
       };
       return statsWorker.postMessage({
         "total": data.total,
@@ -500,7 +477,8 @@
         loc: {
           'sv': "sv-SE",
           'en': "gb-EN"
-        }[$("body").scope().lang]
+        }[$("body").scope().lang],
+        "attrs": reduceVals
       });
     };
 
@@ -526,9 +504,10 @@
       ignoreCase = false;
       if (indexOf.call(reduceVals, "word_insensitive") >= 0) {
         ignoreCase = true;
-        reduceVals.splice(reduceVals.indexOf("word_insensitive"), 1);
-        if (indexOf.call(reduceVals, "word") < 0) {
-          reduceVals.push("word");
+        if (indexOf.call(reduceVals, "word") >= 0) {
+          reduceVals.splice(1, 1);
+        } else {
+          reduceVals.splice(0, 1, "word");
         }
       }
       reduceValLabels = _.map(reduceVals, function(reduceVal) {

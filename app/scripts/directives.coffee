@@ -480,9 +480,11 @@ korpApp.directive "clickCover", () ->
         , (val) ->
             if val
                 elem.prepend(cover)
+                elem.css "pointer-events" ,"none"
                 elem.css("position", "relative").addClass("covered")
             else
                 cover.remove()
+                elem.css "pointer-events", ""
                 elem.css("position", pos).removeClass("covered")
 
 korpApp.directive 'toBody', ($compile) ->
@@ -789,10 +791,18 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                 $timeout (() -> scope.selected = newSelected))
 
         scope.toggleSelected = (value) ->
-            if value  in scope.selected
-                scope.selected.splice (scope.selected.indexOf value), 1
+            selected = scope.selected
+            if value  in selected
+                selected.splice (selected.indexOf value), 1
             else
-                scope.selected.push value
+                selected.push value
+
+            # sort
+            ordered = []
+            _.map scope.items, (elem) ->
+                if elem.value in selected
+                    ordered.push elem.value
+            scope.selected = ordered
 
         scope.toggled = (open) ->
             # if no element is selected when closing popop, select word

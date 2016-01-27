@@ -522,9 +522,11 @@
         }, function(val) {
           if (val) {
             elem.prepend(cover);
+            elem.css("pointer-events", "none");
             return elem.css("position", "relative").addClass("covered");
           } else {
             cover.remove();
+            elem.css("pointer-events", "");
             return elem.css("position", pos).removeClass("covered");
           }
         });
@@ -805,11 +807,21 @@
           }
         }));
         scope.toggleSelected = function(value) {
-          if (indexOf.call(scope.selected, value) >= 0) {
-            return scope.selected.splice(scope.selected.indexOf(value), 1);
+          var ordered, selected;
+          selected = scope.selected;
+          if (indexOf.call(selected, value) >= 0) {
+            selected.splice(selected.indexOf(value), 1);
           } else {
-            return scope.selected.push(value);
+            selected.push(value);
           }
+          ordered = [];
+          _.map(scope.items, function(elem) {
+            var ref;
+            if (ref = elem.value, indexOf.call(selected, ref) >= 0) {
+              return ordered.push(elem.value);
+            }
+          });
+          return scope.selected = ordered;
         };
         return scope.toggled = function(open) {
           if (!open && scope.numberAttributes === 0) {

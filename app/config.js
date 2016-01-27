@@ -4402,7 +4402,7 @@ settings.reduce_statistics = function(types, ignoreCase,tokensLength) {
 
         var output = $("<span>",
             {
-            "class" : "link",
+            "class" : "statistics-link",
             "data-query" : encodeURIComponent(query),
             "data-corpora" : JSON.stringify(corpora)
             }).html(linkInnerHTML).outerHTML();
