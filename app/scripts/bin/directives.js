@@ -764,69 +764,83 @@
       scope: {
         items: '=reduceItems',
         selected: '=reduceSelected',
+        insensitive: '=reduceInsensitive',
         lang: '=reduceLang'
       },
       replace: true,
-      template: '<div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">\n  <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">\n    <div class="reduce-dropdown-button-text">\n      <span>{{ "reduce_text" | loc:lang }}:</span>\n      <span ng-if="showAllSelected" ng-repeat="item in items | filter:{selected: true}">\n        {{item.label | loc:lang}}\n      </span>\n      <span ng-if="!showAllSelected">\n        {{ numberAttributes }} {{"attr" | loc:lang}}\n      </span>\n      <span class="caret"></span>\n    </div>\n  </div>\n  <div class="reduce-dropdown-menu dropdown-menu">\n    <ul>\n      <li ng-repeat="item in items | filter:{ group: \'word\' }:true"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n      <b ng-if="hasWordAttrs">{{\'word_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'word_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n      <b ng-if="hasStructAttrs">{{\'sentence_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'sentence_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n    </ul>\n  </div>\n</div>',
+      template: '<div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">\n  <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">\n    <div class="reduce-dropdown-button-text">\n      <span>{{ "reduce_text" | loc:lang }}:</span>\n      <span ng-if="showAllSelected" ng-repeat="item in items | filter:{selected: true}">\n        {{item.label | loc:lang}}\n      </span>\n      <span ng-if="!showAllSelected">\n        {{ numberAttributes }} {{"attr" | loc:lang}}\n      </span>\n      <span class="caret"></span>\n    </div>\n  </div>\n  <div class="reduce-dropdown-menu dropdown-menu">\n    <ul>\n      <li ng-click="toggleSelected(\'word\')" ng-class="keyItems[\'word\'].selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="keyItems[\'word\'].selected ? \'selected\':\'\'">&#10004;</span>\n        {{keyItems[\'word\'].label | loc:lang }}\n        <span ng-class="keyItems[\'word\'].insensitive ? \'selected\':\'\'"\n              class="insensitive-toggle"\n              ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>\n      </li>\n      <b ng-if="hasWordAttrs">{{\'word_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'word_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n      <b ng-if="hasStructAttrs">{{\'sentence_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'sentence_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <span class="reduce-check" ng-class="item.selected ? \'selected\':\'\'">&#10004;</span> {{item.label | loc:lang }}\n      </li>\n    </ul>\n  </div>\n</div>',
       link: function(scope, element, attribute) {
-        scope.$watchCollection('selected', (function() {
-          if (scope.selected) {
-            scope.numberAttributes = scope.selected.length;
-            scope.showAllSelected = scope.numberAttributes < 2;
-            return _.map(scope.items, function(elem) {
-              var ref;
-              return elem.selected = (ref = elem.value, indexOf.call(scope.selected, ref) >= 0);
-            });
-          }
-        }), true);
+        var updateSelected;
         scope.$watchCollection('items', (function() {
-          var newSelected, possibleVals;
+          var insensitive, item, j, k, l, len1, len2, len3, ref, ref1, ref2, select;
           if (scope.items) {
-            scope.hasWordAttrs = _.filter(scope.items, {
+            scope.keyItems = {};
+            ref = scope.items;
+            for (j = 0, len1 = ref.length; j < len1; j++) {
+              item = ref[j];
+              scope.keyItems[item.value] = item;
+            }
+            scope.hasWordAttrs = _.filter(scope.keyItems, {
               'group': 'word_attr'
             }).length > 0;
-            scope.hasStructAttrs = _.filter(scope.items, {
+            scope.hasStructAttrs = _.filter(scope.keyItems, {
               'group': 'sentence_attr'
             }).length > 0;
-            possibleVals = _.pluck(scope.items, "value");
-            newSelected = _.filter(scope.selected, function(elem) {
-              return indexOf.call(possibleVals, elem) >= 0;
-            });
-            if (newSelected.length === 0) {
-              newSelected.push("word");
+            if (scope.selected && scope.selected.length > 0) {
+              ref1 = scope.selected;
+              for (k = 0, len2 = ref1.length; k < len2; k++) {
+                select = ref1[k];
+                item = scope.keyItems[select];
+                if (item) {
+                  item.selected = true;
+                }
+              }
+            } else {
+              scope.keyItems["word"].selected = true;
             }
-            if (("" + newSelected) === ("" + scope.selected)) {
-              _.map(scope.items, function(elem) {
-                var ref;
-                return elem.selected = (ref = elem.value, indexOf.call(scope.selected, ref) >= 0);
-              });
+            if (scope.insensitive) {
+              ref2 = scope.insensitive;
+              for (l = 0, len3 = ref2.length; l < len3; l++) {
+                insensitive = ref2[l];
+                scope.keyItems[insensitive].insensitive = true;
+              }
             }
-            return $timeout((function() {
-              return scope.selected = newSelected;
-            }));
+            return updateSelected(scope);
           }
         }));
+        updateSelected = function(scope) {
+          scope.selected = _.pluck(_.filter(scope.keyItems, function(item, key) {
+            return item.selected;
+          }), "value");
+          scope.numberAttributes = scope.selected.length;
+          return scope.showAllSelected = scope.numberAttributes < 2;
+        };
         scope.toggleSelected = function(value) {
-          var ordered, selected;
-          selected = scope.selected;
-          if (indexOf.call(selected, value) >= 0) {
-            selected.splice(selected.indexOf(value), 1);
-          } else {
-            selected.push(value);
+          var item;
+          item = scope.keyItems[value];
+          item.selected = !item.selected;
+          if (value === "word" && !item.selected) {
+            item.insensitive = false;
+            scope.insensitive = [];
           }
-          ordered = [];
-          _.map(scope.items, function(elem) {
-            var ref;
-            if (ref = elem.value, indexOf.call(selected, ref) >= 0) {
-              return ordered.push(elem.value);
-            }
-          });
-          return scope.selected = ordered;
+          return updateSelected(scope);
+        };
+        scope.toggleWordInsensitive = function(event) {
+          event.stopPropagation();
+          scope.keyItems["word"].insensitive = !scope.keyItems["word"].insensitive;
+          if (scope.keyItems["word"].insensitive) {
+            scope.insensitive = ["word"];
+          } else {
+            scope.insensitive = [];
+          }
+          if (!scope.keyItems["word"].selected) {
+            return scope.toggleSelected("word");
+          }
         };
         return scope.toggled = function(open) {
           if (!open && scope.numberAttributes === 0) {
             return $timeout((function() {
-              return scope.selected.push("word");
+              return scope.toggleSelected("word");
             }), 0);
           }
         };

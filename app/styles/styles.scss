@@ -2742,5 +2742,12 @@ li.active a span .num-to-find {
       margin: 0;
       padding: 2px;
     }
+    .insensitive-toggle {
+      float: right;
+      color: grey;
+    }
+    .insensitive-toggle.selected {
+      color: black;
+    }
   }
 }

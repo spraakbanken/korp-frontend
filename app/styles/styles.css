@@ -5963,3 +5963,12 @@ li.active a span .num-to-find {
   margin: 0;
   padding: 2px;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032745}}
+.reduce-attr-select .reduce-dropdown-menu .insensitive-toggle {
+  float: right;
+  color: grey;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend\/app\/styles\/styles\.scss}line{font-family:\000032749}}
+.reduce-attr-select .reduce-dropdown-menu .insensitive-toggle.selected {
+  color: black;
+}

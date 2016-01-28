@@ -39,12 +39,24 @@
       $location.search('stats_reduce', "word");
     }
     $scope.$on("corpuschooserchange", function() {
+      var insensitiveAttrs;
       $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
-      return $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
+      $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
+      insensitiveAttrs = $location.search().stats_reduce_insensitive;
+      if (insensitiveAttrs) {
+        return $scope.statInsensitiveAttrs = insensitiveAttrs.split(',');
+      }
     });
-    return $scope.$watch('statSelectedAttrs', (function(selected) {
+    $scope.$watch('statSelectedAttrs', (function(selected) {
       if (selected && selected.length > 0) {
         return $location.search('stats_reduce', $scope.statSelectedAttrs.join(','));
+      }
+    }), true);
+    return $scope.$watch('statInsensitiveAttrs', (function(insensitive) {
+      if (insensitive && insensitive.length > 0) {
+        return $location.search('stats_reduce_insensitive', $scope.statInsensitiveAttrs.join(','));
+      } else if (insensitive) {
+        return $location.search('stats_reduce_insensitive', null);
       }
     }), true);
   });

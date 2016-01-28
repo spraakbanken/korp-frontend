@@ -496,19 +496,16 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, def, ignoreCase, reduceValLabels, reduceVals, reduceval, self;
+      var data, def, ignoreCase, insensitive, reduceValLabels, reduceVals, reduceval, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
       reduceVals = reduceval.split(",");
-      ignoreCase = false;
-      if (indexOf.call(reduceVals, "word_insensitive") >= 0) {
+      insensitive = search().stats_reduce_insensitive;
+      if (insensitive) {
         ignoreCase = true;
-        if (indexOf.call(reduceVals, "word") >= 0) {
-          reduceVals.splice(1, 1);
-        } else {
-          reduceVals.splice(0, 1, "word");
-        }
+      } else {
+        ignoreCase = false;
       }
       reduceValLabels = _.map(reduceVals, function(reduceVal) {
         if (reduceVal === "word") {

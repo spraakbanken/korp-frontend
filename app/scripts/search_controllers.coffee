@@ -35,11 +35,23 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
     $scope.$on "corpuschooserchange", () ->
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
         $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
+        insensitiveAttrs = $location.search().stats_reduce_insensitive
+        if insensitiveAttrs
+            $scope.statInsensitiveAttrs = insensitiveAttrs.split ','
 
     $scope.$watch 'statSelectedAttrs', ((selected) ->
         if selected and selected.length > 0
             $location.search 'stats_reduce', ($scope.statSelectedAttrs.join ',')
     ), true
+
+    $scope.$watch 'statInsensitiveAttrs', ((insensitive) ->
+        if insensitive and insensitive.length > 0
+            $location.search 'stats_reduce_insensitive', ($scope.statInsensitiveAttrs.join ',')
+        else if insensitive
+            $location.search 'stats_reduce_insensitive', null
+    ), true
+
+
 
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
     s = $scope

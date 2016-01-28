@@ -177,7 +177,7 @@
               </select>
             </div>
             <div ng-show="showStats()"><span rel="localize[statistics]"> </span>: 
-              <reduce-select reduce-items="statCurrentAttrs" reduce-selected="statSelectedAttrs" reduce-lang="lang" style="width: 200px"></reduce-select>
+              <reduce-select reduce-items="statCurrentAttrs" reduce-selected="statSelectedAttrs" reduce-insensitive="statInsensitiveAttrs" reduce-lang="lang" style="width: 200px"></reduce-select>
             </div>
             <div ng-show="settings.wordpicture !== false">
               <input id="word_pic" type="checkbox" ng-model="word_pic">

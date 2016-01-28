@@ -724,6 +724,7 @@ korpApp.directive 'reduceSelect', ($timeout) ->
     scope:
       items: '=reduceItems'
       selected: '=reduceSelected'
+      insensitive: '=reduceInsensitive'
       lang: '=reduceLang'
     replace : true
     template: '''
@@ -742,10 +743,12 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                     </div>
                     <div class="reduce-dropdown-menu dropdown-menu">
                       <ul>
-                        <li ng-repeat="item in items | filter:{ group: 'word' }:true"
-                            ng-click="toggleSelected(item.value)"
-                            ng-class="item.selected ? 'selected':''" class="attribute">
-                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                        <li ng-click="toggleSelected('word')" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
+                          <span class="reduce-check" ng-class="keyItems['word'].selected ? 'selected':''">&#10004;</span>
+                          {{keyItems['word'].label | loc:lang }}
+                          <span ng-class="keyItems['word'].insensitive ? 'selected':''"
+                                class="insensitive-toggle"
+                                ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>
                         </li>
                         <b ng-if="hasWordAttrs">{{'word_attr' | loc:lang}}</b>
                         <li ng-repeat="item in items | filter:{ group: 'word_attr' }"
@@ -762,52 +765,59 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                       </ul>
                     </div>
                   </div>'''
-    link: (scope, element, attribute) ->
 
-        scope.$watchCollection 'selected', (() ->
-            if scope.selected
-                scope.numberAttributes = scope.selected.length
-                scope.showAllSelected = scope.numberAttributes < 2
-                _.map scope.items, (elem) ->
-                    elem.selected = elem.value in scope.selected), true
+    link: (scope, element, attribute) ->
 
         scope.$watchCollection 'items', (() ->
             if scope.items
-                scope.hasWordAttrs = _.filter(scope.items, { 'group': 'word_attr' }).length > 0
-                scope.hasStructAttrs = _.filter(scope.items, { 'group': 'sentence_attr' }).length > 0
+                scope.keyItems = {}
+                for item in scope.items
+                    scope.keyItems[item.value] = item
 
-                # if items changed, it is possible that the current selected values
-                # have not changed and we need to check if they still are
-                # applicable and also set the selected value on the item for
-                # highlighting to be visible
-                possibleVals = _.pluck scope.items, "value"
-                newSelected = _.filter scope.selected, (elem) ->
-                    elem in possibleVals
-                if newSelected.length == 0
-                    newSelected.push "word"
-                if "#{newSelected}" is "#{scope.selected}"
-                   _.map scope.items, (elem) ->
-                       elem.selected = elem.value in scope.selected
-                $timeout (() -> scope.selected = newSelected))
+                scope.hasWordAttrs = _.filter(scope.keyItems, { 'group': 'word_attr' }).length > 0
+                scope.hasStructAttrs = _.filter(scope.keyItems, { 'group': 'sentence_attr' }).length > 0
+
+                if scope.selected and scope.selected.length > 0
+                    for select in scope.selected
+                        item = scope.keyItems[select]
+                        if item
+                            item.selected = true
+                else
+                    scope.keyItems["word"].selected = true
+                if scope.insensitive
+                    for insensitive in scope.insensitive
+                        scope.keyItems[insensitive].insensitive = true
+                updateSelected scope
+        )
+
+        updateSelected = (scope) ->
+            scope.selected = _.pluck (_.filter scope.keyItems, (item, key) -> item.selected), "value"
+            scope.numberAttributes = scope.selected.length
+            scope.showAllSelected = scope.numberAttributes < 2
 
         scope.toggleSelected = (value) ->
-            selected = scope.selected
-            if value  in selected
-                selected.splice (selected.indexOf value), 1
-            else
-                selected.push value
+            item = scope.keyItems[value]
+            item.selected = not item.selected
+            if value == "word" and not item.selected
+                item.insensitive = false
+                scope.insensitive = []
+            updateSelected scope
 
-            # sort
-            ordered = []
-            _.map scope.items, (elem) ->
-                if elem.value in selected
-                    ordered.push elem.value
-            scope.selected = ordered
+        scope.toggleWordInsensitive = (event) ->
+            event.stopPropagation()
+            scope.keyItems["word"].insensitive = not scope.keyItems["word"].insensitive
+            if scope.keyItems["word"].insensitive
+                scope.insensitive = ["word"]
+            else
+                scope.insensitive = []
+
+            if not scope.keyItems["word"].selected
+                scope.toggleSelected "word"
 
         scope.toggled = (open) ->
             # if no element is selected when closing popop, select word
             if not open and scope.numberAttributes == 0
-                $timeout (() -> scope.selected.push "word"), 0
+                $timeout (() -> scope.toggleSelected "word"), 0
 
 
 angular.module("template/datepicker/day.html", []).run ($templateCache) ->
