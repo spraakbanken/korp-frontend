@@ -1,0 +1,44 @@
+Release manual
+
+These are some guidelines how to release Korp to "labb" or production.
+
+Begin with:
+* Make sure that all changed are commited to SVN
+* Run all tests:
+  > node_modules/protractor/bin/webdriver-manager update (if you have not already installed webdrivers)
+  > grunt test
+
+Labb:
+* Build a release using
+  > grunt release:labb
+  For this to work, the repository must be checkout by svn and not git-svn. The reason 
+  is that we create a file with the SVN revision number for tracking. (dist/release-info).
+  (It is still possible to build the dist-folder using just "grunt")
+* Do basic testing locally on the built version
+  > grunt serve:dist
+* Update the server with the new dist folder:
+  > rsync --delete -r dist/ fkkorp@k2.spraakdata.gu.se:/var/www/html_sb/korplabb
+
+Production:
+- We should release in the beginning of the week
+- The release should first be tested in the labb-environment, preferably by several people
+
+* Bump the version number in packages.json and app/markup/about.html, commit the changes
+* Build a release using:
+  > grunt release
+  For this to work, the repository must be checkout by svn and not git-svn. The reason 
+  is that we create a file with the SVN revision number for tracking. (dist/release-info).
+  (It is possible to build the dist-folder using just "grunt", without revision information)
+* Do basic testing locally on the built version
+  > grunt serve:dist
+* Update the server with the new dist folder:
+  > rsync --delete -r dist/ fkkorp@k2.spraakdata.gu.se:/var/www/html_sb/korp
+* Upload archive for download on webpage
+  - Remove the dist folder and zip the other content of the repository (ignore .svn-folders)
+  - Upload as https://svn.spraakdata.gu.se/repos/lb/trunk/sbkhs/pub/korp_frontend.zip on SVN
+* Update git-repository
+  - TODO
+
+
+
+
