@@ -118,7 +118,12 @@
 
     "language": "språk",
     "languagefamily": "språkfamilj",
-    "subfamily": "underfamilj",
+    
+    "lsi_classification": "LSI-klassifikation",
+    "ethnologue_classification": "Ethnologue-klassifikation",
+    "glottolog_classification": "Glottolog-klassifikation",
+    "latitude": "latitud",
+    "longitude": "longitud",
 
     "blog_title": "bloggtitel",
     "blog_url": "bloggaddress",

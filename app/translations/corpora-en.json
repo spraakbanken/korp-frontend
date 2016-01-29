@@ -118,7 +118,12 @@
     
     "language": "language",
     "languagefamily": "language family",
-    "subfamily": "subfamily",
+    
+    "lsi_classification": "LSI classification",
+    "ethnologue_classification": "Ethnologue classification",
+    "glottolog_classification": "Glottolog classification",
+    "latitude": "latitude",
+    "longitude": "longitude",
 
     "blog_title": "blog title",
     "blog_url": "blog address",

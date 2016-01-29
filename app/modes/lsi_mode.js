@@ -18,22 +18,33 @@ settings.corpora.lsi = {
 		lsi : "english"
 	},
 	within : settings.defaultWithin,
-	context : settings.defaultContext,
+	context : {
+	"1 sentence" : "1 sentence",
+    "7 sentence" : "7 sentence"
+    },
 	attributes : {
+	    norm : {label: "normalized_wordform"},
         pos : {label : "pos"},
         msd : attrs.msd,
-        lemma : attrs.baseform,
+        lemma : {label: "baseform"},
         dephead : attrs.dephead,
         deprel : {label : "deprel"},
         ref : attrs.ref
     },
 	struct_attributes : {
 	    "page_pno": {label: "page"},
-	    "page_languagefamily": {label: "languagefamily"},
-	    "page_subfamily": {label: "subfamily"},
+	    "page_family": {label: "languagefamily"},
+	    "page_language": {label: "language"},
+	    "page_lsi_classification": {label: "lsi_classification"},
+	    "page_ethnologue_classification": {label: "ethnologue_classification"},
+	    "page_glottolog_classification": {label: "glottolog_classification"},
+	    "page_latitude": {label: "latitude"},
+	    "page_longitude": {label: "longitude"},
+	    "page_page_url": {label: "pagesource", type: "url"},
+	    "page_language": {label: "language"},
 	    "corpus_vol": {label: "volume"},
 	    "corpus_part": {label: "part"}
-	},
+	}
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
