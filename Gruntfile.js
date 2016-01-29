@@ -469,10 +469,46 @@ module.exports = function (grunt) {
           }
         ]
       }
+    },
+    svninfo: {
+
+    },
+    "file-creator": {
+      "prod": {
+        "dist/release-info": function(fs, fd, done) {
+          fs.writeSync(fd, "svnrev:" + grunt.config("svninfo.rev") + "\n");
+          fs.writeSync(fd, "korpversion:" + grunt.file.readJSON('package.json').version + "\n");
+          done();
+        }
+      },
+      "labb": {
+        "dist/release-info": function(fs, fd, done) {
+          fs.writeSync(fd, "svnrev:" + grunt.config("svninfo.rev") + "\n");
+          fs.writeSync(fd, "korpversion:" + grunt.file.readJSON('package.json').version + "\n");
+          fs.writeSync(fd, "lab:true\n");
+          done();
+        }
+      }
     }
   });
 
   // grunt.renameTask('regarde', 'watch');
+
+  grunt.registerTask('release', function(target) {
+    grunt.task.run([
+     'build',
+     'svninfo'
+    ]);
+    if(target === 'labb') {
+      grunt.task.run([
+        'file-creator:labb'
+      ]);
+    } else {
+      grunt.task.run([
+       'file-creator:prod'
+      ]);
+    }
+  });
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
@@ -548,4 +584,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', ['build']);
+
+
+
 };
