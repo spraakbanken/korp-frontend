@@ -64,7 +64,7 @@
     "website": "webbsida",
 
     "id": "id",
-
+    
     "organization": "organisation",
 
     "imprintyear": "tryckår",
@@ -116,6 +116,7 @@
     "pagesource": "sidkälla",
     "age": "ålder",
 
+    "language": "språk",
     "languagefamily": "språkfamilj",
     "subfamily": "underfamilj",
 
@@ -449,7 +450,7 @@
     "commentaries": "kommentarer",
 
     "published": "publicerat",
-
+    
     "sponsor": "sponsor",
     "place": "plats",
 

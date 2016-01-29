@@ -64,7 +64,7 @@
     "website": "website",
 
     "id": "id",
-
+    
     "organization": "organization",
 
     "imprintyear": "imprint year",
@@ -115,7 +115,8 @@
     "source": "source",
     "pagesource": "page source",
     "age": "age",
-
+    
+    "language": "language",
     "languagefamily": "language family",
     "subfamily": "subfamily",
 
@@ -448,7 +449,7 @@
     "commentaries": "commentaries",
 
     "published": "published",
-
+    
     "sponsor": "sponsor",
     "place": "place",
     "subtitle": "subtitle",
