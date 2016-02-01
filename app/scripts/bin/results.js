@@ -1504,6 +1504,9 @@
       $.each(this.savedSummarizedData, (function(_this) {
         return function(corpus, obj) {
           var freq, totfreq;
+          if (corpus === "total") {
+            return;
+          }
           if (dataName === "SIGMA_ALL") {
             totfreq = 0;
             $.each(obj["relative"], function(wordform, freq) {

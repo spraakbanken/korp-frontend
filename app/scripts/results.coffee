@@ -1228,8 +1228,10 @@ class view.StatsResults extends BaseResults
         @lastDataName = dataName
 
         $.each @savedSummarizedData, (corpus, obj) =>
-            if dataName is "SIGMA_ALL"
+            if corpus == "total"
+                return
 
+            if dataName is "SIGMA_ALL"
                 # ∑ selected
                 totfreq = 0
                 $.each obj["relative"], (wordform, freq) ->
