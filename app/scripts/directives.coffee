@@ -732,11 +732,11 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                     <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">
                       <div class="reduce-dropdown-button-text">
                         <span>{{ "reduce_text" | loc:lang }}:</span>
-                        <span ng-if="showAllSelected" ng-repeat="item in items | filter:{selected: true}">
-                          {{item.label | loc:lang}}
+                        <span>
+                          {{keyItems[selected[0]].label | loc:lang}}
                         </span>
-                        <span ng-if="!showAllSelected">
-                          {{ numberAttributes }} {{"attr" | loc:lang}}
+                        <span ng-if="selected.length > 1">
+                          (+{{ numberAttributes - 1 }})
                         </span>
                         <span class="caret"></span>
                       </div>
@@ -744,8 +744,8 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                     <div class="reduce-dropdown-menu dropdown-menu">
                       <ul>
                         <li ng-click="toggleSelected('word')" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
-                          <span class="reduce-check" ng-class="keyItems['word'].selected ? 'selected':''">&#10004;</span>
-                          {{keyItems['word'].label | loc:lang }}
+                          <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected">
+                          <span class="reduce-label">{{keyItems['word'].label | loc:lang }}</span>
                           <span ng-class="keyItems['word'].insensitive ? 'selected':''"
                                 class="insensitive-toggle"
                                 ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>
@@ -754,13 +754,15 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                         <li ng-repeat="item in items | filter:{ group: 'word_attr' }"
                             ng-click="toggleSelected(item.value)"
                             ng-class="item.selected ? 'selected':''" class="attribute">
-                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                          <input type="checkbox" class="reduce-check" ng-checked="item.selected">
+                          <span class="reduce-label">{{item.label | loc:lang }}</span>
                         </li>
                         <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:lang}}</b>
                         <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
                             ng-click="toggleSelected(item.value)"
                             ng-class="item.selected ? 'selected':''" class="attribute">
-                          <span class="reduce-check" ng-class="item.selected ? 'selected':''">&#10004;</span> {{item.label | loc:lang }}
+                          <input type="checkbox" class="reduce-check" ng-checked="item.selected">
+                          <span class="reduce-label">{{item.label | loc:lang }}</span>
                         </li>
                       </ul>
                     </div>
@@ -793,7 +795,6 @@ korpApp.directive 'reduceSelect', ($timeout) ->
         updateSelected = (scope) ->
             scope.selected = _.pluck (_.filter scope.keyItems, (item, key) -> item.selected), "value"
             scope.numberAttributes = scope.selected.length
-            scope.showAllSelected = scope.numberAttributes < 2
 
         scope.toggleSelected = (value) ->
             item = scope.keyItems[value]

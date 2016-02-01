@@ -5940,7 +5940,7 @@ li.active a span .num-to-find {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032726}}
 .reduce-attr-select .reduce-dropdown-menu {
   width: 100%;
-  max-height: 300px;
+  max-height: 400px;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032729}}
 .reduce-attr-select .reduce-dropdown-menu .selected {
@@ -5952,23 +5952,25 @@ li.active a span .num-to-find {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032735}}
 .reduce-attr-select .reduce-dropdown-menu .reduce-check {
-  visibility: hidden;
+  margin: 0px;
+  margin-top: 4px;
+  margin-right: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032738}}
-.reduce-attr-select .reduce-dropdown-menu .reduce-check.selected {
-  visibility: visible;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032740}}
+.reduce-attr-select .reduce-dropdown-menu .reduce-label {
+  position: absolute;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032741}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032743}}
 .reduce-attr-select .reduce-dropdown-menu ul {
   margin: 0;
   padding: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032745}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032747}}
 .reduce-attr-select .reduce-dropdown-menu .insensitive-toggle {
   float: right;
-  color: grey;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032749}}
-.reduce-attr-select .reduce-dropdown-menu .insensitive-toggle.selected {
   color: black;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/home\/maria\/spr\%C3\%A5kbanken\/korp-frontend-5\.0\.1\/app\/styles\/styles\.scss}line{font-family:\000032751}}
+.reduce-attr-select .reduce-dropdown-menu .insensitive-toggle.selected {
+  color: grey;
 }

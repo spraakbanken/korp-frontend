@@ -42,6 +42,7 @@ settings.corpora.lsi = {
 	    "page_longitude": {label: "longitude"},
 	    "page_page_url": {label: "pagesource", type: "url"},
 	    "page_language": {label: "language"},
+	    "page_iso_code": {label: "iso_code"},
 	    "corpus_vol": {label: "volume"},
 	    "corpus_part": {label: "part"}
 	}

@@ -1289,6 +1289,9 @@ class view.StatsResults extends BaseResults
                 dataItems = []
                 dataName = @lastDataName
                 $.each @savedSummarizedData, (corpus, obj) ->
+                    if corpus == "total"
+                        return;
+
                     if dataName is "SIGMA_ALL"
 
                         # sigma selected

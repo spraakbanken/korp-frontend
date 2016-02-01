@@ -1563,6 +1563,9 @@
             dataName = _this.lastDataName;
             $.each(_this.savedSummarizedData, function(corpus, obj) {
               var freq, totfreq;
+              if (corpus === "total") {
+                return;
+              }
               if (dataName === "SIGMA_ALL") {
                 totfreq = 0;
                 $.each(obj[typestring], function(wordform, freq) {

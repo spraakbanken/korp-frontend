@@ -2725,7 +2725,7 @@ li.active a span .num-to-find {
   }
   .reduce-dropdown-menu {
     width: 100%;
-    max-height: 300px;
+    max-height: 400px;
     .selected {
       background: rgb(242, 247, 255);
     }
@@ -2733,10 +2733,12 @@ li.active a span .num-to-find {
       cursor: pointer;
     }
     .reduce-check {
-      visibility: hidden;
+      margin: 0px;
+      margin-top: 4px;
+      margin-right: 2px;
     }
-    .reduce-check.selected {
-      visibility: visible;
+    .reduce-label {
+      position: absolute;
     }
     ul {
       margin: 0;
@@ -2744,10 +2746,10 @@ li.active a span .num-to-find {
     }
     .insensitive-toggle {
       float: right;
-      color: grey;
+      color: black;
     }
     .insensitive-toggle.selected {
-      color: black;
+      color: grey;
     }
   }
 }

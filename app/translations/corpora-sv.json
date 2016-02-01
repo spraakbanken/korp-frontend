@@ -118,6 +118,7 @@
 
     "language": "språk",
     "languagefamily": "språkfamilj",
+    "iso_code": "ISO-kod",
     
     "lsi_classification": "LSI-klassifikation",
     "ethnologue_classification": "Ethnologue-klassifikation",
@@ -459,9 +460,9 @@
     "sponsor": "sponsor",
     "place": "plats",
 
-    "ne_expr": "namnentitet",
-    "ne_type": "namnentitetstyp",
-    "ne_subtype": "namnentitetsundertyp",
+    "ne_expr": "namn",
+    "ne_type": "namntyp",
+    "ne_subtype": "namnundertyp",
     "ne_expr_ENAMEX": "namnuttryck",
     "ne_expr_TIMEX": "tidsuttryck",
     "ne_expr_NUMEX": "numeriskt uttryck",

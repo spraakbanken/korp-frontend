@@ -118,6 +118,7 @@
     
     "language": "language",
     "languagefamily": "language family",
+    "iso_code": "ISO code",
     
     "lsi_classification": "LSI classification",
     "ethnologue_classification": "Ethnologue classification",
@@ -459,9 +460,9 @@
     "place": "place",
     "subtitle": "subtitle",
 
-    "ne_expr": "named entity",
-    "ne_type": "named entity type",
-    "ne_subtype": "named entity subtype",
+    "ne_expr": "name",
+    "ne_type": "name type",
+    "ne_subtype": "name subtype",
     "ne_expr_ENAMEX": "name expression",
     "ne_expr_TIMEX": "time expression",
     "ne_expr_NUMEX": "numerical expression",
