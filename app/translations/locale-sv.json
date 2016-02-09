@@ -78,7 +78,7 @@
     "show_word_pic" : "Visa ordbild",
     "word_pic_warn" : "Ordbilden är avaktiverad. ",
     "word_pic_warn_btn" : "Aktivera och sök",
-    "word_pic_bad_search" : "En ordbild kunde inte genereras från din sökning. För närvarande stödjs endast enkla ordsökningar och lemgramsökningar.",
+    "word_pic_bad_search" : "En ordbild kunde inte genereras från din sökning. För närvarande stödjs endast 'Enkel sökning' på ett ord eller lemgram.",
 
     "show_map" : "Visa karta",
     "map_activate" : "Kartan är avaktiverad.",

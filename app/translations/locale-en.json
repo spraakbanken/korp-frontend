@@ -83,7 +83,7 @@
     "show_word_pic" : "Show word picture",
     "word_pic_warn" : "The word picture is disabled. ",
     "word_pic_warn_btn" : "Enable and search",
-    "word_pic_bad_search" : "Could not generate a word picture from you search. Only single word searches or lemgram searches are currenly supported.",
+    "word_pic_bad_search" : "Could not generate a word picture from you search. Only 'Simple search' on one word or lemgram is supported.",
     "search_aborted" : "The search was aborted",
 
     "show_map" : "Show map",
