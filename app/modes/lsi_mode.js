@@ -4,6 +4,13 @@ settings.autocomplete = false;
 settings.lemgramSelect = false;
 settings.wordpicture = false;
 
+settings.mapCenter = {
+  lat: 23.987825,
+  lng: 78.223017,
+  zoom: 4
+}
+
+
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 

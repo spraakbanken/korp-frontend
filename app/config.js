@@ -4670,3 +4670,10 @@ var fsv_aldrelagar = {
         text_date : {label : "date"}
     }
 };
+
+settings.mapCenter = {
+  lat: 62.99515845212052,
+  lng: 16.69921875,
+  zoom: 4
+}
+

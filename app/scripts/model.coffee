@@ -484,7 +484,7 @@ class model.NameProxy extends model.StatsProxy
     makeParameters: (reduceVal, cqp) ->
         # ignore reduceVal, map only works for word
         parameters = super(["word"], cqp)
-        parameters.cqp2 = "[pos='PM']"
+        parameters.cqp2 = "[pos='PM' | pos='NNP' | pos='NNPS']"
         return parameters
 
     processData: (def, data, reduceval) ->

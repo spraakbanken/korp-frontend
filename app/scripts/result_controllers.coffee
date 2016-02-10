@@ -421,10 +421,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                 cqpExpr = search.val
         return cqpExpr
 
-    s.center =
-        lat: 62.99515845212052
-        lng: 16.69921875
-        zoom: 4
+    s.center = settings.mapCenter
 
     s.hoverTemplate = """<div class="hover-info" ng-repeat="(name, values) in names">
                           <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
