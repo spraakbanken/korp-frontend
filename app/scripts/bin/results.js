@@ -1196,7 +1196,7 @@
           for (k = 0, len = ref.length; k < len; k++) {
             chk = ref[k];
             cell = $(chk).parent();
-            cqp = decodeURIComponent(cell.next().find(" > .link").data("query"));
+            cqp = decodeURIComponent(cell.next().find(" > .statistics-link").data("query"));
             if (cqp === "undefined") {
               showTotal = true;
               continue;

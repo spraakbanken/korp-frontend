@@ -987,7 +987,7 @@ class view.StatsResults extends BaseResults
                 #if cell.parent().is ".slick-row:nth-child(1)"
                 #    showTotal = true
                 #    continue
-                cqp = decodeURIComponent cell.next().find(" > .link").data("query")
+                cqp = decodeURIComponent cell.next().find(" > .statistics-link").data("query")
                 unless cqp isnt "undefined" # TODO: make a better check
                     showTotal = true
                     continue
@@ -995,8 +995,6 @@ class view.StatsResults extends BaseResults
                 texts = $.map cell.parent().find('.parameter-column'), (elem) ->
                     $(elem).text()
                 labelMapping[cqp] = texts.join ", "
-
-
 
             activeCorpora = _.flatten [key for key, val of @savedData.corpora when val.sums.absolute]
 
