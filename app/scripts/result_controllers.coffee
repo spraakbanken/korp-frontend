@@ -293,8 +293,8 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
         cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
         attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
-        
-        s.stringify = _.map reduce, (item) -> 
+
+        s.stringify = _.map reduce, (item) ->
             return attributes[_.str.strip item, "_."]?.stringify or angular.identity
 
         s.max = max
@@ -313,7 +313,7 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 
             # number of tokens in search
             tokenLength = splitTokens[0][0].length
-            
+
             # transform result from grouping on attribute to grouping on token place
             tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
                        tokens = _.map reduce, (reduceAttr, attrIdx) ->
@@ -322,23 +322,23 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                        return tokens
 
 
-            cqps = _.map tokens, (token) -> 
+            cqps = _.map tokens, (token) ->
                 cqpAnd = _.map [0..token.length-1], (attrI) ->
                     attrKey = reduce[attrI]
                     attrVal = token[attrI]
 
-                    
+
                     if "_." in attrKey
                         c.log "error, attribute key contains _."
-                    
+
                     attribute = attributes[attrKey]
-                    if attribute 
+                    if attribute
                         type = attribute.type
                         attrKey = "_." + attrKey if attribute.isStructAttr
 
 
                     op = if type == "set" then "contains" else "="
-                
+
                     if type == "set" and attrVal.length > 1
                         variants = _.flatten _.map(attrVal, (val) ->
                             val.split(":")[1])
@@ -346,7 +346,7 @@ korpApp.controller "compareCtrl", ($scope, $rootScope) ->
                         val = key + ":" + "(" + variants.join("|") + ")"
                     else
                         val = attrVal[0]
-                
+
                     if type == "set" and val == "|"
                         return "ambiguity(#{attrKey}) = 0"
                     else
@@ -429,7 +429,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                           <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
                        </div>"""
     s.markers = {}
-    s.mapSettings = 
+    s.mapSettings =
         baseLayer : "Stamen Watercolor"
     s.numResults = 0
     s.showTime = true
@@ -484,7 +484,7 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                                     ajaxParams :
                                         command : "query"
                                         cqp : getCqpExpr()
-                                        cqp2 : "[word='" + query + "' & pos='PM']"
+                                        cqp2 : "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]"
                                         corpus : cl.stringifySelected()
                                         show_struct : _.keys cl.getStructAttrs()
                                         expand_prequeries : true
@@ -499,5 +499,3 @@ korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches
                 s.markers = {}
                 s.numResults = 0
                 s.loading = false
-
-

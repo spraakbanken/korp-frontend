@@ -567,7 +567,7 @@
                   ajaxParams: {
                     command: "query",
                     cqp: getCqpExpr(),
-                    cqp2: "[word='" + query + "' & pos='PM']",
+                    cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
                     corpus: cl.stringifySelected(),
                     show_struct: _.keys(cl.getStructAttrs()),
                     expand_prequeries: true
