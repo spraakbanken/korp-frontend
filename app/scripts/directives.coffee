@@ -25,7 +25,7 @@ korpApp.directive 'kwicWord', ->
             return (x for [x, y] in _.pairs output when y).join " "
 
 korpApp.directive "tabHash", (utils, $location) ->
-    scope : true
+    # scope : true
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()

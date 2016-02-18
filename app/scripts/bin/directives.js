@@ -51,7 +51,6 @@
 
   korpApp.directive("tabHash", function(utils, $location) {
     return {
-      scope: true,
       link: function(scope, elem, attr) {
         var contentScope, init_tab, s, w, watchHash;
         s = scope;

@@ -322,39 +322,43 @@
     };
   });
 
-  korpApp.controller("AdvancedCtrl", function($scope, compareSearches, $location, $timeout) {
-    var expr, ref, ref1, type;
-    expr = "";
-    if ($location.search().search) {
-      ref1 = (ref = $location.search().search) != null ? ref.split("|") : void 0, type = ref1[0], expr = 2 <= ref1.length ? slice.call(ref1, 1) : [];
-      expr = expr.join("|");
-    }
-    if (type === "cqp") {
-      $scope.cqp = expr || "[]";
-    } else {
-      $scope.cqp = "[]";
-    }
-    $scope.$watch(function() {
-      return typeof simpleSearch !== "undefined" && simpleSearch !== null ? simpleSearch.getCQP() : void 0;
-    }, function(val) {
-      return $scope.simpleCQP = val;
-    });
-    $scope.$on("popover_submit", function(event, name) {
-      return compareSearches.saveSearch({
-        label: name || $rootScope.extendedCQP,
-        cqp: $scope.cqp,
-        corpora: settings.corpusListing.getSelectedCorpora()
-      });
-    });
-    return $scope.$on("btn_submit", function() {
-      c.log("advanced cqp", $scope.cqp);
-      $location.search("search", null);
-      $location.search("page", null);
-      $location.search("within", null);
-      return $timeout(function() {
-        return $location.search("search", "cqp|" + $scope.cqp);
-      }, 0);
-    });
+  korpApp.directive("advancedSearch", function() {
+    return {
+      controller: function($scope, compareSearches, $location, $timeout) {
+        var expr, ref, ref1, type;
+        expr = "";
+        if ($location.search().search) {
+          ref1 = (ref = $location.search().search) != null ? ref.split("|") : void 0, type = ref1[0], expr = 2 <= ref1.length ? slice.call(ref1, 1) : [];
+          expr = expr.join("|");
+        }
+        if (type === "cqp") {
+          $scope.cqp = expr || "[]";
+        } else {
+          $scope.cqp = "[]";
+        }
+        $scope.$watch(function() {
+          return typeof simpleSearch !== "undefined" && simpleSearch !== null ? simpleSearch.getCQP() : void 0;
+        }, function(val) {
+          return $scope.simpleCQP = val;
+        });
+        $scope.$on("popover_submit", function(event, name) {
+          return compareSearches.saveSearch({
+            label: name || $rootScope.extendedCQP,
+            cqp: $scope.cqp,
+            corpora: settings.corpusListing.getSelectedCorpora()
+          });
+        });
+        return $scope.$on("btn_submit", function() {
+          c.log("advanced cqp", $scope.cqp);
+          $location.search("search", null);
+          $location.search("page", null);
+          $location.search("within", null);
+          return $timeout(function() {
+            return $location.search("search", "cqp|" + $scope.cqp);
+          }, 0);
+        });
+      }
+    };
   });
 
   korpApp.filter("mapper", function() {
@@ -363,27 +367,31 @@
     };
   });
 
-  korpApp.controller("CompareSearchCtrl", function($scope, utils, $location, backend, $rootScope, compareSearches) {
-    var s;
-    s = $scope;
-    s.valfilter = utils.valfilter;
-    s.savedSearches = compareSearches.savedSearches;
-    s.$watch("savedSearches.length", function() {
-      var listing;
-      s.cmp1 = compareSearches.savedSearches[0];
-      s.cmp2 = compareSearches.savedSearches[1];
-      if (!(s.cmp1 && s.cmp2)) {
-        return;
+  korpApp.directive("compareSearchCtrl", function() {
+    return {
+      controller: function($scope, utils, $location, backend, $rootScope, compareSearches) {
+        var s;
+        s = $scope;
+        s.valfilter = utils.valfilter;
+        s.savedSearches = compareSearches.savedSearches;
+        s.$watch("savedSearches.length", function() {
+          var listing;
+          s.cmp1 = compareSearches.savedSearches[0];
+          s.cmp2 = compareSearches.savedSearches[1];
+          if (!(s.cmp1 && s.cmp2)) {
+            return;
+          }
+          listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
+          return s.currentAttrs = listing.getAttributeGroups();
+        });
+        s.reduce = 'word';
+        s.sendCompare = function() {
+          return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]));
+        };
+        return s.deleteCompares = function() {
+          return compareSearches.flush();
+        };
       }
-      listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
-      return s.currentAttrs = listing.getAttributeGroups();
-    });
-    s.reduce = 'word';
-    s.sendCompare = function() {
-      return $rootScope.compareTabs.push(backend.requestCompare(s.cmp1, s.cmp2, [s.reduce]));
-    };
-    return s.deleteCompares = function() {
-      return compareSearches.flush();
     };
   });
 

@@ -49,7 +49,7 @@ html
                 tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",
-                    ng-controller='kwicCtrl'
+                    kwic-ctrl
                 )
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
@@ -57,7 +57,7 @@ html
                   .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
                 //- disabled="!instance.hasData && !aborted",
-                tab(ng-controller='StatsResultCtrl',
+                tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"
                     deselect="instance.onexit()"
@@ -98,7 +98,7 @@ html
                       a#exportButton.btn.btn-sm.btn-default
                         | {{'statstable_export' | loc:lang}}
                 tab(ng-if="_settings.wordpicture != false",
-                    ng-controller="wordpicCtrl",
+                    wordpic-ctrl,
                     select="instance.onentry()",
                     deselect="instance.onexit()")
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
@@ -123,7 +123,7 @@ html
                     //- .progress_container
                     //-   progress(value='{{progress || 0}}', max='100')
                     .content_target(ng-show="word_pic")
-                tab(ng-show="enableMap" ng-controller="MapCtrl")
+                tab(ng-show="enableMap" map-ctrl)
                   tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && countCorpora() < 2 }")
                     | {{'map' | loc:lang }}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")

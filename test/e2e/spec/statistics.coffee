@@ -86,7 +86,7 @@ describe "stats table", () ->
         
         # total row
         rows.get(0).getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 4 676,9 (10 912) 4 676,9 (5 456) 4 676,9 (5 456)"
+            expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 4 838 (11 288) 4 999,2 (5 832) 4 676,9 (5 456)"
 
         rows.get(22).getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "gå ut VB.INF.AKT PL gå7 gå ut4 33,4 (78) 33,4 (39) 33,4 (39)"
+            expect(text.replace /\n/g, " ").toBe "gå ut VB.INF.AKT PL gå11 gå ut6 33,4 (78) 33,4 (39) 33,4 (39)"

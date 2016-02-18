@@ -4,7 +4,8 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
     $scope.enableMap = settings.enableMap
 
-korpApp.controller "kwicCtrl", class KwicCtrl
+# korpApp.controller "kwicCtrl", class KwicCtrl
+class KwicCtrl
     setupHash : () ->
         c.log "setupHash", @scope.$id
         @utils.setupHash @scope, [
@@ -213,8 +214,11 @@ korpApp.controller "kwicCtrl", class KwicCtrl
             len = sentence.tokens.length
             sentence.tokens.slice from, len
 
+korpApp.directive "kwicCtrl", () ->
+    controller: KwicCtrl
 
-korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
+# korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
+class ExampleCtrl extends KwicCtrl
     @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
         super(@scope, utils, $location)
@@ -237,35 +241,45 @@ korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
         @scope.page = 0
     setupHash : () ->
 
-korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
-    s = $scope
 
-    s.onGraphShow = (data) ->
-        c.log "show graph!", arguments
-        $rootScope.graphTabs.push data
+korpApp.directive "exampleCtrl", () ->
+    controller: ExampleCtrl
 
+# korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
+korpApp.directive "statsResultCtrl", () -> 
+    controller: ($scope, utils, $location, backend, searches, $rootScope) ->
+        s = $scope
 
-
-
-korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
-    $scope.word_pic = $location.search().word_pic?
-    $scope.$watch (() -> $location.search().word_pic), (val) ->
-        $scope.word_pic = Boolean(val)
-
-    $scope.activate = () ->
-        $location.search("word_pic", true)
-        search = searches.activeSearch
-        $scope.instance.makeRequest(search.val, search.type)
+        s.onGraphShow = (data) ->
+            c.log "show graph!", arguments
+            $rootScope.graphTabs.push data
 
 
-korpApp.controller "graphCtrl", ($scope) ->
-    s = $scope
-    s.active = true
 
-    s.mode = "line"
 
-    s.isGraph = () -> s.mode in ["line", "bar"]
-    s.isTable = () -> s.mode == "table"
+# korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
+korpApp.directive "wordpicCtrl", () ->
+    controller: ($scope, $location, utils, searches) ->
+        $scope.word_pic = $location.search().word_pic?
+        $scope.$watch (() -> $location.search().word_pic), (val) ->
+            $scope.word_pic = Boolean(val)
+
+        $scope.activate = () ->
+            $location.search("word_pic", true)
+            search = searches.activeSearch
+            $scope.instance.makeRequest(search.val, search.type)
+
+
+# korpApp.controller "graphCtrl", ($scope) ->
+korpApp.directive "graphCtrl", () ->
+    controller: ($scope) ->
+        s = $scope
+        s.active = true
+
+        s.mode = "line"
+
+        s.isGraph = () -> s.mode in ["line", "bar"]
+        s.isTable = () -> s.mode == "table"
 
     # s.$watch "mode", (mode) ->
     #     c.log "mode", mode
@@ -276,226 +290,232 @@ korpApp.controller "graphCtrl", ($scope) ->
     #                 s.instance.setBarMode()
 
 
-korpApp.controller "compareCtrl", ($scope, $rootScope) ->
-    s = $scope
-    s.loading = true
-    s.active = true
+# korpApp.controller "compareCtrl", ($scope, $rootScope) ->
+korpApp.directive "compareCtrl", () ->
+    controller: ($scope, $rootScope) ->
+        s = $scope
+        s.loading = true
+        s.active = true
 
 
-    s.resultOrder = (item) ->
-        return Math.abs item.loglike
+        s.resultOrder = (item) ->
+            return Math.abs item.loglike
 
-    s.promise.then (([tables, max, cmp1, cmp2, reduce], xhr) ->
-        s.loading = false
-
-        s.tables = tables
-        s.reduce = reduce
-
-        cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
-        attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
-
-        s.stringify = _.map reduce, (item) ->
-            return attributes[_.str.strip item, "_."]?.stringify or angular.identity
-
-        s.max = max
-
-        s.cmp1 = cmp1
-        s.cmp2 = cmp2
-
-        cmps = [cmp1, cmp2]
-
-        s.rowClick = (row, cmp_index) ->
-            cmp = cmps[cmp_index]
-
-            splitTokens = _.map row.elems, (elem) ->
-                _.map (elem.split "/"), (tokens) ->
-                    tokens.split " "
-
-            # number of tokens in search
-            tokenLength = splitTokens[0][0].length
-
-            # transform result from grouping on attribute to grouping on token place
-            tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
-                       tokens = _.map reduce, (reduceAttr, attrIdx) ->
-                           return _.unique _.map(splitTokens, (res) ->
-                               return res[attrIdx][tokenIdx])
-                       return tokens
-
-
-            cqps = _.map tokens, (token) ->
-                cqpAnd = _.map [0..token.length-1], (attrI) ->
-                    attrKey = reduce[attrI]
-                    attrVal = token[attrI]
-
-
-                    if "_." in attrKey
-                        c.log "error, attribute key contains _."
-
-                    attribute = attributes[attrKey]
-                    if attribute
-                        type = attribute.type
-                        attrKey = "_." + attrKey if attribute.isStructAttr
-
-
-                    op = if type == "set" then "contains" else "="
-
-                    if type == "set" and attrVal.length > 1
-                        variants = _.flatten _.map(attrVal, (val) ->
-                            val.split(":")[1])
-                        key  = attrVal[0].split(":")[0]
-                        val = key + ":" + "(" + variants.join("|") + ")"
-                    else
-                        val = attrVal[0]
-
-                    if type == "set" and val == "|"
-                        return "ambiguity(#{attrKey}) = 0"
-                    else
-                        return "#{attrKey} #{op} \"#{val}\""
-
-                return "[" + cqpAnd.join(" & ") + "]"
-
-            cqp = cqps.join " "
-
-            cl = settings.corpusListing.subsetFactory cmp.corpora
-
-            opts = {
-                start : 0
-                end : 24
-                ajaxParams :
-                    command : "query"
-                    cqp : cmp.cqp
-                    cqp2 : cqp
-                    corpus : cl.stringifySelected()
-                    show_struct : _.keys cl.getStructAttrs()
-                    expand_prequeries : false
-
-            }
-            $rootScope.kwicTabs.push opts),
-        () ->
+        s.promise.then (([tables, max, cmp1, cmp2, reduce], xhr) ->
             s.loading = false
-            s.error = true
 
-korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
-    s = $scope
-    s.loading = false
-    s.hasResult = false
-    s.aborted = false
+            s.tables = tables
+            s.reduce = reduce
 
-    $(document).keyup (event) ->
-        if event.keyCode == 27 and s.showMap and s.loading
-            s.proxy?.abort()
-            $timeout (() ->
-                s.aborted = true
-                s.loading = false), 0
+            cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
+            attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
+            
+            s.stringify = _.map reduce, (item) -> 
+                return attributes[_.str.strip item, "_."]?.stringify or angular.identity
 
-    s.$watch (() -> $location.search().result_tab), (val) ->
-        $timeout (() -> s.tabVisible = val == 1), 0
+            s.max = max
 
-    s.showMap = $location.search().show_map?
-    s.$watch (() -> $location.search().show_map), (val) ->
-        if val == s.showMap
-            return
+            s.cmp1 = cmp1
+            s.cmp2 = cmp2
 
-        s.showMap = Boolean(val)
-        if s.showMap
-            currentCqp = getCqpExpr()
-            currentCorpora = settings.corpusListing.stringifySelected(true)
-            if currentCqp != s.lastSearch?.cqp or currentCorpora != s.lastSearch?.corpora
-                s.hasResult = false
+            cmps = [cmp1, cmp2]
 
-    s.activate = () ->
-        $location.search("show_map", true)
-        s.showMap = true
-        cqpExpr = getCqpExpr()
-        if cqpExpr
-            nameEntitySearch.request cqpExpr
+            s.rowClick = (row, cmp_index) ->
+                cmp = cmps[cmp_index]
 
-    getCqpExpr = () ->
-        # TODO currently copy pasted from watch on "searches.activeSearch"
-        search = searches.activeSearch
-        cqpExpr = null
-        if search
-            if search.type == "word" or search.type == "lemgram"
-                cqpExpr = simpleSearch.getCQP(search.val)
-            else
-                cqpExpr = search.val
-        return cqpExpr
+                splitTokens = _.map row.elems, (elem) ->
+                    _.map (elem.split "/"), (tokens) ->
+                        tokens.split " "
 
-    s.center = settings.mapCenter
+                # number of tokens in search
+                tokenLength = splitTokens[0][0].length
+                
+                # transform result from grouping on attribute to grouping on token place
+                tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
+                           tokens = _.map reduce, (reduceAttr, attrIdx) ->
+                               return _.unique _.map(splitTokens, (res) ->
+                                   return res[attrIdx][tokenIdx])
+                           return tokens
 
-    s.hoverTemplate = """<div class="hover-info" ng-repeat="(name, values) in names">
-                          <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
-                          <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
-                          <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
-                       </div>"""
-    s.markers = {}
-    s.mapSettings =
-        baseLayer : "Stamen Watercolor"
-    s.numResults = 0
-    s.showTime = true
 
-    s.$on "map_progress", (event, progress) ->
-        s.progress = Math.round(progress["stats"])
+                cqps = _.map tokens, (token) -> 
+                    cqpAnd = _.map [0..token.length-1], (attrI) ->
+                        attrKey = reduce[attrI]
+                        attrVal = token[attrI]
 
-    s.$on "map_data_available", (event, cqp, corpora) ->
-        s.aborted = false
-        if s.showMap
-            s.proxy = nameEntitySearch.proxy
-            s.lastSearch = { cqp: cqp, corpora: corpora }
-            s.loading = true
-            updateMapData()
-            s.hasResult = true
+                        
+                        if "_." in attrKey
+                            c.log "error, attribute key contains _."
+                        
+                        attribute = attributes[attrKey]
+                        if attribute 
+                            type = attribute.type
+                            attrKey = "_." + attrKey if attribute.isStructAttr
 
-    s.countCorpora = () ->
-        s.proxy.prevParams?.corpus.split(",").length
 
-    fixData = (data) ->
-        fixedData = {}
-        abs = data.total.absolute
-        rel = data.total.relative
-        names = _.keys abs
-        for name in names
-            fixedData[name] = {
-                rel_occurrences : (Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000)
-                abs_occurrences : data.total.absolute[name]
-            }
-        return fixedData
+                        op = if type == "set" then "contains" else "="
+                    
+                        if type == "set" and attrVal.length > 1
+                            variants = _.flatten _.map(attrVal, (val) ->
+                                val.split(":")[1])
+                            key  = attrVal[0].split(":")[0]
+                            val = key + ":" + "(" + variants.join("|") + ")"
+                        else
+                            val = attrVal[0]
+                    
+                        if type == "set" and val == "|"
+                            return "ambiguity(#{attrKey}) = 0"
+                        else
+                            return "#{attrKey} #{op} \"#{val}\""
 
-    updateMapData = () ->
-        nameEntitySearch.promise.then (data) ->
-            if data.count != 0
+                    return "[" + cqpAnd.join(" & ") + "]"
 
-                fixedData = fixData data
+                cqp = cqps.join " "
 
-                markers(fixedData).then (markers) ->
-                    for own key, value of markers
-                        do (key, value) ->
-                            html = ""
-                            msgScope = value.getMessageScope()
-                            for name of msgScope.names
-                                html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>'
+                cl = settings.corpusListing.subsetFactory cmp.corpora
 
-                            msgScope.newKWICSearch = (query) ->
-                                cl = settings.corpusListing
+                opts = {
+                    start : 0
+                    end : 24
+                    ajaxParams :
+                        command : "query"
+                        cqp : cmp.cqp
+                        cqp2 : cqp
+                        corpus : cl.stringifySelected()
+                        show_struct : _.keys cl.getStructAttrs()
+                        expand_prequeries : false
 
-                                opts = {
-                                    start : 0
-                                    end : 24
-                                    ajaxParams :
-                                        command : "query"
-                                        cqp : getCqpExpr()
-                                        cqp2 : "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]"
-                                        corpus : cl.stringifySelected()
-                                        show_struct : _.keys cl.getStructAttrs()
-                                        expand_prequeries : true
-                                }
-                                $rootScope.kwicTabs.push opts
-                            markers[key]["message"] = html
-
-                    s.markers = markers
-                    s.numResults = _.keys(markers).length
-                    s.loading = false
-            else
-                s.markers = {}
-                s.numResults = 0
+                }
+                $rootScope.kwicTabs.push opts),
+            () ->
                 s.loading = false
+                s.error = true
+
+# korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
+korpApp.directive "mapCtrl", () ->
+    controller: ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
+        s = $scope
+        s.loading = false
+        s.hasResult = false
+        s.aborted = false
+
+        $(document).keyup (event) ->
+            if event.keyCode == 27 and s.showMap and s.loading
+                s.proxy?.abort()
+                $timeout (() ->
+                    s.aborted = true
+                    s.loading = false), 0
+
+        s.$watch (() -> $location.search().result_tab), (val) ->
+            $timeout (() -> s.tabVisible = val == 1), 0
+
+        s.showMap = $location.search().show_map?
+        s.$watch (() -> $location.search().show_map), (val) ->
+            if val == s.showMap
+                return
+
+            s.showMap = Boolean(val)
+            if s.showMap
+                currentCqp = getCqpExpr()
+                currentCorpora = settings.corpusListing.stringifySelected(true)
+                if currentCqp != s.lastSearch?.cqp or currentCorpora != s.lastSearch?.corpora
+                    s.hasResult = false
+
+        s.activate = () ->
+            $location.search("show_map", true)
+            s.showMap = true
+            cqpExpr = getCqpExpr()
+            if cqpExpr
+                nameEntitySearch.request cqpExpr
+
+        getCqpExpr = () ->
+            # TODO currently copy pasted from watch on "searches.activeSearch"
+            search = searches.activeSearch
+            cqpExpr = null
+            if search
+                if search.type == "word" or search.type == "lemgram"
+                    cqpExpr = simpleSearch.getCQP(search.val)
+                else
+                    cqpExpr = search.val
+            return cqpExpr
+
+        s.center = settings.mapCenter
+
+        s.hoverTemplate = """<div class="hover-info" ng-repeat="(name, values) in names">
+                              <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>
+                              <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>
+                              <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
+                           </div>"""
+        s.markers = {}
+        s.mapSettings = 
+            baseLayer : "Stamen Watercolor"
+        s.numResults = 0
+        s.showTime = true
+
+        s.$on "map_progress", (event, progress) ->
+            s.progress = Math.round(progress["stats"])
+
+        s.$on "map_data_available", (event, cqp, corpora) ->
+            s.aborted = false
+            if s.showMap
+                s.proxy = nameEntitySearch.proxy
+                s.lastSearch = { cqp: cqp, corpora: corpora }
+                s.loading = true
+                updateMapData()
+                s.hasResult = true
+
+        s.countCorpora = () ->
+            s.proxy?.prevParams?.corpus.split(",").length
+
+        fixData = (data) ->
+            fixedData = {}
+            abs = data.total.absolute
+            rel = data.total.relative
+            names = _.keys abs
+            for name in names
+                fixedData[name] = {
+                    rel_occurrences : (Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000)
+                    abs_occurrences : data.total.absolute[name]
+                }
+            return fixedData
+
+        updateMapData = () ->
+            nameEntitySearch.promise.then (data) ->
+                if data.count != 0
+
+                    fixedData = fixData data
+
+                    markers(fixedData).then (markers) ->
+                        for own key, value of markers
+                            do (key, value) ->
+                                html = ""
+                                msgScope = value.getMessageScope()
+                                for name of msgScope.names
+                                    html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>'
+
+                                msgScope.newKWICSearch = (query) ->
+                                    cl = settings.corpusListing
+
+                                    opts = {
+                                        start : 0
+                                        end : 24
+                                        ajaxParams :
+                                            command : "query"
+                                            cqp : getCqpExpr()
+                                            cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
+                                            corpus : cl.stringifySelected()
+                                            show_struct : _.keys cl.getStructAttrs()
+                                            expand_prequeries : true
+                                    }
+                                    $rootScope.kwicTabs.push opts
+                                markers[key]["message"] = html
+
+                        s.markers = markers
+                        s.numResults = _.keys(markers).length
+                        s.loading = false
+                else
+                    s.markers = {}
+                    s.numResults = 0
+                    s.loading = false
+
+

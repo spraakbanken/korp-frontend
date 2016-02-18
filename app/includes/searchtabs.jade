@@ -5,7 +5,8 @@ div(ng-controller="SearchCtrl")
     tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
       .extended(ng-include='extendedTmpl')
 
-    tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", ng-controller="AdvancedCtrl")
+    tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", 
+        advanced-search)
       #advanced
         .well.well-small
           | {{'active_cqp_simple' | loc:lang}}:
@@ -26,7 +27,7 @@ div(ng-controller="SearchCtrl")
           textarea#cqp_string(ng-model="cqp")
         search-submit(pos='right')
         //- button.btn.btn-sm#sendBtn {{'search' | loc:lang}}
-    tab(ng-if="visibleTabs[3]", ng-controller='CompareSearchCtrl')
+    tab(ng-if="visibleTabs[3]", compare-search-ctrl)
       tab-heading
         | {{'compare' | loc:lang}} 
         span.badge(ng-if='savedSearches.length') {{savedSearches.length}}

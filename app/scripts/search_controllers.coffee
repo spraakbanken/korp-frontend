@@ -324,43 +324,45 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
 
-korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
-    expr = ""
-    if $location.search().search
-        [type, expr...] = $location.search().search?.split("|")
-        expr = expr.join("|")
+# korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
+korpApp.directive "advancedSearch", () ->
+    controller : ($scope, compareSearches, $location, $timeout) ->
+        expr = ""
+        if $location.search().search
+            [type, expr...] = $location.search().search?.split("|")
+            expr = expr.join("|")
 
-    if type == "cqp"
-        $scope.cqp = expr or "[]"
-    else
-        $scope.cqp = "[]"
+        if type == "cqp"
+            $scope.cqp = expr or "[]"
+        else
+            $scope.cqp = "[]"
 
-    # $scope.getSimpleCQP = () ->
-    #     out = simpleSearch.getCQP()
-    #     c.log "getSimpleCQP", out
-    #     out
+        # $scope.getSimpleCQP = () ->
+        #     out = simpleSearch.getCQP()
+        #     c.log "getSimpleCQP", out
+        #     out
 
-    $scope.$watch () ->
-        simpleSearch?.getCQP()
-    , (val) ->
-        $scope.simpleCQP = val
+        $scope.$watch () ->
+            simpleSearch?.getCQP()
+        , (val) ->
+            $scope.simpleCQP = val
 
-    $scope.$on "popover_submit", (event, name) ->
-        compareSearches.saveSearch {
-            label : name or $rootScope.extendedCQP
-            cqp : $scope.cqp
-            corpora : settings.corpusListing.getSelectedCorpora()
+        $scope.$on "popover_submit", (event, name) ->
+            compareSearches.saveSearch {
+                label : name or $rootScope.extendedCQP
+                cqp : $scope.cqp
+                corpora : settings.corpusListing.getSelectedCorpora()
 
-        }
+            }
 
-    $scope.$on "btn_submit", () ->
-        c.log "advanced cqp", $scope.cqp
-        $location.search "search", null
-        $location.search "page", null
-        $location.search "within", null
-        $timeout( () ->
-            $location.search "search", "cqp|" + $scope.cqp
-        , 0)
+        $scope.$on "btn_submit", () ->
+            c.log "advanced cqp", $scope.cqp
+            $location.search "search", null
+            $location.search "page", null
+            $location.search "within", null
+            $timeout( () ->
+                $location.search "search", "cqp|" + $scope.cqp
+            , 0)
 
 
 
@@ -371,38 +373,40 @@ korpApp.filter "mapper", () ->
 
 
 
-korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope, compareSearches) ->
-    s = $scope
-    s.valfilter = utils.valfilter
+# korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope, compareSearches) ->
+korpApp.directive "compareSearchCtrl", () ->
+    controller: ($scope, utils, $location, backend, $rootScope, compareSearches) ->
+        s = $scope
+        s.valfilter = utils.valfilter
 
-    # compareSearches.saveSearch {
-    #     label : "frihet"
-    #     cqp : "[lex contains 'frihet..nn.1']"
-    #     corpora : ["VIVILL"]
-    # }
-    # compareSearches.saveSearch {
-    #     label : "jämlikhet"
-    #     cqp : "[lex contains 'jämlikhet..nn.1']"
-    #     corpora : ["VIVILL"]
-    # }
+        # compareSearches.saveSearch {
+        #     label : "frihet"
+        #     cqp : "[lex contains 'frihet..nn.1']"
+        #     corpora : ["VIVILL"]
+        # }
+        # compareSearches.saveSearch {
+        #     label : "jämlikhet"
+        #     cqp : "[lex contains 'jämlikhet..nn.1']"
+        #     corpora : ["VIVILL"]
+        # }
 
-    s.savedSearches = compareSearches.savedSearches
-    s.$watch "savedSearches.length", () ->
-        s.cmp1 = compareSearches.savedSearches[0]
-        s.cmp2 = compareSearches.savedSearches[1]
-        unless s.cmp1 and s.cmp2 then return
+        s.savedSearches = compareSearches.savedSearches
+        s.$watch "savedSearches.length", () ->
+            s.cmp1 = compareSearches.savedSearches[0]
+            s.cmp2 = compareSearches.savedSearches[1]
+            unless s.cmp1 and s.cmp2 then return
 
-        listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
-        s.currentAttrs = listing.getAttributeGroups()
+            listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
+            s.currentAttrs = listing.getAttributeGroups()
 
-    # s.selectedAttrs = ['word']
-    s.reduce = 'word'
+        # s.selectedAttrs = ['word']
+        s.reduce = 'word'
 
-    s.sendCompare = () ->
-        $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, [s.reduce])
+        s.sendCompare = () ->
+            $rootScope.compareTabs.push backend.requestCompare(s.cmp1, s.cmp2, [s.reduce])
 
-    s.deleteCompares = () ->
-        compareSearches.flush()
+        s.deleteCompares = () ->
+            compareSearches.flush()
 
 
 

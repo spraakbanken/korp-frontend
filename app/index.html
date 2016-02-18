@@ -125,7 +125,7 @@
             <tab heading="{{&quot;detailed&quot; | loc:lang}}" ng-if="visibleTabs[1]">
               <div ng-include="extendedTmpl" class="extended"></div>
             </tab>
-            <tab heading="{{&quot;advanced&quot; | loc:lang}}" ng-if="visibleTabs[2]" ng-controller="AdvancedCtrl">
+            <tab heading="{{&quot;advanced&quot; | loc:lang}}" ng-if="visibleTabs[2]" advanced-search>
               <div id="advanced">
                 <div class="well well-small">{{'active_cqp_simple' | loc:lang}}:
                   <pre>{{simpleCQP}}</pre>
@@ -142,7 +142,7 @@
                 <search-submit pos="right"></search-submit>
               </div>
             </tab>
-            <tab ng-if="visibleTabs[3]" ng-controller="CompareSearchCtrl">
+            <tab ng-if="visibleTabs[3]" compare-search-ctrl>
               <tab-heading>{{'compare' | loc:lang}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></tab-heading>
               <div class="search_compare">
                 <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-sm btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc:lang}}</button>
@@ -193,7 +193,7 @@
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}">
               <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
-                <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" ng-controller="kwicCtrl">
+                <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" kwic-ctrl>
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
@@ -230,7 +230,7 @@
                     <kwic-pager></kwic-pager>
                   </div>
                 </tab>
-                <tab ng-controller="StatsResultCtrl" ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
+                <tab stats-result-ctrl ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
@@ -255,7 +255,7 @@
                     </div>
                   </div>
                 </tab>
-                <tab ng-if="_settings.wordpicture != false" ng-controller="wordpicCtrl" select="instance.onentry()" deselect="instance.onexit()">
+                <tab ng-if="_settings.wordpicture != false" wordpic-ctrl select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
@@ -275,7 +275,7 @@
                     <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </tab>
-                <tab ng-show="enableMap" ng-controller="MapCtrl">
+                <tab ng-show="enableMap" map-ctrl>
                   <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; countCorpora() &lt; 2 }">{{'map' | loc:lang }}
                     <tab-preloader ng-if="loading" value="progress" spinner="countCorpora() &lt; 2"></tab-preloader>
                   </tab-heading>
@@ -299,7 +299,7 @@
                     </div>
                   </div>
                 </tab>
-                <tab active="active" ng-controller="ExampleCtrl" ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
+                <tab active="active" example-ctrl ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="$event.preventDefault();kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
                   <div ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}" constr="ExampleResults" class="results-kwic">
                     <div class="result_controls">
@@ -334,7 +334,7 @@
                     <kwic-pager></kwic-pager>
                   </div>
                 </tab>
-                <tab active="active" ng-repeat="data in graphTabs" ng-controller="graphCtrl">
+                <tab active="active" ng-repeat="data in graphTabs" graph-ctrl>
                   <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc:lang}}
                     <div style="width:{{progress || 0}}%" ng-show="loading" class="tab_progress"></div><span ng-click="$event.preventDefault();graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
                   </tab-heading>
@@ -374,7 +374,7 @@
                     </div>
                   </div>
                 </tab>
-                <tab active="active" ng-repeat="promise in compareTabs" ng-controller="compareCtrl">
+                <tab active="active" ng-repeat="promise in compareTabs" compare-ctrl>
                   <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="$event.preventDefault();compareTabs.splice($index, 1)"></span></tab-heading>
                   <div ng-class="{loading : loading}" class="compare_result">
                     <div ng-if="error" class="error_msg">
