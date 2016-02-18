@@ -518,4 +518,30 @@ korpApp.directive "mapCtrl", () ->
                     s.numResults = 0
                     s.loading = false
 
+korpApp.controller "VideoCtrl", ($scope, $modal) ->
+
+    $scope.videos = []
+
+    $scope.open = () ->
+        modalInstance = $modal.open
+            animation: false
+            templateUrl: 'markup/sidebar_video.html'
+            controller: 'VideoInstanceCtrl'
+            size: 'modal-lg'
+            windowClass: 'video-modal-bootstrap'
+            resolve:
+                items: () ->
+                    return $scope.videos
+                startTime: () ->
+                    return $scope.startTime
+
+    $scope.startTime = 0
+
+korpApp.controller "VideoInstanceCtrl", ($scope, $modalInstance, items, startTime) ->
+    $scope.videos = items;
+
+    $scope.setTime = () ->
+        angular.element("#korp-video")[0].currentTime = startTime
+
+    $scope.ok = () -> $modalInstance.close()
 

@@ -12,7 +12,7 @@
     return $scope.enableMap = settings.enableMap;
   });
 
-  korpApp.controller("kwicCtrl", KwicCtrl = (function() {
+  KwicCtrl = (function() {
     KwicCtrl.prototype.setupHash = function() {
       c.log("setupHash", this.scope.$id);
       return this.utils.setupHash(this.scope, [
@@ -256,9 +256,15 @@
 
     return KwicCtrl;
 
-  })());
+  })();
 
-  korpApp.controller("ExampleCtrl", ExampleCtrl = (function(superClass) {
+  korpApp.directive("kwicCtrl", function() {
+    return {
+      controller: KwicCtrl
+    };
+  });
+
+  ExampleCtrl = (function(superClass) {
     extend(ExampleCtrl, superClass);
 
     ExampleCtrl.$inject = ['$scope', "utils", "$location"];
@@ -292,306 +298,365 @@
 
     return ExampleCtrl;
 
-  })(KwicCtrl));
+  })(KwicCtrl);
 
-  korpApp.controller("StatsResultCtrl", function($scope, utils, $location, backend, searches, $rootScope) {
-    var s;
-    s = $scope;
-    return s.onGraphShow = function(data) {
-      c.log("show graph!", arguments);
-      return $rootScope.graphTabs.push(data);
+  korpApp.directive("exampleCtrl", function() {
+    return {
+      controller: ExampleCtrl
     };
   });
 
-  korpApp.controller("wordpicCtrl", function($scope, $location, utils, searches) {
-    $scope.word_pic = $location.search().word_pic != null;
-    $scope.$watch((function() {
-      return $location.search().word_pic;
-    }), function(val) {
-      return $scope.word_pic = Boolean(val);
-    });
-    return $scope.activate = function() {
-      var search;
-      $location.search("word_pic", true);
-      search = searches.activeSearch;
-      return $scope.instance.makeRequest(search.val, search.type);
+  korpApp.directive("statsResultCtrl", function() {
+    return {
+      controller: function($scope, utils, $location, backend, searches, $rootScope) {
+        var s;
+        s = $scope;
+        return s.onGraphShow = function(data) {
+          c.log("show graph!", arguments);
+          return $rootScope.graphTabs.push(data);
+        };
+      }
     };
   });
 
-  korpApp.controller("graphCtrl", function($scope) {
-    var s;
-    s = $scope;
-    s.active = true;
-    s.mode = "line";
-    s.isGraph = function() {
-      var ref;
-      return (ref = s.mode) === "line" || ref === "bar";
-    };
-    return s.isTable = function() {
-      return s.mode === "table";
-    };
-  });
-
-  korpApp.controller("compareCtrl", function($scope, $rootScope) {
-    var s;
-    s = $scope;
-    s.loading = true;
-    s.active = true;
-    s.resultOrder = function(item) {
-      return Math.abs(item.loglike);
-    };
-    return s.promise.then((function(arg, xhr) {
-      var attributes, cl, cmp1, cmp2, cmps, max, reduce, tables;
-      tables = arg[0], max = arg[1], cmp1 = arg[2], cmp2 = arg[3], reduce = arg[4];
-      s.loading = false;
-      s.tables = tables;
-      s.reduce = reduce;
-      cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
-      attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
-      s.stringify = _.map(reduce, function(item) {
-        var ref;
-        return ((ref = attributes[_.str.strip(item, "_.")]) != null ? ref.stringify : void 0) || angular.identity;
-      });
-      s.max = max;
-      s.cmp1 = cmp1;
-      s.cmp2 = cmp2;
-      cmps = [cmp1, cmp2];
-      return s.rowClick = function(row, cmp_index) {
-        var cmp, cqp, cqps, k, opts, ref, results, splitTokens, tokenLength, tokens;
-        cmp = cmps[cmp_index];
-        splitTokens = _.map(row.elems, function(elem) {
-          return _.map(elem.split("/"), function(tokens) {
-            return tokens.split(" ");
-          });
+  korpApp.directive("wordpicCtrl", function() {
+    return {
+      controller: function($scope, $location, utils, searches) {
+        $scope.word_pic = $location.search().word_pic != null;
+        $scope.$watch((function() {
+          return $location.search().word_pic;
+        }), function(val) {
+          return $scope.word_pic = Boolean(val);
         });
-        tokenLength = splitTokens[0][0].length;
-        tokens = _.map((function() {
-          results = [];
-          for (var k = 0, ref = tokenLength - 1; 0 <= ref ? k <= ref : k >= ref; 0 <= ref ? k++ : k--){ results.push(k); }
-          return results;
-        }).apply(this), function(tokenIdx) {
-          tokens = _.map(reduce, function(reduceAttr, attrIdx) {
-            return _.unique(_.map(splitTokens, function(res) {
-              return res[attrIdx][tokenIdx];
-            }));
+        return $scope.activate = function() {
+          var search;
+          $location.search("word_pic", true);
+          search = searches.activeSearch;
+          return $scope.instance.makeRequest(search.val, search.type);
+        };
+      }
+    };
+  });
+
+  korpApp.directive("graphCtrl", function() {
+    return {
+      controller: function($scope) {
+        var s;
+        s = $scope;
+        s.active = true;
+        s.mode = "line";
+        s.isGraph = function() {
+          var ref;
+          return (ref = s.mode) === "line" || ref === "bar";
+        };
+        return s.isTable = function() {
+          return s.mode === "table";
+        };
+      }
+    };
+  });
+
+  korpApp.directive("compareCtrl", function() {
+    return {
+      controller: function($scope, $rootScope) {
+        var s;
+        s = $scope;
+        s.loading = true;
+        s.active = true;
+        s.resultOrder = function(item) {
+          return Math.abs(item.loglike);
+        };
+        return s.promise.then((function(arg, xhr) {
+          var attributes, cl, cmp1, cmp2, cmps, max, reduce, tables;
+          tables = arg[0], max = arg[1], cmp1 = arg[2], cmp2 = arg[3], reduce = arg[4];
+          s.loading = false;
+          s.tables = tables;
+          s.reduce = reduce;
+          cl = settings.corpusListing.subsetFactory([].concat(cmp1.corpora, cmp2.corpora));
+          attributes = _.extend({}, cl.getCurrentAttributes(), cl.getStructAttrs());
+          s.stringify = _.map(reduce, function(item) {
+            var ref;
+            return ((ref = attributes[_.str.strip(item, "_.")]) != null ? ref.stringify : void 0) || angular.identity;
           });
-          return tokens;
-        });
-        cqps = _.map(tokens, function(token) {
-          var cqpAnd, l, ref1, results1;
-          cqpAnd = _.map((function() {
-            results1 = [];
-            for (var l = 0, ref1 = token.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; 0 <= ref1 ? l++ : l--){ results1.push(l); }
-            return results1;
-          }).apply(this), function(attrI) {
-            var attrKey, attrVal, attribute, key, op, type, val, variants;
-            attrKey = reduce[attrI];
-            attrVal = token[attrI];
-            if (indexOf.call(attrKey, "_.") >= 0) {
-              c.log("error, attribute key contains _.");
-            }
-            attribute = attributes[attrKey];
-            if (attribute) {
-              type = attribute.type;
-              if (attribute.isStructAttr) {
-                attrKey = "_." + attrKey;
+          s.max = max;
+          s.cmp1 = cmp1;
+          s.cmp2 = cmp2;
+          cmps = [cmp1, cmp2];
+          return s.rowClick = function(row, cmp_index) {
+            var cmp, cqp, cqps, k, opts, ref, results, splitTokens, tokenLength, tokens;
+            cmp = cmps[cmp_index];
+            splitTokens = _.map(row.elems, function(elem) {
+              return _.map(elem.split("/"), function(tokens) {
+                return tokens.split(" ");
+              });
+            });
+            tokenLength = splitTokens[0][0].length;
+            tokens = _.map((function() {
+              results = [];
+              for (var k = 0, ref = tokenLength - 1; 0 <= ref ? k <= ref : k >= ref; 0 <= ref ? k++ : k--){ results.push(k); }
+              return results;
+            }).apply(this), function(tokenIdx) {
+              tokens = _.map(reduce, function(reduceAttr, attrIdx) {
+                return _.unique(_.map(splitTokens, function(res) {
+                  return res[attrIdx][tokenIdx];
+                }));
+              });
+              return tokens;
+            });
+            cqps = _.map(tokens, function(token) {
+              var cqpAnd, l, ref1, results1;
+              cqpAnd = _.map((function() {
+                results1 = [];
+                for (var l = 0, ref1 = token.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; 0 <= ref1 ? l++ : l--){ results1.push(l); }
+                return results1;
+              }).apply(this), function(attrI) {
+                var attrKey, attrVal, attribute, key, op, type, val, variants;
+                attrKey = reduce[attrI];
+                attrVal = token[attrI];
+                if (indexOf.call(attrKey, "_.") >= 0) {
+                  c.log("error, attribute key contains _.");
+                }
+                attribute = attributes[attrKey];
+                if (attribute) {
+                  type = attribute.type;
+                  if (attribute.isStructAttr) {
+                    attrKey = "_." + attrKey;
+                  }
+                }
+                op = type === "set" ? "contains" : "=";
+                if (type === "set" && attrVal.length > 1) {
+                  variants = _.flatten(_.map(attrVal, function(val) {
+                    return val.split(":")[1];
+                  }));
+                  key = attrVal[0].split(":")[0];
+                  val = key + ":" + "(" + variants.join("|") + ")";
+                } else {
+                  val = attrVal[0];
+                }
+                if (type === "set" && val === "|") {
+                  return "ambiguity(" + attrKey + ") = 0";
+                } else {
+                  return attrKey + " " + op + " \"" + val + "\"";
+                }
+              });
+              return "[" + cqpAnd.join(" & ") + "]";
+            });
+            cqp = cqps.join(" ");
+            cl = settings.corpusListing.subsetFactory(cmp.corpora);
+            opts = {
+              start: 0,
+              end: 24,
+              ajaxParams: {
+                command: "query",
+                cqp: cmp.cqp,
+                cqp2: cqp,
+                corpus: cl.stringifySelected(),
+                show_struct: _.keys(cl.getStructAttrs()),
+                expand_prequeries: false
               }
-            }
-            op = type === "set" ? "contains" : "=";
-            if (type === "set" && attrVal.length > 1) {
-              variants = _.flatten(_.map(attrVal, function(val) {
-                return val.split(":")[1];
-              }));
-              key = attrVal[0].split(":")[0];
-              val = key + ":" + "(" + variants.join("|") + ")";
-            } else {
-              val = attrVal[0];
-            }
-            if (type === "set" && val === "|") {
-              return "ambiguity(" + attrKey + ") = 0";
-            } else {
-              return attrKey + " " + op + " \"" + val + "\"";
-            }
-          });
-          return "[" + cqpAnd.join(" & ") + "]";
+            };
+            return $rootScope.kwicTabs.push(opts);
+          };
+        }), function() {
+          s.loading = false;
+          return s.error = true;
         });
-        cqp = cqps.join(" ");
-        cl = settings.corpusListing.subsetFactory(cmp.corpora);
-        opts = {
-          start: 0,
-          end: 24,
-          ajaxParams: {
-            command: "query",
-            cqp: cmp.cqp,
-            cqp2: cqp,
-            corpus: cl.stringifySelected(),
-            show_struct: _.keys(cl.getStructAttrs()),
-            expand_prequeries: false
+      }
+    };
+  });
+
+  korpApp.directive("mapCtrl", function() {
+    return {
+      controller: function($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) {
+        var fixData, getCqpExpr, s, updateMapData;
+        s = $scope;
+        s.loading = false;
+        s.hasResult = false;
+        s.aborted = false;
+        $(document).keyup(function(event) {
+          var ref;
+          if (event.keyCode === 27 && s.showMap && s.loading) {
+            if ((ref = s.proxy) != null) {
+              ref.abort();
+            }
+            return $timeout((function() {
+              s.aborted = true;
+              return s.loading = false;
+            }), 0);
+          }
+        });
+        s.$watch((function() {
+          return $location.search().result_tab;
+        }), function(val) {
+          return $timeout((function() {
+            return s.tabVisible = val === 1;
+          }), 0);
+        });
+        s.showMap = $location.search().show_map != null;
+        s.$watch((function() {
+          return $location.search().show_map;
+        }), function(val) {
+          var currentCorpora, currentCqp, ref, ref1;
+          if (val === s.showMap) {
+            return;
+          }
+          s.showMap = Boolean(val);
+          if (s.showMap) {
+            currentCqp = getCqpExpr();
+            currentCorpora = settings.corpusListing.stringifySelected(true);
+            if (currentCqp !== ((ref = s.lastSearch) != null ? ref.cqp : void 0) || currentCorpora !== ((ref1 = s.lastSearch) != null ? ref1.corpora : void 0)) {
+              return s.hasResult = false;
+            }
+          }
+        });
+        s.activate = function() {
+          var cqpExpr;
+          $location.search("show_map", true);
+          s.showMap = true;
+          cqpExpr = getCqpExpr();
+          if (cqpExpr) {
+            return nameEntitySearch.request(cqpExpr);
           }
         };
-        return $rootScope.kwicTabs.push(opts);
-      };
-    }), function() {
-      s.loading = false;
-      return s.error = true;
-    });
+        getCqpExpr = function() {
+          var cqpExpr, search;
+          search = searches.activeSearch;
+          cqpExpr = null;
+          if (search) {
+            if (search.type === "word" || search.type === "lemgram") {
+              cqpExpr = simpleSearch.getCQP(search.val);
+            } else {
+              cqpExpr = search.val;
+            }
+          }
+          return cqpExpr;
+        };
+        s.center = settings.mapCenter;
+        s.hoverTemplate = "<div class=\"hover-info\" ng-repeat=\"(name, values) in names\">\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>\n</div>";
+        s.markers = {};
+        s.mapSettings = {
+          baseLayer: "Stamen Watercolor"
+        };
+        s.numResults = 0;
+        s.showTime = true;
+        s.$on("map_progress", function(event, progress) {
+          return s.progress = Math.round(progress["stats"]);
+        });
+        s.$on("map_data_available", function(event, cqp, corpora) {
+          s.aborted = false;
+          if (s.showMap) {
+            s.proxy = nameEntitySearch.proxy;
+            s.lastSearch = {
+              cqp: cqp,
+              corpora: corpora
+            };
+            s.loading = true;
+            updateMapData();
+            return s.hasResult = true;
+          }
+        });
+        s.countCorpora = function() {
+          var ref, ref1;
+          return (ref = s.proxy) != null ? (ref1 = ref.prevParams) != null ? ref1.corpus.split(",").length : void 0 : void 0;
+        };
+        fixData = function(data) {
+          var abs, fixedData, k, len1, name, names, rel;
+          fixedData = {};
+          abs = data.total.absolute;
+          rel = data.total.relative;
+          names = _.keys(abs);
+          for (k = 0, len1 = names.length; k < len1; k++) {
+            name = names[k];
+            fixedData[name] = {
+              rel_occurrences: Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
+              abs_occurrences: data.total.absolute[name]
+            };
+          }
+          return fixedData;
+        };
+        return updateMapData = function() {
+          return nameEntitySearch.promise.then(function(data) {
+            var fixedData;
+            if (data.count !== 0) {
+              fixedData = fixData(data);
+              return markers(fixedData).then(function(markers) {
+                var fn, key, value;
+                fn = function(key, value) {
+                  var html, msgScope, name;
+                  html = "";
+                  msgScope = value.getMessageScope();
+                  for (name in msgScope.names) {
+                    html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>';
+                  }
+                  msgScope.newKWICSearch = function(query) {
+                    var cl, opts;
+                    cl = settings.corpusListing;
+                    opts = {
+                      start: 0,
+                      end: 24,
+                      ajaxParams: {
+                        command: "query",
+                        cqp: getCqpExpr(),
+                        cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
+                        corpus: cl.stringifySelected(),
+                        show_struct: _.keys(cl.getStructAttrs()),
+                        expand_prequeries: true
+                      }
+                    };
+                    return $rootScope.kwicTabs.push(opts);
+                  };
+                  return markers[key]["message"] = html;
+                };
+                for (key in markers) {
+                  if (!hasProp.call(markers, key)) continue;
+                  value = markers[key];
+                  fn(key, value);
+                }
+                s.markers = markers;
+                s.numResults = _.keys(markers).length;
+                return s.loading = false;
+              });
+            } else {
+              s.markers = {};
+              s.numResults = 0;
+              return s.loading = false;
+            }
+          });
+        };
+      }
+    };
   });
 
-  korpApp.controller("MapCtrl", function($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) {
-    var fixData, getCqpExpr, s, updateMapData;
-    s = $scope;
-    s.loading = false;
-    s.hasResult = false;
-    s.aborted = false;
-    $(document).keyup(function(event) {
-      var ref;
-      if (event.keyCode === 27 && s.showMap && s.loading) {
-        if ((ref = s.proxy) != null) {
-          ref.abort();
-        }
-        return $timeout((function() {
-          s.aborted = true;
-          return s.loading = false;
-        }), 0);
-      }
-    });
-    s.$watch((function() {
-      return $location.search().result_tab;
-    }), function(val) {
-      return $timeout((function() {
-        return s.tabVisible = val === 1;
-      }), 0);
-    });
-    s.showMap = $location.search().show_map != null;
-    s.$watch((function() {
-      return $location.search().show_map;
-    }), function(val) {
-      var currentCorpora, currentCqp, ref, ref1;
-      if (val === s.showMap) {
-        return;
-      }
-      s.showMap = Boolean(val);
-      if (s.showMap) {
-        currentCqp = getCqpExpr();
-        currentCorpora = settings.corpusListing.stringifySelected(true);
-        if (currentCqp !== ((ref = s.lastSearch) != null ? ref.cqp : void 0) || currentCorpora !== ((ref1 = s.lastSearch) != null ? ref1.corpora : void 0)) {
-          return s.hasResult = false;
-        }
-      }
-    });
-    s.activate = function() {
-      var cqpExpr;
-      $location.search("show_map", true);
-      s.showMap = true;
-      cqpExpr = getCqpExpr();
-      if (cqpExpr) {
-        return nameEntitySearch.request(cqpExpr);
-      }
-    };
-    getCqpExpr = function() {
-      var cqpExpr, search;
-      search = searches.activeSearch;
-      cqpExpr = null;
-      if (search) {
-        if (search.type === "word" || search.type === "lemgram") {
-          cqpExpr = simpleSearch.getCQP(search.val);
-        } else {
-          cqpExpr = search.val;
-        }
-      }
-      return cqpExpr;
-    };
-    s.center = settings.mapCenter;
-    s.hoverTemplate = "<div class=\"hover-info\" ng-repeat=\"(name, values) in names\">\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{values.abs_occurrences}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>\n</div>";
-    s.markers = {};
-    s.mapSettings = {
-      baseLayer: "Stamen Watercolor"
-    };
-    s.numResults = 0;
-    s.showTime = true;
-    s.$on("map_progress", function(event, progress) {
-      return s.progress = Math.round(progress["stats"]);
-    });
-    s.$on("map_data_available", function(event, cqp, corpora) {
-      s.aborted = false;
-      if (s.showMap) {
-        s.proxy = nameEntitySearch.proxy;
-        s.lastSearch = {
-          cqp: cqp,
-          corpora: corpora
-        };
-        s.loading = true;
-        updateMapData();
-        return s.hasResult = true;
-      }
-    });
-    s.countCorpora = function() {
-      var ref;
-      return (ref = s.proxy.prevParams) != null ? ref.corpus.split(",").length : void 0;
-    };
-    fixData = function(data) {
-      var abs, fixedData, k, len1, name, names, rel;
-      fixedData = {};
-      abs = data.total.absolute;
-      rel = data.total.relative;
-      names = _.keys(abs);
-      for (k = 0, len1 = names.length; k < len1; k++) {
-        name = names[k];
-        fixedData[name] = {
-          rel_occurrences: Math.round((data.total.relative[name] + 0.00001) * 1000) / 1000,
-          abs_occurrences: data.total.absolute[name]
-        };
-      }
-      return fixedData;
-    };
-    return updateMapData = function() {
-      return nameEntitySearch.promise.then(function(data) {
-        var fixedData;
-        if (data.count !== 0) {
-          fixedData = fixData(data);
-          return markers(fixedData).then(function(markers) {
-            var fn, key, value;
-            fn = function(key, value) {
-              var html, msgScope, name;
-              html = "";
-              msgScope = value.getMessageScope();
-              for (name in msgScope.names) {
-                html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>';
-              }
-              msgScope.newKWICSearch = function(query) {
-                var cl, opts;
-                cl = settings.corpusListing;
-                opts = {
-                  start: 0,
-                  end: 24,
-                  ajaxParams: {
-                    command: "query",
-                    cqp: getCqpExpr(),
-                    cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
-                    corpus: cl.stringifySelected(),
-                    show_struct: _.keys(cl.getStructAttrs()),
-                    expand_prequeries: true
-                  }
-                };
-                return $rootScope.kwicTabs.push(opts);
-              };
-              return markers[key]["message"] = html;
-            };
-            for (key in markers) {
-              if (!hasProp.call(markers, key)) continue;
-              value = markers[key];
-              fn(key, value);
-            }
-            s.markers = markers;
-            s.numResults = _.keys(markers).length;
-            return s.loading = false;
-          });
-        } else {
-          s.markers = {};
-          s.numResults = 0;
-          return s.loading = false;
+  korpApp.controller("VideoCtrl", function($scope, $modal) {
+    $scope.videos = [];
+    $scope.open = function() {
+      var modalInstance;
+      return modalInstance = $modal.open({
+        animation: false,
+        templateUrl: 'markup/sidebar_video.html',
+        controller: 'VideoInstanceCtrl',
+        size: 'modal-lg',
+        windowClass: 'video-modal-bootstrap',
+        resolve: {
+          items: function() {
+            return $scope.videos;
+          },
+          startTime: function() {
+            return $scope.startTime;
+          }
         }
       });
+    };
+    return $scope.startTime = 0;
+  });
+
+  korpApp.controller("VideoInstanceCtrl", function($scope, $modalInstance, items, startTime) {
+    $scope.videos = items;
+    $scope.setTime = function() {
+      return angular.element("#korp-video")[0].currentTime = startTime;
+    };
+    return $scope.ok = function() {
+      return $modalInstance.close();
     };
   });
 

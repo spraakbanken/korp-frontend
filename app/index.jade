@@ -137,6 +137,10 @@ html
             //- ng-class='{visible : word_selected && result_tab == 0}'
             #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
             div(style='clear: both; float: none;')
+            
+            div(id='video-modal', ng-controller='VideoCtrl')
+                
+            
       #click_cover
       #deptree_popup(title='Dependensträd', style='display: none;')
       #plot_popup
