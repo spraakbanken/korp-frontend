@@ -755,7 +755,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
     title : "Skyddade korpusar",
-    contents : ["ansokningar", "coctaill", "forhor", "frageladan", "gdc", "soexempel", "sw1203", "tisus"]
+    contents : ["ansokningar", "coctaill", "forhor", "frageladan", "gdc", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.medical = {
@@ -2517,6 +2517,40 @@ settings.corpora["frageladan"] = {
         text_sendername : {label : "sendername"},
         text_sendermail : {label : "sendermail"},
         text_receivername : {label : "receivername"}
+    }
+};
+
+settings.corpora["ivip"] = {
+    id: "ivip",
+    title: "IVIP",
+    description: '<br><br>För åtkomst kontakta <a href="mailto:?">?</a>.',
+    limited_access: true,
+    context: {
+        "1 sentence" : "1 sentence",
+        "1 text" : "1 text"
+    },
+    within: settings.defaultWithin,
+    attributes: _.extend({}, modernAttrs, {
+        shortened_shortform: {
+            label: "shortform",
+            isStructAttr : true
+        }
+    }),
+    struct_attributes : {
+        text_country: {label: "country"},
+        text_city: {label: "city"},
+        text_place: {label: "location"},
+        text_mediatype: {label: "mediatype"},
+        text_consentid: {label: "consentid"},
+        text_date: {label: "date"},
+        sentence_speaker_id: {label: "speaker"},
+        sentence_speaker_role1: {label: "speakerrole1"},
+        sentence_speaker_role2: {label: "speakerrole2"},
+        sentence_speaker_age: {label: "speakerage"},
+        sentence_speaker_region: {label: "speakerregion"}
+        // sentence_start
+        // sentence_end
+        // text_mediafile
     }
 };
 
@@ -4676,4 +4710,3 @@ settings.mapCenter = {
   lng: 16.69921875,
   zoom: 4
 }
-

@@ -64,7 +64,7 @@
     "website": "webbsida",
 
     "id": "id",
-    
+
     "organization": "organisation",
 
     "imprintyear": "tryckår",
@@ -119,7 +119,7 @@
     "language": "språk",
     "languagefamily": "språkfamilj",
     "iso_code": "ISO-kod",
-    
+
     "lsi_classification": "LSI-klassifikation",
     "ethnologue_classification": "Ethnologue-klassifikation",
     "glottolog_classification": "Glottolog-klassifikation",
@@ -456,7 +456,7 @@
     "commentaries": "kommentarer",
 
     "published": "publicerat",
-    
+
     "sponsor": "sponsor",
     "place": "plats",
 
@@ -1023,5 +1023,14 @@
 
     "sendername" : "avsändare (namm)",
     "sendermail" : "avsändare (e-post)",
-    "receivername" : "mottagare"
+    "receivername" : "mottagare",
+
+    "country": "land",
+    "mediatype": "mediatyp",
+    "consentid": "samtyckes-ID",
+    "speakerrole1": "talarroll (1)",
+    "speakerrole2": "talarroll (2)",
+    "speakerage": "talarålder",
+    "speakerregion": "talarregion",
+    "shortform": "kortform"
 }
