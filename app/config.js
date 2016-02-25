@@ -2523,7 +2523,7 @@ settings.corpora["frageladan"] = {
 settings.corpora["ivip"] = {
     id: "ivip",
     title: "IVIP",
-    description: '<br><br>För åtkomst kontakta <a href="mailto:?">?</a>.',
+    description: 'Interaktion och variation i pluricentriska språk – Kommunikativa mönster i sverigesvenska och finlandssvenska<br><br>För åtkomst kontakta <a href="mailto:inga-lill.grahn@sprakochfolkminnen.se">Inga-Lill Grahn</a>.',
     limited_access: true,
     context: {
         "1 sentence" : "1 sentence",
@@ -2531,8 +2531,8 @@ settings.corpora["ivip"] = {
     },
     within: settings.defaultWithin,
     attributes: _.extend({}, modernAttrs, {
-        shortened_shortform: {
-            label: "shortform",
+        shortened_normalised: {
+            label: "normalized_wordform",
             isStructAttr : true
         }
     }),
@@ -2547,10 +2547,8 @@ settings.corpora["ivip"] = {
         sentence_speaker_role1: {label: "speakerrole1"},
         sentence_speaker_role2: {label: "speakerrole2"},
         sentence_speaker_age: {label: "speakerage"},
-        sentence_speaker_region: {label: "speakerregion"}
-        // sentence_start
-        // sentence_end
-        // text_mediafile
+        sentence_speaker_region: {label: "speakerregion"},
+        sentence_speaker_gender: {label: "speakergender"}
     }
 };
 
