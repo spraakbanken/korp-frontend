@@ -3702,7 +3702,18 @@ settings.corpora.klarsprak = {
         text_genre : {label : "genre"},
         text_textcategory : {label : "category"},
         text_year : {label : "year"},
-        text_month : {label : "month"}
+        text_month : {label : "month"},
+        type_type : {
+            label : "type",
+            displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "heading" : "Heading",
+                "section_heading" : "Section heading",
+                "signature" : "Signature"
+            }
+        }
     }
 };
 
