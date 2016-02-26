@@ -2718,14 +2718,18 @@ li.active a span .num-to-find {
     height: 23px;
     overflow: hidden;
     .caret {
-      right: 5px;
+      right: 7px;
       position: absolute;
-      top: 7px;
+      top: 10px;
+    }
+    transition : border-color 200ms;
+    &:hover {
+      border-color : #999;
     }
   }
   .reduce-dropdown-button-text {
     width: 1000px;
-    padding: 2px;
+    padding: 2px 5px;
   }
   .reduce-dropdown-menu {
     width: 100%;
@@ -2735,11 +2739,15 @@ li.active a span .num-to-find {
     }
     .attribute {
       cursor: pointer;
+      &:hover {
+        background-color : lighten(#999, 30%);
+      }
+      padding: 2px 1px;
     }
     .reduce-check {
       margin: 0px;
       margin-top: 4px;
-      margin-right: 2px;
+      margin-right: 4px;
     }
     .reduce-label {
       position: absolute;
