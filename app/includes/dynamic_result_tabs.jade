@@ -1,12 +1,12 @@
-tab(active="active", example-ctrl, ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
-  tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
+uib-tab(active="active", example-ctrl, ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
+  uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
     span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   .results-kwic(ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
-  tab-heading(ng-class="{not_loading: progress > 99}")
+uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
+  uib-tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
     span(ng-click='$event.preventDefault();graphTabs.splice($index, 1)', tab-spinner='tab-spinner')
@@ -23,9 +23,9 @@ tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
 
 
         .btn-group.form_switch
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'line'") {{'line' | loc:lang}}
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'bar'") {{'bar' | loc:lang}}
-          label.btn.btn-default.btn-sm(ng-model="$parent.mode", btn-radio="'table'") {{'table' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'line'") {{'line' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'bar'") {{'bar' | loc:lang}}
+          label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'table'") {{'table' | loc:lang}}
 
         //- label.smoothing_label(for='smoothing_switch') Utjämna
         //- input#smoothing_switch.smoothing_switch(type='checkbox')
@@ -34,7 +34,7 @@ tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
           span.non_time
           span(rel='localize[non_time_after]')
       .legend(ng-style='{visibility : !loading && isGraph() ? "visible" : "hidden"}')
-        .line(ng-show="hasEmptyIntervals", tooltip="{{'graph_material_tooltip' | loc:lang}}")
+        .line(ng-show="hasEmptyIntervals", uib-tooltip="{{'graph_material_tooltip' | loc:lang}}")
           a.action
           .swatch(style="background-color: #999")
           span.label 
@@ -56,8 +56,8 @@ tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
       a.export.btn.btn-default.btn-sm {{'statstable_export' | loc:lang}}
-tab(active="active", ng-repeat='promise in compareTabs', compare-ctrl)
-  tab-heading.compare_tab(ng-class='{loading : loading}')
+uib-tab(active="active", ng-repeat='promise in compareTabs', compare-ctrl)
+  uib-tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
   .compare_result(ng-class='{loading : loading}')

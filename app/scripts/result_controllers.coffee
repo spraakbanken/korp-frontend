@@ -518,12 +518,12 @@ korpApp.directive "mapCtrl", () ->
                     s.numResults = 0
                     s.loading = false
 
-korpApp.controller "VideoCtrl", ($scope, $modal) ->
+korpApp.controller "VideoCtrl", ($scope, $uibModal) ->
 
     $scope.videos = []
 
     $scope.open = () ->
-        modalInstance = $modal.open
+        modalInstance = $uibModal.open
             animation: false
             templateUrl: 'markup/sidebar_video.html'
             controller: 'VideoInstanceCtrl'

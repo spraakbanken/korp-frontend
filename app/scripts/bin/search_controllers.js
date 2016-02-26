@@ -61,7 +61,7 @@
     }), true);
   });
 
-  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) {
+  korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal) {
     var modalInstance, s;
     s = $scope;
     s.$on("popover_submit", function(event, name) {
@@ -94,7 +94,7 @@
       return modalInstance.dismiss();
     };
     s.showAllRelated = function() {
-      return modalInstance = $modal.open({
+      return modalInstance = $uibModal.open({
         template: "<div class=\"modal-header\">\n    <h3 class=\"modal-title\">{{'similar_header' | loc:lang}} (SWE-FN)</h3>\n    <span ng-click=\"clickX()\" class=\"close-x\">×</span>\n</div>\n<div class=\"modal-body\">\n    <div ng-repeat=\"obj in relatedObj\" class=\"col\"><a target=\"_blank\" ng-href=\"http://spraakbanken.gu.se/karp/#?lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}\" class=\"header\">{{stringifyRelatedHeader(obj.label)}}</a>\n      <div class=\"list_wrapper\">\n          <ul>\n            <li ng-repeat=\"wd in obj.words\"> <a ng-click=\"clickRelated(wd)\" class=\"link\">{{stringifyRelated(wd) + \" \"}}</a></li>\n          </ul>\n      </div>\n    </div>\n</div>",
         scope: s,
         size: 'lg',

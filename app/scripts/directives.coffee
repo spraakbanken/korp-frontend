@@ -289,7 +289,7 @@ korpApp.directive "meter", () ->
     template: '''
         <div>
             <div class="background" ng-bind-html="displayWd | trust"></div>
-            <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter.abs}}</div>
+            <div class="abs badge" uib-tooltip-html="tooltipHTML | trust">{{meter.abs}}</div>
         </div>
     '''
     replace: true
@@ -512,7 +512,7 @@ korpApp.directive "kwicPager", () ->
     scope: false
     template: """
     <div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
-      <pagination
+      <uib-pagination
          total-items="hits"
          ng-if="gotFirstKwic"
          ng-model="pageObj.pager"
@@ -564,7 +564,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                     autofocus
                     type="text"
                     ng-model="textInField"
-                    typeahead="row for row in getRows($viewValue)"
+                    uib-typeahead="row for row in getRows($viewValue)"
                     typeahead-wait-ms="500"
                     typeahead-template-url="lemgramautocomplete.html"
                     typeahead-loading="isLoading"
@@ -686,13 +686,13 @@ korpApp.directive "timeInterval", () ->
     restrict : "E"
     template : """
         <div>
-            <datepicker class="well well-sm" ng-model="dateModel"
+            <uib-datepicker class="well well-sm" ng-model="dateModel"
                 min-date="minDate" max-date="maxDate" init-date="minDate"
-                show-weeks="true" starting-day="1"></datepicker>
+                show-weeks="true" starting-day="1" ng-change="change()"></uib-datepicker>
 
             <div class="time">
-                <i class="fa fa-3x fa-clock-o"></i><timepicker class="timepicker" ng-model="timeModel"
-                    hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+                <i class="fa fa-3x fa-clock-o"></i><uib-timepicker class="timepicker" ng-model="timeModel"
+                    hour-step="1" minute-step="1" show-meridian="false"></uib-timepicker>
             </div>
         </div>
         """
@@ -706,8 +706,12 @@ korpApp.directive "timeInterval", () ->
 
            # s.model = null
 
+        s.change = () ->
+            c.log "date change"
+
         time_units = ["hour", "minute"]
         w = s.$watchGroup ["dateModel", "timeModel"], ([date, time]) ->
+            c.log "dateModel watch ", date
             if date and time
                 m = moment(moment(date).format("YYYY-MM-DD"))
                 # c.log "time", time, date, s
@@ -728,8 +732,8 @@ korpApp.directive 'reduceSelect', ($timeout) ->
       lang: '=reduceLang'
     replace : true
     template: '''
-                  <div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
-                    <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">
+                  <div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">
+                    <div uib-dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">
                       <div class="reduce-dropdown-button-text">
                         <span>{{ "reduce_text" | loc:lang }}:</span>
                         <span>
@@ -741,9 +745,9 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                         <span class="caret"></span>
                       </div>
                     </div>
-                    <div class="reduce-dropdown-menu dropdown-menu">
+                    <div class="reduce-dropdown-menu " uib-dropdown-menu>
                       <ul>
-                        <li ng-click="toggleSelected('word')" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
+                        <li ng-click="toggleSelected('word', $event)" ng-class="keyItems['word'].selected ? 'selected':''" class="attribute">
                           <input type="checkbox" class="reduce-check" ng-checked="keyItems['word'].selected">
                           <span class="reduce-label">{{keyItems['word'].label | loc:lang }}</span>
                           <span ng-class="keyItems['word'].insensitive ? 'selected':''"
@@ -752,14 +756,14 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                         </li>
                         <b ng-if="hasWordAttrs">{{'word_attr' | loc:lang}}</b>
                         <li ng-repeat="item in items | filter:{ group: 'word_attr' }"
-                            ng-click="toggleSelected(item.value)"
+                            ng-click="toggleSelected(item.value, $event)"
                             ng-class="item.selected ? 'selected':''" class="attribute">
                           <input type="checkbox" class="reduce-check" ng-checked="item.selected">
                           <span class="reduce-label">{{item.label | loc:lang }}</span>
                         </li>
                         <b ng-if="hasStructAttrs">{{'sentence_attr' | loc:lang}}</b>
                         <li ng-repeat="item in items | filter:{ group: 'sentence_attr' }"
-                            ng-click="toggleSelected(item.value)"
+                            ng-click="toggleSelected(item.value, $event)"
                             ng-class="item.selected ? 'selected':''" class="attribute">
                           <input type="checkbox" class="reduce-check" ng-checked="item.selected">
                           <span class="reduce-label">{{item.label | loc:lang }}</span>
@@ -796,13 +800,15 @@ korpApp.directive 'reduceSelect', ($timeout) ->
             scope.selected = _.pluck (_.filter scope.keyItems, (item, key) -> item.selected), "value"
             scope.numberAttributes = scope.selected.length
 
-        scope.toggleSelected = (value) ->
+        scope.toggleSelected = (value, event) ->
             item = scope.keyItems[value]
             item.selected = not item.selected
             if value == "word" and not item.selected
                 item.insensitive = false
                 scope.insensitive = []
             updateSelected scope
+
+            event.stopPropagation()
 
         scope.toggleWordInsensitive = (event) ->
             event.stopPropagation()

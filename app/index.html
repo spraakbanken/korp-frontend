@@ -92,8 +92,8 @@
       </div>
       <div id="content">
         <div ng-controller="SearchCtrl">
-          <tabset tab-hash="search_tab" class="tabbable search_tabs">
-            <tab heading="{{&quot;simple&quot; | loc:lang}}" ng-if="visibleTabs[0]">
+          <uib-tabset tab-hash="search_tab" class="tabbable search_tabs">
+            <uib-tab heading="{{&quot;simple&quot; | loc:lang}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
                 <form class="simple_form">
                   <autoc id="simple_text" placeholder="placeholder" type="lemgram" model="model" disable-lemgram-autocomplete="! settings.autocomplete"></autoc>
@@ -121,11 +121,11 @@
                 </div>
                 <div class="clearfix"></div>
               </div>
-            </tab>
-            <tab heading="{{&quot;detailed&quot; | loc:lang}}" ng-if="visibleTabs[1]">
+            </uib-tab>
+            <uib-tab heading="{{&quot;detailed&quot; | loc:lang}}" ng-if="visibleTabs[1]">
               <div ng-include="extendedTmpl" class="extended"></div>
-            </tab>
-            <tab heading="{{&quot;advanced&quot; | loc:lang}}" ng-if="visibleTabs[2]" advanced-search>
+            </uib-tab>
+            <uib-tab heading="{{&quot;advanced&quot; | loc:lang}}" ng-if="visibleTabs[2]" advanced-search>
               <div id="advanced">
                 <div class="well well-small">{{'active_cqp_simple' | loc:lang}}:
                   <pre>{{simpleCQP}}</pre>
@@ -141,9 +141,9 @@
                 </div>
                 <search-submit pos="right"></search-submit>
               </div>
-            </tab>
-            <tab ng-if="visibleTabs[3]" compare-search-ctrl>
-              <tab-heading>{{'compare' | loc:lang}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></tab-heading>
+            </uib-tab>
+            <uib-tab ng-if="visibleTabs[3]" compare-search-ctrl>
+              <uib-tab-heading>{{'compare' | loc:lang}} <span ng-if="savedSearches.length" class="badge">{{savedSearches.length}}</span></uib-tab-heading>
               <div class="search_compare">
                 <button ng-click="deleteCompares()" ng-show="savedSearches.length &gt; 1" class="btn btn-sm btn-danger delete"> <i class="fa fa-trash-o"></i>{{'compare_delete' | loc:lang}}</button>
                 <div ng-show="savedSearches.length &lt; 2">
@@ -153,11 +153,11 @@
                   <select ng-options="search.label for search in savedSearches" ng-model="cmp1"></select>{{'compare_with' | loc:lang}}
                   <select ng-options="search.label for search in savedSearches" ng-model="cmp2"></select>{{'compare_reduce' | loc:lang}}
                   <select ng-model="reduce" ng-options="obj |              mapper:valfilter as obj.label |              loc group by obj.group |              loc for obj in currentAttrs"></select>
-                  <button ng-click="sendCompare()" class="btn btn-sm search">{{'compare_vb' | loc:lang}}</button>
+                  <button ng-click="sendCompare()" class="btn btn-sm btn-default search">{{'compare_vb' | loc:lang}}</button>
                 </div>
               </div>
-            </tab>
-          </tabset>
+            </uib-tab>
+          </uib-tabset>
           <div id="search_options" click-cover="isCompareSelected" class="ui-widget-content ui-corner-bottom">
             <div><span style="font-size: .9em;">KWIC: </span>
               <select id="num_hits" data-history="hpp" data-prefix="hits_per_page" rel="localize[hits_per_page]" ng-model="$root._searchOpts.hits_per_page" class="num_hits">
@@ -192,11 +192,11 @@
         <div id="results-wrapper" ng-show="searches.activeSearch || compareTabs.length || graphTabs.length" ng-controller="resultContainerCtrl">
           <div id="columns">
             <div id="left-column" ng-class="{sidebar_visible : word_selected &amp;&amp; sidebar_visible}">
-              <tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
-                <tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" kwic-ctrl>
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
+              <uib-tabset tab-hash="result_tab" ng-click="tabclick()" class="tabbable result_tabs">
+                <uib-tab disabled="!instance.hasData" select="instance.onentry()" deselect="instance.onexit()" kwic-ctrl>
+                  <uib-tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">KWIC
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
-                  </tab-heading>
+                  </uib-tab-heading>
                   <div ng-class="{reading_mode : reading_mode, loading: loading}" constr="KWICResults" constr-name="kwicResults" class="results-kwic">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
@@ -229,16 +229,16 @@
                     </div>
                     <kwic-pager></kwic-pager>
                   </div>
-                </tab>
-                <tab stats-result-ctrl ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc:lang}}
+                </uib-tab>
+                <uib-tab stats-result-ctrl ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
+                  <uib-tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'statistics' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
-                  </tab-heading>
+                  </uib-tab-heading>
                   <div constr="StatsResults" constr-name="statsResults">
                     <warning ng-if="no_hits">{{"no_stats_results" | loc:lang}}</warning>
                     <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                     <div class="stats_header">
-                      <button id="showGraph" ng-class="{disabled: !graphEnabled}" tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} " tooltip-placement="right" class="btn btn-sm btn-default"><span class="graph_btn_icon"><svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg></span>{{'show_diagram' | loc:lang}}</button>
+                      <button id="showGraph" ng-class="{disabled: !graphEnabled}" uib-tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} " tooltip-placement="right" class="btn btn-sm btn-default"><span class="graph_btn_icon"><svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg></span>{{'show_diagram' | loc:lang}}</button>
                       <div id="showBarPlot"></div>
                     </div>
                     <div id="myGrid"></div>
@@ -254,11 +254,11 @@
                         <button class="btn btn-sm btn-default">{{'statstable_gen_export' | loc:lang}}</button></a><a id="exportButton" class="btn btn-sm btn-default">{{'statstable_export' | loc:lang}}</a>
                     </div>
                   </div>
-                </tab>
-                <tab ng-if="_settings.wordpicture != false" wordpic-ctrl select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
+                </uib-tab>
+                <uib-tab ng-if="_settings.wordpicture != false" wordpic-ctrl select="instance.onentry()" deselect="instance.onexit()">
+                  <uib-tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
-                  </tab-heading>
+                  </uib-tab-heading>
                   <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}}
                     <div>
                       <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'word_pic_warn_btn' | loc:lang}}</button>
@@ -274,11 +274,11 @@
                     </div>
                     <div ng-show="word_pic" class="content_target"></div>
                   </div>
-                </tab>
-                <tab ng-show="enableMap" map-ctrl>
-                  <tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; countCorpora() &lt; 2 }">{{'map' | loc:lang }}
+                </uib-tab>
+                <uib-tab ng-show="enableMap" map-ctrl>
+                  <uib-tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; countCorpora() &lt; 2 }">{{'map' | loc:lang }}
                     <tab-preloader ng-if="loading" value="progress" spinner="countCorpora() &lt; 2"></tab-preloader>
-                  </tab-heading>
+                  </uib-tab-heading>
                   <div>
                     <div id="mapTab">
                       <div ng-if="!showMap">{{'map_activate' | loc:lang}}
@@ -298,9 +298,9 @@
                       </div>
                     </div>
                   </div>
-                </tab>
-                <tab active="active" example-ctrl ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
-                  <tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="$event.preventDefault();kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></tab-heading>
+                </uib-tab>
+                <uib-tab active="active" example-ctrl ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
+                  <uib-tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="$event.preventDefault();kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></uib-tab-heading>
                   <div ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}" constr="ExampleResults" class="results-kwic">
                     <div class="result_controls">
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
@@ -333,24 +333,24 @@
                     </div>
                     <kwic-pager></kwic-pager>
                   </div>
-                </tab>
-                <tab active="active" ng-repeat="data in graphTabs" graph-ctrl>
-                  <tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc:lang}}
+                </uib-tab>
+                <uib-tab active="active" ng-repeat="data in graphTabs" graph-ctrl>
+                  <uib-tab-heading ng-class="{not_loading: progress &gt; 99}">{{'graph' | loc:lang}}
                     <div style="width:{{progress || 0}}%" ng-show="loading" class="tab_progress"></div><span ng-click="$event.preventDefault();graphTabs.splice($index, 1)" tab-spinner="tab-spinner"></span>
-                  </tab-heading>
+                  </uib-tab-heading>
                   <div constr="GraphResults" class="graph_tab">
                     <div class="graph_header">
                       <div class="controls">
                         
                         <div class="btn-group form_switch">
-                          <label ng-model="$parent.mode" btn-radio="'line'" class="btn btn-default btn-sm">{{'line' | loc:lang}}</label>
-                          <label ng-model="$parent.mode" btn-radio="'bar'" class="btn btn-default btn-sm">{{'bar' | loc:lang}}</label>
-                          <label ng-model="$parent.mode" btn-radio="'table'" class="btn btn-default btn-sm">{{'table' | loc:lang}}</label>
+                          <label ng-model="$parent.mode" uib-btn-radio="'line'" class="btn btn-default btn-sm">{{'line' | loc:lang}}</label>
+                          <label ng-model="$parent.mode" uib-btn-radio="'bar'" class="btn btn-default btn-sm">{{'bar' | loc:lang}}</label>
+                          <label ng-model="$parent.mode" uib-btn-radio="'table'" class="btn btn-default btn-sm">{{'table' | loc:lang}}</label>
                         </div>
                         <div class="non_time_div"><span rel="localize[non_time_before]"></span><span class="non_time"></span><span rel="localize[non_time_after]"></span></div>
                       </div>
                       <div ng-style="{visibility : !loading &amp;&amp; isGraph() ? &quot;visible&quot; : &quot;hidden&quot;}" class="legend">
-                        <div ng-show="hasEmptyIntervals" tooltip="{{'graph_material_tooltip' | loc:lang}}" class="line"><a class="action"></a>
+                        <div ng-show="hasEmptyIntervals" uib-tooltip="{{'graph_material_tooltip' | loc:lang}}" class="line"><a class="action"></a>
                           <div style="background-color: #999" class="swatch"></div><span class="label"> <em>{{'graph_material' | loc:lang}} </em></span>
                         </div>
                       </div>
@@ -373,9 +373,9 @@
                       </select><a class="export btn btn-default btn-sm">{{'statstable_export' | loc:lang}}</a>
                     </div>
                   </div>
-                </tab>
-                <tab active="active" ng-repeat="promise in compareTabs" compare-ctrl>
-                  <tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="$event.preventDefault();compareTabs.splice($index, 1)"></span></tab-heading>
+                </uib-tab>
+                <uib-tab active="active" ng-repeat="promise in compareTabs" compare-ctrl>
+                  <uib-tab-heading ng-class="{loading : loading}" class="compare_tab">{{'compare_vb' | loc:lang}}<span tab-spinner="tab-spinner" ng-click="$event.preventDefault();compareTabs.splice($index, 1)"></span></uib-tab-heading>
                   <div ng-class="{loading : loading}" class="compare_result">
                     <div ng-if="error" class="error_msg">
                       <object type="image/svg+xml" data="img/korp_fail.svg" class="korp_fail inline_block"><img src="img/korp_fail.svg" class="korp_fail"></object>
@@ -398,8 +398,8 @@
                       </ul>
                     </div>
                   </div>
-                </tab>
-              </tabset><a id="json-link" ng-href="{{jsonUrl}}" ng-show="jsonUrl" target="_blank"><img src="img/json.png"></a>
+                </uib-tab>
+              </uib-tabset><a id="json-link" ng-href="{{jsonUrl}}" ng-show="jsonUrl" target="_blank"><img src="img/json.png"></a>
             </div>
             <div id="sidebar" ng-class="{visible : word_selected &amp;&amp; sidebar_visible}" class="ui-corner-all kwic_sidebar"></div>
             <div style="clear: both; float: none;"></div>
@@ -490,7 +490,7 @@
     <script src="components/jquery-ui/ui/jquery.ui.sortable.js"></script>
     <script src="components/angular/angular.js"></script>
     <!-- warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap-->
-    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="components/spin.js/spin.js"></script>
     <script src="components/angular-spinner/angular-spinner.js"></script>
     <script src="lib/angular-sortable.js"></script>

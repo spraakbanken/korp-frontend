@@ -627,11 +627,11 @@
     };
   });
 
-  korpApp.controller("VideoCtrl", function($scope, $modal) {
+  korpApp.controller("VideoCtrl", function($scope, $uibModal) {
     $scope.videos = [];
     $scope.open = function() {
       var modalInstance;
-      return modalInstance = $modal.open({
+      return modalInstance = $uibModal.open({
         animation: false,
         templateUrl: 'markup/sidebar_video.html',
         controller: 'VideoInstanceCtrl',

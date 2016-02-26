@@ -163,6 +163,9 @@ module.exports = function (grunt) {
         }]
       },
       server: {
+        options : {
+          force : true
+        },
         files: {
           src: [
           '.tmp',

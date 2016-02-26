@@ -53,7 +53,7 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
 
 
 
-korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $modal) ->
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal) ->
     s = $scope
 
     s.$on "popover_submit", (event, name) ->
@@ -84,7 +84,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         modalInstance.dismiss()
 
     s.showAllRelated = () ->
-        modalInstance = $modal.open(
+        modalInstance = $uibModal.open(
             template: """
             <div class="modal-header">
                 <h3 class="modal-title">{{'similar_header' | loc:lang}} (SWE-FN)</h3>

@@ -1,11 +1,11 @@
 div(ng-controller="SearchCtrl")
-  tabset.tabbable.search_tabs(tab-hash='search_tab')
-    tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
+  uib-tabset.tabbable.search_tabs(tab-hash='search_tab')
+    uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       include simple
-    tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
+    uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
       .extended(ng-include='extendedTmpl')
 
-    tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", 
+    uib-tab(heading='{{"advanced" | loc:lang}}', ng-if="visibleTabs[2]", 
         advanced-search)
       #advanced
         .well.well-small
@@ -27,8 +27,8 @@ div(ng-controller="SearchCtrl")
           textarea#cqp_string(ng-model="cqp")
         search-submit(pos='right')
         //- button.btn.btn-sm#sendBtn {{'search' | loc:lang}}
-    tab(ng-if="visibleTabs[3]", compare-search-ctrl)
-      tab-heading
+    uib-tab(ng-if="visibleTabs[3]", compare-search-ctrl)
+      uib-tab-heading
         | {{'compare' | loc:lang}} 
         span.badge(ng-if='savedSearches.length') {{savedSearches.length}}
       .search_compare()
@@ -53,7 +53,7 @@ div(ng-controller="SearchCtrl")
 
           //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')
 
-          button.btn.btn-sm.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
+          button.btn.btn-sm.btn-default.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
   #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
     div
       span(style='font-size: .9em;') KWIC: 

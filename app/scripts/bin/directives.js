@@ -318,7 +318,7 @@
 
   korpApp.directive("meter", function() {
     return {
-      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" tooltip-html-unsafe="{{tooltipHTML}}">{{meter.abs}}</div>\n</div>',
+      template: '<div>\n    <div class="background" ng-bind-html="displayWd | trust"></div>\n    <div class="abs badge" uib-tooltip-html="tooltipHTML | trust">{{meter.abs}}</div>\n</div>',
       replace: true,
       scope: {
         meter: "=",
@@ -567,7 +567,7 @@
       replace: true,
       restrict: "E",
       scope: false,
-      template: "<div class=\"pager-wrapper\" ng-show=\"gotFirstKwic && hits > 0\" >\n  <pagination\n     total-items=\"hits\"\n     ng-if=\"gotFirstKwic\"\n     ng-model=\"pageObj.pager\"\n     ng-click=\"pageChange($event, pageObj.pager)\"\n     max-size=\"15\"\n     items-per-page=\"::$root._searchOpts.hits_per_page\"\n     previous-text=\"‹\" next-text=\"›\" first-text=\"«\" last-text=\"»\"\n     boundary-links=\"true\"\n     rotate=\"false\"\n     num-pages=\"$parent.numPages\"> </pagination>\n  <div class=\"page_input\"><span>{{'goto_page' | loc:lang}} </span>\n    <input ng-model=\"gotoPage\" ng-keyup=\"onPageInput($event, gotoPage, numPages)\"\n        ng-click=\"$event.stopPropagation()\" />\n    {{'of' | loc:lang}} {{numPages}}\n  </div>\n\n</div>"
+      template: "<div class=\"pager-wrapper\" ng-show=\"gotFirstKwic && hits > 0\" >\n  <uib-pagination\n     total-items=\"hits\"\n     ng-if=\"gotFirstKwic\"\n     ng-model=\"pageObj.pager\"\n     ng-click=\"pageChange($event, pageObj.pager)\"\n     max-size=\"15\"\n     items-per-page=\"::$root._searchOpts.hits_per_page\"\n     previous-text=\"‹\" next-text=\"›\" first-text=\"«\" last-text=\"»\"\n     boundary-links=\"true\"\n     rotate=\"false\"\n     num-pages=\"$parent.numPages\"> </pagination>\n  <div class=\"page_input\"><span>{{'goto_page' | loc:lang}} </span>\n    <input ng-model=\"gotoPage\" ng-keyup=\"onPageInput($event, gotoPage, numPages)\"\n        ng-click=\"$event.stopPropagation()\" />\n    {{'of' | loc:lang}} {{numPages}}\n  </div>\n\n</div>"
     };
   });
 
@@ -582,7 +582,7 @@
         "variant": "@",
         "disableLemgramAutocomplete": "="
       },
-      template: "<div>\n    <script type=\"text/ng-template\" id=\"lemgramautocomplete.html\">\n        <a style=\"cursor:pointer\">\n            <span ng-class=\"{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}\">\n                <span ng-if=\"match.model.parts.namespace\" class=\"label\">{{match.model.parts.namespace | loc}}</span>\n                <span>{{match.model.parts.main}}</span>\n                <sup ng-if=\"match.model.parts.index != 1\">{{match.model.parts.index}}</sup>\n                <span ng-if=\"match.model.parts.pos\">({{match.model.parts.pos}})</span>\n                <span ng-if=\"match.model.desc\" style=\"color:gray;margin-left:6px\">{{match.model.desc.main}}</span>\n                <sup ng-if=\"match.model.desc && match.model.desc.index != 1\" style=\"color:gray\">{{match.model.desc.index}}</sup>\n                <span class=\"num-to-find\" ng-if=\"match.model.count && match.model.count > 0\">\n                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}\n                </span>\n            </span>\n        </a>\n    </script>\n    <div ng-show=\"!disableLemgramAutocomplete\">\n        <div style=\"float:left\"><input\n            class=\"autocomplete_searchbox\"\n            autofocus\n            type=\"text\"\n            ng-model=\"textInField\"\n            typeahead=\"row for row in getRows($viewValue)\"\n            typeahead-wait-ms=\"500\"\n            typeahead-template-url=\"lemgramautocomplete.html\"\n            typeahead-loading=\"isLoading\"\n            typeahead-on-select=\"selectedItem($item, $model, $label)\"\n            placeholder=\"{{placeholderToString(placeholder)}}\"></div>\n        <div style=\"margin-left:-20px;margin-top:2px;float:left\" ng-if=\"isLoading\"><i class=\"fa fa-spinner fa-pulse\"></i></div>\n    </div>\n    <div ng-show=\"disableLemgramAutocomplete\">\n        <div style=\"float:left\">\n            <input class=\"standard_searchbox\" autofocus type=\"text\">\n        </div>\n    </div>\n</div>",
+      template: "<div>\n    <script type=\"text/ng-template\" id=\"lemgramautocomplete.html\">\n        <a style=\"cursor:pointer\">\n            <span ng-class=\"{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}\">\n                <span ng-if=\"match.model.parts.namespace\" class=\"label\">{{match.model.parts.namespace | loc}}</span>\n                <span>{{match.model.parts.main}}</span>\n                <sup ng-if=\"match.model.parts.index != 1\">{{match.model.parts.index}}</sup>\n                <span ng-if=\"match.model.parts.pos\">({{match.model.parts.pos}})</span>\n                <span ng-if=\"match.model.desc\" style=\"color:gray;margin-left:6px\">{{match.model.desc.main}}</span>\n                <sup ng-if=\"match.model.desc && match.model.desc.index != 1\" style=\"color:gray\">{{match.model.desc.index}}</sup>\n                <span class=\"num-to-find\" ng-if=\"match.model.count && match.model.count > 0\">\n                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{match.model.count}}\n                </span>\n            </span>\n        </a>\n    </script>\n    <div ng-show=\"!disableLemgramAutocomplete\">\n        <div style=\"float:left\"><input\n            class=\"autocomplete_searchbox\"\n            autofocus\n            type=\"text\"\n            ng-model=\"textInField\"\n            uib-typeahead=\"row for row in getRows($viewValue)\"\n            typeahead-wait-ms=\"500\"\n            typeahead-template-url=\"lemgramautocomplete.html\"\n            typeahead-loading=\"isLoading\"\n            typeahead-on-select=\"selectedItem($item, $model, $label)\"\n            placeholder=\"{{placeholderToString(placeholder)}}\"></div>\n        <div style=\"margin-left:-20px;margin-top:2px;float:left\" ng-if=\"isLoading\"><i class=\"fa fa-spinner fa-pulse\"></i></div>\n    </div>\n    <div ng-show=\"disableLemgramAutocomplete\">\n        <div style=\"float:left\">\n            <input class=\"standard_searchbox\" autofocus type=\"text\">\n        </div>\n    </div>\n</div>",
       link: function(scope, elem, attr) {
         c.log("autoc link", scope.model);
         scope.lemgramify = function(lemgram) {
@@ -730,7 +730,7 @@
         maxDate: "="
       },
       restrict: "E",
-      template: "<div>\n    <datepicker class=\"well well-sm\" ng-model=\"dateModel\"\n        min-date=\"minDate\" max-date=\"maxDate\" init-date=\"minDate\"\n        show-weeks=\"true\" starting-day=\"1\"></datepicker>\n\n    <div class=\"time\">\n        <i class=\"fa fa-3x fa-clock-o\"></i><timepicker class=\"timepicker\" ng-model=\"timeModel\"\n            hour-step=\"1\" minute-step=\"1\" show-meridian=\"false\"></timepicker>\n    </div>\n</div>",
+      template: "<div>\n    <uib-datepicker class=\"well well-sm\" ng-model=\"dateModel\"\n        min-date=\"minDate\" max-date=\"maxDate\" init-date=\"minDate\"\n        show-weeks=\"true\" starting-day=\"1\" ng-change=\"change()\"></uib-datepicker>\n\n    <div class=\"time\">\n        <i class=\"fa fa-3x fa-clock-o\"></i><uib-timepicker class=\"timepicker\" ng-model=\"timeModel\"\n            hour-step=\"1\" minute-step=\"1\" show-meridian=\"false\"></uib-timepicker>\n    </div>\n</div>",
       link: function(s, elem, attr) {
         var time_units, w;
         s.isOpen = false;
@@ -739,10 +739,14 @@
           event.stopPropagation();
           return s.isOpen = true;
         };
+        s.change = function() {
+          return c.log("date change");
+        };
         time_units = ["hour", "minute"];
         return w = s.$watchGroup(["dateModel", "timeModel"], function(arg) {
           var date, j, len1, m, m_time, t, time;
           date = arg[0], time = arg[1];
+          c.log("dateModel watch ", date);
           if (date && time) {
             m = moment(moment(date).format("YYYY-MM-DD"));
             for (j = 0, len1 = time_units.length; j < len1; j++) {
@@ -767,7 +771,7 @@
         lang: '=reduceLang'
       },
       replace: true,
-      template: '<div dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">\n  <div dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">\n    <div class="reduce-dropdown-button-text">\n      <span>{{ "reduce_text" | loc:lang }}:</span>\n      <span>\n        {{keyItems[selected[0]].label | loc:lang}}\n      </span>\n      <span ng-if="selected.length > 1">\n        (+{{ numberAttributes - 1 }})\n      </span>\n      <span class="caret"></span>\n    </div>\n  </div>\n  <div class="reduce-dropdown-menu dropdown-menu">\n    <ul>\n      <li ng-click="toggleSelected(\'word\')" ng-class="keyItems[\'word\'].selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="keyItems[\'word\'].selected">\n        <span class="reduce-label">{{keyItems[\'word\'].label | loc:lang }}</span>\n        <span ng-class="keyItems[\'word\'].insensitive ? \'selected\':\'\'"\n              class="insensitive-toggle"\n              ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>\n      </li>\n      <b ng-if="hasWordAttrs">{{\'word_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'word_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="item.selected">\n        <span class="reduce-label">{{item.label | loc:lang }}</span>\n      </li>\n      <b ng-if="hasStructAttrs">{{\'sentence_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'sentence_attr\' }"\n          ng-click="toggleSelected(item.value)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="item.selected">\n        <span class="reduce-label">{{item.label | loc:lang }}</span>\n      </li>\n    </ul>\n  </div>\n</div>',
+      template: '<div uib-dropdown auto-close="outsideClick" class="reduce-attr-select" on-toggle="toggled(open)">\n  <div uib-dropdown-toggle class="reduce-dropdown-button inline_block ui-state-default">\n    <div class="reduce-dropdown-button-text">\n      <span>{{ "reduce_text" | loc:lang }}:</span>\n      <span>\n        {{keyItems[selected[0]].label | loc:lang}}\n      </span>\n      <span ng-if="selected.length > 1">\n        (+{{ numberAttributes - 1 }})\n      </span>\n      <span class="caret"></span>\n    </div>\n  </div>\n  <div class="reduce-dropdown-menu " uib-dropdown-menu>\n    <ul>\n      <li ng-click="toggleSelected(\'word\', $event)" ng-class="keyItems[\'word\'].selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="keyItems[\'word\'].selected">\n        <span class="reduce-label">{{keyItems[\'word\'].label | loc:lang }}</span>\n        <span ng-class="keyItems[\'word\'].insensitive ? \'selected\':\'\'"\n              class="insensitive-toggle"\n              ng-click="toggleWordInsensitive($event)"><b>Aa</b></span>\n      </li>\n      <b ng-if="hasWordAttrs">{{\'word_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'word_attr\' }"\n          ng-click="toggleSelected(item.value, $event)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="item.selected">\n        <span class="reduce-label">{{item.label | loc:lang }}</span>\n      </li>\n      <b ng-if="hasStructAttrs">{{\'sentence_attr\' | loc:lang}}</b>\n      <li ng-repeat="item in items | filter:{ group: \'sentence_attr\' }"\n          ng-click="toggleSelected(item.value, $event)"\n          ng-class="item.selected ? \'selected\':\'\'" class="attribute">\n        <input type="checkbox" class="reduce-check" ng-checked="item.selected">\n        <span class="reduce-label">{{item.label | loc:lang }}</span>\n      </li>\n    </ul>\n  </div>\n</div>',
       link: function(scope, element, attribute) {
         var updateSelected;
         scope.$watchCollection('items', (function() {
@@ -813,7 +817,7 @@
           }), "value");
           return scope.numberAttributes = scope.selected.length;
         };
-        scope.toggleSelected = function(value) {
+        scope.toggleSelected = function(value, event) {
           var item;
           item = scope.keyItems[value];
           item.selected = !item.selected;
@@ -821,7 +825,8 @@
             item.insensitive = false;
             scope.insensitive = [];
           }
-          return updateSelected(scope);
+          updateSelected(scope);
+          return event.stopPropagation();
         };
         scope.toggleWordInsensitive = function(event) {
           event.stopPropagation();

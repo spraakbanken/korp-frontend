@@ -45,25 +45,25 @@ html
             //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}')
               //- tabset.tabbable
-              tabset.tabbable.result_tabs(tab-hash='result_tab', ng-click="tabclick()")
-                tab(disabled="!instance.hasData",
+              uib-tabset.tabbable.result_tabs(tab-hash='result_tab', ng-click="tabclick()")
+                uib-tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",
                     kwic-ctrl
                 )
-                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
+                  uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
                 //- disabled="!instance.hasData && !aborted",
-                tab(stats-result-ctrl,
+                uib-tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"
                     deselect="instance.onexit()"
 
                     )
-                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
+                  uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'statistics' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='StatsResults', constr-name='statsResults')
@@ -74,7 +74,7 @@ html
                       | {{'search_aborted' | loc:lang}}
                     .stats_header
                       button#showGraph.btn.btn-sm.btn-default(ng-class="{disabled: !graphEnabled}",
-                        tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", tooltip-placement="right"
+                        uib-tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", tooltip-placement="right"
                       )
                         span.graph_btn_icon
                           <svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg>
@@ -97,11 +97,11 @@ html
                         button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
                       a#exportButton.btn.btn-sm.btn-default
                         | {{'statstable_export' | loc:lang}}
-                tab(ng-if="_settings.wordpicture != false",
+                uib-tab(ng-if="_settings.wordpicture != false",
                     wordpic-ctrl,
                     select="instance.onentry()",
                     deselect="instance.onexit()")
-                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
+                  uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div.wordpic_disabled(ng-if="!word_pic")
@@ -123,8 +123,8 @@ html
                     //- .progress_container
                     //-   progress(value='{{progress || 0}}', max='100')
                     .content_target(ng-show="word_pic")
-                tab(ng-show="enableMap" map-ctrl)
-                  tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && countCorpora() < 2 }")
+                uib-tab(ng-show="enableMap" map-ctrl)
+                  uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && countCorpora() < 2 }")
                     | {{'map' | loc:lang }}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")
                   div()
@@ -230,7 +230,7 @@ html
     script(src='components/angular/angular.js')
 
     // warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap
-    script(src='lib/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
     
     script(src='components/spin.js/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')

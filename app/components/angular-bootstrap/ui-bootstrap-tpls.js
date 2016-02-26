@@ -3187,11 +3187,11 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     }
   });
 
-  $scope.$on('$locationChangeSuccess', function() {
-    if (scope.getAutoClose() !== 'disabled') {
-      scope.isOpen = false;
-    }
-  });
+  // $scope.$on('$locationChangeSuccess', function() {
+  //   if (scope.getAutoClose() !== 'disabled') {
+  //     scope.isOpen = false;
+  //   }
+  // });
 }])
 
 .directive('uibDropdown', function() {

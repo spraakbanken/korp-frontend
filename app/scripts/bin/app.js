@@ -1,12 +1,12 @@
 (function() {
-  window.korpApp = angular.module('korpApp', ['ui.bootstrap', "template/tabs/tabset.html", "template/tabs/tab.html", "template/modal/backdrop.html", "template/modal/window.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html", "template/pagination/pagination.html", "angularSpinner", "ui.sortable", "newsdesk", "sbMap", "tmh.dynamicLocale", "angular.filter"]);
+  window.korpApp = angular.module('korpApp', ['ui.bootstrap', "uib/template/tabs/tabset.html", "uib/template/tabs/tab.html", "uib/template/modal/backdrop.html", "uib/template/modal/window.html", "uib/template/typeahead/typeahead-match.html", "uib/template/typeahead/typeahead-popup.html", "uib/template/pagination/pagination.html", "angularSpinner", "ui.sortable", "newsdesk", "sbMap", "tmh.dynamicLocale", "angular.filter"]);
 
   korpApp.config(function(tmhDynamicLocaleProvider) {
     return tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js");
   });
 
-  korpApp.config(function($tooltipProvider) {
-    return $tooltipProvider.options({
+  korpApp.config(function($uibTooltipProvider) {
+    return $uibTooltipProvider.options({
       appendToBody: true
     });
   });
@@ -87,7 +87,7 @@
     });
   });
 
-  korpApp.controller("headerCtrl", function($scope, $location, $modal, utils) {
+  korpApp.controller("headerCtrl", function($scope, $location, $uibModal, utils) {
     var N_VISIBLE, closeModals, i, modal, s, showModal;
     s = $scope;
     s.citeClick = function() {
@@ -171,7 +171,7 @@
         about: 'markup/about.html',
         login: 'login_modal'
       }[key];
-      modal = $modal.open({
+      modal = $uibModal.open({
         templateUrl: tmpl,
         scope: s,
         windowClass: key

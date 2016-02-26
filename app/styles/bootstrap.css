@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\000039}}
 html {
@@ -12,7 +11,7 @@ body {
   margin: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000332}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000343}}
 article,
 aside,
 details,
@@ -28,7 +27,7 @@ summary {
   display: block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000352}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000355}}
 audio,
 canvas,
 progress,
@@ -43,7 +42,7 @@ audio:not([controls]) {
   height: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000375}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000376}}
 [hidden],
 template {
   display: none;
@@ -54,7 +53,7 @@ a {
   background: transparent;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000395}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\0000396}}
 a:active,
 a:hover {
   outline: 0;
@@ -65,7 +64,7 @@ abbr[title] {
   border-bottom: 1px dotted;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003115}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003116}}
 b,
 strong {
   font-weight: bold;
@@ -93,7 +92,7 @@ small {
   font-size: 80%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003159}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003160}}
 sub,
 sup {
   font-size: 75%;
@@ -138,7 +137,7 @@ pre {
   overflow: auto;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003227}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003230}}
 code,
 kbd,
 pre,
@@ -147,7 +146,7 @@ samp {
   font-size: 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003250}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003254}}
 button,
 input,
 optgroup,
@@ -163,13 +162,13 @@ button {
   overflow: visible;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003275}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003276}}
 button,
 select {
   text-transform: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003288}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003291}}
 button,
 html input[type="button"],
 input[type="reset"],
@@ -178,13 +177,13 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003300}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003301}}
 button[disabled],
 html input[disabled] {
   cursor: default;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003309}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003310}}
 button::-moz-focus-inner,
 input::-moz-focus-inner {
   border: 0;
@@ -196,14 +195,14 @@ input {
   line-height: normal;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003332}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003333}}
 input[type="checkbox"],
 input[type="radio"] {
   box-sizing: border-box;
   padding: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003344}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003345}}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   height: auto;
@@ -215,7 +214,7 @@ input[type="search"] {
   box-sizing: content-box;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003368}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003369}}
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
@@ -250,7 +249,7 @@ table {
   border-spacing: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003422}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_normalize\.scss}line{font-family:\00003423}}
 td,
 th {
   padding: 0;
@@ -265,7 +264,7 @@ th {
     box-shadow: none !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000316}}
   a,
   a:visited {
     text-decoration: underline;
@@ -281,13 +280,13 @@ th {
     content: " (" attr(title) ")";
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000330}}
   a[href^="javascript:"]:after,
   a[href^="#"]:after {
     content: "";
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000335}}
   pre,
   blockquote {
     border: 1px solid #999;
@@ -299,7 +298,7 @@ th {
     display: table-header-group;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000344}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000345}}
   tr,
   img {
     page-break-inside: avoid;
@@ -310,7 +309,7 @@ th {
     max-width: 100% !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000353}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000355}}
   p,
   h2,
   h3 {
@@ -318,7 +317,7 @@ th {
     widows: 3;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000360}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000361}}
   h2,
   h3 {
     page-break-after: avoid;
@@ -334,7 +333,7 @@ th {
     display: none;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000376}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000377}}
   .table td,
   .table th {
     background-color: #fff !important;
@@ -356,7 +355,7 @@ th {
     border-collapse: collapse !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000395}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_print\.scss}line{font-family:\0000396}}
   .table-bordered th,
   .table-bordered td {
     border: 1px solid #ddd !important;
@@ -396,7 +395,7 @@ input[type="search"] {
   box-sizing: border-box;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000352}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000353}}
 input[type="radio"],
 input[type="checkbox"] {
   margin: 4px 0 0;
@@ -415,13 +414,13 @@ input[type="range"] {
   width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000371}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000372}}
 select[multiple],
 select[size] {
   height: auto;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000377}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\0000379}}
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
@@ -448,9 +447,9 @@ output {
   font-size: 14px;
   line-height: 1.428571429;
   color: #555555;
-  background-color: #fff;
+  background-color: white;
   background-image: none;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
@@ -474,7 +473,7 @@ output {
 .form-control::-webkit-input-placeholder {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003141}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003143}}
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   cursor: not-allowed;
   background-color: #eeeeee;
@@ -491,7 +490,7 @@ input[type="search"] {
   -webkit-appearance: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003178}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003181}}
 input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
@@ -547,7 +546,7 @@ input[type="month"].input-lg,
   margin-bottom: 15px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003209}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003210}}
 .radio,
 .checkbox {
   position: relative;
@@ -565,7 +564,7 @@ input[type="month"].input-lg,
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003224}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003227}}
 .radio input[type="radio"],
 .radio-inline input[type="radio"],
 .checkbox input[type="checkbox"],
@@ -575,13 +574,13 @@ input[type="month"].input-lg,
   margin-top: 4px \9;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003233}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003234}}
 .radio + .radio,
 .checkbox + .checkbox {
   margin-top: -5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003239}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003240}}
 .radio-inline,
 .checkbox-inline {
   display: inline-block;
@@ -592,14 +591,14 @@ input[type="month"].input-lg,
   cursor: pointer;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003248}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003249}}
 .radio-inline + .radio-inline,
 .checkbox-inline + .checkbox-inline {
   margin-top: 0;
   margin-left: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003260}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003262}}
 input[type="radio"][disabled], input[type="radio"].disabled, fieldset[disabled] input[type="radio"],
 input[type="checkbox"][disabled],
 input[type="checkbox"].disabled, fieldset[disabled]
@@ -607,7 +606,7 @@ input[type="checkbox"] {
   cursor: not-allowed;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003269}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003270}}
 .radio-inline.disabled, fieldset[disabled] .radio-inline,
 .checkbox-inline.disabled, fieldset[disabled]
 .checkbox-inline {
@@ -627,7 +626,7 @@ input[type="checkbox"] {
   padding-bottom: 7px;
   margin-bottom: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003298}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003299}}
 .form-control-static.input-lg, .form-horizontal .form-group-lg .form-control-static.form-control, .input-group-lg > .form-control-static.form-control,
 .input-group-lg > .form-control-static.input-group-addon,
 .input-group-lg > .input-group-btn > .form-control-static.btn, .form-control-static.input-sm, .form-horizontal .form-group-sm .form-control-static.form-control, .input-group-sm > .form-control-static.form-control,
@@ -656,7 +655,7 @@ select.input-sm, .form-horizontal .form-group-sm select.form-control, .input-gro
   line-height: 30px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000380}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000381}}
 textarea.input-sm, .form-horizontal .form-group-sm textarea.form-control, .input-group-sm > textarea.form-control,
 .input-group-sm > textarea.input-group-addon,
 .input-group-sm > .input-group-btn > textarea.btn,
@@ -687,7 +686,7 @@ select.input-lg, .form-horizontal .form-group-lg select.form-control, .input-gro
   line-height: 46px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000380}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000381}}
 textarea.input-lg, .form-horizontal .form-group-lg textarea.form-control, .input-group-lg > textarea.form-control,
 .input-group-lg > textarea.input-group-addon,
 .input-group-lg > .input-group-btn > textarea.btn,
@@ -739,7 +738,7 @@ select[multiple].input-lg,
   line-height: 30px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\000038}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000313}}
 .has-success .help-block,
 .has-success .control-label,
 .has-success .radio,
@@ -769,7 +768,7 @@ select[multiple].input-lg,
   color: #3c763d;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\000038}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000313}}
 .has-warning .help-block,
 .has-warning .control-label,
 .has-warning .radio,
@@ -799,7 +798,7 @@ select[multiple].input-lg,
   color: #8a6d3b;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\000038}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_forms\.scss}line{font-family:\0000313}}
 .has-error .help-block,
 .has-error .control-label,
 .has-error .radio,
@@ -860,7 +859,7 @@ select[multiple].input-lg,
     display: inline-table;
     vertical-align: middle;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003417}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003419}}
   .form-inline .input-group .input-group-addon, .navbar-form .input-group .input-group-addon,
   .form-inline .input-group .input-group-btn,
   .navbar-form .input-group .input-group-btn,
@@ -877,7 +876,7 @@ select[multiple].input-lg,
     margin-bottom: 0;
     vertical-align: middle;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003437}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003438}}
   .form-inline .radio, .navbar-form .radio,
   .form-inline .checkbox,
   .navbar-form .checkbox {
@@ -892,7 +891,7 @@ select[multiple].input-lg,
   .navbar-form .checkbox label {
     padding-left: 0;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003448}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003449}}
   .form-inline .radio input[type="radio"], .navbar-form .radio input[type="radio"],
   .form-inline .checkbox input[type="checkbox"],
   .navbar-form .checkbox input[type="checkbox"] {
@@ -905,7 +904,7 @@ select[multiple].input-lg,
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003475}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003478}}
 .form-horizontal .radio,
 .form-horizontal .checkbox,
 .form-horizontal .radio-inline,
@@ -914,7 +913,7 @@ select[multiple].input-lg,
   margin-bottom: 0;
   padding-top: 7px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003485}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_forms\.scss}line{font-family:\00003486}}
 .form-horizontal .radio,
 .form-horizontal .checkbox {
   min-height: 27px;
@@ -924,7 +923,7 @@ select[multiple].input-lg,
   margin-left: -15px;
   margin-right: -15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .form-horizontal .form-group:before, .form-horizontal .form-group:after {
   content: " ";
   display: table;
@@ -985,18 +984,18 @@ select[multiple].input-lg,
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000331}}
 .btn:hover, .btn:focus {
-  color: #333;
+  color: #333333;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000336}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000337}}
 .btn:active, .btn.active {
   outline: 0;
   background-image: none;
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000345}}
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
   cursor: not-allowed;
   pointer-events: none;
@@ -1007,48 +1006,48 @@ select[multiple].input-lg,
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000357}}
 .btn-default {
-  color: #333;
-  background-color: #fff;
-  border-color: #ccc;
+  color: #333333;
+  background-color: white;
+  border-color: #cccccc;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
-  color: #333;
+  color: #333333;
   background-color: #e6e6e6;
   border-color: #adadad;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled:active, .btn-default.disabled.active, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled]:active, .btn-default[disabled].active, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default:hover, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default.active {
-  background-color: #fff;
-  border-color: #ccc;
+  background-color: white;
+  border-color: #cccccc;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-default .badge {
-  color: #fff;
-  background-color: #333;
+  color: white;
+  background-color: #333333;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000360}}
 .btn-primary {
-  color: #fff;
+  color: white;
   background-color: #428bca;
   border-color: #357ebd;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
-  color: #fff;
+  color: white;
   background-color: #3071a9;
   border-color: #285e8e;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
   background-color: #428bca;
   border-color: #357ebd;
@@ -1056,26 +1055,26 @@ select[multiple].input-lg,
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-primary .badge {
   color: #428bca;
-  background-color: #fff;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000364}}
 .btn-success {
-  color: #fff;
+  color: white;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
-  color: #fff;
+  color: white;
   background-color: #449d44;
   border-color: #398439;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-success.disabled, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled:active, .btn-success.disabled.active, .btn-success[disabled], .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled]:active, .btn-success[disabled].active, fieldset[disabled] .btn-success, fieldset[disabled] .btn-success:hover, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success:active, fieldset[disabled] .btn-success.active {
   background-color: #5cb85c;
   border-color: #4cae4c;
@@ -1083,26 +1082,26 @@ select[multiple].input-lg,
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-success .badge {
   color: #5cb85c;
-  background-color: #fff;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000368}}
 .btn-info {
-  color: #fff;
+  color: white;
   background-color: #5bc0de;
   border-color: #46b8da;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
-  color: #fff;
+  color: white;
   background-color: #31b0d5;
   border-color: #269abc;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled:active, .btn-info.disabled.active, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled]:active, .btn-info[disabled].active, fieldset[disabled] .btn-info, fieldset[disabled] .btn-info:hover, fieldset[disabled] .btn-info:focus, fieldset[disabled] .btn-info:active, fieldset[disabled] .btn-info.active {
   background-color: #5bc0de;
   border-color: #46b8da;
@@ -1110,26 +1109,26 @@ select[multiple].input-lg,
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-info .badge {
   color: #5bc0de;
-  background-color: #fff;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000372}}
 .btn-warning {
-  color: #fff;
+  color: white;
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
-  color: #fff;
+  color: white;
   background-color: #ec971f;
   border-color: #d58512;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled:active, .btn-warning.disabled.active, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled]:active, .btn-warning[disabled].active, fieldset[disabled] .btn-warning, fieldset[disabled] .btn-warning:hover, fieldset[disabled] .btn-warning:focus, fieldset[disabled] .btn-warning:active, fieldset[disabled] .btn-warning.active {
   background-color: #f0ad4e;
   border-color: #eea236;
@@ -1137,26 +1136,26 @@ select[multiple].input-lg,
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-warning .badge {
   color: #f0ad4e;
-  background-color: #fff;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000376}}
 .btn-danger {
-  color: #fff;
+  color: white;
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000315}}
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
-  color: #fff;
+  color: white;
   background-color: #c9302c;
   border-color: #ac2925;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000322}}
 .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
   background-image: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000332}}
 .btn-danger.disabled, .btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled:active, .btn-danger.disabled.active, .btn-danger[disabled], .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled]:active, .btn-danger[disabled].active, fieldset[disabled] .btn-danger, fieldset[disabled] .btn-danger:hover, fieldset[disabled] .btn-danger:focus, fieldset[disabled] .btn-danger:active, fieldset[disabled] .btn-danger.active {
   background-color: #d9534f;
   border-color: #d43f3a;
@@ -1164,7 +1163,7 @@ select[multiple].input-lg,
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_buttons\.scss}line{font-family:\0000338}}
 .btn-danger .badge {
   color: #d9534f;
-  background-color: #fff;
+  background-color: white;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000385}}
@@ -1174,22 +1173,22 @@ select[multiple].input-lg,
   cursor: pointer;
   border-radius: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000394}}
 .btn-link, .btn-link:active, .btn-link[disabled], fieldset[disabled] .btn-link {
   background-color: transparent;
   box-shadow: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\0000398}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\00003101}}
 .btn-link, .btn-link:hover, .btn-link:focus, .btn-link:active {
   border-color: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\00003104}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\00003105}}
 .btn-link:hover, .btn-link:focus {
   color: #2a6496;
   text-decoration: underline;
   background-color: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\00003112}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_buttons\.scss}line{font-family:\00003113}}
 .btn-link[disabled]:hover, .btn-link[disabled]:focus, fieldset[disabled] .btn-link:hover, fieldset[disabled] .btn-link:focus {
   color: #777777;
   text-decoration: none;
@@ -1310,8 +1309,8 @@ tbody.collapse.in {
   list-style: none;
   font-size: 14px;
   text-align: left;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: white;
+  border: 1px solid #cccccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -1340,27 +1339,27 @@ tbody.collapse.in {
   white-space: nowrap;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\0000376}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\0000377}}
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   text-decoration: none;
   color: #262626;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\0000386}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\0000388}}
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
-  color: #fff;
+  color: white;
   text-decoration: none;
   outline: 0;
   background-color: #428bca;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\00003101}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\00003103}}
 .dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
   color: #777777;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\00003109}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_dropdowns\.scss}line{font-family:\00003110}}
 .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
   text-decoration: none;
   background-color: transparent;
@@ -1443,7 +1442,7 @@ tbody.collapse.in {
     right: auto;
   }
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\000036}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\000037}}
 .btn-group,
 .btn-group-vertical {
   position: relative;
@@ -1456,7 +1455,7 @@ tbody.collapse.in {
   position: relative;
   float: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000318}}
 .btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active, .btn-group > .btn.active,
 .btn-group-vertical > .btn:hover,
 .btn-group-vertical > .btn:focus,
@@ -1470,7 +1469,7 @@ tbody.collapse.in {
   outline: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000333}}
 .btn-group .btn + .btn,
 .btn-group .btn + .btn-group,
 .btn-group .btn-group + .btn,
@@ -1482,7 +1481,7 @@ tbody.collapse.in {
 .btn-toolbar {
   margin-left: -5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .btn-toolbar:before, .btn-toolbar:after {
   content: " ";
   display: table;
@@ -1491,12 +1490,12 @@ tbody.collapse.in {
 .btn-toolbar:after {
   clear: both;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000344}}
 .btn-toolbar .btn-group,
 .btn-toolbar .input-group {
   float: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000349}}
 .btn-toolbar > .btn,
 .btn-toolbar > .btn-group,
 .btn-toolbar > .input-group {
@@ -1518,7 +1517,7 @@ tbody.collapse.in {
   border-top-right-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000366}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000367}}
 .btn-group > .btn:last-child:not(:first-child),
 .btn-group > .dropdown-toggle:not(:first-child) {
   border-bottom-left-radius: 0;
@@ -1535,7 +1534,7 @@ tbody.collapse.in {
   border-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000379}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000380}}
 .btn-group > .btn-group:first-child > .btn:last-child,
 .btn-group > .btn-group:first-child > .dropdown-toggle {
   border-bottom-right-radius: 0;
@@ -1548,7 +1547,7 @@ tbody.collapse.in {
   border-top-left-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000389}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\0000390}}
 .btn-group .dropdown-toggle:active,
 .btn-group.open .dropdown-toggle {
   outline: 0;
@@ -1591,7 +1590,7 @@ tbody.collapse.in {
   border-width: 0 5px 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003148}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003150}}
 .btn-group-vertical > .btn,
 .btn-group-vertical > .btn-group,
 .btn-group-vertical > .btn-group > .btn {
@@ -1600,7 +1599,7 @@ tbody.collapse.in {
   width: 100%;
   max-width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .btn-group-vertical > .btn-group:before, .btn-group-vertical > .btn-group:after {
   content: " ";
   display: table;
@@ -1613,7 +1612,7 @@ tbody.collapse.in {
 .btn-group-vertical > .btn-group > .btn {
   float: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003165}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003168}}
 .btn-group-vertical > .btn + .btn,
 .btn-group-vertical > .btn + .btn-group,
 .btn-group-vertical > .btn-group + .btn,
@@ -1644,7 +1643,7 @@ tbody.collapse.in {
   border-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003191}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003192}}
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
   border-bottom-right-radius: 0;
@@ -1664,7 +1663,7 @@ tbody.collapse.in {
   table-layout: fixed;
   border-collapse: separate;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003210}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003211}}
 .btn-group-justified > .btn,
 .btn-group-justified > .btn-group {
   float: none;
@@ -1680,7 +1679,7 @@ tbody.collapse.in {
   left: auto;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003235}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_button-groups\.scss}line{font-family:\00003236}}
 [data-toggle="buttons"] > .btn > input[type="radio"],
 [data-toggle="buttons"] > .btn > input[type="checkbox"] {
   position: absolute;
@@ -1710,7 +1709,7 @@ tbody.collapse.in {
   margin-bottom: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000354}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000356}}
 .input-group-addon,
 .input-group-btn,
 .input-group .form-control {
@@ -1723,7 +1722,7 @@ tbody.collapse.in {
   border-radius: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000364}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000365}}
 .input-group-addon,
 .input-group-btn {
   width: 1%;
@@ -1740,7 +1739,7 @@ tbody.collapse.in {
   color: #555555;
   text-align: center;
   background-color: #eeeeee;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border-radius: 4px;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000385}}
@@ -1759,13 +1758,13 @@ tbody.collapse.in {
   font-size: 18px;
   border-radius: 6px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000397}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\0000398}}
 .input-group-addon input[type="radio"],
 .input-group-addon input[type="checkbox"] {
   margin-top: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003104}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003110}}
 .input-group .form-control:first-child,
 .input-group-addon:first-child,
 .input-group-btn:first-child > .btn,
@@ -1782,7 +1781,7 @@ tbody.collapse.in {
   border-right: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003116}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003122}}
 .input-group .form-control:last-child,
 .input-group-addon:last-child,
 .input-group-btn:last-child > .btn,
@@ -1813,16 +1812,16 @@ tbody.collapse.in {
 .input-group-btn > .btn + .btn {
   margin-left: -1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003146}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003148}}
 .input-group-btn > .btn:hover, .input-group-btn > .btn:focus, .input-group-btn > .btn:active {
   z-index: 2;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003155}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003156}}
 .input-group-btn:first-child > .btn,
 .input-group-btn:first-child > .btn-group {
   margin-right: -1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003161}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_input-groups\.scss}line{font-family:\00003162}}
 .input-group-btn:last-child > .btn,
 .input-group-btn:last-child > .btn-group {
   margin-left: -1px;
@@ -1834,7 +1833,7 @@ tbody.collapse.in {
   padding-left: 0;
   list-style: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .nav:before, .nav:after {
   content: " ";
   display: table;
@@ -1854,7 +1853,7 @@ tbody.collapse.in {
   display: block;
   padding: 10px 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000324}}
 .nav > li > a:hover, .nav > li > a:focus {
   text-decoration: none;
   background-color: #eeeeee;
@@ -1863,14 +1862,14 @@ tbody.collapse.in {
 .nav > li.disabled > a {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000335}}
 .nav > li.disabled > a:hover, .nav > li.disabled > a:focus {
   color: #777777;
   text-decoration: none;
   background-color: transparent;
   cursor: not-allowed;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000348}}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
   background-color: #eeeeee;
   border-color: #428bca;
@@ -1889,7 +1888,7 @@ tbody.collapse.in {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000376}}
 .nav-tabs {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000378}}
 .nav-tabs > li {
@@ -1905,13 +1904,13 @@ tbody.collapse.in {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000389}}
 .nav-tabs > li > a:hover {
-  border-color: #eeeeee #eeeeee #ddd;
+  border-color: #eeeeee #eeeeee #dddddd;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000396}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\0000398}}
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #dddddd;
   border-bottom-color: transparent;
   cursor: default;
 }
@@ -1928,9 +1927,9 @@ tbody.collapse.in {
 .nav-pills > li + li {
   margin-left: 2px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003131}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003133}}
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-  color: #fff;
+  color: white;
   background-color: #428bca;
 }
 
@@ -1983,27 +1982,27 @@ tbody.collapse.in {
   margin-right: 0;
   border-radius: 4px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003199}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003201}}
 .nav-tabs-justified > .active > a, .nav-tabs.nav-justified > .active > a,
 .nav-tabs-justified > .active > a:hover,
 .nav-tabs.nav-justified > .active > a:hover,
 .nav-tabs-justified > .active > a:focus,
 .nav-tabs.nav-justified > .active > a:focus {
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
 }
 @media (min-width: 768px) {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003206}}
   .nav-tabs-justified > li > a, .nav-tabs.nav-justified > li > a {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd;
     border-radius: 4px 4px 0 0;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003210}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navs\.scss}line{font-family:\00003212}}
   .nav-tabs-justified > .active > a, .nav-tabs.nav-justified > .active > a,
   .nav-tabs-justified > .active > a:hover,
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #fff;
+    border-bottom-color: white;
   }
 }
 
@@ -2030,7 +2029,7 @@ tbody.collapse.in {
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .navbar:before, .navbar:after {
   content: " ";
   display: table;
@@ -2046,7 +2045,7 @@ tbody.collapse.in {
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .navbar-header:before, .navbar-header:after {
   content: " ";
   display: table;
@@ -2071,7 +2070,7 @@ tbody.collapse.in {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   -webkit-overflow-scrolling: touch;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .navbar-collapse:before, .navbar-collapse:after {
   content: " ";
   display: table;
@@ -2102,7 +2101,7 @@ tbody.collapse.in {
   .navbar-collapse.in {
     overflow-y: visible;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\0000381}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\0000383}}
   .navbar-fixed-top .navbar-collapse, .navbar-static-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse {
     padding-left: 0;
     padding-right: 0;
@@ -2122,7 +2121,7 @@ tbody.collapse.in {
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003108}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003109}}
 .container > .navbar-header,
 .container > .navbar-collapse,
 .container-fluid > .navbar-header,
@@ -2131,7 +2130,7 @@ tbody.collapse.in {
   margin-left: -15px;
 }
 @media (min-width: 768px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003108}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003109}}
   .container > .navbar-header,
   .container > .navbar-collapse,
   .container-fluid > .navbar-header,
@@ -2153,7 +2152,7 @@ tbody.collapse.in {
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003138}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003139}}
 .navbar-fixed-top,
 .navbar-fixed-bottom {
   position: fixed;
@@ -2164,7 +2163,7 @@ tbody.collapse.in {
   transform: translate3d(0, 0, 0);
 }
 @media (min-width: 768px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003138}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003139}}
   .navbar-fixed-top,
   .navbar-fixed-bottom {
     border-radius: 0;
@@ -2192,12 +2191,12 @@ tbody.collapse.in {
   line-height: 20px;
   height: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003171}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003172}}
 .navbar-brand:hover, .navbar-brand:focus {
   text-decoration: none;
 }
 @media (min-width: 768px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003177}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003178}}
   .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: -15px;
   }
@@ -2259,7 +2258,7 @@ tbody.collapse.in {
     border: 0;
     box-shadow: none;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003248}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003249}}
   .navbar-nav .open .dropdown-menu > li > a,
   .navbar-nav .open .dropdown-menu .dropdown-header {
     padding: 5px 15px 5px 25px;
@@ -2268,7 +2267,7 @@ tbody.collapse.in {
   .navbar-nav .open .dropdown-menu > li > a {
     line-height: 20px;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003254}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003255}}
   .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-nav .open .dropdown-menu > li > a:focus {
     background-image: none;
   }
@@ -2393,112 +2392,112 @@ tbody.collapse.in {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003398}}
 .navbar-default .navbar-brand {
-  color: #777;
+  color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003400}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003401}}
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
   color: #5e5e5e;
   background-color: transparent;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003407}}
 .navbar-default .navbar-text {
-  color: #777;
+  color: #777777;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003412}}
 .navbar-default .navbar-nav > li > a {
-  color: #777;
+  color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003415}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003416}}
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-  color: #333;
+  color: #333333;
   background-color: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003422}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003424}}
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-  color: #555;
+  color: #555555;
   background-color: #e7e7e7;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003430}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003432}}
 .navbar-default .navbar-nav > .disabled > a, .navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus {
-  color: #ccc;
+  color: #cccccc;
   background-color: transparent;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003439}}
 .navbar-default .navbar-toggle {
-  border-color: #ddd;
+  border-color: #dddddd;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003441}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003442}}
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-  background-color: #ddd;
+  background-color: #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003445}}
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #888;
+  background-color: #888888;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003450}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003451}}
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
   border-color: #e7e7e7;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003459}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003461}}
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
   background-color: #e7e7e7;
-  color: #555;
+  color: #555555;
 }
 @media (max-width: 767px) {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003470}}
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #777;
+    color: #777777;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003472}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003473}}
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #333;
+    color: #333333;
     background-color: transparent;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003479}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003481}}
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #555;
+    color: #555555;
     background-color: #e7e7e7;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003487}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003489}}
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a, .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-    color: #ccc;
+    color: #cccccc;
     background-color: transparent;
   }
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003503}}
 .navbar-default .navbar-link {
-  color: #777;
+  color: #777777;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003505}}
 .navbar-default .navbar-link:hover {
-  color: #333;
+  color: #333333;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003510}}
 .navbar-default .btn-link {
-  color: #777;
+  color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003512}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003513}}
 .navbar-default .btn-link:hover, .navbar-default .btn-link:focus {
-  color: #333;
+  color: #333333;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003518}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003519}}
 .navbar-default .btn-link[disabled]:hover, .navbar-default .btn-link[disabled]:focus, fieldset[disabled] .navbar-default .btn-link:hover, fieldset[disabled] .navbar-default .btn-link:focus {
-  color: #ccc;
+  color: #cccccc;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003528}}
 .navbar-inverse {
-  background-color: #222;
+  background-color: #222222;
   border-color: #090909;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003532}}
 .navbar-inverse .navbar-brand {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003534}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003535}}
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
-  color: #fff;
+  color: white;
   background-color: transparent;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003541}}
@@ -2509,42 +2508,42 @@ tbody.collapse.in {
 .navbar-inverse .navbar-nav > li > a {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003549}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003550}}
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
-  color: #fff;
+  color: white;
   background-color: transparent;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003556}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003558}}
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-  color: #fff;
+  color: white;
   background-color: #090909;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003564}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003566}}
 .navbar-inverse .navbar-nav > .disabled > a, .navbar-inverse .navbar-nav > .disabled > a:hover, .navbar-inverse .navbar-nav > .disabled > a:focus {
-  color: #444;
+  color: #444444;
   background-color: transparent;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003574}}
 .navbar-inverse .navbar-toggle {
-  border-color: #333;
+  border-color: #333333;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003576}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003577}}
 .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
-  background-color: #333;
+  background-color: #333333;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003580}}
 .navbar-inverse .navbar-toggle .icon-bar {
-  background-color: #fff;
+  background-color: white;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003585}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003586}}
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
   border-color: #101010;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003593}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003595}}
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
   background-color: #090909;
-  color: #fff;
+  color: white;
 }
 @media (max-width: 767px) {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003604}}
@@ -2559,19 +2558,19 @@ tbody.collapse.in {
   .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
     color: #777777;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003612}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003613}}
   .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #fff;
+    color: white;
     background-color: transparent;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003619}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003621}}
   .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #fff;
+    color: white;
     background-color: #090909;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003627}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003629}}
   .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a, .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:hover, .navbar-inverse .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-    color: #444;
+    color: #444444;
     background-color: transparent;
   }
 }
@@ -2581,19 +2580,19 @@ tbody.collapse.in {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003640}}
 .navbar-inverse .navbar-link:hover {
-  color: #fff;
+  color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003645}}
 .navbar-inverse .btn-link {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003647}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003648}}
 .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
-  color: #fff;
+  color: white;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003653}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_navbar\.scss}line{font-family:\00003654}}
 .navbar-inverse .btn-link[disabled]:hover, .navbar-inverse .btn-link[disabled]:focus, fieldset[disabled] .navbar-inverse .btn-link:hover, fieldset[disabled] .navbar-inverse .btn-link:focus {
-  color: #444;
+  color: #444444;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_breadcrumbs\.scss}line{font-family:\000036}}
@@ -2601,7 +2600,7 @@ tbody.collapse.in {
   padding: 8px 15px;
   margin-bottom: 20px;
   list-style: none;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
   border-radius: 4px;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_breadcrumbs\.scss}line{font-family:\0000313}}
@@ -2610,9 +2609,9 @@ tbody.collapse.in {
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_breadcrumbs\.scss}line{font-family:\0000316}}
 .breadcrumb > li + li:before {
-  content: "/ ";
+  content: "/\00a0";
   padding: 0 5px;
-  color: #ccc;
+  color: #cccccc;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_breadcrumbs\.scss}line{font-family:\0000323}}
 .breadcrumb > .active {
@@ -2630,7 +2629,7 @@ tbody.collapse.in {
 .pagination > li {
   display: inline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000313}}
 .pagination > li > a,
 .pagination > li > span {
   position: relative;
@@ -2639,43 +2638,43 @@ tbody.collapse.in {
   line-height: 1.428571429;
   text-decoration: none;
   color: #428bca;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #dddddd;
   margin-left: -1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000326}}
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
   margin-left: 0;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000332}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000333}}
 .pagination > li:last-child > a,
 .pagination > li:last-child > span {
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000341}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000342}}
 .pagination > li > a:hover, .pagination > li > a:focus,
 .pagination > li > span:hover,
 .pagination > li > span:focus {
   color: #2a6496;
   background-color: #eeeeee;
-  border-color: #ddd;
+  border-color: #dddddd;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000351}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000353}}
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
 .pagination > .active > span,
 .pagination > .active > span:hover,
 .pagination > .active > span:focus {
   z-index: 2;
-  color: #fff;
+  color: white;
   background-color: #428bca;
   border-color: #428bca;
   cursor: default;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pagination\.scss}line{font-family:\0000368}}
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
 .pagination > .disabled > span:focus,
@@ -2683,43 +2682,43 @@ tbody.collapse.in {
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
   color: #777777;
-  background-color: #fff;
-  border-color: #ddd;
+  background-color: white;
+  border-color: #dddddd;
   cursor: not-allowed;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\000035}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\000036}}
 .pagination-lg > li > a,
 .pagination-lg > li > span {
   padding: 10px 16px;
   font-size: 18px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000312}}
 .pagination-lg > li:first-child > a,
 .pagination-lg > li:first-child > span {
   border-bottom-left-radius: 6px;
   border-top-left-radius: 6px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000318}}
 .pagination-lg > li:last-child > a,
 .pagination-lg > li:last-child > span {
   border-bottom-right-radius: 6px;
   border-top-right-radius: 6px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\000035}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\000036}}
 .pagination-sm > li > a,
 .pagination-sm > li > span {
   padding: 5px 10px;
   font-size: 12px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000312}}
 .pagination-sm > li:first-child > a,
 .pagination-sm > li:first-child > span {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_pagination\.scss}line{font-family:\0000318}}
 .pagination-sm > li:last-child > a,
 .pagination-sm > li:last-child > span {
   border-bottom-right-radius: 3px;
@@ -2733,7 +2732,7 @@ tbody.collapse.in {
   list-style: none;
   text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .pager:before, .pager:after {
   content: " ";
   display: table;
@@ -2746,38 +2745,38 @@ tbody.collapse.in {
 .pager li {
   display: inline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000315}}
 .pager li > a,
 .pager li > span {
   display: inline-block;
   padding: 5px 14px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #dddddd;
   border-radius: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000324}}
 .pager li > a:hover,
 .pager li > a:focus {
   text-decoration: none;
   background-color: #eeeeee;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000332}}
 .pager .next > a,
 .pager .next > span {
   float: right;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000338}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000339}}
 .pager .previous > a,
 .pager .previous > span {
   float: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000345}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_pager\.scss}line{font-family:\0000348}}
 .pager .disabled > a,
 .pager .disabled > a:hover,
 .pager .disabled > a:focus,
 .pager .disabled > span {
   color: #777777;
-  background-color: #fff;
+  background-color: white;
   cursor: not-allowed;
 }
 
@@ -2788,7 +2787,7 @@ tbody.collapse.in {
   font-size: 75%;
   font-weight: bold;
   line-height: 1;
-  color: #fff;
+  color: white;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
@@ -2804,9 +2803,9 @@ tbody.collapse.in {
   top: -1px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_labels\.scss}line{font-family:\0000333}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_labels\.scss}line{font-family:\0000334}}
 a.label:hover, a.label:focus {
-  color: #fff;
+  color: white;
   text-decoration: none;
   cursor: pointer;
 }
@@ -2815,7 +2814,7 @@ a.label:hover, a.label:focus {
 .label-default {
   background-color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-default[href]:hover, .label-default[href]:focus {
   background-color: #5e5e5e;
 }
@@ -2824,7 +2823,7 @@ a.label:hover, a.label:focus {
 .label-primary {
   background-color: #428bca;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-primary[href]:hover, .label-primary[href]:focus {
   background-color: #3071a9;
 }
@@ -2833,7 +2832,7 @@ a.label:hover, a.label:focus {
 .label-success {
   background-color: #5cb85c;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-success[href]:hover, .label-success[href]:focus {
   background-color: #449d44;
 }
@@ -2842,7 +2841,7 @@ a.label:hover, a.label:focus {
 .label-info {
   background-color: #5bc0de;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-info[href]:hover, .label-info[href]:focus {
   background-color: #31b0d5;
 }
@@ -2851,7 +2850,7 @@ a.label:hover, a.label:focus {
 .label-warning {
   background-color: #f0ad4e;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-warning[href]:hover, .label-warning[href]:focus {
   background-color: #ec971f;
 }
@@ -2860,7 +2859,7 @@ a.label:hover, a.label:focus {
 .label-danger {
   background-color: #d9534f;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000037}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_labels\.scss}line{font-family:\000038}}
 .label-danger[href]:hover, .label-danger[href]:focus {
   background-color: #c9302c;
 }
@@ -2872,7 +2871,7 @@ a.label:hover, a.label:focus {
   padding: 3px 7px;
   font-size: 12px;
   font-weight: bold;
-  color: #fff;
+  color: white;
   line-height: 1;
   vertical-align: baseline;
   white-space: nowrap;
@@ -2894,19 +2893,19 @@ a.label:hover, a.label:focus {
   top: 0;
   padding: 1px 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_badges\.scss}line{font-family:\0000339}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_badges\.scss}line{font-family:\0000340}}
 a.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
   color: #428bca;
-  background-color: #fff;
+  background-color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_badges\.scss}line{font-family:\0000344}}
 .nav-pills > li > a > .badge {
   margin-left: 3px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_badges\.scss}line{font-family:\0000351}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_badges\.scss}line{font-family:\0000352}}
 a.badge:hover, a.badge:focus {
-  color: #fff;
+  color: white;
   text-decoration: none;
   cursor: pointer;
 }
@@ -2918,7 +2917,7 @@ a.badge:hover, a.badge:focus {
   color: inherit;
   background-color: #eeeeee;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_jumbotron\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_jumbotron\.scss}line{font-family:\0000313}}
 .jumbotron h1,
 .jumbotron .h1 {
   color: inherit;
@@ -2952,7 +2951,7 @@ a.badge:hover, a.badge:focus {
     padding-left: 60px;
     padding-right: 60px;
   }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_jumbotron\.scss}line{font-family:\0000343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_jumbotron\.scss}line{font-family:\0000344}}
   .jumbotron h1,
   .jumbotron .h1 {
     font-size: 63px;
@@ -2965,12 +2964,12 @@ a.badge:hover, a.badge:focus {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.428571429;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #dddddd;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_thumbnails\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_thumbnails\.scss}line{font-family:\0000318}}
 .thumbnail > img,
 .thumbnail a > img {
   display: block;
@@ -2986,7 +2985,7 @@ a.badge:hover, a.badge:focus {
   color: #333333;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_thumbnails\.scss}line{font-family:\0000334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_thumbnails\.scss}line{font-family:\0000336}}
 a.thumbnail:hover,
 a.thumbnail:focus,
 a.thumbnail.active {
@@ -3009,7 +3008,7 @@ a.thumbnail.active {
 .alert .alert-link {
   font-weight: bold;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_alerts\.scss}line{font-family:\0000327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_alerts\.scss}line{font-family:\0000328}}
 .alert > p,
 .alert > ul {
   margin-bottom: 0;
@@ -3019,7 +3018,7 @@ a.thumbnail.active {
   margin-top: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_alerts\.scss}line{font-family:\0000340}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_alerts\.scss}line{font-family:\0000341}}
 .alert-dismissable,
 .alert-dismissible {
   padding-right: 35px;
@@ -3094,27 +3093,35 @@ a.thumbnail.active {
 }
 
 @-webkit-keyframes progress-bar-stripes {
+  /* line 11, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
+
+  /* line 12, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
+
 @keyframes progress-bar-stripes {
+  /* line 17, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_progress-bars.scss */
   from {
     background-position: 40px 0;
   }
+
+  /* line 18, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_progress-bars.scss */
   to {
     background-position: 0 0;
   }
 }
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000327}}
 .progress {
   overflow: hidden;
   height: 20px;
   margin-bottom: 20px;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
   border-radius: 4px;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -3126,28 +3133,28 @@ a.thumbnail.active {
   height: 100%;
   font-size: 12px;
   line-height: 20px;
-  color: #fff;
+  color: white;
   text-align: center;
   background-color: #428bca;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   transition: width 0.6s ease;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000355}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000356}}
 .progress-striped .progress-bar,
 .progress-bar-striped {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-size: 40px 40px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000365}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000366}}
 .progress.active .progress-bar,
 .progress-bar.active {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_progress-bars\.scss}line{font-family:\0000373}}
 .progress-bar[aria-valuenow="1"], .progress-bar[aria-valuenow="2"] {
   min-width: 30px;
 }
@@ -3196,14 +3203,14 @@ a.thumbnail.active {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_media\.scss}line{font-family:\0000310}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_media\.scss}line{font-family:\0000311}}
 .media,
 .media-body {
   overflow: hidden;
   zoom: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_media\.scss}line{font-family:\0000317}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_media\.scss}line{font-family:\0000318}}
 .media,
 .media .media {
   margin-top: 15px;
@@ -3251,8 +3258,8 @@ a.thumbnail.active {
   display: block;
   padding: 10px 15px;
   margin-bottom: -1px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  border: 1px solid #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000331}}
 .list-group-item:first-child {
@@ -3276,20 +3283,20 @@ a.thumbnail.active {
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000354}}
 a.list-group-item {
-  color: #555;
+  color: #555555;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000357}}
 a.list-group-item .list-group-item-heading {
-  color: #333;
+  color: #333333;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000363}}
 a.list-group-item:hover, a.list-group-item:focus {
   text-decoration: none;
-  color: #555;
-  background-color: #f5f5f5;
+  color: #555555;
+  background-color: whitesmoke;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000374}}
 .list-group-item.disabled, .list-group-item.disabled:hover, .list-group-item.disabled:focus {
   background-color: #eeeeee;
   color: #777777;
@@ -3302,14 +3309,14 @@ a.list-group-item:hover, a.list-group-item:focus {
 .list-group-item.disabled .list-group-item-text, .list-group-item.disabled:hover .list-group-item-text, .list-group-item.disabled:focus .list-group-item-text {
   color: #777777;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000388}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000390}}
 .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
   z-index: 2;
-  color: #fff;
+  color: white;
   background-color: #428bca;
   border-color: #428bca;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000397}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_list-group\.scss}line{font-family:\0000399}}
 .list-group-item.active .list-group-item-heading,
 .list-group-item.active .list-group-item-heading > small,
 .list-group-item.active .list-group-item-heading > .small, .list-group-item.active:hover .list-group-item-heading,
@@ -3338,12 +3345,12 @@ a.list-group-item-success {
 a.list-group-item-success .list-group-item-heading {
   color: inherit;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000319}}
 a.list-group-item-success:hover, a.list-group-item-success:focus {
   color: #3c763d;
   background-color: #d0e9c6;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000325}}
 a.list-group-item-success.active, a.list-group-item-success.active:hover, a.list-group-item-success.active:focus {
   color: #fff;
   background-color: #3c763d;
@@ -3364,12 +3371,12 @@ a.list-group-item-info {
 a.list-group-item-info .list-group-item-heading {
   color: inherit;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000319}}
 a.list-group-item-info:hover, a.list-group-item-info:focus {
   color: #31708f;
   background-color: #c4e3f3;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000325}}
 a.list-group-item-info.active, a.list-group-item-info.active:hover, a.list-group-item-info.active:focus {
   color: #fff;
   background-color: #31708f;
@@ -3390,12 +3397,12 @@ a.list-group-item-warning {
 a.list-group-item-warning .list-group-item-heading {
   color: inherit;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000319}}
 a.list-group-item-warning:hover, a.list-group-item-warning:focus {
   color: #8a6d3b;
   background-color: #faf2cc;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000325}}
 a.list-group-item-warning.active, a.list-group-item-warning.active:hover, a.list-group-item-warning.active:focus {
   color: #fff;
   background-color: #8a6d3b;
@@ -3416,12 +3423,12 @@ a.list-group-item-danger {
 a.list-group-item-danger .list-group-item-heading {
   color: inherit;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000319}}
 a.list-group-item-danger:hover, a.list-group-item-danger:focus {
   color: #a94442;
   background-color: #ebcccc;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_list-group\.scss}line{font-family:\0000325}}
 a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus {
   color: #fff;
   background-color: #a94442;
@@ -3443,7 +3450,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\000037}}
 .panel {
   margin-bottom: 20px;
-  background-color: #fff;
+  background-color: white;
   border: 1px solid transparent;
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -3453,7 +3460,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel-body {
   padding: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .panel-body:before, .panel-body:after {
   content: " ";
   display: table;
@@ -3490,8 +3497,8 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\0000345}}
 .panel-footer {
   padding: 10px 15px;
-  background-color: #f5f5f5;
-  border-top: 1px solid #ddd;
+  background-color: whitesmoke;
+  border-top: 1px solid #dddddd;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
@@ -3528,19 +3535,19 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
   border-top-width: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\0000399}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003101}}
 .panel > .table,
 .panel > .table-responsive > .table,
 .panel > .panel-collapse > .table {
   margin-bottom: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003105}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003106}}
 .panel > .table:first-child,
 .panel > .table-responsive:first-child > .table:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003112}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003113}}
 .panel > .table:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,
@@ -3551,7 +3558,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {
   border-top-left-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003116}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003117}}
 .panel > .table:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,
@@ -3562,13 +3569,13 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {
   border-top-right-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003124}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003125}}
 .panel > .table:last-child,
 .panel > .table-responsive:last-child > .table:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003131}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003132}}
 .panel > .table:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
@@ -3579,7 +3586,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {
   border-bottom-left-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003135}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003136}}
 .panel > .table:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
@@ -3590,22 +3597,22 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {
   border-bottom-right-radius: 3px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003143}}
 .panel > .panel-body + .table,
 .panel > .panel-body + .table-responsive {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #dddddd;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003146}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003147}}
 .panel > .table > tbody:first-child > tr:first-child th,
 .panel > .table > tbody:first-child > tr:first-child td {
   border-top: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003150}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003151}}
 .panel > .table-bordered,
 .panel > .table-responsive > .table-bordered {
   border: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003157}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003158}}
 .panel > .table-bordered > thead > tr > th:first-child,
 .panel > .table-bordered > thead > tr > td:first-child,
 .panel > .table-bordered > tbody > tr > th:first-child,
@@ -3620,7 +3627,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive > .table-bordered > tfoot > tr > td:first-child {
   border-left: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003161}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003162}}
 .panel > .table-bordered > thead > tr > th:last-child,
 .panel > .table-bordered > thead > tr > td:last-child,
 .panel > .table-bordered > tbody > tr > th:last-child,
@@ -3635,7 +3642,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive > .table-bordered > tfoot > tr > td:last-child {
   border-right: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003170}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003171}}
 .panel > .table-bordered > thead > tr:first-child > td,
 .panel > .table-bordered > thead > tr:first-child > th,
 .panel > .table-bordered > tbody > tr:first-child > td,
@@ -3646,7 +3653,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 .panel > .table-responsive > .table-bordered > tbody > tr:first-child > th {
   border-bottom: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003179}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003180}}
 .panel > .table-bordered > tbody > tr:last-child > td,
 .panel > .table-bordered > tbody > tr:last-child > th,
 .panel > .table-bordered > tfoot > tr:last-child > td,
@@ -3682,7 +3689,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003212}}
 .panel-group .panel-heading + .panel-collapse > .panel-body {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003216}}
 .panel-group .panel-footer {
@@ -3690,31 +3697,31 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003218}}
 .panel-group .panel-footer + .panel-collapse .panel-body {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddddd;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003226}}
 .panel-default {
-  border-color: #ddd;
+  border-color: #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\000036}}
 .panel-default > .panel-heading {
   color: #333333;
-  background-color: #f5f5f5;
-  border-color: #ddd;
+  background-color: whitesmoke;
+  border-color: #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\0000311}}
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #ddd;
+  border-top-color: #dddddd;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\0000314}}
 .panel-default > .panel-heading .badge {
-  color: #f5f5f5;
+  color: whitesmoke;
   background-color: #333333;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\0000320}}
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: #ddd;
+  border-bottom-color: #dddddd;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_panels\.scss}line{font-family:\00003229}}
@@ -3723,7 +3730,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\000036}}
 .panel-primary > .panel-heading {
-  color: #fff;
+  color: white;
   background-color: #428bca;
   border-color: #428bca;
 }
@@ -3734,7 +3741,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\0000314}}
 .panel-primary > .panel-heading .badge {
   color: #428bca;
-  background-color: #fff;
+  background-color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_panels\.scss}line{font-family:\0000320}}
 .panel-primary > .panel-footer + .panel-collapse > .panel-body {
@@ -3845,7 +3852,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
   padding: 0;
   overflow: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_responsive-embed\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_responsive-embed\.scss}line{font-family:\0000315}}
 .embed-responsive .embed-responsive-item,
 .embed-responsive iframe,
 .embed-responsive embed,
@@ -3872,7 +3879,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -3901,14 +3908,14 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
   font-size: 21px;
   font-weight: bold;
   line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
+  color: black;
+  text-shadow: 0 1px 0 white;
   opacity: 0.2;
   filter: alpha(opacity=20);
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_close\.scss}line{font-family:\0000315}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_close\.scss}line{font-family:\0000316}}
 .close:hover, .close:focus {
-  color: #000;
+  color: black;
   text-decoration: none;
   cursor: pointer;
   opacity: 0.5;
@@ -3971,8 +3978,8 @@ button.close {
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_modals\.scss}line{font-family:\0000351}}
 .modal-content {
   position: relative;
-  background-color: #fff;
-  border: 1px solid #999;
+  background-color: white;
+  border: 1px solid #999999;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
@@ -3988,7 +3995,7 @@ button.close {
   bottom: 0;
   left: 0;
   z-index: 1040;
-  background-color: #000;
+  background-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_modals\.scss}line{font-family:\0000373}}
 .modal-backdrop.fade {
@@ -4031,7 +4038,7 @@ button.close {
   text-align: right;
   border-top: 1px solid #e5e5e5;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .modal-footer:before, .modal-footer:after {
   content: " ";
   display: table;
@@ -4127,10 +4134,10 @@ button.close {
 .tooltip-inner {
   max-width: 200px;
   padding: 3px 8px;
-  color: #fff;
+  color: white;
   text-align: center;
   text-decoration: none;
-  background-color: #000;
+  background-color: black;
   border-radius: 4px;
 }
 
@@ -4149,21 +4156,21 @@ button.close {
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000350}}
 .tooltip.top-left .tooltip-arrow {
   bottom: 0;
   left: 5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000356}}
 .tooltip.top-right .tooltip-arrow {
   bottom: 0;
   right: 5px;
   border-width: 5px 5px 0;
-  border-top-color: #000;
+  border-top-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000362}}
 .tooltip.right .tooltip-arrow {
@@ -4171,7 +4178,7 @@ button.close {
   left: 0;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #000;
+  border-right-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000369}}
 .tooltip.left .tooltip-arrow {
@@ -4179,7 +4186,7 @@ button.close {
   right: 0;
   margin-top: -5px;
   border-width: 5px 0 5px 5px;
-  border-left-color: #000;
+  border-left-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000376}}
 .tooltip.bottom .tooltip-arrow {
@@ -4187,21 +4194,21 @@ button.close {
   left: 50%;
   margin-left: -5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000383}}
 .tooltip.bottom-left .tooltip-arrow {
   top: 0;
   left: 5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: black;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_tooltip\.scss}line{font-family:\0000389}}
 .tooltip.bottom-right .tooltip-arrow {
   top: 0;
   right: 5px;
   border-width: 0 5px 5px;
-  border-bottom-color: #000;
+  border-bottom-color: black;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\000036}}
@@ -4214,9 +4221,9 @@ button.close {
   max-width: 276px;
   padding: 1px;
   text-align: left;
-  background-color: #fff;
+  background-color: white;
   background-clip: padding-box;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -4256,7 +4263,7 @@ button.close {
   padding: 9px 14px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\0000352}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\0000353}}
 .popover > .arrow, .popover > .arrow:after {
   position: absolute;
   display: block;
@@ -4292,7 +4299,7 @@ button.close {
   bottom: 1px;
   margin-left: -10px;
   border-bottom-width: 0;
-  border-top-color: #fff;
+  border-top-color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\0000386}}
 .popover.right > .arrow {
@@ -4309,7 +4316,7 @@ button.close {
   left: 1px;
   bottom: -10px;
   border-left-width: 0;
-  border-right-color: #fff;
+  border-right-color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\00003101}}
 .popover.bottom > .arrow {
@@ -4326,7 +4333,7 @@ button.close {
   top: 1px;
   margin-left: -10px;
   border-top-width: 0;
-  border-bottom-color: #fff;
+  border-bottom-color: white;
 }
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_popovers\.scss}line{font-family:\00003117}}
 .popover.left > .arrow {
@@ -4342,11 +4349,11 @@ button.close {
   content: " ";
   right: 1px;
   border-right-width: 0;
-  border-left-color: #fff;
+  border-left-color: white;
   bottom: -10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_clearfix\.scss}line{font-family:\0000315}}
 .clearfix:before, .clearfix:after {
   content: " ";
   display: table;
@@ -4413,12 +4420,13 @@ button.close {
 @-ms-viewport {
   width: device-width;
 }
+
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000318}}
 .visible-xs, .visible-sm, .visible-md, .visible-lg {
   display: none !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_responsive-utilities\.scss}line{font-family:\0000331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/_responsive-utilities\.scss}line{font-family:\0000342}}
 .visible-xs-block,
 .visible-xs-inline,
 .visible-xs-inline-block,
@@ -4450,7 +4458,7 @@ button.close {
     display: table-row !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000313}}
   th.visible-xs,
   td.visible-xs {
     display: table-cell !important;
@@ -4493,7 +4501,7 @@ button.close {
     display: table-row !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000313}}
   th.visible-sm,
   td.visible-sm {
     display: table-cell !important;
@@ -4536,7 +4544,7 @@ button.close {
     display: table-row !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000313}}
   th.visible-md,
   td.visible-md {
     display: table-cell !important;
@@ -4579,7 +4587,7 @@ button.close {
     display: table-row !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000313}}
   th.visible-lg,
   td.visible-lg {
     display: table-cell !important;
@@ -4651,7 +4659,7 @@ button.close {
     display: table-row !important;
   }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000312}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/johan\/Dropbox\%20\(Litteraturbanken\)\/dev\/korp\/app\/components\/bootstrap-sass-official\/assets\/stylesheets\/bootstrap\/mixins\/_responsive-visibility\.scss}line{font-family:\0000313}}
   th.visible-print,
   td.visible-print {
     display: table-cell !important;
