@@ -2548,7 +2548,43 @@ settings.corpora["ivip"] = {
         sentence_speaker_role2: {label: "speakerrole2"},
         sentence_speaker_age: {label: "speakerage"},
         sentence_speaker_region: {label: "speakerregion"},
-        sentence_speaker_gender: {label: "speakergender"}
+        sentence_speaker_gender: {label: "speakergender"},
+        sentence_start: {displayType : "hidden"},
+        sentence_end: {displayType : "hidden"},
+        text_mediafilepath: {displayType : "hidden"},
+        text_mediafile: {displayType : "hidden"},
+        text_mediafileext: {displayType : "hidden"}
+    },
+    custom_attributes : {
+        video: {
+            label : "video",
+            renderItem : function(key, value, attrs, wordData, sentenceData, tokens) {
+
+                var startTime = sentenceData['sentence_start'];
+                var endTime = sentenceData['sentence_end'];
+                var startTime = 10000;
+                var endTime = 12000;
+                var path = sentenceData['text_mediafilepath'];
+                var file = sentenceData['text_mediafile'];
+                var ext = sentenceData['text_mediafileext'];
+
+                var videoLink = $('<span class="link">Visa video</span>');
+                videoLink.click(function () {
+                    var url = "http://k2xx.spraakdata.gu.se/ivip/data/Testkorpus/" + path +  file + "." + ext;
+
+                    var scope = angular.element('#video-modal').scope();
+                    scope.videos = [{'url': url, 'type': 'video/mp4'}];
+                    scope.fileName = file + "." + ext;
+                    scope.startTime = startTime / 1000;
+                    scope.endTime = endTime / 1000;
+                    scope.sentence = _.pluck(tokens, 'word').join(" ")
+                    scope.open();
+                    scope.$apply();
+                });
+                return videoLink;
+            },
+            custom_type : "struct"
+        }
     }
 };
 

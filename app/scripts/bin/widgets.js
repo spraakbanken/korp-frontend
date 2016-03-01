@@ -13,14 +13,14 @@
       $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>" + corpusObj.title + "</p>").prependTo("#selected_sentence");
       if (!$.isEmptyObject(corpusObj.attributes)) {
         $("#selected_word").append($("<h4>").localeKey("word_attr"));
-        this.renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes).appendTo("#selected_word");
+        this.renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens).appendTo("#selected_word");
       }
       if (!$.isEmptyObject(corpusObj.struct_attributes)) {
         $("#selected_sentence").append($("<h4>").localeKey("sentence_attr"));
-        this.renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes).appendTo("#selected_sentence");
+        this.renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes, tokens).appendTo("#selected_sentence");
       }
       if (!$.isEmptyObject(corpusObj.custom_attributes)) {
-        ref = this.renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes), word = ref[0], sentence = ref[1];
+        ref = this.renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes, tokens), word = ref[0], sentence = ref[1];
         word.appendTo("#selected_word");
         sentence.appendTo("#selected_sentence");
       }
@@ -52,7 +52,7 @@
         }).parent().find(".ui-dialog-title").localeKey("dep_tree");
       }).appendTo(this.element);
     },
-    renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs) {
+    renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs, tokens) {
       var i, item, items, key, len, order, pairs, ref, ref1, val, value;
       if (type === "struct") {
         pairs = _.pairs(sentenceData);
@@ -80,20 +80,20 @@
         for (j = 0, len1 = pairs.length; j < len1; j++) {
           ref2 = pairs[j], key = ref2[0], value = ref2[1];
           if (corpus_attrs[key]) {
-            results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData));
+            results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens));
           }
         }
         return results;
       }).call(this);
       return $(items);
     },
-    renderCustomContent: function(wordData, sentenceData, corpus_attrs) {
+    renderCustomContent: function(wordData, sentenceData, corpus_attrs, tokens) {
       var attrs, key, output, pos_items, struct_items;
       struct_items = [];
       pos_items = [];
       for (key in corpus_attrs) {
         attrs = corpus_attrs[key];
-        output = this.renderItem(key, null, attrs, wordData, sentenceData);
+        output = this.renderItem(key, null, attrs, wordData, sentenceData, tokens);
         if (attrs.custom_type === "struct") {
           struct_items.push(output);
         } else if (attrs.custom_type === "pos") {
@@ -102,14 +102,14 @@
       }
       return [$(pos_items), $(struct_items)];
     },
-    renderItem: function(key, value, attrs, wordData, sentenceData) {
+    renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
       var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, str_value, ul, val, valueArray, x;
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
         return "";
       }
       output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
       if (attrs.renderItem) {
-        return output.append(attrs.renderItem(key, value, attrs, wordData, sentenceData));
+        return output.append(attrs.renderItem(key, value, attrs, wordData, sentenceData, tokens));
       }
       output.data("attrs", attrs);
       if (value === "|" || value === "") {

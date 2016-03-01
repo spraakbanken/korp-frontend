@@ -19,14 +19,14 @@ Sidebar =
         unless $.isEmptyObject(corpusObj.attributes)
             $("#selected_word").append $("<h4>").localeKey("word_attr")
 
-            @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes).appendTo "#selected_word"
+            @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens).appendTo "#selected_word"
         unless $.isEmptyObject(corpusObj.struct_attributes)
             $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")
 
-            @renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes).appendTo "#selected_sentence"
+            @renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes, tokens).appendTo "#selected_sentence"
 
         unless $.isEmptyObject(corpusObj.custom_attributes)
-            [word, sentence] = @renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes)
+            [word, sentence] = @renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes, tokens)
             word.appendTo "#selected_word"
             sentence.appendTo "#selected_sentence"
 
@@ -56,7 +56,7 @@ Sidebar =
 
         ).appendTo(@element)
 
-    renderCorpusContent: (type, wordData, sentenceData, corpus_attrs) ->
+    renderCorpusContent: (type, wordData, sentenceData, corpus_attrs, tokens) ->
         if type == "struct"
             pairs = _.pairs(sentenceData)
         else if type == "pos"
@@ -71,27 +71,27 @@ Sidebar =
         pairs.sort ([a], [b]) ->
             $.inArray(b, order) - $.inArray(a, order)
         items = for [key, value] in pairs when corpus_attrs[key]
-            @renderItem key, value, corpus_attrs[key], wordData, sentenceData
+            @renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens
         return $(items)
 
-    renderCustomContent: (wordData, sentenceData, corpus_attrs) ->
+    renderCustomContent: (wordData, sentenceData, corpus_attrs, tokens) ->
         struct_items = []
         pos_items = []
         for key, attrs of corpus_attrs
-            output = @renderItem(key, null, attrs, wordData, sentenceData)
+            output = @renderItem(key, null, attrs, wordData, sentenceData, tokens)
             if attrs.custom_type == "struct"
                 struct_items.push output
             else if attrs.custom_type == "pos"
                 pos_items.push output
         return [$(pos_items), $(struct_items)]
 
-    renderItem: (key, value, attrs, wordData, sentenceData) ->
+    renderItem: (key, value, attrs, wordData, sentenceData, tokens) ->
 
         if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
             return ""
         output = $("<p><span rel='localize[#{attrs.label}]'></span>: </p>")
         if attrs.renderItem
-            return output.append(attrs.renderItem key, value, attrs, wordData, sentenceData)
+            return output.append(attrs.renderItem key, value, attrs, wordData, sentenceData, tokens)
 
         output.data("attrs", attrs)
         if value == "|" or value == ""

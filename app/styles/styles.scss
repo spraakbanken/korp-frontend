@@ -2765,3 +2765,50 @@ li.active a span .num-to-find {
     }
   }
 }
+
+/* sidebar video */
+#video-container {
+    height: 320px;
+    width: 568px;
+    position: relative;
+    #extra-controls {
+        height: 320px;
+        width: 568px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        background-color: rgba(0,0,0,0.7);
+        >* {
+            width: 75px;
+            height: 75px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        .restart {
+            top: 35%;
+            left: 25%;
+        }
+        .continue {
+            top: 35%;
+            right: 25%;
+            float: right;
+        }
+        .restart-icon, .continue-icon {
+            font-size: 3em;
+            display: block;
+        }
+    }
+}
+#video-meta-container {
+    .utterance, .time {
+        font-weight: bold;
+    }
+    .time-div {
+        padding-top: 15px;
+    }
+}

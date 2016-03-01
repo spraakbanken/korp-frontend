@@ -1,11 +1,29 @@
 <div class="modal-header">
-    <h3 class="modal-title">Videokorp</h3>
+    <h3 class="modal-title">{{fileName}}</h3>
     <span ng-click="ok()" class="close-x">×</span>
-    <!-- <button style="float:right" class="btn btn-primary" type="button" ng-click="ok()">OK</button> -->
 </div>
 <div class="modal-body">
-    <video id="korp-video" width="100%" autoplay controls ng-init="setTime()">
-        <source ng-repeat="video in videos" src="{{video.url}}" type="{{video.type}}">
-        Your browser does not support the video tag.
-    </video>
+    <div id="video-container">
+        <video id="korp-video" width="100%" height="100%" controls ng-init="init()">
+            Your browser does not support the video tag.
+        </video>
+        <div id="extra-controls" ng-show="isPaused">
+            <div class="restart" ng-click="goToStartTime()">
+                <i class="restart-icon fa fa-repeat"></i>
+                <span>{{"video_restart" | loc:lang}}</span>
+            </div>
+            <div class="continue" ng-click="continuePlay()">
+                <i class="continue-icon fa fa-play"></i>
+                <span>{{"video_continue" | loc:lang}}</span>
+            </div>
+        </div>
+    </div>
+    <div id="video-meta-container">
+        <div class="time-div">
+            <span>{{"video_start_time" | loc:lang}}: <span class="time">{{startTime}}</span></span> <span>{{"video_end_time" | loc:lang}}: <span class="time">{{endTime}}</span></span>
+        </div>
+        <div>
+            {{"video_utterance" | loc:lang}}: <span class="utterance">{{sentence}}</span>
+        </div>
+    </div>
 </div>

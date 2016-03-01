@@ -643,6 +643,15 @@
           },
           startTime: function() {
             return $scope.startTime;
+          },
+          endTime: function() {
+            return $scope.endTime;
+          },
+          fileName: function() {
+            return $scope.fileName;
+          },
+          sentence: function() {
+            return $scope.sentence;
           }
         }
       });
@@ -650,13 +659,65 @@
     return $scope.startTime = 0;
   });
 
-  korpApp.controller("VideoInstanceCtrl", function($scope, $modalInstance, items, startTime) {
-    $scope.videos = items;
-    $scope.setTime = function() {
-      return angular.element("#korp-video")[0].currentTime = startTime;
+  korpApp.controller("VideoInstanceCtrl", function($scope, $compile, $timeout, $uibModalInstance, items, startTime, endTime, fileName, sentence) {
+    var transformSeconds;
+    $scope.fileName = fileName;
+    $scope.sentence = sentence;
+    transformSeconds = function(seconds) {
+      var d, hours, mins, secs;
+      d = moment.duration(seconds, 'seconds');
+      hours = Math.floor(d.asHours());
+      mins = Math.floor(d.asMinutes()) - hours * 60;
+      secs = Math.floor(d.asSeconds()) - hours * 3600 - mins * 60;
+      return hours + ":" + mins + ":" + secs;
     };
+    if (startTime) {
+      $scope.startTime = transformSeconds(startTime);
+    }
+    if (endTime) {
+      $scope.endTime = transformSeconds(endTime);
+    }
+    $scope.init = function() {
+      var k, len1, srcElem, video, videoData, videoElem;
+      videoElem = angular.element("#korp-video");
+      for (k = 0, len1 = items.length; k < len1; k++) {
+        videoData = items[k];
+        srcElem = angular.element('<source>');
+        srcElem.attr('src', videoData.url);
+        srcElem.attr('type', videoData.type);
+        $compile(srcElem)($scope);
+        videoElem.append(srcElem);
+      }
+      video = videoElem[0];
+      video.addEventListener("durationchange", function() {
+        video.currentTime = startTime;
+        return video.play();
+      });
+      video.addEventListener("timeupdate", (function(_this) {
+        return function() {
+          if ($scope.pauseAfterEndTime && endTime && video.currentTime >= endTime) {
+            video.pause();
+            return $timeout((function() {
+              return $scope.isPaused = true;
+            }), 0);
+          }
+        };
+      })(this));
+      $scope.goToStartTime = function() {
+        video.currentTime = startTime;
+        $scope.isPaused = false;
+        return video.play();
+      };
+      return $scope.continuePlay = function() {
+        $scope.pauseAfterEndTime = false;
+        $scope.isPaused = false;
+        return video.play();
+      };
+    };
+    $scope.isPaused = false;
+    $scope.pauseAfterEndTime = true;
     return $scope.ok = function() {
-      return $modalInstance.close();
+      return $uibModalInstance.close();
     };
   });
 

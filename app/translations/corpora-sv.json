@@ -1032,5 +1032,11 @@
     "speakerrole2": "talarroll (2)",
     "speakerage": "talarålder",
     "speakerregion": "talarregion",
-    "speakergender": "talarkön"
+    "speakergender": "talarkön",
+    "video": "video",
+    "video_restart": "Starta om",
+    "video_continue": "Fortsätt",
+    "video_start_time": "Starttid",
+    "video_end_time": "Sluttid",
+    "video_utterance": "Yttrande"
 }

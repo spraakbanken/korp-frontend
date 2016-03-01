@@ -246,7 +246,7 @@ korpApp.directive "exampleCtrl", () ->
     controller: ExampleCtrl
 
 # korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
-korpApp.directive "statsResultCtrl", () -> 
+korpApp.directive "statsResultCtrl", () ->
     controller: ($scope, utils, $location, backend, searches, $rootScope) ->
         s = $scope
 
@@ -309,8 +309,8 @@ korpApp.directive "compareCtrl", () ->
 
             cl = settings.corpusListing.subsetFactory([].concat cmp1.corpora, cmp2.corpora)
             attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
-            
-            s.stringify = _.map reduce, (item) -> 
+
+            s.stringify = _.map reduce, (item) ->
                 return attributes[_.str.strip item, "_."]?.stringify or angular.identity
 
             s.max = max
@@ -329,7 +329,7 @@ korpApp.directive "compareCtrl", () ->
 
                 # number of tokens in search
                 tokenLength = splitTokens[0][0].length
-                
+
                 # transform result from grouping on attribute to grouping on token place
                 tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
                            tokens = _.map reduce, (reduceAttr, attrIdx) ->
@@ -338,23 +338,23 @@ korpApp.directive "compareCtrl", () ->
                            return tokens
 
 
-                cqps = _.map tokens, (token) -> 
+                cqps = _.map tokens, (token) ->
                     cqpAnd = _.map [0..token.length-1], (attrI) ->
                         attrKey = reduce[attrI]
                         attrVal = token[attrI]
 
-                        
+
                         if "_." in attrKey
                             c.log "error, attribute key contains _."
-                        
+
                         attribute = attributes[attrKey]
-                        if attribute 
+                        if attribute
                             type = attribute.type
                             attrKey = "_." + attrKey if attribute.isStructAttr
 
 
                         op = if type == "set" then "contains" else "="
-                    
+
                         if type == "set" and attrVal.length > 1
                             variants = _.flatten _.map(attrVal, (val) ->
                                 val.split(":")[1])
@@ -362,7 +362,7 @@ korpApp.directive "compareCtrl", () ->
                             val = key + ":" + "(" + variants.join("|") + ")"
                         else
                             val = attrVal[0]
-                    
+
                         if type == "set" and val == "|"
                             return "ambiguity(#{attrKey}) = 0"
                         else
@@ -447,7 +447,7 @@ korpApp.directive "mapCtrl", () ->
                               <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{values.rel_occurrences}}</span></div>
                            </div>"""
         s.markers = {}
-        s.mapSettings = 
+        s.mapSettings =
             baseLayer : "Stamen Watercolor"
         s.numResults = 0
         s.showTime = true
@@ -534,14 +534,64 @@ korpApp.controller "VideoCtrl", ($scope, $uibModal) ->
                     return $scope.videos
                 startTime: () ->
                     return $scope.startTime
+                endTime: () ->
+                    return $scope.endTime
+                fileName: () ->
+                    return $scope.fileName
+                sentence: () ->
+                    return $scope.sentence
 
     $scope.startTime = 0
 
-korpApp.controller "VideoInstanceCtrl", ($scope, $modalInstance, items, startTime) ->
-    $scope.videos = items;
+korpApp.controller "VideoInstanceCtrl", ($scope, $compile, $timeout, $uibModalInstance, items, startTime, endTime, fileName, sentence) ->
+    $scope.fileName = fileName
+    $scope.sentence = sentence
 
-    $scope.setTime = () ->
-        angular.element("#korp-video")[0].currentTime = startTime
+    transformSeconds = (seconds) ->
+        d = moment.duration seconds, 'seconds'
+        hours = Math.floor d.asHours()
+        mins = Math.floor(d.asMinutes()) - hours * 60
+        secs = Math.floor(d.asSeconds()) - hours * 3600 - mins * 60
+        return hours + ":" + mins + ":" + secs
 
-    $scope.ok = () -> $modalInstance.close()
+    if startTime
+        $scope.startTime = transformSeconds startTime
+    if endTime
+        $scope.endTime = transformSeconds endTime
 
+    $scope.init = () ->
+        videoElem = angular.element("#korp-video")
+
+        # workaround for firefox problem, not possible to create source-elem in template
+        for videoData in items
+            srcElem = angular.element '<source>'
+            srcElem.attr 'src', videoData.url
+            srcElem.attr 'type', videoData.type
+            $compile(srcElem)($scope);
+            videoElem.append srcElem
+
+        video = videoElem[0]
+
+        video.addEventListener "durationchange", () ->
+            video.currentTime = startTime
+            video.play()
+
+        video.addEventListener "timeupdate", () =>
+            if($scope.pauseAfterEndTime and endTime and video.currentTime >= endTime)
+                video.pause()
+                $timeout (() -> $scope.isPaused = true), 0
+
+        $scope.goToStartTime = () ->
+            video.currentTime = startTime
+            $scope.isPaused = false
+            video.play()
+
+        $scope.continuePlay = () ->
+            $scope.pauseAfterEndTime = false
+            $scope.isPaused = false
+            video.play()
+
+    $scope.isPaused = false
+    $scope.pauseAfterEndTime = true
+
+    $scope.ok = () -> $uibModalInstance.close()
