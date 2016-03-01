@@ -1,6 +1,6 @@
 {
   "name": "Korp",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
