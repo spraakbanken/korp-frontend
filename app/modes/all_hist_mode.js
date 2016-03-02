@@ -460,6 +460,8 @@ settings.corpora.fragelistor = {
 		"text_topicname" : {label : "topic"},
 		"text_topicid" : {label : "topicid"},
 		"text_year" : {label : "year"},
+		"text_amount_answers" : {label : "amount_answers"},
+		"text_author_signature" : {label : "author_signature"},
 		"document_id" : {label : "document_id"},
 		"text_source" : {
 			label : "source",

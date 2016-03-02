@@ -1020,6 +1020,8 @@
     "topic" : "ämne",
     "topicid" : "ämnes-ID",
     "document_id" : "dokument-ID",
+    "author_signature" : "författarsignatur",
+    "amount_answers" : "antal svar",
 
     "sendername" : "avsändare (namm)",
     "sendermail" : "avsändare (e-post)",

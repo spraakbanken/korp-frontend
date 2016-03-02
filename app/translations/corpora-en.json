@@ -1020,6 +1020,8 @@
     "topic" : "topic",
     "topicid" : "topic ID",
     "document_id" : "document ID",
+    "author_signature" : "author signature",
+    "amount_answers" : "amount of answers",
 
     "sendername" : "sender (name)",
     "sendermail" : "sender (e-mail)",
