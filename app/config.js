@@ -2562,8 +2562,6 @@ settings.corpora["ivip"] = {
 
                 var startTime = sentenceData['sentence_start'];
                 var endTime = sentenceData['sentence_end'];
-                var startTime = 10000;
-                var endTime = 12000;
                 var path = sentenceData['text_mediafilepath'];
                 var file = sentenceData['text_mediafile'];
                 var ext = sentenceData['text_mediafileext'];

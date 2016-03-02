@@ -22,7 +22,7 @@ div(ng-controller="SearchCtrl")
           | {{'cqp_query' | loc}}:
           .pull-right
             i.fa.fa-file-o
-            a(href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf') 
+            a(href='http://cwb.sourceforge.net/files/CQP_Tutorial.pdf', target='_blank') 
               | {{'cqp_docs' | loc:lang}}
           textarea#cqp_string(ng-model="cqp")
         search-submit(pos='right')

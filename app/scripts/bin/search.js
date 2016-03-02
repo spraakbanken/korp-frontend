@@ -222,7 +222,7 @@
         lemgram = regescape(this.s.placeholder);
         val = "[lex contains '" + lemgram + "'";
         if (this.isSearchPrefix()) {
-          val += " | prefix contains '" + lemgram + "' ";
+          val += " | prefix contains '" + lemgram + "'";
         }
         if (this.isSearchSuffix()) {
           val += " | suffix contains '" + lemgram + "'";
