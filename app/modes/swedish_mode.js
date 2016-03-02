@@ -2227,16 +2227,16 @@ settings.corpora['kvah'] = {
 };
 
 var fisk1800attrs = {
-        pos : attrs.pos,
-        msd : attrs.msd,
-        lemma : attrs.baseform,
-        lex : attrs.lemgram,
-        saldo : attrs.saldo,
-        prefix : attrs.prefix,
-        suffix : attrs.suffix,
-        dephead : attrs.dephead,
-        deprel : attrs.deprel,
-        ref : attrs.ref,
+    pos : attrs.pos,
+    msd : attrs.msd,
+    lemma : attrs.baseform,
+    lex : attrs.lemgram,
+    saldo : attrs.saldo,
+    prefix : attrs.prefix,
+    suffix : attrs.suffix,
+    dephead : attrs.dephead,
+    deprel : attrs.deprel,
+    ref : attrs.ref,
 };
 
 settings.corporafolders.brevdagbocker = {

@@ -10,18 +10,20 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.eddan = {
-	id : "eddan",
-	title : "Äldre Eddan",
-	description : "",
-	languages : {
-		eddan : "svenska"
-	},
-	within : settings.defaultWithin,
-	context : settings.defaultContext,
-	attributes : {},
-	struct_attributes : {
-	    text_part: {label: "part"}
-	    },
+    id : "eddan",
+    title : "Äldre Eddan",
+    description : "",
+    languages : {
+        eddan : "svenska"
+    },
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : {},
+    struct_attributes : {
+        text_part: {
+            label: "part"
+        }
+    },
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);

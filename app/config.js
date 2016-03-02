@@ -4156,11 +4156,11 @@ settings.corpora.twitter = {
         user_trstrank : {label : "trstrank"},
     },
     custom_attributes : {
-	    text_url : {
-		    label: "url",
-		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-		    custom_type : "struct"
-		    }
+        text_url : {
+            label: "url",
+            pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+            custom_type : "struct"
+            }
     }
 };
 
@@ -4201,11 +4201,11 @@ settings.corpora["twitter-pldebatt-130612"] = {
         user_created : {label : "user_since"}
     },
     custom_attributes : {
-	    text_url : {
-		    label: "url",
-		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-		    custom_type : "struct"
-		    }
+        text_url : {
+            label: "url",
+            pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+            custom_type : "struct"
+            }
     }
 };
 
@@ -4246,11 +4246,11 @@ settings.corpora["twitter-pldebatt-131006"] = {
         user_created : {label : "user_since"}
     },
     custom_attributes : {
-	    text_url : {
-		    label: "url",
-		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-		    custom_type : "struct"
-		    }
+        text_url : {
+            label: "url",
+            pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+            custom_type : "struct"
+            }
     }
 };
 
@@ -4291,11 +4291,11 @@ settings.corpora["twitter-pldebatt-140504"] = {
         user_created : {label : "user_since"}
     },
     custom_attributes : {
-	    text_url : {
-		    label: "url",
-		    pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-		    custom_type : "struct"
-		    }
+        text_url : {
+            label: "url",
+            pattern : "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
+            custom_type : "struct"
+            }
     }
 };
 
