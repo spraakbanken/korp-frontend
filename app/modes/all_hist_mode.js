@@ -451,11 +451,15 @@ settings.corpora.fragelistor = {
  		suffix : attrs.suffix,
  		dephead : attrs.dephead,
  		deprel : attrs.deprel,
- 		ref : attrs.ref
+ 		ref : attrs.ref,
+		ne_ex : attrs.ne_ex,
+		ne_type : attrs.ne_type,
+		ne_subtype : attrs.ne_subtype
 	},
 	struct_attributes : {
 		"text_topicname" : {label : "topic"},
 		"text_topicid" : {label : "topicid"},
+		"text_year" : {label : "year"},
 		"document_id" : {label : "document_id"},
 		"text_source" : {
 			label : "source",
