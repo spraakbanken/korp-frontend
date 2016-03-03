@@ -730,6 +730,69 @@
     return saldo.match(util.saldoRegExp);
   };
 
+  util.setDownloadLinks = function(xhr_settings, result_data) {
+    var corpus_id, corpus_ids, download_params, format, get_corpus_num, i, j, option, result_corpora, result_corpora_settings;
+    if (!((xhr_settings != null) && (result_data != null) && (result_data.corpus_order != null) && (result_data.kwic != null))) {
+      c.log('failed to do setDownloadLinks');
+      return;
+    }
+    get_corpus_num = function(hit_num) {
+      return result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus);
+    };
+    c.log('setDownloadLinks data:', result_data);
+    $('#download-links').empty();
+    result_corpora = result_data.corpus_order.slice(get_corpus_num(0), get_corpus_num(result_data.kwic.length - 1) + 1);
+    result_corpora_settings = {};
+    i = 0;
+    while (i < result_corpora.length) {
+      corpus_ids = result_corpora[i].toLowerCase().split('|');
+      j = 0;
+      while (j < corpus_ids.length) {
+        corpus_id = corpus_ids[j];
+        result_corpora_settings[corpus_id] = settings.corpora[corpus_id];
+        j++;
+      }
+      i++;
+    }
+    $('#download-links').append("<option value='init' rel='localize[download_kwic]'></option>");
+    i = 0;
+    while (i < settings.downloadFormats.length) {
+      format = settings.downloadFormats[i];
+      option = $("<option \n    value=\"" + format + "\"\n    title=\"" + (util.getLocaleString('formatdescr_' + format)) + "\"\n    class=\"download_link\">" + (format.toUpperCase()) + "</option>");
+      download_params = {
+        query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
+        format: format,
+        korp_url: window.location.href,
+        korp_server_url: settings.cgi_script,
+        corpus_config: JSON.stringify(result_corpora_settings),
+        corpus_config_info_keys: ['metadata', 'licence', 'homepage', 'compiler'].join(','),
+        urn_resolver: settings.urnResolver
+      };
+      if ('downloadFormatParams' in settings) {
+        if ('*' in settings.downloadFormatParams) {
+          $.extend(download_params, settings.downloadFormatParams['*']);
+        }
+        if (format in settings.downloadFormatParams) {
+          $.extend(download_params, settings.downloadFormatParams[format]);
+        }
+      }
+      option.appendTo('#download-links').data("params", download_params);
+      i++;
+    }
+    $('#download-links').localize().click(false).change(function(event) {
+      var params, self;
+      params = $(":selected", this).data("params");
+      if (!params) {
+        return;
+      }
+      $.generateFile(settings.download_cgi_script, params);
+      self = $(this);
+      return setTimeout(function() {
+        return self.val("init");
+      }, 1000);
+    });
+  };
+
   util.searchHash = function(type, value) {
     search({
       search: type + "|" + value,

@@ -16,9 +16,10 @@ settings.languages = ["sv", "en"];
 settings.defaultLanguage = "sv";
 
 settings.downloadFormats = [
+    "csv",
+    "tsv",
     "annot",
     "ref",
-    "nooj"
 ];
 
 settings.downloadFormatParams = {

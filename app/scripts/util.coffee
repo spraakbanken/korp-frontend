@@ -586,10 +586,10 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
             result_corpora_settings[corpus_id] = settings.corpora[corpus_id]
             j++
         i++
+    $('#download-links').append("<option value='init' rel='localize[download_kwic]'></option>")
     i = 0
     while i < settings.downloadFormats.length
         format = settings.downloadFormats[i]
-        link_id = format + '-link'
         # NOTE: Using attribute rel="localize[...]" to localize the
         # title attribute requires a small change to
         # lib/jquery.localize.js. Without that, we could use
@@ -597,12 +597,13 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
         # localizations immediately when switching languages but only
         # after reloading the page.
         # # title = util.getLocaleString('formatdescr_' + format)
-        $('#download-links').append(
-            '<a href="javascript:" ' + ' id="' + link_id + '"' +
-            ' title="' + format + '"' +
-            ' rel="localize[formatdescr_' + format + ']"' +
-            ' class="download_link"><img src="img/' + format + '.png" alt="' +
-            format.toUpperCase() + '" /></a>')
+        option = $ """
+            <option 
+                value="#{format}"
+                title="#{util.getLocaleString('formatdescr_' + format)}"
+                class="download_link">#{format.toUpperCase()}</option>
+            """
+        
         download_params =
             query_params: JSON.stringify(
                 $.deparam.querystring(xhr_settings.url))
@@ -622,14 +623,18 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
                 $.extend download_params, settings.downloadFormatParams['*']
             if format of settings.downloadFormatParams
                 $.extend download_params, settings.downloadFormatParams[format]
-        $('#' + link_id).click ((params) ->
-            (e) ->
-                $.generateFile settings.download_cgi_script, params
-                e.preventDefault()
-                return
-        )(download_params)
+        option.appendTo('#download-links').data("params", download_params)
         i++
-    $('#download-links').localize()
+    $('#download-links').localize().click(false).change (event) ->
+        params = $(":selected", this).data("params")
+        unless params then return
+        $.generateFile settings.download_cgi_script, params
+        self = $(this)
+        setTimeout( () ->
+            self.val("init")
+        , 1000)
+
+
     return
 
 util.searchHash = (type, value) ->

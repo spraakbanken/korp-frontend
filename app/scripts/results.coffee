@@ -291,7 +291,7 @@ class view.KWICResults extends BaseResults
                 offset = (firstWord.position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
 
-        util.setDownloadLinks @proxy.prevRequest, data
+        # util.setDownloadLinks @proxy.prevRequest, data
 
         @$result.localize()
         @centerScrollbar()

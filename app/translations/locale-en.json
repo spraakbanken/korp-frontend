@@ -304,6 +304,7 @@
     "baseforms" : "base forms",
     "wordforms" : "word forms",
 
+    "download_kwic" : "Download KWIC as…",
     "formatdescr_json" : "JavaScript Object Notation (raw format)",
     "formatdescr_csv" : "Comma-Separated Values, sentence per row, e.g., for importing to a spreadsheet. Each row has a corpus id, match position, left context, matching tokens, right context and text attributes. The match and contexts contain tokens without attributes.",
     "formatdescr_csvp" : "Comma-Separated Values, token per row, e.g., for importing to a spreadsheet. Each row has one text token with attributes and a potential search hit indicator. Each found sentence is preceded by a line with a corpus ID, corpus position and text attributes for the sentence.",
