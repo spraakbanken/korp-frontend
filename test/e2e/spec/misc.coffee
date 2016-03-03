@@ -64,3 +64,12 @@ describe "json button", () ->
         elm = element By.css("#json-link")
         waitFor elm
         expect(elm.getAttribute("href")).toContain "?command=count"
+
+
+describe "kwic download menu", () ->
+    # would love to test that download is really performed but it's hard to test side effects...
+    it "should show the csv download option", () ->
+        browser.get "http://localhost:9001/#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
+        expect(element(By.cssContainingText('option', 'CSV')).isPresent()).toBe(true)
+        
+

@@ -20,12 +20,13 @@ exports.config = {
   },
 
   // Spec patterns are relative to the current working directly when protractor is called.
-  specs: ['bin/misc.js',
-          'bin/map.js',
-          'bin/autocomplete.js',
-          'bin/statistics.js',
-          'bin/compare.js',
-          'bin/statistics_export.js'],
+  // specs: ['bin/*.js'],
+  specs: ['bin/kwic_download.js'],
+          // 'bin/map.js',
+          // 'bin/autocomplete.js',
+          // 'bin/statistics.js',
+          // 'bin/compare.js',
+          // 'bin/statistics_export.js'],
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
