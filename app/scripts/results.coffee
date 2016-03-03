@@ -45,6 +45,7 @@ class BaseResults
                 c.log "firstResultDef.resolve"
                 @firstResultDef.resolve()
                 @hasData = true
+        util.setDownloadLinks @proxy.prevRequest, data
 
     resultError: (data) ->
         c.error "json fetch error: ", data
@@ -289,6 +290,8 @@ class view.KWICResults extends BaseResults
                 if not firstWord.length then firstWord = mainrow.find(".match .word:first")
                 offset = (firstWord.position().left + scrollLeft) - 25
                 $(linked).find(".lnk").css("padding-left", Math.round(offset))
+
+        util.setDownloadLinks @proxy.prevRequest, data
 
         @$result.localize()
         @centerScrollbar()
@@ -595,7 +598,6 @@ class view.ExampleResults extends view.KWICResults
             @renderCompleteResult data
             safeApply @s, () =>
                 @hidePreloader()
-            # @$result.find(".num-result").html util.prettyNumbers(data.hits)
 
         # def.success = (data) ->
 

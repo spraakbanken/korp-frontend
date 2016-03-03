@@ -228,6 +228,9 @@
                       </div>
                     </div>
                     <kwic-pager></kwic-pager>
+                    <div id="download-links-container">
+                      <div id="download-links"></div><span id="download-heading" rel="localize[download]">Ladda ner som:</span>
+                    </div>
                   </div>
                 </uib-tab>
                 <uib-tab stats-result-ctrl ng-if="_settings.statistics != false" select="instance.onentry()" deselect="instance.onexit()">
@@ -332,6 +335,9 @@
                       </div>
                     </div>
                     <kwic-pager></kwic-pager>
+                    <div id="download-links-container">
+                      <div id="download-links"></div><span id="download-heading" rel="localize[download]">Ladda ner som:</span>
+                    </div>
                   </div>
                 </uib-tab>
                 <uib-tab active="active" ng-repeat="data in graphTabs" graph-ctrl>

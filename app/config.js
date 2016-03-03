@@ -15,6 +15,43 @@ settings.hits_per_page_default = 25
 settings.languages = ["sv", "en"];
 settings.defaultLanguage = "sv";
 
+settings.downloadFormats = [
+    "annot",
+    "ref",
+    "nooj"
+];
+
+settings.downloadFormatParams = {
+    "*": {
+	structs: "+"
+    },
+    "ref": {
+	format: "bibref,xls"
+    },
+    "csvp": {
+	format: "tokens,csv",
+	attrs: "+,-lex",
+	match_marker: "***"
+    },
+    "csv": {
+	format: "sentences,csv"
+    },
+    "annot": {
+	format: "tokens,xls",
+	attrs: "+,-lex",
+	match_marker: "***"
+    },
+    "nooj": {
+	attrs: "+"
+    },
+    "tsv": {
+	format: "sentences,tsv"
+    },
+    "vrt": {
+	attrs: "+"
+    },
+};
+
 // for extended search dropdown, can be 'union' or 'intersection'
 settings.word_attribute_selector = "union"
 settings.struct_attribute_selector = "union"
@@ -4393,6 +4430,9 @@ settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 // settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 // settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 // settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_sme.cgi";
+
+settings.download_cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp_download.cgi";
+
 
 // label values here represent translation keys.
 settings.arg_groups = {

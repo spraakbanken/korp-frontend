@@ -70,6 +70,7 @@
     "import_chain" : "Annotation Lab",
     "show_deptree" : "Show Dependency Tree",
     "dep_tree" : "Dependency Tree",
+    "download" : "Download as",
 
     "is" : "is",
     "is_not" : "is not",
@@ -293,5 +294,23 @@
     "swedbergm" : "17th century",
     "fsvm" : "old swedish",
 
-    "newsdesk-header" : "News"
+    "newsdesk-header" : "News",
+
+    "in_context_prefix" : " in ",
+    "context_sentences" : "sentences",
+    "context_paragraphs" : "paragraphs",
+    "context_texts" : "texts",
+    "which_contain" : "which contain",
+    "baseforms" : "base forms",
+    "wordforms" : "word forms",
+
+    "formatdescr_json" : "JavaScript Object Notation (raw format)",
+    "formatdescr_csv" : "Comma-Separated Values, sentence per row, e.g., for importing to a spreadsheet. Each row has a corpus id, match position, left context, matching tokens, right context and text attributes. The match and contexts contain tokens without attributes.",
+    "formatdescr_csvp" : "Comma-Separated Values, token per row, e.g., for importing to a spreadsheet. Each row has one text token with attributes and a potential search hit indicator. Each found sentence is preceded by a line with a corpus ID, corpus position and text attributes for the sentence.",
+    "formatdescr_tsv" : "Tab-Separated Values, sentence per line, e.g., for processing with Unix-style text tools. Each sentence is on its own line, with fields containing the corpus id, match position, left context, matching tokens, right context and text attributes. The match and contexts contain tokens without attributes.",
+    "formatdescr_vrt" : "VeRticalized Text: Corpus Workbench input format: each row contains one token with attributes, and structures are marked with XML-like elements.",
+    "formatdescr_text" : "Plain text with matches marked: sentence per line, tokens without attributes, text attributes shown",
+    "formatdescr_annot" : "Annotated text as an Excel spreadsheet (XLS), token per row. Each row has one text token with attributes and a potential search hit indicator. Each found sentence is preceded by a line with a corpus ID, corpus position and text attributes for the sentence.",
+    "formatdescr_nooj" : "XML import format for the NooJ software",
+    "formatdescr_ref" : "Bibliographical references as an Excel spreadsheet (XLS) with each matching sentence on its own line, followed by the text attributes of the sentence on their own lines"
 }

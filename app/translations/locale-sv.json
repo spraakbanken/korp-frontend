@@ -71,6 +71,7 @@
     "import_chain" : "Annoteringslabbet",
     "show_deptree" : "Visa dependensträd",
     "dep_tree" : "Dependensträd",
+    "download" : "Ladda ner som",
 
     "case_insensitive" : "skiftlägesoberoende",
     "case_sensitive" : "skiftlägesberoende",
@@ -292,5 +293,23 @@
     "swedbergm" : "1600-tal",
     "fsvm" : "fornsvenska",
 
-    "newsdesk-header" : "Nyheter"
+    "newsdesk-header" : "Nyheter",
+
+    "in_context_prefix" : " i ",
+    "context_sentences" : "satser",
+    "context_paragraphs" : "stycken",
+    "context_texts" : "texter",
+    "which_contain" : "som innehåller",
+    "baseforms" : "grundformer",
+    "wordforms" : "ordformer",
+
+    "formatdescr_json" : "JavaScript Object Notation",
+    "formatdescr_csv" : "Kommaseparerade värden, en mening per rad, t ex for att importera till ett kalkylbladsprogram. Varje rad har en korpusidentifierare, träffens korpusposition, vänsterkontext, träffen, högerkontext och textattribut. Träffen och kontexter innehåller token utan attribut.",
+    "formatdescr_csvp" : "Kommaseparerade värden, ett token per rad, t ex for att importera till ett kalkylbladsprogram. Varje rad har ett token med attribut och potentiellt en markör för sökträffen. Varje träffad mening föregås av en rad med korpus-ID, träffens korpusposition och textattribut för meningen.",
+    "formatdescr_tsv" : "Tabseparerade värden, en mening per rad, t ex for att bearbetas verktygsprogram i Unix. Varje rad har en korpusidentifierare, träffens korpusposition, vänsterkontext, träffen, högerkontext och textattribut. Träffen och kontexter innehåller token utan attribut.",
+    "formatdescr_vrt" : "VeRticalized Text: Corpus Workbench inputformat, där varje rad har ett token med attribut, och strukturer markeras med XML-liknande element.",
+    "formatdescr_text" : "Klartext med träffar markerade, en mening per rad, token utan ordattribut, meningens textattribut inkluderade",
+    "formatdescr_annot" : "Annoterad text som ett Excel-kalkylblad (XLS), ett token per rad. Varje rad har ett token med attribut och potentiellt en markör för sökträffen. Varje träffad mening föregås av en rad med korpus-ID, träffens korpusposition och textattribut för meningen.",
+    "formatdescr_nooj" : "XML-importformat för NooJ",
+    "formatdescr_ref" : "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader"
 }
