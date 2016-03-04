@@ -1,0 +1,53 @@
+div.wordpic_disabled(ng-if="!word_pic")
+  | {{'word_pic_warn' | loc:lang}}
+  div
+    button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
+      | {{'word_pic_warn_btn' | loc:lang}}
+
+warning(ng-if="word_pic && !instance.hasData && !loading && !aborted")
+  | {{'word_pic_bad_search' | loc:lang}}
+warning(ng-if="word_pic && aborted && !loading")
+  | {{'search_aborted' | loc:lang}}
+warning(ng-if="word_pic && no_hits")
+  | {{"no_stats_results" | loc:lang}}
+div(constr='LemgramResults', constr-name='lemgramResults')
+  #wordPicSettings(ng-show="word_pic && instance.hasData")
+    div()
+      input#wordclassChk(ng-model="showWordClass", type='checkbox')
+      label(for='wordclassChk') {{'show_wordclass' | loc:lang}}
+    div()
+      select#numberHitsSelect(ng-model="settings.showNumberOfHits")
+        option(ng-repeat="hitSetting in hitSettings", value="{{hitSetting}}") {{ localeString(lang, hitSetting) }}
+        //- word_pic_number_of_hits
+  .content_target(ng-show="word_pic")
+    div(ng-repeat="word in data", class="tableContainer radialBkg")
+      div(class="header" ng-if="!isLemgram(word.token)")
+        | {{word.token}} (
+        span() {{word.wordClassShort | loc:lang}}
+        | )
+      div(ng-repeat="section in word.data", class="lemgram_section", ng-init="parentIndex = $index")
+
+        div(class="lemgram_help")
+          span(ng-repeat="header in getResultHeader(parentIndex, word.wordClass)",
+               ng-class="getHeaderClasses(header, word.token)", ng-if="renderResultHeader(parentIndex, section, word.wordClass, $index)")
+            span(ng-if="header != '_'")
+              | {{getHeaderLabel(header, section, $index) | loc:lang}}
+            span(ng-if="header == '_'")
+              b() {{fromLemgram(word.token)}}
+
+        div(ng-repeat="table in section", ng-if="renderTable(table.table)",
+            class="lemgram_result",
+            ng-class="getTableClass(word.wordClass, parentIndex, $index)")
+          table()
+            tbody()
+              tr(ng-repeat="row in minimize(table.table)", ng-init="data = parseLemgram(row, table.all_lemgrams)")
+                td()
+                  span(class="enumerate")
+                td()
+                  | {{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup> 
+                  span(ng-if="showWordClass")
+                    | ({{data.pos | loc:lang}})
+                td(title="mi: {{row.mi | number:2}}")
+                  | {{row.freq}}
+                td(ng-click="onClickExample($event, row)")
+                  span(class="word-pic-kwic-example ui-icon ui-icon-document")

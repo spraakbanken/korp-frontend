@@ -255,11 +255,9 @@ korpApp.directive "statsResultCtrl", () ->
             $rootScope.graphTabs.push data
 
 
-
-
 # korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
 korpApp.directive "wordpicCtrl", () ->
-    controller: ($scope, $location, utils, searches) ->
+    controller: ($scope, $rootScope, $location, utils, searches) ->
         $scope.word_pic = $location.search().word_pic?
         $scope.$watch (() -> $location.search().word_pic), (val) ->
             $scope.word_pic = Boolean(val)
@@ -269,6 +267,133 @@ korpApp.directive "wordpicCtrl", () ->
             search = searches.activeSearch
             $scope.instance.makeRequest(search.val, search.type)
 
+        $scope.settings =
+            showNumberOfHits: "15"
+
+        $scope.hitSettings = ["15"]
+
+        $scope.minimize = (table) ->
+          return table.slice 0, $scope.settings.showNumberOfHits
+
+        $scope.onClickExample = (event, row) ->
+            data = row
+
+            opts = {}
+            opts.ajaxParams =
+                start : 0
+                end : 24
+                command : "relations_sentences"
+                source : data.source.join(",")
+                head: data.head
+                dep: data.dep
+                rel: data.rel
+                depextra: data.depextra
+                corpus: data.corpus
+
+            $rootScope.kwicTabs.push opts
+
+        $scope.showWordClass = false
+
+        $rootScope.$on "word_picture_data_available", (event, data) ->
+            $scope.data = data
+
+            max = 0
+            _.map data, (form) ->
+                _.map form, (something) ->
+                    if something instanceof Array
+                        _.map something, (asdf) ->
+                            _.map asdf, (qwerty) ->
+                                if qwerty.table and (qwerty.table.length > max)
+                                    max = qwerty.table.length
+
+            $scope.hitSettings = []
+            if max < 15
+                $scope.settings =
+                    showNumberOfHits: "1000"
+            else
+                $scope.hitSettings.push "15"
+                $scope.settings =
+                    showNumberOfHits: "15"
+
+            if max > 50
+                $scope.hitSettings.push "50"
+            if max > 100
+                $scope.hitSettings.push "100"
+            if max > 500
+                $scope.hitSettings.push "500"
+
+            $scope.hitSettings.push "1000"
+
+        $scope.localeString = (lang, hitSetting) ->
+            if hitSetting == "1000"
+                return util.getLocaleString "word_pic_show_all", lang
+            else
+                return util.getLocaleString("word_pic_show_some", lang) + " " + hitSetting + " " + util.getLocaleString("word_pic_hits", lang)
+
+        $scope.isLemgram = (word) ->
+            return util.isLemgramId(word)
+
+        $scope.renderTable = (obj) ->
+          return obj instanceof Array
+
+        $scope.parseLemgram = (row, allLemgrams) ->
+          set = row[row.show_rel].split('|')
+          lemgram = set[0]
+
+          word = _.str.trim(lemgram)
+          infixIndex = ""
+          concept = lemgram
+          infixIndex = ""
+          type = "-"
+
+          hasHomograph = (lemgram.slice 0, -1) in allLemgrams
+          prefix = row.depextra
+
+          if util.isLemgramId(lemgram)
+              match = util.splitLemgram(lemgram)
+              infixIndex = match.index
+              if row.dep
+                  concept = match.form.replace(/_/g, " ")
+              else
+                  concept = "-"
+              type = match.pos.slice(0, 2)
+          return {
+              label: prefix + " " + concept
+              pos: type
+              idx: infixIndex
+              showIdx: not(infixIndex is "" or infixIndex is "1")
+            }
+
+        $scope.getTableClass = (wordClass, parentIdx, idx) ->
+            return settings.wordPictureConf[wordClass][parentIdx][idx].css_class
+
+        $scope.getHeaderLabel = (header, section, idx) ->
+            if header.alt_label
+                return header.alt_label
+            else
+                return "rel_" + section[idx].rel
+
+        $scope.getHeaderClasses = (header, token) ->
+            if header isnt '_'
+               return "lemgram_header_item " + header.css_class
+            else
+                classes = "hit"
+                if $scope.isLemgram(token)
+                    classes += " lemgram"
+                return classes
+
+        $scope.renderResultHeader = (parentIndex, section, wordClass, index) ->
+            headers = settings.wordPictureConf[wordClass][parentIndex]
+            return section[index] and section[index].table
+
+        $scope.getResultHeader = (index, wordClass) ->
+            return settings.wordPictureConf[wordClass][index]
+
+        $scope.fromLemgram = (maybeLemgram) ->
+            if util.isLemgramId(maybeLemgram)
+                return util.splitLemgram(maybeLemgram).form
+            else
+                return maybeLemgram
 
 # korpApp.controller "graphCtrl", ($scope) ->
 korpApp.directive "graphCtrl", () ->

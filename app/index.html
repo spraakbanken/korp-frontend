@@ -262,20 +262,48 @@
                   <uib-tab-heading ng-class="{not_loading: progress &gt; 99, loading : loading, single: loading &amp;&amp; instance.countCorpora() &lt; 2 }">{{'word_picture' | loc:lang}}
                     <tab-preloader ng-if="loading" value="progress" spinner="instance.countCorpora() &lt; 2"></tab-preloader>
                   </uib-tab-heading>
-                  <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}}
-                    <div>
-                      <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'word_pic_warn_btn' | loc:lang}}</button>
+                  <div>
+                    <div ng-if="!word_pic" class="wordpic_disabled">{{'word_pic_warn' | loc:lang}}
+                      <div>
+                        <button ng-click="activate()" class="btn btn-sm btn-default activate_word_pic">{{'word_pic_warn_btn' | loc:lang}}</button>
+                      </div>
                     </div>
-                  </div>
-                  <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc:lang}}</warning>
-                  <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
-                  <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc:lang}}</warning>
-                  <div constr="LemgramResults" constr-name="lemgramResults">
-                    <div id="wordclassChkParent" ng-show="word_pic &amp;&amp; instance.hasData">
-                      <input id="wordclassChk" type="checkbox">
-                      <label for="wordclassChk" rel="localize[show_wordclass]"></label>
+                    <warning ng-if="word_pic &amp;&amp; !instance.hasData &amp;&amp; !loading &amp;&amp; !aborted">{{'word_pic_bad_search' | loc:lang}}</warning>
+                    <warning ng-if="word_pic &amp;&amp; aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
+                    <warning ng-if="word_pic &amp;&amp; no_hits">{{"no_stats_results" | loc:lang}}</warning>
+                    <div constr="LemgramResults" constr-name="lemgramResults">
+                      <div id="wordPicSettings" ng-show="word_pic &amp;&amp; instance.hasData">
+                        <div>
+                          <input id="wordclassChk" ng-model="showWordClass" type="checkbox">
+                          <label for="wordclassChk">{{'show_wordclass' | loc:lang}}</label>
+                        </div>
+                        <div>
+                          <select id="numberHitsSelect" ng-model="settings.showNumberOfHits">
+                            <option ng-repeat="hitSetting in hitSettings" value="{{hitSetting}}">{{ localeString(lang, hitSetting) }}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div ng-show="word_pic" class="content_target">
+                        <div ng-repeat="word in data" class="tableContainer radialBkg">
+                          <div ng-if="!isLemgram(word.token)" class="header">{{word.token}} (<span>{{word.wordClassShort | loc:lang}}</span>)</div>
+                          <div ng-repeat="section in word.data" ng-init="parentIndex = $index" class="lemgram_section">
+                            <div class="lemgram_help"><span ng-repeat="header in getResultHeader(parentIndex, word.wordClass)" ng-class="getHeaderClasses(header, word.token)" ng-if="renderResultHeader(parentIndex, section, word.wordClass, $index)"><span ng-if="header != '_'">{{getHeaderLabel(header, section, $index) | loc:lang}}</span><span ng-if="header == '_'"><b>{{fromLemgram(word.token)}}</b></span></span></div>
+                            <div ng-repeat="table in section" ng-if="renderTable(table.table)" ng-class="getTableClass(word.wordClass, parentIndex, $index)" class="lemgram_result">
+                              <table>
+                                <tbody>
+                                  <tr ng-repeat="row in minimize(table.table)" ng-init="data = parseLemgram(row, table.all_lemgrams)">
+                                    <td><span class="enumerate"></span></td>
+                                    <td>{{ data.label }}<sup ng-if="data.showIdx">{{data.idx}}</sup> <span ng-if="showWordClass">({{data.pos | loc:lang}})</span></td>
+                                    <td title="mi: {{row.mi | number:2}}">{{row.freq}}</td>
+                                    <td ng-click="onClickExample($event, row)"><span class="word-pic-kwic-example ui-icon ui-icon-document"></span></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div ng-show="word_pic" class="content_target"></div>
                   </div>
                 </uib-tab>
                 <uib-tab ng-show="enableMap" map-ctrl>

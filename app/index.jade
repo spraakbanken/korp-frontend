@@ -104,25 +104,8 @@ html
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
-                  div.wordpic_disabled(ng-if="!word_pic")
-                    | {{'word_pic_warn' | loc:lang}}
-                    div
-                      button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
-                        | {{'word_pic_warn_btn' | loc:lang}}
-
-                  warning(ng-if="word_pic && !instance.hasData && !loading && !aborted")
-                    | {{'word_pic_bad_search' | loc:lang}}
-                  warning(ng-if="word_pic && aborted && !loading")
-                    | {{'search_aborted' | loc:lang}}
-                  warning(ng-if="word_pic && no_hits")
-                    | {{"no_stats_results" | loc:lang}}
-                  div(constr='LemgramResults', constr-name='lemgramResults')
-                    #wordclassChkParent(ng-show="word_pic && instance.hasData")
-                      input#wordclassChk(type='checkbox')
-                      label(for='wordclassChk', rel='localize[show_wordclass]')
-                    //- .progress_container
-                    //-   progress(value='{{progress || 0}}', max='100')
-                    .content_target(ng-show="word_pic")
+                  div()
+                    include includes/word_picture
                 uib-tab(ng-show="enableMap" map-ctrl)
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && countCorpora() < 2 }")
                     | {{'map' | loc:lang }}
@@ -137,10 +120,10 @@ html
             //- ng-class='{visible : word_selected && result_tab == 0}'
             #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
             div(style='clear: both; float: none;')
-            
+
             div(id='video-modal', ng-controller='VideoCtrl')
-                
-            
+
+
       #click_cover
       #deptree_popup(title='Dependensträd', style='display: none;')
       #plot_popup
@@ -231,7 +214,7 @@ html
 
     // warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap
     script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
-    
+
     script(src='components/spin.js/spin.js')
     script(src='components/angular-spinner/angular-spinner.js')
     //- script(src='components/angular-slider/angular-slider.js')

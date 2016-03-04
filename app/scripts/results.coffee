@@ -624,26 +624,15 @@ class view.LemgramResults extends BaseResults
         super tabSelector, resultSelector, scope
         @s = scope
         @tabindex = 3
-        #   TODO: figure out what I use this for.
-        @resultDeferred = $.Deferred()
         @proxy = new model.LemgramProxy()
-        window.lemgramProxy = @proxy
-        @$result.find("#wordclassChk").change ->
-            if $(this).is(":checked")
-                $(".lemgram_result .wordclass_suffix", self.$result).show()
-            else
-                $(".lemgram_result .wordclass_suffix", self.$result).hide()
-
-
 
     resetView: ->
         super()
-        $(".content_target", @$result).empty()
         safeApply @s, () =>
             @s.$parent.aborted = false
             @s.$parent.no_hits = false
 
-    makeRequest : (word, type) ->
+    makeRequest: (word, type) ->
         if @proxy.hasPending()
             @ignoreAbort = true
         else
@@ -657,70 +646,29 @@ class view.LemgramResults extends BaseResults
         def.success (data) =>
             safeApply @s, () =>
                 @renderResult(data, word)
-
-
         def.fail (jqXHR, status, errorThrown) =>
             c.log "def fail", status
             if @ignoreAbort
-                c.log "lemgram ignoreabort"
                 return
             if status == "abort"
                 safeApply @s, () =>
                     @hidePreloader()
-                    c.log "aborted true", @s
                     @s.$parent.aborted = true
 
 
     renderResult: (data, query) ->
-        c.log "lemgram renderResult", data, query
-        # @resetView()
-        $(".content_target", @$result).empty()
         resultError = super(data)
         @hidePreloader()
         @s.$parent.progress = 100
         return if resultError is false
         unless data.relations
             @s.$parent.no_hits = true
-                # @hasData = false
-
-            @resultDeferred.reject()
         else if util.isLemgramId(query)
             @renderTables query, data.relations
-            @resultDeferred.resolve()
         else
             @renderWordTables query, data.relations
-            @resultDeferred.resolve()
-
-    renderHeader: (wordClass, isLemgram) ->
-
-        wordClass = (_.invert settings.wordpictureTagset)[wordClass.toLowerCase()]
-        $(".tableContainer:last .lemgram_section").each((i) ->
-            $parent = $(this).find(".lemgram_help")
-            $(this).find(".lemgram_result").each (j) ->
-                confObj = settings.wordPictureConf[wordClass][i][j]
-                if confObj != "_"
-
-                    unless $(this).find("table").length then return
-
-                    if confObj.alt_label
-                        label = confObj.alt_label
-                    else
-                        label = "rel_" + $(this).data("rel")
-                    cell = $("<span />", class: "lemgram_header_item")
-                        .localeKey(label)
-                        .addClass(confObj.css_class or "").appendTo($parent)
-                    $(this).addClass(confObj.css_class).css "border-color", $(this).css("background-color")
-                else
-                    # c.log "header data", $(this).data("word"), $(this).tmplItem().lemgram
-                    label = $(this).data("word") or $(this).tmplItem().lemgram
-                    classes = "hit"
-                    if isLemgram
-                        classes += " lemgram"
-                    $("<span class='#{classes}'><b>#{label}</b></span>").appendTo $parent
-        ).append "<div style='clear:both;'/>"
 
     renderWordTables: (word, data) ->
-        self = this
         wordlist = $.map(data, (item) ->
             output = []
             output.push [item.head, item.headpos.toLowerCase()] if item.head.split("_")[0] is word
@@ -729,7 +677,6 @@ class view.LemgramResults extends BaseResults
         )
         unique_words = _.uniq wordlist, ([word, pos]) ->
             word + pos
-
         tagsetTrans = _.invert settings.wordpictureTagset
         unique_words = _.filter unique_words, ([currentWd, pos]) ->
             settings.wordPictureConf[tagsetTrans[pos]]?
@@ -737,36 +684,19 @@ class view.LemgramResults extends BaseResults
             @showNoResults()
             return
 
-
-
-        $.each unique_words, (i, [currentWd, pos]) =>
-            self.drawTable currentWd, pos, data
-            self.renderHeader pos, false
-            content = """
-                #{currentWd} (<span rel="localize[pos]">#{util.getLocaleString(pos)}</span>)
-            """
-            $(".tableContainer:last").prepend($("<div>",
-                class: "header"
-            ).html(content)).find(".hit .wordclass_suffix").hide()
-
-        $(".lemgram_result .wordclass_suffix").hide()
+        @drawTables unique_words, data
         @hidePreloader()
 
 
     renderTables: (lemgram, data) ->
-        # wordClass = util.splitLemgram(lemgram).pos.slice(0, 2)
         if data[0].head == lemgram
             wordClass = data[0].headpos
         else
             wordClass = data[0].deppos
-
-        @drawTable lemgram, wordClass, data #, getRelType
-        $(".lemgram_result .wordclass_suffix").hide()
-        @renderHeader wordClass, true
+        @drawTables [[lemgram, wordClass]], data
         @hidePreloader()
 
-    drawTable: (token, wordClass, data) ->
-        # c.log "token, wordClass", token, wordClass
+    drawTables: (tables, data) ->
         inArray = (rel, orderList) ->
             i = _.findIndex orderList, (item) ->
                 (item.field_reverse or false) == (rel.field_reverse or false) and item.rel == rel.rel
@@ -774,124 +704,70 @@ class view.LemgramResults extends BaseResults
             i : i
             type : type
 
-
-
         tagsetTrans = _.invert settings.wordpictureTagset
-        getRelType = (item) ->
-            return {rel : tagsetTrans[item.rel.toLowerCase()] , field_reverse : item.dep == token}
 
-        wordClass = (_.invert settings.wordpictureTagset)[wordClass.toLowerCase()]
+        res = _.map(tables, ([token, wordClass]) ->
+            getRelType = (item) ->
+                return {rel : tagsetTrans[item.rel.toLowerCase()] , field_reverse : item.dep == token}
 
-        unless settings.wordPictureConf[wordClass]?
-            return
-        orderArrays = [[], [], []]
-        $.each data, (index, item) =>
-            $.each settings.wordPictureConf[wordClass] or [], (i, rel_type_list) =>
-                list = orderArrays[i]
-                rel = getRelType(item)
+            wordClassShort = wordClass.toLowerCase()
+            wordClass = (_.invert settings.wordpictureTagset)[wordClassShort]
 
-                return unless rel
-                ret = inArray(rel, rel_type_list)
-                return if ret.i is -1
-                list[ret.i] = [] unless list[ret.i]
-                item.show_rel = ret.type
-                list[ret.i].push item
+            unless settings.wordPictureConf[wordClass]?
+                return
+            orderArrays = [[], [], []]
+            $.each data, (index, item) =>
+                $.each settings.wordPictureConf[wordClass] or [], (i, rel_type_list) =>
+                    list = orderArrays[i]
+                    rel = getRelType(item)
 
+                    return unless rel
+                    ret = inArray(rel, rel_type_list)
+                    return if ret.i is -1
+                    list[ret.i] = [] unless list[ret.i]
+                    item.show_rel = ret.type
+                    list[ret.i].push item
 
-        $.each orderArrays, (i, unsortedList) ->
-            $.each unsortedList, (_, list) ->
-                if list
-                    list.sort (first, second) ->
-                        second.mi - first.mi
-
-
-            if settings.wordPictureConf[wordClass][i] and unsortedList.length
-                toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i])
-                if util.isLemgramId(token)
-                    unsortedList.splice toIndex, 0,
-                        word: token.split("..")[0].replace(/_/g, " ")
-
-                else
-                    unsortedList.splice toIndex, 0,
-                        word: util.lemgramToString(token)
-
-            unsortedList = $.grep(unsortedList, (item, index) ->
-                Boolean item
-            )
+            $.each orderArrays, (i, unsortedList) ->
+                $.each unsortedList, (_, list) ->
+                    if list
+                        list.sort (first, second) ->
+                            second.mi - first.mi
 
 
-        container = $("<div>", class: "tableContainer radialBkg")
-        .appendTo(".content_target", @$result)
+                if settings.wordPictureConf[wordClass][i] and unsortedList.length
+                    toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i])
+                    if util.isLemgramId(token)
+                        unsortedList[toIndex] = word: token.split("..")[0].replace(/_/g, " ")
 
-        c.log "orderArrays", orderArrays
-        $("#lemgramResultsTmpl").tmpl(orderArrays,
-            lemgram: token
-        ).find(".example_link")
-        .append($("<span>")
-            .addClass("ui-icon ui-icon-document")
-        ).css("cursor", "pointer")
-        .click( (event) =>
-            @onClickExample(event)
-        ).end()
-        .appendTo container
+                    else
+                        unsortedList[toIndex] = word: util.lemgramToString(token)
 
-        $("td:nth-child(2)", @$result).each -> # labels
-            $siblings = $(this).parent().siblings().find("td:nth-child(2)")
-            siblingLemgrams = $.map($siblings, (item) ->
-                $(item).data("lemgram").slice 0, -1
-            )
-            hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) isnt -1
-            prefix = (if $(this).data("depextra").length then $(this).data("depextra") + " " else "")
-            data = $(this).tmplItem().data
-            if not data.dep
-                label = "&mdash;"
-            else
-                label = util.lemgramToString($(this).data("lemgram"), hasHomograph)
-            $(this).html prefix + label
+                unsortedList = $.grep(unsortedList, (item, index) ->
+                    Boolean item
+                )
 
+            orderArrays = _.map orderArrays, (section, i) ->
+                return _.map section, (table, j) ->
+                    if table and table[0]
+                        rel = table[0].rel
+                        show_rel = table[0].show_rel
+                        all_lemgrams = _.unique (_.map (_.pluck table, show_rel), (item) ->
+                            if util.isLemgramId item
+                                return item.slice 0, -1
+                            else
+                                return item)
+                        return { table: table, rel: rel, show_rel: show_rel, all_lemgrams: all_lemgrams }
+                    else
+                        return { table: table }
 
+            return {"token": token, "wordClass": wordClass, "wordClassShort": wordClassShort, "data": orderArrays})
 
-    #   self.renderHeader(wordClass);
-    onClickExample: (event) ->
-        self = this
-        $target = $(event.currentTarget)
-        c.log "onClickExample", $target
-        data = $target.parent().tmplItem().data
-
-        opts = {}
-        opts.ajaxParams =
-            start : 0
-            end : 24
-            command : "relations_sentences"
-            source : data.source.join(",")
-            head: data.head
-            dep: data.dep
-            rel: data.rel
-            depextra: data.depextra
-            corpus: data.corpus
-
-
-        @s.$root.kwicTabs.push opts
-
-    showWarning: ->
-        hasWarned = !!$.jStorage.get("lemgram_warning")
-
-        #   var hasWarned = false;
-        unless hasWarned
-            $.jStorage.set "lemgram_warning", true
-            $("#sidebar").sidebar "refreshContent", "lemgramWarning"
-            safeApply @s, () =>
-                @s.$root.sidebar_visible = true
-            self.timeout = setTimeout(=>
-                safeApply @s, () =>
-                    @s.$root.sidebar_visible = false
-                    $("#sidebar").sidebar "refreshContent"
-            , 5000)
+        @s.$root.$broadcast 'word_picture_data_available', res
 
     onentry: ->
         c.log "lemgram onentry"
         super()
-        @resultDeferred.done @showWarning
         return
 
     onexit: ->
@@ -903,13 +779,6 @@ class view.LemgramResults extends BaseResults
 
     showNoResults: ->
         @hidePreloader()
-        # @$result.find(".content_target").html $("<i />").localeKey("no_lemgram_results")
-
-
-
-    hideWordclass: ->
-        $("td:first-child", @$result).each ->
-            $(this).html $.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" "))
 
 
 class view.StatsResults extends BaseResults

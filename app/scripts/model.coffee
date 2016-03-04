@@ -205,6 +205,7 @@ class model.LemgramProxy extends BaseProxy
             incremental: $.support.ajaxProgress
             type: type
             cache : true
+            max : 1000
         @prevParams = params
         def =  $.ajax
             url: settings.cgi_script

@@ -182,18 +182,6 @@ Sidebar =
 
         # @element.css "display", oldDisplay
 
-    refreshContent: (mode) ->
-        if mode is "lemgramWarning"
-            $.Deferred((dfd) =>
-                @element.load "markup/parse_warning.html", =>
-                    util.localize()
-                    @element.addClass("ui-state-highlight").removeClass "kwic_sidebar"
-                    dfd.resolve()
-
-            ).promise()
-        else
-            @element.removeClass("ui-state-highlight").addClass "kwic_sidebar"
-
     updatePlacement: ->
         max = Math.round($("#columns").position().top)
         if $(window).scrollTop() < max

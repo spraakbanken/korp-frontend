@@ -259,7 +259,8 @@
         corpus: settings.corpusListing.stringifySelected(),
         incremental: $.support.ajaxProgress,
         type: type,
-        cache: true
+        cache: true,
+        max: 1000
       };
       this.prevParams = params;
       def = $.ajax({

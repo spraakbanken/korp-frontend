@@ -219,21 +219,6 @@
         return results;
       });
     },
-    refreshContent: function(mode) {
-      if (mode === "lemgramWarning") {
-        return $.Deferred((function(_this) {
-          return function(dfd) {
-            return _this.element.load("markup/parse_warning.html", function() {
-              util.localize();
-              _this.element.addClass("ui-state-highlight").removeClass("kwic_sidebar");
-              return dfd.resolve();
-            });
-          };
-        })(this)).promise();
-      } else {
-        return this.element.removeClass("ui-state-highlight").addClass("kwic_sidebar");
-      }
-    },
     updatePlacement: function() {
       var max;
       max = Math.round($("#columns").position().top);

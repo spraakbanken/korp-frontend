@@ -830,6 +830,11 @@ table {
 .activate_word_pic {
   margin-top : 1em;
 }
+
+.word-pic-kwic-example {
+    cursor: pointer;
+}
+
 .lemgram_result {
   float: left;
   padding-top: 4px;
@@ -2023,11 +2028,9 @@ warning ~ * {
   display : none !important;
 }
 
-#wordclassChkParent {
+#wordPicSettings {
   float: right;
 }
-
-// #wordclassChk! {}
 
 .nav-tabs li {
   position : relative;

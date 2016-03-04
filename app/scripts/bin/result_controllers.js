@@ -321,18 +321,160 @@
 
   korpApp.directive("wordpicCtrl", function() {
     return {
-      controller: function($scope, $location, utils, searches) {
+      controller: function($scope, $rootScope, $location, utils, searches) {
         $scope.word_pic = $location.search().word_pic != null;
         $scope.$watch((function() {
           return $location.search().word_pic;
         }), function(val) {
           return $scope.word_pic = Boolean(val);
         });
-        return $scope.activate = function() {
+        $scope.activate = function() {
           var search;
           $location.search("word_pic", true);
           search = searches.activeSearch;
           return $scope.instance.makeRequest(search.val, search.type);
+        };
+        $scope.settings = {
+          showNumberOfHits: "15"
+        };
+        $scope.hitSettings = ["15"];
+        $scope.minimize = function(table) {
+          return table.slice(0, $scope.settings.showNumberOfHits);
+        };
+        $scope.onClickExample = function(event, row) {
+          var data, opts;
+          data = row;
+          opts = {};
+          opts.ajaxParams = {
+            start: 0,
+            end: 24,
+            command: "relations_sentences",
+            source: data.source.join(","),
+            head: data.head,
+            dep: data.dep,
+            rel: data.rel,
+            depextra: data.depextra,
+            corpus: data.corpus
+          };
+          return $rootScope.kwicTabs.push(opts);
+        };
+        $scope.showWordClass = false;
+        $rootScope.$on("word_picture_data_available", function(event, data) {
+          var max;
+          $scope.data = data;
+          max = 0;
+          _.map(data, function(form) {
+            return _.map(form, function(something) {
+              if (something instanceof Array) {
+                return _.map(something, function(asdf) {
+                  return _.map(asdf, function(qwerty) {
+                    if (qwerty.table && (qwerty.table.length > max)) {
+                      return max = qwerty.table.length;
+                    }
+                  });
+                });
+              }
+            });
+          });
+          $scope.hitSettings = [];
+          if (max < 15) {
+            $scope.settings = {
+              showNumberOfHits: "1000"
+            };
+          } else {
+            $scope.hitSettings.push("15");
+            $scope.settings = {
+              showNumberOfHits: "15"
+            };
+          }
+          if (max > 50) {
+            $scope.hitSettings.push("50");
+          }
+          if (max > 100) {
+            $scope.hitSettings.push("100");
+          }
+          if (max > 500) {
+            $scope.hitSettings.push("500");
+          }
+          return $scope.hitSettings.push("1000");
+        });
+        $scope.localeString = function(lang, hitSetting) {
+          if (hitSetting === "1000") {
+            return util.getLocaleString("word_pic_show_all", lang);
+          } else {
+            return util.getLocaleString("word_pic_show_some", lang) + " " + hitSetting + " " + util.getLocaleString("word_pic_hits", lang);
+          }
+        };
+        $scope.isLemgram = function(word) {
+          return util.isLemgramId(word);
+        };
+        $scope.renderTable = function(obj) {
+          return obj instanceof Array;
+        };
+        $scope.parseLemgram = function(row, allLemgrams) {
+          var concept, hasHomograph, infixIndex, lemgram, match, prefix, ref, set, type, word;
+          set = row[row.show_rel].split('|');
+          lemgram = set[0];
+          word = _.str.trim(lemgram);
+          infixIndex = "";
+          concept = lemgram;
+          infixIndex = "";
+          type = "-";
+          hasHomograph = (ref = lemgram.slice(0, -1), indexOf.call(allLemgrams, ref) >= 0);
+          prefix = row.depextra;
+          if (util.isLemgramId(lemgram)) {
+            match = util.splitLemgram(lemgram);
+            infixIndex = match.index;
+            if (row.dep) {
+              concept = match.form.replace(/_/g, " ");
+            } else {
+              concept = "-";
+            }
+            type = match.pos.slice(0, 2);
+          }
+          return {
+            label: prefix + " " + concept,
+            pos: type,
+            idx: infixIndex,
+            showIdx: !(infixIndex === "" || infixIndex === "1")
+          };
+        };
+        $scope.getTableClass = function(wordClass, parentIdx, idx) {
+          return settings.wordPictureConf[wordClass][parentIdx][idx].css_class;
+        };
+        $scope.getHeaderLabel = function(header, section, idx) {
+          if (header.alt_label) {
+            return header.alt_label;
+          } else {
+            return "rel_" + section[idx].rel;
+          }
+        };
+        $scope.getHeaderClasses = function(header, token) {
+          var classes;
+          if (header !== '_') {
+            return "lemgram_header_item " + header.css_class;
+          } else {
+            classes = "hit";
+            if ($scope.isLemgram(token)) {
+              classes += " lemgram";
+            }
+            return classes;
+          }
+        };
+        $scope.renderResultHeader = function(parentIndex, section, wordClass, index) {
+          var headers;
+          headers = settings.wordPictureConf[wordClass][parentIndex];
+          return section[index] && section[index].table;
+        };
+        $scope.getResultHeader = function(index, wordClass) {
+          return settings.wordPictureConf[wordClass][index];
+        };
+        return $scope.fromLemgram = function(maybeLemgram) {
+          if (util.isLemgramId(maybeLemgram)) {
+            return util.splitLemgram(maybeLemgram).form;
+          } else {
+            return maybeLemgram;
+          }
         };
       }
     };

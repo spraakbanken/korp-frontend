@@ -767,21 +767,11 @@
       LemgramResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.s = scope;
       this.tabindex = 3;
-      this.resultDeferred = $.Deferred();
       this.proxy = new model.LemgramProxy();
-      window.lemgramProxy = this.proxy;
-      this.$result.find("#wordclassChk").change(function() {
-        if ($(this).is(":checked")) {
-          return $(".lemgram_result .wordclass_suffix", self.$result).show();
-        } else {
-          return $(".lemgram_result .wordclass_suffix", self.$result).hide();
-        }
-      });
     }
 
     LemgramResults.prototype.resetView = function() {
       LemgramResults.__super__.resetView.call(this);
-      $(".content_target", this.$result).empty();
       return safeApply(this.s, (function(_this) {
         return function() {
           _this.s.$parent.aborted = false;
@@ -817,13 +807,11 @@
         return function(jqXHR, status, errorThrown) {
           c.log("def fail", status);
           if (_this.ignoreAbort) {
-            c.log("lemgram ignoreabort");
             return;
           }
           if (status === "abort") {
             return safeApply(_this.s, function() {
               _this.hidePreloader();
-              c.log("aborted true", _this.s);
               return _this.s.$parent.aborted = true;
             });
           }
@@ -833,8 +821,6 @@
 
     LemgramResults.prototype.renderResult = function(data, query) {
       var resultError;
-      c.log("lemgram renderResult", data, query);
-      $(".content_target", this.$result).empty();
       resultError = LemgramResults.__super__.renderResult.call(this, data);
       this.hidePreloader();
       this.s.$parent.progress = 100;
@@ -842,53 +828,16 @@
         return;
       }
       if (!data.relations) {
-        this.s.$parent.no_hits = true;
-        return this.resultDeferred.reject();
+        return this.s.$parent.no_hits = true;
       } else if (util.isLemgramId(query)) {
-        this.renderTables(query, data.relations);
-        return this.resultDeferred.resolve();
+        return this.renderTables(query, data.relations);
       } else {
-        this.renderWordTables(query, data.relations);
-        return this.resultDeferred.resolve();
+        return this.renderWordTables(query, data.relations);
       }
     };
 
-    LemgramResults.prototype.renderHeader = function(wordClass, isLemgram) {
-      wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
-      return $(".tableContainer:last .lemgram_section").each(function(i) {
-        var $parent;
-        $parent = $(this).find(".lemgram_help");
-        return $(this).find(".lemgram_result").each(function(j) {
-          var cell, classes, confObj, label;
-          confObj = settings.wordPictureConf[wordClass][i][j];
-          if (confObj !== "_") {
-            if (!$(this).find("table").length) {
-              return;
-            }
-            if (confObj.alt_label) {
-              label = confObj.alt_label;
-            } else {
-              label = "rel_" + $(this).data("rel");
-            }
-            cell = $("<span />", {
-              "class": "lemgram_header_item"
-            }).localeKey(label).addClass(confObj.css_class || "").appendTo($parent);
-            return $(this).addClass(confObj.css_class).css("border-color", $(this).css("background-color"));
-          } else {
-            label = $(this).data("word") || $(this).tmplItem().lemgram;
-            classes = "hit";
-            if (isLemgram) {
-              classes += " lemgram";
-            }
-            return $("<span class='" + classes + "'><b>" + label + "</b></span>").appendTo($parent);
-          }
-        });
-      }).append("<div style='clear:both;'/>");
-    };
-
     LemgramResults.prototype.renderWordTables = function(word, data) {
-      var self, tagsetTrans, unique_words, wordlist;
-      self = this;
+      var tagsetTrans, unique_words, wordlist;
       wordlist = $.map(data, function(item) {
         var output;
         output = [];
@@ -915,19 +864,7 @@
         this.showNoResults();
         return;
       }
-      $.each(unique_words, (function(_this) {
-        return function(i, arg) {
-          var content, currentWd, pos;
-          currentWd = arg[0], pos = arg[1];
-          self.drawTable(currentWd, pos, data);
-          self.renderHeader(pos, false);
-          content = currentWd + " (<span rel=\"localize[pos]\">" + (util.getLocaleString(pos)) + "</span>)";
-          return $(".tableContainer:last").prepend($("<div>", {
-            "class": "header"
-          }).html(content)).find(".hit .wordclass_suffix").hide();
-        };
-      })(this));
-      $(".lemgram_result .wordclass_suffix").hide();
+      this.drawTables(unique_words, data);
       return this.hidePreloader();
     };
 
@@ -938,14 +875,12 @@
       } else {
         wordClass = data[0].deppos;
       }
-      this.drawTable(lemgram, wordClass, data);
-      $(".lemgram_result .wordclass_suffix").hide();
-      this.renderHeader(wordClass, true);
+      this.drawTables([[lemgram, wordClass]], data);
       return this.hidePreloader();
     };
 
-    LemgramResults.prototype.drawTable = function(token, wordClass, data) {
-      var container, getRelType, inArray, orderArrays, tagsetTrans;
+    LemgramResults.prototype.drawTables = function(tables, data) {
+      var inArray, res, tagsetTrans;
       inArray = function(rel, orderList) {
         var i, type;
         i = _.findIndex(orderList, function(item) {
@@ -958,139 +893,106 @@
         };
       };
       tagsetTrans = _.invert(settings.wordpictureTagset);
-      getRelType = function(item) {
-        return {
-          rel: tagsetTrans[item.rel.toLowerCase()],
-          field_reverse: item.dep === token
+      res = _.map(tables, function(arg) {
+        var getRelType, orderArrays, token, wordClass, wordClassShort;
+        token = arg[0], wordClass = arg[1];
+        getRelType = function(item) {
+          return {
+            rel: tagsetTrans[item.rel.toLowerCase()],
+            field_reverse: item.dep === token
+          };
         };
-      };
-      wordClass = (_.invert(settings.wordpictureTagset))[wordClass.toLowerCase()];
-      if (settings.wordPictureConf[wordClass] == null) {
-        return;
-      }
-      orderArrays = [[], [], []];
-      $.each(data, (function(_this) {
-        return function(index, item) {
-          return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
-            var list, rel, ret;
-            list = orderArrays[i];
-            rel = getRelType(item);
-            if (!rel) {
-              return;
-            }
-            ret = inArray(rel, rel_type_list);
-            if (ret.i === -1) {
-              return;
-            }
-            if (!list[ret.i]) {
-              list[ret.i] = [];
-            }
-            item.show_rel = ret.type;
-            return list[ret.i].push(item);
-          });
-        };
-      })(this));
-      $.each(orderArrays, function(i, unsortedList) {
-        var toIndex;
-        $.each(unsortedList, function(_, list) {
-          if (list) {
-            return list.sort(function(first, second) {
-              return second.mi - first.mi;
-            });
-          }
-        });
-        if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
-          toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i]);
-          if (util.isLemgramId(token)) {
-            unsortedList.splice(toIndex, 0, {
-              word: token.split("..")[0].replace(/_/g, " ")
-            });
-          } else {
-            unsortedList.splice(toIndex, 0, {
-              word: util.lemgramToString(token)
-            });
-          }
+        wordClassShort = wordClass.toLowerCase();
+        wordClass = (_.invert(settings.wordpictureTagset))[wordClassShort];
+        if (settings.wordPictureConf[wordClass] == null) {
+          return;
         }
-        return unsortedList = $.grep(unsortedList, function(item, index) {
-          return Boolean(item);
-        });
-      });
-      container = $("<div>", {
-        "class": "tableContainer radialBkg"
-      }).appendTo(".content_target", this.$result);
-      c.log("orderArrays", orderArrays);
-      $("#lemgramResultsTmpl").tmpl(orderArrays, {
-        lemgram: token
-      }).find(".example_link").append($("<span>").addClass("ui-icon ui-icon-document")).css("cursor", "pointer").click((function(_this) {
-        return function(event) {
-          return _this.onClickExample(event);
-        };
-      })(this)).end().appendTo(container);
-      return $("td:nth-child(2)", this.$result).each(function() {
-        var $siblings, hasHomograph, label, prefix, siblingLemgrams;
-        $siblings = $(this).parent().siblings().find("td:nth-child(2)");
-        siblingLemgrams = $.map($siblings, function(item) {
-          return $(item).data("lemgram").slice(0, -1);
-        });
-        hasHomograph = $.inArray($(this).data("lemgram").slice(0, -1), siblingLemgrams) !== -1;
-        prefix = ($(this).data("depextra").length ? $(this).data("depextra") + " " : "");
-        data = $(this).tmplItem().data;
-        if (!data.dep) {
-          label = "&mdash;";
-        } else {
-          label = util.lemgramToString($(this).data("lemgram"), hasHomograph);
-        }
-        return $(this).html(prefix + label);
-      });
-    };
-
-    LemgramResults.prototype.onClickExample = function(event) {
-      var $target, data, opts, self;
-      self = this;
-      $target = $(event.currentTarget);
-      c.log("onClickExample", $target);
-      data = $target.parent().tmplItem().data;
-      opts = {};
-      opts.ajaxParams = {
-        start: 0,
-        end: 24,
-        command: "relations_sentences",
-        source: data.source.join(","),
-        head: data.head,
-        dep: data.dep,
-        rel: data.rel,
-        depextra: data.depextra,
-        corpus: data.corpus
-      };
-      return this.s.$root.kwicTabs.push(opts);
-    };
-
-    LemgramResults.prototype.showWarning = function() {
-      var hasWarned;
-      hasWarned = !!$.jStorage.get("lemgram_warning");
-      if (!hasWarned) {
-        $.jStorage.set("lemgram_warning", true);
-        $("#sidebar").sidebar("refreshContent", "lemgramWarning");
-        safeApply(this.s, (function(_this) {
-          return function() {
-            return _this.s.$root.sidebar_visible = true;
+        orderArrays = [[], [], []];
+        $.each(data, (function(_this) {
+          return function(index, item) {
+            return $.each(settings.wordPictureConf[wordClass] || [], function(i, rel_type_list) {
+              var list, rel, ret;
+              list = orderArrays[i];
+              rel = getRelType(item);
+              if (!rel) {
+                return;
+              }
+              ret = inArray(rel, rel_type_list);
+              if (ret.i === -1) {
+                return;
+              }
+              if (!list[ret.i]) {
+                list[ret.i] = [];
+              }
+              item.show_rel = ret.type;
+              return list[ret.i].push(item);
+            });
           };
         })(this));
-        return self.timeout = setTimeout((function(_this) {
-          return function() {
-            return safeApply(_this.s, function() {
-              _this.s.$root.sidebar_visible = false;
-              return $("#sidebar").sidebar("refreshContent");
-            });
-          };
-        })(this), 5000);
-      }
+        $.each(orderArrays, function(i, unsortedList) {
+          var toIndex;
+          $.each(unsortedList, function(_, list) {
+            if (list) {
+              return list.sort(function(first, second) {
+                return second.mi - first.mi;
+              });
+            }
+          });
+          if (settings.wordPictureConf[wordClass][i] && unsortedList.length) {
+            toIndex = $.inArray("_", settings.wordPictureConf[wordClass][i]);
+            if (util.isLemgramId(token)) {
+              unsortedList[toIndex] = {
+                word: token.split("..")[0].replace(/_/g, " ")
+              };
+            } else {
+              unsortedList[toIndex] = {
+                word: util.lemgramToString(token)
+              };
+            }
+          }
+          return unsortedList = $.grep(unsortedList, function(item, index) {
+            return Boolean(item);
+          });
+        });
+        orderArrays = _.map(orderArrays, function(section, i) {
+          return _.map(section, function(table, j) {
+            var all_lemgrams, rel, show_rel;
+            if (table && table[0]) {
+              rel = table[0].rel;
+              show_rel = table[0].show_rel;
+              all_lemgrams = _.unique(_.map(_.pluck(table, show_rel), function(item) {
+                if (util.isLemgramId(item)) {
+                  return item.slice(0, -1);
+                } else {
+                  return item;
+                }
+              }));
+              return {
+                table: table,
+                rel: rel,
+                show_rel: show_rel,
+                all_lemgrams: all_lemgrams
+              };
+            } else {
+              return {
+                table: table
+              };
+            }
+          });
+        });
+        return {
+          "token": token,
+          "wordClass": wordClass,
+          "wordClassShort": wordClassShort,
+          "data": orderArrays
+        };
+      });
+      return this.s.$root.$broadcast('word_picture_data_available', res);
     };
 
     LemgramResults.prototype.onentry = function() {
       c.log("lemgram onentry");
       LemgramResults.__super__.onentry.call(this);
-      this.resultDeferred.done(this.showWarning);
     };
 
     LemgramResults.prototype.onexit = function() {
@@ -1105,12 +1007,6 @@
 
     LemgramResults.prototype.showNoResults = function() {
       return this.hidePreloader();
-    };
-
-    LemgramResults.prototype.hideWordclass = function() {
-      return $("td:first-child", this.$result).each(function() {
-        return $(this).html($.format("%s <span class='wordClass'>%s</span>", $(this).html().split(" ")));
-      });
     };
 
     return LemgramResults;
