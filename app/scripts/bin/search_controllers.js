@@ -5,61 +5,65 @@
 
   korpApp = angular.module("korpApp");
 
-  korpApp.controller("SearchCtrl", function($scope, $location, utils, searches) {
-    $scope.visibleTabs = [true, true, true, true];
-    $scope.extendedTmpl = "views/extended_tmpl.html";
-    searches.langDef.resolve();
-    $scope.isCompareSelected = false;
-    $scope.$watch((function() {
-      return $location.search().search_tab;
-    }), function(val) {
-      return $scope.isCompareSelected = val === 3;
-    });
-    $scope.$watch((function() {
-      return $location.search().word_pic;
-    }), function(val) {
-      return $scope.word_pic = Boolean(val);
-    });
-    $scope.$watch("word_pic", function(val) {
-      return $location.search("word_pic", Boolean(val) || null);
-    });
-    $scope.$watch((function() {
-      return $location.search().show_map;
-    }), function(val) {
-      return $scope.show_map = Boolean(val);
-    });
-    $scope.$watch("show_map", function(val) {
-      return $location.search("show_map", Boolean(val) || null);
-    });
-    $scope.settings = settings;
-    $scope.showStats = function() {
-      return settings.statistics !== false;
-    };
-    if (!$location.search().stats_reduce) {
-      $location.search('stats_reduce', "word");
-    }
-    $scope.$on("corpuschooserchange", function() {
-      var insensitiveAttrs;
-      $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
-      $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
-      insensitiveAttrs = $location.search().stats_reduce_insensitive;
-      if (insensitiveAttrs) {
-        return $scope.statInsensitiveAttrs = insensitiveAttrs.split(',');
+  window.SearchCtrl = [
+    "$scope", "$location", "utils", "searches", (function($scope, $location, utils, searches) {
+      $scope.visibleTabs = [true, true, true, true];
+      $scope.extendedTmpl = "views/extended_tmpl.html";
+      searches.langDef.resolve();
+      $scope.isCompareSelected = false;
+      $scope.$watch((function() {
+        return $location.search().search_tab;
+      }), function(val) {
+        return $scope.isCompareSelected = val === 3;
+      });
+      $scope.$watch((function() {
+        return $location.search().word_pic;
+      }), function(val) {
+        return $scope.word_pic = Boolean(val);
+      });
+      $scope.$watch("word_pic", function(val) {
+        return $location.search("word_pic", Boolean(val) || null);
+      });
+      $scope.$watch((function() {
+        return $location.search().show_map;
+      }), function(val) {
+        return $scope.show_map = Boolean(val);
+      });
+      $scope.$watch("show_map", function(val) {
+        return $location.search("show_map", Boolean(val) || null);
+      });
+      $scope.settings = settings;
+      $scope.showStats = function() {
+        return settings.statistics !== false;
+      };
+      if (!$location.search().stats_reduce) {
+        $location.search('stats_reduce', "word");
       }
-    });
-    $scope.$watch('statSelectedAttrs', (function(selected) {
-      if (selected && selected.length > 0) {
-        return $location.search('stats_reduce', $scope.statSelectedAttrs.join(','));
-      }
-    }), true);
-    return $scope.$watch('statInsensitiveAttrs', (function(insensitive) {
-      if (insensitive && insensitive.length > 0) {
-        return $location.search('stats_reduce_insensitive', $scope.statInsensitiveAttrs.join(','));
-      } else if (insensitive) {
-        return $location.search('stats_reduce_insensitive', null);
-      }
-    }), true);
-  });
+      $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function() {
+        var insensitiveAttrs;
+        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
+        $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
+        insensitiveAttrs = $location.search().stats_reduce_insensitive;
+        if (insensitiveAttrs) {
+          return $scope.statInsensitiveAttrs = insensitiveAttrs.split(',');
+        }
+      });
+      $scope.$watch('statSelectedAttrs', (function(selected) {
+        if (selected && selected.length > 0) {
+          return $location.search('stats_reduce', $scope.statSelectedAttrs.join(','));
+        }
+      }), true);
+      return $scope.$watch('statInsensitiveAttrs', (function(insensitive) {
+        if (insensitive && insensitive.length > 0) {
+          return $location.search('stats_reduce_insensitive', $scope.statInsensitiveAttrs.join(','));
+        } else if (insensitive) {
+          return $location.search('stats_reduce_insensitive', null);
+        }
+      }), true);
+    })
+  ];
+
+  korpApp.controller("SearchCtrl", window.SearchCtrl);
 
   korpApp.controller("SimpleCtrl", function($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal) {
     var modalInstance, s;
@@ -263,9 +267,9 @@
       return _.pairs(confObj);
     });
     onCorpusChange = function(event, selected) {
-      var lang, ref, ref1;
-      c.log("onCorpusChange", selected, s.l);
-      lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
+      var lang, ref, ref1, ref2, ref3;
+      c.log("onCorpusChange", selected, (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0);
+      lang = (ref2 = s.$parent.$parent) != null ? (ref3 = ref2.l) != null ? ref3.lang : void 0 : void 0;
       s.types = settings.corpusListing.getAttributeGroups(lang);
       s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {

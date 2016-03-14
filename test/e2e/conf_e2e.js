@@ -20,8 +20,8 @@ exports.config = {
   },
 
   // Spec patterns are relative to the current working directly when protractor is called.
-  // specs: ['bin/*.js'],
-  specs: ['bin/kwic_download.js'],
+  specs: ['bin/*.js'],
+  // specs: ['bin/parallel.js'],
           // 'bin/map.js',
           // 'bin/autocomplete.js',
           // 'bin/statistics.js',

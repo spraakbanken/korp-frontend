@@ -1,15 +1,41 @@
 settings.wordpicture = false;
+settings.enableMap = false;
 var start_lang = "swe";
 
-korpApp.controller("SearchCtrl", function($scope) {
+korpApp.controller("SearchCtrl", function($scope, $controller, $location) {
+    $controller(window.SearchCtrl, {$scope: $scope})
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
+
+    $scope.corpusChangeListener() // remove prev listener
+    $scope.$on("corpuschooserchange", function() {
+        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups("swe")
+        $scope.statSelectedAttrs = $location.search().stats_reduce.split(',')
+        insensitiveAttrs = $location.search().stats_reduce_insensitive
+        if(insensitiveAttrs)
+            $scope.statInsensitiveAttrs = insensitiveAttrs.split(',')
+
+    });
+
 
     $scope.settings = settings
     $scope.showStats = function() {
         return settings.statistics != false
     }
 });
+
+function parseLocationLangs() {
+    try {
+        var langs = _(location.hash.split("?")[1].split("&")).invoke("split", "=").object().value()["parallel_corpora"].split(",")
+    } catch(e) {
+        return ["swe"]
+    }
+    c.log("lang", langs)
+    if(langs.length)
+        return langs
+    else
+        return ["swe"]
+}
 
 korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $timeout, searches) {
     var s = $scope;
@@ -29,6 +55,8 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         $location.search("search", null)
     }
     c.log ("add langs watch")
+
+
     var onLangChange = function() {
         var currentLangList = _.pluck(s.langs, "lang");
         c.log("lang change", currentLangList)
@@ -218,6 +246,21 @@ view.KWICResults = Subclass(view.KWICResults, function() {
         this.selected = []
     }
 });
+
+var superType = model.StatsProxy.prototype.constructor
+model.StatsProxy = Subclass(model.StatsProxy, function() {
+    superType.apply(this, arguments);
+}, {
+    makeParameters : function(reduceVals, cqp) {
+        params = superType.prototype.makeParameters.apply(this, arguments)
+
+
+        params.within = settings.corpusListing.getAttributeQuery("within").replace(/\|.*?:/g, ":")
+
+        return params
+    }
+
+})
 
 // model.StatsProxy.prototype.makeRequest = function(){};
 
@@ -2492,6 +2535,6 @@ settings.corpora["espc-en"] = {
 };
 
 
-window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora);
+window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora, parseLocationLangs());
 delete ParallelCorpusListing;
 delete context;

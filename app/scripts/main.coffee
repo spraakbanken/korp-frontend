@@ -27,6 +27,8 @@ deferred_domReady = $.Deferred((dfd) ->
         if mode? and mode isnt "default"
             $.getScript("modes/#{mode}_mode.js").done () ->
                 dfd.resolve()
+            .error (jqxhr, settings, exception) ->
+                c.error "Mode file parsing error: ", exception
         else
             dfd.resolve()
 

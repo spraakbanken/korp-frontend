@@ -38,6 +38,8 @@
       if ((mode != null) && mode !== "default") {
         return $.getScript("modes/" + mode + "_mode.js").done(function() {
           return dfd.resolve();
+        }).error(function(jqxhr, settings, exception) {
+          return c.error("Mode file parsing error: ", exception);
         });
       } else {
         return dfd.resolve();

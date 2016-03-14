@@ -64,7 +64,7 @@
       }), {});
     };
 
-    CorpusListing.prototype.getCurrentAttributes = function() {
+    CorpusListing.prototype.getCurrentAttributes = function(lang) {
       var attrs;
       attrs = this.mapSelectedCorpora(function(corpus) {
         return corpus.attributes;
@@ -305,7 +305,7 @@
     CorpusListing.prototype.getWordAttributeGroups = function(lang, setOperator) {
       var allAttrs, attrs, key, obj;
       if (setOperator === 'union') {
-        allAttrs = this.getCurrentAttributes();
+        allAttrs = this.getCurrentAttributes(lang);
       } else {
         allAttrs = this.getCurrentAttributesIntersection();
       }
@@ -329,7 +329,7 @@
     CorpusListing.prototype.getStructAttributeGroups = function(lang, setOperator) {
       var allAttrs, common, common_keys, key, obj, sentAttrs;
       if (setOperator === 'union') {
-        allAttrs = this.getStructAttrs();
+        allAttrs = this.getStructAttrs(lang);
       } else {
         allAttrs = this.getStructAttrsIntersection();
       }
@@ -386,8 +386,9 @@
   window.ParallelCorpusListing = (function(superClass) {
     extend(ParallelCorpusListing, superClass);
 
-    function ParallelCorpusListing(corpora) {
+    function ParallelCorpusListing(corpora, activeLangs) {
       ParallelCorpusListing.__super__.constructor.call(this, corpora);
+      this.setActiveLangs(activeLangs);
     }
 
     ParallelCorpusListing.prototype.select = function(idArray) {
@@ -500,6 +501,43 @@
         }
       }
       return output;
+    };
+
+    ParallelCorpusListing.prototype.getAttributeQuery = function(attr) {
+      var output, struct;
+      struct = this.getLinksFromLangs(this.activeLangs);
+      output = [];
+      $.each(struct, function(i, corps) {
+        var mainId, mainIsPivot, other, pair;
+        mainId = corps[0].id.toUpperCase();
+        mainIsPivot = !!corps[0].pivot;
+        other = corps.slice(1);
+        pair = _.map(other, function(corp) {
+          var a;
+          if (mainIsPivot) {
+            a = _.keys(corp[attr])[0];
+          } else {
+            a = _.keys(corps[0][attr])[0];
+          }
+          return mainId + "|" + corp.id.toUpperCase() + ":" + a;
+        });
+        return output.push(pair);
+      });
+      return output.join(",");
+    };
+
+    ParallelCorpusListing.prototype.getContextQueryString = function() {
+      return this.getAttributeQuery("context");
+    };
+
+    ParallelCorpusListing.prototype.getWithinParameters = function() {
+      var defaultWithin, within;
+      defaultWithin = search().within || _.keys(settings.defaultWithin)[0];
+      within = this.getAttributeQuery("within");
+      return {
+        defaultWithin: defaultWithin,
+        within: within
+      };
     };
 
     ParallelCorpusListing.prototype.stringifySelected = function(onlyMain) {

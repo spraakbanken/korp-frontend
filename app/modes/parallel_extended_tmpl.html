@@ -8,13 +8,13 @@
       <div id="query_table" extended_list cqp="l.cqp"></div>
       
     </div>
-    <input id="linkedLang" class="btn btn-sm" ng-disabled="!getEnabledLangs(langs.length).length" ng-click="addLangRow()" type="submit" value="{{'add_lang' | loc:lang}}">
+    <input id="linkedLang" class="btn btn-default btn-sm" ng-disabled="!getEnabledLangs(langs.length).length" ng-click="addLangRow()" type="submit" value="{{'add_lang' | loc:lang}}">
     <!-- <span rel="localize[within]"></span> -->
-    <input id="removeLang" class="btn btn-sm" ng-if="langs.length > 1" ng-click="removeLangRow($index)" type="submit" value="{{'remove_lang' | loc:lang}}">
+    <input id="removeLang" class="btn btn-default btn-sm" ng-if="langs.length > 1" ng-click="removeLangRow($index)" type="submit" value="{{'remove_lang' | loc:lang}}">
     <!-- <option value="sentence" rel="localize[within_sentence]">Mening</option> -->
     <!-- <option value="paragraph" rel="localize[within_paragraph]">Stycke</option> -->
     <!-- <search-submit pos="right"></search-submit> -->
-    <button ng-click="onSubmit()"  class="btn btn-sm">{{'search' | loc:lang}}</button> 
+    <button ng-click="onSubmit()"  class="btn btn-default btn-sm">{{'search' | loc:lang}}</button> 
   </div>
 
 

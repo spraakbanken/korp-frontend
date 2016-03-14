@@ -153,6 +153,9 @@ module.exports = function (grunt) {
     },
     clean: {
       dist: {
+        options : {
+          force : true
+        },
         files: [{
           dot: true,
           src: [
@@ -177,6 +180,9 @@ module.exports = function (grunt) {
         }
       },
       e2e: {
+        options : {
+          force : true
+        },
         files: {
           src: [
             'test/e2e/bin'

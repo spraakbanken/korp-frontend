@@ -1,7 +1,6 @@
 korpApp = angular.module("korpApp")
 
-
-korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
+window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $location, utils, searches) ->
     $scope.visibleTabs = [true, true, true, true]
     $scope.extendedTmpl = "views/extended_tmpl.html"
     # for parallel mode
@@ -31,13 +30,16 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
 
     unless $location.search().stats_reduce
         $location.search 'stats_reduce', ("word")
-
-    $scope.$on "corpuschooserchange", () ->
+    
+    # TODO: override this in parallel mode.
+    $scope.corpusChangeListener = $scope.$on "corpuschooserchange", () ->
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
         $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
         insensitiveAttrs = $location.search().stats_reduce_insensitive
         if insensitiveAttrs
             $scope.statInsensitiveAttrs = insensitiveAttrs.split ','
+
+        
 
     $scope.$watch 'statSelectedAttrs', ((selected) ->
         if selected and selected.length > 0
@@ -50,9 +52,10 @@ korpApp.controller "SearchCtrl", ($scope, $location, utils, searches) ->
         else if insensitive
             $location.search 'stats_reduce_insensitive', null
     ), true
+)]
 
 
-
+korpApp.controller "SearchCtrl", window.SearchCtrl
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal) ->
     s = $scope
 
@@ -257,7 +260,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         # sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
         #     _.extend({group : "sentence_attr", value : key}, obj)
 
-        c.log "onCorpusChange", selected, s.l
+        c.log "onCorpusChange", selected, s.$parent.$parent?.l?.lang
 
         lang = s.$parent.$parent?.l?.lang
         # c.log "lang", lang

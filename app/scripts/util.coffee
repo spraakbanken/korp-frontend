@@ -50,7 +50,7 @@ class window.CorpusListing
             _.merge a, b
         ), {}
 
-    getCurrentAttributes: ->
+    getCurrentAttributes: (lang) -> # lang not used here, only in parallel mode
         attrs = @mapSelectedCorpora((corpus) ->
             corpus.attributes
         )
@@ -229,7 +229,7 @@ class window.CorpusListing
 
     getWordAttributeGroups : (lang, setOperator) ->
         if setOperator == 'union'
-            allAttrs = @getCurrentAttributes()
+            allAttrs = @getCurrentAttributes(lang)
         else
             allAttrs = @getCurrentAttributesIntersection()
 
@@ -239,7 +239,7 @@ class window.CorpusListing
 
     getStructAttributeGroups : (lang, setOperator) ->
         if setOperator == 'union'
-            allAttrs = @getStructAttrs()
+            allAttrs = @getStructAttrs(lang)
         else
             allAttrs = @getStructAttrsIntersection()
 
@@ -276,8 +276,9 @@ class window.CorpusListing
 
 
 class window.ParallelCorpusListing extends CorpusListing
-    constructor: (corpora) ->
+    constructor: (corpora, activeLangs) ->
         super(corpora)
+        @setActiveLangs(activeLangs)
 
     select: (idArray) ->
         @selected = []
@@ -349,6 +350,41 @@ class window.ParallelCorpusListing extends CorpusListing
                 output = output.concat _.map linked, (item) -> [item, cps]
 
         output
+
+    getAttributeQuery : (attr) ->
+      
+      #gets the within and context queries
+
+      struct = @getLinksFromLangs(@activeLangs)
+      output = []
+      $.each struct, (i, corps) ->
+
+        mainId = corps[0].id.toUpperCase()
+        mainIsPivot = !!corps[0].pivot
+
+        other = corps.slice(1)
+
+        pair = _.map(other, (corp) ->
+            if mainIsPivot
+                a = _.keys(corp[attr])[0]
+            else
+                a = _.keys(corps[0][attr])[0]
+            mainId + "|" + corp.id.toUpperCase() + ":" + a
+        )
+        output.push pair
+
+      output.join ","
+
+    getContextQueryString: ->
+        @getAttributeQuery("context")
+
+
+    getWithinParameters : ->
+        defaultWithin = search().within or _.keys(settings.defaultWithin)[0]
+        within = @getAttributeQuery("within")
+        return {defaultWithin : defaultWithin, within : within}
+
+
 
     stringifySelected : (onlyMain) ->
 
