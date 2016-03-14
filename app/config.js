@@ -2661,7 +2661,7 @@ settings.corpora.psalmboken = {
     title : "Psalmboken (1937)",
     description : "",
     within : settings.defaultWithin,
-    context : settings.defaultContext,
+    context : settings.spContext,
     attributes : modernAttrs,
     struct_attributes : {
         text_year : {label : "year"}
