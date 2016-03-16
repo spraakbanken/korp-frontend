@@ -8,13 +8,13 @@ settings.enableMap = false;
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
-settings.preselected_corpora = ["somali-1971-79", "somali-2001", "somali-bulsho", "somali-cilmi", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
+settings.preselected_corpora = ["somali-1971-79", "somali-2001", "somali-bulsho", "somali-cilmi", "somali-cb", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
 
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora["somali-1971-79"] = {
     id : "somali-1971-79",
-    title : "Af Soomaali 1971-79",
+    title : "Af Soomaali 1971–79",
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
@@ -49,6 +49,22 @@ settings.corpora["somali-2001"] = {
 settings.corpora["somali-bulsho"] = {
     id : "somali-bulsho",
     title : "Bulsho",
+    description : "",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : {},
+    struct_attributes : {
+        text_year : {label : "year"},
+        text_title : {label : "title"},
+        text_source : {label : "source", type : "url"},
+        text_publisher : {label : "publisher"},
+        text_place : {label : "place"}
+    }
+};
+
+settings.corpora["somali-cb"] = {
+    id : "somali-cb",
+    title : "Cilmiga bulshada 1971–1980",
     description : "",
     within : settings.defaultWithin,
     context : settings.defaultContext,
