@@ -818,7 +818,7 @@ settings.corporafolders.socialmedia = {
 
 settings.corporafolders.socialmedia.bloggmix = {
     title : "Bloggmix",
-    contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmix2014", "bloggmixodat"],
+    contents : ["bloggmix1998", "bloggmix1999", "bloggmix2000", "bloggmix2001", "bloggmix2002", "bloggmix2003", "bloggmix2004", "bloggmix2005", "bloggmix2006", "bloggmix2007", "bloggmix2008", "bloggmix2009", "bloggmix2010", "bloggmix2011", "bloggmix2012", "bloggmix2013", "bloggmix2014", "bloggmix2015", "bloggmixodat"],
     description : "Material från ett urval av svenska bloggar. Uppdateras regelbundet."
 };
 
@@ -2484,6 +2484,15 @@ settings.corpora.bloggmix2012 = {
     struct_attributes : bloggmix_structs
 };
 
+settings.corpora.bloggmix2013 = {
+    id : "bloggmix2013",
+    title : "Bloggmix 2013",
+    within : settings.defaultWithin,
+    context : settings.defaultContext,
+    attributes : modernAttrs,
+    struct_attributes : bloggmix_structs
+};
+
 settings.corpora.bloggmix2014 = {
     id : "bloggmix2014",
     title : "Bloggmix 2014",
@@ -2493,9 +2502,9 @@ settings.corpora.bloggmix2014 = {
     struct_attributes : bloggmix_structs
 };
 
-settings.corpora.bloggmix2013 = {
-    id : "bloggmix2013",
-    title : "Bloggmix 2013",
+settings.corpora.bloggmix2015 = {
+    id : "bloggmix2015",
+    title : "Bloggmix 2015",
     within : settings.defaultWithin,
     context : settings.defaultContext,
     attributes : modernAttrs,
