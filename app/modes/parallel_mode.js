@@ -641,13 +641,7 @@ settings.corpora["aspacsvru-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "rus" : "russian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -672,13 +666,7 @@ settings.corpora["aspacsvru-ru"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "rus" : "russian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -714,13 +702,7 @@ settings.corpora["aspacsvde-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "deu" : "german"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -745,13 +727,7 @@ settings.corpora["aspacsvde-de"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "deu" : "german"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -786,13 +762,7 @@ settings.corpora["aspacsven-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "eng" : "english"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -817,13 +787,7 @@ settings.corpora["aspacsven-en"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "rus" : "english"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -859,13 +823,7 @@ settings.corpora["aspacsves-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "spa" : "spanish"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -890,13 +848,7 @@ settings.corpora["aspacsves-es"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "spa" : "spanish"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -931,13 +883,7 @@ settings.corpora["aspacsvfr-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "fra" : "french"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -962,13 +908,7 @@ settings.corpora["aspacsvfr-fr"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "fra" : "french"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1003,13 +943,7 @@ settings.corpora["aspacsvit-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "fra" : "italian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1034,13 +968,7 @@ settings.corpora["aspacsvit-it"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ita" : "italian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1076,13 +1004,7 @@ settings.corpora["aspacsvnl-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "nld" : "dutch"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1107,13 +1029,7 @@ settings.corpora["aspacsvnl-nl"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "nld" : "dutch"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1149,13 +1065,7 @@ settings.corpora["aspacsvpt-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "por" : "portuguese"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1180,13 +1090,7 @@ settings.corpora["aspacsvpt-pt"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "por" : "portuguese"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1222,13 +1126,7 @@ settings.corpora["aspacsvpl-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "pol" : "polish"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1253,13 +1151,7 @@ settings.corpora["aspacsvpl-pl"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "pol" : "polish"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1295,13 +1187,7 @@ settings.corpora["aspacsvla-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "lat" : "latin"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1326,13 +1212,7 @@ settings.corpora["aspacsvla-la"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "lat" : "latin"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1368,13 +1248,7 @@ settings.corpora["aspacsvbg-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "bul" : "bulgarian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1399,13 +1273,7 @@ settings.corpora["aspacsvbg-bg"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "bul" : "bulgarian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1441,13 +1309,7 @@ settings.corpora["aspacsvcs-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ces" : "czech"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1470,13 +1332,7 @@ settings.corpora["aspacsvcs-cs"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ces" : "czech"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1512,13 +1368,7 @@ settings.corpora["aspacsvbe-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "bel" : "belarusian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1541,13 +1391,7 @@ settings.corpora["aspacsvbe-be"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "bel" : "belarusian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1583,13 +1427,7 @@ settings.corpora["aspacsvhr-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "hrv" : "croatian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1612,13 +1450,7 @@ settings.corpora["aspacsvhr-hr"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "hrv" : "croatian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1654,13 +1486,7 @@ settings.corpora["aspacsvmk-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "mkd" : "macedonian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1684,13 +1510,7 @@ settings.corpora["aspacsvmk-mk"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "mkd" : "macedonian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1726,13 +1546,7 @@ settings.corpora["aspacsvel-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ell" : "greek"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1756,13 +1570,7 @@ settings.corpora["aspacsvel-el"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ell" : "greek"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1798,13 +1606,7 @@ settings.corpora["aspacsvro-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ron" : "romanian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1828,13 +1630,7 @@ settings.corpora["aspacsvro-ro"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ron" : "romanian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1870,13 +1666,9 @@ settings.corpora["aspacsvsk-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "slk" : "slovak"
-            }
+            displayType : "hidden",
+            //     "slk" : "slovak"
+            // }
         }
     }
 };
@@ -1900,13 +1692,7 @@ settings.corpora["aspacsvsk-sk"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "slk" : "slovak"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -1942,13 +1728,7 @@ settings.corpora["aspacsvsl-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "slv" : "slovene"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -1972,13 +1752,7 @@ settings.corpora["aspacsvsl-sl"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "slv" : "slovene"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2014,13 +1788,7 @@ settings.corpora["aspacsvuk-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ukr" : "ukrainian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2044,13 +1812,7 @@ settings.corpora["aspacsvuk-uk"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "ukr" : "ukrainian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2086,13 +1848,7 @@ settings.corpora["aspacsvtk-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "tuk" : "turkmen"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2116,13 +1872,7 @@ settings.corpora["aspacsvtk-tk"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "tuk" : "turkmen"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2158,13 +1908,7 @@ settings.corpora["aspacsvsr-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "srp" : "serbian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2187,13 +1931,7 @@ settings.corpora["aspacsvsr-sr"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "srp" : "serbian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2229,13 +1967,7 @@ settings.corpora["aspacsvsbc-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "srp" : "serbian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2259,13 +1991,7 @@ settings.corpora["aspacsvsbc-sbc"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "srp" : "serbian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2301,13 +2027,7 @@ settings.corpora["aspacsvdsb-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "dsb" : "lower sorbian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2330,13 +2050,7 @@ settings.corpora["aspacsvdsb-dsb"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "dsb" : "lower sorbian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2372,13 +2086,7 @@ settings.corpora["aspacsvhsb-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "hsb" : "upper sorbian"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2402,13 +2110,7 @@ settings.corpora["aspacsvhsb-hsb"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "hsb" : "upper sorbian"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
@@ -2444,13 +2146,7 @@ settings.corpora["aspacsvsvm-sv"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "svm" : "molise slavic"
-            }
+            displayType : "hidden"
         }
     }
 };
@@ -2474,13 +2170,7 @@ settings.corpora["aspacsvsvm-svm"] = {
         text_description : {label : "description"},
         text_lang : {
             label : "lang",
-            displayType : "select",
-            extended_template : selectType.extended_template,
-            controller : selectType.controller,
-            dataset: {
-                "swe" : "swedish",
-                "svm" : "molise slavic"
-            }
+            displayType : "hidden"
         }
     },
     hide : true
