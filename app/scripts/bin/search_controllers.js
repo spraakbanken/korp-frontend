@@ -39,8 +39,9 @@
       if (!$location.search().stats_reduce) {
         $location.search('stats_reduce', "word");
       }
-      $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function() {
+      $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
         var insensitiveAttrs;
+        $scope.noCorporaSelected = !selected.length;
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
         $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
         insensitiveAttrs = $location.search().stats_reduce_insensitive;
@@ -252,7 +253,7 @@
     };
     s.getOpts = _.memoize(function(type) {
       var confObj, ref;
-      if (!(type in s.typeMapping)) {
+      if (!(type in (s.typeMapping || {}))) {
         return;
       }
       confObj = (ref = s.typeMapping) != null ? ref[type] : void 0;
@@ -269,6 +270,9 @@
     onCorpusChange = function(event, selected) {
       var lang, ref, ref1, ref2, ref3;
       c.log("onCorpusChange", selected, (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0);
+      if (!(selected != null ? selected.length : void 0)) {
+        return;
+      }
       lang = (ref2 = s.$parent.$parent) != null ? (ref3 = ref2.l) != null ? ref3.lang : void 0 : void 0;
       s.types = settings.corpusListing.getAttributeGroups(lang);
       s.typeMapping = _.object(_.map(s.types, function(item) {
@@ -281,7 +285,7 @@
       return c.log("typeMapping", s.typeMapping);
     };
     s.$on("corpuschooserchange", onCorpusChange);
-    onCorpusChange();
+    onCorpusChange(null, settings.corpusListing.selected);
     s.removeOr = function(token, and_array, i) {
       if (and_array.length > 1) {
         return and_array.splice(i, 1);

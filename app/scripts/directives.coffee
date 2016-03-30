@@ -467,13 +467,8 @@ korpApp.directive "clickCover", () ->
     # scope :
         # clickCover : "="
     link : (scope, elem, attr) ->
-        cover = $("<div>").css(
-            position: "absolute"
-            top: 0
-            left: 0
-            right : 0
-            bottom : 0
-        ).on "click", () -> return false
+        cover = $("<div class='click-cover'>").on "click", () -> return false
+            
         pos = elem.css("position") or "static"
         scope.$watch () ->
             scope.$eval attr.clickCover

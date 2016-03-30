@@ -31,8 +31,8 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
     unless $location.search().stats_reduce
         $location.search 'stats_reduce', ("word")
     
-    # TODO: override this in parallel mode.
-    $scope.corpusChangeListener = $scope.$on "corpuschooserchange", () ->
+    $scope.corpusChangeListener = $scope.$on "corpuschooserchange", (event, selected) ->
+        $scope.noCorporaSelected = not selected.length
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
         $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
         insensitiveAttrs = $location.search().stats_reduce_insensitive
@@ -238,7 +238,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     # returning new array each time kills angular, hence the memoizing
     s.getOpts = _.memoize (type) ->
-        unless type of s.typeMapping then return
+        unless type of (s.typeMapping or {}) then return
         confObj = s.typeMapping?[type]
         unless confObj
             c.log "confObj missing", type, s.typeMapping
@@ -262,6 +262,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
         c.log "onCorpusChange", selected, s.$parent.$parent?.l?.lang
 
+        unless selected?.length then return
+
         lang = s.$parent.$parent?.l?.lang
         # c.log "lang", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
@@ -283,7 +285,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
     s.$on "corpuschooserchange", onCorpusChange
 
-    onCorpusChange()
+    onCorpusChange(null, settings.corpusListing.selected)
 
 
     s.removeOr = (token, and_array, i) ->

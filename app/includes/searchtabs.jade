@@ -1,4 +1,4 @@
-div(ng-controller="SearchCtrl")
+div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
   uib-tabset.tabbable.search_tabs(tab-hash='search_tab')
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       include simple

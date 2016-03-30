@@ -237,9 +237,16 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
     @include inline-block();
     margin-right: 10px;
   }
-  &.covered {
-    opacity: 0.6;
-  }
+}
+.click-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right : 0;
+  bottom : 0;
+  background-color: white;
+  z-index: 100;
+  opacity: 0.6;
 }
 
 #corpus_id {

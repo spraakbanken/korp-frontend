@@ -91,7 +91,7 @@
         <div style="clear: both;"></div>
       </div>
       <div id="content">
-        <div ng-controller="SearchCtrl">
+        <div ng-controller="SearchCtrl" click-cover="noCorporaSelected">
           <uib-tabset tab-hash="search_tab" class="tabbable search_tabs">
             <uib-tab heading="{{&quot;simple&quot; | loc:lang}}" ng-if="visibleTabs[0]">
               <div id="korp-simple" constr="SimpleSearch" constr-name="simpleSearch" ng-controller="SimpleCtrl">
@@ -441,7 +441,6 @@
           </div>
         </div>
       </div>
-      <div id="click_cover"></div>
       <div id="deptree_popup" title="Dependensträd" style="display: none;"></div>
       <div id="plot_popup">
         <div id="plot_canvas" style="width: 470px; height: 400px;"></div>
