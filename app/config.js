@@ -2562,11 +2562,14 @@ settings.corpora["sprakfragor"] = {
         text_topic: {label: "topic"},
         text_datetime: {label: "date"},
         text_sender: {label: "sender",
-                      type: "set"},
+                      type: "set",
+                      pattern: "<a href='mailto:<%= val.split('<')[1].split('>')[0] %>'><%= val.split('<')[0] %></span>"},
         text_receiver: {label: "receiver",
-                        type: "set"},
+                        type: "set",
+                        pattern: "<a href='mailto:<%= val.split('<')[1].split('>')[0] %>'><%= val.split('<')[0] %></span>"},
         "text_receiver-cc": {label: "copy",
-                           type: "set"}
+                           type: "set",
+                           pattern: "<a href='mailto:<%= val.split('<')[1].split('>')[0] %>'><%= val.split('<')[0] %></span>"}
     }
 };
 
