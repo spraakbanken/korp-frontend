@@ -1023,9 +1023,8 @@
     "author_signature" : "author signature",
     "amount_answers" : "amount of answers",
 
-    "sendername" : "sender (name)",
-    "sendermail" : "sender (e-mail)",
-    "receivername" : "receiver",
+    "receiver" : "receiver",
+    "copy" : "copy",
 
     "country": "country",
     "mediatype": "media type",

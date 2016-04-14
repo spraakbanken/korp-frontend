@@ -1023,9 +1023,8 @@
     "author_signature" : "författarsignatur",
     "amount_answers" : "antal svar",
 
-    "sendername" : "avsändare (namm)",
-    "sendermail" : "avsändare (e-post)",
-    "receivername" : "mottagare",
+    "receiver" : "mottagare",
+    "copy" : "kopia",
 
     "country": "land",
     "mediatype": "mediatyp",

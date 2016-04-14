@@ -793,7 +793,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
     title : "Skyddade korpusar",
-    contents : ["ansokningar", "coctaill", "forhor", "frageladan", "gdc", "soexempel", "sw1203", "tisus", "ivip"]
+    contents : ["ansokningar", "coctaill", "forhor", "sprakfragor", "gdc", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.medical = {
@@ -2547,9 +2547,9 @@ settings.corpora["europarl-sv"] = {
     }
 };
 
-settings.corpora["frageladan"] = {
-    id : "frageladan",
-    title: "Frågelådan",
+settings.corpora["sprakfragor"] = {
+    id : "sprakfragor",
+    title: "Besvarade språkfrågor",
     description : 'Spåkrådets rådgivningsmejl<br><br>För åtkomst kontakta <a href="mailto:per-anders.jande@sprakochfolkminnen.se">Per-Anders Jande</a>.',
     limited_access : true,
     context: {
@@ -2559,11 +2559,14 @@ settings.corpora["frageladan"] = {
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes : {
-        text_topic : {label : "topic"},
-        text_datetime : {label : "date"},
-        text_sendername : {label : "sendername"},
-        text_sendermail : {label : "sendermail"},
-        text_receivername : {label : "receivername"}
+        text_topic: {label: "topic"},
+        text_datetime: {label: "date"},
+        text_sender: {label: "sender",
+                      type: "set"},
+        text_receiver: {label: "receiver",
+                        type: "set"},
+        "text_receiver-cc": {label: "copy",
+                           type: "set"}
     }
 };
 
