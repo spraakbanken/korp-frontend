@@ -774,6 +774,11 @@
       c.log('failed to do setDownloadLinks');
       return;
     }
+    if (result_data.hits === 0) {
+      $('#download-links').hide();
+      return;
+    }
+    $('#download-links').show();
     get_corpus_num = function(hit_num) {
       return result_data.corpus_order.indexOf(result_data.kwic[hit_num].corpus);
     };
@@ -796,7 +801,7 @@
     i = 0;
     while (i < settings.downloadFormats.length) {
       format = settings.downloadFormats[i];
-      option = $("<option \n    value=\"" + format + "\"\n    title=\"" + (util.getLocaleString('formatdescr_' + format)) + "\"\n    class=\"download_link\">" + (format.toUpperCase()) + "</option>");
+      option = $("<option\n    value=\"" + format + "\"\n    title=\"" + (util.getLocaleString('formatdescr_' + format)) + "\"\n    class=\"download_link\">" + (format.toUpperCase()) + "</option>");
       download_params = {
         query_params: JSON.stringify($.deparam.querystring(xhr_settings.url)),
         format: format,

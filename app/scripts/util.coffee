@@ -352,7 +352,7 @@ class window.ParallelCorpusListing extends CorpusListing
         output
 
     getAttributeQuery : (attr) ->
-      
+
       #gets the within and context queries
 
       struct = @getLinksFromLangs(@activeLangs)
@@ -599,6 +599,12 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
         c.log 'failed to do setDownloadLinks'
         return
 
+    if result_data.hits == 0
+        $('#download-links').hide()
+        return
+
+    $('#download-links').show()
+
     # Get the number (index) of the corpus of the query result hit
     # number hit_num in the corpus order information of the query
     # result.
@@ -634,12 +640,12 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
         # after reloading the page.
         # # title = util.getLocaleString('formatdescr_' + format)
         option = $ """
-            <option 
+            <option
                 value="#{format}"
                 title="#{util.getLocaleString('formatdescr_' + format)}"
                 class="download_link">#{format.toUpperCase()}</option>
             """
-        
+
         download_params =
             query_params: JSON.stringify(
                 $.deparam.querystring(xhr_settings.url))
@@ -669,7 +675,6 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
         setTimeout( () ->
             self.val("init")
         , 1000)
-
 
     return
 
