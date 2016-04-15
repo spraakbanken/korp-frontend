@@ -246,7 +246,7 @@ class view.SimpleSearch extends BaseSearch
         else
             wordArray = currentText.split(" ")
             cqp = $.map(wordArray, (item, i) ->
-                $.format "[word = \"%s\"%s]", [regescape(item), suffix]
+                return "[word = \"#{regescape(item)}\"#{suffix}]"
             )
             val = cqp.join(" ")
 

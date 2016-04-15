@@ -241,7 +241,7 @@
       } else {
         wordArray = currentText.split(" ");
         cqp = $.map(wordArray, function(item, i) {
-          return $.format("[word = \"%s\"%s]", [regescape(item), suffix]);
+          return "[word = \"" + (regescape(item)) + "\"" + suffix + "]";
         });
         val = cqp.join(" ");
       }
