@@ -28,7 +28,7 @@
     "tag": "1.1.2",
     "commit": "257bc3445462b6acd8e7956f91fde0d4ea08107c"
   },
-  "_source": "git://github.com/leaflet-extras/leaflet-providers.git",
-  "_target": "~1.1.1",
+  "_source": "https://github.com/leaflet-extras/leaflet-providers.git",
+  "_target": "1.1.2",
   "_originalSource": "leaflet-providers"
 }
