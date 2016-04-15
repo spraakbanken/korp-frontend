@@ -45,7 +45,12 @@ CQPParser = (function() {
         peg$c4 = { type: "literal", value: "[", description: "\"[\"" },
         peg$c5 = "]",
         peg$c6 = { type: "literal", value: "]", description: "\"]\"" },
-        peg$c7 = function() {return {"and_block":[[{type:"word",op:"=",val:""}]]}},
+        peg$c7 = function(repeat) {
+            var result = {"and_block":[[{type:"word",op:"=",val:""}]]}
+            if(repeat)
+              result.repeat = repeat
+            return result
+          },
         peg$c8 = " & ",
         peg$c9 = { type: "literal", value: " & ", description: "\" & \"" },
         peg$c10 = function(left, right, repeat) {
@@ -454,9 +459,18 @@ CQPParser = (function() {
           if (peg$silentFails === 0) { peg$fail(peg$c6); }
         }
         if (s2 !== peg$FAILED) {
-          peg$savedPos = s0;
-          s1 = peg$c7();
-          s0 = s1;
+          s3 = peg$parserepeat();
+          if (s3 === peg$FAILED) {
+            s3 = null;
+          }
+          if (s3 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c7(s3);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
         } else {
           peg$currPos = s0;
           s0 = peg$FAILED;

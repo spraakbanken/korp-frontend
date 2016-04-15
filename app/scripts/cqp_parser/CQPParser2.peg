@@ -32,8 +32,12 @@ tokens
 
 
 token
-  = "[" "]" // empty token
-    {return {"and_block":[[{type:"word",op:"=",val:""}]]}}
+  = "[" "]" repeat:repeat? {
+    var result = {"and_block":[[{type:"word",op:"=",val:""}]]}
+    if(repeat)
+      result.repeat = repeat
+    return result
+  }
   / "[" left:and right:(" & " and)* "]" repeat:repeat? {
     var output = left
     right.forEach(function(item) {
