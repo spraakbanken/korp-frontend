@@ -1,8 +1,5 @@
 settings.primaryColor = "#F7D1E4";
 settings.primaryLight = "#FFEBF5";
-settings.autocomplete = false;
-settings.lemgramSelect = false;
-settings.wordpicture = false;
 
 settings.struct_attribute_selector = "intersection"
 settings.word_attribute_selector   = "intersection"
