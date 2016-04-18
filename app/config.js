@@ -2563,16 +2563,19 @@ settings.corpora["sprakfragor"] = {
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes : {
-        text_topic: {label: "topic"},
-        text_datetime: {label: "date"},
+        text_topic: {label: "topic", ord: 10},
+        text_datetime: {label: "date", ord: 9},
         text_sender: {label: "sender",
+                      ord: 8,
                       type: "set",
                     //   pattern: "<a href='mailto:<%= val.split('<')[1].split('>')[0] %>'><%= val.split('<')[0] %></span>"},
                       pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"},
         text_receiver: {label: "receiver",
+                        ord: 7,
                         type: "set",
                         pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"},
         "text_receiver-cc": {label: "copy",
+                           ord: 6,
                            type: "set",
                            pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"}
     }
