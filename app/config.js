@@ -313,9 +313,9 @@ attrs.pos = {
     opts : settings.liteOptions,
     extended_template : selectType.extended_template,
     controller : selectType.controller,
-
-
+    ord: 50
 };
+
 attrs.msd = {
     label : "msd",
     opts : settings.defaultOptions,
@@ -353,7 +353,8 @@ attrs.baseform = {
     label : "baseform",
     type : "set",
     opts : settings.setOptions,
-    extended_template : "<input ng-model='model' >"
+    extended_template : "<input ng-model='model' >",
+    ord: 49
 };
 attrs.lemgram = {
     label : "lemgram",
@@ -368,6 +369,7 @@ attrs.lemgram = {
     externalSearch : karpLemgramLink,
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
+    ord: 48
 };
 attrs.dalinlemgram = {
     label : "dalin-lemgram",
@@ -382,6 +384,7 @@ attrs.dalinlemgram = {
     externalSearch : karpLemgramLink,
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
+    ord: 48
 };
 attrs.saldo = {
     label : "saldo",
@@ -394,6 +397,7 @@ attrs.saldo = {
     externalSearch : "http://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='sense'/>",
+    ord: 47
 };
 attrs.dephead = {
     label : "dephead",
@@ -4660,30 +4664,31 @@ settings.posset = {
    extended_template : selectType.extended_template,
    controller : selectType.controller,
    dataset :  {
-    "AB" : "AB",
-    "MID|MAD|PAD" : "DL",
-    "DT" : "DT",
-    "HA" : "HA",
-    "HD" : "HD",
-    "HP" : "HP",
-    "HS" : "HS",
-    "IE" : "IE",
-    "IN" : "IN",
-    "JJ" : "JJ",
-    "KN" : "KN",
-    "NN" : "NN",
-    "PC" : "PC",
-    "PL" : "PL",
-    "PM" : "PM",
-    "PN" : "PN",
-    "PP" : "PP",
-    "PS" : "PS",
-    "RG" : "RG",
-    "RO" : "RO",
-    "SN" : "SN",
-    "UO" : "UO",
-    "VB" : "VB"
-            }
+        "AB" : "AB",
+        "MID|MAD|PAD" : "DL",
+        "DT" : "DT",
+        "HA" : "HA",
+        "HD" : "HD",
+        "HP" : "HP",
+        "HS" : "HS",
+        "IE" : "IE",
+        "IN" : "IN",
+        "JJ" : "JJ",
+        "KN" : "KN",
+        "NN" : "NN",
+        "PC" : "PC",
+        "PL" : "PL",
+        "PM" : "PM",
+        "PN" : "PN",
+        "PP" : "PP",
+        "PS" : "PS",
+        "RG" : "RG",
+        "RO" : "RO",
+        "SN" : "SN",
+        "UO" : "UO",
+        "VB" : "VB"
+    },
+    ord: 50
 };
 settings.fsvlemma = {
     type : "set",
@@ -4713,7 +4718,8 @@ settings.fsvvariants = {
     extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     opts : settings.setOptions,
     externalSearch : karpLemgramLink,
-    internalSearch : true
+    internalSearch : true,
+    ord: 46
 };
 
 

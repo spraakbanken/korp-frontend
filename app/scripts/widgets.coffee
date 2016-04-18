@@ -1,14 +1,4 @@
 Sidebar =
-    options: {
-        displayOrder : [
-            "pos",
-            "posset",
-            "lemma",
-            "lex",
-            "saldo",
-            "variants"
-        ].reverse()
-    }
     _init: () ->
 
     updateContent: (sentenceData, wordData, corpus, tokens) ->
@@ -59,6 +49,7 @@ Sidebar =
     renderCorpusContent: (type, wordData, sentenceData, corpus_attrs, tokens) ->
         if type == "struct"
             pairs = _.pairs(sentenceData)
+
         else if type == "pos"
             pairs = _.pairs(wordData)
             for item in (wordData._struct or [])
@@ -66,11 +57,22 @@ Sidebar =
                 if key of corpus_attrs
                     pairs.push([key, val])
 
-          # c.log "wordData", wordData._struct
-        order = @options.displayOrder
+        pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
+
         pairs.sort ([a], [b]) ->
-            $.inArray(b, order) - $.inArray(a, order)
-        items = for [key, value] in pairs when corpus_attrs[key]
+            ord1 = corpus_attrs[a].ord
+            ord2 = corpus_attrs[b].ord
+            # first three cases to handle ord1 or ord2 being undefined
+            if ord1 == ord2
+                return 0
+            if not ord1
+                return 1
+            if not ord2
+                return -1
+            else
+                return ord2 - ord1
+
+        items = for [key, value] in pairs
             @renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens
         return $(items)
 

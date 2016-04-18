@@ -2,9 +2,6 @@
   var Sidebar;
 
   Sidebar = {
-    options: {
-      displayOrder: ["pos", "posset", "lemma", "lex", "saldo", "variants"].reverse()
-    },
     _init: function() {},
     updateContent: function(sentenceData, wordData, corpus, tokens) {
       var corpusObj, ref, sentence, word;
@@ -53,7 +50,7 @@
       }).appendTo(this.element);
     },
     renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs, tokens) {
-      var i, item, items, key, len, order, pairs, ref, ref1, val, value;
+      var i, item, items, key, len, pairs, ref, ref1, val, value;
       if (type === "struct") {
         pairs = _.pairs(sentenceData);
       } else if (type === "pos") {
@@ -67,21 +64,35 @@
           }
         }
       }
-      order = this.options.displayOrder;
+      pairs = _.filter(pairs, function(arg) {
+        var key, val;
+        key = arg[0], val = arg[1];
+        return corpus_attrs[key];
+      });
       pairs.sort(function(arg, arg1) {
-        var a, b;
+        var a, b, ord1, ord2;
         a = arg[0];
         b = arg1[0];
-        return $.inArray(b, order) - $.inArray(a, order);
+        ord1 = corpus_attrs[a].ord;
+        ord2 = corpus_attrs[b].ord;
+        if (ord1 === ord2) {
+          return 0;
+        }
+        if (!ord1) {
+          return 1;
+        }
+        if (!ord2) {
+          return -1;
+        } else {
+          return ord2 - ord1;
+        }
       });
       items = (function() {
         var j, len1, ref2, results;
         results = [];
         for (j = 0, len1 = pairs.length; j < len1; j++) {
           ref2 = pairs[j], key = ref2[0], value = ref2[1];
-          if (corpus_attrs[key]) {
-            results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens));
-          }
+          results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens));
         }
         return results;
       }).call(this);
