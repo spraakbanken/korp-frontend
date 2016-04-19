@@ -175,7 +175,8 @@
       scope: {
         tokenValue: "=",
         model: "=model",
-        orObj: "=orObj"
+        orObj: "=orObj",
+        lang: "="
       },
       template: "<div>{{tokenValue.label}}</div>",
       link: function(scope, elem, attr) {
@@ -404,7 +405,8 @@
     return {
       templateUrl: "views/extendedlist.html",
       scope: {
-        cqp: "="
+        cqp: "=",
+        lang: "="
       },
       link: function($scope, elem, attr) {
         var s, setCQP;

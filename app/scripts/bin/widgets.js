@@ -73,8 +73,8 @@
         var a, b, ord1, ord2;
         a = arg[0];
         b = arg1[0];
-        ord1 = corpus_attrs[a].ord;
-        ord2 = corpus_attrs[b].ord;
+        ord1 = corpus_attrs[a].order;
+        ord2 = corpus_attrs[b].order;
         if (ord1 === ord2) {
           return 0;
         }

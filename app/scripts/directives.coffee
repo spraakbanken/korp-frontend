@@ -142,6 +142,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         tokenValue : "="
         model : "=model"
         orObj : "=orObj"
+        lang : "="
     template : """
         <div>{{tokenValue.label}}</div>
     """
@@ -374,6 +375,7 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
     # scope : true
     scope : {
         cqp : "="
+        lang: "="
     },
     link : ($scope, elem, attr) ->
         s = $scope

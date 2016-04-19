@@ -60,8 +60,8 @@ Sidebar =
         pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
 
         pairs.sort ([a], [b]) ->
-            ord1 = corpus_attrs[a].ord
-            ord2 = corpus_attrs[b].ord
+            ord1 = corpus_attrs[a].order
+            ord2 = corpus_attrs[b].order
             # first three cases to handle ord1 or ord2 being undefined
             if ord1 == ord2
                 return 0

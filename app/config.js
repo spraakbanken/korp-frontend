@@ -313,7 +313,7 @@ attrs.pos = {
     opts : settings.liteOptions,
     extended_template : selectType.extended_template,
     controller : selectType.controller,
-    ord: 50
+    order: 50
 };
 
 attrs.msd = {
@@ -354,7 +354,7 @@ attrs.baseform = {
     type : "set",
     opts : settings.setOptions,
     extended_template : "<input ng-model='model' >",
-    ord: 49
+    order: 49
 };
 attrs.lemgram = {
     label : "lemgram",
@@ -369,7 +369,7 @@ attrs.lemgram = {
     externalSearch : karpLemgramLink,
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
-    ord: 48
+    order: 48
 };
 attrs.dalinlemgram = {
     label : "dalin-lemgram",
@@ -384,7 +384,7 @@ attrs.dalinlemgram = {
     externalSearch : karpLemgramLink,
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
-    ord: 48
+    order: 48
 };
 attrs.saldo = {
     label : "saldo",
@@ -397,7 +397,7 @@ attrs.saldo = {
     externalSearch : "http://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch : true,
     extended_template : "<autoc model='model' placeholder='placeholder' type='sense'/>",
-    ord: 47
+    order: 47
 };
 attrs.dephead = {
     label : "dephead",
@@ -2563,19 +2563,19 @@ settings.corpora["sprakfragor"] = {
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes : {
-        text_topic: {label: "topic", ord: 10},
-        text_datetime: {label: "date", ord: 9},
+        text_topic: {label: "topic", order: 10},
+        text_datetime: {label: "date", order: 9},
         text_sender: {label: "sender",
-                      ord: 8,
+                      order: 8,
                       type: "set",
                     //   pattern: "<a href='mailto:<%= val.split('<')[1].split('>')[0] %>'><%= val.split('<')[0] %></span>"},
                       pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"},
         text_receiver: {label: "receiver",
-                        ord: 7,
+                        order: 7,
                         type: "set",
                         pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"},
         "text_receiver-cc": {label: "copy",
-                           ord: 6,
+                           order: 6,
                            type: "set",
                            pattern: "<span> <%= val.replace(/</g, '&lt;').replace(/</g, '&lt;') %></span>"}
     }
@@ -2598,18 +2598,18 @@ settings.corpora["ivip"] = {
         }
     }),
     struct_attributes : {
-        text_country: {label: "country", ord: 20},
-        text_city: {label: "city", ord: 19},
-        text_place: {label: "location", ord: 18},
+        text_country: {label: "country", order: 20},
+        text_city: {label: "city", order: 19},
+        text_place: {label: "location", order: 18},
         // deltage ord 17
-        text_mediatype: {label: "mediatype", ord: 9},
-        text_consentid: {label: "consentid", ord: 11},
-        text_date: {label: "date", ord: 10},
-        sentence_speaker_id: {label: "speaker", ord: 16},
-        sentence_speaker_role1: {label: "speakerrole1", ord: 12},
-        sentence_speaker_age: {label: "speakerage", ord: 14},
-        sentence_speaker_region: {label: "speakerregion", ord: 13},
-        sentence_speaker_gender: {label: "speakergender", ord: 15},
+        text_mediatype: {label: "mediatype", order: 9},
+        text_consentid: {label: "consentid", order: 11},
+        text_date: {label: "date", order: 10},
+        sentence_speaker_id: {label: "speaker", order: 16},
+        sentence_speaker_role1: {label: "speakerrole1", order: 12},
+        sentence_speaker_age: {label: "speakerage", order: 14},
+        sentence_speaker_region: {label: "speakerregion", order: 13},
+        sentence_speaker_gender: {label: "speakergender", order: 15},
         sentence_start: {displayType : "hidden"},
         sentence_end: {displayType : "hidden"},
         text_mediafilepath: {displayType : "hidden"},
@@ -4639,7 +4639,7 @@ settings.reduce_cqp = function(type, tokens, ignoreCase) {
                 }
                 return type + " contains '" + res + "'";
         case "word":
-            s = $.format('word="%s"', [tokens[0]]);
+            s = 'word="'+ regescape(tokens[0]) + '"';
             if(ignoreCase)
                 s = s + ' %c'
             return s
@@ -4691,7 +4691,7 @@ settings.posset = {
         "UO" : "UO",
         "VB" : "VB"
     },
-    ord: 50
+    order: 50
 };
 settings.fsvlemma = {
     type : "set",
@@ -4722,7 +4722,7 @@ settings.fsvvariants = {
     opts : settings.setOptions,
     externalSearch : karpLemgramLink,
     internalSearch : true,
-    ord: 46
+    order: 46
 };
 
 
