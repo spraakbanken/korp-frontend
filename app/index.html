@@ -464,41 +464,8 @@
       </div>
       
       
+      
     </script>
-    <script id="lemgramResultsTmpl" type="text/x-jquery-tmpl">
-      <div class="lemgram_section">
-      {{if $data.length}}
-      <div class='lemgram_help' />
-      {{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramTableTmpl'}}
-      {{/if}}
-      </div>
-    </script>
-    <script id="lemgramTableTmpl" type="text/x-jquery-tmpl">
-      <div class="lemgram_result"
-      {{if word}}
-      data-word="${word}">
-      <h3 id="display_word"></h3>
-      {{else}}
-      data-rel="${$data[0].rel}"
-      data-show_rel="${$data[0].show_rel}">
-      <table>
-      {{tmpl($data, {"lemgram" : $item.lemgram}) '#lemgramRowTmpl'}}
-      </table>
-      {{/if}}
-      </div>
-    </script>
-    <script id="lemgramRowTmpl" type="text/x-jquery-tmpl">
-      <tr>
-      <td><span class="enumerate"/></td>
-      <td data-lemgram="${$.grep($item.data[show_rel].split("|"), Boolean)[0]}" data-depextra="${depextra}"></td>
-      <td title="${$.format("mi: %.2f", mi)}">${freq}</td>
-      <td class="example_link"></td>
-      </tr>
-    </script>
-    
-    
-    
-    
     <!--if lte IE 8script(language='javascript', src='lib/flot/excanvas.min.js')
     -->
     <script>
@@ -538,7 +505,6 @@
     <script src="components/jstorage/jstorage.js"></script>
     <script src="lib/jquery.hoverIntent.js"></script>
     <script src="lib/jquery.ui.preloader.min.js"></script>
-    <script src="lib/jquery.tmpl.js"></script>
     <script src="lib/flot/jquery.flot.min.js"></script>
     <script src="lib/flot/jquery.flot.stack.js"></script>
     <script src="components/SlickGrid/slick.core.js"></script>
