@@ -68,6 +68,11 @@ module.exports = function (grunt) {
         // tasks: ['livereload']
       }
     },
+    shell: {
+        postBuild: {
+            command: 'sh post_build.sh'
+        }
+    },
     protractor: {
       options: {
         keepAlive: false, // If false, the grunt process stops when the test fails.
@@ -418,8 +423,7 @@ module.exports = function (grunt) {
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json',
-            'components/leaflet/dist/images/layers.png',
-            'LICENSE'
+            'components/leaflet/dist/images/layers.png'
           ]
         },
         {
@@ -428,6 +432,12 @@ module.exports = function (grunt) {
           src: ['components/jquery-ui/themes/smoothness/images/*'],
           dest: '<%= yeoman.dist %>/images',
           flatten: true
+        },
+        {
+          cwd: '',
+          dest: '<%= yeoman.dist %>/',
+          src: ['LICENSE']
+
         }]
       } // removed from 0.8, not sure if we need
       // styles: {
@@ -501,8 +511,6 @@ module.exports = function (grunt) {
       }
     }
   });
-
-  // grunt.renameTask('regarde', 'watch');
 
   grunt.registerTask('release', function(target) {
     grunt.task.run([
@@ -584,7 +592,8 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'shell:postBuild'
   ]);
 
   grunt.registerTask('default', [

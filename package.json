@@ -27,6 +27,7 @@
     "grunt-protractor-runner": "^2.1.0",
     "grunt-protractor-webdriver": "^0.2.5",
     "grunt-rev": "^0.1.0",
+    "grunt-shell": "^1.3.0",
     "grunt-svgmin": "^2.0.1",
     "grunt-svninfo": "^0.1.5",
     "grunt-usemin": "^3.0.0",

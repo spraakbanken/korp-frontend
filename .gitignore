@@ -7,3 +7,4 @@ node_modules
 *.map
 .vscode
 test/e2e/bin/
+release_bin
