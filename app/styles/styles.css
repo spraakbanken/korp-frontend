@@ -6117,3 +6117,8 @@ li.active a span .num-to-find {
 #video-meta-container .time-div {
   padding-top: 15px;
 }
+
+/* line 2859, styles.scss */
+.or_container .word {
+  color: #222222;
+}
