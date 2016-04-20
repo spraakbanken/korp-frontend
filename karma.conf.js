@@ -26,9 +26,10 @@ module.exports = function(config) {
     // ];
     // list of files / patterns to load in the browser
     files: [
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
+      'app/components/angular/angular.js',
+      'app/components/angular-mocks/angular-mocks.js',
       'app/components/lodash/lodash.js',
+      'app/components/moment/moment.js',
       'app/config.js',
       'app/scripts/bin/util.js',
       'app/scripts/cqp_parser/CQPParser.js',
