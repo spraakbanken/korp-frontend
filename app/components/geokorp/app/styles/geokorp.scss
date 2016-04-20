@@ -1,0 +1,142 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+
+sb-map {
+  padding: 8px;
+
+  .leaflet-marker-icon.leaflet-div-icon.leaflet-clickable {
+    background-color : red;
+    border : none;
+    border-radius: 10px;
+    width : 7px !important;
+    height : 7px !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 4px;
+    background-color: #f6f6f6;
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+  }
+
+  .leaflet-popup-tip {
+    background-color: #e6e6e6;
+  }
+
+  .leaflet-bar a:link, .leaflet-bar a:visited {
+    color: black
+  }
+
+  /* Everything but the jumbotron gets side spacing for mobile first views */
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Custom page header */
+  .header {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+
+    /* Make the masthead heading the same height as the navigation */
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 40px;
+      padding-bottom: 19px;
+    }
+  }
+
+  /* Custom page footer */
+  .footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .container-narrow > hr {
+    margin: 30px 0;
+  }
+
+  /* Main marketing message and sign up button */
+  .jumbotron {
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+
+    .btn {
+      font-size: 21px;
+      padding: 14px 24px;
+    }
+  }
+
+  /* Supporting marketing content */
+  .marketing {
+    margin: 40px 0;
+
+    p + h4 {
+      margin-top: 28px;
+    }
+  }
+
+  /* Responsive: Portrait tablets and up */
+  @media screen and (min-width: 768px) {
+    .container {
+      max-width: 730px;
+    }
+
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing,
+    .footer {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    /* Space out the masthead */
+    .header {
+      margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+      border-bottom: 0;
+    }
+  }
+
+  .map {
+      border: 1px solid black;
+  }
+
+  #sb-map-container {
+    position: relative;
+    height: 522px;
+  }
+
+  #leaflet-map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #hover-info {
+    width: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .hover-info {
+    opacity: 1;
+    transition : opacity 500ms;
+    z-index: 10;
+    background-color: #f6f6f6;
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 4px;
+  }
+
+}

@@ -266,3 +266,5 @@
   $.widget("hp.pie_widget", pie_widget);
 
 }).call(this);
+
+//# sourceMappingURL=pie-widget.js.map

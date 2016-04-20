@@ -826,3 +826,5 @@
   })(BaseProxy);
 
 }).call(this);
+
+//# sourceMappingURL=model.js.map

@@ -96,7 +96,8 @@
         }
         return results;
       }).call(this);
-      return $(items);
+      c.log("_.compact items", _.compact(items));
+      return $(_.compact(items));
     },
     renderCustomContent: function(wordData, sentenceData, corpus_attrs, tokens) {
       var attrs, key, output, pos_items, struct_items;
@@ -282,3 +283,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=widgets.js.map
