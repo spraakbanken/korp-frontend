@@ -173,7 +173,7 @@ window.CQP =
 
 
 # cqp = '[(word = "ge" | pos = "JJ" | lemma = "sdfsdfsdf") & deprel = "SS" & (word = "sdfsdf" | word = "b" | word = "a")]'
-c.log CQP.stringify( CQP.parse('[(word &= "ge" | pos = "JJ")]'), true)
+# c.log CQP.stringify( CQP.parse('[(word &= "ge" | pos = "JJ")]'), true)
 # c.log JSON.stringify (CQP.parse '[word = "apa"'), null, 2
 
 

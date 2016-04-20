@@ -99,9 +99,8 @@ or
   / date
 
 value_expr
-    = ["] rhs:(!["] .)* ["] {
-        rhs = _.map(rhs, _.last);
-        return rhs.join("");
+    = ["] rhs:('\\"' / [^"])* ["] {
+        return rhs.join(""); 
     }
     / ['] rhs:(!['] .)* ['] {
         rhs = _.map(rhs, _.last);

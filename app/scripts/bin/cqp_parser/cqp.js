@@ -199,8 +199,6 @@
     }
   };
 
-  c.log(CQP.stringify(CQP.parse('[(word &= "ge" | pos = "JJ")]'), true));
-
   c.log(CQP.stringify([
     {
       "and_block": [
