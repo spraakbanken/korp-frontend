@@ -199,43 +199,4 @@
     }
   };
 
-  c.log(CQP.stringify([
-    {
-      "and_block": [
-        [
-          {
-            "type": "date_interval",
-            "op": "!=",
-            "val": "18870101,20101231"
-          }, {
-            "type": "word",
-            "op": "!=",
-            "val": "value"
-          }, {
-            "type": "word",
-            "op": "&=",
-            "val": "value2"
-          }
-        ], [
-          {
-            "type": "word",
-            "op": "not contains",
-            "val": "ge..vb.1"
-          }
-        ]
-      ]
-    }, {
-      "and_block": [
-        [
-          {
-            "type": "word",
-            "op": "=",
-            "val": ""
-          }
-        ]
-      ],
-      "repeat": [1, 2]
-    }
-  ]));
-
 }).call(this);
