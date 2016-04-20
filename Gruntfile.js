@@ -221,7 +221,7 @@ module.exports = function (grunt) {
     },
     coffee: {
       options: {
-        sourceMap: false,
+        sourceMap: true,
         sourceRoot: '..'
       },
       dist: {
