@@ -102,8 +102,12 @@ value_expr
     = ["] rhs:('\\"' / [^"])* ["] {
         return rhs.join(""); 
     }
-    / ['] rhs:(!['] .)* ['] {
-        rhs = _.map(rhs, _.last);
+    / ['] rhs:("\\'" / [^'])* ['] {
+        rhs = _.map(rhs, function(char) {
+            if(char == '"')
+                return '\\"'
+            return char
+        });
         return rhs.join("");
     }
 
