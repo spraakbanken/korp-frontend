@@ -337,7 +337,7 @@ class model.StatsProxy extends BaseProxy
         @currentPage = 0
         @page_incr = 25
 
-    processData: (def, data, reduceVals, reduceValLabels, ignoreCase, tokensLength) ->
+    processData: (def, data, reduceVals, reduceValLabels, ignoreCase) ->
         minWidth = 100
 
         columns = []
@@ -348,7 +348,7 @@ class model.StatsProxy extends BaseProxy
                 name: reduceValLabel
                 field: "hit_value"
                 sortable: true
-                formatter: settings.reduce_statistics reduceVals, ignoreCase, tokensLength
+                formatter: settings.reduce_statistics reduceVals, ignoreCase
                 minWidth: minWidth
                 cssClass: "parameter-column"
                 headerCssClass: "localized-header"
@@ -470,8 +470,7 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                tokensLength = (CQP.parse cqp).length
-                @processData(def, data, reduceVals, reduceValLabels, ignoreCase, tokensLength)
+                @processData(def, data, reduceVals, reduceValLabels, ignoreCase)
 
         return def.promise()
 

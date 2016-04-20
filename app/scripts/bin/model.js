@@ -409,7 +409,7 @@
       this.page_incr = 25;
     }
 
-    StatsProxy.prototype.processData = function(def, data, reduceVals, reduceValLabels, ignoreCase, tokensLength) {
+    StatsProxy.prototype.processData = function(def, data, reduceVals, reduceValLabels, ignoreCase) {
       var columns, dataset, groups, j, len, minWidth, reduceVal, reduceValLabel, ref, ref1, sizeOfDataset, statsWorker, wordArray;
       minWidth = 100;
       columns = [];
@@ -421,7 +421,7 @@
           name: reduceValLabel,
           field: "hit_value",
           sortable: true,
-          formatter: settings.reduce_statistics(reduceVals, ignoreCase, tokensLength),
+          formatter: settings.reduce_statistics(reduceVals, ignoreCase),
           minWidth: minWidth,
           cssClass: "parameter-column",
           headerCssClass: "localized-header"
@@ -553,14 +553,12 @@
         },
         success: (function(_this) {
           return function(data) {
-            var tokensLength;
             if (data.ERROR != null) {
               c.log("gettings stats failed with error", data.ERROR);
               def.reject(data);
               return;
             }
-            tokensLength = (CQP.parse(cqp)).length;
-            return _this.processData(def, data, reduceVals, reduceValLabels, ignoreCase, tokensLength);
+            return _this.processData(def, data, reduceVals, reduceValLabels, ignoreCase);
           };
         })(this)
       }));
