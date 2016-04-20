@@ -8,15 +8,6 @@ describe "lemgram autocomplete", () ->
         autocompleteMenu = element(By.css 'ul.dropdown-menu')
         expect(autocompleteMenu.isDisplayed()).toBe true
 
-    it "should not show for historic mode", () ->
-        browser.get "http://localhost:9001/?mode=all_hist"
-        input = element By.css "#simple_text .standard_searchbox"
-        input.sendKeys "gå"
-        
-        autocompleteMenu = element By.css 'ul.dropdown-menu'
-        browser.sleep 1000
-        expect(autocompleteMenu.isDisplayed()).toBe false
-
 describe "lemgram suggestions", () ->
     
     it "should be clickable and show correct output", () ->
