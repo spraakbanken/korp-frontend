@@ -161,7 +161,8 @@
       sent = scope.sentence;
       event.stopPropagation();
       word = $(event.target);
-      if ($("#sidebar").data().korpSidebar != null) {
+      c.log("sidebar", $("#sidebar").data());
+      if ($("#sidebar").data()["korp-sidebar"]) {
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
       }
       return this.selectWord(word, scope, sent);

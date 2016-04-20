@@ -9,7 +9,9 @@ Sidebar =
         unless $.isEmptyObject(corpusObj.attributes)
             $("#selected_word").append $("<h4>").localeKey("word_attr")
 
-            @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens).appendTo "#selected_word"
+            posData = @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens)
+            # posData.appendTo "#selected_word"
+            $("#selected_word").append posData
         unless $.isEmptyObject(corpusObj.struct_attributes)
             $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")
 
@@ -72,10 +74,12 @@ Sidebar =
             else
                 return ord2 - ord1
 
-        items = for [key, value] in pairs
-            @renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens
-        c.log "_.compact items", _.compact items
-        return $(_.compact items)
+        items = []
+        for [key, value] in pairs
+            items = items.concat (@renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens).get?(0)
+
+        items = _.compact items
+        return $(items)
 
     renderCustomContent: (wordData, sentenceData, corpus_attrs, tokens) ->
         struct_items = []

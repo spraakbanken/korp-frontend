@@ -129,7 +129,7 @@ class view.KWICResults extends BaseResults
         event.stopPropagation()
         word = $(event.target)
         # $.sm.send("word.select")
-        if $("#sidebar").data().korpSidebar?
+        if $("#sidebar").data()["korp-sidebar"]
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
         @selectWord word, scope, sent

@@ -3092,8 +3092,6 @@ a.thumbnail.active {
 .alert-danger .alert-link {
   color: #843534;
 }
-<<<<<<< 0b9baca810d6a1cf632445bfadca66e98c1aa2ef
-=======
 
 @-webkit-keyframes progress-bar-stripes {
   from {
@@ -3103,7 +3101,6 @@ a.thumbnail.active {
     background-position: 0 0;
   }
 }
->>>>>>> cleaned more lib stuff, updated jquery and slickgrid
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;

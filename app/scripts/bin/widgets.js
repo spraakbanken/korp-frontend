@@ -4,13 +4,14 @@
   Sidebar = {
     _init: function() {},
     updateContent: function(sentenceData, wordData, corpus, tokens) {
-      var corpusObj, ref, sentence, word;
+      var corpusObj, posData, ref, sentence, word;
       this.element.html('<div id="selected_sentence" /><div id="selected_word" />');
       corpusObj = settings.corpora[corpus];
       $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>" + corpusObj.title + "</p>").prependTo("#selected_sentence");
       if (!$.isEmptyObject(corpusObj.attributes)) {
         $("#selected_word").append($("<h4>").localeKey("word_attr"));
-        this.renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens).appendTo("#selected_word");
+        posData = this.renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens);
+        $("#selected_word").append(posData);
       }
       if (!$.isEmptyObject(corpusObj.struct_attributes)) {
         $("#selected_sentence").append($("<h4>").localeKey("sentence_attr"));
@@ -50,7 +51,7 @@
       }).appendTo(this.element);
     },
     renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs, tokens) {
-      var i, item, items, key, len, pairs, ref, ref1, val, value;
+      var base, i, item, items, j, key, len, len1, pairs, ref, ref1, ref2, val, value;
       if (type === "struct") {
         pairs = _.pairs(sentenceData);
       } else if (type === "pos") {
@@ -87,17 +88,13 @@
           return ord2 - ord1;
         }
       });
-      items = (function() {
-        var j, len1, ref2, results;
-        results = [];
-        for (j = 0, len1 = pairs.length; j < len1; j++) {
-          ref2 = pairs[j], key = ref2[0], value = ref2[1];
-          results.push(this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens));
-        }
-        return results;
-      }).call(this);
-      c.log("_.compact items", _.compact(items));
-      return $(_.compact(items));
+      items = [];
+      for (j = 0, len1 = pairs.length; j < len1; j++) {
+        ref2 = pairs[j], key = ref2[0], value = ref2[1];
+        items = items.concat(typeof (base = this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens)).get === "function" ? base.get(0) : void 0);
+      }
+      items = _.compact(items);
+      return $(items);
     },
     renderCustomContent: function(wordData, sentenceData, corpus_attrs, tokens) {
       var attrs, key, output, pos_items, struct_items;
