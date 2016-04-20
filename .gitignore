@@ -7,4 +7,5 @@ node_modules
 *.map
 .vscode
 test/e2e/bin/
+test/karma/bin
 release_bin

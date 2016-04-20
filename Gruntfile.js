@@ -43,7 +43,7 @@ module.exports = function (grunt) {
         tasks: ['newer:coffee:dist']
       },
       coffeeTest: {
-        files: ['test/spec/{,*/}*.coffee'],
+        files: ['test/karma/spec/{,*/}*.coffee'],
         tasks: ['newer:coffee:test', 'karma']
       },
       compass: {
@@ -235,9 +235,9 @@ module.exports = function (grunt) {
       test: {
         files: [{
           expand: true,
-          cwd: 'test/spec',
+          cwd: 'test/karma/spec',
           src: '*.coffee',
-          dest: 'test/spec',
+          dest: 'test/karma/bin',
           ext: '.js'
         },
         {
@@ -465,7 +465,7 @@ module.exports = function (grunt) {
     },
     karma: {
       unit: {
-        configFile: 'karma.conf.js',
+        configFile: 'test/karma/karma.conf.js',
         singleRun: true
       }
     },
@@ -553,29 +553,37 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
-  // grunt.registerTask('test', [
-  //   'clean:server',
-  //   'concurrent:test',
-  //   'autoprefixer',
-  //   'connect:test',
-  //   'karma'
-  // ]);
-
-  grunt.registerTask('test', [
-    'clean:server',
-    // 'configureProxies',
-    "jade",
-    'concurrent:test',
-    'copy:dev',
-    'concurrent:server',
-    'autoprefixer',
-    // 'connect:test',
-    // 'karma'
-
-    'connect:e2e',
-    'protractor',
-    'clean:e2e'
-  ]);
+  grunt.registerTask('test', function(target) {
+    if(target === 'karma') {
+      return grunt.task.run([
+        'newer:coffee:dist',
+        'newer:coffee:test',
+        'karma'
+      ]);
+    } 
+      
+    grunt.task.run([
+        'clean:server',
+        "jade",
+        'concurrent:test',
+        'copy:dev',
+        'concurrent:server',
+        'autoprefixer'
+    ]);
+    
+    if(target !== 'e2e') {
+      grunt.task.run([
+        'karma'
+      ]);
+    } 
+    
+    grunt.task.run([
+      'connect:e2e',
+      'protractor',
+      'clean:e2e'
+    ]);
+    
+  });
 
   grunt.registerTask('build', [
     'clean:dist',

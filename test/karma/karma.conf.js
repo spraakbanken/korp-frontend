@@ -4,26 +4,11 @@
 module.exports = function(config) {
   config.set({
     // base path, that will be used to resolve files and exclude
-    basePath: '',
+    basePath: '../../',
 
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-
-    // files = [
-    //   JASMINE,
-    //   JASMINE_ADAPTER,
-    //   'app/components/angular/angular.js',
-    //   'app/components/angular-mocks/angular-mocks.js',
-    //   // 'app/components/jquery/jquery.js',
-    //   // 'app/scripts/*.js',
-    //   // 'app/scripts/**/*.js',
-    //   'test/mock/**/*.js',
-    //   'app/components/lodash/lodash.js',
-    //   'app/config.js',
-    //   'app/scripts/bin/util_coffee.js',
-    //   'test/spec/**/*.js'
-    // ];
     // list of files / patterns to load in the browser
     files: [
       'app/components/angular/angular.js',
@@ -36,8 +21,7 @@ module.exports = function(config) {
       'app/scripts/bin/cqp_parser/cqp.js',
       // 'app/scripts/*.coffee',
       // 'app/scripts/**/*.coffee',
-      'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/karma/bin/*.js'
 
     ],
 
