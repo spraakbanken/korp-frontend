@@ -2160,6 +2160,7 @@ tbody.collapse.in {
   right: 0;
   left: 0;
   z-index: 1030;
+  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 @media (min-width: 768px) {
@@ -3091,6 +3092,18 @@ a.thumbnail.active {
 .alert-danger .alert-link {
   color: #843534;
 }
+<<<<<<< 0b9baca810d6a1cf632445bfadca66e98c1aa2ef
+=======
+
+@-webkit-keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+>>>>>>> cleaned more lib stuff, updated jquery and slickgrid
 @keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -3133,6 +3146,7 @@ a.thumbnail.active {
 /* line 65, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_progress-bars.scss */
 .progress.active .progress-bar,
 .progress-bar.active {
+  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
@@ -3933,11 +3947,14 @@ button.close {
 }
 /* line 32, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_modals.scss */
 .modal.fade .modal-dialog {
+  -webkit-transform: translate3d(0, -25%, 0);
   transform: translate3d(0, -25%, 0);
+  transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
 }
 /* line 36, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_modals.scss */
 .modal.in .modal-dialog {
+  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
@@ -4392,6 +4409,7 @@ button.close {
 /* line 54, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_utilities.scss */
 .affix {
   position: fixed;
+  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 

@@ -74,7 +74,8 @@ Sidebar =
 
         items = for [key, value] in pairs
             @renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens
-        return $(items)
+        c.log "_.compact items", _.compact items
+        return $(_.compact items)
 
     renderCustomContent: (wordData, sentenceData, corpus_attrs, tokens) ->
         struct_items = []

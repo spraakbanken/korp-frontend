@@ -80,8 +80,8 @@
           e.stopImmediatePropagation();
           return;
         }
-
-        toggleRowSelection(args.row);
+        // # breaks row order in webkit
+        // toggleRowSelection(args.row);
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
