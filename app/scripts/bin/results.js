@@ -161,7 +161,6 @@
       sent = scope.sentence;
       event.stopPropagation();
       word = $(event.target);
-      c.log("sidebar", $("#sidebar").data());
       if ($("#sidebar").data()["korp-sidebar"]) {
         $("#sidebar").sidebar("updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens);
       }

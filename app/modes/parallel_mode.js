@@ -586,6 +586,7 @@ settings.corpora["saltnld-nl"] = {
     },
     attributes: {
         pos: {label : "pos"},
+        msd: {label: "msd"},
         lemma: {label : "baseform"},
         linkref : linkref,
         "wordlink-sv" : wordlink
