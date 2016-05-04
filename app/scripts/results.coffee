@@ -587,6 +587,16 @@ class view.ExampleResults extends view.KWICResults
         prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
         _.extend opts.ajaxParams, prev
 
+        if @isReadingMode()
+            preferredContext = settings.defaultReadingContext
+            avoidContext = settings.defaultOverviewContext
+        else
+            preferredContext = settings.defaultOverviewContext
+            avoidContext = settings.defaultReadingContext
+
+        context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
+        _.extend opts.ajaxParams, {context: context, defaultcontext : preferredContext }
+
         @showPreloader()
 
         #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));

@@ -710,7 +710,7 @@
     ExampleResults.prototype.setupReadingHash = function() {};
 
     ExampleResults.prototype.makeRequest = function() {
-      var def, items_per_page, opts, prev, progress;
+      var avoidContext, context, def, items_per_page, opts, preferredContext, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
       items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
       opts = this.s.$parent.queryParams;
@@ -721,6 +721,18 @@
       opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
       prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
       _.extend(opts.ajaxParams, prev);
+      if (this.isReadingMode()) {
+        preferredContext = settings.defaultReadingContext;
+        avoidContext = settings.defaultOverviewContext;
+      } else {
+        preferredContext = settings.defaultOverviewContext;
+        avoidContext = settings.defaultReadingContext;
+      }
+      context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext);
+      _.extend(opts.ajaxParams, {
+        context: context,
+        defaultcontext: preferredContext
+      });
       this.showPreloader();
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
       def = this.proxy.makeRequest(opts, null, progress, (function(_this) {
