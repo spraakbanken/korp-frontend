@@ -797,7 +797,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
     title : "Skyddade korpusar",
-    contents : ["ansokningar", "coctaill", "forhor", "sprakfragor", "gdc", "soexempel", "sw1203", "tisus", "ivip"]
+    contents : ["ansokningar", "coctaill", "forhor", "sprakfragor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.medical = {
@@ -4396,6 +4396,20 @@ settings.corpora.gdc = {
         "section_name" : {label : "section"}
         // TODO: this gives some error, fix this.
         //"meta_comment" : {label : "comment", type : "set"}
+    }
+};
+
+settings.corpora.mepac = {
+    id: "mepac",
+    title: "MEPAC",
+    description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
+    limited_access: true,
+    context: settings.defaultContext,
+    within: settings.defaultWithin,
+    attributes: modernAttrs,
+    struct_attributes: {
+        "text_blog": {label: "author"},
+        "text_date": {label: "date"}
     }
 };
 
