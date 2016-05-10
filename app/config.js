@@ -4409,7 +4409,15 @@ settings.corpora.mepac = {
     attributes: modernAttrs,
     struct_attributes: {
         "text_blog": {label: "author"},
-        "text_date": {label: "date"}
+        "text_date": {label: "date"},
+        "text_type": {label : "type", displayType : "select",
+            extended_template : selectType.extended_template,
+            controller : selectType.controller,
+            dataset : {
+                "patient" : "patient",
+                "anhörig" : "anhörig"
+            }
+        }
     }
 };
 
