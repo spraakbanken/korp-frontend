@@ -221,6 +221,7 @@ korpApp.directive "kwicCtrl", () ->
 class ExampleCtrl extends KwicCtrl
     @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
+      
         super(@scope, utils, $location)
         s = @scope
 
@@ -234,6 +235,15 @@ class ExampleCtrl extends KwicCtrl
             s.instance.current_page = page
             s.instance.makeRequest()
 
+        s.toggleReading = () ->
+            s.exampleReadingMode = not s.exampleReadingMode
+            s.instance.centerScrollbar()
+
+            if s.instance?.getProxy().pendingRequests.length
+                window.pending = s.instance.getProxy().pendingRequests
+
+                $.when(s.instance.getProxy().pendingRequests...).then () ->
+                    s.instance.makeRequest()
 
     initPage : () ->
         @scope.pageObj =

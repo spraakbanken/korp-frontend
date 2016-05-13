@@ -522,6 +522,9 @@ class view.ExampleResults extends view.KWICResults
 
     setupReadingHash : () ->
 
+    isReadingMode: () ->
+        return @s.exampleReadingMode
+
     makeRequest: () ->
         # debugger
         c.log "ExampleResults.makeRequest()", @current_page

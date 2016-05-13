@@ -285,6 +285,17 @@
         s.instance.current_page = page;
         return s.instance.makeRequest();
       };
+      s.toggleReading = function() {
+        var ref;
+        s.exampleReadingMode = !s.exampleReadingMode;
+        s.instance.centerScrollbar();
+        if ((ref = s.instance) != null ? ref.getProxy().pendingRequests.length : void 0) {
+          window.pending = s.instance.getProxy().pendingRequests;
+          return $.when.apply($, s.instance.getProxy().pendingRequests).then(function() {
+            return s.instance.makeRequest();
+          });
+        }
+      };
     }
 
     ExampleCtrl.prototype.initPage = function() {

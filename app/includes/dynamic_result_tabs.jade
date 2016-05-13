@@ -3,7 +3,7 @@ uib-tab(active="active", example-ctrl, ng-repeat='queryParams in kwicTabs', sele
     | KWIC
 
     span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
-  .results-kwic(ng-class="{reading_mode : reading_mode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
+  .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
 uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
   uib-tab-heading(ng-class="{not_loading: progress > 99}")

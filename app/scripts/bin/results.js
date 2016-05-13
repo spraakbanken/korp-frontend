@@ -665,6 +665,10 @@
 
     ExampleResults.prototype.setupReadingHash = function() {};
 
+    ExampleResults.prototype.isReadingMode = function() {
+      return this.s.exampleReadingMode;
+    };
+
     ExampleResults.prototype.makeRequest = function() {
       var avoidContext, context, def, items_per_page, opts, preferredContext, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
