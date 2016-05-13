@@ -653,7 +653,7 @@
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
       this.current_page = 1;
-      if (this.s.$parent.queryParams) {
+      if (this.s.$parent.kwicTab.queryParams) {
         this.makeRequest().then((function(_this) {
           return function() {
             return _this.onentry();
@@ -673,8 +673,7 @@
       var avoidContext, context, def, items_per_page, opts, preferredContext, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
       items_per_page = parseInt($("#search_options").find(".num_hits").val());
-      opts = this.s.$parent.queryParams;
-      c.log("opts", opts);
+      opts = this.s.$parent.kwicTab.queryParams;
       this.resetView();
       opts.ajaxParams.incremental = false;
       opts.ajaxParams.start = (this.current_page - 1) * items_per_page;
@@ -697,7 +696,6 @@
       progress = opts.command === "query" ? $.proxy(this.onProgress, this) : $.noop;
       def = this.proxy.makeRequest(opts, null, progress, (function(_this) {
         return function(data) {
-          c.log("first part done", data);
           _this.renderResult(data, opts.cqp);
           _this.renderCompleteResult(data);
           return safeApply(_this.s, function() {
@@ -1023,7 +1021,9 @@
           expand_prequeries: false
         };
         return safeApply(scope.$root, function() {
-          return scope.$root.kwicTabs.push(opts);
+          return scope.$root.kwicTabs.push({
+            queryParams: opts
+          });
         });
       });
       $(window).resize(_.debounce((function(_this) {
@@ -1569,7 +1569,9 @@
               expand_prequeries: false
             };
             return safeApply(_this.s.$root, function() {
-              return _this.s.$root.kwicTabs.push(opts);
+              return _this.s.$root.kwicTabs.push({
+                queryParams: opts
+              });
             });
           }
         };

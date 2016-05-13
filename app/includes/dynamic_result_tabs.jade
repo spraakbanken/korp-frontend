@@ -1,4 +1,4 @@
-uib-tab(active="active", example-ctrl, ng-repeat='queryParams in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
+uib-tab(active="active", example-ctrl, ng-repeat='kwicTab in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
   uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 

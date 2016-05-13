@@ -217,7 +217,6 @@ class KwicCtrl
 korpApp.directive "kwicCtrl", () ->
     controller: KwicCtrl
 
-# korpApp.controller "ExampleCtrl", class ExampleCtrl extends KwicCtrl
 class ExampleCtrl extends KwicCtrl
     @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
@@ -234,6 +233,8 @@ class ExampleCtrl extends KwicCtrl
             $event?.stopPropagation()
             s.instance.current_page = page
             s.instance.makeRequest()
+
+        s.exampleReadingMode = s.kwicTab.readingMode
 
         s.toggleReading = () ->
             s.exampleReadingMode = not s.exampleReadingMode
@@ -300,7 +301,7 @@ korpApp.directive "wordpicCtrl", () ->
                 depextra: data.depextra
                 corpus: data.corpus
 
-            $rootScope.kwicTabs.push opts
+            $rootScope.kwicTabs.push { queryParams: opts }
 
         $scope.showWordClass = false
 
@@ -521,7 +522,7 @@ korpApp.directive "compareCtrl", () ->
                         expand_prequeries : false
 
                 }
-                $rootScope.kwicTabs.push opts),
+                $rootScope.kwicTabs.push { queryParams: opts }),
             () ->
                 s.loading = false
                 s.error = true
@@ -642,7 +643,7 @@ korpApp.directive "mapCtrl", () ->
                                             show_struct : _.keys cl.getStructAttrs()
                                             expand_prequeries : true
                                     }
-                                    $rootScope.kwicTabs.push opts
+                                    $rootScope.kwicTabs.push { queryParams: opts }
                                 markers[key]["message"] = html
 
                         s.markers = markers

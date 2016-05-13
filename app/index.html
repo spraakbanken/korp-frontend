@@ -330,7 +330,7 @@
                     </div>
                   </div>
                 </uib-tab>
-                <uib-tab active="active" example-ctrl ng-repeat="queryParams in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
+                <uib-tab active="active" example-ctrl ng-repeat="kwicTab in kwicTabs" select="instance.onentry()" deselect="instance.onexit()">
                   <uib-tab-heading ng-class="{not_loading: progress == 100, loading : !instance.hasData}">KWIC<span ng-click="$event.preventDefault();kwicTabs.splice($index, 1)" tab-spinner="tab-spinner"></span></uib-tab-heading>
                   <div ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}" constr="ExampleResults" class="results-kwic">
                     <div class="result_controls">

@@ -285,6 +285,7 @@
         s.instance.current_page = page;
         return s.instance.makeRequest();
       };
+      s.exampleReadingMode = s.kwicTab.readingMode;
       s.toggleReading = function() {
         var ref;
         s.exampleReadingMode = !s.exampleReadingMode;
@@ -367,7 +368,9 @@
             depextra: data.depextra,
             corpus: data.corpus
           };
-          return $rootScope.kwicTabs.push(opts);
+          return $rootScope.kwicTabs.push({
+            queryParams: opts
+          });
         };
         $scope.showWordClass = false;
         $rootScope.$on("word_picture_data_available", function(event, data) {
@@ -608,7 +611,9 @@
                 expand_prequeries: false
               }
             };
-            return $rootScope.kwicTabs.push(opts);
+            return $rootScope.kwicTabs.push({
+              queryParams: opts
+            });
           };
         }), function() {
           s.loading = false;
@@ -756,7 +761,9 @@
                         expand_prequeries: true
                       }
                     };
-                    return $rootScope.kwicTabs.push(opts);
+                    return $rootScope.kwicTabs.push({
+                      queryParams: opts
+                    });
                   };
                   return markers[key]["message"] = html;
                 };

@@ -515,7 +515,7 @@ class view.ExampleResults extends view.KWICResults
         @proxy = new model.KWICProxy()
 
         @current_page = 1
-        if @s.$parent.queryParams
+        if @s.$parent.kwicTab.queryParams
             @makeRequest().then () =>
                 @onentry()
         @tabindex = (@getResultTabs().length - 1) + @s.$parent.$index
@@ -526,11 +526,10 @@ class view.ExampleResults extends view.KWICResults
         return @s.exampleReadingMode
 
     makeRequest: () ->
-        # debugger
         c.log "ExampleResults.makeRequest()", @current_page
         items_per_page = parseInt($("#search_options").find(".num_hits").val())
-        opts = @s.$parent.queryParams
-        c.log "opts", opts
+        opts = @s.$parent.kwicTab.queryParams
+
         @resetView()
         opts.ajaxParams.incremental = false
 
@@ -552,16 +551,12 @@ class view.ExampleResults extends view.KWICResults
 
         @showPreloader()
 
-        #   this.proxy.makeRequest(opts, $.proxy(this.onProgress, this));
         progress = if opts.command == "query" then $.proxy(this.onProgress, this) else $.noop
         def = @proxy.makeRequest opts, null, progress, (data) =>
-            c.log "first part done", data
             @renderResult data, opts.cqp
             @renderCompleteResult data
             safeApply @s, () =>
                 @hidePreloader()
-
-        # def.success = (data) ->
 
         def.fail () ->
             safeApply @s, () =>
@@ -778,7 +773,7 @@ class view.StatsResults extends BaseResults
                 expand_prequeries : false
 
             safeApply scope.$root, () ->
-                scope.$root.kwicTabs.push opts
+                scope.$root.kwicTabs.push { queryParams: opts }
 
 
 
@@ -1289,7 +1284,7 @@ class view.GraphResults extends BaseResults
 
 
                 safeApply @s.$root, () =>
-                    @s.$root.kwicTabs.push opts
+                    @s.$root.kwicTabs.push { queryParams: opts }
 
 
 
