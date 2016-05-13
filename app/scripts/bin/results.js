@@ -10,7 +10,6 @@
       this.s = scope;
       this.$tab = $(tabSelector);
       this.$result = $(resultSelector);
-      this.optionWidget = $("#search_options");
       this.$result.add(this.$tab).addClass("not_loading");
       this.injector = $("body").injector();
       def = this.injector.get("$q").defer();
@@ -423,49 +422,6 @@
       });
     };
 
-    KWICResults.prototype.buildPager = function(number_of_hits) {
-      var items_per_page;
-      items_per_page = this.optionWidget.find(".num_hits").val();
-      this.$result.find(".pager-wrapper").unbind().empty();
-      if (number_of_hits > items_per_page) {
-        this.$result.find(".pager-wrapper").pagination(number_of_hits, {
-          items_per_page: items_per_page,
-          callback: $.proxy(this.handlePaginationClick, this),
-          next_text: util.getLocaleString("next"),
-          prev_text: util.getLocaleString("prev"),
-          link_to: "javascript:void(0)",
-          num_edge_entries: 2,
-          ellipse_text: "..",
-          current_page: this.current_page || 0
-        });
-        this.$result.find(".next").attr("rel", "localize[next]");
-        return this.$result.find(".prev").attr("rel", "localize[prev]");
-      }
-    };
-
-    KWICResults.prototype.handlePaginationClick = function(new_page_index, pagination_container, force_click) {
-      var isReading, kwicCallback, page, self;
-      page = search().page || 0;
-      c.log("handlePaginationClick", new_page_index, page);
-      self = this;
-      if (new_page_index !== page || !!force_click) {
-        isReading = this.isReadingMode();
-        kwicCallback = this.renderResult;
-        this.getProxy().makeRequest(this.buildQueryOptions(), new_page_index, (function(progressObj) {
-          return self.$tab.find(".tab_progress").css("width", Math.round(progressObj["stats"]).toString() + "%");
-        }), (function(data) {
-          return self.buildPager(data.hits);
-        }), $.proxy(kwicCallback, this));
-        safeApply(this.s, function() {
-          return search({
-            page: new_page_index
-          });
-        });
-        this.current_page = new_page_index;
-      }
-      return false;
-    };
-
     KWICResults.prototype.buildQueryOptions = function(cqp, isPaging) {
       var avoidContext, context, getSortParams, opts, preferredContext;
       c.log("buildQueryOptions", cqp);
@@ -696,7 +652,7 @@
       c.log("ExampleResults constructor", tabSelector, resultSelector, scope);
       ExampleResults.__super__.constructor.call(this, tabSelector, resultSelector, scope);
       this.proxy = new model.KWICProxy();
-      this.current_page = 0;
+      this.current_page = 1;
       if (this.s.$parent.queryParams) {
         this.makeRequest().then((function(_this) {
           return function() {
@@ -712,13 +668,13 @@
     ExampleResults.prototype.makeRequest = function() {
       var avoidContext, context, def, items_per_page, opts, preferredContext, prev, progress;
       c.log("ExampleResults.makeRequest()", this.current_page);
-      items_per_page = parseInt(this.optionWidget.find(".num_hits").val());
+      items_per_page = parseInt($("#search_options").find(".num_hits").val());
       opts = this.s.$parent.queryParams;
       c.log("opts", opts);
       this.resetView();
       opts.ajaxParams.incremental = false;
-      opts.ajaxParams.start = this.current_page * items_per_page;
-      opts.ajaxParams.end = opts.ajaxParams.start + items_per_page;
+      opts.ajaxParams.start = (this.current_page - 1) * items_per_page;
+      opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1;
       prev = _.pick(this.proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra");
       _.extend(opts.ajaxParams, prev);
       if (this.isReadingMode()) {
