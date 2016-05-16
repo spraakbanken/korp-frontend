@@ -4415,7 +4415,7 @@ settings.corpora.mepac = {
             controller : selectType.controller,
             dataset : {
                 "patient" : "patient",
-                "anhörig" : "anhörig"
+                "närstående" : "närstående"
             }
         }
     }
