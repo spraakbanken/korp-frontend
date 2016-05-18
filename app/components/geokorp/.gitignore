@@ -5,3 +5,4 @@ dist
 bower_components
 .idea
 .vscode
+app/data/sweden-latest.osm.pbf

@@ -1,5 +1,6 @@
 {
   "name": "geokorp",
+  "version": "1.0.0",
   "dependencies": {
     "angular": "1.3.18",
     "bootstrap-sass-official": "^3.2.0",
@@ -18,13 +19,13 @@
   "private": true,
   "appPath": "app",
   "moduleName": "geokorpApp",
-  "_release": "6812ec9c3d",
+  "_release": "1.0.0",
   "_resolution": {
-    "type": "branch",
-    "branch": "master",
-    "commit": "6812ec9c3d9554e35a1d36232f645f94d114c5ba"
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "59795ccbe0f081b82e9439796f6e262e3846703e"
   },
   "_source": "http://spraakbanken.gu.se/pub/geokorp.git",
-  "_target": "*",
+  "_target": "1.0.0",
   "_originalSource": "http://spraakbanken.gu.se/pub/geokorp.git"
 }
