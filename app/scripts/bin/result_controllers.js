@@ -323,9 +323,75 @@
       controller: function($scope, utils, $location, backend, searches, $rootScope) {
         var s;
         s = $scope;
-        return s.onGraphShow = function(data) {
+        s.onGraphShow = function(data) {
           c.log("show graph!", arguments);
           return $rootScope.graphTabs.push(data);
+        };
+        s.newMapEnabled = settings.newMapEnabled;
+        s.getGeoAttributes = function(corpora) {
+          var attr, attrs, corpus, k, l, len1, len2, ref, ref1;
+          attrs = [];
+          ref = settings.corpusListing.subsetFactory(corpora).selected;
+          for (k = 0, len1 = ref.length; k < len1; k++) {
+            corpus = ref[k];
+            ref1 = corpus.private_struct_attributes;
+            for (l = 0, len2 = ref1.length; l < len2; l++) {
+              attr = ref1[l];
+              if (attr.indexOf("geo" !== -1)) {
+                attrs.push(attr);
+              }
+            }
+          }
+          attrs = _.map(attrs, function(attr) {
+            return {
+              label: attr
+            };
+          });
+          if (attrs && attrs.length > 0) {
+            attrs[0].selected = true;
+          }
+          s.searchCorpora = corpora;
+          return s.mapAttributes = attrs;
+        };
+        s.mapToggleSelected = function(index, event) {
+          var attr;
+          _.map(s.mapAttributes, function(attr) {
+            return attr.selected = false;
+          });
+          attr = s.mapAttributes[index];
+          attr.selected = true;
+          return event.stopPropagation();
+        };
+        return s.showMap = function() {
+          var cell, chk, cqp, cqpExprs, getCqpExpr, k, len1, ref, texts;
+          getCqpExpr = function() {
+            var cqpExpr, search;
+            search = searches.activeSearch;
+            cqpExpr = null;
+            if (search) {
+              if (search.type === "word" || search.type === "lemgram") {
+                cqpExpr = simpleSearch.getCQP(search.val);
+              } else {
+                cqpExpr = search.val;
+              }
+            }
+            return cqpExpr;
+          };
+          cqpExprs = {};
+          ref = angular.element("#myGrid .slick-cell > input:checked");
+          for (k = 0, len1 = ref.length; k < len1; k++) {
+            chk = ref[k];
+            cell = angular.element(chk).parent();
+            cqp = decodeURIComponent(cell.next().find(" > .statistics-link").data("query"));
+            if (cqp === "undefined") {
+              continue;
+            }
+            texts = _.map(cell.parent().find('.parameter-column'), function(elem) {
+              return angular.element(elem).text();
+            });
+            cqpExprs[cqp] = texts.join(", ");
+          }
+          return $rootScope.mapTabs.push(backend.requestMapData(s.searchCorpora, getCqpExpr(), cqpExprs, _.filter(s.mapAttributes, "selected")));
         };
       }
     };
@@ -782,6 +848,135 @@
               return s.loading = false;
             }
           });
+        };
+      }
+    };
+  });
+
+  korpApp.directive("newMapCtrl", function($timeout, searches) {
+    return {
+      controller: function($scope, $rootScope) {
+        var getCqpExpr, getGroups, getMarkers, s;
+        s = $scope;
+        s.loading = true;
+        s.active = true;
+        s.center = settings.mapCenter;
+        s.hoverTemplate = "<div class=\"hover-info\">\n   <div style=\"font-weight: bold; font-size: 15px\">{{label}}</div>\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n</div>";
+        s.markers = {};
+        s.markerGroups = [];
+        s.mapSettings = {
+          baseLayer: "Stamen Watercolor"
+        };
+        s.numResults = 0;
+        s.promise.then(((function(_this) {
+          return function(arg, xhr) {
+            var result;
+            result = arg[0];
+            s.loading = false;
+            s.numResults = 20;
+            s.result = result;
+            s.groups = getGroups(result);
+            return s.markers = getMarkers(result);
+          };
+        })(this)), (function(_this) {
+          return function() {
+            s.loading = false;
+            return s.error = true;
+          };
+        })(this));
+        getCqpExpr = function() {
+          var cqpExpr, search;
+          search = searches.activeSearch;
+          cqpExpr = null;
+          if (search) {
+            if (search.type === "word" || search.type === "lemgram") {
+              cqpExpr = simpleSearch.getCQP(search.val);
+            } else {
+              cqpExpr = search.val;
+            }
+          }
+          return cqpExpr;
+        };
+        s.toggleGroup = function(groupName) {
+          var old;
+          old = _.values(s.markers).length;
+          s.groups[groupName].selected = !s.groups[groupName].selected;
+          return s.markers = getMarkers(s.result);
+        };
+        getGroups = function(result) {
+          var groups, palette;
+          palette = new Rickshaw.Color.Palette("colorwheel");
+          groups = {};
+          _.map(result.data, function(res, idx) {
+            return groups[res.label] = {
+              selected: true,
+              color: palette.color(),
+              cqp: res.cqp
+            };
+          });
+          return groups;
+        };
+        return getMarkers = function(result) {
+          var markers;
+          markers = {};
+          _.map(result.data, function(res, idx) {
+            var group, icon, k, len1, point, ref, results;
+            group = s.groups[res.label];
+            if (!group.selected) {
+              return;
+            }
+            icon = {
+              iconUrl: 'http://api.tiles.mapbox.com/v3/marker/pin-m+' + group.color.split("#")[1] + '.png'
+            };
+            ref = res.points;
+            results = [];
+            for (k = 0, len1 = ref.length; k < len1; k++) {
+              point = ref[k];
+              results.push((function(point) {
+                var childScope, html, id;
+                childScope = $rootScope.$new(true);
+                childScope.point = point;
+                childScope.cqp = res.cqp;
+                childScope.label = res.label;
+                id = point.name.replace(/-/g, "") + idx;
+                markers[id] = {
+                  layer: "clusterlayer",
+                  icon: icon,
+                  lat: point.lat,
+                  lng: point.lng
+                };
+                html = '<div class="link" ng-click="newKWICSearch(\'' + point.name + '\')">' + point.name + '</div>';
+                childScope.newKWICSearch = function(query) {
+                  var cl, opts;
+                  cl = settings.corpusListing.subsetFactory(result.corpora);
+                  opts = {
+                    start: 0,
+                    end: 24,
+                    ajaxParams: {
+                      command: "query",
+                      cqp: getCqpExpr(),
+                      cqp2: "[_." + result.attribute + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
+                      cqp3: res.cqp,
+                      corpus: cl.stringifySelected(),
+                      show_struct: _.keys(cl.getStructAttrs()),
+                      expand_prequeries: true,
+                      within: "paragraph"
+                    }
+                  };
+                  return $rootScope.kwicTabs.push({
+                    readingMode: true,
+                    queryParams: opts
+                  });
+                };
+                markers[id].message = html;
+                return markers[id].getMessageScope = function() {
+                  return childScope;
+                };
+              })(point));
+            }
+            return results;
+          });
+          return markers;
         };
       }
     };

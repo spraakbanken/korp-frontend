@@ -54,6 +54,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
     $rootScope.kwicTabs = []
     $rootScope.compareTabs = []
     $rootScope.graphTabs = []
+    $rootScope.mapTabs = []
     isInit = true
 
 

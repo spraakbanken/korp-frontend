@@ -1039,5 +1039,7 @@
     "video_continue": "Fortsätt",
     "video_start_time": "Starttid",
     "video_end_time": "Sluttid",
-    "video_utterance": "Yttrande"
+    "video_utterance": "Yttrande",
+    
+    "paragraph__geocontext" : "Samförekomst i stycke"
 }

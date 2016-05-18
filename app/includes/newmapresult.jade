@@ -1,0 +1,12 @@
+div(ng-if="!loading && numResults != 0")
+  div#mapHeader.legend.rickshaw_legend()
+      div(ng-repeat="(label, group) in groups", class="mapgroup", ng-class="group.selected ? '' : 'disabled'", ng-click="toggleGroup(label)")
+        span(class="check") ✔
+        div.swatch(style="background-color: {{group.color}}")
+        span.label(ng-if="label != 'total'") {{label}}
+        span.label(ng-if="label == 'total'") Σ
+      div(class="mapgroup")
+        div.cluster-info.swatch()
+        span.label() {{"cluster_marker" | loc:lang}}
+
+  sb-map(sb-center="center", sb-markers="markers", sb-show-time="showTime", sb-hover-template="hoverTemplate", sb-base-layer="mapSettings.baseLayer")

@@ -39,6 +39,7 @@
     $rootScope.kwicTabs = [];
     $rootScope.compareTabs = [];
     $rootScope.graphTabs = [];
+    $rootScope.mapTabs = [];
     isInit = true;
     s.searchDisabled = false;
     s.$on("corpuschooserchange", function(event, corpora) {

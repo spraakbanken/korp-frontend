@@ -2859,3 +2859,73 @@ li.active a span .num-to-find {
 .or_container .word {
     color: #222222;
 }
+
+.map-settings-container {
+    margin-left: 20px;
+    .caret {
+        margin-left: 10px;
+    }
+    ul {
+        margin: 0;
+        padding: 2px;
+        .map-selected {
+            margin: 0px;
+            margin-top: 4px;
+            margin-right: 4px
+        }
+        li {
+            cursor: pointer;
+            padding: 2px 1px;
+            white-space: nowrap;
+        }
+        .selected {
+            background: #f2f7ff;
+        }
+    }
+    .empty-attribute-list {
+        font-style: italic;
+        font-size: 12px;
+        padding-top: 2px;
+        padding-left: 2px;
+    }
+    .btn-container {
+        padding: 10px;
+        text-align: right;
+    }
+    .map-settings-title {
+        margin: 0;
+        padding: 8px 14px;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 18px;
+        background-color: #f7f7f7;
+        border-bottom: 1px solid #ebebeb;
+    }
+    .dropdown-menu {
+        padding: 0px;
+    }
+}
+
+#mapHeader {
+    width: 100%;
+    div.disabled {
+        opacity: 0.4;
+    }
+    div.mapgroup {
+        display: inline-block;
+        div.swatch {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        div.cluster-info {
+            background-color: rgba(136, 220, 168, 0.6); 
+            border-radius: 5px;
+        }
+        margin-right: 20px;
+        cursor: pointer;
+    }
+    span.check {
+        opacity: 0.5 !important;
+        color: white;
+    }
+}

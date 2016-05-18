@@ -138,7 +138,8 @@ class model.KWICProxy extends BaseProxy
                     kwicCallback progressObj["struct"]
         , options)
 
-        _.extend options.ajaxParams, settings.corpusListing.getWithinParameters()
+        unless options.ajaxParams.within
+            _.extend options.ajaxParams, settings.corpusListing.getWithinParameters()
 
         data =
             command: "query"

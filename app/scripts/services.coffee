@@ -204,6 +204,71 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         #    def.resolve output
         #
         #return def.promise
+      
+    requestMapData: (corpora, cqp, cqpExprs, attributes) ->
+        cqpSubExprs = {}
+        _.map _.keys(cqpExprs), (subCqp, idx) ->
+            cqpSubExprs["subcqp" + idx] = subCqp
+
+        def = $q.defer()
+        params =
+            command: "count"
+            groupby: attributes[0].label
+            cqp: cqp
+            corpus: corpora
+            incremental: $.support.ajaxProgress
+            split: attributes[0].label
+        _.extend params, settings.corpusListing.getWithinParameters()
+
+        _.extend params, cqpSubExprs
+
+        conf =
+            url : settings.cgi_script
+            params : params
+            method : "GET"
+            headers : {}
+
+        _.extend conf.headers, model.getAuthorizationHeader()
+
+
+        xhr = $http(conf)
+
+        xhr.success (data) ->
+            createResult = (subResult, cqp, label) ->
+                points = []
+                _.map _.keys(subResult.absolute), (hit) ->
+                    if hit == "|"
+                        return
+                    [name, countryCode, lat, lng] = hit.split ";"
+
+                    points.push (
+                        abs: subResult.absolute[hit]
+                        rel: subResult.relative[hit]
+                        name: name
+                        countryCode: countryCode
+                        lat : parseFloat lat
+                        lng : parseFloat lng)
+                    
+                return (
+                    label: label
+                    cqp: cqp
+                    points: points
+                )
+
+            if _.isEmpty cqpExprs
+                result = [createResult data.total, cqp, "total"]
+            else
+                result = []
+                for subResult in data.total.slice(1, data.total.length)
+                    result.push createResult subResult, subResult.cqp, cqpExprs[subResult.cqp]
+
+            if data.ERROR
+                def.reject()
+                return
+
+            def.resolve [{corpora: corpora, data: result, attribute: attributes[0].label}], xhr
+
+        return def.promise
 
 korpApp.factory 'nameEntitySearch', ($rootScope, $q) ->
 
@@ -306,6 +371,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                 c.log "data", data
                 for corpus in settings.corpusListing.corpora
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
+                    privateStructAttrs = []
+                    for attr in data["corpora"][corpus.id.toUpperCase()].attrs.s
+                        if attr.indexOf("__") isnt -1
+                            privateStructAttrs.push attr
+                    corpus["private_struct_attributes"] = privateStructAttrs
 
                 c.log "loadCorpora"
                 util.loadCorpora()

@@ -1039,5 +1039,7 @@
     "video_continue": "Continue",
     "video_start_time": "Start time",
     "video_end_time": "End time",
-    "video_utterance": "Utterance"
+    "video_utterance": "Utterance",
+    
+    "paragraph__geocontext" : "Co-occurrence in paragraph"
 }

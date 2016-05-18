@@ -1323,6 +1323,7 @@
           });
         };
       })(this));
+      this.s.getGeoAttributes(this.proxy.prevParams.corpus.split(","));
       return safeApply(this.s, (function(_this) {
         return function() {
           return _this.hidePreloader();

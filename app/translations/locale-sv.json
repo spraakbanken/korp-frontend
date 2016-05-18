@@ -316,5 +316,8 @@
     "formatdescr_text" : "Klartext med träffar markerade, en mening per rad, token utan ordattribut, meningens textattribut inkluderade",
     "formatdescr_annot" : "Annoterad text som ett Excel-kalkylblad (XLS), ett token per rad. Varje rad har ett token med attribut och potentiellt en markör för sökträffen. Varje träffad mening föregås av en rad med korpus-ID, träffens korpusposition och textattribut för meningen.",
     "formatdescr_nooj" : "XML-importformat för NooJ",
-    "formatdescr_ref" : "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader"
+    "formatdescr_ref" : "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader",
+    
+    "no_geo_info" : "Platsinformation ej tillgänglig",
+    "cluster_marker" : "Gruppmarkör"
 }

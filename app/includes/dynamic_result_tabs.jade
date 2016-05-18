@@ -81,3 +81,14 @@ uib-tab(active="active", ng-repeat='promise in compareTabs', compare-ctrl)
       ul.positive
         li(ng-repeat='row in tables.positive | orderBy:resultOrder:true', ng-click="rowClick(row, 1)")
           .meter(meter='row', max='max', stringify='stringify')
+
+uib-tab(active="active", ng-repeat="promise in mapTabs", new-map-ctrl)
+  uib-tab-heading.map_tab(ng-class='{loading : loading}')
+    | {{ 'map' | loc:lang}}
+    span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();mapTabs.splice($index, 1)')
+  .map_result(ng-class='{loading : loading}')
+    .error_msg(ng-if="error")
+      object.korp_fail.inline_block(type='image/svg+xml', data='img/korp_fail.svg')
+        img.korp_fail(src='img/korp_fail.svg')
+      .fail_text.inline_block(rel='localize[fail_text]') Ett fel har uppstått. 
+    include newmapresult

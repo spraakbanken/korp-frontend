@@ -1015,6 +1015,9 @@ class view.StatsResults extends BaseResults
         $.when(timeDeferred).then =>
             safeApply @s, () =>
                 @updateGraphBtnState()
+
+        @s.getGeoAttributes(@proxy.prevParams.corpus.split(","))
+
         safeApply @s, () =>
             @hidePreloader()
 

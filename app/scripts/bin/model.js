@@ -175,7 +175,9 @@
           }
         }
       }, options);
-      _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters());
+      if (!options.ajaxParams.within) {
+        _.extend(options.ajaxParams, settings.corpusListing.getWithinParameters());
+      }
       data = {
         command: "query",
         defaultcontext: settings.defaultOverviewContext,

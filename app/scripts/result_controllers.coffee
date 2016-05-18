@@ -264,7 +264,53 @@ korpApp.directive "statsResultCtrl", () ->
         s.onGraphShow = (data) ->
             c.log "show graph!", arguments
             $rootScope.graphTabs.push data
+        
+        s.newMapEnabled = settings.newMapEnabled
 
+        s.getGeoAttributes = (corpora) ->
+            # TODO use intersection or union of supported attributes, remove dupliates
+            attrs = []
+            for corpus in settings.corpusListing.subsetFactory(corpora).selected
+                for attr in corpus.private_struct_attributes
+                    if attr.indexOf "geo" isnt -1
+                        attrs.push attr
+            attrs = _.map attrs, (attr) -> return label: attr
+            if attrs and attrs.length > 0
+                attrs[0].selected = true
+            
+            s.searchCorpora = corpora
+            s.mapAttributes = attrs
+
+        s.mapToggleSelected = (index, event) ->
+            _.map s.mapAttributes, (attr) -> attr.selected = false
+            
+            attr = s.mapAttributes[index]
+            attr.selected = true
+            event.stopPropagation()
+
+        s.showMap = () ->
+            getCqpExpr = () ->
+                # TODO currently copy pasted from watch on "searches.activeSearch"
+                search = searches.activeSearch
+                cqpExpr = null
+                if search
+                    if search.type == "word" or search.type == "lemgram"
+                        cqpExpr = simpleSearch.getCQP(search.val)
+                    else
+                        cqpExpr = search.val
+                return cqpExpr
+
+            cqpExprs = {}
+            for chk in angular.element("#myGrid .slick-cell > input:checked")
+                cell = angular.element(chk).parent()
+                cqp = decodeURIComponent cell.next().find(" > .statistics-link").data("query")
+                if cqp is "undefined"
+                    continue
+                texts = _.map cell.parent().find('.parameter-column'), (elem) ->
+                    angular.element(elem).text()
+                cqpExprs[cqp] = texts.join ", "
+
+            $rootScope.mapTabs.push backend.requestMapData(s.searchCorpora, getCqpExpr(), cqpExprs, _.filter(s.mapAttributes, "selected"))
 
 # korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
 korpApp.directive "wordpicCtrl", () ->
@@ -527,7 +573,6 @@ korpApp.directive "compareCtrl", () ->
                 s.loading = false
                 s.error = true
 
-# korpApp.controller "MapCtrl", ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
 korpApp.directive "mapCtrl", () ->
     controller: ($scope, $rootScope, $location, $timeout, searches, nameEntitySearch, markers, nameMapper) ->
         s = $scope
@@ -653,6 +698,109 @@ korpApp.directive "mapCtrl", () ->
                     s.markers = {}
                     s.numResults = 0
                     s.loading = false
+
+korpApp.directive "newMapCtrl", ($timeout, searches) ->
+    controller: ($scope, $rootScope) ->
+        s = $scope
+        s.loading = true
+        s.active = true
+
+        s.center = settings.mapCenter
+        s.hoverTemplate = """<div class="hover-info">
+                              <div style="font-weight: bold; font-size: 15px">{{label}}</div>
+                              <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>
+                              <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
+                              <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
+                           </div>"""
+        s.markers = {}
+        s.markerGroups = []
+        s.mapSettings =
+            baseLayer : "Stamen Watercolor"
+        s.numResults = 0
+
+        s.promise.then (([result], xhr) =>
+                s.loading = false
+                s.numResults = 20
+                s.result = result
+                s.groups = getGroups result
+                s.markers = getMarkers result
+            ),
+            () =>
+                s.loading = false
+                s.error = true
+
+        getCqpExpr = () ->
+            # TODO currently copy pasted from watch on "searches.activeSearch"
+            search = searches.activeSearch
+            cqpExpr = null
+            if search
+                if search.type == "word" or search.type == "lemgram"
+                    cqpExpr = simpleSearch.getCQP(search.val)
+                else
+                    cqpExpr = search.val
+            return cqpExpr
+
+        s.toggleGroup = (groupName) ->
+            old = _.values(s.markers).length
+            s.groups[groupName].selected = not s.groups[groupName].selected
+            s.markers = getMarkers(s.result)
+
+        getGroups = (result) ->
+            palette = new Rickshaw.Color.Palette("colorwheel")
+            groups = {}
+            _.map result.data, (res, idx) ->
+                groups[res.label] = 
+                    selected: true 
+                    color: palette.color()
+                    cqp: res.cqp
+            return groups
+
+        getMarkers = (result) ->
+            markers = {}
+            _.map result.data, (res, idx) ->
+                group = s.groups[res.label]
+                unless group.selected
+                    return
+
+                icon = 
+                    iconUrl: 'http://api.tiles.mapbox.com/v3/marker/pin-m+' + group.color.split("#")[1] + '.png'
+
+                for point in res.points
+                    do(point) ->
+                        childScope = $rootScope.$new(true)
+                        childScope.point = point
+                        childScope.cqp = res.cqp
+                        childScope.label = res.label
+                        id = point.name.replace(/-/g , "") + idx
+                        markers[id] =
+                            layer: "clusterlayer"
+                            icon: icon
+                            lat: point.lat
+                            lng: point.lng
+
+                        html = '<div class="link" ng-click="newKWICSearch(\'' + point.name + '\')">' + point.name + '</div>'
+
+                        childScope.newKWICSearch = (query) ->
+                            cl = settings.corpusListing.subsetFactory(result.corpora)
+                            opts = {
+                                start : 0
+                                end : 24
+                                ajaxParams :
+                                    command : "query"
+                                    cqp : getCqpExpr()
+                                    cqp2: "[_." + result.attribute + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
+                                    cqp3: res.cqp
+                                    corpus : cl.stringifySelected()
+                                    show_struct : _.keys cl.getStructAttrs()
+                                    expand_prequeries : true
+                                    within: "paragraph" 
+                            }
+                            $rootScope.kwicTabs.push { readingMode: true, queryParams: opts }
+                        markers[id].message = html
+                        markers[id].getMessageScope = () -> childScope
+
+            return markers
+
 
 korpApp.controller "VideoCtrl", ($scope, $uibModal) ->
 

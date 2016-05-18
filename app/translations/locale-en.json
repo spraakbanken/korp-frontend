@@ -318,5 +318,9 @@
     "formatdescr_text" : "Plain text with matches marked: sentence per line, tokens without attributes, text attributes shown",
     "formatdescr_annot" : "Annotated text as an Excel spreadsheet (XLS), token per row. Each row has one text token with attributes and a potential search hit indicator. Each found sentence is preceded by a line with a corpus ID, corpus position and text attributes for the sentence.",
     "formatdescr_nooj" : "XML import format for the NooJ software",
-    "formatdescr_ref" : "Bibliographical references as an Excel spreadsheet (XLS) with each matching sentence on its own line, followed by the text attributes of the sentence on their own lines"
+    "formatdescr_ref" : "Bibliographical references as an Excel spreadsheet (XLS) with each matching sentence on its own line, followed by the text attributes of the sentence on their own lines",
+
+    "no_geo_info" : "No location data available",
+    "cluster_marker" : "Cluster marker"
+
 }

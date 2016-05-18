@@ -6093,3 +6093,89 @@ li.active a span .num-to-find {
 .or_container .word {
   color: #222222;
 }
+
+/* line 2863, styles.scss */
+.map-settings-container {
+  margin-left: 20px;
+}
+/* line 2865, styles.scss */
+.map-settings-container .caret {
+  margin-left: 10px;
+}
+/* line 2868, styles.scss */
+.map-settings-container ul {
+  margin: 0;
+  padding: 2px;
+}
+/* line 2871, styles.scss */
+.map-settings-container ul .map-selected {
+  margin: 0px;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+/* line 2876, styles.scss */
+.map-settings-container ul li {
+  cursor: pointer;
+  padding: 2px 1px;
+  white-space: nowrap;
+}
+/* line 2881, styles.scss */
+.map-settings-container ul .selected {
+  background: #f2f7ff;
+}
+/* line 2885, styles.scss */
+.map-settings-container .empty-attribute-list {
+  font-style: italic;
+  font-size: 12px;
+  padding-top: 2px;
+  padding-left: 2px;
+}
+/* line 2891, styles.scss */
+.map-settings-container .btn-container {
+  padding: 10px;
+  text-align: right;
+}
+/* line 2895, styles.scss */
+.map-settings-container .map-settings-title {
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 18px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ebebeb;
+}
+/* line 2904, styles.scss */
+.map-settings-container .dropdown-menu {
+  padding: 0px;
+}
+
+/* line 2909, styles.scss */
+#mapHeader {
+  width: 100%;
+}
+/* line 2911, styles.scss */
+#mapHeader div.disabled {
+  opacity: 0.4;
+}
+/* line 2914, styles.scss */
+#mapHeader div.mapgroup {
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
+}
+/* line 2916, styles.scss */
+#mapHeader div.mapgroup div.swatch {
+  display: inline-block;
+  margin-right: 5px;
+}
+/* line 2920, styles.scss */
+#mapHeader div.mapgroup div.cluster-info {
+  background-color: rgba(136, 220, 168, 0.6);
+  border-radius: 5px;
+}
+/* line 2927, styles.scss */
+#mapHeader span.check {
+  opacity: 0.5 !important;
+  color: white;
+}
