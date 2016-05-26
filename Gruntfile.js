@@ -523,7 +523,8 @@ module.exports = function (grunt) {
       ]);
     } else {
       grunt.task.run([
-       'file-creator:prod'
+       'file-creator:prod',
+       'shell:postBuild'
       ]);
     }
   });
@@ -600,8 +601,7 @@ module.exports = function (grunt) {
     'uglify',
     'rev',
     'usemin',
-    'htmlmin',
-    'shell:postBuild'
+    'htmlmin'
   ]);
 
   grunt.registerTask('default', [
