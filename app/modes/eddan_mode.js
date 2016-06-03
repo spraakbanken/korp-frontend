@@ -10,16 +10,16 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.eddan = {
-    id : "eddan",
-    title : "Äldre Eddan",
-    description : "",
-    languages : {
-        eddan : "svenska"
+    id: "eddan",
+    title: "Äldre Eddan",
+    description: "",
+    languages: {
+        eddan: "svenska"
     },
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : {
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
         text_part: {
             label: "part"
         }

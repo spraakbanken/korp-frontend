@@ -5,22 +5,22 @@ settings.lemgramSelect = false;
 settings.wordpicture = false;
 
 settings.fsvattributes = {
-    lemma : settings.fsvlemma,
-    lex : settings.fsvlex,
-    posset : settings.posset,
-    variants : settings.fsvvariants
+    lemma: settings.fsvlemma,
+    lex: settings.fsvlex,
+    posset: settings.posset,
+    variants: settings.fsvvariants
 };
 
 settings.sdhkstructs = {
-    text_id : {
-        label : "fulltext",
-        pattern : "<a href='http://www.nad.riksarkivet.se/SDHK?EndastDigitaliserat=false&SDHK=<%= val %>&page=1&postid=Dipl_<%= val %>&tab=post' target='_blank'>Riksarkivet <%=val %></a>",
-        opts : settings.liteOptions,
-        internalSearch : false
+    text_id: {
+        label: "fulltext",
+        pattern: "<a href='http://www.nad.riksarkivet.se/SDHK?EndastDigitaliserat=false&SDHK=<%= val %>&page=1&postid=Dipl_<%= val %>&tab=post' target='_blank'>Riksarkivet <%=val %></a>",
+        opts: settings.liteOptions,
+        internalSearch: false
     },
-    text_lang : { label : "lang" },
-    text_place : { label : "city" },
-    text_date : { label : "date" },
+    text_lang: { label: "lang" },
+    text_place: { label: "city" },
+    text_date: { label: "date" },
 };
 
 settings.sdhkdescription ='Svenskt Diplomatarium - från <a href="http://www.riksarkivet.se/sdhk" target="_blank">Riksarkivet</a>';
@@ -33,47 +33,47 @@ settings.corporafolders = {};
 
 
 settings.corporafolders.fsvb = {
-    title : "Fornsvenska textbanken",
-    contents : ["fsv-profanprosa", "fsv-verser"],
+    title: "Fornsvenska textbanken",
+    contents: ["fsv-profanprosa", "fsv-verser"],
 };
 
 
 settings.corporafolders.fsvb.aldre = {
-    title : "Äldre fornsvenska",
-    contents : ["fsv-aldrelagar", "fsv-aldrereligiosprosa"]
+    title: "Äldre fornsvenska",
+    contents: ["fsv-aldrelagar", "fsv-aldrereligiosprosa"]
 };
 
 settings.corporafolders.fsvb.yngre = {
-    title : "Yngre fornsvenska",
-    contents : ["fsv-yngrelagar", "fsv-yngrereligiosprosa", "fsv-yngretankebocker"]
+    title: "Yngre fornsvenska",
+    contents: ["fsv-yngrelagar", "fsv-yngrereligiosprosa", "fsv-yngretankebocker"]
 };
 
 settings.corporafolders.fsvb.nysvenska = {
-    title : "Nysvenska",
-    contents : ["fsv-nysvensklagar", "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
+    title: "Nysvenska",
+    contents: ["fsv-nysvensklagar", "fsv-nysvenskdalin", "fsv-nysvenskkronikor", "fsv-nysvenskovrigt", "fsv-nysvenskbibel"]
 };
 
 settings.corporafolders.medeltid = {
-    title : "Medeltidsbrev, Svenskt Diplomatarium",
-    contents : ["sdhk-svenska", "sdhk-norska", "sdhk-tyska", "sdhk-latin", "sdhk-ovrigt"],
+    title: "Medeltidsbrev, Svenskt Diplomatarium",
+    contents: ["sdhk-svenska", "sdhk-norska", "sdhk-tyska", "sdhk-latin", "sdhk-ovrigt"],
 };
 
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
-    morf : 'fsvm',
-    id : "fsv-aldrereligiosprosa",
-    title : "Äldre religiös prosa – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : settings.fsvattributes,
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    morf: 'fsvm',
+    id: "fsv-aldrereligiosprosa",
+    title: "Äldre religiös prosa – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: settings.fsvattributes,
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Birgittaautograferna",
                 "Fornsvenska legendariet enligt Codex Bureanus",
                 "Pentateuchparafrasen, enligt MB I A",
@@ -81,24 +81,24 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
                 "Fornsvenska legendariet enligt Codex Bildstenianus"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-profanprosa"] = {
-    morf : 'fsvm',
-    id : "fsv-profanprosa",
-    title : "Profan prosa – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : settings.fsvattributes,
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    morf: 'fsvm',
+    id: "fsv-profanprosa",
+    title: "Profan prosa – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: settings.fsvattributes,
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Barlaam och Josaphat, ur Codex Holm A 49 Nådendals klosterbok",
                 "Sju vise mästare B, Nådendals klosterbok, Codex Holm A 49",
                 "Didrik av Bern, hand A",
@@ -111,24 +111,24 @@ settings.corpora["fsv-profanprosa"] = {
                 "Sju vise mästare A, ur Codex Holm D 4"
             ]
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-verser"] = {
-    morf : 'fsvm',
-    id : "fsv-verser",
-    title : "Verser – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : settings.fsvattributes,
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    morf: 'fsvm',
+    id: "fsv-verser",
+    title: "Verser – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: settings.fsvattributes,
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Fornsvenska Ordspråk",
                 "Erikskrönikan, ur Spegelbergs bok, Codex Holm D2" ,
                 "Fredrik av Normandie",
@@ -137,26 +137,26 @@ settings.corpora["fsv-verser"] = {
                 "Karlskrönikan"
             ]
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-yngrelagar"] = fsv_yngrelagar;
 
 settings.corpora["fsv-yngrereligiosprosa"] = {
-    id : "fsv-yngrereligiosprosa",
-    morf : 'fsvm',
-    title : "Yngre religiös prosa – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : settings.fsvattributes,
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    id: "fsv-yngrereligiosprosa",
+    morf: 'fsvm',
+    title: "Yngre religiös prosa – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: settings.fsvattributes,
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Johannes döparens födelse ur Codex Bildstenianus Ups C 528",
                 "Jesu lidandes bägare och hans blods utgjutelse",
                 "Svenska Medeltidspostillor 1, enligt AM 787",
@@ -249,24 +249,24 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
                 "Bonaventuras betraktelser, kapitel 63 ur Holm A 3"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-yngretankebocker"] = {
-    morf : 'fsvm',
-    id : "fsv-yngretankebocker",
-    title : "Yngre tankeböcker – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : settings.fsvattributes,
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    morf: 'fsvm',
+    id: "fsv-yngretankebocker",
+    title: "Yngre tankeböcker – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: settings.fsvattributes,
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Läkebok 1: blandad läkedom, ur Codex AM",
                 "Läkebok 11: Månaderna, efter KBs handskrift med gammal signatur K 45, supplerad på Danska ur codex Grensholmensis",
                 "Läkebok, 8 ur codex Grensholmensis i Linköping",
@@ -280,64 +280,64 @@ settings.corpora["fsv-yngretankebocker"] = {
                 "Läkedom, efter Peder Månssons handskrift i Linköpings Stiftsbibliotek"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-nysvenskbibel"] = {
-    id : "fsv-nysvenskbibel",
-    title : "Nysvenska bibelböcker – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : {pos: attrs.pos},
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    id: "fsv-nysvenskbibel",
+    title: "Nysvenska bibelböcker – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {pos: attrs.pos},
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Gustav Vasas Bibel, Markusevanguliet",
                 "Gustav Vasas Bibel, Lukasevangeliet"
             ]
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-nysvenskdalin"] = {
-    id : "fsv-nysvenskdalin",
-    title : "Dalin: then swänska argus – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : {pos: attrs.pos},
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    id: "fsv-nysvenskdalin",
+    title: "Dalin: then swänska argus – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {pos: attrs.pos},
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Dalin: Then Swänska Argus"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-nysvenskkronikor"] = {
-    id : "fsv-nysvenskkronikor",
-    title : "Nysvenska krönikor – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : {pos: attrs.pos},
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    id: "fsv-nysvenskkronikor",
+    title: "Nysvenska krönikor – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {pos: attrs.pos},
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Peder Swarts krönika",
                 "Per Brahes krönika",
                 "Olaus Petris Krönika, stil B",
@@ -345,23 +345,23 @@ settings.corpora["fsv-nysvenskkronikor"] = {
                 "Olaus Petris Krönika"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-nysvenskovrigt"] = {
-    id : "fsv-nysvenskovrigt",
-    title : "Nysvenska, övrigt – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : {pos: attrs.pos},
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    id: "fsv-nysvenskovrigt",
+    title: "Nysvenska, övrigt – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {pos: attrs.pos},
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Runius: Prosastycken",
                 "Mag. Joh. Qvirfelds himmelska örtegårds-sällskap",
                 "Gyllenborg: Svenska sprätthöken",
@@ -375,107 +375,107 @@ settings.corpora["fsv-nysvenskovrigt"] = {
                 "UrbanHiärne: Stratonice"
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["fsv-nysvensklagar"] = {
-    id : "fsv-nysvensklagar",
-    title : "Nysvenska lagar – Fornsvenska textbankens material",
-    description : settings.fsvdescription,
-    within : settings.defaultWithin,
-    context : settings.spContext,
-    attributes : {
+    id: "fsv-nysvensklagar",
+    title: "Nysvenska lagar – Fornsvenska textbankens material",
+    description: settings.fsvdescription,
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {
     	pos: attrs.pos
     },
-    struct_attributes : {
-        text_title : {
-            label : "title",
-            displayType : "select",
-            localize : false,
-            dataset : [
+    struct_attributes: {
+        text_title: {
+            label: "title",
+            displayType: "select",
+            localize: false,
+            dataset: [
                 "Missgiernings Balk",
                 "Giftermåls balk \\(1734\\)",
             ],
         },
-        text_date : {label : "date"}
+        text_date: {label: "date"}
     }
 };
 
 settings.corpora["sdhk-svenska"] = {
-    id : "sdhk-svenska",
-    title : "Medeltidsbrev - Svenska",
-    description : settings.sdhkdescription,
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : settings.sdhkstructs
+    id: "sdhk-svenska",
+    title: "Medeltidsbrev - Svenska",
+    description: settings.sdhkdescription,
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-norska"] = {
-    id : "sdhk-norska",
-    title : "Medeltidsbrev - Norska",
-    description : settings.sdhkdescription,
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : settings.sdhkstructs
+    id: "sdhk-norska",
+    title: "Medeltidsbrev - Norska",
+    description: settings.sdhkdescription,
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-tyska"] = {
-    id : "sdhk-tyska",
-    title : "Medeltidsbrev - Tyska",
-    description : settings.sdhkdescription,
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : settings.sdhkstructs
+    id: "sdhk-tyska",
+    title: "Medeltidsbrev - Tyska",
+    description: settings.sdhkdescription,
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-latin"] = {
-    id : "sdhk-latin",
-    title : "Medeltidsbrev - Latin",
-    description : settings.sdhkdescription,
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : settings.sdhkstructs
+    id: "sdhk-latin",
+    title: "Medeltidsbrev - Latin",
+    description: settings.sdhkdescription,
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-ovrigt"] = {
-    id : "sdhk-ovrigt",
-    title : "Medeltidsbrev - Övriga språk",
-    description : settings.sdhkdescription,
-    within : settings.defaultWithin,
-    context : settings.defaultContext,
-    attributes : {},
-    struct_attributes : settings.sdhkstructs
+    id: "sdhk-ovrigt",
+    title: "Medeltidsbrev - Övriga språk",
+    description: settings.sdhkdescription,
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: settings.sdhkstructs
 };
 
 if(isLab){
     settings.corpora.ogl = {
-        id : "ogl",
-        title : "Östgötalagen",
-        description : "",
-        within : settings.defaultWithin,
-        context: {"1 section" : "1 section"},
-        attributes : {
-            baseform : {
-                label : "baseform",
-                type : "set",
-                extended_template : "<input ng-model='model' >",
-                opts : settings.setOptions,
-                externalSearch : "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
-                // internalSearch : true,
+        id: "ogl",
+        title: "Östgötalagen",
+        description: "",
+        within: settings.defaultWithin,
+        context: {"1 section": "1 section"},
+        attributes: {
+            baseform: {
+                label: "baseform",
+                type: "set",
+                extended_template: "<input ng-model='model' >",
+                opts: settings.setOptions,
+                externalSearch: "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
+                // internalSearch: true,
             },
-            pos : {
-                label : "pos",
-                displayType : "select",
-                opts : settings.liteOptions,
-                extended_template : selectType.extended_template,
-                controller : selectType.controller,
-                translationKey : "ogl_pos_",
-                dataset : [
+            pos: {
+                label: "pos",
+                displayType: "select",
+                opts: settings.liteOptions,
+                extended_template: selectType.extended_template,
+                controller: selectType.controller,
+                translationKey: "ogl_pos_",
+                dataset: [
                     "Nb",
                     "Ne",
                     "A-",
@@ -498,14 +498,14 @@ if(isLab){
                     "F-"
                 ]
             },
-            morph : {
-                label : "msd",
-                displayType : "select",
-                opts : settings.liteOptions,
-                extended_template : selectType.extended_template,
-                controller : selectType.controller,
-                translationKey : "ogl_msd_",
-                dataset : [
+            morph: {
+                label: "msd",
+                displayType: "select",
+                opts: settings.liteOptions,
+                extended_template: selectType.extended_template,
+                controller: selectType.controller,
+                translationKey: "ogl_msd_",
+                dataset: [
                     "A----------n",
                     "A--s---mnpsi",
                     "A--s---mnpti",
@@ -966,21 +966,21 @@ if(isLab){
                     "V-3pxxa----i"
                 ]
             },
-            annotation : {
-                label : "annotation",
-                extended_template : selectType.extended_template,
-                controller : selectType.controller,
-                opts : settings.liteOptions,
-                dataset : [
+            annotation: {
+                label: "annotation",
+                extended_template: selectType.extended_template,
+                controller: selectType.controller,
+                opts: settings.liteOptions,
+                dataset: [
                     "automatic",
                     "manual"
                 ]
             }
         },
-        struct_attributes : {
-            text_title : {label : "title"},
-            section_name : {label : "section"},
-            chapter_name : {label : "chapter"}
+        struct_attributes: {
+            text_title: {label: "title"},
+            section_name: {label: "section"},
+            chapter_name: {label: "chapter"}
         }
     };
 } // end if(isLab)

@@ -17,28 +17,28 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 settings.corpora.lsi = {
-    id : "lsi",
-    title : "LSI",
-    description : "",
-    limited_access : true,
-    languages : {
-        lsi : "english"
+    id: "lsi",
+    title: "LSI",
+    description: "",
+    limited_access: true,
+    languages: {
+        lsi: "english"
     },
-    within : settings.defaultWithin,
-    context : {
-    "1 sentence" : "1 sentence",
-    "7 sentence" : "7 sentence"
+    within: settings.defaultWithin,
+    context: {
+    "1 sentence": "1 sentence",
+    "7 sentence": "7 sentence"
     },
-    attributes : {
-        norm : {label: "normalized_wordform"},
-        pos : {label : "pos"},
-        msd : attrs.msd,
-        lemma : {label: "baseform"},
-        dephead : attrs.dephead,
-        deprel : {label : "deprel"},
-        ref : attrs.ref
+    attributes: {
+        norm: {label: "normalized_wordform"},
+        pos: {label: "pos"},
+        msd: attrs.msd,
+        lemma: {label: "baseform"},
+        dephead: attrs.dephead,
+        deprel: {label: "deprel"},
+        ref: attrs.ref
     },
-    struct_attributes : {
+    struct_attributes: {
         "page_pno": {label: "page"},
         "page_family": {label: "languagefamily"},
         "page_language": {label: "language"},
