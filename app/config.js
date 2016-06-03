@@ -4405,7 +4405,10 @@ settings.corpora.mepac = {
     title: "MEPAC",
     description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
     limited_access: true,
-    context: settings.defaultContext,
+    context: {
+        "1 sentence": "1 sentence",
+        "3 sentence": "3 sentences"
+    },
     within: settings.defaultWithin,
     attributes: modernAttrs,
     struct_attributes: {
