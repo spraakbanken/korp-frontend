@@ -509,6 +509,19 @@ module.exports = function (grunt) {
           done();
         }
       }
+    },
+    'string-replace': {
+      dist: {
+        files: {
+          'dist/korp.yaml': 'korp.yaml'
+        },
+        options: {
+          replacements: [{
+            pattern: 'KORP-VERSION',
+            replacement: grunt.file.readJSON("package.json").version
+          }]
+        }
+      }
     }
   });
 
@@ -524,6 +537,7 @@ module.exports = function (grunt) {
     } else {
       grunt.task.run([
        'file-creator:prod',
+       'string-replace:dist',
        'shell:postBuild'
       ]);
     }
