@@ -11,9 +11,9 @@ Begin with:
 
 Labb (release from trunk):
 * Build a release using
-  > grunt release:labb
+  > grunt release --no-post-build
   For this to work, the repository must be checkouted by svn and not git-svn. The reason
-  is that we create a file with the SVN revision number for tracking. (dist/release-info).
+  is that we create a file with the SVN revision number for tracking. (dist/karp.yaml).
   (It is still possible to build the dist-folder using just "grunt")
 * Do basic testing locally on the built version
   > grunt serve:dist
@@ -26,7 +26,7 @@ Release candidate
     - Tag latest release
     - Merge trunk into korp-current
 
-    Build a release using SVN (creates a release-info file):
+    Build a release (in repository checked out with SVN):
       > grunt release
 
     Test the release
@@ -42,20 +42,14 @@ Production (release from korp-current branch):
   For major changes:
     - We should release in the beginning of the week
 
-  Build a release using SVN (creates a release-info file):
+  Build a release (in repository checked out with SVN):
     > grunt release
-
-  Build a release using git-svn (not recommended, because SVN revision is not available)
 
   Test the release
     > grunt serve:dist
 
   Push release to server
     > rsync --delete -r dist/ fkkorp@k2.spraakdata.gu.se:/var/www/html_sb/korp
-
-  Upload archive for download on webpage (only for major changes)
-    - Remove the dist folder and zip the other content of the repository (ignore .svn-folders)
-    - Upload as https://svn.spraakdata.gu.se/repos/lb/trunk/sbkhs/pub/korp_frontend.zip on SVN
 
   Update git-repository
     - TODO enter this information

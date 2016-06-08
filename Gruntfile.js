@@ -493,23 +493,6 @@ module.exports = function (grunt) {
     svninfo: {
 
     },
-    "file-creator": {
-      "prod": {
-        "dist/release-info": function(fs, fd, done) {
-          fs.writeSync(fd, "svnrev:" + grunt.config("svninfo.rev") + "\n");
-          fs.writeSync(fd, "korpversion:" + grunt.file.readJSON('package.json').version + "\n");
-          done();
-        }
-      },
-      "labb": {
-        "dist/release-info": function(fs, fd, done) {
-          fs.writeSync(fd, "svnrev:" + grunt.config("svninfo.rev") + "\n");
-          fs.writeSync(fd, "korpversion:" + grunt.file.readJSON('package.json').version + "\n");
-          fs.writeSync(fd, "lab:true\n");
-          done();
-        }
-      }
-    },
     'string-replace': {
       dist: {
         files: {
@@ -519,6 +502,10 @@ module.exports = function (grunt) {
           replacements: [{
             pattern: 'KORP-VERSION',
             replacement: grunt.file.readJSON("package.json").version
+          },
+          {
+            pattern: 'SVN-REVISION',
+            replacement: '<%= svninfo.rev %>'
           }]
         }
       }
@@ -528,19 +515,22 @@ module.exports = function (grunt) {
   grunt.registerTask('release', function(target) {
     grunt.task.run([
      'build',
-     'svninfo'
     ]);
-    if(target === 'labb') {
+    
+    var noPostBuild = grunt.option('no-post-build');
+    if(noPostBuild) {
       grunt.task.run([
-        'file-creator:labb'
+        'svninfo',
+        'string-replace:dist'
       ]);
     } else {
       grunt.task.run([
-       'file-creator:prod',
-       'string-replace:dist',
-       'shell:postBuild'
+        'svninfo',
+        'string-replace:dist',
+        'shell:postBuild'
       ]);
     }
+      
   });
 
   grunt.registerTask('serve', function (target) {
