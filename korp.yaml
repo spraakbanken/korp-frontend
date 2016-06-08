@@ -1,0 +1,24 @@
+external:
+  sbid: 'korp'
+  pid:
+  version: 'KORP-VERSION'
+  svn-revision: 'SVN-REVISION'
+  short-name: 'korp'
+  long-name-en: 'Korp'
+  long-name-sv: 'Korp'
+  description-en: 'Korp is the concordance search tool of Språkbanken (The Swedish Language Bank).'
+  description-sv: 'Korp är Språkbankens konkordansverktyg.'
+  license: 'MIT'
+  restriction: 'attribution'
+
+  contact:
+    surname: ''
+    given-name: ''
+    email: 'sb-info@svenska.gu.se'
+    affiliation:
+      organisation-en: 'University of Gothenburg'
+      organisation-sv: 'Göteborgs universitet'
+      department-en: 'Språkbanken'
+      department-sv: 'Språkbanken'
+      email: 'sb-info@svenska.gu.se'
+
