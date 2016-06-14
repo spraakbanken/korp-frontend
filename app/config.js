@@ -2780,6 +2780,7 @@ settings.corpora.suc3 = {
                    displayType: "hidden",
                    type: "set"},
         compwf: {label: "compwf",
+                  displayType: "hidden",
                   type: "set"}
     }),
     struct_attributes: {
@@ -2794,6 +2795,9 @@ settings.corpora.suc3 = {
                 compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
                         return comp.split("+")
                     });
+                if(compLemgrams.length == 0) {
+                    return $('<i rel="localize[empty]" style="color : grey"></i>')
+                }
                 lemProbs = _.filter(lemProbs.split("|"), Boolean);
                 rows = _.zip(compLemgrams, lemProbs);
 
@@ -2823,10 +2827,58 @@ settings.corpora.suc3 = {
 
                 ul.append(lis);
 
-                showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
+                var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
                 ul.append(showAll);
 
-                showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+                var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+                showOne.css("display", "none");
+                ul.append(showOne);
+
+                showAll.click(function () {
+                    _.map(lis, function(li) {
+                        showAll.css("display", "none");
+                        showOne.css("display", "inline");
+                        li.css("display", "list-item");
+                    })
+                });
+
+                showOne.click(function () {
+                    _.map(lis, function(li, i) {
+                        if(i != 0) {
+                            li.css("display", "none");
+                            showAll.css("display", "inline");
+                            showOne.css("display", "none");
+                        }
+                    });
+                });
+                return ul
+            },
+            custom_type: "pos"
+        },
+        compwf: {
+            label: "compwf",
+            renderItem: function(key, value, attrs, wordData, sentenceData) {
+                var compWordForms = wordData.compwf
+                compWordForms = _.filter(compWordForms.split("|"), Boolean)
+                if(compWordForms.length == 0) {
+                    return $('<i rel="localize[empty]" style="color : grey"></i>')
+                }
+
+                var ul = $("<ul>")
+                var lis = _.map(compWordForms, function(wordForm, i) {
+                    var li = $("<li><span>" + wordForm + "</span></li>")
+                    if(i != 0) {
+                        li.css('display', 'none');
+                    }
+                    return li
+                });
+
+                ul.append(lis);
+
+                var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
+                ul.append(showAll);
+
+                var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
                 showOne.css("display", "none");
                 ul.append(showOne);
 
