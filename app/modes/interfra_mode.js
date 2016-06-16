@@ -52,10 +52,15 @@ settings.interfraStructs = {
     "text_check_date": {label: ""}*/
 };
 
+s1 = _.cloneDeep(settings.interfraStructs)
+s1["text_part"]["dataset"] = {"1B": "1B", "2": "2"};
+s2 = _.cloneDeep(settings.interfraStructs)
+s2["text_part"]["dataset"] = {"1A": "1A"};
+
 settings.corpora.interfra = {
     id: "interfra",
     title: "InterFra",
-    description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 1 233 500 ord',
+    description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 900 000 ord',
     within: settings.spWithin,
     context: settings.spContext,
     attributes: {
@@ -63,7 +68,21 @@ settings.corpora.interfra = {
             label: "type"
         }
     },
-    struct_attributes: settings.interfraStructs,
+    struct_attributes: s1,
+};
+
+settings.corpora["interfra-tagged"] = {
+    id: "interfra-tagged",
+    title: "InterFra taggad",
+    description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 330 000 ord',
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {
+        "type": {
+            label: "type"
+        }
+    },
+    struct_attributes: s2,
 };
 
 settings.corpora["interfra-sv"] = {
@@ -84,7 +103,7 @@ settings.corpora["interfra-sv"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: settings.interfraStructs,
+    struct_attributes: s1,
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
