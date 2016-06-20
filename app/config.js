@@ -4459,7 +4459,7 @@ settings.corpora.mepac = {
     limited_access: true,
     context: {
         "1 sentence": "1 sentence",
-        "3 sentence": "3 sentences"
+        "1 text": "1 text"
     },
     within: settings.defaultWithin,
     attributes: modernAttrs,
