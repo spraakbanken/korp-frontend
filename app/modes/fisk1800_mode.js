@@ -22,8 +22,14 @@ settings.corporafolders = {};
 
 settings.corporafolders.brevdagbocker = {
     title: "Brev och dagböcker",
-    contents: ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "dagbocker1700tal", "dagbocker1800-1849", "dagbocker1850-1899", "dagbocker1900-1949"],
+    contents: ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "dagbocker1700tal", "dagbocker1800-1849"],
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
+};
+
+settings.corporafolders.fragebrevsvar = {
+    title: "Frågebrevsvar",
+    contents: ["dagbocker1900-1949"],
+    description: ""
 };
 
 settings.corporafolders.myndighet = {
@@ -181,27 +187,10 @@ settings.corpora["dagbocker1800-1849"] = {
     }
 };
 
-settings.corpora["dagbocker1850-1899"] = {
-    id: "dagbocker1850-1899",
-    title: "Dagböcker 1850–1899",
-    description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
-    morf: 'saldom|dalinm|swedbergm',
-    within: settings.defaultWithin,
-    context: settings.defaultContext,
-    attributes: fisk1800attrs,
-    struct_attributes: {
-        "text_title": {label: "title"},
-        "text_location": {label: "location"},
-        "text_source": {label: "source"},
-        "text_date": {label: "date"},
-        "text_archivecode": {label: "archivecode"}
-    }
-};
-
 settings.corpora["dagbocker1900-1949"] = {
     id: "dagbocker1900-1949",
-    title: "Dagböcker 1900–1949",
-    description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
+    title: "Frågebrevsvar 1900–1949",
+    description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
     context: settings.defaultContext,
@@ -217,7 +206,7 @@ settings.corpora["dagbocker1900-1949"] = {
 
 settings.corpora["fsbmyndighet1800tal"] = {
     id: "fsbmyndighet1800tal",
-    title: "Myndighetstexter 1800-tal",
+    title: "Protokoll vid lantdagen i Borgå år 1809",
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
