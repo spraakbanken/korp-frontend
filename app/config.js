@@ -2747,6 +2747,92 @@ settings.corpora.sou = {
     }
 };
 
+compLemgram = {
+    renderCompLemgramContent: function(key, value, attrs, wordData, sentenceData) {
+        var compLemgrams = wordData.complemgram
+        compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
+                var parts = comp.split(":");
+                var lemgrams = parts[0].split("+");
+                var prob = parts[1];
+                return [lemgrams, prob];
+            });
+        content = _.map(compLemgrams, function(row, i) {
+            var lemgrams = row[0];
+            var prob = row[1];
+            var li = $("<li></li>")
+            if(i != 0) {
+                li.css('display', 'none');
+            }
+            _.map(lemgrams, function(lemgram, j) {
+                lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + "</span>");
+                lemgramSpan.click(function () {
+                    value = $(this).data("value")
+                    search({"search": "cqp|[lex contains '" + value + "']"})
+                });
+                li.append(lemgramSpan);
+                if(j < lemgrams.length -1) {
+                    li.append("<span> + </span>");
+                }
+                return lemgramSpan;
+            });
+            li.append("<span> (" + prob + ")</span>");
+            return li
+        });
+        
+        return compLemgram.renderList(content);
+    },
+    renderList: function(lis) {
+        if(lis.length == 0) {
+            return $('<i rel="localize[empty]" style="color : grey"></i>')
+        }
+
+        var ul = $("<ul style='list-style:initial'>")
+        ul.append(lis);
+
+        if(lis.length == 1) {
+            return ul
+        }
+        
+        var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>");
+        ul.append(showAll);
+
+        var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+        showOne.css("display", "none");
+        ul.append(showOne);
+
+        showAll.click(function () {
+            _.map(lis, function(li) {
+                showAll.css("display", "none");
+                showOne.css("display", "inline");
+                li.css("display", "list-item");
+            })
+        });
+
+        showOne.click(function () {
+            _.map(lis, function(li, i) {
+                if(i != 0) {
+                    li.css("display", "none");
+                    showAll.css("display", "inline");
+                    showOne.css("display", "none");
+                }
+            });
+        });
+        return ul
+    },
+    renderWordFormContent: function(key, value, attrs, wordData, sentenceData) {
+        var compWordForms = wordData.compwf
+        compWordForms = _.filter(compWordForms.split("|"), Boolean)
+        content = _.map(compWordForms, function(wordForm, i) {
+            var li = $("<li><span>" + wordForm + "</span></li>")
+            if(i != 0) {
+                li.css('display', 'none');
+            }
+            return li
+        });
+        return compLemgram.renderList(content);
+    }
+}
+
 settings.corpora.suc2 = {
     id: "suc2",
     title: "SUC 2.0",
@@ -2755,9 +2841,32 @@ settings.corpora.suc2 = {
     context: {
         "1 sentence": "1 sentence"
     },
-    attributes: modernAttrs,
+    attributes: _.extend({}, modernAttrs, {
+        complemgram: {
+            label: "complemgram",
+            displayType: "hidden",
+            type: "set"
+        },
+        compwf: {
+            label: "compwf",
+            displayType: "hidden",
+            type: "set"
+        }
+    }),
     struct_attributes: {
         text_id: {label: "text"}
+    },
+    custom_attributes: {
+        complemgram: {
+            label: "complemgram",
+            renderItem: compLemgram.renderCompLemgramContent,
+            custom_type: "pos"
+        },
+        compwf: {
+            label: "compwf",
+            renderItem: compLemgram.renderWordFormContent,
+            custom_type: "pos"
+        }
     }
 };
 
@@ -2789,118 +2898,12 @@ settings.corpora.suc3 = {
     custom_attributes: {
         complemgram: {
             label: "complemgram",
-            renderItem: function(key, value, attrs, wordData, sentenceData) {
-                var compLemgrams = wordData.complemgram
-                var lemProbs = wordData.lemprob
-                compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
-                        return comp.split("+")
-                    });
-                if(compLemgrams.length == 0) {
-                    return $('<i rel="localize[empty]" style="color : grey"></i>')
-                }
-                lemProbs = _.filter(lemProbs.split("|"), Boolean);
-                rows = _.zip(compLemgrams, lemProbs);
-
-                var ul = $("<ul style='list-style:initial'>")
-                var lis = _.map(rows, function(row, i) {
-                    var lemgrams = row[0];
-                    var prob = row[1];
-                    var li = $("<li></li>")
-                    if(i != 0) {
-                        li.css('display', 'none');
-                    }
-                    _.map(lemgrams, function(lemgram, j) {
-                        lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + "</span>");
-                        lemgramSpan.click(function () {
-                            value = $(this).data("value")
-                            search({"search": "cqp|[lex contains '" + value + "']"})
-                        });
-                        li.append(lemgramSpan);
-                        if(j < lemgrams.length -1) {
-                            li.append("<span> + </span>");
-                        }
-                        return lemgramSpan;
-                    });
-                    li.append("<span> (" + prob + ")</span>");
-                    return li
-                });
-
-                ul.append(lis);
-
-                var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
-                ul.append(showAll);
-
-                var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
-                showOne.css("display", "none");
-                ul.append(showOne);
-
-                showAll.click(function () {
-                    _.map(lis, function(li) {
-                        showAll.css("display", "none");
-                        showOne.css("display", "inline");
-                        li.css("display", "list-item");
-                    })
-                });
-
-                showOne.click(function () {
-                    _.map(lis, function(li, i) {
-                        if(i != 0) {
-                            li.css("display", "none");
-                            showAll.css("display", "inline");
-                            showOne.css("display", "none");
-                        }
-                    });
-                });
-                return ul
-            },
+            renderItem: compLemgram.renderCompLemgramContent,
             custom_type: "pos"
         },
         compwf: {
             label: "compwf",
-            renderItem: function(key, value, attrs, wordData, sentenceData) {
-                var compWordForms = wordData.compwf
-                compWordForms = _.filter(compWordForms.split("|"), Boolean)
-                if(compWordForms.length == 0) {
-                    return $('<i rel="localize[empty]" style="color : grey"></i>')
-                }
-
-                var ul = $("<ul>")
-                var lis = _.map(compWordForms, function(wordForm, i) {
-                    var li = $("<li><span>" + wordForm + "</span></li>")
-                    if(i != 0) {
-                        li.css('display', 'none');
-                    }
-                    return li
-                });
-
-                ul.append(lis);
-
-                var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + rows.length + ")</span>");
-                ul.append(showAll);
-
-                var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
-                showOne.css("display", "none");
-                ul.append(showOne);
-
-                showAll.click(function () {
-                    _.map(lis, function(li) {
-                        showAll.css("display", "none");
-                        showOne.css("display", "inline");
-                        li.css("display", "list-item");
-                    })
-                });
-
-                showOne.click(function () {
-                    _.map(lis, function(li, i) {
-                        if(i != 0) {
-                            li.css("display", "none");
-                            showAll.css("display", "inline");
-                            showOne.css("display", "none");
-                        }
-                    });
-                });
-                return ul
-            },
+            renderItem: compLemgram.renderWordFormContent,
             custom_type: "pos"
         }
     }
