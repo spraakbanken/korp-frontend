@@ -53,7 +53,7 @@ var aftonbladet_custom_attributes = {
     text_kbid: {
         label: "source",
         pattern: "<div><div>Kungliga Biblioteket</div><div><a href='http://tidningar.kb.se/?newspaper=AFTONBLADET&from=<%= struct_attrs.text_date %>&to=<%= struct_attrs.text_date %>' target='_blank'><img src='http://tidningar.kb.se/4112678/<%= struct_attrs.text_date %>/edition/0/part/1/page/<%= struct_attrs.page_no %>_thumb.jpg' width='100%'></img></a></div></div>",
-        custom_type: "struct"
+        customType: "struct"
     }
 };
 

@@ -86,9 +86,9 @@ Sidebar =
         pos_items = []
         for key, attrs of corpus_attrs
             output = @renderItem(key, null, attrs, wordData, sentenceData, tokens)
-            if attrs.custom_type == "struct"
+            if attrs.customType == "struct"
                 struct_items.push output
-            else if attrs.custom_type == "pos"
+            else if attrs.customType == "pos"
                 pos_items.push output
         return [$(pos_items), $(struct_items)]
 

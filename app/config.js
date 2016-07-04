@@ -2582,7 +2582,7 @@ settings.corpora["ivip"] = {
                 });
                 return videoLink;
             },
-            custom_type: "struct"
+            customType: "struct"
         }
     }
 };
@@ -2799,12 +2799,12 @@ settings.corpora.suc2 = {
         complemgram: {
             label: "complemgram",
             renderItem: compLemgram.renderCompLemgramContent,
-            custom_type: "pos"
+            customType: "pos"
         },
         compwf: {
             label: "compwf",
             renderItem: compLemgram.renderWordFormContent,
-            custom_type: "pos"
+            customType: "pos"
         }
     }
 };
@@ -2838,12 +2838,12 @@ settings.corpora.suc3 = {
         complemgram: {
             label: "complemgram",
             renderItem: compLemgram.renderCompLemgramContent,
-            custom_type: "pos"
+            customType: "pos"
         },
         compwf: {
             label: "compwf",
             renderItem: compLemgram.renderWordFormContent,
-            custom_type: "pos"
+            customType: "pos"
         }
     }
 };
@@ -4215,7 +4215,7 @@ settings.corpora.twitter = {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-            custom_type: "struct"
+            customType: "struct"
             }
     }
 };
@@ -4260,7 +4260,7 @@ settings.corpora["twitter-pldebatt-130612"] = {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-            custom_type: "struct"
+            customType: "struct"
             }
     }
 };
@@ -4305,7 +4305,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-            custom_type: "struct"
+            customType: "struct"
             }
     }
 };
@@ -4350,7 +4350,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
-            custom_type: "struct"
+            customType: "struct"
             }
     }
 };
