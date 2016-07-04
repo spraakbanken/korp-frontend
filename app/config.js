@@ -798,7 +798,7 @@ settings.corporafolders.fisk.magazines = {
 
 settings.corporafolders.protected = {
     title: "Skyddade korpusar",
-    contents: ["ansokningar", "coctaill", "forhor", "sprakfragor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.medical = {
@@ -2592,25 +2592,32 @@ settings.corpora["ivip"] = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: _.extend({}, modernAttrs, {
+    attributes: {
+        pos: attrs.pos,
+        msd: attrs.msd,
+        lemma: attrs.baseform,
+        lex: attrs.lemgram,
+        saldo: attrs.saldo,
+        prefix: attrs.prefix,
+        suffix: attrs.suffix,
         shortened_normalised: {
             label: "normalized_wordform",
             isStructAttr: true
         }
-    }),
+    },
     struct_attributes: {
         text_country: {label: "country", order: 20},
         text_city: {label: "city", order: 19},
         text_place: {label: "location", order: 18},
-        // deltage ord 17
-        text_mediatype: {label: "mediatype", order: 9},
+        text_participants: {label: "participants", order: 17},
+        sentence_speaker_id: {label: "speaker", order: 16},
+        sentence_speaker_role: {label: "speakerrole", order: 15},
+        sentence_speaker_gender: {label: "speakergender", order: 14},
+        sentence_speaker_age: {label: "speakerage", order: 13},
+        sentence_speaker_region: {label: "speakerregion", order: 12},
         text_consentid: {label: "consentid", order: 11},
         text_date: {label: "date", order: 10},
-        sentence_speaker_id: {label: "speaker", order: 16},
-        sentence_speaker_role1: {label: "speakerrole1", order: 12},
-        sentence_speaker_age: {label: "speakerage", order: 14},
-        sentence_speaker_region: {label: "speakerregion", order: 13},
-        sentence_speaker_gender: {label: "speakergender", order: 15},
+        text_mediatype: {label: "mediatype", order: 9},
         sentence_start: {displayType: "hidden"},
         sentence_end: {displayType: "hidden"},
         text_mediafilepath: {displayType: "hidden"},
@@ -2778,7 +2785,7 @@ compLemgram = {
             li.append("<span> (" + prob + ")</span>");
             return li
         });
-        
+
         return compLemgram.renderList(content);
     },
     renderList: function(lis) {
@@ -2792,7 +2799,7 @@ compLemgram = {
         if(lis.length == 1) {
             return ul
         }
-        
+
         var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>");
         ul.append(showAll);
 

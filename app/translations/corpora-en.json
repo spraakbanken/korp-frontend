@@ -1029,17 +1029,17 @@
     "country": "country",
     "mediatype": "media type",
     "consentid": "consent ID",
-    "speakerrole1": "speaker role (1)",
-    "speakerrole2": "speaker role (2)",
+    "speakerrole": "speaker role",
     "speakerage": "speaker age",
     "speakerregion": "speaker region",
     "speakergender": "speaker gender",
+    "participants": "participants",
     "video": "video",
     "video_restart": "Restart",
     "video_continue": "Continue",
     "video_start_time": "Start time",
     "video_end_time": "End time",
     "video_utterance": "Utterance",
-    
+
     "paragraph__geocontext" : "Co-occurrence in paragraph"
 }

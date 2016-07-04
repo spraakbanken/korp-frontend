@@ -1029,17 +1029,17 @@
     "country": "land",
     "mediatype": "mediatyp",
     "consentid": "samtyckes-ID",
-    "speakerrole1": "talarroll (1)",
-    "speakerrole2": "talarroll (2)",
+    "speakerrole": "talarroll",
     "speakerage": "talarålder",
     "speakerregion": "talarregion",
     "speakergender": "talarkön",
+    "participants": "deltagare",
     "video": "video",
     "video_restart": "Starta om",
     "video_continue": "Fortsätt",
     "video_start_time": "Starttid",
     "video_end_time": "Sluttid",
     "video_utterance": "Yttrande",
-    
+
     "paragraph__geocontext" : "Samförekomst i stycke"
 }
