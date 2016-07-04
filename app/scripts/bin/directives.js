@@ -726,7 +726,7 @@
         maxDate: "="
       },
       restrict: "E",
-      template: "<div>\n    <uib-datepicker class=\"well well-sm\" ng-model=\"dateModel\"\n        min-date=\"minDate\" max-date=\"maxDate\" init-date=\"minDate\"\n        show-weeks=\"true\" starting-day=\"1\" ng-change=\"change()\"></uib-datepicker>\n\n    <div class=\"time\">\n        <i class=\"fa fa-3x fa-clock-o\"></i><uib-timepicker class=\"timepicker\" ng-model=\"timeModel\"\n            hour-step=\"1\" minute-step=\"1\" show-meridian=\"false\"></uib-timepicker>\n    </div>\n</div>",
+      template: "<div>\n    <uib-datepicker class=\"well well-sm\" ng-model=\"dateModel\"\n        min-date=\"minDate\" max-date=\"maxDate\" init-date=\"minDate\"\n        show-weeks=\"true\" starting-day=\"1\"></uib-datepicker>\n\n    <div class=\"time\">\n        <i class=\"fa fa-3x fa-clock-o\"></i><uib-timepicker class=\"timepicker\" ng-model=\"timeModel\"\n            hour-step=\"1\" minute-step=\"1\" show-meridian=\"false\"></uib-timepicker>\n    </div>\n</div>",
       link: function(s, elem, attr) {
         var time_units, w;
         s.isOpen = false;
@@ -735,14 +735,10 @@
           event.stopPropagation();
           return s.isOpen = true;
         };
-        s.change = function() {
-          return c.log("date change");
-        };
         time_units = ["hour", "minute"];
         return w = s.$watchGroup(["dateModel", "timeModel"], function(arg) {
           var date, j, len1, m, m_time, t, time;
           date = arg[0], time = arg[1];
-          c.log("dateModel watch ", date);
           if (date && time) {
             m = moment(moment(date).format("YYYY-MM-DD"));
             for (j = 0, len1 = time_units.length; j < len1; j++) {

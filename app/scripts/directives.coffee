@@ -685,7 +685,7 @@ korpApp.directive "timeInterval", () ->
         <div>
             <uib-datepicker class="well well-sm" ng-model="dateModel"
                 min-date="minDate" max-date="maxDate" init-date="minDate"
-                show-weeks="true" starting-day="1" ng-change="change()"></uib-datepicker>
+                show-weeks="true" starting-day="1"></uib-datepicker>
 
             <div class="time">
                 <i class="fa fa-3x fa-clock-o"></i><uib-timepicker class="timepicker" ng-model="timeModel"
@@ -701,24 +701,14 @@ korpApp.directive "timeInterval", () ->
             event.stopPropagation()
             s.isOpen = true
 
-           # s.model = null
-
-        s.change = () ->
-            c.log "date change"
-
         time_units = ["hour", "minute"]
         w = s.$watchGroup ["dateModel", "timeModel"], ([date, time]) ->
-            c.log "dateModel watch ", date
             if date and time
                 m = moment(moment(date).format("YYYY-MM-DD"))
-                # c.log "time", time, date, s
                 for t in time_units
                     m_time = moment(time)
-                    # c.log "add", m_time[t](), t
                     m.add(m_time[t](), t)
-
                 s.model = m
-                # c.log "s.model", s.model
 
 korpApp.directive 'reduceSelect', ($timeout) ->
     restrict: 'AE'

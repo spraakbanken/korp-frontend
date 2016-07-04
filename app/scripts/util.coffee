@@ -1009,7 +1009,6 @@ settings.common_struct_types =
         label: "date_interval"
         displayType: "date_interval"
         opts: false
-        # extended_template: "<slider floor=\"{{floor}}\" ceiling=\"{{ceiling}}\" " + "ng-model-low=\"values.low\" ng-model-high=\"values.high\"></slider>" + "<div><input ng-model=\"values.low\" class=\"from\"> <input class=\"to\" ng-model=\"values.high\"></div>"
         extended_template : '<div class="date_interval_arg_type">
             <div class="section">
                 <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
@@ -1054,46 +1053,32 @@ settings.common_struct_types =
             s.$on "corpuschooserchange", () ->
                 updateIntervals()
 
-
             updateIntervals()
 
             s.from_click = (event) ->
                 event.originalEvent.preventDefault()
                 event.originalEvent.stopPropagation()
 
-            c.log "model", s.model
-
             getYear = (val) ->
                 moment(val.toString(), "YYYYMMDD").toDate()
 
             getTime = (val) ->
-                c.log "getTime", val, moment(val.toString(), "HHmmss").toDate()
                 moment(val.toString(), "HHmmss").toDate()
 
             unless s.model
                 s.from_date = s.minDate
-
                 s.to_date = s.maxDate
                 [s.from_time, s.to_time] = _.invoke cl.getMomentInterval(), "toDate"
-                # s.from_time = moment("0", "h").toDate()
-                # s.to_time = moment("23:59", "hh:mm").toDate()
             else if s.model.length == 4
                 [s.from_date, s.to_date] = _.map s.model[..2], getYear
                 [s.from_time, s.to_time] = _.map s.model[2..], getTime
 
 
-
-                    # moment(item.toString(), )
-            # s.from_date = moment()
-
             s.$watchGroup ["combined", "combined2"], ([combined, combined2]) ->
-                c.log "combined", combined
-                c.log "combined2", combined2
                 s.model = [
                     moment(s.from_date).format("YYYYMMDD"),
                     moment(s.to_date).format("YYYYMMDD"),
                     moment(s.from_time).format("HHmmss"),
                     moment(s.to_time).format("HHmmss")
                 ]
-                c.log "s.model", s.model
         ]

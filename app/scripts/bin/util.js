@@ -1202,12 +1202,10 @@
             event.originalEvent.preventDefault();
             return event.originalEvent.stopPropagation();
           };
-          c.log("model", s.model);
           getYear = function(val) {
             return moment(val.toString(), "YYYYMMDD").toDate();
           };
           getTime = function(val) {
-            c.log("getTime", val, moment(val.toString(), "HHmmss").toDate());
             return moment(val.toString(), "HHmmss").toDate();
           };
           if (!s.model) {
@@ -1221,10 +1219,7 @@
           return s.$watchGroup(["combined", "combined2"], function(arg) {
             var combined, combined2;
             combined = arg[0], combined2 = arg[1];
-            c.log("combined", combined);
-            c.log("combined2", combined2);
-            s.model = [moment(s.from_date).format("YYYYMMDD"), moment(s.to_date).format("YYYYMMDD"), moment(s.from_time).format("HHmmss"), moment(s.to_time).format("HHmmss")];
-            return c.log("s.model", s.model);
+            return s.model = [moment(s.from_date).format("YYYYMMDD"), moment(s.to_date).format("YYYYMMDD"), moment(s.from_time).format("HHmmss"), moment(s.to_time).format("HHmmss")];
           });
         }
       ]
