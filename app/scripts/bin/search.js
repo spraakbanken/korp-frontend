@@ -60,8 +60,6 @@
     return $("#search_history").html(opts).prepend(clear).prepend(placeholder);
   };
 
-  view.enableSearch = function(bool) {};
-
   view.initSearchOptions = function() {
     var selects;
     selects = $("#search_options > div:first select").customSelect();

@@ -43,7 +43,7 @@
     isInit = true;
     s.searchDisabled = false;
     s.$on("corpuschooserchange", function(event, corpora) {
-      var enableSearch, nonprotected;
+      var nonprotected;
       c.log("corpuschooserchange", corpora);
       settings.corpusListing.select(corpora);
       nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id");
@@ -52,8 +52,6 @@
       } else {
         $location.search("corpus", null);
       }
-      enableSearch = !!corpora.length;
-      view.enableSearch(enableSearch);
       isInit = false;
       return s.searchDisabled = settings.corpusListing.selected.length === 0;
     });

@@ -69,9 +69,6 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
         else
             $location.search "corpus", null
 
-        enableSearch = !!corpora.length
-        view.enableSearch enableSearch
-
         isInit = false
 
         s.searchDisabled = settings.corpusListing.selected.length == 0
