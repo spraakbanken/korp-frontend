@@ -1815,7 +1815,7 @@
     GraphResults.prototype.setLineMode = function() {};
 
     GraphResults.prototype.setTableMode = function(series) {
-      var h, nRows, ref, setExportUrl;
+      var h, nRows, ref;
       $(".chart,.legend", this.$result).hide();
       $(".time_table", this.$result.parent()).show();
       nRows = series.length || 2;
@@ -1826,9 +1826,9 @@
         ref.resizeCanvas();
       }
       $(".exportTimeStatsSection", this.$result).show();
-      setExportUrl = (function(_this) {
+      return $(".exportTimeStatsSection .btn.export", this.$result).click((function(_this) {
         return function() {
-          var blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, k, len, len1, len2, o, output, p, ref1, ref2, row, selType, selVal, stampformat;
+          var a, blob, cell, cells, csv, csvUrl, csvstr, dataDelimiter, header, i, k, len, len1, len2, o, output, p, ref1, ref2, row, selType, selVal, stampformat;
           selVal = $(".timeKindOfData option:selected", _this.$result).val();
           selType = $(".timeKindOfFormat option:selected", _this.$result).val();
           dataDelimiter = selType === "TSV" ? "%09" : ";";
@@ -1863,13 +1863,13 @@
             type: "text/" + selType
           });
           csvUrl = URL.createObjectURL(blob);
-          return $(".exportTimeStatsSection .btn.export", _this.$result).attr({
-            download: "export." + selType,
-            href: csvUrl
-          });
+          a = document.createElement("a");
+          a.href = csvUrl;
+          a.download = "export." + selType;
+          a.click();
+          return window.URL.revokeObjectURL(csvUrl);
         };
-      })(this);
-      return setExportUrl();
+      })(this));
     };
 
     GraphResults.prototype.zoomLevelToFormat = function(zoom) {

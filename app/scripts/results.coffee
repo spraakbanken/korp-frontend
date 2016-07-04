@@ -835,7 +835,6 @@ class view.StatsResults extends BaseResults
         csv = new CSV(output, {
             header : header
             delimiter : dataDelimiter
-            # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
         })
 
         csvstr = csv.encode()
@@ -1508,7 +1507,7 @@ class view.GraphResults extends BaseResults
         @time_grid?.resizeCanvas()
         $(".exportTimeStatsSection", @$result).show()
 
-        setExportUrl = () =>
+        $(".exportTimeStatsSection .btn.export", @$result).click(() =>
             selVal = $(".timeKindOfData option:selected", @$result).val()
             selType = $(".timeKindOfFormat option:selected", @$result).val()
             dataDelimiter = if selType is "TSV" then "%09" else ";"
@@ -1532,19 +1531,18 @@ class view.GraphResults extends BaseResults
                 output.push cells
 
             csv = new CSV(output, {
-                #header : header
                 delimiter : dataDelimiter
-                # line : escape(String.fromCharCode(0x0D) + String.fromCharCode(0x0A))
             })
             csvstr = csv.encode()
             blob = new Blob([csvstr], { type: "text/#{selType}"})
             csvUrl = URL.createObjectURL(blob)
-            $(".exportTimeStatsSection .btn.export", @$result).attr({
-                download : "export.#{selType}"
-                href : csvUrl
-            })
-
-        setExportUrl()
+            
+            a = document.createElement "a"
+            a.href = csvUrl
+            a.download = "export.#{selType}"
+            a.click()
+            window.URL.revokeObjectURL(csvUrl)
+        )
 
     zoomLevelToFormat : (zoom) ->
         stampFormats =
