@@ -610,8 +610,7 @@ attrs.ne_subtype = {
    }
 };
 sattrs.date = {
-    label: "date",
-    displayType: "date"
+    label: "date"
 };
 
 var modernAttrs = {
