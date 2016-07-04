@@ -6,6 +6,8 @@ describe "map", () ->
         expect(getMapsHits()).toBe '7'
 
     it "should not display map when there are 0 hits", () ->
+        # TODO if we don't do two requests the wrong corpora might be selected sometimes??
+        browser.get "http://localhost:9001/#?lang=sv&cqp=%5B%5D&corpus=suc2&show_map&search=word%7Ctall&result_tab=1"
         browser.get "http://localhost:9001/#?lang=sv&cqp=%5B%5D&corpus=suc2&show_map&search=word%7Ctall&result_tab=1"
         expect(getMapsHits()).toBe '0'
 

@@ -63,7 +63,7 @@ describe "stats table", () ->
         # 4. assert result total is 4
 
     it "should be possible to reduce on more than one attribute", () ->
-        browser.get "http://localhost:9001/#?result_tab=2&stats_reduce=word,msd,saldo&corpus=suc2,suc3&search=word|gå ut"
+        browser.get "http://localhost:9001/#?result_tab=2&stats_reduce=word,msd,lex&corpus=suc2,suc3&search=word|gå ut"
 
         table = element (By.css "#myGrid")
         waitFor table
@@ -74,7 +74,7 @@ describe "stats table", () ->
         columns = element.all (By.css '.slick-column-name')
         expect(columns.get(1).getText()).toBe "ord"
         expect(columns.get(2).getText()).toBe "msd"
-        expect(columns.get(3).getText()).toBe "betydelse"
+        expect(columns.get(3).getText()).toBe "lemgram"
         
         expect(columns.get(5).getText()).toBe "Totalt"
         expect(columns.get(6).getText()).toBe "SUC 2.0"
@@ -86,7 +86,7 @@ describe "stats table", () ->
         
         # total row
         rows.get(0).getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 4 838 (11 288) 4 999,2 (5 832) 4 676,9 (5 456)"
+            expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 160,3 (374) 180 (210) 140,6 (164)"
 
         rows.get(22).getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "gå ut VB.INF.AKT PL gå11 gå ut6 33,4 (78) 33,4 (39) 33,4 (39)"
+            expect(text.replace /\n/g, " ").toBe "gå ut VB.INF.AKT AB gå på (verb) gå ut (verb) 0,4 (1) 0,9 (1) 0 (0)"
