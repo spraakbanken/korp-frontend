@@ -1,11 +1,9 @@
 class BaseResults
     constructor: (resultSelector, tabSelector, scope) ->
         @s = scope
-        # @s.instance = this
         @$tab = $(tabSelector)
         @$result = $(resultSelector)
 
-        # @num_result = @$result.find(".num-result")
         @$result.add(@$tab).addClass "not_loading"
 
         @injector = $("body").injector()
@@ -13,13 +11,10 @@ class BaseResults
         def = @injector.get("$q").defer()
         @firstResultDef = def
 
-
     onProgress: (progressObj) ->
         safeApply @s, () =>
             @s.$parent.progress = Math.round(progressObj["stats"])
             @s.hits_display = util.prettyNumbers(progressObj["total_results"])
-
-
 
     abort : () ->
         @ignoreAbort = false
@@ -32,7 +27,6 @@ class BaseResults
         $(".result_tabs > ul").scope().tabs
 
     renderResult: (data) ->
-        #       this.resetView();
         @$result.find(".error_msg").remove()
         if data.ERROR
             safeApply @s, () =>
@@ -74,7 +68,6 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
-            c.log "firstResultDef.then", @isActive()
             if @isActive()
                 @s.$root.jsonUrl = @proxy?.prevUrl
     onexit : () ->
@@ -89,8 +82,6 @@ class view.KWICResults extends BaseResults
         self = this
         @prevCQP = null
         super tabSelector, resultSelector, scope
-        # @s.$parent.loading = false
-        # @initHTML = @$result.html()
         window.kwicProxy = new model.KWICProxy()
         @proxy = kwicProxy
         @readingProxy = new model.KWICProxy()
@@ -111,24 +102,19 @@ class view.KWICResults extends BaseResults
 
         @$result.on "click", ".word", (event) => @onWordClick(event)
 
-
-        # @$result.addClass "reading_mode" if $.bbq.getState("reading_mode")
-
     setupReadingHash : () ->
         @s.setupReadingHash()
 
     onWordClick : (event) ->
-        c.log "wordclick", @tabindex, @s
+        c.log "word click in kwic"
         if @isActive()
             @s.$root.sidebar_visible = true
-        # c.log "click", obj, event
-        # c.log "word click", $(this).scope().wd, event.currentTarget
         scope = $(event.currentTarget).scope()
         obj = scope.wd
         sent = scope.sentence
         event.stopPropagation()
         word = $(event.target)
-        # $.sm.send("word.select")
+
         if $("#sidebar").data()["korp-sidebar"]
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
@@ -156,19 +142,15 @@ class view.KWICResults extends BaseResults
                 $(item).is(word) or $(item).is(querySentStart)
             )
             sent_start = paragraph.index(l.eq(l.index(word) - 1))
-            c.log "i", l.index(word), i, sent_start
         aux = $(paragraph.get(sent_start + i - 1))
         scope.selectionManager.select word, aux
         safeApply @s.$root, (s) ->
             s.$root.word_selected = word
 
-
-
     resetView: ->
         super()
 
     getProxy: ->
-        # return @readingProxy if @isReadingMode()
         @proxy
 
     isReadingMode : () ->
@@ -181,15 +163,12 @@ class view.KWICResults extends BaseResults
 
         @$result.find(".token_selected").click()
         _.defer () => @centerScrollbar()
-        # @centerScrollbar()
-        # $(document).keydown $.proxy(@onKeydown, this)
         return
 
     onexit: ->
         super()
         c.log "onexit kwic"
         @s.$root.sidebar_visible = false
-        # $(document).unbind "keydown", @onKeydown
         return
 
     onKeydown: (event) ->
@@ -231,7 +210,6 @@ class view.KWICResults extends BaseResults
         output
 
     renderCompleteResult: (data) ->
-        c.log "renderCompleteResult", data
         @current_page = search().page or 0
         safeApply @s, () =>
             @hidePreloader()
@@ -241,30 +219,19 @@ class view.KWICResults extends BaseResults
             c.log "no kwic results"
             @showNoResults()
             return
-        # @s.$parent.loading = false
         @$result.removeClass "zero_results"
-        # @$result.find(".num-result").html util.prettyNumbers(data.hits)
         @renderHitsPicture data
 
-
-
-
     renderResult: (data) ->
-        c.log "data", data, @proxy.prevUrl
         resultError = super(data)
         return if resultError is false
         unless data.kwic then data.kwic = []
-        c.log "corpus_results"
         isReading = @isReadingMode()
-
-
 
         if @isActive()
             @s.$root.jsonUrl = @proxy.prevUrl
 
-        # applyTo "kwicCtrl", ($scope) ->
         @s.$apply ($scope) =>
-            c.log "apply kwic search data", data
             if isReading
                 $scope.setContextData(data)
                 @selectionManager.deselect()
@@ -277,7 +244,6 @@ class view.KWICResults extends BaseResults
                     @s.gotFirstKwic = true
 
             , 0)
-            # @hidePreloader()
 
         if currentMode == "parallel" and not isReading
             scrollLeft = $(".table_scrollarea", @$result).scrollLeft() or 0
@@ -335,7 +301,6 @@ class view.KWICResults extends BaseResults
         area.stop(true, true).animate scrollLeft: newX
 
     buildQueryOptions: (cqp, isPaging) ->
-        c.log "buildQueryOptions", cqp
         opts = {}
         getSortParams = () ->
             sort = search().sort
@@ -723,11 +688,12 @@ class view.LemgramResults extends BaseResults
         @s.$root.$broadcast 'word_picture_data_available', res
 
     onentry: ->
-        c.log "lemgram onentry"
+        c.log "word pic onentry"
         super()
         return
 
     onexit: ->
+        c.log "word pic onexit"
         super()
         clearTimeout self.timeout
         safeApply @s, () =>
@@ -775,21 +741,16 @@ class view.StatsResults extends BaseResults
             safeApply scope.$root, () ->
                 scope.$root.kwicTabs.push { queryParams: opts }
 
-
-
-
         $(window).resize _.debounce( () =>
             @resizeGrid()
         , 100)
 
         $("#kindOfData,#kindOfFormat").change () =>
-            $("#exportButton").hide();
-            $("#generateExportButton").show();
+            @showGenerateExport()
 
         $("#exportButton").hide();
         $("#generateExportButton").unbind("click").click () =>
-            $("#exportButton").show()
-            $("#generateExportButton").hide();
+            @hideGenerateExport()
             @updateExportBlob()
 
         if $("html.msie7,html.msie8").length
@@ -812,9 +773,6 @@ class view.StatsResults extends BaseResults
             #for chk in @$result.find(".include_chk:checked")
             for chk in @$result.find(".slick-cell > input:checked")
                 cell = $(chk).parent()
-                #if cell.parent().is ".slick-row:nth-child(1)"
-                #    showTotal = true
-                #    continue
                 cqp = decodeURIComponent cell.next().find(" > .statistics-link").data("query")
                 unless cqp isnt "undefined" # TODO: make a better check
                     showTotal = true
@@ -891,7 +849,7 @@ class view.StatsResults extends BaseResults
         })
 
     makeRequest : (cqp) ->
-        c.log "statsrequest makerequest", cqp
+        c.log "StatsResults makeRequest", cqp
 
         if currentMode == "parallel"
             cqp = cqp.replace(/\:LINKED_CORPUS.*/, "")
@@ -914,12 +872,8 @@ class view.StatsResults extends BaseResults
             @renderResult columns, dataset
 
         ).fail (textStatus, err) =>
-            # _.map(@proxy.pendingRequests, function(item){return item.readyState})
             c.log "fail", arguments
             c.log "stats fail", @s.$parent.loading, _.map @proxy.pendingRequests, (item) -> item.readyState
-            # if @proxy.hasPending()
-                # c.log "stats makerequest abort exited"
-                # return
             if @ignoreAbort
                 c.log "stats ignoreabort"
                 return
@@ -930,7 +884,17 @@ class view.StatsResults extends BaseResults
                 else
                     @resultError err
 
+    showGenerateExport: () ->
+        $("#exportButton").hide();
+        $("#generateExportButton").show();
+
+    hideGenerateExport: () ->
+        $("#exportButton").show();
+        $("#generateExportButton").hide();
+
     renderResult: (columns, data) ->
+        @showGenerateExport()
+      
         refreshHeaders = ->
             $(".localized-header .slick-column-name").not("[rel^=localize]").each ->
                 $(this).localeKey $(this).text()
@@ -940,7 +904,6 @@ class view.StatsResults extends BaseResults
         return if resultError is false
 
         if data[0].total_value.absolute == 0
-            # @hidePreloader()
             safeApply @s, () =>
                 @s.no_hits = true
             return
@@ -1006,8 +969,6 @@ class view.StatsResults extends BaseResults
         grid.onHeaderCellRendered.subscribe (e, args) ->
             refreshHeaders()
 
-        # remove first checkbox
-        # c.log "remove", $(".slick-row:nth(0) .l0.r0 input", @$result).remove()
         refreshHeaders()
         $(".slick-row:first input", @$result).click()
         $(window).trigger("resize")
@@ -1181,22 +1142,8 @@ class view.StatsResults extends BaseResults
             download : null,
             href : null
         })
-        # safeApply @s, () ->
         @s.no_hits = false
         @s.aborted = false
-
-    # showNoResults: ->
-    #     c.log "showNoResults", @$result
-    #     safeApply @s, () =>
-    #         @hidePreloader()
-    #     @$result.prepend $("<span class=' bad_search bs-callout bs-callout-warning'>")
-    #         .localeKey("no_stats_results")
-    #     $("#exportStatsSection").hide()
-
-    # onProgress : (progressObj) ->
-    #     super(progressObj)
-        # c.log "onProgress", progressObj.stats
-
 
 
 class view.GraphResults extends BaseResults

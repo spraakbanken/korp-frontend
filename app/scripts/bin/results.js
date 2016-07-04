@@ -89,7 +89,6 @@
       return this.firstResultDef.promise.then((function(_this) {
         return function() {
           var ref;
-          c.log("firstResultDef.then", _this.isActive());
           if (_this.isActive()) {
             return _this.s.$root.jsonUrl = (ref = _this.proxy) != null ? ref.prevUrl : void 0;
           }
@@ -151,7 +150,7 @@
 
     KWICResults.prototype.onWordClick = function(event) {
       var obj, scope, sent, word;
-      c.log("wordclick", this.tabindex, this.s);
+      c.log("word click in kwic");
       if (this.isActive()) {
         this.s.$root.sidebar_visible = true;
       }
@@ -187,7 +186,6 @@
           return $(item).is(word) || $(item).is(querySentStart);
         });
         sent_start = paragraph.index(l.eq(l.index(word) - 1));
-        c.log("i", l.index(word), i, sent_start);
       }
       aux = $(paragraph.get(sent_start + i - 1));
       scope.selectionManager.select(word, aux);
@@ -283,7 +281,6 @@
     };
 
     KWICResults.prototype.renderCompleteResult = function(data) {
-      c.log("renderCompleteResult", data);
       this.current_page = search().page || 0;
       safeApply(this.s, (function(_this) {
         return function() {
@@ -303,7 +300,6 @@
 
     KWICResults.prototype.renderResult = function(data) {
       var firstWord, isReading, k, len, linked, mainrow, offset, ref, resultError, scrollLeft;
-      c.log("data", data, this.proxy.prevUrl);
       resultError = KWICResults.__super__.renderResult.call(this, data);
       if (resultError === false) {
         return;
@@ -311,14 +307,12 @@
       if (!data.kwic) {
         data.kwic = [];
       }
-      c.log("corpus_results");
       isReading = this.isReadingMode();
       if (this.isActive()) {
         this.s.$root.jsonUrl = this.proxy.prevUrl;
       }
       this.s.$apply((function(_this) {
         return function($scope) {
-          c.log("apply kwic search data", data);
           if (isReading) {
             $scope.setContextData(data);
             _this.selectionManager.deselect();
@@ -424,7 +418,6 @@
 
     KWICResults.prototype.buildQueryOptions = function(cqp, isPaging) {
       var avoidContext, context, getSortParams, opts, preferredContext;
-      c.log("buildQueryOptions", cqp);
       opts = {};
       getSortParams = function() {
         var rnd, sort;
@@ -961,11 +954,12 @@
     };
 
     LemgramResults.prototype.onentry = function() {
-      c.log("lemgram onentry");
+      c.log("word pic onentry");
       LemgramResults.__super__.onentry.call(this);
     };
 
     LemgramResults.prototype.onexit = function() {
+      c.log("word pic onexit");
       LemgramResults.__super__.onexit.call(this);
       clearTimeout(self.timeout);
       safeApply(this.s, (function(_this) {
@@ -1033,15 +1027,13 @@
       })(this), 100));
       $("#kindOfData,#kindOfFormat").change((function(_this) {
         return function() {
-          $("#exportButton").hide();
-          return $("#generateExportButton").show();
+          return _this.showGenerateExport();
         };
       })(this));
       $("#exportButton").hide();
       $("#generateExportButton").unbind("click").click((function(_this) {
         return function() {
-          $("#exportButton").show();
-          $("#generateExportButton").hide();
+          _this.hideGenerateExport();
           return _this.updateExportBlob();
         };
       })(this));
@@ -1166,7 +1158,7 @@
     };
 
     StatsResults.prototype.makeRequest = function(cqp) {
-      c.log("statsrequest makerequest", cqp);
+      c.log("StatsResults makeRequest", cqp);
       if (currentMode === "parallel") {
         cqp = cqp.replace(/\:LINKED_CORPUS.*/, "");
       }
@@ -1217,8 +1209,19 @@
       })(this));
     };
 
+    StatsResults.prototype.showGenerateExport = function() {
+      $("#exportButton").hide();
+      return $("#generateExportButton").show();
+    };
+
+    StatsResults.prototype.hideGenerateExport = function() {
+      $("#exportButton").show();
+      return $("#generateExportButton").hide();
+    };
+
     StatsResults.prototype.renderResult = function(columns, data) {
       var checkboxSelector, grid, log, refreshHeaders, resultError, sortCol;
+      this.showGenerateExport();
       refreshHeaders = function() {
         return $(".localized-header .slick-column-name").not("[rel^=localize]").each(function() {
           return $(this).localeKey($(this).text());
