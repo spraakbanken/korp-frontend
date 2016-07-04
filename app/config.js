@@ -2686,7 +2686,7 @@ settings.corpora.sou = {
     }
 };
 
-compLemgram = {
+probabilitySets = {
     renderCompLemgramContent: function(key, value, attrs, wordData, sentenceData) {
         var compLemgrams = wordData.complemgram
         compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
@@ -2717,8 +2717,7 @@ compLemgram = {
             li.append("<span> (" + prob + ")</span>");
             return li
         });
-
-        return compLemgram.renderList(content);
+        return probabilitySets.renderList(content);
     },
     renderList: function(lis) {
         if(lis.length == 0) {
@@ -2768,7 +2767,31 @@ compLemgram = {
             }
             return li
         });
-        return compLemgram.renderList(content);
+        return probabilitySets.renderList(content);
+    },
+    renderSenseContent: function(key, value, attrs, wordData, sentenceData) {
+        var senseProbs = wordData.sense
+        senseProbs = _.filter(senseProbs.split("|"), Boolean)
+        content = _.map(senseProbs, function(senseProb, i) {
+            something =senseProb.split(':');
+            sense = something[0]
+            prob = something[something.length -1]
+            var li = $("<li></li>");
+            if(i != 0) {
+                li.css('display', 'none');
+            }
+            korpLink = $('<span class="link">' + util.saldoToString(sense, true) +  '</span>');
+            korpLink.click(function() {
+                search({"search": "cqp|[sense contains '" + sense + ":.*']"})
+            });
+            karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
+            
+            li.append(korpLink);
+            li.append("<span> (" + prob + ")</span>");
+            li.append(karpLink);
+            return li
+        });
+        return probabilitySets.renderList(content);
     }
 }
 
@@ -2798,12 +2821,12 @@ settings.corpora.suc2 = {
     custom_attributes: {
         complemgram: {
             label: "complemgram",
-            renderItem: compLemgram.renderCompLemgramContent,
+            renderItem: probabilitySets.renderCompLemgramContent,
             customType: "pos"
         },
         compwf: {
             label: "compwf",
-            renderItem: compLemgram.renderWordFormContent,
+            renderItem: probabilitySets.renderWordFormContent,
             customType: "pos"
         }
     }
@@ -2824,12 +2847,14 @@ settings.corpora.suc3 = {
         complemgram: {label: "complemgram",
                        displayType: "hidden",
                        type: "set"},
-        lemprob: {label: "lemprob",
-                   displayType: "hidden",
-                   type: "set"},
         compwf: {label: "compwf",
                   displayType: "hidden",
-                  type: "set"}
+                  type: "set"},
+        sense: {
+            label: "sense",
+            displayType: "hidden",
+            type: "set"
+        }
     }),
     struct_attributes: {
         text_id: {label: "text"}
@@ -2837,16 +2862,24 @@ settings.corpora.suc3 = {
     custom_attributes: {
         complemgram: {
             label: "complemgram",
-            renderItem: compLemgram.renderCompLemgramContent,
+            renderItem: probabilitySets.renderCompLemgramContent,
             customType: "pos"
         },
         compwf: {
             label: "compwf",
-            renderItem: compLemgram.renderWordFormContent,
+            renderItem: probabilitySets.renderWordFormContent,
+            customType: "pos"
+        },
+        sense: {
+            label: "sense",
+            renderItem: probabilitySets.renderSenseContent,
             customType: "pos"
         }
     }
 };
+// current solution to remove saldo from suc3-attributes, replace when more
+// corpora have "sense" instead of "saldo"
+delete settings.corpora.suc3.attributes.saldo;
 
 
 settings.corpora.storsuc = {
