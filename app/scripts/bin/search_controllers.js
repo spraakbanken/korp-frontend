@@ -41,6 +41,7 @@
       }
       $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
         var insensitiveAttrs;
+        c.log("SearchCtrl corpuschooserchange");
         $scope.noCorporaSelected = !selected.length;
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
         $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
@@ -268,21 +269,20 @@
       return _.pairs(confObj);
     });
     onCorpusChange = function(event, selected) {
-      var lang, ref, ref1, ref2, ref3;
-      c.log("onCorpusChange", selected, (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0);
+      var lang, ref, ref1;
       if (!(selected != null ? selected.length : void 0)) {
         return;
       }
-      lang = (ref2 = s.$parent.$parent) != null ? (ref3 = ref2.l) != null ? ref3.lang : void 0 : void 0;
+      lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
+      c.log("ExtendedToken onCorpusChange", lang);
       s.types = settings.corpusListing.getAttributeGroups(lang);
-      s.typeMapping = _.object(_.map(s.types, function(item) {
+      return s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
           return ["_." + item.value, item];
         } else {
           return [item.value, item];
         }
       }));
-      return c.log("typeMapping", s.typeMapping);
     };
     s.$on("corpuschooserchange", onCorpusChange);
     onCorpusChange(null, settings.corpusListing.selected);

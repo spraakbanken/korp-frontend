@@ -32,6 +32,7 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
         $location.search 'stats_reduce', ("word")
     
     $scope.corpusChangeListener = $scope.$on "corpuschooserchange", (event, selected) ->
+        c.log "SearchCtrl corpuschooserchange"
         $scope.noCorporaSelected = not selected.length
         $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
         $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
@@ -253,40 +254,20 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
     onCorpusChange = (event, selected) ->
-        # TODO: respece the setting 'word_attribute_selector' and similar
-        # attrs = for key, obj of settings.corpusListing.getCurrentAttributes() when obj.displayType != "hidden"
-        #     _.extend({group : "word_attr", value : key}, obj)
-
-        # sent_attrs = for key, obj of settings.corpusListing.getStructAttrs() when obj.displayType != "hidden"
-        #     _.extend({group : "sentence_attr", value : key}, obj)
-
-        c.log "onCorpusChange", selected, s.$parent.$parent?.l?.lang
-
+        # TODO: respect the setting 'word_attribute_selector' and similar
         unless selected?.length then return
-
         lang = s.$parent.$parent?.l?.lang
-        # c.log "lang", lang
+        c.log "ExtendedToken onCorpusChange", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
-        # "obj | mapper:valfilter as obj.label | loc:lang group by obj.group | loc:lang for obj in types"
-        # s.typeOpts = []
-        # for obj in types
-        #     utils.valfilter obj
         s.typeMapping = _.object _.map s.types, (item) ->
             if item.isStructAttr
                 ["_." + item.value, item]
             else
                 [item.value, item]
 
-
-        c.log "typeMapping", s.typeMapping
-        # s.types = _.sortBy s.types, "label"
-
-
-
     s.$on "corpuschooserchange", onCorpusChange
 
     onCorpusChange(null, settings.corpusListing.selected)
-
 
     s.removeOr = (token, and_array, i) ->
         if and_array.length > 1
@@ -296,7 +277,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
     s.addAnd = (token) ->
-        # c.log "s", s, s.token,
         token.and_block.push s.addOr([])
 
     toggleBound = (token, bnd) ->
@@ -318,7 +298,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         else
             delete token.repeat
 
-
     s.getTokenCqp = ->
         if not s.token.cqp
             return ""
@@ -328,8 +307,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         event.stopPropagation()
 
 
-
-# korpApp.controller "AdvancedCtrl", ($scope, compareSearches, $location, $timeout) ->
 korpApp.directive "advancedSearch", () ->
     controller : ($scope, compareSearches, $location, $timeout) ->
         expr = ""
@@ -341,11 +318,6 @@ korpApp.directive "advancedSearch", () ->
             $scope.cqp = expr or "[]"
         else
             $scope.cqp = "[]"
-
-        # $scope.getSimpleCQP = () ->
-        #     out = simpleSearch.getCQP()
-        #     c.log "getSimpleCQP", out
-        #     out
 
         $scope.$watch () ->
             simpleSearch?.getCQP()
@@ -370,30 +342,15 @@ korpApp.directive "advancedSearch", () ->
             , 0)
 
 
-
 korpApp.filter "mapper", () ->
     return (item, f) ->
         return f(item)
 
 
-
-
-# korpApp.controller "CompareSearchCtrl", ($scope, utils, $location, backend, $rootScope, compareSearches) ->
 korpApp.directive "compareSearchCtrl", () ->
     controller: ($scope, utils, $location, backend, $rootScope, compareSearches) ->
         s = $scope
         s.valfilter = utils.valfilter
-
-        # compareSearches.saveSearch {
-        #     label : "frihet"
-        #     cqp : "[lex contains 'frihet..nn.1']"
-        #     corpora : ["VIVILL"]
-        # }
-        # compareSearches.saveSearch {
-        #     label : "jämlikhet"
-        #     cqp : "[lex contains 'jämlikhet..nn.1']"
-        #     corpora : ["VIVILL"]
-        # }
 
         s.savedSearches = compareSearches.savedSearches
         s.$watch "savedSearches.length", () ->
@@ -404,7 +361,6 @@ korpApp.directive "compareSearchCtrl", () ->
             listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
             s.currentAttrs = listing.getAttributeGroups()
 
-        # s.selectedAttrs = ['word']
         s.reduce = 'word'
 
         s.sendCompare = () ->
@@ -412,9 +368,6 @@ korpApp.directive "compareSearchCtrl", () ->
 
         s.deleteCompares = () ->
             compareSearches.flush()
-
-
-
 
 
 korpApp.filter "loc", ($rootScope) ->

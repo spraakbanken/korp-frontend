@@ -23,6 +23,9 @@ class window.CorpusListing
         cl.selected = cl.corpora
         return cl
 
+    # only applicable for parallel corpora
+    getReduceLang: ->
+        return
 
     # Returns an array of all the selected corpora's IDs in uppercase
     getSelectedCorpora: ->
@@ -241,7 +244,7 @@ class window.CorpusListing
         if setOperator == 'union'
             allAttrs = @getStructAttrs(lang)
         else
-            allAttrs = @getStructAttrsIntersection()
+            allAttrs = @getStructAttrsIntersection(lang)
 
         common_keys = _.compact _.flatten _.map @selected, (corp) -> _.keys corp.common_attributes
         common = _.pick settings.common_struct_types, common_keys...
@@ -291,6 +294,8 @@ class window.ParallelCorpusListing extends CorpusListing
     setActiveLangs : (langlist) ->
         @activeLangs = langlist
 
+    getReduceLang : () ->
+        return @activeLangs[0]
 
     getCurrentAttributes: (lang) ->
         corpora = _.filter(@selected, (item) ->
@@ -312,6 +317,17 @@ class window.ParallelCorpusListing extends CorpusListing
             val["isStructAttr"] = true
 
         struct
+
+    getStructAttrsIntersection: (lang) ->
+        corpora = _.filter(@selected, (item) ->
+            item.lang is lang
+        )
+        attrs = _.map corpora, (corpus) ->
+            for key, value of corpus.struct_attributes
+                value["isStructAttr"] = true
+
+            corpus.struct_attributes
+        @_mapping_intersection attrs
 
     getLinked : (corp, andSelf=false, only_selected=true) ->
         target = if only_selected then @selected else @struct

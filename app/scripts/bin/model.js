@@ -511,19 +511,21 @@
         ignoreCase = false;
       }
       reduceValLabels = _.map(reduceVals, function(reduceVal) {
+        var maybeReduceAttr;
         if (reduceVal === "word") {
           return "word";
         }
-        if (settings.corpusListing.getCurrentAttributes()[reduceVal]) {
-          return settings.corpusListing.getCurrentAttributes()[reduceVal].label;
+        maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal];
+        if (maybeReduceAttr) {
+          return maybeReduceAttr.label;
         } else {
-          return settings.corpusListing.getStructAttrs()[reduceVal].label;
+          return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label;
         }
       });
       data = this.makeParameters(reduceVals, cqp);
       data.split = _.filter(reduceVals, function(reduceVal) {
         var ref;
-        return ((ref = settings.corpusListing.getCurrentAttributes()[reduceVal]) != null ? ref.type : void 0) === "set";
+        return ((ref = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]) != null ? ref.type : void 0) === "set";
       }).join(',');
       if (ignoreCase) {
         $.extend(data, {

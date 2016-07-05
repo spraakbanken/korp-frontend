@@ -432,15 +432,16 @@ class model.StatsProxy extends BaseProxy
 
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"
-            if settings.corpusListing.getCurrentAttributes()[reduceVal]
-                return settings.corpusListing.getCurrentAttributes()[reduceVal].label
+            maybeReduceAttr = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]
+            if maybeReduceAttr
+                return maybeReduceAttr.label
             else
-                return settings.corpusListing.getStructAttrs()[reduceVal].label
+                return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
 
         data = @makeParameters(reduceVals, cqp)
 
         data.split = _.filter(reduceVals, (reduceVal) ->
-            settings.corpusListing.getCurrentAttributes()[reduceVal]?.type == "set").join(',')
+            settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.type == "set").join(',')
 
         if ignoreCase
             $.extend data,

@@ -8,13 +8,12 @@ korpApp.controller("SearchCtrl", function($scope, $controller, $location) {
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
 
     $scope.corpusChangeListener() // remove prev listener
-    $scope.$on("corpuschooserchange", function() {
-        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups("swe")
+    $scope.$on("reduceattrupdate", function() {
+        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups(settings.corpusListing.getReduceLang())
         $scope.statSelectedAttrs = $location.search().stats_reduce.split(',')
         insensitiveAttrs = $location.search().stats_reduce_insensitive
         if(insensitiveAttrs)
             $scope.statInsensitiveAttrs = insensitiveAttrs.split(',')
-
     });
 
 
@@ -54,12 +53,10 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     s.negChange = function() {
         $location.search("search", null)
     }
-    c.log ("add langs watch")
-
 
     var onLangChange = function() {
+        c.log("ParallelSearch language change");
         var currentLangList = _.pluck(s.langs, "lang");
-        c.log("lang change", currentLangList)
         settings.corpusListing.setActiveLangs(currentLangList);
         $location.search("parallel_corpora", currentLangList.join(","))
         var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
@@ -95,9 +92,10 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             search("cqp_" + langobj.lang , langobj.cqp);
         })
         $rootScope.extendedCQP = output;
-        s.$broadcast("corpuschooserchange")
-        searches.langDef.resolve()
-        return output
+        s.$broadcast("corpuschooserchange");
+        $rootScope.$broadcast("reduceattrupdate");
+        searches.langDef.resolve();
+        return output;
     }
     s.$watch("langs", function() {
         onLangChange()
