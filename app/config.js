@@ -4507,7 +4507,7 @@ settings.cgi_script = "https://ws.spraakbanken.gu.se/ws/korp";
 // settings.cgi_script = "http://spraakbanken.gu.se/ws/korp";
 // settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 
-settings.download_cgi_script = "https://demosb.spraakdata.gu.se/cgi-bin/korp/korp_download.cgi";
+settings.download_cgi_script = "https://ws.spraakbanken.gu.se/ws/korp/download";
 
 
 // label values here represent translation keys.
