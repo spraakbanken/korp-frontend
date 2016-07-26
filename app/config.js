@@ -2532,8 +2532,12 @@ settings.corpora["ivip"] = {
         saldo: attrs.saldo,
         prefix: attrs.prefix,
         suffix: attrs.suffix,
-        shortened_normalised: {
+        w_normalised: {
             label: "normalized_wordform",
+            isStructAttr: true
+        },
+        w_full: {
+            label: "annotation",
             isStructAttr: true
         }
     },
@@ -2785,7 +2789,7 @@ probabilitySets = {
                 search({"search": "cqp|[sense contains '" + sense + ":.*']"})
             });
             karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
-            
+
             li.append(korpLink);
             li.append("<span> (" + prob + ")</span>");
             li.append(karpLink);
