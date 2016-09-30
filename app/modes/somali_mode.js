@@ -148,7 +148,6 @@ settings.corpora["somali-kqa"] = {
     }
 };
 
-
 settings.corpora["somali-qoraallo"] = {
     id: "somali-qoraallo",
     title: "Qoraallo 1956-1970",
@@ -157,14 +156,11 @@ settings.corpora["somali-qoraallo"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
+        text_date: {label: "date"},
         text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
+        text_author: {label: "author"},
         text_place: {label: "place"},
-        text_editor: {label: "editor"},
-        text_edition: {label: "edition"},
-        text_sponsor: {label: "sponsor"},
-        page_n: {label: "page"}
+        text_source: {label: "source", type: "url"}
     }
 };
 
@@ -233,7 +229,7 @@ settings.corpora["somali-sheekooyin"] = {
 };
 
 settings.corpora["somali-faces"] = {
-    id: "somali-saynis",
+    id: "somali-faces",
     title: "Somali Faces",
     description: "",
     within: settings.defaultWithin,
