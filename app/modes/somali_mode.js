@@ -12,6 +12,12 @@ settings.preselected_corpora = ["somali-qoraallo", "somali-saynis", "somali-face
 
 settings.corpora = {};
 settings.corporafolders = {};
+
+settings.corporafolders.buugaag = {
+    title: "Buugaag Dugsiyeed",
+    contents: ["somali-1971-79", "somali-2001", "somali-itoobiya", "somali-cb", "somali-hargeysa", "somali-saynis"]
+};
+
 settings.corpora["somali-1971-79"] = {
     id: "somali-1971-79",
     title: "Af Soomaali 1971–79",
@@ -99,7 +105,7 @@ settings.corpora["somali-bulsho"] = {
 
 settings.corpora["somali-cb"] = {
     id: "somali-cb",
-    title: "Cilmiga bulshada 1971–1980",
+    title: "Cilmiga Bulshada 1971–1980",
     description: "",
     within: settings.defaultWithin,
     context: settings.defaultContext,
