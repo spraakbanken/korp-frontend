@@ -6,7 +6,7 @@ angular.module("template/sb_map.html", []).run(["$templateCache", function($temp
     "    <div class=\"map-outer-container\" ng-show=\"showMap\">\n" +
     "        <div class=\"map-container\"></div>\n" +
     "    </div>\n" +
-    "    <div class=\"hover-info-container\"></div>\n" +
+    "    <div class=\"hover-info-container\" style=\"opacity:0;display:none;\"></div>\n" +
     "</div>\n" +
     "\n" +
     "\n" +

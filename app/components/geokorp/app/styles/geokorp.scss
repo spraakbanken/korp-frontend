@@ -17,8 +17,20 @@ sb-map {
 
   .cluster-geokorp-marker {
     width: 10px;
-    border-radius: 2px;
+    border-radius: 1px;
     display: inline-block;
+  }
+
+  .marker-top .geokorp-multi-marker {
+      vertical-align: top;
+  }
+
+  .marker-middle .geokorp-multi-marker {
+      vertical-align: middle;
+  }
+  
+  .marker-bottom .geokorp-multi-marker {
+      vertical-align: bottom;
   }
 
   .geokorp-multi-marker {

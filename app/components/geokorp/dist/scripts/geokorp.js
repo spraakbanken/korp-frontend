@@ -147,17 +147,17 @@
         scope.selectedMarkers = [];
         stamenWaterColor = L.tileLayer.provider("Stamen.Watercolor");
         openStreetMap = L.tileLayer.provider("OpenStreetMap");
-        createCircleMarker = function(color, diameter) {
+        createCircleMarker = function(color, diameter, borderRadius) {
           return L.divIcon({
-            html: '<div class="geokorp-marker" style="border-radius:' + diameter + 'px;height:' + diameter + 'px;background-color:' + color + '"></div>',
+            html: '<div class="geokorp-marker" style="border-radius:' + borderRadius + 'px;height:' + diameter + 'px;background-color:' + color + '"></div>',
             iconSize: new L.Point(diameter, diameter)
           });
         };
-        createMarkerIcon = function(color) {
-          return createCircleMarker(color, 10);
+        createMarkerIcon = function(color, cluster) {
+          return createCircleMarker(color, 10, cluster ? 1 : 5);
         };
         createMultiMarkerIcon = function(markerData) {
-          var center, color, diameter, elements, grid, gridSize, id, idx, marker, neg, row, something, stop, x, xOp, y, yOp, _i, _j, _ref;
+          var center, circle, color, diameter, elements, grid, gridSize, height, id, idx, marker, markerClass, neg, row, something, stop, width, x, xOp, y, yOp, _i, _j;
           elements = (function() {
             var _i, _len, _results;
             _results = [];
@@ -176,18 +176,10 @@
           gridSize = gridSize % 2 === 0 ? gridSize + 1 : gridSize;
           center = Math.floor(gridSize / 2);
           grid = (function() {
-            var _i, _results;
+            var _i, _ref, _results;
             _results = [];
-            for (x = _i = 0; 0 <= gridSize ? _i <= gridSize : _i >= gridSize; x = 0 <= gridSize ? ++_i : --_i) {
-              row = (function() {
-                var _j, _results1;
-                _results1 = [];
-                for (y = _j = 0; 0 <= gridSize ? _j <= gridSize : _j >= gridSize; y = 0 <= gridSize ? ++_j : --_j) {
-                  _results1.push([]);
-                }
-                return _results1;
-              })();
-              _results.push(row);
+            for (x = _i = 0, _ref = gridSize - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
+              _results.push([]);
             }
             return _results;
           })();
@@ -226,24 +218,58 @@
               if (y === center + idx) {
                 yOp = neg;
               }
-              grid[x][y] = (_ref = elements.pop()) != null ? _ref[1] : void 0;
+              circle = elements.pop();
+              if (circle) {
+                grid[y][x] = circle;
+              } else {
+                break;
+              }
             }
           }
+          grid = _.filter(grid, function(row) {
+            return row.length > 0;
+          });
+          grid = _.map(grid, function(row) {
+            return row = _.filter(row, function(elem) {
+              return elem;
+            });
+          });
+          height = 0;
+          width = 0;
+          center = Math.floor(grid.length / 2);
           grid = (function() {
             var _k, _len, _results;
             _results = [];
-            for (_k = 0, _len = grid.length; _k < _len; _k++) {
-              row = grid[_k];
-              row = _.filter(row, function(elem) {
-                return elem;
-              });
-              _results.push('<div style="text-align: center;">' + row.join('') + '</div>');
+            for (idx = _k = 0, _len = grid.length; _k < _len; idx = ++_k) {
+              row = grid[idx];
+              height = height + _.reduce(row, (function(memo, val) {
+                if (val[0] > memo) {
+                  return val[0];
+                } else {
+                  return memo;
+                }
+              }), 0);
+              if (idx < center) {
+                markerClass = 'marker-bottom';
+              }
+              if (idx === center) {
+                width = _.reduce(grid[center], (function(memo, val) {
+                  return memo + val[0];
+                }), 0);
+                markerClass = 'marker-middle';
+              }
+              if (idx > center) {
+                markerClass = 'marker-top';
+              }
+              _results.push('<div class="' + markerClass + '" style="text-align: center;line-height: 0;">' + _.map(row, function(elem) {
+                return elem[1];
+              }).join('') + '</div>');
             }
             return _results;
           })();
           return L.divIcon({
             html: grid.join(''),
-            iconSize: new L.Point(50, 50)
+            iconSize: new L.Point(width, height)
           });
         };
         createClusterIcon = function(clusterGroups, restColor) {
@@ -277,7 +303,7 @@
               color = _.keys(sizes)[0];
               groupSize = sizes[color];
               diameter = ((groupSize / scope.maxRel) * 45) + 5;
-              return createCircleMarker(color, diameter);
+              return createCircleMarker(color, diameter, diameter);
             } else {
               elements = "";
               _ref1 = _.keys(sizes);
@@ -479,14 +505,16 @@
               hoverInfoElem.empty();
               hoverInfoElem.append(content);
               hoverInfoElem[0].scrollTop = 0;
-              return hoverInfoElem.css('opacity', '1');
+              hoverInfoElem.css('opacity', '1');
+              return hoverInfoElem.css('display', 'block');
             });
           }), 0);
         };
         mouseOut = function() {
           var hoverInfoElem;
           hoverInfoElem = angular.element(element.find(".hover-info-container"));
-          return hoverInfoElem.css('opacity', '0');
+          hoverInfoElem.css('opacity', '0');
+          return hoverInfoElem.css('display', 'none');
         };
         scope.showHoverInfo = false;
         scope.map.on('click', function(e) {
@@ -538,7 +566,7 @@
                 markerData = markerGroup.markers[marker_id];
                 markerData.color = color;
                 marker = L.marker([markerData.lat, markerData.lng], {
-                  icon: createMarkerIcon(color)
+                  icon: createMarkerIcon(color, !scope.oldMap && selectedGroups.length !== 1)
                 });
                 marker.markerData = markerData;
                 if (scope.useClustering) {
@@ -549,6 +577,15 @@
               }
             }
           } else {
+            markers = (function() {
+              var _l, _len3, _results;
+              _results = [];
+              for (_l = 0, _len3 = selectedGroups.length; _l < _len3; _l++) {
+                markerGroupId = selectedGroups[_l];
+                _results.push(markers[markerGroupId]);
+              }
+              return _results;
+            })();
             _ref1 = mergeMarkers(_.values(markers));
             for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
               markerData = _ref1[_l];
@@ -569,6 +606,7 @@
             _ref = val.markers;
             for (markerId in _ref) {
               markerData = _ref[markerId];
+              markerData.color = val.color;
               latLng = markerData.lat + ',' + markerData.lng;
               if (markerData.point.rel > scope.maxRel) {
                 scope.maxRel = markerData.point.rel;

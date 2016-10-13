@@ -102,6 +102,7 @@ angular.module 'sbMap', [
   .directive  'sbMap', ['$compile', '$timeout', '$rootScope', ($compile, $timeout, $rootScope) ->
     link = (scope, element, attrs) ->
       scope.useClustering = if angular.isDefined(scope.useClustering) then scope.useClustering else true
+      scope.oldMap = if angular.isDefined(scope.oldMap) then scope.oldMap else false
         
       scope.showMap = false
       
@@ -119,15 +120,15 @@ angular.module 'sbMap', [
       stamenWaterColor = L.tileLayer.provider "Stamen.Watercolor"
       openStreetMap = L.tileLayer.provider "OpenStreetMap"
 
-      createCircleMarker = (color, diameter) ->
+      createCircleMarker = (color, diameter, borderRadius) ->
           return L.divIcon 
-              html: '<div class="geokorp-marker" style="border-radius:' + diameter + 'px;height:' + diameter + 'px;background-color:' + color + '"></div>'
+              html: '<div class="geokorp-marker" style="border-radius:' + borderRadius + 'px;height:' + diameter + 'px;background-color:' + color + '"></div>'
               iconSize: new L.Point diameter, diameter
 
-      createMarkerIcon = (color, relSize) ->
+      createMarkerIcon = (color, cluster) ->
         # TODO use scope.maxRel, but scope.maxRel is not set when markers are created
         # diameter = ((relSize / scope.maxRel) * 45) + 5
-        return createCircleMarker color, 10
+        return createCircleMarker color, 10, if cluster then 1 else 5
 
       createMultiMarkerIcon = (markerData) ->
         elements = for marker in markerData
@@ -141,10 +142,8 @@ angular.module 'sbMap', [
         gridSize = if gridSize % 2 == 0 then gridSize + 1 else gridSize
         center = Math.floor gridSize / 2
 
-        grid = for x in [0..gridSize]
-            row = for y in [0..gridSize]
-                []
-            row
+        grid = for x in [0..gridSize-1]
+            []
 
         id = (x) -> x
         neg = (x) -> -x
@@ -174,14 +173,36 @@ angular.module 'sbMap', [
                     xOp = neg
                 if y == center + idx
                     yOp = neg
-                
-                grid[x][y] = elements.pop()?[1]
 
-        grid = for row in grid
+                circle = elements.pop()
+                if circle
+                    grid[y][x] = circle
+                else
+                    break
+
+        # remove all empty arrays and elements
+        # TODO don't create empty stuff??
+        grid = _.filter grid, (row) -> row.length > 0
+        grid = _.map grid, (row) ->
             row = _.filter row, (elem) -> elem
-            '<div style="text-align: center;">' + row.join('') + '</div>'
 
-        return L.divIcon html: grid.join(''), iconSize: new L.Point 50, 50
+        ## take largest element from each row and add to height
+        height = 0
+        width = 0
+        center = Math.floor grid.length / 2
+        grid = for row,idx in grid
+            height = height + _.reduce(row, ((memo, val) -> if val[0] > memo then val[0] else memo), 0)
+            if idx < center
+                markerClass = 'marker-bottom'
+            if idx == center
+                width = _.reduce(grid[center], ((memo, val) -> memo + val[0]), 0)
+                markerClass = 'marker-middle'
+            if idx > center
+                markerClass = 'marker-top'
+            
+            '<div class="' + markerClass + '" style="text-align: center;line-height: 0;">' + _.map(row, (elem) -> elem[1]).join('') + '</div>'
+
+        return L.divIcon html: grid.join(''), iconSize: new L.Point width, height
 
       # use the previously calculated "scope.maxRel" to decide the sizes of the bars
       # in the cluster icon that is returned (between 5px and 50px)
@@ -209,7 +230,7 @@ angular.module 'sbMap', [
                   color = _.keys(sizes)[0]
                   groupSize = sizes[color]
                   diameter = ((groupSize / scope.maxRel) * 45) + 5
-                  return createCircleMarker color, diameter
+                  return createCircleMarker color, diameter, diameter
               else
                   elements = ""
                   for color in _.keys sizes
@@ -367,11 +388,13 @@ angular.module 'sbMap', [
                   hoverInfoElem.empty()
                   hoverInfoElem.append content
                   hoverInfoElem[0].scrollTop = 0
-                  hoverInfoElem.css('opacity', '1')), 0
+                  hoverInfoElem.css('opacity', '1')
+                  hoverInfoElem.css('display', 'block')), 0
 
       mouseOut = () ->
           hoverInfoElem  = angular.element (element.find ".hover-info-container")
           hoverInfoElem.css('opacity','0')
+          hoverInfoElem.css('display','none')
 
       scope.showHoverInfo = false
       scope.map.on 'click', (e) ->
@@ -406,8 +429,7 @@ angular.module 'sbMap', [
               scope.featureLayer = createFeatureLayer()
               scope.map.addLayer scope.featureLayer
 
-          oldMap = false # TODO use real value
-          if scope.useClustering or oldMap
+          if scope.useClustering or scope.oldMap
               for markerGroupId in selectedGroups
                   markerGroup = markers[markerGroupId]
                   color = markerGroup.color
@@ -415,7 +437,7 @@ angular.module 'sbMap', [
                   for marker_id in _.keys markerGroup.markers
                       markerData = markerGroup.markers[marker_id]
                       markerData.color = color
-                      marker = L.marker [markerData.lat, markerData.lng], {icon: createMarkerIcon color, markerData.point.rel}
+                      marker = L.marker [markerData.lat, markerData.lng], {icon: createMarkerIcon color, not scope.oldMap and selectedGroups.length != 1}
                       marker.markerData = markerData
 
                       if scope.useClustering
@@ -423,7 +445,8 @@ angular.module 'sbMap', [
                       else
                           scope.featureLayer.addLayer marker
           else
-              # TOOD markers need to be updated to only selected
+              markers = for markerGroupId in selectedGroups
+                  markers[markerGroupId]
               for markerData in mergeMarkers _.values markers
                   marker = L.marker [markerData.lat, markerData.lng], {icon: createMultiMarkerIcon markerData.markerData}
                   marker.markerData = markerData.markerData
@@ -437,6 +460,7 @@ angular.module 'sbMap', [
           scope.maxRel = 0
           val = _.reduce markerLists, ((memo, val) ->
                 for markerId, markerData of val.markers
+                    markerData.color = val.color
                     latLng = markerData.lat + ',' + markerData.lng
                     if markerData.point.rel > scope.maxRel
                         scope.maxRel = markerData.point.rel
@@ -475,6 +499,7 @@ angular.module 'sbMap', [
         selectedGroups: '=sbSelectedGroups'
         useClustering: '=?sbUseClustering'
         restColor: '=?sbRestColor' # free color to use for grouping etc
+        oldMap: '=?sbOldMap'
       },
       link: link,
       templateUrl: 'template/sb_map.html'
