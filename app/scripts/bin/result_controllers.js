@@ -884,7 +884,7 @@
         s.selectedGroups = [];
         s.markerGroups = [];
         s.mapSettings = {
-          baseLayer: "Stamen Watercolor"
+          baseLayer: "OpenStreetMap"
         };
         s.numResults = 0;
         s.promise.then(((function(_this) {

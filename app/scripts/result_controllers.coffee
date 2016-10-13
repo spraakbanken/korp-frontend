@@ -724,7 +724,7 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
         s.selectedGroups = []
         s.markerGroups = []
         s.mapSettings =
-            baseLayer : "Stamen Watercolor"
+            baseLayer : "OpenStreetMap"
         s.numResults = 0
 
         s.promise.then (([result], xhr) =>
