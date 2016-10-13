@@ -1872,9 +1872,6 @@ class view.GraphResults extends BaseResults
                     catch e
                         c.log "i", i, x
 
-                    if not abs_y
-                        c.log "abs_y", i, x
-
                     rel = series.name + ':&nbsp;' + formattedY
                     return """<span data-cqp="#{encodeURIComponent(series.cqp)}">
                         #{rel}

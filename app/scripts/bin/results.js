@@ -1002,7 +1002,7 @@
         };
       })(this));
       this.$result.on("click", ".slick-cell .statistics-link", (function(_this) {
-        return function(e, args) {
+        return function(e) {
           var corpora, cqp2, opts, rowData, rowIx;
           rowIx = $(e.currentTarget).data("row");
           rowData = _this.grid.getData()[rowIx];
@@ -2195,9 +2195,6 @@
               } catch (_error) {
                 e = _error;
                 c.log("i", i, x);
-              }
-              if (!abs_y) {
-                c.log("abs_y", i, x);
               }
               rel = series.name + ':&nbsp;' + formattedY;
               return "<span data-cqp=\"" + (encodeURIComponent(series.cqp)) + "\">\n    " + rel + "\n    <br>\n    " + (util.getLocaleString('abs_hits_short')) + ": " + abs_y + "\n</span>";
