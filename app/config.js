@@ -284,6 +284,120 @@ var selectType = {
     }
 }
 
+
+probabilitySets = {
+    renderCompLemgramContent: function(key, value, attrs, wordData, sentenceData) {
+        var compLemgrams = wordData.complemgram
+        compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
+                var parts = comp.split(":");
+                var lemgrams = parts[0].split("+");
+                var prob = parts[1];
+                return [lemgrams, prob];
+            });
+        content = _.map(compLemgrams, function(row, i) {
+            var lemgrams = row[0];
+            var prob = row[1];
+            var li = $("<li></li>")
+            if(i != 0) {
+                li.css('display', 'none');
+            }
+            _.map(lemgrams, function(lemgram, j) {
+                lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + "</span>");
+                lemgramSpan.click(function () {
+                    value = $(this).data("value")
+                    search({"search": "cqp|[lex contains '" + value + "']"})
+                });
+                li.append(lemgramSpan);
+                if(j < lemgrams.length -1) {
+                    li.append("<span> + </span>");
+                }
+                return lemgramSpan;
+            });
+            li.append("<span> (" + prob + ")</span>");
+            return li
+        });
+        return probabilitySets.renderList(content);
+    },
+    renderList: function(lis) {
+        if(lis.length == 0) {
+            return $('<i rel="localize[empty]" style="color : grey"></i>')
+        }
+
+        var ul = $("<ul style='list-style:initial'>")
+        ul.append(lis);
+
+        if(lis.length == 1) {
+            return ul
+        }
+
+        var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>");
+        ul.append(showAll);
+
+        var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+        showOne.css("display", "none");
+        ul.append(showOne);
+
+        showAll.click(function () {
+            _.map(lis, function(li) {
+                showAll.css("display", "none");
+                showOne.css("display", "inline");
+                li.css("display", "list-item");
+            })
+        });
+
+        showOne.click(function () {
+            _.map(lis, function(li, i) {
+                if(i != 0) {
+                    li.css("display", "none");
+                    showAll.css("display", "inline");
+                    showOne.css("display", "none");
+                }
+            });
+        });
+        return ul
+    },
+    renderWordFormContent: function(key, value, attrs, wordData, sentenceData) {
+        var compWordForms = wordData.compwf
+        compWordForms = _.filter(compWordForms.split("|"), Boolean)
+        content = _.map(compWordForms, function(wordForm, i) {
+            var li = $("<li><span>" + wordForm + "</span></li>")
+            if(i != 0) {
+                li.css('display', 'none');
+            }
+            return li
+        });
+        return probabilitySets.renderList(content);
+    },
+    renderSenseContent: function(key, value, attrs, wordData, sentenceData) {
+        var senseProbs = wordData.sense
+        senseProbs = _.filter(senseProbs.split("|"), Boolean)
+        var content = _.map(senseProbs, function(senseProb, i) {
+            var something = senseProb.split(':');
+            var sense = something[0];
+            var prob = something[something.length -1];
+            var li = $("<li></li>");
+            if(i != 0) {
+                li.css('display', 'none');
+            } 
+
+            korpLink = $('<span>' + util.saldoToString(sense, true) +  '</span>');
+            if(i == 0) {
+                korpLink.addClass("link");
+                korpLink.click(function() {
+                    search({"search": "cqp|[sense = '\\|" + regescape(sense) + ":.*']"})
+                });
+            }
+            li.append(korpLink);
+            li.append("<span> (" + prob + ")</span>");
+            var karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
+            li.append(karpLink);
+            return li
+        });
+        return probabilitySets.renderList(content);
+    }
+}
+
+
 var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes
 
@@ -629,6 +743,45 @@ var modernAttrs = {
     prefix: attrs.prefix,
     suffix: attrs.suffix
 };
+
+var modernAttrs2 = _.extend({}, modernAttrs, {
+    ne_ex: attrs.ne_ex,
+    ne_type: attrs.ne_type,
+    ne_subtype: attrs.ne_subtype,
+    complemgram: {label: "complemgram",
+                   displayType: "hidden",
+                   type: "set"},
+    compwf: {label: "compwf",
+              displayType: "hidden",
+              type: "set"},
+    sense: {
+        label: "sense",
+        renderItem: probabilitySets.renderSenseContent,
+        type: "set",
+        ranked: true,
+        opts: settings.probabilitySetOptions,
+        stringify: function(saldo) {
+            return util.saldoToString(saldo, true);
+        },
+        // externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
+        // internalSearch: true,
+        extended_template: settings.senseAutoComplete
+    }
+});
+delete modernAttrs2.saldo;
+
+var customComp = {
+    complemgram: {
+        label: "complemgram",
+        renderItem: probabilitySets.renderCompLemgramContent,
+        customType: "pos"
+    },
+    compwf: {
+        label: "compwf",
+        renderItem: probabilitySets.renderWordFormContent,
+        customType: "pos"
+    }
+}
 
 /*
  * FOLDERS
@@ -1563,12 +1716,13 @@ settings.corpora.gp2013 = {
     description: "Göteborgs-Posten 2013.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.gp2d = {
@@ -1577,10 +1731,11 @@ settings.corpora.gp2d = {
     description: "Helgbilaga till Göteborgs-Posten.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_issue: {label: "issue"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.ordat = {
@@ -2694,118 +2849,6 @@ settings.corpora.sou = {
     }
 };
 
-probabilitySets = {
-    renderCompLemgramContent: function(key, value, attrs, wordData, sentenceData) {
-        var compLemgrams = wordData.complemgram
-        compLemgrams = _.map(_.filter(compLemgrams.split("|"), Boolean), function (comp) {
-                var parts = comp.split(":");
-                var lemgrams = parts[0].split("+");
-                var prob = parts[1];
-                return [lemgrams, prob];
-            });
-        content = _.map(compLemgrams, function(row, i) {
-            var lemgrams = row[0];
-            var prob = row[1];
-            var li = $("<li></li>")
-            if(i != 0) {
-                li.css('display', 'none');
-            }
-            _.map(lemgrams, function(lemgram, j) {
-                lemgramSpan = $("<span class='link' data-value='" + lemgram + "'>" + util.lemgramToString(lemgram, true) + "</span>");
-                lemgramSpan.click(function () {
-                    value = $(this).data("value")
-                    search({"search": "cqp|[lex contains '" + value + "']"})
-                });
-                li.append(lemgramSpan);
-                if(j < lemgrams.length -1) {
-                    li.append("<span> + </span>");
-                }
-                return lemgramSpan;
-            });
-            li.append("<span> (" + prob + ")</span>");
-            return li
-        });
-        return probabilitySets.renderList(content);
-    },
-    renderList: function(lis) {
-        if(lis.length == 0) {
-            return $('<i rel="localize[empty]" style="color : grey"></i>')
-        }
-
-        var ul = $("<ul style='list-style:initial'>")
-        ul.append(lis);
-
-        if(lis.length == 1) {
-            return ul
-        }
-
-        var showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>");
-        ul.append(showAll);
-
-        var showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
-        showOne.css("display", "none");
-        ul.append(showOne);
-
-        showAll.click(function () {
-            _.map(lis, function(li) {
-                showAll.css("display", "none");
-                showOne.css("display", "inline");
-                li.css("display", "list-item");
-            })
-        });
-
-        showOne.click(function () {
-            _.map(lis, function(li, i) {
-                if(i != 0) {
-                    li.css("display", "none");
-                    showAll.css("display", "inline");
-                    showOne.css("display", "none");
-                }
-            });
-        });
-        return ul
-    },
-    renderWordFormContent: function(key, value, attrs, wordData, sentenceData) {
-        var compWordForms = wordData.compwf
-        compWordForms = _.filter(compWordForms.split("|"), Boolean)
-        content = _.map(compWordForms, function(wordForm, i) {
-            var li = $("<li><span>" + wordForm + "</span></li>")
-            if(i != 0) {
-                li.css('display', 'none');
-            }
-            return li
-        });
-        return probabilitySets.renderList(content);
-    },
-    renderSenseContent: function(key, value, attrs, wordData, sentenceData) {
-        var senseProbs = wordData.sense
-        senseProbs = _.filter(senseProbs.split("|"), Boolean)
-        var content = _.map(senseProbs, function(senseProb, i) {
-            var something = senseProb.split(':');
-            var sense = something[0];
-            var prob = something[something.length -1];
-            var li = $("<li></li>");
-            if(i != 0) {
-                li.css('display', 'none');
-            } 
-
-            korpLink = $('<span>' + util.saldoToString(sense, true) +  '</span>');
-            if(i == 0) {
-                korpLink.addClass("link");
-                korpLink.click(function() {
-                    search({"search": "cqp|[sense = '\\|" + regescape(sense) + ":.*']"})
-                });
-            }
-            li.append(korpLink);
-            li.append("<span> (" + prob + ")</span>");
-            var karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
-            li.append(karpLink);
-            return li
-        });
-        return probabilitySets.renderList(content);
-    }
-}
-
 settings.corpora.suc2 = {
     id: "suc2",
     title: "SUC 2.0",
@@ -2851,50 +2894,12 @@ settings.corpora.suc3 = {
     context: {
         "1 sentence": "1 sentence"
     },
-    attributes: _.extend({}, modernAttrs, {
-        ne_ex: attrs.ne_ex,
-        ne_type: attrs.ne_type,
-        ne_subtype: attrs.ne_subtype,
-        complemgram: {label: "complemgram",
-                       displayType: "hidden",
-                       type: "set"},
-        compwf: {label: "compwf",
-                  displayType: "hidden",
-                  type: "set"},
-        sense: {
-            label: "sense",
-            renderItem: probabilitySets.renderSenseContent,
-            type: "set",
-            ranked: true,
-            opts: settings.probabilitySetOptions,
-            stringify: function(saldo) {
-                return util.saldoToString(saldo, true);
-            },
-            // externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
-            // internalSearch: true,
-            extended_template: settings.senseAutoComplete
-        }
-    }),
+    attributes: modernAttrs2,
     struct_attributes: {
         text_id: {label: "text"}
     },
-    custom_attributes: {
-        complemgram: {
-            label: "complemgram",
-            renderItem: probabilitySets.renderCompLemgramContent,
-            customType: "pos"
-        },
-        compwf: {
-            label: "compwf",
-            renderItem: probabilitySets.renderWordFormContent,
-            customType: "pos"
-        }
-    }
+    custom_attributes: customComp
 };
-// current solution to remove saldo from suc3-attributes, replace when more
-// corpora have "sense" instead of "saldo"
-delete settings.corpora.suc3.attributes.saldo;
-
 
 settings.corpora.storsuc = {
     id: "storsuc",
