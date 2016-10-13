@@ -1,4 +1,4 @@
-@import url('slick-default-theme.css');
+@import url('../slick-default-theme.css');
 
 * {
   font-family: arial;
@@ -8,7 +8,7 @@
 body {
   background: beige;
   padding: 0;
-  margin: 8;
+  margin: 8px;
 }
 
 h2 {
@@ -22,7 +22,7 @@ ul {
   cursor: default;
 }
 
-li {
+.options-panel li {
   background: url("../images/arrow_right_spearmint.png") no-repeat center left;
   padding: 0 0 0 14px;
 

@@ -83,7 +83,7 @@
     var _handler = new Slick.EventHandler();
     var _defaults = {
       buttonCssClass: null,
-      buttonImage: "../images/down.gif"
+      buttonImage: null
     };
     var $menu;
     var $activeHeaderColumn;
@@ -100,13 +100,13 @@
       _grid.setColumns(_grid.getColumns());
 
       // Hide the menu on outside click.
-      $(document.body).bind("mousedown", handleBodyMouseDown);
+      $(document.body).on("mousedown", handleBodyMouseDown);
     }
 
 
     function destroy() {
       _handler.unsubscribeAll();
-      $(document.body).unbind("mousedown", handleBodyMouseDown);
+      $(document.body).off("mousedown", handleBodyMouseDown);
     }
 
 
@@ -149,7 +149,7 @@
         }
 
         $el
-          .bind("click", showMenu)
+          .on("click", showMenu)
           .appendTo(args.node);
       }
     }
@@ -182,7 +182,7 @@
 
       if (!$menu) {
         $menu = $("<div class='slick-header-menu'></div>")
-          .appendTo(document.body);
+          .appendTo(_grid.getContainerNode());
       }
       $menu.empty();
 
@@ -195,7 +195,7 @@
           .data("command", item.command || '')
           .data("column", columnDef)
           .data("item", item)
-          .bind("click", handleMenuItemClick)
+          .on("click", handleMenuItemClick)
           .appendTo($menu);
 
         if (item.disabled) {
@@ -225,14 +225,17 @@
 
       // Position the menu.
       $menu
-        .css("top", $(this).offset().top + $(this).height())
-        .css("left", $(this).offset().left);
+        .offset({ top: $(this).offset().top + $(this).height(), left: $(this).offset().left });
 
 
       // Mark the header as active to keep the highlighting.
       $activeHeaderColumn = $menuButton.closest(".slick-header-column");
       $activeHeaderColumn
         .addClass("slick-header-column-active");
+
+      // Stop propagation so that it doesn't register as a header click event.
+      e.preventDefault();
+      e.stopPropagation();
     }
 
 

@@ -1,13 +1,14 @@
 {
   "name": "SlickGrid",
-  "homepage": "https://github.com/jroxendal/SlickGrid",
-  "_release": "2.1.01",
+  "homepage": "https://github.com/6pac/SlickGrid",
+  "version": "2.3.2",
+  "_release": "2.3.2",
   "_resolution": {
-    "type": "tag",
-    "tag": "2.1.01",
-    "commit": "40447c268e35f1d90c763538c89b6544fb7025dc"
+    "type": "version",
+    "tag": "2.3.2",
+    "commit": "9f409fdcada691dcb3214c8009cac7d1519132cf"
   },
-  "_source": "https://github.com/jroxendal/SlickGrid.git",
-  "_target": "2.1.01",
-  "_originalSource": "https://github.com/jroxendal/SlickGrid.git"
+  "_source": "https://github.com/6pac/SlickGrid.git",
+  "_target": "2.3.2",
+  "_originalSource": "https://github.com/6pac/SlickGrid.git"
 }

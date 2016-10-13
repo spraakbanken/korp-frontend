@@ -56,6 +56,9 @@
     }
 
     function setSelectedRanges(ranges) {
+      // simle check for: empty selection didn't change, prevent firing onSelectedRangesChanged
+      if ((!_ranges || _ranges.length === 0) && (!ranges || ranges.length === 0)) { return; }
+
       _ranges = removeInvalidRanges(ranges);
       _self.onSelectedRangesChanged.notify(_ranges);
     }
@@ -126,8 +129,10 @@
         var new_last = new Slick.Range(active.row, active.cell, active.row + dirRow*dRow, active.cell + dirCell*dCell);
         if (removeInvalidRanges([new_last]).length) {
           ranges.push(new_last);
-         _grid.scrollRowIntoView(dirRow > 0 ? new_last.toRow : new_last.fromRow);
-         _grid.scrollCellIntoView(new_last.fromRow, dirCell > 0 ? new_last.toCell : new_last.fromCell);
+          var viewRow = dirRow > 0 ? new_last.toRow : new_last.fromRow;
+          var viewCell = dirCell > 0 ? new_last.toCell : new_last.fromCell;
+         _grid.scrollRowIntoView(viewRow);
+         _grid.scrollCellIntoView(viewRow, viewCell);
         }
         else 
           ranges.push(last);

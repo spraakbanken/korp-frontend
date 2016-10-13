@@ -14,11 +14,17 @@
 
       $menu = $("<span class='slick-columnpicker' style='display:none;position:absolute;z-index:20;' />").appendTo(document.body);
 
-      $menu.bind("mouseleave", function (e) {
+      $menu.on("mouseleave", function (e) {
         $(this).fadeOut(options.fadeSpeed)
       });
-      $menu.bind("click", updateColumn);
+      $menu.on("click", updateColumn);
 
+    }
+
+    function destroy() {
+      grid.onHeaderContextMenu.unsubscribe(handleHeaderContextMenu);
+      grid.onColumnsReordered.unsubscribe(updateColumnOrder);
+      $menu.remove();
     }
 
     function handleHeaderContextMenu(e, args) {
@@ -136,7 +142,8 @@
     init();
 
     return {
-      "getAllColumns": getAllColumns
+      "getAllColumns": getAllColumns,
+      "destroy": destroy
     };
   }
 
