@@ -6,8 +6,9 @@ div(ng-if="!loading && numResults != 0")
         span.label(ng-if="label != 'total'") {{label}}
         span.label(ng-if="label == 'total'") Σ
       div(style="float:right;padding-right: 5px;")
-        input(type="checkbox", ng-model="useClustering")
-        label() Sammanställ
+        label()
+          input(style="vertical-align: top;margin-top: 0px;margin-right: 5px;", type="checkbox", ng-model="useClustering")
+          | Sammanställ
 
   sb-map(sb-center="center", 
          sb-markers="markerGroups", 

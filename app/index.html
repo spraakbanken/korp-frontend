@@ -460,8 +460,9 @@
                           <div style="background-color: {{group.color}}" class="swatch"></div><span ng-if="label != 'total'" class="label">{{label}}</span><span ng-if="label == 'total'" class="label">Σ</span>
                         </div>
                         <div style="float:right;padding-right: 5px;">
-                          <input type="checkbox" ng-model="useClustering">
-                          <label>Sammanställ</label>
+                          <label>
+                            <input style="vertical-align: top;margin-top: 0px;margin-right: 5px;" type="checkbox" ng-model="useClustering">Sammanställ
+                          </label>
                         </div>
                       </div>
                       <sb-map sb-center="center" sb-markers="markerGroups" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups" sb-rest-color="restColor" sb-use-clustering="useClustering"></sb-map>
