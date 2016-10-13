@@ -4,7 +4,7 @@
   <div ng-controller="ParallelSearch" ng-keydown="keydown($event)">
     <div ng-repeat="l in langs" >
       <select ng-model="l.lang" ng-options="langstr as (langstr | loc:lang) for langstr in getEnabledLangs($index)"></select>
-      <label tooltip="{{'negate_explanation' | loc:lang}} " ng-show="!$first" for="negate_chk{{$index}}">{{"not_containing" | loc:lang}}</label> <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="negates[$index]" ng-change="negChange()">
+      <label uib-tooltip="{{'negate_explanation' | loc:lang}} " ng-show="!$first" for="negate_chk{{$index}}">{{"not_containing" | loc:lang}}</label> <input type="checkbox" id="negate_chk{{$index}}" ng-show="!$first" ng-model="negates[$index]" ng-change="negChange()">
       <div id="query_table" extended_list cqp="l.cqp"></div>
       
     </div>

@@ -15,8 +15,8 @@
               ng-class='{odd : $index % 2 != 0, \
                          even : $index % 2 == 0}'
               ng-click='hitspictureClick(corpus.page, corpus)'
-              tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
-              tooltip-placement='{{$last? "left":"top"}}'
+              uib-tooltip='{{corpus.rtitle}}: {{corpus.abs}}'
+              uib-tooltip-placement='{{$last? "left":"top"}}'
               append-to-body="false")
 kwic-pager
 
