@@ -9,10 +9,25 @@ sb-map {
     border: none;
   }
 
-  .geokorp-marker {
+  .cluster-geokorp-marker-group {
+      position: absolute;
+      bottom: 0;
+      width: 40px;
+  }
+
+  .cluster-geokorp-marker {
     width: 10px;
-    height: 10px;
-    border-radius: 2px
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .geokorp-multi-marker {
+      opacity: 0.85;
+      display: inline-block;
+  }
+
+  .geokorp-marker {
+    opacity: 0.93
   }
   
   .cluster-text {
@@ -82,7 +97,6 @@ sb-map {
   }
 
   .hover-info-container {
-    // background-color: rgba(255, 255,255, 0.95);
     margin: 5px;
     border-radius: 5px;
     width: 200px;

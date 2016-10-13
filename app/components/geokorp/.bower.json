@@ -18,5 +18,14 @@
   },
   "private": true,
   "appPath": "app",
-  "moduleName": "geokorpApp"
+  "moduleName": "geokorpApp",
+  "_release": "1.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.1",
+    "commit": "5fae61cef85600e551db87a729337e4af49ecfe6"
+  },
+  "_source": "http://spraakbanken.gu.se/pub/geokorp.git",
+  "_target": "1.2.1",
+  "_originalSource": "http://spraakbanken.gu.se/pub/geokorp.git"
 }

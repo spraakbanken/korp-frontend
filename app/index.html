@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="components/rickshaw/rickshaw.css">
     <link rel="stylesheet" type="text/css" href="components/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="components/leaflet.markercluster/dist/MarkerCluster.css">
-    <link rel="stylesheet" href="components/leaflet.markercluster/dist/MarkerCluster.Default.css">
     <link rel="stylesheet" type="text/css" href="components/geokorp/dist/styles/geokorp.css">
     <!-- endbuild-->
     <link type="text/css" href="components/jquery-ui/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
@@ -340,7 +339,7 @@
                       <warning ng-if="aborted &amp;&amp; !loading">{{'search_aborted' | loc:lang}}</warning>
                       <div id="mapHits" ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading"><span>{{'map_num_results' | loc:lang}}: </span><span>{{numResults}}</span></div>
                       <div ng-if="showMap &amp;&amp; tabVisible &amp;&amp; hasResult &amp;&amp; !loading &amp;&amp; numResults != 0">
-                        <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups" sb-use-clustering="false"></sb-map>
+                        <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups" sb-use-clustering="false" sb-old-map="true"></sb-map>
                       </div>
                     </div>
                   </div>
@@ -460,8 +459,12 @@
                         <div ng-repeat="(label, group) in markerGroups" ng-class="group.selected ? '' : 'disabled'" ng-click="toggleMarkerGroup(label)" class="mapgroup"><span class="check">✔</span>
                           <div style="background-color: {{group.color}}" class="swatch"></div><span ng-if="label != 'total'" class="label">{{label}}</span><span ng-if="label == 'total'" class="label">Σ</span>
                         </div>
+                        <div style="float:right;padding-right: 5px;">
+                          <input type="checkbox" ng-model="useClustering">
+                          <label>Sammanställ</label>
+                        </div>
                       </div>
-                      <sb-map sb-center="center" sb-markers="markerGroups" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups"></sb-map>
+                      <sb-map sb-center="center" sb-markers="markerGroups" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups" sb-rest-color="restColor" sb-use-clustering="useClustering"></sb-map>
                     </div>
                   </div>
                 </uib-tab>

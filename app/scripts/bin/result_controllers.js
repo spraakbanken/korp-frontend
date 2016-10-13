@@ -893,7 +893,6 @@
             result = arg[0];
             s.loading = false;
             s.numResults = 20;
-            s.result = result;
             s.markerGroups = getMarkerGroups(result);
             return s.selectedGroups = _.keys(s.markerGroups);
           };
@@ -913,15 +912,19 @@
         };
         getMarkerGroups = function(result) {
           var groups, palette;
-          palette = new Rickshaw.Color.Palette("colorwheel");
+          palette = new Rickshaw.Color.Palette({
+            scheme: 'colorwheel'
+          });
           groups = {};
           _.map(result.data, function(res, idx) {
             return groups[res.label] = {
               selected: true,
+              order: idx,
               color: palette.color(),
               markers: getMarkers(result.attribute.label, result.cqp, result.corpora, result.within, res, idx)
             };
           });
+          s.restColor = "#9b9fa5";
           return groups;
         };
         getMarkers = function(label, cqp, corpora, within, res, idx) {

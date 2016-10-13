@@ -730,7 +730,6 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
         s.promise.then (([result], xhr) =>
                 s.loading = false
                 s.numResults = 20
-                s.result = result
                 s.markerGroups = getMarkerGroups result
                 s.selectedGroups = _.keys s.markerGroups
             ),
@@ -746,13 +745,15 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                 s.selectedGroups.push groupName
 
         getMarkerGroups = (result) ->
-            palette = new Rickshaw.Color.Palette("colorwheel")
+            palette = new Rickshaw.Color.Palette { scheme: 'colorwheel' } # spectrum2000
             groups = {}
             _.map result.data, (res, idx) ->
                 groups[res.label] = 
                     selected: true 
+                    order: idx
                     color: palette.color()
                     markers: getMarkers result.attribute.label, result.cqp, result.corpora, result.within, res, idx
+            s.restColor = "#9b9fa5"
             return groups
 
         getMarkers = (label, cqp, corpora, within, res, idx) ->
