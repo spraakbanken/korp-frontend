@@ -100,6 +100,7 @@
     "is_not": "är inte",
     "starts_with": "börjar med",
     "contains": "innehåller",
+    "contains_not": "innehåller inte",
     "ends_with": "slutar med",
 
     "word_is": "ordet är",

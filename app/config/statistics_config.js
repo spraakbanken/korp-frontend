@@ -35,16 +35,30 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
         case "suffix":
         case "lex":
         case "lemma":
+        case "sense":
             if(tokens[0] == "|")
                 return "ambiguity(" + type + ") = 0";
             else
                 var res;
                 if(tokens.length > 1) {
                     var key = tokens[0].split(":")[0];
-                    var variants = _.flatten(_.map(tokens, function(val) {
-                        return val.split(":")[1];
-                    }));
-                    res = key + ":" + "(" + variants.join("|") + ")";
+                    
+                    var variants = []
+                    _.map(tokens, function(val) {
+                        parts = val.split(":")
+                        if(variants.length == 0) {
+                            for(var idx = 0; idx < parts.length - 1; idx++)
+                                variants.push([]);
+                        }
+                        for(var idx = 1; idx < parts.length; idx++)
+                            variants[idx - 1].push(parts[idx]);
+                    });
+
+                    variants = _.map(variants, function(variant) {
+                        return ":(" + variant.join("|") + ")"
+                    });
+                    
+                    res = key + variants.join("")
                 }
                 else {
                     res = tokens[0];
@@ -65,8 +79,9 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
 };
 
 statisticsFormatting.reduceStatisticsPieChart = function(row, cell, value, columnDef, dataContext) {
-    if(value != "&Sigma;")
-        value = value[0].replace(/:\d+/g, "")
+    if(value != "&Sigma;") {
+        value = value[0].replace(/(:.+?)(\/|$| )/g, "$2");
+    }
     return $.format('<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', value);
 };
 
@@ -130,8 +145,9 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
         case "suffix":
         case "lex":
         case "lemma":
+        case "sense":
 
-            if(type == "saldo")
+            if(type == "saldo" || type == "sense")
                 stringify = util.saldoToString
             else if(type == "lemma")
                 stringify = function(lemma) {return lemma.replace(/_/g, " ")}
@@ -141,7 +157,7 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
             var html = _.map(values, function(token) {
                 if(token == "|")
                     return "–";
-                return stringify(token.replace(/:\d+/g, ""), true);
+                return stringify(token.replace(/:.*/g, ""), true);
             });
 
             return html.join(" ")

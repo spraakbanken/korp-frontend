@@ -229,7 +229,7 @@ settings.spWithin = {
  */
 // for optimization purposes
 settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
-
+settings.senseAutoComplete = "<autoc model='model' placeholder='placeholder' type='sense'/>";
 
 settings.defaultOptions = {
     "is": "=",
@@ -247,8 +247,13 @@ settings.liteOptions = {
 settings.setOptions = {
     "is": "contains",
     "is_not": "not contains"
-}
-
+};
+settings.probabilitySetOptions = {
+    "is": "highest_rank",
+    "is_not": "not_highest_rank",
+    "contains": "rank_contains",
+    "contains_not": "not_rank_contains",
+};
 
 var selectType = {
     extended_template: "<select ng-model='model' "
@@ -397,7 +402,7 @@ attrs.saldo = {
     },
     externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='sense'/>",
+    extended_template: settings.senseAutoComplete,
     order: 47
 };
 attrs.dephead = {
@@ -2777,16 +2782,16 @@ probabilitySets = {
         var senseProbs = wordData.sense
         senseProbs = _.filter(senseProbs.split("|"), Boolean)
         content = _.map(senseProbs, function(senseProb, i) {
-            something =senseProb.split(':');
-            sense = something[0]
-            prob = something[something.length -1]
+            var something = senseProb.split(':');
+            var sense = something[0];
+            var prob = something[something.length -1];
             var li = $("<li></li>");
             if(i != 0) {
                 li.css('display', 'none');
             }
             korpLink = $('<span class="link">' + util.saldoToString(sense, true) +  '</span>');
             korpLink.click(function() {
-                search({"search": "cqp|[sense contains '" + sense + ":.*']"})
+                search({"search": "cqp|[sense = '\\|" + regescape(sense) + ":.*']"})
             });
             karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
 
@@ -2856,8 +2861,13 @@ settings.corpora.suc3 = {
                   type: "set"},
         sense: {
             label: "sense",
-            displayType: "hidden",
-            type: "set"
+            renderItem: probabilitySets.renderSenseContent,
+            type: "set",
+            ranked: true,
+            opts: settings.probabilitySetOptions,
+            // externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
+            // internalSearch: true,
+            extended_template: settings.senseAutoComplete
         }
     }),
     struct_attributes: {
@@ -2872,11 +2882,6 @@ settings.corpora.suc3 = {
         compwf: {
             label: "compwf",
             renderItem: probabilitySets.renderWordFormContent,
-            customType: "pos"
-        },
-        sense: {
-            label: "sense",
-            renderItem: probabilitySets.renderSenseContent,
             customType: "pos"
         }
     }

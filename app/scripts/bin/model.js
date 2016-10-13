@@ -460,7 +460,7 @@
         };
       })(this));
       groups = _.groupBy(_.keys(data.total.absolute), function(item) {
-        return item.replace(/:\d+/g, "");
+        return item.replace(/(:.+?)(\/|$| )/g, "$2");
       });
       wordArray = _.keys(groups);
       sizeOfDataset = wordArray.length;
@@ -505,7 +505,7 @@
     };
 
     StatsProxy.prototype.makeRequest = function(cqp, callback) {
-      var data, def, ignoreCase, insensitive, reduceValLabels, reduceVals, reduceval, self;
+      var data, def, ignoreCase, insensitive, rankedReduceVals, reduceValLabels, reduceVals, reduceval, self;
       self = this;
       StatsProxy.__super__.makeRequest.call(this);
       reduceval = search().stats_reduce || "word";
@@ -532,6 +532,13 @@
       data.split = _.filter(reduceVals, function(reduceVal) {
         var ref;
         return ((ref = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]) != null ? ref.type : void 0) === "set";
+      }).join(',');
+      rankedReduceVals = _.filter(reduceVals, function(reduceVal) {
+        var ref;
+        return (ref = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]) != null ? ref.ranked : void 0;
+      });
+      data.top = _.map(rankedReduceVals, function(reduceVal) {
+        return reduceVal + ":1";
       }).join(',');
       if (ignoreCase) {
         $.extend(data, {

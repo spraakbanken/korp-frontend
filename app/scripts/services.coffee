@@ -126,7 +126,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
             groupAndSum = (table, currentMax) ->
                 groups = _.groupBy table, (obj) ->
-                    obj.value.replace(/:\d+/g, "")
+                    obj.value.replace(/(:.+?)(\/|$| )/g, "$2")
 
                 res = _.map groups, (value, key) ->
                     tokenLists = _.map key.split("/"), (tokens) ->

@@ -239,7 +239,6 @@
   korpApp.controller("ExtendedToken", function($scope, utils, $location) {
     var cqp, onCorpusChange, s, toggleBound;
     s = $scope;
-    c.log("ExtendedToken", s);
     cqp = '[]';
     s.valfilter = utils.valfilter;
     s.setDefault = function(or_obj) {
@@ -274,7 +273,6 @@
         return;
       }
       lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
-      c.log("ExtendedToken onCorpusChange", lang);
       s.types = settings.corpusListing.getAttributeGroups(lang);
       return s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {

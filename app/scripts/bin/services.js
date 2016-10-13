@@ -166,7 +166,7 @@
           groupAndSum = function(table, currentMax) {
             var groups, res;
             groups = _.groupBy(table, function(obj) {
-              return obj.value.replace(/:\d+/g, "");
+              return obj.value.replace(/(:.+?)(\/|$| )/g, "$2");
             });
             res = _.map(groups, function(value, key) {
               var abs, cqp, elems, loglike, tokenLists;

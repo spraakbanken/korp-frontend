@@ -220,9 +220,7 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
 
 korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s = $scope
-    c.log "ExtendedToken", s
     cqp = '[]'
-
     s.valfilter = utils.valfilter
 
     s.setDefault = (or_obj) ->
@@ -257,7 +255,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         # TODO: respect the setting 'word_attribute_selector' and similar
         unless selected?.length then return
         lang = s.$parent.$parent?.l?.lang
-        c.log "ExtendedToken onCorpusChange", lang
         s.types = settings.corpusListing.getAttributeGroups(lang)
         s.typeMapping = _.object _.map s.types, (item) ->
             if item.isStructAttr

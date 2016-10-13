@@ -656,11 +656,26 @@
                 }
                 op = type === "set" ? "contains" : "=";
                 if (type === "set" && attrVal.length > 1) {
-                  variants = _.flatten(_.map(attrVal, function(val) {
-                    return val.split(":")[1];
-                  }));
+                  variants = [];
+                  _.map(attrVal, function(val) {
+                    var idx, m, n, parts, ref2, ref3, results2;
+                    parts = val.split(":");
+                    if (variants.length === 0) {
+                      for (idx = m = 0, ref2 = parts.length - 2; 0 <= ref2 ? m <= ref2 : m >= ref2; idx = 0 <= ref2 ? ++m : --m) {
+                        variants.push([]);
+                      }
+                    }
+                    results2 = [];
+                    for (idx = n = 1, ref3 = parts.length - 1; 1 <= ref3 ? n <= ref3 : n >= ref3; idx = 1 <= ref3 ? ++n : --n) {
+                      results2.push(variants[idx - 1].push(parts[idx]));
+                    }
+                    return results2;
+                  });
                   key = attrVal[0].split(":")[0];
-                  val = key + ":" + "(" + variants.join("|") + ")";
+                  variants = _.map(variants, function(variant) {
+                    return ":(" + variant.join("|") + ")";
+                  });
+                  val = key + variants.join("");
                 } else {
                   val = attrVal[0];
                 }

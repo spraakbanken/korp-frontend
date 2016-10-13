@@ -549,10 +549,19 @@ korpApp.directive "compareCtrl", () ->
                         op = if type == "set" then "contains" else "="
 
                         if type == "set" and attrVal.length > 1
-                            variants = _.flatten _.map(attrVal, (val) ->
-                                val.split(":")[1])
+                            variants = []
+                            _.map attrVal, (val) ->
+                                parts = val.split(":")
+                                if variants.length == 0
+                                    for idx in [0..parts.length - 2]
+                                        variants.push []
+                                for idx in [1..parts.length - 1]
+                                    variants[idx - 1].push parts[idx]
+
                             key  = attrVal[0].split(":")[0]
-                            val = key + ":" + "(" + variants.join("|") + ")"
+                            variants = _.map variants, (variant) ->
+                                return ":(" + variant.join("|") + ")"
+                            val = key + variants.join("")
                         else
                             val = attrVal[0]
 

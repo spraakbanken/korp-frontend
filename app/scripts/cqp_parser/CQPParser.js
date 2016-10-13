@@ -181,16 +181,24 @@ CQPParser = (function() {
         peg$c84 = { type: "literal", value: "not contains", description: "\"not contains\"" },
         peg$c85 = "contains",
         peg$c86 = { type: "literal", value: "contains", description: "\"contains\"" },
-        peg$c87 = " <= ",
-        peg$c88 = { type: "literal", value: " <= ", description: "\" <= \"" },
-        peg$c89 = " => ",
-        peg$c90 = { type: "literal", value: " => ", description: "\" => \"" },
-        peg$c91 = " > ",
-        peg$c92 = { type: "literal", value: " > ", description: "\" > \"" },
-        peg$c93 = " = ",
-        peg$c94 = { type: "literal", value: " = ", description: "\" = \"" },
-        peg$c95 = " < ",
-        peg$c96 = { type: "literal", value: " < ", description: "\" < \"" },
+        peg$c87 = "highest_rank",
+        peg$c88 = { type: "literal", value: "highest_rank", description: "\"highest_rank\"" },
+        peg$c89 = "not_highest_rank",
+        peg$c90 = { type: "literal", value: "not_highest_rank", description: "\"not_highest_rank\"" },
+        peg$c91 = "rank_contains",
+        peg$c92 = { type: "literal", value: "rank_contains", description: "\"rank_contains\"" },
+        peg$c93 = "not_rank_contains",
+        peg$c94 = { type: "literal", value: "not_rank_contains", description: "\"not_rank_contains\"" },
+        peg$c95 = " <= ",
+        peg$c96 = { type: "literal", value: " <= ", description: "\" <= \"" },
+        peg$c97 = " => ",
+        peg$c98 = { type: "literal", value: " => ", description: "\" => \"" },
+        peg$c99 = " > ",
+        peg$c100 = { type: "literal", value: " > ", description: "\" > \"" },
+        peg$c101 = " = ",
+        peg$c102 = { type: "literal", value: " = ", description: "\" = \"" },
+        peg$c103 = " < ",
+        peg$c104 = { type: "literal", value: " < ", description: "\" < \"" },
 
         peg$currPos          = 0,
         peg$savedPos         = 0,
@@ -1578,6 +1586,42 @@ CQPParser = (function() {
                         s0 = peg$FAILED;
                         if (peg$silentFails === 0) { peg$fail(peg$c86); }
                       }
+                      if (s0 === peg$FAILED) {
+                        if (input.substr(peg$currPos, 12) === peg$c87) {
+                          s0 = peg$c87;
+                          peg$currPos += 12;
+                        } else {
+                          s0 = peg$FAILED;
+                          if (peg$silentFails === 0) { peg$fail(peg$c88); }
+                        }
+                        if (s0 === peg$FAILED) {
+                          if (input.substr(peg$currPos, 16) === peg$c89) {
+                            s0 = peg$c89;
+                            peg$currPos += 16;
+                          } else {
+                            s0 = peg$FAILED;
+                            if (peg$silentFails === 0) { peg$fail(peg$c90); }
+                          }
+                          if (s0 === peg$FAILED) {
+                            if (input.substr(peg$currPos, 13) === peg$c91) {
+                              s0 = peg$c91;
+                              peg$currPos += 13;
+                            } else {
+                              s0 = peg$FAILED;
+                              if (peg$silentFails === 0) { peg$fail(peg$c92); }
+                            }
+                            if (s0 === peg$FAILED) {
+                              if (input.substr(peg$currPos, 17) === peg$c93) {
+                                s0 = peg$c93;
+                                peg$currPos += 17;
+                              } else {
+                                s0 = peg$FAILED;
+                                if (peg$silentFails === 0) { peg$fail(peg$c94); }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -1593,44 +1637,44 @@ CQPParser = (function() {
     function peg$parsedate_op() {
       var s0;
 
-      if (input.substr(peg$currPos, 4) === peg$c87) {
-        s0 = peg$c87;
+      if (input.substr(peg$currPos, 4) === peg$c95) {
+        s0 = peg$c95;
         peg$currPos += 4;
       } else {
         s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c88); }
+        if (peg$silentFails === 0) { peg$fail(peg$c96); }
       }
       if (s0 === peg$FAILED) {
-        if (input.substr(peg$currPos, 4) === peg$c89) {
-          s0 = peg$c89;
+        if (input.substr(peg$currPos, 4) === peg$c97) {
+          s0 = peg$c97;
           peg$currPos += 4;
         } else {
           s0 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c90); }
+          if (peg$silentFails === 0) { peg$fail(peg$c98); }
         }
         if (s0 === peg$FAILED) {
-          if (input.substr(peg$currPos, 3) === peg$c91) {
-            s0 = peg$c91;
+          if (input.substr(peg$currPos, 3) === peg$c99) {
+            s0 = peg$c99;
             peg$currPos += 3;
           } else {
             s0 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c92); }
+            if (peg$silentFails === 0) { peg$fail(peg$c100); }
           }
           if (s0 === peg$FAILED) {
-            if (input.substr(peg$currPos, 3) === peg$c93) {
-              s0 = peg$c93;
+            if (input.substr(peg$currPos, 3) === peg$c101) {
+              s0 = peg$c101;
               peg$currPos += 3;
             } else {
               s0 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c94); }
+              if (peg$silentFails === 0) { peg$fail(peg$c102); }
             }
             if (s0 === peg$FAILED) {
-              if (input.substr(peg$currPos, 3) === peg$c95) {
-                s0 = peg$c95;
+              if (input.substr(peg$currPos, 3) === peg$c103) {
+                s0 = peg$c103;
                 peg$currPos += 3;
               } else {
                 s0 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c96); }
+                if (peg$silentFails === 0) { peg$fail(peg$c104); }
               }
             }
           }

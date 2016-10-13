@@ -60,16 +60,21 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
             continue
         
         or_array = for and_array in token.and_block
+
             for {type, op, val, flags} in and_array
-                # if op != "*="
-                #     val = regescape val
                 if expanded_format
+                    if op == "highest_rank" or op == "not_highest_rank" or op == "rank_contains" or op == "not_rank_contains"
+                        val = regescape val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]
                         "&=" : [".*" + val, "="]
                         "*=" : [val, "="]
                         "!*=" : [val, "!="]
+                        "rank_contains": [val + ":.*", "contains"]
+                        "not_rank_contains": [val + ":.*", "not contains"]
+                        "highest_rank" : ["\\|" + val + ":.*", "="]
+                        "not_highest_rank": ["\\|" + val + ":.*", "!="]
                     }[op] or [val, op]
 
                 flagstr = ""
@@ -81,7 +86,7 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
                 else if type == "date_interval"
                     out = parseDateInterval(op, val, expanded_format)
                     
-                else 
+                else
                     out = "#{type} #{op} \"#{val}\"" 
 
                 out + flagstr

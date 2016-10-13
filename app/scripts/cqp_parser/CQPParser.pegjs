@@ -133,6 +133,10 @@ infix_op
   / "!*="
   / "not contains"
   / "contains"
+  / "highest_rank"
+  / "not_highest_rank"
+  / "rank_contains"
+  / "not_rank_contains"
 
 date_op
   = " <= "

@@ -382,7 +382,7 @@ class model.StatsProxy extends BaseProxy
                 minWidth : minWidth
 
         groups = _.groupBy _.keys(data.total.absolute), (item) ->
-            item.replace(/:\d+/g, "")
+            item.replace(/(:.+?)(\/|$| )/g, "$2")
 
         wordArray = _.keys groups
 
@@ -446,6 +446,11 @@ class model.StatsProxy extends BaseProxy
 
         data.split = _.filter(reduceVals, (reduceVal) ->
             settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.type == "set").join(',')
+
+        rankedReduceVals = _.filter reduceVals, (reduceVal) ->
+            settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.ranked
+        data.top = _.map(rankedReduceVals, (reduceVal) ->
+            return reduceVal + ":1").join(',')
 
         if ignoreCase
             $.extend data,
