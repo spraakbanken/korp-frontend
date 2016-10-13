@@ -603,6 +603,7 @@
                 deferred.resolve([]);
                 return;
               }
+              karpLemgrams = karpLemgrams.slice(0, 100);
               senseargs = {
                 "q": "extended||and|lemgram|equals|" + (karpLemgrams.join('|')),
                 "resource": "saldo",
