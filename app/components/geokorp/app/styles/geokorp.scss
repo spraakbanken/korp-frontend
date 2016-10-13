@@ -1,16 +1,32 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 sb-map {
+    
   padding: 8px;
+  
+  .leaflet-div-icon {
+    background: none;
+    border: none;
+  }
 
-  .dot {
-    background-color : red;
-    border : none;
-    border-radius: 10px;
-    width : 7px !important;
-    height : 7px !important;
+  .geokorp-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px
+  }
+  
+  .cluster-text {
+    font-weight: bold;
+  }
+  
+  .cluster-icon {
+    border-radius: 15px;
+    width: 30px !important;
+    height: 30px !important;
     z-index : 400;
     position: absolute;
+    padding-top: 5px;
+    padding-left: 1px;
   }
   
   .leaflet-marker-icon.leaflet-div-icon.leaflet-clickable {
@@ -33,6 +49,13 @@ sb-map {
     color: black
   }
 
+  .swatch {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
   .marker-cluster-small {
     background-color: rgba(136, 220, 168, 0.6);
     div {
@@ -42,14 +65,15 @@ sb-map {
   
   .map {
       border: 1px solid black;
+      position: relative;
+      height: 522px;
   }
 
-  #sb-map-container {
-    position: relative;
-    height: 522px;
+  .map-container {
+    height: 520px;
   }
 
-  #leaflet-map {
+  .map-outer-container {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -57,17 +81,22 @@ sb-map {
     left: 0;
   }
 
-  #hover-info {
+  .hover-info-container {
+    // background-color: rgba(255, 255,255, 0.95);
+    margin: 5px;
+    border-radius: 5px;
     width: 200px;
+    height: 500px;
+    overflow: auto; 
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 100;
+    z-index: 800;
+    opacity: 1;
+    transition : opacity 500ms;
   }
 
   .hover-info {
-    opacity: 1;
-    transition : opacity 500ms;
     z-index: 10;
     background-color: #f6f6f6;
     background-image: linear-gradient(to bottom, #fff, #e6e6e6);
@@ -75,6 +104,7 @@ sb-map {
     padding: 10px;
     margin: 10px;
     border-radius: 4px;
+    cursor: pointer;
   }
 
 }

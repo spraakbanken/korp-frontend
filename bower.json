@@ -29,12 +29,11 @@
     "angular-dynamic-locale": "https://github.com/lgalfaso/angular-dynamic-locale.git#~0.1.17",
     "angular-filter": "~0.5.7",
     "angular-sanitize": "1.4.5",
-    "angular-leaflet-directive": "~0.10.0",
-    "leaflet": "~0.7.3",
+    "leaflet": "~1.0.0",
     "leaflet-providers": "1.1.15",
     "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.2",
     "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.2.0",
-    "leaflet.markercluster": "^0.5.0"
+    "leaflet.markercluster": "1.0.0-rc.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

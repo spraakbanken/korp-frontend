@@ -96,7 +96,7 @@
     "map_activate_btn": "Enable and search",
     "map_warn": "No data available for current search",
     "map_warn_btn": "Search",
-    "map_name": "Name",
+    "map_name": "Place",
     "map_abs_occurrences": "Absolute occurrences",
     "map_rel_occurrences": "Relative occurrences",
     "map_num_results": "Locations",
@@ -320,6 +320,5 @@
     "formatdescr_nooj": "XML import format for the NooJ software",
     "formatdescr_ref": "Bibliographical references as an Excel spreadsheet (XLS) with each matching sentence on its own line, followed by the text attributes of the sentence on their own lines",
 
-    "no_geo_info": "No location data available",
-    "cluster_marker": "Cluster marker"
+    "no_geo_info": "No location data available"
 }

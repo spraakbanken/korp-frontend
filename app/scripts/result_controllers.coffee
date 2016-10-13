@@ -717,13 +717,8 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
         s.active = true
 
         s.center = settings.mapCenter
-        s.hoverTemplate = """<div class="hover-info">
-                              <div style="font-weight: bold; font-size: 15px">{{label}}</div>
-                              <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>
-                              <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
-                              <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
-                           </div>"""
         s.markers = {}
+        s.selectedGroups = []
         s.markerGroups = []
         s.mapSettings =
             baseLayer : "Stamen Watercolor"
@@ -733,73 +728,70 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                 s.loading = false
                 s.numResults = 20
                 s.result = result
-                s.groups = getGroups result
-                s.markers = getMarkers result
+                s.markerGroups = getMarkerGroups result
+                s.selectedGroups = _.keys s.markerGroups
             ),
             () =>
                 s.loading = false
                 s.error = true
 
-        s.toggleGroup = (groupName) ->
-            old = _.values(s.markers).length
-            s.groups[groupName].selected = not s.groups[groupName].selected
-            s.markers = getMarkers(s.result)
+        s.toggleMarkerGroup = (groupName) ->
+            s.markerGroups[groupName].selected = not s.markerGroups[groupName].selected
+            if groupName in s.selectedGroups
+                s.selectedGroups.splice (s.selectedGroups.indexOf groupName), 1
+            else
+                s.selectedGroups.push groupName
 
-        getGroups = (result) ->
+        getMarkerGroups = (result) ->
             palette = new Rickshaw.Color.Palette("colorwheel")
             groups = {}
             _.map result.data, (res, idx) ->
                 groups[res.label] = 
                     selected: true 
                     color: palette.color()
-                    cqp: res.cqp
+                    markers: getMarkers result.attribute.label, result.cqp, result.corpora, result.within, res, idx
             return groups
 
-        getMarkers = (result) ->
+        getMarkers = (label, cqp, corpora, within, res, idx) ->
             markers = {}
-            _.map result.data, (res, idx) ->
-                group = s.groups[res.label]
-                unless group.selected
-                    return
 
-                icon = 
-                    iconUrl: 'http://api.tiles.mapbox.com/v3/marker/pin-m+' + group.color.split("#")[1] + '.png'
-
-                for point in res.points
-                    do(point) ->
-                        childScope = $rootScope.$new(true)
-                        childScope.point = point
-                        childScope.cqp = res.cqp
-                        childScope.label = res.label
-                        id = point.name.replace(/-/g , "") + idx
-                        markers[id] =
-                            layer: "clusterlayer"
-                            icon: icon
-                            lat: point.lat
-                            lng: point.lng
-
-                        html = '<div class="link" ng-click="newKWICSearch(\'' + point.name + '\')">' + point.name + '</div>'
-
-                        childScope.newKWICSearch = (query) ->
-                            cl = settings.corpusListing.subsetFactory(result.corpora)
-                            opts = {
-                                start : 0
-                                end : 24
-                                ajaxParams :
-                                    command : "query"
-                                    cqp : result.cqp
-                                    cqp2: "[_." + result.attribute.label + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
-                                    cqp3: res.cqp
-                                    corpus : cl.stringifySelected()
-                                    show_struct : _.keys cl.getStructAttrs()
-                                    expand_prequeries : true
-                            }
-                            _.extend opts.ajaxParams, result.within
-                            $rootScope.kwicTabs.push { readingMode: result.attribute.label == "paragraph__geocontext", queryParams: opts }
-                        markers[id].message = html
-                        markers[id].getMessageScope = () -> childScope
+            for point in res.points
+                do(point) ->
+                    id = point.name.replace(/-/g , "") + idx
+                    markers[id] =
+                        lat: point.lat
+                        lng: point.lng
+                        queryData:
+                            searchCqp: cqp
+                            subCqp: res.cqp
+                            label: label
+                            corpora: corpora
+                            within: within
+                        label: res.label
+                        point: point
 
             return markers
+
+        s.newKWICSearch = (marker) ->
+            queryData = marker.queryData
+            point = marker.point
+            cl = settings.corpusListing.subsetFactory(queryData.corpora)
+            numberOfTokens = queryData.subCqp.split("[").length - 1
+            opts = {
+                start : 0
+                end : 24
+                ajaxParams :
+                    command : "query"
+                    cqp : queryData.searchCqp
+                    cqp2: "[_." + queryData.label + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']{" + numberOfTokens + "}",
+                    cqp3: queryData.subCqp
+                    corpus : cl.stringifySelected()
+                    show_struct : _.keys cl.getStructAttrs()
+                    expand_prequeries : false
+            }
+            _.extend opts.ajaxParams, queryData.within
+            $rootScope.kwicTabs.push { readingMode: queryData.label == "paragraph__geocontext", queryParams: opts }
+
 
 
 korpApp.controller "VideoCtrl", ($scope, $uibModal) ->

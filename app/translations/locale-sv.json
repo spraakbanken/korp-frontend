@@ -89,7 +89,7 @@
     "map_activate_btn": "Aktivera och sök",
     "map_warn": "Ingen data tillgänglig för nuvarande sökning",
     "map_warn_btn": "Sök",
-    "map_name": "Namn",
+    "map_name": "Plats",
     "map_abs_occurrences": "Absoluta förekomster",
     "map_rel_occurrences": "Relativa förekomster",
     "map_num_results": "Platser",
@@ -318,6 +318,5 @@
     "formatdescr_nooj": "XML-importformat för NooJ",
     "formatdescr_ref": "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader",
     
-    "no_geo_info": "Platsinformation ej tillgänglig",
-    "cluster_marker": "Gruppmarkör"
+    "no_geo_info": "Platsinformation ej tillgänglig"
 }

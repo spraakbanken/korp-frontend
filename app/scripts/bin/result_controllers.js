@@ -865,13 +865,13 @@
   korpApp.directive("newMapCtrl", function($timeout, searches) {
     return {
       controller: function($scope, $rootScope) {
-        var getGroups, getMarkers, s;
+        var getMarkerGroups, getMarkers, s;
         s = $scope;
         s.loading = true;
         s.active = true;
         s.center = settings.mapCenter;
-        s.hoverTemplate = "<div class=\"hover-info\">\n   <div style=\"font-weight: bold; font-size: 15px\">{{label}}</div>\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n</div>";
         s.markers = {};
+        s.selectedGroups = [];
         s.markerGroups = [];
         s.mapSettings = {
           baseLayer: "Stamen Watercolor"
@@ -884,8 +884,8 @@
             s.loading = false;
             s.numResults = 20;
             s.result = result;
-            s.groups = getGroups(result);
-            return s.markers = getMarkers(result);
+            s.markerGroups = getMarkerGroups(result);
+            return s.selectedGroups = _.keys(s.markerGroups);
           };
         })(this)), (function(_this) {
           return function() {
@@ -893,13 +893,15 @@
             return s.error = true;
           };
         })(this));
-        s.toggleGroup = function(groupName) {
-          var old;
-          old = _.values(s.markers).length;
-          s.groups[groupName].selected = !s.groups[groupName].selected;
-          return s.markers = getMarkers(s.result);
+        s.toggleMarkerGroup = function(groupName) {
+          s.markerGroups[groupName].selected = !s.markerGroups[groupName].selected;
+          if (indexOf.call(s.selectedGroups, groupName) >= 0) {
+            return s.selectedGroups.splice(s.selectedGroups.indexOf(groupName), 1);
+          } else {
+            return s.selectedGroups.push(groupName);
+          }
         };
-        getGroups = function(result) {
+        getMarkerGroups = function(result) {
           var groups, palette;
           palette = new Rickshaw.Color.Palette("colorwheel");
           groups = {};
@@ -907,72 +909,62 @@
             return groups[res.label] = {
               selected: true,
               color: palette.color(),
-              cqp: res.cqp
+              markers: getMarkers(result.attribute.label, result.cqp, result.corpora, result.within, res, idx)
             };
           });
           return groups;
         };
-        return getMarkers = function(result) {
-          var markers;
+        getMarkers = function(label, cqp, corpora, within, res, idx) {
+          var fn, k, len1, markers, point, ref;
           markers = {};
-          _.map(result.data, function(res, idx) {
-            var group, icon, k, len1, point, ref, results;
-            group = s.groups[res.label];
-            if (!group.selected) {
-              return;
-            }
-            icon = {
-              iconUrl: 'http://api.tiles.mapbox.com/v3/marker/pin-m+' + group.color.split("#")[1] + '.png'
+          ref = res.points;
+          fn = function(point) {
+            var id;
+            id = point.name.replace(/-/g, "") + idx;
+            return markers[id] = {
+              lat: point.lat,
+              lng: point.lng,
+              queryData: {
+                searchCqp: cqp,
+                subCqp: res.cqp,
+                label: label,
+                corpora: corpora,
+                within: within
+              },
+              label: res.label,
+              point: point
             };
-            ref = res.points;
-            results = [];
-            for (k = 0, len1 = ref.length; k < len1; k++) {
-              point = ref[k];
-              results.push((function(point) {
-                var childScope, html, id;
-                childScope = $rootScope.$new(true);
-                childScope.point = point;
-                childScope.cqp = res.cqp;
-                childScope.label = res.label;
-                id = point.name.replace(/-/g, "") + idx;
-                markers[id] = {
-                  layer: "clusterlayer",
-                  icon: icon,
-                  lat: point.lat,
-                  lng: point.lng
-                };
-                html = '<div class="link" ng-click="newKWICSearch(\'' + point.name + '\')">' + point.name + '</div>';
-                childScope.newKWICSearch = function(query) {
-                  var cl, opts;
-                  cl = settings.corpusListing.subsetFactory(result.corpora);
-                  opts = {
-                    start: 0,
-                    end: 24,
-                    ajaxParams: {
-                      command: "query",
-                      cqp: result.cqp,
-                      cqp2: "[_." + result.attribute.label + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
-                      cqp3: res.cqp,
-                      corpus: cl.stringifySelected(),
-                      show_struct: _.keys(cl.getStructAttrs()),
-                      expand_prequeries: true
-                    }
-                  };
-                  _.extend(opts.ajaxParams, result.within);
-                  return $rootScope.kwicTabs.push({
-                    readingMode: result.attribute.label === "paragraph__geocontext",
-                    queryParams: opts
-                  });
-                };
-                markers[id].message = html;
-                return markers[id].getMessageScope = function() {
-                  return childScope;
-                };
-              })(point));
-            }
-            return results;
-          });
+          };
+          for (k = 0, len1 = ref.length; k < len1; k++) {
+            point = ref[k];
+            fn(point);
+          }
           return markers;
+        };
+        return s.newKWICSearch = function(marker) {
+          var cl, numberOfTokens, opts, point, queryData;
+          queryData = marker.queryData;
+          point = marker.point;
+          cl = settings.corpusListing.subsetFactory(queryData.corpora);
+          numberOfTokens = queryData.subCqp.split("[").length - 1;
+          opts = {
+            start: 0,
+            end: 24,
+            ajaxParams: {
+              command: "query",
+              cqp: queryData.searchCqp,
+              cqp2: "[_." + queryData.label + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']{" + numberOfTokens + "}",
+              cqp3: queryData.subCqp,
+              corpus: cl.stringifySelected(),
+              show_struct: _.keys(cl.getStructAttrs()),
+              expand_prequeries: false
+            }
+          };
+          _.extend(opts.ajaxParams, queryData.within);
+          return $rootScope.kwicTabs.push({
+            readingMode: queryData.label === "paragraph__geocontext",
+            queryParams: opts
+          });
         };
       }
     };

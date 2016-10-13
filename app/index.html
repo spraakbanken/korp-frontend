@@ -456,15 +456,12 @@
                       <div rel="localize[fail_text]" class="fail_text inline_block">Ett fel har uppstått. </div>
                     </div>
                     <div ng-if="!loading &amp;&amp; numResults != 0">
-                      <div id="mapHeader" class="legend rickshaw_legend">
-                        <div ng-repeat="(label, group) in groups" ng-class="group.selected ? '' : 'disabled'" ng-click="toggleGroup(label)" class="mapgroup"><span class="check">✔</span>
+                      <div id="mapHeader" class="rickshaw_legend">
+                        <div ng-repeat="(label, group) in markerGroups" ng-class="group.selected ? '' : 'disabled'" ng-click="toggleMarkerGroup(label)" class="mapgroup"><span class="check">✔</span>
                           <div style="background-color: {{group.color}}" class="swatch"></div><span ng-if="label != 'total'" class="label">{{label}}</span><span ng-if="label == 'total'" class="label">Σ</span>
                         </div>
-                        <div class="mapgroup">
-                          <div class="cluster-info swatch"></div><span class="label">{{"cluster_marker" | loc:lang}}</span>
-                        </div>
                       </div>
-                      <sb-map sb-center="center" sb-markers="markers" sb-show-time="showTime" sb-hover-template="hoverTemplate" sb-base-layer="mapSettings.baseLayer"></sb-map>
+                      <sb-map sb-center="center" sb-markers="markerGroups" sb-show-time="showTime" sb-base-layer="mapSettings.baseLayer" sb-marker-callback="newKWICSearch" sb-selected-groups="selectedGroups"></sb-map>
                     </div>
                   </div>
                 </uib-tab>
@@ -562,7 +559,6 @@
     <script src="components/leaflet/dist/leaflet.js"></script>
     <script src="components/leaflet/dist/leaflet-src.js"></script>
     <script src="components/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <script src="components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="components/leaflet-providers/leaflet-providers.js"></script>
     <script src="components/geokorp/dist/scripts/geokorp-templates.js"></script>
     <script src="components/geokorp/dist/scripts/geokorp.js"></script>
