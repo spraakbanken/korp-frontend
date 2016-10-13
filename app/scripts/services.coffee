@@ -79,6 +79,11 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         split = _.filter(reduce, (r) -> 
             settings.corpusListing.getCurrentAttributes()[r]?.type == "set").join(',')
 
+        rankedReduce = _.filter reduce, (item) ->
+            settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[item]?.ranked
+        top = _.map(rankedReduce, (item) ->
+            return item + ":1").join ','
+
         def = $q.defer()
         params =
             command : "loglike"
@@ -89,6 +94,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
             set2_cqp : cmpObj2.cqp
             max : 50
             split : split
+            top : top
 
         conf =
             url : settings.cgi_script

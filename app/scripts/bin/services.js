@@ -108,7 +108,7 @@
   korpApp.factory('backend', function($http, $q, utils, lexicons) {
     return {
       requestCompare: function(cmpObj1, cmpObj2, reduce) {
-        var conf, corpora1, corpora2, corpusListing, def, filterFun, params, split, xhr;
+        var conf, corpora1, corpora2, corpusListing, def, filterFun, params, rankedReduce, split, top, xhr;
         reduce = _.map(reduce, function(item) {
           return item.replace(/^_\./, "");
         });
@@ -122,6 +122,13 @@
           var ref;
           return ((ref = settings.corpusListing.getCurrentAttributes()[r]) != null ? ref.type : void 0) === "set";
         }).join(',');
+        rankedReduce = _.filter(reduce, function(item) {
+          var ref;
+          return (ref = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[item]) != null ? ref.ranked : void 0;
+        });
+        top = _.map(rankedReduce, function(item) {
+          return item + ":1";
+        }).join(',');
         def = $q.defer();
         params = {
           command: "loglike",
@@ -131,7 +138,8 @@
           set2_corpus: corpora2.join(",").toUpperCase(),
           set2_cqp: cmpObj2.cqp,
           max: 50,
-          split: split
+          split: split,
+          top: top
         };
         conf = {
           url: settings.cgi_script,

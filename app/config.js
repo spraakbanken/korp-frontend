@@ -2865,6 +2865,9 @@ settings.corpora.suc3 = {
             type: "set",
             ranked: true,
             opts: settings.probabilitySetOptions,
+            stringify: function(saldo) {
+                return util.saldoToString(saldo, true);
+            },
             // externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
             // internalSearch: true,
             extended_template: settings.senseAutoComplete
