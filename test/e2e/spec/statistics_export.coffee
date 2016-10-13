@@ -1,5 +1,5 @@
 # disabled because tests will succeed even though export fails
-xdescribe "stats table", () ->
+xdescribe "stats table export", () ->
 
     waitFor = (elm) ->
         browser.wait () ->
