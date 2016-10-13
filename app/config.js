@@ -325,7 +325,7 @@ attrs.pos = {
 attrs.msd = {
     label: "msd",
     opts: settings.defaultOptions,
-    extended_template: '<input class="arg_value" ng-model="model" escaper>' +
+    extended_template: '<input ng-model="input" ng-change="inputChange()" class="arg_value" escaper ng-model-options=\'{debounce : {default : 300, blur : 0}, updateOn: "default blur"}\'>' +
     '<span ng-click="onIconClick()" class="fa fa-info-circle"></span>',
     controller: function($scope, $uibModal) {
         var modal = null;
@@ -348,9 +348,8 @@ attrs.msd = {
         $scope.msdClick = function(event) {
             val = $(event.target).parent().data("value")
             if(!val) return;
-            $scope.model = val;
-
-
+            $scope.input = val;
+            $scope.inputChange();
             modal.close();
         }
     }
