@@ -423,7 +423,7 @@
           name: reduceValLabel,
           field: "hit_value",
           sortable: true,
-          formatter: settings.reduce_statistics(reduceVals, ignoreCase),
+          formatter: statisticsFormatting.reduceStatistics(reduceVals, ignoreCase, _.keys(data.corpora)),
           minWidth: minWidth,
           cssClass: "parameter-column",
           headerCssClass: "localized-header"
@@ -434,7 +434,7 @@
         name: "",
         field: "hit_value",
         sortable: false,
-        formatter: settings.reduce_statistics_pie_chart,
+        formatter: statisticsFormatting.reduceStatisticsPieChart,
         maxWidth: 25,
         minWidth: 25
       });
@@ -467,9 +467,15 @@
       dataset = new Array(sizeOfDataset + 1);
       statsWorker = new Worker("scripts/statistics_worker.js");
       statsWorker.onmessage = function(e) {
+        var searchParams;
         c.log("Called back by the worker!\n");
         c.log(e);
-        return def.resolve([data, wordArray, columns, e.data.dataset, e.data.summarizedData]);
+        searchParams = {
+          reduceVals: reduceVals,
+          ignoreCase: ignoreCase,
+          corpora: _.keys(data.corpora)
+        };
+        return def.resolve([data, wordArray, columns, e.data.dataset, e.data.summarizedData, searchParams]);
       };
       return statsWorker.postMessage({
         "total": data.total,

@@ -306,13 +306,13 @@ korpApp.directive "statsResultCtrl", () ->
             cqpExpr = CQP.expandOperators getCqpExpr()
 
             cqpExprs = {}
-            for chk in angular.element("#myGrid .slick-cell > input:checked")
-                cell = angular.element(chk).parent()
-                cqp = decodeURIComponent cell.next().find(" > .statistics-link").data("query")
-                if cqp is "undefined"
+            for rowIx in s.instance.getSelectedRows()
+                if rowIx == 0
                     continue
-                texts = _.map cell.parent().find('.parameter-column'), (elem) ->
-                    angular.element(elem).text()
+                row = s.instance.getDataAt(rowIx)
+                searchParams = s.instance.searchParams
+                cqp = statisticsFormatting.getCqp searchParams.reduceVals, row.hit_value, searchParams.ignoreCase
+                texts = statisticsFormatting.getTexts searchParams.reduceVals, row.hit_value, searchParams.corpora
                 cqpExprs[cqp] = texts.join ", "
 
             selectedAttributes = _.filter(s.mapAttributes, "selected")

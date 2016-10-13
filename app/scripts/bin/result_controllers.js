@@ -366,7 +366,7 @@
           return event.stopPropagation();
         };
         return s.showMap = function() {
-          var cell, chk, cqp, cqpExpr, cqpExprs, getCqpExpr, k, len1, ref, selectedAttribute, selectedAttributes, texts, within;
+          var cqp, cqpExpr, cqpExprs, getCqpExpr, k, len1, ref, row, rowIx, searchParams, selectedAttribute, selectedAttributes, texts, within;
           getCqpExpr = function() {
             var cqpExpr, search;
             search = searches.activeSearch;
@@ -382,17 +382,16 @@
           };
           cqpExpr = CQP.expandOperators(getCqpExpr());
           cqpExprs = {};
-          ref = angular.element("#myGrid .slick-cell > input:checked");
+          ref = s.instance.getSelectedRows();
           for (k = 0, len1 = ref.length; k < len1; k++) {
-            chk = ref[k];
-            cell = angular.element(chk).parent();
-            cqp = decodeURIComponent(cell.next().find(" > .statistics-link").data("query"));
-            if (cqp === "undefined") {
+            rowIx = ref[k];
+            if (rowIx === 0) {
               continue;
             }
-            texts = _.map(cell.parent().find('.parameter-column'), function(elem) {
-              return angular.element(elem).text();
-            });
+            row = s.instance.getDataAt(rowIx);
+            searchParams = s.instance.searchParams;
+            cqp = statisticsFormatting.getCqp(searchParams.reduceVals, row.hit_value, searchParams.ignoreCase);
+            texts = statisticsFormatting.getTexts(searchParams.reduceVals, row.hit_value, searchParams.corpora);
             cqpExprs[cqp] = texts.join(", ");
           }
           selectedAttributes = _.filter(s.mapAttributes, "selected");

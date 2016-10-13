@@ -725,17 +725,21 @@ class view.StatsResults extends BaseResults
             else # The ∑ row
                 @newDataInGraph "SIGMA_ALL"
 
-        @$result.on "click", ".slick-cell .statistics-link", () ->
-            query = $(this).data("query")
+        @$result.on "click", ".slick-cell .statistics-link", (e) =>
+            rowIx = $(e.currentTarget).data "row"
+            rowData = @grid.getData()[rowIx]
+
+            cqp2 = statisticsFormatting.getCqp(@searchParams.reduceVals, rowData.hit_value, @searchParams.ignoreCase)
+            corpora = @searchParams.corpora
 
             opts = {}
             opts.ajaxParams =
                 start : 0
                 end : 24
                 command : "query"
-                corpus : $(this).data("corpora").join(",").toUpperCase()
+                corpus : corpora.join ","
                 cqp : self.proxy.prevParams.cqp
-                cqp2: decodeURIComponent query
+                cqp2: cqp2
                 expand_prequeries : false
 
             safeApply scope.$root, () ->
@@ -767,19 +771,15 @@ class view.StatsResults extends BaseResults
 
             showTotal = false
 
-            console.log "DOING GRAPH CHECKING"
-            # THIS IS FLAWED AND SHOULD USE 'getSelectedRows()' INSTEAD.
-            # FIXED FOR NOW BUT MIGHT ONLY WORK FOR VISIBLE CHECKBOXES!
-            #for chk in @$result.find(".include_chk:checked")
-            for chk in @$result.find(".slick-cell > input:checked")
-                cell = $(chk).parent()
-                cqp = decodeURIComponent cell.next().find(" > .statistics-link").data("query")
-                unless cqp isnt "undefined" # TODO: make a better check
+            for rowIx in @getSelectedRows()
+                if rowIx == 0
                     showTotal = true
                     continue
+
+                row = @getDataAt(rowIx)
+                cqp = statisticsFormatting.getCqp @searchParams.reduceVals, row.hit_value, @searchParams.ignoreCase
                 subExprs.push cqp
-                texts = $.map cell.parent().find('.parameter-column'), (elem) ->
-                    $(elem).text()
+                texts = statisticsFormatting.getTexts @searchParams.reduceVals, row.hit_value, @searchParams.corpora
                 labelMapping[cqp] = texts.join ", "
 
             activeCorpora = _.flatten [key for key, val of @savedData.corpora when val.sums.absolute]
@@ -861,13 +861,13 @@ class view.StatsResults extends BaseResults
 
         @showPreloader()
         @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
-        ).done( ([data, wordArray, columns, dataset, summarizedData]) =>
+        ).done( ([data, wordArray, columns, dataset, summarizedData, searchParams]) =>
             safeApply @s, () =>
                 @hidePreloader()
             @savedData = data
             @savedSummarizedData = summarizedData
             @savedWordArray = wordArray
-
+            @searchParams = searchParams
             @renderResult columns, dataset
 
         ).fail (textStatus, err) =>
@@ -882,6 +882,15 @@ class view.StatsResults extends BaseResults
                     @s.aborted = true
                 else
                     @resultError err
+
+    getSelectedRows: () ->
+        if @grid
+            return @grid.getSelectedRows().sort()
+        else
+            return []
+
+    getDataAt: (rowIx) ->
+        return @grid.getData()[rowIx]
 
     showGenerateExport: () ->
         $("#exportButton").hide();

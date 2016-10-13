@@ -1001,25 +1001,30 @@
           }
         };
       })(this));
-      this.$result.on("click", ".slick-cell .statistics-link", function() {
-        var opts, query;
-        query = $(this).data("query");
-        opts = {};
-        opts.ajaxParams = {
-          start: 0,
-          end: 24,
-          command: "query",
-          corpus: $(this).data("corpora").join(",").toUpperCase(),
-          cqp: self.proxy.prevParams.cqp,
-          cqp2: decodeURIComponent(query),
-          expand_prequeries: false
-        };
-        return safeApply(scope.$root, function() {
-          return scope.$root.kwicTabs.push({
-            queryParams: opts
+      this.$result.on("click", ".slick-cell .statistics-link", (function(_this) {
+        return function(e, args) {
+          var corpora, cqp2, opts, rowData, rowIx;
+          rowIx = $(e.currentTarget).data("row");
+          rowData = _this.grid.getData()[rowIx];
+          cqp2 = statisticsFormatting.getCqp(_this.searchParams.reduceVals, rowData.hit_value, _this.searchParams.ignoreCase);
+          corpora = _this.searchParams.corpora;
+          opts = {};
+          opts.ajaxParams = {
+            start: 0,
+            end: 24,
+            command: "query",
+            corpus: corpora.join(","),
+            cqp: self.proxy.prevParams.cqp,
+            cqp2: cqp2,
+            expand_prequeries: false
+          };
+          return safeApply(scope.$root, function() {
+            return scope.$root.kwicTabs.push({
+              queryParams: opts
+            });
           });
-        });
-      });
+        };
+      })(this));
       $(window).resize(_.debounce((function(_this) {
         return function() {
           return _this.resizeGrid();
@@ -1043,7 +1048,7 @@
       }
       $("#showGraph").on("click", (function(_this) {
         return function() {
-          var activeCorpora, cell, chk, cqp, k, key, labelMapping, len, params, reduceVal, ref, showTotal, subExprs, texts, val;
+          var activeCorpora, cqp, k, key, labelMapping, len, params, reduceVal, ref, row, rowIx, showTotal, subExprs, texts, val;
           if ($("#showGraph").is(".disabled")) {
             return;
           }
@@ -1052,20 +1057,17 @@
           subExprs = [];
           labelMapping = {};
           showTotal = false;
-          console.log("DOING GRAPH CHECKING");
-          ref = _this.$result.find(".slick-cell > input:checked");
+          ref = _this.getSelectedRows();
           for (k = 0, len = ref.length; k < len; k++) {
-            chk = ref[k];
-            cell = $(chk).parent();
-            cqp = decodeURIComponent(cell.next().find(" > .statistics-link").data("query"));
-            if (cqp === "undefined") {
+            rowIx = ref[k];
+            if (rowIx === 0) {
               showTotal = true;
               continue;
             }
+            row = _this.getDataAt(rowIx);
+            cqp = statisticsFormatting.getCqp(_this.searchParams.reduceVals, row.hit_value, _this.searchParams.ignoreCase);
             subExprs.push(cqp);
-            texts = $.map(cell.parent().find('.parameter-column'), function(elem) {
-              return $(elem).text();
-            });
+            texts = statisticsFormatting.getTexts(_this.searchParams.reduceVals, row.hit_value, _this.searchParams.corpora);
             labelMapping[cqp] = texts.join(", ");
           }
           activeCorpora = _.flatten([
@@ -1177,14 +1179,15 @@
         };
       })(this))).done((function(_this) {
         return function(arg) {
-          var columns, data, dataset, summarizedData, wordArray;
-          data = arg[0], wordArray = arg[1], columns = arg[2], dataset = arg[3], summarizedData = arg[4];
+          var columns, data, dataset, searchParams, summarizedData, wordArray;
+          data = arg[0], wordArray = arg[1], columns = arg[2], dataset = arg[3], summarizedData = arg[4], searchParams = arg[5];
           safeApply(_this.s, function() {
             return _this.hidePreloader();
           });
           _this.savedData = data;
           _this.savedSummarizedData = summarizedData;
           _this.savedWordArray = wordArray;
+          _this.searchParams = searchParams;
           return _this.renderResult(columns, dataset);
         };
       })(this)).fail((function(_this) {
@@ -1207,6 +1210,18 @@
           });
         };
       })(this));
+    };
+
+    StatsResults.prototype.getSelectedRows = function() {
+      if (this.grid) {
+        return this.grid.getSelectedRows().sort();
+      } else {
+        return [];
+      }
+    };
+
+    StatsResults.prototype.getDataAt = function(rowIx) {
+      return this.grid.getData()[rowIx];
     };
 
     StatsResults.prototype.showGenerateExport = function() {

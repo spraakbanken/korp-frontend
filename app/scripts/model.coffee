@@ -349,7 +349,7 @@ class model.StatsProxy extends BaseProxy
                 name: reduceValLabel
                 field: "hit_value"
                 sortable: true
-                formatter: settings.reduce_statistics reduceVals, ignoreCase
+                formatter: statisticsFormatting.reduceStatistics reduceVals, ignoreCase, _.keys(data.corpora)
                 minWidth: minWidth
                 cssClass: "parameter-column"
                 headerCssClass: "localized-header"
@@ -359,7 +359,7 @@ class model.StatsProxy extends BaseProxy
             name: ""
             field: "hit_value"
             sortable: false
-            formatter: settings.reduce_statistics_pie_chart
+            formatter: statisticsFormatting.reduceStatisticsPieChart
             maxWidth: 25
             minWidth: 25
 
@@ -393,7 +393,11 @@ class model.StatsProxy extends BaseProxy
         statsWorker.onmessage = (e) ->
             c.log "Called back by the worker!\n"
             c.log e
-            def.resolve [data, wordArray, columns, e.data.dataset, e.data.summarizedData]
+            searchParams = 
+                reduceVals: reduceVals
+                ignoreCase: ignoreCase
+                corpora: _.keys data.corpora
+            def.resolve [data, wordArray, columns, e.data.dataset, e.data.summarizedData, searchParams]
 
         statsWorker.postMessage {
             "total" : data.total
