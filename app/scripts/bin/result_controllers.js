@@ -744,15 +744,15 @@
         s.$watch((function() {
           return $location.search().show_map;
         }), function(val) {
-          var currentCorpora, currentCqp, ref, ref1;
+          var currentCqp, ref, ref1, searchCorpora;
           if (val === s.showMap) {
             return;
           }
           s.showMap = Boolean(val);
           if (s.showMap) {
             currentCqp = getCqpExpr();
-            currentCorpora = settings.corpusListing.stringifySelected(true);
-            if (currentCqp !== ((ref = s.lastSearch) != null ? ref.cqp : void 0) || currentCorpora !== ((ref1 = s.lastSearch) != null ? ref1.corpora : void 0)) {
+            searchCorpora = settings.corpusListing.stringifySelected(true);
+            if (currentCqp !== ((ref = s.lastSearch) != null ? ref.cqp : void 0) || searchCorpora !== ((ref1 = s.lastSearch) != null ? ref1.corpora : void 0)) {
               return s.hasResult = false;
             }
           }
@@ -822,55 +822,50 @@
           }
           return fixedData;
         };
-        return updateMapData = function() {
+        updateMapData = function() {
           return nameEntitySearch.promise.then(function(data) {
-            var fixedData;
+            var fixedData, palette;
             if (data.count !== 0) {
               fixedData = fixData(data);
+              palette = new Rickshaw.Color.Palette("colorwheel");
               return markers(fixedData).then(function(markers) {
-                var fn, key, value;
-                fn = function(key, value) {
-                  var html, msgScope, name;
-                  html = "";
-                  msgScope = value.getMessageScope();
-                  for (name in msgScope.names) {
-                    html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>';
+                s.markers = {
+                  "all": {
+                    "markers": markers,
+                    "color": palette.color()
                   }
-                  msgScope.newKWICSearch = function(query) {
-                    var cl, opts;
-                    cl = settings.corpusListing;
-                    opts = {
-                      start: 0,
-                      end: 24,
-                      ajaxParams: {
-                        command: "query",
-                        cqp: getCqpExpr(),
-                        cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
-                        corpus: cl.stringifySelected(),
-                        show_struct: _.keys(cl.getStructAttrs()),
-                        expand_prequeries: true
-                      }
-                    };
-                    return $rootScope.kwicTabs.push({
-                      queryParams: opts
-                    });
-                  };
-                  return markers[key]["message"] = html;
                 };
-                for (key in markers) {
-                  if (!hasProp.call(markers, key)) continue;
-                  value = markers[key];
-                  fn(key, value);
-                }
-                s.markers = markers;
+                s.selectedGroups = ["all"];
                 s.numResults = _.keys(markers).length;
                 return s.loading = false;
               });
             } else {
+              s.selectedGroups = [];
               s.markers = {};
               s.numResults = 0;
               return s.loading = false;
             }
+          });
+        };
+        return s.newKWICSearch = function(marker) {
+          var cl, opts, point;
+          point = marker.point;
+          cl = settings.corpusListing.subsetFactory(s.lastSearch.corpora.split(","));
+          opts = {
+            start: 0,
+            end: 24,
+            ajaxParams: {
+              command: "query",
+              cqp: s.lastSearch.cqp,
+              cqp2: "[word='" + point.name + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
+              corpus: s.lastSearch.corpora,
+              show_struct: _.keys(cl.getStructAttrs()),
+              expand_prequeries: true,
+              defaultwithin: 'sentence'
+            }
+          };
+          return $rootScope.kwicTabs.push({
+            queryParams: opts
           });
         };
       }

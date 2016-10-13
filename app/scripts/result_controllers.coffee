@@ -618,8 +618,8 @@ korpApp.directive "mapCtrl", () ->
             s.showMap = Boolean(val)
             if s.showMap
                 currentCqp = getCqpExpr()
-                currentCorpora = settings.corpusListing.stringifySelected(true)
-                if currentCqp != s.lastSearch?.cqp or currentCorpora != s.lastSearch?.corpora
+                searchCorpora = settings.corpusListing.stringifySelected(true)
+                if currentCqp != s.lastSearch?.cqp or searchCorpora != s.lastSearch?.corpora
                     s.hasResult = false
 
         s.activate = () ->
@@ -683,41 +683,35 @@ korpApp.directive "mapCtrl", () ->
         updateMapData = () ->
             nameEntitySearch.promise.then (data) ->
                 if data.count != 0
-
                     fixedData = fixData data
-
+                    palette = new Rickshaw.Color.Palette("colorwheel")
                     markers(fixedData).then (markers) ->
-                        for own key, value of markers
-                            do (key, value) ->
-                                html = ""
-                                msgScope = value.getMessageScope()
-                                for name of msgScope.names
-                                    html += '<div class="link" ng-click="newKWICSearch(\'' + name + '\')">' + name + '</div>'
-
-                                msgScope.newKWICSearch = (query) ->
-                                    cl = settings.corpusListing
-
-                                    opts = {
-                                        start : 0
-                                        end : 24
-                                        ajaxParams :
-                                            command : "query"
-                                            cqp : getCqpExpr()
-                                            cqp2: "[word='" + query + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
-                                            corpus : cl.stringifySelected()
-                                            show_struct : _.keys cl.getStructAttrs()
-                                            expand_prequeries : true
-                                    }
-                                    $rootScope.kwicTabs.push { queryParams: opts }
-                                markers[key]["message"] = html
-
-                        s.markers = markers
+                        s.markers = {"all":{"markers":markers, "color": palette.color()}}
+                        s.selectedGroups = ["all"]
                         s.numResults = _.keys(markers).length
                         s.loading = false
                 else
+                    s.selectedGroups = []
                     s.markers = {}
                     s.numResults = 0
                     s.loading = false
+
+        s.newKWICSearch = (marker) ->
+            point = marker.point
+            cl = settings.corpusListing.subsetFactory(s.lastSearch.corpora.split(","))
+            opts = {
+                start : 0
+                end : 24
+                ajaxParams :
+                    command : "query"
+                    cqp : s.lastSearch.cqp
+                    cqp2: "[word='" + point.name + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
+                    corpus : s.lastSearch.corpora
+                    show_struct : _.keys cl.getStructAttrs()
+                    expand_prequeries : true
+                    defaultwithin : 'sentence'
+            }
+            $rootScope.kwicTabs.push { queryParams: opts }
 
 korpApp.directive "newMapCtrl", ($timeout, searches) ->
     controller: ($scope, $rootScope) ->

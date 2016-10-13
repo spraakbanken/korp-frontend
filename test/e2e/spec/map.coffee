@@ -20,7 +20,7 @@ describe "map", () ->
         marker = getMarkers().last()
         marker.click() 
 
-        popup = element (By.css ".leaflet-popup-content .link")
+        popup = element (By.css ".hover-info")
         waitFor popup
         popup.click()
         
@@ -33,11 +33,11 @@ waitFor = (elm) ->
         return elm.isDisplayed()
 
 getMapElem = () ->
-    return element (By.css ".angular-leaflet-map")
+    return element (By.css ".map")
 
 getMarkers = () ->
     waitFor getMapElem()
-    return element.all (By.css ".angular-leaflet-map .leaflet-marker-icon")
+    return element.all (By.css ".map .leaflet-marker-icon")
 
 getMapsHits = () ->
     mapDiv = element (By.css "#mapTab")
