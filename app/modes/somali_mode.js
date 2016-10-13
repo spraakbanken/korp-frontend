@@ -8,11 +8,12 @@ settings.enableMap = false;
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
-settings.preselected_corpora = ["somali-qoraallo", "somali-saynis", "somali-faces", "somali-hargeysa", "somali-1971-79", "somali-2001", "somali-itoobiya", "somali-bulsho", "somali-cilmi", "somali-cb", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
+settings.preselected_corpora = ["somali-ogaden", "somali-qoraallo", "somali-saynis", "somali-faces", "somali-hargeysa", "somali-1971-79", "somali-2001", "somali-itoobiya", "somali-bulsho", "somali-cilmi", "somali-cb", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
 
 settings.corpora = {};
 settings.corporafolders = {};
 
+// Skolböcker
 settings.corporafolders.buugaag = {
     title: "Buugaag Dugsiyeed",
     contents: ["somali-1971-79", "somali-2001", "somali-itoobiya", "somali-cb", "somali-hargeysa", "somali-saynis"]
@@ -151,6 +152,21 @@ settings.corpora["somali-kqa"] = {
         text_edition: {label: "edition"},
         text_date: {label: "year"},
         text_source: {label: "source", type: "url"}
+    }
+};
+
+settings.corpora["somali-ogaden"] = {
+    id: "somali-ogaden",
+    title: "Ogaden Online",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: {label: "year"},
+        text_title: {label: "title"},
+        text_source: {label: "source", type: "url"},
+        page_purl: {label: "pagesource", type: "url"}
     }
 };
 
