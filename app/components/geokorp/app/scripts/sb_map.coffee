@@ -103,7 +103,7 @@ angular.module 'sbMap', [
         deferred.resolve markers
       deferred.promise
   ]
-  .directive  'sbMap', ['$compile', '$timeout', 'leafletData', 'leafletEvents', ($compile, $timeout, leafletData, leafletEvents) ->
+  .directive  'sbMap', ['$compile', '$timeout', 'leafletData', ($compile, $timeout, leafletData) ->
     link = (scope, element, attrs) ->
 
       scope.$on('leafletDirectiveMarker.mouseover', (event, marker) ->

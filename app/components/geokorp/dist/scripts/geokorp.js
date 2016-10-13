@@ -135,7 +135,7 @@
       };
     }
   ]).directive('sbMap', [
-    '$compile', '$timeout', 'leafletData', 'leafletEvents', function($compile, $timeout, leafletData, leafletEvents) {
+    '$compile', '$timeout', 'leafletData', function($compile, $timeout, leafletData) {
       var link;
       link = function(scope, element, attrs) {
         var osmLayer, stamenLayer;
