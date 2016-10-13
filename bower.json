@@ -31,7 +31,7 @@
     "angular-sanitize": "1.4.5",
     "angular-leaflet-directive": "~0.8.4",
     "leaflet": "~0.7.3",
-    "leaflet-providers": "1.1.2",
+    "leaflet-providers": "1.1.15",
     "SlickGrid": "https://github.com/jroxendal/SlickGrid.git#2.1.01",
     "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.1.0",
     "leaflet.markercluster": "^0.5.0"
