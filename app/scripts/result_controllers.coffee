@@ -262,23 +262,26 @@ korpApp.directive "statsResultCtrl", () ->
         s = $scope
 
         s.onGraphShow = (data) ->
-            c.log "show graph!", arguments
             $rootScope.graphTabs.push data
         
         s.newMapEnabled = settings.newMapEnabled
 
         s.getGeoAttributes = (corpora) ->
-            # TODO use intersection or union of supported attributes, remove dupliates
-            attrs = []
+            attrs = {}
             for corpus in settings.corpusListing.subsetFactory(corpora).selected
                 for attr in corpus.private_struct_attributes
                     if attr.indexOf "geo" isnt -1
-                        attrs.push attr
-            attrs = _.map attrs, (attr) -> return label: attr
+                        if attrs[attr]
+                            attrs[attr].corpora.push corpus.id
+                        else
+                            attrs[attr] =
+                                label: attr
+                                corpora: [corpus.id]
+
+            attrs = _.map attrs, (val) -> val
             if attrs and attrs.length > 0
                 attrs[0].selected = true
-            
-            s.searchCorpora = corpora
+
             s.mapAttributes = attrs
 
         s.mapToggleSelected = (index, event) ->
@@ -300,6 +303,8 @@ korpApp.directive "statsResultCtrl", () ->
                         cqpExpr = search.val
                 return cqpExpr
 
+            cqpExpr = CQP.expandOperators getCqpExpr()
+
             cqpExprs = {}
             for chk in angular.element("#myGrid .slick-cell > input:checked")
                 cell = angular.element(chk).parent()
@@ -310,9 +315,15 @@ korpApp.directive "statsResultCtrl", () ->
                     angular.element(elem).text()
                 cqpExprs[cqp] = texts.join ", "
 
-            $rootScope.mapTabs.push backend.requestMapData(s.searchCorpora, getCqpExpr(), cqpExprs, _.filter(s.mapAttributes, "selected"))
+            selectedAttributes = _.filter(s.mapAttributes, "selected")
+            if selectedAttributes.length > 1
+                c.log "Warning: more than one selected attribute, choosing first"
+            selectedAttribute = selectedAttributes[0]
+            
+            within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
+            $rootScope.mapTabs.push backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
 
-# korpApp.controller "wordpicCtrl", ($scope, $location, utils, searches) ->
+
 korpApp.directive "wordpicCtrl", () ->
     controller: ($scope, $rootScope, $location, utils, searches) ->
         $scope.word_pic = $location.search().word_pic?
@@ -729,17 +740,6 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                 s.loading = false
                 s.error = true
 
-        getCqpExpr = () ->
-            # TODO currently copy pasted from watch on "searches.activeSearch"
-            search = searches.activeSearch
-            cqpExpr = null
-            if search
-                if search.type == "word" or search.type == "lemgram"
-                    cqpExpr = simpleSearch.getCQP(search.val)
-                else
-                    cqpExpr = search.val
-            return cqpExpr
-
         s.toggleGroup = (groupName) ->
             old = _.values(s.markers).length
             s.groups[groupName].selected = not s.groups[groupName].selected
@@ -787,15 +787,15 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                                 end : 24
                                 ajaxParams :
                                     command : "query"
-                                    cqp : getCqpExpr()
-                                    cqp2: "[_." + result.attribute + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
+                                    cqp : result.cqp
+                                    cqp2: "[_." + result.attribute.label + " contains " + "'" + [point.name, point.countryCode, point.lat, point.lng].join(";") + "']",
                                     cqp3: res.cqp
                                     corpus : cl.stringifySelected()
                                     show_struct : _.keys cl.getStructAttrs()
                                     expand_prequeries : true
-                                    within: "paragraph" 
                             }
-                            $rootScope.kwicTabs.push { readingMode: true, queryParams: opts }
+                            _.extend opts.ajaxParams, result.within
+                            $rootScope.kwicTabs.push { readingMode: result.attribute.label == "paragraph__geocontext", queryParams: opts }
                         markers[id].message = html
                         markers[id].getMessageScope = () -> childScope
 

@@ -4,19 +4,7 @@ korpApp.factory "utils", ($location) ->
         return if attrobj.isStructAttr then "_." + attrobj.value else attrobj.value
 
     setupHash : (scope, config) ->
-        # config = [
-        #     expr : "sorttuple[0]"
-        #     scope_name : "sortVal"
-        #     scope_func : "locChange"
-        #     key : "sortering"
-        #     val_in : (val) ->
-        #         newVal
-        #     val_out : (val) ->
-        #         newVal
-        #     post_change : () ->
-        #     default : [val : valval]
 
-        # ]
         onWatch = () ->
             for obj in config
                 val = $location.search()[obj.key]
@@ -168,44 +156,8 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
     relatedWordSearch : (lemgram) ->
         return lexicons.relatedWordSearch(lemgram)
-        #def = $q.defer()
-        #lexicons.relatedWordSearch(lemgram)
-        #return def.promise
-        #def = $q.defer()
-        ## http://spraakbanken.gu.se/ws/karp-sok?cql=lemgram==/pivot/saldo%20g%C3%A5..vb.1&resource=swefn&mini-entries=true&info=lu​
-        #req = $http(
-        #    #url : "http://spraakbanken.gu.se/ws/karp-sok"
-        #    #method: "GET"
-        #    #params :
-        #    #    cql : "lemgram==/pivot/saldo " + lemgram
-        #    #    resource : "swefn"
-        #    #    "mini-entries" : true
-        #    #    info : "lu"
-        #    #    format : "json"
-        #    url : "https://ws.spraakbanken.gu.se/ws/karp/v1/query"
-        #    method : "GET"
-        #    params :
-        #
-        #).success (data) ->
-        #
-        #    if angular.isArray data.div
-        #        eNodes = data.div[0].e
-        #    else if data.div
-        #        eNodes = data.div.e
-        #    else 
-        #        eNodes = []
-        #    unless angular.isArray eNodes then eNodes = [eNodes]
-        #    output = for e in eNodes
-        #        {
-        #            label : e.s.replace("swefn--", "")
-        #            words : _.pluck e.info.info.feat, "val"
-        #        }
-        #
-        #    def.resolve output
-        #
-        #return def.promise
-      
-    requestMapData: (corpora, cqp, cqpExprs, attributes) ->
+
+    requestMapData: (cqp, cqpExprs, within, attribute) ->
         cqpSubExprs = {}
         _.map _.keys(cqpExprs), (subCqp, idx) ->
             cqpSubExprs["subcqp" + idx] = subCqp
@@ -213,11 +165,11 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         def = $q.defer()
         params =
             command: "count"
-            groupby: attributes[0].label
+            groupby: attribute.label
             cqp: cqp
-            corpus: corpora
+            corpus: attribute.corpora.join(",")
             incremental: $.support.ajaxProgress
-            split: attributes[0].label
+            split: attribute.label
         _.extend params, settings.corpusListing.getWithinParameters()
 
         _.extend params, cqpSubExprs
@@ -266,7 +218,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                 def.reject()
                 return
 
-            def.resolve [{corpora: corpora, data: result, attribute: attributes[0].label}], xhr
+            def.resolve [{corpora: attribute.corpora, cqp: cqp, within: within, data: result, attribute: attribute}], xhr
 
         return def.promise
 
@@ -368,7 +320,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                     command : "info"
                     corpus : _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join ","
             ).success (data) ->
-                c.log "data", data
                 for corpus in settings.corpusListing.corpora
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
                     privateStructAttrs = []
@@ -376,8 +327,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                         if attr.indexOf("__") isnt -1
                             privateStructAttrs.push attr
                     corpus["private_struct_attributes"] = privateStructAttrs
-
-                c.log "loadCorpora"
                 util.loadCorpora()
                 def.resolve()
 
@@ -387,9 +336,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
 
     searches = new Searches()
-    # infoDef = searches.getInfoData()
-
-
     oldValues = []
     $rootScope.$watchGroup [(() -> $location.search().search), "_loc.search().page"], (newValues) =>
         c.log "searches service watch", $location.search().search
@@ -398,16 +344,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
         unless searchExpr then return
         [type, value...] = searchExpr?.split("|")
         value = value.join("|")
-        # page = $location.search().page or 0
 
         newValues[1] = Number(newValues[1]) or 0
         oldValues[1] = Number(oldValues[1]) or 0
-        c.log "newValues", newValues
-        c.log "oldValues", oldValues
-
-        # weird workaround for bug that makes oldValues[0] undefined sometimes
-        # if not oldValues[0]?
-        #     oldValues[0] = newValues[0]
 
         if _.isEqual newValues, oldValues
             pageChanged = false
@@ -419,8 +358,6 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
         pageOnly = pageChanged and not searchChanged
 
         view.updateSearchHistory value, $location.absUrl()
-        # $.when(chained).then () ->
-            # $rootScope.$apply () ->
         $q.all([searches.infoDef, searches.langDef.promise]).then () ->
             switch type
                 when "word"
@@ -436,23 +373,15 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                         val : value
                         page: newValues[1]
                         pageOnly: pageOnly
-
-
-                    # $.sm.send "submit.lemgram", data
                 when "saldo"
                     extendedSearch.setOneToken "saldo", value
-                    # $.sm.send "submit.cqp", data
                 when "cqp"
-                    # advancedSearch.setCQP value
-                    # if not value then value = CQP.expandOperators $location.search().cqp
                     if not value then value = $location.search().cqp
-                    # c.log "cqp search", value, $location.search().cqp
                     searches.activeSearch =
                         type : type
                         val : value
                         page: newValues[1]
                         pageOnly: pageOnly
-
 
                     searches.kwicSearch value, pageOnly
             oldValues = [].concat newValues

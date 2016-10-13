@@ -1,6 +1,10 @@
 (function() {
   window.korpApp = angular.module('korpApp', ['ui.bootstrap', "uib/template/tabs/tabset.html", "uib/template/tabs/tab.html", "uib/template/modal/backdrop.html", "uib/template/modal/window.html", "uib/template/typeahead/typeahead-match.html", "uib/template/typeahead/typeahead-popup.html", "uib/template/pagination/pagination.html", "angularSpinner", "ui.sortable", "newsdesk", "sbMap", "tmh.dynamicLocale", "angular.filter"]);
 
+  korpApp.config(function($logProvider) {
+    return $logProvider.debugEnabled(false);
+  });
+
   korpApp.config(function(tmhDynamicLocaleProvider) {
     return tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js");
   });

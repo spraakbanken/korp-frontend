@@ -1042,5 +1042,6 @@
     "video_end_time": "End time",
     "video_utterance": "Utterance",
 
-    "paragraph__geocontext" : "Co-occurrence in paragraph"
+    "paragraph__geocontext" : "Co-occurrence in paragraph",
+    "text__geoauthorhome" : "Author's home"
 }

@@ -17,6 +17,10 @@ window.korpApp = angular.module 'korpApp', [
                                         ]
 
 
+# This is due to angular-leaflet-directive logging, move to geokorp-component?
+korpApp.config ($logProvider) ->
+    $logProvider.debugEnabled false
+
 korpApp.config (tmhDynamicLocaleProvider) ->
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
 

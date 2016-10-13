@@ -204,7 +204,7 @@
       relatedWordSearch: function(lemgram) {
         return lexicons.relatedWordSearch(lemgram);
       },
-      requestMapData: function(corpora, cqp, cqpExprs, attributes) {
+      requestMapData: function(cqp, cqpExprs, within, attribute) {
         var conf, cqpSubExprs, def, params, xhr;
         cqpSubExprs = {};
         _.map(_.keys(cqpExprs), function(subCqp, idx) {
@@ -213,11 +213,11 @@
         def = $q.defer();
         params = {
           command: "count",
-          groupby: attributes[0].label,
+          groupby: attribute.label,
           cqp: cqp,
-          corpus: corpora,
+          corpus: attribute.corpora.join(","),
           incremental: $.support.ajaxProgress,
-          split: attributes[0].label
+          split: attribute.label
         };
         _.extend(params, settings.corpusListing.getWithinParameters());
         _.extend(params, cqpSubExprs);
@@ -271,9 +271,11 @@
           }
           return def.resolve([
             {
-              corpora: corpora,
+              corpora: attribute.corpora,
+              cqp: cqp,
+              within: within,
               data: result,
-              attribute: attributes[0].label
+              attribute: attribute
             }
           ], xhr);
         });
@@ -387,7 +389,6 @@
           }
         }).success(function(data) {
           var attr, corpus, i, j, len, len1, privateStructAttrs, ref, ref1;
-          c.log("data", data);
           ref = settings.corpusListing.corpora;
           for (i = 0, len = ref.length; i < len; i++) {
             corpus = ref[i];
@@ -402,7 +403,6 @@
             }
             corpus["private_struct_attributes"] = privateStructAttrs;
           }
-          c.log("loadCorpora");
           util.loadCorpora();
           return def.resolve();
         });
@@ -430,8 +430,6 @@
         value = value.join("|");
         newValues[1] = Number(newValues[1]) || 0;
         oldValues[1] = Number(oldValues[1]) || 0;
-        c.log("newValues", newValues);
-        c.log("oldValues", oldValues);
         if (_.isEqual(newValues, oldValues)) {
           pageChanged = false;
           searchChanged = true;

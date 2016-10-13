@@ -1042,5 +1042,6 @@
     "video_end_time": "Sluttid",
     "video_utterance": "Yttrande",
 
-    "paragraph__geocontext" : "Samförekomst i stycke"
+    "paragraph__geocontext" : "Samförekomst i stycke",
+    "text__geoauthorhome" : "Författarens hemort"
 }
