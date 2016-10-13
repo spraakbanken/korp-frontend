@@ -2781,22 +2781,25 @@ probabilitySets = {
     renderSenseContent: function(key, value, attrs, wordData, sentenceData) {
         var senseProbs = wordData.sense
         senseProbs = _.filter(senseProbs.split("|"), Boolean)
-        content = _.map(senseProbs, function(senseProb, i) {
+        var content = _.map(senseProbs, function(senseProb, i) {
             var something = senseProb.split(':');
             var sense = something[0];
             var prob = something[something.length -1];
             var li = $("<li></li>");
             if(i != 0) {
                 li.css('display', 'none');
-            }
-            korpLink = $('<span class="link">' + util.saldoToString(sense, true) +  '</span>');
-            korpLink.click(function() {
-                search({"search": "cqp|[sense = '\\|" + regescape(sense) + ":.*']"})
-            });
-            karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
+            } 
 
+            korpLink = $('<span>' + util.saldoToString(sense, true) +  '</span>');
+            if(i == 0) {
+                korpLink.addClass("link");
+                korpLink.click(function() {
+                    search({"search": "cqp|[sense = '\\|" + regescape(sense) + ":.*']"})
+                });
+            }
             li.append(korpLink);
             li.append("<span> (" + prob + ")</span>");
+            var karpLink = $('<a href="https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|' + sense +  '" class="external_link" target="_blank" style="margin-top: -6px"></a>');
             li.append(karpLink);
             return li
         });
