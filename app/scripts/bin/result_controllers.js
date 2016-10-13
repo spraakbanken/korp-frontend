@@ -887,6 +887,7 @@
           baseLayer: "OpenStreetMap"
         };
         s.numResults = 0;
+        s.useClustering = false;
         s.promise.then(((function(_this) {
           return function(arg, xhr) {
             var result;

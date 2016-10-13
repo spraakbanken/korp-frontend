@@ -726,6 +726,7 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
         s.mapSettings =
             baseLayer : "OpenStreetMap"
         s.numResults = 0
+        s.useClustering = false
 
         s.promise.then (([result], xhr) =>
                 s.loading = false
