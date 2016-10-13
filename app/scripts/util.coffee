@@ -572,6 +572,15 @@ util.saldoToString = (saldoId, appendIndex) ->
         infixIndex
     ]
 
+util.saldoToPlaceholderString = (saldoId, appendIndex) ->
+    match = saldoId.match(util.saldoRegExp)
+    infixIndex = ""
+    infixIndex = $.format(" (%s)", match[2]) if appendIndex? and match[2] isnt "1"
+    $.format "%s%s", [
+        match[1].replace(/_/g, " ")
+        infixIndex
+    ]
+
 util.sblexArraytoString = (idArray, labelFunction) ->
     labelFunction = labelFunction or util.lemgramToString
     return _.map idArray, (lemgram) -> labelFunction lemgram, true

@@ -610,7 +610,7 @@
           if (scope.type === "lemgram") {
             return util.lemgramToString(placeholder).replace(/<.*?>/g, "");
           } else {
-            return util.saldoToString(placeholder);
+            return util.saldoToPlaceholderString(placeholder, true);
           }
         };
         scope.formatPlaceholder = function(input) {
@@ -634,9 +634,15 @@
           return scope.textInField = "";
         };
         if (scope.model) {
-          scope.selectedItem(null, {
-            lemgram: scope.model
-          });
+          if (scope.type === "sense") {
+            scope.selectedItem(null, {
+              sense: scope.model
+            });
+          } else {
+            scope.selectedItem(null, {
+              lemgram: scope.model
+            });
+          }
         }
         scope.getMorphologies = function(corporaIDs) {
           var corporaID, j, k, len1, len2, morf, morfs, morphologies, ref;

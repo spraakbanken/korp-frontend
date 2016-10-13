@@ -764,6 +764,16 @@
     return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex]);
   };
 
+  util.saldoToPlaceholderString = function(saldoId, appendIndex) {
+    var infixIndex, match;
+    match = saldoId.match(util.saldoRegExp);
+    infixIndex = "";
+    if ((appendIndex != null) && match[2] !== "1") {
+      infixIndex = $.format(" (%s)", match[2]);
+    }
+    return $.format("%s%s", [match[1].replace(/_/g, " "), infixIndex]);
+  };
+
   util.sblexArraytoString = function(idArray, labelFunction) {
     labelFunction = labelFunction || util.lemgramToString;
     return _.map(idArray, function(lemgram) {
