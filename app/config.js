@@ -2492,8 +2492,9 @@ settings.corpora.bloggmix2003 = {
     title: "Bloggmix 2003",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2004 = {
