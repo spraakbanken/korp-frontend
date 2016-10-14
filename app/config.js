@@ -1797,12 +1797,13 @@ settings.corpora.press95 = {
     description: "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.press96 = {
@@ -2441,8 +2442,9 @@ settings.corpora.bloggmix1998 = {
     title: "Bloggmix 1998",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix1999 = {
@@ -2450,8 +2452,9 @@ settings.corpora.bloggmix1999 = {
     title: "Bloggmix 1999",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2000 = {
@@ -2459,8 +2462,9 @@ settings.corpora.bloggmix2000 = {
     title: "Bloggmix 2000",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2001 = {
@@ -2468,8 +2472,9 @@ settings.corpora.bloggmix2001 = {
     title: "Bloggmix 2001",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2002 = {
@@ -2477,8 +2482,9 @@ settings.corpora.bloggmix2002 = {
     title: "Bloggmix 2002",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2003 = {
