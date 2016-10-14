@@ -264,7 +264,7 @@
             };
           };
           if (_.isEmpty(cqpExprs)) {
-            result = [createResult(data.total, cqp, "total")];
+            result = [createResult(data.total, cqp, "Σ")];
           } else {
             result = [];
             ref = data.total.slice(1, data.total.length);
