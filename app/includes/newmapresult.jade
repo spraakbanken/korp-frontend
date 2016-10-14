@@ -8,7 +8,7 @@ div(ng-if="!loading && numResults != 0")
       div(style="float:right;padding-right: 5px;")
         label()
           input(style="vertical-align: top;margin-top: 0px;margin-right: 5px;", type="checkbox", ng-model="useClustering")
-          | Sammanställ
+          | {{'map_cluster' | loc:lang}}
 
   sb-map(sb-center="center", 
          sb-markers="markerGroups", 

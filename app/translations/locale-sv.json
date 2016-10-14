@@ -319,5 +319,6 @@
     "formatdescr_nooj": "XML-importformat för NooJ",
     "formatdescr_ref": "Källhänvisningar som ett Excel-kalkylblad (XLS) med varje sökträffmening på sin egen rad, efterträdd av meningens textattribut på sina egna rader",
     
-    "no_geo_info": "Platsinformation ej tillgänglig"
+    "no_geo_info": "Platsinformation ej tillgänglig",
+    "map_cluster": "Sammanställ"
 }
