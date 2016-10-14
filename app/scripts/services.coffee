@@ -195,7 +195,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
             createResult = (subResult, cqp, label) ->
                 points = []
                 _.map _.keys(subResult.absolute), (hit) ->
-                    if hit.startsWith "|"
+                    if (hit.startsWith "|") or (hit.startsWith " ")
                         return
                     [name, countryCode, lat, lng] = hit.split ";"
 

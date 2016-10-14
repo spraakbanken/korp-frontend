@@ -244,7 +244,7 @@
             points = [];
             _.map(_.keys(subResult.absolute), function(hit) {
               var countryCode, lat, lng, name, ref;
-              if (hit.startsWith("|")) {
+              if ((hit.startsWith("|")) || (hit.startsWith(" "))) {
                 return;
               }
               ref = hit.split(";"), name = ref[0], countryCode = ref[1], lat = ref[2], lng = ref[3];
