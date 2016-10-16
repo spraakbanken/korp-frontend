@@ -1702,12 +1702,13 @@ settings.corpora.gp2012 = {
     description: "Göteborgs-Posten 2012.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.gp2013 = {
@@ -1812,12 +1813,13 @@ settings.corpora.press96 = {
     description: "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.press97 = {
@@ -1826,12 +1828,13 @@ settings.corpora.press97 = {
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "date"},
         text_publisher: {label: "publisher"},
         text_sectionshort: {label: "section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.press98 = {
@@ -1840,12 +1843,13 @@ settings.corpora.press98 = {
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
-    }
+    },
+    custom_attributes: customComp
 };
 
 settings.corpora.strindbergbrev = {
@@ -2502,8 +2506,9 @@ settings.corpora.bloggmix2004 = {
     title: "Bloggmix 2004",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2005 = {
@@ -2601,8 +2606,9 @@ settings.corpora.bloggmix2014 = {
     title: "Bloggmix 2014",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmix2015 = {
@@ -2610,8 +2616,9 @@ settings.corpora.bloggmix2015 = {
     title: "Bloggmix 2015",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
-    struct_attributes: bloggmix_structs
+    attributes: modernAttrs2,
+    struct_attributes: bloggmix_structs,
+    custom_attributes: customComp
 };
 
 settings.corpora.bloggmixodat = {
