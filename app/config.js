@@ -59,7 +59,7 @@ settings.word_attribute_selector = "union"
 settings.struct_attribute_selector = "union"
 
 // for 'compile statistics by' selector, can be 'union' or 'intersection'
-settings.reduce_word_attribute_selector = "union"
+settings.reduce_word_attribute_selector = "intersection"
 settings.reduce_struct_attribute_selector = "intersection"
 
 settings.news_desk_url = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_news/json/korpnews.json";
