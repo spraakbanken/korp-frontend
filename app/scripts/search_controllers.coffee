@@ -34,7 +34,8 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
     $scope.corpusChangeListener = $scope.$on "corpuschooserchange", (event, selected) ->
         c.log "SearchCtrl corpuschooserchange"
         $scope.noCorporaSelected = not selected.length
-        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups()
+        allAttrs = settings.corpusListing.getStatsAttributeGroups()
+        $scope.statCurrentAttrs = _.filter allAttrs, (item) -> not item.hideStatistics
         $scope.statSelectedAttrs = $location.search().stats_reduce.split ','
         insensitiveAttrs = $location.search().stats_reduce_insensitive
         if insensitiveAttrs
@@ -255,7 +256,8 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         # TODO: respect the setting 'word_attribute_selector' and similar
         unless selected?.length then return
         lang = s.$parent.$parent?.l?.lang
-        s.types = settings.corpusListing.getAttributeGroups(lang)
+        allAttrs = settings.corpusListing.getAttributeGroups(lang)
+        s.types = _.filter allAttrs, (item) -> not item.hideExtended
         s.typeMapping = _.object _.map s.types, (item) ->
             if item.isStructAttr
                 ["_." + item.value, item]
@@ -356,7 +358,8 @@ korpApp.directive "compareSearchCtrl", () ->
             unless s.cmp1 and s.cmp2 then return
 
             listing = settings.corpusListing.subsetFactory(_.uniq ([].concat s.cmp1.corpora, s.cmp2.corpora))
-            s.currentAttrs = listing.getAttributeGroups()
+            allAttrs = listing.getAttributeGroups()
+            s.currentAttrs = _.filter allAttrs, (item) -> not item.hideCompare
 
         s.reduce = 'word'
 

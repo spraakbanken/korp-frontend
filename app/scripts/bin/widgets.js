@@ -51,14 +51,14 @@
       }).appendTo(this.element);
     },
     renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs, tokens) {
-      var base, i, item, items, j, key, len, len1, pairs, ref, ref1, ref2, val, value;
+      var base, item, items, j, k, key, len, len1, pairs, ref, ref1, ref2, val, value;
       if (type === "struct") {
         pairs = _.pairs(sentenceData);
       } else if (type === "pos") {
         pairs = _.pairs(wordData);
         ref = wordData._struct || [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          item = ref[i];
+        for (j = 0, len = ref.length; j < len; j++) {
+          item = ref[j];
           ref1 = item.split(" "), key = ref1[0], val = ref1[1];
           if (key in corpus_attrs) {
             pairs.push([key, val]);
@@ -89,8 +89,8 @@
         }
       });
       items = [];
-      for (j = 0, len1 = pairs.length; j < len1; j++) {
-        ref2 = pairs[j], key = ref2[0], value = ref2[1];
+      for (k = 0, len1 = pairs.length; k < len1; k++) {
+        ref2 = pairs[k], key = ref2[0], value = ref2[1];
         items = items.concat(typeof (base = this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens)).get === "function" ? base.get(0) : void 0);
       }
       items = _.compact(items);
@@ -112,8 +112,8 @@
       return [$(pos_items), $(struct_items)];
     },
     renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
-      var address, getStringVal, inner, itr, li, lis, output, pattern, prefix, str_value, ul, val, valueArray, x;
-      if (attrs.displayType === "hidden" || attrs.displayType === "date_interval") {
+      var address, attrSettings, getStringVal, idx, inner, itr, j, k, karpLink, l, len, len1, len2, li, lis, outerIdx, output, pattern, prefix, prob, ref, ref1, showAll, showOne, str_value, subValue, subValues, ul, val, valueArray, x;
+      if (attrs.displayType === "hidden" || attrs.displayType === "date_interval" || attrs.hideSidebar) {
         return "";
       }
       output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
@@ -125,7 +125,101 @@
         output.append("<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>");
         return output;
       }
-      if (attrs.type === "set") {
+      if (attrs.type === "set" && ((ref = attrs.display) != null ? ref.expandList : void 0)) {
+        valueArray = _.filter((value != null ? value.split("|") : void 0) || [], Boolean);
+        attrSettings = attrs.display.expandList;
+        if (attrs.ranked) {
+          valueArray = _.map(valueArray, function(value) {
+            var val;
+            val = value.split(":");
+            return [val[0], val[val.length - 1]];
+          });
+          lis = [];
+          for (outerIdx = j = 0, len = valueArray.length; j < len; outerIdx = ++j) {
+            ref1 = valueArray[outerIdx], value = ref1[0], prob = ref1[1];
+            li = $("<li></li>");
+            subValues = attrSettings.splitValue ? attrSettings.splitValue(value) : [value];
+            for (idx = k = 0, len1 = subValues.length; k < len1; idx = ++k) {
+              subValue = subValues[idx];
+              val = (attrs.stringify || attrSettings.stringify || _.identity)(subValue);
+              inner = $("<span>" + val + "</span>");
+              if (attrs.internalSearch && (attrSettings.linkAllValues || outerIdx === 0)) {
+                inner.data("key", subValue);
+                inner.addClass("link").click(function() {
+                  var cqpExpr, cqpVal, searchKey;
+                  searchKey = attrSettings.searchKey || key;
+                  cqpVal = $(this).data("key");
+                  cqpExpr = attrSettings.internalSearch ? attrSettings.internalSearch(searchKey, cqpVal) : "[" + searchKey + " contains '" + cqpVal + "']";
+                  return search({
+                    "search": "cqp|" + cqpExpr
+                  });
+                });
+              }
+              if (attrs.externalSearch) {
+                address = _.template(attrs.externalSearch, {
+                  val: subValue
+                });
+                karpLink = $("<a href='" + address + "' class='external_link' target='_blank' style='margin-top: -6px'></a>");
+              }
+              li.append(inner);
+              if (attrSettings.joinValues && idx !== subValues.length - 1) {
+                li.append(attrSettings.joinValues);
+              }
+            }
+            li.append("<span class='prob'> (" + prob + ")</span>");
+            if (karpLink) {
+              li.append(karpLink);
+            }
+            lis.push(li);
+          }
+        } else {
+          lis = [];
+          for (l = 0, len2 = valueArray.length; l < len2; l++) {
+            value = valueArray[l];
+            li = $("<li></li>");
+            li.append(value);
+            lis.push(li);
+          }
+        }
+        if (lis.length === 0) {
+          ul = $('<i rel="localize[empty]" style="color : grey"></i>');
+        } else {
+          ul = $("<ul class='hide-prob' style='list-style:initial'>");
+          ul.append(lis);
+          if (lis.length !== 1) {
+            _.map(lis, function(li, idx) {
+              if (idx !== 0) {
+                return li.css('display', 'none');
+              }
+            });
+            showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>");
+            ul.append(showAll);
+            showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>");
+            showOne.css("display", "none");
+            ul.append(showOne);
+            showAll.click(function() {
+              showAll.css("display", "none");
+              showOne.css("display", "inline");
+              ul.removeClass("hide-prob");
+              return _.map(lis, function(li) {
+                return li.css("display", "list-item");
+              });
+            });
+            showOne.click(function() {
+              showAll.css("display", "inline");
+              showOne.css("display", "none");
+              ul.addClass("hide-prob");
+              return _.map(lis, function(li, i) {
+                if (i !== 0) {
+                  return li.css("display", "none");
+                }
+              });
+            });
+          }
+        }
+        output.append(ul);
+        return output;
+      } else if (attrs.type === "set") {
         pattern = attrs.pattern || '<span data-key="<%= key %>"><%= val %></span>';
         ul = $("<ul>");
         getStringVal = function(str) {
@@ -146,10 +240,10 @@
         }
         itr = _.isArray(valueArray) ? valueArray : _.values(valueArray);
         lis = (function() {
-          var i, len, results;
+          var len3, m, results;
           results = [];
-          for (i = 0, len = itr.length; i < len; i++) {
-            x = itr[i];
+          for (m = 0, len3 = itr.length; m < len3; m++) {
+            x = itr[m];
             if (!x.length) {
               continue;
             }

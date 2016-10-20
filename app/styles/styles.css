@@ -6179,3 +6179,8 @@ li.active a span .num-to-find {
   opacity: 0.5 !important;
   color: white;
 }
+
+/* line 2933, styles.scss */
+.hide-prob > li > .prob {
+  display: none;
+}

@@ -40,10 +40,13 @@
         $location.search('stats_reduce', "word");
       }
       $scope.corpusChangeListener = $scope.$on("corpuschooserchange", function(event, selected) {
-        var insensitiveAttrs;
+        var allAttrs, insensitiveAttrs;
         c.log("SearchCtrl corpuschooserchange");
         $scope.noCorporaSelected = !selected.length;
-        $scope.statCurrentAttrs = settings.corpusListing.getStatsAttributeGroups();
+        allAttrs = settings.corpusListing.getStatsAttributeGroups();
+        $scope.statCurrentAttrs = _.filter(allAttrs, function(item) {
+          return !item.hideStatistics;
+        });
         $scope.statSelectedAttrs = $location.search().stats_reduce.split(',');
         insensitiveAttrs = $location.search().stats_reduce_insensitive;
         if (insensitiveAttrs) {
@@ -268,12 +271,15 @@
       return _.pairs(confObj);
     });
     onCorpusChange = function(event, selected) {
-      var lang, ref, ref1;
+      var allAttrs, lang, ref, ref1;
       if (!(selected != null ? selected.length : void 0)) {
         return;
       }
       lang = (ref = s.$parent.$parent) != null ? (ref1 = ref.l) != null ? ref1.lang : void 0 : void 0;
-      s.types = settings.corpusListing.getAttributeGroups(lang);
+      allAttrs = settings.corpusListing.getAttributeGroups(lang);
+      s.types = _.filter(allAttrs, function(item) {
+        return !item.hideExtended;
+      });
       return s.typeMapping = _.object(_.map(s.types, function(item) {
         if (item.isStructAttr) {
           return ["_." + item.value, item];
@@ -381,14 +387,17 @@
         s.valfilter = utils.valfilter;
         s.savedSearches = compareSearches.savedSearches;
         s.$watch("savedSearches.length", function() {
-          var listing;
+          var allAttrs, listing;
           s.cmp1 = compareSearches.savedSearches[0];
           s.cmp2 = compareSearches.savedSearches[1];
           if (!(s.cmp1 && s.cmp2)) {
             return;
           }
           listing = settings.corpusListing.subsetFactory(_.uniq([].concat(s.cmp1.corpora, s.cmp2.corpora)));
-          return s.currentAttrs = listing.getAttributeGroups();
+          allAttrs = listing.getAttributeGroups();
+          return s.currentAttrs = _.filter(allAttrs, function(item) {
+            return !item.hideCompare;
+          });
         });
         s.reduce = 'word';
         s.sendCompare = function() {

@@ -2929,3 +2929,7 @@ li.active a span .num-to-find {
         color: white;
     }
 }
+
+.hide-prob > li > .prob {
+    display: none;
+}

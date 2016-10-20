@@ -94,7 +94,7 @@ Sidebar =
 
     renderItem: (key, value, attrs, wordData, sentenceData, tokens) ->
 
-        if attrs.displayType == "hidden" or attrs.displayType == "date_interval"
+        if attrs.displayType == "hidden" or attrs.displayType == "date_interval" or attrs.hideSidebar
             return ""
         output = $("<p><span rel='localize[#{attrs.label}]'></span>: </p>")
         if attrs.renderItem
@@ -105,8 +105,84 @@ Sidebar =
             output.append "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
             return output
 
+        if attrs.type == "set" and attrs.display?.expandList
+            valueArray = _.filter(value?.split("|") or [], Boolean)
+            attrSettings = attrs.display.expandList
+            if attrs.ranked
+                valueArray = _.map valueArray, (value) -> val = value.split(":"); [val[0], val[val.length - 1]]
 
-        if attrs.type == "set"
+                lis = []
+
+                for [value, prob], outerIdx in valueArray
+                    li = $("<li></li>")
+                    subValues = if attrSettings.splitValue then attrSettings.splitValue value else [value]
+                    for subValue, idx in subValues
+                        val = (attrs.stringify or attrSettings.stringify or _.identity)(subValue)
+                        inner = $("<span>" + val + "</span>");
+
+                        if attrs.internalSearch and (attrSettings.linkAllValues or outerIdx is 0)
+                            inner.data("key", subValue)
+                            inner.addClass("link").click ->
+                                searchKey = attrSettings.searchKey or key
+                                cqpVal = $(this).data("key")
+                                cqpExpr = if attrSettings.internalSearch then attrSettings.internalSearch searchKey, cqpVal else "[#{searchKey} contains '#{cqpVal}']"
+                                search({"search": "cqp|" + cqpExpr})
+                        if attrs.externalSearch
+                            address = _.template(attrs.externalSearch, {val : subValue})
+                            karpLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
+
+                        li.append inner
+                        if attrSettings.joinValues and idx isnt subValues.length - 1
+                            li.append attrSettings.joinValues
+                    li.append "<span class='prob'> (" + prob + ")</span>"
+                    if karpLink
+                        li.append karpLink
+                    lis.push li
+            else
+                lis = []
+                for value in valueArray
+                    li = $("<li></li>")
+                    li.append value
+                    lis.push li
+
+            if lis.length == 0
+                ul = $('<i rel="localize[empty]" style="color : grey"></i>')
+
+            else
+                ul = $("<ul class='hide-prob' style='list-style:initial'>")
+                ul.append lis
+
+                if lis.length isnt 1
+
+                    _.map lis, (li, idx) -> if idx != 0 then li.css('display', 'none')
+
+                    showAll = $("<span class='link' rel='localize[complemgram_show_all]'></span><span> (" + (lis.length - 1) + ")</span>")
+                    ul.append showAll
+
+                    showOne = $("<span class='link' rel='localize[complemgram_show_one]'></span>")
+                    showOne.css "display", "none"
+                    ul.append showOne
+
+                    showAll.click () ->
+                        showAll.css "display", "none"
+                        showOne.css "display", "inline"
+                        ul.removeClass "hide-prob"
+                        _.map lis, (li) ->
+                            
+                            li.css "display", "list-item"
+
+                    showOne.click () ->
+                        showAll.css "display", "inline"
+                        showOne.css "display", "none"
+                        ul.addClass "hide-prob"
+                        _.map lis, (li, i) ->
+                            if i != 0
+                                li.css "display", "none"
+
+            output.append ul
+            return output
+
+        else if attrs.type == "set"
             pattern = attrs.pattern or '<span data-key="<%= key %>"><%= val %></span>'
             ul = $("<ul>")
             getStringVal = (str) ->
