@@ -55,7 +55,6 @@ settings.corpora.lsi = {
     },
     custom_attributes: {
         "image": {
-            label: "pagesource",
             customType: "struct",
             renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
                 var pageUrl = sentenceData["page_page_url"];

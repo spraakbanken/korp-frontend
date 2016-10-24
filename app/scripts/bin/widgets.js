@@ -116,7 +116,11 @@
       if (attrs.displayType === "hidden" || attrs.displayType === "date_interval" || attrs.hideSidebar) {
         return "";
       }
-      output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
+      if (attrs.label) {
+        output = $("<p><span rel='localize[" + attrs.label + "]'></span>: </p>");
+      } else {
+        output = $("<p></p>");
+      }
       if (attrs.renderItem) {
         return output.append(attrs.renderItem(key, value, attrs, wordData, sentenceData, tokens));
       }
