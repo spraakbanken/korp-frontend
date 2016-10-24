@@ -52,6 +52,26 @@ settings.corpora.lsi = {
         "page_iso_code": {label: "iso_code"},
         "corpus_vol": {label: "volume"},
         "corpus_part": {label: "part"}
+    },
+    custom_attributes: {
+        "image": {
+            label: "pagesource",
+            customType: "struct",
+            renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
+                var pageUrl = sentenceData["page_page_url"];
+                var re = new RegExp("volume=(.*-.*)&pages=.*#page/(.*)/mode");
+                var matches = pageUrl.match(re);
+                var volumeName = matches[1];
+                var pageNumber = matches[2];
+                var src = 'https://spraakbanken.gu.se/korp/data/lsi/faksimil_thumb/thumb.lsi-v' + volumeName + '-' + ("00"+pageNumber).slice(-3) + '.jpg';
+                var image = $('<img src="' + src + '">');
+                var a = $('<a target="_blank" href="' + pageUrl + '"/>');
+                var div = $('<div></div>');
+                a.append(image);
+                div.append(a);
+                return div;
+            }
+        }
     }
 };
 
