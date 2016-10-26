@@ -88,5 +88,5 @@ describe "stats table", () ->
         rows.get(0).getText().then (text) ->
             expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 160,3 (374) 180 (210) 140,6 (164)"
 
-        rows.get(22).getText().then (text) ->
+        rows.get(21).getText().then (text) ->
             expect(text.replace /\n/g, " ").toBe "gå ut VB.INF.AKT AB gå på (verb) gå ut (verb) 0,4 (1) 0,9 (1) 0 (0)"
