@@ -2,7 +2,6 @@
 settings.primaryColor = "#EDFCD5";
 settings.primaryLight = "#f7fceb";
 settings.autocomplete = false;
-settings.lemgramSelect = false;
 settings.wordpicture = false;
 
 $("#lemgram_list_item").remove();

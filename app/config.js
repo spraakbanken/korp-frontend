@@ -6,7 +6,6 @@ var settings = {};
 
 var isLab = window.isLab || false;
 
-settings.lemgramSelect = true;
 settings.autocomplete = true;
 settings.enableMap = !isLab;
 settings.newMapEnabled = isLab;

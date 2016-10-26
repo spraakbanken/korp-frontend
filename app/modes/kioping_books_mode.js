@@ -1,6 +1,5 @@
 settings.primaryColor = "#E0F4F4";
 settings.primaryLight = "#F2FFFF";
-settings.lemgramSelect = false;
 settings.wordpicture = false;
 
 $("#lemgram_list_item").remove();

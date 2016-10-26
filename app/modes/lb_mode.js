@@ -2,7 +2,6 @@
 settings.primaryColor = "#eecccc";
 settings.primaryLight = "#eee2e2";
 settings.autocomplete = true;
-settings.lemgramSelect = true;
 settings.wordpicture = true;
 
 settings.corpora = {};
