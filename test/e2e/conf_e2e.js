@@ -1,8 +1,11 @@
 
 
 // var HtmlReporter = require('protractor-html-screenshot-reporter');
-
 exports.config = {
+
+  params: {
+    url: 'http://localhost:9001/'
+  },
 
   // Capabilities to be passed to the webdriver instance.
   capabilities: {

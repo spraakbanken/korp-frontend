@@ -24,42 +24,42 @@ describe "compare", () ->
         return (element.all(By.css ".search_tabs .nav-tabs li")).last()
 
     it "should be possible to save searches", () ->
-        browser.get "http://localhost:9001/#?corpus=suc2"
+        browser.get(browser.params.url + "#?corpus=suc2").then () ->
         
-        selectLemgram "gå"
-        saveSearch "gå"
-        
-        compareTabHeading = getCompareTabHeading()
-        
-        expect(compareTabHeading.getText()).toBe "Jämförelse 1"
-        
-        selectLemgram "springa"
-        saveSearch "springa"
-        
-        expect(compareTabHeading.getText()).toBe "Jämförelse 2"
+            selectLemgram "gå"
+            saveSearch "gå"
+            
+            compareTabHeading = getCompareTabHeading()
+            
+            expect(compareTabHeading.getText()).toBe "Jämförelse 1"
+            
+            selectLemgram "springa"
+            saveSearch "springa"
+            
+            expect(compareTabHeading.getText()).toBe "Jämförelse 2"
     
     it "should work for simple word comparison", () ->
-        browser.get "http://localhost:9001/#?corpus=suc2"
+        browser.get(browser.params.url + "#?corpus=suc2").then () ->
         
-        selectLemgram "gå"
-        saveSearch "gå"
-        
-        selectLemgram "springa"
-        saveSearch "springa"
-        
-        getCompareTabHeading().click()
-        
-        (element.all(By.css ".search_compare button")).last().click()
-        
-        negativeMeters = element.all By.css ".compare_result .negative li"
-        positiveMeters = element.all By.css ".compare_result .positive li"
-
-        negativeMeters.first().getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "går 932"
+            selectLemgram "gå"
+            saveSearch "gå"
             
-        positiveMeters.first().getText().then (text) ->
-            expect(text.replace /\n/g, " ").toBe "sprang 45"
+            selectLemgram "springa"
+            saveSearch "springa"
+            
+            getCompareTabHeading().click()
+            
+            (element.all(By.css ".search_compare button")).last().click()
+            
+            negativeMeters = element.all By.css ".compare_result .negative li"
+            positiveMeters = element.all By.css ".compare_result .positive li"
 
-        # todo fails because if weird NaN error on start & end parameters
-        # negativeMeters.first().click()
+            negativeMeters.first().getText().then (text) ->
+                expect(text.replace /\n/g, " ").toBe "går 932"
+                
+            positiveMeters.first().getText().then (text) ->
+                expect(text.replace /\n/g, " ").toBe "sprang 45"
+
+            # todo fails because if weird NaN error on start & end parameters
+            # negativeMeters.first().click()
         

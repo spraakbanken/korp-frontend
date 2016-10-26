@@ -17,9 +17,9 @@ describe "page", () ->
     
     beforeEach () ->
         browser.ignoreSynchronization = true
-        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{cycleSearch()}&page=7"
-        elm = element(By.css(".results-kwic .pager-wrapper:nth-child(2) .active a"))
-        waitFor(elm)
+        browser.get(browser.params.url + "#?corpus=suc2&cqp=%5B%5D&search=word%7C#{cycleSearch()}&page=7").then () ->
+            elm = element(By.css(".results-kwic .pager-wrapper:nth-child(2) .active a"))
+            waitFor(elm)
 
     it "should should bring up the correct page", () ->
         expect(elm.getText()).toBe "8"
@@ -48,28 +48,28 @@ describe "json button", () ->
 
     it "should display the correct url", () ->
         wd = cycleSearch()
-        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
-        elm = element By.css("#json-link")
-        waitFor elm
-        expect(elm.getAttribute("href")).toContain "?command=query"
+        browser.get(browser.params.url + "#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7").then () ->
+            elm = element By.css("#json-link")
+            waitFor elm
+            expect(elm.getAttribute("href")).toContain "?command=query"
     
     it "should switch url when changing tab", () ->
         wd = cycleSearch()
-        browser.get "http://localhost:9001/#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7"
+        browser.get(browser.params.url + "#?corpus=suc2&cqp=%5B%5D&search=word%7C#{wd}&page=7").then () ->
 
-        elem = element By.css(".result_tabs > ul > li:nth-child(2)")
-        waitFor elem
-        elem.click()
-        
-        elm = element By.css("#json-link")
-        waitFor elm
-        expect(elm.getAttribute("href")).toContain "?command=count"
+            elem = element By.css(".result_tabs > ul > li:nth-child(2)")
+            waitFor elem
+            elem.click()
+            
+            elm = element By.css("#json-link")
+            waitFor elm
+            expect(elm.getAttribute("href")).toContain "?command=count"
 
 
 describe "kwic download menu", () ->
     # would love to test that download is really performed but it's hard to test side effects...
     it "should show the csv download option", () ->
-        browser.get "http://localhost:9001/#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2"
-        expect(element(By.cssContainingText('option', 'CSV')).isPresent()).toBe(true)
+        browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then () ->
+            expect(element(By.cssContainingText('option', 'CSV')).isPresent()).toBe(true)
         
 
