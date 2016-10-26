@@ -66,7 +66,7 @@
   });
 
   $.when(loc_dfd, deferred_domReady).then((function(loc_data) {
-    var corpus, e, prevFragment, tab_a_selector;
+    var corpus, e, error1, prevFragment, tab_a_selector;
     c.log("preloading done, t = ", $.now() - t);
     angular.bootstrap(document, ['korpApp']);
     try {
@@ -75,8 +75,8 @@
         settings.corpusListing.select(corpus.split(","));
       }
       view.updateSearchHistory();
-    } catch (_error) {
-      e = _error;
+    } catch (error1) {
+      e = error1;
       c.warn("ERROR setting corpora from location");
     }
     if (isLab) {

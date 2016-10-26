@@ -208,15 +208,15 @@
       s.cqp = $location.search().cqp;
     }
     s.$watch("cqp", function(val) {
-      var e;
+      var e, error;
       c.log("cqp change", val);
       if (!val) {
         return;
       }
       try {
         $rootScope.extendedCQP = CQP.expandOperators(val);
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
         c.log("cqp parse error:", e);
       }
       return $location.search("cqp", val);

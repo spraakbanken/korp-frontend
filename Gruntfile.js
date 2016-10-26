@@ -34,9 +34,9 @@ module.exports = function (grunt) {
       //  files: ['bower.json'],
       //  tasks: ['bowerInstall']
       //},
-      jade : {
-        files : ["<%= yeoman.app %>/index.jade", "<%= yeoman.app %>/{includes,views}/*.jade"],
-        tasks : ['jade:compile']
+      pug : {
+        files : ["<%= yeoman.app %>/index.pug", "<%= yeoman.app %>/{includes,views}/*.pug"],
+        tasks : ['pug:compile']
       },
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -356,7 +356,7 @@ module.exports = function (grunt) {
         }]
       }
     },
-    ngmin: {
+    ngAnnotate: {
       dist: {
         files: [{
           expand: true,
@@ -469,7 +469,7 @@ module.exports = function (grunt) {
         singleRun: true
       }
     },
-    jade: {
+    pug: {
       compile: {
         options: {
           data: {
@@ -479,11 +479,11 @@ module.exports = function (grunt) {
 
         },
         files: [
-          {'<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.jade"]},
+          {'<%= yeoman.app %>/index.html': ["<%= yeoman.app %>/index.pug"]},
           {
             expand: true,
             cwd: 'app/views',
-            src: '{,*/}*.jade',
+            src: '{,*/}*.pug',
             dest: 'app/views',
             ext: '.html'
           }
@@ -544,7 +544,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       //'bowerInstall',
-      'jade',
+      'pug',
       'concurrent:server',
       'copy:dev',
       'autoprefixer',
@@ -569,7 +569,7 @@ module.exports = function (grunt) {
       
     grunt.task.run([
         'clean:server',
-        "jade",
+        "pug",
         'concurrent:test',
         'copy:dev',
         'concurrent:server',
@@ -593,12 +593,12 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     // 'bowerInstall',
-    "jade",
+    "pug",
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+    'ngAnnotate',
     'copy:dist',
     // 'cdnify',
     'cssmin',

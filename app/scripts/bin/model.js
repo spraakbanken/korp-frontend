@@ -27,11 +27,11 @@
     }
 
     BaseProxy.prototype.expandCQP = function(cqp) {
-      var e;
+      var e, error1;
       try {
         return CQP.expandOperators(cqp);
-      } catch (_error) {
-        e = _error;
+      } catch (error1) {
+        e = error1;
         c.warn("CQP expansion failed", cqp, e);
         return cqp;
       }
@@ -58,7 +58,7 @@
     };
 
     BaseProxy.prototype.parseJSON = function(data) {
-      var e, json, out;
+      var e, error1, json, out;
       try {
         json = data;
         if (json[0] !== "{") {
@@ -69,8 +69,8 @@
         }
         out = JSON.parse(json);
         return out;
-      } catch (_error) {
-        e = _error;
+      } catch (error1) {
+        e = error1;
         return JSON.parse(data);
       }
     };
@@ -89,7 +89,7 @@
       struct = {};
       try {
         struct = this.parseJSON(newText);
-      } catch (_error) {}
+      } catch (undefined) {}
       $.each(struct, (function(_this) {
         return function(key, val) {
           var currentCorpus, sum;

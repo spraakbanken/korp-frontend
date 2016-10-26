@@ -412,13 +412,13 @@
         var s, setCQP;
         s = $scope;
         setCQP = function(val) {
-          var error, j, k, len1, len2, output, ref, ref1, results, token, tokenObj;
+          var error, error1, error2, j, k, len1, len2, output, ref, ref1, results, token, tokenObj;
           c.log("inner cqp change", val);
           try {
             s.data = CQP.parse(val);
             c.log("s.data", s.data);
-          } catch (_error) {
-            error = _error;
+          } catch (error1) {
+            error = error1;
             output = [];
             ref = val.split("[");
             for (j = 0, len1 = ref.length; j < len1; j++) {
@@ -429,8 +429,8 @@
               token = "[" + token;
               try {
                 tokenObj = CQP.parse(token);
-              } catch (_error) {
-                error = _error;
+              } catch (error2) {
+                error = error2;
                 tokenObj = [
                   {
                     cqp: token

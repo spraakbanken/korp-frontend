@@ -276,11 +276,11 @@
     };
 
     CorpusListing.prototype.getTitle = function(corpus) {
-      var e;
+      var e, error;
       try {
         return this.struct[corpus].title;
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
         return c.log("gettitle broken", corpus);
       }
     };
@@ -715,14 +715,14 @@
   };
 
   util.getLocaleString = function(key, lang) {
-    var e;
+    var e, error;
     if (!lang) {
       lang = window.lang || settings.defaultLanguage || "sv";
     }
     try {
       return loc_data[lang][key] || key;
-    } catch (_error) {
-      e = _error;
+    } catch (error) {
+      e = error;
       return key;
     }
   };
