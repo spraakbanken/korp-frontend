@@ -430,11 +430,6 @@ class window.ParallelCorpusListing extends CorpusListing
         @struct[corpus.split("|")[1]].title
 
 
-
-settings.corpusListing = new CorpusListing(settings.corpora)
-
-
-
 window.applyTo = (ctrl, f) ->
     s = getScope(ctrl)
     s.$apply f(s)
@@ -1026,84 +1021,3 @@ util.findoutType = (variable) ->
         "array"
     else
         typeof (variable)
-
-
-
-settings.common_struct_types =
-    date_interval:
-        label: "date_interval"
-        displayType: "date_interval"
-        opts: false
-        extended_template : '<div class="date_interval_arg_type">
-            <div class="section">
-                <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
-                    <i class="fa fa-calendar"></i>
-                    Från
-                </button>
-                    {{combined.format("YYYY-MM-DD HH:mm")}}
-                <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu"
-                    date-model="from_date" time-model="from_time" model="combined"
-                    min-date="minDate" max-date="maxDate">
-                </time-interval>
-            </div>
-
-            <div class="section">
-                <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top">
-                    <i class="fa fa-calendar"></i>
-                    Till
-                </button>
-                    {{combined2.format("YYYY-MM-DD HH:mm")}}
-                <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu"
-                    date-model="to_date" time-model="to_time" model="combined2" my="left top" at="right top"
-                    min-date="minDate" max-date="maxDate">
-                </time-interval>
-            </div>
-        </div>'
-
-
-        controller: ["$scope", "searches", "$timeout", ($scope, searches, $timeout) ->
-
-            s = $scope
-            cl = settings.corpusListing
-            updateIntervals = () ->
-                moments = cl.getMomentInterval()
-                if moments.length
-                    [s.minDate, s.maxDate] = _.invoke moments, "toDate"
-                else
-                    # TODO: ideally, all corpora should have momentinterval soon and this block may be removed
-                    [from, to] = cl.getTimeInterval()
-                    s.minDate = moment(from.toString(), "YYYY").toDate()
-                    s.maxDate = moment(to.toString(), "YYYY").toDate()
-
-            s.$on "corpuschooserchange", () ->
-                updateIntervals()
-
-            updateIntervals()
-
-            s.from_click = (event) ->
-                event.originalEvent.preventDefault()
-                event.originalEvent.stopPropagation()
-
-            getYear = (val) ->
-                moment(val.toString(), "YYYYMMDD").toDate()
-
-            getTime = (val) ->
-                moment(val.toString(), "HHmmss").toDate()
-
-            unless s.model
-                s.from_date = s.minDate
-                s.to_date = s.maxDate
-                [s.from_time, s.to_time] = _.invoke cl.getMomentInterval(), "toDate"
-            else if s.model.length == 4
-                [s.from_date, s.to_date] = _.map s.model[..2], getYear
-                [s.from_time, s.to_time] = _.map s.model[2..], getTime
-
-
-            s.$watchGroup ["combined", "combined2"], ([combined, combined2]) ->
-                s.model = [
-                    moment(s.from_date).format("YYYYMMDD"),
-                    moment(s.to_date).format("YYYYMMDD"),
-                    moment(s.from_time).format("HHmmss"),
-                    moment(s.to_time).format("HHmmss")
-                ]
-        ]

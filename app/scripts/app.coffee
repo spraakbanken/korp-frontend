@@ -131,7 +131,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
             if mode.mode == modeId
                 mode.selected = true
 
-    s.select(currentMode)
+    s.select currentMode
     s.getUrl = (modeId) ->
         langParam = "#lang=#{s.$root.lang}"
         if modeId is "default"
