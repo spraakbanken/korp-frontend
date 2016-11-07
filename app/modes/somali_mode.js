@@ -7,7 +7,7 @@ settings.enableMap = false;
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
-settings.preselected_corpora = ["somali-ogaden", "somali-qoraallo", "somali-saynis", "somali-faces", "somali-hargeysa", "somali-1971-79", "somali-2001", "somali-itoobiya", "somali-bulsho", "somali-cilmi", "somali-cb", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
+settings.preselected_corpora = ["somali-wakiillada", "somali-xeerar", "somali-ogaden", "somali-qoraallo", "somali-saynis", "somali-faces", "somali-hargeysa", "somali-1971-79", "somali-2001", "somali-itoobiya", "somali-bulsho", "somali-cilmi", "somali-cb", "somali-radioden2014", "somali-radioswe2014", "somali-sheekooyin", "somali-suugaan", "wikipedia-so"];
 
 settings.corpora = {};
 settings.corporafolders = {};
@@ -134,6 +134,22 @@ settings.corpora["somali-cilmi"] = {
         text_place: {label: "place"},
         text_edition: {label: "edition"},
         page_n: {label: "page"}
+    }
+};
+
+settings.corpora["somali-wakiillada"] = {
+    id: "somali-wakiillada",
+    title: "Golaha Wakiillada Somaliland",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_date: {label: "date"},
+        text_title: {label: "title"},
+        text_source: {label: "source", type: "url"},
+        text_publisher: {label: "publisher"},
+        text_place: {label: "place"}
     }
 };
 
@@ -293,6 +309,22 @@ settings.corpora["wikipedia-so"] = {
         text_title: {label: "title"},
         text_publisher: {label: "date"},
         text_source: {label: "source", type: "url"}
+    }
+};
+
+settings.corpora["somali-xeerar"] = {
+    id: "somali-xeerar",
+    title: "Xeerar Somaliland",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: {label: "year"},
+        text_title: {label: "title"},
+        text_source: {label: "source", type: "url"},
+        text_publisher: {label: "publisher"},
+        text_place: {label: "place"}
     }
 };
 
