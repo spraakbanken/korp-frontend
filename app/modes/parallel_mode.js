@@ -655,6 +655,7 @@ settings.corpora["aspacsvru-ru"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -716,6 +717,7 @@ settings.corpora["aspacsvde-de"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -776,6 +778,7 @@ settings.corpora["aspacsven-en"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -837,6 +840,7 @@ settings.corpora["aspacsves-es"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -897,6 +901,7 @@ settings.corpora["aspacsvfr-fr"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -957,6 +962,7 @@ settings.corpora["aspacsvit-it"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1018,6 +1024,7 @@ settings.corpora["aspacsvnl-nl"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1079,6 +1086,7 @@ settings.corpora["aspacsvpt-pt"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1140,6 +1148,7 @@ settings.corpora["aspacsvpl-pl"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1201,6 +1210,7 @@ settings.corpora["aspacsvla-la"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1262,6 +1272,7 @@ settings.corpora["aspacsvbg-bg"] = {
     },
     attributes: {
         pos: {label: "pos"},
+        msd: {label: "msd"},
         lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
@@ -1620,6 +1631,9 @@ settings.corpora["aspacsvro-ro"] = {
         "link": "meningspar"
     },
     attributes: {
+        pos: {label: "pos"},
+        msd: {label: "msd"},
+        lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
     },
@@ -1682,6 +1696,9 @@ settings.corpora["aspacsvsk-sk"] = {
         "link": "meningspar"
     },
     attributes: {
+        pos: {label: "pos"},
+        msd: {label: "msd"},
+        lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
     },
@@ -1742,6 +1759,9 @@ settings.corpora["aspacsvsl-sl"] = {
         "link": "meningspar"
     },
     attributes: {
+        pos: {label: "pos"},
+        msd: {label: "msd"},
+        lemma: {label: "baseform"},
         linkref: linkref,
         "wordlink-sv": wordlink
     },
