@@ -65,6 +65,7 @@
     "username": "Epostadress",
     "password": "Lösenord",
     "login_fail_msg": "Login misslyckades, kontrollera användarnamn och lösenord och försök igen.",
+    "forgot_password": "Glömt lösenord?",
     "send": "Skicka",
     "log_out": "Logga ut",
     "strict": "strikt",

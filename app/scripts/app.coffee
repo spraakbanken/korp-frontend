@@ -173,10 +173,13 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
 
     showModal = (key) ->
         tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]
-        modal = $uibModal.open
+        params = 
             templateUrl : tmpl
             scope : s
             windowClass : key
+        if key == 'login'
+            params.size = 'sm'
+        modal = $uibModal.open params
 
         modal.result.then (() ->
             closeModals()

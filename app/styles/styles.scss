@@ -1344,20 +1344,17 @@ a {
   margin-top: 8px;
 }
 
-#login {
-  /*display : none;*/
-}
-
-.modal.login {
-  // width: 280px;
-  // height : 370px;
-  // margin-left : -120px;
-
+.login-modal-header {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  
+  .login-header {
+    font-weight: bold;
+  }
 }
 
 #login_popup {
-  // display: none;
-  min-height: 210px;
+  min-height: 190px;
   * {
     display: block;
   }
@@ -1365,12 +1362,22 @@ a {
     margin-top: 5px;
   }
   .err_msg {
-    // display: none;
     font-size: .8em;
+    color: red;
+  }
+  .password-reset {
+    font-size: 0.7em;
+    float: right;
+  }
+  input[type=text] {
+    width: 100%;
+  }
+  input[type=password] {
+    width: 100%;
   }
   input[type=submit] {
+    margin-top: 5px;
     float: right;
-    margin-top: 2em;
   }
 }
 

@@ -43,7 +43,7 @@
             <li><a class="follow_link" id="docs" href="http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning" target="_blank" rel="localize[docs]"></a></li>
             <li id="korplink"><a class="follow_link" href="/korp" rel="localize[korp]"></a></li>
             <li id="korplablink"><a class="follow_link" href="/korplabb" rel="localize[korp_lab]"></a></li>
-            <li id="import"><a class="follow_link" href="https://spraakbanken.gu.se/sparv" rel="localize[import_chain]"></a></li>
+            <li id="import"><a class="follow_link" href="https://spraakbanken.gu.se/sparv" rel="localize[import_chain]" target="_blank"></a></li>
             <li id="login"><a href="javascript:" rel="localize[log_in]"></a></li>
           </ul>
           <div id="news_area">
@@ -473,19 +473,21 @@
       </div>
     </div>
     <script id="login_modal" type="text/ng-template">
-      <div class="modal-header">
-        <h2>{{'log_in' | loc:lang}}</h2>
+      <div class="modal-header login-modal-header">
+        <span class="login-header">{{'log_in' | loc:lang}}</span>
         <span ng-click="clickX()" class="close-x">×</span>
-      
       </div>
       <div id="login_popup" class="modal-body">
         <form ng-submit="loginSubmit(login_usr, login_pass)">
-          <label for="usrname" rel="localize[username]">Epostadress</label>
+          <label for="usrname">{{'username' | loc:lang}}</label>
           <input id="usrname" ng-model="login_usr" type="text">
-          <label for="pass" rel="localize[password]">Lösenord</label>
+          <label for="pass">{{'password' | loc:lang}}</label>
           <input id="pass" ng-model="login_pass" type="password">
-          <p rel="localize[login_fail_msg]" ng-show="login_err" class="err_msg">Login misslyckades, kontrollera användarnamn och lösenord och försök igen.</p>
-          <input class="btn btn-sm btn-primary" type="submit" value="Logga in" rel="localize[send]" >
+          <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
+          <div style="clear:both"/>
+          <p ng-show="login_err" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
+          <input class="btn btn-sm btn-primary" type="submit" value="{{'send' | loc:lang}}">
+          <div style="clear:both"/>
         </form>
       </div>
       

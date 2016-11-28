@@ -169,16 +169,20 @@
       });
     });
     showModal = function(key) {
-      var tmpl;
+      var params, tmpl;
       tmpl = {
         about: 'markup/about.html',
         login: 'login_modal'
       }[key];
-      modal = $uibModal.open({
+      params = {
         templateUrl: tmpl,
         scope: s,
         windowClass: key
-      });
+      };
+      if (key === 'login') {
+        params.size = 'sm';
+      }
+      modal = $uibModal.open(params);
       return modal.result.then((function() {
         return closeModals();
       }), function() {
