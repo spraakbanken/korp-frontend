@@ -15,7 +15,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         label: "complemgram",
         internalSearch: true,
         ranked: true,
-        display: { 
+        display: {
             expandList: {
                 splitValue: function(value) { return value.split("+"); },
                 searchKey: "lex",
@@ -6711,6 +6711,185 @@ settings.corpora.spf = {
         "text_date" : {label : "imprintyear"},
         "page_url" : {label : "pagelink", type : "url"}
     }
+};
+
+
+// RD Riksdagens öppna data
+rd_struct_attributes = {
+    text_titel: {label: "title", order: 50},
+    text_subtitel: {label: "subtitel", order: 49},
+    text_debattnamn: {label: "debattnamn", order: 48},
+    text_rubrik: {label: "rubrik", order: 47},
+    // text_rubriker: {label: "rubriker", order: 47},
+    text_datum: {label: "date", order: 46},
+    // text_systemdatum: {label: "systemdatum"},
+    text_publicerad: {label: "published", order: 45},
+    text_typ: {label: "type", order: 44},
+
+    text_parti: {label: "party", order: 43},
+    text_filnamn: {label: "filnamn", order: 44},
+    text_fil_url: {label: "file_url", order: 43,
+                   pattern: "<a href='<%= struct_attrs.text_fil_url %>' target='_blank'><%= struct_attrs.text_fil_url %></a>"},
+    text_dokument_url_html: {label: "dokument_url_html", order: 42,
+                             pattern: "<a href='<%= struct_attrs.text_dokument_url_html %>' target='_blank'><%= struct_attrs.text_dokument_url_html %></a>"},
+    text_dokument_url_text: {label: "dokument_url_text", order: 41,
+                             pattern: "<a href='<%= struct_attrs.text_dokument_url_text %>' target='_blank'><%= struct_attrs.text_dokument_url_text %></a>"},
+    text_dokumentstatus_url_xml: {label: "dokumentstatus_url_xml", order: 40,
+                                  pattern: "<a href='<%= struct_attrs.text_dokumentstatus_url_xml %>' target='_blank'><%= struct_attrs.text_dokumentstatus_url_xml %></a>"},
+
+    text_talare: {label: "speaker", order: 31},
+    text_source: {label: "source", order: 30},
+
+    text_doktyp: {label: "doktyp", order: 19},
+    text_dok_id: {label: "dok_id", order: 18},
+    text_htmlformat: {label: "htmlformat", order: 17},
+    text_filtyp: {label: "filtyp", order: 16},
+    // text_filstorlek: {label: "filstorlek", order: 15},
+    text_pretext: {label: "pretext", order: 14},
+    text_hangar_id: {label: "hangar_id", order: 13},
+    text_relaterat_id: {label: "relaterat_id", order: 12},
+    text_nummer: {label: "nummer", order: 11},
+    text_slutnummer: {label: "slutnummer", order: 10},
+    text_beteckning: {label: "beteckning", order: 9},
+    text_tempbeteckning: {label: "tempbeteckning", order: 8},
+    text_status: {label: "status", order: 7},
+    text_rm: {label: "rm", order: 6}
+
+    // text_anf_beteckning: {label: "anf_beteckning", order: 0},
+    // text_anf_datum: {label: "anf_datum", order: 0},
+    // text_anf_hangar_id: {label: "anf_hangar_id", order: 0},
+    // text_anf_klockslag: {label: "anf_klockslag", order: 0},
+    // text_anf_nummer: {label: "anf_nummer", order: 0},
+    // text_anf_rm: {label: "anf_rm", order: 0},
+    // text_anf_sekunder: {label: "anf_sekunder", order: 0},
+    // text_anf_text: {label: "anf_text", order: 0},
+    // text_anf_typ: {label: "anf_typ", order: 0},
+    // text_anf_video_id: {label: "anf_video_id", order: 0},
+    // text_avsnitt: {label: "avsnitt", order: 0},
+    // text_behandlas_i: {label: "behandlas_i", order: 0},
+    // text_beslutstyp: {label: "beslutstyp", order: 0},
+    // text_bet: {label: "bet", order: 0},
+    // text_datumtid: {label: "datumtid", order: 0},
+    // text_forslag: {label: "forslag", order: 0},
+    // text_id: {label: "id", order: 0},
+    // text_intressent: {label: "intressent", order: 0},
+    // text_intressent_id: {label: "intressent_id", order: 0},
+    // text_kammarbeslutstyp: {label: "kammarbeslutstyp", order: 0},
+    // text_kammaren: {label: "kammaren", order: 0},
+    // text_kod: {label: "kod", order: 0},
+    // text_lydelse: {label: "lydelse", order: 0},
+    // text_lydelse2: {label: "lydelse2", order: 0},
+    // text_motforslag_nummer: {label: "motforslag_nummer", order: 0},
+    // text_motforslag_partier: {label: "motforslag_partier", order: 0},
+    // text_mottagare: {label: "mottagare", order: 0},
+    // text_namn: {label: "namn", order: 0},
+    // text_nummer: {label: "nummer", order: 0},
+    // text_ordning: {label: "ordning", order: 0},
+    // text_organ: {label: "organ", order: 0},
+    // text_partibet: {label: "partibet", order: 0},
+    // text_partier: {label: "partier", order: 0},
+    // text_pretext: {label: "pretext", order: 0},
+    // text_process: {label: "process", order: 0},
+    // text_publicerad: {label: "publicerad", order: 0},
+    // text_punkt: {label: "punkt", order: 0},
+    // text_ref_dok_bet: {label: "ref_dok_bet", order: 0},
+    // text_ref_dok_id: {label: "ref_dok_id", order: 0},
+    // text_ref_dok_rm: {label: "ref_dok_rm", order: 0},
+    // text_ref_dok_subtitel: {label: "ref_dok_subtitel", order: 0},
+    // text_ref_dok_subtyp: {label: "ref_dok_subtyp", order: 0},
+    // text_ref_dok_titel: {label: "ref_dok_titel", order: 0},
+    // text_ref_dok_typ: {label: "ref_dok_typ", order: 0},
+    // text_referenstyp: {label: "referenstyp", order: 0},
+    // text_relaterat_id: {label: "relaterat_id", order: 0},
+    // text_roll: {label: "roll", order: 0},
+    // text_sourceid: {label: "sourceid", order: 0},
+    // text_startpos: {label: "startpos", order: 0},
+    // text_status: {label: "status", order: 0},
+    // text_subtyp: {label: "subtyp", order: 0},
+    // text_tumnagel: {label: "tumnagel", order: 0},
+    // text_tumnagel_stor: {label: "tumnagel_stor", order: 0},
+    // text_typ: {label: "typ", order: 0},
+    // text_uppgift: {label: "uppgift", order: 0},
+    // text_utskottet: {label: "utskottet", order: 0},
+    // text_utskottsforslag_punkt: {label: "utskottsforslag_punkt", order: 0},
+    // text_utskottsforslag_url_xml: {label: "utskottsforslag_url_xml", order: 0},
+    // text_video_id: {label: "video_id", order: 0},
+    // text_video_url: {label: "video_url", order: 0},
+    // text_vinnare: {label: "vinnare", order: 0},
+    // text_votering_id: {label: "votering_id", order: 0},
+    // text_votering_ledamot_url_xml: {label: "votering_ledamot_url_xml", order: 0},
+    // text_votering_sammanfattning_html: {label: "votering_sammanfattning_html", order: 0},
+    // text_votering_url_xml: {label: "votering_url_xml", order: 0},
+
+    // text_h4: {label: "h4", order: 0},
+    // text_td: {label: "td", order: 0},
+    // text_th: {label: "th", order: 0},
+};
+
+
+settings.corporafolders.governmental.rd = {
+    title : "Riksdagens öppna data",
+    contents : ["rd-flista", "rd-kammakt", "rd-rskr", "rd-samtr", "rd-sou", "rd-tlista"]
+};
+
+settings.corpora["rd-sou"] = {
+    id: "rd-sou",
+    title: "Statens offentliga utredningar",
+    description: "Olika utredningars förslag till regeringen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-flista"] = {
+    id: "rd-flista",
+    title: "Föredragningslista",
+    description: "Föredragningslistor för kammarens sammanträden.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-samtr"] = {
+    id: "rd-samtr",
+    title: "Sammanträden",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-rskr"] = {
+    id: "rd-rskr",
+    title: "Riksdagsskrivelse",
+    description: "Skrivelser från riksdagen till regeringen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-tlista"] = {
+    id: "rd-tlista",
+    title: "Talarlista",
+    description: "Talarlistor för kammarens sammanträden.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-kammakt"] = {
+    id: "rd-kammakt",
+    title: "Kammaraktiviteter",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
