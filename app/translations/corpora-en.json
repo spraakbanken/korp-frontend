@@ -1043,5 +1043,30 @@
     "video_utterance": "Utterance",
 
     "paragraph__geocontext" : "Co-occurrence in paragraph",
-    "text__geoauthorhome" : "Author's home"
+    "text__geoauthorhome" : "Author's home",
+
+    "file_url": "file URL",
+    "hangar_id": "hangar ID",
+    "relaterat_id": "related ID",
+    "pretext": "pretext",
+    "doktyp": "dokument type",
+    "subtitel": "sub title",
+    "dokument_url_text": "dokument URL (text)",
+    "dok_id": "dokument ID",
+    "rubriker": "headlines",
+    "rubrik": "headline",
+    "tempbeteckning": "temporary name",
+    "rm": "rm",
+    "dokumentstatus_url_xml": "dokument status",
+    "status": "status",
+    "htmlformat": "HTML format",
+    "filnamn": "file name",
+    "slutnummer": "end number",
+    "dokument_url_html": "dokument URL (HTML)",
+    "debattnamn": "debate name",
+    "nummer": "number",
+    "filtyp": "file type",
+    "filstorlek": "file size",
+    "beteckning": "name"
+
 }

@@ -1043,5 +1043,29 @@
     "video_utterance": "Yttrande",
 
     "paragraph__geocontext" : "Samförekomst i stycke",
-    "text__geoauthorhome" : "Författarens hemort"
+    "text__geoauthorhome" : "Författarens hemort",
+
+    "file_url": "fil-URL",
+    "hangar_id": "hangar-ID",
+    "relaterat_id": "relaterat-ID",
+    "pretext": "pretext",
+    "doktyp": "dokumenttyp",
+    "subtitel": "subtitel",
+    "dokument_url_text": "dokument-URL (text)",
+    "dok_id": "dokument-ID",
+    "rubriker": "rubriker",
+    "rubrik": "rubrik",
+    "tempbeteckning": "tempbeteckning",
+    "rm": "rm",
+    "dokumentstatus_url_xml": "dokumentstatus",
+    "status": "status",
+    "htmlformat": "HTML-format",
+    "filnamn": "filnamn",
+    "slutnummer": "slutnummer",
+    "dokument_url_html": "dokument-URL (HTML)",
+    "debattnamn": "debattnamn",
+    "nummer": "nummer",
+    "filtyp": "filtyp",
+    "filstorlek": "filstorlek",
+    "beteckning": "beteckning"
 }
