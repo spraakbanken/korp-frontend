@@ -1045,6 +1045,8 @@
     "paragraph__geocontext" : "Samförekomst i stycke",
     "text__geoauthorhome" : "Författarens hemort",
 
+    "suc_name": "SUC-namntyp",
+
     "file_url": "fil-URL",
     "hangar_id": "hangar-ID",
     "relaterat_id": "relaterat-ID",

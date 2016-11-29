@@ -1045,6 +1045,8 @@
     "paragraph__geocontext" : "Co-occurrence in paragraph",
     "text__geoauthorhome" : "Author's home",
 
+    "suc_name": "SUC name type",
+
     "file_url": "file URL",
     "hangar_id": "hangar ID",
     "relaterat_id": "related ID",
