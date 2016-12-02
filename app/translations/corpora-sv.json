@@ -1027,6 +1027,7 @@
     "receiver": "mottagare",
     "copy": "kopia",
 
+    "annotation_type": "annotationstyp",
     "country": "land",
     "mediatype": "mediatyp",
     "consentid": "samtyckes-ID",

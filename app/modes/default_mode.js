@@ -1958,21 +1958,139 @@ settings.corpora["ivip"] = {
         w_full: {
             label: "annotation",
             isStructAttr: true
+        },
+        w_type: {
+            label: "annotation_type",
+            isStructAttr: true,
+            displayType: "select",
+            extended_template: selectType.extended_template,
+            controller: selectType.controller,
+            dataset: {
+                "shortened": "shortened",
+                "pause": "pause"
+            }
         }
     },
     struct_attributes: {
-        text_country: {label: "country", order: 20},
-        text_city: {label: "city", order: 19},
-        text_place: {label: "location", order: 18},
+        text_country: {label: "country",
+                       order: 20,
+                       extended_template: selectType.extended_template,
+                       controller: selectType.controller,
+                       dataset: {
+                           "Sverige": "Sverige",
+                           "Finland": "Finland"
+                       }
+                   },
+        text_city: {label: "city",
+                    order: 19,
+                    displayType: "select",
+                    extended_template: selectType.extended_template,
+                    controller: selectType.controller,
+                    dataset: {
+                        "Göteborg": "Göteborg",
+                        "Helsingfors": "Helsingfors",
+                        "Vasa": "Vasa",
+                        "Åbo": "Åbo",
+                        "Karlstad": "Karlstad"
+                    }
+                },
+        text_place: {label: "location",
+                     order: 18,
+                     displayType: "select",
+                     extended_template: selectType.extended_template,
+                     controller: selectType.controller,
+                     dataset: {
+                         "GotEvent": "GotEvent",
+                         "Svenska handelshögskolans bibliotek": "Svenska handelshögskolans bibliotek",
+                         "Wasa teater": "Wasa teater",
+                         "Åbo Svenska Teater": "Åbo Svenska Teater",
+                         "Svenska teatern": "Svenska teatern",
+                         "Luckan": "Luckan",
+                         "Lorensbergsteatern": "Lorensbergsteatern",
+                         "Stadsteatern 2": "Stadsteatern 2",
+                         "Scala": "Scala",
+                         "Stadsteatern 1": "Stadsteatern 1"
+                     }
+                 },
         text_participants: {label: "participants", order: 17},
-        sentence_speaker_id: {label: "speaker", order: 16},
-        sentence_speaker_role: {label: "speakerrole", order: 15},
-        sentence_speaker_gender: {label: "speakergender", order: 14},
+        sentence_speaker_id: {label: "speaker",
+                              hideSidebar: true,
+                              displayType: "select",
+                              extended_template: selectType.extended_template,
+                              controller: selectType.controller,
+                              dataset: {
+                                  "KU1": "KU1",
+                                  "PE1": "PE1",
+                                  "KU2": "KU2",
+                                  "pause": "pause",
+                                  "PE4": "PE4",
+                                  "comment": "comment",
+                                  "PE2": "PE2",
+                                  "PE8": "PE8",
+                                  "PE5": "PE5",
+                                  "PE3": "PE3",
+                                  "UP1": "UP1",
+                                  "UP2": "UP2",
+                                  "PE": "PE",
+                                  "PE10": "PE10",
+                                  "PE6": "PE6",
+                                  "AS2": "AS2",
+                                  "AS1": "AS1",
+                                  "KU3": "KU3",
+                                  "PE9": "PE9"
+                              }
+        },
+        sentence_speaker_role: {label: "speakerrole",
+                                hideSidebar: true,
+                                displayType: "select",
+                                extended_template: selectType.extended_template,
+                                controller: selectType.controller,
+                                dataset: {
+                                    "Kund": "Kund",
+                                    "Personal": "Personal",
+                                    "": "Odefinerat",
+                                    "Uncertain": "Uncertain",
+                                    "Assistent": "Assistent",
+                                    "Talaren": "Talaren",
+                                    "Kund1": "Kund1",
+                                    "Kund2": "Kund2",
+                                    "Hund": "Hund"
+                                }
+                            },
+        sentence_speaker_gender: {label: "speakergender",
+                                  order: 14,
+                                  displayType: "select",
+                                  extended_template: selectType.extended_template,
+                                  controller: selectType.controller,
+                                  dataset: {
+                                      "female": "female",
+                                      "male": "male",
+                                      "": "Odefinerat"
+                                  }
+                              },
         sentence_speaker_age: {label: "speakerage", order: 13},
         sentence_speaker_region: {label: "speakerregion", order: 12},
         text_consentid: {label: "consentid", order: 11},
+        text_type: {label: "type",
+                    hideSidebar: true,
+                    displayType: "select",
+                    extended_template: selectType.extended_template,
+                    controller: selectType.controller,
+                    dataset: {
+                        "service": "service"
+                    }
+                },
         text_date: {label: "date", order: 10},
-        text_mediatype: {label: "mediatype", order: 9},
+        text_mediatype: {label: "mediatype",
+                         order: 9,
+                         displayType: "select",
+                         extended_template: selectType.extended_template,
+                         controller: selectType.controller,
+                         dataset: {
+                             "filmad inspelning": "filmad inspelning",
+                             "telefoninspelning": "telefoninspelning"
+                         }
+                     },
         sentence_start: {displayType: "hidden"},
         sentence_end: {displayType: "hidden"},
         text_mediafilepath: {displayType: "hidden"},
@@ -2005,6 +2123,12 @@ settings.corpora["ivip"] = {
                 });
                 return videoLink;
             },
+            customType: "struct"
+        },
+        text_speaker_custom: {
+            label: "speaker",
+            order: 16,
+            pattern: "<span><%= struct_attrs.sentence_speaker_id %> <%= struct_attrs.sentence_speaker_role %></span>",
             customType: "struct"
         }
     }

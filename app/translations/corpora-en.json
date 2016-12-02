@@ -1027,6 +1027,7 @@
     "receiver": "receiver",
     "copy": "copy",
 
+    "annotation_type": "annotation type",
     "country": "country",
     "mediatype": "media type",
     "consentid": "consent ID",
