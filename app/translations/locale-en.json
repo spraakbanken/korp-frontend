@@ -65,6 +65,7 @@
     "password": "Password",
     "login_fail_msg": "Authentication failed, please check your username and password and try again.",
     "forgot_password": "Forgotten password?",
+    "save_login": "Remember me",
     "send": "Send",
     "log_out": "Log out",
     "strict": "strict",

@@ -192,9 +192,9 @@
     s.clickX = function() {
       return closeModals();
     };
-    return s.loginSubmit = function(usr, pass) {
+    return s.loginSubmit = function(usr, pass, saveLogin) {
       s.login_err = false;
-      return authenticationProxy.makeRequest(usr, pass).done(function(data) {
+      return authenticationProxy.makeRequest(usr, pass, saveLogin).done(function(data) {
         util.setLogin();
         return safeApply(s, function() {
           return s.show_modal = null;

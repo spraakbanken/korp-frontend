@@ -617,9 +617,8 @@
       this.loginObj = {};
     }
 
-    AuthenticationProxy.prototype.makeRequest = function(usr, pass) {
+    AuthenticationProxy.prototype.makeRequest = function(usr, pass, saveLogin) {
       var auth, dfd, self;
-      c.log("makeRequest: (usr, pass", usr, pass);
       self = this;
       if (window.btoa) {
         auth = window.btoa(usr + ":" + pass);
@@ -637,7 +636,6 @@
           return req.setRequestHeader("Authorization", "Basic " + auth);
         }
       }).done(function(data, status, xhr) {
-        c.log("auth done", arguments);
         if (!data.corpora) {
           dfd.reject();
           return;
@@ -647,7 +645,9 @@
           credentials: data.corpora,
           auth: auth
         };
-        $.jStorage.set("creds", self.loginObj);
+        if (saveLogin) {
+          $.jStorage.set("creds", self.loginObj);
+        }
         return dfd.resolve(data);
       }).fail(function(xhr, status, error) {
         c.log("auth fail", arguments);

@@ -190,9 +190,9 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         closeModals()
 
 
-    s.loginSubmit = (usr, pass) ->
+    s.loginSubmit = (usr, pass, saveLogin) ->
         s.login_err = false
-        authenticationProxy.makeRequest(usr, pass).done((data) ->
+        authenticationProxy.makeRequest(usr, pass, saveLogin).done((data) ->
             util.setLogin()
             safeApply s, () ->
                 s.show_modal = null

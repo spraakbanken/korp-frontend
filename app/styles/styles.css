@@ -4375,13 +4375,18 @@ a.relStat:hover {
   margin-top: 5px;
   float: right;
 }
+/* line 1382, styles.scss */
+#login_popup .save-login {
+  display: inline;
+  font-size: 0.9em;
+}
 
-/* line 1384, styles.scss */
+/* line 1388, styles.scss */
 .logged_in #login {
   display: none;
 }
 
-/* line 1388, styles.scss */
+/* line 1392, styles.scss */
 #log_out {
   display: none;
   float: right;
@@ -4389,35 +4394,35 @@ a.relStat:hover {
   margin-left: 3px;
 }
 
-/* line 1399, styles.scss */
+/* line 1403, styles.scss */
 .logged_in #log_out {
   display: block;
 }
 
 /* when selecting a word, not a lemgram, this pops up. */
-/* line 1405, styles.scss */
+/* line 1409, styles.scss */
 .lemgram_select {
   margin-top: 8px;
 }
 
-/* line 1409, styles.scss */
+/* line 1413, styles.scss */
 label[for=lemgram_select]:before {
   display: block;
 }
 
-/* line 1415, styles.scss */
+/* line 1419, styles.scss */
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
   border-radius: 5px;
 }
 
-/* line 1422, styles.scss */
+/* line 1426, styles.scss */
 .inline_list {
   margin: 0;
   padding: 0;
 }
-/* line 1425, styles.scss */
+/* line 1429, styles.scss */
 .inline_list li {
   display: inline-block;
   vertical-align: middle;
@@ -4426,33 +4431,33 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1430, styles.scss */
+/* line 1434, styles.scss */
 .msie8 .inline_list li {
   display: inline;
 }
 
-/* line 1434, styles.scss */
+/* line 1438, styles.scss */
 .inline_list span {
   padding: 0 5px;
   color: grey;
 }
 
-/* line 1439, styles.scss */
+/* line 1443, styles.scss */
 #mode_switch {
   margin: 0;
   margin-right: 10px;
   float: left;
   padding-left: 0;
 }
-/* line 1444, styles.scss */
+/* line 1448, styles.scss */
 #mode_switch a:visited {
   color: navy;
 }
-/* line 1447, styles.scss */
+/* line 1451, styles.scss */
 #mode_switch a:hover {
   color: indianred;
 }
-/* line 1451, styles.scss */
+/* line 1455, styles.scss */
 #mode_switch li.visible {
   display: inline-block;
   vertical-align: middle;
@@ -4460,56 +4465,56 @@ label[for=lemgram_select]:before {
   *zoom: 1;
   *display: inline;
 }
-/* line 1454, styles.scss */
+/* line 1458, styles.scss */
 #mode_switch li.selected a {
   color: black;
 }
-/* line 1457, styles.scss */
+/* line 1461, styles.scss */
 #mode_switch li.visible:after {
   content: "|";
   margin: 0 0.3em;
   color: grey;
 }
-/* line 1462, styles.scss */
+/* line 1466, styles.scss */
 #mode_switch li:last-child:after {
   display: none;
 }
-/* line 1466, styles.scss */
+/* line 1470, styles.scss */
 #mode_switch li .dropdown-toggle {
   background-color: transparent;
 }
-/* line 1469, styles.scss */
+/* line 1473, styles.scss */
 #mode_switch li.menu_more {
   margin-left: -3px;
 }
-/* line 1471, styles.scss */
+/* line 1475, styles.scss */
 #mode_switch li.menu_more a {
   background: transparent;
 }
-/* line 1474, styles.scss */
+/* line 1478, styles.scss */
 #mode_switch li.menu_more i {
   padding-left: 5px;
 }
 
-/* line 1481, styles.scss */
+/* line 1485, styles.scss */
 .radioList_selected {
   color: black !important;
   cursor: default;
 }
 
-/* line 1486, styles.scss */
+/* line 1490, styles.scss */
 .custom_anchor {
   padding-right: 8px !important;
 }
 
-/* line 1494, styles.scss */
+/* line 1498, styles.scss */
 .tabClose {
   padding: 0 !important;
   margin-right: 6px;
   cursor: pointer !important;
 }
 
-/* line 1500, styles.scss */
+/* line 1504, styles.scss */
 .hits_picture_table {
   border: 1px solid lightgrey;
   /*    opacity: .3; */
@@ -4517,7 +4522,7 @@ label[for=lemgram_select]:before {
   padding: 0px;
 }
 
-/* line 1509, styles.scss */
+/* line 1513, styles.scss */
 .hits_picture {
   cursor: pointer;
   position: absolute;
@@ -4527,23 +4532,23 @@ label[for=lemgram_select]:before {
   transition: left 400ms ease;
 }
 
-/* line 1518, styles.scss */
+/* line 1522, styles.scss */
 #showLineDiagram {
   position: relative;
   top: 3px;
 }
 
-/* line 1524, styles.scss */
+/* line 1528, styles.scss */
 .right_col {
   padding-right: 2px;
 }
 
-/* line 1527, styles.scss */
+/* line 1531, styles.scss */
 .ie8 .right_col .input {
   float: right;
 }
 
-/* line 1531, styles.scss */
+/* line 1535, styles.scss */
 .query_arg {
   border-radius: 2px;
   padding: 5px;
@@ -4553,42 +4558,42 @@ label[for=lemgram_select]:before {
   padding-right: 13px;
 }
 
-/* line 1540, styles.scss */
+/* line 1544, styles.scss */
 .or_arg {
   margin-bottom: 5px;
 }
-/* line 1542, styles.scss */
+/* line 1546, styles.scss */
 .or_arg .fa-info-circle {
   cursor: pointer;
   margin-left: 5px;
 }
 
-/* line 1548, styles.scss */
+/* line 1552, styles.scss */
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
   cursor: default;
   opacity: 0;
   transition: opacity 200ms ease;
 }
 
-/* line 1554, styles.scss */
+/* line 1558, styles.scss */
 .arg_header {
   opacity: 0;
   transition: opacity 200ms ease;
   margin-bottom: 1px;
 }
 
-/* line 1560, styles.scss */
+/* line 1564, styles.scss */
 .or_arg:not(:only-child):first-child .arg_header {
   opacity: 1;
   transition: opacity 200ms ease;
 }
 
-/* line 1569, styles.scss */
+/* line 1573, styles.scss */
 .arg_header {
   font-size: 10px;
 }
 
-/* line 1574, styles.scss */
+/* line 1578, styles.scss */
 .insert_or {
   padding-top: 6px;
   right: 0;
@@ -4596,7 +4601,7 @@ label[for=lemgram_select]:before {
   float: right;
 }
 
-/* line 1582, styles.scss */
+/* line 1586, styles.scss */
 #time {
   margin-top: 10px;
   display: inline-block;
@@ -4606,14 +4611,14 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1588, styles.scss */
+/* line 1592, styles.scss */
 #time_inputs input {
   border: none;
   font-weight: bold;
   width: 30px;
 }
 
-/* line 1595, styles.scss */
+/* line 1599, styles.scss */
 #time_graph {
   display: inline-block;
   vertical-align: middle;
@@ -4625,7 +4630,7 @@ label[for=lemgram_select]:before {
   margin-bottom: 1em;
 }
 
-/* line 1602, styles.scss */
+/* line 1606, styles.scss */
 #rest_time_graph {
   display: inline-block;
   vertical-align: middle;
@@ -4638,7 +4643,7 @@ label[for=lemgram_select]:before {
   bottom: 20px;
 }
 
-/* line 1610, styles.scss */
+/* line 1614, styles.scss */
 #time_slider {
   display: inline-block;
   vertical-align: middle;
@@ -4649,27 +4654,27 @@ label[for=lemgram_select]:before {
   margin-right: 10px;
 }
 
-/* line 1616, styles.scss */
+/* line 1620, styles.scss */
 .exportTimeStatsSection {
   margin-top: 2em;
 }
 
-/* line 1619, styles.scss */
+/* line 1623, styles.scss */
 .export.btn {
   margin-right: 1em;
 }
 
-/* line 1623, styles.scss */
+/* line 1627, styles.scss */
 .ui-slider-handle {
   border-radius: 20px;
 }
 
-/* line 1627, styles.scss */
+/* line 1631, styles.scss */
 .sidebar_url {
   white-space: nowrap;
 }
 
-/* line 1631, styles.scss */
+/* line 1635, styles.scss */
 .arcDiagramPicture {
   cursor: pointer;
   margin-bottom: -2px;
@@ -4677,18 +4682,18 @@ label[for=lemgram_select]:before {
   padding-right: 5px;
 }
 
-/* line 1638, styles.scss */
+/* line 1642, styles.scss */
 .c0 {
   position: relative;
 }
 
-/* line 1642, styles.scss */
+/* line 1646, styles.scss */
 .arcDiagramPicture {
   position: absolute;
   right: 0;
 }
 
-/* line 1648, styles.scss */
+/* line 1652, styles.scss */
 .lemgram_section {
   display: inline-block;
   vertical-align: top;
@@ -4698,7 +4703,7 @@ label[for=lemgram_select]:before {
   margin-right: 30px;
 }
 
-/* line 1653, styles.scss */
+/* line 1657, styles.scss */
 .tableContainer {
   margin-bottom: 15px;
   display: inline-block;
@@ -4710,7 +4715,7 @@ label[for=lemgram_select]:before {
   border: solid 1px lightgray;
   margin-right: 20px;
 }
-/* line 1659, styles.scss */
+/* line 1663, styles.scss */
 .tableContainer > .header {
   color: #333;
   font-size: 1.1em;
@@ -4718,45 +4723,45 @@ label[for=lemgram_select]:before {
   font-family: Lucida Grande, sans-serif;
 }
 
-/* line 1667, styles.scss */
+/* line 1671, styles.scss */
 .explanation {
   font-size: 12px;
   padding: 0 20px;
 }
 
-/* line 1672, styles.scss */
+/* line 1676, styles.scss */
 .ui-dialog ul, ol {
   padding-left: 0;
 }
 
-/* line 1676, styles.scss */
+/* line 1680, styles.scss */
 .ui-dialog li {
   margin-bottom: 3px;
 }
 
-/* line 1680, styles.scss */
+/* line 1684, styles.scss */
 .autocomplete-item-disabled a {
   font-style: italic;
   color: indianred;
   opacity: 0.7;
 }
 
-/* line 1686, styles.scss */
+/* line 1690, styles.scss */
 #showLineDiagram {
   display: none;
 }
 
-/* line 1690, styles.scss */
+/* line 1694, styles.scss */
 .lab #showLineDiagram {
   display: inline;
 }
 
-/* line 1694, styles.scss */
+/* line 1698, styles.scss */
 #labs_logo {
   display: none;
 }
 
-/* line 1698, styles.scss */
+/* line 1702, styles.scss */
 .lab #labs_logo {
   display: inline-block;
   vertical-align: bottom;
@@ -4765,21 +4770,21 @@ label[for=lemgram_select]:before {
   *display: inline;
 }
 
-/* line 1702, styles.scss */
+/* line 1706, styles.scss */
 #korplink {
   display: none;
 }
 
-/* line 1707, styles.scss */
+/* line 1711, styles.scss */
 .lab #korplablink {
   display: none;
 }
-/* line 1710, styles.scss */
+/* line 1714, styles.scss */
 .lab #korplink {
   display: block;
 }
 
-/* line 1715, styles.scss */
+/* line 1719, styles.scss */
 #cog {
   float: right;
   margin-top: -6px;
@@ -4787,26 +4792,26 @@ label[for=lemgram_select]:before {
   height: 26px;
 }
 
-/* line 1722, styles.scss */
+/* line 1726, styles.scss */
 #cog_menu {
   position: absolute;
   font-size: inherit;
   text-align: right;
 }
 
-/* line 1728, styles.scss */
+/* line 1732, styles.scss */
 .ui-menu {
   box-shadow: 2px 2px 3px grey;
   z-index: 999;
 }
 
-/* line 1733, styles.scss */
+/* line 1737, styles.scss */
 .korp_fail {
   height: 146px;
   width: 290px;
 }
 
-/* line 1738, styles.scss */
+/* line 1742, styles.scss */
 .fail_text {
   margin: 1em 0 0 1em;
   vertical-align: top;
@@ -4814,49 +4819,49 @@ label[for=lemgram_select]:before {
   font-size: 1.3em;
 }
 
-/* line 1745, styles.scss */
+/* line 1749, styles.scss */
 .error_msg ~ * {
   display: none !important;
 }
 
-/* line 1749, styles.scss */
+/* line 1753, styles.scss */
 .msd_sidebar {
   font-size: 0.8em;
 }
 
-/* line 1755, styles.scss */
+/* line 1759, styles.scss */
 #korp-simple #simple_text {
   position: relative;
   margin-top: 2px;
   display: inline-block;
   vertical-align: middle;
 }
-/* line 1762, styles.scss */
+/* line 1766, styles.scss */
 #korp-simple .simple_form {
   float: left;
 }
-/* line 1767, styles.scss */
+/* line 1771, styles.scss */
 #korp-simple .opts {
   margin-top: 1em;
   margin-bottom: 1em;
 }
-/* line 1774, styles.scss */
+/* line 1778, styles.scss */
 #korp-simple #similar_wrapper {
   margin-left: 3em;
   float: right;
   vertical-align: top;
   text-align: right;
 }
-/* line 1781, styles.scss */
+/* line 1785, styles.scss */
 #korp-simple #similar_wrapper .btn_header {
   font-size: 1.1em;
 }
-/* line 1785, styles.scss */
+/* line 1789, styles.scss */
 #korp-simple #similar_wrapper button {
   display: block;
 }
 
-/* line 1791, styles.scss */
+/* line 1795, styles.scss */
 .modal {
   max-height: initial;
   overflow-y: auto;
@@ -4864,53 +4869,53 @@ label[for=lemgram_select]:before {
   font-size: 1.3em;
 }
 
-/* line 1801, styles.scss */
+/* line 1805, styles.scss */
 .modal-header h3, .modal-header h2 {
   font-weight: normal;
 }
 
-/* line 1806, styles.scss */
+/* line 1810, styles.scss */
 .modal-header {
   display: block;
 }
-/* line 1808, styles.scss */
+/* line 1812, styles.scss */
 .modal-header > * {
   display: inline-block;
   width: 49%;
 }
-/* line 1812, styles.scss */
+/* line 1816, styles.scss */
 .modal-header .close-x {
   text-align: right;
   font-size: 2em;
   cursor: pointer;
 }
-/* line 1816, styles.scss */
+/* line 1820, styles.scss */
 .modal-header .close-x:hover {
   color: darkgrey;
 }
 
-/* line 1822, styles.scss */
+/* line 1826, styles.scss */
 .modal.fade.in {
   top: 90px;
   margin-top: 0;
 }
 
-/* line 1826, styles.scss */
+/* line 1830, styles.scss */
 body.modal-open {
   overflow: hidden;
 }
 
-/* line 1829, styles.scss */
+/* line 1833, styles.scss */
 .modal-body {
   max-height: 71vh;
   min-height: 300px;
 }
 
-/* line 1839, styles.scss */
+/* line 1843, styles.scss */
 .related.modal .modal-body {
   overflow: auto;
 }
-/* line 1841, styles.scss */
+/* line 1845, styles.scss */
 .related.modal .modal-body ul {
   display: flex;
   flex-direction: column;
@@ -4919,85 +4924,85 @@ body.modal-open {
   justify-content: flex-start;
   align-content: flex-start;
 }
-/* line 1848, styles.scss */
+/* line 1852, styles.scss */
 .related.modal .modal-body ul li {
   margin-right: 1em;
 }
-/* line 1854, styles.scss */
+/* line 1858, styles.scss */
 .related.modal .col .header {
   font-size: 1.1em;
 }
 
-/* line 1860, styles.scss */
+/* line 1864, styles.scss */
 .search_submit {
   display: inline;
   margin-right: 5px;
 }
 
-/* line 1867, styles.scss */
+/* line 1871, styles.scss */
 .search_tabs .nav.nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
-/* line 1870, styles.scss */
+/* line 1874, styles.scss */
 .search_tabs .tab-content {
   overflow: visible;
 }
-/* line 1873, styles.scss */
+/* line 1877, styles.scss */
 .search_tabs .search_compare {
   padding-top: 1em;
 }
-/* line 1875, styles.scss */
+/* line 1879, styles.scss */
 .search_tabs .search_compare button.delete {
   float: right;
 }
-/* line 1877, styles.scss */
+/* line 1881, styles.scss */
 .search_tabs .search_compare button.delete .fa, .search_tabs .search_compare button.delete .boxdiv.disabled .checkbox, .boxdiv.disabled .search_tabs .search_compare button.delete .checkbox,
 .search_tabs .search_compare button.delete .tree.disabled > label .checkbox,
 .tree.disabled > label .search_tabs .search_compare button.delete .checkbox {
   margin-right: 0.8em;
 }
-/* line 1881, styles.scss */
+/* line 1885, styles.scss */
 .search_tabs .search_compare button.search {
   margin-top: 2em;
   display: block;
 }
-/* line 1885, styles.scss */
+/* line 1889, styles.scss */
 .search_tabs .search_compare select {
   margin: 0 5px;
 }
 
-/* line 1891, styles.scss */
+/* line 1895, styles.scss */
 option[value^='? string:sentence ?'] {
   display: none;
 }
 
-/* line 1893, styles.scss */
+/* line 1897, styles.scss */
 .nav-tabs li.disabled {
   opacity: 0.6;
 }
 
-/* line 1897, styles.scss */
+/* line 1901, styles.scss */
 #results-wrapper .nav-tabs li:nth-child(4) {
   margin-left: 1em;
 }
 
-/* line 1901, styles.scss */
+/* line 1905, styles.scss */
 #korp-extended .within_select ~ * {
   display: none;
 }
 
-/* line 1905, styles.scss */
+/* line 1909, styles.scss */
 .lab #korp-extended #sendBtn ~ * {
   display: inline;
 }
 
-/* line 1914, styles.scss */
+/* line 1918, styles.scss */
 #search-tab {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 1919, styles.scss */
+/* line 1923, styles.scss */
 .val_mod {
   letter-spacing: 1px;
   font-size: .8em;
@@ -5005,14 +5010,14 @@ option[value^='? string:sentence ?'] {
   margin-right: 1px;
 }
 
-/* line 1926, styles.scss */
+/* line 1930, styles.scss */
 .mod_menu {
   cursor: default;
   position: absolute;
   font-size: .9em;
 }
 
-/* line 1934, styles.scss */
+/* line 1938, styles.scss */
 slider {
   display: inline-block;
   position: relative;
@@ -5021,19 +5026,19 @@ slider {
   margin: 25px 5px 25px 5px;
   vertical-align: middle;
 }
-/* line 1942, styles.scss */
+/* line 1946, styles.scss */
 slider span {
   white-space: nowrap;
   position: absolute;
   display: inline-block;
 }
-/* line 1946, styles.scss */
+/* line 1950, styles.scss */
 slider span.base {
   width: 100%;
   height: 100%;
   padding: 0;
 }
-/* line 1951, styles.scss */
+/* line 1955, styles.scss */
 slider span.bar {
   width: 100%;
   height: 100%;
@@ -5044,7 +5049,7 @@ slider span.bar {
   background-image: linear-gradient(to top, #cccccc, #ffffff);
   box-shadow: inset 0 1px 3px rgba(10, 10, 10, 0.5);
 }
-/* line 1958, styles.scss */
+/* line 1962, styles.scss */
 slider span.bar.selection {
   width: 0%;
   z-index: 1;
@@ -5053,7 +5058,7 @@ slider span.bar.selection {
   background-image: linear-gradient(to top, #ababab, #c6c6c6);
   box-shadow: none;
 }
-/* line 1965, styles.scss */
+/* line 1969, styles.scss */
 slider span.pointer {
   cursor: pointer;
   width: 15px;
@@ -5067,19 +5072,19 @@ slider span.pointer {
   border-radius: 1em/1em;
   box-shadow: 2px 2px 3px grey;
 }
-/* line 1979, styles.scss */
+/* line 1983, styles.scss */
 slider span.pointer:after {
   box-shadow: inset 2px 2px 5px;
 }
-/* line 1983, styles.scss */
+/* line 1987, styles.scss */
 slider span.pointer:hover:after {
   background-color: #000;
 }
-/* line 1986, styles.scss */
+/* line 1990, styles.scss */
 slider span.pointer.active:hover:after {
   background-color: #f00;
 }
-/* line 1991, styles.scss */
+/* line 1995, styles.scss */
 slider span.bubble {
   cursor: default;
   top: -22px;
@@ -5087,71 +5092,71 @@ slider span.bubble {
   font-size: 0.7em;
   font-family: sans-serif;
 }
-/* line 1997, styles.scss */
+/* line 2001, styles.scss */
 slider span.bubble.selection {
   top: 15px;
 }
-/* line 2000, styles.scss */
+/* line 2004, styles.scss */
 slider span.bubble.limit {
   color: #808080;
 }
 
-/* line 2009, styles.scss */
+/* line 2013, styles.scss */
 .val_mod.insensitive {
   color: lightgrey;
 }
-/* line 2012, styles.scss */
+/* line 2016, styles.scss */
 .val_mod.sensitive {
   color: black;
 }
-/* line 2014, styles.scss */
+/* line 2018, styles.scss */
 .val_mod.sensitive + .mod_menu li:first-of-type a {
   text-decoration: underline;
 }
-/* line 2018, styles.scss */
+/* line 2022, styles.scss */
 .val_mod.insensitive + .mod_menu li:nth-of-type(2) a {
   text-decoration: underline;
 }
 
-/* line 2023, styles.scss */
+/* line 2027, styles.scss */
 .enumerate {
   counter-increment: wordpic;
 }
-/* line 2025, styles.scss */
+/* line 2029, styles.scss */
 .enumerate:before {
   content: counter(wordpic) ".";
 }
 
-/* line 2030, styles.scss */
+/* line 2034, styles.scss */
 #showBarPlot {
   display: none;
 }
 
-/* line 2038, styles.scss */
+/* line 2042, styles.scss */
 .korp-warning {
   max-width: 500px;
 }
 
-/* line 2041, styles.scss */
+/* line 2045, styles.scss */
 warning ~ * {
   display: none !important;
 }
 
-/* line 2045, styles.scss */
+/* line 2049, styles.scss */
 #wordPicSettings {
   float: right;
 }
-/* line 2048, styles.scss */
+/* line 2052, styles.scss */
 #wordPicSettings #numberHitsSelect {
   margin-top: 10px;
 }
 
-/* line 2054, styles.scss */
+/* line 2058, styles.scss */
 .nav-tabs li {
   position: relative;
 }
 
-/* line 2058, styles.scss */
+/* line 2062, styles.scss */
 .tab_progress {
   height: 2px;
   background-color: darkblue;
@@ -5163,31 +5168,31 @@ warning ~ * {
   bottom: 0;
 }
 
-/* line 2069, styles.scss */
+/* line 2073, styles.scss */
 .not_loading .tab_progress {
   display: none;
 }
 
-/* line 2073, styles.scss */
+/* line 2077, styles.scss */
 .not_loading .hits_picture {
   left: 180px;
   transition: width 400ms ease;
 }
 
-/* line 2079, styles.scss */
+/* line 2083, styles.scss */
 .results-kwic .controls_n {
   margin-right: 5px;
   min-width: 125px;
 }
-/* line 2083, styles.scss */
+/* line 2087, styles.scss */
 .results-kwic .pager-wrapper {
   display: inline;
 }
-/* line 2087, styles.scss */
+/* line 2091, styles.scss */
 .results-kwic .result_controls {
   position: relative;
 }
-/* line 2089, styles.scss */
+/* line 2093, styles.scss */
 .results-kwic .result_controls > * {
   display: inline-block;
   vertical-align: bottom;
@@ -5195,11 +5200,11 @@ warning ~ * {
   *zoom: 1;
   *display: inline;
 }
-/* line 2094, styles.scss */
+/* line 2098, styles.scss */
 .results-kwic .result_controls, .results-kwic .pager-wrapper {
   margin-bottom: 8px;
 }
-/* line 2097, styles.scss */
+/* line 2101, styles.scss */
 .results-kwic .pagination {
   height: auto;
   margin: 0;
@@ -5207,11 +5212,11 @@ warning ~ * {
   display: inline-block;
   vertical-align: initial;
 }
-/* line 2104, styles.scss */
+/* line 2108, styles.scss */
 .results-kwic .pagination li.active {
   font-weight: bold;
 }
-/* line 2107, styles.scss */
+/* line 2111, styles.scss */
 .results-kwic .pagination a, .results-kwic .pagination span {
   border-width: 1px;
   line-height: 18px;
@@ -5220,54 +5225,54 @@ warning ~ * {
   float: initial;
   display: inline-block;
 }
-/* line 2117, styles.scss */
+/* line 2121, styles.scss */
 .results-kwic .pagination .active a {
   color: white;
 }
-/* line 2122, styles.scss */
+/* line 2126, styles.scss */
 .results-kwic .page_input {
   display: inline-block;
   vertical-align: middle;
   margin-left: 1em;
 }
-/* line 2126, styles.scss */
+/* line 2130, styles.scss */
 .results-kwic .page_input span {
   color: #666;
 }
-/* line 2129, styles.scss */
+/* line 2133, styles.scss */
 .results-kwic .page_input input {
   width: 2em;
 }
-/* line 2134, styles.scss */
+/* line 2138, styles.scss */
 .results-kwic.loading .controls_n {
   color: darkgrey;
   font-style: italic;
 }
 
-/* line 2143, styles.scss */
+/* line 2147, styles.scss */
 .arg_value .from, .arg_value .to {
   width: 50px;
 }
-/* line 2146, styles.scss */
+/* line 2150, styles.scss */
 .arg_value .from {
   float: left;
 }
-/* line 2149, styles.scss */
+/* line 2153, styles.scss */
 .arg_value .to {
   float: right;
   text-align: left;
 }
 
-/* line 2156, styles.scss */
+/* line 2160, styles.scss */
 .arg_val_container {
   margin-top: 2px;
 }
-/* line 2158, styles.scss */
+/* line 2162, styles.scss */
 .arg_val_container select {
   max-width: 100%;
 }
 
-/* line 2163, styles.scss */
+/* line 2167, styles.scss */
 .ui-autocomplete-category {
   font-size: .7em;
   text-transform: uppercase;
@@ -5275,78 +5280,78 @@ warning ~ * {
   letter-spacing: 1.1;
 }
 
-/* line 2170, styles.scss */
+/* line 2174, styles.scss */
 #keyboard {
   cursor: pointer;
   padding: 0 3px;
   display: none;
 }
 
-/* line 2176, styles.scss */
+/* line 2180, styles.scss */
 #char_table {
   display: none;
 }
 
-/* line 2180, styles.scss */
+/* line 2184, styles.scss */
 .specialkey {
   width: 12px;
   text-align: center;
   cursor: pointer;
 }
 
-/* line 2187, styles.scss */
+/* line 2191, styles.scss */
 #deptree_popup {
   overflow-y: hidden;
 }
-/* line 2189, styles.scss */
+/* line 2193, styles.scss */
 #deptree_popup iframe {
   border: none;
   height: 400px;
 }
-/* line 2193, styles.scss */
+/* line 2197, styles.scss */
 #deptree_popup .info:empty {
   display: block;
   height: 1.3em;
 }
 
-/* line 2199, styles.scss */
+/* line 2203, styles.scss */
 .smoother.ui-slider {
   width: 200px;
 }
 
-/* line 2203, styles.scss */
+/* line 2207, styles.scss */
 .legend {
   float: right;
   margin-bottom: 1em;
 }
-/* line 2206, styles.scss */
+/* line 2210, styles.scss */
 .legend .action {
   opacity: 0.5 !important;
   color: white;
 }
 
-/* line 2212, styles.scss */
+/* line 2216, styles.scss */
 .slick-viewport .slick-cell-checkboxsel input {
   margin-left: 6px;
 }
 
-/* line 2216, styles.scss */
+/* line 2220, styles.scss */
 #myGrid .slick-header-column input[type="checkbox"] {
   margin-left: 4px;
 }
 
-/* line 2223, styles.scss */
+/* line 2227, styles.scss */
 .graph_btn_icon svg {
   margin-top: -6px;
   margin-bottom: -6px;
   margin-left: -8px;
 }
 
-/* line 2230, styles.scss */
+/* line 2234, styles.scss */
 .chart_container {
   position: relative;
 }
-/* line 2232, styles.scss */
+/* line 2236, styles.scss */
 .chart_container .preloader {
   position: absolute;
   left: 0;
@@ -5362,31 +5367,31 @@ warning ~ * {
   opacity: 0;
   transition: opacity 500ms;
 }
-/* line 2247, styles.scss */
+/* line 2251, styles.scss */
 .chart_container .preloader.loading {
   opacity: 1;
   transition: opacity 500ms;
 }
-/* line 2252, styles.scss */
+/* line 2256, styles.scss */
 .chart_container .preloader i {
   z-index: 1000;
 }
 
-/* line 2258, styles.scss */
+/* line 2262, styles.scss */
 .graph_tab {
   min-height: 430px;
 }
 
-/* line 2262, styles.scss */
+/* line 2266, styles.scss */
 .graph_header .controls {
   float: left;
 }
 
-/* line 2267, styles.scss */
+/* line 2271, styles.scss */
 .stats_header {
   margin-bottom: 1em;
 }
-/* line 2269, styles.scss */
+/* line 2273, styles.scss */
 .stats_header > * {
   display: inline-block;
   vertical-align: middle;
@@ -5395,17 +5400,17 @@ warning ~ * {
   *display: inline;
 }
 
-/* line 2273, styles.scss */
+/* line 2277, styles.scss */
 .reading_mode .show_deptree {
   display: none;
 }
 
-/* line 2277, styles.scss */
+/* line 2281, styles.scss */
 .form-table .preview {
   display: none;
 }
 
-/* line 2282, styles.scss */
+/* line 2286, styles.scss */
 .rickshaw_graph .empty_area {
   background-color: #999;
   position: absolute;
@@ -5414,50 +5419,50 @@ warning ~ * {
   opacity: 0.2;
   z-index: 1;
 }
-/* line 2290, styles.scss */
+/* line 2294, styles.scss */
 .rickshaw_graph .detail .x_label {
   top: -26px;
 }
-/* line 2293, styles.scss */
+/* line 2297, styles.scss */
 .rickshaw_graph .x_tick {
   border-left: none;
 }
-/* line 2295, styles.scss */
+/* line 2299, styles.scss */
 .rickshaw_graph .x_tick .title {
   bottom: -1.1em !important;
   left: -1.3em;
 }
-/* line 2302, styles.scss */
+/* line 2306, styles.scss */
 .rickshaw_graph .detail {
   z-index: 101;
 }
-/* line 2306, styles.scss */
+/* line 2310, styles.scss */
 .rickshaw_graph svg {
   position: relative;
   z-index: 100;
 }
 
-/* line 2313, styles.scss */
+/* line 2317, styles.scss */
 .rickshaw_legend .line {
   white-space: nowrap;
 }
 
-/* line 2318, styles.scss */
+/* line 2322, styles.scss */
 .form-bar .rickshaw_graph .x_tick .title {
   left: 0;
 }
 
-/* line 2323, styles.scss */
+/* line 2327, styles.scss */
 .y_ticks.plain g:first-of-type text {
   display: none;
 }
 
-/* line 2327, styles.scss */
+/* line 2331, styles.scss */
 .form-bar .legend li:last-child:not(:only-child) {
   display: none;
 }
 
-/* line 2330, styles.scss */
+/* line 2334, styles.scss */
 .form_switch {
   display: inline-block;
   vertical-align: bottom;
@@ -5466,110 +5471,110 @@ warning ~ * {
   *display: inline;
 }
 
-/* line 2334, styles.scss */
+/* line 2338, styles.scss */
 line.tick {
   display: none;
 }
 
-/* line 2338, styles.scss */
+/* line 2342, styles.scss */
 .dot.active {
   cursor: pointer;
 }
 
-/* line 2349, styles.scss */
+/* line 2353, styles.scss */
 .preview {
   margin-top: 30px;
 }
 
-/* line 2353, styles.scss */
+/* line 2357, styles.scss */
 #main > #msd_popup {
   display: none !important;
 }
 
-/* line 2357, styles.scss */
+/* line 2361, styles.scss */
 .msd-modal {
   overflow-y: scroll;
 }
 
-/* line 2361, styles.scss */
+/* line 2365, styles.scss */
 .popupchecks .header {
   white-space: nowrap;
 }
 
-/* line 2365, styles.scss */
+/* line 2369, styles.scss */
 .ui-button-text-only .ui-button-text {
   padding: 0;
 }
 
-/* line 2368, styles.scss */
+/* line 2372, styles.scss */
 .ui-button-text-only > .ui-button-text {
   padding: 0.4em 1em;
 }
 
-/* line 2371, styles.scss */
+/* line 2375, styles.scss */
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text {
   padding: 0.4em 1em 0.4em 2.1em;
 }
 
-/* line 2375, styles.scss */
+/* line 2379, styles.scss */
 .time_table {
   width: 100%;
   height: 500px;
 }
 
-/* line 2379, styles.scss */
+/* line 2383, styles.scss */
 .time_table, .time_table * {
   box-sizing: content-box;
 }
 
-/* line 2382, styles.scss */
+/* line 2386, styles.scss */
 #myGrid {
   width: 100%;
   height: 500px;
 }
 
-/* line 2387, styles.scss */
+/* line 2391, styles.scss */
 #myGrid, #myGrid * {
   box-sizing: content-box;
 }
 
-/* line 2390, styles.scss */
+/* line 2394, styles.scss */
 .loading .exportStatsSection {
   display: none;
 }
 
-/* line 2394, styles.scss */
+/* line 2398, styles.scss */
 #myGrid .parameter-column {
   background-color: #f2f7ff;
 }
 
-/* line 2398, styles.scss */
+/* line 2402, styles.scss */
 #myGrid .slick-row:hover .parameter-column {
   background-color: #e6ebff;
 }
 
-/* line 2402, styles.scss */
+/* line 2406, styles.scss */
 #myGrid .statistics-link {
   color: navy;
   cursor: pointer;
 }
 
-/* line 2407, styles.scss */
+/* line 2411, styles.scss */
 #myGrid .slick-row:hover .statistics-link {
   color: indianred;
 }
 
-/* line 2412, styles.scss */
+/* line 2416, styles.scss */
 .ui-widget-header {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
 }
 
-/* line 2415, styles.scss */
+/* line 2419, styles.scss */
 .ui-state-hover {
   background: #e6e6e6 url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
 }
 
-/* line 2418, styles.scss */
+/* line 2422, styles.scss */
 .nav.nav-tabs {
   background: url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50% #CCCCCC;
   border: 1px solid #AAAAAA;
@@ -5577,42 +5582,42 @@ line.tick {
   color: #222222;
   padding-top: 0.2em;
 }
-/* line 2426, styles.scss */
+/* line 2430, styles.scss */
 .nav.nav-tabs li {
   cursor: pointer;
   margin-right: 0.2em;
 }
-/* line 2430, styles.scss */
+/* line 2434, styles.scss */
 .nav.nav-tabs .badge {
   margin-left: 1em;
 }
 
-/* line 2439, styles.scss */
+/* line 2443, styles.scss */
 .tabbable {
   border: 1px solid #AAAAAA;
   border-radius: 2px 2px 2px 2px;
   color: #222222;
   padding: 3px;
 }
-/* line 2444, styles.scss */
+/* line 2448, styles.scss */
 .tabbable .single {
   margin-right: 1em;
 }
-/* line 2447, styles.scss */
+/* line 2451, styles.scss */
 .tabbable .tab-content {
   padding: 1em;
 }
-/* line 2450, styles.scss */
+/* line 2454, styles.scss */
 .tabbable .close_icon {
   cursor: pointer;
   padding-left: 5px;
 }
-/* line 2454, styles.scss */
+/* line 2458, styles.scss */
 .tabbable .nav.nav-tabs {
   margin: 0;
   padding-left: 0;
 }
-/* line 2457, styles.scss */
+/* line 2461, styles.scss */
 .tabbable .nav.nav-tabs li {
   background: url("images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
   border: 1px solid #D3D3D3;
@@ -5620,11 +5625,11 @@ line.tick {
   font-weight: normal;
   margin-bottom: -1px;
 }
-/* line 2463, styles.scss */
+/* line 2467, styles.scss */
 .tabbable .nav.nav-tabs li:first-child {
   margin-left: 0.5em;
 }
-/* line 2466, styles.scss */
+/* line 2470, styles.scss */
 .tabbable .nav.nav-tabs li a {
   padding-bottom: 0.3em !important;
   padding-top: 0.3em !important;
@@ -5632,39 +5637,39 @@ line.tick {
   color: #555555;
   margin-bottom: -1px;
 }
-/* line 2473, styles.scss */
+/* line 2477, styles.scss */
 .tabbable .nav.nav-tabs li.active {
   border-bottom-color: transparent;
 }
 
-/* line 2480, styles.scss */
+/* line 2484, styles.scss */
 .search_tabs.tabbable {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-/* line 2485, styles.scss */
+/* line 2489, styles.scss */
 .nav-tabs > .active > a,
 .nav-tabs > .active > a:hover {
   border-radius: 0;
   border-color: transparent;
 }
 
-/* line 2490, styles.scss */
+/* line 2494, styles.scss */
 .nav-tabs > li > a, .nav-pills > li > a {
   margin-right: 0;
 }
 
-/* line 2496, styles.scss */
+/* line 2500, styles.scss */
 .modal-header_left {
   display: none;
 }
 
-/* line 2501, styles.scss */
+/* line 2505, styles.scss */
 .compare_result.loading {
   visibility: hidden;
 }
-/* line 2504, styles.scss */
+/* line 2508, styles.scss */
 .compare_result .column {
   display: inline-block;
   vertical-align: top;
@@ -5672,116 +5677,116 @@ line.tick {
   *zoom: 1;
   *display: inline;
 }
-/* line 2507, styles.scss */
+/* line 2511, styles.scss */
 .compare_result .meter {
   cursor: pointer;
   position: relative;
   border: 1px solid rgba(221, 233, 255, 0);
   transition: all 200ms ease;
 }
-/* line 2512, styles.scss */
+/* line 2516, styles.scss */
 .compare_result .meter:hover {
   color: navy;
   border: 1px solid #aac8ff;
 }
-/* line 2517, styles.scss */
+/* line 2521, styles.scss */
 .compare_result .badge {
   position: absolute;
   right: 0;
   top: 4px;
 }
-/* line 2522, styles.scss */
+/* line 2526, styles.scss */
 .compare_result .background {
   padding: 5px 0;
 }
-/* line 2526, styles.scss */
+/* line 2530, styles.scss */
 .compare_result .column_1 ul {
   background-color: #f1f6ff;
   border: 1px solid #dde9ff;
 }
-/* line 2529, styles.scss */
+/* line 2533, styles.scss */
 .compare_result .column_1 ul .background {
   background-color: #dde9ff;
 }
-/* line 2533, styles.scss */
+/* line 2537, styles.scss */
 .compare_result .column_2 ul {
   background-color: #fff9ec;
   border: 1px solid #FFF3D8;
 }
-/* line 2536, styles.scss */
+/* line 2540, styles.scss */
 .compare_result .column_2 ul .background {
   background-color: #FFF3D8;
 }
-/* line 2540, styles.scss */
+/* line 2544, styles.scss */
 .compare_result ul {
   padding: 2px;
   margin-right: 2em;
   width: 400px;
   font-size: 1.1em;
 }
-/* line 2547, styles.scss */
+/* line 2551, styles.scss */
 .compare_result ul li {
   margin-bottom: 0.5em;
   white-space: nowrap;
 }
 
-/* line 2562, styles.scss */
+/* line 2566, styles.scss */
 .popover {
   border-radius: 2px;
 }
-/* line 2564, styles.scss */
+/* line 2568, styles.scss */
 .popover .popover-content {
   padding: 5px;
 }
-/* line 2567, styles.scss */
+/* line 2571, styles.scss */
 .popover .btn_container {
   margin-top: 1em;
   text-align: right;
 }
 
-/* line 2573, styles.scss */
+/* line 2577, styles.scss */
 .tab_preloaders {
   display: inline-block;
 }
-/* line 2575, styles.scss */
+/* line 2579, styles.scss */
 .tab_preloaders .preloader_spinner {
   width: 9px;
   display: inline;
 }
 
-/* line 2584, styles.scss */
+/* line 2588, styles.scss */
 .close_icon {
   display: inline;
 }
 
-/* line 2587, styles.scss */
+/* line 2591, styles.scss */
 .tab_spinner {
   display: none;
   width: 13px;
 }
 
-/* line 2591, styles.scss */
+/* line 2595, styles.scss */
 .loading .tab_spinner {
   display: inline-block;
 }
 
-/* line 2594, styles.scss */
+/* line 2598, styles.scss */
 .loading .close_icon {
   display: none;
 }
 
-/* line 2599, styles.scss */
+/* line 2603, styles.scss */
 .badge {
   padding-right: 6px;
   padding-left: 6px;
 }
 
-/* line 2604, styles.scss */
+/* line 2608, styles.scss */
 .popper_menu {
   width: 130px;
 }
 
-/* line 2608, styles.scss */
+/* line 2612, styles.scss */
 .tab-content {
   overflow: hidden;
 }
@@ -5789,49 +5794,49 @@ line.tick {
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
-/* line 2620, styles.scss */
+/* line 2624, styles.scss */
 .bs-callout {
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
   border-left: 5px solid #eee;
 }
 
-/* line 2625, styles.scss */
+/* line 2629, styles.scss */
 .bs-callout h4 {
   margin-top: 0;
 }
 
-/* line 2628, styles.scss */
+/* line 2632, styles.scss */
 .bs-callout p:last-child {
   margin-bottom: 0;
 }
 
-/* line 2631, styles.scss */
+/* line 2635, styles.scss */
 .bs-callout code,
 .bs-callout .highlight {
   background-color: #fff;
 }
 
 /* Themes for different contexts */
-/* line 2637, styles.scss */
+/* line 2641, styles.scss */
 .bs-callout-danger {
   background-color: #fcf2f2;
   border-color: #dFb5b4;
 }
 
-/* line 2641, styles.scss */
+/* line 2645, styles.scss */
 .bs-callout-warning {
   background-color: #fefbed;
   border-color: #f1e7bc;
 }
 
-/* line 2645, styles.scss */
+/* line 2649, styles.scss */
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
 
-/* line 2650, styles.scss */
+/* line 2654, styles.scss */
 .dropdown-menu {
   border-radius: 2px;
   max-height: 575px;
@@ -5839,19 +5844,19 @@ line.tick {
 }
 
 /* ----------- Newsdesk ----------- */
-/* line 2658, styles.scss */
+/* line 2662, styles.scss */
 #news_area {
   float: right;
   margin-right: 4px;
 }
 
-/* line 2662, styles.scss */
+/* line 2666, styles.scss */
 .newsdesk-new-news {
   font-weight: bold;
   color: #428bca;
 }
 
-/* line 2666, styles.scss */
+/* line 2670, styles.scss */
 .newsdesk-new-news div {
   background-color: red;
   color: red;
@@ -5859,7 +5864,7 @@ line.tick {
   background: #ff0000;
 }
 
-/* line 2672, styles.scss */
+/* line 2676, styles.scss */
 .newsdesk-new-news div:after {
   right: 100%;
   top: 50%;
@@ -5875,43 +5880,43 @@ line.tick {
   margin-top: -4px;
 }
 
-/* line 2686, styles.scss */
+/* line 2690, styles.scss */
 .newsdesk-no-new-news {
   font-weight: normal;
   color: #ddd;
 }
 
-/* line 2690, styles.scss */
+/* line 2694, styles.scss */
 .newsdesk-no-new-news div {
   background-color: #ddd;
 }
 
-/* line 2693, styles.scss */
+/* line 2697, styles.scss */
 .newsdesk-new-news-item {
   background-color: #ffeeee;
   border-radius: 5px;
 }
 
-/* line 2697, styles.scss */
+/* line 2701, styles.scss */
 .newsdesk-new-news-item h4 {
   color: red;
 }
 
-/* line 2700, styles.scss */
+/* line 2704, styles.scss */
 .newsdesk-popover {
   width: 440px;
   max-height: 95%;
   overflow-y: auto;
 }
 
-/* line 2705, styles.scss */
+/* line 2709, styles.scss */
 .newsdesk-bell {
   float: left;
   margin-top: 4px;
   margin-right: 3px;
 }
 
-/* line 2710, styles.scss */
+/* line 2714, styles.scss */
 .newsdesk-arrow-box {
   float: left;
   padding-left: 4px;
@@ -5919,51 +5924,51 @@ line.tick {
   border-radius: 3px;
 }
 
-/* line 2716, styles.scss */
+/* line 2720, styles.scss */
 .newsdesk-arrow-box span {
   color: #fff;
 }
 
-/* line 2719, styles.scss */
+/* line 2723, styles.scss */
 .newsdesk-news-item {
   padding-left: 4px;
   margin-bottom: 4px;
 }
 
-/* line 2723, styles.scss */
+/* line 2727, styles.scss */
 .newsdesk-opener {
   cursor: pointer;
 }
 
-/* line 2726, styles.scss */
+/* line 2730, styles.scss */
 .newsdesk-around-items {
   margin: 10px;
 }
 
-/* line 2729, styles.scss */
+/* line 2733, styles.scss */
 .newsdesk-item-date {
   font-style: italic;
   color: gray;
 }
 
 /* ----------- Autocompletion ----------- */
-/* line 2736, styles.scss */
+/* line 2740, styles.scss */
 .none-to-find {
   color: #aaa;
 }
 
-/* line 2739, styles.scss */
+/* line 2743, styles.scss */
 .num-to-find {
   visibility: hidden;
   font-size: x-small;
 }
 
-/* line 2743, styles.scss */
+/* line 2747, styles.scss */
 li.active a span .num-to-find {
   visibility: visible;
 }
 
-/* line 2746, styles.scss */
+/* line 2750, styles.scss */
 .autoc-spinner {
   margin-left: -20px;
   margin-top: 2px;
@@ -5971,23 +5976,23 @@ li.active a span .num-to-find {
 }
 
 /* Map */
-/* line 2752, styles.scss */
+/* line 2756, styles.scss */
 .name_map {
   max-width: 1000px;
 }
 
-/* line 2756, styles.scss */
+/* line 2760, styles.scss */
 .leaflet-control-layers-toggle {
   background-image: url(../components/leaflet/dist/images/layers.png);
 }
 
 /* korp multi select directive */
-/* line 2762, styles.scss */
+/* line 2766, styles.scss */
 .reduce-attr-select {
   color: #000;
   display: inline-block;
 }
-/* line 2765, styles.scss */
+/* line 2769, styles.scss */
 .reduce-attr-select .reduce-dropdown-button {
   cursor: pointer;
   width: 100%;
@@ -5995,72 +6000,72 @@ li.active a span .num-to-find {
   overflow: hidden;
   transition: border-color 200ms;
 }
-/* line 2770, styles.scss */
+/* line 2774, styles.scss */
 .reduce-attr-select .reduce-dropdown-button .caret {
   right: 7px;
   position: absolute;
   top: 10px;
 }
-/* line 2776, styles.scss */
+/* line 2780, styles.scss */
 .reduce-attr-select .reduce-dropdown-button:hover {
   border-color: #999;
 }
-/* line 2780, styles.scss */
+/* line 2784, styles.scss */
 .reduce-attr-select .reduce-dropdown-button-text {
   width: 1000px;
   padding: 2px 5px;
 }
-/* line 2784, styles.scss */
+/* line 2788, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu {
   width: 100%;
   max-height: 400px;
 }
-/* line 2787, styles.scss */
+/* line 2791, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .selected {
   background: #f2f7ff;
 }
-/* line 2790, styles.scss */
+/* line 2794, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .attribute {
   cursor: pointer;
   padding: 2px 1px;
 }
-/* line 2792, styles.scss */
+/* line 2796, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .attribute:hover {
   background-color: #e6e6e6;
 }
-/* line 2797, styles.scss */
+/* line 2801, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .reduce-check {
   margin: 0px;
   margin-top: 4px;
   margin-right: 4px;
 }
-/* line 2802, styles.scss */
+/* line 2806, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .reduce-label {
   position: absolute;
 }
-/* line 2805, styles.scss */
+/* line 2809, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu ul {
   margin: 0;
   padding: 2px;
 }
-/* line 2809, styles.scss */
+/* line 2813, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .insensitive-toggle {
   float: right;
   color: black;
 }
-/* line 2813, styles.scss */
+/* line 2817, styles.scss */
 .reduce-attr-select .reduce-dropdown-menu .insensitive-toggle.selected {
   color: grey;
 }
 
 /* sidebar video */
-/* line 2820, styles.scss */
+/* line 2824, styles.scss */
 #video-container {
   height: 320px;
   width: 568px;
   position: relative;
 }
-/* line 2824, styles.scss */
+/* line 2828, styles.scss */
 #video-container #extra-controls {
   height: 320px;
   width: 568px;
@@ -6070,7 +6075,7 @@ li.active a span .num-to-find {
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.7);
 }
-/* line 2832, styles.scss */
+/* line 2836, styles.scss */
 #video-container #extra-controls > * {
   width: 75px;
   height: 75px;
@@ -6081,79 +6086,79 @@ li.active a span .num-to-find {
   color: white;
   font-weight: bold;
 }
-/* line 2842, styles.scss */
+/* line 2846, styles.scss */
 #video-container #extra-controls .restart {
   top: 35%;
   left: 25%;
 }
-/* line 2846, styles.scss */
+/* line 2850, styles.scss */
 #video-container #extra-controls .continue {
   top: 35%;
   right: 25%;
   float: right;
 }
-/* line 2851, styles.scss */
+/* line 2855, styles.scss */
 #video-container #extra-controls .restart-icon, #video-container #extra-controls .continue-icon {
   font-size: 3em;
   display: block;
 }
 
-/* line 2858, styles.scss */
+/* line 2862, styles.scss */
 #video-meta-container .utterance, #video-meta-container .time {
   font-weight: bold;
 }
-/* line 2861, styles.scss */
+/* line 2865, styles.scss */
 #video-meta-container .time-div {
   padding-top: 15px;
 }
 
-/* line 2866, styles.scss */
+/* line 2870, styles.scss */
 .or_container .word {
   color: #222222;
 }
 
-/* line 2870, styles.scss */
+/* line 2874, styles.scss */
 .map-settings-container {
   margin-left: 20px;
 }
-/* line 2872, styles.scss */
+/* line 2876, styles.scss */
 .map-settings-container .caret {
   margin-left: 10px;
 }
-/* line 2875, styles.scss */
+/* line 2879, styles.scss */
 .map-settings-container ul {
   margin: 0;
   padding: 2px;
 }
-/* line 2878, styles.scss */
+/* line 2882, styles.scss */
 .map-settings-container ul .map-selected {
   margin: 0px;
   margin-top: 4px;
   margin-right: 4px;
 }
-/* line 2883, styles.scss */
+/* line 2887, styles.scss */
 .map-settings-container ul li {
   cursor: pointer;
   padding: 2px 1px;
   white-space: nowrap;
 }
-/* line 2888, styles.scss */
+/* line 2892, styles.scss */
 .map-settings-container ul .selected {
   background: #f2f7ff;
 }
-/* line 2892, styles.scss */
+/* line 2896, styles.scss */
 .map-settings-container .empty-attribute-list {
   font-style: italic;
   font-size: 12px;
   padding-top: 2px;
   padding-left: 2px;
 }
-/* line 2898, styles.scss */
+/* line 2902, styles.scss */
 .map-settings-container .btn-container {
   padding: 10px;
   text-align: right;
 }
-/* line 2902, styles.scss */
+/* line 2906, styles.scss */
 .map-settings-container .map-settings-title {
   margin: 0;
   padding: 8px 14px;
@@ -6163,42 +6168,42 @@ li.active a span .num-to-find {
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
 }
-/* line 2911, styles.scss */
+/* line 2915, styles.scss */
 .map-settings-container .dropdown-menu {
   padding: 0px;
 }
 
-/* line 2916, styles.scss */
+/* line 2920, styles.scss */
 #mapHeader {
   width: 100%;
 }
-/* line 2918, styles.scss */
+/* line 2922, styles.scss */
 #mapHeader div.disabled {
   opacity: 0.4;
 }
-/* line 2921, styles.scss */
+/* line 2925, styles.scss */
 #mapHeader div.mapgroup {
   display: inline-block;
   margin-right: 20px;
   cursor: pointer;
 }
-/* line 2923, styles.scss */
+/* line 2927, styles.scss */
 #mapHeader div.mapgroup div.swatch {
   display: inline-block;
   margin-right: 5px;
 }
-/* line 2927, styles.scss */
+/* line 2931, styles.scss */
 #mapHeader div.mapgroup div.cluster-info {
   background-color: rgba(136, 220, 168, 0.6);
   border-radius: 5px;
 }
-/* line 2934, styles.scss */
+/* line 2938, styles.scss */
 #mapHeader span.check {
   opacity: 0.5 !important;
   color: white;
 }
 
-/* line 2940, styles.scss */
+/* line 2944, styles.scss */
 .hide-prob > li > .prob {
   display: none;
 }

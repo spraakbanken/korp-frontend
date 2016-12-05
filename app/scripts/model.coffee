@@ -506,8 +506,7 @@ class model.AuthenticationProxy
     constructor: ->
         @loginObj = {}
 
-    makeRequest: (usr, pass) ->
-        c.log "makeRequest: (usr, pass", usr, pass
+    makeRequest: (usr, pass, saveLogin) ->
         self = this
         if window.btoa
             auth = window.btoa(usr + ":" + pass)
@@ -523,7 +522,6 @@ class model.AuthenticationProxy
             beforeSend: (req) ->
                 req.setRequestHeader "Authorization", "Basic " + auth
         ).done((data, status, xhr) ->
-            c.log "auth done", arguments
             unless data.corpora
                 dfd.reject()
                 return
@@ -531,12 +529,11 @@ class model.AuthenticationProxy
                 name: usr
                 credentials: data.corpora
                 auth: auth
-
-            $.jStorage.set "creds", self.loginObj
+            if saveLogin
+                $.jStorage.set "creds", self.loginObj
             dfd.resolve data
         ).fail (xhr, status, error) ->
             c.log "auth fail", arguments
-
             dfd.reject()
 
         dfd

@@ -89,9 +89,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
 
     $("#log_out").click ->
-        $.each authenticationProxy.loginObj.credentials, (i, item) ->
-            $(".boxdiv[data=#{item.toLowerCase()}]").addClass "disabled"
-
         authenticationProxy.loginObj = {}
         $.jStorage.deleteKey "creds"
         $("body").toggleClass "logged_in not_logged_in"

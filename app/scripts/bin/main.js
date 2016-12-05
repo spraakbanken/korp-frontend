@@ -109,9 +109,6 @@
     }
     tab_a_selector = "ul .ui-tabs-anchor";
     $("#log_out").click(function() {
-      $.each(authenticationProxy.loginObj.credentials, function(i, item) {
-        return $(".boxdiv[data=" + (item.toLowerCase()) + "]").addClass("disabled");
-      });
       authenticationProxy.loginObj = {};
       $.jStorage.deleteKey("creds");
       $("body").toggleClass("logged_in not_logged_in");

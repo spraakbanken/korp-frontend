@@ -478,13 +478,15 @@
         <span ng-click="clickX()" class="close-x">×</span>
       </div>
       <div id="login_popup" class="modal-body">
-        <form ng-submit="loginSubmit(login_usr, login_pass)">
+        <form ng-submit="loginSubmit(login_usr, login_pass, saveLogin)">
           <label for="usrname">{{'username' | loc:lang}}</label>
           <input id="usrname" ng-model="login_usr" type="text">
           <label for="pass">{{'password' | loc:lang}}</label>
           <input id="pass" ng-model="login_pass" type="password">
           <a class="password-reset" href="https://ws.spraakbanken.gu.se/user/password" target="_blank">{{'forgot_password' | loc:lang}}</a>
           <div style="clear:both"/>
+          <input class="save-login" id="saveLogin" type="checkbox" ng-model="saveLogin">
+          <label class="save-login" for="saveLogin">{{'save_login' | loc:lang}}</label>
           <p ng-show="login_err" class="err_msg">{{'login_fail_msg' | loc:lang}}</p>
           <input class="btn btn-sm btn-primary" type="submit" value="{{'send' | loc:lang}}">
           <div style="clear:both"/>
