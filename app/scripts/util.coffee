@@ -470,8 +470,6 @@ window.initLocales = () ->
                     cache : false,
                     success : (data) ->
                         _.extend loc_data[lang], data
-                        # $.localize.data[lang][pkg] = data;
-                        # $.extend($.localize.data[lang]["_all"], data);
 
     $.when.apply($, defs).then () ->
         def.resolve loc_data
@@ -485,7 +483,6 @@ window.safeApply = (scope, fn) ->
 window.util.setLogin = () ->
     $("body").toggleClass("logged_in not_logged_in")
 
-    # $.each authenticationProxy.loginObj.credentials, (i, item) ->
     for corp in authenticationProxy.loginObj.credentials
         $("#hpcorpus_#{corp.toLowerCase()}")
             .closest(".boxdiv.disabled").removeClass("disabled")
