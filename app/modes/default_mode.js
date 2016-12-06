@@ -1967,7 +1967,8 @@ settings.corpora["ivip"] = {
             controller: selectType.controller,
             dataset: {
                 "shortened": "shortened",
-                "pause": "pause"
+                "pause": "pause",
+                "overlap": "overlap"
             }
         }
     },
@@ -2110,7 +2111,7 @@ settings.corpora["ivip"] = {
 
                 var videoLink = $('<span class="link">Visa video</span>');
                 videoLink.click(function () {
-                    var url = "http://k2xx.spraakdata.gu.se/ivip/data/Testkorpus/" + path +  file + "." + ext;
+                    var url = "http://k2xx.spraakdata.gu.se/korp_data/ivip/data/Testkorpus/" + path +  file + "." + ext;
 
                     var scope = angular.element('#video-modal').scope();
                     scope.videos = [{'url': url, 'type': 'video/mp4'}];
