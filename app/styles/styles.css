@@ -163,8 +163,7 @@
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  -webkit-filter: none;
-          filter: none;
+  filter: none;
 }
 
 /* line 4, ../components/font-awesome/scss/_stacked.scss */
