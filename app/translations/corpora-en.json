@@ -461,9 +461,10 @@
     "place": "place",
     "subtitle": "subtitle",
 
-    "ne_expr": "name",
+    "ne_expr": "expression",
     "ne_type": "name type",
     "ne_subtype": "name subtype",
+    "ne_name": "name",
     "ne_expr_ENAMEX": "name expression",
     "ne_expr_TIMEX": "time expression",
     "ne_expr_NUMEX": "numerical expression",

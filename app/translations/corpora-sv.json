@@ -461,9 +461,10 @@
     "sponsor": "sponsor",
     "place": "plats",
 
-    "ne_expr": "namn",
+    "ne_expr": "uttryck",
     "ne_type": "namntyp",
     "ne_subtype": "namnundertyp",
+    "ne_name": "namn",
     "ne_expr_ENAMEX": "namnuttryck",
     "ne_expr_TIMEX": "tidsuttryck",
     "ne_expr_NUMEX": "numeriskt uttryck",

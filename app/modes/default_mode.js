@@ -2,6 +2,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
     ne_ex: attrs.ne_ex,
     ne_type: attrs.ne_type,
     ne_subtype: attrs.ne_subtype,
+    ne_name: attrs.ne_name,
     complemgram: {
         label: "complemgram",
         internalSearch: true,
