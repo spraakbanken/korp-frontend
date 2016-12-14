@@ -299,7 +299,11 @@
         }));
       } else {
         if (attrs.translationKey) {
-          return output.append("<span rel='localize[" + attrs.translationKey + value + "]'></span>");
+          if (loc_data["en"][attrs.translationKey + value]) {
+            return output.append("<span rel='localize[" + attrs.translationKey + value + "]'></span>");
+          } else {
+            return output.append("<span>" + value + "</span>");
+          }
         } else {
           return output.append("<span>" + (str_value || '') + "</span>");
         }
