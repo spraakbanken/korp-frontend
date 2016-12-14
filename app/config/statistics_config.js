@@ -176,7 +176,13 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
             if(!_.isUndefined(attrObj) && attrObj.translationKey )
                 prefix = attrObj.translationKey
             var mapped = _.map(values, function (value) {
-                return util.getLocaleString(prefix + value)
+                if(value === "") {
+                    return "-";
+                } else if(loc_data["en"][prefix + value]) {
+                    return util.getLocaleString(prefix + value);
+                } else {
+                    return value;
+                }
             });
             return mapped.join(" ");
     }
