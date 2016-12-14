@@ -51,7 +51,7 @@
       }).appendTo(this.element);
     },
     renderCorpusContent: function(type, wordData, sentenceData, corpus_attrs, tokens) {
-      var base, item, items, j, k, key, len, len1, pairs, ref, ref1, ref2, val, value;
+      var base, item, items, j, k, key, len, len1, pairs, ref, ref1, val, value;
       if (type === "struct") {
         pairs = _.pairs(sentenceData);
       } else if (type === "pos") {
@@ -59,7 +59,8 @@
         ref = wordData._struct || [];
         for (j = 0, len = ref.length; j < len; j++) {
           item = ref[j];
-          ref1 = item.split(" "), key = ref1[0], val = ref1[1];
+          key = item.substring(0, item.indexOf(" "));
+          val = item.substring(item.indexOf(" ") + 1);
           if (key in corpus_attrs) {
             pairs.push([key, val]);
           }
@@ -90,7 +91,7 @@
       });
       items = [];
       for (k = 0, len1 = pairs.length; k < len1; k++) {
-        ref2 = pairs[k], key = ref2[0], value = ref2[1];
+        ref1 = pairs[k], key = ref1[0], value = ref1[1];
         items = items.concat(typeof (base = this.renderItem(key, value, corpus_attrs[key], wordData, sentenceData, tokens)).get === "function" ? base.get(0) : void 0);
       }
       items = _.compact(items);
