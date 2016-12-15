@@ -357,7 +357,8 @@ attrs.ne_subtype = {
         "PER"
    ],
    stringify: function(val) {
-       return util.getLocaleString("ne_subtype_" + val);
+       lString = util.getLocaleStringUndefined("ne_subtype_" + val)
+       return lString || val;
    }
 };
 attrs.ne_name = {

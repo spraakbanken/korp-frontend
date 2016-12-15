@@ -521,14 +521,16 @@ util.SelectionManager::hasSelected = ->
     @selected.length > 0
 
 util.getLocaleString = (key, lang) ->
-    # lang = (if $("body").scope() then $("body").scope().lang) or settings.defaultLanguage or "sv"
+    return util.getLocaleStringUndefined(key, lang) or key
+
+
+util.getLocaleStringUndefined = (key, lang) ->
     unless lang
         lang = window.lang or settings.defaultLanguage or "sv"
-
     try
-        return loc_data[lang][key] or key
+        return loc_data[lang][key]
     catch e
-        return key
+        return undefined
 
 
 util.localize = (root) ->

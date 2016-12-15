@@ -715,15 +715,19 @@
   };
 
   util.getLocaleString = function(key, lang) {
+    return util.getLocaleStringUndefined(key, lang) || key;
+  };
+
+  util.getLocaleStringUndefined = function(key, lang) {
     var e, error;
     if (!lang) {
       lang = window.lang || settings.defaultLanguage || "sv";
     }
     try {
-      return loc_data[lang][key] || key;
+      return loc_data[lang][key];
     } catch (error) {
       e = error;
-      return key;
+      return void 0;
     }
   };
 
