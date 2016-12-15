@@ -515,7 +515,7 @@
 
   korpApp.factory("lexicons", function($q, $http) {
     var karpURL;
-    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v1";
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v2";
     return {
       getLemgrams: function(wf, resources, corporaIDs) {
         var args, deferred;
@@ -582,14 +582,6 @@
       getSenses: function(wf) {
         var args, deferred;
         deferred = $q.defer();
-        args = {
-          "cql": "wf==" + wf,
-          "resurs": "saldom",
-          "lemgram-ac": "true",
-          "format": "json",
-          "sw-forms": "false",
-          "sms-forms": "false"
-        };
         args = {
           "q": wf,
           "resource": "saldom"

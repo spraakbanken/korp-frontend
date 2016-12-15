@@ -416,7 +416,7 @@ korpApp.service "compareSearches",
 
 
 korpApp.factory "lexicons", ($q, $http) ->
-    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v1"
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v2"
     getLemgrams: (wf, resources, corporaIDs) ->
         deferred = $q.defer()
 
@@ -432,7 +432,6 @@ korpApp.factory "lexicons", ($q, $http) ->
             if data is null
                 deferred.resolve []
             else
-
                 # Pick the lemgrams. Would be nice if this was done by the backend instead.
                 karpLemgrams = _.map data.hits.hits, (entry) -> entry._source.FormRepresentations[0].lemgram
 
@@ -464,13 +463,6 @@ korpApp.factory "lexicons", ($q, $http) ->
 
     getSenses: (wf) ->
         deferred = $q.defer()
-        args =
-            "cql" : "wf==" + wf
-            "resurs" : "saldom"
-            "lemgram-ac" : "true"
-            "format" : "json"
-            "sw-forms" : "false"
-            "sms-forms" : "false"
 
         args =
             "q" : wf
@@ -484,8 +476,6 @@ korpApp.factory "lexicons", ($q, $http) ->
             if data is null
                 deferred.resolve []
             else
-                #unless angular.isArray(data) then data = [data]
-
                 karpLemgrams = _.map data.hits.hits, (entry) -> entry._source.FormRepresentations[0].lemgram
                 if karpLemgrams.length is 0
                     deferred.resolve []
