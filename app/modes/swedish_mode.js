@@ -156,11 +156,6 @@ settings.corporafolders.fisk.magazines = {
     contents: ["astra1960-1979", "astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "jft", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
-settings.corporafolders.protected = {
-    title: "Skyddade korpusar",
-    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
-};
-
 settings.corporafolders.medical = {
     title: "Medicinska texter",
     contents: ["diabetolog", "smittskydd"]
@@ -169,6 +164,17 @@ settings.corporafolders.medical = {
 settings.corporafolders.medical.ltd = {
     title: "Läkartidningen",
     contents: ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001", "lt2002", "lt2003", "lt2004", "lt2005"]
+};
+
+settings.corporafolders.myndighet = {
+    title : "Myndighetstexter",
+    contents : ["fsbmyndighet1800tal"],
+    description : ""
+};
+
+settings.corporafolders.protected = {
+    title: "Skyddade korpusar",
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.novels = {
@@ -4080,6 +4086,12 @@ settings.corporafolders.bibel = {
     description : "Bibeln, 1873 och 1917 års utgåvor och Gustav Vasas Bibel (nya testamentet)"
 };
 
+settings.corporafolders.fisk1800 = {
+    title: "Äldre finlandssvenska",
+    contents: [],
+    description: ""
+};
+
 settings.corporafolders.akerbruk1700 = {
     title : "Åkerbruk och gödsel",
     contents : ["akerbruk", "kvah"],
@@ -5995,55 +6007,49 @@ var fisk1800attrs = {
     ref : attrs.ref,
 };
 
-settings.corporafolders.brevdagbocker = {
+settings.corporafolders.fisk1800.brevdagbocker = {
     title : "Brev och dagböcker",
     contents : ["fsbbrev1700tal", "fsbbrev1800-1849", "fsbbrev1850-1899", "fsbbrev1900tal", "dagbocker1700tal", "dagbocker1800-1849", "dagbocker1900-1949"],
     description : "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser."
 };
 
-settings.corporafolders.myndighet = {
-    title : "Myndighetstexter",
-    contents : ["fsbmyndighet1800tal"],
-    description : ""
-};
-
-settings.corporafolders.sakprosa = {
+settings.corporafolders.fisk1800.sakprosa = {
     title : "Sakprosa",
     contents : ["sakprosa1700-1749", "sakprosa1750-1799", "sakprosa1800-1849", "sakprosa1850-1899", "sakprosa1900-1959"],
     description : "Samling av facklitteratur, reseskildringar, resebroschyrer och dissertationer m.m."
 };
 
-settings.corporafolders.skonlitteratur = {
+settings.corporafolders.fisk1800.skonlitteratur = {
     title : "Skönlitteratur",
     contents : ["fsbskonlit1800-1849", "fsbskonlit1850-1899", "fsbskonlit1900-1959"],
     description : "Material ur skönlitterära verk."
 };
 
-settings.corporafolders.tidningar = {
+settings.corporafolders.fisk1800.tidningar = {
     title : "Tidningstexter",
     contents : ["bjorneborgstidning", "borgabladet2", "fredrikshamnstidning", "dagbladet1866-1886", "hbl1800", "tidningarsallskapetiabo", "uleaborgstidning", "wasabladet", "wiborgstidning", "abotidning", "aland"],
     description : "Nummer ur olika tidningar publicerade under 1700–1900-talet."
 };
 
-settings.corporafolders.tidskrifter = {
+settings.corporafolders.fisk1800.tidskrifter = {
     title : "Tidskrifter",
     contents : [],
     description : ""
 };
 
-settings.corporafolders.tidskrifter.tidskrifter1849 = {
+settings.corporafolders.fisk1800.tidskrifter.tidskrifter1849 = {
     title : "Tidskrifter 1800–1849",
     contents : ["spanskaflugan"],
     description : ""
 };
 
-settings.corporafolders.tidskrifter.tidskrifter1899 = {
+settings.corporafolders.fisk1800.tidskrifter.tidskrifter1899 = {
     title : "Tidskrifter 1850–1899",
     contents : ["ateneum-1800tal", "filosofia1850-1899", "finsktidskrift1800tal", "landtmannen", "litterartidskrift-helsingfors", "typografisktminnesblad", "typograftidning"],
     description : ""
 };
 
-settings.corporafolders.tidskrifter.tidskrifter1959 = {
+settings.corporafolders.fisk1800.tidskrifter.tidskrifter1959 = {
     title : "Tidskrifter 1900–1959",
     contents : ["astra1920-1959", "ateneum-1900tal", "argus", "euterpe", "filosofia1900-1959", "finsktidskrift1900tal", "husmodern"],
     description : ""
@@ -6713,13 +6719,54 @@ settings.corpora.spf = {
     }
 };
 
+settings.corpora.fragelistor = {
+    id: "fragelistor",
+    title: "Etnologiska frågelistor",
+    description: "Nordiska museets etnologiska frågelistor",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: {
+        msd: attrs.msd,
+        lemma: attrs.baseform,
+        lex: attrs.lemgram,
+        dalinlex: attrs.dalinlemgram,
+        saldo: attrs.saldo,
+        prefix: attrs.prefix,
+        suffix: attrs.suffix,
+        dephead: attrs.dephead,
+        deprel: attrs.deprel,
+        ref: attrs.ref,
+        ne_ex: attrs.ne_ex,
+        ne_type: attrs.ne_type,
+        ne_subtype: attrs.ne_subtype
+    },
+    struct_attributes: {
+        "text_topicname": {label: "topic"},
+        "text_topicid": {label: "topicid"},
+        "text_year": {label: "year"},
+        "text_amount_answers": {label: "amount_answers"},
+        "text_author_signature": {label: "author_signature"},
+        "document_id": {label: "document_id"},
+        "text_source": {
+            label: "source",
+            displayType: "select",
+            localize: false,
+            extended_template: selectType.extended_template,
+            controller: selectType.controller,
+            dataset: [
+                "frågelistor",
+                "specialfrågelistor"
+            ]
+        }
+    }
+};
 
 // RD Riksdagens öppna data
 rd_struct_attributes = {
     text_titel: {label: "title", order: 50},
-    text_subtitel: {label: "subtitel", order: 49},
-    text_debattnamn: {label: "debattnamn", order: 48},
-    text_rubrik: {label: "rubrik", order: 47},
+    text_subtitel: {label: "rd_subtitel", order: 49},
+    text_debattnamn: {label: "rd_debattnamn", order: 48},
+    text_rubrik: {label: "rd_rubrik", order: 47},
     // text_rubriker: {label: "rubriker", order: 47},
     text_datum: {label: "date", order: 46},
     // text_systemdatum: {label: "systemdatum"},
@@ -6727,125 +6774,232 @@ rd_struct_attributes = {
     text_typ: {label: "type", order: 44},
 
     text_parti: {label: "party", order: 43},
-    text_filnamn: {label: "filnamn", order: 44},
-    text_fil_url: {label: "file_url", order: 43,
+    text_filnamn: {label: "rd_filnamn", order: 44},
+    text_fil_url: {label: "rd_file_url", order: 43,
                    pattern: "<a href='<%= struct_attrs.text_fil_url %>' target='_blank'><%= struct_attrs.text_fil_url %></a>"},
-    text_dokument_url_html: {label: "dokument_url_html", order: 42,
+    text_dokument_url_html: {label: "rd_dokument_url_html", order: 42,
                              pattern: "<a href='<%= struct_attrs.text_dokument_url_html %>' target='_blank'><%= struct_attrs.text_dokument_url_html %></a>"},
-    text_dokument_url_text: {label: "dokument_url_text", order: 41,
+    text_dokument_url_text: {label: "rd_dokument_url_text", order: 41,
                              pattern: "<a href='<%= struct_attrs.text_dokument_url_text %>' target='_blank'><%= struct_attrs.text_dokument_url_text %></a>"},
-    text_dokumentstatus_url_xml: {label: "dokumentstatus_url_xml", order: 40,
+    text_dokumentstatus_url_xml: {label: "rd_dokumentstatus_url_xml", order: 40,
                                   pattern: "<a href='<%= struct_attrs.text_dokumentstatus_url_xml %>' target='_blank'><%= struct_attrs.text_dokumentstatus_url_xml %></a>"},
 
     text_talare: {label: "speaker", order: 31},
     text_source: {label: "source", order: 30},
 
-    text_doktyp: {label: "doktyp", order: 19},
-    text_dok_id: {label: "dok_id", order: 18},
-    text_htmlformat: {label: "htmlformat", order: 17},
-    text_filtyp: {label: "filtyp", order: 16},
-    // text_filstorlek: {label: "filstorlek", order: 15},
-    text_pretext: {label: "pretext", order: 14},
-    text_hangar_id: {label: "hangar_id", order: 13},
-    text_relaterat_id: {label: "relaterat_id", order: 12},
-    text_nummer: {label: "nummer", order: 11},
-    text_slutnummer: {label: "slutnummer", order: 10},
-    text_beteckning: {label: "beteckning", order: 9},
-    text_tempbeteckning: {label: "tempbeteckning", order: 8},
-    text_status: {label: "status", order: 7},
-    text_rm: {label: "rm", order: 6}
+    text_doktyp: {label: "rd_doktyp", order: 19},
+    text_dok_id: {label: "rd_dok_id", order: 18},
+    text_htmlformat: {label: "rd_htmlformat", order: 17},
+    text_filtyp: {label: "rd_filtyp", order: 16},
+    // text_filstorlek: {label: "rd_filstorlek", order: 15},
+    text_pretext: {label: "rd_pretext", order: 14},
+    text_hangar_id: {label: "rd_hangar_id", order: 13},
+    text_relaterat_id: {label: "rd_relaterat_id", order: 12},
+    text_nummer: {label: "rd_nummer", order: 11},
+    text_slutnummer: {label: "rd_slutnummer", order: 10},
+    text_beteckning: {label: "rd_beteckning", order: 9},
+    text_tempbeteckning: {label: "rd_tempbeteckning", order: 8},
+    text_status: {label: "rd_status", order: 7},
 
-    // text_anf_beteckning: {label: "anf_beteckning", order: 0},
-    // text_anf_datum: {label: "anf_datum", order: 0},
-    // text_anf_hangar_id: {label: "anf_hangar_id", order: 0},
-    // text_anf_klockslag: {label: "anf_klockslag", order: 0},
-    // text_anf_nummer: {label: "anf_nummer", order: 0},
-    // text_anf_rm: {label: "anf_rm", order: 0},
-    // text_anf_sekunder: {label: "anf_sekunder", order: 0},
-    // text_anf_text: {label: "anf_text", order: 0},
-    // text_anf_typ: {label: "anf_typ", order: 0},
-    // text_anf_video_id: {label: "anf_video_id", order: 0},
-    // text_avsnitt: {label: "avsnitt", order: 0},
-    // text_behandlas_i: {label: "behandlas_i", order: 0},
-    // text_beslutstyp: {label: "beslutstyp", order: 0},
-    // text_bet: {label: "bet", order: 0},
-    // text_datumtid: {label: "datumtid", order: 0},
-    // text_forslag: {label: "forslag", order: 0},
-    // text_id: {label: "id", order: 0},
-    // text_intressent: {label: "intressent", order: 0},
-    // text_intressent_id: {label: "intressent_id", order: 0},
-    // text_kammarbeslutstyp: {label: "kammarbeslutstyp", order: 0},
-    // text_kammaren: {label: "kammaren", order: 0},
-    // text_kod: {label: "kod", order: 0},
-    // text_lydelse: {label: "lydelse", order: 0},
-    // text_lydelse2: {label: "lydelse2", order: 0},
-    // text_motforslag_nummer: {label: "motforslag_nummer", order: 0},
-    // text_motforslag_partier: {label: "motforslag_partier", order: 0},
-    // text_mottagare: {label: "mottagare", order: 0},
-    // text_namn: {label: "namn", order: 0},
-    // text_nummer: {label: "nummer", order: 0},
-    // text_ordning: {label: "ordning", order: 0},
-    // text_organ: {label: "organ", order: 0},
-    // text_partibet: {label: "partibet", order: 0},
-    // text_partier: {label: "partier", order: 0},
-    // text_pretext: {label: "pretext", order: 0},
-    // text_process: {label: "process", order: 0},
-    // text_publicerad: {label: "publicerad", order: 0},
-    // text_punkt: {label: "punkt", order: 0},
-    // text_ref_dok_bet: {label: "ref_dok_bet", order: 0},
-    // text_ref_dok_id: {label: "ref_dok_id", order: 0},
-    // text_ref_dok_rm: {label: "ref_dok_rm", order: 0},
-    // text_ref_dok_subtitel: {label: "ref_dok_subtitel", order: 0},
-    // text_ref_dok_subtyp: {label: "ref_dok_subtyp", order: 0},
-    // text_ref_dok_titel: {label: "ref_dok_titel", order: 0},
-    // text_ref_dok_typ: {label: "ref_dok_typ", order: 0},
-    // text_referenstyp: {label: "referenstyp", order: 0},
-    // text_relaterat_id: {label: "relaterat_id", order: 0},
-    // text_roll: {label: "roll", order: 0},
-    // text_sourceid: {label: "sourceid", order: 0},
-    // text_startpos: {label: "startpos", order: 0},
-    // text_status: {label: "status", order: 0},
-    // text_subtyp: {label: "subtyp", order: 0},
-    // text_tumnagel: {label: "tumnagel", order: 0},
-    // text_tumnagel_stor: {label: "tumnagel_stor", order: 0},
-    // text_typ: {label: "typ", order: 0},
-    // text_uppgift: {label: "uppgift", order: 0},
-    // text_utskottet: {label: "utskottet", order: 0},
-    // text_utskottsforslag_punkt: {label: "utskottsforslag_punkt", order: 0},
-    // text_utskottsforslag_url_xml: {label: "utskottsforslag_url_xml", order: 0},
-    // text_video_id: {label: "video_id", order: 0},
-    // text_video_url: {label: "video_url", order: 0},
-    // text_vinnare: {label: "vinnare", order: 0},
-    // text_votering_id: {label: "votering_id", order: 0},
-    // text_votering_ledamot_url_xml: {label: "votering_ledamot_url_xml", order: 0},
-    // text_votering_sammanfattning_html: {label: "votering_sammanfattning_html", order: 0},
-    // text_votering_url_xml: {label: "votering_url_xml", order: 0},
-
-    // text_h4: {label: "h4", order: 0},
-    // text_td: {label: "td", order: 0},
-    // text_th: {label: "th", order: 0},
+    // text_anf_beteckning: {label: "rd_anf_beteckning", order: 0},
+    // text_anf_datum: {label: "rd_anf_datum", order: 0},
+    // text_anf_hangar_id: {label: "rd_anf_hangar_id", order: 0},
+    // text_anf_klockslag: {label: "rd_anf_klockslag", order: 0},
+    // text_anf_nummer: {label: "rd_anf_nummer", order: 0},
+    // text_anf_rm: {label: "rd_anf_rm", order: 0},
+    // text_anf_sekunder: {label: "rd_anf_sekunder", order: 0},
+    // text_anf_text: {label: "rd_anf_text", order: 0},
+    // text_anf_typ: {label: "rd_anf_typ", order: 0},
+    // text_anf_video_id: {label: "rd_anf_video_id", order: 0},
+    text_avsnitt: {label: "rd_avsnitt", order: 0},
+    text_behandlas_i: {label: "rd_behandlas_i", order: 0},
+    text_beslutstyp: {label: "rd_beslutstyp", order: 0},
+    text_bet: {label: "rd_bet", order: 0},
+    text_datumtid: {label: "rd_datumtid", order: 0},
+    text_forslag: {label: "rd_forslag", order: 0},
+    text_id: {label: "id", order: 0},
+    text_intressent: {label: "rd_intressent", order: 0},
+    text_intressent_id: {label: "rd_intressent_id", order: 0},
+    text_kammarbeslutstyp: {label: "rd_kammarbeslutstyp", order: 0},
+    text_kammaren: {label: "rd_kammaren", order: 0},
+    text_kod: {label: "rd_kod", order: 0},
+    text_lydelse: {label: "rd_lydelse", order: 0},
+    text_lydelse2: {label: "rd_lydelse2", order: 0},
+    text_motforslag_nummer: {label: "rd_motforslag_nummer", order: 0},
+    text_motforslag_partier: {label: "rd_motforslag_partier", order: 0},
+    text_mottagare: {label: "rd_mottagare", order: 0},
+    text_namn: {label: "rd_namn", order: 0},
+    text_nummer: {label: "rd_nummer", order: 0},
+    text_ordning: {label: "rd_ordning", order: 0},
+    text_organ: {label: "rd_organ", order: 0},
+    text_partibet: {label: "rd_partibet", order: 0},
+    text_partier: {label: "rd_partier", order: 0},
+    text_pretext: {label: "rd_pretext", order: 0},
+    text_process: {label: "rd_process", order: 0},
+    text_punkt: {label: "rd_punkt", order: 0},
+    // text_ref_dok_bet: {label: "rd_ref_dok_bet", order: 0},
+    // text_ref_dok_id: {label: "rd_ref_dok_id", order: 0},
+    // text_ref_dok_rm: {label: "rd_ref_dok_rm", order: 0},
+    // text_ref_dok_subtitel: {label: "rd_ref_dok_subtitel", order: 0},
+    // text_ref_dok_subtyp: {label: "rd_ref_dok_subtyp", order: 0},
+    // text_ref_dok_titel: {label: "rd_ref_dok_titel", order: 0},
+    // text_ref_dok_typ: {label: "rd_ref_dok_typ", order: 0},
+    text_referenstyp: {label: "rd_referenstyp", order: 0},
+    text_relaterat_id: {label: "rd_relaterat_id", order: 0},
+    text_rm: {label: "rd_rm", order: 0},
+    text_roll: {label: "rd_roll", order: 0},
+    text_sourceid: {label: "rd_sourceid", order: 0},
+    text_startpos: {label: "rd_startpos", order: 0},
+    text_status: {label: "rd_status", order: 0},
+    text_subtyp: {label: "rd_subtyp", order: 0},
+    text_tumnagel: {label: "rd_tumnagel", order: 0},
+    text_tumnagel_stor: {label: "rd_tumnagel_stor", order: 0},
+    text_typ: {label: "rd_typ", order: 0},
+    text_uppgift: {label: "rd_uppgift", order: 0},
+    text_utskottet: {label: "rd_utskottet", order: 0},
+    text_utskottsforslag_punkt: {label: "rd_utskottsforslag_punkt", order: 0},
+    text_utskottsforslag_url_xml: {label: "rd_utskottsforslag_url_xml", order: 0,
+                   pattern: "<a href='<%= struct_attrs.text_utskottsforslag_url_xml %>' target='_blank'><%= struct_attrs.text_utskottsforslag_url_xml %></a>"},
+    text_video_id: {label: "rd_video_id", order: 0},
+    text_video_url: {label: "rd_video_url", order: 0},
+    text_vinnare: {label: "rd_vinnare", order: 0},
+    text_votering_id: {label: "rd_votering_id", order: 0},
+    text_votering_ledamot_url_xml: {label: "rd_votering_ledamot_url_xml", order: 0,
+                   pattern: "<a href='<%= struct_attrs.text_votering_ledamot_url_xml %>' target='_blank'><%= struct_attrs.text_votering_ledamot_url_xml %></a>"},
+    text_votering_sammanfattning_html: {label: "rd_votering_sammanfattning_html", order: 0},
+    text_votering_url_xml: {label: "rd_votering_url_xml", order: 0,
+                   pattern: "<a href='<%= struct_attrs.text_votering_url_xml %>' target='_blank'><%= struct_attrs.text_votering_url_xml %></a>"}
 };
-
 
 settings.corporafolders.governmental.rd = {
     title : "Riksdagens öppna data",
-    contents : ["rd-flista", "rd-kammakt", "rd-rskr", "rd-samtr", "rd-sou", "rd-tlista"]
+    contents : ["rd-bet", "rd-flista", "rd-kammakt", "rd-rskr", "rd-samtr", "rd-sou", "rd-tlista"]
 };
 
-settings.corpora["rd-sou"] = {
-    id: "rd-sou",
-    title: "Statens offentliga utredningar",
-    description: "Olika utredningars förslag till regeringen.",
+settings.corpora["rd-bet"] = {
+    id: "rd-bet",
+    title: "Betänkande",
+    description: "Utskottens betänkanden och utlåtanden, inklusive rksdagens beslut, en sammanfattning av voteringsresultaten och Beslut i korthet.",
     within: settings.defaultWithin,
     context: settings.spContext,
     attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
+// settings.corpora["rd-ds"] = {
+//     id: "rd-ds",
+//     title: "Departementsserien",
+//     description: "Utredningar från regeringens departement.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-eun"] = {
+//     id: "rd-eun",
+//     title: "EUN",
+//     description: "Dokument från EU-nämnden, bland annat möteskallelser, föredragningslistor, protokoll och skriftliga samråd med regeringen.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
 settings.corpora["rd-flista"] = {
     id: "rd-flista",
     title: "Föredragningslista",
     description: "Föredragningslistor för kammarens sammanträden.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+// settings.corpora["rd-fpm"] = {
+//     id: "rd-fpm",
+//     title: "Faktapromemoria",
+//     description: "Regeringens faktapromemorior om EU-kommissionens förslag.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-frsrdg"] = {
+//     id: "rd-frsrdg",
+//     title: "Framställning/redogörelse",
+//     description: "Framställningar och redogörelser från organ som utsetts av riksdagen.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-ip"] = {
+//     id: "rd-ip",
+//     title: "Interpellation",
+//     description: "Interpellationer från ledamöterna till regeringen.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+settings.corpora["rd-kammakt"] = {
+    id: "rd-kammakt",
+    title: "Kammaraktiviteter",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: modernAttrs2,
+    struct_attributes: rd_struct_attributes
+};
+
+// settings.corpora["rd-kom"] = {
+//     id: "rd-kom",
+//     title: "KOM",
+//     description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-mot"] = {
+//     id: "rd-mot",
+//     title: "Motion",
+//     description: "Motioner från riksdagens ledamöter.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-prop"] = {
+//     id: "rd-prop",
+//     title: "Proposition",
+//     description: "Propositioner och skrivelser från regeringen.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-prot"] = {
+//     id: "rd-prot",
+//     title: "Protokoll",
+//     description: "Protokoll från kammarens sammanträden.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+settings.corpora["rd-rskr"] = {
+    id: "rd-rskr",
+    title: "Riksdagsskrivelse",
+    description: "Skrivelser från riksdagen till regeringen.",
     within: settings.defaultWithin,
     context: settings.spContext,
     attributes: modernAttrs2,
@@ -6862,10 +7016,20 @@ settings.corpora["rd-samtr"] = {
     struct_attributes: rd_struct_attributes
 };
 
-settings.corpora["rd-rskr"] = {
-    id: "rd-rskr",
-    title: "Riksdagsskrivelse",
-    description: "Skrivelser från riksdagen till regeringen.",
+// settings.corpora["rd-skfr"] = {
+//     id: "rd-skfr",
+//     title: "Skriftliga frågor",
+//     description: "Skriftliga frågor från ledamöterna till regeringen och svaren på dessa.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+settings.corpora["rd-sou"] = {
+    id: "rd-sou",
+    title: "Statens offentliga utredningar",
+    description: "Olika utredningars förslag till regeringen.",
     within: settings.defaultWithin,
     context: settings.spContext,
     attributes: modernAttrs2,
@@ -6882,14 +7046,44 @@ settings.corpora["rd-tlista"] = {
     struct_attributes: rd_struct_attributes
 };
 
-settings.corpora["rd-kammakt"] = {
-    id: "rd-kammakt",
-    title: "Kammaraktiviteter",
-    description: "",
-    within: settings.defaultWithin,
-    context: settings.spContext,
-    attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
-};
+// settings.corpora["rd-utr"] = {
+//     id: "rd-utr",
+//     title: "Utredningar",
+//     description: "Kommittédirektiv och kommittéberättelser för utredningar som regeringen tillsätter.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+//
+// settings.corpora["rd-utsk"] = {
+//     id: "rd-utsk",
+//     title: "Utskottsdokument",
+//     description: "Dokument från utskotten, bland annat KU-anmälningar, protokoll, verksamhetsberättelser och den gamla dokumentserien Utredningar från riksdagen.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+//
+// settings.corpora["rd-yttr"] = {
+//     id: "rd-yttr",
+//     title: "Yttrande",
+//     description: "Utskottens yttranden.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
+
+// settings.corpora["rd-ovr"] = {
+//     id: "rd-ovr",
+//     title: "Övrigt",
+//     description: "Dokumentserierna Riksrevisionens granskningsrapporter, Utredningar från Riksdagsförvaltningen och Rapporter från riksdagen samt planeringsdokument, bilagor till dokument och uttag ur riksdagens databaser.",
+//     within: settings.defaultWithin,
+//     context: settings.spContext,
+//     attributes: modernAttrs2,
+//     struct_attributes: rd_struct_attributes
+// };
 
 settings.corpusListing = new CorpusListing(settings.corpora);

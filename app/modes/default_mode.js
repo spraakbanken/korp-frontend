@@ -148,11 +148,6 @@ settings.corporafolders.fisk.magazines = {
     contents: ["astra1960-1979", "astranova", "bullen", "fanbararen", "finsktidskrift", "forumfeot", "hankeiten", "hanken", "jft", "kallan", "meddelanden", "nyaargus", "studentbladet", "svenskbygden"]
 };
 
-settings.corporafolders.protected = {
-    title: "Skyddade korpusar",
-    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
-};
-
 settings.corporafolders.medical = {
     title: "Medicinska texter",
     contents: ["diabetolog", "smittskydd"]
@@ -161,6 +156,16 @@ settings.corporafolders.medical = {
 settings.corporafolders.medical.ltd = {
     title: "Läkartidningen",
     contents: ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001", "lt2002", "lt2003", "lt2004", "lt2005"]
+};
+
+settings.corporafolders.governmental = {
+    title: "Myndighetstexter",
+    contents: ["klarsprak", "sou", "sfs"]
+};
+
+settings.corporafolders.protected = {
+    title: "Skyddade korpusar",
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip"]
 };
 
 settings.corporafolders.novels = {
@@ -224,11 +229,6 @@ settings.corporafolders.newspapertexts.webnews = {
 settings.corporafolders.magazines = {
     title: "Tidskrifter",
     contents: ["fof"]
-};
-
-settings.corporafolders.governmental = {
-    title: "Myndighetstexter",
-    contents: ["klarsprak", "sou", "sfs"]
 };
 
 
