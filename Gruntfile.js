@@ -412,6 +412,7 @@ module.exports = function (grunt) {
             // 'markup/*',
             'modes/*',
             'img/*',
+            'img/browsers/*',
             'lib/**/*',
             'styles/**/*.{png,otf,gif}',
             'styles/styles.css',
