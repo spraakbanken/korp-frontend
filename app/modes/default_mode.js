@@ -3953,8 +3953,8 @@ rd_struct_attributes = {
     text_kammarbeslutstyp: {label: "rd_kammarbeslutstyp", order: 0},
     text_kammaren: {label: "rd_kammaren", order: 0},
     text_kod: {label: "rd_kod", order: 0},
-    text_lydelse: {label: "rd_lydelse", order: 0},
-    text_lydelse2: {label: "rd_lydelse2", order: 0},
+    // text_lydelse: {label: "rd_lydelse", order: 0},
+    // text_lydelse2: {label: "rd_lydelse2", order: 0},
     text_motforslag_nummer: {label: "rd_motforslag_nummer", order: 0},
     text_motforslag_partier: {label: "rd_motforslag_partier", order: 0},
     text_mottagare: {label: "rd_mottagare", order: 0},
@@ -4001,10 +4001,14 @@ rd_struct_attributes = {
                    pattern: "<a href='<%= struct_attrs.text_votering_url_xml %>' target='_blank'><%= struct_attrs.text_votering_url_xml %></a>"}
 };
 
+var rdAttrs = _.extend({}, modernAttrs2, {
+    saldo: attrs.saldo
+});
 
 settings.corporafolders.governmental.rd = {
     title : "Riksdagens öppna data",
-    contents : ["rd-bet", "rd-flista", "rd-kammakt", "rd-rskr", "rd-samtr", "rd-sou", "rd-tlista"]
+    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-mot", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
+    // "rd-kom", "rd-prop",
 };
 
 settings.corpora["rd-bet"] = {
@@ -4013,29 +4017,29 @@ settings.corpora["rd-bet"] = {
     description: "Utskottens betänkanden och utlåtanden, inklusive rksdagens beslut, en sammanfattning av voteringsresultaten och Beslut i korthet.",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-ds"] = {
-//     id: "rd-ds",
-//     title: "Departementsserien",
-//     description: "Utredningar från regeringens departement.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-ds"] = {
+    id: "rd-ds",
+    title: "Departementsserien",
+    description: "Utredningar från regeringens departement.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
-// settings.corpora["rd-eun"] = {
-//     id: "rd-eun",
-//     title: "EUN",
-//     description: "Dokument från EU-nämnden, bland annat möteskallelser, föredragningslistor, protokoll och skriftliga samråd med regeringen.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-eun"] = {
+    id: "rd-eun",
+    title: "EUN",
+    description: "Dokument från EU-nämnden, bland annat möteskallelser, föredragningslistor, protokoll och skriftliga samråd med regeringen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-flista"] = {
     id: "rd-flista",
@@ -4043,39 +4047,39 @@ settings.corpora["rd-flista"] = {
     description: "Föredragningslistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-fpm"] = {
-//     id: "rd-fpm",
-//     title: "Faktapromemoria",
-//     description: "Regeringens faktapromemorior om EU-kommissionens förslag.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-fpm"] = {
+    id: "rd-fpm",
+    title: "Faktapromemoria",
+    description: "Regeringens faktapromemorior om EU-kommissionens förslag.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
-// settings.corpora["rd-frsrdg"] = {
-//     id: "rd-frsrdg",
-//     title: "Framställning/redogörelse",
-//     description: "Framställningar och redogörelser från organ som utsetts av riksdagen.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-frsrdg"] = {
+    id: "rd-frsrdg",
+    title: "Framställning/redogörelse",
+    description: "Framställningar och redogörelser från organ som utsetts av riksdagen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
-// settings.corpora["rd-ip"] = {
-//     id: "rd-ip",
-//     title: "Interpellation",
-//     description: "Interpellationer från ledamöterna till regeringen.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-ip"] = {
+    id: "rd-ip",
+    title: "Interpellation",
+    description: "Interpellationer från ledamöterna till regeringen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-kammakt"] = {
     id: "rd-kammakt",
@@ -4083,7 +4087,7 @@ settings.corpora["rd-kammakt"] = {
     description: "",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4093,19 +4097,19 @@ settings.corpora["rd-kammakt"] = {
 //     description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
 //     within: settings.defaultWithin,
 //     context: settings.spContext,
-//     attributes: modernAttrs2,
+//     attributes: rdAttrs,
 //     struct_attributes: rd_struct_attributes
 // };
 
-// settings.corpora["rd-mot"] = {
-//     id: "rd-mot",
-//     title: "Motion",
-//     description: "Motioner från riksdagens ledamöter.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-mot"] = {
+    id: "rd-mot",
+    title: "Motion",
+    description: "Motioner från riksdagens ledamöter.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 // settings.corpora["rd-prop"] = {
 //     id: "rd-prop",
@@ -4113,19 +4117,19 @@ settings.corpora["rd-kammakt"] = {
 //     description: "Propositioner och skrivelser från regeringen.",
 //     within: settings.defaultWithin,
 //     context: settings.spContext,
-//     attributes: modernAttrs2,
+//     attributes: rdAttrs,
 //     struct_attributes: rd_struct_attributes
 // };
 
-// settings.corpora["rd-prot"] = {
-//     id: "rd-prot",
-//     title: "Protokoll",
-//     description: "Protokoll från kammarens sammanträden.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-prot"] = {
+    id: "rd-prot",
+    title: "Protokoll",
+    description: "Protokoll från kammarens sammanträden.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-rskr"] = {
     id: "rd-rskr",
@@ -4133,7 +4137,7 @@ settings.corpora["rd-rskr"] = {
     description: "Skrivelser från riksdagen till regeringen.",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4143,19 +4147,19 @@ settings.corpora["rd-samtr"] = {
     description: "",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-skfr"] = {
-//     id: "rd-skfr",
-//     title: "Skriftliga frågor",
-//     description: "Skriftliga frågor från ledamöterna till regeringen och svaren på dessa.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-skfr"] = {
+    id: "rd-skfr",
+    title: "Skriftliga frågor",
+    description: "Skriftliga frågor från ledamöterna till regeringen och svaren på dessa.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-sou"] = {
     id: "rd-sou",
@@ -4163,7 +4167,7 @@ settings.corpora["rd-sou"] = {
     description: "Olika utredningars förslag till regeringen.",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4173,48 +4177,48 @@ settings.corpora["rd-tlista"] = {
     description: "Talarlistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: settings.spContext,
-    attributes: modernAttrs2,
+    attributes: rdAttrs,
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-utr"] = {
-//     id: "rd-utr",
-//     title: "Utredningar",
-//     description: "Kommittédirektiv och kommittéberättelser för utredningar som regeringen tillsätter.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
-//
-// settings.corpora["rd-utsk"] = {
-//     id: "rd-utsk",
-//     title: "Utskottsdokument",
-//     description: "Dokument från utskotten, bland annat KU-anmälningar, protokoll, verksamhetsberättelser och den gamla dokumentserien Utredningar från riksdagen.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
-//
-// settings.corpora["rd-yttr"] = {
-//     id: "rd-yttr",
-//     title: "Yttrande",
-//     description: "Utskottens yttranden.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-utr"] = {
+    id: "rd-utr",
+    title: "Utredningar",
+    description: "Kommittédirektiv och kommittéberättelser för utredningar som regeringen tillsätter.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
-// settings.corpora["rd-ovr"] = {
-//     id: "rd-ovr",
-//     title: "Övrigt",
-//     description: "Dokumentserierna Riksrevisionens granskningsrapporter, Utredningar från Riksdagsförvaltningen och Rapporter från riksdagen samt planeringsdokument, bilagor till dokument och uttag ur riksdagens databaser.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: modernAttrs2,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-utsk"] = {
+    id: "rd-utsk",
+    title: "Utskottsdokument",
+    description: "Dokument från utskotten, bland annat KU-anmälningar, protokoll, verksamhetsberättelser och den gamla dokumentserien Utredningar från riksdagen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-yttr"] = {
+    id: "rd-yttr",
+    title: "Yttrande",
+    description: "Utskottens yttranden.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
+
+settings.corpora["rd-ovr"] = {
+    id: "rd-ovr",
+    title: "Övrigt",
+    description: "Dokumentserierna Riksrevisionens granskningsrapporter, Utredningar från Riksdagsförvaltningen och Rapporter från riksdagen samt planeringsdokument, bilagor till dokument och uttag ur riksdagens databaser.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpusListing = new CorpusListing(settings.corpora);
