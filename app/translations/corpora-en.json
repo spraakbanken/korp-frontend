@@ -1135,6 +1135,7 @@
     "rd_votering_id": "voting ID",
     "rd_votering_ledamot_url_xml": "voting member URL (XML)",
     "rd_votering_sammanfattning_html": "voting summary (HTML)",
-    "rd_votering_url_xml": "voting URL (XML)"
+    "rd_votering_url_xml": "voting URL (XML)",
 
+    "category_url": "category URL"
 }
