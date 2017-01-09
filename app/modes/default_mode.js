@@ -4007,8 +4007,8 @@ var rdAttrs = _.extend({}, modernAttrs2, {
 
 settings.corporafolders.governmental.rd = {
     title : "Riksdagens öppna data",
-    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-mot", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
-    // "rd-kom", "rd-prop",
+    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-kom", "rd-mot", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
+    // "rd-prop",
 };
 
 settings.corpora["rd-bet"] = {
@@ -4091,15 +4091,15 @@ settings.corpora["rd-kammakt"] = {
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-kom"] = {
-//     id: "rd-kom",
-//     title: "KOM",
-//     description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: rdAttrs,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-kom"] = {
+    id: "rd-kom",
+    title: "KOM",
+    description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-mot"] = {
     id: "rd-mot",
