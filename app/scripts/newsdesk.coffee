@@ -4,7 +4,7 @@
 angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootElement, $http, $location) ->
     template : '''
     <div>
-        <div ng-if="shouldUseThis()" class="newsdesk-opener" ng-click="togglePopover($event)" ng-class="{'newsdesk-new-news': numNewNews != 0, 'newsdesk-no-new-news' : numNewNews == 0}">
+        <div ng-if="shouldUseThis" class="newsdesk-opener" ng-click="togglePopover($event)" ng-class="{'newsdesk-new-news': numNewNews != 0, 'newsdesk-no-new-news' : numNewNews == 0}">
             <i class="fa fa-bell newsdesk-bell"></i>
             <div class="newsdesk-arrow-box">
                 <span>{{numNewNews}}</span>
@@ -28,74 +28,80 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
     scope : { "header" : "=", "storage" : "=" }
     link : (scope, elem, attr) ->
         s = scope
-        s.shouldUseThis = () ->
-            return settings.news_desk_url?
+        s.shouldUseThis = settings.news_desk_url?
 
-        if s.shouldUseThis()
-            s.onPopoverClick = (event) ->
-                event.stopPropagation()
-            s.newsitems = []
-            s.initData = () ->
-                s.lastChecked = localStorage.getItem(s.storage) or "0000-00-00"
-                $.ajax({
-                    type: "GET",
-                    url: settings.news_desk_url,
-                    async: false,
-                    jsonpCallback: "newsdata",
-                    contentType: "application/json",
-                    dataType: "jsonp",
-                    success: (json) ->
-                        currentDate = new Date().toISOString()[0..9]
-                        s.newsitems = (newsitem for newsitem in json when ((not newsitem.e?) or (newsitem.e >= currentDate)))
-                        n = 0
-                        for n_item in s.newsitems
-                            if n_item.d > s.lastChecked
-                                n += 1
-                        # s.$apply(() -> s.numNewNews = n)
-                        safeApply s, (() -> s.numNewNews = n)
+        if not s.shouldUseThis
+            return
 
-                    error: (e) ->
-                       console.log "error, couldn't fetch news", e.message
-                });
+        s.onPopoverClick = (event) ->
+            event.stopPropagation()
 
-            s.currentLang = $location.search().lang or "sv"
+        s.newsitems = []
+        s.initData = () ->
+            s.lastChecked = localStorage.getItem s.storage
+            if not s.lastChecked
+                d = new Date()
+                d.setFullYear(d.getFullYear() - 1)
+                s.lastChecked = d.toISOString()[0..9]
+            $.ajax({
+                type: "GET",
+                url: settings.news_desk_url,
+                async: false,
+                jsonpCallback: "newsdata",
+                contentType: "application/json",
+                dataType: "jsonp",
+                success: (json) ->
+                    currentDate = new Date().toISOString()[0..9]
+                    s.newsitems = (newsitem for newsitem in json when ((not newsitem.e?) or (newsitem.e >= currentDate)))
+                    n = 0
+                    for nItem in s.newsitems
+                        if nItem.d > s.lastChecked
+                            n += 1
 
-            s.numNewNews = 0
-            s.initData()
+                    safeApply s, (() -> s.numNewNews = n)
 
-            s.togglePopover = (event) ->
-                if s.isPopoverVisible
-                    s.popHide()
-                else
-                    s.currentLang = $location.search().lang or "sv"
-                    s.popShow()
-                    s.numNewNews = 0
-                event.preventDefault()
-                event.stopPropagation()
+                error: (e) ->
+                   console.log "error, couldn't fetch news", e.message
+            });
 
-            popover = $(".newsdesk-popover")
+        s.currentLang = $location.search().lang or "sv"
+
+        s.numNewNews = 0
+        s.initData()
+
+        s.togglePopover = (event) ->
+            if s.isPopoverVisible
+                s.popHide()
+            else
+                s.currentLang = $location.search().lang or "sv"
+                s.popShow()
+                s.numNewNews = 0
+            event.preventDefault()
+            event.stopPropagation()
+
+        popover = $(".newsdesk-popover")
+        s.isPopoverVisible = false
+
+        handleEscape = (event) ->
+            if event.which is 27
+                s.popHide()
+                return false
+
+        s.popShow = () ->
+            s.isPopoverVisible = true
+
+            popover.show().focus().position
+                my : "right top"
+                at : "right-10 top+10"
+                of : window
+            $rootElement.on "keydown", handleEscape
+            $rootElement.on "click", s.popHide
+
+            localStorage.setItem s.storage, s.newsitems[0].d
+
+        s.popHide = () ->
             s.isPopoverVisible = false
-
-            handleEscape = (event) ->
-                if event.which is 27
-                    s.popHide()
-                    return false
-
-            s.popShow = () ->
-                s.isPopoverVisible = true
-
-                popover.show().focus().position
-                    my : "right top"
-                    at : "right-10 top+10"
-                    of : window
-                $rootElement.on "keydown", handleEscape
-                $rootElement.on "click", s.popHide
-
-                localStorage.setItem s.storage, s.newsitems[0].d
-
-            s.popHide = () ->
-                s.isPopoverVisible = false
-                popover.hide()
-                $rootElement.off "keydown", handleEscape
-                $rootElement.off "click", s.popHide
-                return
+            popover.hide()
+            $rootElement.off "keydown", handleEscape
+            $rootElement.off "click", s.popHide
+            return
