@@ -37,7 +37,7 @@ view.initSearchOptions = ->
     selects = $("#search_options > div:first select").customSelect()
 
     $("#search_options select").each ->
-        state = search()[$(this).data("history")]
+        state = locationSearch()[$(this).data("history")]
 
         if state
             $(this).val(state).change()
@@ -50,11 +50,11 @@ view.initSearchOptions = ->
         state = {}
         state[target.data("history")] = target.val()
         unless target.prop("selectedIndex") is 0
-            search state
+            locationSearch state
         else
-            if search()[target.data("history")]
-                search target.data("history"), null
+            if locationSearch()[target.data("history")]
+                locationSearch target.data("history"), null
 
         if isInit is true
-            search("search", null)
+            locationSearch("search", null)
 

@@ -298,10 +298,10 @@ class model.StatsProxy extends BaseProxy
     makeRequest: (cqp, callback) ->
         self = this
         super()
-        reduceval = search().stats_reduce or "word"
+        reduceval = locationSearch().stats_reduce or "word"
         reduceVals = reduceval.split ","
 
-        insensitive = search().stats_reduce_insensitive
+        insensitive = locationSearch().stats_reduce_insensitive
         if insensitive
             ignoreCase = true
         else

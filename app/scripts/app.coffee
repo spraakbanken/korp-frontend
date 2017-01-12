@@ -37,7 +37,10 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
     s.sidebar_visible = false
 
     s.extendedCQP = null
-    s.search = () -> $location.search arguments...
+
+    s.locationSearch = () ->
+        $location.search arguments...
+
     s.searchtabs = () ->
         $(".search_tabs > ul").scope().tabs
 

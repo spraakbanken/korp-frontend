@@ -23,7 +23,7 @@ describe "page", () ->
 
     it "should should bring up the correct page", () ->
         expect(elm.getText()).toBe "8"
-        expect(browser.executeScript("return search().page")).toBe 7
+        expect(browser.executeScript("return locationSearch().page")).toBe 7
 
     it "should page to the correct page", () ->
         element(By.css(".results-kwic .pagination li:nth-last-child(2)")).click()
@@ -33,7 +33,7 @@ describe "page", () ->
         input = element(By.model('textInField'))
         input.sendKeys("gå")
         input.sendKeys(protractor.Key.ENTER)
-        expect(browser.executeScript("return search().page")).toBe 0    
+        expect(browser.executeScript("return locationSearch().page")).toBe 0    
 
     it "should should use the correct start/end values", () ->
         expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe 175

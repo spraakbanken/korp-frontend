@@ -73,7 +73,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
     # triggers watch on searches.activeSearch
     s.updateSearch = ->
-        search "search", null
+        locationSearch "search", null
         $timeout (()->
             if s.textInField
                 util.searchHash "word", s.textInField

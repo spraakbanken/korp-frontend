@@ -81,7 +81,7 @@ class view.KWICResults extends BaseResults
 
         @proxy = new model.KWICProxy()
         window.kwicProxy = @proxy
-        @current_page = search().page or 0
+        @current_page = locationSearch().page or 0
         @tabindex = 0
 
         @s = scope
@@ -206,7 +206,7 @@ class view.KWICResults extends BaseResults
         output
 
     renderCompleteResult: (data) ->
-        @current_page = search().page or 0
+        @current_page = locationSearch().page or 0
         safeApply @s, () =>
             @hidePreloader()
             @s.hits = data.hits
@@ -299,14 +299,14 @@ class view.KWICResults extends BaseResults
     buildQueryOptions: (cqp, isPaging) ->
         opts = {}
         getSortParams = () ->
-            sort = search().sort
+            sort = locationSearch().sort
             unless sort then return {}
             if sort == "random"
-                if search().random_seed
-                    rnd = search().random_seed
+                if locationSearch().random_seed
+                    rnd = locationSearch().random_seed
                 else
                     rnd = Math.ceil(Math.random() * 10000000)
-                    search random_seed: rnd
+                    locationSearch random_seed: rnd
 
                 return {
                     sort : sort
@@ -339,7 +339,7 @@ class view.KWICResults extends BaseResults
     makeRequest: (cqp, isPaging) ->
         c.log "kwicResults.makeRequest", cqp, isPaging
 
-        page = Number(search().page) or 0
+        page = Number(locationSearch().page) or 0
 
         if !@hasInitialized?
             c.log "not init set page", page + 1

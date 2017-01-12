@@ -46,7 +46,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     angular.bootstrap(document, ['korpApp'])
 
     try
-        corpus = search()["corpus"]
+        corpus = locationSearch()["corpus"]
         if corpus
             settings.corpusListing.select corpus.split(",")
         view.updateSearchHistory()
@@ -100,21 +100,21 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     window.onHashChange = (event, isInit) ->
         c.log "onHashChange"
         hasChanged = (key) ->
-            prevFragment[key] isnt search()[key]
+            prevFragment[key] isnt locationSearch()[key]
         if hasChanged("lang")
-            newLang = search().lang || settings.defaultLanguage
+            newLang = locationSearch().lang || settings.defaultLanguage
             $("body").scope().lang = newLang
             window.lang = newLang
             util.localize()
 
             $("#languages").radioList "select", newLang
 
-        display = search().display
+        display = locationSearch().display
 
         if isInit
             util.localize()
 
-        prevFragment = _.extend {}, search()
+        prevFragment = _.extend {}, locationSearch()
 
 
     $(window).scroll ->
@@ -123,21 +123,21 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     #setup about link
     $("#about").click ->
-        unless search().display?
-            search display: "about"
+        unless locationSearch().display?
+            locationSearch display: "about"
         else
-            search "about", null
+            locationSearch "about", null
 
     $("#login").click ->
-        unless search().display?
-            search display: "login"
+        unless locationSearch().display?
+            locationSearch display: "login"
         else
-            search "login", null
+            locationSearch "login", null
 
     $("#languages").radioList(
         change: ->
             c.log "lang change", $(this).radioList("getSelected").data("mode")
-            search lang: $(this).radioList("getSelected").data("mode")
+            locationSearch lang: $(this).radioList("getSelected").data("mode")
         # TODO: this does nothing?
         selected: settings.defaultLanguage
 

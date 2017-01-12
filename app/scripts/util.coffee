@@ -146,7 +146,7 @@ class window.CorpusListing
         return _(output).compact().join()
 
     getWithinParameters: () ->
-        defaultWithin = search().within or _.keys(settings.defaultWithin)[0]
+        defaultWithin = locationSearch().within or _.keys(settings.defaultWithin)[0]
 
         output = for corpus in @selected
             withins = _.keys corpus.within
@@ -396,7 +396,7 @@ class window.ParallelCorpusListing extends CorpusListing
 
 
     getWithinParameters : ->
-        defaultWithin = search().within or _.keys(settings.defaultWithin)[0]
+        defaultWithin = locationSearch().within or _.keys(settings.defaultWithin)[0]
         within = @getAttributeQuery("within")
         return {defaultWithin : defaultWithin, within : within}
 
@@ -434,22 +434,25 @@ window.applyTo = (ctrl, f) ->
     s = getScope(ctrl)
     s.$apply f(s)
 
+
+# TODO never use this, remove when sure it is not used
 window.search = (obj, val) ->
+    window.locationSearch obj, val
+
+
+window.locationSearch = (obj, val) ->
     s = $("body").scope()
 
-    # ret = s.$root.$apply () ->
     ret = safeApply s.$root, () ->
-        # if obj or val
-        unless obj then return s.$root.search()
+        unless obj then return s.$root.locationSearch()
         if _.isObject obj
-            obj = _.extend {}, s.$root.search(), obj
-            s.$root.search(obj)
+            obj = _.extend {}, s.$root.locationSearch(), obj
+            s.$root.locationSearch(obj)
         else
-            s.$root.search(obj, val)
+            s.$root.locationSearch(obj, val)
 
     onHashChange() if val == null
     return ret
-
 
 
 window.initLocales = () ->
@@ -698,7 +701,7 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
     return
 
 util.searchHash = (type, value) ->
-    search
+    locationSearch
         search: type + "|" + value
         page: 0
 

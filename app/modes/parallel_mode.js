@@ -43,8 +43,8 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     if($location.search().parallel_corpora)
         s.langs = _.map($location.search().parallel_corpora.split(","), function(lang) {
             var obj = {lang: lang};
-            if(search()["cqp_" + lang])
-                obj.cqp = search()["cqp_" + lang];
+            if(locationSearch()["cqp_" + lang])
+                obj.cqp = locationSearch()["cqp_" + lang];
             return obj;
         })
 
@@ -89,7 +89,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         }).join("");
 
         _.each(s.langs, function(langobj, i) {
-            search("cqp_" + langobj.lang , langobj.cqp);
+            locationSearch("cqp_" + langobj.lang , langobj.cqp);
         })
         $rootScope.extendedCQP = output;
         s.$broadcast("corpuschooserchange");

@@ -130,7 +130,7 @@ Sidebar =
                                 searchKey = attrSettings.searchKey or key
                                 cqpVal = $(this).data("key")
                                 cqpExpr = if attrSettings.internalSearch then attrSettings.internalSearch searchKey, cqpVal else "[#{searchKey} contains '#{cqpVal}']"
-                                search({"search": "cqp|" + cqpExpr})
+                                locationSearch({"search": "cqp|" + cqpExpr})
                         if attrs.externalSearch
                             address = _.template(attrs.externalSearch, {val : subValue})
                             karpLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
@@ -214,7 +214,7 @@ Sidebar =
                 if attrs.internalSearch
                     inner.addClass("link").click ->
                         cqpVal = $(this).data("key")
-                        search({"search": "cqp|[#{key} contains '#{cqpVal}']"})
+                        locationSearch({"search": "cqp|[#{key} contains '#{cqpVal}']"})
 
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
