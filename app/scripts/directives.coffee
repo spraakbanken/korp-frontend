@@ -567,7 +567,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                 "index" : senseParts[1]
             }
 
-        scope.placeholderToString = (placeholder) ->
+        scope.placeholderToString = _.memoize (placeholder) ->
             unless placeholder then return
             if scope.type is "lemgram"
                 util.lemgramToString(placeholder).replace(/<.*?>/g, "")
