@@ -76,26 +76,22 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
 
     searches.infoDef.then () ->
         corpus = $location.search().corpus
+        currentCorpora = []
         if corpus
-            corp_array = corpus.split(",")
-            processed_corp_array = []
-            $.each corp_array, (key, val) ->
-                processed_corp_array = [].concat(processed_corp_array, getAllCorporaInFolders(settings.corporafolders, val))
-            settings.corpusListing.select(processed_corp_array)
-            corpusChooserInstance.corpusChooser "selectItems", processed_corp_array
-            $("#select_corpus").val corpus
+            _.map corpus.split(","), (val) ->
+                currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val))
         else
             if not settings.preselected_corpora?.length
-                all_default_corpora = _.pluck settings.corpusListing.corpora, "id"
+                currentCorpora = _.pluck settings.corpusListing.corpora, "id"
             else
-                all_default_corpora = []
                 for pre_item in settings.preselected_corpora
                     pre_item = pre_item.replace /^__/g, ''
-                    all_default_corpora.push.apply(all_default_corpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
+                    currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
 
-            settings.preselected_corpora = all_default_corpora
-            settings.corpusListing.select all_default_corpora
-            corpusChooserInstance.corpusChooser "selectItems", all_default_corpora
+            settings.preselected_corpora = currentCorpora
+
+        settings.corpusListing.select currentCorpora
+        corpusChooserInstance.corpusChooser "selectItems", currentCorpora
 
 korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s = $scope
