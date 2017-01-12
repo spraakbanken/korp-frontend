@@ -334,16 +334,15 @@ korpApp.directive "wordpicCtrl", () ->
 
         $rootScope.$on "word_picture_data_available", (event, data) ->
             $scope.data = data
-            
-            # TODO fix this ugliness
+
             max = 0
             _.map data, (form) ->
-                _.map form, (something) ->
-                    if something instanceof Array
-                        _.map something, (asdf) ->
-                            _.map asdf, (qwerty) ->
-                                if qwerty.table and (qwerty.table.length > max)
-                                    max = qwerty.table.length
+                _.map form, (categories) ->
+                    if categories instanceof Array
+                        _.map categories, (cols) ->
+                            _.map cols, (col) ->
+                                if col.table and (col.table.length > max)
+                                    max = col.table.length
 
             $scope.hitSettings = []
             if max < 15
