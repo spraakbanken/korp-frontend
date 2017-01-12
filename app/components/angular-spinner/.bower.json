@@ -24,7 +24,7 @@
     "tag": "0.2.1",
     "commit": "323e8cd7b4caf683b11a2e4830ce47cec53257ce"
   },
-  "_source": "git://github.com/urish/angular-spinner.git",
+  "_source": "https://github.com/urish/angular-spinner.git",
   "_target": "~0.2.1",
   "_originalSource": "angular-spinner"
 }
