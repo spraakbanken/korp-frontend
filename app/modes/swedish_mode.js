@@ -7,56 +7,6 @@ settings.struct_attribute_selector = "intersection"
 settings.word_attribute_selector   = "intersection"
 settings.reduce_word_attribute_selector = "intersection"
 
-var modernAttrs2 = _.extend({}, modernAttrs, {
-    ne_ex: attrs.ne_ex,
-    ne_type: attrs.ne_type,
-    ne_subtype: attrs.ne_subtype,
-    complemgram: {
-        label: "complemgram",
-        internalSearch: true,
-        ranked: true,
-        display: {
-            expandList: {
-                splitValue: function(value) { return value.split("+"); },
-                searchKey: "lex",
-                joinValues: " + ",
-                stringify: function(lemgram) { return util.lemgramToString(lemgram, true); },
-                linkAllValues: true
-            }
-        },
-        type: "set",
-        hideStatistics: true,
-        hideExtended: true,
-        hideCompare: true
-    },
-    compwf: {
-        label: "compwf",
-        display: {
-            "expandList": {}
-        },
-        type: "set",
-        hideStatistics: true,
-        hideExtended: true,
-        hideCompare: true
-    },
-    sense: {
-        label: "sense",
-        type: "set",
-        ranked: true,
-        display: {
-            expandList: {
-                internalSearch: function(key, value) { return "[" + key + " = '\\|" + regescape(value) + ":.*']"},
-            }
-        },
-        stringify: function(sense) { return util.saldoToString(sense, true); },
-        opts: settings.probabilitySetOptions,
-        externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
-        internalSearch: true,
-        extended_template: settings.senseAutoComplete
-    }
-});
-delete modernAttrs2.saldo;
-
 settings.corpora = {};
 settings.corporafolders = {};
 
