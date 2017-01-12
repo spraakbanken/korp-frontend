@@ -249,7 +249,7 @@ var superType = model.StatsProxy.prototype.constructor
 model.StatsProxy = Subclass(model.StatsProxy, function() {
     superType.apply(this, arguments);
 }, {
-    makeParameters: function(reduceVals, cqp) {
+    makeParameters: function(reduceVals, cqp, ignoreCase) {
         params = superType.prototype.makeParameters.apply(this, arguments)
 
 

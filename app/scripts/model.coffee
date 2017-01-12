@@ -285,7 +285,7 @@ class model.StatsProxy extends BaseProxy
             "attrs" : reduceVals
         }
 
-    makeParameters: (reduceVals, cqp) ->
+    makeParameters: (reduceVals, cqp, ignoreCase) ->
         parameters =
             command: "count"
             groupby: reduceVals.join ','
@@ -293,6 +293,8 @@ class model.StatsProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: $.support.ajaxProgress
         _.extend parameters, settings.corpusListing.getWithinParameters()
+        if ignoreCase
+            _.extend parameters, {ignore_case: "word"}
         return parameters
 
     makeRequest: (cqp, callback) ->
@@ -315,7 +317,7 @@ class model.StatsProxy extends BaseProxy
             else
                 return settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())[reduceVal].label
 
-        data = @makeParameters(reduceVals, cqp)
+        data = @makeParameters(reduceVals, cqp, ignoreCase)
 
         data.split = _.filter(reduceVals, (reduceVal) ->
             settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.type == "set").join(',')
@@ -324,10 +326,6 @@ class model.StatsProxy extends BaseProxy
             settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.ranked
         data.top = _.map(rankedReduceVals, (reduceVal) ->
             return reduceVal + ":1").join(',')
-
-        if ignoreCase
-            $.extend data,
-                ignore_case: "word"
 
         @prevNonExpandedCQP = cqp
         @prevParams = data
@@ -367,7 +365,7 @@ class model.NameProxy extends model.StatsProxy
 
     makeParameters: (reduceVal, cqp) ->
         # ignore reduceVal, map only works for word
-        parameters = super(["word"], cqp)
+        parameters = super(["word"], cqp, false)
         parameters.cqp2 = "[pos='PM' | pos='NNP' | pos='NNPS']"
         return parameters
 
