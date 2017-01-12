@@ -9,3 +9,7 @@ node_modules
 test/e2e/bin/
 test/karma/bin
 release_bin
+app/index.html
+app/scripts/bin/
+app/styles/styles.css
+
