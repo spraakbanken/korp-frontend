@@ -63,8 +63,6 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
 
             for {type, op, val, flags} in and_array
                 if expanded_format
-                    if op in ["highest_rank", "not_highest_rank", "rank_contains", "not_rank_contains"]
-                        val = regescape val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
                         "_=" : [".*" + val + ".*", "="]

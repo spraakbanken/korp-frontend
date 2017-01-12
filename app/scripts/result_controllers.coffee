@@ -275,18 +275,7 @@ korpApp.directive "statsResultCtrl", () ->
             event.stopPropagation()
 
         s.showMap = () ->
-            getCqpExpr = () ->
-                # TODO currently copy pasted from watch on "searches.activeSearch"
-                search = searches.activeSearch
-                cqpExpr = null
-                if search
-                    if search.type == "word" or search.type == "lemgram"
-                        cqpExpr = simpleSearch.getCQP(search.val)
-                    else
-                        cqpExpr = search.val
-                return cqpExpr
-
-            cqpExpr = CQP.expandOperators getCqpExpr()
+            cqpExpr = CQP.expandOperators searches.getCqpExpr()
 
             cqpExprs = {}
             for rowIx in s.instance.getSelectedRows()
@@ -592,7 +581,7 @@ korpApp.directive "mapCtrl", () ->
 
             s.showMap = Boolean(val)
             if s.showMap
-                currentCqp = getCqpExpr()
+                currentCqp = searches.getCqpExpr()
                 searchCorpora = settings.corpusListing.stringifySelected(true)
                 if currentCqp != s.lastSearch?.cqp or searchCorpora != s.lastSearch?.corpora
                     s.hasResult = false
@@ -600,20 +589,9 @@ korpApp.directive "mapCtrl", () ->
         s.activate = () ->
             $location.search("show_map", true)
             s.showMap = true
-            cqpExpr = getCqpExpr()
+            cqpExpr = searches.getCqpExpr()
             if cqpExpr
                 nameEntitySearch.request cqpExpr
-
-        getCqpExpr = () ->
-            # TODO currently copy pasted from watch on "searches.activeSearch"
-            search = searches.activeSearch
-            cqpExpr = null
-            if search
-                if search.type == "word" or search.type == "lemgram"
-                    cqpExpr = simpleSearch.getCQP(search.val)
-                else
-                    cqpExpr = search.val
-            return cqpExpr
 
         s.center = settings.mapCenter
 

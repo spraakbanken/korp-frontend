@@ -203,14 +203,6 @@ class model.LemgramProxy extends BaseProxy
         return def
 
 
-    lemgramSearch: (lemgram, searchPrefix, searchSuffix) ->
-        return $.format("[(lex contains \"%s\")%s%s]", [lemgram, @buildAffixQuery(searchPrefix, "prefix", lemgram), @buildAffixQuery(searchSuffix, "suffix", lemgram)])
-
-    buildAffixQuery: (isValid, key, value) ->
-        return "" unless isValid
-        $.format "| (%s contains \"%s\")", [key, value]
-
-
 class model.StatsProxy extends BaseProxy
     constructor: ->
         super()

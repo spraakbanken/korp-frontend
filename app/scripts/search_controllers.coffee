@@ -58,17 +58,66 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
 
 
 korpApp.controller "SearchCtrl", window.SearchCtrl
-korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal) ->
+
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout) ->
     s = $scope
 
-    s.$on "popover_submit", (event, name) ->
-        cqp = s.instance.getCQP()
-        compareSearches.saveSearch {
-            label : name or cqp
-            cqp : cqp
-            corpora : settings.corpusListing.getSelectedCorpora()
-        }
+    s.prefix = false
+    s.suffix = false 
+    s.isCaseInsensitive = false
 
+    s.$on "btn_submit", () ->
+        c.log "simple search submit"
+        s.updateSearch()
+        $location.search "within", null
+
+    # triggers watch on searches.activeSearch
+    s.updateSearch = ->
+        search "search", null
+        $timeout (()->
+            if s.textInField
+                util.searchHash "word", s.textInField
+                s.model = null
+                s.placeholder = null
+            else if s.model
+                util.searchHash "lemgram", s.model
+        ), 0
+
+    s.$watch "getCQP()", (val) ->
+        if not val then return
+        $rootScope.simpleCQP = CQP.expandOperators(val)
+
+    s.getCQP = () ->
+        currentText = (s.textInField or "").trim()
+
+        if currentText
+            suffix = if s.isCaseInsensitive then " %c" else ""
+            wordArray = currentText.split(" ")
+            tokenArray = _.map wordArray, (token) =>
+                orParts = []
+                if s.prefix
+                    orParts.push token + ".*"
+                if s.suffix
+                    orParts.push ".*" + token
+                if not (s.prefix or s.suffix)
+                    orParts.push regescape token
+                res = _.map orParts, (orPart) ->
+                    return 'word = "' + orPart + '"' + suffix
+                return "[" + res.join(" | ") + "]"
+            val = tokenArray.join(" ")
+        else if s.placeholder or util.isLemgramId(currentText)
+            lemgram = if s.model then s.model else currentText
+            val = "[lex contains \"#{lemgram}\""
+            if s.prefix
+                val += " | prefix contains \"#{lemgram}\""
+            if s.suffix
+                val += " | suffix contains \"#{lemgram}\""
+            val += "]"
+
+        return val
+
+    s.$on "popover_submit", (event, name) ->
+        compareSearches.saveSearch name, s.getCQP()
 
     s.stringifyRelatedHeader = (wd) ->
         wd.replace(/_/g, " ")
@@ -111,70 +160,48 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         )
 
     s.searches = searches
-    s.$watch "searches.activeSearch", (search) =>
-        c.log "search", search
+    s.$watch("searches.activeSearch", (search) ->
         unless search then return
-        page = Number($location.search().page) or 0
-        s.relatedObj = null
-        if search.type == "word"
-            $("#simple_text input").val(search.val) # Necessary for displaying the wordform if it came from the URL
-            s.simple_text = search.val
-            cqp = simpleSearch.getCQP(search.val)
-            c.log "simple search cqp", cqp
-            if search.pageOnly
-                searches.kwicRequest(cqp, true)
-                return
+        if search.type == "word" || search.type == "lemgram"
+            if search.type == "word"
+                s.textInField = search.val
             else
-                searches.kwicSearch(cqp)
-            if settings.wordpicture != false and s.word_pic and " " not in search.val
-                lemgramResults.makeRequest(search.val, "word")
-            else
-                lemgramResults.resetView()
-
-        else if search.type == "lemgram"
-            s.placeholder = search.val
-            s.simple_text = ""
-            s.model = search.val
-            cqp = simpleSearch.getCQP()
-            backend.relatedWordSearch(search.val).then (data) ->
-                s.relatedObj = data
-
-            if s.word_pic
-                searches.lemgramSearch(search.val, s.prefix, s.suffix, search.pageOnly)
-            else
-                searches.kwicSearch(cqp, search.pageOnly)
-
+                s.placeholder = unregescape search.val
+                s.model = search.val
+            s.doSearch()
         else
             s.placeholder = null
-            s.simple_text = ""
             lemgramResults?.resetView()
+    )
 
+    s.doSearch = () ->
+        search = searches.activeSearch
+        s.relatedObj = null
+        cqp = s.getCQP()
+        searches.kwicSearch(cqp, search?.pageOnly)
 
-    s.lemgramToString = (lemgram) ->
-        unless lemgram then return
-        util.lemgramToString(lemgram).replace(/<.*?>/g, "")
+        if not search?.pageOnly
+            if search.type == "lemgram"
+                backend.relatedWordSearch(unregescape search.val).then (data) ->
+                    s.relatedObj = data
+
+            if s.word_pic and (search.type == "lemgram" or " " not in search.val)
+                value = if search.type == "lemgram" then unregescape search.val else search.val
+                searches.lemgramSearch(value, search.type)
+            else
+                lemgramResults?.resetView()
 
     utils.setupHash s, [
-            key : "prefix"
-        ,
-            key : "suffix"
-        ,
-            key : "isCaseInsensitive"
+            {key : "prefix"},
+            {key : "suffix"},
+            {key : "isCaseInsensitive"}
     ]
-
-    $scope.$on "btn_submit", () ->
-        $location.search "within", null
 
 
 korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $timeout) ->
     s = $scope
     s.$on "popover_submit", (event, name) ->
-        compareSearches.saveSearch {
-            label : name or $rootScope.extendedCQP
-            cqp : $rootScope.extendedCQP
-            corpora : settings.corpusListing.getSelectedCorpora()
-
-        }
+        compareSearches.saveSearch name, $rootScope.extendedCQP
 
     s.searches = searches
     s.$on "btn_submit", () ->
@@ -305,18 +332,8 @@ korpApp.directive "advancedSearch", () ->
         else
             $scope.cqp = "[]"
 
-        $scope.$watch () ->
-            simpleSearch?.getCQP()
-        , (val) ->
-            $scope.simpleCQP = val
-
         $scope.$on "popover_submit", (event, name) ->
-            compareSearches.saveSearch {
-                label : name or $rootScope.extendedCQP
-                cqp : $scope.cqp
-                corpora : settings.corpusListing.getSelectedCorpora()
-
-            }
+            compareSearches.saveSearch name, $scope.cqp
 
         $scope.$on "btn_submit", () ->
             c.log "advanced submit", $scope.cqp

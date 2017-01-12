@@ -83,12 +83,12 @@ korpApp.directive "escaper", () ->
 
         unescape = (val) ->
             if $scope.orObj.op not in doNotEscape
-                val.replace(/\\/g, "")
+                unregescape(val)
             else
                 val
 
         $scope.input = unescape $scope.model
-        $scope.inputChange = () ->
+        $scope.$watch "input", () ->
             $scope.model = escape($scope.input)
 
         $scope.$watch "orObj.op", () ->
@@ -98,7 +98,7 @@ korpApp.directive "escaper", () ->
 korpApp.directive "tokenValue", ($compile, $controller) ->
 
     getDefaultTmpl = _.template """
-                <input ng-model='input' ng-change="inputChange()" class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
+                <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
                 <%= maybe_placeholder %>>
                 <span class='val_mod' popper
                     ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
@@ -506,6 +506,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         "type" : "@"
         "variant" : "@"
         "disableLemgramAutocomplete" : "="
+        "textInField": "="
     template: """
         <div>
             <script type="text/ng-template" id="lemgramautocomplete.html">
@@ -525,7 +526,6 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             </script>
             <div ng-show="!disableLemgramAutocomplete">
                 <div style="float:left"><input
-                    class="autocomplete_searchbox"
                     autofocus
                     type="text"
                     ng-model="textInField"
@@ -539,7 +539,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             </div>
             <div ng-show="disableLemgramAutocomplete">
                 <div style="float:left">
-                    <input class="standard_searchbox" autofocus type="text">
+                    <input autofocus type="text" ng-model="textInField">
                 </div>
             </div>
         </div>
@@ -572,17 +572,17 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         scope.selectedItem = (item, model, label) ->
             if scope.type is "lemgram"
                 scope.placeholder = model.lemgram
-                scope.model = model.lemgram
+                scope.model = regescape(model.lemgram)
             else
                 scope.placeholder = model.sense
-                scope.model = model.sense
+                scope.model = regescape(model.sense)
             scope.textInField = ""
 
         if scope.model
             if scope.type == "sense"
-                scope.selectedItem null, {sense : scope.model }
+                scope.selectedItem null, {sense : unregescape scope.model }
             else
-                scope.selectedItem null, {lemgram : scope.model }
+                scope.selectedItem null, {lemgram : unregescape scope.model }
 
         scope.getMorphologies = (corporaIDs) ->
             morphologies = []

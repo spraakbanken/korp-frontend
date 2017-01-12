@@ -233,27 +233,15 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                 def.resolve()
                 initTimeGraph(timedef)
 
-        kwicRequest : (cqp, isPaging) ->
-            c.log "kwicRequest", cqp
-            kwicResults.makeRequest(cqp, isPaging)
-
-
         kwicSearch : (cqp, isPaging) ->
-            @kwicRequest cqp, isPaging
-            statsResults.makeRequest cqp
-            @nameEntitySearch cqp
+            kwicResults.makeRequest cqp, isPaging
+            if not isPaging
+                statsResults.makeRequest cqp
+                @nameEntitySearch cqp
 
-
-        lemgramSearch : (lemgram, searchPrefix, searchSuffix, isPaging) ->
-            #TODO: this is dumb, move the cqp calculations elsewhere
-            cqp = new model.LemgramProxy().lemgramSearch(lemgram, searchPrefix, searchSuffix)
-            statsResults.makeRequest cqp
-            @kwicRequest cqp, isPaging
-            @nameEntitySearch cqp
-
+        lemgramSearch : (word, type) ->
             if settings.wordpicture == false then return
-
-            lemgramResults.makeRequest(lemgram, "lemgram")
+            lemgramResults.makeRequest(word, type)
 
         nameEntitySearch : (cqp) ->
             if $location.search().show_map?
@@ -284,6 +272,17 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
 
     searches = new Searches()
+    
+    searches.getCqpExpr = () ->
+        search = searches.activeSearch
+        cqpExpr = null
+        if search
+            if search.type == "word" or search.type == "lemgram"
+                cqpExpr = $rootScope.simpleCQP
+            else
+                cqpExpr = search.val
+        return cqpExpr
+    
     oldValues = []
     $rootScope.$watchGroup [(() -> $location.search().search), "_loc.search().page"], (newValues) =>
         c.log "searches service watch", $location.search().search
@@ -307,33 +306,21 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
         view.updateSearchHistory value, $location.absUrl()
         $q.all([searches.infoDef, searches.langDef.promise]).then () ->
-            switch type
-                when "word"
-                    searches.activeSearch =
-                        type : type
-                        val : value
-                        page: newValues[1]
-                        pageOnly: pageOnly
+            if type == "cqp"
+                if not value then value = $location.search().cqp
+            if type in ["cqp", "word", "lemgram"]
+                searches.activeSearch =
+                    type : type
+                    val : value
+                    page: newValues[1]
+                    pageOnly: pageOnly
+            else if type == "saldo"
+                extendedSearch.setOneToken "saldo", value
 
-                when "lemgram"
-                    searches.activeSearch =
-                        type : type
-                        val : value
-                        page: newValues[1]
-                        pageOnly: pageOnly
-                when "saldo"
-                    extendedSearch.setOneToken "saldo", value
-                when "cqp"
-                    if not value then value = $location.search().cqp
-                    searches.activeSearch =
-                        type : type
-                        val : value
-                        page: newValues[1]
-                        pageOnly: pageOnly
+            if type == "cqp"
+                searches.kwicSearch value, pageOnly
 
-                    searches.kwicSearch value, pageOnly
             oldValues = [].concat newValues
-
 
     return searches
 
@@ -348,7 +335,11 @@ korpApp.service "compareSearches",
             c.log "key", @key
             @savedSearches = ($.jStorage.get @key) or []
 
-        saveSearch : (searchObj) ->
+        saveSearch : (name, cqp) ->
+            searchObj =
+                label : name or cqp
+                cqp : cqp
+                corpora : settings.corpusListing.getSelectedCorpora()
             @savedSearches.push searchObj
             $.jStorage.set @key, @savedSearches
 

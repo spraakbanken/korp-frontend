@@ -6,7 +6,7 @@ describe "compare", () ->
             return elm.isDisplayed()
             
     selectLemgram = (word) ->
-        input = element By.css "#simple_text .autocomplete_searchbox"
+        input = element By.css "#simple_text input"
         input.clear()
         input.sendKeys word
         

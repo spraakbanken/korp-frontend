@@ -3,7 +3,7 @@ settings.senseAutoComplete = "<autoc model='model' placeholder='placeholder' typ
 var karpLemgramLink = "https://spraakbanken.gu.se/karp/#?search=extended||and|lemgram|equals|<%= val.replace(/:\\d+/, '') %>";
 
 var selectType = {
-    extended_template: "<select ng-model='model' "
+    extended_template: "<select ng-model='input' escaper "
      + "ng-options='tuple[0] as localize(tuple[1]) for tuple in dataset' ></select>",
     controller: function($scope) {
         $scope.localize = function(str) {
@@ -72,7 +72,7 @@ attrs.pos = {
 attrs.msd = {
     label: "msd",
     opts: settings.defaultOptions,
-    extended_template: '<input ng-model="input" ng-change="inputChange()" class="arg_value" escaper ng-model-options=\'{debounce : {default : 300, blur : 0}, updateOn: "default blur"}\'>' +
+    extended_template: '<input ng-model="input" class="arg_value" escaper ng-model-options=\'{debounce : {default : 300, blur : 0}, updateOn: "default blur"}\'>' +
     '<span ng-click="onIconClick()" class="fa fa-info-circle"></span>',
     controller: function($scope, $uibModal) {
         var modal = null;
@@ -96,7 +96,6 @@ attrs.msd = {
             val = $(event.target).parent().data("value")
             if(!val) return;
             $scope.input = val;
-            $scope.inputChange();
             modal.close();
         }
     }
