@@ -40,9 +40,6 @@ class KwicCtrl
 
         @initPage()
 
-        s.$watch "pageObj.pager", (val) ->
-            c.log "pageobj watch", val
-
         s.pageChange = ($event, page) ->
             c.log "pageChange", arguments
             $event.stopPropagation()
@@ -305,7 +302,8 @@ korpApp.directive "wordpicCtrl", () ->
         $scope.activate = () ->
             $location.search("word_pic", true)
             search = searches.activeSearch
-            $scope.instance.makeRequest(search.val, search.type)
+            searchVal = if search.type == "lemgram" then unregescape search.val else search.val
+            $scope.instance.makeRequest(searchVal, search.type)
 
         $scope.settings =
             showNumberOfHits: "15"

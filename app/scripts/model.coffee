@@ -208,8 +208,6 @@ class model.StatsProxy extends BaseProxy
         super()
         @prevRequest = null
         @prevParams = null
-        @currentPage = 0
-        @page_incr = 25
 
     processData: (def, data, reduceVals, reduceValLabels, ignoreCase) ->
         minWidth = 100
