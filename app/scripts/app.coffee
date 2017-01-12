@@ -39,7 +39,6 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
 
     s.extendedCQP = null
     s.search = () -> $location.search arguments...
-
     s.searchtabs = () ->
         $(".search_tabs > ul").scope().tabs
 
@@ -67,7 +66,6 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
         c.log "corpuschooserchange", corpora
         settings.corpusListing.select corpora
         nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
-        # c.log "corpus change", corpora.length, _.intersection(corpora, nonprotected).length, nonprotected.length
         if corpora.length and _.intersection(corpora, nonprotected).length isnt nonprotected.length
             $location.search "corpus", corpora.join(",")
         else
@@ -105,8 +103,6 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
 
     s.citeClick = () ->
         s.show_modal = 'about'
-        # $location.search("display", "about")
-        # onHashChange()
 
     N_VISIBLE = settings.visibleModes
 
@@ -124,14 +120,11 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         s.visible.push s.menu[i]
         s.menu.splice(i, 1)
 
+    for mode in s.modes
+        mode.selected = false
+        if mode.mode == currentMode
+            mode.selected = true
 
-    s.select = (modeId) ->
-        for mode in s.modes
-            mode.selected = false
-            if mode.mode == modeId
-                mode.selected = true
-
-    s.select currentMode
     s.getUrl = (modeId) ->
         langParam = "#lang=#{s.$root.lang}"
         if modeId is "default"
@@ -142,8 +135,6 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         window.location = s.getUrl modeId
 
     s.show_modal = false
-
-
 
     modal = null
     utils.setupHash s, [
@@ -157,19 +148,11 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
                 c.log "post change modal", modal
                 modal?.close()
                 modal = null
-
-
     ]
 
     closeModals = () ->
         s.login_err = false
         s.show_modal = false
-
-    #hack for buggy backdrop, remove when angular bootstrap fixes bug
-    $("body").on "click", ".modal-backdrop", () ->
-        scp = $(this).next().scope()
-        scp.$apply () ->
-            scp.$close()
 
     showModal = (key) ->
         tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]

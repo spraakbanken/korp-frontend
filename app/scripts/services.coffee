@@ -36,35 +36,6 @@ korpApp.factory "utils", ($location) ->
                     obj.post_change?(val)
 
 
-korpApp.factory "debounce", ($timeout) ->
-    (func, wait, options) ->
-        args = null
-        inited = null
-        result = null
-        thisArg = null
-        timeoutDeferred = null
-        trailing = true
-
-        delayed = ->
-            inited = timeoutDeferred = null
-            result = func.apply(thisArg, args) if trailing
-        if options is true
-            leading = true
-            trailing = false
-        else if options and angular.isObject(options)
-            leading = options.leading
-            trailing = (if "trailing" of options then options.trailing else trailing)
-        return () ->
-            args = arguments
-            thisArg = this
-            $timeout.cancel timeoutDeferred
-            if not inited and leading
-                inited = true
-                result = func.apply(thisArg, args)
-            else
-                timeoutDeferred = $timeout(delayed, wait)
-            result
-
 korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
         reduce = _.map reduce, (item) -> item.replace(/^_\./, "")
@@ -258,21 +229,16 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
             # is resolved when parallel search controller is loaded
             @langDef = $q.defer()
-            # @modeDef = @getMode()
-            # @modeDef.then () =>
             @getInfoData().then () ->
                 def.resolve()
                 initTimeGraph(timedef)
 
         kwicRequest : (cqp, isPaging) ->
-
             c.log "kwicRequest", cqp
             kwicResults.makeRequest(cqp, isPaging)
 
 
         kwicSearch : (cqp, isPaging) ->
-            # simpleSearch.resetView()
-            # kwicResults.@
             @kwicRequest cqp, isPaging
             statsResults.makeRequest cqp
             @nameEntitySearch cqp
@@ -287,35 +253,11 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
             if settings.wordpicture == false then return
 
-            # lemgramResults.showPreloader()
             lemgramResults.makeRequest(lemgram, "lemgram")
-            # def = lemgramProxy.makeRequest(lemgram, "lemgram", $.proxy(lemgramResults.onProgress, lemgramResults))
-            # c.log "def", def
-            # def.fail (jqXHR, status, errorThrown) ->
-            #     c.log "def fail", status
-            #     if status == "abort"
-            #         safeApply lemgramResults.s, () =>
-            #             lemgramResults.hidePreloader()
 
         nameEntitySearch : (cqp) ->
             if $location.search().show_map?
                 nameEntitySearch.request cqp
-
-        getMode : () ->
-            def = $q.defer()
-            mode = $.deparam.querystring().mode
-            if mode? and mode isnt "default"
-                $.getScript("modes/#{mode}_mode.js").done(->
-                    $rootScope.$apply () ->
-                        def.resolve()
-
-                ).fail (args, msg, e) ->
-                    $rootScope.$apply () ->
-                        def.reject()
-            else
-                def.resolve()
-
-            return def.promise
 
         getInfoData : () ->
             def = $q.defer()

@@ -114,7 +114,6 @@ attrs.lemgram = {
     displayType: "autocomplete",
     opts: settings.setOptions,
     stringify: function(lemgram) {
-        // if(_.contains(lemgram, " "))
         // TODO: what if we're getting more than one consequtive lemgram back?
         return util.lemgramToString(_.str.trim(lemgram), true);
     },
@@ -129,7 +128,6 @@ attrs.dalinlemgram = {
     displayType: "autocomplete",
     opts: settings.setOptions,
     stringify: function(lemgram) {
-        // if(_.contains(lemgram, " "))
         // TODO: what if we're getting more than one consequtive lemgram back?
         return util.lemgramToString(_.str.trim(lemgram), true);
     },

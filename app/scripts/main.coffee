@@ -11,7 +11,6 @@ if(location.hash.length && location.hash[1] != "?")
 
 t = $.now()
 
-isDev = window.location.host is "localhost"
 $.ajaxSetup
     dataType: "json"
     traditional: true

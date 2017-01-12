@@ -249,15 +249,6 @@ settings.corporafolders.governmental = {
 
 
 /*
- * PRESELECTED CORPORA
- * Folders will be expanded to all corpora. Optionally prefix folders with __ , which will be ignored.
- */
-// TODO: this should be moved when modern texts are moved to their own mode
-if(window.currentMode == "default")
-settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk",
-                                "fof", "twitter", "__socialmedia.bloggmix", "romi", "romii", "rom99", "storsuc"];
-
-/*
  * CORPORA
  */
 

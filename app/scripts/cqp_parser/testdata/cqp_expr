@@ -1,1 +1,0 @@
-[(word = "c" | word = "d") & (word = "a" | word = "b")]

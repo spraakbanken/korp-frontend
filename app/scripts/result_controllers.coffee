@@ -4,7 +4,7 @@ korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
     $scope.enableMap = settings.enableMap
 
-# korpApp.controller "kwicCtrl", class KwicCtrl
+
 class KwicCtrl
     setupHash : () ->
         c.log "setupHash", @scope.$id
@@ -16,9 +16,8 @@ class KwicCtrl
                 c.log "@scope.pageObj.pager", @scope.pageObj.pager
             val_in : Number
         ]
+
     initPage : () ->
-        # @scope.pager = Number(@location.search().page) + 1 or 1
-        c.log "initPage", @location.search().page
         @scope.pageObj =
             pager: Number(@location.search().page) + 1 or 1
         @scope.page = @scope.pageObj.pager - 1
@@ -44,14 +43,10 @@ class KwicCtrl
         s.$watch "pageObj.pager", (val) ->
             c.log "pageobj watch", val
 
-
-
         s.pageChange = ($event, page) ->
             c.log "pageChange", arguments
             $event.stopPropagation()
             s.page = page - 1
-
-
 
         @setupHash()
         s.onPageInput = ($event, page, numPages) ->
@@ -61,8 +56,6 @@ class KwicCtrl
                 s.page = Number(page) - 1
 
         readingChange = () ->
-            c.log "reading change"
-
             if s.instance?.getProxy().pendingRequests.length
                 window.pending = s.instance.getProxy().pendingRequests
 
@@ -85,8 +78,6 @@ class KwicCtrl
                 if not init
                     readingChange()
                 init = false
-
-
 
         s.toggleReading = () ->
             s.reading_mode = not s.reading_mode
@@ -116,12 +107,10 @@ class KwicCtrl
                     if wd.structs?.open
                         wd._open = wd.structs.open
                         currentStruct = [].concat(currentStruct, wd.structs.open)
-                        # c.log "currentStruct open", currentStruct
                         isOpen = true
                     else if isOpen and wd.structs?.close
                         wd._close = wd.structs.close
                         currentStruct = _.without currentStruct, wd.structs.close...
-                        # c.log "currentStruct close", currentStruct, wd.structs.close
 
                     if isOpen
                         _.extend wd, {_struct : currentStruct} if currentStruct.length
@@ -161,10 +150,8 @@ class KwicCtrl
                         corpus : corpus_aligned
                         _color : sentence._color
 
-
                 prevCorpus = id
 
-                # return sentence
             return output
 
         findMatchSentence = (sentence) ->
@@ -184,9 +171,6 @@ class KwicCtrl
             return span
 
 
-
-
-
         s.kwic = []
         s.contextKwic = []
         s.setContextData = (data) ->
@@ -200,7 +184,6 @@ class KwicCtrl
 
         s.selectLeft = (sentence) ->
             if not sentence.match then return
-            # c.log "left", sentence.tokens.slice 0, sentence.match.start
             sentence.tokens.slice 0, sentence.match.start
 
         s.selectMatch = (sentence) ->
@@ -256,7 +239,7 @@ class ExampleCtrl extends KwicCtrl
 korpApp.directive "exampleCtrl", () ->
     controller: ExampleCtrl
 
-# korpApp.controller "StatsResultCtrl", ($scope, utils, $location, backend, searches, $rootScope) ->
+
 korpApp.directive "statsResultCtrl", () ->
     controller: ($scope, utils, $location, backend, searches, $rootScope) ->
         s = $scope
@@ -364,7 +347,8 @@ korpApp.directive "wordpicCtrl", () ->
 
         $rootScope.$on "word_picture_data_available", (event, data) ->
             $scope.data = data
-
+            
+            # TODO fix this ugliness
             max = 0
             _.map data, (form) ->
                 _.map form, (something) ->
@@ -463,7 +447,7 @@ korpApp.directive "wordpicCtrl", () ->
             else
                 return maybeLemgram
 
-# korpApp.controller "graphCtrl", ($scope) ->
+
 korpApp.directive "graphCtrl", () ->
     controller: ($scope) ->
         s = $scope
@@ -474,16 +458,7 @@ korpApp.directive "graphCtrl", () ->
         s.isGraph = () -> s.mode in ["line", "bar"]
         s.isTable = () -> s.mode == "table"
 
-    # s.$watch "mode", (mode) ->
-    #     c.log "mode", mode
 
-    #     switch mode
-    #         when "bar"
-    #             safeApply s, () ->
-    #                 s.instance.setBarMode()
-
-
-# korpApp.controller "compareCtrl", ($scope, $rootScope) ->
 korpApp.directive "compareCtrl", () ->
     controller: ($scope, $rootScope) ->
         s = $scope

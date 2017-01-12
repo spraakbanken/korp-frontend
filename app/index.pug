@@ -26,13 +26,9 @@ html
     link(rel='shortcut icon', type='image/ico', href='img/korp_icon.ico')
     title Korp
 
-
-  //- body.not_logged_in(ng-app='korpApp', style="opacity: 0;")
   body.not_logged_in(style="opacity: 0;")
     noscript
       h2 You need JavaScript to run Korp.
-    //- script.
-      //- $("body").css("opacity", 0);
     #main
       #header
         include includes/header
@@ -41,9 +37,7 @@ html
 
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
           #columns
-            //-ng-class='{sidebar_visible : word_selected && result_tab == 0}'
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}')
-              //- tabset.tabbable
               uib-tabset.tabbable.result_tabs(tab-hash='result_tab', ng-click="tabclick()")
                 uib-tab(disabled="!instance.hasData",
                     select="instance.onentry()",
@@ -55,7 +49,6 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   .results-kwic(ng-class="{reading_mode : reading_mode, loading: loading}", constr='KWICResults', constr-name='kwicResults')
                     include includes/kwicresult
-                //- disabled="!instance.hasData && !aborted",
                 uib-tab(stats-result-ctrl,
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"
@@ -87,15 +80,12 @@ html
                           h3.map-settings-title() Välj attribut
                           ul(ng-if="mapAttributes.length != 0")
                             li(ng-repeat="attr in mapAttributes", ng-class="attr.selected ? 'selected':''", ng-click="mapToggleSelected($index, $event)")
-                              //- input.map-selected(type="checkbox", ng-checked="attr.selected")
                               span() {{attr.label | loc:lang}}
                           span(ng-show="mapAttributes.length == 0", class="empty-attribute-list")
                             | {{ 'no_geo_info' | loc:lang}}
                           div.btn-container()
                               button.btn.btn-sm.btn-primary(ng-disabled="mapAttributes.length == 0", ng-click="showMap()") {{'show_map' | loc:lang}}
 
-                      //- .progress_container
-                      //-   progress(value='{{progress || 0}}', max='100')
                       #showBarPlot
                     #myGrid
                     #exportStatsSection
@@ -131,14 +121,11 @@ html
 
               a#json-link(ng-href='{{jsonUrl}}', ng-show="jsonUrl", target="_blank")
                 img(src='img/json.png')
-            //- ng-class='{visible : word_selected && result_tab == 0}'
             #sidebar.ui-corner-all.kwic_sidebar(ng-class='{visible : word_selected && sidebar_visible}')
             div(style='clear: both; float: none;')
 
             div(id='video-modal', ng-controller='VideoCtrl')
 
-
-      //- #click_cover("true")
       #deptree_popup(title='Dependensträd', style='display: none;')
       #plot_popup
         #plot_canvas(style='width: 470px; height: 400px;')

@@ -63,7 +63,7 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
 
             for {type, op, val, flags} in and_array
                 if expanded_format
-                    if op == "highest_rank" or op == "not_highest_rank" or op == "rank_contains" or op == "not_rank_contains"
+                    if op in ["highest_rank", "not_highest_rank", "rank_contains", "not_rank_contains"]
                         val = regescape val
                     [val, op] = {
                         "^=" : [val + ".*", "="]
@@ -118,27 +118,13 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
     return output.join(" ")
 
 window.CQP =
+    
     parse : => CQPParser.parse arguments...
+    
     stringify : stringifyCqp
+    
     expandOperators : (cqpstr) ->
         CQP.stringify CQP.parse(cqpstr), true
-
-    fromObj : (obj) ->
-        CQP.parse "[#{obj.type} #{obj.op} '#{obj.val}']"
-
-    # UNTESTED AND UNUSED
-    and_merge : (cqpObjs...) ->
-
-        for tup in _.zip cqpObjs...
-            [first, rest...] = tup
-            merged = [].concat (_.pluck rest, "and_block")...
-            first.and_block = first.and_block.concat merged
-
-
-
-
-    concat : (cqpObjs...) ->
-        [].concat cqpObjs...
 
     getTimeInterval : (obj) ->
         from = []
@@ -156,16 +142,10 @@ window.CQP =
 
         return [from, to]
 
-
-
-
-
     prioSort : (cqpObjs) ->
         getPrio = (and_array) ->
             numbers = _.map and_array, (item) ->
                 _.indexOf prio, item.type
-
-
             return Math.min numbers...
 
         for token in cqpObjs

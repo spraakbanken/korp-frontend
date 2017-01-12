@@ -189,23 +189,18 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
 
 
     s.$on "extended_set", ($event, val) ->
-        c.log "extended_set", val
         s.cqp = val
 
     if $location.search().cqp
         s.cqp = $location.search().cqp
 
     s.$watch "cqp", (val) ->
-        c.log "cqp change", val
         unless val then return
         try
             $rootScope.extendedCQP = CQP.expandOperators(val)
         catch e
             c.log "cqp parse error:", e
         $location.search("cqp", val)
-
-
-
 
     s.withins = []
 
@@ -297,14 +292,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         else
             delete token.repeat
 
-    s.getTokenCqp = ->
-        if not s.token.cqp
-            return ""
-        s.token.cqp.match(/\[(.*)]/)[1]
-
-    s.onInsertMousedown = (event) ->
-        event.stopPropagation()
-
 
 korpApp.directive "advancedSearch", () ->
     controller : ($scope, compareSearches, $location, $timeout) ->
@@ -332,7 +319,7 @@ korpApp.directive "advancedSearch", () ->
             }
 
         $scope.$on "btn_submit", () ->
-            c.log "advanced cqp", $scope.cqp
+            c.log "advanced submit", $scope.cqp
             $location.search "search", null
             $location.search "page", null
             $location.search "within", null

@@ -10,8 +10,6 @@ model.getAuthorizationHeader = () ->
 
 class BaseProxy
     constructor: ->
-
-        # progress
         @prev = ""
         @progress = 0
         @total
@@ -34,31 +32,19 @@ class BaseProxy
 
     abort: ->
         _.invoke @pendingRequests, "abort" if @pendingRequests.length
-        # @pendingRequests = []
 
     hasPending : () ->
         _.any _.map @pendingRequests, (req) -> req.readyState != 4 and req.readyState != 0
 
     parseJSON: (data) ->
         try
-
-            # var prefix = data[0] == "{" ? "" : "{";
-            # var suffix = data.slice(-1) == "}" ? "" : "}";
-            # var json = prefix + data.slice(0,-2) + suffix;
             json = data
-            # json = "{" + json.slice(0, -1) + "}" if json.slice(-1) is ","
             if json[0] != "{" then json = "{" + json
             if json.match(/,\s*$/)
                 json = json.replace(/,\s*$/, "") + "}"
-
-
-            # c.log('json after', json)
             out = JSON.parse(json)
-            # c.log "json parsing success!", json
             return out
         catch e
-
-                    # c.log("trying data", data);
             return JSON.parse(data)
 
     addAuthorizationHeader: (req) ->
@@ -68,11 +54,9 @@ class BaseProxy
 
     calcProgress: (e) ->
         newText = e.target.responseText.slice(@prev.length)
-        # c.log "newText", newText
         struct = {}
         try
             struct = @parseJSON(newText)
-        # c.log("json parse failed in ", newText);
         $.each struct, (key, val) =>
             if key isnt "progress_corpora" and key.split("_")[0] is "progress"
                 currentCorpus = val.corpus or val
@@ -109,11 +93,6 @@ class model.KWICProxy extends BaseProxy
         @queryData = null
         @prevAjaxParams = null
         @foundKwic = false
-
-
-    popXhr: (xhr) ->
-        i = $.inArray(@pendingRequests, xhr)
-        @pendingRequests.pop i unless i is -1
 
     makeRequest: (options, page, progressCallback, kwicCallback) ->
         c.log "kwicproxy.makeRequest", options, page, kwicResults.getPageInterval(Number(page))
@@ -178,23 +157,18 @@ class model.KWICProxy extends BaseProxy
                 self.prevUrl = this.url
 
             success: (data, status, jqxhr) ->
-                c.log "jqxhr", this
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
 
-
-
-
-            # error: o.error
             progress: o.progress
         )
         @pendingRequests.push def
         return def
 
+
 class model.LemgramProxy extends BaseProxy
     constructor: ->
         super()
-        # @pendingRequest = abort: $.noop
 
     makeRequest: (word, type, callback) ->
         super()
@@ -211,22 +185,10 @@ class model.LemgramProxy extends BaseProxy
         def =  $.ajax
             url: settings.cgi_script
             data: params
-            # beforeSend: (jqXHR, settings) ->
-            #   c.log "before relations send", settings
-            #   # self.prevRequest = settings
-
-            # error: (data, status) ->
-            #     c.log "relationsearch abort", arguments
-            #     if status == "abort"
-
-            #     else
-            #         lemgramResults.resultError()
-
 
             success: (data) ->
                 c.log "relations success", data
                 self.prevRequest = params
-                # lemgramResults.renderResult data, word
 
             progress: (data, e) ->
                 progressObj = self.calcProgress(e)
@@ -240,87 +202,6 @@ class model.LemgramProxy extends BaseProxy
         @pendingRequests.push def
         return def
 
-
-
-    karpSearch: (word, sw_forms) ->
-        deferred = $.Deferred((dfd) =>
-            @pendingRequests.push $.ajax(
-                url: "http://spraakbanken.gu.se/ws/karp-sok"
-                data:
-                    wf: word
-                    resource: settings.corpusListing.getMorphology()
-                    format: "json"
-                    "sms-forms": false
-                    "sw-forms": sw_forms
-
-                success: (data, textStatus, xhr) ->
-                    if Number(data.count) is 0
-                        dfd.reject()
-                        return
-                    c.log "karp success", data, sw_forms
-
-                    div = (if $.isPlainObject(data.div) then [data.div] else data.div)
-                    output = $.map(div.slice(0, Number(data.count)), (item) ->
-                        item = util.convertLMFFeatsToObjects(item)
-                        item.LexicalEntry.Lemma.FormRepresentation.feat_lemgram
-                    )
-
-                    dfd.resolve output, textStatus, xhr
-
-                error: (jqXHR, textStatus, errorThrown) ->
-                    c.log "karp error", jqXHR, textStatus, errorThrown
-                    dfd.reject()
-            )
-        ).promise()
-        deferred
-
-    saldoSearch: (word, sw_forms) ->
-        dfd = $.Deferred()
-        @karpSearch(word, sw_forms).done (lemgramArray) ->
-            $.ajax(
-                url: "http://spraakbanken.gu.se/ws/karp-sok"
-                data:
-                    lemgram: lemgramArray.join("|")
-                    resource: "saldo"
-                    format: "json"
-            ).done((data, textStatus, xhr) ->
-                if data.count is 0
-                    dfd.reject()
-                    c.log "saldo search 0 results"
-                    return
-                div = (if $.isPlainObject(data.div) then [data.div] else data.div)
-
-                output = $.map(div.slice(0, Number(data.count)), (item) ->
-                    sense = item.LexicalEntry.Sense
-                    sense = [sense] unless $.isArray(sense)
-                    _.map sense, (item) ->
-                        item.id
-
-                )
-                c.log "saldoSearch results", output
-                dfd.resolve output, textStatus, xhr
-            ).fail ->
-                c.log "saldo search failed"
-                dfd.reject()
-
-
-        dfd
-
-    lemgramCount: (lemgrams, findPrefix, findSuffix) ->
-        self = this
-        count = $.grep(["lemgram", (if findPrefix then "prefix" else ""), (if findSuffix then "suffix" else "")], Boolean)
-        $.ajax
-            url: settings.cgi_script
-            data:
-                command: "lemgram_count"
-                lemgram: lemgrams
-                count: count.join(",")
-                corpus: settings.corpusListing.stringifySelected()
-
-            beforeSend: (req) ->
-                self.addAuthorizationHeader req
-
-            method: "POST"
 
     lemgramSearch: (lemgram, searchPrefix, searchSuffix) ->
         return $.format("[(lex contains \"%s\")%s%s]", [lemgram, @buildAffixQuery(searchPrefix, "prefix", lemgram), @buildAffixQuery(searchSuffix, "suffix", lemgram)])
@@ -537,6 +418,7 @@ class model.AuthenticationProxy
             dfd.reject()
 
         dfd
+
     hasCred : (corpusId) ->
         unless @loginObj.credentials then return false
         corpusId.toUpperCase() in @loginObj.credentials
@@ -569,23 +451,18 @@ class model.TimeProxy extends BaseProxy
 
             @expandTimeStruct data.combined
             combined = @compilePlotArray(data.combined)
-            # dfd.resolve output, rest
 
             if _.keys(data).length < 2 or data.ERROR
                 dfd.reject()
                 return
-            # @corpusdata = data
 
             dfd.resolve [data.corpora, combined, rest]
-
 
         xhr.fail ->
             c.log "timeProxy.makeRequest failed", arguments
             dfd.reject()
 
         dfd
-
-
 
     compilePlotArray: (dataStruct) ->
         output = []
@@ -599,7 +476,6 @@ class model.TimeProxy extends BaseProxy
         output
 
     expandTimeStruct: (struct) ->
-        # c.log "struct", struct
         years = _.map(_.pairs(_.omit(struct, "")), (item) ->
             Number item[0]
         )
@@ -610,15 +486,14 @@ class model.TimeProxy extends BaseProxy
         if _.isNaN(maxYear) or _.isNaN(minYear)
             c.log "expandTimestruct broken, years:", years
             return
-        # while y < maxYear
-        # c.log "years", minYear, maxYear
+
         for y in [minYear..maxYear]
             thisVal = struct[y]
             if typeof thisVal is "undefined"
                 struct[y] = prevVal
             else
                 prevVal = thisVal
-        # c.log "after", struct
+
 
 
 class model.GraphProxy extends BaseProxy
@@ -655,7 +530,6 @@ class model.GraphProxy extends BaseProxy
 
         $.ajax
             url: settings.cgi_script
-            # url : "data.json"
             dataType : "json"
             data : params
 
@@ -667,14 +541,11 @@ class model.GraphProxy extends BaseProxy
             progress: (data, e) =>
                 progressObj = @calcProgress(e)
                 return unless progressObj?
-                # callback progressObj
                 def.notify progressObj
 
             error: (jqXHR, textStatus, errorThrown) ->
                 def.reject(textStatus)
             success : (data) ->
                 def.resolve data
-            #     [first, last] = settings.corpusListing.getTimeInterval()
-            #     data
 
         return def.promise()

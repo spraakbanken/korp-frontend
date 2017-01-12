@@ -1,10 +1,12 @@
 korpApp = angular.module("korpApp")
 
+
+
 korpApp.directive 'kwicWord', ->
     replace: true
     template : """<span class="word" ng-class="getClassObj(wd)">
                     {{::wd.word}} </span>
-                """ #ng-click="wordClick($event, wd, sentence)"
+                """
     link : (scope, element) ->
         scope.getClassObj = (wd) ->
             output =
@@ -21,11 +23,11 @@ korpApp.directive 'kwicWord', ->
             for struct in (wd._close or [])
                 output["close_" + struct] = true
 
-
             return (x for [x, y] in _.pairs output when y).join " "
 
+
+
 korpApp.directive "tabHash", (utils, $location) ->
-    # scope : true
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()
@@ -52,8 +54,6 @@ korpApp.directive "tabHash", (utils, $location) ->
                 watchHash()
                 w()
 
-
-
         s.getSelected = () ->
             out = null
             for p, i in contentScope.tabs
@@ -68,12 +68,8 @@ korpApp.directive "tabHash", (utils, $location) ->
                 t.onDeselect?()
             if contentScope.tabs[index]
                 contentScope.tabs[index].active = true
-                # contentScope.tabs[index].onSelect()
             else
                 (_.last contentScope.tabs)?.active = true
-                # (_.last contentScope.tabs)?.onSelect()
-
-
 
 
 korpApp.directive "escaper", () ->
@@ -99,10 +95,7 @@ korpApp.directive "escaper", () ->
             $scope.model = escape($scope.input)
 
 
-
 korpApp.directive "tokenValue", ($compile, $controller) ->
-    # defaultTmpl = "<input ng-model='model'
-    #             placeholder='{{tokenValue.value == \"word\" && !model.length && \"any\" | loc:lang}} '>"
 
     getDefaultTmpl = _.template """
                 <input ng-model='input' ng-change="inputChange()" class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
@@ -132,12 +125,8 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             $scope.orObj.flags = flags
 
             $scope.case = "insensitive"
-
     ]
 
-
-
-    # require:'ngModel',
     scope :
         tokenValue : "="
         model : "=model"
@@ -170,13 +159,12 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             prevScope = childScope
             $controller(valueObj.controller or defaultController, locals)
 
-            # valueObj.controller?(scope, _.omit valueObj)
             if valueObj.value == "word"
                 tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
             else
                 tmplObj = {maybe_placeholder : ""}
 
-            defaultTmpl = getDefaultTmpl(tmplObj)
+            defaultTmpl = getDefaultTmpl tmplObj
             tmplElem = $compile(valueObj.extended_template or defaultTmpl)(childScope)
             elem.html(tmplElem).addClass("arg_value")
 
@@ -193,8 +181,6 @@ korpApp.directive "constr", ($window, searches) ->
 
         scope.instance = instance
         scope.$parent.instance = instance
-
-
 
 
 
@@ -286,6 +272,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
             s.$broadcast('btn_submit')
 
 
+
 korpApp.directive "meter", () ->
     template: '''
         <div>
@@ -321,7 +308,6 @@ korpApp.directive "meter", () ->
 
         bkg = elem.find(".background")
         bkg.width Math.round (part * w)
-
 
 
 
@@ -361,7 +347,6 @@ korpApp.directive "popper", ($rootElement) ->
 
 
 
-
 korpApp.directive "tabSpinner", ($rootElement) ->
     template : """
     <i class="fa fa-times-circle close_icon"></i>
@@ -372,7 +357,6 @@ korpApp.directive "tabSpinner", ($rootElement) ->
 
 korpApp.directive "extendedList", ($location, $rootScope) ->
     templateUrl : "views/extendedlist.html"
-    # scope : true
     scope : {
         cqp : "="
         lang: "="
@@ -380,20 +364,9 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
     link : ($scope, elem, attr) ->
         s = $scope
 
-        # if $location.search().cqp
-        #     try
-        #         s.data = CQP.parse($location.search().cqp)
-        #     catch e
-        #         # TODO: we could traverse the token list, trying to repair parsing, se above
-        #         s.data = CQP.parse("[]")
-        # else
-            # s.data = CQP.parse(val)
-
         setCQP = (val) ->
-            c.log "inner cqp change", val
             try
                 s.data = CQP.parse(val)
-                c.log "s.data", s.data
             catch error
                 output = []
                 for token in val.split("[")
@@ -407,28 +380,21 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
                     output = output.concat(tokenObj)
 
                 s.data = output
-                c.log "crash", s.data
+                c.log "error parsing cqp", s.data
 
             for token in s.data
                 if "and_block" not of token or not token.and_block.length
                     token.and_block = CQP.parse('[word = ""]')[0].and_block
-
-
-        # s.$watch "cqp", (val) ->
 
         s.cqp ?= '[]'
         setCQP(s.cqp)
 
 
         s.$watch 'getCQPString()', (val) ->
-            c.log "getCQPString", val
-            # if val
-                # setCQP(val)
             s.cqp = val
 
         s.getCQPString = ->
             return (CQP.stringify s.data) or ""
-
 
         s.addOr = (and_array) ->
             and_array.push
@@ -436,7 +402,6 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
                 op : "="
                 val : ""
             return and_array
-
 
         s.addToken = ->
             token = {and_block : [[]]}
@@ -465,9 +430,9 @@ korpApp.directive "tabPreloader", () ->
     link : (scope, elem, attr) ->
 
 
+
 korpApp.directive "clickCover", () ->
-    # scope :
-        # clickCover : "="
+
     link : (scope, elem, attr) ->
         cover = $("<div class='click-cover'>").on "click", () -> return false
             
@@ -484,6 +449,8 @@ korpApp.directive "clickCover", () ->
                 elem.css "pointer-events", ""
                 elem.css("position", pos).removeClass("covered")
 
+
+
 korpApp.directive 'toBody', ($compile) ->
     restrict : "A"
     compile : (elm, attrs) ->
@@ -498,10 +465,14 @@ korpApp.directive 'toBody', ($compile) ->
             scope.$on "$destroy", () ->
                 newElem.remove()
 
+
+
 korpApp.directive "warning", () ->
     restrict : "E"
     transclude : true
     template : "<div class='korp-warning bs-callout bs-callout-warning' ng-transclude></div>"
+
+
 
 korpApp.directive "kwicPager", () ->
     replace: true
@@ -528,6 +499,8 @@ korpApp.directive "kwicPager", () ->
 
     </div>
     """
+
+
 
 korpApp.directive "autoc", ($q, $http, lexicons) ->
     replace: true
@@ -577,8 +550,6 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
         </div>
     """
     link : (scope, elem, attr) ->
-        c.log "autoc link", scope.model
-
         scope.lemgramify = (lemgram) ->
             lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
             match = lemgram.match lemgramRegExp
@@ -602,14 +573,6 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                 util.lemgramToString(placeholder).replace(/<.*?>/g, "")
             else
                 util.saldoToPlaceholderString placeholder, true
-
-        scope.formatPlaceholder = (input) ->
-            lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
-            match = input.match lemgramRegExp
-            if match # Lemgram
-                return scope.lemgramToString(input)
-            else # Sense
-                return input
 
         scope.selectedItem = (item, model, label) ->
             if scope.type is "lemgram"
@@ -713,6 +676,8 @@ korpApp.directive "timeInterval", () ->
                     m_time = moment(time)
                     m.add(m_time[t](), t)
                 s.model = m
+
+
 
 korpApp.directive 'reduceSelect', ($timeout) ->
     restrict: 'AE'
