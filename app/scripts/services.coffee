@@ -304,7 +304,12 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
         pageOnly = pageChanged and not searchChanged
 
-        view.updateSearchHistory value, $location.absUrl()
+        if value
+            if type == "lemgram"
+                historyValue = unregescape value
+            else
+                historyValue = value
+            view.updateSearchHistory historyValue, $location.absUrl()
         $q.all([searches.infoDef, searches.langDef.promise]).then () ->
             if type == "cqp"
                 if not value then value = $location.search().cqp
