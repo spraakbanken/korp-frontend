@@ -485,7 +485,7 @@ korpApp.directive "kwicPager", () ->
          previous-text="‹" next-text="›" first-text="«" last-text="»"
          boundary-links="true"
          rotate="false"
-         num-pages="$parent.numPages"> </pagination>
+         num-pages="$parent.numPages"> </uib-pagination>
       <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
         <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"
             ng-click="$event.stopPropagation()" />
