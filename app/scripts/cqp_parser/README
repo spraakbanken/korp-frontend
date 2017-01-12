@@ -2,5 +2,4 @@ Install pegjs:
 npm install -g pegjs
 
 Rebuild parser:
-pegjs -e CQPParser CQPParser.pegjs
-
+pegjs --format globals -e  CQPParser CQPParser.pegjs
