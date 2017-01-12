@@ -389,12 +389,7 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
         s.cqp ?= '[]'
         setCQP(s.cqp)
 
-
-        s.$watch 'getCQPString()', (val) ->
-            s.cqp = val
-
-        s.getCQPString = ->
-            return (CQP.stringify s.data) or ""
+        s.$watch 'data', (() -> s.cqp = (CQP.stringify s.data) or ""), true
 
         s.addOr = (and_array) ->
             and_array.push
