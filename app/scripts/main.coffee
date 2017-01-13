@@ -144,8 +144,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     )
     $("#sidebar").sidebar()
-    $(document).click ->
-        $("#simple_text.ui-autocomplete-input").autocomplete "close"
 
     setTimeout(() ->
         view.initSearchOptions()
