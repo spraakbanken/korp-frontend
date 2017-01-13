@@ -1,3 +1,4 @@
+
 Sidebar =
     _init: () ->
 
@@ -5,22 +6,26 @@ Sidebar =
         @element.html '<div id="selected_sentence" /><div id="selected_word" />'
         corpusObj = settings.corpora[corpus]
 
+
         $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
-        unless $.isEmptyObject(corpusObj.attributes)
-            $("#selected_word").append $("<h4>").localeKey("word_attr")
 
-            posData = @renderCorpusContent("pos", wordData, sentenceData, corpusObj.attributes, tokens)
-            # posData.appendTo "#selected_word"
-            $("#selected_word").append posData
-        unless $.isEmptyObject(corpusObj.struct_attributes)
-            $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")
-
-            @renderCorpusContent("struct", wordData, sentenceData, corpusObj.struct_attributes, tokens).appendTo "#selected_sentence"
-
+        customData = pos: [], struct: []
         unless $.isEmptyObject(corpusObj.custom_attributes)
-            [word, sentence] = @renderCustomContent(wordData, sentenceData, corpusObj.custom_attributes, tokens)
-            word.appendTo "#selected_word"
-            sentence.appendTo "#selected_sentence"
+            [word, sentence] = @renderCustomContent wordData, sentenceData, corpusObj.custom_attributes, tokens
+            customData.pos = word
+            customData.struct = sentence
+
+        posData = []
+        unless $.isEmptyObject(corpusObj.attributes)
+            posData = @renderCorpusContent "pos", wordData, sentenceData, corpusObj.attributes, tokens, corpusObj.custom_attributes or {}, customData.pos
+        structData = []
+        unless $.isEmptyObject(corpusObj.struct_attributes)
+            structData = @renderCorpusContent "struct", wordData, sentenceData, corpusObj.struct_attributes, tokens, corpusObj.custom_attributes or {}, customData.struct
+
+        $("#selected_word").append $("<h4>").localeKey("word_attr")
+        $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")
+        $("#selected_word").append posData
+        $("#selected_sentence").append structData
 
         @element.localize()
         @applyEllipse()
@@ -48,7 +53,7 @@ Sidebar =
 
         ).appendTo(@element)
 
-    renderCorpusContent: (type, wordData, sentenceData, corpus_attrs, tokens) ->
+    renderCorpusContent: (type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) ->
         if type == "struct"
             pairs = _.pairs(sentenceData)
 
@@ -61,10 +66,22 @@ Sidebar =
                     pairs.push([key, val])
 
         pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
+        pairs = _.filter pairs, ([key, val]) -> not (corpus_attrs[key].displayType == "hidden" or corpus_attrs[key].displayType == "date_interval" or corpus_attrs[key].hideSidebar)
+
+        for custom in customData
+            pairs.push custom
 
         pairs.sort ([a], [b]) ->
-            ord1 = corpus_attrs[a].order
-            ord2 = corpus_attrs[b].order
+            if a of corpus_attrs
+                ord1 = corpus_attrs[a].order
+            else
+                ord1 = customAttrs[a].order
+
+            if b of corpus_attrs
+                ord2 = corpus_attrs[b].order
+            else
+                ord2 = customAttrs[b].order
+
             # first three cases to handle ord1 or ord2 being undefined
             if ord1 == ord2
                 return 0
@@ -77,26 +94,26 @@ Sidebar =
 
         items = []
         for [key, value] in pairs
-            items = items.concat (@renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens).get?(0)
+            if key of customAttrs
+                items.push value
+            else
+                items = items.concat (@renderItem key, value, corpus_attrs[key], wordData, sentenceData, tokens).get?(0)
 
         items = _.compact items
         return $(items)
 
     renderCustomContent: (wordData, sentenceData, corpus_attrs, tokens) ->
-        struct_items = []
-        pos_items = []
+        structItems = []
+        posItems = []
         for key, attrs of corpus_attrs
-            output = @renderItem(key, null, attrs, wordData, sentenceData, tokens)
+            output = @renderItem(key, null, attrs, wordData, sentenceData, tokens).get?(0)
             if attrs.customType == "struct"
-                struct_items.push output
+                structItems.push [key, output]
             else if attrs.customType == "pos"
-                pos_items.push output
-        return [$(pos_items), $(struct_items)]
+                posItems.push [key, output]
+        return [posItems, structItems]
 
     renderItem: (key, value, attrs, wordData, sentenceData, tokens) ->
-
-        if attrs.displayType == "hidden" or attrs.displayType == "date_interval" or attrs.hideSidebar
-            return ""
         if attrs.label
             output = $("<p><span rel='localize[#{attrs.label}]'></span>: </p>")
         else
