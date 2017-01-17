@@ -3954,8 +3954,7 @@ var rdAttrs = _.extend({}, modernAttrs2, {
 
 settings.corporafolders.governmental.rd = {
     title : "Riksdagens öppna data",
-    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-kom", "rd-mot", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
-    // "rd-prop",
+    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-kom", "rd-mot", "rd-prop", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
 };
 
 settings.corpora["rd-bet"] = {
@@ -4058,15 +4057,15 @@ settings.corpora["rd-mot"] = {
     struct_attributes: rd_struct_attributes
 };
 
-// settings.corpora["rd-prop"] = {
-//     id: "rd-prop",
-//     title: "Proposition",
-//     description: "Propositioner och skrivelser från regeringen.",
-//     within: settings.defaultWithin,
-//     context: settings.spContext,
-//     attributes: rdAttrs,
-//     struct_attributes: rd_struct_attributes
-// };
+settings.corpora["rd-prop"] = {
+    id: "rd-prop",
+    title: "Proposition",
+    description: "Propositioner och skrivelser från regeringen.",
+    within: settings.defaultWithin,
+    context: settings.spContext,
+    attributes: rdAttrs,
+    struct_attributes: rd_struct_attributes
+};
 
 settings.corpora["rd-prot"] = {
     id: "rd-prot",
