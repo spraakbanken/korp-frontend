@@ -3886,14 +3886,10 @@ rd_struct_attributes = {
 
     text_parti: {label: "party", order: 43},
     text_filnamn: {label: "rd_filnamn", order: 44},
-    text_fil_url: {label: "rd_file_url", order: 43,
-                   pattern: "<a href='<%= struct_attrs.text_fil_url %>' target='_blank'><%= struct_attrs.text_fil_url %></a>"},
-    text_dokument_url_html: {label: "rd_dokument_url_html", order: 42,
-                             pattern: "<a href='<%= struct_attrs.text_dokument_url_html %>' target='_blank'><%= struct_attrs.text_dokument_url_html %></a>"},
-    text_dokument_url_text: {label: "rd_dokument_url_text", order: 41,
-                             pattern: "<a href='<%= struct_attrs.text_dokument_url_text %>' target='_blank'><%= struct_attrs.text_dokument_url_text %></a>"},
-    text_dokumentstatus_url_xml: {label: "rd_dokumentstatus_url_xml", order: 40,
-                                  pattern: "<a href='<%= struct_attrs.text_dokumentstatus_url_xml %>' target='_blank'><%= struct_attrs.text_dokumentstatus_url_xml %></a>"},
+    text_fil_url: {label: "rd_file_url", order: 43, type: "url"},
+    text_dokument_url_html: {label: "rd_dokument_url_html", order: 42, type: "url"},
+    text_dokument_url_text: {label: "rd_dokument_url_text", order: 41, type: "url"},
+    text_dokumentstatus_url_xml: {label: "rd_dokumentstatus_url_xml", order: 40, type: "url"},
 
     text_talare: {label: "speaker", order: 31},
     text_source: {label: "source", order: 30},
@@ -3969,17 +3965,14 @@ rd_struct_attributes = {
     text_uppgift: {label: "rd_uppgift", order: 0},
     text_utskottet: {label: "rd_utskottet", order: 0},
     text_utskottsforslag_punkt: {label: "rd_utskottsforslag_punkt", order: 0},
-    text_utskottsforslag_url_xml: {label: "rd_utskottsforslag_url_xml", order: 0,
-                   pattern: "<a href='<%= struct_attrs.text_utskottsforslag_url_xml %>' target='_blank'><%= struct_attrs.text_utskottsforslag_url_xml %></a>"},
+    text_utskottsforslag_url_xml: {label: "rd_utskottsforslag_url_xml", order: 0, type: "url"},
     text_video_id: {label: "rd_video_id", order: 0},
     text_video_url: {label: "rd_video_url", order: 0},
     text_vinnare: {label: "rd_vinnare", order: 0},
     text_votering_id: {label: "rd_votering_id", order: 0},
-    text_votering_ledamot_url_xml: {label: "rd_votering_ledamot_url_xml", order: 0,
-                   pattern: "<a href='<%= struct_attrs.text_votering_ledamot_url_xml %>' target='_blank'><%= struct_attrs.text_votering_ledamot_url_xml %></a>"},
+    text_votering_ledamot_url_xml: {label: "rd_votering_ledamot_url_xml", order: 0, type: "url"},
     text_votering_sammanfattning_html: {label: "rd_votering_sammanfattning_html", order: 0},
-    text_votering_url_xml: {label: "rd_votering_url_xml", order: 0,
-                   pattern: "<a href='<%= struct_attrs.text_votering_url_xml %>' target='_blank'><%= struct_attrs.text_votering_url_xml %></a>"}
+    text_votering_url_xml: {label: "rd_votering_url_xml", order: 0, type: "url"}
 };
 
 var rdAttrs = _.extend({}, modernAttrs2, {
