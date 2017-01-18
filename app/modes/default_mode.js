@@ -114,7 +114,7 @@ settings.corporafolders.governmental = {
 
 settings.corporafolders.protected = {
     title: "Skyddade korpusar",
-    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "mepac", "soexempel", "sw1203", "tisus", "ivip", "lawline"]
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "ivip", "lawline", "mepac", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.novels = {
