@@ -253,37 +253,6 @@ settings.corpora["lag1800"] = {
     }
 };
 
-settings.corpora["lawline"] = {
-    id: "lawline",
-    title: "Lawline",
-    description: "Frågor och svar kring juridisk rådgivning från lawline.",
-    within: settings.defaultWithin,
-    context: settings.spContext,
-    attributes: modernAttrs2,
-    struct_attributes: {
-        "text_category": {label: "category", order: 10},
-        "text_topic": {label: "topic", order: 9},
-        "text_datum": {label: "date", order: 8},
-        "textpart_type": {label: "type",
-                          order: 7,
-                          displayType: "select",
-                          extended_template: selectType.extended_template,
-                          controller: selectType.controller,
-                          dataset: {
-                            "answer": "answer",
-                            "question": "question"
-                            }
-                        },
-        "text_url": {label: "url",
-                     order: 6,
-                     pattern: "<a href='<%= struct_attrs.text_url %>' target='_blank'><%= struct_attrs.text_url %></a>"
-                 },
-        "text_category_link": {label: "category_url",
-                               order: 5,
-                               pattern: "<a href='<%= struct_attrs.text_category_link %>' target='_blank'><%= struct_attrs.text_category_link %></a>"
-                          }
-    }
-};
 
 settings.corpora["tankebok"] = {
     morf: 'swedbergm|dalinm',
