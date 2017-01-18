@@ -2086,7 +2086,8 @@ settings.corpora["ivip"] = {
 settings.corpora["lawline"] = {
     id: "lawline",
     title: "Lawline",
-    description: "Frågor och svar kring juridisk rådgivning från lawline.",
+    description: 'Frågor och svar kring juridisk rådgivning från lawline.' +
+                 '<br><br>För åtkomst kontakta <a href="mailto:lena.rogstroem@svenska.gu.se">Lena Rogström</a>.',
     limited_access: true,
     within: settings.defaultWithin,
     context: settings.spContext,
