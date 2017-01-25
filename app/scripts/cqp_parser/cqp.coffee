@@ -59,8 +59,9 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
             output.push token
             continue
         
-        or_array = for and_array in token.and_block
-
+        outer_and_array = []
+        for and_array in token.and_block
+            or_array = []
             for {type, op, val, flags} in and_array
                 if expanded_format
                     [val, op] = {
@@ -87,10 +88,12 @@ stringifyCqp = (cqp_obj, expanded_format = false) ->
                 else
                     out = "#{type} #{op} \"#{val}\"" 
 
-                out + flagstr
+                if out
+                    or_array.push(out + flagstr)
+            if not _.isEmpty or_array
+                outer_and_array.push or_array
 
-
-        or_out = for x in or_array
+        or_out = for x in outer_and_array
             if x.length > 1
                 "(#{x.join(' | ')})"
             else
