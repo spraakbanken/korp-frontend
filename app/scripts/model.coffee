@@ -125,7 +125,6 @@ class model.KWICProxy extends BaseProxy
             defaultcontext: settings.defaultOverviewContext
             show: []
             show_struct: []
-            cache : true
 
         $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
         for corpus in settings.corpusListing.selected
@@ -179,7 +178,6 @@ class model.LemgramProxy extends BaseProxy
             corpus: settings.corpusListing.stringifySelected()
             incremental: $.support.ajaxProgress
             type: type
-            cache : true
             max : 1000
         @prevParams = params
         def =  $.ajax
