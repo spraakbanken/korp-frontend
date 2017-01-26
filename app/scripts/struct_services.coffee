@@ -1,0 +1,29 @@
+korpApp = angular.module "korpApp"
+
+korpApp.factory "structService",  ($http, $q) ->
+
+    getStructValues: (attributes) ->
+
+        def = $q.defer()
+
+        params =
+            command: "struct_values"
+            corpus: "ivip"
+            struct: attributes.join ","
+
+        conf =
+            url : settings.cgi_script
+            params : params
+            method : "GET"
+            headers : {}
+
+        _.extend conf.headers, model.getAuthorizationHeader()
+
+        $http(conf).success (data) ->
+            if data.ERROR
+                def.reject()
+                return
+
+            def.resolve data.corpora
+
+        return def.promise

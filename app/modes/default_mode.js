@@ -2080,7 +2080,8 @@ settings.corpora["ivip"] = {
             pattern: "<span><%= struct_attrs.sentence_speaker_id %> <%= struct_attrs.sentence_speaker_role %></span>",
             customType: "struct"
         }
-    }
+    },
+    showFilters: ["text_country", "text_city"]
 };
 
 settings.corpora["lawline"] = {

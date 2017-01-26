@@ -27,7 +27,7 @@ korpApp.config ($uibTooltipProvider) ->
     $uibTooltipProvider.options
         appendToBody: true
 
-korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout) ->
+korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) ->
     s = $rootScope
     s._settings = settings
     window.lang = s.lang = $location.search().lang or settings.defaultLanguage
@@ -37,6 +37,8 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout)
     s.sidebar_visible = false
 
     s.extendedCQP = null
+
+    s.globalFilterDef = $q.defer()
 
     s.locationSearch = () ->
         $location.search arguments...

@@ -2,7 +2,10 @@ settings.wordpicture = false;
 settings.enableMap = false;
 var start_lang = "swe";
 
-korpApp.controller("SearchCtrl", function($scope, $controller, $location) {
+korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $location) {
+    // resolve globalFilterDef since globalFilter-directive is not used
+    $rootScope.globalFilterDef.resolve()
+    
     $controller(window.SearchCtrl, {$scope: $scope})
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";

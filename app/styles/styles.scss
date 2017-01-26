@@ -2889,3 +2889,41 @@ li.active a span .num-to-find {
 .hide-prob > li > .prob {
     display: none;
 }
+
+.global-filters-container {
+    margin-bottom: 10px;
+}
+
+.global-filter-dropdown {
+    margin-top: 7px;
+    margin-left: 4px;
+    padding: 0px;
+    font-weight: bold;
+
+    .selected {
+        background: #f2f7ff;
+    }
+
+    .attribute {
+        padding: 5px;
+    }
+
+    .attribute:hover {
+        background-color: #e6e6e6;
+    }
+    
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+
+}
+
+.global-filter-toggle {
+    margin-left: 5px;
+    
+    .selected-attr-value {
+        font-weight: bold
+    }
+    
+}

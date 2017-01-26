@@ -114,6 +114,9 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 val += " | suffix contains \"#{lemgram}\""
             val += "]"
 
+        if $rootScope.globalFilter
+            val = CQP.stringify (CQP.mergeCqpExprs (CQP.parse(val or "[]")), $rootScope.globalFilter)
+
         return val
 
     s.$on "popover_submit", (event, name) ->
@@ -221,10 +224,20 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     if $location.search().cqp
         s.cqp = $location.search().cqp
 
+    updateExtendedCQP = () ->
+        val2 = CQP.expandOperators(s.cqp)
+        if $rootScope.globalFilter
+            val2 = CQP.stringify (CQP.mergeCqpExprs (CQP.parse(val2 or "[]")), $rootScope.globalFilter)
+        $rootScope.extendedCQP = val2
+
+    $rootScope.$watch "globalFilter", () ->
+        if $rootScope.globalFilter
+            updateExtendedCQP()
+
     s.$watch "cqp", (val) ->
         unless val then return
         try
-            $rootScope.extendedCQP = CQP.expandOperators(val)
+            updateExtendedCQP()
         catch e
             c.log "cqp parse error:", e
         $location.search("cqp", val)
@@ -321,7 +334,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
 korpApp.directive "advancedSearch", () ->
-    controller : ($scope, compareSearches, $location, $timeout) ->
+    controller : ($scope, compareSearches, $location, $timeout, $rootScope) ->
         expr = ""
         if $location.search().search
             [type, expr...] = $location.search().search?.split("|")

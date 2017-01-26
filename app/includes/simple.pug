@@ -1,5 +1,8 @@
 #korp-simple(ng-controller='SimpleCtrl')
   form.simple_form
+
+    global-filters(lang="lang")
+
     autoc#simple_text(placeholder="placeholder", type='lemgram', model='model', disable-lemgram-autocomplete='! settings.autocomplete', text-in-field="textInField")
     search-submit
     .opts

@@ -153,3 +153,9 @@ window.CQP =
             token.and_block = (_.sortBy token.and_block, getPrio).reverse()
 
         return cqpObjs
+
+    # assume cqpObj2 to contain fewer tokens than cqpObj1
+    mergeCqpExprs: (cqpObj1, cqpObj2) ->
+        for token, i in cqpObj2
+            cqpObj1[i].and_block = cqpObj1[i].and_block.concat token.and_block
+        return cqpObj1

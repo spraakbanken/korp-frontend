@@ -324,5 +324,8 @@
     "formatdescr_ref": "Bibliographical references as an Excel spreadsheet (XLS) with each matching sentence on its own line, followed by the text attributes of the sentence on their own lines",
 
     "no_geo_info": "No location data available",
-    "map_cluster": "Cluster"
+    "map_cluster": "Cluster",
+    
+    "global_filter": "Filter",
+    "filter_add": "Add"
 }

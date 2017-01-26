@@ -310,8 +310,10 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
             else
                 historyValue = value
             view.updateSearchHistory historyValue, $location.absUrl()
-        $q.all([searches.infoDef, searches.langDef.promise]).then () ->
+        $q.all([searches.infoDef, searches.langDef.promise, $rootScope.globalFilterDef.promise]).then () ->
+            extendedSearch = false
             if type == "cqp"
+                extendedSearch = true
                 if not value then value = $location.search().cqp
             if type in ["cqp", "word", "lemgram"]
                 searches.activeSearch =
@@ -323,6 +325,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                 extendedSearch.setOneToken "saldo", value
 
             if type == "cqp"
+                if extendedSearch and $rootScope.globalFilter
+                    value = CQP.stringify (CQP.mergeCqpExprs (CQP.parse(value or "[]")), $rootScope.globalFilter)
                 searches.kwicSearch value, pageOnly
 
             oldValues = [].concat newValues
