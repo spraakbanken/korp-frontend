@@ -54,9 +54,9 @@
             
                     <div class="repeat" ng-show="token.repeat">
                         <span rel="localize[repeat]">{{'repeat' | loc:lang}}</span>
-                        <input type="number" ng-model="token.repeat[0]" >
+                        <input type="number" ng-model="token.repeat[0]" ng-change="repeatChange(0, $index)" ng-blur="repeatBlur(0, $index)" ng-class="{'input-error': repeatError}">
                         <span rel="localize[to]">{{'to' | loc:lang}}</span>
-                        <input type="number" ng-model="token.repeat[1]">
+                        <input type="number" ng-model="token.repeat[1]" ng-change="repeatChange(1, $index)" ng-blur="repeatBlur(1, $index)">
                         <span rel="localize[times]">{{'times' | loc:lang}}</span>
                     </div>
             

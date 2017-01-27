@@ -360,6 +360,7 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
     scope : {
         cqp : "="
         lang: "="
+        repeatError: "="
     },
     link : ($scope, elem, attr) ->
         s = $scope
@@ -406,6 +407,52 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
         s.removeToken = (i) ->
             unless s.data.length > 1 then return
             s.data.splice(i, 1)
+
+        s.toggleRepeat = (token) ->
+            unless token.repeat
+                token.repeat = [1,1]
+            else
+                s.repeatError = false
+                delete token.repeat
+
+        s.repeatChange = (repeat_idx, token_idx) ->
+            token = s.data[token_idx]
+            
+            if token.repeat[repeat_idx] is null
+                return
+
+            if token.repeat[repeat_idx] is -1
+                token.repeat[repeat_idx] = 0
+            else if token.repeat[repeat_idx] < 0
+                token.repeat[repeat_idx] = 1
+            else if token.repeat[repeat_idx] > 100
+                token.repeat[repeat_idx] = 100
+
+            if token.repeat[1] < token.repeat[0] and repeat_idx is 0
+                token.repeat[1] = token.repeat[0]
+
+            if token.repeat[1] < token.repeat[0] and repeat_idx is 1
+                token.repeat[0] = token.repeat[1]
+            
+            if token.repeat[1] < 1
+                token.repeat[1] = 1
+            
+            if token.repeat[0] > 0
+                s.repeatError = false
+
+        s.repeatBlur = (repeat_idx, token_idx) ->
+            token = s.data[token_idx]
+
+            if token.repeat[repeat_idx] is null
+                token.repeat[repeat_idx] = token.repeat[if repeat_idx is 0 then 1 else 0]
+            
+            repeatError = true
+            for token in s.data
+                if not token.repeat or token.repeat[0] > 0
+                    repeatError = false
+                    break
+
+            s.repeatError = repeatError
 
 
 korpApp.directive "tabPreloader", () ->

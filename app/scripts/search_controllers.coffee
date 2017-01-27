@@ -326,12 +326,6 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
     s.toggleEnd = (token) ->
         toggleBound(token, "rbound")
 
-    s.toggleRepeat = (token) ->
-        unless token.repeat
-            token.repeat = [1,1]
-        else
-            delete token.repeat
-
 
 korpApp.directive "advancedSearch", () ->
     controller : ($scope, compareSearches, $location, $timeout, $rootScope) ->

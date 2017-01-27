@@ -2,7 +2,9 @@ div(ng-controller='ExtendedSearch')
     
   global-filters(lang="lang")
     
-  #query_table(extended-list, cqp="cqp", lang="lang")
+  #query_table(extended-list, cqp="cqp", lang="lang", repeat-error="searchDisabled")
+
+  div(ng-show="searchDisabled" style="color: red; margin-bottom: 10px;") {{'repeat_error' | loc:lang}}
 
   search-submit(pos='right')
   span(rel='localize[within]')

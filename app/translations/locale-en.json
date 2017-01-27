@@ -327,5 +327,7 @@
     "map_cluster": "Cluster",
     
     "global_filter": "Filter",
-    "filter_add": "Add"
+    "filter_add": "Add",
+    
+    "repeat_error": "Error: Not possible to repeat from 0 for all tokens."
 }
