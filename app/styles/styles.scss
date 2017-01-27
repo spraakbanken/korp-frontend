@@ -1857,14 +1857,6 @@ option[value^='? string:sentence ?'] {display : none;}
   margin-left : 1em;
 }
 
-#korp-extended .within_select ~ * {
-  display: none;
-}
-
-.lab #korp-extended #sendBtn ~ * {
-  display: inline;
-}
-
 .val_mod {
   letter-spacing: 1px;
   font-size: .8em;
