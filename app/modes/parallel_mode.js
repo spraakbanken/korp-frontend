@@ -133,24 +133,30 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         }
     }
 
+    enabledLangsHelper = function(lang) {
+        return _(settings.corpusListing.getLinksFromLangs([lang])).flatten().pluck("lang").unique().value();
+    }
+
     s.getEnabledLangs = function(i) {
         if(i === 0) {
-            return _(settings.corpusListing.getLinksFromLangs([start_lang])).flatten()
-            .pluck("lang").unique().value();
-
+            if(!s.langs[0].lang) {
+                s.langs[0].lang = start_lang;
+            }
+            return enabledLangsHelper(start_lang);
         }
         var currentLangList = _.pluck(s.langs, "lang");
         delete currentLangList[i];
         var firstlang;
         if(s.langs.length)
              firstlang = s.langs[0].lang
-        var other =  _(settings.corpusListing.getLinksFromLangs([firstlang || start_lang]))
-            .flatten()
-            .pluck("lang").unique().value();
-
-        return _.difference(other, currentLangList);
-
+        var other = enabledLangsHelper(firstlang || start_lang);
+        var langResult = _.difference(other, currentLangList);
+        if(s.langs[i] && (!s.langs[i].lang)) {
+            s.langs[i].lang = langResult[0];
+        }
+        return langResult;
     };
+
     s.addLangRow = function() {
         s.langs.push({lang: s.getEnabledLangs()[0]})
     }
