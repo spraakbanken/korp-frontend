@@ -13,8 +13,35 @@ settings.corporafolders = {};
 // Skolböcker
 settings.corporafolders.buugaag = {
     title: "Buugaag Dugsiyeed",
-    contents: ["somali-1971-79", "somali-2001", "somali-hargeysa-2010", "somali-itoobiya", "somali-cb", "somali-hargeysa", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis"]
+    contents: ["somali-1971-79", "somali-1993-94", "somali-2001", "somali-itoobiya", "somali-hargeysa-2010", "somali-caafimaad-1994", "somali-cb", "somali-hargeysa", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis", "somali-xisaab-1971-79", "somali-xisaab-1994-97", "somali-xisaab-2001-hargeysa"]
 };
+
+settings.corporafolders.warar = {
+    title: "Warar",
+    contents: ["somali-radioden2014", "somali-radioswe2014", "somali-radiomuq", "somali-ogaden"]
+};
+
+settings.corporafolders.wb = {
+    title: "Warbixin bulsheed",
+    contents: ["somali-wksi", "somali-wksk"]
+};
+
+// Strukturella attribut
+somalis = {}
+somalis.title = {label: "title", order: -100};
+somalis.source = {label: "source", type: "url", order: -200};
+somalis.author = {label: "author", order: -300};
+somalis.translator = {label: "translator", order: -400};
+somalis.editor = {label: "editor", order: -500};
+somalis.journal = {label: "journal", order: -600};
+somalis.publisher = {label: "publisher", order: -700};
+somalis.sponsor = {label: "sponsor", order: -800};
+somalis.place = {label: "place", order: -900};
+somalis.year = {label: "year", order: -1000};
+somalis.edition = {label: "edition", order: -1100};
+somalis.date = {label: "date", order: -1200};
+somalis.page = {label: "page", order: -1300};
+somalis.pagesource = {label: "pagesource", type: "url", order: -1400};
 
 settings.corpora["somali-1971-79"] = {
     id: "somali-1971-79",
@@ -24,12 +51,46 @@ settings.corpora["somali-1971-79"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
-        text_source: {label: "source", type: "url"},
-        page_n: {label: "page"},
-        page_purl: {label: "pagesource", type: "url"}
+        text_year: somalis.year,
+        text_place: somalis.place,
+        text_author: somalis.author,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source,
+        page_n: somalis.page,
+        page_purl: somalis.pagesource
+    }
+};
+
+settings.corpora["somali-1993-94"] = {
+    id: "somali-1993-94",
+    title: "Af Soomaali 1993–94",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_place: somalis.place,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-caafimaad-1994"] = {
+    id: "somali-caafimaad-1994",
+    title: "Caafimaad 1994",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_edition: somalis.edition,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        page_n: somalis.page
     }
 };
 
@@ -41,12 +102,12 @@ settings.corpora["somali-2001"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_sponsor: {label: "sponsor"},
-        text_place: {label: "place"},
-        page_n: {label: "page"},
-        text_edition: {label: "edition"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_sponsor: somalis.sponsor,
+        text_place: somalis.place,
+        page_n: somalis.page,
+        text_edition: somalis.edition
     }
 };
 
@@ -58,11 +119,11 @@ settings.corpora["somali-itoobiya"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        page_n: {label: "page"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        page_n: somalis.page
     }
 };
 
@@ -74,12 +135,12 @@ settings.corpora["somali-hargeysa-2010"] = {
     context: settings.spContext,
     attributes: {},
     struct_attributes: {
-        text_edition: {label: "edition"},
-        text_place: {label: "place"},
-        text_publisher: {label: "publisher"},
-        text_title: {label: "title"},
-        text_year: {label: "year"},
-        page_n: {label: "page"}
+        text_edition: somalis.edition,
+        text_place: somalis.place,
+        text_publisher: somalis.publisher,
+        text_title: somalis.title,
+        text_year: somalis.year,
+        page_n: somalis.page
     }
 };
 
@@ -91,30 +152,14 @@ settings.corpora["somali-hargeysa"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        text_editor: {label: "editor"},
-        text_edition: {label: "edition"},
-        text_sponsor: {label: "sponsor"},
-        page_n: {label: "page"}
-    }
-};
-
-settings.corpora["somali-bulsho"] = {
-    id: "somali-bulsho",
-    title: "Bulsho",
-    description: "",
-    within: settings.defaultWithin,
-    context: settings.defaultContext,
-    attributes: {},
-    struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_source: {label: "source", type: "url"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_editor: somalis.editor,
+        text_edition: somalis.edition,
+        text_sponsor: somalis.sponsor,
+        page_n: somalis.page
     }
 };
 
@@ -126,11 +171,12 @@ settings.corpora["somali-cb"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_source: {label: "source", type: "url"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        page_purl: somalis.pagesource
     }
 };
 
@@ -142,13 +188,102 @@ settings.corpora["somali-cilmi"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_editor: {label: "editor"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        text_edition: {label: "edition"},
-        page_n: {label: "page"}
+        text_year: somalis.year,
+        text_author: somalis.author,
+        text_title: somalis.title,
+        text_editor: somalis.editor,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_edition: somalis.edition,
+        text_translator: somalis.translator,
+        text_journal: somalis.journal,
+        text_source: somalis.source,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-xisaab-1971-79"] = {
+    id: "somali-xisaab-1971-79",
+    title: "Xisaab 1971-79",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_author: somalis.author,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_edition: somalis.edition,
+        text_source: somalis.source,
+        page_purl: somalis.pagesource,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-xisaab-1994-97"] = {
+    id: "somali-xisaab-1994-97",
+    title: "Xisaab 1994-97",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_author: somalis.author,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-xisaab-2001-hargeysa"] = {
+    id: "somali-xisaab-2001-hargeysa",
+    title: "Xisaab 2001 Hargeysa",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_author: somalis.author,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-wksi"] = {
+    id: "somali-wksi",
+    title: "Warbixin Ku Saabsan Iswiidhan",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place
+    }
+};
+
+settings.corpora["somali-wksk"] = {
+    id: "somali-wksk",
+    title: "Warbixin Ku Saabsan Kanada",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place
     }
 };
 
@@ -160,11 +295,11 @@ settings.corpora["somali-wakiillada"] = {
     context: settings.spContext,
     attributes: {},
     struct_attributes: {
-        text_date: {label: "date"},
-        text_title: {label: "title"},
-        text_source: {label: "source", type: "url"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"}
+        text_date: somalis.date,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place
     }
 };
 
@@ -176,12 +311,12 @@ settings.corpora["somali-kqa"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_title: {label: "title"},
-        text_sponsor: {label: "sponsor"},
-        text_place: {label: "place"},
-        text_edition: {label: "edition"},
-        text_date: {label: "year"},
-        text_source: {label: "source", type: "url"}
+        text_title: somalis.title,
+        text_sponsor: somalis.sponsor,
+        text_place: somalis.place,
+        text_edition: somalis.edition,
+        text_date: somalis.year,
+        text_source: somalis.source
     }
 };
 
@@ -193,10 +328,10 @@ settings.corpora["somali-ogaden"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_source: {label: "source", type: "url"},
-        page_purl: {label: "pagesource", type: "url"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        page_purl: somalis.pagesource
     }
 };
 
@@ -208,11 +343,12 @@ settings.corpora["somali-qoraallo"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_date: {label: "date"},
-        text_title: {label: "title"},
-        text_author: {label: "author"},
-        text_place: {label: "place"},
-        text_source: {label: "source", type: "url"}
+        text_date: somalis.date,
+        text_title: somalis.title,
+        text_author: somalis.author,
+        text_place: somalis.place,
+        text_source: somalis.source,
+        page_n: somalis.page
     }
 };
 
@@ -224,14 +360,14 @@ settings.corpora["somali-saynis"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        text_editor: {label: "editor"},
-        text_edition: {label: "edition"},
-        text_sponsor: {label: "sponsor"},
-        page_n: {label: "page"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_editor: somalis.editor,
+        text_edition: somalis.edition,
+        text_sponsor: somalis.sponsor,
+        page_n: somalis.page
     }
 };
 
@@ -243,10 +379,10 @@ settings.corpora["somali-radioden2014"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        text_date: {label: "date"},
-        text_source: {label: "source", type: "url"}
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_date: somalis.date,
+        text_source: somalis.source
     }
 };
 
@@ -258,10 +394,10 @@ settings.corpora["somali-radioswe2014"] = {
     context: settings.spContext,
     attributes: {},
     struct_attributes: {
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"},
-        text_date: {label: "date"},
-        text_source: {label: "source", type: "url"}
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_date: somalis.date,
+        text_source: somalis.source
     }
 };
 
@@ -274,14 +410,14 @@ settings.corpora["somali-saynis-1972-77"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_edition: {label: "edition"},
-        text_editor: {label: "editor"},
-        text_place: {label: "place"},
-        text_publisher: {label: "publisher"},
-        text_source: {label: "source", type: "url"},
-        text_title: {label: "title"},
-        text_year: {label: "year"},
-        page_n: {label: "page"}
+        text_edition: somalis.edition,
+        text_editor: somalis.editor,
+        text_place: somalis.place,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source,
+        text_title: somalis.title,
+        text_year: somalis.year,
+        page_n: somalis.page
     }
 };
 
@@ -293,14 +429,14 @@ settings.corpora["somali-saynis-1994-96"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_edition: {label: "edition"},
-        text_editor: {label: "editor"},
-        text_place: {label: "place"},
-        text_publisher: {label: "publisher"},
-        text_source: {label: "source", type: "url"},
-        text_title: {label: "title"},
-        text_year: {label: "year"},
-        page_n: {label: "page"}
+        text_edition: somalis.edition,
+        text_editor: somalis.editor,
+        text_place: somalis.place,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source,
+        text_title: somalis.title,
+        text_year: somalis.year,
+        page_n: somalis.page
     }
 };
 
@@ -312,10 +448,10 @@ settings.corpora["somali-sheekooyin"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_title: {label: "title"},
-        text_date: {label: "year"},
-        text_publisher: {label: "publisher"},
-        text_source: {label: "source", type: "url"}
+        text_title: somalis.title,
+        text_date: somalis.year,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source
     }
 };
 
@@ -327,12 +463,29 @@ settings.corpora["somali-faces"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        page_n: {label: "page"},
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_publisher: {label: "publisher"},
-        text_source: {label: "source", type: "url"},
-        page_purl: {label: "pagesource", type: "url"}
+        page_n: somalis.page,
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source,
+        page_purl: somalis.pagesource
+    }
+};
+
+settings.corpora["somali-radiomuq"] = {
+    id: "somali-radiomuq",
+    title: "Radio Muqdisho",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        page_n: somalis.page,
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_source: somalis.source,
+        page_purl: somalis.pagesource
     }
 };
 
@@ -344,11 +497,11 @@ settings.corpora["somali-suugaan"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_place: {label: "place"},
-        text_author: {label: "author"},
-        text_edition: {label: "edition"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_place: somalis.place,
+        text_author: somalis.author,
+        text_edition: somalis.edition
     }
 };
 
@@ -360,9 +513,9 @@ settings.corpora["wikipedia-so"] = {
     context: settings.defaultContext,
     attributes: {},
     struct_attributes: {
-        text_title: {label: "title"},
-        text_publisher: {label: "date"},
-        text_source: {label: "source", type: "url"}
+        text_title: somalis.title,
+        text_publisher: somalis.date,
+        text_source: somalis.source
     }
 };
 
@@ -374,12 +527,31 @@ settings.corpora["somali-xeerar"] = {
     context: settings.spContext,
     attributes: {},
     struct_attributes: {
-        text_year: {label: "year"},
-        text_title: {label: "title"},
-        text_source: {label: "source", type: "url"},
-        text_publisher: {label: "publisher"},
-        text_place: {label: "place"}
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place
     }
 };
+
+settings.corpora["somali-ah-1992-02-kanada"] = {
+    id: "somali-ah-1992-02-kanada",
+    title: "Afka Hooyo 1992-02 Kanada",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_author: somalis.author,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        page_n: somalis.page
+    }
+};
+
 
 settings.corpusListing = new CorpusListing(settings.corpora);
