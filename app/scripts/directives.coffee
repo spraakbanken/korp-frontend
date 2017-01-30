@@ -139,6 +139,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
         current = null
         prevScope = null
         childWatch = null
+
         scope.$watch "tokenValue", (valueObj) ->
             unless valueObj then return
             if valueObj.value == current?.value then return
@@ -152,6 +153,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
             childScope = scope.$new(false, scope)
             childWatch = childScope.$watch "model", (val) ->
                 scope.model = val
+
             childScope.orObj = scope.orObj
             _.extend childScope, valueObj
 
@@ -554,6 +556,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
         "variant" : "@"
         "disableLemgramAutocomplete" : "="
         "textInField": "="
+        "typeaheadCloseCallback": "&"
     template: """
         <div>
             <script type="text/ng-template" id="lemgramautocomplete.html">
@@ -583,7 +586,8 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                     typeahead-on-select="selectedItem($item, $model, $label)"
                     placeholder="{{placeholderToString(placeholder)}}"
                     typeahead-click-open
-                    typeahead-is-open="typeaheadIsOpen"></div>
+                    typeahead-is-open="typeaheadIsOpen"
+                    ng-blur="typeaheadClose()"></div>
                 <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
             <div ng-show="disableLemgramAutocomplete">
@@ -594,6 +598,13 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
         </div>
     """
     link : (scope, elem, attr) ->
+
+        scope.typeaheadClose = () ->
+            if scope.typeaheadCloseCallback
+                scope.typeaheadCloseCallback({
+                    valueSelected: scope.model? and _.isEmpty scope.textInField
+                })
+
         scope.lemgramify = (lemgram) ->
             lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
             match = lemgram.match lemgramRegExp
@@ -626,6 +637,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                 scope.placeholder = model.sense
                 scope.model = regescape(model.sense)
             scope.textInField = ""
+            scope.typeaheadClose()
 
         if scope.model
             if scope.type == "sense"

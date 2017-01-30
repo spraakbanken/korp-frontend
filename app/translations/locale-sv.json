@@ -327,5 +327,7 @@
     "global_filter": "Filter",
     "filter_add": "Lägg till",
     
-    "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token."
+    "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
+    
+    "choose_lemgram": "Välj lemgram"
 }

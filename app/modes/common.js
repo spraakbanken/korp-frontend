@@ -118,7 +118,15 @@ attrs.lemgram = {
     },
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
+    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram' typeahead-close-callback='checkForError(valueSelected)'/>"
+                        + "<span ng-if='valueError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{'choose_lemgram' | loc:lang}}</span>",
+    controller: function($scope) {
+        $scope.valueError = false;
+
+        $scope.checkForError = function(valueSelected) {
+            $scope.valueError = !valueSelected;
+        }
+    },
     order: 48
 };
 attrs.dalinlemgram = {
