@@ -544,7 +544,7 @@ korpApp.directive "kwicPager", () ->
 
 
 
-korpApp.directive "autoc", ($q, $http, lexicons) ->
+korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
     replace: true
     restrict: "E"
     scope:
@@ -573,6 +573,7 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
             </script>
             <div ng-show="!disableLemgramAutocomplete">
                 <div style="float:left"><input
+                    id="korpAutocompleteInput"
                     autofocus
                     type="text"
                     ng-model="textInField"
@@ -581,7 +582,9 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                     typeahead-template-url="lemgramautocomplete.html"
                     typeahead-loading="isLoading"
                     typeahead-on-select="selectedItem($item, $model, $label)"
-                    placeholder="{{placeholderToString(placeholder)}}"></div>
+                    placeholder="{{placeholderToString(placeholder)}}"
+                    typeahead-click-open
+                    typeahead-is-open="typeaheadIsOpen"></div>
                 <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
             <div ng-show="disableLemgramAutocomplete">
@@ -678,6 +681,22 @@ korpApp.directive "autoc", ($q, $http, lexicons) ->
                         a.sense.length - b.sense.length
                 deferred.resolve data
             return deferred.promise
+
+
+
+korpApp.directive "typeaheadClickOpen", ($parse, $timeout)->
+    dir =
+        restrict: "A"
+        require: "ngModel"
+        link: ($scope, elem, attrs)->
+            triggerFunc = (event)->
+                if event.keyCode is 40 and not $scope.typeaheadIsOpen
+                    ctrl = elem.controller 'ngModel'
+                    prev = ctrl.$modelValue || ''
+                    if prev
+                        ctrl.$setViewValue ''
+                        $timeout -> ctrl.$setViewValue "#{prev}"
+            elem.bind 'keyup', triggerFunc
 
 
 
