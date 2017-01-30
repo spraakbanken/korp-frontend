@@ -31,6 +31,9 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
     unless $location.search().stats_reduce
         $location.search 'stats_reduce', ("word")
     
+    if settings.statisticsCaseInsensitiveDefault
+        $location.search 'stats_reduce_insensitive', 'word'
+
     $scope.corpusChangeListener = $scope.$on "corpuschooserchange", (event, selected) ->
         c.log "SearchCtrl corpuschooserchange"
         $scope.noCorporaSelected = not selected.length
@@ -65,6 +68,8 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.prefix = false
     s.suffix = false 
     s.isCaseInsensitive = false
+    if settings.inputCaseInsensitiveDefault
+        s.isCaseInsensitive = true
 
     s.$on "btn_submit", () ->
         c.log "simple search submit"

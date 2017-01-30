@@ -299,11 +299,7 @@ class model.StatsProxy extends BaseProxy
         reduceval = locationSearch().stats_reduce or "word"
         reduceVals = reduceval.split ","
 
-        insensitive = locationSearch().stats_reduce_insensitive
-        if insensitive
-            ignoreCase = true
-        else
-            ignoreCase = false
+        ignoreCase = locationSearch().stats_reduce_insensitive?
 
         reduceValLabels = _.map reduceVals, (reduceVal) ->
             return "word" if reduceVal == "word"

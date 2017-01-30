@@ -4,6 +4,10 @@ settings.autocomplete = false;
 settings.wordpicture = false;
 settings.enableMap = false;
 
+settings.inputCaseInsensitiveDefault = true;
+settings.statisticsCaseInsensitiveDefault = true;
+
+
 $("#lemgram_list_item").remove();
 $("#showLineDiagram").remove();
 
