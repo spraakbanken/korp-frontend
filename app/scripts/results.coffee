@@ -233,7 +233,10 @@ class view.KWICResults extends BaseResults
                 @selectionManager.deselect()
                 @s.$root.word_selected = null
             else
-                $scope.setKwicData(data)
+                $scope.setKwicData data
+
+            if @s.$parent.pageObj.pager is 1
+                @s.$parent.page = 0
 
             setTimeout(() =>
                 safeApply @s, () =>
@@ -340,16 +343,8 @@ class view.KWICResults extends BaseResults
         c.log "kwicResults.makeRequest", cqp, isPaging
 
         page = Number(locationSearch().page) or 0
+        @s.$parent.pageObj.pager = page + 1
 
-        if !@hasInitialized?
-            c.log "not init set page", page + 1
-            @s.$parent.pageObj.pager = page + 1
-        else if not isPaging
-            @s.gotFirstKwic = false
-            @s.$parent.pageObj.pager = 0
-            c.log "not isPaging page reset"
-
-        @hasInitialized ?= false
         @showPreloader()
         @s.aborted = false
 
