@@ -573,7 +573,6 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
             </script>
             <div ng-show="!disableLemgramAutocomplete">
                 <div style="float:left"><input
-                    id="korpAutocompleteInput"
                     autofocus
                     type="text"
                     ng-model="textInField"
