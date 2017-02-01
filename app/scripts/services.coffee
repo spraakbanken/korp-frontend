@@ -118,8 +118,8 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                         abs += val.abs
                         loglike += val.loglike
                         elems.push val.value
-                    if loglike > currentMax
-                        currentMax = loglike
+                    if Math.abs(loglike) > currentMax
+                        currentMax = Math.abs loglike
                     { key: key, loglike : loglike, abs : abs, elems : elems, tokenLists: tokenLists }
 
                 return [res, currentMax]
