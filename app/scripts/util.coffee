@@ -689,6 +689,7 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
                 $.extend download_params, settings.downloadFormatParams[format]
         option.appendTo('#download-links').data("params", download_params)
         i++
+    $('#download-links').off "change"
     $('#download-links').localize().click(false).change (event) ->
         params = $(":selected", this).data("params")
         unless params then return
