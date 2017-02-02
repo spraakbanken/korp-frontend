@@ -2081,7 +2081,7 @@ settings.corpora["ivip"] = {
             customType: "struct"
         }
     },
-    showFilters: ["text_country", "text_city"]
+    showFilters: ["text_country", "text_city", "text_place"]
 };
 
 settings.corpora["lawline"] = {
