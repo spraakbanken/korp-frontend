@@ -136,6 +136,10 @@ html
         <span ng-click="clickX()" class="close-x">×</span>
       </div>
       <div id="login_popup" class="modal-body">
+        <div ng-if="loginNeededFor.length" style="font-size: 0.75em">
+          <span style="display: inline">{{'login_needed_for_corpora' | loc:lang}}</span>
+          <span style="display: inline; margin-right: 2px;" ng-repeat="corpus in loginNeededFor">{{corpus.title}}</span>
+        </div>
         <form ng-submit="loginSubmit(login_usr, login_pass, saveLogin)">
           <label for="usrname">{{'username' | loc:lang}}</label>
           <input id="usrname" ng-model="login_usr" type="text">

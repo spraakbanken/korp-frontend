@@ -64,6 +64,32 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
     $rootScope.mapTabs = []
     isInit = true
 
+    if $location.search().corpus
+        loginNeededFor = []
+        for corpus in $location.search().corpus.split(",")
+            corpusObj = settings.corpusListing.struct[corpus]
+            if corpusObj.limited_access
+                if (_.isEmpty authenticationProxy.loginObj) or (corpus.toUpperCase() not in authenticationProxy.loginObj.credentials)
+                    loginNeededFor.push corpusObj
+        s.loginNeededFor = loginNeededFor
+
+        if not _.isEmpty s.loginNeededFor
+            s.savedState = $location.search()
+            $location.url $location.path()
+            $location.search "display", "login"
+    
+    s.restorePreLoginState = () ->
+        if s.savedState
+            for key, val of s.savedState
+                $location.search key, val
+
+            corpora = s.savedState.corpus.split(",")
+            settings.corpusListing.select corpora
+            corpusChooserInstance.corpusChooser "selectItems", corpora
+
+            s.savedState = null
+            s.loginNeededFor = null
+
 
     s.searchDisabled = false
     s.$on "corpuschooserchange", (event, corpora) ->
@@ -179,6 +205,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
             util.setLogin()
             safeApply s, () ->
                 s.show_modal = null
+                s.restorePreLoginState()
         ).fail ->
             c.log "login fail"
             safeApply s, () ->

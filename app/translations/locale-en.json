@@ -331,5 +331,6 @@
     
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
     
-    "choose_lemgram": "Choose lemgram"
+    "choose_lemgram": "Choose lemgram",
+    "login_needed_for_corpora": "Login needed for access to"
 }
