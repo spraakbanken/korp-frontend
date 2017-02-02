@@ -405,14 +405,22 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
             token = {and_block : [[]]}
             s.data.push token
             s.addOr token.and_block[0]
+            s.repeatError = false
 
         s.removeToken = (i) ->
             unless s.data.length > 1 then return
             s.data.splice(i, 1)
+            repeatError = true
+            for token in s.data
+                if not token.repeat or token.repeat[0] > 0
+                    repeatError = false
+                    break
+            s.repeatError = repeatError
 
         s.toggleRepeat = (token) ->
             unless token.repeat
                 token.repeat = [1,1]
+                s.repeatError = false
             else
                 s.repeatError = false
                 delete token.repeat
