@@ -247,6 +247,9 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
     if $location.search().cqp
         s.cqp = $location.search().cqp
 
+    s.$watch "repeatError", (repeatError) ->
+        s.searchDisabled = repeatError
+
     updateExtendedCQP = () ->
         val2 = CQP.expandOperators(s.cqp)
         if $rootScope.globalFilter
