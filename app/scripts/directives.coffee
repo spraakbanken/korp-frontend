@@ -878,9 +878,15 @@ korpApp.directive "globalFilters", ($rootScope, $location, $q, structService) ->
         def = $q.defer()
 
         $rootScope.$on "corpuschooserchange", () ->
-            scope.showDirective = settings.corpusListing.selected.length is 1 and settings.corpusListing.selected[0].id == "ivip"
+            scope.showDirective = false
+            if settings.corpusListing.selected.length is 1 and not _.isEmpty settings.globalFilterCorpora 
+                corpus = settings.corpusListing.selected[0]
+                if corpus.id in settings.globalFilterCorpora
+                    scope.showDirective = true
+                    scope.corpus = corpus.id
+
             if scope.showDirective
-                scope.showFilters = settings.corpora["ivip"].showFilters
+                scope.showFilters = settings.corpora[scope.corpus].showFilters
                 if $location.search().global_filter
                     scope.initFilters()
                     scope.setFromLocation $location.search().global_filter
@@ -901,9 +907,9 @@ korpApp.directive "globalFilters", ($rootScope, $location, $q, structService) ->
                 filterValues[filter].possibleValues = []
 
             if not _.isEmpty filters
-                structService.getStructValues(filters).then (data) ->
+                structService.getStructValues(scope.corpus, filters).then (data) ->
                     for filter in filters
-                        filterValues[filter].possibleValues = data.IVIP[filter]
+                        filterValues[filter].possibleValues = data[scope.corpus.toUpperCase()][filter]
 
             scope.filterValues = filterValues
 
@@ -936,7 +942,7 @@ korpApp.directive "globalFilters", ($rootScope, $location, $q, structService) ->
                     scope.filterValues[attrKey].value = []
 
         scope.getFilterLabel = (filterKey) -> 
-            settings.corpora["ivip"].struct_attributes[filterKey].label
+            settings.corpora[scope.corpus].struct_attributes[filterKey].label
 
         scope.makeCqp = () ->
             exprs = []

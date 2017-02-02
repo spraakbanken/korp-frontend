@@ -2,13 +2,13 @@ korpApp = angular.module "korpApp"
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (attributes) ->
+    getStructValues: (corpora, attributes) ->
 
         def = $q.defer()
 
         params =
             command: "struct_values"
-            corpus: "ivip"
+            corpus: corpora
             struct: attributes.join ","
 
         conf =
