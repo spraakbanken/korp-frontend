@@ -146,8 +146,8 @@ Sidebar =
                             inner.addClass("link").click ->
                                 searchKey = attrSettings.searchKey or key
                                 cqpVal = $(this).data("key")
-                                cqpExpr = if attrSettings.internalSearch then attrSettings.internalSearch searchKey, cqpVal else "[#{searchKey} contains '#{cqpVal}']"
-                                locationSearch({"search": "cqp|" + cqpExpr})
+                                cqpExpr = if attrSettings.internalSearch then attrSettings.internalSearch searchKey, cqpVal else "[#{searchKey} contains '#{regescape(cqpVal)}']"
+                                locationSearch({"search": "cqp", "cqp": cqpExpr, "page": null})
                         if attrs.externalSearch
                             address = _.template(attrs.externalSearch, {val : subValue})
                             karpLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
@@ -231,7 +231,7 @@ Sidebar =
                 if attrs.internalSearch
                     inner.addClass("link").click ->
                         cqpVal = $(this).data("key")
-                        locationSearch({"search": "cqp|[#{key} contains '#{cqpVal}']"})
+                        locationSearch({"page": null, "search": "cqp", "cqp": "[#{key} contains \"#{regescape(cqpVal)}\"]"})
 
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
