@@ -152,12 +152,17 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
         util.saldoToString(wd)
 
     modalInstance = null
-    s.clickRelated = (wd) ->
+    s.clickRelated = (wd, attribute) ->
         modalInstance?.close()
         c.log "modalInstance", modalInstance
         $scope.$root.searchtabs()[1].select()
-        s.$root.$broadcast "extended_set", "[saldo contains '#{wd}']"
-        $location.search("search", "cqp|" + "[saldo contains '#{wd}']")
+        if attribute is "saldo"
+            cqp = "[saldo contains \"#{regescape(wd)}\"]"
+        else
+            cqp = "[sense rank_contains \"#{regescape(wd)}\"]"
+        s.$root.$broadcast "extended_set", cqp
+        $location.search "search", "cqp"
+        $location.search "cqp", cqp
 
     s.relatedDefault = 3
     s.clickX = () ->
@@ -174,7 +179,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#?lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
                   <div class="list_wrapper">
                       <ul>
-                        <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
+                        <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
                       </ul>
                   </div>
                 </div>
@@ -208,8 +213,18 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
         if not search?.pageOnly
             if search.type == "lemgram"
-                backend.relatedWordSearch(unregescape search.val).then (data) ->
-                    s.relatedObj = data
+                sense = true
+                saldo = true
+                for corpus in settings.corpusListing.selected
+                    if "sense" of corpus.attributes
+                        saldo = false
+                    if "saldo" of corpus.attributes
+                        sense = false
+
+                if sense or saldo
+                    backend.relatedWordSearch(unregescape search.val).then (data) ->
+                        s.relatedObj = data
+                        s.relatedObj.attribute = if sense then "sense" else "saldo"
 
             if s.word_pic and (search.type == "lemgram" or " " not in search.val)
                 value = if search.type == "lemgram" then unregescape search.val else search.val
