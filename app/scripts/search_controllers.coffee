@@ -13,16 +13,34 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
             $scope.isCompareSelected = val == 3
     )
 
-    $scope.$watch (() -> $location.search().word_pic), (val) ->
-        $scope.word_pic = Boolean(val)
+    setupWatchWordPic = () ->
+        $scope.$watch (() -> $location.search().word_pic), (val) ->
+            $scope.word_pic = Boolean(val)
 
-    $scope.$watch "word_pic", (val) ->
-        $location.search("word_pic", Boolean(val) or null)
+        $scope.$watch "word_pic", (val) ->
+            $location.search("word_pic", Boolean(val) or null)
 
-    $scope.$watch (() -> $location.search().show_map), (val) ->
-        $scope.show_map = Boolean(val)
+    setupWatchMap = () ->
+        $scope.$watch (() -> $location.search().show_map), (val) ->
+            $scope.show_map = Boolean(val)
 
-    $scope.$watch "show_map", (val) -> $location.search("show_map", Boolean(val) or null)
+        $scope.$watch "show_map", (val) -> $location.search("show_map", Boolean(val) or null)
+
+    setupWatchStats = () ->
+        $scope.showStatistics = true
+        
+        $scope.$watch (() -> $location.search().hide_stats), (val) ->
+            $scope.showStatistics = not val?
+
+        $scope.$watch "showStatistics", (val) ->
+            if $scope.showStatistics
+                $location.search("hide_stats", null)
+            else
+                $location.search("hide_stats", true)
+
+    setupWatchWordPic()
+    setupWatchMap()
+    setupWatchStats()
 
     $scope.settings = settings
     $scope.showStats = () ->

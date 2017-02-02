@@ -241,6 +241,15 @@ korpApp.directive "statsResultCtrl", () ->
     controller: ($scope, utils, $location, backend, searches, $rootScope) ->
         s = $scope
 
+        s.$watch (() -> $location.search().hide_stats), (val) ->
+            s.showStatistics = not val?
+
+        $scope.activate = () ->
+            $location.search("hide_stats", null)
+            cqp = searches.getCqpExpr()
+            s.showStatistics = true
+            $scope.instance.makeRequest(cqp)
+
         s.onGraphShow = (data) ->
             $rootScope.graphTabs.push data
         

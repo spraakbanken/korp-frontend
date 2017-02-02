@@ -839,6 +839,12 @@ class view.StatsResults extends BaseResults
         })
 
     makeRequest : (cqp) ->
+        grid = document.getElementById "myGrid"
+        grid.innerHTML = ''
+
+        if not @s.showStatistics
+            return
+
         c.log "StatsResults makeRequest", cqp
 
         if currentMode == "parallel"

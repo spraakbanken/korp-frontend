@@ -60,47 +60,54 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='StatsResults', constr-name='statsResults')
 
+                    div(ng-if="!showStatistics")
+                      | {{'stats_warn' | loc:lang}}
+                      div
+                        button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
+                          | {{'word_pic_warn_btn' | loc:lang}}
+
                     warning(ng-if="no_hits")
                       | {{"no_stats_results" | loc:lang}}
                     warning(ng-if="aborted && !loading")
                       | {{'search_aborted' | loc:lang}}
-                    .stats_header
-                      button#showGraph.btn.btn-sm.btn-default(ng-class="{disabled: !graphEnabled}",
-                        uib-tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", uib-tooltip-placement="right"
-                      )
-                        span.graph_btn_icon
-                          <svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg>
-                        | {{'show_diagram' | loc:lang}}
-                      
-                      div.map-settings-container(uib-dropdown, auto-close="outsideClick", ng-show="newMapEnabled")
-                        button.btn.btn-sm.btn-default(uib-dropdown-toggle)
-                          | {{'show_map' | loc:lang}}
-                          span.caret()
-                        div(uib-dropdown-menu)
-                          h3.map-settings-title() Välj attribut
-                          ul(ng-if="mapAttributes.length != 0")
-                            li(ng-repeat="attr in mapAttributes", ng-class="attr.selected ? 'selected':''", ng-click="mapToggleSelected($index, $event)")
-                              span() {{attr.label | loc:lang}}
-                          span(ng-show="mapAttributes.length == 0", class="empty-attribute-list")
-                            | {{ 'no_geo_info' | loc:lang}}
-                          div.btn-container()
-                              button.btn.btn-sm.btn-primary(ng-disabled="mapAttributes.length == 0", ng-click="showMap()") {{'show_map' | loc:lang}}
+                    div(ng-show="showStatistics")
+                      .stats_header(ng-show="showStatistics")
+                        button#showGraph.btn.btn-sm.btn-default(ng-class="{disabled: !graphEnabled}",
+                          uib-tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", uib-tooltip-placement="right"
+                        )
+                          span.graph_btn_icon
+                            <svg height="24" version="1.1" width="33" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><path fill="#666666" stroke="none" d="M3.625,25.062C3.086,24.947000000000003,2.74,24.416,2.855,23.875L2.855,23.875L6.51,6.584L8.777,15.843L10.7,10.655000000000001L14.280999999999999,14.396L18.163999999999998,1.293000000000001L21.098,13.027000000000001L23.058,11.518L28.329,23.258000000000003C28.555,23.762000000000004,28.329,24.353,27.824,24.579000000000004L27.824,24.579000000000004C27.319000000000003,24.806000000000004,26.728,24.579000000000004,26.502000000000002,24.075000000000003L26.502000000000002,24.075000000000003L22.272000000000002,14.647000000000002L19.898000000000003,16.473000000000003L18.002000000000002,8.877000000000002L15.219000000000003,18.270000000000003L11.465000000000003,14.346000000000004L8.386,22.66L6.654999999999999,15.577L4.811999999999999,24.288C4.710999999999999,24.76,4.297,25.082,3.8329999999999993,25.082L3.8329999999999993,25.082C3.765,25.083,3.695,25.076,3.625,25.062L3.625,25.062Z" transform="matrix(0.6,0,0,0.6,6.2499,5.275)" stroke-width="1.6666666666666667" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path></svg>
+                          | {{'show_diagram' | loc:lang}}
+                        
+                        div.map-settings-container(uib-dropdown, auto-close="outsideClick", ng-show="newMapEnabled")
+                          button.btn.btn-sm.btn-default(uib-dropdown-toggle)
+                            | {{'show_map' | loc:lang}}
+                            span.caret()
+                          div(uib-dropdown-menu)
+                            h3.map-settings-title() Välj attribut
+                            ul(ng-if="mapAttributes.length != 0")
+                              li(ng-repeat="attr in mapAttributes", ng-class="attr.selected ? 'selected':''", ng-click="mapToggleSelected($index, $event)")
+                                span() {{attr.label | loc:lang}}
+                            span(ng-show="mapAttributes.length == 0", class="empty-attribute-list")
+                              | {{ 'no_geo_info' | loc:lang}}
+                            div.btn-container()
+                                button.btn.btn-sm.btn-primary(ng-disabled="mapAttributes.length == 0", ng-click="showMap()") {{'show_map' | loc:lang}}
 
-                      #showBarPlot
-                    #myGrid
-                    #exportStatsSection
-                      br
-                      br
-                      select#kindOfData
-                        option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
-                        option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
-                      select#kindOfFormat
-                        option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
-                        option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
-                      a#generateExportButton
-                        button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
-                      a#exportButton.btn.btn-sm.btn-default
-                        | {{'statstable_export' | loc:lang}}
+                        #showBarPlot
+                      #myGrid
+                      #exportStatsSection
+                        br
+                        br
+                        select#kindOfData
+                          option(value='relative', rel='localize[statstable_relfigures]') Relativa tal
+                          option(value='absolute', rel='localize[statstable_absfigures]') Absoluta tal
+                        select#kindOfFormat
+                          option(value='csv', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
+                          option(value='tsv', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
+                        a#generateExportButton
+                          button.btn.btn-sm.btn-default {{'statstable_gen_export' | loc:lang}}
+                        a#exportButton.btn.btn-sm.btn-default
+                          | {{'statstable_export' | loc:lang}}
                 uib-tab(ng-if="_settings.wordpicture != false",
                     wordpic-ctrl,
                     select="instance.onentry()",

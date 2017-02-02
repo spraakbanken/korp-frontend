@@ -78,6 +78,7 @@
     "case_insensitive": "skiftlägesoberoende",
     "case_sensitive": "skiftlägesberoende",
     "reduce_text": "sammanställ på",
+    "show_stats": "Visa statistik",
     "show_word_pic": "Visa ordbild",
     "word_pic_warn": "Ordbilden är avaktiverad. ",
     "word_pic_warn_btn": "Aktivera och sök",
@@ -330,5 +331,7 @@
     "repeat_error": "Fel: Det går inte att upprepa från 0 på alla token.",
     
     "choose_lemgram": "Välj lemgram",
-    "login_needed_for_corpora": "Inloggning behövs för åtkomst till"
+    "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
+    
+    "stats_warn": "Statistiken är avaktiverad"
 }

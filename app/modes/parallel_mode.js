@@ -21,6 +21,7 @@ korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $loca
 
 
     $scope.settings = settings
+    $scope.showStatistics = true
     $scope.showStats = function() {
         return settings.statistics != false
     }
