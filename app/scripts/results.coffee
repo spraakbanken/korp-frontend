@@ -842,8 +842,11 @@ class view.StatsResults extends BaseResults
         grid = document.getElementById "myGrid"
         grid.innerHTML = ''
 
+        @s.hasResult = false
         if not @s.showStatistics
             return
+
+        @s.hasResult = true
 
         c.log "StatsResults makeRequest", cqp
 
@@ -866,7 +869,6 @@ class view.StatsResults extends BaseResults
             @savedWordArray = wordArray
             @searchParams = searchParams
             @renderResult columns, dataset
-
         ).fail (textStatus, err) =>
             c.log "fail", arguments
             c.log "stats fail", @s.$parent.loading, _.map @proxy.pendingRequests, (item) -> item.readyState

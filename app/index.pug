@@ -66,12 +66,17 @@ html
                         button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
                           | {{'word_pic_warn_btn' | loc:lang}}
 
-                    warning(ng-if="no_hits")
+                    div(ng-if="showStatistics && !hasResult")
+                      div
+                        button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
+                          | {{'update_btn' | loc:lang}}
+                        
+                    warning(ng-if="showStatistics && no_hits")
                       | {{"no_stats_results" | loc:lang}}
-                    warning(ng-if="aborted && !loading")
+                    warning(ng-if="showStatistics && aborted && !loading")
                       | {{'search_aborted' | loc:lang}}
-                    div(ng-show="showStatistics")
-                      .stats_header(ng-show="showStatistics")
+                    div(ng-show="showStatistics && hasResult")
+                      .stats_header
                         button#showGraph.btn.btn-sm.btn-default(ng-class="{disabled: !graphEnabled}",
                           uib-tooltip="{{graphEnabled ? '' : ('material_warn' | loc:lang)}} ", uib-tooltip-placement="right"
                         )
