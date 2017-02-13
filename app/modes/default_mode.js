@@ -755,7 +755,7 @@ settings.corpora.gp1994 = {
     description: "Göteborgs-Posten 1994.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_section: {label: "section"}
@@ -768,7 +768,7 @@ settings.corpora.gp2001 = {
     description: "Göteborgs-Posten 2001.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -781,7 +781,7 @@ settings.corpora.gp2002 = {
     description: "Göteborgs-Posten 2002.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -794,7 +794,7 @@ settings.corpora.gp2003 = {
     description: "Göteborgs-Posten 2003.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -807,7 +807,7 @@ settings.corpora.gp2004 = {
     description: "Göteborgs-Posten 2004.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -820,7 +820,7 @@ settings.corpora.gp2005 = {
     description: "Göteborgs-Posten 2005.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -833,7 +833,7 @@ settings.corpora.gp2006 = {
     description: "Göteborgs-Posten 2006.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -846,7 +846,7 @@ settings.corpora.gp2007 = {
     description: "Göteborgs-Posten 2007.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -859,7 +859,7 @@ settings.corpora.gp2008 = {
     description: "Göteborgs-Posten 2008.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -872,7 +872,7 @@ settings.corpora.gp2009 = {
     description: "Göteborgs-Posten 2009.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -886,7 +886,7 @@ settings.corpora.gp2010 = {
     description: "Göteborgs-Posten 2010.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -900,7 +900,7 @@ settings.corpora.gp2011 = {
     description: "Göteborgs-Posten 2011.",
     within: settings.spWithin,
     context: settings.spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
