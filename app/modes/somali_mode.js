@@ -22,7 +22,7 @@ settings.corporafolders.buugaag = {
 
 settings.corporafolders.warar = {
     title: "Warar",
-    contents: ["somali-radioden2014", "somali-radioswe2014", "somali-radiomuq", "somali-ogaden"]
+    contents: ["somali-radioden2014", "somali-radioswe2014", "somali-radiomuq", "somali-ogaden", "somali-wardheer"]
 };
 
 settings.corporafolders.wb = {
@@ -66,6 +66,22 @@ settings.corpora["somali-1971-79"] = {
     }
 };
 
+settings.corpora["somali-wardheer"] = {
+    id: "somali-wardheer",
+    title: "Wardheer News",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_date: somalis.date,
+        text2_title: somalis.title,
+        text2_publisher: somalis.publisher,
+        text2_source: somalis.source,
+        text_purl: somalis.pagesource
+    }
+};
+
 settings.corpora["somali-1993-94"] = {
     id: "somali-1993-94",
     title: "Af Soomaali 1993–94",
@@ -94,6 +110,24 @@ settings.corpora["somali-caafimaad-1994"] = {
         text_edition: somalis.edition,
         text_title: somalis.title,
         text_source: somalis.source,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-ah-1992-02-kanada"] = {
+    id: "somali-ah-1992-02-kanada",
+    title: "Afka Hooyo 1992-02 Kanada",
+    description: "",
+    within: settings.spWithin,
+    context: settings.spContext,
+    attributes: {},
+    struct_attributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_author: somalis.author,
+        text_source: somalis.source,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
         page_n: somalis.page
     }
 };
@@ -459,6 +493,21 @@ settings.corpora["somali-sheekooyin"] = {
     }
 };
 
+settings.corpora["somali-sheekooying"] = {
+    id: "somali-sheekooying",
+    title: "Sheekooyin Gaagaaban",
+    description: "",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: {},
+    struct_attributes: {
+        text_title: somalis.title,
+        text_date: somalis.year,
+        text_author: somalis.author,
+        text_source: somalis.source
+    }
+};
+
 settings.corpora["somali-faces"] = {
     id: "somali-faces",
     title: "Somali Faces",
@@ -539,23 +588,6 @@ settings.corpora["somali-xeerar"] = {
     }
 };
 
-settings.corpora["somali-ah-1992-02-kanada"] = {
-    id: "somali-ah-1992-02-kanada",
-    title: "Afka Hooyo 1992-02 Kanada",
-    description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
-    attributes: {},
-    struct_attributes: {
-        text_year: somalis.year,
-        text_title: somalis.title,
-        text_author: somalis.author,
-        text_source: somalis.source,
-        text_publisher: somalis.publisher,
-        text_place: somalis.place,
-        page_n: somalis.page
-    }
-};
 
 
 settings.corpusListing = new CorpusListing(settings.corpora);
