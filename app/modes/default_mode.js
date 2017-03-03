@@ -534,7 +534,7 @@ settings.corpora.attasidor = {
     description: "<a target=\"_blank\" href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
     within: settings.defaultWithin,
     context: settings.defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
         text_title: {label: "title"}
