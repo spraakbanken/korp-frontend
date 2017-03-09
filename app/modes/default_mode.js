@@ -3857,8 +3857,11 @@ settings.corpora.mepac = {
             extended_template: selectType.extended_template,
             controller: selectType.controller,
             dataset: {
-                "patient": "patient",
-                "närstående": "närstående"
+                "patientblogg": "patientblogg",
+                "patientintervju": "patientintervju",
+                "fokusgrupp": "fokusgrupp",
+                "närståendeblogg": "närståendeblogg",
+                "närståendeintervju": "närståendeintervju"
             }
         }
     }
