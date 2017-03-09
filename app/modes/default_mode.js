@@ -1940,9 +1940,14 @@ settings.corpora["ivip"] = {
                     dataset: {
                         "Göteborg": "Göteborg",
                         "Helsingfors": "Helsingfors",
+                        "Jakobstad": "Jakobstad",
+                        "Karleby": "Karleby",
+                        "Karlstad": "Karlstad",
+                        "Luleå": "Luleå",
+                        "Osby": "Osby",
+                        "Stockholm": "Stockholm",
                         "Vasa": "Vasa",
-                        "Åbo": "Åbo",
-                        "Karlstad": "Karlstad"
+                        "Åbo": "Åbo"
                     }
                 },
         text_place: {label: "location",
@@ -1952,15 +1957,20 @@ settings.corpora["ivip"] = {
                      controller: selectType.controller,
                      dataset: {
                          "GotEvent": "GotEvent",
-                         "Svenska handelshögskolans bibliotek": "Svenska handelshögskolans bibliotek",
-                         "Wasa teater": "Wasa teater",
-                         "Åbo Svenska Teater": "Åbo Svenska Teater",
-                         "Svenska teatern": "Svenska teatern",
-                         "Luckan": "Luckan",
+                         "Lipputoimisto": "Lipputoimisto",
                          "Lorensbergsteatern": "Lorensbergsteatern",
-                         "Stadsteatern 2": "Stadsteatern 2",
+                         "Luckan": "Luckan",
+                         "Norrbottens Museum": "Norrbottens Museum",
+                         "Osby bibliotek": "Osby bibliotek",
                          "Scala": "Scala",
-                         "Stadsteatern 1": "Stadsteatern 1"
+                         "Stadsteatern 1": "Stadsteatern 1",
+                         "Stadsteatern 2": "Stadsteatern 2",
+                         "Stockholms universitetsbibliotek": "Stockholms universitetsbibliotek",
+                         "Svenska handelshögskolans bibliotek": "Svenska handelshögskolans bibliotek",
+                         "Svenska teatern": "Svenska teatern",
+                         "Wasa teater": "Wasa teater",
+                         "Åbo Akademis bibliotek": "Åbo Akademis bibliotek",
+                         "Åbo Svenska Teater": "Åbo Svenska Teater"
                      }
                  },
         text_participants: {label: "participants", order: 17},
@@ -1970,25 +1980,25 @@ settings.corpora["ivip"] = {
                               extended_template: selectType.extended_template,
                               controller: selectType.controller,
                               dataset: {
+                                  "AS1": "AS1",
+                                  "AS2": "AS2",
                                   "KU1": "KU1",
-                                  "PE1": "PE1",
                                   "KU2": "KU2",
-                                  "pause": "pause",
-                                  "PE4": "PE4",
-                                  "comment": "comment",
+                                  "KU3": "KU3",
+                                  "PE": "PE",
+                                  "PE1": "PE1",
+                                  "PE10": "PE10",
                                   "PE2": "PE2",
-                                  "PE8": "PE8",
-                                  "PE5": "PE5",
                                   "PE3": "PE3",
+                                  "PE4": "PE4",
+                                  "PE5": "PE5",
+                                  "PE6": "PE6",
+                                  "PE8": "PE8",
+                                  "PE9": "PE9",
                                   "UP1": "UP1",
                                   "UP2": "UP2",
-                                  "PE": "PE",
-                                  "PE10": "PE10",
-                                  "PE6": "PE6",
-                                  "AS2": "AS2",
-                                  "AS1": "AS1",
-                                  "KU3": "KU3",
-                                  "PE9": "PE9"
+                                  "comment": "comment",
+                                  "pause": "pause"
                               }
         },
         sentence_speaker_role: {label: "speakerrole",
@@ -1997,15 +2007,18 @@ settings.corpora["ivip"] = {
                                 extended_template: selectType.extended_template,
                                 controller: selectType.controller,
                                 dataset: {
-                                    "Kund": "Kund",
-                                    "Personal": "Personal",
                                     "": "Odefinerat",
-                                    "Uncertain": "Uncertain",
                                     "Assistent": "Assistent",
-                                    "Talaren": "Talaren",
+                                    "Hund": "Hund",
+                                    "Kund": "Kund",
                                     "Kund1": "Kund1",
                                     "Kund2": "Kund2",
-                                    "Hund": "Hund"
+                                    "Observer": "Observer",
+                                    "Participant": "Participant",
+                                    "Personal": "Personal",
+                                    "Talaren": "Talaren",
+                                    "Uncertain": "Uncertain",
+                                    "Visitor": "Visitor"
                                 }
                             },
         sentence_speaker_gender: {label: "speakergender",
@@ -2014,9 +2027,9 @@ settings.corpora["ivip"] = {
                                   extended_template: selectType.extended_template,
                                   controller: selectType.controller,
                                   dataset: {
+                                      "": "Odefinerat",
                                       "female": "female",
-                                      "male": "male",
-                                      "": "Odefinerat"
+                                      "male": "male"
                                   }
                               },
         sentence_speaker_age: {label: "speakerage", order: 13},
@@ -2059,9 +2072,9 @@ settings.corpora["ivip"] = {
                 var file = sentenceData['text_mediafile'];
                 var ext = sentenceData['text_mediafileext'];
 
-                var videoLink = $('<span class="link">Visa video</span>');
+                var videoLink = $('<span class="link">visa inspelning</span>');
                 videoLink.click(function () {
-                    var url = "http://k2xx.spraakdata.gu.se/" + path +  file + "." + ext;
+                    var url = "http://k2xx.spraakdata.gu.se/ivip/data/" + path +  file + "." + ext;
 
                     var scope = angular.element('#video-modal').scope();
                     scope.videos = [{'url': url, 'type': 'video/mp4'}];

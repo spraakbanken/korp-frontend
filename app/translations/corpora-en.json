@@ -368,7 +368,7 @@
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
     "notes": "notes",
-    
+
     "journal": "journal",
 
     "thread": "thread",
@@ -1039,7 +1039,7 @@
     "speakerregion": "speaker region",
     "speakergender": "speaker gender",
     "participants": "participants",
-    "video": "video",
+    "video": "recording",
     "video_restart": "Restart",
     "video_continue": "Continue",
     "video_start_time": "Start time",

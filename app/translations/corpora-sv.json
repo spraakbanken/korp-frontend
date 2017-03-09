@@ -369,7 +369,7 @@
     "compound_patterns": "compound patterns",
     "compound_pattern_examples": "compound pattern examples",
     "notes": "anteckningar",
-    
+
     "journal": "tidskrift",
 
     "thread": "tråd",
@@ -1039,7 +1039,7 @@
     "speakerregion": "talarregion",
     "speakergender": "talarkön",
     "participants": "deltagare",
-    "video": "video",
+    "video": "inspelning",
     "video_restart": "Starta om",
     "video_continue": "Fortsätt",
     "video_start_time": "Starttid",
