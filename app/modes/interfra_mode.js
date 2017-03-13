@@ -12,21 +12,18 @@ settings.corporafolders = {};
 settings.interfraStructs = {
     "u_who": {
         label: "speaker",
-        displayType: "select",
         dataset: {},
         extendedController: selectType.extendedController,
         extendedTemplate: selectType.extendedTemplate
     },
     "text_part": {
         label: "part",
-        displayType: "select",
         dataset: {"1A": "1A", "1B": "1B", "2": "2"},
         extendedController: selectType.extendedController,
         extendedTemplate: selectType.extendedTemplate
     },
     "text_group": {
         label: "group",
-        displayType: "select",
         dataset: {
             "G": "Secondary school students (G)",
             "N": "Beginners (N)",
@@ -51,7 +48,6 @@ settings.interfraStructs = {
     "text_activity": {label: "activity"},
     "text_interviewee": {
         label: "interviewee",
-        displayType: "select",
         dataset: {},
         extendedController: selectType.extendedController,
         extendedTemplate: selectType.extendedTemplate

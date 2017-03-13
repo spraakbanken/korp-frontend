@@ -32,7 +32,6 @@ settings.corpora.fts = {
         },
         text_authortype: {
             label: "author_type",
-            displayType: "select",
             dataset: {
                 journalist: "journalist",
                 reader: "reader"
@@ -41,7 +40,6 @@ settings.corpora.fts = {
         },
         text_gender: {
             label: "gender",
-            displayType: "select",
             dataset: {
                 unknown: "unknown",
                 male: "male",

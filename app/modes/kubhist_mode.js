@@ -18,7 +18,6 @@ settings.kubhistattributes = {
 settings.kubhiststruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },
@@ -59,7 +58,6 @@ var aftonbladet_custom_attributes = {
 settings.aftonbladstruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },

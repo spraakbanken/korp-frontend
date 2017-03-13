@@ -20,7 +20,6 @@ settings.corpora.siberiangermandialogs = {
     attributes: {
         sib_de_msd: {
             label: "msd",
-            displayType: "select",
             dataset: [
                 "INFINIT",
                 "INF",
@@ -43,7 +42,6 @@ settings.corpora.siberiangermanwomen = {
     attributes: {
         sib_de_msd: {
             label: "msd",
-            displayType: "select",
             dataset: [
                 "INFINIT",
                 "FINIT"

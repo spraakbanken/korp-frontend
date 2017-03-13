@@ -332,7 +332,6 @@ settings.corpora["europarl-sv"] = {
         text_speaker: {label: "speaker"},
         text_speakerlang: {
             label: "lang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -571,7 +570,6 @@ settings.corpora["saltnld-sv"] = {
         text_year: {label: "year"},
         text_origlang: {
             label: "origlang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -605,7 +603,6 @@ settings.corpora["saltnld-nl"] = {
         text_year: {label: "year"},
         text_origlang: {
             label: "origlang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {

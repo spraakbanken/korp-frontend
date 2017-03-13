@@ -64,7 +64,6 @@ var sattrs = {}; // structural attributes
 
 attrs.pos = {
     label: "pos",
-    displayType: "select",
     translationKey: "pos_",
     dataset: {
         "AB": "AB",
@@ -138,7 +137,6 @@ attrs.baseform = {
 attrs.lemgram = {
     label: "lemgram",
     type: "set",
-    displayType: "autocomplete",
     opts: setOptions,
     stringify: function(lemgram) {
         // TODO: what if we're getting more than one consequtive lemgram back?
@@ -160,7 +158,6 @@ attrs.lemgram = {
 attrs.dalinlemgram = {
     label: "dalin-lemgram",
     type: "set",
-    displayType: "autocomplete",
     opts: setOptions,
     stringify: function(lemgram) {
         // TODO: what if we're getting more than one consequtive lemgram back?
@@ -174,7 +171,6 @@ attrs.dalinlemgram = {
 attrs.saldo = {
     label: "saldo",
     type: "set",
-    displayType: "autocomplete",
     opts: setOptions,
     stringify: function(saldo) {
         return util.saldoToString(saldo, true);
@@ -190,7 +186,6 @@ attrs.dephead = {
 };
 attrs.deprel = {
     label: "deprel",
-    displayType: "select",
     translationKey: "deprel_",
     extendedTemplate: selectType.extendedTemplate,
     extendedController: selectType.extendedController,
@@ -267,7 +262,6 @@ attrs.deprel = {
 attrs.prefix = {
     label: "prefix",
     type: "set",
-    displayType: "autocomplete",
     opts: setOptions,
     stringify: function(lemgram) {
         return util.lemgramToString(lemgram, true);
@@ -279,7 +273,6 @@ attrs.prefix = {
 attrs.suffix = {
     label: "suffix",
     type: "set",
-    displayType: "autocomplete",
     opts: setOptions,
     stringify: function(lemgram) {
         return util.lemgramToString(lemgram, true);
@@ -471,7 +464,6 @@ delete modernAttrs2.saldo;
 settings.posset = {
    type: "set",
    label: "posset",
-   displayType: "select",
    opts: setOptions,
    translationKey: "pos_",
    extendedTemplate: selectType.extendedTemplate,
@@ -513,7 +505,6 @@ settings.fsvlemma = {
 settings.fsvlex = {
     type: "set",
     label: "lemgram",
-    displayType: "autocomplete",
     opts: setOptions,
     extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     stringify: function(str) {
@@ -528,7 +519,6 @@ settings.fsvvariants = {
     stringify: function(str) {
         return util.lemgramToString(str, true);
     },
-    displayType: "autocomplete",
     extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     opts: setOptions,
     externalSearch: karpLemgramLink,
@@ -554,7 +544,6 @@ var fsv_yngrelagar = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -585,7 +574,6 @@ var fsv_aldrelagar = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -627,7 +615,7 @@ var fsv_aldrelagar = {
 settings.common_struct_types = {
     date_interval: {
         label: "date_interval",
-        displayType: "date_interval",
+        displayType: "hidden",
         opts: false,
         extendedTemplate: '<div class="date_interval_arg_type"> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Från </button> {{combined.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="from_date" time-model="from_time" model="combined" min-date="minDate" max-date="maxDate"> </time-interval> </div> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Till </button> {{combined2.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="to_date" time-model="to_time" model="combined2" my="left top" at="right top" min-date="minDate" max-date="maxDate"> </time-interval> </div> </div>',
         extendedController: [

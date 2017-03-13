@@ -468,7 +468,6 @@ settings.corpora.sweachum = {
     attributes: modernAttrs,
     struct_attributes: {
         text_type: {label: "type",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -477,7 +476,6 @@ settings.corpora.sweachum = {
             }
         },
         text_subject: {label: "subject",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -502,7 +500,6 @@ settings.corpora.sweacsam = {
     attributes: modernAttrs,
     struct_attributes: {
         text_type: {label: "type",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -511,7 +508,6 @@ settings.corpora.sweacsam = {
             }
         },
         text_subject: {label: "subject",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -1930,7 +1926,6 @@ settings.corpora["ivip"] = {
         w_type: {
             label: "annotation_type",
             isStructAttr: true,
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -1952,7 +1947,6 @@ settings.corpora["ivip"] = {
                    },
         text_city: {label: "city",
                     order: 19,
-                    displayType: "select",
                     extendedTemplate: selectType.extendedTemplate,
                     extendedController: selectType.extendedController,
                     dataset: {
@@ -1970,7 +1964,6 @@ settings.corpora["ivip"] = {
                 },
         text_place: {label: "location",
                      order: 18,
-                     displayType: "select",
                      extendedTemplate: selectType.extendedTemplate,
                      extendedController: selectType.extendedController,
                      dataset: {
@@ -1994,7 +1987,6 @@ settings.corpora["ivip"] = {
         text_participants: {label: "participants", order: 17},
         sentence_speaker_id: {label: "speaker",
                               hideSidebar: true,
-                              displayType: "select",
                               extendedTemplate: selectType.extendedTemplate,
                               extendedController: selectType.extendedController,
                               dataset: {
@@ -2021,7 +2013,6 @@ settings.corpora["ivip"] = {
         },
         sentence_speaker_role: {label: "speakerrole",
                                 hideSidebar: true,
-                                displayType: "select",
                                 extendedTemplate: selectType.extendedTemplate,
                                 extendedController: selectType.extendedController,
                                 dataset: {
@@ -2041,7 +2032,6 @@ settings.corpora["ivip"] = {
                             },
         sentence_speaker_gender: {label: "speakergender",
                                   order: 14,
-                                  displayType: "select",
                                   extendedTemplate: selectType.extendedTemplate,
                                   extendedController: selectType.extendedController,
                                   dataset: {
@@ -2055,7 +2045,6 @@ settings.corpora["ivip"] = {
         text_consentid: {label: "consentid", order: 11},
         text_type: {label: "type",
                     hideSidebar: true,
-                    displayType: "select",
                     extendedTemplate: selectType.extendedTemplate,
                     extendedController: selectType.extendedController,
                     dataset: {
@@ -2065,7 +2054,6 @@ settings.corpora["ivip"] = {
         text_date: {label: "date", order: 10},
         text_mediatype: {label: "mediatype",
                          order: 9,
-                         displayType: "select",
                          extendedTemplate: selectType.extendedTemplate,
                          extendedController: selectType.extendedController,
                          dataset: {
@@ -2132,7 +2120,6 @@ settings.corpora["lawline"] = {
         "text_datum": {label: "date", order: 8},
         "textpart_type": {label: "type",
                           order: 7,
-                          displayType: "select",
                           extendedTemplate: selectType.extendedTemplate,
                           extendedController: selectType.extendedController,
                           dataset: {
@@ -2530,7 +2517,7 @@ settings.corpora.vivill = {
     },
     attributes: modernAttrs,
     struct_attributes: {
-        text_year: {label: "year", displayType: "select",
+        text_year: {label: "year",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -2598,7 +2585,6 @@ settings.corpora.vivill = {
         },
         text_party: {
             label: "party",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             translationKey: "party_",
@@ -3238,7 +3224,6 @@ settings.corpora.klarsprak = {
         text_month: {label: "month"},
         type_type: {
             label: "type",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3261,7 +3246,6 @@ settings.corpora.sw1203 = {
     struct_attributes: {
         text_type: {
             label: "type",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3274,7 +3258,6 @@ settings.corpora.sw1203 = {
         text_l1: {label: "tisus_l1"},
         text_gender: {
             label: "gender",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3288,7 +3271,6 @@ settings.corpora.sw1203 = {
         text_cd: {label: "c/d"},
         text_semester: {
             label: "semester",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3352,7 +3334,7 @@ settings.corpora.coctaill = {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "date"},
-        lesson_level: {label: "coctaill_level", displayType: "select",
+        lesson_level: {label: "coctaill_level",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3362,7 +3344,7 @@ settings.corpora.coctaill = {
                 "B2": "B2",
                 "C1": "C1"}
         },
-        lessontext_genre: {label: "coctaill_genre", type: "set", displayType: "select",
+        lessontext_genre: {label: "coctaill_genre", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3402,7 +3384,7 @@ settings.corpora.coctaill = {
                 "other/rhyme": "other/rhyme"
             }
         },
-        list_unit: {label: "coctaill_list_unit", type: "set", displayType: "select",
+        list_unit: {label: "coctaill_list_unit", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3418,7 +3400,7 @@ settings.corpora.coctaill = {
                 "texts": "texts"
             }
         },
-        list_skill: {label: "coctaill_list_skill", type: "set", displayType: "select",
+        list_skill: {label: "coctaill_list_skill", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3432,7 +3414,7 @@ settings.corpora.coctaill = {
                 "writing": "writing"
             }
         },
-        lessontext_topic: {label: "coctaill_lessontext_topic", type: "set", displayType: "select",
+        lessontext_topic: {label: "coctaill_lessontext_topic", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3472,7 +3454,7 @@ settings.corpora.coctaill = {
                 "weather and nature": "weather and nature"
             }
         },
-        activity_instruction_skill: {label: "coctaill_activity_instruction_skill", type: "set", displayType: "select",
+        activity_instruction_skill: {label: "coctaill_activity_instruction_skill", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3487,7 +3469,7 @@ settings.corpora.coctaill = {
                 "writing": "writing"
             }
         },
-        activity_instruction_format: {label: "coctaill_activity_instruction_format", type: "set", displayType: "select",
+        activity_instruction_format: {label: "coctaill_activity_instruction_format", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3522,7 +3504,7 @@ settings.corpora.coctaill = {
                 "wordbank": "wordbank"
             }
         },
-        task_skill: {label: "coctaill_task_skill", type: "set", displayType: "select",
+        task_skill: {label: "coctaill_task_skill", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3537,7 +3519,7 @@ settings.corpora.coctaill = {
                 "writing": "writing"
             }
         },
-        task_format: {label: "coctaill_task_format", type: "set", displayType: "select",
+        task_format: {label: "coctaill_task_format", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3572,7 +3554,7 @@ settings.corpora.coctaill = {
                 "wordbank": "wordbank"
             }
         },
-        language_example_unit: {label: "coctaill_language_example_unit", type: "set", displayType: "select",
+        language_example_unit: {label: "coctaill_language_example_unit", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3592,7 +3574,7 @@ settings.corpora.coctaill = {
                 "texts": "texts"
             }
         },
-        language_example_skill: {label: "coctaill_language_example_skill", type: "set", displayType: "select",
+        language_example_skill: {label: "coctaill_language_example_skill", type: "set",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -3606,15 +3588,15 @@ settings.corpora.coctaill = {
                 "writing": "writing"
             }
         },
-        extra_dummy:      {label: "+extra", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        subheading_dummy: {label: "+subheading", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        contents_dummy:   {label: "+contents", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        lessontext_dummy: {label: "+lessontext", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        list_dummy:       {label: "+list", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        activity_instruction_dummy: {label: "+activity_instruction", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        task_dummy: {label: "+task", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        language_example_dummy: {label: "+language_example", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
-        lesson_dummy: {label: "+lesson", displayType: "select", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController}
+        extra_dummy:      {label: "+extra", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        subheading_dummy: {label: "+subheading", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        contents_dummy:   {label: "+contents", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        lessontext_dummy: {label: "+lessontext", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        list_dummy:       {label: "+list", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        activity_instruction_dummy: {label: "+activity_instruction", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        task_dummy: {label: "+task", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        language_example_dummy: {label: "+language_example", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController},
+        lesson_dummy: {label: "+lesson", dataset: {"-": "-"}, opts: {}, extendedTemplate: '<input type="hidden">', extendedController: selectType.extendedController}
     }
 };
 
@@ -3853,7 +3835,7 @@ settings.corpora.mepac = {
     struct_attributes: {
         "text_blog": {label: "author"},
         "text_date": {label: "date"},
-        "text_type": {label: "type", displayType: "select",
+        "text_type": {label: "type",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {

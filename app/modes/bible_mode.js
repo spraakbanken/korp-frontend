@@ -32,7 +32,6 @@ settings.corpora.bibel1917 = {
         texttype: {
              label: "fab_texttype",
              type: "set",
-             displayType: "select",
              translationKey: "fab_",
              dataset: [
                  "info",

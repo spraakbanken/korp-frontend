@@ -94,7 +94,6 @@ settings.corpora["lag1734"] = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             dataset: [
                 "bold",
@@ -113,7 +112,6 @@ settings.corpora["lag1734"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "1734 års lag Förord",
@@ -138,7 +136,6 @@ settings.corpora["forarbeten1734"] = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             dataset: [
                 "bold",
@@ -157,7 +154,6 @@ settings.corpora["forarbeten1734"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "1734 års lag Förarbeten vol 1",
@@ -241,7 +237,6 @@ settings.corpora["lag1800"] = {
         text_title: {
             localize: false,
             label: "title",
-            displayType: "select",
             dataset: [
                 "Författningssamling 1800 Låssa kyrkas arkiv",
                 "Regeringsformen 1809 "
@@ -270,7 +265,6 @@ settings.corpora["tankebok"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Stockholms stads tänkebok - Koncept ",

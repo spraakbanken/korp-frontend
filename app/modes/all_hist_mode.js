@@ -44,7 +44,6 @@ settings.kubhistattributes = {
 settings.kubhiststruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },
@@ -73,7 +72,6 @@ settings.kubhiststruct_attributes = {
 settings.aftonbladstruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },
@@ -102,7 +100,6 @@ settings.ubkvtattributes = {
 settings.ubkvtstruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
         opts: liteOptions
     },
@@ -124,7 +121,6 @@ settings.runebergattributes = {
     typograph: {
         label: "typography",
         type: "set",
-        displayType: "select",
         translationKey: "fab_",
         dataset: [
             "footnote",
@@ -138,7 +134,6 @@ settings.runebergattributes = {
 settings.runebergstruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },
@@ -461,7 +456,6 @@ settings.corpora.fragelistor = {
         "document_id": {label: "document_id"},
         "text_source": {
             label: "source",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -515,7 +509,6 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -542,7 +535,6 @@ settings.corpora["fsv-profanprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -574,7 +566,6 @@ settings.corpora["fsv-verser"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -604,7 +595,6 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -716,7 +706,6 @@ settings.corpora["fsv-yngretankebocker"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -748,7 +737,6 @@ settings.corpora["fsv-nysvenskbibel"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -771,7 +759,6 @@ settings.corpora["fsv-nysvenskdalin"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -793,7 +780,6 @@ settings.corpora["fsv-nysvenskkronikor"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -819,7 +805,6 @@ settings.corpora["fsv-nysvenskovrigt"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -855,7 +840,6 @@ settings.corpora["fsv-nysvensklagar"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -1914,7 +1898,6 @@ settings.corpora["tankebok"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Stockholms stads tänkebok - Koncept ",
@@ -1941,7 +1924,6 @@ settings.corpora["lag1734"] = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -1962,7 +1944,6 @@ settings.corpora["lag1734"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -1989,7 +1970,6 @@ settings.corpora["forarbeten1734"] = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2010,7 +1990,6 @@ settings.corpora["forarbeten1734"] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2049,7 +2028,6 @@ settings.corpora["lag1800"] = {
         text_title: {
             localize: false,
             label: "title",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: [
@@ -2242,7 +2220,6 @@ settings.corpora.kioping = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2264,7 +2241,6 @@ settings.corpora.kioping = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2304,7 +2280,6 @@ settings.corpora['akerbruk'] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2344,7 +2319,6 @@ settings.corpora['kvah'] = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,

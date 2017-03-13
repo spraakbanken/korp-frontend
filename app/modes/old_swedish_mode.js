@@ -70,7 +70,6 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Birgittaautograferna",
@@ -95,7 +94,6 @@ settings.corpora["fsv-profanprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Barlaam och Josaphat, ur Codex Holm A 49 Nådendals klosterbok",
@@ -125,7 +123,6 @@ settings.corpora["fsv-verser"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Fornsvenska Ordspråk",
@@ -153,7 +150,6 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Johannes döparens födelse ur Codex Bildstenianus Ups C 528",
@@ -263,7 +259,6 @@ settings.corpora["fsv-yngretankebocker"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Läkebok 1: blandad läkedom, ur Codex AM",
@@ -293,7 +288,6 @@ settings.corpora["fsv-nysvenskbibel"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Gustav Vasas Bibel, Markusevanguliet",
@@ -314,7 +308,6 @@ settings.corpora["fsv-nysvenskdalin"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Dalin: Then Swänska Argus"
@@ -334,7 +327,6 @@ settings.corpora["fsv-nysvenskkronikor"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Peder Swarts krönika",
@@ -358,7 +350,6 @@ settings.corpora["fsv-nysvenskovrigt"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Runius: Prosastycken",
@@ -390,7 +381,6 @@ settings.corpora["fsv-nysvensklagar"] = {
     struct_attributes: {
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Missgiernings Balk",
@@ -468,7 +458,6 @@ if(isLab){
             },
             pos: {
                 label: "pos",
-                displayType: "select",
                 opts: liteOptions,
                 extendedTemplate: selectType.extendedTemplate,
                 extendedController: selectType.extendedController,
@@ -498,7 +487,6 @@ if(isLab){
             },
             morph: {
                 label: "msd",
-                displayType: "select",
                 opts: liteOptions,
                 extendedTemplate: selectType.extendedTemplate,
                 extendedController: selectType.extendedController,

@@ -24,7 +24,6 @@ settings.corpora["pe77"] = {
         text_title: {label: "title"},
         text_lang: {
             label: "lang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -50,7 +49,6 @@ settings.corpora["one71"] = {
         text_title: {label: "title"},
         text_lang: {
             label: "lang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
@@ -84,7 +82,6 @@ settings.corpora["cor92"] = {
         speaker_info: {label: "info"},
         text_lang: {
             label: "lang",
-            displayType: "select",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {

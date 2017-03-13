@@ -272,9 +272,6 @@ class window.CorpusListing
         structOp = settings.reduce_struct_attribute_selector or "union"
         sentAttrs = @getStructAttributeGroups lang, structOp
 
-        # todo check if this is neccessary?
-        sentAttrs = _.filter sentAttrs, (attr) -> attr.displayType isnt "date_interval"
-
         return words.concat attrs, sentAttrs
 
 

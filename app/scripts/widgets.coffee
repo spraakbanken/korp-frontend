@@ -64,7 +64,7 @@ Sidebar =
                     pairs.push([key, val])
 
         pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
-        pairs = _.filter pairs, ([key, val]) -> not (corpus_attrs[key].displayType == "hidden" or corpus_attrs[key].displayType == "date_interval" or corpus_attrs[key].hideSidebar)
+        pairs = _.filter pairs, ([key, val]) -> not (corpus_attrs[key].displayType == "hidden" or corpus_attrs[key].hideSidebar)
 
         for custom in customData
             pairs.push custom

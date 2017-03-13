@@ -28,7 +28,6 @@ settings.corpora.kioping = {
         typograph: {
             label: "typography",
             type: "set",
-            displayType: "select",
             translationKey: "fab_",
             dataset: [
                 "antikva",
@@ -48,7 +47,6 @@ settings.corpora.kioping = {
         text_date: {label: "date"},
         text_title: {
             label: "title",
-            displayType: "select",
             localize: false,
             dataset: [
                 "Een kort Beskriffning Uppå Trenne Reesor och Peregrinationer, sampt Konungarijket Japan",

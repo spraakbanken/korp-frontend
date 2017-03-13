@@ -21,9 +21,8 @@ settings.runebergattributes = {
     deprel: attrs.deprel,
     ref: attrs.ref,
     typograph: {
-            label: "typography",
-            type: "set",
-        displayType: "select",
+        label: "typography",
+        type: "set",
         translationKey: "fab_",
         dataset: [
             "footnote",
@@ -37,7 +36,6 @@ settings.runebergattributes = {
 settings.runebergstruct_attributes = {
     text_title: {
         label: "title",
-        displayType: "select",
         localize: false,
          opts: liteOptions
     },
