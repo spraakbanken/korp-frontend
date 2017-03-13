@@ -12,4 +12,6 @@ release_bin
 app/index.html
 app/scripts/bin/
 app/styles/styles.css
+app/styles/bootstrap.css
+release
 
