@@ -1,9 +1,4 @@
-@import "compass/css3";
-// $fa-font-path: "components/font-awesome/fonts/";
 @import "../components/font-awesome/scss/font-awesome.scss";
-
-
-
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -15,9 +10,8 @@
   font-weight : bold;
 }
 
-
 * {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
 }
 
 $primaryColor: rgb(221, 233, 255);
@@ -106,13 +100,12 @@ a.btn {
 
 
 .radialBkg {
-  background: #f9fdff;
-  @include background-image(radial-gradient(center, ellipse cover, #f9fdff 56%, #ebf0f4 100%));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9fdff', endColorstr='#ebf0f4',GradientType=1 );
+  background-image: radial-gradient(ellipse at center, #f9fdff 56%, #ebf0f4 100%);
 }
 
 .inline_block {
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .invalid_input {
@@ -205,9 +198,8 @@ a.btn {
 }
 
 #top_bar {
-  // height: 30px;
   width: 100%;
-  @include background-image(linear-gradient(bottom, #fcfafc 0%, #d9d9d9 100%));
+  background-image: linear-gradient(to top, #fcfafc 0%, #d9d9d9 100%);
   padding : 6px 5px 5px 8px;
 }
 
@@ -234,7 +226,8 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
     margin-right: 5px;
   }
   > div {
-    @include inline-block();
+    display: inline-block;
+    vertical-align: middle;
     margin-right: 10px;
   }
 }
@@ -371,30 +364,9 @@ time-interval {
   }
 }
 
-
-
-// .mode-law .within_select ~ * {
-//   display: inline;
-// }
-
-// .within_select ~ *, #removeLang, #linkedLang {
-//   display: none;
-// }
-
-
 .lang_row + #removeLang {
   display: inline;
 }
-
-
-
-// .repeat, .lower_footer > * {
-//   display: none;
-// }
-
-// .repeat_item .repeat, .lbound_item .lbound, .rbound_item .rbound {
-//   display: inline;
-// }
 
 .statisticWords {
   border-style: hidden;
@@ -424,7 +396,6 @@ time-interval {
   text-decoration: none;
   position: relative;
   white-space : nowrap;
-  // font-size: .6em;
   &:link, &:visited {
     color: #222222;
   }
@@ -446,7 +417,6 @@ $corpusbox-width : 480px;
 #corpusbox {
   cursor: pointer;
   .hp_topframe {
-    // height: 16px;
     width: $corpusbox-width;
     padding: .5em 1em .5em 20px;
     color: #222222;
@@ -482,7 +452,8 @@ $corpusbox-width : 480px;
   position: absolute;
   .buttons {
     margin: 10px 0;
-    @include inline-block(top);
+    display: inline-block;
+    vertical-align: top;
     font-size: .8em;
     button {
       display: block;
@@ -494,7 +465,6 @@ $corpusbox-width : 480px;
       }
     }
   }
-  // .header! {}
 }
 
 .corpusInfoSpace {
@@ -541,7 +511,6 @@ $corpusbox-width : 480px;
     img {
       display: none;
     }
-    // label! {}
   }
 }
 
@@ -559,7 +528,8 @@ $corpusbox-width : 480px;
 .checkbox {
   width: 12px;
   height: 12px;
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
   &.checked {
     background: url("../img/checked.png") no-repeat;
   }
@@ -626,7 +596,8 @@ table {
 
 .query_token {
   background-color: #e1e1e1;
-  @include inline-block(top);
+  display: inline-block;
+  vertical-align: top;
   padding: 5px;
   border: 1px solid #999;
   margin-left: 0;
@@ -638,20 +609,20 @@ table {
     cursor : pointer;
     float: right;
     opacity: 1;
-    @include transition(opacity 200ms ease);
+    transition: opacity 200ms ease;
     font-size : 15px;
   }
   &:only-of-type .close_btn {
     opacity: 0;
     cursor: default;
-    @include transition(opacity 200ms ease);
+    transition: opacity 200ms ease;
   }
 
   .remove_arg {
     position: relative;
     top: 15px;
     opacity: 1;
-    @include transition(opacity 200ms ease);
+    transition: opacity 200ms ease;
   }
 
   .insert_arg {
@@ -665,7 +636,8 @@ table {
   }
 
   .arg_type {
-    @include inline-block();
+    display: inline-block;
+    vertical-align: middle;
     width : 160px;
   }
 
@@ -688,7 +660,8 @@ table {
 
   .btn-icon {
     vertical-align: top;
-    @include inline-block();
+    display: inline-block;
+    vertical-align: middle;
     cursor: pointer;
     position: relative;
     right: -4px;
@@ -696,7 +669,8 @@ table {
   }
 
   .left_col {
-    @include inline-block(top);
+    display: inline-block;
+    vertical-align: top;
     min-width : 16px;
   }
   .repeat {
@@ -712,7 +686,6 @@ table {
     cursor: move;
   }
   .token_footer {
-    // position: relative;
     font-size: .8em;
     button {
       width: 20px;
@@ -728,8 +701,7 @@ table {
   }
 
   .close_token {
-
-    @include border-radius(20px);
+    border-radius: 20px;
     color: black;
     background-color: rgb(242, 247, 255);
     border: thin lightgrey solid;
@@ -778,16 +750,6 @@ table {
     text-transform: initial;
   }
 }
-
-// .ui-tabs .ui-tabs-nav li a {
-//   padding-top: 0.3em !important;
-//   padding-bottom: 0.3em !important;
-// }
-
-// .spinner {
-//   @include inline-block();
-//   margin: 3px 2px -2px -4px;
-// }
 
 .activate_word_pic {
   margin-top : 1em;
@@ -856,12 +818,6 @@ table {
   margin-top: 15px;
 }
 
-/* removing context for custom tab */
-
-.customtab .reading_btn {
-  display: none !important;
-}
-
 .loading .reading_btn {
   display: none;
 }
@@ -923,16 +879,6 @@ table {
     background-color : $primaryLight;
   }
 }
-
-
-/*
-.customtab .results_table.kwic {
-    display : block;
-}
-.customtab .results_table.reading {
-    display : none;
-}
-*/
 
 .reading_match {
   font-weight: bold;
@@ -1063,7 +1009,7 @@ table {
 }
 
 .word_selected {
-  @include border-radius(10px);
+  border-radius: 10px;
   padding-left: 3px;
   margin-left: -3px;
   &:hover {
@@ -1097,7 +1043,6 @@ table {
   // Clear floats so that the JSON link is right-justified and not
   // placed to the left of the download links.
   clear: both;
-  // display: none;
   img {
     border: 0px;
   }
@@ -1119,13 +1064,6 @@ table {
 
 .loading .download_link {
   display: none;
-}
-
-#download-heading {
-  float: right;
-  margin-right: 8px;
-  // Try to align vertically with the download link buttons
-  margin-top: -3px;
 }
 
 #columns {
@@ -1153,7 +1091,6 @@ table {
   transition : right 300ms;
   &.visible {
     transition : right 300ms;
-    // display : block;
     right : 0;
   }
   &.visible.fixed {
@@ -1177,8 +1114,8 @@ table {
   background-image: url("../img/fish_icon.png");
   background-origin: content-box;
   background-repeat: no-repeat;
-  @include inline-block();
   display: inline-block !important;
+  vertical-align: middle;
   height: 12px;
   width: 15px;
   background-size: 15px;
@@ -1189,7 +1126,8 @@ table {
 }
 
 #sidbar_info {
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
   position: relative;
   top: 3px;
   left: 5px;
@@ -1268,14 +1206,8 @@ a {
   color: #999;
   font-style: italic;
   position: relative;
-  .lnk {
-    // text-align : center;
-    // display : block;
-    // position : relative;
-  }
   .left, .match, .right {
     display : none;
-
   }
 }
 
@@ -1348,11 +1280,7 @@ a {
   display: none;
   float: right;
   margin-right: 8px;
-  // margin-top: 7px;
   margin-left: 3px;
-  span {
-    // margin-right: 1em;
-  }
 }
 
 .logged_in #log_out {
@@ -1374,15 +1302,15 @@ label[for=lemgram_select]:before {
 #highlight {
   position: absolute;
   background-color: #FFF3D8;
-
-  @include border-radius(5px);
+  border-radius: 5px;
 }
 
 .inline_list {
   margin: 0;
   padding: 0;
   li {
-    @include inline-block();
+    display: inline-block;
+    vertical-align: middle;
   }
 }
 
@@ -1408,7 +1336,8 @@ label[for=lemgram_select]:before {
   }
   li {
     &.visible {
-      @include inline-block();
+      display: inline-block;
+      vertical-align: middle;
     }
     &.selected a {
       color : black;
@@ -1419,7 +1348,6 @@ label[for=lemgram_select]:before {
       color : grey;
     }
     &:last-child:after {
-      // content: "";
       display: none;
     }
     .dropdown-toggle {
@@ -1446,10 +1374,6 @@ label[for=lemgram_select]:before {
   padding-right: 8px !important;
 }
 
-// .ui-tabs .ui-tabs-nav li.custom_tab.loading {
-//   padding-right : 18px;
-// }
-
 .tabClose {
   padding: 0 !important;
   margin-right: 6px;
@@ -1458,12 +1382,9 @@ label[for=lemgram_select]:before {
 
 .hits_picture_table {
   border : 1px solid lightgrey;
-  /*    opacity: .3; */
   width: 100%;
   padding: 0px;
 }
-
-// .hits_picture_corp:hover! {}
 
 .hits_picture {
   cursor: pointer;
@@ -1471,14 +1392,13 @@ label[for=lemgram_select]:before {
   right: 10px;
   left: 280px;
   top: -1px;
-  @include transition(left 400ms ease);
+  transition: left 400ms ease;
 }
 
 #showLineDiagram {
   position: relative;
   top: 3px;
 }
-
 
 .right_col {
   padding-right: 2px;
@@ -1488,7 +1408,7 @@ label[for=lemgram_select]:before {
 }
 
 .query_arg {
-  @include border-radius(2px);
+  border-radius: 2px;
   padding: 5px;
   background-color: #f7fceb;
   border: solid 1px #999;
@@ -1507,23 +1427,19 @@ label[for=lemgram_select]:before {
 .query_arg:only-of-type .or_arg:only-child .remove_arg {
   cursor: default;
   opacity: 0;
-  @include transition(opacity 200ms ease);
+  transition: opacity 200ms ease;
 }
 
 .arg_header {
   opacity: 0;
-  @include transition(opacity 200ms ease);
+  transition: opacity 200ms ease;
   margin-bottom: 1px;
 }
 
 .or_arg:not(:only-child):first-child .arg_header {
   opacity: 1;
-  @include transition(opacity 200ms ease);
+  transition: opacity 200ms ease;
 }
-
-// .and:first-of-type {
-//   display: none !important;
-// }
 
 .arg_header {
   font-size: 10px;
@@ -1540,7 +1456,8 @@ label[for=lemgram_select]:before {
 
 #time {
   margin-top: 10px;
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
 }
 
 #time_inputs {
@@ -1552,14 +1469,16 @@ label[for=lemgram_select]:before {
 }
 
 #time_graph {
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
   width: 335px;
   height: 70px;
   margin-bottom : 1em;
 }
 
 #rest_time_graph {
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
   height: 70px;
   width: 5px;
   position: relative;
@@ -1567,7 +1486,8 @@ label[for=lemgram_select]:before {
 }
 
 #time_slider {
-  @include inline-block();
+  display: inline-block;
+  vertical-align: middle;
   width: 250px;
   margin-right: 10px;
 }
@@ -1580,7 +1500,7 @@ label[for=lemgram_select]:before {
 }
 
 .ui-slider-handle {
-  @include border-radius(20px);
+  border-radius: 20px;
 }
 
 .sidebar_url {
@@ -1605,13 +1525,15 @@ label[for=lemgram_select]:before {
 
 
 .lemgram_section {
-  @include inline-block(top);
+  display: inline-block;
+  vertical-align: top;
   margin-right: 30px;
 }
 
 .tableContainer {
   margin-bottom: 15px;
-  @include inline-block(top);
+  display: inline-block;
+  vertical-align: top;
   padding: 10px;
   border: solid 1px lightgray;
   margin-right: 20px;
@@ -1655,7 +1577,8 @@ label[for=lemgram_select]:before {
 }
 
 .lab #labs_logo {
-  @include inline-block(bottom);
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 #korplink {
@@ -1720,19 +1643,15 @@ label[for=lemgram_select]:before {
 
   .simple_form {
     float : left;
-    // display: inline-block;
-    // margin-bottom : 2em;
   }
+
   .opts {
-    // background-color : $primaryLight;
-    // padding : 1em;
     margin-top : 1em;
     margin-bottom : 1em;
   }
 
   #similar_wrapper {
     margin-left : 3em;
-    // display: inline-block;
     float: right;
     vertical-align: top;
     text-align: right;
@@ -1754,9 +1673,6 @@ label[for=lemgram_select]:before {
   font-size : 1.3em;
 }
 
-// .modal.fade.in {
-//   top : 30%;
-// }
 .modal-header h3, .modal-header h2 {
   font-weight : normal;
 }
@@ -1786,8 +1702,6 @@ body.modal-open {
   overflow: hidden;
 }
 .modal-body {
-
-  // max-height : 710px;
   max-height : 71vh;
   min-height : 300px;
 
@@ -1868,7 +1782,6 @@ option[value^='? string:sentence ?'] {display : none;}
   cursor: default;
   position: absolute;
   font-size: .9em;
-  // text-align: right;
 }
 
 
@@ -1894,12 +1807,12 @@ slider {
       height: 100%;
       z-index: 0;
       border-radius: 1em/1em;
-      @include background-image(linear-gradient(to top, #ccc, #fff));
+      background-image: linear-gradient(to top, #cccccc, #ffffff);
       box-shadow: inset 0 1px 3px rgba(10,10,10,0.5);
       &.selection {
           width: 0%;
           z-index: 1;
-          @include background-image(linear-gradient(to top, #ababab, #c6c6c6));
+          background-image: linear-gradient(to top, #ababab, #c6c6c6);
           box-shadow: none;
       }
     }
@@ -1908,7 +1821,7 @@ slider {
       width: 15px;
       height: 15px;
       top: -5px;
-      @include background(linear-gradient(to left, #fff, #dfdfdf));
+      background: linear-gradient(to left, #ffffff, #dfdfdf);
       border-top: 1px solid #ddd;
 
       border: 1px solid #666;
@@ -1972,10 +1885,6 @@ slider {
   display: none;
 }
 
-// .lab #showBarPlot {
-//   @include inline-block();
-// }
-
 .korp-warning {
   max-width : 500px;
 }
@@ -2013,7 +1922,7 @@ warning ~ * {
 
 .not_loading .hits_picture {
   left: 180px;
-  @include transition(width 400ms ease);
+  transition: width 400ms ease;
 }
 
 .results-kwic {
@@ -2028,7 +1937,8 @@ warning ~ * {
   .result_controls {
     position: relative;
     > * {
-      @include inline-block(bottom);
+      display: inline-block;
+      vertical-align: bottom;
     }
   }
 
@@ -2160,8 +2070,6 @@ warning ~ * {
 }
 
 .graph_btn_icon {
-  // position : absolute;
-  // left : 0;
   svg {
     margin-top : -6px;
     margin-bottom : -6px;
@@ -2193,7 +2101,6 @@ warning ~ * {
 
     i {
       z-index : 1000;
-      // flex
     }
   }
 }
@@ -2209,7 +2116,8 @@ warning ~ * {
 .stats_header {
   margin-bottom : 1em;
   > * {
-    @include inline-block();
+    display: inline-block;
+    vertical-align: top;
   }
 }
 .reading_mode .show_deptree {
@@ -2270,7 +2178,8 @@ warning ~ * {
   display : none;
 }
 .form_switch {
-  @include inline-block(bottom);
+  display: inline-block;
+  vertical-align: bottom;
 }
 
 line.tick {
@@ -2284,9 +2193,7 @@ line.tick {
 .rickshaw_graph .x_tick {
 }
 
-// .zoom_slider {
-//   width : 100% !important;
-// }
+
 
 .preview {
   margin-top : 30px;
@@ -2323,7 +2230,6 @@ line.tick {
 }
 #myGrid {
   width : 100%;
-  // height : 100%;
   height : 500px;
 }
 #myGrid, #myGrid * {
@@ -2444,13 +2350,14 @@ line.tick {
     visibility : hidden;
   }
   .column {
-    @include inline-block(top);
+    display: inline-block;
+    vertical-align: top;
   }
   .meter {
     cursor: pointer;
     position: relative;
     border: 1px solid rgba($primaryColor, 0);
-    @include transition(all 200ms ease);
+    transition: all 200ms ease;
     &:hover {
       color : navy;
       border: 1px solid rgba(darken($primaryColor, 10%), 1);
@@ -2463,7 +2370,6 @@ line.tick {
   }
   .background {
     padding: 5px 0;
-    // @include transition(all 400ms ease);
   }
   .column_1 ul {
     background-color: lighten($primaryColor, 4%);
@@ -2480,29 +2386,19 @@ line.tick {
     }
   }
   ul {
-    // border : 1px solid $primaryColor;
     padding : 2px;
     margin-right : 2em;
-    // min-width : 300px;
     width : 400px;
     font-size : 1.1em;
     li {
       margin-bottom : 0.5em;
       white-space : nowrap;
-      .meter {
-      }
-      .content {
-        // z-index : 2;
-        // position : relative;
-      }
-
     }
-
   }
 }
 
 .popover {
-  @include border-radius(2px);
+  border-radius: 2px;
   .popover-content {
     padding : 5px;
   }
