@@ -1,10 +1,35 @@
+#!/bin/bash
+set -x
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 VERSION"
+    exit 1
+fi
+
+rm -r release
+mkdir release
 
 grunt release
 
-VERSION=$(python -c 'import json; print json.load(open("package.json"))["version"]')
-DATE=$(date "+%Y%m%dT%H%M%S")
-zip -rq - dist | \
-    ssh fkkorp@k2.spraakdata.gu.se \
-        "cat > /export/htdocs_sb/pub/korp.dist/korp-frontend-$VERSION-$DATE-dist.zip"
+grunt clean:server
+grunt clean:e2e
 
-echo "post-build complete."
+# make dist release zip
+DIST_NAME="korp-frontend-$1-dist"
+cp -r dist/ "release/$DIST_NAME"
+cd release
+zip --quiet -r "$DIST_NAME.zip" $DIST_NAME
+rm -r $DIST_NAME
+
+# make src release zip
+SRC_NAME="korp-frontend-$1-src"
+mkdir $SRC_NAME
+
+cd ..
+CHANGED_FILES="dist/korp.yaml"
+INCLUDED_FILES="app/ bower.json LICENSE package.json Gruntfile.js README.md test/"
+cp -r $INCLUDED_FILES $CHANGED_FILES "release/$SRC_NAME"
+cd release
+zip --quiet -r "$SRC_NAME.zip" $SRC_NAME
+rm -r $SRC_NAME
+
