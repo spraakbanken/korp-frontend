@@ -3,9 +3,9 @@ settings.senseAutoComplete = "<autoc model='model' placeholder='placeholder' typ
 var karpLemgramLink = "https://spraakbanken.gu.se/karp/#?search=extended||and|lemgram|equals|<%= val.replace(/:\\d+/, '') %>";
 
 var selectType = {
-    extended_template: "<select ng-model='input' escaper "
+    extendedTemplate: "<select ng-model='input' escaper "
      + "ng-options='tuple[0] as localize(tuple[1]) for tuple in dataset' ></select>",
-    controller: function($scope) {
+    extendedController: function($scope) {
         $scope.localize = function(str) {
             if($scope.localize === false) {
                 return str;
@@ -92,17 +92,17 @@ attrs.pos = {
         "VB": "VB"
     },
     opts: liteOptions,
-    extended_template: selectType.extended_template,
-    controller: selectType.controller,
+    extendedTemplate: selectType.extendedTemplate,
+    extendedController: selectType.extendedController,
     order: 50
 };
 
 attrs.msd = {
     label: "msd",
     opts: settings.defaultOptions,
-    extended_template: '<input ng-model="input" class="arg_value" escaper ng-model-options=\'{debounce : {default : 300, blur : 0}, updateOn: "default blur"}\'>' +
+    extendedTemplate: '<input ng-model="input" class="arg_value" escaper ng-model-options=\'{debounce : {default : 300, blur : 0}, updateOn: "default blur"}\'>' +
     '<span ng-click="onIconClick()" class="fa fa-info-circle"></span>',
-    controller: function($scope, $uibModal) {
+    extendedController: function($scope, $uibModal) {
         var modal = null;
 
         $scope.onIconClick = function() {
@@ -132,7 +132,7 @@ attrs.baseform = {
     label: "baseform",
     type: "set",
     opts: setOptions,
-    extended_template: "<input ng-model='model' >",
+    extendedTemplate: "<input ng-model='model' >",
     order: 49
 };
 attrs.lemgram = {
@@ -146,9 +146,9 @@ attrs.lemgram = {
     },
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram' typeahead-close-callback='checkForError(valueSelected)'/>"
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram' typeahead-close-callback='checkForError(valueSelected)'/>"
                         + "<span ng-if='valueError' style='color: red; position: relative; top: 3px; margin-left: 6px'>{{'choose_lemgram' | loc:lang}}</span>",
-    controller: function($scope) {
+    extendedController: function($scope) {
         $scope.valueError = false;
 
         $scope.checkForError = function(valueSelected) {
@@ -168,7 +168,7 @@ attrs.dalinlemgram = {
     },
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
     order: 48
 };
 attrs.saldo = {
@@ -181,7 +181,7 @@ attrs.saldo = {
     },
     externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch: true,
-    extended_template: settings.senseAutoComplete,
+    extendedTemplate: settings.senseAutoComplete,
     order: 47
 };
 attrs.dephead = {
@@ -192,8 +192,8 @@ attrs.deprel = {
     label: "deprel",
     displayType: "select",
     translationKey: "deprel_",
-    extended_template: selectType.extended_template,
-    controller: selectType.controller,
+    extendedTemplate: selectType.extendedTemplate,
+    extendedController: selectType.extendedController,
     dataset: {
         "++": "++",
         "+A": "+A",
@@ -274,7 +274,7 @@ attrs.prefix = {
     },
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
 };
 attrs.suffix = {
     label: "suffix",
@@ -286,7 +286,7 @@ attrs.suffix = {
     },
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='affix'/>"
 };
 attrs.ref = {
     label: "ref",
@@ -298,8 +298,8 @@ attrs.link = {
 attrs.ne_ex = {
     label: "ne_expr",
     translationKey: "ne_expr_",
-    extended_template: selectType.extended_template,
-    controller: selectType.controller,
+    extendedTemplate: selectType.extendedTemplate,
+    extendedController: selectType.extendedController,
     isStructAttr: true,
     dataset: [
        "ENAMEX",
@@ -310,8 +310,8 @@ attrs.ne_ex = {
 attrs.ne_type = {
     label: "ne_type",
     translationKey: "ne_type_",
-    extended_template: selectType.extended_template,
-    controller: selectType.controller,
+    extendedTemplate: selectType.extendedTemplate,
+    extendedController: selectType.extendedController,
     isStructAttr: true,
     dataset: [
        "LOC",
@@ -327,8 +327,8 @@ attrs.ne_type = {
 attrs.ne_subtype = {
     label: "ne_subtype",
     translationKey: "ne_subtype_",
-    extended_template: selectType.extended_template,
-    controller: selectType.controller,
+    extendedTemplate: selectType.extendedTemplate,
+    extendedController: selectType.extendedController,
     isStructAttr: true,
     dataset: [
         "AST",
@@ -462,7 +462,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         opts: probabilitySetOptions,
         externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
         internalSearch: true,
-        extended_template: settings.senseAutoComplete
+        extendedTemplate: settings.senseAutoComplete
     }
 });
 delete modernAttrs2.saldo;
@@ -474,8 +474,8 @@ settings.posset = {
    displayType: "select",
    opts: setOptions,
    translationKey: "pos_",
-   extended_template: selectType.extended_template,
-   controller: selectType.controller,
+   extendedTemplate: selectType.extendedTemplate,
+   extendedController: selectType.extendedController,
    dataset:  {
         "AB": "AB",
         "MID|MAD|PAD": "DL",
@@ -508,14 +508,14 @@ settings.fsvlemma = {
     type: "set",
     label: "baseform",
     opts: setOptions,
-    extended_template: "<input ng-model='model' >"
+    extendedTemplate: "<input ng-model='model' >"
 };
 settings.fsvlex = {
     type: "set",
     label: "lemgram",
     displayType: "autocomplete",
     opts: setOptions,
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     stringify: function(str) {
         return util.lemgramToString(str, true);
     },
@@ -529,7 +529,7 @@ settings.fsvvariants = {
         return util.lemgramToString(str, true);
     },
     displayType: "autocomplete",
-    extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
+    extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     opts: setOptions,
     externalSearch: karpLemgramLink,
     internalSearch: true,
@@ -556,8 +556,8 @@ var fsv_yngrelagar = {
             label: "title",
             displayType: "select",
             localize: false,
-            extended_template: selectType.extended_template,
-            controller: selectType.controller,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Kristoffers Landslag, nyskrivna flockar i förhållande till MEL",
                 "Kristoffers Landslag, innehållsligt ändrade flockar i förhållande til MEL",
@@ -587,8 +587,8 @@ var fsv_aldrelagar = {
             label: "title",
             displayType: "select",
             localize: false,
-            extended_template: selectType.extended_template,
-            controller: selectType.controller,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Yngre Västgötalagens äldsta fragment, Lydekini excerpter och anteckningar",
                 "Tillägg till Upplandslagen, hskr A (Ups B 12)",
@@ -629,8 +629,8 @@ settings.common_struct_types = {
         label: "date_interval",
         displayType: "date_interval",
         opts: false,
-        extended_template: '<div class="date_interval_arg_type"> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Från </button> {{combined.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="from_date" time-model="from_time" model="combined" min-date="minDate" max-date="maxDate"> </time-interval> </div> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Till </button> {{combined2.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="to_date" time-model="to_time" model="combined2" my="left top" at="right top" min-date="minDate" max-date="maxDate"> </time-interval> </div> </div>',
-        controller: [
+        extendedTemplate: '<div class="date_interval_arg_type"> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Från </button> {{combined.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="from_date" time-model="from_time" model="combined" min-date="minDate" max-date="maxDate"> </time-interval> </div> <div class="section"> <button class="btn btn-default btn-sm" popper no-close-on-click my="left top" at="right top"> <i class="fa fa-calendar"></i> Till </button> {{combined2.format("YYYY-MM-DD HH:mm")}} <time-interval ng-click="from_click($event)" class="date_interval popper_menu dropdown-menu" date-model="to_date" time-model="to_time" model="combined2" my="left top" at="right top" min-date="minDate" max-date="maxDate"> </time-interval> </div> </div>',
+        extendedController: [
             "$scope", "searches", "$timeout", function($scope, searches, $timeout) {
                 var cl, getTime, getYear, ref, ref1, ref2, s, updateIntervals;
                 s = $scope;

@@ -333,8 +333,8 @@ settings.corpora["europarl-sv"] = {
         text_speakerlang: {
             label: "lang",
             displayType: "select",
-            extended_template: selectType.extended_template,
-            controller: selectType.controller,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: {
                 "EN": "engelska",
                 "FI": "finska",
@@ -572,8 +572,8 @@ settings.corpora["saltnld-sv"] = {
         text_origlang: {
             label: "origlang",
             displayType: "select",
-            extended_template: selectType.extended_template,
-            controller: selectType.controller,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: {
                 "swe": "swedish",
                 "nld": "dutch"
@@ -606,8 +606,8 @@ settings.corpora["saltnld-nl"] = {
         text_origlang: {
             label: "origlang",
             displayType: "select",
-            extended_template: selectType.extended_template,
-            controller: selectType.controller,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: {
                 "swe": "swedish",
                 "nld": "dutch"

@@ -462,17 +462,16 @@ if(isLab){
             baseform: {
                 label: "baseform",
                 type: "set",
-                extended_template: "<input ng-model='model' >",
+                extendedTemplate: "<input ng-model='model' >",
                 opts: setOptions,
                 externalSearch: "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
-                // internalSearch: true,
             },
             pos: {
                 label: "pos",
                 displayType: "select",
                 opts: liteOptions,
-                extended_template: selectType.extended_template,
-                controller: selectType.controller,
+                extendedTemplate: selectType.extendedTemplate,
+                extendedController: selectType.extendedController,
                 translationKey: "ogl_pos_",
                 dataset: [
                     "Nb",
@@ -501,8 +500,8 @@ if(isLab){
                 label: "msd",
                 displayType: "select",
                 opts: liteOptions,
-                extended_template: selectType.extended_template,
-                controller: selectType.controller,
+                extendedTemplate: selectType.extendedTemplate,
+                extendedController: selectType.extendedController,
                 translationKey: "ogl_msd_",
                 dataset: [
                     "A----------n",
@@ -967,8 +966,8 @@ if(isLab){
             },
             annotation: {
                 label: "annotation",
-                extended_template: selectType.extended_template,
-                controller: selectType.controller,
+                extendedTemplate: selectType.extendedTemplate,
+                extendedController: selectType.extendedController,
                 opts: liteOptions,
                 dataset: [
                     "automatic",

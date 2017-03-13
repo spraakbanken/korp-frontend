@@ -14,15 +14,15 @@ settings.interfraStructs = {
         label: "speaker",
         displayType: "select",
         dataset: {},
-        controller: selectType.controller,
-        extended_template: selectType.extended_template
+        extendedController: selectType.extendedController,
+        extendedTemplate: selectType.extendedTemplate
     },
     "text_part": {
         label: "part",
         displayType: "select",
         dataset: {"1A": "1A", "1B": "1B", "2": "2"},
-        controller: selectType.controller,
-        extended_template: selectType.extended_template
+        extendedController: selectType.extendedController,
+        extendedTemplate: selectType.extendedTemplate
     },
     "text_group": {
         label: "group",
@@ -42,8 +42,8 @@ settings.interfraStructs = {
             "S": "Control group of senior NS (S)",
             "K": "Multi-task control group (K)"
         },
-        controller: selectType.controller,
-        extended_template: selectType.extended_template
+        extendedController: selectType.extendedController,
+        extendedTemplate: selectType.extendedTemplate
     },
     "text_xmlurl": {label: "interview", pattern: '<a href="<%=val%>">XML</a>', hideStatistics: true, hideExtended: true, hideCompare: true},
     "text_rawurl": {label: "interview", pattern: '<a href="<%=val%>">TXT</a>', hideStatistics: true, hideExtended: true, hideCompare: true},
@@ -53,8 +53,8 @@ settings.interfraStructs = {
         label: "interviewee",
         displayType: "select",
         dataset: {},
-        controller: selectType.controller,
-        extended_template: selectType.extended_template
+        extendedController: selectType.extendedController,
+        extendedTemplate: selectType.extendedTemplate
     },
     
     

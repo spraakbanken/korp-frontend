@@ -53,7 +53,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         opts: probabilitySetOptions,
         externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
         internalSearch: true,
-        extended_template: settings.senseAutoComplete
+        extendedTemplate: settings.senseAutoComplete
     }
 });
 delete modernAttrs2.saldo;

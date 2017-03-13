@@ -159,7 +159,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             locals = {$scope : childScope}
             prevScope = childScope
-            $controller(valueObj.controller or defaultController, locals)
+            $controller(valueObj.extendedController or defaultController, locals)
 
             if valueObj.value == "word"
                 tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
@@ -167,7 +167,7 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
                 tmplObj = {maybe_placeholder : ""}
 
             defaultTmpl = getDefaultTmpl tmplObj
-            tmplElem = $compile(valueObj.extended_template or defaultTmpl)(childScope)
+            tmplElem = $compile(valueObj.extendedTemplate or defaultTmpl)(childScope)
             elem.html(tmplElem).addClass("arg_value")
 
 
