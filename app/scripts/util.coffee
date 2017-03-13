@@ -88,7 +88,9 @@ class window.CorpusListing
         )
         rest = @_invalidateAttrs(attrs)
 
-        # fix for combining dataset values
+        # TODO this code merges datasets from attributes with the same name and
+        # should be moved to the code for selectType.extendedController since
+        # datasets are not built in to Korp anymore
         withDataset = _.filter(_.pairs(rest), (item) ->
             item[1].dataset
         )
@@ -103,8 +105,8 @@ class window.CorpusListing
                     val.dataset = (_.object val.dataset, val.dataset) if _.isArray val.dataset
                     $.extend val.dataset, ds
 
-
         $.extend rest, _.object(withDataset)
+        # End TODO
 
     _invalidateAttrs: (attrs) ->
         union = @_mapping_union(attrs)
