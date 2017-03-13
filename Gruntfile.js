@@ -43,11 +43,6 @@ module.exports = function (grunt) {
         ]
       }
     },
-    shell: {
-        postBuild: {
-            command: 'sh post_build.sh'
-        }
-    },
     protractor: {
       options: {
         keepAlive: false, // If false, the grunt process stops when the test fails.
@@ -312,7 +307,6 @@ module.exports = function (grunt) {
             'styles/**/*.{png,otf,gif}',
             'styles/styles.css',
             "components/font-awesome/fonts/*",
-            'components/d3/d3.min.js',
             'components/rickshaw/rickshaw.min.js',
             'lib/jquery.tooltip.pack.js',
             'lib/leaflet-settings.js',
@@ -389,22 +383,10 @@ module.exports = function (grunt) {
   grunt.registerTask('release', function(target) {
     grunt.task.run([
      'build',
+     'svninfo',
+     'string-replace:dist'
     ]);
-    
-    var noPostBuild = grunt.option('no-post-build');
-    if(noPostBuild) {
-      grunt.task.run([
-        'svninfo',
-        'string-replace:dist'
-      ]);
-    } else {
-      grunt.task.run([
-        'svninfo',
-        'string-replace:dist',
-        'shell:postBuild'
-      ]);
-    }
-      
+
   });
 
   grunt.registerTask('serve', function (target) {

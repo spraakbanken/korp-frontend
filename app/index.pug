@@ -16,8 +16,6 @@ html
     link(rel='stylesheet', type='text/css', href='components/leaflet/dist/leaflet.css')
     link(rel="stylesheet", href="components/leaflet.markercluster/dist/MarkerCluster.css")
     link(rel='stylesheet', type='text/css', href='components/geokorp/dist/styles/geokorp.css')
-    //- bower:css
-    //- endbower
     // endbuild
     link(type='text/css', href='components/jquery-ui/themes/smoothness/jquery-ui.min.css', rel='stylesheet')
 
@@ -165,10 +163,6 @@ html
         </form>
       </div>
 
-
-
-    //if lte IE 8
-      script(language='javascript', src='lib/flot/excanvas.min.js')
     script.
       var isLab = window.location.pathname.split("/")[1] == "korplabb";
       if(window.console == null) window.console = {"log" : $.noop, "error" : $.noop};
@@ -191,7 +185,7 @@ html
 
     script(src='components/angular/angular.js')
 
-    // warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap
+    //- warning: modified version of ui-bootstrap, see README in lib/angular-bootstrap
     script(src='components/angular-bootstrap/ui-bootstrap-tpls.js')
 
     script(src='components/spin.js/spin.js')
@@ -225,16 +219,11 @@ html
     script(src='scripts/jq_extensions.js')
     script(src='components/lodash/dist/lodash.js')
     script(src="components/underscore.string/lib/underscore.string.js")
-    script(src='components/spin.js/spin.js')
-    script(src='components/angular-spinner/angular-spinner.js')
 
     script(src='lib/angular-sortable.js')
 
     script(src='components/moment/moment.js')
     script(src='components/comma-separated-values/csv.js')
-    //- not used currently
-    //- bower:js
-    //- endbower
     script(src='components/angular-simple-logger/dist/index.js')
     script(src='lib/leaflet-settings.js')
     script(src='components/leaflet/dist/leaflet.js')
@@ -246,7 +235,6 @@ html
     script(src='components/angular-filter/dist/angular-filter.js')
     // endbuild
     script(src='lib/jquery.tooltip.pack.js')
-    script(src='components/d3/d3.min.js')
     script(src='components/rickshaw/rickshaw.min.js')
 
 

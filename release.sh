@@ -1,3 +1,6 @@
+
+grunt release
+
 VERSION=$(python -c 'import json; print json.load(open("package.json"))["version"]')
 DATE=$(date "+%Y%m%dT%H%M%S")
 zip -rq - dist | \

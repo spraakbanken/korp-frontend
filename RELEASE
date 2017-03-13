@@ -11,7 +11,7 @@ Begin with:
 
 Labb (release from trunk):
 * Build a release using
-  > grunt release --no-post-build
+  > grunt release
   For this to work, the repository must be checkouted by svn and not git-svn. The reason
   is that we create a file with the SVN revision number for tracking. (dist/karp.yaml).
   (It is still possible to build the dist-folder using just "grunt")
@@ -53,3 +53,4 @@ Production (release from korp-current branch):
 
   Update git-repository
     - TODO enter this information
+
