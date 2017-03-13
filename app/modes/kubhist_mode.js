@@ -20,7 +20,7 @@ settings.kubhiststruct_attributes = {
         label: "title",
         displayType: "select",
         localize: false,
-         opts: settings.liteOptions
+         opts: liteOptions
     },
     text_date: {label: "date"},
     text_edition: {label: "edition"},
@@ -61,7 +61,7 @@ settings.aftonbladstruct_attributes = {
         label: "title",
         displayType: "select",
         localize: false,
-         opts: settings.liteOptions
+         opts: liteOptions
     },
     text_date: {label: "date"},
     text_issn: {label: "issn"},
@@ -90,7 +90,7 @@ settings.corpora["kubhist-aftonbladet-1830"] = {
     title: "Aftonbladet 1830-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.aftonbladstruct_attributes,
     custom_attributes: aftonbladet_custom_attributes
@@ -102,7 +102,7 @@ settings.corpora["kubhist-aftonbladet-1840"] = {
     title: "Aftonbladet 1840-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.aftonbladstruct_attributes,
     custom_attributes: aftonbladet_custom_attributes
@@ -114,7 +114,7 @@ settings.corpora["kubhist-aftonbladet-1850"] = {
     title: "Aftonbladet 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.aftonbladstruct_attributes,
     custom_attributes: aftonbladet_custom_attributes
@@ -126,7 +126,7 @@ settings.corpora["kubhist-aftonbladet-1860"] = {
     title: "Aftonbladet 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.aftonbladstruct_attributes,
     custom_attributes: aftonbladet_custom_attributes
@@ -145,7 +145,7 @@ settings.corpora["kubhist-blekingsposten-1850"] = {
     title: "Blekingsposten 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -156,7 +156,7 @@ settings.corpora["kubhist-blekingsposten-1860"] = {
     title: "Blekingsposten 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -167,7 +167,7 @@ settings.corpora["kubhist-blekingsposten-1870"] = {
     title: "Blekingsposten 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -178,7 +178,7 @@ settings.corpora["kubhist-blekingsposten-1880"] = {
     title: "Blekingsposten 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -194,7 +194,7 @@ settings.corpora["kubhist-bollnastidning-1870"] = {
     title: "Bollnäs tidning 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -205,7 +205,7 @@ settings.corpora["kubhist-bollnastidning-1880"] = {
     title: "Bollnäs tidning 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -223,7 +223,7 @@ settings.corpora["kubhist-dalpilen-1850"] = {
     title: "Dalpilen 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -234,7 +234,7 @@ settings.corpora["kubhist-dalpilen-1860"] = {
     title: "Dalpilen 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -245,7 +245,7 @@ settings.corpora["kubhist-dalpilen-1870"] = {
     title: "Dalpilen 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -256,7 +256,7 @@ settings.corpora["kubhist-dalpilen-1880"] = {
     title: "Dalpilen 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -267,7 +267,7 @@ settings.corpora["kubhist-dalpilen-1890"] = {
     title: "Dalpilen 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -278,7 +278,7 @@ settings.corpora["kubhist-dalpilen-1900"] = {
     title: "Dalpilen 1900-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -289,7 +289,7 @@ settings.corpora["kubhist-dalpilen-1910"] = {
     title: "Dalpilen 1910-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -300,7 +300,7 @@ settings.corpora["kubhist-dalpilen-1920"] = {
     title: "Dalpilen 1920-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -318,7 +318,7 @@ settings.corpora["kubhist-fahluweckoblad-1780"] = {
     title: "Fahlu weckoblad 1780-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -329,7 +329,7 @@ settings.corpora["kubhist-fahluweckoblad-1790"] = {
     title: "Fahlu weckoblad 1790-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -340,7 +340,7 @@ settings.corpora["kubhist-fahluweckoblad-1800"] = {
     title: "Fahlu weckoblad 1800-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -351,7 +351,7 @@ settings.corpora["kubhist-fahluweckoblad-1810"] = {
     title: "Fahlu weckoblad 1810-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -362,7 +362,7 @@ settings.corpora["kubhist-fahluweckoblad-1820"] = {
     title: "Fahlu weckoblad 1820-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -380,7 +380,7 @@ settings.corpora["kubhist-faluposten-1860"] = {
     title: "Faluposten 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -391,7 +391,7 @@ settings.corpora["kubhist-faluposten-1870"] = {
     title: "Faluposten 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -402,7 +402,7 @@ settings.corpora["kubhist-faluposten-1880"] = {
     title: "Faluposten 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -413,7 +413,7 @@ settings.corpora["kubhist-faluposten-1890"] = {
     title: "Faluposten 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -431,7 +431,7 @@ settings.corpora["kubhist-folketsrost-1850"] = {
     title: "Folkets röst 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -442,7 +442,7 @@ settings.corpora["kubhist-folketsrost-1860"] = {
     title: "Folkets röst 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -460,7 +460,7 @@ settings.corpora["kubhist-gotlandstidning-1860"] = {
     title: "Gotlands tidning 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -471,7 +471,7 @@ settings.corpora["kubhist-gotlandstidning-1870"] = {
     title: "Gotlands tidning 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -482,7 +482,7 @@ settings.corpora["kubhist-gotlandstidning-1880"] = {
     title: "Gotlands tidning 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -500,7 +500,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1870"] = {
     title: "Göteborgs weckoblad 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -511,7 +511,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1880"] = {
     title: "Göteborgs weckoblad 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -522,7 +522,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1890"] = {
     title: "Göteborgs weckoblad 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -540,7 +540,7 @@ settings.corpora["kubhist-gotheborgsweckolista-1740"] = {
     title: "Götheborgs weckolista 1740-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -551,7 +551,7 @@ settings.corpora["kubhist-gotheborgsweckolista-1750"] = {
     title: "Götheborgs weckolista 1750-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -569,7 +569,7 @@ settings.corpora["kubhist-jonkopingsbladet-1840"] = {
     title: "Jönköpingsbladet 1840-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -580,7 +580,7 @@ settings.corpora["kubhist-jonkopingsbladet-1850"] = {
     title: "Jönköpingsbladet 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -591,7 +591,7 @@ settings.corpora["kubhist-jonkopingsbladet-1860"] = {
     title: "Jönköpingsbladet 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -602,7 +602,7 @@ settings.corpora["kubhist-jonkopingsbladet-1870"] = {
     title: "Jönköpingsbladet 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -620,7 +620,7 @@ settings.corpora["kubhist-kalmar-1860"] = {
     title: "Kalmar 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -631,7 +631,7 @@ settings.corpora["kubhist-kalmar-1870"] = {
     title: "Kalmar 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -642,7 +642,7 @@ settings.corpora["kubhist-kalmar-1880"] = {
     title: "Kalmar 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -653,7 +653,7 @@ settings.corpora["kubhist-kalmar-1890"] = {
     title: "Kalmar 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -664,7 +664,7 @@ settings.corpora["kubhist-kalmar-1900"] = {
     title: "Kalmar 1900-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -675,7 +675,7 @@ settings.corpora["kubhist-kalmar-1910"] = {
     title: "Kalmar 1910-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -693,7 +693,7 @@ settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
     title: "Lindesbergs allehanda 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -704,7 +704,7 @@ settings.corpora["kubhist-lindesbergsallehanda-1880"] = {
     title: "Lindesbergs allehanda 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -722,7 +722,7 @@ settings.corpora["kubhist-norraskane-1880"] = {
     title: "Norra Skåne 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -733,7 +733,7 @@ settings.corpora["kubhist-norraskane-1890"] = {
     title: "Norra Skåne 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -753,7 +753,7 @@ settings.corpora["kubhist-postochinrikestidning-1770"] = {
     title: "Post- och Inrikes Tidningar 1770-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -764,7 +764,7 @@ settings.corpora["kubhist-postochinrikestidning-1780"] = {
     title: "Post- och Inrikes Tidningar 1780-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -775,7 +775,7 @@ settings.corpora["kubhist-postochinrikestidning-1790"] = {
     title: "Post- och Inrikes Tidningar 1790-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -786,7 +786,7 @@ settings.corpora["kubhist-postochinrikestidning-1800"] = {
     title: "Post- och Inrikes Tidningar 1800-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -797,7 +797,7 @@ settings.corpora["kubhist-postochinrikestidning-1810"] = {
     title: "Post- och Inrikes Tidningar 1810-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -808,7 +808,7 @@ settings.corpora["kubhist-postochinrikestidning-1820"] = {
     title: "Post- och Inrikes Tidningar 1820-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -819,7 +819,7 @@ settings.corpora["kubhist-postochinrikestidning-1830"] = {
     title: "Post- och Inrikes Tidningar 1830-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -830,7 +830,7 @@ settings.corpora["kubhist-postochinrikestidning-1840"] = {
     title: "Post- och Inrikes Tidningar 1840-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -841,7 +841,7 @@ settings.corpora["kubhist-postochinrikestidning-1850"] = {
     title: "Post- och Inrikes Tidningar 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -852,7 +852,7 @@ settings.corpora["kubhist-postochinrikestidning-1860"] = {
     title: "Post- och Inrikes Tidningar 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -871,7 +871,7 @@ settings.corpora["kubhist-stockholmsposten-1770"] = {
     title: "Stockholmsposten 1770-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -882,7 +882,7 @@ settings.corpora["kubhist-stockholmsposten-1780"] = {
     title: "Stockholmsposten 1780-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -893,7 +893,7 @@ settings.corpora["kubhist-stockholmsposten-1790"] = {
     title: "Stockholmsposten 1790-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -904,7 +904,7 @@ settings.corpora["kubhist-stockholmsposten-1800"] = {
     title: "Stockholmsposten 1800-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -915,7 +915,7 @@ settings.corpora["kubhist-stockholmsposten-1810"] = {
     title: "Stockholmsposten 1810-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -926,7 +926,7 @@ settings.corpora["kubhist-stockholmsposten-1820"] = {
     title: "Stockholmsposten 1820-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -937,7 +937,7 @@ settings.corpora["kubhist-stockholmsposten-1830"] = {
     title: "Stockholmsposten 1830-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -956,7 +956,7 @@ settings.corpora["kubhist-tidningforwenersborg-1840"] = {
     title: "Tidning för Wenersborgs stad och län 1840-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -967,7 +967,7 @@ settings.corpora["kubhist-tidningforwenersborg-1850"] = {
     title: "Tidning för Wenersborgs stad och län 1850-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -978,7 +978,7 @@ settings.corpora["kubhist-tidningforwenersborg-1860"] = {
     title: "Tidning för Wenersborgs stad och län 1860-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -989,7 +989,7 @@ settings.corpora["kubhist-tidningforwenersborg-1870"] = {
     title: "Tidning för Wenersborgs stad och län 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1000,7 +1000,7 @@ settings.corpora["kubhist-tidningforwenersborg-1880"] = {
     title: "Tidning för Wenersborgs stad och län 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1011,7 +1011,7 @@ settings.corpora["kubhist-tidningforwenersborg-1890"] = {
     title: "Tidning för Wenersborgs stad och län 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1029,7 +1029,7 @@ settings.corpora["kubhist-wermlandslanstidning-1870"] = {
     title: "Wermlands läns tidning 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1047,7 +1047,7 @@ settings.corpora["kubhist-wernamotidning-1870"] = {
     title: "Wernamo tidning 1870-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1058,7 +1058,7 @@ settings.corpora["kubhist-wernamotidning-1880"] = {
     title: "Wernamo tidning 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1076,7 +1076,7 @@ settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
     title: "Östergötlands veckoblad 1880-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1087,7 +1087,7 @@ settings.corpora["kubhist-ostergotlandsveckoblad-1890"] = {
     title: "Östergötlands veckoblad 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1105,7 +1105,7 @@ settings.corpora["kubhist-ostgotaposten-1890"] = {
     title: "Östgötaposten 1890-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1116,7 +1116,7 @@ settings.corpora["kubhist-ostgotaposten-1900"] = {
     title: "Östgötaposten 1900-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };
@@ -1127,7 +1127,7 @@ settings.corpora["kubhist-ostgotaposten-1910"] = {
     title: "Östgötaposten 1910-talet",
     description: digidailydescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.kubhistattributes,
     struct_attributes: settings.kubhiststruct_attributes
 };

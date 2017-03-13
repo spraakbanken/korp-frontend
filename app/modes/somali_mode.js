@@ -52,7 +52,7 @@ settings.corpora["somali-1971-79"] = {
     title: "Af Soomaali 1971–79",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -71,7 +71,7 @@ settings.corpora["somali-wardheer"] = {
     title: "Wardheer News",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_date: somalis.date,
@@ -87,7 +87,7 @@ settings.corpora["somali-1993-94"] = {
     title: "Af Soomaali 1993–94",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -103,7 +103,7 @@ settings.corpora["somali-caafimaad-1994"] = {
     title: "Caafimaad 1994",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -118,8 +118,8 @@ settings.corpora["somali-ah-1992-02-kanada"] = {
     id: "somali-ah-1992-02-kanada",
     title: "Afka Hooyo 1992-02 Kanada",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -137,7 +137,7 @@ settings.corpora["somali-2001"] = {
     title: "Af-Soomaali 2001",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -154,7 +154,7 @@ settings.corpora["somali-itoobiya"] = {
     title: "Af-Soomaali 2006 Itoobiya",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -169,8 +169,8 @@ settings.corpora["somali-hargeysa-2010"] = {
     id: "somali-hargeysa-2010",
     title: "Af-Soomaali 2010 Hargeysa",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_edition: somalis.edition,
@@ -187,7 +187,7 @@ settings.corpora["somali-hargeysa"] = {
     title: "Cilmiga Bulshada 2001 Hargeysa",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -206,7 +206,7 @@ settings.corpora["somali-cb"] = {
     title: "Cilmiga Bulshada 1971–1980",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -223,7 +223,7 @@ settings.corpora["somali-cilmi"] = {
     title: "Cilmi-Afeed",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -245,7 +245,7 @@ settings.corpora["somali-xisaab-1971-79"] = {
     title: "Xisaab 1971-79",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -265,7 +265,7 @@ settings.corpora["somali-xisaab-1994-97"] = {
     title: "Xisaab 1994-97",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -281,7 +281,7 @@ settings.corpora["somali-xisaab-2001-hargeysa"] = {
     title: "Xisaab 2001 Hargeysa",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -297,8 +297,8 @@ settings.corpora["somali-wksi"] = {
     id: "somali-wksi",
     title: "Warbixin Ku Saabsan Iswiidhan",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -313,8 +313,8 @@ settings.corpora["somali-wksk"] = {
     id: "somali-wksk",
     title: "Warbixin Ku Saabsan Kanada",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -329,8 +329,8 @@ settings.corpora["somali-wakiillada"] = {
     id: "somali-wakiillada",
     title: "Golaha Wakiillada Somaliland",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_date: somalis.date,
@@ -346,7 +346,7 @@ settings.corpora["somali-kqa"] = {
     title: "Kitaabka Quduuska Ah",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_title: somalis.title,
@@ -363,7 +363,7 @@ settings.corpora["somali-ogaden"] = {
     title: "Ogaden Online",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -378,7 +378,7 @@ settings.corpora["somali-qoraallo"] = {
     title: "Qoraallo 1956-1970",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_date: somalis.date,
@@ -395,7 +395,7 @@ settings.corpora["somali-saynis"] = {
     title: "Saynis 2001 Hargeysa",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -414,7 +414,7 @@ settings.corpora["somali-radioden2014"] = {
     title: "Raadiyaha Denmark 2014",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_publisher: somalis.publisher,
@@ -428,8 +428,8 @@ settings.corpora["somali-radioswe2014"] = {
     id: "somali-radioswe2014",
     title: "Raadiyaha Iswiidhan 2014",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_publisher: somalis.publisher,
@@ -445,7 +445,7 @@ settings.corpora["somali-saynis-1972-77"] = {
     title: "Saynis 1972–77",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_edition: somalis.edition,
@@ -464,7 +464,7 @@ settings.corpora["somali-saynis-1994-96"] = {
     title: "Saynis 1994–96",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_edition: somalis.edition,
@@ -483,7 +483,7 @@ settings.corpora["somali-sheekooyin"] = {
     title: "Sheekooyin Carruureed",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_title: somalis.title,
@@ -498,7 +498,7 @@ settings.corpora["somali-sheekooying"] = {
     title: "Sheekooyin Gaagaaban",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_title: somalis.title,
@@ -513,7 +513,7 @@ settings.corpora["somali-faces"] = {
     title: "Somali Faces",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         page_n: somalis.page,
@@ -530,7 +530,7 @@ settings.corpora["somali-radiomuq"] = {
     title: "Radio Muqdisho",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         page_n: somalis.page,
@@ -547,7 +547,7 @@ settings.corpora["somali-suugaan"] = {
     title: "Suugaan",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,
@@ -563,7 +563,7 @@ settings.corpora["wikipedia-so"] = {
     title: "Somali Wikipedia",
     description: "",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_title: somalis.title,
@@ -576,8 +576,8 @@ settings.corpora["somali-xeerar"] = {
     id: "somali-xeerar",
     title: "Xeerar Somaliland",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {},
     struct_attributes: {
         text_year: somalis.year,

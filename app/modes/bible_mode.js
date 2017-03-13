@@ -17,7 +17,7 @@ settings.corpora.bibel1917 = {
     title: "Bibeln 1917",
     description: "",
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {
         pos: attrs.pos,
         msd: attrs.msd,
@@ -38,7 +38,7 @@ settings.corpora.bibel1917 = {
                  "info",
                  "footnote",
              ],
-             opts: settings.liteOptions
+             opts: liteOptions
         
        },
 
@@ -56,7 +56,7 @@ settings.corpora.bibel1873dalin = {
     id: "bibel1873dalin",
     title: "Bibeln 1873",
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {
         pos: attrs.pos,
         msd: attrs.msd,
@@ -82,8 +82,8 @@ settings.corpora["vasabibel-nt"] = {
     id: "vasabibel-nt",
     title: "Gustaf Vasas bibel - Nya testamentet",
     description: "'Nya Testamentet i Gustaf Vasas Bibel /under jämförelse med texten av år 1526 utgivet av Natan Lindqvist' från 1941",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         msd: attrs.msd,
         lemma: attrs.baseform,

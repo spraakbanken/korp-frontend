@@ -599,8 +599,8 @@ settings.corpora.interfra = {
     id: "interfra",
     title: "InterFra",
     description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 900 000 ord',
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         "type": {
             label: "type"
@@ -613,8 +613,8 @@ settings.corpora["interfra-tagged"] = {
     id: "interfra-tagged",
     title: "InterFra taggad",
     description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 330 000 ord',
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         "type": {
             label: "type"
@@ -627,8 +627,8 @@ settings.corpora["interfra-sv"] = {
     id: "interfra-sv",
     title: "InterFra svenska",
     description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 45 500 ord',
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         pos: attrs.pos,
         msd: attrs.msd,

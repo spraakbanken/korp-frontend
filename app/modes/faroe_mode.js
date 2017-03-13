@@ -14,7 +14,7 @@ settings.corpora.fts = {
     title: "FTS - Färöisk textsamling",
     description: "Färöisk textsamling, i samarbete med Färöarnas universitet, Fróðskaparsetur Føroya.",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {
         pos: {label: "pos"},
         msd: {label: "msd"},

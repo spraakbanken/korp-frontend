@@ -14,7 +14,7 @@ settings.sdhkstructs = {
     text_id: {
         label: "fulltext",
         pattern: "<a href='http://www.nad.riksarkivet.se/SDHK?EndastDigitaliserat=false&SDHK=<%= val %>&page=1&postid=Dipl_<%= val %>&tab=post' target='_blank'>Riksarkivet <%=val %></a>",
-        opts: settings.liteOptions,
+        opts: liteOptions,
         internalSearch: false
     },
     text_lang: { label: "lang" },
@@ -65,7 +65,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
     title: "Äldre religiös prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.fsvattributes,
     struct_attributes: {
         text_title: {
@@ -90,7 +90,7 @@ settings.corpora["fsv-profanprosa"] = {
     title: "Profan prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.fsvattributes,
     struct_attributes: {
         text_title: {
@@ -120,7 +120,7 @@ settings.corpora["fsv-verser"] = {
     title: "Verser – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.fsvattributes,
     struct_attributes: {
         text_title: {
@@ -148,7 +148,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
     title: "Yngre religiös prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.fsvattributes,
     struct_attributes: {
         text_title: {
@@ -258,7 +258,7 @@ settings.corpora["fsv-yngretankebocker"] = {
     title: "Yngre tankeböcker – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: settings.fsvattributes,
     struct_attributes: {
         text_title: {
@@ -288,7 +288,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
     title: "Nysvenska bibelböcker – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {pos: attrs.pos},
     struct_attributes: {
         text_title: {
@@ -309,7 +309,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
     title: "Dalin: then swänska argus – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {pos: attrs.pos},
     struct_attributes: {
         text_title: {
@@ -329,7 +329,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
     title: "Nysvenska krönikor – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {pos: attrs.pos},
     struct_attributes: {
         text_title: {
@@ -353,7 +353,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
     title: "Nysvenska, övrigt – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {pos: attrs.pos},
     struct_attributes: {
         text_title: {
@@ -383,7 +383,7 @@ settings.corpora["fsv-nysvensklagar"] = {
     title: "Nysvenska lagar – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {
     	pos: attrs.pos
     },
@@ -406,7 +406,7 @@ settings.corpora["sdhk-svenska"] = {
     title: "Medeltidsbrev - Svenska",
     description: settings.sdhkdescription,
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: settings.sdhkstructs
 };
@@ -416,7 +416,7 @@ settings.corpora["sdhk-norska"] = {
     title: "Medeltidsbrev - Norska",
     description: settings.sdhkdescription,
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: settings.sdhkstructs
 };
@@ -426,7 +426,7 @@ settings.corpora["sdhk-tyska"] = {
     title: "Medeltidsbrev - Tyska",
     description: settings.sdhkdescription,
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: settings.sdhkstructs
 };
@@ -436,7 +436,7 @@ settings.corpora["sdhk-latin"] = {
     title: "Medeltidsbrev - Latin",
     description: settings.sdhkdescription,
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: settings.sdhkstructs
 };
@@ -446,7 +446,7 @@ settings.corpora["sdhk-ovrigt"] = {
     title: "Medeltidsbrev - Övriga språk",
     description: settings.sdhkdescription,
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: settings.sdhkstructs
 };
@@ -463,14 +463,14 @@ if(isLab){
                 label: "baseform",
                 type: "set",
                 extended_template: "<input ng-model='model' >",
-                opts: settings.setOptions,
+                opts: setOptions,
                 externalSearch: "http://spraakbanken.gu.se/karplabb/#?resources=soederwall,soederwall-supp&search=extended%7C%7Cand%7Cgf%7Cequals%7C<%= val %>&searchTab=extended&hpp=25&extended=and%7Cgf%7Cequals%7C<%= val %>",
                 // internalSearch: true,
             },
             pos: {
                 label: "pos",
                 displayType: "select",
-                opts: settings.liteOptions,
+                opts: liteOptions,
                 extended_template: selectType.extended_template,
                 controller: selectType.controller,
                 translationKey: "ogl_pos_",
@@ -500,7 +500,7 @@ if(isLab){
             morph: {
                 label: "msd",
                 displayType: "select",
-                opts: settings.liteOptions,
+                opts: liteOptions,
                 extended_template: selectType.extended_template,
                 controller: selectType.controller,
                 translationKey: "ogl_msd_",
@@ -969,7 +969,7 @@ if(isLab){
                 label: "annotation",
                 extended_template: selectType.extended_template,
                 controller: selectType.controller,
-                opts: settings.liteOptions,
+                opts: liteOptions,
                 dataset: [
                     "automatic",
                     "manual"

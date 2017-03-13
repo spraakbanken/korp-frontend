@@ -11,7 +11,7 @@ settings.corpora.spf = {
     title: "Svensk prosafiktion 1800–1900",
     description: 'Samtliga etexter från <a href="http://spf1800-1900.se/">spf1800-1900.se</a>.',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {
         pos: attrs.pos,
         msd: attrs.msd,

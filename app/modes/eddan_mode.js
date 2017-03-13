@@ -16,7 +16,7 @@ settings.corpora.eddan = {
         eddan: "svenska"
     },
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {},
     struct_attributes: {
         text_part: {

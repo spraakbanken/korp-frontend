@@ -193,24 +193,12 @@ settings.modeConfig = [
 
 settings.primaryColor = "rgb(221, 233, 255)";
 settings.primaryLight = "rgb(242, 247, 255)";
-settings.secondaryColor = "";
 
 settings.defaultOverviewContext = "1 sentence"
 settings.defaultReadingContext = "1 paragraph"
 
-settings.defaultContext = {
-    "1 sentence": "1 sentence"
-};
-settings.spContext = {
-    "1 sentence": "1 sentence",
-    "1 paragraph": "1 paragraph"
-};
 settings.defaultWithin = {
     "sentence": "sentence"
-};
-settings.spWithin = {
-    "sentence": "sentence",
-    "paragraph": "paragraph"
 };
 
 // for optimization purposes
@@ -225,34 +213,9 @@ settings.defaultOptions = {
     "matches": "*=",
     "matches_not": "!*=",
 }
-settings.liteOptions = {
-    "is": "=",
-    "is_not": "!="
-}
-settings.setOptions = {
-    "is": "contains",
-    "is_not": "not contains"
-};
-settings.probabilitySetOptions = {
-    "is": "highest_rank",
-    "is_not": "not_highest_rank",
-    "contains": "rank_contains",
-    "contains_not": "not_rank_contains",
-};
-/*
- * MISC
- */
+
 settings.cgi_script = "https://ws.spraakbanken.gu.se/ws/korp";
-// settings.cgi_script = "http://demosb.spraakdata.gu.se/cgi-bin/korp/korp.cgi";
 settings.download_cgi_script = "https://ws.spraakbanken.gu.se/ws/korp/download";
-
-
-// label values here represent translation keys.
-settings.arg_groups = {
-    "word": {
-        word: {label: "word"}
-    }
-};
 
 settings.mapCenter = {
   lat: 62.99515845212052,

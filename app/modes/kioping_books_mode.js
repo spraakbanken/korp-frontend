@@ -13,8 +13,8 @@ settings.corpora.kioping = {
     id: "kioping",
     title: "Nils Matsson Kiöpings resor",
     description: "Reseskildringar från 1674 och 1743",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         msd: attrs.msd,
         lemma: attrs.baseform,
@@ -39,7 +39,7 @@ settings.corpora.kioping = {
                 "gap"
                 //"kustod"
             ],
-            opts: settings.liteOptions
+            opts: liteOptions
 
             }
     },
@@ -54,7 +54,7 @@ settings.corpora.kioping = {
                 "Een kort Beskriffning Uppå Trenne Reesor och Peregrinationer, sampt Konungarijket Japan",
                 "BESKRIFNING Om En RESA GENOM ASIA, AFRICA Och många andra HEDNA LÄNDER "
             ],
-            opts: settings.liteOptions
+            opts: liteOptions
         },
         "chapter_name": {
             label: "chapter"

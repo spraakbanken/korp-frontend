@@ -12,8 +12,8 @@ settings.corpora.dylan = {
     title: "Bob Dylan",
     description: "",
     limited_access: true,
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
     },
     struct_attributes: {

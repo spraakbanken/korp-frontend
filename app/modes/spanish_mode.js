@@ -13,7 +13,7 @@ settings.corpora["pe77"] = {
     lang: "spa",
     title: "Banco de Datos de Prensa Española 1977 (SOL)",
     description: "spanska presstexter från tidskrifterna 'El País' och 'Triunfo'",
-    context: settings.defaultContext,
+    context: defaultContext,
     within: settings.defaultWithin,
     attributes: {
         pos: {label: "pos"},
@@ -39,7 +39,7 @@ settings.corpora["one71"] = {
     lang: "spa",
     title: "Banco de Datos de Once Novelas Españolas 1951—1971 (SOL)",
     description: "11 spanska noveller",
-    context: settings.defaultContext,
+    context: defaultContext,
     within: settings.defaultWithin,
     attributes: {
         pos: {label: "pos"},

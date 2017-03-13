@@ -31,7 +31,7 @@ settings.runebergattributes = {
             "headline",
             "italic"
             ],
-        opts: settings.liteOptions
+        opts: liteOptions
     }
 };
 settings.runebergstruct_attributes = {
@@ -39,7 +39,7 @@ settings.runebergstruct_attributes = {
         label: "title",
         displayType: "select",
         localize: false,
-         opts: settings.liteOptions
+         opts: liteOptions
     },
     "chapter_name": {label: "chapter"},
     text_date: {label: "date"}
@@ -51,8 +51,8 @@ settings.corpora["runeberg-diverse"] = {
     id: "runeberg-diverse",
     title: "Diverse tidningar",
     description: "Brand, De ungas tidning, Det nya Sverige, Elegant, Hvar 8 dag, Nyare Conversations-Bladet, Sundsvalls tidning, Varia",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: settings.runebergattributes,
     struct_attributes: settings.runebergstruct_attributes,
 };
@@ -62,8 +62,8 @@ settings.corpora["runeberg-rost"] = {
     id: "runeberg-rost",
     title: "Rösträtt för kvinnor",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: settings.runebergattributes,
     struct_attributes: settings.runebergstruct_attributes,
 };
@@ -73,8 +73,8 @@ settings.corpora["runeberg-svtidskr"] = {
     id: "runeberg-svtidskr",
     title: "Svensk Tidskrift",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: settings.runebergattributes,
     struct_attributes: settings.runebergstruct_attributes,
 };
@@ -84,8 +84,8 @@ settings.corpora["runeberg-tiden"] = {
     id: "runeberg-tiden",
     title: "Tiden",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: settings.runebergattributes,
     struct_attributes: settings.runebergstruct_attributes,
 
@@ -96,8 +96,8 @@ settings.corpora["runeberg-urdagkron"] = {
     id: "runeberg-urdagkron",
     title: "Ur Dagens Krönika",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: settings.runebergattributes,
     struct_attributes: settings.runebergstruct_attributes,
 };

@@ -87,7 +87,7 @@ settings.corpora.fsbbrev1700tal = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_sender": {label: "sender"},
@@ -105,7 +105,7 @@ settings.corpora["fsbbrev1800-1849"] = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_sender": {label: "sender"},
@@ -123,7 +123,7 @@ settings.corpora["fsbbrev1850-1899"] = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_sender": {label: "sender"},
@@ -141,7 +141,7 @@ settings.corpora.fsbbrev1900tal = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_sender": {label: "sender"},
@@ -159,7 +159,7 @@ settings.corpora["dagbocker1700tal"] = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -176,7 +176,7 @@ settings.corpora["dagbocker1800-1849"] = {
     description: "Privatkorrespondens, dagböcker, resejournaler och andra icke skönlitterära texter såsom meddelanden och uppsatser.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -193,7 +193,7 @@ settings.corpora["dagbocker1900-1949"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -210,7 +210,7 @@ settings.corpora["fsbmyndighet1800tal"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_source": {label: "source"},
@@ -225,7 +225,7 @@ settings.corpora["fsbskonlit1800-1849"] = {
     description: "Material ur skönlitterära verk.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -240,7 +240,7 @@ settings.corpora["fsbskonlit1850-1899"] = {
     description: "Material ur skönlitterära verk.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -255,7 +255,7 @@ settings.corpora["fsbskonlit1900-1959"] = {
     description: "Material ur skönlitterära verk.",
     morf: 'saldom|dalinm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -271,7 +271,7 @@ settings.corpora["ateneum-1800tal"] = {
     description: "Illustrerad tidskrift för literatur, konst och spörsmål af allmänt intresse.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -286,7 +286,7 @@ settings.corpora["ateneum-1900tal"] = {
     description: "Illustrerad tidskrift för literatur, konst och spörsmål af allmänt intresse.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -301,7 +301,7 @@ settings.corpora["filosofia1850-1899"] = {
     description: "Tidskriftstexter från webbsidan filosofia.fi",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -318,7 +318,7 @@ settings.corpora["filosofia1900-1959"] = {
     description: "Tidskriftstexter från webbsidan filosofia.fi",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -335,7 +335,7 @@ settings.corpora["sakprosa1700-1749"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -353,7 +353,7 @@ settings.corpora["sakprosa1750-1799"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -371,7 +371,7 @@ settings.corpora["sakprosa1800-1849"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -389,7 +389,7 @@ settings.corpora["sakprosa1850-1899"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -407,7 +407,7 @@ settings.corpora["sakprosa1900-1959"] = {
     description: "",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_author": {label: "author"},
@@ -425,7 +425,7 @@ settings.corpora.spanskaflugan = {
     description: "Spanska Flugan var en polemisk tidskrift, vars redaktör var J.V. Snellman.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_title": {label: "title"},
@@ -439,7 +439,7 @@ settings.corpora["astra1920-1959"] = {
     description: "Tidskrift med kvinnoperspektiv.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -453,7 +453,7 @@ settings.corpora.argus = {
     description: "Tidskrift för kulturella och samhälleliga frågor. Utkommer sedan 1907.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -467,7 +467,7 @@ settings.corpora.husmodern = {
     description: "Utgavs av föreningen Martha 1903–1958. Bytte sedan namn till först Marthabladet och senare Martha (1999–).",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -481,7 +481,7 @@ settings.corpora["landtmannen"] = {
     description: "Notisblad för Finlands jordbruk och dess binäringar.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -495,7 +495,7 @@ settings.corpora["litterartidskrift-helsingfors"] = {
     description: "Litterär tidskrift med blandat innehåll.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -509,7 +509,7 @@ settings.corpora["typografisktminnesblad"] = {
     description: "Utkom 1642–1892.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "year"}
@@ -522,7 +522,7 @@ settings.corpora["typograftidning"] = {
     description: "Tidskrift ”utgifven af typografernes förening i Helsingfors”.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -536,7 +536,7 @@ settings.corpora["finsktidskrift1800tal"] = {
     description: "Tidskrift som grundades 1875. Utkom med sitt första nummer 1876. Nordens äldsta fortsättningsvis utkommande tidskrift.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_issue": {label: "issue"},
@@ -550,7 +550,7 @@ settings.corpora["finsktidskrift1900tal"] = {
     description: "Tidskrift som grundades 1875. Utkom med sitt första nummer 1876. Nordens äldsta fortsättningsvis utkommande tidskrift.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_edition": {label: "issue"},
@@ -563,7 +563,7 @@ settings.corpora.euterpe = {
     title: "Euterpe 1900–1905",
     description: "Euterpe var en litterär, konstnärlig och samhällskritisk kulturtidskrift som utkom 1900–1905. Föregångare till Argus.",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         text_date: {label: "year"},
@@ -577,7 +577,7 @@ settings.corpora["borgabladet2"] = {
     description: "Tidning som utkommer i Borgå.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -590,7 +590,7 @@ settings.corpora["fredrikshamnstidning"] = {
     description: "Tidning som utkom i Fredrikshamn 1884–1910.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -603,7 +603,7 @@ settings.corpora["tidningarsallskapetiabo"] = {
     description: "Finlands första tidning. Starkt knuten till Aurorasällskapet och Henrik Gabriel Porthan. Utkom i Åbo åren 1771–1778 och 1782–1785.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -616,7 +616,7 @@ settings.corpora["uleaborgstidning"] = {
     description: "Tidning som utkom i Uleåborg 1877–1891.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -629,7 +629,7 @@ settings.corpora["wasabladet"] = {
     description: "Tidning som utkommer i Vasa. Grundad år 1856.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -642,7 +642,7 @@ settings.corpora["wiborgstidning"] = {
     description: "Tidning som utkom i Viborg åren 1864–1881.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -655,7 +655,7 @@ settings.corpora["abotidning"] = {
     description: "Tidning som utkom i Åbo 1882–1906.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -669,7 +669,7 @@ settings.corpora["bjorneborgstidning"] = {
     description: "Tidning som utkom i Björneborg mellan åren 1860 och 1965, med vissa avbrott.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -682,7 +682,7 @@ settings.corpora["dagbladet1866-1886"] = {
     description: "Liberal tidning som utkom i Helsingfors 1862–1889.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -695,7 +695,7 @@ settings.corpora["hbl1800"] = {
     description: "Tidning som grundades av August Schauman år 1864.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}
@@ -708,7 +708,7 @@ settings.corpora["aland"] = {
     description: "Grundades 1891 av Julius Sundblom. Utkommer på Åland.",
     morf: 'saldom|dalinm|swedbergm',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: fisk1800attrs,
     struct_attributes: {
         "text_date": {label: "date"}

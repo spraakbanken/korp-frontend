@@ -11,7 +11,7 @@ settings.corpora.lb = {
     title: "Litteraturbanken",
     description: 'Samtliga etexter och sökbara faksimiler från <a href="http://litteraturbanken.se/">Litteraturbanken.se</a>.',
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: {
         pos: attrs.pos,
         msd: attrs.msd,

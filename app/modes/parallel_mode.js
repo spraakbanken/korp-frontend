@@ -547,7 +547,6 @@ settings.corpora["saltnld-sv"] = {
     linked_to: ["saltnld-nl"],
     title: "SALT svenska-nederländska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -626,7 +625,6 @@ settings.corpora["aspacsvru-sv"] = {
     linked_to: ["aspacsvru-ru"],
     title: "ASPAC svenska-ryska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -688,7 +686,6 @@ settings.corpora["aspacsvde-sv"] = {
     linked_to: ["aspacsvde-de"],
     title: "ASPAC svenska-tyska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -811,7 +808,6 @@ settings.corpora["aspacsves-sv"] = {
     linked_to: ["aspacsves-es"],
     title: "ASPAC svenska-spanska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -995,7 +991,6 @@ settings.corpora["aspacsvnl-sv"] = {
     linked_to: ["aspacsvnl-nl"],
     title: "ASPAC svenska-nederländska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1057,7 +1052,6 @@ settings.corpora["aspacsvpt-sv"] = {
     linked_to: ["aspacsvpt-pt"],
     title: "ASPAC svenska-portugisiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1119,7 +1113,6 @@ settings.corpora["aspacsvpl-sv"] = {
     linked_to: ["aspacsvpl-pl"],
     title: "ASPAC svenska-polska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1181,7 +1174,6 @@ settings.corpora["aspacsvla-sv"] = {
     linked_to: ["aspacsvla-la"],
     title: "ASPAC svenska-latin",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1243,7 +1235,6 @@ settings.corpora["aspacsvbg-sv"] = {
     linked_to: ["aspacsvbg-bg"],
     title: "ASPAC svenska-bulgariska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1305,7 +1296,6 @@ settings.corpora["aspacsvcs-sv"] = {
     linked_to: ["aspacsvcs-cs"],
     title: "ASPAC svenska-tjeckiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1364,7 +1354,6 @@ settings.corpora["aspacsvbe-sv"] = {
     linked_to: ["aspacsvbe-be"],
     title: "ASPAC svenska-vitryska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1423,7 +1412,6 @@ settings.corpora["aspacsvhr-sv"] = {
     linked_to: ["aspacsvhr-hr"],
     title: "ASPAC svenska-kroatiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1482,7 +1470,6 @@ settings.corpora["aspacsvmk-sv"] = {
     linked_to: ["aspacsvmk-mk"],
     title: "ASPAC svenska-makedonska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1542,7 +1529,6 @@ settings.corpora["aspacsvel-sv"] = {
     linked_to: ["aspacsvel-el"],
     title: "ASPAC svenska-grekiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1602,7 +1588,6 @@ settings.corpora["aspacsvro-sv"] = {
     linked_to: ["aspacsvro-ro"],
     title: "ASPAC svenska-rumänska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1665,7 +1650,6 @@ settings.corpora["aspacsvsk-sv"] = {
     linked_to: ["aspacsvsk-sk"],
     title: "ASPAC svenska-slovakiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1730,7 +1714,6 @@ settings.corpora["aspacsvsl-sv"] = {
     linked_to: ["aspacsvsl-sl"],
     title: "ASPAC svenska-slovenska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1793,7 +1776,6 @@ settings.corpora["aspacsvuk-sv"] = {
     linked_to: ["aspacsvuk-uk"],
     title: "ASPAC svenska-ukrainska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1853,7 +1835,6 @@ settings.corpora["aspacsvtk-sv"] = {
     linked_to: ["aspacsvtk-tk"],
     title: "ASPAC svenska-turkmeniska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1913,7 +1894,6 @@ settings.corpora["aspacsvsr-sv"] = {
     linked_to: ["aspacsvsr-sr"],
     title: "ASPAC svenska-serbiska (latinska alfabetet)",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -1972,7 +1952,6 @@ settings.corpora["aspacsvsbc-sv"] = {
     linked_to: ["aspacsvsbc-sbc"],
     title: "ASPAC svenska-serbiska (kyrilliska alfabetet)",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -2032,7 +2011,6 @@ settings.corpora["aspacsvdsb-sv"] = {
     linked_to: ["aspacsvdsb-dsb"],
     title: "ASPAC svenska-lågsorbiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -2091,7 +2069,6 @@ settings.corpora["aspacsvhsb-sv"] = {
     linked_to: ["aspacsvhsb-hsb"],
     title: "ASPAC svenska-högsorbiska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -2151,7 +2128,6 @@ settings.corpora["aspacsvsvm-sv"] = {
     linked_to: ["aspacsvsvm-svm"],
     title: "ASPAC svenska-moliseslaviska",
     context: context.defaultAligned,
-    // context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },
@@ -2213,7 +2189,6 @@ settings.corpora["espc-sv"] = {
     title: "The English-Swedish Parallel Corpus (ESPC)",
     description: 'För åtkomst kontakta <a href="mailto:karin.axelsson@sprak.gu.se">Karin Axelsson</a>.',
     context: context.defaultAligned,
-    context: settings.defaultContext,
     within: {
         "link": "meningspar"
     },

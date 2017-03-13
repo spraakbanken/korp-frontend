@@ -31,6 +31,34 @@ var selectType = {
     }
 };
 
+var liteOptions = {
+    "is": "=",
+    "is_not": "!="
+}
+var setOptions = {
+    "is": "contains",
+    "is_not": "not contains"
+};
+var probabilitySetOptions = {
+    "is": "highest_rank",
+    "is_not": "not_highest_rank",
+    "contains": "rank_contains",
+    "contains_not": "not_rank_contains",
+};
+
+var defaultContext = {
+    "1 sentence": "1 sentence"
+};
+
+var spContext = {
+    "1 sentence": "1 sentence",
+    "1 paragraph": "1 paragraph"
+};
+var spWithin = {
+    "sentence": "sentence",
+    "paragraph": "paragraph"
+};
+
 var attrs = {};  // positional attributes
 var sattrs = {}; // structural attributes
 
@@ -63,7 +91,7 @@ attrs.pos = {
         "UO": "UO",
         "VB": "VB"
     },
-    opts: settings.liteOptions,
+    opts: liteOptions,
     extended_template: selectType.extended_template,
     controller: selectType.controller,
     order: 50
@@ -103,7 +131,7 @@ attrs.msd = {
 attrs.baseform = {
     label: "baseform",
     type: "set",
-    opts: settings.setOptions,
+    opts: setOptions,
     extended_template: "<input ng-model='model' >",
     order: 49
 };
@@ -111,7 +139,7 @@ attrs.lemgram = {
     label: "lemgram",
     type: "set",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     stringify: function(lemgram) {
         // TODO: what if we're getting more than one consequtive lemgram back?
         return util.lemgramToString(_.str.trim(lemgram), true);
@@ -133,7 +161,7 @@ attrs.dalinlemgram = {
     label: "dalin-lemgram",
     type: "set",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     stringify: function(lemgram) {
         // TODO: what if we're getting more than one consequtive lemgram back?
         return util.lemgramToString(_.str.trim(lemgram), true);
@@ -147,7 +175,7 @@ attrs.saldo = {
     label: "saldo",
     type: "set",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     stringify: function(saldo) {
         return util.saldoToString(saldo, true);
     },
@@ -234,13 +262,13 @@ attrs.deprel = {
         "VG": "VG",
         "ROOT": "ROOT"
     },
-    opts: settings.liteOptions
+    opts: liteOptions
 };
 attrs.prefix = {
     label: "prefix",
     type: "set",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     stringify: function(lemgram) {
         return util.lemgramToString(lemgram, true);
     },
@@ -252,7 +280,7 @@ attrs.suffix = {
     label: "suffix",
     type: "set",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     stringify: function(lemgram) {
         return util.lemgramToString(lemgram, true);
     },
@@ -431,7 +459,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
             }
         },
         stringify: function(sense) { return util.saldoToString(sense, true); },
-        opts: settings.probabilitySetOptions,
+        opts: probabilitySetOptions,
         externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
         internalSearch: true,
         extended_template: settings.senseAutoComplete
@@ -444,7 +472,7 @@ settings.posset = {
    type: "set",
    label: "posset",
    displayType: "select",
-   opts: settings.setOptions,
+   opts: setOptions,
    translationKey: "pos_",
    extended_template: selectType.extended_template,
    controller: selectType.controller,
@@ -479,14 +507,14 @@ settings.posset = {
 settings.fsvlemma = {
     type: "set",
     label: "baseform",
-    opts: settings.setOptions,
+    opts: setOptions,
     extended_template: "<input ng-model='model' >"
 };
 settings.fsvlex = {
     type: "set",
     label: "lemgram",
     displayType: "autocomplete",
-    opts: settings.setOptions,
+    opts: setOptions,
     extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
     stringify: function(str) {
         return util.lemgramToString(str, true);
@@ -502,7 +530,7 @@ settings.fsvvariants = {
     },
     displayType: "autocomplete",
     extended_template: "<autoc model='model' placeholder='placeholder' type='lemgram'/>",
-    opts: settings.setOptions,
+    opts: setOptions,
     externalSearch: karpLemgramLink,
     internalSearch: true,
     order: 46
@@ -516,7 +544,7 @@ var fsv_yngrelagar = {
     title: "Yngre lagar – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {
         posset: settings.posset,
         lemma: settings.fsvlemma,
@@ -547,7 +575,7 @@ var fsv_aldrelagar = {
     title: "Äldre lagar – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
-    context: settings.spContext,
+    context: spContext,
     attributes: {
         posset: settings.posset,
         lemma: settings.fsvlemma,

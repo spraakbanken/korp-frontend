@@ -18,8 +18,8 @@ settings.corpora['bellman'] = {
     id: "bellman",
     title: "Bellmans samlade verk",
     description: "",
-    within: settings.spWithin,
-    context: settings.spContext,
+    within: spWithin,
+    context: spContext,
     attributes: {
         msd: attrs.msd,
 		lemma: attrs.baseform,
