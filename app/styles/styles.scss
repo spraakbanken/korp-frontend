@@ -2126,6 +2126,7 @@ warning ~ * {
 }
 
 #deptree_popup {
+  display: none;
   overflow-y : hidden;
   iframe {
     border : none;

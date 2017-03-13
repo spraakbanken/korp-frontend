@@ -33,9 +33,8 @@ Sidebar =
             @renderGraph(tokens)
 
     renderGraph : (tokens) ->
-        outerW = $(window).width() - 80
-
-        $("<span class='link show_deptree'>Visa träd</button>").localeKey("show_deptree").click( ->
+        $("<span class='link show_deptree'></button>").localeKey("show_deptree").click( ->
+            outerW = $(window).width() - 80
             info = $("<span class='info' />")
             iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load ->
 
@@ -48,7 +47,6 @@ Sidebar =
             $("#deptree_popup").empty().append(info, iframe).dialog(
                 height : 300
                 width : outerW
-
             ).parent().find(".ui-dialog-title").localeKey("dep_tree")
 
         ).appendTo(@element)
