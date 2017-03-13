@@ -84,11 +84,11 @@ Sidebar =
             if ord1 == ord2
                 return 0
             if not ord1
-                return 1
-            if not ord2
                 return -1
+            if not ord2
+                return 1
             else
-                return ord2 - ord1
+                return ord1 - ord2
 
         items = []
         for [key, value] in pairs
