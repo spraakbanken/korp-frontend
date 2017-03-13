@@ -20,6 +20,8 @@ settings.corpora.siberiangermandialogs = {
     attributes: {
         sib_de_msd: {
             label: "msd",
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "INFINIT",
                 "INF",
@@ -42,6 +44,8 @@ settings.corpora.siberiangermanwomen = {
     attributes: {
         sib_de_msd: {
             label: "msd",
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "INFINIT",
                 "FINIT"

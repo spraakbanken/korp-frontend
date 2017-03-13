@@ -32,14 +32,17 @@ settings.corpora.fts = {
         },
         text_authortype: {
             label: "author_type",
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: {
                 journalist: "journalist",
                 reader: "reader"
-
             }
         },
         text_gender: {
             label: "gender",
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: {
                 unknown: "unknown",
                 male: "male",

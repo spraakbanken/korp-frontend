@@ -71,6 +71,8 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Birgittaautograferna",
                 "Fornsvenska legendariet enligt Codex Bureanus",
@@ -95,6 +97,8 @@ settings.corpora["fsv-profanprosa"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Barlaam och Josaphat, ur Codex Holm A 49 Nådendals klosterbok",
                 "Sju vise mästare B, Nådendals klosterbok, Codex Holm A 49",
@@ -124,6 +128,8 @@ settings.corpora["fsv-verser"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Fornsvenska Ordspråk",
                 "Erikskrönikan, ur Spegelbergs bok, Codex Holm D2" ,
@@ -151,6 +157,8 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Johannes döparens födelse ur Codex Bildstenianus Ups C 528",
                 "Jesu lidandes bägare och hans blods utgjutelse",
@@ -260,6 +268,8 @@ settings.corpora["fsv-yngretankebocker"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Läkebok 1: blandad läkedom, ur Codex AM",
                 "Läkebok 11: Månaderna, efter KBs handskrift med gammal signatur K 45, supplerad på Danska ur codex Grensholmensis",
@@ -289,6 +299,8 @@ settings.corpora["fsv-nysvenskbibel"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Gustav Vasas Bibel, Markusevanguliet",
                 "Gustav Vasas Bibel, Lukasevangeliet"
@@ -309,6 +321,8 @@ settings.corpora["fsv-nysvenskdalin"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Dalin: Then Swänska Argus"
             ],
@@ -328,6 +342,8 @@ settings.corpora["fsv-nysvenskkronikor"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Peder Swarts krönika",
                 "Per Brahes krönika",

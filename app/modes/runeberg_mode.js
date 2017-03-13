@@ -24,6 +24,8 @@ settings.runebergattributes = {
         label: "typography",
         type: "set",
         translationKey: "fab_",
+        extendedTemplate: selectType.extendedTemplate,
+        extendedController: selectType.extendedController,
         dataset: [
             "footnote",
             "small",

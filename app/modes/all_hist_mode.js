@@ -122,6 +122,8 @@ settings.runebergattributes = {
         label: "typography",
         type: "set",
         translationKey: "fab_",
+        extendedTemplate: selectType.extendedTemplate,
+        extendedController: selectType.extendedController,
         dataset: [
             "footnote",
             "small",
@@ -1899,6 +1901,8 @@ settings.corpora["tankebok"] = {
         text_title: {
             label: "title",
             localize: false,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
             dataset: [
                 "Stockholms stads tänkebok - Koncept ",
                 "Stockholms stads tänkebok - Notariat",
