@@ -32,9 +32,21 @@ korpApp.controller "VideoInstanceCtrl", ($scope, $compile, $timeout, $uibModalIn
     transformSeconds = (seconds) ->
         d = moment.duration seconds, 'seconds'
         hours = Math.floor d.asHours()
+        if hours != 0
+            sHours = String(hours) + ":"
+        else
+            sHours = ""
+
         mins = Math.floor(d.asMinutes()) - hours * 60
-        secs = Math.floor(d.asSeconds()) - hours * 3600 - mins * 60
-        return hours + ":" + mins + ":" + secs
+        sMins = String mins + ":"
+        
+        if sMins.length == 2 and sHours
+            sMins = "0" + sMins
+        secs = String(Math.floor(d.asSeconds()) - hours * 3600 - mins * 60)
+        if secs.length == 1
+            secs = "0" + secs
+
+        return sHours + sMins + secs
 
     if startTime
         $scope.startTime = transformSeconds startTime
