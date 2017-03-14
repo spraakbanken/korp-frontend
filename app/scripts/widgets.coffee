@@ -137,7 +137,8 @@ Sidebar =
                     subValues = if attrSettings.splitValue then attrSettings.splitValue value else [value]
                     for subValue, idx in subValues
                         val = (attrs.stringify or attrSettings.stringify or _.identity)(subValue)
-                        inner = $("<span>" + val + "</span>");
+                        inner = $("<span>" + val + "</span>")
+                        inner.attr "title", prob
 
                         if attrs.internalSearch and (attrSettings.linkAllValues or outerIdx is 0)
                             inner.data("key", subValue)
@@ -153,7 +154,6 @@ Sidebar =
                         li.append inner
                         if attrSettings.joinValues and idx isnt subValues.length - 1
                             li.append attrSettings.joinValues
-                    li.append "<span class='prob'> (" + prob + ")</span>"
                     if karpLink
                         li.append karpLink
                     lis.push li
@@ -168,7 +168,7 @@ Sidebar =
                 ul = $('<i rel="localize[empty]" style="color : grey"></i>')
 
             else
-                ul = $("<ul class='hide-prob' style='list-style:initial'>")
+                ul = $("<ul style='list-style:initial'>")
                 ul.append lis
 
                 if lis.length isnt 1
@@ -185,7 +185,6 @@ Sidebar =
                     showAll.click () ->
                         showAll.css "display", "none"
                         showOne.css "display", "inline"
-                        ul.removeClass "hide-prob"
                         _.map lis, (li) ->
                             
                             li.css "display", "list-item"
@@ -193,7 +192,6 @@ Sidebar =
                     showOne.click () ->
                         showAll.css "display", "inline"
                         showOne.css "display", "none"
-                        ul.addClass "hide-prob"
                         _.map lis, (li, i) ->
                             if i != 0
                                 li.css "display", "none"
