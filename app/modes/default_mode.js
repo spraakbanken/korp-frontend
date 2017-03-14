@@ -116,7 +116,7 @@ settings.corporafolders.governmental = {
 
 settings.corporafolders.protected = {
     title: "Skyddade korpusar",
-    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "ivip", "lawline", "mepac", "soexempel", "sw1203", "tisus"]
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "ivip", "lawline", "mepac", "mepac-i", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.novels = {
@@ -3823,7 +3823,7 @@ settings.corpora.gdc = {
 
 settings.corpora.mepac = {
     id: "mepac",
-    title: "MEPAC",
+    title: "MEPAC bloggar",
     description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
     limited_access: true,
     context: {
@@ -3831,18 +3831,41 @@ settings.corpora.mepac = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
-        "text_blog": {label: "author"},
+        "text_source": {label: "source"},
         "text_date": {label: "date"},
         "text_type": {label: "type",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
             dataset: {
                 "patientblogg": "patientblogg",
+                "närståendeblogg": "närståendeblogg",
+            }
+        }
+    }
+};
+
+settings.corpora["mepac-i"] = {
+    id: "mepac-i",
+    title: "MEPAC intervjuer",
+    description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
+    limited_access: true,
+    context: {
+        "1 sentence": "1 sentence",
+        "3 text": "3 text"
+    },
+    within: settings.defaultWithin,
+    attributes: modernAttrs2,
+    struct_attributes: {
+        "text_source": {label: "source"},
+        "text_date": {label: "date"},
+        "text_type": {label: "type", displayType: "select",
+            extended_template: selectType.extended_template,
+            controller: selectType.controller,
+            dataset: {
                 "patientintervju": "patientintervju",
                 "fokusgrupp": "fokusgrupp",
-                "närståendeblogg": "närståendeblogg",
                 "närståendeintervju": "närståendeintervju"
             }
         }
@@ -4214,3 +4237,4 @@ settings.corpora["rd-ovr"] = {
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
+
