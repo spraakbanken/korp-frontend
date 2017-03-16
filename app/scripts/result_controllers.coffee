@@ -68,6 +68,7 @@ class KwicCtrl
                     readingChange()
             ]
 
+        # used by example kwic
         s.setupReadingWatch = _.once () ->
             c.log "setupReadingWatch"
             init = true

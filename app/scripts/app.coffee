@@ -76,6 +76,8 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
         if not _.isEmpty s.loginNeededFor
             s.savedState = $location.search()
             $location.url $location.path()
+            if s.savedState.reading_mode
+                $location.search "reading_mode"
             $location.search "display", "login"
     
     s.restorePreLoginState = () ->
