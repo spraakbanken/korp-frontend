@@ -102,7 +102,6 @@ class view.KWICResults extends BaseResults
         @s.setupReadingHash()
 
     onWordClick : (event) ->
-        c.log "word click in kwic"
         if @isActive()
             @s.$root.sidebar_visible = true
         scope = $(event.currentTarget).scope()
