@@ -1933,7 +1933,86 @@ settings.corpora["ivip"] = {
                 "pause": "pause",
                 "overlap": "overlap"
             }
-        }
+        },
+        sentence_speaker_id: {
+            label: "speaker",
+            hideSidebar: true,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
+            dataset: {
+                "AS1": "AS1",
+                "AS2": "AS2",
+                "KU1": "KU1",
+                "KU2": "KU2",
+                "KU3": "KU3",
+                "PE": "PE",
+                "PE1": "PE1",
+                "PE10": "PE10",
+                "PE2": "PE2",
+                "PE3": "PE3",
+                "PE4": "PE4",
+                "PE5": "PE5",
+                "PE6": "PE6",
+                "PE8": "PE8",
+                "PE9": "PE9",
+                "UP1": "UP1",
+                "UP2": "UP2",
+                "comment": "comment",
+                "pause": "pause"
+            },
+            isStructAttr: true
+        },
+        sentence_speaker_role: {
+            label: "speakerrole",
+            hideSidebar: true,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
+            dataset: {
+                "": "Odefinerat",
+                "Assistent": "Assistent",
+                "Hund": "Hund",
+                "Kund": "Kund",
+                "Kund1": "Kund1",
+                "Kund2": "Kund2",
+                "Observer": "Observer",
+                "Participant": "Participant",
+                "Personal": "Personal",
+                "Talaren": "Talaren",
+                "Uncertain": "Uncertain",
+                "Visitor": "Visitor"
+            },
+            isStructAttr: true
+        },
+        sentence_speaker_gender: {
+            label: "speakergender",
+            order: 14,
+            extendedTemplate: selectType.extendedTemplate,
+            extendedController: selectType.extendedController,
+            dataset: {
+                "": "Odefinerat",
+                "female": "female",
+                "male": "male"
+            },
+            isStructAttr: true
+        },
+        sentence_speaker_age: {
+            label: "speakerage", 
+            order: 13,
+            isStructAttr: true
+        },
+        sentence_speaker_region: {
+            label: "speakerregion", 
+            order: 12,
+            isStructAttr: true
+        },
+        sentence_start: {
+            displayType: "hidden",
+            isStructAttr: true
+        },
+        sentence_end: {
+            displayType: "hidden",
+            isStructAttr: true
+        },
     },
     struct_attributes: {
         text_country: {label: "country",
@@ -1985,63 +2064,6 @@ settings.corpora["ivip"] = {
                      }
                  },
         text_participants: {label: "participants", order: 17},
-        sentence_speaker_id: {label: "speaker",
-                              hideSidebar: true,
-                              extendedTemplate: selectType.extendedTemplate,
-                              extendedController: selectType.extendedController,
-                              dataset: {
-                                  "AS1": "AS1",
-                                  "AS2": "AS2",
-                                  "KU1": "KU1",
-                                  "KU2": "KU2",
-                                  "KU3": "KU3",
-                                  "PE": "PE",
-                                  "PE1": "PE1",
-                                  "PE10": "PE10",
-                                  "PE2": "PE2",
-                                  "PE3": "PE3",
-                                  "PE4": "PE4",
-                                  "PE5": "PE5",
-                                  "PE6": "PE6",
-                                  "PE8": "PE8",
-                                  "PE9": "PE9",
-                                  "UP1": "UP1",
-                                  "UP2": "UP2",
-                                  "comment": "comment",
-                                  "pause": "pause"
-                              }
-        },
-        sentence_speaker_role: {label: "speakerrole",
-                                hideSidebar: true,
-                                extendedTemplate: selectType.extendedTemplate,
-                                extendedController: selectType.extendedController,
-                                dataset: {
-                                    "": "Odefinerat",
-                                    "Assistent": "Assistent",
-                                    "Hund": "Hund",
-                                    "Kund": "Kund",
-                                    "Kund1": "Kund1",
-                                    "Kund2": "Kund2",
-                                    "Observer": "Observer",
-                                    "Participant": "Participant",
-                                    "Personal": "Personal",
-                                    "Talaren": "Talaren",
-                                    "Uncertain": "Uncertain",
-                                    "Visitor": "Visitor"
-                                }
-                            },
-        sentence_speaker_gender: {label: "speakergender",
-                                  order: 14,
-                                  extendedTemplate: selectType.extendedTemplate,
-                                  extendedController: selectType.extendedController,
-                                  dataset: {
-                                      "": "Odefinerat",
-                                      "female": "female",
-                                      "male": "male"
-                                  }
-                              },
-        sentence_speaker_age: {label: "speakerage", order: 13},
-        sentence_speaker_region: {label: "speakerregion", order: 12},
         text_consentid: {label: "consentid", order: 11},
         text_type: {label: "type",
                     hideSidebar: true,
@@ -2061,8 +2083,6 @@ settings.corpora["ivip"] = {
                              "telefoninspelning": "telefoninspelning"
                          }
                      },
-        sentence_start: {displayType: "hidden"},
-        sentence_end: {displayType: "hidden"},
         text_mediafilepath: {displayType: "hidden"},
         text_mediafile: {displayType: "hidden"},
         text_mediafileext: {displayType: "hidden"}
@@ -2072,8 +2092,8 @@ settings.corpora["ivip"] = {
             label: "video",
             renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
 
-                var startTime = sentenceData['sentence_start'];
-                var endTime = sentenceData['sentence_end'];
+                var startTime = wordData['sentence_start'];
+                var endTime = wordData['sentence_end'];
                 var path = sentenceData['text_mediafilepath'];
                 var file = sentenceData['text_mediafile'];
                 var ext = sentenceData['text_mediafileext'];
@@ -2098,7 +2118,7 @@ settings.corpora["ivip"] = {
         text_speaker_custom: {
             label: "speaker",
             order: 16,
-            pattern: "<span><%= struct_attrs.sentence_speaker_id %> <%= struct_attrs.sentence_speaker_role %></span>",
+            pattern: "<span><%= pos_attrs.sentence_speaker_id %> <%= pos_attrs.sentence_speaker_role %></span>",
             customType: "struct"
         }
     },
