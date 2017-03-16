@@ -93,7 +93,7 @@ attrs.pos = {
     opts: liteOptions,
     extendedTemplate: selectType.extendedTemplate,
     extendedController: selectType.extendedController,
-    order: 50
+    order: 0
 };
 
 attrs.msd = {
@@ -132,7 +132,7 @@ attrs.baseform = {
     type: "set",
     opts: setOptions,
     extendedTemplate: "<input ng-model='model' >",
-    order: 49
+    order: 1
 };
 attrs.lemgram = {
     label: "lemgram",
@@ -153,7 +153,7 @@ attrs.lemgram = {
             $scope.valueError = !valueSelected;
         }
     },
-    order: 48
+    order: 2
 };
 attrs.dalinlemgram = {
     label: "dalin-lemgram",
@@ -166,7 +166,7 @@ attrs.dalinlemgram = {
     externalSearch: karpLemgramLink,
     internalSearch: true,
     extendedTemplate: "<autoc model='model' placeholder='placeholder' type='lemgram' variant='dalin'/>",
-    order: 48
+    order: 2
 };
 attrs.saldo = {
     label: "saldo",
@@ -178,7 +178,7 @@ attrs.saldo = {
     externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
     internalSearch: true,
     extendedTemplate: settings.senseAutoComplete,
-    order: 47
+    order: 3
 };
 attrs.dephead = {
     label: "dephead",
@@ -493,7 +493,7 @@ settings.posset = {
         "UO": "UO",
         "VB": "VB"
     },
-    order: 50
+    order: 0
 };
 
 settings.fsvlemma = {
@@ -523,7 +523,7 @@ settings.fsvvariants = {
     opts: setOptions,
     externalSearch: karpLemgramLink,
     internalSearch: true,
-    order: 46
+    order: 4
 };
 
 settings.fsvdescription ='<a target="_blank" href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';

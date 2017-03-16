@@ -32,20 +32,20 @@ settings.corporafolders.wb = {
 
 // Strukturella attribut
 somalis = {}
-somalis.title = {label: "title", order: -100};
-somalis.source = {label: "source", type: "url", order: -200};
-somalis.author = {label: "author", order: -300};
-somalis.translator = {label: "translator", order: -400};
-somalis.editor = {label: "editor", order: -500};
-somalis.journal = {label: "journal", order: -600};
-somalis.publisher = {label: "publisher", order: -700};
-somalis.sponsor = {label: "sponsor", order: -800};
-somalis.place = {label: "place", order: -900};
-somalis.year = {label: "year", order: -1000};
-somalis.edition = {label: "edition", order: -1100};
-somalis.date = {label: "date", order: -1200};
-somalis.page = {label: "page", order: -1300};
-somalis.pagesource = {label: "pagesource", type: "url", order: -1400};
+somalis.title = {label: "title", order: 100};
+somalis.source = {label: "source", type: "url", order: 200};
+somalis.author = {label: "author", order: 300};
+somalis.translator = {label: "translator", order: 400};
+somalis.editor = {label: "editor", order: 500};
+somalis.journal = {label: "journal", order: 600};
+somalis.publisher = {label: "publisher", order: 700};
+somalis.sponsor = {label: "sponsor", order: 800};
+somalis.place = {label: "place", order: 900};
+somalis.year = {label: "year", order: 1000};
+somalis.edition = {label: "edition", order: 1100};
+somalis.date = {label: "date", order: 1200};
+somalis.page = {label: "page", order: 1300};
+somalis.pagesource = {label: "pagesource", type: "url", order: 1400};
 
 settings.corpora["somali-1971-79"] = {
     id: "somali-1971-79",
