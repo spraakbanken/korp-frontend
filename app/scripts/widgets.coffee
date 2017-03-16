@@ -57,11 +57,6 @@ Sidebar =
 
         else if type == "pos"
             pairs = _.pairs(wordData)
-            for item in (wordData._struct or [])
-                key = item.substring(0, item.indexOf(" "))
-                val = item.substring(item.indexOf(" ") + 1)
-                if key of corpus_attrs
-                    pairs.push([key, val])
 
         pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
         pairs = _.filter pairs, ([key, val]) -> not (corpus_attrs[key].displayType == "hidden" or corpus_attrs[key].hideSidebar)

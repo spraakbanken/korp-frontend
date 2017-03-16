@@ -84,47 +84,51 @@ class KwicCtrl
             c.log "pageNumber", pageNumber
             s.page = Number(pageNumber)
 
-        massageData = (sentenceArray) ->
-            currentStruct = []
+        massageData = (hitArray) ->
             prevCorpus = ""
             output = []
-            isOpen = false
-            for sentence, i in sentenceArray
-                [matchSentenceStart, matchSentenceEnd] = findMatchSentence sentence
-                {start, end} = sentence.match
 
-                for j in [0...sentence.tokens.length]
-                    wd = sentence.tokens[j]
-                    if start <= j < end
+            for hitContext, i in hitArray
+                currentStruct = {}
+                if currentMode == "parallel"
+                    mainCorpusId = hitContext.corpus.split("|")[0].toLowerCase()
+                    linkCorpusId = hitContext.corpus.split("|")[1].toLowerCase()
+                else
+                    mainCorpusId = hitContext.corpus.toLowerCase()
+
+                id = (linkCorpusId or mainCorpusId)
+                
+                [matchSentenceStart, matchSentenceEnd] = findMatchSentence hitContext
+                {matchStart, matchEnd} = hitContext.match
+
+                for j in [0...hitContext.tokens.length]
+                    wd = hitContext.tokens[j]
+                    wd._open = []
+                    wd._close = []
+                    if matchStart <= j < matchEnd
                         _.extend wd, {_match : true}
                     if matchSentenceStart < j < matchSentenceEnd
                         _.extend wd, {_matchSentence : true}
                     if wd.word in punctArray
                         _.extend wd, {_punct : true}
-                    if wd.structs?.open
-                        wd._open = wd.structs.open
-                        currentStruct = [].concat(currentStruct, wd.structs.open)
-                        isOpen = true
-                    else if isOpen and wd.structs?.close
-                        wd._close = wd.structs.close
-                        currentStruct = _.without currentStruct, wd.structs.close...
 
-                    if isOpen
-                        _.extend wd, {_struct : currentStruct} if currentStruct.length
+                    for structItem in wd.structs?.open or []
+                        spaceIdx = structItem.indexOf(" ")
+                        if spaceIdx == -1
+                            key = structItem
+                            val = ""
+                        else
+                            key = structItem.substring(0, spaceIdx)
+                            val = structItem.substring(spaceIdx + 1)
+                        wd._open.push key
+                        if key of settings.corpora[id].attributes
+                            currentStruct[key] = val
 
+                    _.extend wd, currentStruct
 
-                    if wd.structs?.close
-                        currentStruct = []
-                        isOpen = false
-
-
-                if currentMode == "parallel"
-                    mainCorpusId = sentence.corpus.split("|")[0].toLowerCase()
-                    linkCorpusId = sentence.corpus.split("|")[1].toLowerCase()
-                else
-                    mainCorpusId = sentence.corpus.toLowerCase()
-
-                id = (linkCorpusId or mainCorpusId)
+                    for structItem in wd.structs?.close or []
+                        wd._close.push structItem
+                        delete currentStruct[structItem]
 
                 if prevCorpus != id
                     corpus = settings.corpora[id]
@@ -132,36 +136,36 @@ class KwicCtrl
                     output.push newSent
 
                 if i % 2 == 0
-                    sentence._color = settings.primaryColor
+                    hitContext._color = settings.primaryColor
                 else
-                    sentence._color = settings.primaryLight
+                    hitContext._color = settings.primaryLight
 
-                sentence.corpus = mainCorpusId
+                hitContext.corpus = mainCorpusId
 
-                output.push(sentence)
-                if sentence.aligned
-                    [corpus_aligned, tokens] = _.pairs(sentence.aligned)[0]
+                output.push(hitContext)
+                if hitContext.aligned
+                    [corpus_aligned, tokens] = _.pairs(hitContext.aligned)[0]
                     output.push
                         tokens : tokens
                         isLinked : true
                         corpus : corpus_aligned
-                        _color : sentence._color
+                        _color : hitContext._color
 
                 prevCorpus = id
 
             return output
 
-        findMatchSentence = (sentence) ->
+        findMatchSentence = (hitContext) ->
             span = []
-            {start, end} = sentence.match
+            {start, end} = hitContext.match
             decr = start
             incr = end
             while decr >= 0
-                if "sentence" in (sentence.tokens[decr--].structs?.open or [])
+                if "sentence" in (hitContext.tokens[decr--].structs?.open or [])
                     span[0] = decr
                     break
-            while incr < sentence.tokens.length
-                if "sentence" in (sentence.tokens[incr++].structs?.close or [])
+            while incr < hitContext.tokens.length
+                if "sentence" in (hitContext.tokens[incr++].structs?.close or [])
                     span[1] = incr
                     break
 
