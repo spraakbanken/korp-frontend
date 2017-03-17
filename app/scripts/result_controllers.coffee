@@ -49,6 +49,8 @@ class KwicCtrl
         s.onPageInput = ($event, page, numPages) ->
             if $event.keyCode == 13
                 if page > numPages then page = numPages
+                if page <= 0 then page = "1"
+                s.gotoPage = page
                 s.pageObj.pager = page
                 s.page = Number(page) - 1
 
