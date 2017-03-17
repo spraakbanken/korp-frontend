@@ -1,68 +1,56 @@
 <div class="modal-header">
-	<h2>Korp version 5.0.11</h2>
-	<span ng-click="clickX()" class="close-x">×</span>
+    <h2>Korp version 5.0.11</h2>
+    <span ng-click="clickX()" class="close-x">×</span>
 
 </div>
 <div id="about_body" class="modal-body" >
-	<p ng-bind-html="'about_body' | loc:lang | trust" ></p>
-	
-	<b ng-bind-html="'about_cite_header' | loc:lang | trust"></b>
-	<p ng-bind-html="'about_cite' | loc:lang | trust"></p>
+    <p ng-bind-html="'about_body' | loc:lang | trust" ></p>
+    
+    <b ng-bind-html="'about_cite_header' | loc:lang | trust"></b>
+    <p ng-bind-html="'about_cite' | loc:lang | trust"></p>
 
-	<div>
-		<b rel="localize[about_man]">
-			Projektledning
-		</b>
-		<ul>
-			<li>
-			    <a href="http://språkbanken.gu.se/eng/personal/lars">Lars Borin</a></li>
-			<li>
-			    <a href="http://språkbanken.gu.se/eng/personal/markus">Markus Forsberg</a></li>
-		</ul>
-		<b rel="localize[about_dev]">
-			Utvecklare
-		</b>
-		<ul>
-			<li>
-				<a href="http://språkbanken.gu.se/eng/personal/johanrox">Johan Roxendal</a>
-			</li>
-			<li>
-			    <a href="http://språkbanken.gu.se/eng/personal/martin">Martin Hammarstedt</a>
-		    </li>
-    	    <li>
-    	        <a href="http://språkbanken.gu.se/eng/personal/jonupp">Jonatan Uppström</a>
+    <div>
+        <b>{{'about_man' | loc:lang}}</b>
+        <ul>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/lars">Lars Borin</a></li>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/markus">Markus Forsberg</a></li>
+        </ul>
+        <b>{{'about_dev' | loc:lang}}</b>
+        <ul>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/johanrox">Johan Roxendal</a>
             </li>
-    	    <li>
-    	        <a href="http://språkbanken.gu.se/swe/personal/mariao">Maria Öhrman</a>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/martin">Martin Hammarstedt</a>
             </li>
-		    <li>
-		        <a href="http://spraakbanken.gu.se/swe/personal/anne">Anne Schumacher</a>
-	        </li>
-		</ul>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/jonupp">Jonatan Uppström</a>
+            </li>
+            <li>
+                <a href="http://språkbanken.gu.se/swe/personal/mariao">Maria Öhrman</a>
+            </li>
+            <li>
+                <a href="http://spraakbanken.gu.se/swe/personal/anne">Anne Schumacher</a>
+            </li>
+        </ul>
 
-		<!-- <b rel="localize[about_dev_additional]">
-			Övriga utvecklare
-		</b> -->
-		<!-- <ul> -->
-		    
-		<!-- </ul> -->
+        <b>{{'about_contributors' | loc:lang}}</b>
+        <ul>
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/malin">Malin Ahlberg</a></li>
+            
+            <li>
+                <a href="http://språkbanken.gu.se/eng/personal/olof">Olof Olsson</a></li>
+            <li>
+                <a href="http://www.cse.chalmers.se/~peb/">Peter Ljunglöf</a></li>
+            <li>Dan Rosén</li>
+            <li>Roland Schäfer</li>
 
+        </ul>
 
-		<b rel="localize[about_contributors]">Med bidrag från</b>
-		<ul>
-			<li>
-			    <a href="http://språkbanken.gu.se/eng/personal/malin">Malin Ahlberg</a></li>
-			
-			<li>
-			    <a href="http://språkbanken.gu.se/eng/personal/olof">Olof Olsson</a></li>
-			<li>
-			    <a href="http://www.cse.chalmers.se/~peb/">Peter Ljunglöf</a></li>
-		    <li>Dan Rosén</li>
-		    <li>Roland Schäfer</li>
+        <span>{{'about_logo' | loc:lang}}</span> <a href="http://spraakbanken.gu.se/swe/personal/judy-ribeck">Judy Ribeck</a>.
 
-		</ul>
-
-		<span rel="localize[about_logo]">Logotyp av</span> <a href="http://spraakbanken.gu.se/swe/personal/judy-ribeck">Judy Ribeck</a>.
-
-	</div>
+    </div>
 </div>
