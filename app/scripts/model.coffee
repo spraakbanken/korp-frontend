@@ -145,8 +145,6 @@ class model.KWICProxy extends BaseProxy
         c.log "data.show", data.show
         data.show_struct = (_.uniq data.show_struct).join(",")
         @prevRequest = data
-        numHits = locationSearch().hpp or 25
-        @prevMisc = {"hitsPerPage" : numHits}
         @prevParams = data
         def = $.ajax(
             url: settings.cgi_script
