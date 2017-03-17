@@ -2107,7 +2107,26 @@ settings.corpora["ivip"] = {
                     scope.fileName = file + "." + ext;
                     scope.startTime = startTime / 1000;
                     scope.endTime = endTime / 1000;
-                    scope.sentence = _.pluck(tokens, 'word').join(" ")
+
+                    // find start of sentence
+                    var startIdx = 0
+                    for(var i = wordData.position; i >= 0; i--) {
+                        if(_.contains(tokens[i]._open, "sentence")) {
+                            startIdx = i;
+                            break;
+                        }
+                    }
+
+                    // find end of sentence
+                    var endIdx = tokens.length - 1
+                    for(var i = wordData.position; i < tokens.length; i++) {
+                        if(_.contains(tokens[i]._close, "sentence")) {
+                            endIdx = i;
+                            break;
+                        }
+                    }
+
+                    scope.sentence = _.pluck(tokens.slice(startIdx, endIdx + 1), 'word').join(" ")
                     scope.open();
                     scope.$apply();
                 });

@@ -104,6 +104,7 @@ class KwicCtrl
 
                 for j in [0...hitContext.tokens.length]
                     wd = hitContext.tokens[j]
+                    wd.position = j
                     wd._open = []
                     wd._close = []
                     if matchStart <= j < matchEnd
