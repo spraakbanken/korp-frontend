@@ -33,6 +33,7 @@ view.updateSearchHistory = (value, href) ->
         .prepend(clear)
         .prepend(placeholder)
 
+##TODO data-history and data-prefix (not used?) should be replaced with angular
 view.initSearchOptions = ->
     selects = $("#search_options > div:first select").customSelect()
 

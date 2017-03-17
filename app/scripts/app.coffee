@@ -49,7 +49,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
     tmhDynamicLocale.set("en")
 
     s._loc = $location
-    s._searchOpts = {}
+
     s.$watch "_loc.search()", () ->
         c.log "loc.search() change", $location.search()
         _.defer () -> window.onHashChange?()

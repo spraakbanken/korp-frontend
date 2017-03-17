@@ -197,7 +197,8 @@ class view.KWICResults extends BaseResults
 
 
     getPageInterval: (page) ->
-        items_per_page = Number(@s.$root._searchOpts.hits_per_page) or settings.hits_per_page_default
+        hpp = locationSearch().hpp or 25
+        items_per_page = Number(hpp) or settings.hits_per_page_default
         page = Number(page)
         output = {}
         output.start = (page or 0) * items_per_page
@@ -482,7 +483,7 @@ class view.ExampleResults extends view.KWICResults
 
     makeRequest: () ->
         c.log "ExampleResults.makeRequest()", @current_page
-        items_per_page = parseInt($("#search_options").find(".num_hits").val())
+        items_per_page = parseInt(locationSearch().hpp or 25)
         opts = @s.$parent.kwicTab.queryParams
 
         @resetView()

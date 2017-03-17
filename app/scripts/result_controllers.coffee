@@ -199,6 +199,9 @@ class KwicCtrl
             len = sentence.tokens.length
             sentence.tokens.slice from, len
 
+        s.$watch (() -> $location.search().hpp), (hpp) ->
+            s.hitsPerPage = hpp or 25
+
 korpApp.directive "kwicCtrl", () ->
     controller: KwicCtrl
 
