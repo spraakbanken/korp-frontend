@@ -92,6 +92,14 @@ korpApp.directive "mapCtrl", () ->
                     s.numResults = 0
                     s.loading = false
 
+        createCqp2Fun = () ->
+            posTags = for posTag in settings.mapPosTag
+                "pos='#{posTag}'"
+            nameMatching  = "(" + posTags.join(" | ") + ")"
+            return (name) ->
+                return "[word='#{name}' & #{nameMatching}]"
+        getCqp2 = createCqp2Fun()
+        
         s.newKWICSearch = (marker) ->
             point = marker.point
             cl = settings.corpusListing.subsetFactory(s.lastSearch.corpora.split(","))
@@ -101,7 +109,7 @@ korpApp.directive "mapCtrl", () ->
                 ajaxParams :
                     command : "query"
                     cqp : s.lastSearch.cqp
-                    cqp2: "[word='" + point.name + "' & (pos='PM' | pos='NNP' | pos='NNPS')]",
+                    cqp2: getCqp2(point.name)
                     corpus : s.lastSearch.corpora
                     show_struct : _.keys cl.getStructAttrs()
                     expand_prequeries : true
