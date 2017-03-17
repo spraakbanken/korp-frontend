@@ -16,7 +16,7 @@
 
   ul#cog_menu.dropdown-menu.popper_menu
     li
-      a#about(ng-click="show_about = 'about'", rel='localize[about]') About Korp
+      a#about(ng-click="show_about = 'about'", style="cursor: pointer;") {{'about' | loc:lang}}
     li
       a#docs.follow_link(href='http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning', target='_blank', rel='localize[docs]')
     li#korplink
