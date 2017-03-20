@@ -97,6 +97,7 @@ html
                                 button.btn.btn-sm.btn-primary(ng-disabled="mapAttributes.length == 0", ng-click="showMap()") {{'show_map' | loc:lang}}
 
                         #showBarPlot
+                      div(ng-if="!loading", style="margin-bottom: 5px;") {{'total_rows' | loc:lang}} {{totalNumberOfRows}}
                       #myGrid
                       #exportStatsSection
                         br

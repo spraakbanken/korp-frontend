@@ -197,6 +197,7 @@
     "no_stats_results": "The search generated no results.",
     "no_related_words": "No hits",
 
+    "total_rows": "Number of rows:",
     "graph": "Graph",
     "line": "Line",
     "bar": "Bar",

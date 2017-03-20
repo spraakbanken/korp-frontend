@@ -923,12 +923,15 @@ class view.StatsResults extends BaseResults
         grid = new Slick.Grid $("#myGrid"), data, columns,
             enableCellNavigation: false
             enableColumnReorder: false
+            forceFitColumns: true
 
         grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}))
         grid.registerPlugin(checkboxSelector)
         @grid = grid
         @grid.autosizeColumns()
-
+        
+        @s.totalNumberOfRows = @grid.getDataLength()
+        
         sortCol = columns[2]
         log = _.debounce () ->
             c.log "grid sort"
