@@ -219,6 +219,7 @@
     "rel_ADV": "Adverbial",
     "rel_PA": "Preposition",
     "rel_head": "Head",
+    "rel_AA": "Adverbial",
 
     "deprel_ROOT": "Root",
     "deprel_++": "Coordinating conjunction",

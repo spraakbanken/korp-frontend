@@ -78,8 +78,8 @@ settings.wordpictureTagset = {
     adverbial: "adv",
     preposition_rel: "pa",
     pre_modifier: "at",
-    post_modifier: "et"
-
+    post_modifier: "et",
+    adverbial2: "aa"
 }
 
 
@@ -99,8 +99,14 @@ settings.wordPictureConf = {
         ["_", {rel: "subject", css_class: "color_blue", field_reverse: true, alt_label: "vb"}],
         [{rel: "object", css_class: "color_purple", field_reverse: true, alt_label: "vb"}, "_"]
     ],
-    adjective: [["_", {rel: "pre_modifier", css_class: "color_yellow", field_reverse: true}]],
-    adverb: [["_", {rel: "adverbial", css_class: "color_yellow", field_reverse: true}]],
+    adjective: [
+        ["_", {rel: "pre_modifier", css_class: "color_yellow", field_reverse: true}],
+        [{rel: "adverbial2", css_class: "color_purple"}, "_"]
+    ],
+    adverb: [
+        ["_", {rel: "adverbial", css_class: "color_yellow", field_reverse: true}],
+        ["_", {rel: "adverbial2", css_class: "color_purple", field_reverse: true}]
+    ],
     preposition: [["_", {rel: "preposition_rel", css_class: "color_green"}]]
 
 }

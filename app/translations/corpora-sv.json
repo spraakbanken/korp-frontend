@@ -220,6 +220,7 @@
     "rel_ADV": "Adverbial",
     "rel_PA": "Preposition",
     "rel_head": "Huvud",
+    "rel_AA": "Adverbial",
 
     "deprel_ROOT": "Rot",
     "deprel_++": "Samordnande konjunktion",
