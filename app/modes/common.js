@@ -1,6 +1,6 @@
 settings.senseAutoComplete = "<autoc model='model' placeholder='placeholder' type='sense'/>";
 
-var karpLemgramLink = "https://spraakbanken.gu.se/karp/#?search=extended||and|lemgram|equals|<%= val.replace(/:\\d+/, '') %>";
+var karpLemgramLink = "https://spraakbanken.gu.se/karp/#?mode=DEFAULT&search=extended||and|lemgram|equals|<%= val.replace(/:\\d+/, '') %>";
 
 var selectType = {
     extendedTemplate: "<select ng-model='input' escaper "
