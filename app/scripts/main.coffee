@@ -73,20 +73,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             $.jStorage.set("searches", [])
             view.updateSearchHistory()
 
-
-    creds = $.jStorage.get("creds")
-    if creds
-        util.setLogin()
-
-    $("#log_out").click ->
-        authenticationProxy.loginObj = {}
-        $.jStorage.deleteKey "creds"
-        $("body").toggleClass "logged_in not_logged_in"
-        $("#pass").val ""
-        $("#corpusbox").corpusChooser "redraw"
-
-
-
     prevFragment = {}
     window.onHashChange = (event, isInit) ->
         c.log "onHashChange"

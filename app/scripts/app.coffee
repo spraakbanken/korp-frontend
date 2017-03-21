@@ -134,6 +134,13 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
 
     s.showLogin = () ->
         s.show_modal = 'login'
+    
+    s.logout = () ->
+        authenticationProxy.loginObj = {}
+        $.jStorage.deleteKey "creds"
+        $("#corpusbox").corpusChooser "redraw"
+        s.loggedIn = false
+        return
 
     N_VISIBLE = settings.visibleModes
 
@@ -203,7 +210,12 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s.clickX = () ->
         closeModals()
 
-
+    s.loggedIn = false
+    creds = $.jStorage.get("creds")
+    if creds
+        util.setLogin()
+        s.loggedIn = true
+        s.username = authenticationProxy.loginObj.name
     s.loginSubmit = (usr, pass, saveLogin) ->
         s.login_err = false
         authenticationProxy.makeRequest(usr, pass, saveLogin).done((data) ->
@@ -211,6 +223,8 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
             safeApply s, () ->
                 s.show_modal = null
                 s.restorePreLoginState()
+                s.loggedIn = true
+                s.username = usr
         ).fail ->
             c.log "login fail"
             safeApply s, () ->

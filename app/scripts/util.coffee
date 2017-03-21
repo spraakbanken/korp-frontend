@@ -470,15 +470,11 @@ window.safeApply = (scope, fn) ->
     if (scope.$$phase || scope.$root.$$phase) then fn(scope) else scope.$apply(fn)
 
 window.util.setLogin = () ->
-    $("body").toggleClass("logged_in not_logged_in")
-
     for corp in authenticationProxy.loginObj.credentials
         $("#hpcorpus_#{corp.toLowerCase()}")
             .closest(".boxdiv.disabled").removeClass("disabled")
     if window.corpusChooserInstance
         window.corpusChooserInstance.corpusChooser "updateAllStates"
-
-    $("#log_out .usrname").text(authenticationProxy.loginObj.name)
     $(".err_msg", self).hide()
 
 

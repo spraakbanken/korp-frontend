@@ -1272,19 +1272,10 @@ a {
   }
 }
 
-.logged_in #login {
-  display: none;
-}
-
 #log_out {
-  display: none;
   float: right;
   margin-right: 8px;
   margin-left: 3px;
-}
-
-.logged_in #log_out {
-  display: block;
 }
 
 /* when selecting a word, not a lemgram, this pops up. */
