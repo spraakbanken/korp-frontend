@@ -138,8 +138,15 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s.logout = () ->
         authenticationProxy.loginObj = {}
         $.jStorage.deleteKey "creds"
-        $("#corpusbox").corpusChooser "redraw"
+        newCorpora = []
+        for corpus in settings.corpusListing.getSelectedCorpora()
+            if not settings.corpora[corpus].limited_access
+                newCorpora.push corpus
+        if _.isEmpty newCorpora
+            newCorpora = settings.preselected_corpora
+        settings.corpusListing.select newCorpora
         s.loggedIn = false
+        $("#corpusbox").corpusChooser "selectItems", newCorpora
         return
 
     N_VISIBLE = settings.visibleModes
