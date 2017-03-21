@@ -59,10 +59,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
 
-    $("#logo").click ->
-        window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search
-        false
-
     $("#search_history").change (event) ->
         c.log "select", $(this).find(":selected")
         target = $(this).find(":selected")

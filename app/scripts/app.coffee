@@ -126,6 +126,19 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
         settings.corpusListing.select currentCorpora
         corpusChooserInstance.corpusChooser "selectItems", currentCorpora
 
+
+korpApp.controller "extraHeaderCtrl", ($scope, $location) ->
+    $scope.logoClick = () ->
+        window.location = $scope.getUrl currentMode
+        window.location.reload()
+
+    $scope.getUrl = (modeId) ->
+        langParam = "#?lang=#{$scope.$root.lang}"
+        if modeId is "default"
+            return location.pathname + langParam
+        return location.pathname + "?mode=#{modeId}" + langParam
+
+
 korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s = $scope
 
