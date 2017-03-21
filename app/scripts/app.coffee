@@ -132,6 +132,9 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s.citeClick = () ->
         s.show_modal = 'about'
 
+    s.showLogin = () ->
+        s.show_modal = 'login'
+
     N_VISIBLE = settings.visibleModes
 
     s.modes = _.filter settings.modeConfig

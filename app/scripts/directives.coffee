@@ -318,7 +318,7 @@ korpApp.directive "popper", ($rootElement) ->
         closePopup = () ->
             popup.hide()
 
-        if !attrs.noCloseOnClick?
+        if !attrs.nocloseonclick?
             popup.on "click", (event) ->
                 closePopup()
                 return false

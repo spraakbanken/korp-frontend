@@ -59,15 +59,9 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $("body").addClass "mode-" + currentMode
     util.browserWarn()
 
-
     $("#logo").click ->
         window.location = window.location.protocol + "//" + window.location.host + window.location.pathname + location.search
         false
-
-
-    #TODO: why do i have to do this?
-    $("#cog_menu .follow_link").click ->
-        window.href = window.open($(this).attr("href"), $(this).attr("target") or "_self")
 
     $("#search_history").change (event) ->
         c.log "select", $(this).find(":selected")
@@ -83,9 +77,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     creds = $.jStorage.get("creds")
     if creds
         util.setLogin()
-
-    tab_a_selector = "ul .ui-tabs-anchor"
-
 
     $("#log_out").click ->
         authenticationProxy.loginObj = {}
@@ -119,20 +110,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
 
     $(window).scroll ->
         $("#sidebar").sidebar "updatePlacement"
-
-
-    #setup about link
-    $("#about").click ->
-        unless locationSearch().display?
-            locationSearch display: "about"
-        else
-            locationSearch "about", null
-
-    $("#login").click ->
-        unless locationSearch().display?
-            locationSearch display: "login"
-        else
-            locationSearch "login", null
 
     $("#languages").radioList(
         change: ->
