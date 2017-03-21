@@ -358,13 +358,14 @@ korpApp.service "compareSearches",
 
 
 korpApp.factory "lexicons", ($q, $http) ->
-    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v2"
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v3"
     getLemgrams: (wf, resources, corporaIDs) ->
         deferred = $q.defer()
 
         args =
             "q" : wf
             "resource" : if $.isArray(resources) then resources.join(",") else resources
+            "mode": "external"
 
         $http(
             method : "GET"
