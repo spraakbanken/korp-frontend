@@ -157,12 +157,6 @@ class window.CorpusListing
         within = _(output).compact().join()
         return { defaultwithin : defaultWithin, within : within }
 
-    getMorphology: ->
-        _(@selected).map((corpus) ->
-            morf = corpus.morf or "saldom"
-            morf.split "|"
-        ).flatten().unique().join "|"
-
     getTimeInterval : ->
         all = _(@selected)
             .pluck("time")
@@ -203,7 +197,6 @@ class window.CorpusListing
         else
             to = _.max tos, toUnix
 
-        # c.log "first", infoGetter("FirstDate")
         [from, to]
 
 
@@ -428,12 +421,6 @@ class window.ParallelCorpusListing extends CorpusListing
     getTitle : (corpus) ->
         @struct[corpus.split("|")[1]].title
 
-
-window.applyTo = (ctrl, f) ->
-    s = getScope(ctrl)
-    s.$apply f(s)
-
-
 # TODO never use this, remove when sure it is not used
 window.search = (obj, val) ->
     window.locationSearch obj, val
@@ -577,22 +564,6 @@ util.saldoToPlaceholderString = (saldoId, appendIndex) ->
         infixIndex
     ]
 
-util.sblexArraytoString = (idArray, labelFunction) ->
-    labelFunction = labelFunction or util.lemgramToString
-    return _.map idArray, (lemgram) -> labelFunction lemgram, true
-
-    # TODO: remove this if all is well with the lemgram dropdown
-    # tempArray = $.map(idArray, (lemgram) ->
-    #     labelFunction lemgram, false
-    # )
-    # out = $.map idArray, (lemgram) ->
-    #     isAmbigous = $.grep(tempArray, (tempLemgram) ->
-    #         tempLemgram is labelFunction(lemgram, false)
-    #     ).length > 1
-    #     labelFunction lemgram, isAmbigous
-    # return out
-
-
 util.lemgramRegexp = /\.\.\w+\.\d\d?(\:\d+)?$/
 util.isLemgramId = (lemgram) ->
     lemgram.search(util.lemgramRegexp) isnt -1
@@ -603,10 +574,6 @@ util.splitLemgram = (lemgram) ->
     keys = ["morph", "form", "pos", "index", "startIndex"]
     splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2)
     _.object keys, splitArray
-
-util.splitSaldo = (saldo) ->
-    saldo.match util.saldoRegExp
-
 
 # Add download links for other formats, defined in
 # settings.downloadFormats (Jyrki Niemi <jyrki.niemi@helsinki.fi>
@@ -707,7 +674,6 @@ util.searchHash = (type, value) ->
 
     return
 
-# $(window).trigger("hashchange")
 added_corpora_ids = []
 util.loadCorporaFolderRecursive = (first_level, folder) ->
     outHTML = undefined
@@ -742,14 +708,6 @@ util.loadCorporaFolderRecursive = (first_level, folder) ->
             outHTML += "<li id='#{val}'>#{settings.corpora[val].title}</li>"
     outHTML += "</ul>"
     outHTML
-
-# Helper function to turn 1.2345 into 1,2345 (locale dependent)
-# Use "," instead of "." if Swedish, if mode is
-# Split the string into two parts
-
-#return x.replace(".",'<span rel="localize[util_decimalseparator]">' + decimalSeparator + '</span>');
-
-#return x.replace(".", decimalSeparator);
 
 # Helper function to turn "8455999" into "8 455 999"
 util.prettyNumbers = (numstring) ->
@@ -787,7 +745,6 @@ util.loadCorpora = ->
             baseLang = settings.corpora[corpusID]?.linked_to
             if baseLang
                 lang = " (" + util.getLocaleString(settings.corpora[corpusID].lang) + ")"
-                #baseLangTag = " (" + settings.corpora[baseLang].lang + ")"
                 baseLangTokenHTML = """#{util.getLocaleString("corpselector_numberoftokens")}: <b>#{util.prettyNumbers(settings.corpora[baseLang].info.Size)}
                 </b> (#{util.getLocaleString(settings.corpora[baseLang].lang)})<br/>
                 """
@@ -872,15 +829,6 @@ window.regescape = (s) ->
 window.unregescape = (s) ->
     s.replace /\\/g, ""
 
-util.localizeFloat = (float, nDec) ->
-    lang = $("#languages").radioList("getSelected").data("lang")
-    sep = null
-    nDec = nDec or float.toString().split(".")[1].length
-    if lang is "sv"
-        sep = ","
-    else sep = "." if lang is "en"
-    $.format("%." + nDec + "f", float).replace ".", sep
-
 util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
     if _.contains(x, ".")
         parts = x.split(".")
@@ -895,25 +843,6 @@ util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
             x
         else
             util.prettyNumbers x
-
-util.makeAttrSelect = (groups) ->
-    arg_select = $("<select/>")
-    $.each groups, (lbl, group) ->
-        return if $.isEmptyObject(group)
-        optgroup = $("<optgroup/>",
-            label: util.getLocaleString(lbl).toLowerCase()
-            rel: $.format("localize[%s]", lbl)
-        ).appendTo(arg_select)
-        $.each group, (key, val) ->
-            return if val.displayType is "hidden"
-            $("<option/>",
-                rel: $.format("localize[%s]", val.label)
-            ).val(key).text(util.getLocaleString(val.label) or "").appendTo(optgroup).data "dataProvider", val
-            return
-
-        return
-
-    arg_select
 
 util.browserWarn = ->
     $.reject
@@ -971,58 +900,3 @@ util.browserWarn = ->
             expires: 100000 # Expiration Date (in seconds), 0 (default) means it ends with the current session
 
     return
-
-util.convertLMFFeatsToObjects = (structure, key) ->
-
-    # Recursively traverse a tree, expanding each "feat" array into a real object, with the key "feat-[att]":
-    if structure?
-        output = null
-        theType = util.findoutType(structure)
-        if theType is "object"
-            output = {}
-            $.each structure, (inkey, inval) ->
-                if inkey is "feat"
-                    innerType = util.findoutType(inval)
-                    if innerType is "array"
-                        $.each inval, (fkey, fval) ->
-                            keyName = "feat_" + fval["att"]
-                            if not output[keyName]?
-                                output[keyName] = fval["val"]
-                            else
-                                if $.isArray(output[keyName])
-                                    output[keyName].push fval["val"]
-                                else
-                                    output[keyName] = [output[keyName], fval["val"]]
-                            return
-
-                    else
-                        keyName = "feat_" + inval["att"]
-                        if not output[keyName]?
-                            output[keyName] = inval["val"]
-                        else
-                            if $.isArray(output[keyName])
-                                output[keyName].push inval["val"]
-                            else
-                                output[keyName] = [output[keyName], inval["val"]]
-                else
-                    output[inkey] = util.convertLMFFeatsToObjects(inval)
-                return
-
-        else if theType is "array"
-            dArr = new Array()
-            $.each structure, (inkey, inval) ->
-                dArr.push util.convertLMFFeatsToObjects(inval)
-                return
-
-            output = dArr
-        else
-            output = structure
-        output
-    else
-        null
-
-util.findoutType = (variable) ->
-    if $.isArray(variable)
-        "array"
-    else
-        typeof (variable)
