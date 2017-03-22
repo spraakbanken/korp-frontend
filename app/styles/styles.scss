@@ -36,6 +36,25 @@ ul, ol {
   padding-left : 0;
 }
 
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: navy;
+  &:link {
+    color: navy;
+  }
+  &:visited {
+    color: purple;
+  }
+  &:hover {
+    color: indianred;
+  }
+}
+
+a.btn {
+  color : #333;
+}
+
 #welcome {
   padding: 0.2em;
 }
@@ -66,23 +85,6 @@ sup {
 
 img {
   border: 0px;
-}
-
-a {
-  text-decoration: none;
-  &:link {
-    color: navy;
-  }
-  &:visited {
-    color: purple;
-  }
-  &:hover {
-    color: indianred;
-  }
-}
-
-a.btn {
-  color : #333;
 }
 
 /* unvisited link */
@@ -2429,10 +2431,6 @@ line.tick {
 .badge {
   padding-right: 6px;
   padding-left: 6px;
-}
-
-.popper_menu {
-  width : 130px;
 }
 
 .tab-content {
