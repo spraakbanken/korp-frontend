@@ -1048,6 +1048,7 @@
     "video_utterance": "Yttrande",
 
     "paragraph__geocontext" : "Samförekomst i stycke",
+    "sentence__geocontext" : "Samförekomst i mening",
     "text__geoauthorhome" : "Författarens hemort",
 
     "suc_name": "SUC-namntyp",

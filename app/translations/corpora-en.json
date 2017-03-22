@@ -1048,6 +1048,7 @@
     "video_utterance": "Utterance",
 
     "paragraph__geocontext" : "Co-occurrence in paragraph",
+    "sentence__geocontext" : "Co-occurrence in sentence",
     "text__geoauthorhome" : "Author's home",
 
     "suc_name": "SUC name type",
