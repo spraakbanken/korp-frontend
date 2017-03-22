@@ -276,7 +276,15 @@ module.exports = function (grunt) {
           src: ['components/jquery-ui/themes/smoothness/images/*'],
           dest: '.tmp/images',
           flatten: true
-        }]
+        },
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: ['components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          dest: '.tmp/fonts/bootstrap',
+          flatten: true
+        }
+        ]
       },
       dist: {
         files: [
@@ -286,6 +294,13 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           src: ['components/font-awesome/fonts/*'],
           dest: '<%= yeoman.dist %>/fonts',
+          flatten: true
+        },
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: ['components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          dest: '<%= yeoman.dist %>/fonts/bootstrap',
           flatten: true
         },
         {
@@ -313,7 +328,8 @@ module.exports = function (grunt) {
             'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json',
-            'components/leaflet/dist/images/layers.png'
+            'components/leaflet/dist/images/layers.png',
+            'components/d3/d3.min.js'
           ]
         },
         {
