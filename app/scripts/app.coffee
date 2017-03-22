@@ -144,10 +144,19 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s.logout = () ->
         authenticationProxy.loginObj = {}
         $.jStorage.deleteKey "creds"
+
+        # TODO figure out another way to do this
+        for corpusObj in settings.corpusListing.corpora
+            corpus = corpusObj.id
+            if corpusObj.limited_access
+                $("#hpcorpus_#{corpus}").closest(".boxdiv").addClass("disabled")
+        $("#corpusbox").corpusChooser "updateAllStates"
+
         newCorpora = []
         for corpus in settings.corpusListing.getSelectedCorpora()
             if not settings.corpora[corpus].limited_access
                 newCorpora.push corpus
+
         if _.isEmpty newCorpora
             newCorpora = settings.preselected_corpora
         settings.corpusListing.select newCorpora
