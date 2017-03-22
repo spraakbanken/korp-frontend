@@ -127,20 +127,13 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
         corpusChooserInstance.corpusChooser "selectItems", currentCorpora
 
 
-korpApp.controller "extraHeaderCtrl", ($scope, $location) ->
-    $scope.logoClick = () ->
+korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
+    s = $scope
+
+    s.logoClick = () ->
         window.location = $scope.getUrl currentMode
         window.location.reload()
 
-    $scope.getUrl = (modeId) ->
-        langParam = "#?lang=#{$scope.$root.lang}"
-        if modeId is "default"
-            return location.pathname + langParam
-        return location.pathname + "?mode=#{modeId}" + langParam
-
-
-korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
-    s = $scope
 
     s.citeClick = () ->
         s.show_modal = 'about'
@@ -184,7 +177,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
             mode.selected = true
 
     s.getUrl = (modeId) ->
-        langParam = "#lang=#{s.$root.lang}"
+        langParam = "#?lang=#{s.$root.lang}"
         if modeId is "default"
             return location.pathname + langParam
         return location.pathname + "?mode=#{modeId}" + langParam
