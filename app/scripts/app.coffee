@@ -191,9 +191,6 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
             return location.pathname + langParam
         return location.pathname + "?mode=#{modeId}" + langParam
 
-    s.onModeMenuClick = (modeId) ->
-        window.location = s.getUrl modeId
-
     s.show_modal = false
 
     modal = null
