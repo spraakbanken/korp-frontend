@@ -1996,12 +1996,12 @@ settings.corpora["ivip"] = {
             isStructAttr: true
         },
         sentence_speaker_age: {
-            label: "speakerage", 
+            label: "speakerage",
             order: 13,
             isStructAttr: true
         },
         sentence_speaker_region: {
-            label: "speakerregion", 
+            label: "speakerregion",
             order: 12,
             isStructAttr: true
         },
@@ -2065,7 +2065,7 @@ settings.corpora["ivip"] = {
                  },
         text_participants: {label: "participants", order: 40},
         text_consentid: {label: "consentid", order: 50},
-        text_type: {label: "type",
+        text_type: {label: "material_type",
                     hideSidebar: true,
                     extendedTemplate: selectType.extendedTemplate,
                     extendedController: selectType.extendedController,
@@ -4276,4 +4276,3 @@ settings.corpora["rd-ovr"] = {
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);
-
