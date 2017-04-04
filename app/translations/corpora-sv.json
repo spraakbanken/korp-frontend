@@ -1140,5 +1140,6 @@
     "rd_votering_sammanfattning_html": "votering sammanfattning (HTML)",
     "rd_votering_url_xml": "votering-URL (XML)",
 
-    "category_url": "kategori-URL"
+    "category_url": "kategori-URL",
+    "page_tables": "Sidtabeller"
 }

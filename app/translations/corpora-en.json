@@ -1141,5 +1141,6 @@
     "rd_votering_sammanfattning_html": "voting summary (HTML)",
     "rd_votering_url_xml": "voting URL (XML)",
 
-    "category_url": "category URL"
+    "category_url": "category URL",
+    "page_tables": "Page tables"
 }

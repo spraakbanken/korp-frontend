@@ -975,7 +975,7 @@ settings.corpora.press65 = {
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
@@ -990,7 +990,7 @@ settings.corpora.press76 = {
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_year: {label: "year"},
         text_publisher: {label: "article_publisher"}
@@ -2694,7 +2694,7 @@ settings.corpora.romi = {
     description: "69 romaner utgivna 1976–77.",
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -2707,7 +2707,7 @@ settings.corpora.romii = {
     description: "60 romaner från 1980–81.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -2720,7 +2720,7 @@ settings.corpora.romg = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
