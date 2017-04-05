@@ -46,7 +46,7 @@ settings.corpora.lsi = {
         "page_glottolog_classification": {label: "glottolog_classification"},
         "page_latitude": {label: "latitude"},
         "page_longitude": {label: "longitude"},
-        "page_tables_url": {label: "page_tables"},
+        "page_page_tables_url": {label: "page_tables", type: "url"},
         "page_page_url": {label: "pagesource", type: "url"},
         "page_language": {label: "language"},
         "page_iso_code": {label: "iso_code"},
