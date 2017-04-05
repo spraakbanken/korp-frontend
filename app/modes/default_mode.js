@@ -106,7 +106,7 @@ settings.corporafolders.medical = {
 
 settings.corporafolders.medical.ltd = {
     title: "Läkartidningen",
-    contents: ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001", "lt2002", "lt2003", "lt2004", "lt2005"]
+    contents: ["lt1996", "lt1997", "lt1998", "lt1999", "lt2000", "lt2001", "lt2002", "lt2003", "lt2004", "lt2005", "lt2006"]
 };
 
 settings.corporafolders.governmental = {
@@ -2367,21 +2367,7 @@ settings.corpora.lt1996 = {
     description: "Läkartidningens publicerade artiklar under 1996.<br/>Antal artiklar: 2345",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: {
-        pos: attrs.pos,
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        saldo: attrs.saldo,
-        entity: {
-            label: "entity"
-        },
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-        prefix: attrs.prefix,
-        suffix: attrs.suffix
-    },
+    attributes: modernAttrs2,
     struct_attributes: {
         text_year: {label: "year"},
         text_article: {label: "article"},
@@ -2395,7 +2381,7 @@ settings.corpora.lt1997 = {
     description: "Läkartidningens publicerade artiklar under 1997.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2409,7 +2395,7 @@ settings.corpora.lt1998 = {
     description: "Läkartidningens publicerade artiklar under 1998.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2423,7 +2409,7 @@ settings.corpora.lt1999 = {
     description: "Läkartidningens publicerade artiklar under 1999.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2437,7 +2423,7 @@ settings.corpora.lt2000 = {
     description: "Läkartidningens publicerade artiklar under 2000.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2451,7 +2437,7 @@ settings.corpora.lt2001 = {
     description: "Läkartidningens publicerade artiklar under 2001.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2465,7 +2451,7 @@ settings.corpora.lt2002 = {
     description: "Läkartidningens publicerade artiklar under 2002.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2479,7 +2465,7 @@ settings.corpora.lt2003 = {
     description: "Läkartidningens publicerade artiklar under 2003.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2493,7 +2479,7 @@ settings.corpora.lt2004 = {
     description: "Läkartidningens publicerade artiklar under 2004.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2507,7 +2493,21 @@ settings.corpora.lt2005 = {
     description: "Läkartidningens publicerade artiklar under 2005.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
+    struct_attributes: {
+        text_date: {label: "year"},
+        text_issue: {label: "issue"},
+        text_title: {label: "title"}
+    }
+};
+
+settings.corpora.lt2006 = {
+    id: "lt2006",
+    title: "Läkartidningen 2006",
+    description: "Läkartidningens publicerade artiklar under 2006.",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -3353,7 +3353,7 @@ settings.corpora.ansokningar = {
     limited_access: true,
     context: defaultContext,
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: {
         text_id: {label: "id"},
         text_gender: {label: "gender"},
