@@ -90,6 +90,7 @@
     "section": "avdelning",
     "genre": "genre",
     "article": "artikel",
+    "type": "typ",
     "material_type": "materialtyp",
     "publisher": "utgivare",
     "issue": "utgåva",

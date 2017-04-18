@@ -90,6 +90,7 @@
     "section": "section",
     "genre": "genre",
     "article": "article",
+    "type": "type",
     "material_type": "material type",
     "publisher": "publisher",
     "issue": "issue",
