@@ -529,7 +529,7 @@ settings.corpora.attasidor = {
     title: "8 SIDOR",
     description: "<a target=\"_blank\" href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: {
         text_date: sattrs.date,
@@ -1709,7 +1709,7 @@ settings.corpora.bloggmix2005 = {
     id: "bloggmix2005",
     title: "Bloggmix 2005",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1718,7 +1718,7 @@ settings.corpora.bloggmix2006 = {
     id: "bloggmix2006",
     title: "Bloggmix 2006",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1727,7 +1727,7 @@ settings.corpora.bloggmix2007 = {
     id: "bloggmix2007",
     title: "Bloggmix 2007",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1736,7 +1736,7 @@ settings.corpora.bloggmix2008 = {
     id: "bloggmix2008",
     title: "Bloggmix 2008",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1745,7 +1745,7 @@ settings.corpora.bloggmix2009 = {
     id: "bloggmix2009",
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1754,7 +1754,7 @@ settings.corpora.bloggmix2009 = {
     id: "bloggmix2009",
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1763,7 +1763,7 @@ settings.corpora.bloggmix2010 = {
     id: "bloggmix2010",
     title: "Bloggmix 2010",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1772,7 +1772,7 @@ settings.corpora.bloggmix2011 = {
     id: "bloggmix2011",
     title: "Bloggmix 2011",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1781,7 +1781,7 @@ settings.corpora.bloggmix2012 = {
     id: "bloggmix2012",
     title: "Bloggmix 2012",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1790,7 +1790,7 @@ settings.corpora.bloggmix2013 = {
     id: "bloggmix2013",
     title: "Bloggmix 2013",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1817,7 +1817,7 @@ settings.corpora.bloggmix2016 = {
     id: "bloggmix2016",
     title: "Bloggmix 2016",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -1826,7 +1826,7 @@ settings.corpora.bloggmix2017 = {
     id: "bloggmix2017",
     title: "Bloggmix 2017",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
@@ -2506,7 +2506,7 @@ settings.corpora.lt2006 = {
     title: "Läkartidningen 2006",
     description: "Läkartidningens publicerade artiklar under 2006.",
     within: settings.defaultWithin,
-    context: settings.defaultContext,
+    context: defaultContext,
     attributes: modernAttrs2,
     struct_attributes: {
         text_date: {label: "year"},
