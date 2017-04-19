@@ -3955,6 +3955,9 @@ settings.corpora.soexempel = {
 
 // RD Riksdagens öppna data
 rd_struct_attributes = {
+    dokument_dok_id: {label: "rd_dok_id", order: 1},
+    text_datatyp: {label: "rd_datatyp", order: 9},
+
     text_titel: {label: "title", order: 10},
     text_subtitel: {label: "rd_subtitel", order: 12},
     text_debattnamn: {label: "rd_debattnamn", order: 14},
@@ -3964,22 +3967,16 @@ rd_struct_attributes = {
     // text_systemdatum: {label: "systemdatum"},
     text_publicerad: {label: "published", order: 20},
     text_typ: {label: "type", order: 22},
-
-    text_filnamn: {label: "rd_filnamn", order: 24},
+    text_subtyp: {label: "rd_subtyp", order: 23},
+    text_doktyp: {label: "rd_doktyp", order: 24},
     text_parti: {label: "party", order: 26},
-    text_fil_url: {label: "rd_file_url", order: 28, type: "url"},
+    dokument_dokumentstatus_url_xml: {label: "rd_dokumentstatus_url_xml", order: 29, type: "url"},
     text_dokument_url_html: {label: "rd_dokument_url_html", order: 30, type: "url"},
     text_dokument_url_text: {label: "rd_dokument_url_text", order: 32, type: "url"},
-    text_dokumentstatus_url_xml: {label: "rd_dokumentstatus_url_xml", order: 34, type: "url"},
 
     text_talare: {label: "speaker", order: 36},
     text_source: {label: "source", order: 38},
-
-    text_doktyp: {label: "rd_doktyp", order: 40},
-    text_dok_id: {label: "rd_dok_id", order: 42},
     text_htmlformat: {label: "rd_htmlformat", order: 44},
-    text_filtyp: {label: "rd_filtyp", order: 46},
-    // text_filstorlek: {label: "rd_filstorlek", order: 48},
     text_pretext: {label: "rd_pretext", order: 50},
     text_hangar_id: {label: "rd_hangar_id", order: 52},
     text_relaterat_id: {label: "rd_relaterat_id", order: 54},
@@ -3989,76 +3986,50 @@ rd_struct_attributes = {
     text_tempbeteckning: {label: "rd_tempbeteckning", order: 62},
     text_status: {label: "rd_status", order: 64},
 
-    // text_anf_beteckning: {label: "rd_anf_beteckning", order: 100},
-    // text_anf_datum: {label: "rd_anf_datum", order: 100},
-    // text_anf_hangar_id: {label: "rd_anf_hangar_id", order: 100},
-    // text_anf_klockslag: {label: "rd_anf_klockslag", order: 100},
-    // text_anf_nummer: {label: "rd_anf_nummer", order: 100},
-    // text_anf_rm: {label: "rd_anf_rm", order: 100},
-    // text_anf_sekunder: {label: "rd_anf_sekunder", order: 100},
-    // text_anf_text: {label: "rd_anf_text", order: 100},
-    // text_anf_typ: {label: "rd_anf_typ", order: 100},
-    // text_anf_video_id: {label: "rd_anf_video_id", order: 100},
+    text_lydelse: {label: "rd_lydelse", order: 80},
+    text_lydelse2: {label: "rd_lydelse2", order: 81},
     text_avsnitt: {label: "rd_avsnitt", order: 100},
     text_behandlas_i: {label: "rd_behandlas_i", order: 100},
     text_beslutstyp: {label: "rd_beslutstyp", order: 100},
     text_bet: {label: "rd_bet", order: 100},
     text_datumtid: {label: "rd_datumtid", order: 100},
     text_forslag: {label: "rd_forslag", order: 100},
-    text_id: {label: "id", order: 100},
     text_intressent: {label: "rd_intressent", order: 100},
     text_intressent_id: {label: "rd_intressent_id", order: 100},
     text_kammarbeslutstyp: {label: "rd_kammarbeslutstyp", order: 100},
     text_kammaren: {label: "rd_kammaren", order: 100},
-    text_kod: {label: "rd_kod", order: 100},
-    // text_lydelse: {label: "rd_lydelse", order: 100},
-    // text_lydelse2: {label: "rd_lydelse2", order: 100},
     text_motforslag_nummer: {label: "rd_motforslag_nummer", order: 100},
     text_motforslag_partier: {label: "rd_motforslag_partier", order: 100},
     text_mottagare: {label: "rd_mottagare", order: 100},
-    text_namn: {label: "rd_namn", order: 100},
     text_nummer: {label: "rd_nummer", order: 100},
-    text_ordning: {label: "rd_ordning", order: 100},
     text_organ: {label: "rd_organ", order: 100},
-    text_partibet: {label: "rd_partibet", order: 100},
-    text_partier: {label: "rd_partier", order: 100},
     text_pretext: {label: "rd_pretext", order: 100},
-    text_process: {label: "rd_process", order: 100},
     text_punkt: {label: "rd_punkt", order: 100},
-    // text_ref_dok_bet: {label: "rd_ref_dok_bet", order: 100},
-    // text_ref_dok_id: {label: "rd_ref_dok_id", order: 100},
-    // text_ref_dok_rm: {label: "rd_ref_dok_rm", order: 100},
-    // text_ref_dok_subtitel: {label: "rd_ref_dok_subtitel", order: 100},
-    // text_ref_dok_subtyp: {label: "rd_ref_dok_subtyp", order: 100},
-    // text_ref_dok_titel: {label: "rd_ref_dok_titel", order: 100},
-    // text_ref_dok_typ: {label: "rd_ref_dok_typ", order: 100},
-    text_referenstyp: {label: "rd_referenstyp", order: 100},
     text_relaterat_id: {label: "rd_relaterat_id", order: 100},
     text_rm: {label: "rd_rm", order: 100},
-    text_roll: {label: "rd_roll", order: 100},
     text_sourceid: {label: "rd_sourceid", order: 100},
     text_startpos: {label: "rd_startpos", order: 100},
     text_status: {label: "rd_status", order: 100},
-    text_subtyp: {label: "rd_subtyp", order: 100},
     text_tumnagel: {label: "rd_tumnagel", order: 100},
     text_tumnagel_stor: {label: "rd_tumnagel_stor", order: 100},
-    text_typ: {label: "rd_typ", order: 100},
-    text_uppgift: {label: "rd_uppgift", order: 100},
     text_utskottet: {label: "rd_utskottet", order: 100},
-    text_utskottsforslag_punkt: {label: "rd_utskottsforslag_punkt", order: 100},
     text_utskottsforslag_url_xml: {label: "rd_utskottsforslag_url_xml", order: 100, type: "url"},
     text_video_id: {label: "rd_video_id", order: 100},
     text_video_url: {label: "rd_video_url", order: 100},
     text_vinnare: {label: "rd_vinnare", order: 100},
     text_votering_id: {label: "rd_votering_id", order: 100},
     text_votering_ledamot_url_xml: {label: "rd_votering_ledamot_url_xml", order: 100, type: "url"},
-    text_votering_sammanfattning_html: {label: "rd_votering_sammanfattning_html", order: 100},
-    text_votering_url_xml: {label: "rd_votering_url_xml", order: 100, type: "url"}
-};
 
-var rdAttrs = _.extend({}, modernAttrs2, {
-    saldo: attrs.saldo
-});
+    text_anf_beteckning: {label: "rd_anf_beteckning", order: 200},
+    text_anf_datum: {label: "rd_anf_datum", order: 200},
+    text_anf_hangar_id: {label: "rd_anf_hangar_id", order: 200},
+    text_anf_klockslag: {label: "rd_anf_klockslag", order: 200},
+    text_anf_nummer: {label: "rd_anf_nummer", order: 200},
+    text_anf_rm: {label: "rd_anf_rm", order: 200},
+    text_anf_sekunder: {label: "rd_anf_sekunder", order: 200},
+    text_anf_typ: {label: "rd_anf_typ", order: 200},
+    text_anf_video_id: {label: "rd_anf_video_id", order: 200}
+};
 
 settings.corporafolders.governmental.rd = {
     title : "Riksdagens öppna data",
@@ -4071,7 +4042,7 @@ settings.corpora["rd-bet"] = {
     description: "Utskottens betänkanden och utlåtanden, inklusive rksdagens beslut, en sammanfattning av voteringsresultaten och Beslut i korthet.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4081,7 +4052,7 @@ settings.corpora["rd-ds"] = {
     description: "Utredningar från regeringens departement.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4091,7 +4062,7 @@ settings.corpora["rd-eun"] = {
     description: "Dokument från EU-nämnden, bland annat möteskallelser, föredragningslistor, protokoll och skriftliga samråd med regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4101,7 +4072,7 @@ settings.corpora["rd-flista"] = {
     description: "Föredragningslistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4111,7 +4082,7 @@ settings.corpora["rd-fpm"] = {
     description: "Regeringens faktapromemorior om EU-kommissionens förslag.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4121,7 +4092,7 @@ settings.corpora["rd-frsrdg"] = {
     description: "Framställningar och redogörelser från organ som utsetts av riksdagen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4131,7 +4102,7 @@ settings.corpora["rd-ip"] = {
     description: "Interpellationer från ledamöterna till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4141,7 +4112,7 @@ settings.corpora["rd-kammakt"] = {
     description: "",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4151,7 +4122,7 @@ settings.corpora["rd-kom"] = {
     description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4161,7 +4132,7 @@ settings.corpora["rd-mot"] = {
     description: "Motioner från riksdagens ledamöter.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4171,7 +4142,7 @@ settings.corpora["rd-prop"] = {
     description: "Propositioner och skrivelser från regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4181,7 +4152,7 @@ settings.corpora["rd-prot"] = {
     description: "Protokoll från kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4191,7 +4162,7 @@ settings.corpora["rd-rskr"] = {
     description: "Skrivelser från riksdagen till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4201,7 +4172,7 @@ settings.corpora["rd-samtr"] = {
     description: "",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4211,7 +4182,7 @@ settings.corpora["rd-skfr"] = {
     description: "Skriftliga frågor från ledamöterna till regeringen och svaren på dessa.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4221,7 +4192,7 @@ settings.corpora["rd-sou"] = {
     description: "Olika utredningars förslag till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4231,7 +4202,7 @@ settings.corpora["rd-tlista"] = {
     description: "Talarlistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4241,7 +4212,7 @@ settings.corpora["rd-utr"] = {
     description: "Kommittédirektiv och kommittéberättelser för utredningar som regeringen tillsätter.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4251,7 +4222,7 @@ settings.corpora["rd-utsk"] = {
     description: "Dokument från utskotten, bland annat KU-anmälningar, protokoll, verksamhetsberättelser och den gamla dokumentserien Utredningar från riksdagen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4261,7 +4232,7 @@ settings.corpora["rd-yttr"] = {
     description: "Utskottens yttranden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
@@ -4271,7 +4242,7 @@ settings.corpora["rd-ovr"] = {
     description: "Dokumentserierna Riksrevisionens granskningsrapporter, Utredningar från Riksdagsförvaltningen och Rapporter från riksdagen samt planeringsdokument, bilagor till dokument och uttag ur riksdagens databaser.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: rdAttrs,
+    attributes: modernAttrs2,
     struct_attributes: rd_struct_attributes
 };
 
