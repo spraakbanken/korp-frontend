@@ -1836,7 +1836,7 @@ settings.corpora.bloggmixodat = {
     title: "Bloggmix okänt datum",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     struct_attributes: bloggmix_structs
 };
 
