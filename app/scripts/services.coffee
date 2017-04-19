@@ -410,6 +410,7 @@ korpApp.factory "lexicons", ($q, $http) ->
         args =
             "q" : wf
             "resource" : "saldom"
+            "mode": "external"
 
         $http(
             method: 'GET'
