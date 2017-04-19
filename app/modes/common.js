@@ -175,7 +175,7 @@ attrs.saldo = {
     stringify: function(saldo) {
         return util.saldoToString(saldo, true);
     },
-    externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
+    externalSearch: "https://spraakbanken.gu.se/karp/#?mode=DEFAULT&search=extended||and|sense|equals|<%= val %>",
     internalSearch: true,
     extendedTemplate: settings.senseAutoComplete,
     order: 3
@@ -453,7 +453,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         },
         stringify: function(sense) { return util.saldoToString(sense, true); },
         opts: probabilitySetOptions,
-        externalSearch: "https://spraakbanken.gu.se/karp/#?search=extended||and|sense|equals|<%= val %>",
+        externalSearch: "https://spraakbanken.gu.se/karp/#?mode=DEFAULT&search=extended||and|sense|equals|<%= val %>",
         internalSearch: true,
         extendedTemplate: settings.senseAutoComplete
     }
