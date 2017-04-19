@@ -448,7 +448,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         ranked: true,
         display: {
             expandList: {
-                internalSearch: function(key, value) { return "[" + key + " = '\\|" + regescape(value) + ":.*']"},
+                internalSearch: function(key, value) { return "[" + key + " highest_rank '" + regescape(value) + "']"}
             }
         },
         stringify: function(sense) { return util.saldoToString(sense, true); },
