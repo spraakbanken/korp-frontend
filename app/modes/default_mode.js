@@ -2057,6 +2057,20 @@ settings.corpora["parole"] = {
     }
 };
 
+settings.corpora["poeter"] = {
+    id: "poeter",
+    title: "Poeter.se",
+    description: "Poesi från sidan <a target=\"_blank\" href=\"http://www.poeter.se\">Poeter.se</a>.",
+    within: settings.defaultWithin,
+    context: settings.defaultContext,
+    attributes: modernAttrs2,
+    struct_attributes: {
+        text_type: {label: "type"},
+        text_url: {label: "source", type: "url"},
+        text_date: {label: "date"}
+    }
+};
+
 settings.corpora["psalmboken"] = {
     id: "psalmboken",
     title: "Psalmboken (1937)",
