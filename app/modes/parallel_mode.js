@@ -327,7 +327,7 @@ settings.corpora["europarl-sv"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_speaker: {label: "speaker"},
         text_speakerlang: {
@@ -374,7 +374,7 @@ settings.corpora["europarl-da"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -391,7 +391,7 @@ settings.corpora["europarl-de"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -408,7 +408,7 @@ settings.corpora["europarl-el"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -425,7 +425,7 @@ settings.corpora["europarl-en"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -442,7 +442,7 @@ settings.corpora["europarl-es"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -459,7 +459,7 @@ settings.corpora["europarl-fi"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -476,7 +476,7 @@ settings.corpora["europarl-fr"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -493,7 +493,7 @@ settings.corpora["europarl-it"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -510,7 +510,7 @@ settings.corpora["europarl-nl"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -527,7 +527,7 @@ settings.corpora["europarl-pt"] = {
     },
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -563,7 +563,7 @@ settings.corpora["saltnld-sv"] = {
         linkref: linkref,
         "wordlink-nl": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
 
@@ -596,7 +596,7 @@ settings.corpora["saltnld-nl"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
 
@@ -639,7 +639,7 @@ settings.corpora["aspacsvru-sv"] = {
         linkref: linkref,
         "wordlink-ru": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -665,7 +665,7 @@ settings.corpora["aspacsvru-ru"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -700,7 +700,7 @@ settings.corpora["aspacsvde-sv"] = {
         linkref: linkref,
         "wordlink-de": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -726,7 +726,7 @@ settings.corpora["aspacsvde-de"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -761,7 +761,7 @@ settings.corpora["aspacsven-sv"] = {
         linkref: linkref,
         "wordlink-en": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -787,7 +787,7 @@ settings.corpora["aspacsven-en"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -822,7 +822,7 @@ settings.corpora["aspacsves-sv"] = {
         linkref: linkref,
         "wordlink-es": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -848,7 +848,7 @@ settings.corpora["aspacsves-es"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -883,7 +883,7 @@ settings.corpora["aspacsvfr-sv"] = {
         linkref: linkref,
         "wordlink-fr": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -909,7 +909,7 @@ settings.corpora["aspacsvfr-fr"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -944,7 +944,7 @@ settings.corpora["aspacsvit-sv"] = {
         linkref: linkref,
         "wordlink-it": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -970,7 +970,7 @@ settings.corpora["aspacsvit-it"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1005,7 +1005,7 @@ settings.corpora["aspacsvnl-sv"] = {
         linkref: linkref,
         "wordlink-nl": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1031,7 +1031,7 @@ settings.corpora["aspacsvnl-nl"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1066,7 +1066,7 @@ settings.corpora["aspacsvpt-sv"] = {
         linkref: linkref,
         "wordlink-pt": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1092,7 +1092,7 @@ settings.corpora["aspacsvpt-pt"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1127,7 +1127,7 @@ settings.corpora["aspacsvpl-sv"] = {
         linkref: linkref,
         "wordlink-pl": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1153,7 +1153,7 @@ settings.corpora["aspacsvpl-pl"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1188,7 +1188,7 @@ settings.corpora["aspacsvla-sv"] = {
         linkref: linkref,
         "wordlink-la": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1214,7 +1214,7 @@ settings.corpora["aspacsvla-la"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1249,7 +1249,7 @@ settings.corpora["aspacsvbg-sv"] = {
         linkref: linkref,
         "wordlink-bg": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1275,7 +1275,7 @@ settings.corpora["aspacsvbg-bg"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1310,7 +1310,7 @@ settings.corpora["aspacsvcs-sv"] = {
         linkref: linkref,
         "wordlink-cs": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1333,7 +1333,7 @@ settings.corpora["aspacsvcs-cs"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1368,7 +1368,7 @@ settings.corpora["aspacsvbe-sv"] = {
         linkref: linkref,
         "wordlink-be": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1391,7 +1391,7 @@ settings.corpora["aspacsvbe-be"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1426,7 +1426,7 @@ settings.corpora["aspacsvhr-sv"] = {
         linkref: linkref,
         "wordlink-hr": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1449,7 +1449,7 @@ settings.corpora["aspacsvhr-hr"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1484,7 +1484,7 @@ settings.corpora["aspacsvmk-sv"] = {
         linkref: linkref,
         "wordlink-mk": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1508,7 +1508,7 @@ settings.corpora["aspacsvmk-mk"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1543,7 +1543,7 @@ settings.corpora["aspacsvel-sv"] = {
         linkref: linkref,
         "wordlink-el": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1567,7 +1567,7 @@ settings.corpora["aspacsvel-el"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1602,7 +1602,7 @@ settings.corpora["aspacsvro-sv"] = {
         linkref: linkref,
         "wordlink-ro": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1629,7 +1629,7 @@ settings.corpora["aspacsvro-ro"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1664,7 +1664,7 @@ settings.corpora["aspacsvsk-sv"] = {
         linkref: linkref,
         "wordlink-sk": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1693,7 +1693,7 @@ settings.corpora["aspacsvsk-sk"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1728,7 +1728,7 @@ settings.corpora["aspacsvsl-sv"] = {
         linkref: linkref,
         "wordlink-sl": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1755,7 +1755,7 @@ settings.corpora["aspacsvsl-sl"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1790,7 +1790,7 @@ settings.corpora["aspacsvuk-sv"] = {
         linkref: linkref,
         "wordlink-uk": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1814,7 +1814,7 @@ settings.corpora["aspacsvuk-uk"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1849,7 +1849,7 @@ settings.corpora["aspacsvtk-sv"] = {
         linkref: linkref,
         "wordlink-tk": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1873,7 +1873,7 @@ settings.corpora["aspacsvtk-tk"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1908,7 +1908,7 @@ settings.corpora["aspacsvsr-sv"] = {
         linkref: linkref,
         "wordlink-sr": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1931,7 +1931,7 @@ settings.corpora["aspacsvsr-sr"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1966,7 +1966,7 @@ settings.corpora["aspacsvsbc-sv"] = {
         linkref: linkref,
         "wordlink-sbc": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -1990,7 +1990,7 @@ settings.corpora["aspacsvsbc-sbc"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2025,7 +2025,7 @@ settings.corpora["aspacsvdsb-sv"] = {
         linkref: linkref,
         "wordlink-dsb": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2048,7 +2048,7 @@ settings.corpora["aspacsvdsb-dsb"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2083,7 +2083,7 @@ settings.corpora["aspacsvhsb-sv"] = {
         linkref: linkref,
         "wordlink-hsb": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2107,7 +2107,7 @@ settings.corpora["aspacsvhsb-hsb"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2142,7 +2142,7 @@ settings.corpora["aspacsvsvm-sv"] = {
         linkref: linkref,
         "wordlink-svm": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2166,7 +2166,7 @@ settings.corpora["aspacsvsvm-svm"] = {
         linkref: linkref,
         "wordlink-sv": wordlink
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"},
@@ -2201,7 +2201,7 @@ settings.corpora["espc-sv"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"}
@@ -2219,7 +2219,7 @@ settings.corpora["espc-en"] = {
         "link": "meningspar"
     },
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"}

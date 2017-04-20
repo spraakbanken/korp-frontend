@@ -7,7 +7,7 @@ describe "config file", () ->
             "within"
             "context"
             "attributes"
-            "struct_attributes"
+            "structAttributes"
             "id"
             "title"
         ]

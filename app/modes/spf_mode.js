@@ -24,7 +24,7 @@ settings.corpora.spf = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_author": {label: "author"},
         "text_url": {label: "verk", type: "url"},

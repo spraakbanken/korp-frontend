@@ -68,23 +68,23 @@ class window.CorpusListing
 
     getStructAttrsIntersection: () ->
         attrs = @mapSelectedCorpora((corpus) ->
-            for key, value of corpus.struct_attributes
+            for key, value of corpus.structAttributes
                 value["isStructAttr"] = true
 
-            corpus.struct_attributes
+            corpus.structAttributes
         )
         @_mapping_intersection attrs
 
 
     getStructAttrs: ->
         attrs = @mapSelectedCorpora((corpus) ->
-            for key, value of corpus.struct_attributes
+            for key, value of corpus.structAttributes
                 value["isStructAttr"] = true
 
             # if a position attribute is declared as structural, include here
             pos_attrs = _.pick corpus.attributes, (val, key) ->
                 val.isStructAttr
-            _.extend {}, pos_attrs, corpus.struct_attributes
+            _.extend {}, pos_attrs, corpus.structAttributes
         )
         rest = @_invalidateAttrs(attrs)
 
@@ -122,7 +122,7 @@ class window.CorpusListing
     # returns true if coprus has all attrs, else false
     corpusHasAttrs: (corpus, attrs) ->
         for attr in attrs
-            unless attr == "word" or attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].struct_attributes)
+            unless attr == "word" or attr of $.extend({}, @struct[corpus].attributes, @struct[corpus].structAttributes)
                 return false
         return true
 
@@ -303,7 +303,7 @@ class window.ParallelCorpusListing extends CorpusListing
             item.lang is lang
         )
         struct = _.reduce(corpora, (a, b) ->
-            $.extend {}, a.struct_attributes, b.struct_attributes
+            $.extend {}, a.structAttributes, b.structAttributes
         , {})
         $.each struct, (key, val) ->
             val["isStructAttr"] = true
@@ -315,10 +315,10 @@ class window.ParallelCorpusListing extends CorpusListing
             item.lang is lang
         )
         attrs = _.map corpora, (corpus) ->
-            for key, value of corpus.struct_attributes
+            for key, value of corpus.structAttributes
                 value["isStructAttr"] = true
 
-            corpus.struct_attributes
+            corpus.structAttributes
         @_mapping_intersection attrs
 
     getLinked : (corp, andSelf=false, only_selected=true) ->

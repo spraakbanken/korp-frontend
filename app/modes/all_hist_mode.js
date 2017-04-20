@@ -1,4 +1,4 @@
-settings.primaryColor = "#F7D1E4";
+structAttributes:settings.primaryColor = "#F7D1E4";
 settings.primaryLight = "#FFEBF5";
 
 settings.structAttributeSelector = "intersection"
@@ -343,7 +343,7 @@ settings.corpora['bellman'] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         page_n: {label: "page"}
@@ -372,7 +372,7 @@ settings.corpora['betankande'] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_year: {label: "year"},
         text_place: {label: "place"},
@@ -400,7 +400,7 @@ settings.corpora['vasabrev'] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_published: {label: "published"},
         text_fromyear: {label: "year_from"},
@@ -420,7 +420,7 @@ settings.corpora.ekeblad = {
         lex: attrs.lemgram,
         ref: attrs.ref,
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_author": {label: "author"},
         "text_date": {label: "date"},
@@ -449,7 +449,7 @@ settings.corpora.fragelistor = {
         ne_type: attrs.ne_type,
         ne_subtype: attrs.ne_subtype
     },
-    struct_attributes: {
+    structAttributes: {
         "text_topicname": {label: "topic"},
         "text_topicid": {label: "topicid"},
         "text_year": {label: "year"},
@@ -487,7 +487,7 @@ settings.corpora.lb = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_author": {label: "author"},
         "text_url": {label: "verk", type: "url"},
@@ -508,7 +508,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -534,7 +534,7 @@ settings.corpora["fsv-profanprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -565,7 +565,7 @@ settings.corpora["fsv-verser"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -594,7 +594,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -705,7 +705,7 @@ settings.corpora["fsv-yngretankebocker"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -736,7 +736,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -758,7 +758,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -779,7 +779,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -804,7 +804,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -839,7 +839,7 @@ settings.corpora["fsv-nysvensklagar"] = {
         lex: settings.fsvlex,
         pos: attrs.pos
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -861,7 +861,7 @@ settings.corpora["sdhk-svenska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-norska"] = {
@@ -871,7 +871,7 @@ settings.corpora["sdhk-norska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-tyska"] = {
@@ -881,7 +881,7 @@ settings.corpora["sdhk-tyska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-latin"] = {
@@ -891,7 +891,7 @@ settings.corpora["sdhk-latin"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-ovrigt"] = {
@@ -901,7 +901,7 @@ settings.corpora["sdhk-ovrigt"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["kubhist-aftonbladet-1830"] = {
@@ -912,7 +912,7 @@ settings.corpora["kubhist-aftonbladet-1830"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.aftonbladstruct_attributes
+    structAttributes: settings.aftonbladstruct_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1840"] = {
@@ -923,7 +923,7 @@ settings.corpora["kubhist-aftonbladet-1840"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.aftonbladstruct_attributes
+    structAttributes: settings.aftonbladstruct_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1850"] = {
@@ -934,7 +934,7 @@ settings.corpora["kubhist-aftonbladet-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.aftonbladstruct_attributes
+    structAttributes: settings.aftonbladstruct_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1860"] = {
@@ -945,7 +945,7 @@ settings.corpora["kubhist-aftonbladet-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.aftonbladstruct_attributes
+    structAttributes: settings.aftonbladstruct_attributes
 };
 
 settings.corpora["kubhist-blekingsposten-1850"] = {
@@ -956,7 +956,7 @@ settings.corpora["kubhist-blekingsposten-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-blekingsposten-1860"] = {
@@ -967,7 +967,7 @@ settings.corpora["kubhist-blekingsposten-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-blekingsposten-1870"] = {
@@ -978,7 +978,7 @@ settings.corpora["kubhist-blekingsposten-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-blekingsposten-1880"] = {
@@ -989,7 +989,7 @@ settings.corpora["kubhist-blekingsposten-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-bollnastidning-1870"] = {
@@ -1000,7 +1000,7 @@ settings.corpora["kubhist-bollnastidning-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-bollnastidning-1880"] = {
@@ -1011,7 +1011,7 @@ settings.corpora["kubhist-bollnastidning-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1850"] = {
@@ -1022,7 +1022,7 @@ settings.corpora["kubhist-dalpilen-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1860"] = {
@@ -1033,7 +1033,7 @@ settings.corpora["kubhist-dalpilen-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1870"] = {
@@ -1044,7 +1044,7 @@ settings.corpora["kubhist-dalpilen-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1880"] = {
@@ -1055,7 +1055,7 @@ settings.corpora["kubhist-dalpilen-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1890"] = {
@@ -1066,7 +1066,7 @@ settings.corpora["kubhist-dalpilen-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1900"] = {
@@ -1077,7 +1077,7 @@ settings.corpora["kubhist-dalpilen-1900"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1910"] = {
@@ -1088,7 +1088,7 @@ settings.corpora["kubhist-dalpilen-1910"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-dalpilen-1920"] = {
@@ -1099,7 +1099,7 @@ settings.corpora["kubhist-dalpilen-1920"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-fahluweckoblad-1780"] = {
@@ -1110,7 +1110,7 @@ settings.corpora["kubhist-fahluweckoblad-1780"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-fahluweckoblad-1790"] = {
@@ -1121,7 +1121,7 @@ settings.corpora["kubhist-fahluweckoblad-1790"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-fahluweckoblad-1800"] = {
@@ -1132,7 +1132,7 @@ settings.corpora["kubhist-fahluweckoblad-1800"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-fahluweckoblad-1810"] = {
@@ -1143,7 +1143,7 @@ settings.corpora["kubhist-fahluweckoblad-1810"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-fahluweckoblad-1820"] = {
@@ -1154,7 +1154,7 @@ settings.corpora["kubhist-fahluweckoblad-1820"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-faluposten-1860"] = {
@@ -1165,7 +1165,7 @@ settings.corpora["kubhist-faluposten-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-faluposten-1870"] = {
@@ -1176,7 +1176,7 @@ settings.corpora["kubhist-faluposten-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-faluposten-1880"] = {
@@ -1187,7 +1187,7 @@ settings.corpora["kubhist-faluposten-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-faluposten-1890"] = {
@@ -1198,7 +1198,7 @@ settings.corpora["kubhist-faluposten-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-folketsrost-1850"] = {
@@ -1209,7 +1209,7 @@ settings.corpora["kubhist-folketsrost-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-folketsrost-1860"] = {
@@ -1220,7 +1220,7 @@ settings.corpora["kubhist-folketsrost-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-gotlandstidning-1860"] = {
@@ -1231,7 +1231,7 @@ settings.corpora["kubhist-gotlandstidning-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-gotlandstidning-1870"] = {
@@ -1242,7 +1242,7 @@ settings.corpora["kubhist-gotlandstidning-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-gotlandstidning-1880"] = {
@@ -1253,7 +1253,7 @@ settings.corpora["kubhist-gotlandstidning-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1870"] = {
@@ -1264,7 +1264,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1880"] = {
@@ -1275,7 +1275,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1890"] = {
@@ -1286,7 +1286,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-gotheborgsweckolista-1740"] = {
@@ -1297,7 +1297,7 @@ settings.corpora["kubhist-gotheborgsweckolista-1740"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-gotheborgsweckolista-1750"] = {
@@ -1308,7 +1308,7 @@ settings.corpora["kubhist-gotheborgsweckolista-1750"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1840"] = {
@@ -1319,7 +1319,7 @@ settings.corpora["kubhist-jonkopingsbladet-1840"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1850"] = {
@@ -1330,7 +1330,7 @@ settings.corpora["kubhist-jonkopingsbladet-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1860"] = {
@@ -1341,7 +1341,7 @@ settings.corpora["kubhist-jonkopingsbladet-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1870"] = {
@@ -1352,7 +1352,7 @@ settings.corpora["kubhist-jonkopingsbladet-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1860"] = {
@@ -1363,7 +1363,7 @@ settings.corpora["kubhist-kalmar-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1870"] = {
@@ -1374,7 +1374,7 @@ settings.corpora["kubhist-kalmar-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1880"] = {
@@ -1385,7 +1385,7 @@ settings.corpora["kubhist-kalmar-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1890"] = {
@@ -1396,7 +1396,7 @@ settings.corpora["kubhist-kalmar-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1900"] = {
@@ -1407,7 +1407,7 @@ settings.corpora["kubhist-kalmar-1900"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-kalmar-1910"] = {
@@ -1418,7 +1418,7 @@ settings.corpora["kubhist-kalmar-1910"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
@@ -1429,7 +1429,7 @@ settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-lindesbergsallehanda-1880"] = {
@@ -1440,7 +1440,7 @@ settings.corpora["kubhist-lindesbergsallehanda-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-norraskane-1880"] = {
@@ -1451,7 +1451,7 @@ settings.corpora["kubhist-norraskane-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-norraskane-1890"] = {
@@ -1462,7 +1462,7 @@ settings.corpora["kubhist-norraskane-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1770"] = {
@@ -1473,7 +1473,7 @@ settings.corpora["kubhist-postochinrikestidning-1770"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1780"] = {
@@ -1484,7 +1484,7 @@ settings.corpora["kubhist-postochinrikestidning-1780"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1790"] = {
@@ -1495,7 +1495,7 @@ settings.corpora["kubhist-postochinrikestidning-1790"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1800"] = {
@@ -1506,7 +1506,7 @@ settings.corpora["kubhist-postochinrikestidning-1800"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1810"] = {
@@ -1517,7 +1517,7 @@ settings.corpora["kubhist-postochinrikestidning-1810"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1820"] = {
@@ -1528,7 +1528,7 @@ settings.corpora["kubhist-postochinrikestidning-1820"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1830"] = {
@@ -1539,7 +1539,7 @@ settings.corpora["kubhist-postochinrikestidning-1830"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1840"] = {
@@ -1550,7 +1550,7 @@ settings.corpora["kubhist-postochinrikestidning-1840"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1850"] = {
@@ -1561,7 +1561,7 @@ settings.corpora["kubhist-postochinrikestidning-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-postochinrikestidning-1860"] = {
@@ -1572,7 +1572,7 @@ settings.corpora["kubhist-postochinrikestidning-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1770"] = {
@@ -1583,7 +1583,7 @@ settings.corpora["kubhist-stockholmsposten-1770"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1780"] = {
@@ -1594,7 +1594,7 @@ settings.corpora["kubhist-stockholmsposten-1780"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1790"] = {
@@ -1605,7 +1605,7 @@ settings.corpora["kubhist-stockholmsposten-1790"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1800"] = {
@@ -1616,7 +1616,7 @@ settings.corpora["kubhist-stockholmsposten-1800"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1810"] = {
@@ -1627,7 +1627,7 @@ settings.corpora["kubhist-stockholmsposten-1810"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1820"] = {
@@ -1638,7 +1638,7 @@ settings.corpora["kubhist-stockholmsposten-1820"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-stockholmsposten-1830"] = {
@@ -1649,7 +1649,7 @@ settings.corpora["kubhist-stockholmsposten-1830"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1840"] = {
@@ -1660,7 +1660,7 @@ settings.corpora["kubhist-tidningforwenersborg-1840"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1850"] = {
@@ -1671,7 +1671,7 @@ settings.corpora["kubhist-tidningforwenersborg-1850"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1860"] = {
@@ -1682,7 +1682,7 @@ settings.corpora["kubhist-tidningforwenersborg-1860"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1870"] = {
@@ -1693,7 +1693,7 @@ settings.corpora["kubhist-tidningforwenersborg-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1880"] = {
@@ -1704,7 +1704,7 @@ settings.corpora["kubhist-tidningforwenersborg-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1890"] = {
@@ -1715,7 +1715,7 @@ settings.corpora["kubhist-tidningforwenersborg-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-wermlandslanstidning-1870"] = {
@@ -1726,7 +1726,7 @@ settings.corpora["kubhist-wermlandslanstidning-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-wernamotidning-1870"] = {
@@ -1737,7 +1737,7 @@ settings.corpora["kubhist-wernamotidning-1870"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-wernamotidning-1880"] = {
@@ -1748,7 +1748,7 @@ settings.corpora["kubhist-wernamotidning-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
@@ -1759,7 +1759,7 @@ settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-ostergotlandsveckoblad-1890"] = {
@@ -1770,7 +1770,7 @@ settings.corpora["kubhist-ostergotlandsveckoblad-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-ostgotaposten-1890"] = {
@@ -1781,7 +1781,7 @@ settings.corpora["kubhist-ostgotaposten-1890"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-ostgotaposten-1900"] = {
@@ -1792,7 +1792,7 @@ settings.corpora["kubhist-ostgotaposten-1900"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["kubhist-ostgotaposten-1910"] = {
@@ -1803,7 +1803,7 @@ settings.corpora["kubhist-ostgotaposten-1910"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.kubhistattributes,
-    struct_attributes: settings.kubhiststruct_attributes
+    structAttributes: settings.kubhiststruct_attributes
 };
 
 settings.corpora["ub-kvt-dagny"] = {
@@ -1814,7 +1814,7 @@ settings.corpora["ub-kvt-dagny"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-hertha"] = {
@@ -1825,7 +1825,7 @@ settings.corpora["ub-kvt-hertha"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-idun"] = {
@@ -1836,7 +1836,7 @@ settings.corpora["ub-kvt-idun"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-kvt"] = {
@@ -1847,7 +1847,7 @@ settings.corpora["ub-kvt-kvt"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-morgonbris"] = {
@@ -1858,7 +1858,7 @@ settings.corpora["ub-kvt-morgonbris"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-rostratt"] = {
@@ -1869,7 +1869,7 @@ settings.corpora["ub-kvt-rostratt"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 settings.corpora["ub-kvt-tidevarvet"] = {
@@ -1880,7 +1880,7 @@ settings.corpora["ub-kvt-tidevarvet"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: settings.ubkvtattributes,
-    struct_attributes: settings.ubkvtstruct_attributes,
+    structAttributes: settings.ubkvtstruct_attributes,
 };
 
 
@@ -1896,7 +1896,7 @@ settings.corpora["tankebok"] = {
         lemma: attrs.baseform,
         lex: attrs.lemgram
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -1944,7 +1944,7 @@ settings.corpora["lag1734"] = {
 
         },
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -1990,7 +1990,7 @@ settings.corpora["forarbeten1734"] = {
 
         },
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -2028,7 +2028,7 @@ settings.corpora["lag1800"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             localize: false,
             label: "title",
@@ -2063,7 +2063,7 @@ settings.corpora.bibel1917 = {
         deprel: attrs.deprel,
         ref: attrs.ref,
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "chapter_name": {label: "chapter"},
         "verse_name": {label: "verse"},
@@ -2089,7 +2089,7 @@ settings.corpora.bibel1873dalin = {
         ref: attrs.ref
 
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "chapter_name": {label: "chapter"},
         "verse_name": {label: "verse"},
@@ -2116,7 +2116,7 @@ settings.corpora["vasabibel-nt"] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_publisher: {label: "publisher"},
         text_published: {label: "published"},
@@ -2132,7 +2132,7 @@ settings.corpora["runeberg-folkbbl"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 
 };
 
@@ -2144,7 +2144,7 @@ settings.corpora["runeberg-biblblad"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 
 };
 
@@ -2157,7 +2157,7 @@ settings.corpora["runeberg-diverse"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-rost"] = {
@@ -2168,7 +2168,7 @@ settings.corpora["runeberg-rost"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-svtidskr"] = {
@@ -2179,7 +2179,7 @@ settings.corpora["runeberg-svtidskr"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-tiden"] = {
@@ -2190,7 +2190,7 @@ settings.corpora["runeberg-tiden"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-urdagkron"] = {
@@ -2201,7 +2201,7 @@ settings.corpora["runeberg-urdagkron"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora.kioping = {
@@ -2241,7 +2241,7 @@ settings.corpora.kioping = {
             }
     },
 
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -2280,7 +2280,7 @@ settings.corpora['akerbruk'] = {
         ref: attrs.ref,
     },
 
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -2319,7 +2319,7 @@ settings.corpora['kvah'] = {
         ref: attrs.ref,
     },
 
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",
@@ -2363,7 +2363,7 @@ settings.corpora.eddan = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_part: {
             label: "part"
         }
@@ -2377,7 +2377,7 @@ settings.corpora.romg = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"}

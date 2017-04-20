@@ -29,7 +29,7 @@ settings.corpora.siberiangermandialogs = {
             ]
         }
     },
-    struct_attributes: {},
+    structAttributes: {},
 };
 
 settings.corpora.siberiangermanwomen = {
@@ -52,7 +52,7 @@ settings.corpora.siberiangermanwomen = {
             ]
         }
     },
-    struct_attributes: {},
+    structAttributes: {},
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);

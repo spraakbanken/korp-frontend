@@ -67,7 +67,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -93,7 +93,7 @@ settings.corpora["fsv-profanprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -124,7 +124,7 @@ settings.corpora["fsv-verser"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -153,7 +153,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -264,7 +264,7 @@ settings.corpora["fsv-yngretankebocker"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: settings.fsvattributes,
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -295,7 +295,7 @@ settings.corpora["fsv-nysvenskbibel"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -317,7 +317,7 @@ settings.corpora["fsv-nysvenskdalin"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -338,7 +338,7 @@ settings.corpora["fsv-nysvenskkronikor"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -363,7 +363,7 @@ settings.corpora["fsv-nysvenskovrigt"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: {pos: attrs.pos},
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -394,7 +394,7 @@ settings.corpora["fsv-nysvensklagar"] = {
     attributes: {
     	pos: attrs.pos
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -414,7 +414,7 @@ settings.corpora["sdhk-svenska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-norska"] = {
@@ -424,7 +424,7 @@ settings.corpora["sdhk-norska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-tyska"] = {
@@ -434,7 +434,7 @@ settings.corpora["sdhk-tyska"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-latin"] = {
@@ -444,7 +444,7 @@ settings.corpora["sdhk-latin"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 settings.corpora["sdhk-ovrigt"] = {
@@ -454,7 +454,7 @@ settings.corpora["sdhk-ovrigt"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: settings.sdhkstructs
+    structAttributes: settings.sdhkstructs
 };
 
 if(isLab){
@@ -979,7 +979,7 @@ if(isLab){
                 ]
             }
         },
-        struct_attributes: {
+        structAttributes: {
             text_title: {label: "title"},
             section_name: {label: "section"},
             chapter_name: {label: "chapter"}

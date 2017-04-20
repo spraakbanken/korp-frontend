@@ -45,7 +45,7 @@ settings.corpora.kioping = {
             }
     },
 
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",

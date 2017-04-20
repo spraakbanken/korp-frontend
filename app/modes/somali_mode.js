@@ -54,7 +54,7 @@ settings.corpora["somali-1971-79"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_place: somalis.place,
         text_author: somalis.author,
@@ -73,7 +73,7 @@ settings.corpora["somali-wardheer"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_date: somalis.date,
         text2_title: somalis.title,
         text2_publisher: somalis.publisher,
@@ -89,7 +89,7 @@ settings.corpora["somali-1993-94"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_place: somalis.place,
         text_title: somalis.title,
@@ -105,7 +105,7 @@ settings.corpora["somali-caafimaad-1994"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_edition: somalis.edition,
         text_title: somalis.title,
@@ -121,7 +121,7 @@ settings.corpora["somali-ah-1992-02-kanada"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_author: somalis.author,
@@ -139,7 +139,7 @@ settings.corpora["somali-2001"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_sponsor: somalis.sponsor,
@@ -156,7 +156,7 @@ settings.corpora["somali-itoobiya"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_publisher: somalis.publisher,
@@ -172,7 +172,7 @@ settings.corpora["somali-hargeysa-2010"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_edition: somalis.edition,
         text_place: somalis.place,
         text_publisher: somalis.publisher,
@@ -189,7 +189,7 @@ settings.corpora["somali-hargeysa"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_publisher: somalis.publisher,
@@ -208,7 +208,7 @@ settings.corpora["somali-cb"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_source: somalis.source,
@@ -225,7 +225,7 @@ settings.corpora["somali-cilmi"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_author: somalis.author,
         text_title: somalis.title,
@@ -247,7 +247,7 @@ settings.corpora["somali-xisaab-1971-79"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_author: somalis.author,
         text_title: somalis.title,
@@ -267,7 +267,7 @@ settings.corpora["somali-xisaab-1994-97"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_author: somalis.author,
         text_title: somalis.title,
@@ -283,7 +283,7 @@ settings.corpora["somali-xisaab-2001-hargeysa"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_author: somalis.author,
         text_title: somalis.title,
@@ -300,7 +300,7 @@ settings.corpora["somali-wksi"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_source: somalis.source,
@@ -316,7 +316,7 @@ settings.corpora["somali-wksk"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_source: somalis.source,
@@ -332,7 +332,7 @@ settings.corpora["somali-wakiillada"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_date: somalis.date,
         text_title: somalis.title,
         text_source: somalis.source,
@@ -348,7 +348,7 @@ settings.corpora["somali-kqa"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_title: somalis.title,
         text_sponsor: somalis.sponsor,
         text_place: somalis.place,
@@ -365,7 +365,7 @@ settings.corpora["somali-ogaden"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_source: somalis.source,
@@ -380,7 +380,7 @@ settings.corpora["somali-qoraallo"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_date: somalis.date,
         text_title: somalis.title,
         text_author: somalis.author,
@@ -397,7 +397,7 @@ settings.corpora["somali-saynis"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_publisher: somalis.publisher,
@@ -416,7 +416,7 @@ settings.corpora["somali-radioden2014"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_publisher: somalis.publisher,
         text_place: somalis.place,
         text_date: somalis.date,
@@ -431,7 +431,7 @@ settings.corpora["somali-radioswe2014"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_publisher: somalis.publisher,
         text_place: somalis.place,
         text_date: somalis.date,
@@ -447,7 +447,7 @@ settings.corpora["somali-saynis-1972-77"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_edition: somalis.edition,
         text_editor: somalis.editor,
         text_place: somalis.place,
@@ -466,7 +466,7 @@ settings.corpora["somali-saynis-1994-96"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_edition: somalis.edition,
         text_editor: somalis.editor,
         text_place: somalis.place,
@@ -485,7 +485,7 @@ settings.corpora["somali-sheekooyin"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_title: somalis.title,
         text_date: somalis.year,
         text_publisher: somalis.publisher,
@@ -500,7 +500,7 @@ settings.corpora["somali-sheekooying"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_title: somalis.title,
         text_date: somalis.year,
         text_author: somalis.author,
@@ -515,7 +515,7 @@ settings.corpora["somali-faces"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         page_n: somalis.page,
         text_year: somalis.year,
         text_title: somalis.title,
@@ -532,7 +532,7 @@ settings.corpora["somali-radiomuq"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         page_n: somalis.page,
         text_year: somalis.year,
         text_title: somalis.title,
@@ -549,7 +549,7 @@ settings.corpora["somali-suugaan"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_place: somalis.place,
@@ -565,7 +565,7 @@ settings.corpora["wikipedia-so"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_title: somalis.title,
         text_publisher: somalis.date,
         text_source: somalis.source
@@ -579,7 +579,7 @@ settings.corpora["somali-xeerar"] = {
     within: spWithin,
     context: spContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_year: somalis.year,
         text_title: somalis.title,
         text_source: somalis.source,

@@ -20,7 +20,7 @@ settings.corpora["pe77"] = {
         msd: {label: "msd"},
         lemma: {label: "baseform"}
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_lang: {
             label: "lang",
@@ -45,7 +45,7 @@ settings.corpora["one71"] = {
         msd: {label: "msd"},
         lemma: {label: "baseform"}
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_lang: {
             label: "lang",
@@ -70,7 +70,7 @@ settings.corpora["cor92"] = {
         msd: {label: "msd"},
         lemma: {label: "baseform"}
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_source: {label: "source"},
         text_date: {label: "date"},

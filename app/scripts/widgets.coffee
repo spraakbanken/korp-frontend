@@ -19,8 +19,8 @@ Sidebar =
         unless $.isEmptyObject(corpusObj.attributes)
             posData = @renderCorpusContent "pos", wordData, sentenceData, corpusObj.attributes, tokens, corpusObj.custom_attributes or {}, customData.pos
         structData = []
-        unless $.isEmptyObject(corpusObj.struct_attributes)
-            structData = @renderCorpusContent "struct", wordData, sentenceData, corpusObj.struct_attributes, tokens, corpusObj.custom_attributes or {}, customData.struct
+        unless $.isEmptyObject(corpusObj.structAttributes)
+            structData = @renderCorpusContent "struct", wordData, sentenceData, corpusObj.structAttributes, tokens, corpusObj.custom_attributes or {}, customData.struct
 
         $("#selected_word").append $("<h4>").localeKey("word_attr")
         $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")

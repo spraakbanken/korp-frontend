@@ -54,7 +54,7 @@ settings.corpora["runeberg-diverse"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-rost"] = {
@@ -65,7 +65,7 @@ settings.corpora["runeberg-rost"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-svtidskr"] = {
@@ -76,7 +76,7 @@ settings.corpora["runeberg-svtidskr"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 settings.corpora["runeberg-tiden"] = {
@@ -87,7 +87,7 @@ settings.corpora["runeberg-tiden"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 
 };
 
@@ -99,7 +99,7 @@ settings.corpora["runeberg-urdagkron"] = {
     within: spWithin,
     context: spContext,
     attributes: settings.runebergattributes,
-    struct_attributes: settings.runebergstruct_attributes,
+    structAttributes: settings.runebergstruct_attributes,
 };
 
 

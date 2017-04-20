@@ -16,7 +16,7 @@ settings.corpora.dylan = {
     context: spContext,
     attributes: {
     },
-    struct_attributes: {
+    structAttributes: {
         "album_name": {label: "album"},
         "album_year": {label: "album_year"},
         "song_title": {label: "song_title"},

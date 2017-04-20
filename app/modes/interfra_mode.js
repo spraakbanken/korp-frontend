@@ -602,7 +602,7 @@ settings.corpora.interfra = {
             label: "type"
         }
     },
-    struct_attributes: s,
+    structAttributes: s,
 };
 
 settings.corpora["interfra-tagged"] = {
@@ -616,7 +616,7 @@ settings.corpora["interfra-tagged"] = {
             label: "type"
         }
     },
-    struct_attributes: st,
+    structAttributes: st,
 };
 
 settings.corpora["interfra-sv"] = {
@@ -637,7 +637,7 @@ settings.corpora["interfra-sv"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: ss,
+    structAttributes: ss,
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);

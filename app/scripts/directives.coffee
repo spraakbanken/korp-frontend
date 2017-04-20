@@ -939,7 +939,7 @@ korpApp.directive "globalFilters", ($rootScope, $location, $q, structService) ->
                     scope.filterValues[attrKey].value = []
 
         scope.getFilterLabel = (filterKey) -> 
-            settings.corpora[scope.corpus].struct_attributes[filterKey].label
+            settings.corpora[scope.corpus].structAttributes[filterKey].label
 
         scope.makeCqp = () ->
             exprs = []

@@ -89,7 +89,7 @@ settings.corpora.fsbbrev1700tal = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_sender": {label: "sender"},
         "text_recipient": {label: "text_recipient"},
         "text_title": {label: "title"},
@@ -107,7 +107,7 @@ settings.corpora["fsbbrev1800-1849"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_sender": {label: "sender"},
         "text_recipient": {label: "text_recipient"},
         "text_title": {label: "title"},
@@ -125,7 +125,7 @@ settings.corpora["fsbbrev1850-1899"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_sender": {label: "sender"},
         "text_recipient": {label: "text_recipient"},
         "text_title": {label: "title"},
@@ -143,7 +143,7 @@ settings.corpora.fsbbrev1900tal = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_sender": {label: "sender"},
         "text_recipient": {label: "text_recipient"},
         "text_title": {label: "title"},
@@ -161,7 +161,7 @@ settings.corpora["dagbocker1700tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_location": {label: "location"},
         "text_source": {label: "source"},
@@ -178,7 +178,7 @@ settings.corpora["dagbocker1800-1849"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_location": {label: "location"},
         "text_source": {label: "source"},
@@ -195,7 +195,7 @@ settings.corpora["dagbocker1900-1949"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_location": {label: "location"},
         "text_source": {label: "source"},
@@ -212,7 +212,7 @@ settings.corpora["fsbmyndighet1800tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_source": {label: "source"},
         "text_title": {label: "title"},
         "text_date": {label: "year"}
@@ -227,7 +227,7 @@ settings.corpora["fsbskonlit1800-1849"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"}
@@ -242,7 +242,7 @@ settings.corpora["fsbskonlit1850-1899"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"}
@@ -257,7 +257,7 @@ settings.corpora["fsbskonlit1900-1959"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -273,7 +273,7 @@ settings.corpora["ateneum-1800tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_date": {label: "year"},
         "text_issue": {label: "issue"}
@@ -288,7 +288,7 @@ settings.corpora["ateneum-1900tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_date": {label: "year"},
         "text_issue": {label: "issue"}
@@ -303,7 +303,7 @@ settings.corpora["filosofia1850-1899"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -320,7 +320,7 @@ settings.corpora["filosofia1900-1959"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -337,7 +337,7 @@ settings.corpora["sakprosa1700-1749"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -355,7 +355,7 @@ settings.corpora["sakprosa1750-1799"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -373,7 +373,7 @@ settings.corpora["sakprosa1800-1849"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -391,7 +391,7 @@ settings.corpora["sakprosa1850-1899"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -409,7 +409,7 @@ settings.corpora["sakprosa1900-1959"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_author": {label: "author"},
         "text_title": {label: "title"},
         "text_date": {label: "year"},
@@ -427,7 +427,7 @@ settings.corpora.spanskaflugan = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "text_date": {label: "year"}
     }
@@ -441,7 +441,7 @@ settings.corpora["astra1920-1959"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -455,7 +455,7 @@ settings.corpora.argus = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -469,7 +469,7 @@ settings.corpora.husmodern = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -483,7 +483,7 @@ settings.corpora["landtmannen"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -497,7 +497,7 @@ settings.corpora["litterartidskrift-helsingfors"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -511,7 +511,7 @@ settings.corpora["typografisktminnesblad"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "year"}
     }
 };
@@ -524,7 +524,7 @@ settings.corpora["typograftidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -538,7 +538,7 @@ settings.corpora["finsktidskrift1800tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_issue": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -552,7 +552,7 @@ settings.corpora["finsktidskrift1900tal"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_edition": {label: "issue"},
         "text_date": {label: "year"}
     }
@@ -565,7 +565,7 @@ settings.corpora.euterpe = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -579,7 +579,7 @@ settings.corpora["borgabladet2"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -592,7 +592,7 @@ settings.corpora["fredrikshamnstidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -605,7 +605,7 @@ settings.corpora["tidningarsallskapetiabo"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -618,7 +618,7 @@ settings.corpora["uleaborgstidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -631,7 +631,7 @@ settings.corpora["wasabladet"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -644,7 +644,7 @@ settings.corpora["wiborgstidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -657,7 +657,7 @@ settings.corpora["abotidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 
@@ -671,7 +671,7 @@ settings.corpora["bjorneborgstidning"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -684,7 +684,7 @@ settings.corpora["dagbladet1866-1886"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -697,7 +697,7 @@ settings.corpora["hbl1800"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };
@@ -710,7 +710,7 @@ settings.corpora["aland"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: fisk1800attrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "date"}
     }
 };

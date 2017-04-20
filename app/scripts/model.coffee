@@ -134,8 +134,8 @@ class model.KWICProxy extends BaseProxy
                 data.show.push key
 
 
-            if corpus.struct_attributes?
-                $.each corpus.struct_attributes, (key, val) ->
+            if corpus.structAttributes?
+                $.each corpus.structAttributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
         if data.cqp

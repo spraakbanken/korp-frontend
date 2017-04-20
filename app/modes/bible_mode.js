@@ -44,7 +44,7 @@ settings.corpora.bibel1917 = {
        },
 
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "chapter"},
         "text_subtitle": {label: "title"},
         "verse_name": {label: "verse"},
@@ -70,7 +70,7 @@ settings.corpora.bibel1873dalin = {
         ref: attrs.ref
         
     },
-    struct_attributes: {
+    structAttributes: {
         "text_title": {label: "title"},
         "chapter_name": {label: "chapter"},
         "verse_name": {label: "verse"},
@@ -97,7 +97,7 @@ settings.corpora["vasabibel-nt"] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_publisher: {label: "publisher"},
         text_published: {label: "published"},

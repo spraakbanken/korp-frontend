@@ -37,7 +37,7 @@ settings.corpora.lsi = {
         deprel: {label: "deprel"},
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         "page_pno": {label: "page"},
         "page_family": {label: "languagefamily"},
         "page_language": {label: "language"},

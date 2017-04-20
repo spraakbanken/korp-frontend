@@ -18,7 +18,7 @@ settings.corpora.eddan = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: {},
-    struct_attributes: {
+    structAttributes: {
         text_part: {
             label: "part"
         }

@@ -541,7 +541,7 @@ var fsv_yngrelagar = {
         lex: settings.fsvlex,
         variants: settings.fsvvariants
         },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,
@@ -571,7 +571,7 @@ var fsv_aldrelagar = {
         lex: settings.fsvlex,
         variants: settings.fsvvariants
                 },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             label: "title",
             localize: false,

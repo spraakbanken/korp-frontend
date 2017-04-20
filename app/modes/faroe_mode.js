@@ -23,7 +23,7 @@ settings.corpora.fts = {
         deprel: {label: "deprel"},
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {
             label: "date"
         },

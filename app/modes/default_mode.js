@@ -203,7 +203,7 @@ settings.corpora.magmakolumner = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "date"}
@@ -217,7 +217,7 @@ settings.corpora.fsbbloggvuxna = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         blog_title: {label: "blog_title"},
         blog_url: {label: "blog_url", type: "url"},
         blog_age: {label: "author_age"},
@@ -236,7 +236,7 @@ settings.corpora["fsbskonlit1960-1999"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -251,7 +251,7 @@ settings.corpora.fsbskonlit2000tal = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -266,7 +266,7 @@ settings.corpora.barnlitteratur = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -281,7 +281,7 @@ settings.corpora.fsbessaistik = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -296,7 +296,7 @@ settings.corpora.fsbsakprosa = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -311,7 +311,7 @@ settings.corpora.ungdomslitteratur = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -326,7 +326,7 @@ settings.corpora.informationstidningar = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -340,7 +340,7 @@ settings.corpora.lagtexter = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -351,7 +351,7 @@ settings.corpora.myndighet = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_publisher: {label: "publisher"},
         text_title: {label: "title"}
@@ -365,7 +365,7 @@ settings.corpora.propositioner = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_title: {label: "title"}
     }
@@ -378,7 +378,7 @@ settings.corpora.finsktidskrift = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -391,7 +391,7 @@ settings.corpora.forumfeot = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -403,7 +403,7 @@ settings.corpora.hanken = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -416,7 +416,7 @@ settings.corpora.svenskbygden = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -429,7 +429,7 @@ settings.corpora.studentbladet = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -442,7 +442,7 @@ settings.corpora.jakobstadstidning1999 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -454,7 +454,7 @@ settings.corpora.jakobstadstidning2000 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -466,7 +466,7 @@ settings.corpora.sweachum = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_type: {label: "type",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -498,7 +498,7 @@ settings.corpora.sweacsam = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_type: {label: "type",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -531,7 +531,7 @@ settings.corpora.attasidor = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"}
     }
@@ -544,7 +544,7 @@ settings.corpora.dn1987 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -557,7 +557,7 @@ settings.corpora.webbnyheter2001 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url", type: "url"},
@@ -572,7 +572,7 @@ settings.corpora.webbnyheter2002 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -587,7 +587,7 @@ settings.corpora.webbnyheter2003 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -602,7 +602,7 @@ settings.corpora.webbnyheter2004 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -617,7 +617,7 @@ settings.corpora.webbnyheter2005 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -632,7 +632,7 @@ settings.corpora.webbnyheter2006 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -647,7 +647,7 @@ settings.corpora.webbnyheter2007 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -662,7 +662,7 @@ settings.corpora.webbnyheter2008 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -677,7 +677,7 @@ settings.corpora.webbnyheter2009 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -692,7 +692,7 @@ settings.corpora.webbnyheter2010 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -707,7 +707,7 @@ settings.corpora.webbnyheter2011 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -722,7 +722,7 @@ settings.corpora.webbnyheter2012 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -737,7 +737,7 @@ settings.corpora.webbnyheter2013 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
         text_url: {label: "url" , type: "url"},
@@ -752,7 +752,7 @@ settings.corpora.gp1994 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_section: {label: "section"}
     }
@@ -765,7 +765,7 @@ settings.corpora.gp2001 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -778,7 +778,7 @@ settings.corpora.gp2002 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -791,7 +791,7 @@ settings.corpora.gp2003 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -804,7 +804,7 @@ settings.corpora.gp2004 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -817,7 +817,7 @@ settings.corpora.gp2005 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -830,7 +830,7 @@ settings.corpora.gp2006 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -843,7 +843,7 @@ settings.corpora.gp2007 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -856,7 +856,7 @@ settings.corpora.gp2008 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
     }
@@ -869,7 +869,7 @@ settings.corpora.gp2009 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -883,7 +883,7 @@ settings.corpora.gp2010 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -897,7 +897,7 @@ settings.corpora.gp2011 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -911,7 +911,7 @@ settings.corpora.gp2012 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -925,7 +925,7 @@ settings.corpora.gp2013 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -939,7 +939,7 @@ settings.corpora.gp2d = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_issue: {label: "issue"}
     }
 };
@@ -951,7 +951,7 @@ settings.corpora.ordat = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "text_year"},
         text_volume: {label: "text_volume"}
     }
@@ -964,7 +964,7 @@ settings.corpora.fof = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_issue: {label: "issue"}
     }
 };
@@ -976,7 +976,7 @@ settings.corpora.press65 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_topic: {label: "article_topic"},
@@ -991,7 +991,7 @@ settings.corpora.press76 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"},
         text_publisher: {label: "article_publisher"}
     }
@@ -1004,7 +1004,7 @@ settings.corpora.press95 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
@@ -1018,7 +1018,7 @@ settings.corpora.press96 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
@@ -1032,7 +1032,7 @@ settings.corpora.press97 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "publisher"},
         text_sectionshort: {label: "section"}
@@ -1046,7 +1046,7 @@ settings.corpora.press98 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
         text_sectionshort: {label: "section"}
@@ -1060,7 +1060,7 @@ settings.corpora.strindbergbrev = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_recipient: {label: "text_recipient"},
         text_year: {label: "year"},
@@ -1090,7 +1090,7 @@ settings.corpora["familjeliv-allmanna-ekonomi"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-familjeliv"] = {
@@ -1100,7 +1100,7 @@ settings.corpora["familjeliv-allmanna-familjeliv"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-hushem"] = {
@@ -1110,7 +1110,7 @@ settings.corpora["familjeliv-allmanna-hushem"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-husdjur"] = {
@@ -1120,7 +1120,7 @@ settings.corpora["familjeliv-allmanna-husdjur"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-fritid"] = {
@@ -1130,7 +1130,7 @@ settings.corpora["familjeliv-allmanna-fritid"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-kropp"] = {
@@ -1140,7 +1140,7 @@ settings.corpora["familjeliv-allmanna-kropp"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-noje"] = {
@@ -1150,7 +1150,7 @@ settings.corpora["familjeliv-allmanna-noje"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-samhalle"] = {
@@ -1160,7 +1160,7 @@ settings.corpora["familjeliv-allmanna-samhalle"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-allmanna-sandladan"] = {
@@ -1170,7 +1170,7 @@ settings.corpora["familjeliv-allmanna-sandladan"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-adoption"] = {
@@ -1180,7 +1180,7 @@ settings.corpora["familjeliv-adoption"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-expert"] = {
@@ -1190,7 +1190,7 @@ settings.corpora["familjeliv-expert"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-foralder"] = {
@@ -1200,7 +1200,7 @@ settings.corpora["familjeliv-foralder"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-gravid"] = {
@@ -1210,7 +1210,7 @@ settings.corpora["familjeliv-gravid"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-kansliga"] = {
@@ -1220,7 +1220,7 @@ settings.corpora["familjeliv-kansliga"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-allmanna"] = {
@@ -1230,7 +1230,7 @@ settings.corpora["familjeliv-medlem-allmanna"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 
@@ -1241,7 +1241,7 @@ settings.corpora["familjeliv-medlem-foraldrar"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-medlem-planerarbarn"] = {
@@ -1251,7 +1251,7 @@ settings.corpora["familjeliv-medlem-planerarbarn"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 
@@ -1262,7 +1262,7 @@ settings.corpora["familjeliv-medlem-vantarbarn"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-pappagrupp"] = {
@@ -1272,7 +1272,7 @@ settings.corpora["familjeliv-pappagrupp"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-planerarbarn"] = {
@@ -1282,7 +1282,7 @@ settings.corpora["familjeliv-planerarbarn"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-sexsamlevnad"] = {
@@ -1292,7 +1292,7 @@ settings.corpora["familjeliv-sexsamlevnad"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-svartattfabarn"] = {
@@ -1302,7 +1302,7 @@ settings.corpora["familjeliv-svartattfabarn"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["familjeliv-anglarum"] = {
@@ -1312,7 +1312,7 @@ settings.corpora["familjeliv-anglarum"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: familjeliv_structs
+    structAttributes: familjeliv_structs
 };
 
 settings.corpora["flashback-dator"] = {
@@ -1322,7 +1322,7 @@ settings.corpora["flashback-dator"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1343,7 +1343,7 @@ settings.corpora["flashback-droger"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1364,7 +1364,7 @@ settings.corpora["flashback-fordon"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1385,7 +1385,7 @@ settings.corpora["flashback-hem"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1406,7 +1406,7 @@ settings.corpora["flashback-kultur"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1427,7 +1427,7 @@ settings.corpora["flashback-livsstil"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1448,7 +1448,7 @@ settings.corpora["flashback-mat"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1469,7 +1469,7 @@ settings.corpora["flashback-politik"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1490,7 +1490,7 @@ settings.corpora["flashback-resor"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1511,7 +1511,7 @@ settings.corpora["flashback-samhalle"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1532,7 +1532,7 @@ settings.corpora["flashback-sex"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1553,7 +1553,7 @@ settings.corpora["flashback-sport"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1574,7 +1574,7 @@ settings.corpora["flashback-vetenskap"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1595,7 +1595,7 @@ settings.corpora["flashback-ovrigt"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1616,7 +1616,7 @@ settings.corpora["flashback-flashback"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_username: {label: "username2"},
         text_date: {label: "date"},
         text_links: {label: "postlinks", type: "set"},
@@ -1648,7 +1648,7 @@ settings.corpora.bloggmix1998 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix1999 = {
@@ -1657,7 +1657,7 @@ settings.corpora.bloggmix1999 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2000 = {
@@ -1666,7 +1666,7 @@ settings.corpora.bloggmix2000 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2001 = {
@@ -1675,7 +1675,7 @@ settings.corpora.bloggmix2001 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2002 = {
@@ -1684,7 +1684,7 @@ settings.corpora.bloggmix2002 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2003 = {
@@ -1693,7 +1693,7 @@ settings.corpora.bloggmix2003 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2004 = {
@@ -1702,7 +1702,7 @@ settings.corpora.bloggmix2004 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2005 = {
@@ -1711,7 +1711,7 @@ settings.corpora.bloggmix2005 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2006 = {
@@ -1720,7 +1720,7 @@ settings.corpora.bloggmix2006 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2007 = {
@@ -1729,7 +1729,7 @@ settings.corpora.bloggmix2007 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2008 = {
@@ -1738,7 +1738,7 @@ settings.corpora.bloggmix2008 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2009 = {
@@ -1747,7 +1747,7 @@ settings.corpora.bloggmix2009 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2009 = {
@@ -1756,7 +1756,7 @@ settings.corpora.bloggmix2009 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2010 = {
@@ -1765,7 +1765,7 @@ settings.corpora.bloggmix2010 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2011 = {
@@ -1774,7 +1774,7 @@ settings.corpora.bloggmix2011 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2012 = {
@@ -1783,7 +1783,7 @@ settings.corpora.bloggmix2012 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2013 = {
@@ -1792,7 +1792,7 @@ settings.corpora.bloggmix2013 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2014 = {
@@ -1801,7 +1801,7 @@ settings.corpora.bloggmix2014 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2015 = {
@@ -1810,7 +1810,7 @@ settings.corpora.bloggmix2015 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2016 = {
@@ -1819,7 +1819,7 @@ settings.corpora.bloggmix2016 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmix2017 = {
@@ -1828,7 +1828,7 @@ settings.corpora.bloggmix2017 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 settings.corpora.bloggmixodat = {
@@ -1837,7 +1837,7 @@ settings.corpora.bloggmixodat = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: bloggmix_structs
+    structAttributes: bloggmix_structs
 };
 
 
@@ -1848,7 +1848,7 @@ settings.corpora.drama = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
     }
@@ -1861,7 +1861,7 @@ settings.corpora["europarl-sv"] = {
     context: defaultContext,
     within: settings.defaultWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_speaker: {label: "speaker"}
     }
@@ -1878,7 +1878,7 @@ settings.corpora["sprakfragor"] = {
     },
     within: settings.defaultWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_topic: {label: "topic", order: 10},
         text_datetime: {label: "date", order: 20},
         text_sender: {label: "sender",
@@ -2014,7 +2014,7 @@ settings.corpora["ivip"] = {
             isStructAttr: true
         },
     },
-    struct_attributes: {
+    structAttributes: {
         text_country: {label: "country",
                        order: 10,
                        extendedTemplate: selectType.extendedTemplate,
@@ -2153,7 +2153,7 @@ settings.corpora["lawline"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         "text_category": {label: "category", order: 10},
         "text_topic": {label: "topic", order: 20},
         "text_datum": {label: "date", order: 30},
@@ -2184,7 +2184,7 @@ settings.corpora.lasbart = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_source: {label: "source"},
         text_type: {label: "type"},
         text_date: {label: "date"},
@@ -2201,7 +2201,7 @@ settings.corpora.parole = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "text"},
         text_date: {label: "date"},
         text_title: {label: "title"},
@@ -2216,7 +2216,7 @@ settings.corpora.psalmboken = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"}
     }
 };
@@ -2249,7 +2249,7 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
     context: defaultContext,
     within: settings.defaultWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -2260,7 +2260,7 @@ settings.corpora.snp7879 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {}
+    structAttributes: {}
 };
 
 settings.corpora.sou = {
@@ -2270,7 +2270,7 @@ settings.corpora.sou = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "id"},
         text_librisid: {label: "librisid"}
     }
@@ -2296,7 +2296,7 @@ settings.corpora.suc2 = {
             type: "set"
         }
     }),
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "text"}
     }
 };
@@ -2315,7 +2315,7 @@ settings.corpora.suc3 = {
             isStructAttr: true
         }
     }),
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "text"}
     }
 };
@@ -2327,7 +2327,7 @@ settings.corpora.storsuc = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "text"}
     }
 };
@@ -2339,7 +2339,7 @@ settings.corpora.aspacsv = {
     context: defaultContext,
     within: settings.defaultWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_lang: {label: "lang"},
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -2354,7 +2354,7 @@ settings.corpora.diabetolog = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"},
         text_title: {label: "title"},
         text_source: {label: "url", type: "url"}
@@ -2368,7 +2368,7 @@ settings.corpora.lt1996 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"},
         text_article: {label: "article"},
         text_id: {label: "text"}
@@ -2382,7 +2382,7 @@ settings.corpora.lt1997 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2396,7 +2396,7 @@ settings.corpora.lt1998 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2410,7 +2410,7 @@ settings.corpora.lt1999 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2424,7 +2424,7 @@ settings.corpora.lt2000 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2438,7 +2438,7 @@ settings.corpora.lt2001 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2452,7 +2452,7 @@ settings.corpora.lt2002 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2466,7 +2466,7 @@ settings.corpora.lt2003 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2480,7 +2480,7 @@ settings.corpora.lt2004 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2494,7 +2494,7 @@ settings.corpora.lt2005 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2508,7 +2508,7 @@ settings.corpora.lt2006 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2522,7 +2522,7 @@ settings.corpora.smittskydd = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"},
         text_issue: {label: "issue"},
         text_title: {label: "title"}
@@ -2536,7 +2536,7 @@ settings.corpora.sfs = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_date: {label: "date"}
     }
@@ -2555,7 +2555,7 @@ settings.corpora.vivill = {
         "5 sentence": "5 sentences"
     },
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year",
             extendedTemplate: selectType.extendedTemplate,
             extendedController: selectType.extendedController,
@@ -2666,7 +2666,7 @@ settings.corpora["wikipedia-sv"] = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "article"},
         text_url: {label: "url", type: "url"}
     }
@@ -2679,7 +2679,7 @@ settings.corpora.strindbergromaner = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "year"},
@@ -2695,7 +2695,7 @@ settings.corpora.romi = {
     context: spContext,
     within: spWithin,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
     }
@@ -2708,7 +2708,7 @@ settings.corpora.romii = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
     }
@@ -2721,7 +2721,7 @@ settings.corpora.romg = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_year: {label: "year"}
@@ -2735,7 +2735,7 @@ settings.corpora.rom99 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_year: {label: "year"}
@@ -2749,7 +2749,7 @@ settings.corpora["swefn-ex"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         "text_created_by": {label: "created_by"},
 /*      "element_name": {label: "element"},
         "lu_n": {label: ""},
@@ -2777,7 +2777,7 @@ settings.corpora.astranova = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2790,7 +2790,7 @@ settings.corpora["astra1960-1979"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2803,7 +2803,7 @@ settings.corpora.bullen = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2815,7 +2815,7 @@ settings.corpora.fanbararen = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2828,7 +2828,7 @@ settings.corpora.kallan = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2841,7 +2841,7 @@ settings.corpora.jft = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2854,7 +2854,7 @@ settings.corpora.meddelanden = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2867,7 +2867,7 @@ settings.corpora.hankeiten = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2880,7 +2880,7 @@ settings.corpora.nyaargus = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2893,7 +2893,7 @@ settings.corpora.pargaskungorelser2011 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2906,7 +2906,7 @@ settings.corpora.pargaskungorelser2012 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"}
     }
@@ -2919,7 +2919,7 @@ settings.corpora.borgabladet = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2931,7 +2931,7 @@ settings.corpora.sydosterbotten2010 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2943,7 +2943,7 @@ settings.corpora.sydosterbotten2011 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2955,7 +2955,7 @@ settings.corpora.sydosterbotten2012 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2967,7 +2967,7 @@ settings.corpora.sydosterbotten2013 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -2979,7 +2979,7 @@ settings.corpora.sydosterbotten2014 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -2993,7 +2993,7 @@ settings.corpora.vastranyland = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3005,7 +3005,7 @@ settings.corpora.ostranyland = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3017,7 +3017,7 @@ settings.corpora.abounderrattelser2012 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3029,7 +3029,7 @@ settings.corpora.abounderrattelser2013 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3042,7 +3042,7 @@ settings.corpora.at2012 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3054,7 +3054,7 @@ settings.corpora.vasabladet1991 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_type: {label: "section"}
     }
@@ -3067,7 +3067,7 @@ settings.corpora.vasabladet2012 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -3078,7 +3078,7 @@ settings.corpora.vasabladet2013 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3090,7 +3090,7 @@ settings.corpora.vasabladet2014 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -3104,7 +3104,7 @@ settings.corpora.osterbottenstidning2011 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3116,7 +3116,7 @@ settings.corpora.osterbottenstidning2012 = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3128,7 +3128,7 @@ settings.corpora.osterbottenstidning2013 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3140,7 +3140,7 @@ settings.corpora.osterbottenstidning2014 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
         text_section: {label: "article_section"}
@@ -3154,7 +3154,7 @@ settings.corpora.fnb1999 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {label: "title"}
     }
@@ -3167,7 +3167,7 @@ settings.corpora.fnb2000 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {label: "title"}
     }
@@ -3180,7 +3180,7 @@ settings.corpora.hbl1991 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "year"},
         text_type: {label: "section"}
     }
@@ -3193,7 +3193,7 @@ settings.corpora.hbl1998 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"}
     }
 };
@@ -3205,7 +3205,7 @@ settings.corpora.hbl1999 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_year: {label: "year"}
     }
 };
@@ -3217,7 +3217,7 @@ settings.corpora.hbl20122013 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3229,7 +3229,7 @@ settings.corpora.hbl2014 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"}
     }
 };
@@ -3241,7 +3241,7 @@ settings.corpora.talbanken = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
     }
 };
 
@@ -3252,7 +3252,7 @@ settings.corpora.klarsprak = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_title: {label: "title"},
         text_textid: {label: "id"},
         text_organisation: {label: "organization"},
@@ -3282,7 +3282,7 @@ settings.corpora.sw1203 = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_type: {
             label: "type",
             extendedTemplate: selectType.extendedTemplate,
@@ -3328,7 +3328,7 @@ settings.corpora.tisus = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "id"},
         text_age: {label: "age"},
         text_gender: {label: "gender"},
@@ -3354,7 +3354,7 @@ settings.corpora.ansokningar = {
     context: defaultContext,
     within: settings.defaultWithin,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_id: {label: "id"},
         text_gender: {label: "gender"},
         text_birthyear: {label: "birthyear"}
@@ -3369,7 +3369,7 @@ settings.corpora.coctaill = {
     context: spContext,
     within: spWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_date: {label: "date"},
@@ -3652,7 +3652,7 @@ settings.corpora.twitter = {
         "1 text": "1 text"
     },
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         user_username: {label: "username2"},
         user_name: {label: "name"},
         text_datetime: {label: "date"},
@@ -3699,7 +3699,7 @@ settings.corpora["twitter-pldebatt-130612"] = {
         "1 text": "1 text"
     },
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         user_username: {label: "username2"},
         user_name: {label: "name"},
         text_datetime: {label: "date"},
@@ -3744,7 +3744,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
         "1 text": "1 text"
     },
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         user_username: {label: "username2"},
         user_name: {label: "name"},
         text_datetime: {label: "date"},
@@ -3789,7 +3789,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
         "1 text": "1 text"
     },
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         user_username: {label: "username2"},
         user_name: {label: "name"},
         text_datetime: {label: "date"},
@@ -3844,7 +3844,7 @@ settings.corpora.gdc = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         "text_activity1": {label: "activity1"},
         "text_activity2": {label: "activity2"},
         "text_activity3": {label: "activity3"},
@@ -3871,7 +3871,7 @@ settings.corpora.mepac = {
     },
     within: settings.defaultWithin,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         "text_source": {label: "source"},
         "text_date": {label: "date"},
         "text_type": {label: "type",
@@ -3896,7 +3896,7 @@ settings.corpora["mepac-i"] = {
     },
     within: settings.defaultWithin,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         "text_source": {label: "source"},
         "text_date": {label: "date"},
         "text_type": {label: "type", displayType: "select",
@@ -3919,7 +3919,7 @@ settings.corpora.forhor = {
     context: spContext,
     within: spWithin,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         "text_fall": {label: "fall"},
         "text_hord": {label: "hord"},
         "text_fl1": {label: "fl1"},
@@ -3943,7 +3943,7 @@ settings.corpora.soexempel = {
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
-    struct_attributes: {
+    structAttributes: {
         "text_date": {label: "year"},
         "entry_word": {label: "entryword"},
         "entry_entryno": {label: "entryno"},
@@ -4043,7 +4043,7 @@ settings.corpora["rd-bet"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-ds"] = {
@@ -4053,7 +4053,7 @@ settings.corpora["rd-ds"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-eun"] = {
@@ -4063,7 +4063,7 @@ settings.corpora["rd-eun"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-flista"] = {
@@ -4073,7 +4073,7 @@ settings.corpora["rd-flista"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-fpm"] = {
@@ -4083,7 +4083,7 @@ settings.corpora["rd-fpm"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-frsrdg"] = {
@@ -4093,7 +4093,7 @@ settings.corpora["rd-frsrdg"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-ip"] = {
@@ -4103,7 +4103,7 @@ settings.corpora["rd-ip"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-kammakt"] = {
@@ -4113,7 +4113,7 @@ settings.corpora["rd-kammakt"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-kom"] = {
@@ -4123,7 +4123,7 @@ settings.corpora["rd-kom"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-mot"] = {
@@ -4133,7 +4133,7 @@ settings.corpora["rd-mot"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-prop"] = {
@@ -4143,7 +4143,7 @@ settings.corpora["rd-prop"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-prot"] = {
@@ -4153,7 +4153,7 @@ settings.corpora["rd-prot"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-rskr"] = {
@@ -4163,7 +4163,7 @@ settings.corpora["rd-rskr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-samtr"] = {
@@ -4173,7 +4173,7 @@ settings.corpora["rd-samtr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-skfr"] = {
@@ -4183,7 +4183,7 @@ settings.corpora["rd-skfr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-sou"] = {
@@ -4193,7 +4193,7 @@ settings.corpora["rd-sou"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-tlista"] = {
@@ -4203,7 +4203,7 @@ settings.corpora["rd-tlista"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-utr"] = {
@@ -4213,7 +4213,7 @@ settings.corpora["rd-utr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-utsk"] = {
@@ -4223,7 +4223,7 @@ settings.corpora["rd-utsk"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-yttr"] = {
@@ -4233,7 +4233,7 @@ settings.corpora["rd-yttr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpora["rd-ovr"] = {
@@ -4243,7 +4243,7 @@ settings.corpora["rd-ovr"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
-    struct_attributes: rd_struct_attributes
+    structAttributes: rd_struct_attributes
 };
 
 settings.corpusListing = new CorpusListing(settings.corpora);

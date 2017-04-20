@@ -58,7 +58,7 @@ settings.corpora["lag1734"] = {
             opts: liteOptions
         },
     },
-    struct_attributes: {
+    structAttributes: {
         //paragraph_marginal: {label: "paragraph_marginal"},
         text_date: {label: "date"},
         text_title: {
@@ -104,7 +104,7 @@ settings.corpora["forarbeten1734"] = {
             opts: liteOptions
         },
     },
-    struct_attributes: {
+    structAttributes: {
         //paragraph_marginal: {label: "paragraph_marginal"},
         text_date: {label: "date"},
         text_title: {
@@ -145,7 +145,7 @@ settings.corpora["sfs"] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {label: "title"}
     }
@@ -169,7 +169,7 @@ settings.corpora["moderntdv"] = {
         deprel: attrs.deprel,
         ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {label: "title"}
     }
@@ -190,7 +190,7 @@ settings.corpora["lag1800"] = {
         prefix: attrs.prefix,
         suffix: attrs.suffix
     },
-    struct_attributes: {
+    structAttributes: {
         text_title: {
             localize: false,
             label: "title",
@@ -220,7 +220,7 @@ settings.corpora["tankebok"] = {
         lemma: attrs.baseform,
         lex: attrs.lemgram
     },
-    struct_attributes: {
+    structAttributes: {
         text_date: {label: "date"},
         text_title: {
             label: "title",

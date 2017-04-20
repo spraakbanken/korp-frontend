@@ -32,7 +32,7 @@ settings.corpora['bellman'] = {
 		deprel: attrs.deprel,
 		ref: attrs.ref
     },
-    struct_attributes: {
+    structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
         page_n: {label: "page"}
