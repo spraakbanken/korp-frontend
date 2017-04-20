@@ -47,7 +47,7 @@ settings.runebergstruct_attributes = {
 
 
 settings.corpora["runeberg-diverse"] = {
-    morphology: 'swedbergm|dalinm|saldom',
+    morphology: "swedbergm|dalinm|saldom",
     id: "runeberg-diverse",
     title: "Diverse tidningar",
     description: "Brand, De ungas tidning, Det nya Sverige, Elegant, Hvar 8 dag, Nyare Conversations-Bladet, Sundsvalls tidning, Varia",
@@ -58,7 +58,7 @@ settings.corpora["runeberg-diverse"] = {
 };
 
 settings.corpora["runeberg-rost"] = {
-    morphology: 'swedbergm|dalinm|saldom',
+    morphology: "swedbergm|dalinm|saldom",
     id: "runeberg-rost",
     title: "Rösträtt för kvinnor",
     description: "",
@@ -69,7 +69,7 @@ settings.corpora["runeberg-rost"] = {
 };
 
 settings.corpora["runeberg-svtidskr"] = {
-    morphology: 'swedbergm|dalinm|saldom',
+    morphology: "swedbergm|dalinm|saldom",
     id: "runeberg-svtidskr",
     title: "Svensk Tidskrift",
     description: "",
@@ -80,7 +80,7 @@ settings.corpora["runeberg-svtidskr"] = {
 };
 
 settings.corpora["runeberg-tiden"] = {
-    morphology: 'swedbergm|dalinm|saldom',
+    morphology: "swedbergm|dalinm|saldom",
     id: "runeberg-tiden",
     title: "Tiden",
     description: "",
@@ -92,7 +92,7 @@ settings.corpora["runeberg-tiden"] = {
 };
 
 settings.corpora["runeberg-urdagkron"] = {
-    morphology: 'swedbergm|dalinm|saldom',
+    morphology: "swedbergm|dalinm|saldom",
     id: "runeberg-urdagkron",
     title: "Ur Dagens Krönika",
     description: "",

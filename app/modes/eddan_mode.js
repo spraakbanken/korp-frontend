@@ -8,7 +8,7 @@ $("#showLineDiagram").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.eddan = {
+settings.corpora["eddan"] = {
     id: "eddan",
     title: "Äldre Eddan",
     description: "",

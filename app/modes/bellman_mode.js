@@ -13,8 +13,8 @@ $("#results-lemgram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 
-settings.corpora['bellman'] = {
-    morphology: 'swedbergm|dalinm|saldom',
+settings.corpora["bellman"] = {
+    morphology: "swedbergm|dalinm|saldom",
     id: "bellman",
     title: "Bellmans samlade verk",
     description: "",

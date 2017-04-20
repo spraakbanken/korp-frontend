@@ -8,8 +8,8 @@ $("#showLineDiagram").remove();
 settings.corpora = {};
 settings.corporafolders = {};
 
-settings.corpora.kioping = {
-    morphology: 'swedbergm|dalinm|saldom',
+settings.corpora["kioping"] = {
+    morphology: "swedbergm|dalinm|saldom",
     id: "kioping",
     title: "Nils Matsson Kiöpings resor",
     description: "Reseskildringar från 1674 och 1743",

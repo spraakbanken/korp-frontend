@@ -15,7 +15,7 @@ $("#showLineDiagram").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.lsi = {
+settings.corpora["lsi"] = {
     id: "lsi",
     title: "LSI",
     description: "",

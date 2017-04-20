@@ -9,7 +9,7 @@ $("#showLineDiagram").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.fts = {
+settings.corpora["fts"] = {
     id: "fts",
     title: "FTS - Färöisk textsamling",
     description: "Färöisk textsamling, i samarbete med Färöarnas universitet, Fróðskaparsetur Føroya.",

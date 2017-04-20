@@ -31,7 +31,7 @@ settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 
 settings.corpora["lag1734"] = {
-    morphology: 'swedbergm|dalinm',
+    morphology: "swedbergm|dalinm",
     id: "lag1734",
     title: "1734 års lag",
     description: "Materialet utgörs av balkarna i själva lagtexten, förordet samt domarreglerna. Materialet är inskrivet för hand och korrekturläst, men en del fel finns fortfarande kvar.",
@@ -77,7 +77,7 @@ settings.corpora["lag1734"] = {
 };
 
 settings.corpora["forarbeten1734"] = {
-    morphology: 'swedbergm|dalinm',
+    morphology: "swedbergm|dalinm",
     id: "forarbeten1734",
     title: "Förarbeten",
     description: "Förarbetena till 1734 års lag utgörs av material från lagkommissionen till 1734 års lag. Materialet är från 1686–1735, utgivet av Vilhelsm Sjögren 1900–1909. Materialet utgörs av protokoll från sammanträdena (vol. 1–3); lagkommissionens förslag (vol. 4 –6); utlåtanden över lagkommissionens förslag (vol. 7) samt riksdagshandlingar angående lagkommissionens förslag (vol. 8). Materialet är OCR-skannat med manuell efterarbetning.",
@@ -176,7 +176,7 @@ settings.corpora["moderntdv"] = {
 };
 
 settings.corpora["lag1800"] = {
-    morphology: 'saldom|dalinm',
+    morphology: "saldom|dalinm",
     id: "lag1800",
     title: "Lagar från 1800-talet",
     description: "Regeringsformen 1809 med ändringar 1809-1974, Författningssamling Låssa kyrkas arkiv 1800",
@@ -209,7 +209,7 @@ settings.corpora["lag1800"] = {
 
 
 settings.corpora["tankebok"] = {
-    morphology: 'swedbergm|dalinm',
+    morphology: "swedbergm|dalinm",
     id: "tankebok",
     title: "Stockholms stads tänkeböcker",
     description: "Stockholms stads tänkeböcker från 1626",

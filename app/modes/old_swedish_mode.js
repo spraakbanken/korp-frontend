@@ -60,7 +60,7 @@ settings.corporafolders.medeltid = {
 settings.corpora["fsv-aldrelagar"] = fsv_aldrelagar;
 
 settings.corpora["fsv-aldrereligiosprosa"] = {
-    morphology: 'fsvm',
+    morphology: "fsvm",
     id: "fsv-aldrereligiosprosa",
     title: "Äldre religiös prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
@@ -86,7 +86,7 @@ settings.corpora["fsv-aldrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-profanprosa"] = {
-    morphology: 'fsvm',
+    morphology: "fsvm",
     id: "fsv-profanprosa",
     title: "Profan prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
@@ -117,7 +117,7 @@ settings.corpora["fsv-profanprosa"] = {
 };
 
 settings.corpora["fsv-verser"] = {
-    morphology: 'fsvm',
+    morphology: "fsvm",
     id: "fsv-verser",
     title: "Verser – Fornsvenska textbankens material",
     description: settings.fsvdescription,
@@ -147,7 +147,7 @@ settings.corpora["fsv-yngrelagar"] = fsv_yngrelagar;
 
 settings.corpora["fsv-yngrereligiosprosa"] = {
     id: "fsv-yngrereligiosprosa",
-    morphology: 'fsvm',
+    morphology: "fsvm",
     title: "Yngre religiös prosa – Fornsvenska textbankens material",
     description: settings.fsvdescription,
     within: settings.defaultWithin,
@@ -257,7 +257,7 @@ settings.corpora["fsv-yngrereligiosprosa"] = {
 };
 
 settings.corpora["fsv-yngretankebocker"] = {
-    morphology: 'fsvm',
+    morphology: "fsvm",
     id: "fsv-yngretankebocker",
     title: "Yngre tankeböcker – Fornsvenska textbankens material",
     description: settings.fsvdescription,
@@ -458,7 +458,7 @@ settings.corpora["sdhk-ovrigt"] = {
 };
 
 if(isLab){
-    settings.corpora.ogl = {
+    settings.corpora["ogl"] = {
         id: "ogl",
         title: "Östgötalagen",
         description: "",

@@ -591,7 +591,7 @@ st["text_interviewee"]["dataset"] = {"ALE": "ALE",
 "ZIT": "ZIT"};
 
 
-settings.corpora.interfra = {
+settings.corpora["interfra"] = {
     id: "interfra",
     title: "InterFra",
     description: '<a target="_blank" href="http://spraakbanken.gu.se/eng/resource/interfra">Mer information om korpusen</a><br>Innehåller c:a 900 000 ord',

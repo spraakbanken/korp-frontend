@@ -6,7 +6,7 @@ settings.wordpicture = true;
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.lb = {
+settings.corpora["lb"] = {
     id: "lb",
     title: "Litteraturbanken",
     description: 'Samtliga etexter och sökbara faksimiler från <a href="http://litteraturbanken.se/">Litteraturbanken.se</a>.',

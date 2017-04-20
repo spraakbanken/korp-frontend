@@ -83,7 +83,7 @@ settings.corporafolders.aftonbladet = {
 };
 
 settings.corpora["kubhist-aftonbladet-1830"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-aftonbladet-1830",
     title: "Aftonbladet 1830-talet",
     description: digidailydescription,
@@ -95,7 +95,7 @@ settings.corpora["kubhist-aftonbladet-1830"] = {
 };
 
 settings.corpora["kubhist-aftonbladet-1840"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-aftonbladet-1840",
     title: "Aftonbladet 1840-talet",
     description: digidailydescription,
@@ -107,7 +107,7 @@ settings.corpora["kubhist-aftonbladet-1840"] = {
 };
 
 settings.corpora["kubhist-aftonbladet-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-aftonbladet-1850",
     title: "Aftonbladet 1850-talet",
     description: digidailydescription,
@@ -119,7 +119,7 @@ settings.corpora["kubhist-aftonbladet-1850"] = {
 };
 
 settings.corpora["kubhist-aftonbladet-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-aftonbladet-1860",
     title: "Aftonbladet 1860-talet",
     description: digidailydescription,
@@ -138,7 +138,7 @@ settings.corporafolders.blekingsposten = {
 };
 
 settings.corpora["kubhist-blekingsposten-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-blekingsposten-1850",
     title: "Blekingsposten 1850-talet",
     description: digidailydescription,
@@ -149,7 +149,7 @@ settings.corpora["kubhist-blekingsposten-1850"] = {
 };
 
 settings.corpora["kubhist-blekingsposten-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-blekingsposten-1860",
     title: "Blekingsposten 1860-talet",
     description: digidailydescription,
@@ -160,7 +160,7 @@ settings.corpora["kubhist-blekingsposten-1860"] = {
 };
 
 settings.corpora["kubhist-blekingsposten-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-blekingsposten-1870",
     title: "Blekingsposten 1870-talet",
     description: digidailydescription,
@@ -171,7 +171,7 @@ settings.corpora["kubhist-blekingsposten-1870"] = {
 };
 
 settings.corpora["kubhist-blekingsposten-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-blekingsposten-1880",
     title: "Blekingsposten 1880-talet",
     description: digidailydescription,
@@ -187,7 +187,7 @@ settings.corporafolders.bollnastidning = {
 };
 
 settings.corpora["kubhist-bollnastidning-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-bollnastidning-1870",
     title: "Bollnäs tidning 1870-talet",
     description: digidailydescription,
@@ -198,7 +198,7 @@ settings.corpora["kubhist-bollnastidning-1870"] = {
 };
 
 settings.corpora["kubhist-bollnastidning-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-bollnastidning-1880",
     title: "Bollnäs tidning 1880-talet",
     description: digidailydescription,
@@ -216,7 +216,7 @@ settings.corporafolders.dalpilen = {
 };
 
 settings.corpora["kubhist-dalpilen-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1850",
     title: "Dalpilen 1850-talet",
     description: digidailydescription,
@@ -227,7 +227,7 @@ settings.corpora["kubhist-dalpilen-1850"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1860",
     title: "Dalpilen 1860-talet",
     description: digidailydescription,
@@ -238,7 +238,7 @@ settings.corpora["kubhist-dalpilen-1860"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1870",
     title: "Dalpilen 1870-talet",
     description: digidailydescription,
@@ -249,7 +249,7 @@ settings.corpora["kubhist-dalpilen-1870"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1880",
     title: "Dalpilen 1880-talet",
     description: digidailydescription,
@@ -260,7 +260,7 @@ settings.corpora["kubhist-dalpilen-1880"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1890",
     title: "Dalpilen 1890-talet",
     description: digidailydescription,
@@ -271,7 +271,7 @@ settings.corpora["kubhist-dalpilen-1890"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1900"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1900",
     title: "Dalpilen 1900-talet",
     description: digidailydescription,
@@ -282,7 +282,7 @@ settings.corpora["kubhist-dalpilen-1900"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1910"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1910",
     title: "Dalpilen 1910-talet",
     description: digidailydescription,
@@ -293,7 +293,7 @@ settings.corpora["kubhist-dalpilen-1910"] = {
 };
 
 settings.corpora["kubhist-dalpilen-1920"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-dalpilen-1920",
     title: "Dalpilen 1920-talet",
     description: digidailydescription,
@@ -311,7 +311,7 @@ settings.corporafolders.fahluweckoblad = {
 };
 
 settings.corpora["kubhist-fahluweckoblad-1780"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-fahluweckoblad-1780",
     title: "Fahlu weckoblad 1780-talet",
     description: digidailydescription,
@@ -322,7 +322,7 @@ settings.corpora["kubhist-fahluweckoblad-1780"] = {
 };
 
 settings.corpora["kubhist-fahluweckoblad-1790"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-fahluweckoblad-1790",
     title: "Fahlu weckoblad 1790-talet",
     description: digidailydescription,
@@ -333,7 +333,7 @@ settings.corpora["kubhist-fahluweckoblad-1790"] = {
 };
 
 settings.corpora["kubhist-fahluweckoblad-1800"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-fahluweckoblad-1800",
     title: "Fahlu weckoblad 1800-talet",
     description: digidailydescription,
@@ -344,7 +344,7 @@ settings.corpora["kubhist-fahluweckoblad-1800"] = {
 };
 
 settings.corpora["kubhist-fahluweckoblad-1810"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-fahluweckoblad-1810",
     title: "Fahlu weckoblad 1810-talet",
     description: digidailydescription,
@@ -355,7 +355,7 @@ settings.corpora["kubhist-fahluweckoblad-1810"] = {
 };
 
 settings.corpora["kubhist-fahluweckoblad-1820"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-fahluweckoblad-1820",
     title: "Fahlu weckoblad 1820-talet",
     description: digidailydescription,
@@ -373,7 +373,7 @@ settings.corporafolders.faluposten = {
 };
 
 settings.corpora["kubhist-faluposten-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-faluposten-1860",
     title: "Faluposten 1860-talet",
     description: digidailydescription,
@@ -384,7 +384,7 @@ settings.corpora["kubhist-faluposten-1860"] = {
 };
 
 settings.corpora["kubhist-faluposten-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-faluposten-1870",
     title: "Faluposten 1870-talet",
     description: digidailydescription,
@@ -395,7 +395,7 @@ settings.corpora["kubhist-faluposten-1870"] = {
 };
 
 settings.corpora["kubhist-faluposten-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-faluposten-1880",
     title: "Faluposten 1880-talet",
     description: digidailydescription,
@@ -406,7 +406,7 @@ settings.corpora["kubhist-faluposten-1880"] = {
 };
 
 settings.corpora["kubhist-faluposten-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-faluposten-1890",
     title: "Faluposten 1890-talet",
     description: digidailydescription,
@@ -424,7 +424,7 @@ settings.corporafolders.folketsrost = {
 };
 
 settings.corpora["kubhist-folketsrost-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-folketsrost-1850",
     title: "Folkets röst 1850-talet",
     description: digidailydescription,
@@ -435,7 +435,7 @@ settings.corpora["kubhist-folketsrost-1850"] = {
 };
 
 settings.corpora["kubhist-folketsrost-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-folketsrost-1860",
     title: "Folkets röst 1860-talet",
     description: digidailydescription,
@@ -453,7 +453,7 @@ settings.corporafolders.gotlandstidning = {
 };
 
 settings.corpora["kubhist-gotlandstidning-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-gotlandstidning-1860",
     title: "Gotlands tidning 1860-talet",
     description: digidailydescription,
@@ -464,7 +464,7 @@ settings.corpora["kubhist-gotlandstidning-1860"] = {
 };
 
 settings.corpora["kubhist-gotlandstidning-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-gotlandstidning-1870",
     title: "Gotlands tidning 1870-talet",
     description: digidailydescription,
@@ -475,7 +475,7 @@ settings.corpora["kubhist-gotlandstidning-1870"] = {
 };
 
 settings.corpora["kubhist-gotlandstidning-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-gotlandstidning-1880",
     title: "Gotlands tidning 1880-talet",
     description: digidailydescription,
@@ -493,7 +493,7 @@ settings.corporafolders.goteborgsweckoblad = {
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-goteborgsweckoblad-1870",
     title: "Göteborgs weckoblad 1870-talet",
     description: digidailydescription,
@@ -504,7 +504,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1870"] = {
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-goteborgsweckoblad-1880",
     title: "Göteborgs weckoblad 1880-talet",
     description: digidailydescription,
@@ -515,7 +515,7 @@ settings.corpora["kubhist-goteborgsweckoblad-1880"] = {
 };
 
 settings.corpora["kubhist-goteborgsweckoblad-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-goteborgsweckoblad-1890",
     title: "Göteborgs weckoblad 1890-talet",
     description: digidailydescription,
@@ -533,7 +533,7 @@ settings.corporafolders.gotheborgsweckolista = {
 };
 
 settings.corpora["kubhist-gotheborgsweckolista-1740"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-gotheborgsweckolista-1740",
     title: "Götheborgs weckolista 1740-talet",
     description: digidailydescription,
@@ -544,7 +544,7 @@ settings.corpora["kubhist-gotheborgsweckolista-1740"] = {
 };
 
 settings.corpora["kubhist-gotheborgsweckolista-1750"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-gotheborgsweckolista-1750",
     title: "Götheborgs weckolista 1750-talet",
     description: digidailydescription,
@@ -562,7 +562,7 @@ settings.corporafolders.jonkopingsbladet = {
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1840"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-jonkopingsbladet-1840",
     title: "Jönköpingsbladet 1840-talet",
     description: digidailydescription,
@@ -573,7 +573,7 @@ settings.corpora["kubhist-jonkopingsbladet-1840"] = {
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-jonkopingsbladet-1850",
     title: "Jönköpingsbladet 1850-talet",
     description: digidailydescription,
@@ -584,7 +584,7 @@ settings.corpora["kubhist-jonkopingsbladet-1850"] = {
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-jonkopingsbladet-1860",
     title: "Jönköpingsbladet 1860-talet",
     description: digidailydescription,
@@ -595,7 +595,7 @@ settings.corpora["kubhist-jonkopingsbladet-1860"] = {
 };
 
 settings.corpora["kubhist-jonkopingsbladet-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-jonkopingsbladet-1870",
     title: "Jönköpingsbladet 1870-talet",
     description: digidailydescription,
@@ -613,7 +613,7 @@ settings.corporafolders.kalmar = {
 };
 
 settings.corpora["kubhist-kalmar-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1860",
     title: "Kalmar 1860-talet",
     description: digidailydescription,
@@ -624,7 +624,7 @@ settings.corpora["kubhist-kalmar-1860"] = {
 };
 
 settings.corpora["kubhist-kalmar-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1870",
     title: "Kalmar 1870-talet",
     description: digidailydescription,
@@ -635,7 +635,7 @@ settings.corpora["kubhist-kalmar-1870"] = {
 };
 
 settings.corpora["kubhist-kalmar-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1880",
     title: "Kalmar 1880-talet",
     description: digidailydescription,
@@ -646,7 +646,7 @@ settings.corpora["kubhist-kalmar-1880"] = {
 };
 
 settings.corpora["kubhist-kalmar-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1890",
     title: "Kalmar 1890-talet",
     description: digidailydescription,
@@ -657,7 +657,7 @@ settings.corpora["kubhist-kalmar-1890"] = {
 };
 
 settings.corpora["kubhist-kalmar-1900"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1900",
     title: "Kalmar 1900-talet",
     description: digidailydescription,
@@ -668,7 +668,7 @@ settings.corpora["kubhist-kalmar-1900"] = {
 };
 
 settings.corpora["kubhist-kalmar-1910"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-kalmar-1910",
     title: "Kalmar 1910-talet",
     description: digidailydescription,
@@ -686,7 +686,7 @@ settings.corporafolders.lindesbergsallehanda = {
 };
 
 settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-lindesbergsallehanda-1870",
     title: "Lindesbergs allehanda 1870-talet",
     description: digidailydescription,
@@ -697,7 +697,7 @@ settings.corpora["kubhist-lindesbergsallehanda-1870"] = {
 };
 
 settings.corpora["kubhist-lindesbergsallehanda-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-lindesbergsallehanda-1880",
     title: "Lindesbergs allehanda 1880-talet",
     description: digidailydescription,
@@ -715,7 +715,7 @@ settings.corporafolders.norraskane = {
 };
 
 settings.corpora["kubhist-norraskane-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-norraskane-1880",
     title: "Norra Skåne 1880-talet",
     description: digidailydescription,
@@ -726,7 +726,7 @@ settings.corpora["kubhist-norraskane-1880"] = {
 };
 
 settings.corpora["kubhist-norraskane-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-norraskane-1890",
     title: "Norra Skåne 1890-talet",
     description: digidailydescription,
@@ -746,7 +746,7 @@ settings.corporafolders.postochinrikestidning = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1770"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1770",
     title: "Post- och Inrikes Tidningar 1770-talet",
     description: digidailydescription,
@@ -757,7 +757,7 @@ settings.corpora["kubhist-postochinrikestidning-1770"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1780"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1780",
     title: "Post- och Inrikes Tidningar 1780-talet",
     description: digidailydescription,
@@ -768,7 +768,7 @@ settings.corpora["kubhist-postochinrikestidning-1780"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1790"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1790",
     title: "Post- och Inrikes Tidningar 1790-talet",
     description: digidailydescription,
@@ -779,7 +779,7 @@ settings.corpora["kubhist-postochinrikestidning-1790"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1800"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1800",
     title: "Post- och Inrikes Tidningar 1800-talet",
     description: digidailydescription,
@@ -790,7 +790,7 @@ settings.corpora["kubhist-postochinrikestidning-1800"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1810"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1810",
     title: "Post- och Inrikes Tidningar 1810-talet",
     description: digidailydescription,
@@ -801,7 +801,7 @@ settings.corpora["kubhist-postochinrikestidning-1810"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1820"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1820",
     title: "Post- och Inrikes Tidningar 1820-talet",
     description: digidailydescription,
@@ -812,7 +812,7 @@ settings.corpora["kubhist-postochinrikestidning-1820"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1830"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1830",
     title: "Post- och Inrikes Tidningar 1830-talet",
     description: digidailydescription,
@@ -823,7 +823,7 @@ settings.corpora["kubhist-postochinrikestidning-1830"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1840"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1840",
     title: "Post- och Inrikes Tidningar 1840-talet",
     description: digidailydescription,
@@ -834,7 +834,7 @@ settings.corpora["kubhist-postochinrikestidning-1840"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1850",
     title: "Post- och Inrikes Tidningar 1850-talet",
     description: digidailydescription,
@@ -845,7 +845,7 @@ settings.corpora["kubhist-postochinrikestidning-1850"] = {
 };
 
 settings.corpora["kubhist-postochinrikestidning-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-postochinrikestidning-1860",
     title: "Post- och Inrikes Tidningar 1860-talet",
     description: digidailydescription,
@@ -864,7 +864,7 @@ settings.corporafolders.stockholmsposten = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1770"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1770",
     title: "Stockholmsposten 1770-talet",
     description: digidailydescription,
@@ -875,7 +875,7 @@ settings.corpora["kubhist-stockholmsposten-1770"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1780"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1780",
     title: "Stockholmsposten 1780-talet",
     description: digidailydescription,
@@ -886,7 +886,7 @@ settings.corpora["kubhist-stockholmsposten-1780"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1790"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1790",
     title: "Stockholmsposten 1790-talet",
     description: digidailydescription,
@@ -897,7 +897,7 @@ settings.corpora["kubhist-stockholmsposten-1790"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1800"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1800",
     title: "Stockholmsposten 1800-talet",
     description: digidailydescription,
@@ -908,7 +908,7 @@ settings.corpora["kubhist-stockholmsposten-1800"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1810"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1810",
     title: "Stockholmsposten 1810-talet",
     description: digidailydescription,
@@ -919,7 +919,7 @@ settings.corpora["kubhist-stockholmsposten-1810"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1820"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1820",
     title: "Stockholmsposten 1820-talet",
     description: digidailydescription,
@@ -930,7 +930,7 @@ settings.corpora["kubhist-stockholmsposten-1820"] = {
 };
 
 settings.corpora["kubhist-stockholmsposten-1830"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-stockholmsposten-1830",
     title: "Stockholmsposten 1830-talet",
     description: digidailydescription,
@@ -949,7 +949,7 @@ settings.corporafolders.tidningforwenersborg = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1840"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1840",
     title: "Tidning för Wenersborgs stad och län 1840-talet",
     description: digidailydescription,
@@ -960,7 +960,7 @@ settings.corpora["kubhist-tidningforwenersborg-1840"] = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1850"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1850",
     title: "Tidning för Wenersborgs stad och län 1850-talet",
     description: digidailydescription,
@@ -971,7 +971,7 @@ settings.corpora["kubhist-tidningforwenersborg-1850"] = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1860"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1860",
     title: "Tidning för Wenersborgs stad och län 1860-talet",
     description: digidailydescription,
@@ -982,7 +982,7 @@ settings.corpora["kubhist-tidningforwenersborg-1860"] = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1870",
     title: "Tidning för Wenersborgs stad och län 1870-talet",
     description: digidailydescription,
@@ -993,7 +993,7 @@ settings.corpora["kubhist-tidningforwenersborg-1870"] = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1880",
     title: "Tidning för Wenersborgs stad och län 1880-talet",
     description: digidailydescription,
@@ -1004,7 +1004,7 @@ settings.corpora["kubhist-tidningforwenersborg-1880"] = {
 };
 
 settings.corpora["kubhist-tidningforwenersborg-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-tidningforwenersborg-1890",
     title: "Tidning för Wenersborgs stad och län 1890-talet",
     description: digidailydescription,
@@ -1022,7 +1022,7 @@ settings.corporafolders.wermlandslanstidning = {
 };
 
 settings.corpora["kubhist-wermlandslanstidning-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-wermlandslanstidning-1870",
     title: "Wermlands läns tidning 1870-talet",
     description: digidailydescription,
@@ -1040,7 +1040,7 @@ settings.corporafolders.wernamotidning = {
 };
 
 settings.corpora["kubhist-wernamotidning-1870"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-wernamotidning-1870",
     title: "Wernamo tidning 1870-talet",
     description: digidailydescription,
@@ -1051,7 +1051,7 @@ settings.corpora["kubhist-wernamotidning-1870"] = {
 };
 
 settings.corpora["kubhist-wernamotidning-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-wernamotidning-1880",
     title: "Wernamo tidning 1880-talet",
     description: digidailydescription,
@@ -1069,7 +1069,7 @@ settings.corporafolders.ostergotlandsveckoblad = {
 };
 
 settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-ostergotlandsveckoblad-1880",
     title: "Östergötlands veckoblad 1880-talet",
     description: digidailydescription,
@@ -1080,7 +1080,7 @@ settings.corpora["kubhist-ostergotlandsveckoblad-1880"] = {
 };
 
 settings.corpora["kubhist-ostergotlandsveckoblad-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-ostergotlandsveckoblad-1890",
     title: "Östergötlands veckoblad 1890-talet",
     description: digidailydescription,
@@ -1098,7 +1098,7 @@ settings.corporafolders.ostgotaposten = {
 };
 
 settings.corpora["kubhist-ostgotaposten-1890"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-ostgotaposten-1890",
     title: "Östgötaposten 1890-talet",
     description: digidailydescription,
@@ -1109,7 +1109,7 @@ settings.corpora["kubhist-ostgotaposten-1890"] = {
 };
 
 settings.corpora["kubhist-ostgotaposten-1900"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-ostgotaposten-1900",
     title: "Östgötaposten 1900-talet",
     description: digidailydescription,
@@ -1120,7 +1120,7 @@ settings.corpora["kubhist-ostgotaposten-1900"] = {
 };
 
 settings.corpora["kubhist-ostgotaposten-1910"] = {
-    morphology: 'saldom|dalinm|swedbergm',
+    morphology: "saldom|dalinm|swedbergm",
     id: "kubhist-ostgotaposten-1910",
     title: "Östgötaposten 1910-talet",
     description: digidailydescription,

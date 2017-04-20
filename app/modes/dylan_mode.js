@@ -7,7 +7,7 @@ $("#lemgram_list_item").remove();
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.dylan = {
+settings.corpora["dylan"] = {
     id: "dylan",
     title: "Bob Dylan",
     description: "",

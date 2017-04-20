@@ -196,7 +196,7 @@ settings.preselectedCorpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7
  * CORPORA
  */
 
-settings.corpora.magmakolumner = {
+settings.corpora["magmakolumner"] = {
     id: "magmakolumner",
     title: "Magma kolumner 2009–2012",
     description: "Material ur kolumner publicerade av <a target=\"_blank\" href=\"http://www.magma.fi\">Tankesmedjan Magma</a>",
@@ -210,7 +210,7 @@ settings.corpora.magmakolumner = {
     }
 };
 
-settings.corpora.fsbbloggvuxna = {
+settings.corpora["fsbbloggvuxna"] = {
     id: "fsbbloggvuxna",
     title: "Bloggtexter 2006–2013",
     description: "",
@@ -244,7 +244,7 @@ settings.corpora["fsbskonlit1960-1999"] = {
     }
 };
 
-settings.corpora.fsbskonlit2000tal = {
+settings.corpora["fsbskonlit2000tal"] = {
     id: "fsbskonlit2000tal",
     title: "Skönlitteratur 2000–2013",
     description: "Material ur skönlitterära verk publicerade under 2000–2013.",
@@ -259,7 +259,7 @@ settings.corpora.fsbskonlit2000tal = {
     }
 };
 
-settings.corpora.barnlitteratur = {
+settings.corpora["barnlitteratur"] = {
     id: "barnlitteratur",
     title: "Barnlitteratur 1988–2013",
     description: "Material ur barnlitterära verk publicerade under 2000–2013.",
@@ -274,7 +274,7 @@ settings.corpora.barnlitteratur = {
     }
 };
 
-settings.corpora.fsbessaistik = {
+settings.corpora["fsbessaistik"] = {
     id: "fsbessaistik",
     title: "Essäistisk litteratur 1963–2010",
     description: "Material ur essäistiska verk publicerade under 1992–2013",
@@ -289,7 +289,7 @@ settings.corpora.fsbessaistik = {
     }
 };
 
-settings.corpora.fsbsakprosa = {
+settings.corpora["fsbsakprosa"] = {
     id: "fsbsakprosa",
     title: "Sakprosa 2006–2013",
     description: "Material ur facklitterära verk publicerade under 2006–2013.",
@@ -304,7 +304,7 @@ settings.corpora.fsbsakprosa = {
     }
 };
 
-settings.corpora.ungdomslitteratur = {
+settings.corpora["ungdomslitteratur"] = {
     id: "ungdomslitteratur",
     title: "Ungdomslitteratur 1992–2011",
     description: "Material ur ungdomslitterära verk publicerade under 1992–2013.",
@@ -319,7 +319,7 @@ settings.corpora.ungdomslitteratur = {
     }
 };
 
-settings.corpora.informationstidningar = {
+settings.corpora["informationstidningar"] = {
     id: "informationstidningar",
     title: "Kommuners och städers informationstidningar 2001–2013",
     description: "Material ur informationstidningar som ges ut av kommuner och städer.",
@@ -333,7 +333,7 @@ settings.corpora.informationstidningar = {
     }
 };
 
-settings.corpora.lagtexter = {
+settings.corpora["lagtexter"] = {
     id: "lagtexter",
     title: "Lagtexter 1990–2000",
     description: "Material ur Finlands lag.",
@@ -344,7 +344,7 @@ settings.corpora.lagtexter = {
     }
 };
 
-settings.corpora.myndighet = {
+settings.corpora["myndighet"] = {
     id: "myndighet",
     title: "Myndighetsprosa 1990–2013",
     description: "Material ur bland annat Utbildningsstyrelsens, Undervisningsministeriets och Länsstyrelsens publikationer.",
@@ -358,7 +358,7 @@ settings.corpora.myndighet = {
     }
 };
 
-settings.corpora.propositioner = {
+settings.corpora["propositioner"] = {
     id: "propositioner",
     title: "Propositioner 1993–2013",
     description: 'Material ur <a target="_blank" href="http://www.eduskunta.fi/triphome/bin/vexhaku.sh?lyh=HE?kieli=ru">regeringens propositioner</a>.',
@@ -371,7 +371,7 @@ settings.corpora.propositioner = {
     }
 };
 
-settings.corpora.finsktidskrift = {
+settings.corpora["finsktidskrift"] = {
     id: "finsktidskrift",
     title: "Finsk tidskrift 2011–2012",
     description: "<a target=\"_blank\" href=\"http://www.abo.fi/public/finsktidskrift\">Finsk Tidskrift</a> är en tidskrift som strävar efter ingående reflektion inom ett brett område och vill ge djupare historisk, politisk och kulturell förståelse av den aktuella samtidsdebatten.",
@@ -384,7 +384,7 @@ settings.corpora.finsktidskrift = {
     }
 };
 
-settings.corpora.forumfeot = {
+settings.corpora["forumfeot"] = {
     id: "forumfeot",
     title: "Forum för ekonomi och teknik 2008–2012",
     description: "<a target=\"_blank\" href=\"http://www.forummag.fi\">Forum för ekonomi och teknik</a> är Finlands enda svenskspråkiga affärsmagasin och ger sina läsare information om näringsliv, ledarskap och teknologi.",
@@ -396,7 +396,7 @@ settings.corpora.forumfeot = {
     }
 };
 
-settings.corpora.hanken = {
+settings.corpora["hanken"] = {
     id: "hanken",
     title: "Hanken 2008–2011",
     description: "Tidningen <a target=\"_blank\" href=\"http://www.hanken.fi/public/alumntidning\">Hanken</a> är Svenska handelshögskolans alumntidning.",
@@ -409,7 +409,7 @@ settings.corpora.hanken = {
     }
 };
 
-settings.corpora.svenskbygden = {
+settings.corpora["svenskbygden"] = {
     id: "svenskbygden",
     title: "Svenskbygden 2010–2011",
     description: "<a target=\"_blank\" href=\"http://www.sfv.fi/publikationer/svenskbygden/\">Svenskbygden</a> är Svenska Folkskolans Vänners medlemstidning. Tiskriften innehåller artiklar som berör allt från utbildning och aktuella samhällsfrågor till kultur och litteratur.",
@@ -422,7 +422,7 @@ settings.corpora.svenskbygden = {
     }
 };
 
-settings.corpora.studentbladet = {
+settings.corpora["studentbladet"] = {
     id: "studentbladet",
     title: "Studentbladet 2011",
     description: "<a target=\"_blank\" href=\"http://www.stbl.fi\">Studentbladet</a> är en tidskrift som bevakar samtliga svenskspråkiga studieorter på fastlandet i Finland.",
@@ -435,7 +435,7 @@ settings.corpora.studentbladet = {
     }
 };
 
-settings.corpora.jakobstadstidning1999 = {
+settings.corpora["jakobstadstidning1999"] = {
     id: "jakobstadstidning1999",
     title: "Jakobstads tidning 1999",
     description: "",
@@ -447,7 +447,7 @@ settings.corpora.jakobstadstidning1999 = {
     }
 };
 
-settings.corpora.jakobstadstidning2000 = {
+settings.corpora["jakobstadstidning2000"] = {
     id: "jakobstadstidning2000",
     title: "Jakobstads tidning 2000",
     description: "",
@@ -459,7 +459,7 @@ settings.corpora.jakobstadstidning2000 = {
     }
 };
 
-settings.corpora.sweachum = {
+settings.corpora["sweachum"] = {
     id: "sweachum",
     title: "Humaniora",
     description: "",
@@ -491,7 +491,7 @@ settings.corpora.sweachum = {
     }
 };
 
-settings.corpora.sweacsam = {
+settings.corpora["sweacsam"] = {
     id: "sweacsam",
     title: "Samhällsvetenskap",
     description: "",
@@ -524,7 +524,7 @@ settings.corpora.sweacsam = {
     }
 };
 
-settings.corpora.attasidor = {
+settings.corpora["attasidor"] = {
     id: "attasidor",
     title: "8 SIDOR",
     description: "<a target=\"_blank\" href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
@@ -537,7 +537,7 @@ settings.corpora.attasidor = {
     }
 };
 
-settings.corpora.dn1987 = {
+settings.corpora["dn1987"] = {
     id: "dn1987",
     title: "DN 1987",
     description: "Dagens Nyheter 1987.",
@@ -550,7 +550,7 @@ settings.corpora.dn1987 = {
     }
 };
 
-settings.corpora.webbnyheter2001 = {
+settings.corpora["webbnyheter2001"] = {
     id: "webbnyheter2001",
     title: "Webbnyheter 2001",
     description: "",
@@ -565,7 +565,7 @@ settings.corpora.webbnyheter2001 = {
     }
 };
 
-settings.corpora.webbnyheter2002 = {
+settings.corpora["webbnyheter2002"] = {
     id: "webbnyheter2002",
     title: "Webbnyheter 2002",
     description: "",
@@ -580,7 +580,7 @@ settings.corpora.webbnyheter2002 = {
     }
 };
 
-settings.corpora.webbnyheter2003 = {
+settings.corpora["webbnyheter2003"] = {
     id: "webbnyheter2003",
     title: "Webbnyheter 2003",
     description: "",
@@ -595,7 +595,7 @@ settings.corpora.webbnyheter2003 = {
     }
 };
 
-settings.corpora.webbnyheter2004 = {
+settings.corpora["webbnyheter2004"] = {
     id: "webbnyheter2004",
     title: "Webbnyheter 2004",
     description: "",
@@ -610,7 +610,7 @@ settings.corpora.webbnyheter2004 = {
     }
 };
 
-settings.corpora.webbnyheter2005 = {
+settings.corpora["webbnyheter2005"] = {
     id: "webbnyheter2005",
     title: "Webbnyheter 2005",
     description: "",
@@ -625,7 +625,7 @@ settings.corpora.webbnyheter2005 = {
     }
 };
 
-settings.corpora.webbnyheter2006 = {
+settings.corpora["webbnyheter2006"] = {
     id: "webbnyheter2006",
     title: "Webbnyheter 2006",
     description: "",
@@ -640,7 +640,7 @@ settings.corpora.webbnyheter2006 = {
     }
 };
 
-settings.corpora.webbnyheter2007 = {
+settings.corpora["webbnyheter2007"] = {
     id: "webbnyheter2007",
     title: "Webbnyheter 2007",
     description: "",
@@ -655,7 +655,7 @@ settings.corpora.webbnyheter2007 = {
     }
 };
 
-settings.corpora.webbnyheter2008 = {
+settings.corpora["webbnyheter2008"] = {
     id: "webbnyheter2008",
     title: "Webbnyheter 2008",
     description: "",
@@ -670,7 +670,7 @@ settings.corpora.webbnyheter2008 = {
     }
 };
 
-settings.corpora.webbnyheter2009 = {
+settings.corpora["webbnyheter2009"] = {
     id: "webbnyheter2009",
     title: "Webbnyheter 2009",
     description: "",
@@ -685,7 +685,7 @@ settings.corpora.webbnyheter2009 = {
     }
 };
 
-settings.corpora.webbnyheter2010 = {
+settings.corpora["webbnyheter2010"] = {
     id: "webbnyheter2010",
     title: "Webbnyheter 2010",
     description: "",
@@ -700,7 +700,7 @@ settings.corpora.webbnyheter2010 = {
     }
 };
 
-settings.corpora.webbnyheter2011 = {
+settings.corpora["webbnyheter2011"] = {
     id: "webbnyheter2011",
     title: "Webbnyheter 2011",
     description: "",
@@ -715,7 +715,7 @@ settings.corpora.webbnyheter2011 = {
     }
 };
 
-settings.corpora.webbnyheter2012 = {
+settings.corpora["webbnyheter2012"] = {
     id: "webbnyheter2012",
     title: "Webbnyheter 2012",
     description: "",
@@ -730,7 +730,7 @@ settings.corpora.webbnyheter2012 = {
     }
 };
 
-settings.corpora.webbnyheter2013 = {
+settings.corpora["webbnyheter2013"] = {
     id: "webbnyheter2013",
     title: "Webbnyheter 2013",
     description: "",
@@ -745,7 +745,7 @@ settings.corpora.webbnyheter2013 = {
     }
 };
 
-settings.corpora.gp1994 = {
+settings.corpora["gp1994"] = {
     id: "gp1994",
     title: "GP 1994",
     description: "Göteborgs-Posten 1994.",
@@ -758,7 +758,7 @@ settings.corpora.gp1994 = {
     }
 };
 
-settings.corpora.gp2001 = {
+settings.corpora["gp2001"] = {
     id: "gp2001",
     title: "GP 2001",
     description: "Göteborgs-Posten 2001.",
@@ -771,7 +771,7 @@ settings.corpora.gp2001 = {
     }
 };
 
-settings.corpora.gp2002 = {
+settings.corpora["gp2002"] = {
     id: "gp2002",
     title: "GP 2002",
     description: "Göteborgs-Posten 2002.",
@@ -784,7 +784,7 @@ settings.corpora.gp2002 = {
     }
 };
 
-settings.corpora.gp2003 = {
+settings.corpora["gp2003"] = {
     id: "gp2003",
     title: "GP 2003",
     description: "Göteborgs-Posten 2003.",
@@ -797,7 +797,7 @@ settings.corpora.gp2003 = {
     }
 };
 
-settings.corpora.gp2004 = {
+settings.corpora["gp2004"] = {
     id: "gp2004",
     title: "GP 2004",
     description: "Göteborgs-Posten 2004.",
@@ -810,7 +810,7 @@ settings.corpora.gp2004 = {
     }
 };
 
-settings.corpora.gp2005 = {
+settings.corpora["gp2005"] = {
     id: "gp2005",
     title: "GP 2005",
     description: "Göteborgs-Posten 2005.",
@@ -823,7 +823,7 @@ settings.corpora.gp2005 = {
     }
 };
 
-settings.corpora.gp2006 = {
+settings.corpora["gp2006"] = {
     id: "gp2006",
     title: "GP 2006",
     description: "Göteborgs-Posten 2006.",
@@ -836,7 +836,7 @@ settings.corpora.gp2006 = {
     }
 };
 
-settings.corpora.gp2007 = {
+settings.corpora["gp2007"] = {
     id: "gp2007",
     title: "GP 2007",
     description: "Göteborgs-Posten 2007.",
@@ -849,7 +849,7 @@ settings.corpora.gp2007 = {
     }
 };
 
-settings.corpora.gp2008 = {
+settings.corpora["gp2008"] = {
     id: "gp2008",
     title: "GP 2008",
     description: "Göteborgs-Posten 2008.",
@@ -862,7 +862,7 @@ settings.corpora.gp2008 = {
     }
 };
 
-settings.corpora.gp2009 = {
+settings.corpora["gp2009"] = {
     id: "gp2009",
     title: "GP 2009",
     description: "Göteborgs-Posten 2009.",
@@ -876,7 +876,7 @@ settings.corpora.gp2009 = {
     }
 };
 
-settings.corpora.gp2010 = {
+settings.corpora["gp2010"] = {
     id: "gp2010",
     title: "GP 2010",
     description: "Göteborgs-Posten 2010.",
@@ -890,7 +890,7 @@ settings.corpora.gp2010 = {
     }
 };
 
-settings.corpora.gp2011 = {
+settings.corpora["gp2011"] = {
     id: "gp2011",
     title: "GP 2011",
     description: "Göteborgs-Posten 2011.",
@@ -904,7 +904,7 @@ settings.corpora.gp2011 = {
     }
 };
 
-settings.corpora.gp2012 = {
+settings.corpora["gp2012"] = {
     id: "gp2012",
     title: "GP 2012",
     description: "Göteborgs-Posten 2012.",
@@ -918,7 +918,7 @@ settings.corpora.gp2012 = {
     }
 };
 
-settings.corpora.gp2013 = {
+settings.corpora["gp2013"] = {
     id: "gp2013",
     title: "GP 2013",
     description: "Göteborgs-Posten 2013.",
@@ -932,7 +932,7 @@ settings.corpora.gp2013 = {
     }
 };
 
-settings.corpora.gp2d = {
+settings.corpora["gp2d"] = {
     id: "gp2d",
     title: "GP – Två dagar",
     description: "Helgbilaga till Göteborgs-Posten.",
@@ -944,7 +944,7 @@ settings.corpora.gp2d = {
     }
 };
 
-settings.corpora.ordat = {
+settings.corpora["ordat"] = {
     id: "ordat",
     title: "ORDAT: Svenska dagbladets årsbok 1923–1958",
     description: "25 årgångar av Svenska Dagbladets årsbok, 1923–45, 1948 och 1958.",
@@ -957,7 +957,7 @@ settings.corpora.ordat = {
     }
 };
 
-settings.corpora.fof = {
+settings.corpora["fof"] = {
     id: "fof",
     title: "Forskning & Framsteg",
     description: "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
@@ -969,7 +969,7 @@ settings.corpora.fof = {
     }
 };
 
-settings.corpora.press65 = {
+settings.corpora["press65"] = {
     id: "press65",
     title: "Press 65",
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
@@ -984,7 +984,7 @@ settings.corpora.press65 = {
     }
 };
 
-settings.corpora.press76 = {
+settings.corpora["press76"] = {
     id: "press76",
     title: "Press 76",
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
@@ -997,7 +997,7 @@ settings.corpora.press76 = {
     }
 };
 
-settings.corpora.press95 = {
+settings.corpora["press95"] = {
     id: "press95",
     title: "Press 95",
     description: "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
@@ -1011,7 +1011,7 @@ settings.corpora.press95 = {
     }
 };
 
-settings.corpora.press96 = {
+settings.corpora["press96"] = {
     id: "press96",
     title: "Press 96",
     description: "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
@@ -1025,7 +1025,7 @@ settings.corpora.press96 = {
     }
 };
 
-settings.corpora.press97 = {
+settings.corpora["press97"] = {
     id: "press97",
     title: "Press 97",
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
@@ -1039,7 +1039,7 @@ settings.corpora.press97 = {
     }
 };
 
-settings.corpora.press98 = {
+settings.corpora["press98"] = {
     id: "press98",
     title: "Press 98",
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
@@ -1053,7 +1053,7 @@ settings.corpora.press98 = {
     }
 };
 
-settings.corpora.strindbergbrev = {
+settings.corpora["strindbergbrev"] = {
     id: "strindbergbrev",
     title: "August Strindbergs brev",
     description: "Samtliga tryckta och otryckta brev som var tillgängliga 1 augusti 1991.",
@@ -1490,7 +1490,7 @@ var bloggmix_structs = {
     text_url: {label: "post_url", type: "url"}
 }
 
-settings.corpora.bloggmix1998 = {
+settings.corpora["bloggmix1998"] = {
     id: "bloggmix1998",
     title: "Bloggmix 1998",
     within: settings.defaultWithin,
@@ -1499,7 +1499,7 @@ settings.corpora.bloggmix1998 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix1999 = {
+settings.corpora["bloggmix1999"] = {
     id: "bloggmix1999",
     title: "Bloggmix 1999",
     within: settings.defaultWithin,
@@ -1508,7 +1508,7 @@ settings.corpora.bloggmix1999 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2000 = {
+settings.corpora["bloggmix2000"] = {
     id: "bloggmix2000",
     title: "Bloggmix 2000",
     within: settings.defaultWithin,
@@ -1517,7 +1517,7 @@ settings.corpora.bloggmix2000 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2001 = {
+settings.corpora["bloggmix2001"] = {
     id: "bloggmix2001",
     title: "Bloggmix 2001",
     within: settings.defaultWithin,
@@ -1526,7 +1526,7 @@ settings.corpora.bloggmix2001 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2002 = {
+settings.corpora["bloggmix2002"] = {
     id: "bloggmix2002",
     title: "Bloggmix 2002",
     within: settings.defaultWithin,
@@ -1535,7 +1535,7 @@ settings.corpora.bloggmix2002 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2003 = {
+settings.corpora["bloggmix2003"] = {
     id: "bloggmix2003",
     title: "Bloggmix 2003",
     within: settings.defaultWithin,
@@ -1544,7 +1544,7 @@ settings.corpora.bloggmix2003 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2004 = {
+settings.corpora["bloggmix2004"] = {
     id: "bloggmix2004",
     title: "Bloggmix 2004",
     within: settings.defaultWithin,
@@ -1553,7 +1553,7 @@ settings.corpora.bloggmix2004 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2005 = {
+settings.corpora["bloggmix2005"] = {
     id: "bloggmix2005",
     title: "Bloggmix 2005",
     within: settings.defaultWithin,
@@ -1562,7 +1562,7 @@ settings.corpora.bloggmix2005 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2006 = {
+settings.corpora["bloggmix2006"] = {
     id: "bloggmix2006",
     title: "Bloggmix 2006",
     within: settings.defaultWithin,
@@ -1571,7 +1571,7 @@ settings.corpora.bloggmix2006 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2007 = {
+settings.corpora["bloggmix2007"] = {
     id: "bloggmix2007",
     title: "Bloggmix 2007",
     within: settings.defaultWithin,
@@ -1580,7 +1580,7 @@ settings.corpora.bloggmix2007 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2008 = {
+settings.corpora["bloggmix2008"] = {
     id: "bloggmix2008",
     title: "Bloggmix 2008",
     within: settings.defaultWithin,
@@ -1589,7 +1589,7 @@ settings.corpora.bloggmix2008 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2009 = {
+settings.corpora["bloggmix2009"] = {
     id: "bloggmix2009",
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
@@ -1598,7 +1598,7 @@ settings.corpora.bloggmix2009 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2009 = {
+settings.corpora["bloggmix2009"] = {
     id: "bloggmix2009",
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
@@ -1607,7 +1607,7 @@ settings.corpora.bloggmix2009 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2010 = {
+settings.corpora["bloggmix2010"] = {
     id: "bloggmix2010",
     title: "Bloggmix 2010",
     within: settings.defaultWithin,
@@ -1616,7 +1616,7 @@ settings.corpora.bloggmix2010 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2011 = {
+settings.corpora["bloggmix2011"] = {
     id: "bloggmix2011",
     title: "Bloggmix 2011",
     within: settings.defaultWithin,
@@ -1625,7 +1625,7 @@ settings.corpora.bloggmix2011 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2012 = {
+settings.corpora["bloggmix2012"] = {
     id: "bloggmix2012",
     title: "Bloggmix 2012",
     within: settings.defaultWithin,
@@ -1634,7 +1634,7 @@ settings.corpora.bloggmix2012 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2013 = {
+settings.corpora["bloggmix2013"] = {
     id: "bloggmix2013",
     title: "Bloggmix 2013",
     within: settings.defaultWithin,
@@ -1643,7 +1643,7 @@ settings.corpora.bloggmix2013 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2014 = {
+settings.corpora["bloggmix2014"] = {
     id: "bloggmix2014",
     title: "Bloggmix 2014",
     within: settings.defaultWithin,
@@ -1652,7 +1652,7 @@ settings.corpora.bloggmix2014 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2015 = {
+settings.corpora["bloggmix2015"] = {
     id: "bloggmix2015",
     title: "Bloggmix 2015",
     within: settings.defaultWithin,
@@ -1661,7 +1661,7 @@ settings.corpora.bloggmix2015 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2016 = {
+settings.corpora["bloggmix2016"] = {
     id: "bloggmix2016",
     title: "Bloggmix 2016",
     within: settings.defaultWithin,
@@ -1670,7 +1670,7 @@ settings.corpora.bloggmix2016 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmix2017 = {
+settings.corpora["bloggmix2017"] = {
     id: "bloggmix2017",
     title: "Bloggmix 2017",
     within: settings.defaultWithin,
@@ -1679,7 +1679,7 @@ settings.corpora.bloggmix2017 = {
     structAttributes: bloggmix_structs
 };
 
-settings.corpora.bloggmixodat = {
+settings.corpora["bloggmixodat"] = {
     id: "bloggmixodat",
     title: "Bloggmix okänt datum",
     within: settings.defaultWithin,
@@ -1689,7 +1689,7 @@ settings.corpora.bloggmixodat = {
 };
 
 
-settings.corpora.drama = {
+settings.corpora["drama"] = {
     id: "drama",
     title: "Dramawebben",
     description: "",
@@ -1940,18 +1940,18 @@ settings.corpora["ivip"] = {
             label: "video",
             renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
 
-                var startTime = wordData['sentence_start'];
-                var endTime = wordData['sentence_end'];
-                var path = sentenceData['text_mediafilepath'];
-                var file = sentenceData['text_mediafile'];
-                var ext = sentenceData['text_mediafileext'];
+                var startTime = wordData["sentence_start"];
+                var endTime = wordData["sentence_end"];
+                var path = sentenceData["text_mediafilepath"];
+                var file = sentenceData["text_mediafile"];
+                var ext = sentenceData["text_mediafileext"];
 
                 var videoLink = $('<span class="link">visa inspelning</span>');
                 videoLink.click(function () {
                     var url = "http://k2xx.spraakdata.gu.se/ivip/data/" + path +  file + "." + ext;
 
-                    var scope = angular.element('#video-modal').scope();
-                    scope.videos = [{'url': url, 'type': 'video/mp4'}];
+                    var scope = angular.element("#video-modal").scope();
+                    scope.videos = [{"url": url, "type": "video/mp4"}];
                     scope.fileName = file + "." + ext;
                     scope.startTime = startTime / 1000;
                     scope.endTime = endTime / 1000;
@@ -1974,7 +1974,7 @@ settings.corpora["ivip"] = {
                         }
                     }
 
-                    scope.sentence = _.pluck(tokens.slice(startIdx, endIdx + 1), 'word').join(" ")
+                    scope.sentence = _.pluck(tokens.slice(startIdx, endIdx + 1), "word").join(" ")
                     scope.open();
                     scope.$apply();
                 });
@@ -2025,7 +2025,7 @@ settings.corpora["lawline"] = {
     }
 };
 
-settings.corpora.lasbart = {
+settings.corpora["lasbart"] = {
     id: "lasbart",
     title: "LäSBarT – Lättläst svenska och barnbokstext",
     description: "",
@@ -2042,7 +2042,7 @@ settings.corpora.lasbart = {
     }
 };
 
-settings.corpora.parole = {
+settings.corpora["parole"] = {
     id: "parole",
     title: "PAROLE",
     description: "Material insamlat inom ramen för EU-projektet PAROLE. Innehåller romaner, dagstidningar, tidskrifter och webbtexter.",
@@ -2057,7 +2057,7 @@ settings.corpora.parole = {
     }
 };
 
-settings.corpora.psalmboken = {
+settings.corpora["psalmboken"] = {
     id: "psalmboken",
     title: "Psalmboken (1937)",
     description: "",
@@ -2101,7 +2101,7 @@ Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska 
     }
 };
 
-settings.corpora.snp7879 = {
+settings.corpora["snp7879"] = {
     id: "snp7879",
     title: "SNP 78–79 (Riksdagens snabbprotokoll)",
     description: "Riksdagens snabbprotokoll 1978–1979.",
@@ -2111,7 +2111,7 @@ settings.corpora.snp7879 = {
     structAttributes: {}
 };
 
-settings.corpora.sou = {
+settings.corpora["sou"] = {
     id: "sou",
     title: "Statens offentliga utredningar",
     description: "Statens offentliga utredningar (SOU) i digitaliserat format. Samlingen är inte komplett men kommer att uppdateras.",
@@ -2124,7 +2124,7 @@ settings.corpora.sou = {
     }
 };
 
-settings.corpora.suc2 = {
+settings.corpora["suc2"] = {
     id: "suc2",
     title: "SUC 2.0",
     description: "Stockholm-Umeå Corpus",
@@ -2149,7 +2149,7 @@ settings.corpora.suc2 = {
     }
 };
 
-settings.corpora.suc3 = {
+settings.corpora["suc3"] = {
     id: "suc3",
     title: "SUC 3.0",
     description: "Stockholm-Umeå Corpus",
@@ -2168,7 +2168,7 @@ settings.corpora.suc3 = {
     }
 };
 
-settings.corpora.storsuc = {
+settings.corpora["storsuc"] = {
     id: "storsuc",
     title: "SUC-romaner",
     description: "En samling romaner och andra böcker som har använts i urvalet till SUC. 58 böcker ingår.",
@@ -2180,7 +2180,7 @@ settings.corpora.storsuc = {
     }
 };
 
-settings.corpora.aspacsv = {
+settings.corpora["aspacsv"] = {
     id: "aspacsv",
     title: "ASPAC svenska",
     description: "Svenska delen av The Amsterdam Slavic Parallel Aligned Corpus",
@@ -2195,7 +2195,7 @@ settings.corpora.aspacsv = {
     }
 };
 
-settings.corpora.diabetolog = {
+settings.corpora["diabetolog"] = {
     id: "diabetolog",
     title: "DiabetologNytt (1996–1999)",
     description: "",
@@ -2209,7 +2209,7 @@ settings.corpora.diabetolog = {
     }
 };
 
-settings.corpora.lt1996 = {
+settings.corpora["lt1996"] = {
     id: "lt1996",
     title: "Läkartidningen 1996",
     description: "Läkartidningens publicerade artiklar under 1996.<br/>Antal artiklar: 2345",
@@ -2223,7 +2223,7 @@ settings.corpora.lt1996 = {
     }
 };
 
-settings.corpora.lt1997 = {
+settings.corpora["lt1997"] = {
     id: "lt1997",
     title: "Läkartidningen 1997",
     description: "Läkartidningens publicerade artiklar under 1997.",
@@ -2237,7 +2237,7 @@ settings.corpora.lt1997 = {
     }
 };
 
-settings.corpora.lt1998 = {
+settings.corpora["lt1998"] = {
     id: "lt1998",
     title: "Läkartidningen 1998",
     description: "Läkartidningens publicerade artiklar under 1998.",
@@ -2251,7 +2251,7 @@ settings.corpora.lt1998 = {
     }
 };
 
-settings.corpora.lt1999 = {
+settings.corpora["lt1999"] = {
     id: "lt1999",
     title: "Läkartidningen 1999",
     description: "Läkartidningens publicerade artiklar under 1999.",
@@ -2265,7 +2265,7 @@ settings.corpora.lt1999 = {
     }
 };
 
-settings.corpora.lt2000 = {
+settings.corpora["lt2000"] = {
     id: "lt2000",
     title: "Läkartidningen 2000",
     description: "Läkartidningens publicerade artiklar under 2000.",
@@ -2279,7 +2279,7 @@ settings.corpora.lt2000 = {
     }
 };
 
-settings.corpora.lt2001 = {
+settings.corpora["lt2001"] = {
     id: "lt2001",
     title: "Läkartidningen 2001",
     description: "Läkartidningens publicerade artiklar under 2001.",
@@ -2293,7 +2293,7 @@ settings.corpora.lt2001 = {
     }
 };
 
-settings.corpora.lt2002 = {
+settings.corpora["lt2002"] = {
     id: "lt2002",
     title: "Läkartidningen 2002",
     description: "Läkartidningens publicerade artiklar under 2002.",
@@ -2307,7 +2307,7 @@ settings.corpora.lt2002 = {
     }
 };
 
-settings.corpora.lt2003 = {
+settings.corpora["lt2003"] = {
     id: "lt2003",
     title: "Läkartidningen 2003",
     description: "Läkartidningens publicerade artiklar under 2003.",
@@ -2321,7 +2321,7 @@ settings.corpora.lt2003 = {
     }
 };
 
-settings.corpora.lt2004 = {
+settings.corpora["lt2004"] = {
     id: "lt2004",
     title: "Läkartidningen 2004",
     description: "Läkartidningens publicerade artiklar under 2004.",
@@ -2335,7 +2335,7 @@ settings.corpora.lt2004 = {
     }
 };
 
-settings.corpora.lt2005 = {
+settings.corpora["lt2005"] = {
     id: "lt2005",
     title: "Läkartidningen 2005",
     description: "Läkartidningens publicerade artiklar under 2005.",
@@ -2349,7 +2349,7 @@ settings.corpora.lt2005 = {
     }
 };
 
-settings.corpora.lt2006 = {
+settings.corpora["lt2006"] = {
     id: "lt2006",
     title: "Läkartidningen 2006",
     description: "Läkartidningens publicerade artiklar under 2006.",
@@ -2363,7 +2363,7 @@ settings.corpora.lt2006 = {
     }
 };
 
-settings.corpora.smittskydd = {
+settings.corpora["smittskydd"] = {
     id: "smittskydd",
     title: "Smittskydd",
     description: "Smittskyddsinstitutets tidskrift, årgångarna 2002–2010.",
@@ -2377,7 +2377,7 @@ settings.corpora.smittskydd = {
     }
 };
 
-settings.corpora.sfs = {
+settings.corpora["sfs"] = {
     id: "sfs",
     title: "Svensk författningssamling",
     description: "",
@@ -2390,7 +2390,7 @@ settings.corpora.sfs = {
     }
 };
 
-settings.corpora.vivill = {
+settings.corpora["vivill"] = {
     id: "vivill",
     title: "Svenska partiprogram och valmanifest 1887–2010",
     description: "",
@@ -2520,7 +2520,7 @@ settings.corpora["wikipedia-sv"] = {
     }
 };
 
-settings.corpora.strindbergromaner = {
+settings.corpora["strindbergromaner"] = {
     id: "strindbergromaner",
     title: "August Strindbergs samlade verk",
     description: "August Strindbergs samlade verk. Innehåller material från de 59 volymer som utgivits fram till år 2003.",
@@ -2536,7 +2536,7 @@ settings.corpora.strindbergromaner = {
     }
 };
 
-settings.corpora.romi = {
+settings.corpora["romi"] = {
     id: "romi",
     title: "Bonniersromaner I (1976–77)",
     description: "69 romaner utgivna 1976–77.",
@@ -2549,7 +2549,7 @@ settings.corpora.romi = {
     }
 };
 
-settings.corpora.romii = {
+settings.corpora["romii"] = {
     id: "romii",
     title: "Bonniersromaner II (1980–81)",
     description: "60 romaner från 1980–81.",
@@ -2562,7 +2562,7 @@ settings.corpora.romii = {
     }
 };
 
-settings.corpora.romg = {
+settings.corpora["romg"] = {
     id: "romg",
     title: "Äldre svenska romaner",
     description: "",
@@ -2576,7 +2576,7 @@ settings.corpora.romg = {
     }
 };
 
-settings.corpora.rom99 = {
+settings.corpora["rom99"] = {
     id: "rom99",
     title: "Norstedtsromaner (1999)",
     description: "23 romaner utgivna 1999 på Norstedts förlag.",
@@ -2618,7 +2618,7 @@ settings.corpora["swefn-ex"] = {
     }
 };
 
-settings.corpora.astranova = {
+settings.corpora["astranova"] = {
     id: "astranova",
     title: "Astra Nova 2008–2010",
     description: "<a target=\"_blank\" href=\"http://www.astranova.fi\">Astra Nova</a> är en tidskrift med feministisk prägel. Innehåller samtliga nummer av Astra Nova från perioden 2008–2010 med artiklar av finlandssvenska skribenter. Artiklar av utländska skribenter ingår inte i materialet, utan är bortplockade.",
@@ -2644,7 +2644,7 @@ settings.corpora["astra1960-1979"] = {
     }
 };
 
-settings.corpora.bullen = {
+settings.corpora["bullen"] = {
     id: "bullen",
     title: "Bullen 2010–2012",
     description: "<a target=\"_blank\" href=\"http://www.karen.abo.fi/index.php?u[2]=0&u[3]=70\">Bullen</a> är Åbo Akademis Studentkårs informationsbulletin.",
@@ -2656,7 +2656,7 @@ settings.corpora.bullen = {
     }
 };
 
-settings.corpora.fanbararen = {
+settings.corpora["fanbararen"] = {
     id: "fanbararen",
     title: "Fanbäraren 2011–2012",
     description: "<a target=\"_blank\" href=\"http://www.nylandsbrigadsgille.fi/sidor/?page_id=813\">Fanbäraren</a> är en tidskrift som utges gemensamt av Nylands brigad och Nylands Brigads Gille, med syfte att öka kännedomen om utbildningen vid Nylands Brigad och öka sammanhållningen mellan Gillets medlemmar.",
@@ -2669,7 +2669,7 @@ settings.corpora.fanbararen = {
     }
 };
 
-settings.corpora.kallan = {
+settings.corpora["kallan"] = {
     id: "kallan",
     title: "Källan 2008–2010",
     description: "<a target=\"_blank\" href=\"http://www.sls.fi/kallan\">Källan</a> är Svenska litteratursällskapets tidskrift.",
@@ -2682,7 +2682,7 @@ settings.corpora.kallan = {
     }
 };
 
-settings.corpora.jft = {
+settings.corpora["jft"] = {
     id: "jft",
     title: "JFT 2000–2013",
     description: "<a target=\"_blank\" href=\"http://jff.fi/index.asp?page=5\">JFT</a> publiceras av Juridiska Föreningen i Finland r.f. Den är Nordens äldsta utkommande rättsvetenskapliga tidskrift.",
@@ -2695,7 +2695,7 @@ settings.corpora.jft = {
     }
 };
 
-settings.corpora.meddelanden = {
+settings.corpora["meddelanden"] = {
     id: "meddelanden",
     title: "Meddelanden från Åbo Akademi 2002–2010",
     description: "<a target=\"_blank\" href=\"http://www.abo.fi/meddelanden\">Meddelanden från Åbo Akademi</a> är Åbo Akademis tidning för extern och intern information. Materialet består av artiklar skrivna av redaktörerna Peter Sandström och Michael Karlsson",
@@ -2708,7 +2708,7 @@ settings.corpora.meddelanden = {
     }
 };
 
-settings.corpora.hankeiten = {
+settings.corpora["hankeiten"] = {
     id: "hankeiten",
     title: "Hankeiten 2006–2012",
     description: "<a target=\"_blank\" href=\"http://www.shsweb.fi/shs/arkiv/hankeiten1\">Hankeiten</a> är Svenska Handelshögskolans Studentkårs tidskrift.",
@@ -2721,7 +2721,7 @@ settings.corpora.hankeiten = {
     }
 };
 
-settings.corpora.nyaargus = {
+settings.corpora["nyaargus"] = {
     id: "nyaargus",
     title: "Nya Argus 2010–2011",
     description: "<a target=\"_blank\" href=\"http://www.kolumbus.fi/nya.argus/\">Nya Argus</a> är en tidskrift som bevakar kultur, samhälle och debatt. Artiklar skrivna av utländska skribenter är bortplockade.",
@@ -2734,7 +2734,7 @@ settings.corpora.nyaargus = {
     }
 };
 
-settings.corpora.pargaskungorelser2011 = {
+settings.corpora["pargaskungorelser2011"] = {
     id: "pargaskungorelser2011",
     title: "Pargas Kungörelser 2011",
     description: "",
@@ -2747,7 +2747,7 @@ settings.corpora.pargaskungorelser2011 = {
     }
 };
 
-settings.corpora.pargaskungorelser2012 = {
+settings.corpora["pargaskungorelser2012"] = {
     id: "pargaskungorelser2012",
     title: "Pargas Kungörelser 2012",
     description: "",
@@ -2760,7 +2760,7 @@ settings.corpora.pargaskungorelser2012 = {
     }
 };
 
-settings.corpora.borgabladet = {
+settings.corpora["borgabladet"] = {
     id: "borgabladet",
     title: "Borgåbladet 2012–2013",
     description: "<a target=\"_blank\" href=\"http://www.bbl.fi\">Borgåbladet</a> är en regional svenskspråkig dagstidning i Borgå med omnejd.",
@@ -2772,7 +2772,7 @@ settings.corpora.borgabladet = {
     }
 };
 
-settings.corpora.sydosterbotten2010 = {
+settings.corpora["sydosterbotten2010"] = {
     id: "sydosterbotten2010",
     title: "Syd-Österbotten 2010",
     description: "",
@@ -2784,7 +2784,7 @@ settings.corpora.sydosterbotten2010 = {
     }
 };
 
-settings.corpora.sydosterbotten2011 = {
+settings.corpora["sydosterbotten2011"] = {
     id: "sydosterbotten2011",
     title: "Syd-Österbotten 2011",
     description: "",
@@ -2796,7 +2796,7 @@ settings.corpora.sydosterbotten2011 = {
     }
 };
 
-settings.corpora.sydosterbotten2012 = {
+settings.corpora["sydosterbotten2012"] = {
     id: "sydosterbotten2012",
     title: "Syd-Österbotten 2012",
     description: "",
@@ -2808,7 +2808,7 @@ settings.corpora.sydosterbotten2012 = {
     }
 };
 
-settings.corpora.sydosterbotten2013 = {
+settings.corpora["sydosterbotten2013"] = {
     id: "sydosterbotten2013",
     title: "Syd-Österbotten 2013",
     description: "",
@@ -2820,7 +2820,7 @@ settings.corpora.sydosterbotten2013 = {
     }
 };
 
-settings.corpora.sydosterbotten2014 = {
+settings.corpora["sydosterbotten2014"] = {
     id: "sydosterbotten2014",
     title: "Syd-Österbotten 2014",
     description: "",
@@ -2834,7 +2834,7 @@ settings.corpora.sydosterbotten2014 = {
     }
 };
 
-settings.corpora.vastranyland = {
+settings.corpora["vastranyland"] = {
     id: "vastranyland",
     title: "Västra Nyland 2012–2013",
     description: "<a target=\"_blank\" href=\"http://www.vastranyland.fi\">Västra Nyland</a> är en regional svenskspråkig dagstidning i Västra Nyland.",
@@ -2846,7 +2846,7 @@ settings.corpora.vastranyland = {
     }
 };
 
-settings.corpora.ostranyland = {
+settings.corpora["ostranyland"] = {
     id: "ostranyland",
     title: "Östra Nyland 2012–2013",
     description: "<a target=\"_blank\" href=\"http://www.ostnyland.fi\">Östra Nyland</a> är en regional svenskspråkig dagstidning i Östra Nyland.",
@@ -2858,7 +2858,7 @@ settings.corpora.ostranyland = {
     }
 };
 
-settings.corpora.abounderrattelser2012 = {
+settings.corpora["abounderrattelser2012"] = {
     id: "abounderrattelser2012",
     title: "Åbo Underrättelser 2012",
     description: "",
@@ -2870,7 +2870,7 @@ settings.corpora.abounderrattelser2012 = {
     }
 };
 
-settings.corpora.abounderrattelser2013 = {
+settings.corpora["abounderrattelser2013"] = {
     id: "abounderrattelser2013",
     title: "Åbo Underrättelser 2013",
     description: "",
@@ -2883,7 +2883,7 @@ settings.corpora.abounderrattelser2013 = {
 };
 
 
-settings.corpora.at2012 = {
+settings.corpora["at2012"] = {
     id: "at2012",
     title: "Ålandstidningen 2012",
     description: "<a target=\"_blank\" href=\"http://www.alandstidningen.ax/\">Ålandstidningen</a> är en regional svenskspråkig dagstidning på Åland.",
@@ -2895,7 +2895,7 @@ settings.corpora.at2012 = {
     }
 };
 
-settings.corpora.vasabladet1991 = {
+settings.corpora["vasabladet1991"] = {
     id: "vasabladet1991",
     title: "Vasabladet 1991",
     description: "",
@@ -2908,7 +2908,7 @@ settings.corpora.vasabladet1991 = {
     }
 };
 
-settings.corpora.vasabladet2012 = {
+settings.corpora["vasabladet2012"] = {
     id: "vasabladet2012",
     title: "Vasabladet 2012",
     description: "",
@@ -2919,7 +2919,7 @@ settings.corpora.vasabladet2012 = {
     }
 };
 
-settings.corpora.vasabladet2013 = {
+settings.corpora["vasabladet2013"] = {
     id: "vasabladet2013",
     title: "Vasabladet 2013",
     description: "",
@@ -2931,7 +2931,7 @@ settings.corpora.vasabladet2013 = {
     }
 };
 
-settings.corpora.vasabladet2014 = {
+settings.corpora["vasabladet2014"] = {
     id: "vasabladet2014",
     title: "Vasabladet 2014",
     description: "",
@@ -2945,7 +2945,7 @@ settings.corpora.vasabladet2014 = {
     }
 };
 
-settings.corpora.osterbottenstidning2011 = {
+settings.corpora["osterbottenstidning2011"] = {
     id: "osterbottenstidning2011",
     title: "Österbottens Tidning 2011",
     description: "",
@@ -2957,7 +2957,7 @@ settings.corpora.osterbottenstidning2011 = {
     }
 };
 
-settings.corpora.osterbottenstidning2012 = {
+settings.corpora["osterbottenstidning2012"] = {
     id: "osterbottenstidning2012",
     title: "Österbottens Tidning 2012",
     description: "",
@@ -2969,7 +2969,7 @@ settings.corpora.osterbottenstidning2012 = {
     }
 };
 
-settings.corpora.osterbottenstidning2013 = {
+settings.corpora["osterbottenstidning2013"] = {
     id: "osterbottenstidning2013",
     title: "Österbottens Tidning 2013",
     description: "",
@@ -2981,7 +2981,7 @@ settings.corpora.osterbottenstidning2013 = {
     }
 };
 
-settings.corpora.osterbottenstidning2014 = {
+settings.corpora["osterbottenstidning2014"] = {
     id: "osterbottenstidning2014",
     title: "Österbottens Tidning 2014",
     description: "",
@@ -2995,7 +2995,7 @@ settings.corpora.osterbottenstidning2014 = {
     }
 };
 
-settings.corpora.fnb1999 = {
+settings.corpora["fnb1999"] = {
     id: "fnb1999",
     title: "FNB 1999",
     description: "",
@@ -3008,7 +3008,7 @@ settings.corpora.fnb1999 = {
     }
 };
 
-settings.corpora.fnb2000 = {
+settings.corpora["fnb2000"] = {
     id: "fnb2000",
     title: "FNB 2000",
     description: "",
@@ -3021,7 +3021,7 @@ settings.corpora.fnb2000 = {
     }
 };
 
-settings.corpora.hbl1991 = {
+settings.corpora["hbl1991"] = {
     id: "hbl1991",
     title: "Hufvudstadsbladet 1991",
     description: "",
@@ -3034,7 +3034,7 @@ settings.corpora.hbl1991 = {
     }
 };
 
-settings.corpora.hbl1998 = {
+settings.corpora["hbl1998"] = {
     id: "hbl1998",
     title: "Hufvudstadsbladet 1998",
     description: "",
@@ -3046,7 +3046,7 @@ settings.corpora.hbl1998 = {
     }
 };
 
-settings.corpora.hbl1999 = {
+settings.corpora["hbl1999"] = {
     id: "hbl1999",
     title: "Hufvudstadsbladet 1999",
     description: "",
@@ -3058,7 +3058,7 @@ settings.corpora.hbl1999 = {
     }
 };
 
-settings.corpora.hbl20122013 = {
+settings.corpora["hbl20122013"] = {
     id: "hbl20122013",
     title: "Hufvudstadsbladet (2012–)2013",
     description: "",
@@ -3070,7 +3070,7 @@ settings.corpora.hbl20122013 = {
     }
 };
 
-settings.corpora.hbl2014 = {
+settings.corpora["hbl2014"] = {
     id: "hbl2014",
     title: "Hufvudstadsbladet 2014",
     description: "",
@@ -3082,7 +3082,7 @@ settings.corpora.hbl2014 = {
     }
 };
 
-settings.corpora.talbanken = {
+settings.corpora["talbanken"] = {
     id: "talbanken",
     title: "Talbanken",
     description: "",
@@ -3093,7 +3093,7 @@ settings.corpora.talbanken = {
     }
 };
 
-settings.corpora.klarsprak = {
+settings.corpora["klarsprak"] = {
     id: "klarsprak",
     title: "Förvaltningsmyndigheters texter",
     description: "",
@@ -3122,7 +3122,7 @@ settings.corpora.klarsprak = {
     }
 };
 
-settings.corpora.sw1203 = {
+settings.corpora["sw1203"] = {
     id: "sw1203",
     title: "SW1203-uppsatser",
     description: 'För åtkomst kontakta <a href="mailto:ingegerd.enstroem@svenska.gu.se">Ingegerd Enström</a>.',
@@ -3168,7 +3168,7 @@ settings.corpora.sw1203 = {
     }
 };
 
-settings.corpora.tisus = {
+settings.corpora["tisus"] = {
     id: "tisus",
     title: "TISUS-texter",
     description: 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
@@ -3194,7 +3194,7 @@ settings.corpora.tisus = {
     }
 };
 
-settings.corpora.ansokningar = {
+settings.corpora["ansokningar"] = {
     id: "ansokningar",
     title: "Ansökningar",
     description: 'För åtkomst kontakta <a href="mailto:lena.rogstroem@svenska.gu.se">Lena Rogström</a>.',
@@ -3209,7 +3209,7 @@ settings.corpora.ansokningar = {
     }
 };
 
-settings.corpora.coctaill = {
+settings.corpora["coctaill"] = {
     id: "coctaill",
     title: "COCTAILL",
     description: 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
@@ -3487,7 +3487,7 @@ settings.corpora.coctaill = {
     }
 };
 
-settings.corpora.twitter = {
+settings.corpora["twitter"] = {
     id: "twitter",
     title: "Twittermix",
     description: "Material från ett urval av svenska Twitteranvändare. Uppdateras regelbundet.",
@@ -3669,7 +3669,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
     }
 };
 
-settings.corpora.gdc = {
+settings.corpora["gdc"] = {
     id: "gdc",
     title: "Gothenburg Dialogue Corpus (GDC)",
     description: 'För åtkomst kontakta <a href="mailto:cajsa.ottesjo@gu.se">Cajsa Ottesjö</a>.',
@@ -3698,7 +3698,7 @@ settings.corpora.gdc = {
     }
 };
 
-settings.corpora.mepac = {
+settings.corpora["mepac"] = {
     id: "mepac",
     title: "MEPAC bloggar",
     description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
@@ -3749,7 +3749,7 @@ settings.corpora["mepac-i"] = {
     }
 };
 
-settings.corpora.forhor = {
+settings.corpora["forhor"] = {
     id: "forhor",
     title: "Förhör",
     description: 'För åtkomst kontakta <a href="mailto:ylva.byrman@svenska.gu.se">Ylva Byrman</a>.',
@@ -3771,7 +3771,7 @@ settings.corpora.forhor = {
     }
 };
 
-settings.corpora.soexempel = {
+settings.corpora["soexempel"] = {
     id: "soexempel",
     title: "Språkprov SO 2009",
     description: 'De drygt 94 000 språkexemplen är hämtade ur Svensk ordbok utgiven av Svenska Akademien (2009). '+

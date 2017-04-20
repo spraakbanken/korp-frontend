@@ -6,7 +6,7 @@ settings.wordpicture = true;
 
 settings.corpora = {};
 settings.corporafolders = {};
-settings.corpora.spf = {
+settings.corpora["spf"] = {
     id: "spf",
     title: "Svensk prosafiktion 1800–1900",
     description: 'Samtliga etexter från <a href="http://spf1800-1900.se/">spf1800-1900.se</a>.',
