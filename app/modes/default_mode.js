@@ -543,7 +543,7 @@ settings.corpora.dn1987 = {
     description: "Dagens Nyheter 1987.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -963,7 +963,7 @@ settings.corpora.fof = {
     description: "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_issue: {label: "issue"}
     }
@@ -1315,25 +1315,27 @@ settings.corpora["familjeliv-anglarum"] = {
     structAttributes: familjeliv_structs
 };
 
+var flashback_structs = {
+    text_username: {label: "username2"},
+    text_date: {label: "date"},
+    text_links: {label: "postlinks", type: "set"},
+    text_url: {label: "posturl", type: "url"},
+    thread_title: {label: "thread"},
+    thread_postcount: {label: "threadpostcount"},
+    thread_lastpost: {label: "threadlastpost"},
+    thread_url: {label: "thread", type: "url"},
+    forum_title: {label: "forum"},
+    forum_url: {label: "forum", type: "url"}
+};
+
 settings.corpora["flashback-dator"] = {
     id: "flashback-dator",
     title: "Flashback: Dator & IT",
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-droger"] = {
@@ -1342,19 +1344,8 @@ settings.corpora["flashback-droger"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-fordon"] = {
@@ -1363,19 +1354,8 @@ settings.corpora["flashback-fordon"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-hem"] = {
@@ -1384,19 +1364,8 @@ settings.corpora["flashback-hem"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-kultur"] = {
@@ -1405,19 +1374,8 @@ settings.corpora["flashback-kultur"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-livsstil"] = {
@@ -1426,19 +1384,8 @@ settings.corpora["flashback-livsstil"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-mat"] = {
@@ -1447,19 +1394,8 @@ settings.corpora["flashback-mat"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-politik"] = {
@@ -1468,19 +1404,8 @@ settings.corpora["flashback-politik"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-resor"] = {
@@ -1489,19 +1414,8 @@ settings.corpora["flashback-resor"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-samhalle"] = {
@@ -1510,19 +1424,8 @@ settings.corpora["flashback-samhalle"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-sex"] = {
@@ -1531,19 +1434,8 @@ settings.corpora["flashback-sex"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-sport"] = {
@@ -1552,19 +1444,8 @@ settings.corpora["flashback-sport"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-vetenskap"] = {
@@ -1573,19 +1454,8 @@ settings.corpora["flashback-vetenskap"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-ovrigt"] = {
@@ -1594,19 +1464,8 @@ settings.corpora["flashback-ovrigt"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 settings.corpora["flashback-flashback"] = {
@@ -1615,19 +1474,8 @@ settings.corpora["flashback-flashback"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
-    structAttributes: {
-        text_username: {label: "username2"},
-        text_date: {label: "date"},
-        text_links: {label: "postlinks", type: "set"},
-        text_url: {label: "posturl", type: "url"},
-        thread_title: {label: "thread"},
-        thread_postcount: {label: "threadpostcount"},
-        thread_lastpost: {label: "threadlastpost"},
-        thread_url: {label: "thread", type: "url"},
-        forum_title: {label: "forum"},
-        forum_url: {label: "forum", type: "url"}
-    }
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
 };
 
 var bloggmix_structs = {
@@ -1847,7 +1695,7 @@ settings.corpora.drama = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -2183,7 +2031,7 @@ settings.corpora.lasbart = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_source: {label: "source"},
         text_type: {label: "type"},
@@ -2259,7 +2107,7 @@ settings.corpora.snp7879 = {
     description: "Riksdagens snabbprotokoll 1978–1979.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {}
 };
 
@@ -2353,7 +2201,7 @@ settings.corpora.diabetolog = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_year: {label: "year"},
         text_title: {label: "title"},
@@ -2521,7 +2369,7 @@ settings.corpora.smittskydd = {
     description: "Smittskyddsinstitutets tidskrift, årgångarna 2002–2010.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_year: {label: "year"},
         text_issue: {label: "issue"},
@@ -2554,7 +2402,7 @@ settings.corpora.vivill = {
         "1 sentence": "1 sentence",
         "5 sentence": "5 sentences"
     },
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_year: {label: "year",
             extendedTemplate: selectType.extendedTemplate,
@@ -2665,7 +2513,7 @@ settings.corpora["wikipedia-sv"] = {
     description: "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_title: {label: "article"},
         text_url: {label: "url", type: "url"}
@@ -2734,7 +2582,7 @@ settings.corpora.rom99 = {
     description: "23 romaner utgivna 1999 på Norstedts förlag.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -3251,7 +3099,7 @@ settings.corpora.klarsprak = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_title: {label: "title"},
         text_textid: {label: "id"},
@@ -3368,7 +3216,7 @@ settings.corpora.coctaill = {
     limitedAccess: true,
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -3831,19 +3679,9 @@ settings.corpora.gdc = {
         "1 sentence": "1 sentence",
         "3 sentence": "3 sentences"
     },
-    attributes: {
-        wordclean: {label: "normalized_wordform"},
-        pos: attrs.pos,
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        saldo: attrs.saldo,
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-        prefix: attrs.prefix,
-        suffix: attrs.suffix
-    },
+    attributes: _.extend({}, modernAttrs2, {
+        wordclean: {label: "normalized_wordform"}
+    }),
     structAttributes: {
         "text_activity1": {label: "activity1"},
         "text_activity2": {label: "activity2"},
@@ -3918,7 +3756,7 @@ settings.corpora.forhor = {
     limitedAccess: true,
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         "text_fall": {label: "fall"},
         "text_hord": {label: "hord"},
@@ -4032,8 +3870,8 @@ rd_struct_attributes = {
 };
 
 settings.corporafolders.governmental.rd = {
-    title : "Riksdagens öppna data",
-    contents : ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-kom", "rd-mot", "rd-prop", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
+    title: "Riksdagens öppna data",
+    contents: ["rd-bet", "rd-ds", "rd-eun", "rd-fpm", "rd-frsrdg", "rd-flista", "rd-ip", "rd-kammakt", "rd-kom", "rd-mot", "rd-prop", "rd-prot", "rd-rskr", "rd-samtr", "rd-skfr", "rd-sou", "rd-tlista", "rd-utr", "rd-utsk", "rd-yttr", "rd-ovr"]
 };
 
 settings.corpora["rd-bet"] = {
