@@ -342,10 +342,6 @@ korpApp.directive "wordpicCtrl", () ->
                 end : 24
                 command : "relations_sentences"
                 source : data.source.join(",")
-                head: data.head
-                dep: data.dep
-                rel: data.rel
-                depextra: data.depextra
                 corpus: data.corpus
 
             $rootScope.kwicTabs.push { queryParams: opts }

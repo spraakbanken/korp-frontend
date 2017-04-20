@@ -492,7 +492,7 @@ class view.ExampleResults extends view.KWICResults
         opts.ajaxParams.start = (@current_page - 1) * items_per_page
         opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page - 1)
 
-        prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "head", "rel", "source", "dep", "depextra"
+        prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "source"
         _.extend opts.ajaxParams, prev
 
         if @isReadingMode()
