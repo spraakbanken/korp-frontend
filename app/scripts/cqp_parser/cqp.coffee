@@ -1,6 +1,6 @@
 window.c = console
 
-prio = settings.cqp_prio or ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word']
+prio = settings.cqpPrio or ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word']
 
 
 parseDateInterval = (op, val, expanded_format) ->

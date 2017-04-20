@@ -68,7 +68,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
         loginNeededFor = []
         for corpus in $location.search().corpus.split(",")
             corpusObj = settings.corpusListing.struct[corpus]
-            if corpusObj.limited_access
+            if corpusObj.limitedAccess
                 if (_.isEmpty authenticationProxy.loginObj) or (corpus.toUpperCase() not in authenticationProxy.loginObj.credentials)
                     loginNeededFor.push corpusObj
         s.loginNeededFor = loginNeededFor
@@ -114,14 +114,14 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
             _.map corpus.split(","), (val) ->
                 currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val))
         else
-            if not settings.preselected_corpora?.length
+            if not settings.preselectedCorpora?.length
                 currentCorpora = _.pluck settings.corpusListing.corpora, "id"
             else
-                for pre_item in settings.preselected_corpora
+                for pre_item in settings.preselectedCorpora
                     pre_item = pre_item.replace /^__/g, ''
                     currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, pre_item))
 
-            settings.preselected_corpora = currentCorpora
+            settings.preselectedCorpora = currentCorpora
 
         settings.corpusListing.select currentCorpora
         corpusChooserInstance.corpusChooser "selectItems", currentCorpora
@@ -148,17 +148,17 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         # TODO figure out another way to do this
         for corpusObj in settings.corpusListing.corpora
             corpus = corpusObj.id
-            if corpusObj.limited_access
+            if corpusObj.limitedAccess
                 $("#hpcorpus_#{corpus}").closest(".boxdiv").addClass("disabled")
         $("#corpusbox").corpusChooser "updateAllStates"
 
         newCorpora = []
         for corpus in settings.corpusListing.getSelectedCorpora()
-            if not settings.corpora[corpus].limited_access
+            if not settings.corpora[corpus].limitedAccess
                 newCorpora.push corpus
 
         if _.isEmpty newCorpora
-            newCorpora = settings.preselected_corpora
+            newCorpora = settings.preselectedCorpora
         settings.corpusListing.select newCorpora
         s.loggedIn = false
         $("#corpusbox").corpusChooser "selectItems", newCorpora

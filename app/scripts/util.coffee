@@ -5,7 +5,7 @@ class window.CorpusListing
     constructor: (corpora) ->
         @struct = corpora
         @corpora = _.values(corpora)
-        @selected = _.filter @corpora, (corp) -> not corp.limited_access
+        @selected = _.filter @corpora, (corp) -> not corp.limitedAccess
 
     get: (key) ->
         @struct[key]
@@ -202,7 +202,7 @@ class window.CorpusListing
 
     getNonProtected : () ->
         _.filter @corpora, (item) ->
-            not item.limited_access
+            not item.limitedAccess
 
     getTitle : (corpus) ->
         try
@@ -242,7 +242,7 @@ class window.CorpusListing
             allAttrs = @getStructAttrsIntersection(lang)
 
         common_keys = _.compact _.flatten _.map @selected, (corp) -> _.keys corp.common_attributes
-        common = _.pick settings.common_struct_types, common_keys...
+        common = _.pick settings.commonStructTypes, common_keys...
 
         sentAttrs = for key, obj of (_.extend {}, common, allAttrs) when obj.displayType != "hidden"
                          _.extend({group : "sentence_attr", value : key}, obj)
@@ -261,10 +261,10 @@ class window.CorpusListing
     getStatsAttributeGroups : (lang) ->
         words = @getWordGroup true
 
-        wordOp = settings.reduce_word_attribute_selector or "union"
+        wordOp = settings.reduceWordAttributeSelector or "union"
         attrs = @getWordAttributeGroups lang, wordOp
 
-        structOp = settings.reduce_struct_attribute_selector or "union"
+        structOp = settings.reduceStructAttributeSelector or "union"
         sentAttrs = @getStructAttributeGroups lang, structOp
 
         return words.concat attrs, sentAttrs
@@ -635,7 +635,7 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
                 $.deparam.querystring(xhr_settings.url))
             format: format
             korp_url: window.location.href
-            korp_server_url: settings.cgi_script
+            korp_server_url: settings.cgiScript
             corpus_config: JSON.stringify(result_corpora_settings)
             corpus_config_info_keys: [
                 'metadata'
@@ -655,7 +655,7 @@ util.setDownloadLinks = (xhr_settings, result_data) ->
     $('#download-links').localize().click(false).change (event) ->
         params = $(":selected", this).data("params")
         unless params then return
-        $.generateFile settings.download_cgi_script, params
+        $.generateFile settings.downloadCgiScript, params
         self = $(this)
         setTimeout( () ->
             self.val("init")
@@ -777,7 +777,7 @@ util.loadCorpora = ->
 
             supportsContext = _.keys(corpusObj.context).length > 1
             output += $("<div>").localeKey("corpselector_supports").html() + "<br>" if supportsContext
-            output += $("<div>").localeKey("corpselector_limited").html() if corpusObj.limited_access
+            output += $("<div>").localeKey("corpselector_limited").html() if corpusObj.limitedAccess
             output
 
         infoPopupFolder: (indata) ->

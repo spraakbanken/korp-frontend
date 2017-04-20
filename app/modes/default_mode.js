@@ -189,7 +189,7 @@ settings.corporafolders.magazines = {
  * PRESELECTED CORPORA
  * Folders will be expanded to all corpora. Optionally prefix folders with __ , which will be ignored.
  */
-settings.preselected_corpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk",
+settings.preselectedCorpora = ["suc3", "wikipedia-sv", "talbanken", "sfs", "snp7879", "__newspapertexts", "__fisk",
                                 "fof", "twitter", "__socialmedia.bloggmix", "romi", "romii", "rom99", "storsuc"];
 
 /*
@@ -1871,7 +1871,7 @@ settings.corpora["sprakfragor"] = {
     id: "sprakfragor",
     title: "Besvarade språkfrågor",
     description: 'Spåkrådets rådgivningsmejl<br><br>För åtkomst kontakta <a href="mailto:per-anders.jande@sprakochfolkminnen.se">Per-Anders Jande</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: {
         "1 sentence": "1 sentence",
         "1 text": "1 text"
@@ -1901,7 +1901,7 @@ settings.corpora["ivip"] = {
     id: "ivip",
     title: "IVIP",
     description: 'Interaktion och variation i pluricentriska språk – Kommunikativa mönster i sverigesvenska och finlandssvenska<br><br>För åtkomst kontakta <a href="mailto:inga-lill.grahn@sprakochfolkminnen.se">Inga-Lill Grahn</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: {
         "1 sentence": "1 sentence",
         "1 text": "1 text"
@@ -2149,7 +2149,7 @@ settings.corpora["lawline"] = {
     title: "Lawline",
     description: 'Frågor och svar kring juridisk rådgivning från lawline.' +
                  '<br><br>För åtkomst kontakta <a href="mailto:lena.rogstroem@svenska.gu.se">Lena Rogström</a>.',
-    limited_access: true,
+    limitedAccess: true,
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs2,
@@ -3278,7 +3278,7 @@ settings.corpora.sw1203 = {
     id: "sw1203",
     title: "SW1203-uppsatser",
     description: 'För åtkomst kontakta <a href="mailto:ingegerd.enstroem@svenska.gu.se">Ingegerd Enström</a>.',
-    limited_access: true,
+    limitedAccess: true,
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
@@ -3324,7 +3324,7 @@ settings.corpora.tisus = {
     id: "tisus",
     title: "TISUS-texter",
     description: 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
-    limited_access: true,
+    limitedAccess: true,
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,
@@ -3350,7 +3350,7 @@ settings.corpora.ansokningar = {
     id: "ansokningar",
     title: "Ansökningar",
     description: 'För åtkomst kontakta <a href="mailto:lena.rogstroem@svenska.gu.se">Lena Rogström</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: defaultContext,
     within: settings.defaultWithin,
     attributes: modernAttrs2,
@@ -3365,7 +3365,7 @@ settings.corpora.coctaill = {
     id: "coctaill",
     title: "COCTAILL",
     description: 'För åtkomst kontakta <a href="mailto:elena.volodina@svenska.gu.se">Elena Volodina</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: spContext,
     within: spWithin,
     attributes: modernAttrs,
@@ -3825,7 +3825,7 @@ settings.corpora.gdc = {
     id: "gdc",
     title: "Gothenburg Dialogue Corpus (GDC)",
     description: 'För åtkomst kontakta <a href="mailto:cajsa.ottesjo@gu.se">Cajsa Ottesjö</a>.',
-    limited_access: true,
+    limitedAccess: true,
     within: settings.defaultWithin,
     context: {
         "1 sentence": "1 sentence",
@@ -3864,7 +3864,7 @@ settings.corpora.mepac = {
     id: "mepac",
     title: "MEPAC bloggar",
     description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: {
         "1 sentence": "1 sentence",
         "1 text": "1 text"
@@ -3889,7 +3889,7 @@ settings.corpora["mepac-i"] = {
     id: "mepac-i",
     title: "MEPAC intervjuer",
     description: 'För åtkomst kontakta <a href="mailto:anna_w.gustafsson@nordlund.lu.se">Anna W Gustafsson</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: {
         "1 sentence": "1 sentence",
         "3 text": "3 text"
@@ -3915,7 +3915,7 @@ settings.corpora.forhor = {
     id: "forhor",
     title: "Förhör",
     description: 'För åtkomst kontakta <a href="mailto:ylva.byrman@svenska.gu.se">Ylva Byrman</a>.',
-    limited_access: true,
+    limitedAccess: true,
     context: spContext,
     within: spWithin,
     attributes: modernAttrs,
@@ -3939,7 +3939,7 @@ settings.corpora.soexempel = {
     description: 'De drygt 94 000 språkexemplen är hämtade ur Svensk ordbok utgiven av Svenska Akademien (2009). '+
                   'Exemplens uppgift är att stödja ordboksdefinitionerna och att ge information om uppslagsordens fraseologi. ' +
                   '<br><br>För åtkomst kontakta <a href="mailto:emma.skoldberg@svenska.gu.se">Emma Sköldberg</a>.',
-    limited_access: true,
+    limitedAccess: true,
     within: spWithin,
     context: spContext,
     attributes: modernAttrs,

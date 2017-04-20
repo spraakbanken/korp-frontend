@@ -329,7 +329,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
 
 
     onCorpusChange = (event, selected) ->
-        # TODO: respect the setting 'word_attribute_selector' and similar
+        # TODO: respect the setting 'wordAttributeSelector' and similar
         unless selected?.length then return
         lang = s.$parent.$parent?.l?.lang
         allAttrs = settings.corpusListing.getAttributeGroups(lang)

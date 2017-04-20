@@ -3,9 +3,9 @@ settings.primaryLight = "#FFEBF5";
 settings.autocomplete = false;
 settings.wordpicture = false;
 
-settings.struct_attribute_selector = "intersection"
-settings.word_attribute_selector   = "intersection"
-settings.reduce_word_attribute_selector = "intersection"
+settings.structAttributeSelector = "intersection"
+settings.wordAttributeSelector   = "intersection"
+settings.reduceWordAttributeSelector = "intersection"
 
 $("#lemgram_list_item").remove();
 $("#results-lemgram").remove();

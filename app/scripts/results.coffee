@@ -198,7 +198,8 @@ class view.KWICResults extends BaseResults
 
     getPageInterval: (page) ->
         hpp = locationSearch().hpp or 25
-        items_per_page = Number(hpp) or settings.hits_per_page_default
+        # TODO settings.hitsPerPageDefault will never be used
+        items_per_page = Number(hpp) or settings.hitsPerPageDefault
         page = Number(page)
         output = {}
         output.start = (page or 0) * items_per_page

@@ -28,7 +28,7 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
     scope : { "header" : "=", "storage" : "=" }
     link : (scope, elem, attr) ->
         s = scope
-        s.shouldUseThis = settings.news_desk_url?
+        s.shouldUseThis = settings.newsDeskUrl?
 
         if not s.shouldUseThis
             return
@@ -45,7 +45,7 @@ angular.module('newsdesk', []).directive "newsDesk", ($window, $document, $rootE
                 s.lastChecked = d.toISOString()[0..9]
             $.ajax({
                 type: "GET",
-                url: settings.news_desk_url,
+                url: settings.newsDeskUrl,
                 async: false,
                 jsonpCallback: "newsdata",
                 contentType: "application/json",

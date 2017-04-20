@@ -612,7 +612,7 @@ var fsv_aldrelagar = {
     }
 };
 
-settings.common_struct_types = {
+settings.commonStructTypes = {
     date_interval: {
         label: "date_interval",
         hideSidebar: "true",

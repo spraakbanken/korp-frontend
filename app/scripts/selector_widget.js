@@ -415,7 +415,7 @@ var hp_corpusChooser = {
 						outStr += recursive_transform(theHTML, levelindent + 1);
 						outStr += "</div>";
 					} else {
-						var disable = settings.corpora[$(this).attr('id')].limited_access === true && 
+						var disable = settings.corpora[$(this).attr('id')].limitedAccess === true && 
 							!authenticationProxy.hasCred($(this).attr('id'));
 
 						if(levelindent > 0) {

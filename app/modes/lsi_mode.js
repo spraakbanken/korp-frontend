@@ -19,7 +19,7 @@ settings.corpora.lsi = {
     id: "lsi",
     title: "LSI",
     description: "",
-    limited_access: true,
+    limitedAccess: true,
     languages: {
         lsi: "english"
     },

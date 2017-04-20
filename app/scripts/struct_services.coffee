@@ -12,7 +12,7 @@ korpApp.factory "structService",  ($http, $q) ->
             struct: attributes.join ","
 
         conf =
-            url : settings.cgi_script
+            url : settings.cgiScript
             params : params
             method : "GET"
             headers : {}

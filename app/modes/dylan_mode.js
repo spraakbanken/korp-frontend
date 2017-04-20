@@ -11,7 +11,7 @@ settings.corpora.dylan = {
     id: "dylan",
     title: "Bob Dylan",
     description: "",
-    limited_access: true,
+    limitedAccess: true,
     within: spWithin,
     context: spContext,
     attributes: {

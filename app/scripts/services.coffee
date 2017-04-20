@@ -68,7 +68,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
             top : top
 
         conf =
-            url : settings.cgi_script
+            url : settings.cgiScript
             params : params
             method : "GET"
             headers : {}
@@ -152,7 +152,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         _.extend params, cqpSubExprs
 
         conf =
-            url : settings.cgi_script
+            url : settings.cgiScript
             params : params
             method : "GET"
             headers : {}
@@ -251,7 +251,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
             def = $q.defer()
             $http(
                 method : "GET"
-                url : settings.cgi_script
+                url : settings.cgiScript
                 params:
                     command : "info"
                     corpus : _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join ","
@@ -386,7 +386,7 @@ korpApp.factory "lexicons", ($q, $http) ->
                 corpora = corporaIDs.join(",")
                 $http(
                     method: 'POST'
-                    url: settings.cgi_script
+                    url: settings.cgiScript
                     data : "command=lemgram_count&lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
                     headers : {
                         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'

@@ -10,7 +10,7 @@ settings.autocomplete = true;
 settings.enableMap = !isLab;
 settings.mapPosTag = ["PM", "NNP", "NNPS"]
 settings.newMapEnabled = isLab;
-settings.hits_per_page_default = 25
+settings.hitsPerPageDefault = 25
 
 settings.languages = ["sv", "en"];
 settings.defaultLanguage = "sv";
@@ -54,14 +54,14 @@ settings.downloadFormatParams = {
 };
 
 // for extended search dropdown, can be 'union' or 'intersection'
-settings.word_attribute_selector = "union"
-settings.struct_attribute_selector = "union"
+settings.wordAttributeSelector = "union";
+settings.structAttributeSelector = "union";
 
 // for 'compile statistics by' selector, can be 'union' or 'intersection'
-settings.reduce_word_attribute_selector = "intersection"
-settings.reduce_struct_attribute_selector = "intersection"
+settings.reduceWordAttributeSelector = "intersection";
+settings.reduceStructAttributeSelector = "intersection";
 
-settings.news_desk_url = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_news/json/korpnews.json";
+settings.newsDeskUrl = "https://svn.spraakdata.gu.se/sb-arkiv/pub/component_news/json/korpnews.json";
 
 settings.wordpictureTagset = {
     // supported pos-tags
@@ -209,7 +209,7 @@ settings.defaultWithin = {
 };
 
 // for optimization purposes
-settings.cqp_prio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
+settings.cqpPrio = ['deprel', 'pos', 'msd', 'suffix', 'prefix', 'grundform', 'lemgram', 'saldo', 'word'];
 
 settings.defaultOptions = {
     "is": "=",
@@ -221,8 +221,8 @@ settings.defaultOptions = {
     "matches_not": "!*=",
 }
 
-settings.cgi_script = "https://ws.spraakbanken.gu.se/ws/korp";
-settings.download_cgi_script = "https://ws.spraakbanken.gu.se/ws/korp/download";
+settings.cgiScript = "https://ws.spraakbanken.gu.se/ws/korp";
+settings.downloadCgiScript = "https://ws.spraakbanken.gu.se/ws/korp/download";
 
 settings.mapCenter = {
   lat: 62.99515845212052,
