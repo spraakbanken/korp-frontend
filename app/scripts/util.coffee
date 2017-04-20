@@ -324,7 +324,7 @@ class window.ParallelCorpusListing extends CorpusListing
     getLinked : (corp, andSelf=false, only_selected=true) ->
         target = if only_selected then @selected else @struct
         output = _.filter target, (item) ->
-            item.id in (corp.linked_to or [])
+            item.id in (corp.linkedTo or [])
         output = [corp].concat output if andSelf
         output
 
@@ -352,7 +352,7 @@ class window.ParallelCorpusListing extends CorpusListing
 
             for cps in other
                 linked = _(main).filter((mainCorpus) ->
-                    cps.id in mainCorpus.linked_to
+                    cps.id in mainCorpus.linkedTo
                 ).value()
 
                 output = output.concat _.map linked, (item) -> [item, cps]
@@ -738,7 +738,7 @@ util.loadCorpora = ->
             maybeInfo = ""
             maybeInfo = "<br/><br/>" + corpusObj.description if corpusObj.description
             numTokens = corpusObj.info.Size
-            baseLang = settings.corpora[corpusID]?.linked_to
+            baseLang = settings.corpora[corpusID]?.linkedTo
             if baseLang
                 lang = " (" + util.getLocaleString(settings.corpora[corpusID].lang) + ")"
                 baseLangTokenHTML = """#{util.getLocaleString("corpselector_numberoftokens")}: <b>#{util.prettyNumbers(settings.corpora[baseLang].info.Size)}

@@ -308,7 +308,7 @@ settings.corpora = {};
 settings.corpora["europarl-sv"] = {
     id: "europarl-sv",
     lang: "swe",
-    linked_to: ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
+    linkedTo: ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
     pivot: true,
     title: "Europarl svenska",
     context: context.defaultAligned,
@@ -364,7 +364,7 @@ settings.corpora["europarl-sv"] = {
 settings.corpora["europarl-da"] = {
     id: "europarl-da",
     lang: "dan",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-danska",
     context: {
         "1 linkda": "1 link"
@@ -381,7 +381,7 @@ settings.corpora["europarl-da"] = {
 settings.corpora["europarl-de"] = {
     id: "europarl-de",
     lang: "deu",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-tyska",
     context: {
         "1 linkde": "1 link"
@@ -398,7 +398,7 @@ settings.corpora["europarl-de"] = {
 settings.corpora["europarl-el"] = {
     id: "europarl-el",
     lang: "ell",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-grekiska",
     context: {
         "1 linkel": "1 link"
@@ -415,7 +415,7 @@ settings.corpora["europarl-el"] = {
 settings.corpora["europarl-en"] = {
     id: "europarl-en",
     lang: "eng",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-engelska",
     context: {
         "1 linken": "1 link"
@@ -432,7 +432,7 @@ settings.corpora["europarl-en"] = {
 settings.corpora["europarl-es"] = {
     id: "europarl-es",
     lang: "spa",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-spanska",
     context: {
         "1 linkes": "1 link"
@@ -449,7 +449,7 @@ settings.corpora["europarl-es"] = {
 settings.corpora["europarl-fi"] = {
     id: "europarl-fi",
     lang: "fin",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-finska",
     context: {
         "1 linkfi": "1 link"
@@ -466,7 +466,7 @@ settings.corpora["europarl-fi"] = {
 settings.corpora["europarl-fr"] = {
     id: "europarl-fr",
     lang: "fra",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-franska",
     context: {
         "1 linkfr": "1 link"
@@ -483,7 +483,7 @@ settings.corpora["europarl-fr"] = {
 settings.corpora["europarl-it"] = {
     id: "europarl-it",
     lang: "ita",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-italienska",
     context: {
         "1 linkit": "1 link"
@@ -500,7 +500,7 @@ settings.corpora["europarl-it"] = {
 settings.corpora["europarl-nl"] = {
     id: "europarl-nl",
     lang: "nld",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-nederländska",
     context: {
         "1 linknl": "1 link"
@@ -517,7 +517,7 @@ settings.corpora["europarl-nl"] = {
 settings.corpora["europarl-pt"] = {
     id: "europarl-pt",
     lang: "por",
-    linked_to: ["europarl-sv"],
+    linkedTo: ["europarl-sv"],
     title: "Europarl svenska-portugisiska",
     context: {
         "1 linkpt": "1 link"
@@ -543,7 +543,7 @@ var wordlink = {
 settings.corpora["saltnld-sv"] = {
     id: "saltnld-sv",
     lang: "swe",
-    linked_to: ["saltnld-nl"],
+    linkedTo: ["saltnld-nl"],
     title: "SALT svenska-nederländska",
     context: context.defaultAligned,
     within: {
@@ -583,7 +583,7 @@ settings.corpora["saltnld-sv"] = {
 settings.corpora["saltnld-nl"] = {
     id: "saltnld-nl",
     lang: "nld",
-    linked_to: ["saltnld-sv"],
+    linkedTo: ["saltnld-sv"],
     title: "SALT svenska-nederländska",
     context: context.defaultAligned,
     within: {
@@ -619,7 +619,7 @@ settings.corpora["saltnld-nl"] = {
 settings.corpora["aspacsvru-sv"] = {
     id: "aspacsvru-sv",
     lang: "swe",
-    linked_to: ["aspacsvru-ru"],
+    linkedTo: ["aspacsvru-ru"],
     title: "ASPAC svenska-ryska",
     context: context.defaultAligned,
     within: {
@@ -652,7 +652,7 @@ settings.corpora["aspacsvru-sv"] = {
 settings.corpora["aspacsvru-ru"] = {
     id: "aspacsvru-ru",
     lang: "rus",
-    linked_to: ["aspacsvru-sv"],
+    linkedTo: ["aspacsvru-sv"],
     title: "ASPAC svenska-ryska",
     context: context.defaultAligned,
     within: {
@@ -680,7 +680,7 @@ settings.corpora["aspacsvru-ru"] = {
 settings.corpora["aspacsvde-sv"] = {
     id: "aspacsvde-sv",
     lang: "swe",
-    linked_to: ["aspacsvde-de"],
+    linkedTo: ["aspacsvde-de"],
     title: "ASPAC svenska-tyska",
     context: context.defaultAligned,
     within: {
@@ -713,7 +713,7 @@ settings.corpora["aspacsvde-sv"] = {
 settings.corpora["aspacsvde-de"] = {
     id: "aspacsvde-de",
     lang: "deu",
-    linked_to: ["aspacsvde-sv"],
+    linkedTo: ["aspacsvde-sv"],
     title: "ASPAC svenska-tyska",
     context: context.defaultAligned,
     within: {
@@ -741,7 +741,7 @@ settings.corpora["aspacsvde-de"] = {
 settings.corpora["aspacsven-sv"] = {
     id: "aspacsven-sv",
     lang: "swe",
-    linked_to: ["aspacsven-en"],
+    linkedTo: ["aspacsven-en"],
     title: "ASPAC svenska-engelska",
     context: context.defaultAligned,
     within: {
@@ -774,7 +774,7 @@ settings.corpora["aspacsven-sv"] = {
 settings.corpora["aspacsven-en"] = {
     id: "aspacsven-en",
     lang: "eng",
-    linked_to: ["aspacsven-sv"],
+    linkedTo: ["aspacsven-sv"],
     title: "ASPAC svenska-engelska",
     context: context.defaultAligned,
     within: {
@@ -802,7 +802,7 @@ settings.corpora["aspacsven-en"] = {
 settings.corpora["aspacsves-sv"] = {
     id: "aspacsves-sv",
     lang: "swe",
-    linked_to: ["aspacsves-es"],
+    linkedTo: ["aspacsves-es"],
     title: "ASPAC svenska-spanska",
     context: context.defaultAligned,
     within: {
@@ -835,7 +835,7 @@ settings.corpora["aspacsves-sv"] = {
 settings.corpora["aspacsves-es"] = {
     id: "aspacsves-es",
     lang: "spa",
-    linked_to: ["aspacsves-sv"],
+    linkedTo: ["aspacsves-sv"],
     title: "ASPAC svenska-spanska",
     context: context.defaultAligned,
     within: {
@@ -863,7 +863,7 @@ settings.corpora["aspacsves-es"] = {
 settings.corpora["aspacsvfr-sv"] = {
     id: "aspacsvfr-sv",
     lang: "swe",
-    linked_to: ["aspacsvfr-fr"],
+    linkedTo: ["aspacsvfr-fr"],
     title: "ASPAC svenska-franska",
     context: context.defaultAligned,
     within: {
@@ -896,7 +896,7 @@ settings.corpora["aspacsvfr-sv"] = {
 settings.corpora["aspacsvfr-fr"] = {
     id: "aspacsvfr-fr",
     lang: "fra",
-    linked_to: ["aspacsvfr-sv"],
+    linkedTo: ["aspacsvfr-sv"],
     title: "ASPAC svenska-franska",
     context: context.defaultAligned,
     within: {
@@ -924,7 +924,7 @@ settings.corpora["aspacsvfr-fr"] = {
 settings.corpora["aspacsvit-sv"] = {
     id: "aspacsvit-sv",
     lang: "swe",
-    linked_to: ["aspacsvit-it"],
+    linkedTo: ["aspacsvit-it"],
     title: "ASPAC svenska-italienska",
     context: context.defaultAligned,
     within: {
@@ -957,7 +957,7 @@ settings.corpora["aspacsvit-sv"] = {
 settings.corpora["aspacsvit-it"] = {
     id: "aspacsvit-it",
     lang: "ita",
-    linked_to: ["aspacsvit-sv"],
+    linkedTo: ["aspacsvit-sv"],
     title: "ASPAC svenska-italienska",
     context: context.defaultAligned,
     within: {
@@ -985,7 +985,7 @@ settings.corpora["aspacsvit-it"] = {
 settings.corpora["aspacsvnl-sv"] = {
     id: "aspacsvnl-sv",
     lang: "swe",
-    linked_to: ["aspacsvnl-nl"],
+    linkedTo: ["aspacsvnl-nl"],
     title: "ASPAC svenska-nederländska",
     context: context.defaultAligned,
     within: {
@@ -1018,7 +1018,7 @@ settings.corpora["aspacsvnl-sv"] = {
 settings.corpora["aspacsvnl-nl"] = {
     id: "aspacsvnl-nl",
     lang: "nld",
-    linked_to: ["aspacsvnl-sv"],
+    linkedTo: ["aspacsvnl-sv"],
     title: "ASPAC svenska-nederländska",
     context: context.defaultAligned,
     within: {
@@ -1046,7 +1046,7 @@ settings.corpora["aspacsvnl-nl"] = {
 settings.corpora["aspacsvpt-sv"] = {
     id: "aspacsvpt-sv",
     lang: "swe",
-    linked_to: ["aspacsvpt-pt"],
+    linkedTo: ["aspacsvpt-pt"],
     title: "ASPAC svenska-portugisiska",
     context: context.defaultAligned,
     within: {
@@ -1079,7 +1079,7 @@ settings.corpora["aspacsvpt-sv"] = {
 settings.corpora["aspacsvpt-pt"] = {
     id: "aspacsvpt-pt",
     lang: "por",
-    linked_to: ["aspacsvpt-sv"],
+    linkedTo: ["aspacsvpt-sv"],
     title: "ASPAC svenska-portugisiska",
     context: context.defaultAligned,
     within: {
@@ -1107,7 +1107,7 @@ settings.corpora["aspacsvpt-pt"] = {
 settings.corpora["aspacsvpl-sv"] = {
     id: "aspacsvpl-sv",
     lang: "swe",
-    linked_to: ["aspacsvpl-pl"],
+    linkedTo: ["aspacsvpl-pl"],
     title: "ASPAC svenska-polska",
     context: context.defaultAligned,
     within: {
@@ -1140,7 +1140,7 @@ settings.corpora["aspacsvpl-sv"] = {
 settings.corpora["aspacsvpl-pl"] = {
     id: "aspacsvpl-pl",
     lang: "pol",
-    linked_to: ["aspacsvpl-sv"],
+    linkedTo: ["aspacsvpl-sv"],
     title: "ASPAC svenska-polska",
     context: context.defaultAligned,
     within: {
@@ -1168,7 +1168,7 @@ settings.corpora["aspacsvpl-pl"] = {
 settings.corpora["aspacsvla-sv"] = {
     id: "aspacsvla-sv",
     lang: "swe",
-    linked_to: ["aspacsvla-la"],
+    linkedTo: ["aspacsvla-la"],
     title: "ASPAC svenska-latin",
     context: context.defaultAligned,
     within: {
@@ -1201,7 +1201,7 @@ settings.corpora["aspacsvla-sv"] = {
 settings.corpora["aspacsvla-la"] = {
     id: "aspacsvla-la",
     lang: "lat",
-    linked_to: ["aspacsvla-sv"],
+    linkedTo: ["aspacsvla-sv"],
     title: "ASPAC svenska-latin",
     context: context.defaultAligned,
     within: {
@@ -1229,7 +1229,7 @@ settings.corpora["aspacsvla-la"] = {
 settings.corpora["aspacsvbg-sv"] = {
     id: "aspacsvbg-sv",
     lang: "swe",
-    linked_to: ["aspacsvbg-bg"],
+    linkedTo: ["aspacsvbg-bg"],
     title: "ASPAC svenska-bulgariska",
     context: context.defaultAligned,
     within: {
@@ -1262,7 +1262,7 @@ settings.corpora["aspacsvbg-sv"] = {
 settings.corpora["aspacsvbg-bg"] = {
     id: "aspacsvbg-bg",
     lang: "bul",
-    linked_to: ["aspacsvbg-sv"],
+    linkedTo: ["aspacsvbg-sv"],
     title: "ASPAC svenska-bulgariska",
     context: context.defaultAligned,
     within: {
@@ -1290,7 +1290,7 @@ settings.corpora["aspacsvbg-bg"] = {
 settings.corpora["aspacsvcs-sv"] = {
     id: "aspacsvcs-sv",
     lang: "swe",
-    linked_to: ["aspacsvcs-cs"],
+    linkedTo: ["aspacsvcs-cs"],
     title: "ASPAC svenska-tjeckiska",
     context: context.defaultAligned,
     within: {
@@ -1323,7 +1323,7 @@ settings.corpora["aspacsvcs-sv"] = {
 settings.corpora["aspacsvcs-cs"] = {
     id: "aspacsvcs-cs",
     lang: "ces",
-    linked_to: ["aspacsvcs-sv"],
+    linkedTo: ["aspacsvcs-sv"],
     title: "ASPAC svenska-tjeckiska",
     context: context.defaultAligned,
     within: {
@@ -1348,7 +1348,7 @@ settings.corpora["aspacsvcs-cs"] = {
 settings.corpora["aspacsvbe-sv"] = {
     id: "aspacsvbe-sv",
     lang: "swe",
-    linked_to: ["aspacsvbe-be"],
+    linkedTo: ["aspacsvbe-be"],
     title: "ASPAC svenska-vitryska",
     context: context.defaultAligned,
     within: {
@@ -1381,7 +1381,7 @@ settings.corpora["aspacsvbe-sv"] = {
 settings.corpora["aspacsvbe-be"] = {
     id: "aspacsvbe-be",
     lang: "bel",
-    linked_to: ["aspacsvbe-sv"],
+    linkedTo: ["aspacsvbe-sv"],
     title: "ASPAC svenska-vitryska",
     context: context.defaultAligned,
     within: {
@@ -1406,7 +1406,7 @@ settings.corpora["aspacsvbe-be"] = {
 settings.corpora["aspacsvhr-sv"] = {
     id: "aspacsvhr-sv",
     lang: "swe",
-    linked_to: ["aspacsvhr-hr"],
+    linkedTo: ["aspacsvhr-hr"],
     title: "ASPAC svenska-kroatiska",
     context: context.defaultAligned,
     within: {
@@ -1439,7 +1439,7 @@ settings.corpora["aspacsvhr-sv"] = {
 settings.corpora["aspacsvhr-hr"] = {
     id: "aspacsvhr-hr",
     lang: "hrv",
-    linked_to: ["aspacsvhr-sv"],
+    linkedTo: ["aspacsvhr-sv"],
     title: "ASPAC svenska-kroatiska",
     context: context.defaultAligned,
     within: {
@@ -1464,7 +1464,7 @@ settings.corpora["aspacsvhr-hr"] = {
 settings.corpora["aspacsvmk-sv"] = {
     id: "aspacsvmk-sv",
     lang: "swe",
-    linked_to: ["aspacsvmk-mk"],
+    linkedTo: ["aspacsvmk-mk"],
     title: "ASPAC svenska-makedonska",
     context: context.defaultAligned,
     within: {
@@ -1498,7 +1498,7 @@ settings.corpora["aspacsvmk-sv"] = {
 settings.corpora["aspacsvmk-mk"] = {
     id: "aspacsvmk-mk",
     lang: "mkd",
-    linked_to: ["aspacsvmk-sv"],
+    linkedTo: ["aspacsvmk-sv"],
     title: "ASPAC svenska-makedonska",
     context: context.defaultAligned,
     within: {
@@ -1523,7 +1523,7 @@ settings.corpora["aspacsvmk-mk"] = {
 settings.corpora["aspacsvel-sv"] = {
     id: "aspacsvel-sv",
     lang: "swe",
-    linked_to: ["aspacsvel-el"],
+    linkedTo: ["aspacsvel-el"],
     title: "ASPAC svenska-grekiska",
     context: context.defaultAligned,
     within: {
@@ -1557,7 +1557,7 @@ settings.corpora["aspacsvel-sv"] = {
 settings.corpora["aspacsvel-el"] = {
     id: "aspacsvel-el",
     lang: "ell",
-    linked_to: ["aspacsvel-sv"],
+    linkedTo: ["aspacsvel-sv"],
     title: "ASPAC svenska-grekiska",
     context: context.defaultAligned,
     within: {
@@ -1582,7 +1582,7 @@ settings.corpora["aspacsvel-el"] = {
 settings.corpora["aspacsvro-sv"] = {
     id: "aspacsvro-sv",
     lang: "swe",
-    linked_to: ["aspacsvro-ro"],
+    linkedTo: ["aspacsvro-ro"],
     title: "ASPAC svenska-rumänska",
     context: context.defaultAligned,
     within: {
@@ -1616,7 +1616,7 @@ settings.corpora["aspacsvro-sv"] = {
 settings.corpora["aspacsvro-ro"] = {
     id: "aspacsvro-ro",
     lang: "ron",
-    linked_to: ["aspacsvro-sv"],
+    linkedTo: ["aspacsvro-sv"],
     title: "ASPAC svenska-rumänska",
     context: context.defaultAligned,
     within: {
@@ -1644,7 +1644,7 @@ settings.corpora["aspacsvro-ro"] = {
 settings.corpora["aspacsvsk-sv"] = {
     id: "aspacsvsk-sv",
     lang: "swe",
-    linked_to: ["aspacsvsk-sk"],
+    linkedTo: ["aspacsvsk-sk"],
     title: "ASPAC svenska-slovakiska",
     context: context.defaultAligned,
     within: {
@@ -1680,7 +1680,7 @@ settings.corpora["aspacsvsk-sv"] = {
 settings.corpora["aspacsvsk-sk"] = {
     id: "aspacsvsk-sk",
     lang: "slk",
-    linked_to: ["aspacsvsk-sv"],
+    linkedTo: ["aspacsvsk-sv"],
     title: "ASPAC svenska-slovakiska",
     context: context.defaultAligned,
     within: {
@@ -1708,7 +1708,7 @@ settings.corpora["aspacsvsk-sk"] = {
 settings.corpora["aspacsvsl-sv"] = {
     id: "aspacsvsl-sv",
     lang: "swe",
-    linked_to: ["aspacsvsl-sl"],
+    linkedTo: ["aspacsvsl-sl"],
     title: "ASPAC svenska-slovenska",
     context: context.defaultAligned,
     within: {
@@ -1742,7 +1742,7 @@ settings.corpora["aspacsvsl-sv"] = {
 settings.corpora["aspacsvsl-sl"] = {
     id: "aspacsvsl-sl",
     lang: "slv",
-    linked_to: ["aspacsvsk-sv"],
+    linkedTo: ["aspacsvsk-sv"],
     title: "ASPAC svenska-slovenska",
     context: context.defaultAligned,
     within: {
@@ -1770,7 +1770,7 @@ settings.corpora["aspacsvsl-sl"] = {
 settings.corpora["aspacsvuk-sv"] = {
     id: "aspacsvuk-sv",
     lang: "swe",
-    linked_to: ["aspacsvuk-uk"],
+    linkedTo: ["aspacsvuk-uk"],
     title: "ASPAC svenska-ukrainska",
     context: context.defaultAligned,
     within: {
@@ -1804,7 +1804,7 @@ settings.corpora["aspacsvuk-sv"] = {
 settings.corpora["aspacsvuk-uk"] = {
     id: "aspacsvuk-uk",
     lang: "ukr",
-    linked_to: ["aspacsvuk-sv"],
+    linkedTo: ["aspacsvuk-sv"],
     title: "ASPAC svenska-ukrainska",
     context: context.defaultAligned,
     within: {
@@ -1829,7 +1829,7 @@ settings.corpora["aspacsvuk-uk"] = {
 settings.corpora["aspacsvtk-sv"] = {
     id: "aspacsvtk-sv",
     lang: "swe",
-    linked_to: ["aspacsvtk-tk"],
+    linkedTo: ["aspacsvtk-tk"],
     title: "ASPAC svenska-turkmeniska",
     context: context.defaultAligned,
     within: {
@@ -1863,7 +1863,7 @@ settings.corpora["aspacsvtk-sv"] = {
 settings.corpora["aspacsvtk-tk"] = {
     id: "aspacsvtk-tk",
     lang: "tuk",
-    linked_to: ["aspacsvtk-sv"],
+    linkedTo: ["aspacsvtk-sv"],
     title: "ASPAC svenska-turkmeniska",
     context: context.defaultAligned,
     within: {
@@ -1888,7 +1888,7 @@ settings.corpora["aspacsvtk-tk"] = {
 settings.corpora["aspacsvsr-sv"] = {
     id: "aspacsvsr-sv",
     lang: "swe",
-    linked_to: ["aspacsvsr-sr"],
+    linkedTo: ["aspacsvsr-sr"],
     title: "ASPAC svenska-serbiska (latinska alfabetet)",
     context: context.defaultAligned,
     within: {
@@ -1921,7 +1921,7 @@ settings.corpora["aspacsvsr-sv"] = {
 settings.corpora["aspacsvsr-sr"] = {
     id: "aspacsvsr-sr",
     lang: "srp",
-    linked_to: ["aspacsvsr-sv"],
+    linkedTo: ["aspacsvsr-sv"],
     title: "ASPAC svenska-serbiska (latinska alfabetet)",
     context: context.defaultAligned,
     within: {
@@ -1946,7 +1946,7 @@ settings.corpora["aspacsvsr-sr"] = {
 settings.corpora["aspacsvsbc-sv"] = {
     id: "aspacsvsbc-sv",
     lang: "swe",
-    linked_to: ["aspacsvsbc-sbc"],
+    linkedTo: ["aspacsvsbc-sbc"],
     title: "ASPAC svenska-serbiska (kyrilliska alfabetet)",
     context: context.defaultAligned,
     within: {
@@ -1980,7 +1980,7 @@ settings.corpora["aspacsvsbc-sv"] = {
 settings.corpora["aspacsvsbc-sbc"] = {
     id: "aspacsvsbc-sbc",
     lang: "srp",
-    linked_to: ["aspacsvsbc-sv"],
+    linkedTo: ["aspacsvsbc-sv"],
     title: "ASPAC svenska-serbiska (kyrilliska alfabetet)",
     context: context.defaultAligned,
     within: {
@@ -2005,7 +2005,7 @@ settings.corpora["aspacsvsbc-sbc"] = {
 settings.corpora["aspacsvdsb-sv"] = {
     id: "aspacsvdsb-sv",
     lang: "swe",
-    linked_to: ["aspacsvdsb-dsb"],
+    linkedTo: ["aspacsvdsb-dsb"],
     title: "ASPAC svenska-lågsorbiska",
     context: context.defaultAligned,
     within: {
@@ -2038,7 +2038,7 @@ settings.corpora["aspacsvdsb-sv"] = {
 settings.corpora["aspacsvdsb-dsb"] = {
     id: "aspacsvdsb-dsb",
     lang: "dsb",
-    linked_to: ["aspacsvdsb-sv"],
+    linkedTo: ["aspacsvdsb-sv"],
     title: "ASPAC svenska-lågsorbiska",
     context: context.defaultAligned,
     within: {
@@ -2063,7 +2063,7 @@ settings.corpora["aspacsvdsb-dsb"] = {
 settings.corpora["aspacsvhsb-sv"] = {
     id: "aspacsvhsb-sv",
     lang: "swe",
-    linked_to: ["aspacsvhsb-hsb"],
+    linkedTo: ["aspacsvhsb-hsb"],
     title: "ASPAC svenska-högsorbiska",
     context: context.defaultAligned,
     within: {
@@ -2097,7 +2097,7 @@ settings.corpora["aspacsvhsb-sv"] = {
 settings.corpora["aspacsvhsb-hsb"] = {
     id: "aspacsvhsb-hsb",
     lang: "hsb",
-    linked_to: ["aspacsvhsb-sv"],
+    linkedTo: ["aspacsvhsb-sv"],
     title: "ASPAC svenska-högsorbiska",
     context: context.defaultAligned,
     within: {
@@ -2122,7 +2122,7 @@ settings.corpora["aspacsvhsb-hsb"] = {
 settings.corpora["aspacsvsvm-sv"] = {
     id: "aspacsvsvm-sv",
     lang: "swe",
-    linked_to: ["aspacsvsvm-svm"],
+    linkedTo: ["aspacsvsvm-svm"],
     title: "ASPAC svenska-moliseslaviska",
     context: context.defaultAligned,
     within: {
@@ -2156,7 +2156,7 @@ settings.corpora["aspacsvsvm-sv"] = {
 settings.corpora["aspacsvsvm-svm"] = {
     id: "aspacsvsvm-svm",
     lang: "svm",
-    linked_to: ["aspacsvsvm-sv"],
+    linkedTo: ["aspacsvsvm-sv"],
     title: "ASPAC svenska-moliseslaviska",
     context: context.defaultAligned,
     within: {
@@ -2181,7 +2181,7 @@ settings.corpora["aspacsvsvm-svm"] = {
 settings.corpora["espc-sv"] = {
     id: "espc-sv",
     lang: "swe",
-    linked_to: ["espc-en"],
+    linkedTo: ["espc-en"],
     limitedAccess: true,
     title: "The English-Swedish Parallel Corpus (ESPC)",
     description: 'För åtkomst kontakta <a href="mailto:karin.axelsson@sprak.gu.se">Karin Axelsson</a>.',
@@ -2210,7 +2210,7 @@ settings.corpora["espc-sv"] = {
 settings.corpora["espc-en"] = {
     id: "espc-en",
     lang: "eng",
-    linked_to: ["espc-en"],
+    linkedTo: ["espc-en"],
     limitedAccess: true,
     title: "The English-Swedish Parallel Corpus (ESPC)",
     description: 'För åtkomst kontakta <a href="mailto:karin.axelsson@sprak.gu.se">Karin Axelsson</a>.',
