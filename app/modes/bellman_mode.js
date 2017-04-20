@@ -14,7 +14,7 @@ settings.corpora = {};
 settings.corporafolders = {};
 
 settings.corpora['bellman'] = {
-    morf: 'swedbergm|dalinm|saldom',
+    morphology: 'swedbergm|dalinm|saldom',
     id: "bellman",
     title: "Bellmans samlade verk",
     description: "",

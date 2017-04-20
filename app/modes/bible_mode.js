@@ -53,7 +53,7 @@ settings.corpora.bibel1917 = {
 };
 
 settings.corpora.bibel1873dalin = {
-    morf: 'saldom|dalinm|swedbergm',
+    morphology: 'saldom|dalinm|swedbergm',
     id: "bibel1873dalin",
     title: "Bibeln 1873",
     within: settings.defaultWithin,
@@ -79,7 +79,7 @@ settings.corpora.bibel1873dalin = {
 };
 
 settings.corpora["vasabibel-nt"] = {
-    morf: 'swedbergm|dalinm|saldom',
+    morphology: 'swedbergm|dalinm|saldom',
     id: "vasabibel-nt",
     title: "Gustaf Vasas bibel - Nya testamentet",
     description: "'Nya Testamentet i Gustaf Vasas Bibel /under jämförelse med texten av år 1526 utgivet av Natan Lindqvist' från 1941",

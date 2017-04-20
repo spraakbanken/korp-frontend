@@ -529,7 +529,7 @@ settings.fsvvariants = {
 settings.fsvdescription ='<a target="_blank" href="http://project2.sol.lu.se/fornsvenska/">Fornsvenska textbanken</a> är ett projekt som digitaliserar fornsvenska texter och gör dem tillgängliga över webben. Projektet leds av Lars-Olof Delsing vid Lunds universitet.';
 
 var fsv_yngrelagar = {
-    morf: 'fsvm',
+    morphology: 'fsvm',
     id: "fsv-yngrelagar",
     title: "Yngre lagar – Fornsvenska textbankens material",
     description: settings.fsvdescription,
@@ -559,7 +559,7 @@ var fsv_yngrelagar = {
 };
 
 var fsv_aldrelagar = {
-    morf: 'fsvm',
+    morphology: 'fsvm',
     id: "fsv-aldrelagar",
     title: "Äldre lagar – Fornsvenska textbankens material",
     description: settings.fsvdescription,

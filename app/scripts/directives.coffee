@@ -656,7 +656,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                 morphologies.push "dalinm"
             else
                 for corporaID in corporaIDs
-                    morfs = settings.corpora[corporaID].morf?.split("|") or []
+                    morfs = settings.corpora[corporaID].morphology?.split("|") or []
                     for morf in morfs
                         unless morf in morphologies then morphologies.push morf
                 if morphologies.length is 0 then morphologies.push "saldom"

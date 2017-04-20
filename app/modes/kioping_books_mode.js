@@ -9,7 +9,7 @@ settings.corpora = {};
 settings.corporafolders = {};
 
 settings.corpora.kioping = {
-    morf: 'swedbergm|dalinm|saldom',
+    morphology: 'swedbergm|dalinm|saldom',
     id: "kioping",
     title: "Nils Matsson Kiöpings resor",
     description: "Reseskildringar från 1674 och 1743",
