@@ -54,7 +54,7 @@ settings.corpora["lsi"] = {
         "corpus_part": {label: "part"},
         "sentence_id": {label: "sentence"}
     },
-    custom_attributes: {
+    customAttributes: {
         "image": {
             customType: "struct",
             renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {

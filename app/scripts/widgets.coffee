@@ -10,17 +10,17 @@ Sidebar =
         $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
 
         customData = pos: [], struct: []
-        unless $.isEmptyObject(corpusObj.custom_attributes)
-            [word, sentence] = @renderCustomContent wordData, sentenceData, corpusObj.custom_attributes, tokens
+        unless $.isEmptyObject(corpusObj.customAttributes)
+            [word, sentence] = @renderCustomContent wordData, sentenceData, corpusObj.customAttributes, tokens
             customData.pos = word
             customData.struct = sentence
 
         posData = []
         unless $.isEmptyObject(corpusObj.attributes)
-            posData = @renderCorpusContent "pos", wordData, sentenceData, corpusObj.attributes, tokens, corpusObj.custom_attributes or {}, customData.pos
+            posData = @renderCorpusContent "pos", wordData, sentenceData, corpusObj.attributes, tokens, corpusObj.customAttributes or {}, customData.pos
         structData = []
         unless $.isEmptyObject(corpusObj.structAttributes)
-            structData = @renderCorpusContent "struct", wordData, sentenceData, corpusObj.structAttributes, tokens, corpusObj.custom_attributes or {}, customData.struct
+            structData = @renderCorpusContent "struct", wordData, sentenceData, corpusObj.structAttributes, tokens, corpusObj.customAttributes or {}, customData.struct
 
         $("#selected_word").append $("<h4>").localeKey("word_attr")
         $("#selected_sentence").append $("<h4>").localeKey("sentence_attr")

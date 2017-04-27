@@ -91,7 +91,7 @@ settings.corpora["kubhist-aftonbladet-1830"] = {
     context: spContext,
     attributes: settings.kubhistattributes,
     structAttributes: settings.aftonbladstruct_attributes,
-    custom_attributes: aftonbladet_custom_attributes
+    customAttributes: aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1840"] = {
@@ -103,7 +103,7 @@ settings.corpora["kubhist-aftonbladet-1840"] = {
     context: spContext,
     attributes: settings.kubhistattributes,
     structAttributes: settings.aftonbladstruct_attributes,
-    custom_attributes: aftonbladet_custom_attributes
+    customAttributes: aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1850"] = {
@@ -115,7 +115,7 @@ settings.corpora["kubhist-aftonbladet-1850"] = {
     context: spContext,
     attributes: settings.kubhistattributes,
     structAttributes: settings.aftonbladstruct_attributes,
-    custom_attributes: aftonbladet_custom_attributes
+    customAttributes: aftonbladet_custom_attributes
 };
 
 settings.corpora["kubhist-aftonbladet-1860"] = {
@@ -127,7 +127,7 @@ settings.corpora["kubhist-aftonbladet-1860"] = {
     context: spContext,
     attributes: settings.kubhistattributes,
     structAttributes: settings.aftonbladstruct_attributes,
-    custom_attributes: aftonbladet_custom_attributes
+    customAttributes: aftonbladet_custom_attributes
 };
 
 

@@ -1935,7 +1935,7 @@ settings.corpora["ivip"] = {
         text_mediafile: {displayType: "hidden"},
         text_mediafileext: {displayType: "hidden"}
     },
-    custom_attributes: {
+    customAttributes: {
         video: {
             label: "video",
             renderItem: function(key, value, attrs, wordData, sentenceData, tokens) {
@@ -3539,7 +3539,7 @@ settings.corpora["twitter"] = {
         user_created: {label: "user_since"},
         user_trstrank: {label: "trstrank"},
     },
-    custom_attributes: {
+    customAttributes: {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
@@ -3584,7 +3584,7 @@ settings.corpora["twitter-pldebatt-130612"] = {
         user_url: {label: "website", type: "url"},
         user_created: {label: "user_since"}
     },
-    custom_attributes: {
+    customAttributes: {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
@@ -3629,7 +3629,7 @@ settings.corpora["twitter-pldebatt-131006"] = {
         user_url: {label: "website", type: "url"},
         user_created: {label: "user_since"}
     },
-    custom_attributes: {
+    customAttributes: {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
@@ -3674,7 +3674,7 @@ settings.corpora["twitter-pldebatt-140504"] = {
         user_url: {label: "website", type: "url"},
         user_created: {label: "user_since"}
     },
-    custom_attributes: {
+    customAttributes: {
         text_url: {
             label: "url",
             pattern: "<a href='http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %>' target='_blank'>http://twitter.com/<%= struct_attrs.user_username %>/status/<%= struct_attrs.text_id %></a>",
