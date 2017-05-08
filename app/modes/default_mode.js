@@ -148,7 +148,7 @@ settings.corporafolders.socialmedia.forum.familjeliv = {
 
 settings.corporafolders.socialmedia.forum.flashback = {
     title: "Flashback",
-    contents: ["flashback-dator", "flashback-droger", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-samhalle", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
+    contents: ["flashback-dator", "flashback-droger", "flashback-ekonomi", "flashback-fordon", "flashback-hem", "flashback-kultur", "flashback-livsstil", "flashback-mat", "flashback-politik", "flashback-resor", "flashback-samhalle", "flashback-sex", "flashback-sport", "flashback-vetenskap", "flashback-ovrigt", "flashback-flashback"],
     description: "Material från diskussionsforumet <a target=\"_blank\" href=\"https://www.flashback.org/\">Flashback</a>."
 };
 
@@ -556,7 +556,7 @@ settings.corpora["webbnyheter2001"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -571,7 +571,7 @@ settings.corpora["webbnyheter2002"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -586,7 +586,7 @@ settings.corpora["webbnyheter2003"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -601,7 +601,7 @@ settings.corpora["webbnyheter2004"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -616,7 +616,7 @@ settings.corpora["webbnyheter2005"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -631,7 +631,7 @@ settings.corpora["webbnyheter2006"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -646,7 +646,7 @@ settings.corpora["webbnyheter2007"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -661,7 +661,7 @@ settings.corpora["webbnyheter2008"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -676,7 +676,7 @@ settings.corpora["webbnyheter2009"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -691,7 +691,7 @@ settings.corpora["webbnyheter2010"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -706,7 +706,7 @@ settings.corpora["webbnyheter2011"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -721,7 +721,7 @@ settings.corpora["webbnyheter2012"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -736,7 +736,7 @@ settings.corpora["webbnyheter2013"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -1341,6 +1341,16 @@ settings.corpora["flashback-dator"] = {
 settings.corpora["flashback-droger"] = {
     id: "flashback-droger",
     title: "Flashback: Droger",
+    description: "",
+    within: spWithin,
+    context: spContext,
+    attributes: modernAttrs2,
+    structAttributes: flashback_structs
+};
+
+settings.corpora["flashback-ekonomi"] = {
+    id: "flashback-ekonomi",
+    title: "Flashback: Ekonomi",
     description: "",
     within: spWithin,
     context: spContext,
@@ -2188,7 +2198,7 @@ settings.corpora["storsuc"] = {
     description: "En samling romaner och andra böcker som har använts i urvalet till SUC. 58 böcker ingår.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_id: {label: "text"}
     }
