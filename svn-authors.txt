@@ -1,8 +1,0 @@
-johanrox = Johan Roxendal <johan.roxendal@gu.se>
-mariao = Maria Öhrman <maria.ohrman@gu.se>
-martin = Martin Hammarstedt <martin.hammarstedt@gu.se>
-jonatan = Jonatan Uppström <jonatan.uppstrom@gu.se>
-anne = Anne Schumacher <anne.schumacher@gu.se>
-peter = Peter Ljunglöf <peter.ljunglof@cse.gu.se>
-olof = Olof Olsson <olof.olsson@snd.gu.se>
-malin = Malin Ahlberg <malin.ahlberg@gu.se>
