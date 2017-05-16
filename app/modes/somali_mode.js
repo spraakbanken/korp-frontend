@@ -17,7 +17,7 @@ settings.corporafolders = {};
 // Skolböcker
 settings.corporafolders.buugaag = {
     title: "Buugaag Dugsiyeed",
-    contents: ["somali-1971-79", "somali-1993-94", "somali-2001", "somali-itoobiya", "somali-hargeysa-2010", "somali-caafimaad-1994", "somali-cb", "somali-hargeysa", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis", "somali-xisaab-1971-79", "somali-xisaab-1994-97", "somali-xisaab-2001-hargeysa"]
+    contents: ["somali-1971-79", "somali-1993-94", "somali-2001", "somali-itoobiya", "somali-hargeysa-2010", "somali-caafimaad-1994", "somali-cb", "somali-hargeysa", "somali-cb-2001-nayroobi", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis", "somali-saynis-2011-soomaaliya", "somali-xisaab-1971-79", "somali-xisaab-1994-97", "somali-xisaab-2001-hargeysa", "somali-xisaab-2001-nayroobi", "somali-xisaab-2011-itoobiya"]
 };
 
 settings.corporafolders.warar = {
@@ -196,6 +196,79 @@ settings.corpora["somali-hargeysa"] = {
         text_place: somalis.place,
         text_editor: somalis.editor,
         text_edition: somalis.edition,
+        text_sponsor: somalis.sponsor,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-cb-2001-nayroobi"] = {
+    id: "somali-cb-2001-nayroobi",
+    title: "Cilmiga Bulshada 2001 Nayroobi",
+    description: "",
+    within: settings.defaultWithin,
+    context: defaultContext,
+    attributes: {},
+    structAttributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_editor: somalis.editor,
+        text_edition: somalis.edition,
+        text_sponsor: somalis.sponsor,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-saynis-2011-soomaaliya"] = {
+    id: "somali-saynis-2011-soomaaliya",
+    title: "Saynis 2011 Soomaaliya",
+    description: "",
+    within: settings.defaultWithin,
+    context: defaultContext,
+    attributes: {},
+    structAttributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_editor: somalis.editor,
+        text_edition: somalis.edition,
+        text_sponsor: somalis.sponsor,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-xisaab-2011-itoobiya"] = {
+    id: "somali-xisaab-2011-itoobiya",
+    title: "Xisaab 2011 Itoobiya",
+    description: "",
+    within: settings.defaultWithin,
+    context: defaultContext,
+    attributes: {},
+    structAttributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_author: somalis.author,
+        page_n: somalis.page
+    }
+};
+
+settings.corpora["somali-xisaab-2001-nayroobi"] = {
+    id: "somali-xisaab-2001-nayroobi",
+    title: "Xisaab 2001 Nayroobi",
+    description: "",
+    within: settings.defaultWithin,
+    context: defaultContext,
+    attributes: {},
+    structAttributes: {
+        text_year: somalis.year,
+        text_title: somalis.title,
+        text_publisher: somalis.publisher,
+        text_place: somalis.place,
+        text_author: somalis.author,
         text_sponsor: somalis.sponsor,
         page_n: somalis.page
     }
