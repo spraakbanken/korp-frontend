@@ -44,9 +44,9 @@ grunt serve
 
 Korp has a number of known bugs. Most are GUI bugs, but some are more serious. They will be fixed!
 
-- In extended context (reading mode) the sidebar shows structural values from the smaller context (often sentence) in an incorrect way. If the clicked word is contained in the same sentence as the match, values will be correct. If it is not, the values from the matched sentence will still be shown.
 - Issues with linking to Korp and internal links. Opening a link to Korp in a tab where Korp is already open often leads to errors. For example selected corpora will not change.
 - Issues with the progress bars in the tabs. Sometimes tabs will show progress of another tab.
 - A bug in CWB that makes CQP-expressions searching for first a token ending with " and then another token fail. Example: [word = "\""] [word = "och"].
 
 Please send any issues to sb-korp@svenska.gu.se
+
