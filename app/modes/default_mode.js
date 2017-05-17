@@ -2210,7 +2210,7 @@ settings.corpora["aspacsv"] = {
     description: "Svenska delen av The Amsterdam Slavic Parallel Aligned Corpus",
     context: defaultContext,
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrs2,
     structAttributes: {
         text_lang: {label: "lang"},
         text_author: {label: "author"},
