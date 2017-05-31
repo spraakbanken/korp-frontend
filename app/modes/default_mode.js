@@ -116,7 +116,7 @@ settings.corporafolders.governmental = {
 
 settings.corporafolders.protected = {
     title: "Skyddade korpusar",
-    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "ivip", "lawline", "mepac", "mepac-i", "soexempel", "sw1203", "tisus"]
+    contents: ["ansokningar", "sprakfragor", "coctaill", "forhor", "gdc", "ivip", "lawline", "mepac", "mepac-i", "platsannonser", "soexempel", "sw1203", "tisus"]
 };
 
 settings.corporafolders.novels = {
@@ -3719,6 +3719,23 @@ settings.corpora["gdc"] = {
         "section_name": {label: "section"}
         // TODO: this gives some error, fix this.
         //"meta_comment": {label: "comment", type: "set"}
+    }
+};
+
+settings.corpora["platsannonser"] = {
+    id: "platsannonser",
+    title: "Platsannonser",
+    description: '',
+    limitedAccess: true,
+    context: {
+        "1 sentence": "1 sentence",
+        "1 text": "1 text"
+    },
+    within: settings.defaultWithin,
+    attributes: modernAttrs2,
+    structAttributes: {
+        "text_type": {label: "type"},
+        "text_filename": {label: "name"}
     }
 };
 
