@@ -250,7 +250,15 @@ class model.StatsProxy extends BaseProxy
                 minWidth : minWidth
 
         groups = _.groupBy _.keys(data.total.absolute), (item) ->
-            item.replace(/(:.+?)(\/|$| )/g, "$2")
+            fields = item.split("/")
+            newFields = []
+            for [reduceVal, field] in _.zip reduceVals, fields
+                if reduceVal in ["saldo", "prefix", "suffix", "lex", "lemma"]
+                    newFields.push field.replace(/(:.+?)($| )/g, "$2")
+                else
+                    newFields.push field
+            newFields.join("/")
+            return newFields
 
         wordArray = _.keys groups
 
