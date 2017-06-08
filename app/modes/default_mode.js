@@ -2074,7 +2074,7 @@ settings.corpora["poeter"] = {
     within: settings.defaultWithin,
     context: defaultContext,
     attributes: modernAttrs2,
-    struct_attributes: {
+    structAttributes: {
         text_type: {label: "type"},
         text_url: {label: "source", type: "url"},
         text_date: {label: "date"}
