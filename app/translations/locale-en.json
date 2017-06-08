@@ -329,8 +329,9 @@
     "no_geo_info": "No location data available",
     "map_cluster": "Cluster",
     
-    "global_filter": "Filter",
-    "filter_add": "Add",
+    "global_filter": "Filter:",
+    "add_filter": "Add filter",
+    "add_filter_value": "Add",
     
     "repeat_error": "Error: Not possible to repeat from 0 for all tokens.",
     

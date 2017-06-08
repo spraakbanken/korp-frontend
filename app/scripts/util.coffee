@@ -108,6 +108,42 @@ class window.CorpusListing
         $.extend rest, _.object(withDataset)
         # End TODO
 
+    getDefaultFilters: () ->
+        return @_getFilters "intersection", "defaultFilters"
+        
+    getCurrentFilters: () ->
+        return @_getFilters settings.filterSelection, "showFilters"
+
+    _getFilters: (selection, filterType) ->
+        attrNames = []
+        attrs = {}
+
+        for corpus in @selected
+            if filterType of corpus
+                for filter in corpus[filterType]
+                    if filter not in attrNames
+                        attrNames.push filter
+                    if filter not of attrs
+                        attrs[filter] =
+                            settings: corpus.structAttributes[filter]
+                            corpora: [corpus.id]
+                    else
+                        attrs[filter].corpora.push corpus.id
+        
+
+        if selection is "intersection"
+            attrNames2 = []
+            attrs2 = {}
+            corpusCount = @selected.length
+            for attr in attrNames
+                if attrs[attr].corpora.length is corpusCount
+                    attrNames2.push attr
+                    attrs2[attr] = attrs[attr]
+            attrNames = attrNames2
+            attrs = attrs2
+
+        return [attrNames, attrs]
+
     _invalidateAttrs: (attrs) ->
         union = @_mapping_union(attrs)
         intersection = @_mapping_intersection(attrs)
@@ -896,3 +932,9 @@ util.browserWarn = ->
             expires: 100000 # Expiration Date (in seconds), 0 (default) means it ends with the current session
 
     return
+
+window.__ = {}
+window.__.remove = (arr, elem) ->
+    index = arr.indexOf elem
+    if index isnt -1
+        arr.splice (arr.indexOf elem), 1

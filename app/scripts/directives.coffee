@@ -841,7 +841,8 @@ korpApp.directive 'reduceSelect', ($timeout) ->
                 scope.insensitive = []
             updateSelected scope
 
-            event.stopPropagation()
+            if event
+                event.stopPropagation()
 
         scope.toggleWordInsensitive = (event) ->
             event.stopPropagation()
@@ -858,138 +859,6 @@ korpApp.directive 'reduceSelect', ($timeout) ->
             # if no element is selected when closing popop, select word
             if not open and scope.numberAttributes == 0
                 $timeout (() -> scope.toggleSelected "word"), 0
-
-korpApp.directive "globalFilters", ($rootScope, $location, $q, structService) ->
-    restrict: "E"
-    scope: 
-        lang: '='
-    template: '''
-                <div ng-if="showDirective" class="global-filters-container">
-                  <span style="font-weight: bold"> {{ 'global_filter' | loc:lang}}:</span>
-                  <global-filter lang="lang" ng-repeat="filterKey in showFilters"
-                                 attr-value="filterValues[filterKey].value", 
-                                 attr-label="getFilterLabel(filterKey)",
-                                 possible-values="filterValues[filterKey].possibleValues" />'''
-    link: (scope, element, attribute) ->
-
-        def = $q.defer()
-
-        $rootScope.$on "corpuschooserchange", () ->
-            scope.showDirective = false
-            if settings.corpusListing.selected.length is 1 and not _.isEmpty settings.globalFilterCorpora 
-                corpus = settings.corpusListing.selected[0]
-                if corpus.id in settings.globalFilterCorpora
-                    scope.showDirective = true
-                    scope.corpus = corpus.id
-
-            if scope.showDirective
-                scope.showFilters = settings.corpora[scope.corpus].showFilters
-                if $location.search().global_filter
-                    scope.initFilters()
-                    scope.setFromLocation $location.search().global_filter
-                else
-                    scope.initFilters()
-            else
-                scope.showFilters = []
-                scope.filterValues = {}
-            def.resolve()
-
-        scope.initFilters = () ->
-            filterValues = {}
-            filters = scope.showFilters
-
-            for filter in filters
-                filterValues[filter] = {}
-                filterValues[filter].value = []
-                filterValues[filter].possibleValues = []
-
-            if not _.isEmpty filters
-                structService.getStructValues(scope.corpus, filters).then (data) ->
-                    for filter in filters
-                        filterValues[filter].possibleValues = data[scope.corpus.toUpperCase()][filter]
-
-            scope.filterValues = filterValues
-
-        def.promise.then(() -> scope.$watch "filterValues", (() ->
-            rep = {}
-            for attrKey, attrValues of scope.filterValues
-                if not _.isEmpty attrValues.value
-                    rep[attrKey] = attrValues.value
-            if not _.isEmpty rep
-                $location.search("global_filter", JSON.stringify rep)
-                $rootScope.globalFilter = scope.makeCqp()
-            else
-                $location.search("global_filter", null)
-                $rootScope.globalFilter = null
-            $rootScope.globalFilterDef.resolve()
-        ), true)
-
-        scope.$watch (() -> $location.search().global_filter), (filter) ->
-            scope.setFromLocation filter
-        
-        scope.setFromLocation = (globalFilter) ->
-            unless globalFilter then return
-            unless scope.filterValues then return
-            parsedFilter = JSON.parse globalFilter
-            for attrKey, attrValues of parsedFilter
-                scope.filterValues[attrKey].value = attrValues
-            
-            for attrKey, _ of scope.filterValues
-                if attrKey not of parsedFilter
-                    scope.filterValues[attrKey].value = []
-
-        scope.getFilterLabel = (filterKey) -> 
-            settings.corpora[scope.corpus].structAttributes[filterKey].label
-
-        scope.makeCqp = () ->
-            exprs = []
-            andArray = for attrKey, attrValues of scope.filterValues
-                for attrValue in attrValues.value
-                    { type: "_." + attrKey, op: "=", val: attrValue }
-
-            return [{ and_block: andArray }]
-
-korpApp.directive "globalFilter", () ->
-    restrict: "E"
-    scope:
-      attrLabel: "="
-      attrValue: "="
-      possibleValues: "="
-      lang: '='
-    template: '''
-                  <span uib-dropdown auto-close="outsideClick">
-                    <button uib-dropdown-toggle class="btn btn-sm btn-default global-filter-toggle">
-                      <div ng-if="attrValue.length == 0">
-                        <span>{{ "filter_add" | loc:lang }}</span>
-                        <span>{{attrLabel | loc:lang}}</span>
-                      </div>
-                      <div ng-if="attrValue.length != 0">
-                        <span style="text-transform: capitalize">{{attrLabel | loc:lang}}:</span>
-                        <span ng-repeat="selected in attrValue" class="selected-attr-value">{{selected}} </span>
-                      </div>
-                    </button>
-                    <div uib-dropdown-menu class="global-filter-dropdown">
-                      <ul>
-                        <li ng-repeat="value in possibleValues" ng-class="{'selected': isSelected(value)}" class="attribute"
-                            ng-click="toggleSelected(value, $event)">
-                          <span ng-show="isSelected(value)">✔</span>
-                          <span>{{value | loc:lang }}</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </span>'''
-
-    link: (scope, element, attribute) ->
-
-        scope.toggleSelected = (value, event) ->
-            if value in scope.attrValue
-                scope.attrValue.splice (scope.attrValue.indexOf value), 1
-            else
-                scope.attrValue.push value
-            event.stopPropagation()
-        
-        scope.isSelected = (value) ->
-            return value in scope.attrValue
 
 
 angular.module("template/datepicker/day.html", []).run ($templateCache) ->

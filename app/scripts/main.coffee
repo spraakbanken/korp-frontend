@@ -1,6 +1,7 @@
 
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
+
 creds = $.jStorage.get("creds")
 if creds
     authenticationProxy.loginObj = creds

@@ -2767,9 +2767,12 @@ li.active a span .num-to-find {
 
 .global-filters-container {
     margin-bottom: 10px;
+    > div {
+        margin-bottom: 10px;
+    }
 }
 
-.global-filter-dropdown {
+.korp-uib-dropdown-menu {
     margin-top: 7px;
     margin-left: 4px;
     padding: 0px;
@@ -2798,7 +2801,8 @@ li.active a span .num-to-find {
     margin-left: 5px;
     
     .selected-attr-value {
-        font-weight: bold
+        font-weight: bold;
+        padding-left: 4px;
     }
     
 }

@@ -1999,7 +1999,7 @@ settings.corpora["ivip"] = {
             customType: "struct"
         }
     },
-    showFilters: ["text_country", "text_city", "text_place"]
+    defaultFilters: ["text_country", "text_city", "text_place"]
 };
 
 settings.corpora["lawline"] = {
@@ -2216,7 +2216,8 @@ settings.corpora["aspacsv"] = {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_description: {label: "description"}
-    }
+    },
+    defaultFilters: ["text_author", "text_title", "text_description"]
 };
 
 settings.corpora["diabetolog"] = {
@@ -2528,7 +2529,8 @@ settings.corpora["vivill"] = {
             }
         },
         text_type: {label: "type"}
-    }
+    },
+    defaultFilters: ["text_party", "text_year", "text_type"]
 };
 
 settings.corpora["wikipedia-sv"] = {
@@ -2570,7 +2572,8 @@ settings.corpora["romi"] = {
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
-    }
+    },
+    defaultFilters: ["text_author", "text_title"]
 };
 
 settings.corpora["romii"] = {
@@ -2583,7 +2586,8 @@ settings.corpora["romii"] = {
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
-    }
+    },
+    defaultFilters: ["text_author", "text_title"]
 };
 
 settings.corpora["romg"] = {
@@ -2597,7 +2601,8 @@ settings.corpora["romg"] = {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_year: {label: "year"}
-    }
+    },
+    defaultFilters: ["text_author", "text_title", "text_year"]
 };
 
 settings.corpora["rom99"] = {
@@ -2611,7 +2616,8 @@ settings.corpora["rom99"] = {
         text_author: {label: "author"},
         text_title: {label: "title"},
         text_year: {label: "year"}
-    }
+    },
+    defaultFilters: ["text_author", "text_title", "text_year"]
 };
 
 settings.corpora["swefn-ex"] = {
