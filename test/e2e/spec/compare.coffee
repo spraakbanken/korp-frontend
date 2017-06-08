@@ -55,7 +55,7 @@ describe "compare", () ->
             positiveMeters = element.all By.css ".compare_result .positive li"
 
             negativeMeters.first().getText().then (text) ->
-                expect(text.replace /\n/g, " ").toBe "går 932"
+                expect(text.replace /\n/g, " ").toBe "går 879"
                 
             positiveMeters.first().getText().then (text) ->
                 expect(text.replace /\n/g, " ").toBe "sprang 45"

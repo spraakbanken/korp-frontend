@@ -11,7 +11,7 @@ describe "stats table", () ->
 
             rows = element.all (By.css '.slick-row')
             browser.sleep 500
-            expect(rows.count()).toBe 11
+            expect(rows.count()).toBe 10
             
             # expect a column for hit, total, suc2, suc3
             columns = element.all (By.css '.slick-column-name')
@@ -28,7 +28,7 @@ describe "stats table", () ->
 
             # total row
             rows.get(0).getText().then (text) ->
-                expect(text.replace /\n/g, " ").toBe "Σ 2 178,1 (5 082) 2 210,7 (2 579) 2 145,6 (2 503)"
+                expect(text.replace /\n/g, " ").toBe "Σ 2 145,1 (5 005) 2 144,7 (2 502) 2 145,6 (2 503)"
 
             # gått 
             rows.get(4).getText().then (text) ->
@@ -38,7 +38,7 @@ describe "stats table", () ->
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma").then () ->
             browser.sleep 500
             arcDiagramButtons = element.all (By.css '.slick-row .arcDiagramPicture')
-            expect(arcDiagramButtons.count()).toBe 5
+            expect(arcDiagramButtons.count()).toBe 3
 
             arcDiagramButtons.get(0).click()
 
@@ -85,7 +85,7 @@ describe "stats table", () ->
             
             # total row
             rows.get(0).getText().then (text) ->
-                expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 160,3 (374) 180 (210) 140,6 (164)"
+                expect(text.replace /\n/g, " ").toBe "Σ Σ Σ 140,6 (328) 140,6 (164) 140,6 (164)"
 
             # TODO this always fails
             # rows.get(21).getText().then (text) ->

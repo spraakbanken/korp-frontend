@@ -28,7 +28,7 @@ describe "lemgram suggestions", () ->
             waitFor element By.css "table.kwic"
             
             hits = element By.css ".results-kwic .num-result"
-            expect(hits.getText()).toBe "2 579"
+            expect(hits.getText()).toBe "2 502"
 
 waitFor = (elm) ->
     browser.wait () ->
