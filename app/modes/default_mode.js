@@ -530,7 +530,7 @@ settings.corpora["attasidor"] = {
     description: "<a target=\"_blank\" href=\"http://www.8sidor.se/\">8 SIDOR</a> är en lättläst nyhetstidning.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"}
@@ -543,7 +543,7 @@ settings.corpora["dn1987"] = {
     description: "Dagens Nyheter 1987.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -556,7 +556,7 @@ settings.corpora["webbnyheter2001"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -571,7 +571,7 @@ settings.corpora["webbnyheter2002"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -586,7 +586,7 @@ settings.corpora["webbnyheter2003"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -601,7 +601,7 @@ settings.corpora["webbnyheter2004"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -616,7 +616,7 @@ settings.corpora["webbnyheter2005"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -631,7 +631,7 @@ settings.corpora["webbnyheter2006"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -646,7 +646,7 @@ settings.corpora["webbnyheter2007"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -661,7 +661,7 @@ settings.corpora["webbnyheter2008"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -676,7 +676,7 @@ settings.corpora["webbnyheter2009"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -691,7 +691,7 @@ settings.corpora["webbnyheter2010"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -706,7 +706,7 @@ settings.corpora["webbnyheter2011"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -721,7 +721,7 @@ settings.corpora["webbnyheter2012"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -736,7 +736,7 @@ settings.corpora["webbnyheter2013"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_title: {label: "title"},
@@ -751,7 +751,7 @@ settings.corpora["gp1994"] = {
     description: "Göteborgs-Posten 1994.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_section: {label: "section"}
@@ -764,7 +764,7 @@ settings.corpora["gp2001"] = {
     description: "Göteborgs-Posten 2001.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -777,7 +777,7 @@ settings.corpora["gp2002"] = {
     description: "Göteborgs-Posten 2002.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -790,7 +790,7 @@ settings.corpora["gp2003"] = {
     description: "Göteborgs-Posten 2003.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -803,7 +803,7 @@ settings.corpora["gp2004"] = {
     description: "Göteborgs-Posten 2004.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -816,7 +816,7 @@ settings.corpora["gp2005"] = {
     description: "Göteborgs-Posten 2005.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -829,7 +829,7 @@ settings.corpora["gp2006"] = {
     description: "Göteborgs-Posten 2006.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -842,7 +842,7 @@ settings.corpora["gp2007"] = {
     description: "Göteborgs-Posten 2007.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -855,7 +855,7 @@ settings.corpora["gp2008"] = {
     description: "Göteborgs-Posten 2008.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_sectionshort: {label: "section"}
@@ -868,7 +868,7 @@ settings.corpora["gp2009"] = {
     description: "Göteborgs-Posten 2009.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -882,7 +882,7 @@ settings.corpora["gp2010"] = {
     description: "Göteborgs-Posten 2010.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -896,7 +896,7 @@ settings.corpora["gp2011"] = {
     description: "Göteborgs-Posten 2011.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -910,7 +910,7 @@ settings.corpora["gp2012"] = {
     description: "Göteborgs-Posten 2012.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -924,7 +924,7 @@ settings.corpora["gp2013"] = {
     description: "Göteborgs-Posten 2013.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: sattrs.date,
         text_author: {label: "article_author"},
@@ -938,7 +938,7 @@ settings.corpora["gp2d"] = {
     description: "Helgbilaga till Göteborgs-Posten.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_issue: {label: "issue"}
     }
@@ -963,7 +963,7 @@ settings.corpora["fof"] = {
     description: "Artiklar från tidskriften Forskning & Framsteg, nummer 7, 1992 till och med nummer 8, 1996.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_issue: {label: "issue"}
     }
@@ -975,7 +975,7 @@ settings.corpora["press65"] = {
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
@@ -990,7 +990,7 @@ settings.corpora["press76"] = {
     description: "Tidningsartiklar från Göteborgs Handels- och Sjöfartstidning, Svenska Dagbladet, Stockholmstidningen, Dagens Nyheter och Sydsvenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_year: {label: "year"},
         text_publisher: {label: "article_publisher"}
@@ -1003,7 +1003,7 @@ settings.corpora["press95"] = {
     description: "Tidningsartiklar från Arbetet, Dagens Nyheter, Göteborgs-Posten, Svenska Dagbladet och Sydsvenskan.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
@@ -1017,7 +1017,7 @@ settings.corpora["press96"] = {
     description: "Tidningsartiklar från Göteborgs-Posten och Svenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
@@ -1031,7 +1031,7 @@ settings.corpora["press97"] = {
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "publisher"},
@@ -1045,7 +1045,7 @@ settings.corpora["press98"] = {
     description: "Tidningsartiklar från DN, Göteborgs-Posten och Svenska Dagbladet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "date"},
         text_publisher: {label: "article_publisher"},
@@ -1089,7 +1089,7 @@ settings.corpora["familjeliv-allmanna-ekonomi"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1099,7 +1099,7 @@ settings.corpora["familjeliv-allmanna-familjeliv"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1109,7 +1109,7 @@ settings.corpora["familjeliv-allmanna-hushem"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1119,7 +1119,7 @@ settings.corpora["familjeliv-allmanna-husdjur"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1129,7 +1129,7 @@ settings.corpora["familjeliv-allmanna-fritid"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1139,7 +1139,7 @@ settings.corpora["familjeliv-allmanna-kropp"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1149,7 +1149,7 @@ settings.corpora["familjeliv-allmanna-noje"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1159,7 +1159,7 @@ settings.corpora["familjeliv-allmanna-samhalle"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1169,7 +1169,7 @@ settings.corpora["familjeliv-allmanna-sandladan"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1179,7 +1179,7 @@ settings.corpora["familjeliv-adoption"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1189,7 +1189,7 @@ settings.corpora["familjeliv-expert"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1199,7 +1199,7 @@ settings.corpora["familjeliv-foralder"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1209,7 +1209,7 @@ settings.corpora["familjeliv-gravid"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1219,7 +1219,7 @@ settings.corpora["familjeliv-kansliga"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1229,7 +1229,7 @@ settings.corpora["familjeliv-medlem-allmanna"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1240,7 +1240,7 @@ settings.corpora["familjeliv-medlem-foraldrar"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1250,7 +1250,7 @@ settings.corpora["familjeliv-medlem-planerarbarn"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1261,7 +1261,7 @@ settings.corpora["familjeliv-medlem-vantarbarn"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1271,7 +1271,7 @@ settings.corpora["familjeliv-pappagrupp"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1281,7 +1281,7 @@ settings.corpora["familjeliv-planerarbarn"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1291,7 +1291,7 @@ settings.corpora["familjeliv-sexsamlevnad"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1301,7 +1301,7 @@ settings.corpora["familjeliv-svartattfabarn"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1311,7 +1311,7 @@ settings.corpora["familjeliv-anglarum"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: familjeliv_structs
 };
 
@@ -1334,7 +1334,7 @@ settings.corpora["flashback-dator"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1344,7 +1344,7 @@ settings.corpora["flashback-droger"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1354,7 +1354,7 @@ settings.corpora["flashback-ekonomi"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1364,7 +1364,7 @@ settings.corpora["flashback-fordon"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1374,7 +1374,7 @@ settings.corpora["flashback-hem"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1384,7 +1384,7 @@ settings.corpora["flashback-kultur"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1394,7 +1394,7 @@ settings.corpora["flashback-livsstil"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1404,7 +1404,7 @@ settings.corpora["flashback-mat"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1414,7 +1414,7 @@ settings.corpora["flashback-politik"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1424,7 +1424,7 @@ settings.corpora["flashback-resor"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1434,7 +1434,7 @@ settings.corpora["flashback-samhalle"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1444,7 +1444,7 @@ settings.corpora["flashback-sex"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1454,7 +1454,7 @@ settings.corpora["flashback-sport"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1464,7 +1464,7 @@ settings.corpora["flashback-vetenskap"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1474,7 +1474,7 @@ settings.corpora["flashback-ovrigt"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1484,7 +1484,7 @@ settings.corpora["flashback-flashback"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: flashback_structs
 };
 
@@ -1505,7 +1505,7 @@ settings.corpora["bloggmix1998"] = {
     title: "Bloggmix 1998",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1514,7 +1514,7 @@ settings.corpora["bloggmix1999"] = {
     title: "Bloggmix 1999",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1523,7 +1523,7 @@ settings.corpora["bloggmix2000"] = {
     title: "Bloggmix 2000",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1532,7 +1532,7 @@ settings.corpora["bloggmix2001"] = {
     title: "Bloggmix 2001",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1541,7 +1541,7 @@ settings.corpora["bloggmix2002"] = {
     title: "Bloggmix 2002",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1550,7 +1550,7 @@ settings.corpora["bloggmix2003"] = {
     title: "Bloggmix 2003",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1559,7 +1559,7 @@ settings.corpora["bloggmix2004"] = {
     title: "Bloggmix 2004",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1568,7 +1568,7 @@ settings.corpora["bloggmix2005"] = {
     title: "Bloggmix 2005",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1577,7 +1577,7 @@ settings.corpora["bloggmix2006"] = {
     title: "Bloggmix 2006",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1586,7 +1586,7 @@ settings.corpora["bloggmix2007"] = {
     title: "Bloggmix 2007",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1595,7 +1595,7 @@ settings.corpora["bloggmix2008"] = {
     title: "Bloggmix 2008",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1604,7 +1604,7 @@ settings.corpora["bloggmix2009"] = {
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1613,7 +1613,7 @@ settings.corpora["bloggmix2009"] = {
     title: "Bloggmix 2009",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1622,7 +1622,7 @@ settings.corpora["bloggmix2010"] = {
     title: "Bloggmix 2010",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1631,7 +1631,7 @@ settings.corpora["bloggmix2011"] = {
     title: "Bloggmix 2011",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1640,7 +1640,7 @@ settings.corpora["bloggmix2012"] = {
     title: "Bloggmix 2012",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1649,7 +1649,7 @@ settings.corpora["bloggmix2013"] = {
     title: "Bloggmix 2013",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1658,7 +1658,7 @@ settings.corpora["bloggmix2014"] = {
     title: "Bloggmix 2014",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1667,7 +1667,7 @@ settings.corpora["bloggmix2015"] = {
     title: "Bloggmix 2015",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1676,7 +1676,7 @@ settings.corpora["bloggmix2016"] = {
     title: "Bloggmix 2016",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1685,7 +1685,7 @@ settings.corpora["bloggmix2017"] = {
     title: "Bloggmix 2017",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1694,7 +1694,7 @@ settings.corpora["bloggmixodat"] = {
     title: "Bloggmix okänt datum",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: bloggmix_structs
 };
 
@@ -1705,7 +1705,7 @@ settings.corpora["drama"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -1718,7 +1718,7 @@ settings.corpora["europarl-sv"] = {
     description: "Texter från Europaparlamentets webbsida.",
     context: defaultContext,
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: {
         text_date: {label: "date"},
         text_speaker: {label: "speaker"}
@@ -1735,7 +1735,7 @@ settings.corpora["sprakfragor"] = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: {
         text_topic: {label: "topic", order: 10},
         text_datetime: {label: "date", order: 20},
@@ -2010,7 +2010,7 @@ settings.corpora["lawline"] = {
     limitedAccess: true,
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         "text_category": {label: "category", order: 10},
         "text_topic": {label: "topic", order: 20},
@@ -2041,7 +2041,7 @@ settings.corpora["lasbart"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_source: {label: "source"},
         text_type: {label: "type"},
@@ -2073,7 +2073,7 @@ settings.corpora["poeter"] = {
     description: "Poesi från sidan <a target=\"_blank\" href=\"http://www.poeter.se\">Poeter.se</a>.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_type: {label: "type"},
         text_url: {label: "source", type: "url"},
@@ -2120,7 +2120,7 @@ settings.corpora["saltnld-sv"] = {
 Meningarna i korpusarna är sorterade i slumpvis ordning, för att man inte ska kunna återskapa originalet.",
     context: defaultContext,
     within: settings.defaultWithin,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: {
     }
 };
@@ -2131,7 +2131,7 @@ settings.corpora["snp7879"] = {
     description: "Riksdagens snabbprotokoll 1978–1979.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {}
 };
 
@@ -2141,7 +2141,7 @@ settings.corpora["sou"] = {
     description: "Statens offentliga utredningar (SOU) i digitaliserat format. Samlingen är inte komplett men kommer att uppdateras.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: {
         text_id: {label: "id"},
         text_librisid: {label: "librisid"}
@@ -2181,7 +2181,7 @@ settings.corpora["suc3"] = {
     context: {
         "1 sentence": "1 sentence"
     },
-    attributes: _.extend({}, modernAttrs2, {
+    attributes: _.extend({}, modernAttrs, {
         name_type: {
             label: "suc_name",
             isStructAttr: true
@@ -2198,7 +2198,7 @@ settings.corpora["storsuc"] = {
     description: "En samling romaner och andra böcker som har använts i urvalet till SUC. 58 böcker ingår.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_id: {label: "text"}
     }
@@ -2226,7 +2226,7 @@ settings.corpora["diabetolog"] = {
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_year: {label: "year"},
         text_title: {label: "title"},
@@ -2240,7 +2240,7 @@ settings.corpora["lt1996"] = {
     description: "Läkartidningens publicerade artiklar under 1996.<br/>Antal artiklar: 2345",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_year: {label: "year"},
         text_article: {label: "article"},
@@ -2254,7 +2254,7 @@ settings.corpora["lt1997"] = {
     description: "Läkartidningens publicerade artiklar under 1997.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2268,7 +2268,7 @@ settings.corpora["lt1998"] = {
     description: "Läkartidningens publicerade artiklar under 1998.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2282,7 +2282,7 @@ settings.corpora["lt1999"] = {
     description: "Läkartidningens publicerade artiklar under 1999.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2296,7 +2296,7 @@ settings.corpora["lt2000"] = {
     description: "Läkartidningens publicerade artiklar under 2000.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2310,7 +2310,7 @@ settings.corpora["lt2001"] = {
     description: "Läkartidningens publicerade artiklar under 2001.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2324,7 +2324,7 @@ settings.corpora["lt2002"] = {
     description: "Läkartidningens publicerade artiklar under 2002.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2338,7 +2338,7 @@ settings.corpora["lt2003"] = {
     description: "Läkartidningens publicerade artiklar under 2003.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2352,7 +2352,7 @@ settings.corpora["lt2004"] = {
     description: "Läkartidningens publicerade artiklar under 2004.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2366,7 +2366,7 @@ settings.corpora["lt2005"] = {
     description: "Läkartidningens publicerade artiklar under 2005.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2380,7 +2380,7 @@ settings.corpora["lt2006"] = {
     description: "Läkartidningens publicerade artiklar under 2006.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_date: {label: "year"},
         text_issue: {label: "issue"},
@@ -2394,7 +2394,7 @@ settings.corpora["smittskydd"] = {
     description: "Smittskyddsinstitutets tidskrift, årgångarna 2002–2010.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_year: {label: "year"},
         text_issue: {label: "issue"},
@@ -2427,7 +2427,7 @@ settings.corpora["vivill"] = {
         "1 sentence": "1 sentence",
         "5 sentence": "5 sentences"
     },
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_year: {label: "year",
             extendedTemplate: selectType.extendedTemplate,
@@ -2539,7 +2539,7 @@ settings.corpora["wikipedia-sv"] = {
     description: "Samtliga artikar från svenska Wikipedia. Uppdateras regelbundet.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_title: {label: "article"},
         text_url: {label: "url", type: "url"}
@@ -2568,7 +2568,7 @@ settings.corpora["romi"] = {
     description: "69 romaner utgivna 1976–77.",
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -2582,7 +2582,7 @@ settings.corpora["romii"] = {
     description: "60 romaner från 1980–81.",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"}
@@ -2596,7 +2596,7 @@ settings.corpora["romg"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -2611,7 +2611,7 @@ settings.corpora["rom99"] = {
     description: "23 romaner utgivna 1999 på Norstedts förlag.",
     within: settings.defaultWithin,
     context: defaultContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -3129,7 +3129,7 @@ settings.corpora["klarsprak"] = {
     description: "",
     within: spWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_title: {label: "title"},
         text_textid: {label: "id"},
@@ -3231,7 +3231,7 @@ settings.corpora["ansokningar"] = {
     limitedAccess: true,
     context: defaultContext,
     within: settings.defaultWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_id: {label: "id"},
         text_gender: {label: "gender"},
@@ -3246,7 +3246,7 @@ settings.corpora["coctaill"] = {
     limitedAccess: true,
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         text_author: {label: "author"},
         text_title: {label: "title"},
@@ -3529,7 +3529,7 @@ settings.corpora["twitter"] = {
         "1 sentence": "1 sentence",
         "1 text": "1 text"
     },
-    attributes: modernAttrs,
+    attributes: modernAttrsOld,
     structAttributes: {
         user_username: {label: "username2"},
         user_name: {label: "name"},
@@ -3709,7 +3709,7 @@ settings.corpora["gdc"] = {
         "1 sentence": "1 sentence",
         "3 sentence": "3 sentences"
     },
-    attributes: _.extend({}, modernAttrs2, {
+    attributes: _.extend({}, modernAttrs, {
         wordclean: {label: "normalized_wordform"}
     }),
     structAttributes: {
@@ -3738,7 +3738,7 @@ settings.corpora["platsannonser"] = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         "text_type": {label: "type"},
         "text_filename": {label: "name"}
@@ -3755,7 +3755,7 @@ settings.corpora["mepac"] = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         "text_source": {label: "source"},
         "text_date": {label: "date"},
@@ -3780,7 +3780,7 @@ settings.corpora["mepac-i"] = {
         "3 text": "3 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         "text_source": {label: "source"},
         "text_date": {label: "date"},
@@ -3803,7 +3803,7 @@ settings.corpora["forhor"] = {
     limitedAccess: true,
     context: spContext,
     within: spWithin,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: {
         "text_fall": {label: "fall"},
         "text_hord": {label: "hord"},
@@ -3927,7 +3927,7 @@ settings.corpora["rd-bet"] = {
     description: "Utskottens betänkanden och utlåtanden, inklusive rksdagens beslut, en sammanfattning av voteringsresultaten och Beslut i korthet.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3937,7 +3937,7 @@ settings.corpora["rd-ds"] = {
     description: "Utredningar från regeringens departement.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3947,7 +3947,7 @@ settings.corpora["rd-eun"] = {
     description: "Dokument från EU-nämnden, bland annat möteskallelser, föredragningslistor, protokoll och skriftliga samråd med regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3957,7 +3957,7 @@ settings.corpora["rd-flista"] = {
     description: "Föredragningslistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3967,7 +3967,7 @@ settings.corpora["rd-fpm"] = {
     description: "Regeringens faktapromemorior om EU-kommissionens förslag.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3977,7 +3977,7 @@ settings.corpora["rd-frsrdg"] = {
     description: "Framställningar och redogörelser från organ som utsetts av riksdagen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3987,7 +3987,7 @@ settings.corpora["rd-ip"] = {
     description: "Interpellationer från ledamöterna till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -3997,7 +3997,7 @@ settings.corpora["rd-kammakt"] = {
     description: "",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4007,7 +4007,7 @@ settings.corpora["rd-kom"] = {
     description: "EU-kommissionens förslag och redogörelser, så kallade KOM-dokument.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4017,7 +4017,7 @@ settings.corpora["rd-mot"] = {
     description: "Motioner från riksdagens ledamöter.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4027,7 +4027,7 @@ settings.corpora["rd-prop"] = {
     description: "Propositioner och skrivelser från regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4037,7 +4037,7 @@ settings.corpora["rd-prot"] = {
     description: "Protokoll från kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4047,7 +4047,7 @@ settings.corpora["rd-rskr"] = {
     description: "Skrivelser från riksdagen till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4057,7 +4057,7 @@ settings.corpora["rd-samtr"] = {
     description: "",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4067,7 +4067,7 @@ settings.corpora["rd-skfr"] = {
     description: "Skriftliga frågor från ledamöterna till regeringen och svaren på dessa.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4077,7 +4077,7 @@ settings.corpora["rd-sou"] = {
     description: "Olika utredningars förslag till regeringen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4087,7 +4087,7 @@ settings.corpora["rd-tlista"] = {
     description: "Talarlistor för kammarens sammanträden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4097,7 +4097,7 @@ settings.corpora["rd-utr"] = {
     description: "Kommittédirektiv och kommittéberättelser för utredningar som regeringen tillsätter.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4107,7 +4107,7 @@ settings.corpora["rd-utsk"] = {
     description: "Dokument från utskotten, bland annat KU-anmälningar, protokoll, verksamhetsberättelser och den gamla dokumentserien Utredningar från riksdagen.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4117,7 +4117,7 @@ settings.corpora["rd-yttr"] = {
     description: "Utskottens yttranden.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 
@@ -4127,7 +4127,7 @@ settings.corpora["rd-ovr"] = {
     description: "Dokumentserierna Riksrevisionens granskningsrapporter, Utredningar från Riksdagsförvaltningen och Rapporter från riksdagen samt planeringsdokument, bilagor till dokument och uttag ur riksdagens databaser.",
     within: settings.defaultWithin,
     context: spContext,
-    attributes: modernAttrs2,
+    attributes: modernAttrs,
     structAttributes: rd_struct_attributes
 };
 

@@ -395,7 +395,7 @@ sattrs.date = {
     label: "date"
 };
 
-var modernAttrs = {
+var modernAttrsOld = {
     pos: attrs.pos,
     msd: attrs.msd,
     lemma: attrs.baseform,
@@ -409,7 +409,16 @@ var modernAttrs = {
 };
 
 
-var modernAttrs2 = _.extend({}, modernAttrs, {
+var modernAttrs = {
+    pos: attrs.pos,
+    msd: attrs.msd,
+    lemma: attrs.baseform,
+    lex: attrs.lemgram,
+    dephead: attrs.dephead,
+    deprel: attrs.deprel,
+    ref: attrs.ref,
+    prefix: attrs.prefix,
+    suffix: attrs.suffix,
     ne_ex: attrs.ne_ex,
     ne_type: attrs.ne_type,
     ne_subtype: attrs.ne_subtype,
@@ -457,8 +466,7 @@ var modernAttrs2 = _.extend({}, modernAttrs, {
         internalSearch: true,
         extendedTemplate: settings.senseAutoComplete
     }
-});
-delete modernAttrs2.saldo;
+};
 
 
 settings.posset = {
