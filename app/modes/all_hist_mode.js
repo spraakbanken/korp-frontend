@@ -428,47 +428,6 @@ settings.corpora["ekeblad"] = {
     }
 };
 
-settings.corpora["fragelistor"] = {
-    id: "fragelistor",
-    title: "Etnologiska frågelistor",
-    description: "Nordiska museets etnologiska frågelistor",
-    within: settings.defaultWithin,
-    context: spContext,
-    attributes: {
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        dalinlex: attrs.dalinlemgram,
-        saldo: attrs.saldo,
-        prefix: attrs.prefix,
-        suffix: attrs.suffix,
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-        ne_ex: attrs.ne_ex,
-        ne_type: attrs.ne_type,
-        ne_subtype: attrs.ne_subtype
-    },
-    structAttributes: {
-        "text_topicname": {label: "topic"},
-        "text_topicid": {label: "topicid"},
-        "text_year": {label: "year"},
-        "text_amount_answers": {label: "amount_answers"},
-        "text_author_signature": {label: "author_signature"},
-        "document_id": {label: "document_id"},
-        "text_source": {
-            label: "source",
-            localize: false,
-            extendedTemplate: selectType.extendedTemplate,
-            extendedController: selectType.extendedController,
-            dataset: [
-                "frågelistor",
-                "specialfrågelistor"
-            ]
-        }
-    }
-};
-
 settings.corpora["lb"] = {
     id: "lb",
     title: "Litteraturbanken",
