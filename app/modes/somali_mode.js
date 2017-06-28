@@ -17,7 +17,7 @@ settings.corporafolders = {};
 // Skolböcker
 settings.corporafolders.buugaag = {
     title: "Buugaag Dugsiyeed",
-    contents: ["somali-1971-79", "somali-1993-94", "somali-2001", "somali-itoobiya", "somali-hargeysa-2010", "somali-caafimaad-1994", "somali-cb", "somali-hargeysa", "somali-cb-2001-nayroobi", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis", "somali-saynis-2011-soomaaliya", "somali-xisaab-1971-79", "somali-xisaab-1994-97", "somali-xisaab-2001-hargeysa", "somali-xisaab-2001-nayroobi", "somali-xisaab-2011-itoobiya"]
+    contents: ["somali-1971-79", "somali-1993-94", "somali-2001", "somali-itoobiya", "somali-hargeysa-2010", "somali-caafimaad-1994", "somali-cb", "somali-hargeysa", "somali-cb-2001-03-soomaaliya", "somali-saynis-1972-77", "somali-saynis-1994-96", "somali-saynis", "somali-saynis-2011-soomaaliya", "somali-xisaab-1971-79", "somali-xisaab-1994-97", "somali-xisaab-2001-hargeysa", "somali-xisaab-2001-nayroobi", "somali-xisaab-2011-itoobiya"]
 };
 
 settings.corporafolders.warar = {
@@ -201,9 +201,9 @@ settings.corpora["somali-hargeysa"] = {
     }
 };
 
-settings.corpora["somali-cb-2001-nayroobi"] = {
-    id: "somali-cb-2001-nayroobi",
-    title: "Cilmiga Bulshada 2001 Nayroobi",
+settings.corpora["somali-cb-2001-03-soomaaliya"] = {
+    id: "somali-cb-2001-03-soomaaliya",
+    title: "Cilmiga Bulshada 2001-03 Soomaaliya",
     description: "",
     within: settings.defaultWithin,
     context: defaultContext,
