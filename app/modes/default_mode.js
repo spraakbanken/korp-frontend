@@ -1732,20 +1732,6 @@ settings.corpora["fragelistor"] = {
     within: settings.defaultWithin,
     context: spContext,
     attributes: modernAttrs,
-    attributes: {
-        msd: attrs.msd,
-        lemma: attrs.baseform,
-        lex: attrs.lemgram,
-        saldo: attrs.saldo,
-        prefix: attrs.prefix,
-        suffix: attrs.suffix,
-        dephead: attrs.dephead,
-        deprel: attrs.deprel,
-        ref: attrs.ref,
-        ne_ex: attrs.ne_ex,
-        ne_type: attrs.ne_type,
-        ne_subtype: attrs.ne_subtype
-    },
     structAttributes: {
         "text_topicname": {label: "topic"},
         "text_topicid": {label: "topicid"},
@@ -1777,7 +1763,7 @@ settings.corpora["sprakfragor"] = {
         "1 text": "1 text"
     },
     within: settings.defaultWithin,
-    attributes: modernAttrsOld,
+    attributes: modernAttrs,
     structAttributes: {
         text_topic: {label: "topic", order: 10},
         text_datetime: {label: "date", order: 20},
