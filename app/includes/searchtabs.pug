@@ -1,5 +1,5 @@
 div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
-  uib-tabset.tabbable.search_tabs(tab-hash='search_tab')
+  uib-tabset.tabbable.search_tabs(tab-hash='search_tab', active="activeTab")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       include simple
     uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")

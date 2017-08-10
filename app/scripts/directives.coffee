@@ -24,49 +24,37 @@ korpApp.directive 'kwicWord', ->
 
 
 
-korpApp.directive "tabHash", (utils, $location) ->
+korpApp.directive "tabHash", (utils, $location, $timeout) ->
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()
 
-
         watchHash = () ->
             utils.setupHash s,[
-                expr : "getSelected()"
+                expr : "activeTab"
                 val_out : (val) ->
                     return val
                 val_in : (val) ->
                     s.setSelected parseInt(val)
-                    return parseInt(val)
+                    return s.activeTab
                 key : attr.tabHash
                 default : 0
             ]
 
-        init_tab = parseInt($location.search()[attr.tabHash]) or 0
-
-
-        w = contentScope.$watch "tabs.length", (len) ->
-            if len
-                s.setSelected(init_tab)
-                watchHash()
-                w()
-
-        s.getSelected = () ->
-            out = null
-            for p, i in contentScope.tabs
-                out = i if p.active
-
-            unless out? then out = contentScope.tabs.length - 1
-            return out
-
         s.setSelected = (index) ->
-            for t in contentScope.tabs
-                t.active = false
-                t.onDeselect?()
-            if contentScope.tabs[index]
-                contentScope.tabs[index].active = true
-            else
-                (_.last contentScope.tabs)?.active = true
+            if not contentScope.tabset.tabs[index]
+                index = contentScope.tabset.tabs.length - 1
+            # contentScope.tabset.tabs[index].active = true
+            s.activeTab = index
+
+        initTab = parseInt($location.search()[attr.tabHash]) or 0
+        $timeout (() ->
+            s.setSelected(initTab)
+            watchHash()), 0
+            
+        s.newDynamicTab = () ->
+            $timeout(() -> s.setSelected (contentScope.tabset.tabs.length - 1), 0)
+
 
 
 korpApp.directive "escaper", () ->

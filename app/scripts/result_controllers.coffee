@@ -30,8 +30,6 @@ class KwicCtrl
         c.log "kwicCtrl init", $scope.$parent
         $location = @location
 
-        s.active = true
-
         s.onexit = () ->
             c.log "onexit"
             s.$root.sidebar_visible = false
@@ -211,9 +209,10 @@ korpApp.directive "kwicCtrl", () ->
 class ExampleCtrl extends KwicCtrl
     @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
-      
         super(@scope, utils, $location)
         s = @scope
+
+        s.newDynamicTab()
 
         s.hitspictureClick = (pageNumber) ->
             s.page = Number(pageNumber)
@@ -453,7 +452,7 @@ korpApp.directive "wordpicCtrl", () ->
 korpApp.directive "graphCtrl", () ->
     controller: ($scope) ->
         s = $scope
-        s.active = true
+        s.newDynamicTab()
 
         s.mode = "line"
 
@@ -465,8 +464,7 @@ korpApp.directive "compareCtrl", () ->
     controller: ($scope, $rootScope) ->
         s = $scope
         s.loading = true
-        s.active = true
-
+        s.newDynamicTab()
 
         s.resultOrder = (item) ->
             return Math.abs item.loglike

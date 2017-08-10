@@ -35,11 +35,12 @@ html
         #results-wrapper(ng-show='searches.activeSearch || compareTabs.length || graphTabs.length || mapTabs.length', ng-controller='resultContainerCtrl')
           #columns
             #left-column(ng-class='{sidebar_visible : word_selected && sidebar_visible}')
-              uib-tabset.tabbable.result_tabs(tab-hash='result_tab', ng-click="tabclick()")
+              uib-tabset.tabbable.result_tabs(tab-hash='result_tab', active="activeTab")
                 uib-tab(disabled="!instance.hasData",
                     select="instance.onentry()",
                     deselect="instance.onexit()",
-                    kwic-ctrl
+                    kwic-ctrl,
+                    index=0
                 )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | KWIC
@@ -50,7 +51,7 @@ html
                     ng-if="_settings.statistics != false"
                     select="instance.onentry()"
                     deselect="instance.onexit()"
-
+                    index=2
                     )
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'statistics' | loc:lang}}
@@ -114,13 +115,14 @@ html
                 uib-tab(ng-if="_settings.wordpicture != false",
                     wordpic-ctrl,
                     select="instance.onentry()",
-                    deselect="instance.onexit()")
+                    deselect="instance.onexit()",
+                    index=3)
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && instance.countCorpora() < 2 }")
                     | {{'word_picture' | loc:lang}}
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div()
                     include includes/word_picture
-                uib-tab(ng-show="enableMap" map-ctrl)
+                uib-tab(ng-show="enableMap" map-ctrl, index=1)
                   uib-tab-heading(ng-class="{not_loading: progress > 99, loading : loading, single: loading && countCorpora() < 2 }")
                     | {{'map' | loc:lang }}
                     tab-preloader(ng-if="loading", value="progress", spinner="countCorpora() < 2")

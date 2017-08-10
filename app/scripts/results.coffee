@@ -23,6 +23,9 @@ class BaseResults
     getResultTabs : () ->
         $(".result_tabs > ul").scope().tabset.tabs
 
+    getActiveResultTab: () ->
+        $(".result_tabs > ul").scope().active
+
     renderResult: (data) ->
         @$result.find(".error_msg").remove()
         if data.ERROR
@@ -71,7 +74,7 @@ class BaseResults
         @s.$root.jsonUrl = null
 
     isActive : () ->
-        !!@getResultTabs()[@tabindex]?.active
+        return @getActiveResultTab() is @tabindex
 
 
 class view.KWICResults extends BaseResults

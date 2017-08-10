@@ -121,8 +121,7 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
     controller: ($scope, $rootScope) ->
         s = $scope
         s.loading = true
-        s.active = true
-
+        s.newDynamicTab()
         s.center = settings.mapCenter
         s.markers = {}
         s.selectedGroups = []
