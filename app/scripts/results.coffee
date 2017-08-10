@@ -21,7 +21,7 @@ class BaseResults
         @proxy.abort()
 
     getResultTabs : () ->
-        $(".result_tabs > ul").scope().tabs
+        $(".result_tabs > ul").scope().tabset.tabs
 
     renderResult: (data) ->
         @$result.find(".error_msg").remove()
@@ -362,7 +362,7 @@ class view.KWICResults extends BaseResults
                             progressCallback,
                             (data) =>
                                 @renderResult data
-        req.success (data) =>
+        req.done (data) =>
             @hidePreloader()
             @renderCompleteResult(data)
         req.fail (jqXHR, status, errorThrown) =>
@@ -557,7 +557,7 @@ class view.LemgramResults extends BaseResults
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
 
-        def.success (data) =>
+        def.done (data) =>
             safeApply @s, () =>
                 @renderResult(data, word)
         def.fail (jqXHR, status, errorThrown) =>

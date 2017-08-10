@@ -52,7 +52,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             settings.corpusListing.select corpus.split(",")
         view.updateSearchHistory()
     catch e
-        c.warn "ERROR setting corpora from location"
+        c.error "ERROR setting corpora from location", e
 
 
     $("body").addClass "lab" if isLab

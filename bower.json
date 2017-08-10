@@ -2,7 +2,7 @@
   "name": "Korp",
   "version": "3.0.0",
   "dependencies": {
-    "angular": "1.6.1",
+    "angular": "1.4.x",
     "json3": "~3.3.1",
     "jquery-ui": "~1.12.1",
     "raphael": "~2.1.0",

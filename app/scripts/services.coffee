@@ -79,7 +79,8 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
         xhr = $http(conf)
 
-        xhr.success (data) ->
+        xhr.then (response) ->
+            data = response.data
 
             if data.ERROR
                 def.reject()
@@ -162,7 +163,8 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
         xhr = $http(conf)
 
-        xhr.success (data) ->
+        xhr.then (response) ->
+            data = response.data
             createResult = (subResult, cqp, label) ->
                 points = []
                 _.map _.keys(subResult.absolute), (hit) ->
@@ -255,7 +257,8 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
                 params:
                     command : "info"
                     corpus : _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join ","
-            ).success (data) ->
+            ).then (response) ->
+                data = response.data
                 for corpus in settings.corpusListing.corpora
                     corpus["info"] = data["corpora"][corpus.id.toUpperCase()]["info"]
                     privateStructAttrs = []
@@ -371,7 +374,8 @@ korpApp.factory "lexicons", ($q, $http) ->
             method : "GET"
             url : "#{karpURL}/autocomplete"
             params : args
-        ).success((data, status, headers, config) ->
+        ).then((response) ->
+            data = response.data
             if data is null
                 deferred.resolve []
             else
@@ -391,7 +395,8 @@ korpApp.factory "lexicons", ($q, $http) ->
                     headers : {
                         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
                     }
-                ).success (data, status, headers, config) =>
+                ).then (response) =>
+                    data = response.data
                     delete data.time
                     allLemgrams = []
                     for lemgram, count of data
@@ -400,7 +405,7 @@ korpApp.factory "lexicons", ($q, $http) ->
                         unless data[klemgram]
                             allLemgrams.push {"lemgram" : klemgram, "count" : 0}
                     deferred.resolve allLemgrams
-        ).error (data, status, headers, config) ->
+        ).catch (response) ->
             deferred.resolve []
         return deferred.promise
 
@@ -416,7 +421,8 @@ korpApp.factory "lexicons", ($q, $http) ->
             method: 'GET'
             url: "#{karpURL}/autocomplete"
             params : args
-        ).success((data, status, headers, config) =>
+        ).then((response) =>
+            data = response.data
             if data is null
                 deferred.resolve []
             else
@@ -437,7 +443,8 @@ korpApp.factory "lexicons", ($q, $http) ->
                     method: 'GET'
                     url: "#{karpURL}/minientry"
                     params : senseargs
-                ).success((data, status, headers, config) ->
+                ).then((response) ->
+                    data = response.data
                     if data.hits.total is 0
                         deferred.resolve []
                         return
@@ -447,9 +454,9 @@ korpApp.factory "lexicons", ($q, $http) ->
                             "desc" : entry._source.Sense[0].SenseRelations?.primary
                         }
                     deferred.resolve senses
-                ).error (data, status, headers, config) ->
+                ).catch (response) ->
                     deferred.resolve []
-        ).error (data, status, headers, config) ->
+        ).catch (response) ->
             deferred.resolve []
         return deferred.promise
 
@@ -462,7 +469,8 @@ korpApp.factory "lexicons", ($q, $http) ->
                 q : "extended||and|lemgram|equals|#{lemgram}"
                 show : "sense"
                 resource : "saldo"
-        ).success (data) ->
+        ).then (response) ->
+            data = response.data
             if data.hits.total is 0
                 def.resolve []
                 return
@@ -476,7 +484,8 @@ korpApp.factory "lexicons", ($q, $http) ->
                         q : "extended||and|LU|equals|#{senses.join('|')}"
                         show : "LU,sense"
                         resource : "swefn"
-                ).success (data) ->
+                ).then (response) ->
+                    data = response.data
                     if data.hits.total is 0
                         def.resolve []
                         return

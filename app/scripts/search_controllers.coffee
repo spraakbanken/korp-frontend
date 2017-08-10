@@ -155,7 +155,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.clickRelated = (wd, attribute) ->
         modalInstance?.close()
         c.log "modalInstance", modalInstance
-        $scope.$root.searchtabs()[1].select()
+        $scope.$root.searchtabs()[1].tab.select()
         if attribute is "saldo"
             cqp = "[saldo contains \"#{regescape(wd)}\"]"
         else
