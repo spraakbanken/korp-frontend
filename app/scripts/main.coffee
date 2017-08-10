@@ -27,9 +27,9 @@ deferred_domReady = $.Deferred((dfd) ->
         $.getScript("modes/common.js").done () ->
             $.getScript("modes/#{mode}_mode.js").done () ->
                 dfd.resolve()
-            .error (jqxhr, settings, exception) ->
+            .fail (jqxhr, settings, exception) ->
                 c.error "Mode file parsing error: ", exception
-        .error (jqxhr, settings, exception) ->
+        .fail (jqxhr, settings, exception) ->
             c.error "common.js parsing error: ", exception
     return dfd
 ).promise()

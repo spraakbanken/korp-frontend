@@ -23,7 +23,7 @@
     "angular-filter": "~0.5.7",
     "leaflet": "~1.0.0",
     "leaflet-providers": "1.1.15",
-    "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.2",
+    "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.6",
     "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.2.3",
     "leaflet.markercluster": "1.0.0-rc.1"
   },
