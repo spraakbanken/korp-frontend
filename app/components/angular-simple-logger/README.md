@@ -14,9 +14,9 @@ To have simplified log levels where a supporting angular module's log levels are
 ```js
 angular.module('someApp', ['nemLogging'])
 //note this can be any type of injectable angular dependency (factory, service.. etc)
-.controller("someController", function ($scope, nemLogger) {
-  nemLogger.doLog = true; //default is true
-  nemLogger.currentLevel = nemLogger.LEVELS.debug;//defaults to error only
+.controller("someController", function ($scope, nemSimpleLogger) {
+  nemSimpleLogger.doLog = true; //default is true
+  nemSimpleLogger.currentLevel = nemSimpleLogger.LEVELS.debug;//defaults to error only
 });  
 ```
 
@@ -26,21 +26,68 @@ angular.module('someApp', ['nemLogging'])
 ```js
 angular.module('someApp', ['nemLogging'])
 //note this can be any type of injectable angular dependency (factory, service.. etc)
-.service("apiLogger", function ($scope, nemLogger) {
-  var logger = nemLogger.spawn();
+.service("apiLogger", function ($scope, nemSimpleLogger) {
+  var logger = nemSimpleLogger.spawn();
   logger.currentLevel = logger.LEVELS.warn;
   return logger;
 })
-.service("businessLogicLogger", function ($scope, nemLogger) {
-  var logger = nemLogger.spawn();
+.service("businessLogicLogger", function ($scope, nemSimpleLogger) {
+  var logger = nemSimpleLogger.spawn();
   logger.currentLevel = logger.LEVELS.error;
   return logger;
 })
-.service("terseLogger", function ($scope, nemLogger) {
-  var logger = nemLogger.spawn();
+.service("terseLogger", function ($scope, nemSimpleLogger) {
+  var logger = nemSimpleLogger.spawn();
   logger.currentLevel = logger.LEVELS.info;
   return logger;
-});  
+});
+```
+
+### Use your new creations!
+
+```js
+angular.module('someApp', ['nemLogging'])
+//note this can be any type of injectable angular dependency (factory, service.. etc)
+.service("booksApi", function (apiLogger, $http) {
+  //do something with your books
+  $http.get("/ap/books").then(function(data){
+    apiLogger.debug("books have come yay!");
+  });
+})
+.controller("businessCtrl", function ($scope, businessLogicLogger, book) {
+  businessLogicLogger.debug("new book");
+  var b = new book();
+  $scope.books = [b];
+})
+.controller("appCtrl", function ($rootScope, terseLogger) {
+  $rootScope.$on "error", function(){
+    terseLogger.error("something happened");
+  }
+});
+```
+
+### Override all of $log (optional decorator)
+
+Optionally (default is off) decorate $log to utilize log levels globally within the app.
+
+Note this logger's currentLevel is info!
+
+```js
+angular.module('someApp', ['nemLogging']))
+.config(function($provide, nemSimpleLoggerProvider) {
+  return $provide.decorator.apply(null, nemSimpleLoggerProvider.decorator);
+})
+.config(function($provide, nemSimpleLoggerProvider) {
+  var logger = $provide.decorator.apply(null, nemSimpleLoggerProvider.decorator);
+  //override level at config
+  logger.currentLevel = logger.LEVELS.error;
+  return logger;
+})
+.run(function($log){
+  //at run time
+  //override the default log level globally
+  $log.currentLevel = $log.LEVELS.error;
+});
 ```
 
 ### API

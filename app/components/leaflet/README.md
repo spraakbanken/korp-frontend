@@ -1,7 +1,8 @@
-<img width="600" src="https://rawgit.com/Leaflet/Leaflet/master/src/images/logo.svg" alt="Leaflet" />
+<img src="http://leafletjs.com/docs/images/logo.png" alt="Leaflet" />
 
-Leaflet is the leading open-source JavaScript library for **mobile-friendly interactive maps**.
-Weighing just about 37 KB of gzipped JS code, it has all the mapping [features][] most developers ever need.
+Leaflet is an open source JavaScript library for **mobile-friendly interactive maps**.
+It is developed by [Vladimir Agafonkin][] of [MapBox][] with a team of dedicated [contributors][].
+Weighing just about 30 KB of gzipped JS code, it has all the [features][] most developers ever need for online maps.
 
 Leaflet is designed with *simplicity*, *performance* and *usability* in mind.
 It works efficiently across all major desktop and mobile platforms out of the box,
@@ -18,10 +19,11 @@ If you want to **get involved** with Leaflet development, check out the [contrib
 Let's make the best mapping library that will ever exist,
 and push the limits of what's possible with online maps!
 
-[![Build Status](https://travis-ci.org/Leaflet/Leaflet.svg?branch=master)](https://travis-ci.org/Leaflet/Leaflet)
+[![Build Status](https://travis-ci.org/Leaflet/Leaflet.png?branch=master)](https://travis-ci.org/Leaflet/Leaflet)
 
+ [Vladimir Agafonkin]: http://agafonkin.com/en
  [contributors]: https://github.com/Leaflet/Leaflet/graphs/contributors
- [features]: http://leafletjs.com/#features
+ [features]: http://leafletjs.com/features.html
  [plugins]: http://leafletjs.com/plugins.html
  [well-documented]: http://leafletjs.com/reference.html "Leaflet API reference"
  [source code]: https://github.com/Leaflet/Leaflet "Leaflet GitHub repository"
@@ -29,4 +31,4 @@ and push the limits of what's possible with online maps!
  [contribute]: https://github.com/Leaflet/Leaflet/blob/master/CONTRIBUTING.md "A guide to contributing to Leaflet"
  [official website]: http://leafletjs.com
  [download page]: http://leafletjs.com/download.html
-
+ [MapBox]: https://mapbox.com
