@@ -24,6 +24,7 @@ All dependencies that are needed are under version control (`app/components`). T
 ## grunt
 
 Available target in grunt are:
+
 - clean - Remove all built files
 - test - Run tests. The graphical user tests are dependent on SUC 2.0, SUC 3.0 and a parallel mode with some corpora available in the tested instance. Run `node_modules/protractor/bin/webdriver-manager update` to install drivers.
 - build - Same as running only `grunt`. Creates a dist-folder with only built files, css and js are concatenated and minfied. html are also minified.
@@ -31,14 +32,33 @@ Available target in grunt are:
 - release - Same as build, but updates a file with SVN revision
 
 ## Local setup for Ubuntu
-sudo apt-get install npm
-sudo npm install -g grunt-cli
-sudo apt-get install nodejs
-npm install
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-sudo apt-get install ruby-dev
-sudo gem install sass
-grunt serve
+
+- `sudo apt-get install npm`
+- `sudo npm install -g grunt-cli`
+- `sudo apt-get install nodejs`
+- `npm install`
+- `sudo ln -s /usr/bin/nodejs /usr/bin/node`
+- `sudo apt-get install ruby-dev`
+- `sudo gem install sass`
+- `grunt serve`
+
+## run_config.json
+
+To use your own versions of the configuration-files without creating them in this project, 
+use a `run_config.json` file in the root of the project with the following content:
+
+```
+{
+    "configDir": "../path/to/my/configuration/folder"
+}
+```
+
+In this folder, use the same layout as in Korp and add the following files:
+
+- `app/config.js`
+- `app/modes/*mode.js`
+- `app/modes/common.js`
+- `app/translations/*.json`
 
 ## Known bugs
 

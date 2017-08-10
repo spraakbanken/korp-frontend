@@ -9,24 +9,6 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    // list of files / patterns to load in the browser
-    files: [
-      'app/components/angular/angular.js',
-      'app/components/angular-mocks/angular-mocks.js',
-      'app/components/lodash/lodash.js',
-      'app/components/moment/moment.js',
-      'app/scripts/bin/util.js',
-      'app/config.js',
-      'app/modes/common.js',
-      'app/modes/default_mode.js',
-      'app/scripts/cqp_parser/CQPParser.js',
-      'app/scripts/bin/cqp_parser/cqp.js',
-      // 'app/scripts/*.coffee',
-      // 'app/scripts/**/*.coffee',
-      'test/karma/bin/*.js'
-
-    ],
-
     // list of files / patterns to exclude
     exclude: [],
 

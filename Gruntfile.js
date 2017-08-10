@@ -4,10 +4,22 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
+  function getKorpConfigDir() {
+      let config = "app";
+      try {
+          config = grunt.file.readJSON("run_config.json").configDir || ".";
+          grunt.log.write("Using \"" + config + "\" as config directory.");
+      } catch(err) {
+          grunt.log.write("No run_config.json given, using \"app\" as config directory (default).");
+      }
+      return config;
+  }
+
   grunt.initConfig({
     yeoman: {
       app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      dist: 'dist',
+      korpConfig: getKorpConfigDir()
     },
     watch: {
       pug : {
@@ -37,8 +49,8 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/{,*/}*.html',
           '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/**/*.js',
-          '{.tmp,<%= yeoman.app %>}/modes/{,*/}*.js',
-          '{.tmp,<%= yeoman.app %>}/config.js',
+          '{.tmp,<%= yeoman.app %>,<%= yeoman.korpConfig %>}/modes/{,*/}*.js',
+          '{.tmp,<%= yeoman.app %>,<%= yeoman.korpConfig %>}/config.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -74,6 +86,7 @@ module.exports = function (grunt) {
             open: false,
             base: [
               '.tmp',
+              '<%= yeoman.korpConfig %>',
               '<%= yeoman.app %>'
             ]
           }
@@ -84,6 +97,7 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             'test',
+            '<%= yeoman.korpConfig %>',
             '<%= yeoman.app %>'
           ]
         }
@@ -315,7 +329,6 @@ module.exports = function (grunt) {
             'components/jquery-ui/themes/smoothness/images/*',
             'components/SlickGrid/images/*',
             'translations/*',
-            'modes/*',
             'img/*',
             'img/browsers/*',
             'lib/**/*',
@@ -330,6 +343,16 @@ module.exports = function (grunt) {
             'components/geokorp/dist/data/name_mapping.json',
             'components/leaflet/dist/images/layers.png',
             'components/d3/d3.min.js'
+          ]
+        },
+        {
+          expand: true,
+          cwd: "<%= yeoman.korpConfig %>",
+          dest: "<%= yeoman.dist %>",
+          src: [
+            "translations/*",
+            "modes/*",
+            "config.js"
           ]
         },
         {
@@ -350,7 +373,22 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'test/karma/karma.conf.js',
-        singleRun: true
+        singleRun: true,
+        options: {
+            files: [
+                'app/components/angular/angular.js',
+                'app/components/angular-mocks/angular-mocks.js',
+                'app/components/lodash/lodash.js',
+                'app/components/moment/moment.js',
+                'app/scripts/bin/util.js',
+                '<%= yeoman.korpConfig %>/config.js',
+                '<%= yeoman.korpConfig %>/modes/common.js',
+                '<%= yeoman.korpConfig %>/modes/default_mode.js',
+                'app/scripts/cqp_parser/CQPParser.js',
+                'app/scripts/bin/cqp_parser/cqp.js',
+                'test/karma/bin/*.js'
+            ]
+        }
       }
     },
     pug: {
