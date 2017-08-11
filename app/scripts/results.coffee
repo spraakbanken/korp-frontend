@@ -24,7 +24,7 @@ class BaseResults
         $(".result_tabs > ul").scope().tabset.tabs
 
     getActiveResultTab: () ->
-        $(".result_tabs > ul").scope().active
+        $(".result_tabs").scope().activeTab
 
     renderResult: (data) ->
         @$result.find(".error_msg").remove()

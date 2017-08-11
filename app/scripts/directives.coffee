@@ -517,7 +517,7 @@ korpApp.directive "kwicPager", () ->
     scope: false
     template: """
     <div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
-      <uib-pagination
+      <ul uib-pagination
          total-items="hits"
          ng-if="gotFirstKwic"
          ng-model="pageObj.pager"
@@ -527,7 +527,7 @@ korpApp.directive "kwicPager", () ->
          previous-text="‹" next-text="›" first-text="«" last-text="»"
          boundary-links="true"
          rotate="false"
-         num-pages="$parent.numPages"> </uib-pagination>
+         num-pages="$parent.numPages"> </ul>
       <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
         <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"
             ng-click="$event.stopPropagation()" />
@@ -715,13 +715,13 @@ korpApp.directive "timeInterval", () ->
     restrict : "E"
     template : """
         <div>
-            <uib-datepicker class="well well-sm" ng-model="dateModel"
+            <div uib-datepicker class="well well-sm" ng-model="dateModel"
                 min-date="minDate" max-date="maxDate" init-date="minDate"
-                show-weeks="true" starting-day="1"></uib-datepicker>
+                show-weeks="true" starting-day="1"></div>
 
             <div class="time">
-                <i class="fa fa-3x fa-clock-o"></i><uib-timepicker class="timepicker" ng-model="timeModel"
-                    hour-step="1" minute-step="1" show-meridian="false"></uib-timepicker>
+                <i class="fa fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
+                    hour-step="1" minute-step="1" show-meridian="false"></div>
             </div>
         </div>
         """
