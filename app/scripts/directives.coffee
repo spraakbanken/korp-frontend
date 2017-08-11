@@ -234,7 +234,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
         s.popShow = () ->
             s.isPopoverVisible = true
-            popover.show("fade", "fast").focus().position
+            popover.fadeIn("fast").focus().position
                 my : my
                 at : at
                 of : elem.find(".opener")
@@ -245,7 +245,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
         s.popHide = () ->
             s.isPopoverVisible = false
-            popover.hide("fade", "fast")
+            popover.fadeOut("fast")
             $rootElement.off "keydown", onEscape
             $rootElement.off "click", s.popHide
             return
