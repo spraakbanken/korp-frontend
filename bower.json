@@ -27,7 +27,8 @@
     "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.2.3",
     "leaflet.markercluster": "1.0.0-rc.1",
     "jquery-hoverintent": "1.8.x",
-    "angular-ui-sortable": "^0.17.1"
+    "angular-ui-sortable": "^0.17.1",
+    "angular-dynamic-locale": "^0.1.32"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
