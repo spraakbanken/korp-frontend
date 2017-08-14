@@ -2,7 +2,7 @@
   "name": "Korp",
   "version": "3.0.0",
   "dependencies": {
-    "angular": "1.4.x",
+    "angular": "1.6.x",
     "json3": "~3.3.1",
     "jquery-ui": "~1.12.1",
     "raphael": "~2.1.0",
@@ -25,7 +25,8 @@
     "leaflet-providers": "1.1.15",
     "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.6",
     "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.2.3",
-    "leaflet.markercluster": "1.0.0-rc.1"
+    "leaflet.markercluster": "1.0.0-rc.1",
+    "jquery-hoverintent": "1.8.x"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
