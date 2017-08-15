@@ -257,7 +257,7 @@ korpApp.factory "structService",  ($http, $q) ->
 
         _.extend conf.headers, model.getAuthorizationHeader()
 
-        $http(conf).success (data) ->
+        $http(conf).then (data) ->
             if data.ERROR
                 def.reject()
                 return
