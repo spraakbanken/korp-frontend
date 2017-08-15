@@ -2283,9 +2283,6 @@ line.tick {
   border-radius: 2px 2px 2px 2px;
   color : #222222;
   padding : 3px;
-  .single {
-    margin-right : 1em;
-  }
   .tab-content {
     padding : 1em;
   }
@@ -2404,6 +2401,8 @@ line.tick {
 
 .tab_preloaders {
   display : inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
   .preloader_spinner {
     width : 9px;
     display : inline;
