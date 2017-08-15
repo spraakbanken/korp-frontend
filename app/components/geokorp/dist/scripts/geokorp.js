@@ -17,14 +17,14 @@
           var def;
           def = $q.defer();
           if (!this.places) {
-            $http.get('components/geokorp/dist/data/places.json').success((function(_this) {
-              return function(data) {
+            $http.get('components/geokorp/dist/data/places.json').then((function(_this) {
+              return function(response) {
                 _this.places = {
-                  data: data
+                  data: response.data
                 };
                 return def.resolve(_this.places);
               };
-            })(this)).error((function(_this) {
+            })(this))["catch"]((function(_this) {
               return function() {
                 def.reject();
                 return c.log("failed to get place data for sb map");
@@ -53,11 +53,11 @@
           var def;
           def = $q.defer();
           if (!this.mapper) {
-            $http.get('components/geokorp/dist/data/name_mapping.json').success(function(data) {
+            $http.get('components/geokorp/dist/data/name_mapping.json').then(function(response) {
               return def.resolve({
-                data: data
+                data: response.data
               });
-            }).error(function() {
+            })["catch"](function() {
               c.log("failed to get name mapper for sb map");
               return def.reject();
             });

@@ -16,11 +16,11 @@ angular.module 'sbMap', [
 
         if not @places
           $http.get('components/geokorp/dist/data/places.json')
-            .success((data) =>
-              @places = data: data
+            .then((response) =>
+              @places = data: response.data
               def.resolve @places
             )
-            .error(() =>
+            .catch(() =>
               def.reject()
               c.log "failed to get place data for sb map"
             )
@@ -43,10 +43,10 @@ angular.module 'sbMap', [
 
         if not @mapper
           $http.get('components/geokorp/dist/data/name_mapping.json')
-            .success((data) ->
-              def.resolve(data: data)
+            .then((response) ->
+              def.resolve(data: response.data)
             )
-            .error(() ->
+            .catch(() ->
               c.log "failed to get name mapper for sb map"
               def.reject()
             )
