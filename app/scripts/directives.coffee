@@ -41,19 +41,25 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
                 default : 0
             ]
 
-        s.setSelected = (index) ->
-            if not contentScope.tabset.tabs[index]
-                index = contentScope.tabset.tabs.length - 1
-            # contentScope.tabset.tabs[index].active = true
+        s.setSelected = (index, ignoreCheck) ->
+            if not ignoreCheck and index not of s.fixedTabs
+                index = s.maxTab
+
             s.activeTab = index
 
         initTab = parseInt($location.search()[attr.tabHash]) or 0
         $timeout (() ->
+            s.fixedTabs = {}
+            s.maxTab = -1
+            for tab in contentScope.tabset.tabs
+                s.fixedTabs[tab.index] = tab
+                if tab.index > s.maxTab
+                    s.maxTab = tab.index
             s.setSelected(initTab)
             watchHash()), 0
             
         s.newDynamicTab = () ->
-            $timeout(() -> s.setSelected (contentScope.tabset.tabs.length - 1), 0)
+            $timeout (() -> s.setSelected(s.maxTab + 1, true)), 0
 
 
 
