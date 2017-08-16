@@ -2417,7 +2417,9 @@ line.tick {
 }
 .tab_spinner {
   display : none;
-    width : 13px;
+  width : 13px;
+  margin-left: 10px;
+  vertical-align: middle;
 }
 .loading .tab_spinner {
   display : inline-block;
