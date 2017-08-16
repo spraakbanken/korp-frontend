@@ -2816,3 +2816,7 @@ li.active a span .num-to-find {
 .sr-only {
     display: none;
 }
+
+.show-graph-btn.disabled {
+  pointer-events: auto;
+}
