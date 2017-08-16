@@ -68,8 +68,8 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
-            if @isActive()
-                @s.$root.jsonUrl = @proxy?.prevUrl
+            @s.$root.jsonUrl = @proxy?.prevUrl
+
     onexit : () ->
         @s.$root.jsonUrl = null
 
