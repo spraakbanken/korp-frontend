@@ -24,7 +24,7 @@
     "leaflet": "~1.0.0",
     "leaflet-providers": "1.1.15",
     "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.6",
-    "geokorp": "http://spraakbanken.gu.se/pub/geokorp.git#1.2.4",
+    "geokorp": "https://github.com/spraakbanken/geokorp.git#1.2.4",
     "leaflet.markercluster": "1.0.0-rc.1",
     "jquery-hoverintent": "1.8.x",
     "angular-ui-sortable": "^0.17.1",
