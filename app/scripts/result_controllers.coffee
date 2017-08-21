@@ -2,7 +2,6 @@ korpApp = angular.module("korpApp")
 
 korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
-    $scope.enableMap = settings.enableMap
 
 
 class KwicCtrl
@@ -29,8 +28,6 @@ class KwicCtrl
         $scope = @scope
         c.log "kwicCtrl init", $scope.$parent
         $location = @location
-
-        s.active = true
 
         s.onexit = () ->
             c.log "onexit"
@@ -211,9 +208,10 @@ korpApp.directive "kwicCtrl", () ->
 class ExampleCtrl extends KwicCtrl
     @$inject: ['$scope', "utils", "$location"]
     constructor: (@scope, utils, $location) ->
-      
         super(@scope, utils, $location)
         s = @scope
+
+        s.newDynamicTab()
 
         s.hitspictureClick = (pageNumber) ->
             s.page = Number(pageNumber)
@@ -251,6 +249,8 @@ korpApp.directive "exampleCtrl", () ->
 korpApp.directive "statsResultCtrl", () ->
     controller: ($scope, utils, $location, backend, searches, $rootScope) ->
         s = $scope
+        s.loading = false
+        s.progress = 0
 
         s.$watch (() -> $location.search().hide_stats), (val) ->
             s.showStatistics = not val?
@@ -315,6 +315,8 @@ korpApp.directive "statsResultCtrl", () ->
 
 korpApp.directive "wordpicCtrl", () ->
     controller: ($scope, $rootScope, $location, utils, searches) ->
+        $scope.loading = false
+        $scope.progress = 0
         $scope.word_pic = $location.search().word_pic?
         $scope.$watch (() -> $location.search().word_pic), (val) ->
             $scope.word_pic = Boolean(val)
@@ -453,7 +455,7 @@ korpApp.directive "wordpicCtrl", () ->
 korpApp.directive "graphCtrl", () ->
     controller: ($scope) ->
         s = $scope
-        s.active = true
+        s.newDynamicTab()
 
         s.mode = "line"
 
@@ -465,8 +467,7 @@ korpApp.directive "compareCtrl", () ->
     controller: ($scope, $rootScope) ->
         s = $scope
         s.loading = true
-        s.active = true
-
+        s.newDynamicTab()
 
         s.resultOrder = (item) ->
             return Math.abs item.loglike

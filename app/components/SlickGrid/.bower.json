@@ -1,14 +1,14 @@
 {
   "name": "SlickGrid",
   "homepage": "https://github.com/6pac/SlickGrid",
-  "version": "2.3.2",
-  "_release": "2.3.2",
+  "version": "2.3.6",
+  "_release": "2.3.6",
   "_resolution": {
     "type": "version",
-    "tag": "2.3.2",
-    "commit": "9f409fdcada691dcb3214c8009cac7d1519132cf"
+    "tag": "2.3.6",
+    "commit": "f6d763752d36521dcb6945d1f1d6084bf44d75a9"
   },
   "_source": "https://github.com/6pac/SlickGrid.git",
-  "_target": "2.3.2",
+  "_target": "2.3.6",
   "_originalSource": "https://github.com/6pac/SlickGrid.git"
 }

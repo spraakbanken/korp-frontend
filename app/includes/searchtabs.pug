@@ -1,5 +1,5 @@
 div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
-  uib-tabset.tabbable.search_tabs(tab-hash='search_tab')
+  uib-tabset.tabbable.search_tabs(tab-hash='search_tab', active="activeTab")
     uib-tab(heading='{{"simple" | loc:lang}}', ng-if="visibleTabs[0]")
       include simple
     uib-tab(heading='{{"detailed" | loc:lang}}', ng-if="visibleTabs[1]")
@@ -76,7 +76,7 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
       | : 
       reduce-select(reduce-items="statCurrentAttrs", reduce-selected="statSelectedAttrs", 
         reduce-insensitive="statInsensitiveAttrs" reduce-lang="lang", style='width: 200px')
-    div()
+    div(ng-show="settings.statistics !== false")
       input#show_stats(type="checkbox", ng-model="showStatistics")
       label(for="show_stats") {{'show_stats' | loc:lang}}
     div(ng-show="settings.wordpicture !== false")

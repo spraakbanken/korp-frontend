@@ -21,7 +21,10 @@ class BaseResults
         @proxy.abort()
 
     getResultTabs : () ->
-        $(".result_tabs > ul").scope().tabs
+        $(".result_tabs > ul").scope().tabset.tabs
+
+    getActiveResultTab: () ->
+        $(".result_tabs").scope().activeTab
 
     renderResult: (data) ->
         @$result.find(".error_msg").remove()
@@ -65,13 +68,13 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
-            if @isActive()
-                @s.$root.jsonUrl = @proxy?.prevUrl
+            @s.$root.jsonUrl = @proxy?.prevUrl
+
     onexit : () ->
         @s.$root.jsonUrl = null
 
     isActive : () ->
-        !!@getResultTabs()[@tabindex]?.active
+        return @getActiveResultTab() is @tabindex
 
 
 class view.KWICResults extends BaseResults
@@ -110,7 +113,7 @@ class view.KWICResults extends BaseResults
         event.stopPropagation()
         word = $(event.target)
 
-        if $("#sidebar").data()["korp-sidebar"]
+        if $("#sidebar").data()["korpSidebar"]
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
         @selectWord word, scope, sent
@@ -362,7 +365,7 @@ class view.KWICResults extends BaseResults
                             progressCallback,
                             (data) =>
                                 @renderResult data
-        req.success (data) =>
+        req.done (data) =>
             @hidePreloader()
             @renderCompleteResult(data)
         req.fail (jqXHR, status, errorThrown) =>
@@ -557,7 +560,7 @@ class view.LemgramResults extends BaseResults
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
 
-        def.success (data) =>
+        def.done (data) =>
             safeApply @s, () =>
                 @renderResult(data, word)
         def.fail (jqXHR, status, errorThrown) =>

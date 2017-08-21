@@ -27,9 +27,9 @@ deferred_domReady = $.Deferred((dfd) ->
         $.getScript("modes/common.js").done () ->
             $.getScript("modes/#{mode}_mode.js").done () ->
                 dfd.resolve()
-            .error (jqxhr, settings, exception) ->
+            .fail (jqxhr, settings, exception) ->
                 c.error "Mode file parsing error: ", exception
-        .error (jqxhr, settings, exception) ->
+        .fail (jqxhr, settings, exception) ->
             c.error "common.js parsing error: ", exception
     return dfd
 ).promise()
@@ -52,7 +52,7 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
             settings.corpusListing.select corpus.split(",")
         view.updateSearchHistory()
     catch e
-        c.warn "ERROR setting corpora from location"
+        c.error "ERROR setting corpora from location", e
 
 
     $("body").addClass "lab" if isLab

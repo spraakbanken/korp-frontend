@@ -206,7 +206,6 @@ var hp_corpusChooser = {
 
 			$(".scroll_checkboxes").unbind("mousedown");
 			$(".scroll_checkboxes").mousedown(function(e) {
-				$(this).disableSelection();
 				if($(this).siblings(".popupchecks").css("display") == "block") {
 					$(".popupchecks").fadeOut('fast');
 					$(".corpusInfoSpace").fadeOut('fast');
@@ -367,7 +366,6 @@ var hp_corpusChooser = {
                     });
                 }
 
-				$(this).disableSelection();
 				hp_this.updateState($(this));
 	 			var childMan = $(this).children('label').children('.checkbox');
 				if ( childMan.hasClass("checked") ) {
@@ -423,7 +421,7 @@ var hp_corpusChooser = {
 							hasDirectCorporaChildren = true;
 							outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:46px; display:none; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox ' + (disable ? " unchecked" : "checked")  + '" /> ' + theHTML + ' </label></div>';
 						} else {
-							if (index != ul.size()) {
+							if (index != ul.length) {
 								hasDirectCorporaChildren = true;
 								outStr += '<div data="' + theHTML + '" class="boxdiv ui-corner-all' + (disable ? " disabled" : "")  + '" style="margin-left:16px; background-color:' + settings.primaryColor + '"><label class="hplabel"><span id="' + item_id + '" class="checkbox ' + (disable ? " unchecked" : "checked")  + '" /> ' + theHTML + ' </label></div>';
 							}
