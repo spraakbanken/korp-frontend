@@ -54,22 +54,11 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
           //- reduce-select(reduce-items="currentAttrs", reduce-selected="selectedAttrs", reduce-lang="lang", style='width: 150px')
 
           button.btn.btn-sm.btn-default.search(ng-click='sendCompare()') {{'compare_vb' | loc:lang}}
-  #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected")
+  #search_options.ui-widget-content.ui-corner-bottom(click-cover="isCompareSelected", ng-style="{'background-color': settings.primaryLight}")
     div
       span(style='font-size: .9em;') KWIC: 
-      select#num_hits.num_hits(data-history='hpp', data-prefix='hits_per_page', rel='localize[hits_per_page]')
-        option(value='25') 25
-        option(value='50') 50
-        option(value='75') 75
-        option(value='100') 100
-        option(value='500') 500
-        option(value='1000') 1000
-      select.sort_select(data-history='sort', data-prefix='sort_default')
-        option(value='', rel='localize[appearance_context]') 
-        option(value='keyword', rel='localize[word_context]') 
-        option(value='left', rel='localize[left_context]') 
-        option(value='right', rel='localize[right_context]') 
-        option(value='random', rel='localize[random_context]') 
+      select(ng-model='hitsPerPage' ng-options='getHppFormat(val) for val in hitsPerPageValues track by val')
+      select(ng-model='kwicSort' ng-options='getSortFormat(val) for val in kwicSortValues track by val')
 
     div(ng-show="showStats()")
       span(rel='localize[statistics]') 

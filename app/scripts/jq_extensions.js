@@ -10,24 +10,6 @@ $.fn.localeKey = function(key) {
 	return this;
 };
 
-jQuery.fn.customSelect = function() {
-    
-	this.change(function() {
-		$("option", this).each(function() {
-			$(this).text($(this).val());
-			$(this).data("locPrefix", null);
-		});
-
-		var selected = $(this).find("option:selected");
-
-		selected.data("locPrefix", $(this).data("prefix"));
-		selected.data("locSuffix", $(this).data("suffix"));
-		$(this).localize();
-	});
-	return this;
-};
-
-
 /*!
  * jQuery ajaxProgress Plugin v0.5.0
  * Requires jQuery v1.5.0 or later

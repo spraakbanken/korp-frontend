@@ -32,30 +32,3 @@ view.updateSearchHistory = (value, href) ->
     $("#search_history").html(opts)
         .prepend(clear)
         .prepend(placeholder)
-
-##TODO data-history and data-prefix (not used?) should be replaced with angular
-view.initSearchOptions = ->
-    selects = $("#search_options > div:first select").customSelect()
-
-    $("#search_options select").each ->
-        state = locationSearch()[$(this).data("history")]
-
-        if state
-            $(this).val(state).change()
-        else
-            $(this).prop("selectedIndex", 0).change()
-
-    $("#search_options").css("background-color", settings.primaryLight).change (event, isInit) ->
-        target = $(event.target)
-        unless target.data("history") then return
-        state = {}
-        state[target.data("history")] = target.val()
-        unless target.prop("selectedIndex") is 0
-            locationSearch state
-        else
-            if locationSearch()[target.data("history")]
-                locationSearch target.data("history"), null
-
-        if isInit is true
-            locationSearch("search", null)
-

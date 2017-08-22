@@ -2,6 +2,9 @@ settings.wordpicture = false;
 settings.enableMap = false;
 var start_lang = "swe";
 
+settings.hitsPerPageDefault = 10
+settings.hitsPerPageValues = [10,25,50,75,100,500,1000]
+
 korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $location) {
     // resolve globalFilterDef since globalFilter-directive is not used
     $rootScope.globalFilterDef.resolve()
@@ -166,9 +169,6 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     }
 
 });
-
-$("#search_options > div:last").remove();
-$("#num_hits").prepend("<option value='10'>10</option>");
 
 var c3 = view.KWICResults.prototype.constructor
 view.KWICResults = Subclass(view.KWICResults, function() {

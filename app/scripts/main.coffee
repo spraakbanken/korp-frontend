@@ -106,7 +106,6 @@ $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     $("#sidebar").sidebar()
 
     setTimeout(() ->
-        view.initSearchOptions()
         onHashChange null, true
     , 0)
     $("body").animate
