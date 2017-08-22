@@ -330,11 +330,14 @@ class view.KWICResults extends BaseResults
 
         context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
 
+        if not isPaging
+            @proxy.queryData = null
+
         opts.ajaxParams = {
             command : "query"
             corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
-            queryData : @proxy.queryData if @proxy.queryData
+            querydata : @proxy.queryData if @proxy.queryData
             context : context
             defaultcontext : preferredContext
             incremental: !isPaging and $.support.ajaxProgress

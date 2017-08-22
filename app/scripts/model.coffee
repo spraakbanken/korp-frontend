@@ -101,12 +101,7 @@ class model.KWICProxy extends BaseProxy
         super()
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
-
-
-        o = $.extend(
-            queryData: null
-
-            progress: (data, e) ->
+        progressObj = progress: (data, e) ->
                 progressObj = self.calcProgress(e)
                 return unless progressObj?
 
@@ -115,7 +110,6 @@ class model.KWICProxy extends BaseProxy
                     c.log "found kwic!"
                     @foundKwic = true
                     kwicCallback progressObj["struct"]
-        , options)
 
         unless options.ajaxParams.within
             _.extend options.ajaxParams, settings.corpusListing.getWithinParameters()
@@ -126,20 +120,19 @@ class model.KWICProxy extends BaseProxy
             show: []
             show_struct: []
 
-        $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
+        $.extend data, kwicResults.getPageInterval(page), options.ajaxParams
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
                 data.show.push _.last key.split(" ")
             for key, val of corpus.attributes
                 data.show.push key
 
-
             if corpus.structAttributes?
                 $.each corpus.structAttributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
         if data.cqp
-            data.cqp = @expandCQP(data.cqp)
+            data.cqp = @expandCQP data.cqp
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show
@@ -158,7 +151,7 @@ class model.KWICProxy extends BaseProxy
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
 
-            progress: o.progress
+            progress: progressObj.progress
         )
         @pendingRequests.push def
         return def
