@@ -26,8 +26,6 @@
         a(href='/korplabb') {{'korp_lab' | loc:lang}}
       li
         a(href='https://spraakbanken.gu.se/sparv', target='_blank') {{'import_chain' | loc:lang}}
-      li
-        a(ng-click="showLogin()", ng-show="!loggedIn") {{'log_in' | loc:lang}}
     #news_area
       div(news-desk="", header="'newsdesk-header'", storage="'korp_last_read_newsitem'")
     #log_out.link(ng-click="logout()", ng-if="loggedIn")
@@ -37,8 +35,8 @@
     #languages
       a(data-mode='sv', ng-click="lang = 'sv'") {{'swedish' | loc:lang}}
       a(data-mode='en', ng-click="lang = 'en'") {{'english' | loc:lang}}
-    #cite
-      a(ng-click="citeClick()") {{"about_cite_header" | loc:lang}}
+    #login
+      a(ng-click="showLogin()", ng-show="!loggedIn") {{'log_in' | loc:lang}}
 
     .clearfix
   #header_left

@@ -34,7 +34,7 @@
     "remove_lang": "Färre språk",
     "not_containing": "Innehåller inte",
     "negate_explanation": "Ger alla meningar som inte matchar sökuttrycket.",
-    "about": "Om Korp",
+    "about": "Om Korp / Referera till Korp",
     "about_body": "Korp är Språkbankens konkordansverktyg. För mer information, kommentarer eller förslag, kontakta <a href='mailto:sb-info@svenska.gu.se'>Språkbanken</a>.",
     "about_cite_header": "Referera till Korp",
     "about_cite": "Lars Borin, Markus Forsberg and Johan Roxendal. 2012. <a href='http://spraakbanken.gu.se/eng/publikationer/korp-–-corpus-infrastructure-språkbanken'>Korp – the corpus infrastructure of Språkbanken</a>. Proceedings of LREC 2012. Istanbul: ELRA, pages 474–478.<br><a href='http://spraakbanken.gu.se/publikationer/bibtex/1822'><img src='http://spraakbanken.gu.se/sites/spraakbanken.gu.se/modules/custom/gup_publications/images/bibtex.png' alt='BibTeX'></a>",
