@@ -237,17 +237,21 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (corpora, attributes) ->
+    getStructValues: (corpora, attributes, count, returnByCorpora) ->
 
         def = $q.defer()
 
         structValue = attributes.join ">"
+        if count == null
+            count = true
+        if returnByCorpora == null
+            returnByCorpora = true
 
         params =
             command: "struct_values"
             corpus: corpora.join ","
             struct: structValue
-            count: true
+            count: count
 
         conf =
             url : settings.cgiScript
@@ -257,14 +261,20 @@ korpApp.factory "structService",  ($http, $q) ->
 
         _.extend conf.headers, model.getAuthorizationHeader()
 
-        $http(conf).then (data) ->
+        $http(conf).then ({ data }) ->
             if data.ERROR
                 def.reject()
                 return
-
-            result = {}
-            for corpora, values of data.corpora
-                result[corpora] = values[structValue]
-            def.resolve result
+            
+            if returnByCorpora
+                result = {}
+                for corpora, values of data.corpora
+                    result[corpora] = values[structValue]
+                def.resolve result
+            else
+                result = []
+                for corpora, values of data.corpora
+                    result = result.concat values[structValue]
+                def.resolve result
 
         return def.promise

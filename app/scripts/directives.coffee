@@ -86,38 +86,7 @@ korpApp.directive "escaper", () ->
             $scope.model = escape($scope.input)
 
 
-korpApp.directive "tokenValue", ($compile, $controller) ->
-
-    getDefaultTmpl = _.template """
-                <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
-                <%= maybe_placeholder %>>
-                <span class='val_mod' popper
-                    ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
-                        Aa
-                </span>
-                <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
-                </ul>
-                """
-    defaultController = ["$scope", ($scope) ->
-        if $scope.orObj.flags?.c
-            $scope.case = "insensitive"
-        else
-            $scope.case = "sensitive"
-
-        $scope.makeSensitive = () ->
-            $scope.case = "sensitive"
-            delete $scope.orObj.flags?["c"]
-
-        $scope.makeInsensitive = () ->
-            flags = ($scope.orObj.flags or {})
-            flags["c"] = true
-            $scope.orObj.flags = flags
-
-            $scope.case = "insensitive"
-    ]
-
+korpApp.directive "tokenValue", ($compile, $controller, extendedComponents) ->
     scope :
         tokenValue : "="
         model : "=model"
@@ -150,17 +119,26 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             locals = {$scope : childScope}
             prevScope = childScope
-            $controller(valueObj.extendedController or defaultController, locals)
-
-            if valueObj.value == "word"
-                tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
+            if valueObj.extendedComponent
+                { template, controller } = extendedComponents[valueObj.extendedComponent]
             else
-                tmplObj = {maybe_placeholder : ""}
+                if valueObj.extendedController
+                    controller = valueObj.extendedController
+                else
+                    controller = extendedComponents.defaultController
+                if valueObj.extendedTemplate
+                    template = valueObj.extendedTemplate
+                else
+                    if valueObj.value == "word"
+                        tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
+                    else
+                        tmplObj = {maybe_placeholder : ""}
 
-            defaultTmpl = getDefaultTmpl tmplObj
-            tmplElem = $compile(valueObj.extendedTemplate or defaultTmpl)(childScope)
-            elem.html(tmplElem).addClass("arg_value")
-
+                    template = extendedComponents.defaultTemplate tmplObj
+                    
+            $controller controller, locals
+            tmplElem = $compile(template) childScope
+            elem.html(tmplElem).addClass "arg_value"
 
 
 korpApp.directive "constr", ($window, searches) ->

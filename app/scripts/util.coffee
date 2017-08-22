@@ -89,8 +89,7 @@ class window.CorpusListing
         rest = @_invalidateAttrs(attrs)
 
         # TODO this code merges datasets from attributes with the same name and
-        # should be moved to the code for selectType.extendedController since
-        # datasets are not built in to Korp anymore
+        # should be moved to the code for extended controller "datasetSelect"
         withDataset = _.filter(_.pairs(rest), (item) ->
             item[1].dataset
         )
