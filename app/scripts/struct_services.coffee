@@ -74,7 +74,7 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
     # and flattens data structure?
     getData = () ->
         corpora = getSupportedCorpora()
-        structService.getStructValues(corpora, dataObj.selectedFilters).then (data) ->
+        structService.getStructValues(corpora, dataObj.selectedFilters, {}).then (data) ->
             currentData = {}
             for corpus in corpora
                 for k, v of data[corpus.toUpperCase()]
