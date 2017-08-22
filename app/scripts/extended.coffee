@@ -46,6 +46,11 @@ korpApp.factory "extendedComponents", () ->
                 c.log "struct_values error"
             )
 
+    singleValue:
+        template: '<input type="hidden">'
+        controller: ($scope) ->
+            $scope.model = _.values($scope.dataset)[0]
+
     defaultTemplate: _.template """
                 <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
                 <%= maybe_placeholder %>>
