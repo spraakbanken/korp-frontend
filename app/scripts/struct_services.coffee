@@ -237,15 +237,13 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (corpora, attributes, count, returnByCorpora) ->
+    getStructValues: (corpora, attributes, { count, returnByCorpora }) ->
 
         def = $q.defer()
 
         structValue = attributes.join ">"
-        if count == null
-            count = true
-        if returnByCorpora == null
-            returnByCorpora = true
+        count ?= true
+        returnByCorpora ?= true
 
         params =
             command: "struct_values"

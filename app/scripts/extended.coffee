@@ -3,27 +3,29 @@ korpApp.factory "extendedComponents", () ->
     selectTemplate = "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset' ></select>"
     localize = ($scope) ->
         return (str) ->
-            if not $scope.localize and not $scope.translationKey
+            if not $scope.translationKey
                 return str
             else
                 return util.getLocaleString( ($scope.translationKey or "") + str)
 
+    # Select-element. Use the following settings in the corpus:
+    # - dataset: an object or an array of values
+    # - translationKey: a key that will be prepended to the value for lookup in translation files
+    # - escape: boolean, will be used by the escaper-directive
     datasetSelect:
         template: selectTemplate
         controller: ($scope) ->
             localizer = localize($scope)
-
-            $scope.translationKey = $scope.translationKey or ""
-
             if _.isArray $scope.dataset
                 dataset = _.map $scope.dataset, (item) -> return [item, localizer item]
             else
                 dataset = _.map $scope.dataset, (v, k) -> return [k, localizer v]
-
-            $scope.dataset = dataset or $scope.dataset
-            $scope.dataset = _.sortBy $scope.dataset, (tuple) -> return tuple[1]
+            $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
             $scope.model = $scope.model or $scope.dataset[0][0]
 
+    # Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
+    # - translationKey: a key that will be prepended to the value for lookup in translation files
+    # - escape: boolean, will be used by the escaper-directive
     structServiceSelect:
         template: selectTemplate
         controller: ($scope, $timeout, structService) ->
@@ -37,15 +39,16 @@ korpApp.factory "extendedComponents", () ->
                 if attribute of corpusSettings.structAttributes or (attribute of corpusSettings.attributes)
                     corpora.push corpus
 
-            structService.getStructValues(corpora, [attribute], false, false).then((data) ->
+            structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
                 localizer = localize($scope)
                 dataset = _.map data, (item) -> return [item, localizer item]
                 $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
-                $scope.input = $scope.input || $scope.dataset[0][0]
+                $scope.input = $scope.input or $scope.dataset[0][0]
             , () ->
                 c.log "struct_values error"
             )
 
+    # puts the first values from a dataset paramater into model
     singleValue:
         template: '<input type="hidden">'
         controller: ($scope) ->
