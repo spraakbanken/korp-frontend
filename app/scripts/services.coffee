@@ -388,13 +388,13 @@ korpApp.factory "lexicons", ($q, $http) ->
 
                 lemgram = karpLemgrams.join(",")
                 corpora = corporaIDs.join(",")
+                headers = model.getAuthorizationHeader()
+                headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
                 $http(
                     method: 'POST'
                     url: settings.cgiScript
                     data : "command=lemgram_count&lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
-                    headers : {
-                        'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-                    }
+                    headers : headers
                 ).then (response) =>
                     data = response.data
                     delete data.time
