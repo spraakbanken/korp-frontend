@@ -70,14 +70,15 @@ class BaseProxy
 
         stats = (@progress / @total) * 100
         if not @total? and struct.progress_corpora?.length
-            @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
+            tmp = $.map struct["progress_corpora"], (corpus) ->
                 return if not corpus.length
+                
                 _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
                 , 0)
-            ), (val1, val2) ->
+            @total = _.reduce(tmp, (val1, val2) ->
                 val1 + val2
             , 0)
         @prev = e.target.responseText
