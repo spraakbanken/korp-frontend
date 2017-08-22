@@ -65,25 +65,32 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
 
 korpApp.directive "escaper", () ->
     link : ($scope, elem, attr) ->
-        doNotEscape = ["*=", "!*="]
-        escape = (val) ->
-            if $scope.orObj.op not in doNotEscape
-                regescape(val)
-            else
-                val
 
-        unescape = (val) ->
-            if $scope.orObj.op not in doNotEscape
-                unregescape(val)
-            else
-                val
+        if $scope.escape == false
+            escape = (val) ->
+                return val
+            unescape = (val) ->
+                return val
+        else
+            doNotEscape = ["*=", "!*="]
+            escape = (val) ->
+                if $scope.orObj.op not in doNotEscape
+                    regescape(val)
+                else
+                    val
+
+            unescape = (val) ->
+                if $scope.orObj.op not in doNotEscape
+                    unregescape(val)
+                else
+                    val
 
         $scope.input = unescape $scope.model
         $scope.$watch "input", () ->
-            $scope.model = escape($scope.input)
+            $scope.model = escape $scope.input
 
         $scope.$watch "orObj.op", () ->
-            $scope.model = escape($scope.input)
+            $scope.model = escape $scope.input
 
 
 korpApp.directive "tokenValue", ($compile, $controller, extendedComponents) ->
