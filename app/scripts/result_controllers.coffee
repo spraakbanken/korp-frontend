@@ -22,8 +22,8 @@ class KwicCtrl
         @scope.page = @scope.pageObj.pager - 1
 
 
-    @$inject: ['$scope', "utils", "$location"]
-    constructor: (@scope, @utils, @location) ->
+    @$inject: ['$scope', "$timeout", "utils", "$location", "kwicDownload"]
+    constructor: (@scope, @timeout, @utils, @location, @kwicDownload) ->
         s = @scope
         $scope = @scope
         c.log "kwicCtrl init", $scope.$parent
@@ -201,6 +201,30 @@ class KwicCtrl
 
         s.$watch (() -> $location.search().hpp), (hpp) ->
             s.hitsPerPage = hpp or 25
+
+        s.download = 
+            options: [
+                    {value: "", label: "download_kwic"},
+                    {value: "kwic/csv", label: "download_kwic_csv"},
+                    {value: "kwic/tsv", label: "download_kwic_tsv"},
+                    {value: "annotations/csv", label: "download_annotations_csv"},
+                    {value: "annotations/tsv", label: "download_annotations_tsv"},
+                ]
+            selected: ""
+            init: (value, hitsDisplay) =>
+                if s.download.blobName
+                    URL.revokeObjectURL s.download.blobName
+                if value == ""
+                    return
+                totalHits = 0 # TODO
+                requestData = s.instance.getProxy().prevParams
+                [fileName, blobName] = @kwicDownload.makeDownload value.split("/")..., s.kwic, requestData, hitsDisplay
+                s.download.fileName = fileName
+                s.download.blobName = blobName
+                s.download.selected = ""
+                @timeout (() -> 
+                        angular.element("#kwicDownloadLink")[0].click()
+                    ), 0
 
 korpApp.directive "kwicCtrl", () ->
     controller: KwicCtrl

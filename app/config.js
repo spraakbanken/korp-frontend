@@ -8,6 +8,8 @@ settings.enableMap = !isLab;
 settings.mapPosTag = ["PM", "NNP", "NNPS"]
 settings.newMapEnabled = isLab;
 settings.hitsPerPageDefault = 25
+settings.enableBackendKwicDownload = false
+settings.enableFrontendKwicDownload = true
 
 settings.languages = ["sv", "en"];
 settings.defaultLanguage = "sv";

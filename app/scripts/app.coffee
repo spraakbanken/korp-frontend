@@ -23,6 +23,10 @@ korpApp.config ['$locationProvider', ($locationProvider) ->
   $locationProvider.hashPrefix ''
 ]
 
+korpApp.config ['$compileProvider', ($compileProvider) ->
+    $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|ftp|mailto|tel|file|blob):/
+]
+
 korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) ->
     s = $rootScope
     s._settings = settings

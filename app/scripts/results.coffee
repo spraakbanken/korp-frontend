@@ -91,7 +91,8 @@ class view.KWICResults extends BaseResults
 
         @selectionManager = scope.selectionManager
         @setupReadingHash()
-        @$result.click =>
+        @$result.click (event) =>
+            return if event.target.id in ["kwicDownloadLink", "frontendDownloadLinks"]
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
             safeApply @s.$root, (s) ->
@@ -795,7 +796,7 @@ class view.StatsResults extends BaseResults
         selVal = $("#kindOfData option:selected").val()
         selType = $("#kindOfFormat option:selected").val()
         dataDelimiter = ";"
-        dataDelimiter = "%09" if selType is "tsv"
+        dataDelimiter = "	" if selType is "tsv"
         cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
 
         header = [
