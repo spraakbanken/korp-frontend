@@ -14,7 +14,7 @@ korpApp.factory "extendedComponents", () ->
     # - escape: boolean, will be used by the escaper-directive
     datasetSelect:
         template: selectTemplate
-        controller: ($scope) ->
+        controller: ["$scope", ($scope) ->
             localizer = localize($scope)
             if _.isArray $scope.dataset
                 dataset = _.map $scope.dataset, (item) -> return [item, localizer item]
@@ -22,13 +22,14 @@ korpApp.factory "extendedComponents", () ->
                 dataset = _.map $scope.dataset, (v, k) -> return [k, localizer v]
             $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
             $scope.model = $scope.model or $scope.dataset[0][0]
+        ]
 
     # Select-element. Gets values from "struct_values"-command. Use the following settings in the corpus:
     # - translationKey: a key that will be prepended to the value for lookup in translation files
     # - escape: boolean, will be used by the escaper-directive
     structServiceSelect:
         template: selectTemplate
-        controller: ($scope, $timeout, structService) ->
+        controller: ["$scope", "$timeout", "structService", ($scope, $timeout, structService) ->
             attribute = $scope.$parent.tokenValue.value
             selectedCorpora = settings.corpusListing.getSelectedCorpora()
             
@@ -47,12 +48,14 @@ korpApp.factory "extendedComponents", () ->
             , () ->
                 c.log "struct_values error"
             )
+        ]
 
     # puts the first values from a dataset paramater into model
     singleValue:
         template: '<input type="hidden">'
-        controller: ($scope) ->
+        controller: ["$scope", ($scope) ->
             $scope.model = _.values($scope.dataset)[0]
+        ]
 
     defaultTemplate: _.template """
                 <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
