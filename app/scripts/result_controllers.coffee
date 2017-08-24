@@ -216,7 +216,6 @@ class KwicCtrl
                     URL.revokeObjectURL s.download.blobName
                 if value == ""
                     return
-                totalHits = 0 # TODO
                 requestData = s.instance.getProxy().prevParams
                 [fileName, blobName] = @kwicDownload.makeDownload value.split("/")..., s.kwic, requestData, hitsDisplay
                 s.download.fileName = fileName
