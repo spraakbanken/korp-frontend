@@ -65,7 +65,6 @@ In this folder, use the same layout as in Korp and add the following files:
 Korp has a number of known bugs. Most are GUI bugs, but some are more serious. They will be fixed!
 
 - Issues with linking to Korp and internal links. Opening a link to Korp in a tab where Korp is already open often leads to errors. For example selected corpora will not change.
-- Issues with the progress bars in the tabs. Sometimes tabs will show progress of another tab.
 - A bug in CWB that makes CQP-expressions searching for first a token ending with " and then another token fail. Example: [word = "\""] [word = "och"].
 
 Please send any issues to sb-korp@svenska.gu.se
