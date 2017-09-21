@@ -8,7 +8,7 @@ Documentation:
 - [Backend documentation](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/backend)
 - Sparv - The pipeline used to tag and otherwise process raw Swedish-language corpus data is documented [here](https://spraakbanken.gu.se/eng/research/infrastructure/korp/distribution/corpuspipeline)
 
-# sass
+## sass
 
 To compile the sass-stylesheets, Ruby and sass is required. Install Ruby and then `gem install sass`
 
@@ -33,12 +33,12 @@ Available target in grunt are:
 
 ## Local setup for Ubuntu
 
-- `sudo apt-get install npm`
+- `sudo apt install npm`
 - `sudo npm install -g grunt-cli`
-- `sudo apt-get install nodejs`
+- `sudo apt install nodejs`
 - `npm install`
-- `sudo ln -s /usr/bin/nodejs /usr/bin/node`
-- `sudo apt-get install ruby-dev`
+- `sudo ln -s /usr/bin/nodejs /usr/bin/node` or `sudo apt install nodejs-legacy`
+- `sudo apt install ruby-dev`
 - `sudo gem install sass`
 - `grunt serve`
 
@@ -66,6 +66,3 @@ Korp has a number of known bugs. Most are GUI bugs, but some are more serious. T
 
 - Issues with linking to Korp and internal links. Opening a link to Korp in a tab where Korp is already open often leads to errors. For example selected corpora will not change.
 - A bug in CWB that makes CQP-expressions searching for first a token ending with " and then another token fail. Example: [word = "\""] [word = "och"].
-
-Please send any issues to sb-korp@svenska.gu.se
-
