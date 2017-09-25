@@ -229,9 +229,10 @@ korpApp.directive "kwicCtrl", () ->
     controller: KwicCtrl
 
 class ExampleCtrl extends KwicCtrl
-    @$inject: ['$scope', "utils", "$location"]
-    constructor: (@scope, utils, $location) ->
-        super(@scope, utils, $location)
+
+    @$inject: ['$scope', "$timeout", "utils", "$location", "kwicDownload"]
+    constructor: (@scope, $timeout, utils, $location, @kwicDownload) ->
+        super(@scope, $timeout, utils, $location, @kwicDownload)
         s = @scope
 
         s.newDynamicTab()

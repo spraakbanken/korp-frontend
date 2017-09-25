@@ -198,4 +198,7 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                     expand_prequeries : false
             }
             _.extend opts.ajaxParams, queryData.within
-            $rootScope.kwicTabs.push { readingMode: queryData.label == "paragraph__geocontext", queryParams: opts }
+            $timeout(() ->
+                $rootScope.kwicTabs.push { readingMode: queryData.label == "paragraph__geocontext", queryParams: opts }
+            , 0)
+            
