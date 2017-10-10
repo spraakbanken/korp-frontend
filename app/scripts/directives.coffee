@@ -590,7 +590,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                 })
 
         scope.lemgramify = (lemgram) ->
-            lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
+            lemgramRegExp = /([^_\.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
             match = lemgram.match lemgramRegExp
             unless match then return false
             return {
