@@ -145,6 +145,11 @@
           maxZoom: 13
         }).setView([51.505, -0.09], 13);
         scope.selectedMarkers = [];
+        scope.$on("update_map", function() {
+          return $timeout((function() {
+            return scope.map.invalidateSize();
+          }), 0);
+        });
         stamenWaterColor = L.tileLayer.provider("Stamen.Watercolor");
         openStreetMap = L.tileLayer.provider("OpenStreetMap");
         createCircleMarker = function(color, diameter, borderRadius) {

@@ -117,6 +117,9 @@ angular.module 'sbMap', [
       scope.map = L.map(map[0], {minZoom: 1, maxZoom: 13}).setView [51.505, -0.09], 13
       scope.selectedMarkers = []
 
+      scope.$on "update_map", () ->
+          $timeout((() -> scope.map.invalidateSize()), 0)
+
       stamenWaterColor = L.tileLayer.provider "Stamen.Watercolor"
       openStreetMap = L.tileLayer.provider "OpenStreetMap"
 

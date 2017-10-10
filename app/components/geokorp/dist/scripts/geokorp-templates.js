@@ -1,6 +1,6 @@
 angular.module('sbMapTemplate', ['template/sb_map.html']);
 
-angular.module("template/sb_map.html", []).run(["$templateCache", function($templateCache) {
+angular.module("template/sb_map.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("template/sb_map.html",
     "<div class=\"map\" >\n" +
     "    <div class=\"map-outer-container\" ng-show=\"showMap\">\n" +

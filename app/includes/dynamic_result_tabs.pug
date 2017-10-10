@@ -69,7 +69,7 @@ uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
         li(ng-repeat='row in tables.positive | orderBy:resultOrder:true', ng-click="rowClick(row, 1)")
           .meter(meter='row', max='max', stringify='stringify')
 
-uib-tab(ng-repeat="promise in mapTabs", new-map-ctrl)
+uib-tab(ng-repeat="promise in mapTabs", new-map-ctrl, select="onentry()")
   uib-tab-heading.map_tab(ng-class='{loading : loading}')
     | {{ 'map' | loc:lang}}
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();mapTabs.splice($index, 1)')

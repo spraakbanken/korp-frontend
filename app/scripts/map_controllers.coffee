@@ -120,6 +120,10 @@ korpApp.directive "mapCtrl", () ->
 korpApp.directive "newMapCtrl", ($timeout, searches) ->
     controller: ($scope, $rootScope) ->
         s = $scope
+
+        s.onentry = () ->
+            s.$broadcast("update_map")
+
         s.loading = true
         s.newDynamicTab()
         s.center = settings.mapCenter
