@@ -341,7 +341,7 @@ class view.KWICResults extends BaseResults
             querydata : @proxy.queryData if @proxy.queryData
             context : context
             defaultcontext : preferredContext
-            incremental: !isPaging and $.support.ajaxProgress
+            incremental: true
         }
 
         _.extend opts.ajaxParams, getSortParams()
@@ -362,7 +362,7 @@ class view.KWICResults extends BaseResults
             @ignoreAbort = false
 
         params = @buildQueryOptions(cqp, isPaging)
-        progressCallback = if ((not params.ajaxParams.incremental)) then $.noop else $.proxy(@onProgress, this)
+        progressCallback = $.proxy(@onProgress, this)
 
         req = @getProxy().makeRequest params,
                             page,
@@ -495,7 +495,7 @@ class view.ExampleResults extends view.KWICResults
         opts = @s.$parent.kwicTab.queryParams
 
         @resetView()
-        opts.ajaxParams.incremental = false
+        opts.ajaxParams.incremental = true
 
         opts.ajaxParams.start = (@current_page - 1) * items_per_page
         opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page - 1)

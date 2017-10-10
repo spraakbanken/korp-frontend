@@ -169,7 +169,7 @@ class model.LemgramProxy extends BaseProxy
             command: "relations"
             word: word
             corpus: settings.corpusListing.stringifySelected()
-            incremental: $.support.ajaxProgress
+            incremental: true
             type: type
             max : 1000
         @prevParams = params
@@ -288,7 +288,7 @@ class model.StatsProxy extends BaseProxy
             groupby: reduceVals.join ','
             cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
-            incremental: $.support.ajaxProgress
+            incremental: true
         _.extend parameters, settings.corpusListing.getWithinParameters()
         if ignoreCase
             _.extend parameters, {ignore_case: "word"}
@@ -501,7 +501,7 @@ class model.GraphProxy extends BaseProxy
             cqp : @expandCQP cqp
             corpus : corpora
             granularity : @granularity
-            incremental: $.support.ajaxProgress
+            incremental: true
 
         if from
             params.from = from
