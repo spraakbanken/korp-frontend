@@ -514,7 +514,7 @@ korpApp.directive "kwicPager", () ->
          ng-model="pageObj.pager"
          ng-click="pageChange($event, pageObj.pager)"
          max-size="15"
-         items-per-page="::hitsPerPage"
+         items-per-page="pagerHitsPerPage"
          previous-text="‹" next-text="›" first-text="«" last-text="»"
          boundary-links="true"
          rotate="false"

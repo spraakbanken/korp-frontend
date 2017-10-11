@@ -176,9 +176,11 @@ class KwicCtrl
         s.kwic = []
         s.contextKwic = []
         s.setContextData = (data) ->
+            s.pagerHitsPerPage = s.hitsPerPage
             s.contextKwic = massageData data.kwic
 
         s.setKwicData = (data) ->
+            s.pagerHitsPerPage = s.hitsPerPage
             s.kwic = massageData(data.kwic)
 
         c.log "selectionManager"
