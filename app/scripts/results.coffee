@@ -21,7 +21,10 @@ class BaseResults
         @proxy.abort()
 
     getResultTabs : () ->
-        $(".result_tabs > ul").scope().tabs
+        $(".result_tabs > ul").scope().tabset.tabs
+
+    getActiveResultTab: () ->
+        $(".result_tabs").scope().activeTab
 
     renderResult: (data) ->
         @$result.find(".error_msg").remove()
@@ -65,13 +68,13 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
-            if @isActive()
-                @s.$root.jsonUrl = @proxy?.prevUrl
+            @s.$root.jsonUrl = @proxy?.prevUrl
+
     onexit : () ->
         @s.$root.jsonUrl = null
 
     isActive : () ->
-        !!@getResultTabs()[@tabindex]?.active
+        return @getActiveResultTab() is @tabindex
 
 
 class view.KWICResults extends BaseResults
@@ -88,7 +91,8 @@ class view.KWICResults extends BaseResults
 
         @selectionManager = scope.selectionManager
         @setupReadingHash()
-        @$result.click =>
+        @$result.click (event) =>
+            return if event.target.id in ["kwicDownloadLink", "frontendDownloadLinks"]
             return unless @selectionManager.hasSelected()
             @selectionManager.deselect()
             safeApply @s.$root, (s) ->
@@ -110,7 +114,7 @@ class view.KWICResults extends BaseResults
         event.stopPropagation()
         word = $(event.target)
 
-        if $("#sidebar").data()["korp-sidebar"]
+        if $("#sidebar").data()["korpSidebar"]
             $("#sidebar").sidebar "updateContent", sent.structs, obj, sent.corpus.toLowerCase(), sent.tokens
 
         @selectWord word, scope, sent
@@ -327,14 +331,17 @@ class view.KWICResults extends BaseResults
 
         context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
 
+        if not isPaging
+            @proxy.queryData = null
+
         opts.ajaxParams = {
             command : "query"
             corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
-            queryData : @proxy.queryData if @proxy.queryData
+            querydata : @proxy.queryData if @proxy.queryData
             context : context
             defaultcontext : preferredContext
-            incremental: !isPaging and $.support.ajaxProgress
+            incremental: true
         }
 
         _.extend opts.ajaxParams, getSortParams()
@@ -355,14 +362,14 @@ class view.KWICResults extends BaseResults
             @ignoreAbort = false
 
         params = @buildQueryOptions(cqp, isPaging)
-        progressCallback = if ((not params.ajaxParams.incremental)) then $.noop else $.proxy(@onProgress, this)
+        progressCallback = $.proxy(@onProgress, this)
 
         req = @getProxy().makeRequest params,
                             page,
                             progressCallback,
                             (data) =>
                                 @renderResult data
-        req.success (data) =>
+        req.done (data) =>
             @hidePreloader()
             @renderCompleteResult(data)
         req.fail (jqXHR, status, errorThrown) =>
@@ -488,7 +495,7 @@ class view.ExampleResults extends view.KWICResults
         opts = @s.$parent.kwicTab.queryParams
 
         @resetView()
-        opts.ajaxParams.incremental = false
+        opts.ajaxParams.incremental = true
 
         opts.ajaxParams.start = (@current_page - 1) * items_per_page
         opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page - 1)
@@ -557,7 +564,7 @@ class view.LemgramResults extends BaseResults
         def = @proxy.makeRequest word, type, (args...) =>
             @onProgress args...
 
-        def.success (data) =>
+        def.done (data) =>
             safeApply @s, () =>
                 @renderResult(data, word)
         def.fail (jqXHR, status, errorThrown) =>
@@ -789,7 +796,7 @@ class view.StatsResults extends BaseResults
         selVal = $("#kindOfData option:selected").val()
         selType = $("#kindOfFormat option:selected").val()
         dataDelimiter = ";"
-        dataDelimiter = "%09" if selType is "tsv"
+        dataDelimiter = "	" if selType is "tsv"
         cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
 
         header = [

@@ -1,12 +1,12 @@
 {
   "name": "comma-separated-values",
   "main": "csv.js",
-  "version": "3.2.0",
+  "version": "3.6.4",
   "homepage": "https://github.com/knrz/CSV.js",
   "authors": [
     "Kash Nouroozi <hi@knrz.co>"
   ],
-  "description": "Simple CSV parsing and encoding. Full RFC 4180 compliance.",
+  "description": "Simple, blazing-fast CSV parsing/encoding in JavaScript. Full RFC 4180 compliance.",
   "moduleType": [
     "amd",
     "globals",
@@ -30,13 +30,13 @@
     "test",
     "tests"
   ],
-  "_release": "3.2.0",
+  "_release": "3.6.4",
   "_resolution": {
     "type": "version",
-    "tag": "3.2.0",
-    "commit": "713ba5404c316ffb3f3f40e23287384bc02d03bc"
+    "tag": "3.6.4",
+    "commit": "87b960367105b4a7db9921d6eeaa78df7eaebc03"
   },
-  "_source": "git://github.com/knrz/CSV.js.git",
-  "_target": "~3.2.0",
+  "_source": "https://github.com/knrz/CSV.js.git",
+  "_target": "3.6.x",
   "_originalSource": "comma-separated-values"
 }

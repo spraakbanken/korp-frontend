@@ -1,12 +1,5 @@
 window.korpApp = angular.module 'korpApp', [
-                                            'ui.bootstrap',
-                                            "uib/template/tabs/tabset.html"
-                                            "uib/template/tabs/tab.html"
-                                            "uib/template/modal/backdrop.html"
-                                            "uib/template/modal/window.html"
-                                            "uib/template/typeahead/typeahead-match.html",
-                                            "uib/template/typeahead/typeahead-popup.html"
-                                            "uib/template/pagination/pagination.html"
+                                            "ui.bootstrap"
                                             "angularSpinner"
                                             "ui.sortable"
                                             "newsdesk"
@@ -14,7 +7,6 @@ window.korpApp = angular.module 'korpApp', [
                                             "tmh.dynamicLocale"
                                             "angular.filter"
                                         ]
-
 
 # This is due to angular-leaflet-directive logging, move to geokorp-component?
 korpApp.config ($logProvider) ->
@@ -26,6 +18,14 @@ korpApp.config (tmhDynamicLocaleProvider) ->
 korpApp.config ($uibTooltipProvider) ->
     $uibTooltipProvider.options
         appendToBody: true
+
+korpApp.config ['$locationProvider', ($locationProvider) ->
+  $locationProvider.hashPrefix ''
+]
+
+korpApp.config ['$compileProvider', ($compileProvider) ->
+    $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|ftp|mailto|tel|file|blob):/
+]
 
 korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout, $q) ->
     s = $rootScope
@@ -44,7 +44,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
         $location.search arguments...
 
     s.searchtabs = () ->
-        $(".search_tabs > ul").scope().tabs
+        $(".search_tabs > ul").scope().tabset.tabs
 
     tmhDynamicLocale.set("en")
 

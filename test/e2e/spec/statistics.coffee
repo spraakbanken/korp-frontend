@@ -10,7 +10,7 @@ describe "stats table", () ->
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then () ->
 
             rows = element.all (By.css '.slick-row')
-            browser.sleep 500
+            browser.sleep 1000
             expect(rows.count()).toBe 10
             
             # expect a column for hit, total, suc2, suc3
@@ -24,7 +24,7 @@ describe "stats table", () ->
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then () ->
             rows = element.all (By.css '.slick-row')
 
-            browser.sleep 500
+            browser.sleep 1000
 
             # total row
             rows.get(0).getText().then (text) ->
@@ -36,7 +36,7 @@ describe "stats table", () ->
 
     it "should work to open arc diagram with the correct result", () ->
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2&stats_reduce=lemma").then () ->
-            browser.sleep 500
+            browser.sleep 1000
             arcDiagramButtons = element.all (By.css '.slick-row .arcDiagramPicture')
             expect(arcDiagramButtons.count()).toBe 3
 

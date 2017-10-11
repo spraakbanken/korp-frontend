@@ -1,7 +1,4 @@
-/* lemma => grundform, base form
- * lexem => lemgram, lemgram
- *
- */
+
 var settings = {};
 
 var isLab = window.isLab || false;
@@ -11,6 +8,8 @@ settings.enableMap = !isLab;
 settings.mapPosTag = ["PM", "NNP", "NNPS"]
 settings.newMapEnabled = isLab;
 settings.hitsPerPageDefault = 25
+settings.enableBackendKwicDownload = false
+settings.enableFrontendKwicDownload = true
 
 settings.languages = ["sv", "en"];
 settings.defaultLanguage = "sv";
@@ -120,84 +119,9 @@ settings.modeConfig = [
         mode: "default"
     },
     {
-        localekey: "swedish_texts",
-        mode: "swedish",
-        labOnly: true
-    },
-    {
         localekey: "parallel_texts",
         mode: "parallel"
-    },
-    {
-        localekey: "old_swedish_texts",
-        mode: "old_swedish"
-    },
-    {
-        localekey: "lb_texts",
-        mode: "lb"
-    },
-    {
-        localekey: "kubhist",
-        mode: "kubhist"
-    },
-    {
-        localekey: "all_hist",
-        mode: "all_hist",
-    },
-    {
-        localekey: "spf_texts",
-        mode: "spf"
-    },
-    {
-        localekey: "fisk1800_texts",
-        mode: "fisk1800"
-    },
-    {
-        localekey: "faroese_texts",
-        mode: "faroe"
-    },
-    {
-        localekey: "siberian_texts",
-        mode: "siberian_german",
-    },
-    {
-        localekey: "kioping_texts",
-        mode: "kioping_books",
-    },
-    {
-        localekey: "runeberg",
-        mode: "runeberg",
-    },
-
-    {
-        localekey: "bible_texts",
-        mode: "bible",
-    },
-    {
-        localekey: "lawroom",
-        mode: "law",
-    },
-    {
-        localekey: "spanish_texts",
-        mode: "spanish",
-    },
-    {
-        localekey: "interfra",
-        mode: "interfra"
-    },
-    {
-        localekey: "bellman",
-        mode: "bellman"
-    },
-    {
-        localekey: "eddan",
-        mode: "eddan"
-    },
-    {
-        localekey: "somali",
-        mode: "somali",
     }
-
 ];
 
 settings.primaryColor = "rgb(221, 233, 255)";

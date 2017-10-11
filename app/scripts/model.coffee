@@ -70,14 +70,15 @@ class BaseProxy
 
         stats = (@progress / @total) * 100
         if not @total? and struct.progress_corpora?.length
-            @total = $.reduce($.map(struct["progress_corpora"], (corpus) ->
+            tmp = $.map struct["progress_corpora"], (corpus) ->
                 return if not corpus.length
+                
                 _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
                     a + b
                 , 0)
-            ), (val1, val2) ->
+            @total = _.reduce(tmp, (val1, val2) ->
                 val1 + val2
             , 0)
         @prev = e.target.responseText
@@ -101,12 +102,7 @@ class model.KWICProxy extends BaseProxy
         super()
         kwicCallback = kwicCallback or $.proxy(kwicResults.renderResult, kwicResults)
         self.progress = 0
-
-
-        o = $.extend(
-            queryData: null
-
-            progress: (data, e) ->
+        progressObj = progress: (data, e) ->
                 progressObj = self.calcProgress(e)
                 return unless progressObj?
 
@@ -115,7 +111,6 @@ class model.KWICProxy extends BaseProxy
                     c.log "found kwic!"
                     @foundKwic = true
                     kwicCallback progressObj["struct"]
-        , options)
 
         unless options.ajaxParams.within
             _.extend options.ajaxParams, settings.corpusListing.getWithinParameters()
@@ -126,20 +121,19 @@ class model.KWICProxy extends BaseProxy
             show: []
             show_struct: []
 
-        $.extend data, kwicResults.getPageInterval(page), o.ajaxParams
+        $.extend data, kwicResults.getPageInterval(page), options.ajaxParams
         for corpus in settings.corpusListing.selected
             for key, val of corpus.within
                 data.show.push _.last key.split(" ")
             for key, val of corpus.attributes
                 data.show.push key
 
-
             if corpus.structAttributes?
                 $.each corpus.structAttributes, (key, val) ->
                     data.show_struct.push key if $.inArray(key, data.show_struct) is -1
 
         if data.cqp
-            data.cqp = @expandCQP(data.cqp)
+            data.cqp = @expandCQP data.cqp
         @prevCQP = data.cqp
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show
@@ -158,7 +152,7 @@ class model.KWICProxy extends BaseProxy
                 self.queryData = data.querydata
                 kwicCallback data if data.incremental is false or not @foundKwic
 
-            progress: o.progress
+            progress: progressObj.progress
         )
         @pendingRequests.push def
         return def
@@ -175,7 +169,7 @@ class model.LemgramProxy extends BaseProxy
             command: "relations"
             word: word
             corpus: settings.corpusListing.stringifySelected()
-            incremental: $.support.ajaxProgress
+            incremental: true
             type: type
             max : 1000
         @prevParams = params
@@ -294,7 +288,7 @@ class model.StatsProxy extends BaseProxy
             groupby: reduceVals.join ','
             cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
-            incremental: $.support.ajaxProgress
+            incremental: true
         _.extend parameters, settings.corpusListing.getWithinParameters()
         if ignoreCase
             _.extend parameters, {ignore_case: "word"}
@@ -507,7 +501,7 @@ class model.GraphProxy extends BaseProxy
             cqp : @expandCQP cqp
             corpus : corpora
             granularity : @granularity
-            incremental: $.support.ajaxProgress
+            incremental: true
 
         if from
             params.from = from

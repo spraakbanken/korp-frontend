@@ -2,7 +2,6 @@ korpApp = angular.module("korpApp")
 
 korpApp.controller "resultContainerCtrl", ($scope, searches, $location) ->
     $scope.searches = searches
-    $scope.enableMap = settings.enableMap
 
 
 class KwicCtrl
@@ -23,14 +22,12 @@ class KwicCtrl
         @scope.page = @scope.pageObj.pager - 1
 
 
-    @$inject: ['$scope', "utils", "$location"]
-    constructor: (@scope, @utils, @location) ->
+    @$inject: ['$scope', "$timeout", "utils", "$location", "kwicDownload"]
+    constructor: (@scope, @timeout, @utils, @location, @kwicDownload) ->
         s = @scope
         $scope = @scope
         c.log "kwicCtrl init", $scope.$parent
         $location = @location
-
-        s.active = true
 
         s.onexit = () ->
             c.log "onexit"
@@ -179,9 +176,11 @@ class KwicCtrl
         s.kwic = []
         s.contextKwic = []
         s.setContextData = (data) ->
+            s.pagerHitsPerPage = s.hitsPerPage
             s.contextKwic = massageData data.kwic
 
         s.setKwicData = (data) ->
+            s.pagerHitsPerPage = s.hitsPerPage
             s.kwic = massageData(data.kwic)
 
         c.log "selectionManager"
@@ -205,15 +204,40 @@ class KwicCtrl
         s.$watch (() -> $location.search().hpp), (hpp) ->
             s.hitsPerPage = hpp or 25
 
+        s.download = 
+            options: [
+                    {value: "", label: "download_kwic"},
+                    {value: "kwic/csv", label: "download_kwic_csv"},
+                    {value: "kwic/tsv", label: "download_kwic_tsv"},
+                    {value: "annotations/csv", label: "download_annotations_csv"},
+                    {value: "annotations/tsv", label: "download_annotations_tsv"},
+                ]
+            selected: ""
+            init: (value, hitsDisplay) =>
+                if s.download.blobName
+                    URL.revokeObjectURL s.download.blobName
+                if value == ""
+                    return
+                requestData = s.instance.getProxy().prevParams
+                [fileName, blobName] = @kwicDownload.makeDownload value.split("/")..., s.kwic, requestData, hitsDisplay
+                s.download.fileName = fileName
+                s.download.blobName = blobName
+                s.download.selected = ""
+                @timeout (() -> 
+                        angular.element("#kwicDownloadLink")[0].click()
+                    ), 0
+
 korpApp.directive "kwicCtrl", () ->
     controller: KwicCtrl
 
 class ExampleCtrl extends KwicCtrl
-    @$inject: ['$scope', "utils", "$location"]
-    constructor: (@scope, utils, $location) ->
-      
-        super(@scope, utils, $location)
+
+    @$inject: ['$scope', "$timeout", "utils", "$location", "kwicDownload"]
+    constructor: (@scope, $timeout, utils, $location, @kwicDownload) ->
+        super(@scope, $timeout, utils, $location, @kwicDownload)
         s = @scope
+
+        s.newDynamicTab()
 
         s.hitspictureClick = (pageNumber) ->
             s.page = Number(pageNumber)
@@ -251,6 +275,8 @@ korpApp.directive "exampleCtrl", () ->
 korpApp.directive "statsResultCtrl", () ->
     controller: ($scope, utils, $location, backend, searches, $rootScope) ->
         s = $scope
+        s.loading = false
+        s.progress = 0
 
         s.$watch (() -> $location.search().hide_stats), (val) ->
             s.showStatistics = not val?
@@ -315,6 +341,8 @@ korpApp.directive "statsResultCtrl", () ->
 
 korpApp.directive "wordpicCtrl", () ->
     controller: ($scope, $rootScope, $location, utils, searches) ->
+        $scope.loading = false
+        $scope.progress = 0
         $scope.word_pic = $location.search().word_pic?
         $scope.$watch (() -> $location.search().word_pic), (val) ->
             $scope.word_pic = Boolean(val)
@@ -453,7 +481,7 @@ korpApp.directive "wordpicCtrl", () ->
 korpApp.directive "graphCtrl", () ->
     controller: ($scope) ->
         s = $scope
-        s.active = true
+        s.newDynamicTab()
 
         s.mode = "line"
 
@@ -465,8 +493,7 @@ korpApp.directive "compareCtrl", () ->
     controller: ($scope, $rootScope) ->
         s = $scope
         s.loading = true
-        s.active = true
-
+        s.newDynamicTab()
 
         s.resultOrder = (item) ->
             return Math.abs item.loglike

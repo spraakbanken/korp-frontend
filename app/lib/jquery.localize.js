@@ -67,8 +67,6 @@
 				elem.attr("label", value);
 			} else if(elem.is("button")) {
 				elem.attr("title", value);
-			} else if(elem.is(".num_hits")) {
-				elem.find(":selected").text(value + ": " + elem.find(":selected").val());
 			} else if (elem.is('a') && elem.attr('title') && ! elem.text()) {
 			    elem.attr('title', value);
 			}

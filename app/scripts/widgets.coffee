@@ -36,7 +36,7 @@ Sidebar =
         $("<span class='link show_deptree'></button>").localeKey("show_deptree").click( ->
             outerW = $(window).width() - 80
             info = $("<span class='info' />")
-            iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).load ->
+            iframe = $('<iframe src="lib/deptrees/deptrees.html"></iframe>').css("width", outerW - 40).on "load", ->
 
                 wnd = this.contentWindow
                 tokens = tokens

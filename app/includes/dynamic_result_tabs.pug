@@ -1,11 +1,11 @@
-uib-tab(active="active", example-ctrl, ng-repeat='kwicTab in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
+uib-tab(example-ctrl, ng-repeat='kwicTab in kwicTabs', select="instance.onentry()", deselect="instance.onexit()")
   uib-tab-heading(ng-class="{not_loading: progress == 100, loading : !instance.hasData}")
     | KWIC
 
     span(ng-click='$event.preventDefault();kwicTabs.splice($index, 1)', tab-spinner='tab-spinner')
   .results-kwic(ng-class="{reading_mode : exampleReadingMode, not_loading: !loading, loading : loading}", constr='ExampleResults' )
     include kwicresult
-uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
+uib-tab(ng-repeat='data in graphTabs', graph-ctrl)
   uib-tab-heading(ng-class="{not_loading: progress > 99}")
     | {{'graph' | loc:lang}}
     .tab_progress(style="width:{{progress || 0}}%", ng-show="loading")
@@ -13,22 +13,11 @@ uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
   div.graph_tab(constr='GraphResults')
     .graph_header
       .controls()
-        //- .form_switch
-        //-   input#line_input(type='radio', name='form_switch', value='line', checked='checked')
-        //-   label(for='line_input') Linje
-        //-   input#bar_input(type='radio', name='form_switch', value='bar')
-        //-   label(for="bar_input") Stapel
-        //-   input#table_input(type='radio', name='form_switch', value='table')
-        //-   label(for="table_input") Tabell
-
-
         .btn-group.form_switch
           label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'line'") {{'line' | loc:lang}}
           label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'bar'") {{'bar' | loc:lang}}
           label.btn.btn-default.btn-sm(ng-model="$parent.mode", uib-btn-radio="'table'") {{'table' | loc:lang}}
 
-        //- label.smoothing_label(for='smoothing_switch') Utjämna
-        //- input#smoothing_switch.smoothing_switch(type='checkbox')
         .non_time_div
           span(rel='localize[non_time_before]')
           span.non_time
@@ -40,8 +29,6 @@ uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
           span.label 
             em {{'graph_material' | loc:lang}} 
       div(style='clear: both;')
-      //- .drawing(ng-show="loading")
-      //-   | {{'drawing' | loc}}
     .chart_container
       .preloader(ng-class="{loading: loading}")
         i.fa.fa-spinner.fa-spin.fa-5x
@@ -56,7 +43,7 @@ uib-tab(active="active", ng-repeat='data in graphTabs', graph-ctrl)
         option(value='CSV', rel='localize[statstable_exp_csv]') CSV (kommaseparerade värden)
         option(value='TSV', rel='localize[statstable_exp_tsv]') TSV (tabseparerade värden)
       a.export.btn.btn-default.btn-sm {{'statstable_export' | loc:lang}}
-uib-tab(active="active", ng-repeat='promise in compareTabs', compare-ctrl)
+uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
   uib-tab-heading.compare_tab(ng-class='{loading : loading}')
     | {{'compare_vb' | loc:lang}}
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
@@ -82,7 +69,7 @@ uib-tab(active="active", ng-repeat='promise in compareTabs', compare-ctrl)
         li(ng-repeat='row in tables.positive | orderBy:resultOrder:true', ng-click="rowClick(row, 1)")
           .meter(meter='row', max='max', stringify='stringify')
 
-uib-tab(active="active", ng-repeat="promise in mapTabs", new-map-ctrl)
+uib-tab(ng-repeat="promise in mapTabs", new-map-ctrl, select="onentry()")
   uib-tab-heading.map_tab(ng-class='{loading : loading}')
     | {{ 'map' | loc:lang}}
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();mapTabs.splice($index, 1)')

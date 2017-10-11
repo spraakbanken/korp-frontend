@@ -74,7 +74,7 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
     # and flattens data structure?
     getData = () ->
         corpora = getSupportedCorpora()
-        structService.getStructValues(corpora, dataObj.selectedFilters).then (data) ->
+        structService.getStructValues(corpora, dataObj.selectedFilters, {}).then (data) ->
             currentData = {}
             for corpus in corpora
                 for k, v of data[corpus.toUpperCase()]
@@ -237,17 +237,19 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (corpora, attributes) ->
+    getStructValues: (corpora, attributes, { count, returnByCorpora }) ->
 
         def = $q.defer()
 
         structValue = attributes.join ">"
+        count ?= true
+        returnByCorpora ?= true
 
         params =
             command: "struct_values"
             corpus: corpora.join ","
             struct: structValue
-            count: true
+            count: count
 
         conf =
             url : settings.cgiScript
@@ -257,14 +259,20 @@ korpApp.factory "structService",  ($http, $q) ->
 
         _.extend conf.headers, model.getAuthorizationHeader()
 
-        $http(conf).success (data) ->
+        $http(conf).then ({ data }) ->
             if data.ERROR
                 def.reject()
                 return
-
-            result = {}
-            for corpora, values of data.corpora
-                result[corpora] = values[structValue]
-            def.resolve result
+            
+            if returnByCorpora
+                result = {}
+                for corpora, values of data.corpora
+                    result[corpora] = values[structValue]
+                def.resolve result
+            else
+                result = []
+                for corpora, values of data.corpora
+                    result = result.concat values[structValue]
+                def.resolve result
 
         return def.promise

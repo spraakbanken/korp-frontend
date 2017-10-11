@@ -269,7 +269,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 #languages {
   margin-top : -1px;
 }
-#languages, #cite {
+#languages, #login {
   float: right;
   margin-right: 8px;
 }
@@ -1055,6 +1055,10 @@ table {
 }
 
 #download-links {
+  float: right;
+}
+
+#frontendDownloadLinks {
   float: right;
 }
 
@@ -2283,9 +2287,6 @@ line.tick {
   border-radius: 2px 2px 2px 2px;
   color : #222222;
   padding : 3px;
-  .single {
-    margin-right : 1em;
-  }
   .tab-content {
     padding : 1em;
   }
@@ -2404,6 +2405,8 @@ line.tick {
 
 .tab_preloaders {
   display : inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
   .preloader_spinner {
     width : 9px;
     display : inline;
@@ -2418,7 +2421,9 @@ line.tick {
 }
 .tab_spinner {
   display : none;
-    width : 13px;
+  width : 13px;
+  margin-left: 10px;
+  vertical-align: middle;
 }
 .loading .tab_spinner {
   display : inline-block;
@@ -2809,4 +2814,13 @@ li.active a span .num-to-find {
 
 .input-error {
     border:red 2px solid;
+}
+
+// TODO we should not do this, update boostrap instead?
+.sr-only {
+    display: none;
+}
+
+.show-graph-btn.disabled {
+  pointer-events: auto;
 }

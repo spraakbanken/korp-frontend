@@ -24,106 +24,76 @@ korpApp.directive 'kwicWord', ->
 
 
 
-korpApp.directive "tabHash", (utils, $location) ->
+korpApp.directive "tabHash", (utils, $location, $timeout) ->
     link : (scope, elem, attr) ->
         s = scope
         contentScope = elem.find(".tab-content").scope()
 
-
         watchHash = () ->
             utils.setupHash s,[
-                expr : "getSelected()"
+                expr : "activeTab"
                 val_out : (val) ->
                     return val
                 val_in : (val) ->
                     s.setSelected parseInt(val)
-                    return parseInt(val)
+                    return s.activeTab
                 key : attr.tabHash
                 default : 0
             ]
 
-        init_tab = parseInt($location.search()[attr.tabHash]) or 0
+        s.setSelected = (index, ignoreCheck) ->
+            if not ignoreCheck and index not of s.fixedTabs
+                index = s.maxTab
 
+            s.activeTab = index
 
-        w = contentScope.$watch "tabs.length", (len) ->
-            if len
-                s.setSelected(init_tab)
-                watchHash()
-                w()
+        initTab = parseInt($location.search()[attr.tabHash]) or 0
+        $timeout (() ->
+            s.fixedTabs = {}
+            s.maxTab = -1
+            for tab in contentScope.tabset.tabs
+                s.fixedTabs[tab.index] = tab
+                if tab.index > s.maxTab
+                    s.maxTab = tab.index
+            s.setSelected(initTab)
+            watchHash()), 0
+            
+        s.newDynamicTab = () ->
+            $timeout (() -> s.setSelected(s.maxTab + 1, true)), 0
 
-        s.getSelected = () ->
-            out = null
-            for p, i in contentScope.tabs
-                out = i if p.active
-
-            unless out? then out = contentScope.tabs.length - 1
-            return out
-
-        s.setSelected = (index) ->
-            for t in contentScope.tabs
-                t.active = false
-                t.onDeselect?()
-            if contentScope.tabs[index]
-                contentScope.tabs[index].active = true
-            else
-                (_.last contentScope.tabs)?.active = true
 
 
 korpApp.directive "escaper", () ->
     link : ($scope, elem, attr) ->
-        doNotEscape = ["*=", "!*="]
-        escape = (val) ->
-            if $scope.orObj.op not in doNotEscape
-                regescape(val)
-            else
-                val
 
-        unescape = (val) ->
-            if $scope.orObj.op not in doNotEscape
-                unregescape(val)
-            else
-                val
+        if $scope.escape == false
+            escape = (val) ->
+                return val
+            unescape = (val) ->
+                return val
+        else
+            doNotEscape = ["*=", "!*="]
+            escape = (val) ->
+                if $scope.orObj.op not in doNotEscape
+                    regescape(val)
+                else
+                    val
+
+            unescape = (val) ->
+                if $scope.orObj.op not in doNotEscape
+                    unregescape(val)
+                else
+                    val
 
         $scope.input = unescape $scope.model
         $scope.$watch "input", () ->
-            $scope.model = escape($scope.input)
+            $scope.model = escape $scope.input
 
         $scope.$watch "orObj.op", () ->
-            $scope.model = escape($scope.input)
+            $scope.model = escape $scope.input
 
 
-korpApp.directive "tokenValue", ($compile, $controller) ->
-
-    getDefaultTmpl = _.template """
-                <input ng-model='input' class='arg_value' escaper ng-model-options='{debounce : {default : 300, blur : 0}, updateOn: "default blur"}'
-                <%= maybe_placeholder %>>
-                <span class='val_mod' popper
-                    ng-class='{sensitive : case == "sensitive", insensitive : case == "insensitive"}'>
-                        Aa
-                </span>
-                <ul class='mod_menu popper_menu dropdown-menu'>
-                    <li><a ng-click='makeSensitive()'>{{'case_sensitive' | loc:lang}}</a></li>
-                    <li><a ng-click='makeInsensitive()'>{{'case_insensitive' | loc:lang}}</a></li>
-                </ul>
-                """
-    defaultController = ["$scope", ($scope) ->
-        if $scope.orObj.flags?.c
-            $scope.case = "insensitive"
-        else
-            $scope.case = "sensitive"
-
-        $scope.makeSensitive = () ->
-            $scope.case = "sensitive"
-            delete $scope.orObj.flags?["c"]
-
-        $scope.makeInsensitive = () ->
-            flags = ($scope.orObj.flags or {})
-            flags["c"] = true
-            $scope.orObj.flags = flags
-
-            $scope.case = "insensitive"
-    ]
-
+korpApp.directive "tokenValue", ($compile, $controller, extendedComponents) ->
     scope :
         tokenValue : "="
         model : "=model"
@@ -156,17 +126,26 @@ korpApp.directive "tokenValue", ($compile, $controller) ->
 
             locals = {$scope : childScope}
             prevScope = childScope
-            $controller(valueObj.extendedController or defaultController, locals)
-
-            if valueObj.value == "word"
-                tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
+            if valueObj.extendedComponent
+                { template, controller } = extendedComponents[valueObj.extendedComponent]
             else
-                tmplObj = {maybe_placeholder : ""}
+                if valueObj.extendedController
+                    controller = valueObj.extendedController
+                else
+                    controller = extendedComponents.defaultController
+                if valueObj.extendedTemplate
+                    template = valueObj.extendedTemplate
+                else
+                    if valueObj.value == "word"
+                        tmplObj = {maybe_placeholder : """placeholder='<{{"any" | loc:lang}}>'"""}
+                    else
+                        tmplObj = {maybe_placeholder : ""}
 
-            defaultTmpl = getDefaultTmpl tmplObj
-            tmplElem = $compile(valueObj.extendedTemplate or defaultTmpl)(childScope)
-            elem.html(tmplElem).addClass("arg_value")
-
+                    template = extendedComponents.defaultTemplate tmplObj
+                    
+            $controller controller, locals
+            tmplElem = $compile(template) childScope
+            elem.html(tmplElem).addClass "arg_value"
 
 
 korpApp.directive "constr", ($window, searches) ->
@@ -246,7 +225,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
         s.popShow = () ->
             s.isPopoverVisible = true
-            popover.show("fade", "fast").focus().position
+            popover.fadeIn("fast").focus().position
                 my : my
                 at : at
                 of : elem.find(".opener")
@@ -257,7 +236,7 @@ korpApp.directive "searchSubmit", ($window, $document, $rootElement) ->
 
         s.popHide = () ->
             s.isPopoverVisible = false
-            popover.hide("fade", "fast")
+            popover.fadeOut("fast")
             $rootElement.off "keydown", onEscape
             $rootElement.off "click", s.popHide
             return
@@ -529,17 +508,17 @@ korpApp.directive "kwicPager", () ->
     scope: false
     template: """
     <div class="pager-wrapper" ng-show="gotFirstKwic && hits > 0" >
-      <uib-pagination
+      <ul uib-pagination
          total-items="hits"
          ng-if="gotFirstKwic"
          ng-model="pageObj.pager"
          ng-click="pageChange($event, pageObj.pager)"
          max-size="15"
-         items-per-page="::hitsPerPage"
+         items-per-page="pagerHitsPerPage"
          previous-text="‹" next-text="›" first-text="«" last-text="»"
          boundary-links="true"
          rotate="false"
-         num-pages="$parent.numPages"> </uib-pagination>
+         num-pages="$parent.numPages"> </ul>
       <div class="page_input"><span>{{'goto_page' | loc:lang}} </span>
         <input ng-model="gotoPage" ng-keyup="onPageInput($event, gotoPage, numPages)"
             ng-click="$event.stopPropagation()" />
@@ -611,7 +590,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                 })
 
         scope.lemgramify = (lemgram) ->
-            lemgramRegExp = /([^_\.-]*--)?([^-]*)\.\.(\w+)\.(\d\d?)/
+            lemgramRegExp = /([^_\.-]*--)?(.*)\.\.(\w+)\.(\d\d?)/
             match = lemgram.match lemgramRegExp
             unless match then return false
             return {
@@ -727,13 +706,13 @@ korpApp.directive "timeInterval", () ->
     restrict : "E"
     template : """
         <div>
-            <uib-datepicker class="well well-sm" ng-model="dateModel"
+            <div uib-datepicker class="well well-sm" ng-model="dateModel"
                 min-date="minDate" max-date="maxDate" init-date="minDate"
-                show-weeks="true" starting-day="1"></uib-datepicker>
+                show-weeks="true" starting-day="1"></div>
 
             <div class="time">
-                <i class="fa fa-3x fa-clock-o"></i><uib-timepicker class="timepicker" ng-model="timeModel"
-                    hour-step="1" minute-step="1" show-meridian="false"></uib-timepicker>
+                <i class="fa fa-3x fa-clock-o"></i><div uib-timepicker class="timepicker" ng-model="timeModel"
+                    hour-step="1" minute-step="1" show-meridian="false"></div>
             </div>
         </div>
         """

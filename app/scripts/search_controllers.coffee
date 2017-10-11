@@ -1,6 +1,6 @@
 korpApp = angular.module("korpApp")
 
-window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $location, utils, searches) ->
+window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($scope, $location, $filter, utils, searches) ->
     $scope.visibleTabs = [true, true, true, true]
     $scope.extendedTmpl = "views/extended_tmpl.html"
     # for parallel mode
@@ -75,6 +75,56 @@ window.SearchCtrl = ["$scope", "$location", "utils", "searches", ( ($scope, $loc
         else if insensitive
             $location.search 'stats_reduce_insensitive', null
     ), true
+
+    setupHitsPerPage = () ->
+        $scope.getHppFormat = (val) ->
+            if val == $scope.hitsPerPage
+                return $filter("loc")("hits_per_page", $scope.lang) + ": " + val
+            else
+                return val
+        
+        $scope.hitsPerPageValues = settings.hitsPerPageValues
+        $scope.hitsPerPage = $location.search().hpp or settings.hitsPerPageDefault
+        
+        $scope.$watch (() -> $location.search().hpp), (val) ->
+            $scope.hitsPerPage = val or settings.hitsPerPageDefault
+
+        $scope.$watch "hitsPerPage", (val) ->
+            if val == settings.hitsPerPageDefault
+                $location.search("hpp", null)
+            else
+                $location.search("hpp", val)
+
+    setupKwicSort = () ->
+        kwicSortValueMap =
+            "": "appearance_context"
+            "keyword": "word_context"
+            "left": "left_context"
+            "right": "right_context"
+            "random": "random_context"
+        $scope.kwicSortValues = _.keys kwicSortValueMap
+
+        $scope.getSortFormat = (val) ->
+            mappedVal = kwicSortValueMap[val]
+            if val == $scope.kwicSort
+                return $filter("loc")("sort_default", $scope.lang) + ": " + $filter("loc")(mappedVal, $scope.lang)
+            else
+                return $filter("loc")(mappedVal, $scope.lang)
+
+        $scope.kwicSort = $location.search().sort or ""
+        
+        $scope.$watch (() -> $location.search().sort), (val) ->
+            $scope.kwicSort = val or ""
+
+        $scope.$watch "kwicSort", (val) ->
+            if val == ""
+                $location.search("sort", null)
+            else
+                $location.search("sort", val)
+
+    setupHitsPerPage()
+    setupKwicSort()
+
 )]
 
 
@@ -155,7 +205,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     s.clickRelated = (wd, attribute) ->
         modalInstance?.close()
         c.log "modalInstance", modalInstance
-        $scope.$root.searchtabs()[1].select()
+        $scope.$root.searchtabs()[1].tab.select()
         if attribute is "saldo"
             cqp = "[saldo contains \"#{regescape(wd)}\"]"
         else

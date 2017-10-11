@@ -120,9 +120,12 @@ korpApp.directive "mapCtrl", () ->
 korpApp.directive "newMapCtrl", ($timeout, searches) ->
     controller: ($scope, $rootScope) ->
         s = $scope
-        s.loading = true
-        s.active = true
 
+        s.onentry = () ->
+            s.$broadcast("update_map")
+
+        s.loading = true
+        s.newDynamicTab()
         s.center = settings.mapCenter
         s.markers = {}
         s.selectedGroups = []
@@ -199,4 +202,7 @@ korpApp.directive "newMapCtrl", ($timeout, searches) ->
                     expand_prequeries : false
             }
             _.extend opts.ajaxParams, queryData.within
-            $rootScope.kwicTabs.push { readingMode: queryData.label == "paragraph__geocontext", queryParams: opts }
+            $timeout(() ->
+                $rootScope.kwicTabs.push { readingMode: queryData.label == "paragraph__geocontext", queryParams: opts }
+            , 0)
+            

@@ -1,4 +1,4 @@
-describe "map", () ->
+xdescribe "map", () ->
 
     it "should show the correct markers", () ->
         browser.get(browser.params.url + "#?lang=sv&cqp=%5B%5D&corpus=suc2&page=0&show_map&search=lemgram%7Cskog..nn.1&result_tab=1").then () ->
@@ -9,7 +9,7 @@ describe "map", () ->
         # TODO if we don't do two requests the wrong corpora might be selected sometimes??
         browser.get(browser.params.url + "#?lang=sv&cqp=%5B%5D&corpus=suc2&show_map&search=word%7Ctall&result_tab=1").then () ->
             browser.get(browser.params.url + "#?lang=sv&cqp=%5B%5D&corpus=suc2&show_map&search=word%7Ctall&result_tab=1").then () ->
-                browser.sleep 500
+                browser.sleep 1000
                 expect(getMapsHits()).toBe '0'
 
                 element.all(By.css ".angular-leaflet-map").then (items) ->
