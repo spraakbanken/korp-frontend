@@ -1,4 +1,4 @@
-describe "map", () ->
+xdescribe "map", () ->
 
     it "should show the correct markers", () ->
         browser.get(browser.params.url + "#?lang=sv&cqp=%5B%5D&corpus=suc2&page=0&show_map&search=lemgram%7Cskog..nn.1&result_tab=1").then () ->
