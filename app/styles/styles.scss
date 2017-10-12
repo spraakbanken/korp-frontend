@@ -2718,8 +2718,14 @@ li.active a span .num-to-find {
             padding: 2px 1px;
             white-space: nowrap;
         }
+        .checked {
+            color: white;
+        }
         .selected {
             background: #f2f7ff;
+            .checked {
+                color: black;
+            }
         }
     }
     .empty-attribute-list {
