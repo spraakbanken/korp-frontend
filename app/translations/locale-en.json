@@ -342,5 +342,7 @@
     "choose_lemgram": "Choose lemgram",
     "login_needed_for_corpora": "Login needed for access to",
     
-    "stats_warn": "Statistics is disabled"
+    "stats_warn": "Statistics is disabled",
+    
+    "read_in_strix": "Read this text in Strix"
 }

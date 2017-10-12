@@ -6,8 +6,16 @@ Sidebar =
         @element.html '<div id="selected_sentence" /><div id="selected_word" />'
         corpusObj = settings.corpora[corpus]
 
+        corpusInfo = $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>")
+        corpusInfo.prependTo "#selected_sentence"
 
-        $("<div />").html("<h4 rel='localize[corpus]'></h4> <p>#{corpusObj.title}</p>").prependTo "#selected_sentence"
+        if corpusObj["inStrix"]
+            sentenceID = sentenceData["sentence_id"]
+            if sentenceID
+                # TODO fix this so that strix uses correct corpus ids
+                strixCorpus = if corpus == "wikipedia-sv" then "wikipedia" else corpus
+                strixLinkText = "#{settings.strixUrl}?sentenceID=#{sentenceID}&documentCorpus=#{strixCorpus}"
+                $("<div class='strix-link'/>").html("<a target='_blank' href='#{strixLinkText}' rel='localize[read_in_strix]'></a>").prependTo corpusInfo
 
         customData = pos: [], struct: []
         unless $.isEmptyObject(corpusObj.customAttributes)
