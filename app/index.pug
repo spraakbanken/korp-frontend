@@ -90,7 +90,8 @@ html
                             h3.map-settings-title() Välj attribut
                             ul(ng-if="mapAttributes.length != 0")
                               li(ng-repeat="attr in mapAttributes", ng-class="attr.selected ? 'selected':''", ng-click="mapToggleSelected($index, $event)")
-                                span() {{attr.label | loc:lang}}
+                                span(class="checked") ✔
+                                span {{attr.label | loc:lang}}
                             span(ng-show="mapAttributes.length == 0", class="empty-attribute-list")
                               | {{ 'no_geo_info' | loc:lang}}
                             div.btn-container()
