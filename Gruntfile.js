@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     yeoman: {
-      app: require('./bower.json').appPath || 'app',
+      app: 'app',
       dist: 'dist',
       korpConfig: getKorpConfigDir()
     },
@@ -287,14 +287,14 @@ module.exports = function (grunt) {
         {
           expand: true,
           cwd: '<%= yeoman.app %>',
-          src: ['components/jquery-ui/themes/smoothness/images/*'],
+          src: ['components/components-jqueryui/themes/smoothness/images/*'],
           dest: '.tmp/images',
           flatten: true
         },
         {
           expand: true,
           cwd: '<%= yeoman.app %>',
-          src: ['components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          src: ['components/bootstrap-sass/assets/fonts/bootstrap/*'],
           dest: '.tmp/fonts/bootstrap',
           flatten: true
         }
@@ -313,7 +313,7 @@ module.exports = function (grunt) {
         {
           expand: true,
           cwd: '<%= yeoman.app %>',
-          src: ['components/bootstrap-sass-official/assets/fonts/bootstrap/*'],
+          src: ['components/bootstrap-sass/assets/fonts/bootstrap/*'],
           dest: '<%= yeoman.dist %>/fonts/bootstrap',
           flatten: true
         },
@@ -326,7 +326,7 @@ module.exports = function (grunt) {
             'scripts/statistics_worker.js',
             '*.{ico,txt,js,xml}',
             '.htaccess',
-            'components/jquery-ui/themes/smoothness/images/*',
+            'components/components-jqueryui/themes/smoothness/images/*',
             'components/SlickGrid/images/*',
             'translations/*',
             'img/*',
@@ -338,7 +338,7 @@ module.exports = function (grunt) {
             'components/rickshaw/rickshaw.min.js',
             'lib/jquery.tooltip.pack.js',
             'lib/leaflet-settings.js',
-            'components/jquery-ui/themes/smoothness/jquery-ui.min.css',
+            'components/components-jqueryui/themes/smoothness/jquery-ui.min.css',
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json',
             'components/leaflet/dist/images/layers.png',
@@ -359,7 +359,7 @@ module.exports = function (grunt) {
         {
           expand: true,
           cwd: '<%= yeoman.app %>',
-          src: ['components/jquery-ui/themes/smoothness/images/*'],
+          src: ['components/components-jqueryui/themes/smoothness/images/*'],
           dest: '<%= yeoman.dist %>/images',
           flatten: true
         },
@@ -377,10 +377,10 @@ module.exports = function (grunt) {
         singleRun: true,
         options: {
             files: [
-                'app/components/angular/angular.js',
-                'app/components/angular-mocks/angular-mocks.js',
-                'app/components/lodash/lodash.js',
-                'app/components/moment/moment.js',
+                'node_modules/angular/angular.js',
+                'node_modules/angular-mocks/angular-mocks.js',
+                'node_modules/lodash/dist/lodash.js',
+                'node_modules/moment/moment.js',
                 'app/scripts/bin/util.js',
                 '<%= yeoman.korpConfig %>/config.js',
                 '<%= yeoman.korpConfig %>/modes/common.js',
