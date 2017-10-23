@@ -1,7 +1,0 @@
-node_modules
-.tmp
-.sass-cache
-bower_components
-.idea
-.vscode
-app/data/sweden-latest.osm.pbf
