@@ -1,12 +1,56 @@
 korpApp = angular.module("korpApp")
 korpApp.factory "extendedComponents", () ->
-    selectTemplate = "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset' ></select>"
+    autocompleteTemplate = """
+        <div>
+            <input type="text"
+                   size="37"
+                   ng-model="input"
+                   escaper
+                   typeahead-min-length="0"
+                   typeahead-input-formatter="typeaheadInputFormatter($model)"
+                   uib-typeahead="tuple[0] as tuple[1] for tuple in getRows($viewValue)"></input>
+        </div>
+    """
+    selectTemplate = "<select ng-model='input' escaper ng-options='tuple[0] as tuple[1] for tuple in dataset'></select>"
     localize = ($scope) ->
         return (str) ->
             if not $scope.translationKey
                 return str
             else
                 return util.getLocaleString( ($scope.translationKey or "") + str)
+
+    selectController = (autocomplete) -> ["$scope", "$timeout", "structService", ($scope, $timeout, structService) ->
+        attribute = $scope.$parent.tokenValue.value
+        selectedCorpora = settings.corpusListing.getSelectedCorpora()
+
+        # check which corpora support attributes
+        corpora = []
+        for corpus in selectedCorpora
+            corpusSettings = settings.corpora[corpus]
+            if attribute of corpusSettings.structAttributes or (attribute of corpusSettings.attributes)
+                corpora.push corpus
+
+        $scope.loading = true
+        structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
+            $scope.loading = false
+            localizer = localize($scope)
+            dataset = _.map data, (item) -> return [item, localizer item]
+            $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
+            if not autocomplete
+                $scope.input = $scope.input or $scope.dataset[0][0]
+        , () ->
+            c.log "struct_values error"
+        )
+
+        $scope.getRows = (input) ->
+            if input
+                return _.filter $scope.dataset, (tuple) -> tuple[0].toLowerCase().indexOf(input.toLowerCase()) != -1
+            else
+                return $scope.dataset
+
+        $scope.typeaheadInputFormatter = (model) ->
+            return localize($scope) model
+    ]
 
     # Select-element. Use the following settings in the corpus:
     # - dataset: an object or an array of values
@@ -29,26 +73,15 @@ korpApp.factory "extendedComponents", () ->
     # - escape: boolean, will be used by the escaper-directive
     structServiceSelect:
         template: selectTemplate
-        controller: ["$scope", "$timeout", "structService", ($scope, $timeout, structService) ->
-            attribute = $scope.$parent.tokenValue.value
-            selectedCorpora = settings.corpusListing.getSelectedCorpora()
-            
-            # check which corpora support attributes
-            corpora = []
-            for corpus in selectedCorpora
-                corpusSettings = settings.corpora[corpus]
-                if attribute of corpusSettings.structAttributes or (attribute of corpusSettings.attributes)
-                    corpora.push corpus
+        controller: selectController false
 
-            structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
-                localizer = localize($scope)
-                dataset = _.map data, (item) -> return [item, localizer item]
-                $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
-                $scope.input = $scope.input or $scope.dataset[0][0]
-            , () ->
-                c.log "struct_values error"
-            )
-        ]
+    # Autocomplete. Gets values from "struct_values"-command. Use the following settings in the corpus:
+    # - translationKey: a key that will be prepended to the value for lookup in translation files
+    # - escape: boolean, will be used by the escaper-directive
+    structServiceAutocomplete:
+        template: autocompleteTemplate
+        controller: selectController true
+
 
     # puts the first values from a dataset paramater into model
     singleValue:
