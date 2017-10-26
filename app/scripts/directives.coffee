@@ -546,7 +546,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
             <script type="text/ng-template" id="lemgramautocomplete.html">
                 <a style="cursor:pointer">
                     <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
-                        <span ng-if="match.model.parts.namespace" class="label">{{match.model.parts.namespace | loc}}</span>
+                        <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
                         <span>{{match.model.parts.main}}</span>
                         <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                         <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
