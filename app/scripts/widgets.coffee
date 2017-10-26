@@ -123,7 +123,7 @@ Sidebar =
             return output.append(attrs.renderItem key, value, attrs, wordData, sentenceData, tokens)
 
         output.data("attrs", attrs)
-        if value == "|" or value == ""
+        if value == "|" or value == "" or value == null
             output.append "<i rel='localize[empty]' style='color : grey'>${util.getLocaleString('empty')}</i>"
             return output
 
