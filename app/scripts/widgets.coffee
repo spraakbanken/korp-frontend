@@ -174,7 +174,7 @@ Sidebar =
                 ul = $("<ul style='list-style:initial'>")
                 ul.append lis
 
-                if lis.length isnt 1
+                if lis.length isnt 1 and (not attrSettings.showAll)
 
                     _.map lis, (li, idx) -> if idx != 0 then li.css('display', 'none')
 

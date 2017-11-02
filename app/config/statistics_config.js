@@ -36,8 +36,15 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
         case "lex":
         case "lemma":
         case "sense":
+        case "text_blingbring":
+        case "text_swefn":
+            if (type == "text_blingbring" || "text_swefn") {
+                newType = "_." + type;
+            } else {
+                newType = type;
+            }
             if(tokens[0] == "|")
-                return "ambiguity(" + type + ") = 0";
+                return "ambiguity(" + newType + ") = 0";
             else
                 var res;
                 if(tokens.length > 1) {
@@ -63,7 +70,7 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
                 else {
                     res = tokens[0];
                 }
-                return type + " contains '" + res + "'";
+                return newType + " contains '" + res + "'";
         case "word":
             s = 'word="'+ regescape(tokens[0]) + '"';
             if(ignoreCase)
@@ -146,11 +153,15 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
         case "lex":
         case "lemma":
         case "sense":
+        case "text_blingbring":
+        case "text_swefn":
 
             if(type == "saldo" || type == "sense")
                 stringify = util.saldoToString
             else if(type == "lemma")
                 stringify = function(lemma) {return lemma.replace(/_/g, " ")}
+            else if(type == "text_swefn" || type == "text_blingbring")
+                stringify = function(str) { return str };
             else
                 stringify = util.lemgramToString
 

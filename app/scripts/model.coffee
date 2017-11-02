@@ -248,8 +248,9 @@ class model.StatsProxy extends BaseProxy
             fields = item.split("/")
             newFields = []
             for [reduceVal, field] in _.zip reduceVals, fields
-                if reduceVal in ["saldo", "prefix", "suffix", "lex", "lemma", "sense"]
+                if reduceVal in ["saldo", "prefix", "suffix", "lex", "lemma", "sense", "text_swefn", "text_blingbring"]
                     newFields.push field.replace(/(:.+?)($| )/g, "$2")
+                    
                 else
                     newFields.push field
             newFields.join("/")
@@ -313,8 +314,10 @@ class model.StatsProxy extends BaseProxy
 
         data = @makeParameters(reduceVals, cqp, ignoreCase)
 
+        wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
+        structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
         data.split = _.filter(reduceVals, (reduceVal) ->
-            settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.type == "set").join(',')
+            return wordAttrs[reduceVal]?.type == "set" or structAttrs[reduceVal]?.type == "set").join(',')
 
         rankedReduceVals = _.filter reduceVals, (reduceVal) ->
             settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.ranked
