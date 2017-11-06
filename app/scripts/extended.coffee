@@ -29,16 +29,15 @@ korpApp.factory "extendedComponents", () ->
     # - escape: boolean, will be used by the escaper-directive
     structServiceSelect:
         template: selectTemplate
-        controller: ["$scope", "$timeout", "structService", ($scope, $timeout, structService) ->
+        controller: ["$scope", "structService", ($scope, structService) ->
             attribute = $scope.$parent.tokenValue.value
-            selectedCorpora = settings.corpusListing.getSelectedCorpora()
+            selectedCorpora = settings.corpusListing.selected
             
             # check which corpora support attributes
             corpora = []
-            for corpus in selectedCorpora
-                corpusSettings = settings.corpora[corpus]
+            for corpusSettings in selectedCorpora
                 if attribute of corpusSettings.structAttributes or (attribute of corpusSettings.attributes)
-                    corpora.push corpus
+                    corpora.push corpusSettings.id
 
             structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
                 localizer = localize($scope)
