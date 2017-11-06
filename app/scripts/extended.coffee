@@ -19,16 +19,15 @@ korpApp.factory "extendedComponents", () ->
             else
                 return util.getLocaleString( ($scope.translationKey or "") + str)
 
-    selectController = (autocomplete) -> ["$scope", "$timeout", "structService", ($scope, $timeout, structService) ->
+    selectController = (autocomplete) -> ["$scope", "structService", ($scope, structService) ->
         attribute = $scope.$parent.tokenValue.value
-        selectedCorpora = settings.corpusListing.getSelectedCorpora()
+        selectedCorpora = settings.corpusListing.selected
 
         # check which corpora support attributes
         corpora = []
-        for corpus in selectedCorpora
-            corpusSettings = settings.corpora[corpus]
+        for corpusSettings in selectedCorpora
             if attribute of corpusSettings.structAttributes or (attribute of corpusSettings.attributes)
-                corpora.push corpus
+                corpora.push corpusSettings.id
 
         $scope.loading = true
         structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
