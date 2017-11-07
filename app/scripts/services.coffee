@@ -361,7 +361,7 @@ korpApp.service "compareSearches",
 
 
 korpApp.factory "lexicons", ($q, $http) ->
-    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v3"
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
     getLemgrams: (wf, resources, corporaIDs) ->
         deferred = $q.defer()
 
