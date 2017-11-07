@@ -342,5 +342,6 @@
     
     "stats_warn": "Statistiken är avaktiverad",
     
-    "read_in_strix": "Läs texten i Strix"
+    "read_in_strix": "Läs texten i Strix",
+    "add_token": "Lägg till token"
 }

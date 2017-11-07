@@ -593,6 +593,15 @@ table {
   position: relative;
   top: 54px;
   margin-left: 10px;
+  font-weight: bold;
+  color: #555;
+  &:hover {
+    color: #333;
+  }
+  .plus-btn {
+      position: relative;
+      top: 3px;
+  }
 }
 
 .query_token {
@@ -627,8 +636,8 @@ table {
   }
 
   .insert_arg {
-    margin-top: 4px;
     float: left;
+    height: 20px;
   }
 
   .arg_selects.date_interval .arg_opts {
@@ -689,16 +698,16 @@ table {
   }
   .token_footer {
     font-size: .8em;
-    button {
-      width: 20px;
-      height: 20px;
-      float: right;
-      i {
-        position: relative;
-        top: 0px;
-        left: -2px;
-        font-size: 14px;
-      }
+  }
+  .token-cog-btn {
+    width: 20px;
+    height: 20px;
+    float: right;
+    i {
+      position: relative;
+      top: 0px;
+      left: -2px;
+      font-size: 14px;
     }
   }
 

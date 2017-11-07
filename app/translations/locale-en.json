@@ -344,5 +344,6 @@
     
     "stats_warn": "Statistics is disabled",
     
-    "read_in_strix": "Read this text in Strix"
+    "read_in_strix": "Read this text in Strix",
+    "add_token": "Add token"
 }
