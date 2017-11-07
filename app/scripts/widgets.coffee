@@ -152,13 +152,13 @@ Sidebar =
                                 locationSearch({"search": "cqp", "cqp": cqpExpr, "page": null})
                         if attrs.externalSearch
                             address = _.template(attrs.externalSearch, {val : subValue})
-                            karpLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
+                            externalLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
 
                         li.append inner
                         if attrSettings.joinValues and idx isnt subValues.length - 1
                             li.append attrSettings.joinValues
-                    if karpLink
-                        li.append karpLink
+                    if externalLink
+                        li.append externalLink
                     lis.push li
             else
                 lis = []
