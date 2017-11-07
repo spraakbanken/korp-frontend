@@ -38,7 +38,7 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
         case "sense":
         case "text_blingbring":
         case "text_swefn":
-            if (type == "text_blingbring" || "text_swefn") {
+            if (type == "text_blingbring" || type == "text_swefn") {
                 newType = "_." + type;
             } else {
                 newType = type;
