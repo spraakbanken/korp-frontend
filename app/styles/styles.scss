@@ -2838,3 +2838,12 @@ li.active a span .num-to-find {
 .lemgram-namespace {
     color: #777777;
 }
+
+.logos {
+    position: absolute;
+    right: 150px;
+    img {
+        padding:5px;
+        height: 68px;
+    }
+}
