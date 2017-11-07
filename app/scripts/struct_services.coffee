@@ -252,10 +252,10 @@ korpApp.factory "structService",  ($http, $q) ->
             count: count
 
         conf =
-            url : settings.cgiScript
-            params : params
-            method : "GET"
-            headers : {}
+            url: settings.korpBackendURL
+            params: params
+            method: "GET"
+            headers: {}
 
         _.extend conf.headers, model.getAuthorizationHeader()
 

@@ -147,7 +147,7 @@ settings.defaultOptions = {
     "matches_not": "!*=",
 }
 
-settings.cgiScript = "https://ws.spraakbanken.gu.se/ws/korp";
+settings.korpBackendURL = "https://ws.spraakbanken.gu.se/ws/korp";
 settings.downloadCgiScript = "https://ws.spraakbanken.gu.se/ws/korp/download";
 
 settings.mapCenter = {
