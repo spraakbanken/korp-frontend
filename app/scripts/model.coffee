@@ -360,20 +360,49 @@ class model.StatsProxy extends BaseProxy
     valueFormatter: (row, cell, value, columnDef, dataContext) ->
         return dataContext[columnDef.id + "_display"]
 
-class model.NameProxy extends model.StatsProxy
+class model.NameProxy extends BaseProxy
     constructor: ->
         super()
 
-    makeParameters: (reduceVal, cqp) ->
-        # ignore reduceVal, map only works for word
-        parameters = super(["word"], cqp, false)
+    makeRequest: (cqp, callback) ->
+        self = this
+        super()
+        
         posTags = for posTag in settings.mapPosTag
             "pos='#{posTag}'"
-        parameters.cqp2  = "[" + posTags.join(" | ") + "]"
-        return parameters
 
-    processData: (def, data, reduceval) ->
-        def.resolve data
+        parameters =
+            groupby: "word"
+            cqp: @expandCQP cqp
+            cqp2: "[" + posTags.join(" | ") + "]"
+            corpus: settings.corpusListing.stringifySelected(true)
+            incremental: true
+        _.extend parameters, settings.corpusListing.getWithinParameters()
+        
+        def = $.Deferred()
+        @pendingRequests.push $.ajax
+            url: settings.korpBackendURL + "/count"
+            data: parameters
+
+            beforeSend: (req, settings) ->
+                self.addAuthorizationHeader req
+
+            error: (jqXHR, textStatus, errorThrown) ->
+                def.reject(textStatus, errorThrown)
+
+            progress: (data, e) ->
+                progressObj = self.calcProgress(e)
+                return unless progressObj?
+                callback? progressObj
+
+            success: (data) =>
+                if data.ERROR?
+                    c.log "gettings stats failed with error", data.ERROR
+                    def.reject(data)
+                    return
+                def.resolve data
+
+        return def.promise()
 
 
 class model.AuthenticationProxy
