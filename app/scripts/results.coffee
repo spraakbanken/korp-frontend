@@ -851,7 +851,7 @@ class view.StatsResults extends BaseResults
         grid.innerHTML = ''
 
         @s.hasResult = false
-        if not @s.showStatistics
+        if not @s.shouldSearch()
             return
 
         @s.hasResult = true

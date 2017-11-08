@@ -66,7 +66,7 @@ div(ng-controller="SearchCtrl", click-cover="noCorporaSelected")
       reduce-select(reduce-items="statCurrentAttrs", reduce-selected="statSelectedAttrs", 
         reduce-insensitive="statInsensitiveAttrs" reduce-lang="lang", style='width: 200px')
     div(ng-show="settings.statistics !== false")
-      input#show_stats(type="checkbox", ng-model="showStatistics")
+      input#show_stats(type="checkbox", ng-model="showStatistics", ng-disabled="inOrder")
       label(for="show_stats") {{'show_stats' | loc:lang}}
     div(ng-show="settings.wordpicture !== false")
       input#word_pic(type="checkbox", ng-model="word_pic")

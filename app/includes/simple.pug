@@ -6,12 +6,15 @@
     autoc#simple_text(placeholder="placeholder", type='lemgram', model='model', disable-lemgram-autocomplete='! settings.autocomplete', text-in-field="textInField")
     search-submit
     .opts
+      input#inOrderChk(type='checkbox', ng-model="inOrder") 
+      label(for='inOrderChk')  {{'in_order_chk' | loc:lang}}
+      span  {{'and' | loc:lang}} 
       span 
         |  {{'and_include' | loc:lang}} 
       input#prefixChk(type='checkbox', ng-model="prefix") 
-      label(for='prefixChk')  {{'prefix' | loc:lang}} 
+      label(for='prefixChk')  {{'prefix_chk' | loc:lang}}
       input#suffixChk(type='checkbox', ng-model="suffix") 
-      label(for='suffixChk')  {{'suffix' | loc:lang}} 
+      label(for='suffixChk')  {{'suffix_chk' | loc:lang}} 
       span  {{'and' | loc:lang}} 
       input#caseChk(type='checkbox', ng-model="isCaseInsensitive") 
       label(for='caseChk')  {{'case_insensitive' | loc:lang}}  

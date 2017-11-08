@@ -281,6 +281,12 @@ korpApp.directive "statsResultCtrl", () ->
         s.$watch (() -> $location.search().hide_stats), (val) ->
             s.showStatistics = not val?
 
+        s.$watch (() -> $location.search().in_order), (val) ->
+            s.inOrder = not val?
+
+        s.shouldSearch = () ->
+            return s.showStatistics and s.inOrder
+
         $scope.activate = () ->
             $location.search("hide_stats", null)
             cqp = searches.getCqpExpr()

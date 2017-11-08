@@ -58,13 +58,16 @@ html
                     tab-preloader(ng-if="loading", value="progress", spinner="instance.countCorpora() < 2")
                   div(constr='StatsResults', constr-name='statsResults')
 
+                    div(ng-if="!inOrder && !hasResult")
+                      | {{'stats_not_in_order_warn' | loc:lang}}
+
                     div(ng-if="!showStatistics")
                       | {{'stats_warn' | loc:lang}}
                       div
                         button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
                           | {{'word_pic_warn_btn' | loc:lang}}
 
-                    div(ng-if="showStatistics && !hasResult")
+                    div(ng-if="showStatistics && !hasResult && inOrder")
                       div
                         button.btn.btn-sm.btn-default.activate_word_pic(ng-click="activate()")
                           | {{'update_btn' | loc:lang}}

@@ -133,8 +133,14 @@ korpApp.controller "SearchCtrl", window.SearchCtrl
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout) ->
     s = $scope
 
+    $scope.inOrder = not $location.search().in_order?
+    $scope.$watch (() -> $location.search().in_order), (val) ->
+        $scope.inOrder = not val?
+    $scope.$watch "inOrder", (val) -> 
+        $location.search("in_order", if not s.inOrder then false else null)
+
     s.prefix = false
-    s.suffix = false 
+    s.suffix = false
     s.isCaseInsensitive = false
     if settings.inputCaseInsensitiveDefault
         s.isCaseInsensitive = true
