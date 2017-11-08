@@ -246,13 +246,12 @@ korpApp.factory "structService",  ($http, $q) ->
         returnByCorpora ?= true
 
         params =
-            command: "struct_values"
             corpus: corpora.join ","
             struct: structValue
             count: count
 
         conf =
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/struct_values"
             params: params
             method: "GET"
             headers: {}

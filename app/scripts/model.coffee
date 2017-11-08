@@ -145,7 +145,7 @@ class model.KWICProxy extends BaseProxy
         @prevRequest = data
         @prevParams = data
         def = $.ajax(
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/" + data.command
             data: data
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
@@ -178,7 +178,7 @@ class model.LemgramProxy extends BaseProxy
             max : 1000
         @prevParams = params
         def =  $.ajax
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/" + params.command
             data: params
 
             success: (data) ->
@@ -332,7 +332,7 @@ class model.StatsProxy extends BaseProxy
         @prevParams = data
         def = $.Deferred()
         @pendingRequests.push $.ajax
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/" + data.command
             data: data
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
@@ -388,11 +388,8 @@ class model.AuthenticationProxy
             throw "window.btoa is undefined"
         dfd = $.Deferred()
         $.ajax(
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/authenticate"
             type: "GET"
-            data:
-                command: "authenticate"
-
             beforeSend: (req) ->
                 req.setRequestHeader "Authorization", "Basic " + auth
         ).done((data, status, xhr) ->
@@ -425,10 +422,9 @@ class model.TimeProxy extends BaseProxy
 
 
         xhr = $.ajax
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/timespan"
             type: "GET"
             data:
-                command: "timespan"
                 granularity: "y"
                 corpus: settings.corpusListing.stringifyAll()
 
@@ -522,7 +518,7 @@ class model.GraphProxy extends BaseProxy
         def = $.Deferred()
 
         $.ajax
-            url: settings.korpBackendURL
+            url: settings.korpBackendURL + "/" + params.command
             dataType : "json"
             data : params
 
