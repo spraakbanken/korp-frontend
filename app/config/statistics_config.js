@@ -43,7 +43,8 @@ statisticsFormatting.reduceCqp = function(type, tokens, ignoreCase) {
             } else {
                 newType = type;
             }
-            if(tokens[0] == "|")
+            // TODO: remove the "|" case when backend is updated to return "" instead of "|"
+            if(tokens[0] === "" || tokens[0] === "|")
                 return "ambiguity(" + newType + ") = 0";
             else
                 var res;
@@ -166,7 +167,8 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
                 stringify = util.lemgramToString
 
             var html = _.map(values, function(token) {
-                if(token == "|")
+                // TODO: remove the "|" case when backend is updated to return "" instead of "|"
+                if(token === "" || token === "|")
                     return "–";
                 return stringify(token.replace(/:.*/g, ""), true);
             });
@@ -187,7 +189,10 @@ statisticsFormatting.reduceStringify = function(type, values, corpora) {
             if(!_.isUndefined(attrObj) && attrObj.translationKey )
                 prefix = attrObj.translationKey
             var mapped = _.map(values, function (value) {
-                if(value === "") {
+                // TODO: remove the "|" case when backend is updated to return "" instead of "|"
+                if (attrObj["set"] && (value === "" || value === "|")) {
+                    return "–"; 
+                } else if(value === "") {
                     return "-";
                 } else if(loc_data["en"][prefix + value]) {
                     return util.getLocaleString(prefix + value);

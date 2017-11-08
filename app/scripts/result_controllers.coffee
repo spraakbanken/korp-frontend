@@ -569,7 +569,7 @@ korpApp.directive "compareCtrl", () ->
                         else
                             val = attrVal[0]
 
-                        if type == "set" and val == "|"
+                        if type == "set" and (val == "|" or val == "")
                             return "ambiguity(#{attrKey}) = 0"
                         else
                             return "#{attrKey} #{op} \"#{val}\""

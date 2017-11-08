@@ -268,7 +268,7 @@ korpApp.directive "meter", () ->
         zipped = _.zip scope.meter.tokenLists, scope.stringify
         scope.displayWd = (_.map zipped, ([tokens, stringify]) ->
             (_.map tokens, (token) ->
-                if token == "|"
+                if token == "|" or token == ""
                     return "&mdash;"
                 else
                     return stringify(token)).join " ").join ";"
