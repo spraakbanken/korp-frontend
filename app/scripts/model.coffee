@@ -204,90 +204,6 @@ class model.StatsProxy extends BaseProxy
         @prevRequest = null
         @prevParams = null
 
-    processData: (def, data, reduceVals, reduceValLabels, ignoreCase) ->
-        minWidth = 100
-
-        columns = []
-
-        for [reduceVal, reduceValLabel] in _.zip reduceVals, reduceValLabels
-            columns.push
-                id: reduceVal
-                name: reduceValLabel
-                field: "hit_value"
-                sortable: true
-                formatter: statisticsFormatting.reduceStatistics reduceVals, ignoreCase, _.keys(data.corpora)
-                minWidth: minWidth
-                cssClass: "parameter-column"
-                headerCssClass: "localized-header"
-
-        columns.push
-            id: "pieChart"
-            name: ""
-            field: "hit_value"
-            sortable: false
-            formatter: statisticsFormatting.reduceStatisticsPieChart
-            maxWidth: 25
-            minWidth: 25
-
-        columns.push
-            id: "total"
-            name: "stats_total"
-            field: "total_value"
-            sortable: true
-            formatter: @valueFormatter
-            minWidth : minWidth
-            headerCssClass: "localized-header"
-
-        $.each _.keys(data.corpora).sort(), (i, corpus) =>
-            columns.push
-                id: corpus
-                name: settings.corpora[corpus.toLowerCase()].title
-                field: corpus + "_value"
-                sortable: true
-                formatter: @valueFormatter
-                minWidth : minWidth
-
-        groups = _.groupBy _.keys(data.total.absolute), (item) ->
-            item.replace(/(:.+?)(\/|$| )/g, "$2")
-            fields = item.split("/")
-            newFields = []
-            for [reduceVal, field] in _.zip reduceVals, fields
-                if reduceVal in ["saldo", "prefix", "suffix", "lex", "lemma", "sense", "text_swefn", "text_blingbring"]
-                    newFields.push field.replace(/(:.+?)($| )/g, "$2")
-                    
-                else
-                    newFields.push field
-            newFields.join("/")
-            return newFields
-
-        wordArray = _.keys groups
-
-        sizeOfDataset = wordArray.length
-        dataset = new Array(sizeOfDataset + 1)
-
-        statsWorker = new Worker "scripts/statistics_worker.js"
-        statsWorker.onmessage = (e) ->
-            c.log "Called back by the worker!\n"
-            c.log e
-            searchParams = 
-                reduceVals: reduceVals
-                ignoreCase: ignoreCase
-                corpora: _.keys data.corpora
-            def.resolve [data, wordArray, columns, e.data.dataset, e.data.summarizedData, searchParams]
-
-        statsWorker.postMessage {
-            "total" : data.total
-            "dataset" : dataset
-            "allrows" : (wordArray)
-            "corpora" : data.corpora
-            "groups" : groups
-            loc : {
-                'sv' : "sv-SE"
-                'en' : "gb-EN"
-            }[$("body").scope().lang]
-            "attrs" : reduceVals
-        }
-
     makeParameters: (reduceVals, cqp, ignoreCase) ->
         parameters =
             command: "count"
@@ -353,12 +269,9 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                @processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
 
         return def.promise()
-
-    valueFormatter: (row, cell, value, columnDef, dataContext) ->
-        return dataContext[columnDef.id + "_display"]
 
 class model.NameProxy extends BaseProxy
     constructor: ->

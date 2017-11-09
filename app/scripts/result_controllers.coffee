@@ -332,9 +332,10 @@ korpApp.directive "statsResultCtrl", () ->
                     continue
                 row = s.instance.getDataAt(rowIx)
                 searchParams = s.instance.searchParams
-                cqp = statisticsFormatting.getCqp searchParams.reduceVals, row.hit_value, searchParams.ignoreCase
-                texts = statisticsFormatting.getTexts searchParams.reduceVals, row.hit_value, searchParams.corpora
-                cqpExprs[cqp] = texts.join ", "
+                cqp = statisticsFormatting.getCqp row.statsValues, searchParams.ignoreCase
+                parts = for reduceVal in searchParams.reduceVals
+                    row.formattedValue[reduceVal]
+                cqpExprs[cqp] = parts.join ", "
 
             selectedAttributes = _.filter(s.mapAttributes, "selected")
             if selectedAttributes.length > 1

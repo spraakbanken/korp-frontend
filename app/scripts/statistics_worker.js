@@ -3,38 +3,45 @@
     Speed/memory gains mostly come from using [absolute, relative] rather than {absolute: x, relative: y}
 */
 
+importScripts("../components/lodash/dist/lodash.js");
+
 onmessage = function(e) {
+    var data = e.data.data;
+    var total = data.total;
+    var reduceVals = e.data.reduceVals;
+    var groupStatistics = e.data.groupStatistics;
 
-    var groups = e.data.groups;
-    var total = e.data.total;
-    var dataset = e.data.dataset;
-    var allcorpora = e.data.corpora;
-    var allrows = e.data.allrows;
-    var len = allrows.length;
-    var loc = e.data.loc
-    var attributes = e.data.attrs
+    var simplifyHitString = function(item) {
+        fields = item.split("/");
+        newFields = [];
+        ref = _.zip(reduceVals, fields);
+        for(i = 0, len = ref.length; i < len; i++) {
+            [reduceVal, field] = ref[i];
+            if(groupStatistics.indexOf(reduceVal) != -1) {
+                newFields.push(field.replace(/(:.+?)($| )/g, "$2"));
+            } else {
+                newFields.push(field);
+            }
+        }
+        return newFields.join("/");
+    };
 
-    var fmt = function(valTup) {
-        if(typeof valTup[0] == "undefined" ) return ""
-        return "<span>" +
-                "<span class='relStat'>" + Number(valTup[1].toFixed(1)).toLocaleString(loc) + "</span> " +
-                "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
-          "<span>"
-
-    }
+    var groups = _.groupBy(_.keys(total.absolute), simplifyHitString);
+    var rowIds = _.keys(groups)
+    var rowCount = rowIds.length + 1
+    var dataset = new Array(rowCount);
 
     var totalRow = {
         id: "row_total",
-        hit_value: "&Sigma;",
         total_value: [total.sums.absolute, total.sums.relative],
-        total_display: fmt([total.sums.absolute, total.sums.relative])
+        rowId: 0
     }
 
-    for(corpus in allcorpora) {
-        var obj = allcorpora[corpus]
+    var corporaKeys = _.keys(data.corpora);
+    _.map(corporaKeys, function(corpus) {
+        var obj = data.corpora[corpus];
         totalRow[corpus + "_value"] = [obj.sums.absolute, obj.sums.relative]
-        totalRow[corpus + "_display"] = fmt([obj.sums.absolute, obj.sums.relative])
-    }
+    });
 
     dataset[0] = totalRow
 
@@ -48,55 +55,55 @@ onmessage = function(e) {
         return sum;
     }
 
-    var summarizedData = {};
-    summarizedData.total = {};
-    summarizedData.total.absolute = {};
-    summarizedData.total.relative = {};
-    for(c in allcorpora) {
-        if(allcorpora.hasOwnProperty(c)) {
-            summarizedData[c] = {};
-            summarizedData[c].absolute = {};
-            summarizedData[c].relative = {};
+    for(var i = 0; i < rowCount - 1; i++) {
+        var word = rowIds[i];
+        var totalAbs = valueGetter(total.absolute, word)
+        var totalRel = valueGetter(total.relative, word)
+
+        //TODO: we need to know which attributes are structural and not
+        statsValues = []
+        for(var j = 0; j < groups[word].length; j++) {
+            var variant = groups[word][j];
+            _.map(_.zip(reduceVals, variant.split("/")), function(part) {
+                var reduceVal = part[0];
+                var terms = part[1];
+                _.map(terms.split(" "), function(term, idx) {
+                    if(!statsValues[idx]) {
+                        statsValues[idx] = {}
+                    }
+                    if(!statsValues[idx][reduceVal]) {
+                        statsValues[idx][reduceVal] = [];
+                    }
+                    if(statsValues[idx][reduceVal].indexOf(term) == -1) {
+                        statsValues[idx][reduceVal].push(term);
+                    }
+                });
+            });
         }
-    }
-
-    for(var i = 0; i < len; i++) {
-        var word = allrows[i];
-        var abs = valueGetter(total.absolute, word)
-        var rel = valueGetter(total.relative, word)
-
-        summarizedData.total.absolute[word] = abs
-        summarizedData.total.relative[word] = rel
-
+        
         var row = {
-            "id": "row" + i,
-            "hit_value": groups[word],
-            "total_value": [abs, rel],
-            "total_display" : fmt([abs, rel])
+            rowId: i + 1,
+            total_value: [totalAbs, totalRel],
+            statsValues: statsValues,
+            formattedValue: {}
         }
+
+        _.map(corporaKeys, function(corpus) {
+            var obj = data.corpora[corpus];
+            var abs = valueGetter(obj.absolute, word);
+            var rel = valueGetter(obj.relative, word);
+            row[corpus + "_value"] = [abs, rel];
+        });
 
         var parts = word.split("/")
-        for(var j = 0; j < attributes.length; j++) {
-            row[attributes[j]] = parts[j];
+        for(var j = 0; j < reduceVals.length; j++) {
+            row[reduceVals[j]] = parts[j].split(" ");
         }
 
-        for(corpus in allcorpora) {
-            if(allcorpora.hasOwnProperty(corpus)) {
-                var obj = allcorpora[corpus];
-                var abs = valueGetter(obj.absolute, word);
-                var rel = valueGetter(obj.relative, word);
-
-                summarizedData[corpus].absolute[word] = abs
-                summarizedData[corpus].relative[word] = rel
-
-                row[corpus + "_value"] = [abs, rel];
-                row[corpus + "_display"] = fmt([abs,rel]);
-            }
-        }
         dataset[i+1] = row;
     }
 
     dataset.sort(function(a, b) { return b["total_value"][0] - a["total_value"][0] } );
 
-    postMessage({dataset: dataset, summarizedData: summarizedData});
+    postMessage(dataset);
 };

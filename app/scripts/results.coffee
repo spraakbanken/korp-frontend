@@ -718,17 +718,16 @@ class view.StatsResults extends BaseResults
         window.statsProxy = @proxy
         @$result.on "click", ".arcDiagramPicture", (event) =>
             parts = $(event.currentTarget).attr("id").split("__")
-
-            if parts[1] != "Σ"
-                @newDataInGraph parts[1]
-            else # The ∑ row
-                @newDataInGraph "SIGMA_ALL"
+            @showPieChart parseInt(parts[1])
 
         @$result.on "click", ".slick-cell .statistics-link", (e) =>
             rowIx = $(e.currentTarget).data "row"
-            rowData = @grid.getData()[rowIx]
-
-            cqp2 = statisticsFormatting.getCqp(@searchParams.reduceVals, rowData.hit_value, @searchParams.ignoreCase)
+            # TODO don't loop
+            for row in @data
+                if row.rowId == parseInt(rowIx)
+                    rowData = row
+                    break
+            cqp2 = statisticsFormatting.getCqp(rowData.statsValues, @searchParams.ignoreCase)
             corpora = @searchParams.corpora
 
             opts = {}
@@ -776,12 +775,17 @@ class view.StatsResults extends BaseResults
                     continue
 
                 row = @getDataAt(rowIx)
-                cqp = statisticsFormatting.getCqp @searchParams.reduceVals, row.hit_value, @searchParams.ignoreCase
+                cqp = statisticsFormatting.getCqp row.statsValues, @searchParams.ignoreCase
                 subExprs.push cqp
-                texts = statisticsFormatting.getTexts @searchParams.reduceVals, row.hit_value, @searchParams.corpora
-                labelMapping[cqp] = texts.join ", "
+                parts = for reduceVal in @searchParams.reduceVals
+                    row.formattedValue[reduceVal]
+                labelMapping[cqp] = parts.join ", "
 
-            activeCorpora = _.flatten [key for key, val of @savedData.corpora when val.sums.absolute]
+            activeCorpora = []
+            totalRow = @getDataAt(rowIx)
+            for corpus in @searchParams.corpora
+                if totalRow[corpus + "_value"][0] > 0
+                    activeCorpora.push corpus
 
             @s.$apply () =>
                 @s.onGraphShow
@@ -793,42 +797,36 @@ class view.StatsResults extends BaseResults
 
 
     updateExportBlob : () ->
-        selVal = $("#kindOfData option:selected").val()
+        selVal = if $("#kindOfData option:selected").val() == "absolute" then 0 else 1
         selType = $("#kindOfFormat option:selected").val()
         dataDelimiter = ";"
         dataDelimiter = "	" if selType is "tsv"
-        cl = settings.corpusListing.subsetFactory(_.keys @savedData.corpora)
+        cl = settings.corpusListing.subsetFactory(@searchParams.corpora)
 
-        header = [
-            util.getLocaleString("stats_hit"),
-            util.getLocaleString("stats_total")
-        ]
+        header = []
+        for reduceVal in @searchParams.reduceVals
+            header.push reduceVal
+
+        header.push util.getLocaleString("stats_total")
         header = header.concat _.pluck cl.corpora, "title"
 
         fmt = (what) ->
             what.toString()
 
-        total = ["Σ", fmt @savedData.total.sums[selVal]]
-
-        total = total.concat (fmt @savedData.corpora[corp.toUpperCase()].sums[selVal] for corp in _.pluck cl.corpora, "id")
-
-
-
-        output = [
-            total
-        ]
-
-        for wd in @savedWordArray
-            row = [wd, fmt @savedSummarizedData.total[selVal][wd]]
-            values = for corp in _.pluck cl.corpora, "id"
-                val = @savedSummarizedData[corp.toUpperCase()][selVal][wd]
-                if val
-                    val = fmt val
+        output = for row in @data
+            outputRow = for reduceVal in @searchParams.reduceVals
+                if row.rowId == 0
+                    "Σ"
                 else
-                    val = "0"
-
-
-            output.push row.concat values
+                    row[reduceVal]
+            outputRow.push fmt(row.total_value[selVal])
+            for corp in @searchParams.corpora
+                val = row[corp + "_value"][selVal]
+                if val
+                    outputRow.push fmt val
+                else
+                    outputRow.push "0"
+            outputRow
 
 
         csv = new CSV(output, {
@@ -868,27 +866,25 @@ class view.StatsResults extends BaseResults
             @resetView()
 
         @showPreloader()
-        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...))
-        ).done( ([data, wordArray, columns, dataset, summarizedData, searchParams]) =>
-            safeApply @s, () =>
-                @hidePreloader()
-            @savedData = data
-            @savedSummarizedData = summarizedData
-            @savedWordArray = wordArray
-            @searchParams = searchParams
-            @renderResult columns, dataset
-        ).fail (textStatus, err) =>
-            c.log "fail", arguments
-            c.log "stats fail", @s.$parent.loading, _.map @proxy.pendingRequests, (item) -> item.readyState
-            if @ignoreAbort
-                c.log "stats ignoreabort"
-                return
-            safeApply @s, () =>
-                @hidePreloader()
-                if textStatus == "abort"
-                    @s.aborted = true
-                else
-                    @resultError err
+        @proxy.makeRequest(cqp, ((args...) => @onProgress(args...)))
+            .done ([data, columns, searchParams]) =>
+                safeApply @s, () =>
+                    @hidePreloader()
+                @data = data
+                @searchParams = searchParams
+                @renderResult columns, data
+            .fail (textStatus, err) =>
+                c.log "fail", arguments
+                c.log "stats fail", @s.$parent.loading, _.map @proxy.pendingRequests, (item) -> item.readyState
+                if @ignoreAbort
+                    c.log "stats ignoreabort"
+                    return
+                safeApply @s, () =>
+                    @hidePreloader()
+                    if textStatus == "abort"
+                        @s.aborted = true
+                    else
+                        @resultError err
 
     getSelectedRows: () ->
         if @grid
@@ -939,11 +935,7 @@ class view.StatsResults extends BaseResults
         @grid.autosizeColumns()
         
         @s.totalNumberOfRows = @grid.getDataLength()
-        
-        sortCol = columns[2]
-        log = _.debounce () ->
-            c.log "grid sort"
-        , 200
+
         grid.onSort.subscribe (e, args) =>
             if @doSort
                 sortColumns = grid.getSortColumns()[0]
@@ -957,8 +949,8 @@ class view.StatsResults extends BaseResults
                         return -1
                     log()
                     if sortCol.field is "hit_value"
-                        x = a[sortColumns.columnId]
-                        y = b[sortColumns.columnId]
+                        x = a[@sortColumn]
+                        y = b[@sortColumn]
                     else
                         x = a[sortCol.field][0] or 0
                         y = b[sortCol.field][0] or 0
@@ -995,16 +987,14 @@ class view.StatsResults extends BaseResults
             safeApply @s, () =>
                 @updateGraphBtnState()
 
-        @s.getGeoAttributes(@proxy.prevParams.corpus.split(","))
+        @s.getGeoAttributes(@searchParams.corpora)
 
         safeApply @s, () =>
             @hidePreloader()
 
     updateGraphBtnState : () ->
-
         @s.graphEnabled = true
-        cl = settings.corpusListing.subsetFactory(@proxy.prevParams.corpus.split(","))
-
+        cl = settings.corpusListing.subsetFactory(@searchParams.corpora)
         if not (_.compact cl.getTimeInterval()).length
             @s.graphEnabled = false
 
@@ -1029,120 +1019,61 @@ class view.StatsResults extends BaseResults
         @grid?.resizeCanvas()
         @grid?.invalidate()
 
-    newDataInGraph : (dataName) ->
-        dataItems = []
-        wordArray = []
-        corpusArray = []
-        @lastDataName = dataName
+    showPieChart: (rowId) ->
+        @pieChartCurrentRowId = rowId
 
-        $.each @savedSummarizedData, (corpus, obj) =>
-            if corpus == "total"
-                return
-
-            if dataName is "SIGMA_ALL"
-                # ∑ selected
-                totfreq = 0
-                $.each obj["relative"], (wordform, freq) ->
-                    numFreq = parseFloat(freq)
-                    totfreq += numFreq if numFreq
-
-                dataItems.push
-                    value: totfreq
-                    caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString())
-                    shape_id: "sigma_all"
-
+        getDataItems = (rowId, valueType) =>
+            dataItems = []
+            if valueType is "relative"
+                valueType = 1
             else
-                # Individual wordform selected
-                freq = parseFloat(obj["relative"][dataName])
-                if freq
-                    dataItems.push
-                        value: freq
-                        caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString())
-                        shape_id: dataName
-
-                else
-                    dataItems.push
-                        value: 0
-                        caption: ""
-                        shape_id: dataName
-
+                valueType = 0
+            for row in @data
+                if row.rowId == rowId
+                    for corpus in @searchParams.corpora
+                        freq = row[corpus + "_value"][valueType]
+                        dataItems.push
+                            value: freq
+                            caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString())
+                            shape_id: rowId
+                    break
+            return dataItems
 
         $("#dialog").remove()
 
         relHitsString = util.getLocaleString("statstable_relfigures_hits")
         $("<div id='dialog' />")
-        .appendTo("body")
-        .append("""<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
-                            <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
-                            <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
-                        </div>
-                        <div id="chartFrame" style="height:380"></div>
-                        <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p></div>"""
-        ).dialog(
-            width: 400
-            height: 500
-            close: () ->
-                $("#pieDiv").remove()
-        ).css("opacity", 0)
-        .parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram")
+            .appendTo("body")
+            .append("""<div id="pieDiv"><br/><div id="statistics_switch" style="text-align:center">
+                                <a href="javascript:" rel="localize[statstable_relfigures]" data-mode="relative">Relativa frekvenser</a>
+                                <a href="javascript:" rel="localize[statstable_absfigures]" data-mode="absolute">Absoluta frekvenser</a>
+                            </div>
+                            <div id="chartFrame" style="height:380"></div>
+                            <p id="hitsDescription" style="text-align:center" rel="localize[statstable_absfigures_hits]">#{relHitsString}</p></div>"""
+            ).dialog(
+                width: 400
+                height: 500
+                close: () ->
+                    $("#pieDiv").remove()
+            ).css("opacity", 0)
+            .parent().find(".ui-dialog-title").localeKey("statstable_hitsheader_lemgram")
+
         $("#dialog").fadeTo 400, 1
         $("#dialog").find("a").blur() # Prevents the focus of the first link in the "dialog"
+        
         stats2Instance = $("#chartFrame").pie_widget(
             container_id: "chartFrame"
-            data_items: dataItems
+            data_items: getDataItems(rowId, "relative")
         )
         statsSwitchInstance = $("#statistics_switch").radioList(
             change: =>
                 typestring = statsSwitchInstance.radioList("getSelected").attr("data-mode")
-                dataItems = []
-                dataName = @lastDataName
-                $.each @savedSummarizedData, (corpus, obj) ->
-                    if corpus == "total"
-                        return;
-
-                    if dataName is "SIGMA_ALL"
-
-                        # sigma selected
-                        totfreq = 0
-                        $.each obj[typestring], (wordform, freq) ->
-                            if typestring is "absolute"
-                                numFreq = parseInt(freq)
-                            else
-                                numFreq = parseFloat(freq)
-                            totfreq += numFreq if numFreq
-
-                        dataItems.push
-                            value: totfreq
-                            caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(totfreq.toString(), false)
-                            shape_id: "sigma_all"
-
-                    else
-
-                        # Individual wordform selected
-                        if typestring is "absolute"
-                            freq = parseInt(obj[typestring][dataName])
-                        else
-                            freq = parseFloat(obj[typestring][dataName])
-                        if freq
-                            dataItems.push
-                                value: freq
-                                caption: settings.corpora[corpus.toLowerCase()]["title"] + ": " + util.formatDecimalString(freq.toString(), false)
-                                shape_id: dataName
-
-                        else
-                            dataItems.push
-                                value: 0
-                                caption: ""
-                                shape_id: dataName
-
-
-                stats2Instance.pie_widget "newData", dataItems
+                stats2Instance.pie_widget "newData", getDataItems(@pieChartCurrentRowId, typestring)
                 if typestring is "absolute"
                     loc = "statstable_absfigures_hits"
                 else
                     loc = "statstable_relfigures_hits"
                 $("#hitsDescription").localeKey loc
-
             selected: "relative"
         )
 
