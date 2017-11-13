@@ -5,7 +5,11 @@
 
   c = console;
 
-  angular.module('sbMap', ['sbMapTemplate']).factory('places', [
+  angular.module('sbMap', ['sbMapTemplate']).filter("trust", function($sce) {
+    return function(input) {
+      return $sce.trustAsHtml(input);
+    };
+  }).factory('places', [
     '$q', '$http', function($q, $http) {
       var Places;
       Places = (function() {
@@ -138,7 +142,7 @@
         scope.useClustering = angular.isDefined(scope.useClustering) ? scope.useClustering : true;
         scope.oldMap = angular.isDefined(scope.oldMap) ? scope.oldMap : false;
         scope.showMap = false;
-        scope.hoverTemplate = "<div class=\"hover-info\">\n   <div ng-if=\"showLabel\" class=\"swatch\" style=\"background-color: {{color}}\"></div><div ng-if=\"showLabel\" style=\"display: inline; font-weight: bold; font-size: 15px\">{{label}}</div>\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>\n</div>";
+        scope.hoverTemplate = "<div class=\"hover-info\">\n   <div ng-if=\"showLabel\" class=\"swatch\" style=\"background-color: {{color}}\"></div>\n   <div ng-if=\"showLabel\" ng-bind-html=\"label | trust\" style=\"display: inline; font-weight: bold; font-size: 15px\"></div>\n   <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>\n   <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>\n   <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>\n</div>";
         map = angular.element(element.find(".map-container"));
         scope.map = L.map(map[0], {
           minZoom: 1,

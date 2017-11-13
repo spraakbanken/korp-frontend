@@ -1,29 +1,14 @@
 {
   "name": "geokorp",
-  "version": "1.2.5",
-  "dependencies": {
-    "angular": "1.6.x",
-    "bootstrap-sass-official": "^3.2.0",
-    "leaflet": "~1.0.0",
-    "leaflet-providers": "~1.1.1",
-    "lodash": "~1.2",
-    "moment": "~2.0.0",
-    "leaflet.markercluster": "1.0.0-rc.1"
-  },
-  "devDependencies": {
-    "angular-mocks": "~1.0.7"
-  },
-  "private": true,
-  "appPath": "app",
-  "moduleName": "geokorpApp",
   "homepage": "https://github.com/spraakbanken/geokorp",
-  "_release": "1.2.5",
+  "version": "1.2.8",
+  "_release": "1.2.8",
   "_resolution": {
     "type": "version",
-    "tag": "v1.2.5",
-    "commit": "28e771399e827ae618875ea05021781651f6bd37"
+    "tag": "v1.2.8",
+    "commit": "67b30aad43a3cdf11b4a0239d4cc443164930b0a"
   },
   "_source": "https://github.com/spraakbanken/geokorp.git",
-  "_target": "1.2.5",
+  "_target": "1.2.8",
   "_originalSource": "https://github.com/spraakbanken/geokorp.git"
 }

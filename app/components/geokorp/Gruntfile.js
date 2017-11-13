@@ -1,11 +1,5 @@
 'use strict';
 
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
-
 module.exports = function (grunt) {
 
   require('load-grunt-tasks')(grunt);
@@ -14,7 +8,7 @@ module.exports = function (grunt) {
 
   // Configurable paths for the application
   var appConfig = {
-    app: require('./bower.json').appPath || 'app',
+    app: 'app',
     dist: 'dist'
   };
 
@@ -26,17 +20,9 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      bower: {
-        files: ['bower.json'],
-        tasks: ['wiredep']
-      },
       coffee: {
         files: ['<%= geokorp.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['newer:coffee:dist']
-      },
-      coffeeTest: {
-        files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['newer:coffee:test', 'karma']
       },
       compass: {
         files: ['<%= geokorp.app %>/styles/{,*/}*.{scss,sass}'],
@@ -53,22 +39,6 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost'
-      },
-      test: {
-        options: {
-          port: 9001,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect.static('test'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
-            ];
-          }
-        }
       }
     },
 
@@ -112,32 +82,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // Automatically inject Bower components into the app
-    wiredep: {
-      test: {
-        devDependencies: true,
-        src: '<%= karma.unit.configFile %>',
-        ignorePath:  /\.\.\//,
-        fileTypes:{
-          coffee: {
-            block: /(([\s\t]*)#\s*?bower:\s*?(\S*))(\n|\r|.)*?(#\s*endbower)/gi,
-              detect: {
-                js: /'(.*\.js)'/gi,
-                coffee: /'(.*\.coffee)'/gi
-              },
-            replace: {
-              js: '\'{{filePath}}\'',
-              coffee: '\'{{filePath}}\''
-            }
-          }
-          }
-      },
-      sass: {
-        src: ['<%= geokorp.app %>/styles/{,*/}*.{scss,sass}'],
-        ignorePath: /(\.\.\/){1,2}bower_components\//
-      }
-    },
-
     // Compiles CoffeeScript to JavaScript
     coffee: {
       options: {
@@ -152,15 +96,6 @@ module.exports = function (grunt) {
           dest: '.tmp/scripts',
           ext: '.js'
         }]
-      },
-      test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/spec',
-          ext: '.js'
-        }]
       }
     },
 
@@ -173,7 +108,7 @@ module.exports = function (grunt) {
         imagesDir: '<%= geokorp.app %>/images',
         javascriptsDir: '<%= geokorp.app %>/scripts',
         fontsDir: '<%= geokorp.app %>/styles/fonts',
-        importPath: './bower_components',
+        // importPath: './bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -240,10 +175,6 @@ module.exports = function (grunt) {
         'coffee:dist',
         'compass:server'
       ],
-      test: [
-        'coffee',
-        'compass'
-      ],
       dist: [
         'coffee',
         'compass:dist'
@@ -266,23 +197,7 @@ module.exports = function (grunt) {
       },
     },
 
-    // Test settings
-    karma: {
-      unit: {
-        configFile: 'test/karma.conf.coffee',
-        singleRun: true
-      }
-    }
   });
-
-  grunt.registerTask('test', [
-    'clean:server',
-    'wiredep',
-    'concurrent:test',
-    'autoprefixer',
-    'connect:test',
-    'karma'
-  ]);
 
   grunt.registerTask('build', [
     'clean:dist',
@@ -295,8 +210,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    // no tests available yet
-    //'test',
     'build'
   ]);
 };

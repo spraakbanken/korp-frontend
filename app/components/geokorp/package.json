@@ -1,8 +1,15 @@
 {
-  "name": "leaflet",
-  "version": "0.0.0",
-  "dependencies": {},
-  "repository": {},
+  "name": "geokorp",
+  "version": "1.2.7",
+  "dependencies": {
+      "angular": "1.6.x",
+      "bootstrap-sass-official": "twbs/bootstrap-sass#~3.2.0",
+      "leaflet": "~1.0.0",
+      "leaflet-providers": "~1.1.1",
+      "lodash": "~1.2",
+      "moment": "~2.0.0",
+      "leaflet.markercluster": "1.0.0-rc.1.0"
+  },
   "devDependencies": {
     "coffee-script": "*",
     "grunt": "^0.4.5",
@@ -21,18 +28,13 @@
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.1.2",
-    "grunt-google-cdn": "^0.4.3",
     "grunt-html2js": "^0.3.5",
-    "grunt-karma": "*",
     "grunt-newer": "^1.1.0",
     "grunt-ngmin": "0.0.3",
     "grunt-svgmin": "^2.0.0",
     "grunt-usemin": "^3.0.0",
     "grunt-wiredep": "^2.0.0",
     "jshint-stylish": "^1.0.0",
-    "karma-coffee-preprocessor": "*",
-    "karma-jasmine": "*",
-    "karma-phantomjs-launcher": "*",
     "load-grunt-tasks": "^3.1.0",
     "time-grunt": "^1.0.0"
   },

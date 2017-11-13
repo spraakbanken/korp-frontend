@@ -4,6 +4,9 @@ c = console
 angular.module 'sbMap', [
   'sbMapTemplate'
   ]
+  .filter "trust", ($sce) ->
+    return (input) ->
+        $sce.trustAsHtml input
   .factory 'places', ['$q', '$http', ($q, $http) ->
 
     class Places
@@ -107,7 +110,8 @@ angular.module 'sbMap', [
       scope.showMap = false
       
       scope.hoverTemplate = """<div class="hover-info">
-                                <div ng-if="showLabel" class="swatch" style="background-color: {{color}}"></div><div ng-if="showLabel" style="display: inline; font-weight: bold; font-size: 15px">{{label}}</div>
+                                <div ng-if="showLabel" class="swatch" style="background-color: {{color}}"></div>
+                                <div ng-if="showLabel" ng-bind-html="label | trust" style="display: inline; font-weight: bold; font-size: 15px"></div>
                                 <div><span>{{ 'map_name' | loc }}: </span> <span>{{point.name}}</span></div>
                                 <div><span>{{ 'map_abs_occurrences' | loc }}: </span> <span>{{point.abs}}</span></div>
                                 <div><span>{{ 'map_rel_occurrences' | loc }}: </span> <span>{{point.rel | number:2}}</span></div>

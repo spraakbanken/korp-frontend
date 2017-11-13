@@ -22,7 +22,7 @@
     "bootstrap-sass-official": "~3.2.0",
     "angular-filter": "~0.5.7",
     "SlickGrid": "https://github.com/6pac/SlickGrid.git#2.3.6",
-    "geokorp": "https://github.com/spraakbanken/geokorp.git#1.2.5",
+    "geokorp": "https://github.com/spraakbanken/geokorp.git#1.2.8",
     "jquery-hoverintent": "1.8.x",
     "angular-ui-sortable": "^0.17.1",
     "angular-dynamic-locale": "^0.1.32",
