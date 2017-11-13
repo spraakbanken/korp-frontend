@@ -947,10 +947,9 @@ class view.StatsResults extends BaseResults
                         return -1
                     if(b.id == "row_total")
                         return -1
-                    log()
                     if sortCol.field is "hit_value"
-                        x = a[@sortColumn]
-                        y = b[@sortColumn]
+                        x = a[sortColumns.columnId]
+                        y = b[sortColumns.columnId]
                     else
                         x = a[sortCol.field][0] or 0
                         y = b[sortCol.field][0] or 0
