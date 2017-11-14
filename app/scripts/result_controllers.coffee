@@ -99,8 +99,9 @@ class KwicCtrl
                 id = (linkCorpusId or mainCorpusId)
                 
                 [matchSentenceStart, matchSentenceEnd] = findMatchSentence hitContext
-                {matchStart, matchEnd} = hitContext.match
-
+                matchStart = hitContext.match.start
+                matchEnd = hitContext.match.end
+                
                 for j in [0...hitContext.tokens.length]
                     wd = hitContext.tokens[j]
                     wd.position = j
