@@ -21,7 +21,7 @@ kwic-pager
 span.reading_btn.show_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_reading' | loc:lang}}
 span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()") {{'show_kwic' | loc:lang}}
 .table_scrollarea(ng-class="{paging : paging, 'waiting-first' : !gotFirstKwic}")
-  table.results_table.kwic(cellspacing='0')
+  table.results_table.kwic(ng-if="kwic.length > 0" cellspacing='0')
     tr.sentence(ng-repeat='sentence in kwic'
       ng-class='{corpus_info : sentence.newCorpus, \
         not_corpus_info : !sentence.newCorpus, \
@@ -40,7 +40,7 @@ span.reading_btn.hide_reading.link(ng-hide="loading", ng-click="toggleReading()"
         span(kwic-word='kwic-word', ng-repeat='wd in selectMatch(sentence)')
       td.right(ng-if='::!sentence.newCorpus')
         span(kwic-word='kwic-word', ng-repeat='wd in selectRight(sentence)')
-  .results_table.reading
+  .results_table.reading(ng-if="contextKwic.length > 0")
     p.sentence(ng-repeat='sentence in contextKwic'
       ng-class='{corpus_info : sentence.newCorpus, \
         not_corpus_info : !sentence.newCorpus, \

@@ -233,7 +233,8 @@ class view.KWICResults extends BaseResults
             @s.$root.jsonUrl = @proxy.prevUrl
 
         @s.$apply ($scope) =>
-            if isReading
+            useContextData = locationSearch()["in_order"]?
+            if isReading or useContextData
                 $scope.setContextData(data)
                 @selectionManager.deselect()
                 @s.$root.word_selected = null

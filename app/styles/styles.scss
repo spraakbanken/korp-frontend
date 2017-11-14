@@ -864,22 +864,12 @@ table {
 }
 
 .results_table.reading {
-  display: none;
+  margin-left: 10%;
   p {
     display: block;
     padding: 1em !important;
     width: 510px;
     margin : 0;
-  }
-}
-
-.reading_mode .results_table {
-  margin-left: 10%;
-  &.kwic {
-    display: none;
-  }
-  &.reading {
-    display: block;
   }
 }
 

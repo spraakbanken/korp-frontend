@@ -99,16 +99,20 @@ class KwicCtrl
                 id = (linkCorpusId or mainCorpusId)
                 
                 [matchSentenceStart, matchSentenceEnd] = findMatchSentence hitContext
-                matchStart = hitContext.match.start
-                matchEnd = hitContext.match.end
                 
+                if not (hitContext.match instanceof Array)
+                    matches = [{start: hitContext.match.start, end: hitContext.match.end}]
+                else
+                    matches = hitContext.match
+
                 for j in [0...hitContext.tokens.length]
                     wd = hitContext.tokens[j]
                     wd.position = j
                     wd._open = []
                     wd._close = []
-                    if matchStart <= j < matchEnd
-                        _.extend wd, {_match : true}
+                    for {start, end} in matches
+                        if start <= j < end
+                            _.extend wd, {_match : true}
                     if matchSentenceStart < j < matchSentenceEnd
                         _.extend wd, {_matchSentence : true}
                     if wd.word in punctArray
@@ -177,10 +181,12 @@ class KwicCtrl
         s.kwic = []
         s.contextKwic = []
         s.setContextData = (data) ->
+            s.kwic = []
             s.pagerHitsPerPage = s.hitsPerPage
             s.contextKwic = massageData data.kwic
 
         s.setKwicData = (data) ->
+            s.contextKwic = []
             s.pagerHitsPerPage = s.hitsPerPage
             s.kwic = massageData(data.kwic)
 
