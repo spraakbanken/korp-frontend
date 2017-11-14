@@ -275,9 +275,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 }
 
 #query_table {
-  overflow: auto;
   white-space: nowrap;
   margin-bottom: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .lang_row {
