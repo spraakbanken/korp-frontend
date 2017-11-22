@@ -342,7 +342,8 @@ module.exports = function (grunt) {
             'components/geokorp/dist/data/places.json',
             'components/geokorp/dist/data/name_mapping.json',
             'components/leaflet/dist/images/layers.png',
-            'components/d3/d3.min.js'
+            'components/d3/d3.min.js',
+            'components/lodash/dist/lodash.js'
           ]
         },
         {
