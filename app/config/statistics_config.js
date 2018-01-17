@@ -23,14 +23,13 @@ var statisticsFormattingModule = function() {
             case "lex":
             case "lemma":
             case "sense":
-                // TODO: remove the "|" case when backend is updated to return "" instead of "|"
-                if(tokens[0] === "" || tokens[0] === "|")
+                if(tokens[0] === "")
                     return "ambiguity(" + type + ") = 0";
                 else
                     var res;
                     if(tokens.length > 1) {
                         var key = tokens[0].split(":")[0];
-                        
+
                         var variants = []
                         _.map(tokens, function(val) {
                             parts = val.split(":")
@@ -45,7 +44,7 @@ var statisticsFormattingModule = function() {
                         variants = _.map(variants, function(variant) {
                             return ":(" + variant.join("|") + ")"
                         });
-                        
+
                         res = key + variants.join("")
                     }
                     else {
@@ -97,8 +96,7 @@ var statisticsFormattingModule = function() {
                     stringify = util.lemgramToString
 
                 var html = _.map(values, function(token) {
-                    // TODO: remove the "|" case when backend is updated to return "" instead of "|"
-                    if(token === "" || token === "|")
+                    if(token === "")
                         return "–";
                     return stringify(token.replace(/:.*/g, ""), true);
                 });
@@ -117,9 +115,8 @@ var statisticsFormattingModule = function() {
                 if(structAttributes.translationKey)
                     prefix = structAttributes.translationKey
                 var mapped = _.map(values, function (value) {
-                    // TODO: remove the "|" case when backend is updated to return "" instead of "|"
-                    if (structAttributes["set"] && (value === "" || value === "|")) {
-                        return "–"; 
+                    if (structAttributes["set"] && value === "") {
+                        return "–";
                     } else if(value === "") {
                         return "-";
                     } else if(loc_data["en"][prefix + value]) {
@@ -131,7 +128,7 @@ var statisticsFormattingModule = function() {
                 return mapped.join(" ");
         }
     }
-    
+
     return {
         getCqp: getCqp,
         reduceStringify: reduceStringify
