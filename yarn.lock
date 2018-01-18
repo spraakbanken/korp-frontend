@@ -26,13 +26,6 @@ JSONSelect@0.4.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
 
-SlickGrid@6pac/SlickGrid#2.3.6:
-  version "2.3.4"
-  resolved "https://codeload.github.com/6pac/SlickGrid/tar.gz/f6d763752d36521dcb6945d1f1d6084bf44d75a9"
-  dependencies:
-    jquery ">=1.8.0"
-    jquery-ui ">=1.8.0"
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -122,11 +115,11 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-dynamic-locale@^0.1.32:
+angular-dynamic-locale@0.1.32:
   version "0.1.32"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.32.tgz#d07fea75281f25ba94a5be5b46df2a02c5e35836"
 
-angular-filter@~0.5.7:
+angular-filter@0.5.17:
   version "0.5.17"
   resolved "https://registry.yarnpkg.com/angular-filter/-/angular-filter-0.5.17.tgz#60c0c7380fd45872cb8f10801cfe07e154062935"
   dependencies:
@@ -140,23 +133,27 @@ angular-scenario@1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/angular-scenario/-/angular-scenario-1.6.6.tgz#b861641eff8b020dce3d80d772d123bc647eba80"
 
-angular-spinner@1.0.x:
+angular-spinner@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/angular-spinner/-/angular-spinner-1.0.1.tgz#0a159297951d1462e0615ba5e1a01fd46de2c1ca"
   dependencies:
     spin.js "2.3.2"
 
-angular-ui-bootstrap@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.0.tgz#2facefb915386655dc5f44150258032517236d01"
+angular-ui-bootstrap@2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
 
-angular-ui-sortable@0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.17.1.tgz#5d41aa911c5045e2080e11a7ca93659c29cb66b8"
+angular-ui-sortable@0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.18.0.tgz#a4dfdce4baf36406ff9e750c44eb8628f7e74e77"
 
 angular@*, angular@1.6.x:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.6.tgz#fd5a3cfb437ce382d854ee01120797978527cb64"
+
+angular@1.6.8:
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.8.tgz#5be378a58be91a5489e78b59c4518cd9fd273ffb"
 
 ansi-regex@^1.0.0, ansi-regex@^1.1.0:
   version "1.1.1"
@@ -416,9 +413,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap-sass@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.2.0.tgz#e5fb0f4f1dc7d7f5f067664843a5470b152597e5"
+bootstrap-sass@3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.3.7.tgz#6596c7ab40f6637393323ab0bc80d064fc630498"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
@@ -630,7 +627,7 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-comma-separated-values@3.6.x:
+comma-separated-values@3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/comma-separated-values/-/comma-separated-values-3.6.4.tgz#c309ec7024f74b7ae19223372054242617e35bd2"
 
@@ -660,7 +657,7 @@ component-inherit@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/component-inherit/-/component-inherit-0.0.3.tgz#645fc4adf58b72b649d5cae65135619db26ff143"
 
-components-jqueryui@~1.12.1:
+components-jqueryui@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/components-jqueryui/-/components-jqueryui-1.12.1.tgz#617076f128f3be4c265f3e2db50471ef96cd9cee"
 
@@ -1104,9 +1101,9 @@ findup-sync@~0.3.0:
   dependencies:
     glob "~5.0.0"
 
-font-awesome@~4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.3.0.tgz#44eeb790cdf986642786f33fce784764f1841c40"
+font-awesome@4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
 
 for-in@^1.0.1:
   version "1.0.2"
@@ -1203,11 +1200,12 @@ gaze@^1.0.0:
   dependencies:
     globule "^1.0.0"
 
-geokorp@spraakbanken/geokorp#v1.2.9:
+geokorp@spraakbanken/geokorp#1.2.9:
   version "1.2.7"
   resolved "https://codeload.github.com/spraakbanken/geokorp/tar.gz/3529a2e060647d51072553779955156208acfb08"
   dependencies:
     angular "1.6.x"
+    bootstrap-sass-official twbs/bootstrap-sass#~3.2.0
     leaflet "~1.0.0"
     leaflet-providers "~1.1.1"
     leaflet.markercluster "1.0.0-rc.1.0"
@@ -1944,15 +1942,17 @@ jquery-flot@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/jquery-flot/-/jquery-flot-0.8.3.tgz#a273acf43f13190f6e78701869ee24bfef12c22a"
 
-jquery-hoverintent@1.8.x:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/jquery-hoverintent/-/jquery-hoverintent-1.8.2.tgz#bc012d27e7161d42e5aa31a05a78e085c2203ba2"
+jquery-hoverintent@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/jquery-hoverintent/-/jquery-hoverintent-1.9.0.tgz#4d92c1ae07b71b9f0d9721b9b412d672abd387c8"
+  dependencies:
+    jquery ">=1.7.0"
 
 jquery-ui@>=1.8.0:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
 
-jquery@>=1.8.0, jquery@~3.2.1:
+jquery@3.2.1, jquery@>=1.7.0, jquery@>=1.8.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -1993,7 +1993,7 @@ json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
 
-json3@3.3.2, json3@~3.3.1:
+json3@3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/json3/-/json3-3.3.2.tgz#3c0434743df93e2f5c42aee7b19bcb483575f4e1"
 
@@ -2017,9 +2017,9 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jstorage@andris9/jStorage#master:
-  version "0.4.13"
-  resolved "https://codeload.github.com/andris9/jStorage/tar.gz/50466869b93d3bf2138e243ead19b92cfe690a08"
+jstorage@andris9/jStorage#0.4.12:
+  version "0.0.0"
+  resolved "https://codeload.github.com/andris9/jStorage/tar.gz/5f4075a7e1736d5c7d65375288154a73ac895818"
 
 jstransformer@1.0.0:
   version "1.0.0"
@@ -2289,9 +2289,9 @@ mkdirp@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.3.5.tgz#de3e5f8961c88c787ee1368df849ac4413eca8d7"
 
-modernizr@Modernizr/Modernizr#v3.5.0:
+modernizr@3.5.0:
   version "3.5.0"
-  resolved "https://codeload.github.com/Modernizr/Modernizr/tar.gz/7db55bbfa9de67289892b94b60bf2f088c11d669"
+  resolved "https://registry.yarnpkg.com/modernizr/-/modernizr-3.5.0.tgz#396a02231bdc54628bbde2c0813a8e884c7e8060"
   dependencies:
     doctrine "1.2.3"
     file "0.2.2"
@@ -2301,6 +2301,10 @@ modernizr@Modernizr/Modernizr#v3.5.0:
     remarkable "^1.6.2"
     requirejs "2.1.22"
     yargs "7.0.2"
+
+moment@2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 moment@~2.0.0:
   version "2.0.0"
@@ -3092,9 +3096,9 @@ resolve@~1.1.0:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-rickshaw@~1.6.3:
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/rickshaw/-/rickshaw-1.6.3.tgz#e1e80b663d2f0dc2525d0155dcc70e150f847609"
+rickshaw@1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/rickshaw/-/rickshaw-1.6.4.tgz#e5a979564c5ca22cac98d5e86845481bcbf6d5bc"
   dependencies:
     d3 "^3.5.16"
 
@@ -3217,6 +3221,13 @@ simple-is@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/simple-is/-/simple-is-0.2.0.tgz#2abb75aade39deb5cc815ce10e6191164850baf0"
 
+slickgrid@2.3.12:
+  version "2.3.12"
+  resolved "https://registry.yarnpkg.com/slickgrid/-/slickgrid-2.3.12.tgz#f509cd3e6f024371cd3d1fa7e991826466826f87"
+  dependencies:
+    jquery ">=1.8.0"
+    jquery-ui ">=1.8.0"
+
 sntp@1.x.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"
@@ -3322,6 +3333,10 @@ split@^1.0.0, split@~1.0.0:
   resolved "https://registry.yarnpkg.com/split/-/split-1.0.1.tgz#605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
   dependencies:
     through "2"
+
+sprintf-js@^1.0.3:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.1.tgz#36be78320afe5801f6cea3ee78b6e5aab940ea0c"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
@@ -3569,9 +3584,12 @@ ultron@1.0.x:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
 
-underscore.string@~2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.3.3.tgz#71c08bf6b428b1133f37e78fa3a21c82f7329b0d"
+underscore.string@3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.3.4.tgz#2c2a3f9f83e64762fdc45e6ceac65142864213db"
+  dependencies:
+    sprintf-js "^1.0.3"
+    util-deprecate "^1.0.2"
 
 underscore.string@~2.4.0:
   version "2.4.0"
@@ -3612,7 +3630,7 @@ useragent@^2.1.12:
     lru-cache "2.2.x"
     tmp "0.0.x"
 
-util-deprecate@~1.0.1:
+util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
