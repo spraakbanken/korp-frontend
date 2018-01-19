@@ -8,7 +8,7 @@ settings.hitsPerPageValues = [10,25,50,75,100,500,1000]
 korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $location) {
     // resolve globalFilterDef since globalFilter-directive is not used
     $rootScope.globalFilterDef.resolve()
-    
+
     $controller(window.SearchCtrl, {$scope: $scope})
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
@@ -63,7 +63,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 
     var onLangChange = function() {
         c.log("ParallelSearch language change");
-        var currentLangList = _.pluck(s.langs, "lang");
+        var currentLangList = _.map(s.langs, "lang");
         settings.corpusListing.setActiveLangs(currentLangList);
         $location.search("parallel_corpora", currentLangList.join(","))
         var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
@@ -71,7 +71,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             return _(struct)
                 .flatten()
                 .filter(function(item) {
-                    return !_.contains(excludeLangs, item.lang);
+                    return !_.includes(excludeLangs, item.lang);
                 }).groupBy("lang").value()
         }
 
@@ -84,7 +84,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         output += _.map(s.langs.slice(1), function(langobj, i) {
             var neg = s.negates[i + 1] ? "!" : "";
             var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
-            var linkedCorpus = _(langMapping[langobj.lang]).pluck("id").invoke("toUpperCase").join("|");
+            var linkedCorpus = _(langMapping[langobj.lang]).map("id").invokeMap("toUpperCase").join("|");
 
             try {
                 var expanded = CQP.expandOperators(langobj.cqp);
@@ -138,7 +138,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     }
 
     enabledLangsHelper = function(lang) {
-        return _(settings.corpusListing.getLinksFromLangs([lang])).flatten().pluck("lang").unique().value();
+        return _(settings.corpusListing.getLinksFromLangs([lang])).flatten().map("lang").uniq().value();
     }
 
     s.getEnabledLangs = function(i) {
@@ -148,7 +148,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             }
             return enabledLangsHelper(start_lang);
         }
-        var currentLangList = _.pluck(s.langs, "lang");
+        var currentLangList = _.map(s.langs, "lang");
         delete currentLangList[i];
         var firstlang;
         if(s.langs.length)
@@ -220,7 +220,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
             _.each(mainSent.tokens, function(token) {
                 var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
-                if(_.contains(refs, linkNum)) {
+                if(_.includes(refs, linkNum)) {
                     token._link_selected = true
                     self.selected.push(token)
                 }
@@ -228,7 +228,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
         } else {
             var links = _.pick(obj, function(val, key) {
-                return _.str.startsWith(key, "wordlink")
+                return _.startsWith(key, "wordlink")
             })
             _.each(links, function(val, key) {
                 var wordsToLink = _.each(_.compact(val.split("|")), function(num) {

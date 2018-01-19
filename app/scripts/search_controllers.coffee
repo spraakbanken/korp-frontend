@@ -28,7 +28,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
 
     setupWatchStats = () ->
         $scope.showStatistics = true
-        
+
         $scope.$watch (() -> $location.search().hide_stats), (val) ->
             $scope.showStatistics = not val?
 
@@ -48,7 +48,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
 
     unless $location.search().stats_reduce
         $location.search 'stats_reduce', ("word")
-    
+
     if settings.statisticsCaseInsensitiveDefault
         $location.search 'stats_reduce_insensitive', 'word'
 
@@ -62,7 +62,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
         if insensitiveAttrs
             $scope.statInsensitiveAttrs = insensitiveAttrs.split ','
 
-        
+
 
     $scope.$watch 'statSelectedAttrs', ((selected) ->
         if selected and selected.length > 0
@@ -82,10 +82,10 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
                 return $filter("loc")("hits_per_page", $scope.lang) + ": " + val
             else
                 return val
-        
+
         $scope.hitsPerPageValues = settings.hitsPerPageValues
         $scope.hitsPerPage = $location.search().hpp or settings.hitsPerPageDefault
-        
+
         $scope.$watch (() -> $location.search().hpp), (val) ->
             $scope.hitsPerPage = val or settings.hitsPerPageDefault
 
@@ -112,7 +112,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
                 return $filter("loc")(mappedVal, $scope.lang)
 
         $scope.kwicSort = $location.search().sort or ""
-        
+
         $scope.$watch (() -> $location.search().sort), (val) ->
             $scope.kwicSort = val or ""
 
@@ -136,7 +136,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
     $scope.inOrder = not $location.search().in_order?
     $scope.$watch (() -> $location.search().in_order), (val) ->
         $scope.inOrder = not val?
-    $scope.$watch "inOrder", (val) -> 
+    $scope.$watch "inOrder", (val) ->
         $location.search("in_order", if not s.inOrder then false else null)
 
     s.prefix = false
@@ -382,7 +382,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         if confObj.type == "set"
             confObj.is = "contains"
 
-        return _.pairs confObj
+        return _.toPairs confObj
 
 
     onCorpusChange = (event, selected) ->
@@ -391,7 +391,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         lang = s.$parent.$parent?.l?.lang
         allAttrs = settings.corpusListing.getAttributeGroups(lang)
         s.types = _.filter allAttrs, (item) -> not item.hideExtended
-        s.typeMapping = _.object _.map s.types, (item) ->
+        s.typeMapping = _.fromPairs _.map s.types, (item) ->
             if item.isStructAttr
                 ["_." + item.value, item]
             else

@@ -18,7 +18,7 @@ class window.CorpusListing
 
     subsetFactory : (idArray) ->
         #returns a new CorpusListing instance from an id subset.
-        idArray = _.invoke(idArray, "toLowerCase")
+        idArray = _.invokeMap(idArray, "toLowerCase")
         cl = new CorpusListing _.pick @struct, idArray...
         cl.selected = cl.corpora
         return cl
@@ -90,7 +90,7 @@ class window.CorpusListing
 
         # TODO this code merges datasets from attributes with the same name and
         # should be moved to the code for extended controller "datasetSelect"
-        withDataset = _.filter(_.pairs(rest), (item) ->
+        withDataset = _.filter(_.toPairs(rest), (item) ->
             item[1].dataset
         )
         $.each withDataset, (i, item) ->
@@ -99,17 +99,17 @@ class window.CorpusListing
             $.each attrs, (j, origStruct) ->
                 if origStruct[key]?.dataset
                     ds = origStruct[key].dataset
-                    ds = _.object(ds, ds) if $.isArray(ds)
+                    ds = _.zipObject(ds, ds) if $.isArray(ds)
 
-                    val.dataset = (_.object val.dataset, val.dataset) if _.isArray val.dataset
+                    val.dataset = (_.zipObject val.dataset, val.dataset) if _.isArray val.dataset
                     $.extend val.dataset, ds
 
-        $.extend rest, _.object(withDataset)
+        $.extend rest, _.fromPairs withDataset
         # End TODO
 
     getDefaultFilters: () ->
         return @_getFilters "intersection", "defaultFilters"
-        
+
     getCurrentFilters: () ->
         return @_getFilters settings.filterSelection, "showFilters"
 
@@ -128,7 +128,7 @@ class window.CorpusListing
                             corpora: [corpus.id]
                     else
                         attrs[filter].corpora.push corpus.id
-        
+
 
         if selection is "intersection"
             attrNames2 = []
@@ -162,10 +162,10 @@ class window.CorpusListing
         return true
 
     stringifySelected: ->
-        _(@selected).pluck("id").invoke("toUpperCase").join ","
+        _.map(@selected, "id").map((a) -> a.toUpperCase()).join ","
 
     stringifyAll: ->
-        _(@corpora).pluck("id").invoke("toUpperCase").join ","
+        _.map(@corpora, "id").map((a) -> a.toUpperCase()).join ","
 
     getWithinKeys: () ->
         struct = _.map(@selected, (corpus) ->
@@ -194,7 +194,7 @@ class window.CorpusListing
 
     getTimeInterval : ->
         all = _(@selected)
-            .pluck("time")
+            .map("time")
             .filter((item) -> item?)
             .map(_.keys)
             .flatten()
@@ -212,8 +212,8 @@ class window.CorpusListing
 
         infoGetter = (prop) =>
             return _(@selected)
-            .pluck("info")
-            .pluck(prop)
+            .map("info")
+            .map(prop)
             .compact()
             .map((item) -> moment(item))
             .value()
@@ -226,11 +226,11 @@ class window.CorpusListing
         unless froms.length
             from = null
         else
-            from = _.min froms, toUnix
+            from = _.minBy froms, toUnix
         unless tos.length
             to = null
         else
-            to = _.max tos, toUnix
+            to = _.maxBy tos, toUnix
 
         [from, to]
 
@@ -316,7 +316,7 @@ class window.ParallelCorpusListing extends CorpusListing
             corp = @struct[id]
             @selected = @selected.concat(@getLinked(corp, true, false))
 
-        @selected = _.unique @selected
+        @selected = _.uniq @selected
 
     setActiveLangs : (langlist) ->
         @activeLangs = langlist
@@ -438,7 +438,7 @@ class window.ParallelCorpusListing extends CorpusListing
                     item.lang == @activeLangs[0]
 
 
-            return _(struct).flatten().pluck("id").invoke("toUpperCase").join ","
+            return _.map(_.flatten(struct), "id").map((a) -> a.toUpperCase()).join ","
         c.log("struct", struct)
 
         output = []
@@ -559,7 +559,7 @@ util.localize = (root) ->
     return
 
 util.lemgramToString = (lemgram, appendIndex) ->
-    lemgram = _.str.trim(lemgram)
+    lemgram = _.trim(lemgram)
     infixIndex = ""
     concept = lemgram
     infixIndex = ""
@@ -604,7 +604,7 @@ util.splitLemgram = (lemgram) ->
         throw new Error("Input to util.splitLemgram is not a lemgram: " + lemgram)
     keys = ["morph", "form", "pos", "index", "startIndex"]
     splitArray = lemgram.match(/((\w+)--)?(.*?)\.\.(\w+)\.(\d\d?)(\:\d+)?$/).slice(2)
-    _.object keys, splitArray
+    _.zipObject keys, splitArray
 
 # Add download links for other formats, defined in
 # settings.downloadFormats (Jyrki Niemi <jyrki.niemi@helsinki.fi>
@@ -861,7 +861,7 @@ window.unregescape = (s) ->
     s.replace /\\/g, ""
 
 util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
-    if _.contains(x, ".")
+    if _.includes(x, ".")
         parts = x.split(".")
         decimalSeparator = util.getLocaleString("util_decimalseparator")
         return parts[0] + decimalSeparator + parts[1] if stringOnly

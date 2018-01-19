@@ -33,7 +33,7 @@ describe "page", () ->
         input = element(By.model('textInField'))
         input.sendKeys("gå")
         input.sendKeys(protractor.Key.ENTER)
-        expect(browser.executeScript("return locationSearch().page")).toBe 0    
+        expect(browser.executeScript("return locationSearch().page")).toBe null
 
     it "should should use the correct start/end values", () ->
         expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe 175
@@ -72,4 +72,3 @@ describe "kwic download menu", () ->
         browser.get(browser.params.url + "#?corpus=suc2,suc3&search=lemgram|gå..vb.1&result_tab=2").then () ->
             expect(element(By.cssContainingText('option', 'CSV')).isPresent()).toBe(true)
         
-

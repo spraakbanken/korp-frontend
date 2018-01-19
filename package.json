@@ -20,7 +20,7 @@
         "bootstrap-sass": "3.3.7",
         "angular-filter": "0.5.17",
         "slickgrid": "2.3.12",
-        "geokorp": "spraakbanken/geokorp#1.2.9",
+        "geokorp": "spraakbanken/geokorp#1.2.10",
         "jquery-hoverintent": "1.9.0",
         "angular-ui-sortable": "0.18.0",
         "angular-dynamic-locale": "0.1.32",

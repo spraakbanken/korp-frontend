@@ -11,11 +11,7 @@
     return output
   }
 
-  if(typeof require != "undefined")
-      var _ = require("../../components/lodash/lodash")._
-  else
-    var _ = window._
-
+  var _ = window._
   var c = console
 
 }
@@ -42,7 +38,7 @@ token
     var output = left
     right.forEach(function(item) {
       var val = item[1]
-      output = _.merge(output, val, function(a, b) {
+      output = _.mergeWith(output, val, function(a, b) {
         return _.isArray(a) ? a.concat(b) : undefined;
       })
     })
@@ -78,7 +74,7 @@ and
     return {and_block : [unpack([left], right)]}
   }
   / bound:bound_block {
-    bound = _.object(bound.map(function(item) {
+    bound = _.fromPairs(bound.map(function(item) {
       return [item, true]
     }))
     return {"bound" : bound, "and_block" : []}
@@ -92,15 +88,16 @@ or
     if(lhs[0])
       prefix = lhs[0]
 
-    if(flags)
+    if(flags) {
       flags = _.zipObject(flags[1], _.map(flags[1], function() { return true; }));
+    }
     return makeObj(prefix + lhs[1].join(""), infix_op, rhs, flags)
   }
   / date
 
 value_expr
     = ["] rhs:('\\"' / [^"])* ["] {
-        return rhs.join(""); 
+        return rhs.join("");
     }
     / ['] rhs:("\\'" / [^'])* ['] {
         rhs = _.map(rhs, function(char) {

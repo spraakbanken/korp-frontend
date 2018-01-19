@@ -16,14 +16,14 @@ describe "config file", () ->
             .map((corp) ->
                 _.values(_.pick(corp, required_config_fields)).length == required_config_fields.length
             )
-            .all()
+            .every()
 
         expect(has_all).toBe(true)
     it "has 'context' in all corpora definitions", () ->
         within = _(settings.corpora)
             .values()
             .map((item) -> "within" of item)
-            .all()
+            .every()
 
         expect(within).toBe(true)
 
@@ -43,4 +43,3 @@ describe "settings.corpusListing", () ->
     it 'gives a common attribute from vivill and gp2012', () ->
         attrs = cl.subsetFactory(["romi", "romii"]).getStructAttrsIntersection()
         expect("text_title" of attrs and "text_author" of attrs).toBe(true)
-

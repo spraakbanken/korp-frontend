@@ -97,9 +97,9 @@ class KwicCtrl
                     mainCorpusId = hitContext.corpus.toLowerCase()
 
                 id = (linkCorpusId or mainCorpusId)
-                
+
                 [matchSentenceStart, matchSentenceEnd] = findMatchSentence hitContext
-                
+
                 if not (hitContext.match instanceof Array)
                     matches = [{start: hitContext.match.start, end: hitContext.match.end}]
                 else
@@ -150,7 +150,7 @@ class KwicCtrl
 
                 output.push(hitContext)
                 if hitContext.aligned
-                    [corpus_aligned, tokens] = _.pairs(hitContext.aligned)[0]
+                    [corpus_aligned, tokens] = _.toPairs(hitContext.aligned)[0]
                     output.push
                         tokens : tokens
                         isLinked : true
@@ -211,7 +211,7 @@ class KwicCtrl
         s.$watch (() -> $location.search().hpp), (hpp) ->
             s.hitsPerPage = hpp or 25
 
-        s.download = 
+        s.download =
             options: [
                     {value: "", label: "download_kwic"},
                     {value: "kwic/csv", label: "download_kwic_csv"},
@@ -230,7 +230,7 @@ class KwicCtrl
                 s.download.fileName = fileName
                 s.download.blobName = blobName
                 s.download.selected = ""
-                @timeout (() -> 
+                @timeout (() ->
                         angular.element("#kwicDownloadLink")[0].click()
                     ), 0
 
@@ -302,7 +302,7 @@ korpApp.directive "statsResultCtrl", () ->
 
         s.onGraphShow = (data) ->
             $rootScope.graphTabs.push data
-        
+
         s.newMapEnabled = settings.newMapEnabled
 
         s.getGeoAttributes = (corpora) ->
@@ -325,7 +325,7 @@ korpApp.directive "statsResultCtrl", () ->
 
         s.mapToggleSelected = (index, event) ->
             _.map s.mapAttributes, (attr) -> attr.selected = false
-            
+
             attr = s.mapAttributes[index]
             attr.selected = true
             event.stopPropagation()
@@ -348,7 +348,7 @@ korpApp.directive "statsResultCtrl", () ->
             if selectedAttributes.length > 1
                 c.log "Warning: more than one selected attribute, choosing first"
             selectedAttribute = selectedAttributes[0]
-            
+
             within = settings.corpusListing.subsetFactory(selectedAttribute.corpora).getWithinParameters()
             $rootScope.mapTabs.push backend.requestMapData(cqpExpr, cqpExprs, within, selectedAttribute)
 
@@ -436,7 +436,7 @@ korpApp.directive "wordpicCtrl", () ->
           set = row[row.show_rel].split('|')
           lemgram = set[0]
 
-          word = _.str.trim(lemgram)
+          word = _.trim(lemgram)
           infixIndex = ""
           concept = lemgram
           infixIndex = ""
@@ -522,7 +522,7 @@ korpApp.directive "compareCtrl", () ->
             attributes = (_.extend {}, cl.getCurrentAttributes(), cl.getStructAttrs())
 
             s.stringify = _.map reduce, (item) ->
-                return attributes[_.str.strip item, "_."]?.stringify or angular.identity
+                return attributes[_.trimStart item, "_."]?.stringify or angular.identity
 
             s.max = max
 
@@ -544,7 +544,7 @@ korpApp.directive "compareCtrl", () ->
                 # transform result from grouping on attribute to grouping on token place
                 tokens = _.map [0 .. tokenLength - 1], (tokenIdx) ->
                            tokens = _.map reduce, (reduceAttr, attrIdx) ->
-                               return _.unique _.map(splitTokens, (res) ->
+                               return _.uniq _.map(splitTokens, (res) ->
                                    return res[attrIdx][tokenIdx])
                            return tokens
 

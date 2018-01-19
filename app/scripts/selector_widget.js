@@ -10,7 +10,7 @@ var hp_corpusChooser = {
 		var self = this;
 
 		this.updateAllStates();
-		
+
 		// Make the popup disappear when the user clicks outside it
 		$(window).unbind('click.corpusselector');
 		$(window).bind('click.corpusselector', function(e) {
@@ -27,7 +27,7 @@ var hp_corpusChooser = {
 			function() { $(this).removeClass('ui-state-hover'); }
 		);
 
-		
+
 
 	},
 	isSelected: function(id) {
@@ -128,14 +128,14 @@ var hp_corpusChooser = {
 		var num_checkboxes = $(".hplabel .checkbox").length;
 		//if (num_unchecked_checkboxes == num_checkboxes) {
 		//	header_text_2 = 'corpselector_noneselected';
-		//} else 
+		//} else
 		if (num_checked_checkboxes == num_checkboxes && num_checkboxes > 1) {
 			header_text = num_checked_checkboxes;
 			header_text_2 = 'corpselector_allselected';
 		} else if (num_checked_checkboxes == 1) {
 			var currentCorpusName = checked_checkboxes.parent().parent().attr('data');
 			if (currentCorpusName.length > 37) { // Ellipsis
-				currentCorpusName = _.str.trim(currentCorpusName.substr(0, 37)) + "...";
+				currentCorpusName = _.trim(currentCorpusName.substr(0, 37)) + "...";
 			}
 			header_text = currentCorpusName;
 			header_text_2 = "corpselector_selectedone";
@@ -413,7 +413,7 @@ var hp_corpusChooser = {
 						outStr += recursive_transform(theHTML, levelindent + 1);
 						outStr += "</div>";
 					} else {
-						var disable = settings.corpora[$(this).attr('id')].limitedAccess === true && 
+						var disable = settings.corpora[$(this).attr('id')].limitedAccess === true &&
 							!authenticationProxy.hasCred($(this).attr('id'));
 
 						if(levelindent > 0) {
@@ -441,5 +441,3 @@ var hp_corpusChooser = {
 };
 
 $.widget("hp.corpusChooser", hp_corpusChooser); // create the widget
-
-

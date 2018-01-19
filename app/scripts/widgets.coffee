@@ -49,7 +49,7 @@ Sidebar =
                 wnd = this.contentWindow
                 tokens = tokens
                 wnd.draw_deptree.call wnd, tokens, (msg) ->
-                    [type, val] = _.head _.pairs msg
+                    [type, val] = _.head _.toPairs msg
                     info.empty().append $("<span>").localeKey(type), $("<span>: </span>"), $("<span>").localeKey("#{type}_#{val}")
 
             $("#deptree_popup").empty().append(info, iframe).dialog(
@@ -61,10 +61,10 @@ Sidebar =
 
     renderCorpusContent: (type, wordData, sentenceData, corpus_attrs, tokens, customAttrs, customData) ->
         if type == "struct"
-            pairs = _.pairs(sentenceData)
+            pairs = _.toPairs(sentenceData)
 
         else if type == "pos"
-            pairs = _.pairs(wordData)
+            pairs = _.toPairs(wordData)
 
         pairs = _.filter pairs, ([key, val]) -> corpus_attrs[key]
         pairs = _.filter pairs, ([key, val]) -> not (corpus_attrs[key].displayType == "hidden" or corpus_attrs[key].hideSidebar)
@@ -151,7 +151,7 @@ Sidebar =
                                 cqpExpr = if attrSettings.internalSearch then attrSettings.internalSearch searchKey, cqpVal else "[#{searchKey} contains '#{regescape(cqpVal)}']"
                                 locationSearch({"search": "cqp", "cqp": cqpExpr, "page": null})
                         if attrs.externalSearch
-                            address = _.template(attrs.externalSearch, {val : subValue})
+                            address = _.template(attrs.externalSearch)({val : subValue})
                             externalLink = $("<a href='#{address}' class='external_link' target='_blank' style='margin-top: -6px'></a>")
 
                         li.append inner
@@ -189,7 +189,7 @@ Sidebar =
                         showAll.css "display", "none"
                         showOne.css "display", "inline"
                         _.map lis, (li) ->
-                            
+
                             li.css "display", "list-item"
 
                     showOne.click () ->
@@ -206,7 +206,7 @@ Sidebar =
             pattern = attrs.pattern or '<span data-key="<%= key %>"><%= val %></span>'
             ul = $("<ul>")
             getStringVal = (str) ->
-                return _.reduce(_.invoke(_.invoke(str, "charCodeAt", 0), "toString"), (a,b) -> a + b);
+                return _.reduce(_.invokeMap(_.invokeMap(str, "charCodeAt", 0), "toString"), (a,b) -> a + b);
             valueArray = _.filter(value?.split("|") or [], Boolean)
             if key == "variants"
                 # TODO: this doesn't sort quite as expected
@@ -222,7 +222,7 @@ Sidebar =
             lis = for x in itr when x.length
                 val = (attrs.stringify or _.identity)(x)
 
-                inner = $(_.template(pattern, {key : x, val : val}))
+                inner = $(_.template(pattern)({key : x, val : val}))
                 if attrs.translationKey?
                     prefix = attrs.translationKey or ""
                     inner.localeKey(prefix + val)
@@ -234,7 +234,7 @@ Sidebar =
 
                 li = $("<li></li>").data("key", x).append inner
                 if attrs.externalSearch
-                    address = _.template(attrs.externalSearch, {val : x})
+                    address = _.template(attrs.externalSearch)({val : x})
                     li.append $("<a href='#{address}' class='external_link' target='_blank'></a>")
 
 
@@ -259,7 +259,7 @@ Sidebar =
                                     </span>
                                 """
         else if attrs.pattern
-            return output.append _.template attrs.pattern, {key : key, val : str_value, pos_attrs : wordData, struct_attrs : sentenceData }
+            return output.append _.template(attrs.pattern)({key : key, val : str_value, pos_attrs : wordData, struct_attrs : sentenceData })
 
         else
             if attrs.translationKey
@@ -279,7 +279,7 @@ Sidebar =
         @element.find(".sidebar_url").css("white-space", "nowrap").each ->
             while $(this).width() > totalWidth
                 oldtext = $(this).text()
-                a = _.str.trim(oldtext, "/").replace("...", "").split("/")
+                a = _.trim(oldtext, "/").replace("...", "").split("/")
                 domain = a.slice(2, 3)
                 midsection = a.slice(3).join("/")
                 midsection = "..." + midsection.slice(2)
