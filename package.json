@@ -14,7 +14,6 @@
         "modernizr": "3.5.0",
         "angular-ui-bootstrap": "2.5.6",
         "angular-spinner": "1.0.1",
-        "underscore.string": "3.3.4",
         "jstorage": "andris9/jStorage#0.4.12",
         "comma-separated-values": "3.6.4",
         "bootstrap-sass": "3.3.7",
