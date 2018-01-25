@@ -1,3 +1,5 @@
+pieChartImg = require "../img/stats2.png"
+
 createStatisticsService = () ->
     createColumns = (corpora, reduceVals, reduceValLabels) ->
         loc = {
@@ -39,7 +41,7 @@ createStatisticsService = () ->
             field: "hit_value"
             sortable: false
             formatter: (row, cell, value, columnDef, dataContext) ->
-                return $.format '<img id="circlediagrambutton__%s" src="img/stats2.png" class="arcDiagramPicture"/>', dataContext.rowId
+                return $.format('<img id="circlediagrambutton__%s" src="' + pieChartImg + '" class="arcDiagramPicture"/>', dataContext.rowId)
             maxWidth: 25
             minWidth: 25
 
@@ -65,7 +67,7 @@ createStatisticsService = () ->
     processData = (def, data, reduceVals, reduceValLabels, ignoreCase) ->
         columns = createColumns(data.corpora, reduceVals, reduceValLabels)
 
-        statsWorker = new Worker "scripts/statistics_worker.js"
+        statsWorker = new Worker "worker.js"
         statsWorker.onmessage = (e) ->
             searchParams = 
                 reduceVals: reduceVals

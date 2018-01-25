@@ -1,8 +1,0 @@
-
-<div ng-controller="ExtendedSearch">
-  <global-filters lang="lang"></global-filters>
-  <div id="query_table" extended-list="extended-list" cqp="cqp" lang="lang" repeat-error="repeatError"></div>
-  <div ng-show="repeatError" style="color: red; margin-bottom: 10px;">{{'repeat_error' | loc:lang}}</div>
-  <search-submit pos="right"></search-submit><span rel="localize[within]"></span>
-  <select class="within_select" ng-model="within" ng-options="item.value as ('within_' + item.value | loc:lang) for item in withins"></select>
-</div>

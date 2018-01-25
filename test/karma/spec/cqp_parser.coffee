@@ -1,3 +1,6 @@
+require("../../../app/scripts/cqp_parser/CQPParser.js")
+require("../../../app/scripts/cqp_parser/cqp.coffee")
+window.moment = require("moment")
 
 describe "parsing", () ->
     it "can parse simple expr", () ->

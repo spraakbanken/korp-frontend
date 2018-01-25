@@ -1,5 +1,25 @@
 window.korpApp = angular.module 'korpApp', [
-                                            "ui.bootstrap"
+                                            "ui.bootstrap.typeahead"
+                                            "uib/template/typeahead/typeahead-popup.html"
+                                            "ui.bootstrap.tooltip"
+                                            "uib/template/tooltip/tooltip-popup.html"
+                                            "uib/template/tooltip/tooltip-html-popup.html"
+                                            "ui.bootstrap.modal"
+                                            "uib/template/modal/window.html"
+                                            "ui.bootstrap.tabs"
+                                            "uib/template/tabs/tabset.html"
+                                            "uib/template/tabs/tab.html"
+                                            "ui.bootstrap.dropdown"
+                                            "ui.bootstrap.pagination"
+                                            "uib/template/pagination/pagination.html"
+                                            "ui.bootstrap.datepicker"
+                                            "uib/template/datepicker/datepicker.html"
+                                            "uib/template/datepicker/day.html"
+                                            "uib/template/datepicker/month.html"
+                                            "uib/template/datepicker/year.html"
+                                            "ui.bootstrap.timepicker"
+                                            "uib/template/timepicker/timepicker.html"
+                                            "ui.bootstrap.buttons"
                                             "angularSpinner"
                                             "ui.sortable"
                                             "newsdesk"
@@ -208,7 +228,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         s.show_modal = false
 
     showModal = (key) ->
-        tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]
+        tmpl = {about: require('../markup/about.html'), login: 'login_modal'}[key]
         params =
             templateUrl : tmpl
             scope : s

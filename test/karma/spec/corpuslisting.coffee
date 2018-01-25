@@ -1,4 +1,15 @@
+window.c = console
+window._ = require("lodash")
+window.settings = {}
+require("configjs")
+commonSettings = require("commonjs")
+_.map commonSettings, (v, k) ->
+  if (k of window)
+    console.error("warning, overwriting setting" + k)
+  window[k] = v
 
+require("../../../app/scripts/util.coffee")
+require("defaultmode")
 
 describe "config file", () ->
 

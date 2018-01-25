@@ -1,4 +1,6 @@
 
+korpFailImg = require "../img/korp_fail.svg"
+
 window.authenticationProxy = new model.AuthenticationProxy()
 window.timeProxy = new model.TimeProxy()
 
@@ -24,13 +26,10 @@ deferred_domReady = $.Deferred((dfd) ->
         mode = $.deparam.querystring().mode
         unless mode
             mode = "default"
-        $.getScript("modes/common.js").done () ->
-            $.getScript("modes/#{mode}_mode.js").done () ->
-                dfd.resolve()
-            .fail (jqxhr, settings, exception) ->
-                c.error "Mode file parsing error: ", exception
+        $.getScript("modes/#{mode}_mode.js").done () ->
+            dfd.resolve()
         .fail (jqxhr, settings, exception) ->
-            c.error "common.js parsing error: ", exception
+            c.error "Mode file parsing error: ", exception
     return dfd
 ).promise()
 
@@ -54,7 +53,10 @@ $(window).resize (event) ->
 $.when(loc_dfd, deferred_domReady).then ((loc_data) ->
     c.log "preloading done, t = ", $.now() - t
 
-    angular.bootstrap(document, ['korpApp'])
+    try
+        angular.bootstrap(document, ['korpApp'])
+    catch e
+        c.error e
 
     try
         corpus = locationSearch()["corpus"]

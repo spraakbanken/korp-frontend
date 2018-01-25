@@ -252,8 +252,9 @@ Sidebar =
             return output.append "<a href='#{str_value}' class='exturl sidebar_url' target='_blank'>#{decodeURI(str_value)}</a>"
 
         else if key == "msd"
+            msdTags = require '../markup/msdtags.html'
             return output.append """<span class='msd_sidebar'>#{str_value}</span>
-                                        <a href='markup/msdtags.html' target='_blank'>
+                                        <a href='#{msdTags}' target='_blank'>
                                             <span id='sidbar_info' class='ui-icon ui-icon-info'></span>
                                         </a>
                                     </span>

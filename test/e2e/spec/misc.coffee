@@ -31,9 +31,10 @@ describe "page", () ->
 
     it "should go back to 0 when searching anew", () ->
         input = element(By.model('textInField'))
+        input.sendKeys(protractor.Key.BACK_SPACE)
         input.sendKeys("gå")
-        input.sendKeys(protractor.Key.ENTER)
-        expect(browser.executeScript("return locationSearch().page")).toBe null
+        input.sendKeys(protractor.Key.ENTER)  
+        expect(browser.executeScript("return locationSearch().page")).toBe 0
 
     it "should should use the correct start/end values", () ->
         expect(browser.executeScript("return kwicResults.proxy.prevParams.start")).toBe 175

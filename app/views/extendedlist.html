@@ -15,7 +15,7 @@
                     <div class="or_container">
                         <div class="or or_arg" ng-repeat="or in and">
                             <div class="left_col">
-                                <img class="image_button remove_arg" src="img/minus.png" ng-click="removeOr(token, and, $index)">
+                                <img class="image_button remove_arg" src="../img/minus.png" ng-click="removeOr(token, and, $index)">
                             </div>
                             <div class="right_col inline_block" style="margin-left: 5px;">
                                 <div class="arg_selects {{or.type}}">
@@ -79,7 +79,7 @@
             </div>
         </div>
         <span class="image_button insert_token" ng-click="addToken()">
-            <img class="plus-btn" src="img/plus.png"> 
+            <img class="plus-btn" src="../img/plus.png"> 
             <span>{{"add_token" | loc:lang}}</span>
         </span>
     </div>

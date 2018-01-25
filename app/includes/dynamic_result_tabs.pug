@@ -49,7 +49,7 @@ uib-tab(ng-repeat='promise in compareTabs', compare-ctrl)
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();compareTabs.splice($index, 1)')
   .compare_result(ng-class='{loading : loading}')
     .error_msg(ng-if="error")
-      object.korp_fail.inline_block(type='image/svg+xml', data='img/korp_fail.svg')
+      div.korp_fail.inline_block
         img.korp_fail(src='img/korp_fail.svg')
       .fail_text.inline_block(rel='localize[fail_text]') Ett fel har uppstått. 
 
@@ -75,7 +75,7 @@ uib-tab(ng-repeat="promise in mapTabs", new-map-ctrl, select="onentry()")
     span(tab-spinner='tab-spinner', ng-click='$event.preventDefault();mapTabs.splice($index, 1)')
   .map_result(ng-class='{loading : loading}')
     .error_msg(ng-if="error")
-      object.korp_fail.inline_block(type='image/svg+xml', data='img/korp_fail.svg')
+      div.korp_fail.inline_block
         img.korp_fail(src='img/korp_fail.svg')
       .fail_text.inline_block(rel='localize[fail_text]') Ett fel har uppstått. 
     include newmapresult

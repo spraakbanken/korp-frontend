@@ -1,3 +1,5 @@
+plusImg = require "../img/plus.png"
+
 korpApp.directive "globalFilters", (globalFilterService) ->
     restrict: "E"
     scope:
@@ -18,7 +20,7 @@ korpApp.directive "globalFilters", (globalFilterService) ->
 
                        <span uib-dropdown auto-close="outsideClick" ng-if="getAvailableFilters().length !== 0">
                          <span uib-dropdown-toggle style="vertical-align: sub;">
-                            <img src="img/plus.png">
+                            <img src="#{plusImg}">
                          </span>
                          <div uib-dropdown-menu class="korp-uib-dropdown-menu">
                            <ul>
@@ -32,7 +34,7 @@ korpApp.directive "globalFilters", (globalFilterService) ->
 
                    </div>
                    <div ng-if="false">
-                       <img src="img/plus.png">
+                       <img src="#{plusImg}">
                        <span style="font-weight: bold" > {{'add_filter' | loc:lang}}</span>
                    </div>
                 </div>'''

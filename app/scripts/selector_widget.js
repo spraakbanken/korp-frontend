@@ -1,3 +1,6 @@
+var collapsedImg = require('../img/collapsed.png')
+var extendedImg = require('../img/extended.png')
+
 var hp_corpusChooser = {
 
 	options: {
@@ -260,11 +263,11 @@ var hp_corpusChooser = {
 		 		if($(this).parent().hasClass("collapsed")) {
 		 			$(this).parent().removeClass('collapsed').addClass('extended');
 		 			$(this).siblings('div').fadeToggle("fast");
-		 			$(this).attr({src : "img/extended.png"});
+		 			$(this).attr({src : extendedImg});
 		 		} else {
 		 			$(this).parent().removeClass('extended').addClass('collapsed');
 		 			$(this).siblings('div').fadeToggle("fast");
-		 			$(this).attr({src : "img/collapsed.png"});
+		 			$(this).attr({src : collapsedImg});
 		 		}
 			});
 
@@ -408,7 +411,10 @@ var hp_corpusChooser = {
 						var foldertitle = $(this).children('ul').attr('title');
 						var folderdescription = $(this).children('ul').attr('description');
 						if(folderdescription == "undefined") folderdescription = "";
-						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="' + cssattrib + '" class="tree collapsed '+ levelindent +'"><img src="img/collapsed.png" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
+						outStr += '<div data="' + foldertitle + "___" + folderdescription + '" style="' + cssattrib + 
+									'" class="tree collapsed '+ levelindent +'"><img src="' + collapsedImg + 
+									'" alt="extend" class="ext"/> <label class="boxlabel"><span id="' + item_id + '" class="checkbox checked"/> <span>' + 
+									foldertitle + ' </span><span class="numberOfChildren">(?)</span></label>';
 
 						outStr += recursive_transform(theHTML, levelindent + 1);
 						outStr += "</div>";

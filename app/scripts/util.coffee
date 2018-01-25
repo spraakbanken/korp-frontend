@@ -1,3 +1,11 @@
+folderImg = require "../img/folder.png"
+korpIconImg = require "../img/korp_icon.png"
+jRejectBackgroundImg = require "../img/browsers/background_browser.gif"
+require "../img/browsers/browser_chrome.gif"
+require "../img/browsers/browser_firefox.gif"
+require "../img/browsers/browser_safari.gif"
+require "../img/browsers/browser_opera.gif"
+
 window.util = {}
 
 
@@ -795,7 +803,7 @@ util.loadCorpora = ->
 
             output = """
             <b>
-                <img class="popup_icon" src="img/korp_icon.png" />
+                <img class="popup_icon" src="#{korpIconImg}" />
                 #{corpusObj.title}
             </b>
             #{maybeInfo}
@@ -839,7 +847,7 @@ util.loadCorpora = ->
                 glueString = util.getLocaleString("corpselector_corporawith_sing")
             else
                 glueString = util.getLocaleString("corpselector_corporawith_plur")
-            "<b><img src=\"img/folder.png\" style=\"margin-right:4px; vertical-align:middle; margin-top:-1px\"/>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + util.prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences")
+            "<b><img src=\"" + folderImg + "\" style=\"margin-right:4px; vertical-align:middle; margin-top:-1px\"/>" + indata.title + "</b><br/><br/>" + maybeInfo + "<b>" + corporaID.length + "</b> " + glueString + ":<br/><br/><b>" + util.prettyNumbers(totalTokens.toString()) + "</b> " + util.getLocaleString("corpselector_tokens") + "<br/><b>" + totalSentencesString + "</b> " + util.getLocaleString("corpselector_sentences")
     ).bind("corpuschooserchange", (evt, corpora) ->
         c.log "corpuschooserchange", corpora
 
@@ -878,15 +886,13 @@ util.formatDecimalString = (x, mode, statsmode, stringOnly) ->
 util.browserWarn = ->
     $.reject
         reject:
-
-            # all : false,
             msie5: true
             msie6: true
             msie7: true
             msie8: true
             msie9: true
 
-        imagePath: "img/browsers/"
+        imagePath: _.split(jRejectBackgroundImg, "/").slice(0,-1).join("/")
         display: [
             "firefox"
             "chrome"

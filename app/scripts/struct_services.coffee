@@ -54,9 +54,9 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
         return _.intersection corporaPerFilter...
 
     mergeObjects = (values...) ->
-        if _.all values, ((val) -> Array.isArray val)
+        if _.every values, ((val) -> Array.isArray val)
             return _.union values...
-        else if _.all values, ((val) -> (not (Array.isArray val)) and (typeof val is "object"))
+        else if _.every values, ((val) -> (not (Array.isArray val)) and (typeof val is "object"))
             newObj = {}
             allKeys = _.union (_.map values, (val) -> _.keys val)...
             for k in allKeys
@@ -64,7 +64,7 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
                 newValues = _.filter allValsForKey, (val) -> return (not _.isEmpty val) or (Number.isInteger val)
                 newObj[k] = mergeObjects newValues...
             return newObj
-        else if _.all values, ((val) -> Number.isInteger(val))
+        else if _.every values, ((val) -> Number.isInteger(val))
             return _.reduce values, ((a,b) -> return a + b), 0
         else
             c.error "Cannot merge objects a and b"

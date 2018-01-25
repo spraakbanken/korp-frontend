@@ -1,13 +1,8 @@
 
-
-// var HtmlReporter = require('protractor-html-screenshot-reporter');
 exports.config = {
-
   params: {
-    url: 'http://localhost:9001/'
+    url: 'http://localhost:9000/'
   },
-
-  // Capabilities to be passed to the webdriver instance.
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
@@ -21,15 +16,7 @@ exports.config = {
         }
     }
   },
-
-  // Spec patterns are relative to the current working directly when protractor is called.
-  specs: ['bin/*.js'],
-  // specs: ['bin/parallel.js'],
-          // 'bin/map.js',
-          // 'bin/autocomplete.js',
-          // 'bin/statistics.js',
-          // 'bin/compare.js',
-          // 'bin/statistics_export.js'],
+  specs: ['spec/*.js'],
 
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
@@ -38,13 +25,4 @@ exports.config = {
   },
   directConnect: true,
   restartBrowserBetweenTests: true
-
- //  onPrepare: function() {
- //    jasmine.getEnv().addReporter(new HtmlReporter({
- //       baseDirectory: 'test/reports',
- //       takeScreenShotsOnlyForFailedSpecs: true
- //    }));
- // }
-
-
 };

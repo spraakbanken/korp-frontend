@@ -2,7 +2,7 @@ korpApp = angular.module("korpApp")
 
 window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($scope, $location, $filter, utils, searches) ->
     $scope.visibleTabs = [true, true, true, true]
-    $scope.extendedTmpl = "views/extended_tmpl.html"
+    $scope.extendedTmpl = require("../views/extended_tmpl.pug")
     # for parallel mode
     searches.langDef.resolve()
     $scope.isCompareSelected = false

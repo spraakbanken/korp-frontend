@@ -1,4 +1,8 @@
-@import "../components/font-awesome/scss/font-awesome.scss";
+
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import "bootstrap-custom";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -2586,7 +2590,7 @@ li.active a span .num-to-find {
 }
 
 .leaflet-control-layers-toggle {
-    background-image: url(../components/leaflet/dist/images/layers.png);
+    background-image: url(../../node_modules/leaflet/dist/images/layers.png);
 }
 
 

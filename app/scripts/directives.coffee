@@ -334,13 +334,13 @@ korpApp.directive "tabSpinner", ($rootElement) ->
 
 
 korpApp.directive "extendedList", ($location, $rootScope) ->
-    templateUrl : "views/extendedlist.html"
-    scope : {
+    templateUrl: require "../views/extendedlist.html"
+    scope: {
         cqp : "="
         lang: "="
         repeatError: "="
     },
-    link : ($scope, elem, attr) ->
+    link: ($scope, elem, attr) ->
         s = $scope
 
         setCQP = (val) ->

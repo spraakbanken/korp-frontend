@@ -3,7 +3,7 @@
     Speed/memory gains mostly come from using [absolute, relative] rather than {absolute: x, relative: y}
 */
 
-importScripts("../components/lodash/lodash.js");
+require("lodash");
 
 onmessage = function(e) {
     var data = e.data.data;

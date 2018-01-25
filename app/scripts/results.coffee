@@ -1,3 +1,5 @@
+korpFailImg = require "../img/korp_fail.svg"
+
 class BaseResults
     constructor: (resultSelector, tabSelector, scope) ->
         @s = scope
@@ -44,8 +46,8 @@ class BaseResults
         c.error "json fetch error: ", data
         @hidePreloader()
         @resetView()
-        $('<object class="korp_fail" type="image/svg+xml" data="img/korp_fail.svg">')
-            .append("<img class='korp_fail' src='img/korp_fail.svg'>")
+        $('<object class="korp_fail" type="image/svg+xml" data="' + korpFailImg + '">')
+            .append("<img class='korp_fail' src='" + korpFailImg + "'>")
             .add($("<div class='fail_text' />")
             .localeKey("fail_text"))
             .addClass("inline_block")
@@ -1363,7 +1365,7 @@ class view.GraphResults extends BaseResults
     setBarMode : () ->
         if $(".legend .line", @$result).length > 1
             $(".legend li:last:not(.disabled) .action", @$result).click()
-            if (_.all _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
+            if (_.every _.map $(".legend .line", @$result), (item) -> $(item).is(".disabled"))
                 $(".legend li:first .action", @$result).click()
         return
     setLineMode : () ->
@@ -1397,7 +1399,7 @@ class view.GraphResults extends BaseResults
                     if selVal is "relative"
                         cells.push cell.y
                     else
-                        i = _.indexOf (_.map row.abs_data, "x"), cell.x, true
+                        i = _.sortedIndexOf (_.map row.abs_data, "x"), cell.x
                         cells.push row.abs_data[i].y
                 output.push cells
 
@@ -1448,7 +1450,7 @@ class view.GraphResults extends BaseResults
                                     "<span class='absStat'>(" + valTup[0].toLocaleString(loc) + ")</span> " +
                               "<span>"
                         return fmt(value)
-                i = _.indexOf (_.map row.abs_data, "x"), item.x, true
+                i = _.sortedIndexOf (_.map row.abs_data, "x"), item.x
                 new_time_row[timestamp] = [item.y, row.abs_data[i].y]
             time_table_data.push new_time_row
         # Sort columns
@@ -1655,7 +1657,7 @@ class view.GraphResults extends BaseResults
 
                     "<br><span rel='localize[rel_hits_short]'>#{util.getLocaleString 'rel_hits_short'}</span> " + val
                 formatter : (series, x, y, formattedX, formattedY, d) ->
-                    i = _.indexOf (_.map series.data, "x"), x, true
+                    i = _.sortedIndexOf (_.map series.data, "x"), x
                     try
                         abs_y = series.abs_data[i].y
                     catch e
