@@ -2,17 +2,8 @@
 .sass-cache
 node_modules
 /dist
-/.tmp
-/app/components/angular-bootstrap/template
-*.map
 .vscode
-test/e2e/bin/
-test/karma/bin
 release_bin
-app/index.html
-app/scripts/bin/
-app/styles/styles.css
-app/styles/bootstrap.css
 release
 run_config.json
 *~

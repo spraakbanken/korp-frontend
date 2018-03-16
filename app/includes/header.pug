@@ -19,7 +19,7 @@
       li
         a#about(ng-click="citeClick()") {{'about' | loc:lang}}
       li
-        a(href='http://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning', target='_blank') {{'docs' | loc:lang}}
+        a(href='https://spraakbanken.gu.se/swe/forskning/infrastruktur/korp/anvandarhandledning', target='_blank') {{'docs' | loc:lang}}
       li#korplink
         a(href='/korp') {{'korp' | loc:lang}}
       li#korplablink
@@ -75,6 +75,9 @@
     .corpusInfoSpace.ui-corner-all
       div
         p(style='padding: 10px; margin: 0px;')
+  span.logos
+    img(src="img/sb_logo.jpg")
+    img(src="img/sweclarin_logo.png")
   select#search_history
   div(style='clear: both;')
 

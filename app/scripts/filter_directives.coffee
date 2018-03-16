@@ -1,6 +1,8 @@
+plusImg = require "../img/plus.png"
+
 korpApp.directive "globalFilters", (globalFilterService) ->
     restrict: "E"
-    scope: 
+    scope:
         lang: '='
     template: '''
                 <div ng-if="dataObj.showDirective" class="global-filters-container">
@@ -8,17 +10,17 @@ korpApp.directive "globalFilters", (globalFilterService) ->
                   <div style="display: inline-block">
                       <span ng-repeat="filterKey in dataObj.selectedFilters">
                           <global-filter lang="lang" attr="filterKey"
-                                         attr-value="dataObj.filterValues[filterKey].value", 
+                                         attr-value="dataObj.filterValues[filterKey].value",
                                          attr-label="getFilterLabel(filterKey)",
                                          possible-values="dataObj.filterValues[filterKey].possibleValues"
                                          translation-key="getTranslationKey(filterKey)"
                                          closeable="isOptionalFilter(filterKey)"/>
-                          <span ng-if="getAvailableFilters().length !== 0 || !$last">och</span>
+                          <span ng-if="getAvailableFilters().length !== 0 || !$last">{{"and" | loc:lang}}</span>
                        </span>
 
                        <span uib-dropdown auto-close="outsideClick" ng-if="getAvailableFilters().length !== 0">
                          <span uib-dropdown-toggle style="vertical-align: sub;">
-                            <img src="img/plus.png">
+                            <img src="#{plusImg}">
                          </span>
                          <div uib-dropdown-menu class="korp-uib-dropdown-menu">
                            <ul>
@@ -32,14 +34,14 @@ korpApp.directive "globalFilters", (globalFilterService) ->
 
                    </div>
                    <div ng-if="false">
-                       <img src="img/plus.png">
+                       <img src="#{plusImg}">
                        <span style="font-weight: bold" > {{'add_filter' | loc:lang}}</span>
                    </div>
                 </div>'''
     link: (scope, element, attribute) ->
 
         globalFilterService.registerScope(scope)
-        
+
         scope.dataObj =
             showDirective: false
 
@@ -57,10 +59,10 @@ korpApp.directive "globalFilters", (globalFilterService) ->
 
         scope.getAvailableFilters = () ->
             return _.filter scope.dataObj.optionalFilters, (filter) -> filter not in scope.dataObj.selectedFilters
-            
+
         scope.isOptionalFilter = (filterKey) ->
             return scope.dataObj.optionalFilters.indexOf(filterKey) > -1 and (scope.dataObj.defaultFilters.indexOf(filterKey) is -1)
-        
+
         scope.addNewFilter = (value) ->
             globalFilterService.addNewFilter value, true
 
@@ -89,7 +91,7 @@ korpApp.directive "globalFilter", (globalFilterService) ->
                     </button>
                     <div uib-dropdown-menu class="korp-uib-dropdown-menu">
                       <ul>
-                        <li ng-repeat="value in possibleValues" ng-class="selected" class="attribute" 
+                        <li ng-repeat="value in possibleValues" ng-class="selected" class="attribute"
                             ng-click="toggleSelected(value[0], $event)"
                             ng-if="isSelectedList(value[0])">
                           <span ng-if="isSelected(value[0])">✔</span>

@@ -341,6 +341,12 @@
     "login_needed_for_corpora": "Inloggning behövs för åtkomst till",
     
     "stats_warn": "Statistiken är avaktiverad",
+    "stats_not_in_order_warn": "Statistiken stödjs för nuvarande inte när \"i följd\" är avaktiverad.",
     
-    "read_in_strix": "Läs texten i Strix"
+    "read_in_strix": "Läs texten i Strix",
+    "add_token": "Lägg till token",
+    
+    "in_order_chk": "i följd",
+    "prefix_chk": "förled",
+    "suffix_chk": "efterled"
 }

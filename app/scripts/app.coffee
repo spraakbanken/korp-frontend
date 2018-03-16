@@ -1,5 +1,25 @@
 window.korpApp = angular.module 'korpApp', [
-                                            "ui.bootstrap"
+                                            "ui.bootstrap.typeahead"
+                                            "uib/template/typeahead/typeahead-popup.html"
+                                            "ui.bootstrap.tooltip"
+                                            "uib/template/tooltip/tooltip-popup.html"
+                                            "uib/template/tooltip/tooltip-html-popup.html"
+                                            "ui.bootstrap.modal"
+                                            "uib/template/modal/window.html"
+                                            "ui.bootstrap.tabs"
+                                            "uib/template/tabs/tabset.html"
+                                            "uib/template/tabs/tab.html"
+                                            "ui.bootstrap.dropdown"
+                                            "ui.bootstrap.pagination"
+                                            "uib/template/pagination/pagination.html"
+                                            "ui.bootstrap.datepicker"
+                                            "uib/template/datepicker/datepicker.html"
+                                            "uib/template/datepicker/day.html"
+                                            "uib/template/datepicker/month.html"
+                                            "uib/template/datepicker/year.html"
+                                            "ui.bootstrap.timepicker"
+                                            "uib/template/timepicker/timepicker.html"
+                                            "ui.bootstrap.buttons"
                                             "angularSpinner"
                                             "ui.sortable"
                                             "newsdesk"
@@ -7,10 +27,6 @@ window.korpApp = angular.module 'korpApp', [
                                             "tmh.dynamicLocale"
                                             "angular.filter"
                                         ]
-
-# This is due to angular-leaflet-directive logging, move to geokorp-component?
-korpApp.config ($logProvider) ->
-    $logProvider.debugEnabled false
 
 korpApp.config (tmhDynamicLocaleProvider) ->
     tmhDynamicLocaleProvider.localeLocationPattern("translations/angular-locale_{{locale}}.js")
@@ -79,7 +95,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
             if s.savedState.reading_mode
                 $location.search "reading_mode"
             $location.search "display", "login"
-    
+
     s.restorePreLoginState = () ->
         if s.savedState
             for key, val of s.savedState
@@ -97,7 +113,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
     s.$on "corpuschooserchange", (event, corpora) ->
         c.log "corpuschooserchange", corpora
         settings.corpusListing.select corpora
-        nonprotected = _.pluck(settings.corpusListing.getNonProtected(), "id")
+        nonprotected = _.map(settings.corpusListing.getNonProtected(), "id")
         if corpora.length and _.intersection(corpora, nonprotected).length isnt nonprotected.length
             $location.search "corpus", corpora.join(",")
         else
@@ -115,7 +131,7 @@ korpApp.run ($rootScope, $location, utils, searches, tmhDynamicLocale, $timeout,
                 currentCorpora = [].concat(currentCorpora, getAllCorporaInFolders(settings.corporafolders, val))
         else
             if not settings.preselectedCorpora?.length
-                currentCorpora = _.pluck settings.corpusListing.corpora, "id"
+                currentCorpora = _.map settings.corpusListing.corpora, "id"
             else
                 for pre_item in settings.preselectedCorpora
                     pre_item = pre_item.replace /^__/g, ''
@@ -140,7 +156,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
 
     s.showLogin = () ->
         s.show_modal = 'login'
-    
+
     s.logout = () ->
         authenticationProxy.loginObj = {}
         $.jStorage.deleteKey "creds"
@@ -175,7 +191,7 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
     s.visible = s.modes[...N_VISIBLE]
     s.menu = s.modes[N_VISIBLE..]
 
-    i = $.inArray currentMode, (_.pluck s.menu, "mode")
+    i = $.inArray currentMode, (_.map s.menu, "mode")
     if i != -1
         s.visible.push s.menu[i]
         s.menu.splice(i, 1)
@@ -212,8 +228,8 @@ korpApp.controller "headerCtrl", ($scope, $location, $uibModal, utils) ->
         s.show_modal = false
 
     showModal = (key) ->
-        tmpl = {about: 'markup/about.html', login: 'login_modal'}[key]
-        params = 
+        tmpl = {about: require('../markup/about.html'), login: 'login_modal'}[key]
+        params =
             templateUrl : tmpl
             scope : s
             windowClass : key

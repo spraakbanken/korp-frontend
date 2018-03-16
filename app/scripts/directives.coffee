@@ -20,7 +20,7 @@ korpApp.directive 'kwicWord', ->
             for struct in (wd._close or [])
                 output["close_" + struct] = true
 
-            return (x for [x, y] in _.pairs output when y).join " "
+            return (x for [x, y] in _.toPairs output when y).join " "
 
 
 
@@ -57,7 +57,7 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
                     s.maxTab = tab.index
             s.setSelected(initTab)
             watchHash()), 0
-            
+
         s.newDynamicTab = () ->
             $timeout (() -> s.setSelected(s.maxTab + 1, true)), 0
 
@@ -142,7 +142,7 @@ korpApp.directive "tokenValue", ($compile, $controller, extendedComponents) ->
                         tmplObj = {maybe_placeholder : ""}
 
                     template = extendedComponents.defaultTemplate tmplObj
-                    
+
             $controller controller, locals
             tmplElem = $compile(template) childScope
             elem.html(tmplElem).addClass "arg_value"
@@ -268,7 +268,7 @@ korpApp.directive "meter", () ->
         zipped = _.zip scope.meter.tokenLists, scope.stringify
         scope.displayWd = (_.map zipped, ([tokens, stringify]) ->
             (_.map tokens, (token) ->
-                if token == "|"
+                if token == "|" or token == ""
                     return "&mdash;"
                 else
                     return stringify(token)).join " ").join ";"
@@ -334,13 +334,13 @@ korpApp.directive "tabSpinner", ($rootElement) ->
 
 
 korpApp.directive "extendedList", ($location, $rootScope) ->
-    templateUrl : "views/extendedlist.html"
-    scope : {
+    templateUrl: require "../views/extendedlist.html"
+    scope: {
         cqp : "="
         lang: "="
         repeatError: "="
     },
-    link : ($scope, elem, attr) ->
+    link: ($scope, elem, attr) ->
         s = $scope
 
         setCQP = (val) ->
@@ -403,7 +403,7 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
 
         s.repeatChange = (repeat_idx, token_idx) ->
             token = s.data[token_idx]
-            
+
             if token.repeat[repeat_idx] is null
                 return
 
@@ -419,10 +419,10 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
 
             if token.repeat[1] < token.repeat[0] and repeat_idx is 1
                 token.repeat[0] = token.repeat[1]
-            
+
             if token.repeat[1] < 1
                 token.repeat[1] = 1
-            
+
             if token.repeat[0] > 0
                 s.repeatError = false
 
@@ -431,7 +431,7 @@ korpApp.directive "extendedList", ($location, $rootScope) ->
 
             if token.repeat[repeat_idx] is null
                 token.repeat[repeat_idx] = token.repeat[if repeat_idx is 0 then 1 else 0]
-            
+
             repeatError = true
             for token in s.data
                 if not token.repeat or token.repeat[0] > 0
@@ -463,7 +463,7 @@ korpApp.directive "clickCover", () ->
 
     link : (scope, elem, attr) ->
         cover = $("<div class='click-cover'>").on "click", () -> return false
-            
+
         pos = elem.css("position") or "static"
         scope.$watch () ->
             scope.$eval attr.clickCover
@@ -546,7 +546,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
             <script type="text/ng-template" id="lemgramautocomplete.html">
                 <a style="cursor:pointer">
                     <span ng-class="{'autocomplete-item-disabled' : match.model.count == 0, 'none-to-find' : (match.model.variant != 'dalin' && match.model.count == 0)}">
-                        <span ng-if="match.model.parts.namespace" class="label">{{match.model.parts.namespace | loc}}</span>
+                        <span ng-if="match.model.parts.namespace" class="label lemgram-namespace">{{match.model.parts.namespace | loc}}</span>
                         <span>{{match.model.parts.main}}</span>
                         <sup ng-if="match.model.parts.index != 1">{{match.model.parts.index}}</sup>
                         <span ng-if="match.model.parts.pos">({{match.model.parts.pos}})</span>
@@ -642,7 +642,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
             return morphologies
 
         scope.getRows = (input) ->
-            corporaIDs = _.pluck settings.corpusListing.selected, "id"
+            corporaIDs = _.map settings.corpusListing.selected, "id"
             morphologies = scope.getMorphologies corporaIDs
             if scope.type is "lemgram"
                 return scope.getLemgrams input, morphologies, corporaIDs
@@ -809,7 +809,7 @@ korpApp.directive 'reduceSelect', ($timeout) ->
         )
 
         updateSelected = (scope) ->
-            scope.selected = _.pluck (_.filter scope.keyItems, (item, key) -> item.selected), "value"
+            scope.selected = _.map (_.filter scope.keyItems, (item, key) -> item.selected), "value"
             scope.numberAttributes = scope.selected.length
 
         scope.toggleSelected = (value, event) ->

@@ -343,6 +343,12 @@
     "login_needed_for_corpora": "Login needed for access to",
     
     "stats_warn": "Statistics is disabled",
+    "stats_not_in_order_warn": "Statistics is currently not supported when \"in order\" is disabled.",
     
-    "read_in_strix": "Read this text in Strix"
+    "read_in_strix": "Read this text in Strix",
+    "add_token": "Add token",
+    
+    "in_order_chk": "in order",
+    "prefix_chk": "initial part",
+    "suffix_chk": "final part"
 }

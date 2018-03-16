@@ -31,10 +31,10 @@ class BaseProxy
         @total = null
 
     abort: ->
-        _.invoke @pendingRequests, "abort" if @pendingRequests.length
+        _.invokeMap @pendingRequests, "abort" if @pendingRequests.length
 
     hasPending : () ->
-        _.any _.map @pendingRequests, (req) -> req.readyState != 4 and req.readyState != 0
+        _.some _.map @pendingRequests, (req) -> req.readyState != 4 and req.readyState != 0
 
     parseJSON: (data) ->
         try
@@ -48,7 +48,7 @@ class BaseProxy
             return JSON.parse(data)
 
     addAuthorizationHeader: (req) ->
-        pairs = _.pairs model.getAuthorizationHeader()
+        pairs = _.toPairs model.getAuthorizationHeader()
         if pairs.length
             req.setRequestHeader pairs[0]...
 
@@ -72,7 +72,7 @@ class BaseProxy
         if not @total? and struct.progress_corpora?.length
             tmp = $.map struct["progress_corpora"], (corpus) ->
                 return if not corpus.length
-                
+
                 _(corpus.split("|")).map((corpus) ->
                     parseInt settings.corpora[corpus.toLowerCase()].info.Size
                 ).reduce((a, b) ->
@@ -138,10 +138,14 @@ class model.KWICProxy extends BaseProxy
         data.show = (_.uniq ["sentence"].concat(data.show)).join(",")
         c.log "data.show", data.show
         data.show_struct = (_.uniq data.show_struct).join(",")
+
+        if locationSearch()["in_order"] == false
+            data.in_order = false
+
         @prevRequest = data
         @prevParams = data
         def = $.ajax(
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/" + data.command
             data: data
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
@@ -174,7 +178,7 @@ class model.LemgramProxy extends BaseProxy
             max : 1000
         @prevParams = params
         def =  $.ajax
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/" + params.command
             data: params
 
             success: (data) ->
@@ -199,89 +203,6 @@ class model.StatsProxy extends BaseProxy
         super()
         @prevRequest = null
         @prevParams = null
-
-    processData: (def, data, reduceVals, reduceValLabels, ignoreCase) ->
-        minWidth = 100
-
-        columns = []
-
-        for [reduceVal, reduceValLabel] in _.zip reduceVals, reduceValLabels
-            columns.push
-                id: reduceVal
-                name: reduceValLabel
-                field: "hit_value"
-                sortable: true
-                formatter: statisticsFormatting.reduceStatistics reduceVals, ignoreCase, _.keys(data.corpora)
-                minWidth: minWidth
-                cssClass: "parameter-column"
-                headerCssClass: "localized-header"
-
-        columns.push
-            id: "pieChart"
-            name: ""
-            field: "hit_value"
-            sortable: false
-            formatter: statisticsFormatting.reduceStatisticsPieChart
-            maxWidth: 25
-            minWidth: 25
-
-        columns.push
-            id: "total"
-            name: "stats_total"
-            field: "total_value"
-            sortable: true
-            formatter: @valueFormatter
-            minWidth : minWidth
-            headerCssClass: "localized-header"
-
-        $.each _.keys(data.corpora).sort(), (i, corpus) =>
-            columns.push
-                id: corpus
-                name: settings.corpora[corpus.toLowerCase()].title
-                field: corpus + "_value"
-                sortable: true
-                formatter: @valueFormatter
-                minWidth : minWidth
-
-        groups = _.groupBy _.keys(data.total.absolute), (item) ->
-            item.replace(/(:.+?)(\/|$| )/g, "$2")
-            fields = item.split("/")
-            newFields = []
-            for [reduceVal, field] in _.zip reduceVals, fields
-                if reduceVal in ["saldo", "prefix", "suffix", "lex", "lemma", "sense"]
-                    newFields.push field.replace(/(:.+?)($| )/g, "$2")
-                else
-                    newFields.push field
-            newFields.join("/")
-            return newFields
-
-        wordArray = _.keys groups
-
-        sizeOfDataset = wordArray.length
-        dataset = new Array(sizeOfDataset + 1)
-
-        statsWorker = new Worker "scripts/statistics_worker.js"
-        statsWorker.onmessage = (e) ->
-            c.log "Called back by the worker!\n"
-            c.log e
-            searchParams = 
-                reduceVals: reduceVals
-                ignoreCase: ignoreCase
-                corpora: _.keys data.corpora
-            def.resolve [data, wordArray, columns, e.data.dataset, e.data.summarizedData, searchParams]
-
-        statsWorker.postMessage {
-            "total" : data.total
-            "dataset" : dataset
-            "allrows" : (wordArray)
-            "corpora" : data.corpora
-            "groups" : groups
-            loc : {
-                'sv' : "sv-SE"
-                'en' : "gb-EN"
-            }[$("body").scope().lang]
-            "attrs" : reduceVals
-        }
 
     makeParameters: (reduceVals, cqp, ignoreCase) ->
         parameters =
@@ -313,8 +234,10 @@ class model.StatsProxy extends BaseProxy
 
         data = @makeParameters(reduceVals, cqp, ignoreCase)
 
+        wordAttrs = settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())
+        structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
         data.split = _.filter(reduceVals, (reduceVal) ->
-            settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.type == "set").join(',')
+            return wordAttrs[reduceVal]?.type == "set" or structAttrs[reduceVal]?.type == "set").join(',')
 
         rankedReduceVals = _.filter reduceVals, (reduceVal) ->
             settings.corpusListing.getCurrentAttributes(settings.corpusListing.getReduceLang())[reduceVal]?.ranked
@@ -325,7 +248,7 @@ class model.StatsProxy extends BaseProxy
         @prevParams = data
         def = $.Deferred()
         @pendingRequests.push $.ajax
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/" + data.command
             data: data
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
@@ -346,27 +269,53 @@ class model.StatsProxy extends BaseProxy
                     c.log "gettings stats failed with error", data.ERROR
                     def.reject(data)
                     return
-                @processData(def, data, reduceVals, reduceValLabels, ignoreCase)
+                statisticsService.processData(def, data, reduceVals, reduceValLabels, ignoreCase)
 
         return def.promise()
 
-    valueFormatter: (row, cell, value, columnDef, dataContext) ->
-        return dataContext[columnDef.id + "_display"]
-
-class model.NameProxy extends model.StatsProxy
+class model.NameProxy extends BaseProxy
     constructor: ->
         super()
 
-    makeParameters: (reduceVal, cqp) ->
-        # ignore reduceVal, map only works for word
-        parameters = super(["word"], cqp, false)
+    makeRequest: (cqp, callback) ->
+        self = this
+        super()
+
         posTags = for posTag in settings.mapPosTag
             "pos='#{posTag}'"
-        parameters.cqp2  = "[" + posTags.join(" | ") + "]"
-        return parameters
 
-    processData: (def, data, reduceval) ->
-        def.resolve data
+        parameters =
+            groupby: "word"
+            cqp: @expandCQP cqp
+            cqp2: "[" + posTags.join(" | ") + "]"
+            corpus: settings.corpusListing.stringifySelected(true)
+            incremental: true
+        _.extend parameters, settings.corpusListing.getWithinParameters()
+
+        def = $.Deferred()
+        @pendingRequests.push $.ajax
+            url: settings.korpBackendURL + "/count"
+            data: parameters
+
+            beforeSend: (req, settings) ->
+                self.addAuthorizationHeader req
+
+            error: (jqXHR, textStatus, errorThrown) ->
+                def.reject(textStatus, errorThrown)
+
+            progress: (data, e) ->
+                progressObj = self.calcProgress(e)
+                return unless progressObj?
+                callback? progressObj
+
+            success: (data) =>
+                if data.ERROR?
+                    c.log "gettings stats failed with error", data.ERROR
+                    def.reject(data)
+                    return
+                def.resolve data
+
+        return def.promise()
 
 
 class model.AuthenticationProxy
@@ -381,11 +330,8 @@ class model.AuthenticationProxy
             throw "window.btoa is undefined"
         dfd = $.Deferred()
         $.ajax(
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/authenticate"
             type: "GET"
-            data:
-                command: "authenticate"
-
             beforeSend: (req) ->
                 req.setRequestHeader "Authorization", "Basic " + auth
         ).done((data, status, xhr) ->
@@ -418,10 +364,9 @@ class model.TimeProxy extends BaseProxy
 
 
         xhr = $.ajax
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/timespan"
             type: "GET"
             data:
-                command: "timespan"
                 granularity: "y"
                 corpus: settings.corpusListing.stringifyAll()
 
@@ -462,7 +407,7 @@ class model.TimeProxy extends BaseProxy
         output
 
     expandTimeStruct: (struct) ->
-        years = _.map(_.pairs(_.omit(struct, "")), (item) ->
+        years = _.map(_.toPairs(_.omit(struct, "")), (item) ->
             Number item[0]
         )
         unless years.length then return
@@ -492,7 +437,7 @@ class model.GraphProxy extends BaseProxy
         array = for cqp, i in subArray
             p = padding[i.toString().length..].join("")
             ["subcqp#{p}#{i}", cqp]
-        return _.object array
+        return _.fromPairs array
 
     makeRequest: (cqp, subcqps, corpora, from, to) ->
         super()
@@ -515,7 +460,7 @@ class model.GraphProxy extends BaseProxy
         def = $.Deferred()
 
         $.ajax
-            url: settings.cgiScript
+            url: settings.korpBackendURL + "/" + params.command
             dataType : "json"
             data : params
 

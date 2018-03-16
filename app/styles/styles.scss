@@ -1,4 +1,8 @@
-@import "../components/font-awesome/scss/font-awesome.scss";
+
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import "bootstrap-custom";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 @font-face {
   font-family: "Source Sans Pro";
@@ -275,9 +279,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input:pla
 }
 
 #query_table {
-  overflow: auto;
   white-space: nowrap;
   margin-bottom: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .lang_row {
@@ -593,6 +598,15 @@ table {
   position: relative;
   top: 54px;
   margin-left: 10px;
+  font-weight: bold;
+  color: #555;
+  &:hover {
+    color: #333;
+  }
+  .plus-btn {
+      position: relative;
+      top: 3px;
+  }
 }
 
 .query_token {
@@ -627,8 +641,8 @@ table {
   }
 
   .insert_arg {
-    margin-top: 4px;
     float: left;
+    height: 20px;
   }
 
   .arg_selects.date_interval .arg_opts {
@@ -689,16 +703,16 @@ table {
   }
   .token_footer {
     font-size: .8em;
-    button {
-      width: 20px;
-      height: 20px;
-      float: right;
-      i {
-        position: relative;
-        top: 0px;
-        left: -2px;
-        font-size: 14px;
-      }
+  }
+  .token-cog-btn {
+    width: 20px;
+    height: 20px;
+    float: right;
+    i {
+      position: relative;
+      top: 0px;
+      left: -2px;
+      font-size: 14px;
     }
   }
 
@@ -854,22 +868,12 @@ table {
 }
 
 .results_table.reading {
-  display: none;
+  margin-left: 10%;
   p {
     display: block;
     padding: 1em !important;
     width: 510px;
     margin : 0;
-  }
-}
-
-.reading_mode .results_table {
-  margin-left: 10%;
-  &.kwic {
-    display: none;
-  }
-  &.reading {
-    display: block;
   }
 }
 
@@ -1123,11 +1127,10 @@ table {
   display: inline-block !important;
   vertical-align: middle;
   height: 12px;
-  width: 15px;
-  background-size: 15px;
+  width: 20px;
+  background-size: 20px;
   margin-left: 2em;
   position: relative;
-  top: 2px;
   cursor: pointer;
 }
 
@@ -2587,7 +2590,7 @@ li.active a span .num-to-find {
 }
 
 .leaflet-control-layers-toggle {
-    background-image: url(../components/leaflet/dist/images/layers.png);
+    background-image: url(../../node_modules/leaflet/dist/images/layers.png);
 }
 
 
@@ -2833,4 +2836,17 @@ li.active a span .num-to-find {
 
 .strix-link {
     margin-top: 20px;
+}
+
+.lemgram-namespace {
+    color: #777777;
+}
+
+.logos {
+    position: absolute;
+    right: 160px;
+    img {
+        padding:5px;
+        height: 68px;
+    }
 }

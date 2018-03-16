@@ -2,7 +2,7 @@ korpApp = angular.module("korpApp")
 
 window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($scope, $location, $filter, utils, searches) ->
     $scope.visibleTabs = [true, true, true, true]
-    $scope.extendedTmpl = "views/extended_tmpl.html"
+    $scope.extendedTmpl = require("../views/extended_tmpl.pug")
     # for parallel mode
     searches.langDef.resolve()
     $scope.isCompareSelected = false
@@ -28,7 +28,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
 
     setupWatchStats = () ->
         $scope.showStatistics = true
-        
+
         $scope.$watch (() -> $location.search().hide_stats), (val) ->
             $scope.showStatistics = not val?
 
@@ -48,7 +48,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
 
     unless $location.search().stats_reduce
         $location.search 'stats_reduce', ("word")
-    
+
     if settings.statisticsCaseInsensitiveDefault
         $location.search 'stats_reduce_insensitive', 'word'
 
@@ -62,7 +62,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
         if insensitiveAttrs
             $scope.statInsensitiveAttrs = insensitiveAttrs.split ','
 
-        
+
 
     $scope.$watch 'statSelectedAttrs', ((selected) ->
         if selected and selected.length > 0
@@ -82,10 +82,10 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
                 return $filter("loc")("hits_per_page", $scope.lang) + ": " + val
             else
                 return val
-        
+
         $scope.hitsPerPageValues = settings.hitsPerPageValues
         $scope.hitsPerPage = $location.search().hpp or settings.hitsPerPageDefault
-        
+
         $scope.$watch (() -> $location.search().hpp), (val) ->
             $scope.hitsPerPage = val or settings.hitsPerPageDefault
 
@@ -112,7 +112,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
                 return $filter("loc")(mappedVal, $scope.lang)
 
         $scope.kwicSort = $location.search().sort or ""
-        
+
         $scope.$watch (() -> $location.search().sort), (val) ->
             $scope.kwicSort = val or ""
 
@@ -133,8 +133,14 @@ korpApp.controller "SearchCtrl", window.SearchCtrl
 korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout) ->
     s = $scope
 
+    $scope.inOrder = not $location.search().in_order?
+    $scope.$watch (() -> $location.search().in_order), (val) ->
+        $scope.inOrder = not val?
+    $scope.$watch "inOrder", (val) ->
+        $location.search("in_order", if not s.inOrder then false else null)
+
     s.prefix = false
-    s.suffix = false 
+    s.suffix = false
     s.isCaseInsensitive = false
     if settings.inputCaseInsensitiveDefault
         s.isCaseInsensitive = true
@@ -226,7 +232,7 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
                 <span ng-click="clickX()" class="close-x">×</span>
             </div>
             <div class="modal-body">
-                <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="http://spraakbanken.gu.se/karp/#?lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
+                <div ng-repeat="obj in relatedObj" class="col"><a target="_blank" ng-href="https://spraakbanken.gu.se/karp/#?mode=swefn&lexicon=swefn&amp;search=extended||and|sense|equals|swefn--{{obj.label}}" class="header">{{stringifyRelatedHeader(obj.label)}}</a>
                   <div class="list_wrapper">
                       <ul>
                         <li ng-repeat="wd in obj.words"> <a ng-click="clickRelated(wd, relatedObj.attribute)" class="link">{{stringifyRelated(wd) + " "}}</a></li>
@@ -299,6 +305,7 @@ korpApp.controller "ExtendedSearch", ($scope, utils, $location, backend, $rootSc
         c.log "extended submit"
         $location.search("search", null)
         $location.search("page", null)
+        $location.search("in_order", null)
         $timeout( () ->
             $location.search("search", "cqp")
             within = s.within if s.within not in _.keys settings.defaultWithin
@@ -375,7 +382,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         if confObj.type == "set"
             confObj.is = "contains"
 
-        return _.pairs confObj
+        return _.toPairs confObj
 
 
     onCorpusChange = (event, selected) ->
@@ -384,7 +391,7 @@ korpApp.controller "ExtendedToken", ($scope, utils, $location) ->
         lang = s.$parent.$parent?.l?.lang
         allAttrs = settings.corpusListing.getAttributeGroups(lang)
         s.types = _.filter allAttrs, (item) -> not item.hideExtended
-        s.typeMapping = _.object _.map s.types, (item) ->
+        s.typeMapping = _.fromPairs _.map s.types, (item) ->
             if item.isStructAttr
                 ["_." + item.value, item]
             else
@@ -438,6 +445,7 @@ korpApp.directive "advancedSearch", () ->
             $location.search "search", null
             $location.search "page", null
             $location.search "within", null
+            $location.search "in_order", null
             $timeout( () ->
                 $location.search "search", "cqp|" + $scope.cqp
             , 0)

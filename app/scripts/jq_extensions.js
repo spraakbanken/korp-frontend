@@ -153,7 +153,7 @@ $.fn.localeKey = function(key) {
 })(jQuery);
 
 
-var Subclass = function(parent, childConstr, childProto){
+window.Subclass = function(parent, childConstr, childProto){
   var ctor = function(){};
   ctor.prototype = parent.prototype;
   childConstr.prototype = new ctor;

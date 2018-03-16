@@ -162,7 +162,7 @@
             var output = left
             right.forEach(function(item) {
               var val = item[1]
-              output = _.merge(output, val, function(a, b) {
+              output = _.mergeWith(output, val, function(a, b) {
                 return _.isArray(a) ? a.concat(b) : undefined;
               })
             })
@@ -207,7 +207,7 @@
             return {and_block : [unpack([left], right)]}
           },
         peg$c35 = function(bound) {
-            bound = _.object(bound.map(function(item) {
+            bound = _.fromPairs(bound.map(function(item) {
               return [item, true]
             }))
             return {"bound" : bound, "and_block" : []}
@@ -226,8 +226,9 @@
             if(lhs[0])
               prefix = lhs[0]
 
-            if(flags)
+            if(flags) {
               flags = _.zipObject(flags[1], _.map(flags[1], function() { return true; }));
+            }
             return makeObj(prefix + lhs[1].join(""), infix_op, rhs, flags)
           },
         peg$c46 = /^["]/,
@@ -237,7 +238,7 @@
         peg$c50 = /^[^"]/,
         peg$c51 = peg$classExpectation(["\""], true, false),
         peg$c52 = function(rhs) {
-                return rhs.join(""); 
+                return rhs.join("");
             },
         peg$c53 = /^[']/,
         peg$c54 = peg$classExpectation(["'"], false, false),
@@ -1776,11 +1777,7 @@
         return output
       }
 
-      if(typeof require != "undefined")
-          var _ = require("../../components/lodash/lodash")._
-      else
-        var _ = window._
-
+      var _ = window._
       var c = console
 
 

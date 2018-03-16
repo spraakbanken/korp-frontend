@@ -8,7 +8,7 @@ settings.hitsPerPageValues = [10,25,50,75,100,500,1000]
 korpApp.controller("SearchCtrl", function($rootScope, $scope, $controller, $location) {
     // resolve globalFilterDef since globalFilter-directive is not used
     $rootScope.globalFilterDef.resolve()
-    
+
     $controller(window.SearchCtrl, {$scope: $scope})
     $scope.visibleTabs = [false, true, false, false];
     $scope.extendedTmpl = "modes/parallel_extended_tmpl.html";
@@ -63,7 +63,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
 
     var onLangChange = function() {
         c.log("ParallelSearch language change");
-        var currentLangList = _.pluck(s.langs, "lang");
+        var currentLangList = _.map(s.langs, "lang");
         settings.corpusListing.setActiveLangs(currentLangList);
         $location.search("parallel_corpora", currentLangList.join(","))
         var struct = settings.corpusListing.getLinksFromLangs(currentLangList);
@@ -71,7 +71,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             return _(struct)
                 .flatten()
                 .filter(function(item) {
-                    return !_.contains(excludeLangs, item.lang);
+                    return !_.includes(excludeLangs, item.lang);
                 }).groupBy("lang").value()
         }
 
@@ -84,7 +84,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
         output += _.map(s.langs.slice(1), function(langobj, i) {
             var neg = s.negates[i + 1] ? "!" : "";
             var langMapping = getLangMapping(currentLangList.slice(0, i + 1));
-            var linkedCorpus = _(langMapping[langobj.lang]).pluck("id").invoke("toUpperCase").join("|");
+            var linkedCorpus = _(langMapping[langobj.lang]).map("id").invokeMap("toUpperCase").join("|");
 
             try {
                 var expanded = CQP.expandOperators(langobj.cqp);
@@ -138,7 +138,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
     }
 
     enabledLangsHelper = function(lang) {
-        return _(settings.corpusListing.getLinksFromLangs([lang])).flatten().pluck("lang").unique().value();
+        return _(settings.corpusListing.getLinksFromLangs([lang])).flatten().map("lang").uniq().value();
     }
 
     s.getEnabledLangs = function(i) {
@@ -148,7 +148,7 @@ korpApp.controller("ParallelSearch", function($scope, $location, $rootScope, $ti
             }
             return enabledLangsHelper(start_lang);
         }
-        var currentLangList = _.pluck(s.langs, "lang");
+        var currentLangList = _.map(s.langs, "lang");
         delete currentLangList[i];
         var firstlang;
         if(s.langs.length)
@@ -220,7 +220,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
             _.each(mainSent.tokens, function(token) {
                 var refs = _.map(_.compact(token["wordlink-" + lang].split("|")), Number)
-                if(_.contains(refs, linkNum)) {
+                if(_.includes(refs, linkNum)) {
                     token._link_selected = true
                     self.selected.push(token)
                 }
@@ -228,7 +228,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
 
         } else {
             var links = _.pick(obj, function(val, key) {
-                return _.str.startsWith(key, "wordlink")
+                return _.startsWith(key, "wordlink")
             })
             _.each(links, function(val, key) {
                 var wordsToLink = _.each(_.compact(val.split("|")), function(num) {
@@ -286,18 +286,25 @@ settings.defaultReadingContext = "1 link"
 
 settings.defaultWithin = { "link": "link" };
 
-settings.corporafolders = {};
 settings.corpora = {};
 
-settings.corpora["europarl-sv"] = {
-    id: "europarl-sv",
+var linkref = {
+    label: "linkref",
+    displayType: "hidden"
+}
+var wordlink = {
+    label: "wordlink",
+    displayType: "hidden"
+}
+
+settings.corpora["saltnld-sv"] = {
+    id: "saltnld-sv",
     lang: "swe",
-    linkedTo: ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
-    pivot: true,
-    title: "Europarl svenska",
+    linkedTo: ["saltnld-nl"],
+    title: "SALT svenska-nederländska",
     context: context.defaultAligned,
     within: {
-        "linkda": "meningspar"
+        "link": "meningspar"
     },
     attributes: {
         pos: attrs.pos,
@@ -309,57 +316,58 @@ settings.corpora["europarl-sv"] = {
         deprel: attrs.deprel,
         ref: attrs.ref,
         prefix: attrs.prefix,
-        suffix: attrs.suffix
+        suffix: attrs.suffix,
+        linkref: linkref,
+        "wordlink-nl": wordlink
     },
     structAttributes: {
-        text_date: {label: "date"},
-        text_speaker: {label: "speaker"},
-        text_speakerlang: {
-            label: "lang",
-            extendedTemplate: selectType.extendedTemplate,
-            extendedController: selectType.extendedController,
-            dataset: {
-                "EN": "engelska",
-                "FI": "finska",
-                "FR": "franska",
-                "NL": "nederländska",
-                "IT": "italienska",
-                "DE": "tyska",
-                "ES": "spanska",
-                "EL": "grekiska",
-                "PT": "portugisiska",
-                "DA": "danska",
-                "HU": "ungerska",
-                "PL": "polska",
-                "MT": "maltesiska",
-                "LT": "litauiska",
-                "SL": "slovenska",
-                "CS": "tjeckiska",
-                "LV": "lettiska",
-                "SV": "svenska",
-                "SK": "slovakiska",
-                "ET": "estniska"
-            }
-        }
-    },
-    hide: true
-};
+        text_author: {label: "author"},
+        text_title: {label: "title"},
 
-settings.corpora["europarl-da"] = {
-    id: "europarl-da",
-    lang: "dan",
-    linkedTo: ["europarl-sv"],
-    title: "Europarl svenska-danska",
-    context: {
-        "1 linkda": "1 link"
-    },
+        text_year: {label: "year"},
+        text_origlang: {
+            label: "origlang",
+            extendedComponent: "datasetSelect",
+            dataset: {
+                "swe": "swedish",
+                "nld": "dutch"
+            }
+        },
+        page_n: {label: "page_n"}
+    }
+};
+settings.corpora["saltnld-nl"] = {
+    id: "saltnld-nl",
+    lang: "nld",
+    linkedTo: ["saltnld-sv"],
+    title: "SALT svenska-nederländska",
+    context: context.defaultAligned,
     within: {
-        "linkda": "meningspar"
+        "link": "meningspar"
     },
     attributes: {
+        pos: {label: "pos"},
+        msd: {label: "msd"},
+        lemma: {label: "baseform"},
+        linkref: linkref,
+        "wordlink-sv": wordlink
     },
     structAttributes: {
-    }
+        text_author: {label: "author"},
+        text_title: {label: "title"},
+
+        text_year: {label: "year"},
+        text_origlang: {
+            label: "origlang",
+            extendedComponent: "datasetSelect",
+            dataset: {
+                "swe": "swedish",
+                "nld": "dutch"
+            }
+        },
+        page_n: {label: "page_n"}
+    },
+    hide: true
 };
 
 window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora, parseLocationLangs());

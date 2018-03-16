@@ -39,15 +39,15 @@ korpApp.factory "utils", ($location) ->
 korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
     requestCompare : (cmpObj1, cmpObj2, reduce) ->
         reduce = _.map reduce, (item) -> item.replace(/^_\./, "")
-        
+
         # remove all corpora which do not include all the "reduce"-attributes
         filterFun = (item) -> settings.corpusListing.corpusHasAttrs item, reduce
         corpora1 = _.filter cmpObj1.corpora, filterFun
         corpora2 = _.filter cmpObj2.corpora, filterFun
-         
+
         corpusListing = settings.corpusListing.subsetFactory cmpObj1.corpora
 
-        split = _.filter(reduce, (r) -> 
+        split = _.filter(reduce, (r) ->
             settings.corpusListing.getCurrentAttributes()[r]?.type == "set").join(',')
 
         rankedReduce = _.filter reduce, (item) ->
@@ -57,7 +57,6 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
         def = $q.defer()
         params =
-            command : "loglike"
             groupby : reduce.join ','
             set1_corpus : corpora1.join(",").toUpperCase()
             set1_cqp : cmpObj1.cqp
@@ -68,7 +67,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
             top : top
 
         conf =
-            url : settings.cgiScript
+            url : settings.korpBackendURL + "/loglike"
             params : params
             method : "GET"
             headers : {}
@@ -93,12 +92,12 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                     value: key
                     loglike: value
                 }
-            
+
             tables = _.groupBy objs, (obj) ->
                 if obj.loglike > 0
-                    obj.abs = data.set2[obj.value] 
-                    return "positive" 
-                else 
+                    obj.abs = data.set2[obj.value]
+                    return "positive"
+                else
                     obj.abs = data.set1[obj.value]
                     return "negative"
 
@@ -114,7 +113,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                     abs = 0
                     cqp = []
                     elems = []
-                    
+
                     _.map value, (val) ->
                         abs += val.abs
                         loglike += val.loglike
@@ -142,7 +141,6 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
 
         def = $q.defer()
         params =
-            command: "count"
             groupby: attribute.label
             cqp: cqp
             corpus: attribute.corpora.join(",")
@@ -153,7 +151,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
         _.extend params, cqpSubExprs
 
         conf =
-            url : settings.cgiScript
+            url : settings.korpBackendURL + "/count"
             params : params
             method : "GET"
             headers : {}
@@ -168,7 +166,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
             createResult = (subResult, cqp, label) ->
                 points = []
                 _.map _.keys(subResult.absolute), (hit) ->
-                    if (hit.startsWith "|") or (hit.startsWith " ")
+                    if (hit is "") or (hit.startsWith " ")
                         return
                     [name, countryCode, lat, lng] = hit.split ";"
 
@@ -179,7 +177,7 @@ korpApp.factory 'backend', ($http, $q, utils, lexicons) ->
                         countryCode: countryCode
                         lat : parseFloat lat
                         lng : parseFloat lng)
-                    
+
                 return (
                     label: label
                     cqp: cqp
@@ -253,10 +251,9 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
             def = $q.defer()
             $http(
                 method : "GET"
-                url : settings.cgiScript
+                url : settings.korpBackendURL + "/info"
                 params:
-                    command : "info"
-                    corpus : _(settings.corpusListing.corpora).pluck("id").invoke("toUpperCase").join ","
+                    corpus : _.map(settings.corpusListing.corpora, "id").map((a) -> a.toUpperCase()).join ","
             ).then (response) ->
                 data = response.data
                 for corpus in settings.corpusListing.corpora
@@ -275,7 +272,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
 
 
     searches = new Searches()
-    
+
     searches.getCqpExpr = () ->
         search = searches.activeSearch
         cqpExpr = null
@@ -285,7 +282,7 @@ korpApp.factory 'searches', (utils, $location, $rootScope, $http, $q, nameEntity
             else
                 cqpExpr = search.val
         return cqpExpr
-    
+
     oldValues = []
     $rootScope.$watchGroup [(() -> $location.search().search), "_loc.search().page"], (newValues) =>
         c.log "searches service watch", $location.search().search
@@ -361,7 +358,7 @@ korpApp.service "compareSearches",
 
 
 korpApp.factory "lexicons", ($q, $http) ->
-    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v3"
+    karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
     getLemgrams: (wf, resources, corporaIDs) ->
         deferred = $q.defer()
 
@@ -392,8 +389,8 @@ korpApp.factory "lexicons", ($q, $http) ->
                 headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
                 $http(
                     method: 'POST'
-                    url: settings.cgiScript
-                    data : "command=lemgram_count&lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
+                    url: settings.korpBackendURL + "/lemgram_count"
+                    data : "lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
                     headers : headers
                 ).then (response) =>
                     data = response.data
