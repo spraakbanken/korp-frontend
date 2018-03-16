@@ -73,7 +73,7 @@ In this folder, use the same layout as in Korp and add the following files:
 
 ## webpack and configuration
 
-We use `window.settings` share needed configuration to `config.js` and `modes/common.js`.
+We use `window.settings` to share needed configuration to `config.js` and `modes/common.js`.
 
 `config.js` and `modes/common.js` are included in webpacks dependecy graph. Therefore it works
 to use `require` for anything needed, but only things that are in the configured 

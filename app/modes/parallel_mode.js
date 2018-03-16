@@ -286,18 +286,25 @@ settings.defaultReadingContext = "1 link"
 
 settings.defaultWithin = { "link": "link" };
 
-settings.corporafolders = {};
 settings.corpora = {};
 
-settings.corpora["europarl-sv"] = {
-    id: "europarl-sv",
+var linkref = {
+    label: "linkref",
+    displayType: "hidden"
+}
+var wordlink = {
+    label: "wordlink",
+    displayType: "hidden"
+}
+
+settings.corpora["saltnld-sv"] = {
+    id: "saltnld-sv",
     lang: "swe",
-    linkedTo: ["europarl-da", "europarl-de", "europarl-el", "europarl-en", "europarl-es", "europarl-fi", "europarl-fr", "europarl-it", "europarl-nl", "europarl-pt"],
-    pivot: true,
-    title: "Europarl svenska",
+    linkedTo: ["saltnld-nl"],
+    title: "SALT svenska-nederländska",
     context: context.defaultAligned,
     within: {
-        "linkda": "meningspar"
+        "link": "meningspar"
     },
     attributes: {
         pos: attrs.pos,
@@ -309,57 +316,58 @@ settings.corpora["europarl-sv"] = {
         deprel: attrs.deprel,
         ref: attrs.ref,
         prefix: attrs.prefix,
-        suffix: attrs.suffix
+        suffix: attrs.suffix,
+        linkref: linkref,
+        "wordlink-nl": wordlink
     },
     structAttributes: {
-        text_date: {label: "date"},
-        text_speaker: {label: "speaker"},
-        text_speakerlang: {
-            label: "lang",
-            extendedTemplate: selectType.extendedTemplate,
-            extendedController: selectType.extendedController,
-            dataset: {
-                "EN": "engelska",
-                "FI": "finska",
-                "FR": "franska",
-                "NL": "nederländska",
-                "IT": "italienska",
-                "DE": "tyska",
-                "ES": "spanska",
-                "EL": "grekiska",
-                "PT": "portugisiska",
-                "DA": "danska",
-                "HU": "ungerska",
-                "PL": "polska",
-                "MT": "maltesiska",
-                "LT": "litauiska",
-                "SL": "slovenska",
-                "CS": "tjeckiska",
-                "LV": "lettiska",
-                "SV": "svenska",
-                "SK": "slovakiska",
-                "ET": "estniska"
-            }
-        }
-    },
-    hide: true
-};
+        text_author: {label: "author"},
+        text_title: {label: "title"},
 
-settings.corpora["europarl-da"] = {
-    id: "europarl-da",
-    lang: "dan",
-    linkedTo: ["europarl-sv"],
-    title: "Europarl svenska-danska",
-    context: {
-        "1 linkda": "1 link"
-    },
+        text_year: {label: "year"},
+        text_origlang: {
+            label: "origlang",
+            extendedComponent: "datasetSelect",
+            dataset: {
+                "swe": "swedish",
+                "nld": "dutch"
+            }
+        },
+        page_n: {label: "page_n"}
+    }
+};
+settings.corpora["saltnld-nl"] = {
+    id: "saltnld-nl",
+    lang: "nld",
+    linkedTo: ["saltnld-sv"],
+    title: "SALT svenska-nederländska",
+    context: context.defaultAligned,
     within: {
-        "linkda": "meningspar"
+        "link": "meningspar"
     },
     attributes: {
+        pos: {label: "pos"},
+        msd: {label: "msd"},
+        lemma: {label: "baseform"},
+        linkref: linkref,
+        "wordlink-sv": wordlink
     },
     structAttributes: {
-    }
+        text_author: {label: "author"},
+        text_title: {label: "title"},
+
+        text_year: {label: "year"},
+        text_origlang: {
+            label: "origlang",
+            extendedComponent: "datasetSelect",
+            dataset: {
+                "swe": "swedish",
+                "nld": "dutch"
+            }
+        },
+        page_n: {label: "page_n"}
+    },
+    hide: true
 };
 
 window.cl = settings.corpusListing = new ParallelCorpusListing(settings.corpora, parseLocationLangs());

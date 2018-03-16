@@ -1,8 +1,6 @@
 settings.corpora = {};
 settings.corporafolders = {};
 
-settings.globalFilterCorpora = ["ivip"]
-
 settings.corporafolders.sweac = {
     title: "Akademiska texter",
     contents: ["sweachum", "sweacsam"],
