@@ -498,7 +498,8 @@ class view.ExampleResults extends view.KWICResults
         opts = @s.$parent.kwicTab.queryParams
 
         @resetView()
-        opts.ajaxParams.incremental = true
+        # example tab cannot handle incremental = true
+        opts.ajaxParams.incremental = false
 
         opts.ajaxParams.start = (@current_page - 1) * items_per_page
         opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page - 1)
