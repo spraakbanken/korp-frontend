@@ -205,9 +205,18 @@ class model.StatsProxy extends BaseProxy
         @prevParams = null
 
     makeParameters: (reduceVals, cqp, ignoreCase) ->
+        structAttrs = settings.corpusListing.getStructAttrs(settings.corpusListing.getReduceLang())
+        groupBy = []
+        groupByStruct = []
+        for reduceVal in reduceVals
+            if structAttrs[reduceVal]
+                groupByStruct.push reduceVal
+            else
+                groupBy.push reduceVal
         parameters =
             command: "count"
-            groupby: reduceVals.join ','
+            groupby: groupBy.join ','
+            groupby_struct: groupByStruct.join ','
             cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: true

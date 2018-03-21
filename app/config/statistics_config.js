@@ -1,18 +1,18 @@
 var statisticsFormattingModule = function() {
     getCqp = function(hitValues, ignoreCase) {
-        var asdf = [];
+        var tokens = [];
         for(var i = 0; i < hitValues.length; i++) {
             var token = hitValues[i];
-            var qwerty = [];
+            var andExpr = [];
             for (var attribute in token) {
                 if (token.hasOwnProperty(attribute)) {
                     var values = token[attribute];
-                    qwerty.push(reduceCqp(attribute, values, ignoreCase));
+                    andExpr.push(reduceCqp(attribute, values, ignoreCase));
                 }
             }
-            asdf.push("[" + qwerty.join(" & ") + "]")
+            tokens.push("[" + andExpr.join(" & ") + "]")
         }
-        return asdf.join(" ")
+        return tokens.join(" ")
     }
 
     reduceCqp = function(type, tokens, ignoreCase) {
