@@ -248,12 +248,13 @@ class ExampleCtrl extends KwicCtrl
 
         s.hitspictureClick = (pageNumber) ->
             s.page = Number(pageNumber)
-            s.pageChange(null, pageNumber)
+            s.pageObj.pager = Number(pageNumber + 1)
+            s.pageChange(null, pageNumber + 1)
 
 
         s.pageChange = ($event, page) ->
             $event?.stopPropagation()
-            s.instance.current_page = page
+            s.instance.current_page = page - 1
             s.instance.makeRequest()
 
         s.exampleReadingMode = s.kwicTab.readingMode
