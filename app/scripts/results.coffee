@@ -481,7 +481,7 @@ class view.ExampleResults extends view.KWICResults
         super tabSelector, resultSelector, scope
         @proxy = new model.KWICProxy()
 
-        @current_page = 1
+        @current_page = 0
         if @s.$parent.kwicTab.queryParams
             @makeRequest().then () =>
                 @onentry()
@@ -501,8 +501,8 @@ class view.ExampleResults extends view.KWICResults
         # example tab cannot handle incremental = true
         opts.ajaxParams.incremental = false
 
-        opts.ajaxParams.start = (@current_page - 1) * items_per_page
-        opts.ajaxParams.end = (opts.ajaxParams.start + items_per_page - 1)
+        opts.ajaxParams.start = @current_page * items_per_page
+        opts.ajaxParams.end = opts.ajaxParams.start + items_per_page - 1
 
         prev = _.pick @proxy.prevParams, "cqp", "command", "corpus", "source"
         _.extend opts.ajaxParams, prev
