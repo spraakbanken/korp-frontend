@@ -281,7 +281,7 @@ korpApp.directive "meter", () ->
             loglike: #{scope.loglike}
         """
 
-        w = elem.parent().width()
+        w = 394
         part = ((scope.loglike) / (Math.abs scope.max))
 
         bkg = elem.find(".background")
