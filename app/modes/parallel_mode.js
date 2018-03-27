@@ -227,7 +227,7 @@ view.KWICResults = Subclass(view.KWICResults, function() {
             })
 
         } else {
-            var links = _.pick(obj, function(val, key) {
+            var links = _.pickBy(obj, function(val, key) {
                 return _.startsWith(key, "wordlink")
             })
             _.each(links, function(val, key) {

@@ -1,6 +1,6 @@
 {
     "name": "Korp",
-    "version": "7.0.0-beta",
+    "version": "7.0.0",
     "dependencies": {
         "angular": "1.6.8",
         "angular-dynamic-locale": "0.1.32",

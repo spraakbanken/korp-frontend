@@ -765,8 +765,6 @@ class view.StatsResults extends BaseResults
 
         $("#showGraph").on "click", () =>
             if $("#showGraph").is(".disabled") then return
-            params = @proxy.prevParams
-            reduceVal = params.groupby
 
             subExprs = []
             labelMapping = {}
