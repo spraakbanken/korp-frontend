@@ -107,7 +107,7 @@ Sidebar =
         structItems = []
         posItems = []
         for key, attrs of corpus_attrs
-            output = @renderItem(key, null, attrs, wordData, sentenceData, tokens).get?(0)
+            output = @renderItem(key, "not_used", attrs, wordData, sentenceData, tokens).get?(0)
             if attrs.customType == "struct"
                 structItems.push [key, output]
             else if attrs.customType == "pos"
