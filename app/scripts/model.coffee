@@ -145,6 +145,7 @@ class model.KWICProxy extends BaseProxy
         @prevRequest = data
         @prevParams = data
         def = $.ajax(
+            method: "POST"
             url: settings.korpBackendURL + "/" + data.command
             data: data
             beforeSend: (req, settings) ->
