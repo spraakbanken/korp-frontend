@@ -252,18 +252,12 @@ window.initTimeGraph = (def) ->
 
                 plots = [
                     data: normalize([].concat(all_timestruct, [[restyear, rest]]))
-                    bars:
-                        fillColor: "lightgrey"
                 ,
                     data: normalize(timestruct)
-                    bars:
-                        fillColor: "navy"
                 ]
                 if restdata
                     plots.push
                         data: normalize([[restyear, restdata]])
-                        bars:
-                            fillColor: "indianred"
 
                 plot = $.plot($("#time_graph"), plots,
                     bars:
@@ -283,7 +277,7 @@ window.initTimeGraph = (def) ->
                         tickDecimals: 0
 
                     hoverable: true
-                    colors: ["lightgrey", "navy"]
+                    colors: ["lightgrey", "navy", "#cd5c5c"]
                 )
                 $.each $("#time_graph .tickLabel"), ->
                     $(this).hide() if parseInt($(this).text()) > new Date().getFullYear()

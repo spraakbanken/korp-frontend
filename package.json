@@ -62,6 +62,7 @@
         "test:karma": "trap 'rm test/karma/spec/*.js' EXIT INT TERM; coffee -c test/karma/spec && karma start test/karma/karma.conf.js",
         "test:e2e": "trap 'rm test/e2e/spec/*.js' EXIT INT TERM; coffee -c test/e2e/spec && protractor test/e2e/conf_e2e.js",
         "start": "webpack-dev-server --config webpack.dev.js",
+        "dev": "webpack-dev-server --config webpack.dev.js",
         "start:dist": "http-server -p 9000 dist/",
         "build": "webpack --config webpack.prod.js"
     }
