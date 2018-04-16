@@ -117,7 +117,7 @@ class model.KWICProxy extends BaseProxy
 
         data =
             command: "query"
-            defaultcontext: settings.defaultOverviewContext
+            default_context: settings.defaultOverviewContext
             show: []
             show_struct: []
 
@@ -153,7 +153,7 @@ class model.KWICProxy extends BaseProxy
                 self.prevUrl = this.url
 
             success: (data, status, jqxhr) ->
-                self.queryData = data.querydata
+                self.queryData = data.query_data
                 kwicCallback data if data.incremental is false or not @foundKwic
 
             progress: progressObj.progress
@@ -215,8 +215,8 @@ class model.StatsProxy extends BaseProxy
                 groupBy.push reduceVal
         parameters =
             command: "count"
-            groupby: groupBy.join ','
-            groupby_struct: groupByStruct.join ','
+            group_by: groupBy.join ','
+            group_by_struct: groupByStruct.join ','
             cqp: @expandCQP cqp
             corpus: settings.corpusListing.stringifySelected(true)
             incremental: true
@@ -294,7 +294,7 @@ class model.NameProxy extends BaseProxy
             "pos='#{posTag}'"
 
         parameters =
-            groupby: "word"
+            group_by: "word"
             cqp: @expandCQP cqp
             cqp2: "[" + posTags.join(" | ") + "]"
             corpus: settings.corpusListing.stringifySelected(true)

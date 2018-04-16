@@ -341,9 +341,9 @@ class view.KWICResults extends BaseResults
             command : "query"
             corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
-            querydata : @proxy.queryData if @proxy.queryData
+            query_data : @proxy.queryData if @proxy.queryData
             context : context
-            defaultcontext : preferredContext
+            default_context : preferredContext
             incremental: true
         }
 
@@ -515,7 +515,7 @@ class view.ExampleResults extends view.KWICResults
             avoidContext = settings.defaultReadingContext
 
         context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
-        _.extend opts.ajaxParams, {context: context, defaultcontext : preferredContext }
+        _.extend opts.ajaxParams, {context: context, default_context : preferredContext }
 
         @showPreloader()
 
