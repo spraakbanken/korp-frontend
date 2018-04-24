@@ -244,6 +244,8 @@ class ExampleCtrl extends KwicCtrl
         super(@scope, $timeout, utils, $location, @kwicDownload)
         s = @scope
 
+        s.$root.word_selected = false
+
         s.newDynamicTab()
 
         s.hitspictureClick = (pageNumber) ->
