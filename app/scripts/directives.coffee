@@ -42,6 +42,7 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
             ]
 
         s.setSelected = (index, ignoreCheck) ->
+            console.log("tab setSelected", index)
             if not ignoreCheck and index not of s.fixedTabs
                 index = s.maxTab
 
@@ -59,7 +60,11 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
             watchHash()), 0
 
         s.newDynamicTab = () ->
-            $timeout (() -> s.setSelected(s.maxTab + 1, true)), 0
+            console.log("newDynamicTab s.maxTab", s.maxTab)
+            $timeout (() -> 
+                s.setSelected(s.maxTab + 1, true)
+                s.maxTab += 1
+            ), 0
 
 
 
