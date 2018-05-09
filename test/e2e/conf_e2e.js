@@ -1,19 +1,19 @@
-
 exports.config = {
   params: {
-    url: 'http://localhost:9000/'
+    url: 'http://' + (process.env.KORP_HOST || "localhost") +':9000/'
   },
+  seleniumAddress: "http://" + (process.env.SELENIUM || "localhost") + ":4444/wd/hub",
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-        'args': ['--disable-extensions'],
-        prefs: {
-            download: {
-                prompt_for_download: false, 
-                directory_upgrade: true,
-                default_directory: 'test/e2e/bin'
-            }
-        }
+        'args': ['--disable-extensions', '--window-size=1500,900', "--privileged", "--headless"],
+        // prefs: {
+        //     download: {
+        //         prompt_for_download: false, 
+        //         directory_upgrade: true,
+        //         default_directory: 'test/e2e/bin'
+        //     }
+        // }
     }
   },
   specs: ['spec/*.js'],

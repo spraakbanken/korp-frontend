@@ -2,7 +2,7 @@ describe "lemgram autocomplete", () ->
 
     it "should show for default mode", () ->
         browser.get(browser.params.url).then () ->
-            input = element By.css "#simple_text input"
+            input = element.all(By.css "#simple_text input").first()
             input.sendKeys "gå"
             
             autocompleteMenu = element(By.css 'ul.dropdown-menu')
@@ -12,7 +12,7 @@ describe "lemgram suggestions", () ->
     
     it "should be clickable and show correct output", () ->
         browser.get(browser.params.url + "#?corpus=suc2").then () ->
-            input = element By.css "#simple_text input"
+            input = element.all(By.css "#simple_text input").first()
             input.sendKeys "gå"
             
             lemgramSuggestion = (element.all By.css 'ul.dropdown-menu > li').first()

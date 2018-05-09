@@ -30,8 +30,8 @@ describe "page", () ->
         expect(EC.textToBePresentInElement(elm, "9"))
 
     it "should go back to 0 when searching anew", () ->
-        input = element(By.model('textInField'))
-        input.sendKeys(protractor.Key.BACK_SPACE)
+        input = element.all(By.model('textInField')).first()
+        input.clear()
         input.sendKeys("gå")
         input.sendKeys(protractor.Key.ENTER)  
         expect(browser.executeScript("return locationSearch().page")).toBe 0

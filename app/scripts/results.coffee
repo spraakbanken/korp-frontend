@@ -70,6 +70,7 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
+            console.log("@proxy?.prevUrl", @proxy?.prevUrl)
             @s.$root.jsonUrl = @proxy?.prevUrl
 
     onexit : () ->

@@ -151,7 +151,7 @@ class model.KWICProxy extends BaseProxy
             beforeSend: (req, settings) ->
                 self.prevRequest = settings
                 self.addAuthorizationHeader req
-                self.prevUrl = this.url
+                self.prevUrl = this.url + "?" + _.toPairs(data).map( (pair) -> pair.join("=")).join("&")
 
             success: (data, status, jqxhr) ->
                 self.queryData = data.query_data
