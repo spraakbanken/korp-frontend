@@ -373,9 +373,19 @@ korpApp.service "compareSearches",
 
 korpApp.factory "lexicons", ($q, $http) ->
     karpURL = "https://ws.spraakbanken.gu.se/ws/karp/v4"
+    canceller = null
+    cancelNext = false
+    lemgramCancel: () ->
+        cancelNext = true
     getLemgrams: (wf, resources, corporaIDs) ->
-        deferred = $q.defer()
+        console.log("getLemgrams")
 
+        deferred = $q.defer()
+        canceller = $q.defer()
+        if cancelNext
+            canceller.resolve()
+            cancelNext = false
+        
         args =
             "q" : wf
             "resource" : if $.isArray(resources) then resources.join(",") else resources
@@ -385,6 +395,7 @@ korpApp.factory "lexicons", ($q, $http) ->
             method : "GET"
             url : "#{karpURL}/autocomplete"
             params : args
+            timeout: canceller.promise
         ).then((response) ->
             data = response.data
             if data is null
@@ -406,6 +417,7 @@ korpApp.factory "lexicons", ($q, $http) ->
                     url: settings.korpBackendURL + "/lemgram_count"
                     data : "lemgram=#{lemgram}&count=lemgram&corpus=#{corpora}"
                     headers : headers
+                    timeout : canceller.promise
                 ).then (response) =>
                     data = response.data
                     delete data.time
