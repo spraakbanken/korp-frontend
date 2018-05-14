@@ -577,7 +577,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                     typeahead-click-open
                     typeahead-is-open="typeaheadIsOpen"
                     ng-blur="typeaheadClose()"></div>
-                <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+                <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
             <div ng-show="disableLemgramAutocomplete">
                 <div style="float:left">

@@ -1639,6 +1639,13 @@ label[for=lemgram_select]:before {
     margin-top : 2px;
     display: inline-block;
     vertical-align: middle;
+    input {
+      padding: 5px 10px;
+      border-radius: 2px;
+      border-style: solid;
+      border-color: lightgrey;
+      border-width: 1px;
+    }
   }
 
   .simple_form {
@@ -2800,8 +2807,12 @@ li.active a span .num-to-find {
         padding: 5px;
     }
 
-    .attribute:hover {
+    .attribute:not(.disabled):hover {
         background-color: #e6e6e6;
+        cursor: pointer;
+    }
+    .attribute.disabled {
+      opacity: 0.5;
     }
     
     ul {

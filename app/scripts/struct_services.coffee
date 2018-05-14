@@ -74,7 +74,12 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
     # and flattens data structure?
     getData = () ->
         corpora = getSupportedCorpora()
-        structService.getStructValues(corpora, dataObj.selectedFilters, {}).then (data) ->
+
+        opts = {}
+        if dataObj.attributes[_.last dataObj.defaultFilters].settings.type == "set"
+            opts.split = true
+        console.log("dataObj", dataObj)
+        structService.getStructValues(corpora, dataObj.selectedFilters, opts).then (data) ->
             currentData = {}
             for corpus in corpora
                 for k, v of data[corpus.toUpperCase()]
@@ -237,7 +242,7 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (corpora, attributes, { count, returnByCorpora }) ->
+    getStructValues: (corpora, attributes, { count, returnByCorpora, split }) ->
 
         def = $q.defer()
 
@@ -249,6 +254,9 @@ korpApp.factory "structService",  ($http, $q) ->
             corpus: corpora.join ","
             struct: structValue
             count: count
+
+        if split
+            params.split = (_.last attributes)
 
         conf =
             url: settings.korpBackendURL + "/struct_values"

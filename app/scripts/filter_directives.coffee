@@ -105,10 +105,9 @@ korpApp.directive "globalFilter", (globalFilterService) ->
                           <span>{{translationKey + value[0] | loc:lang }}</span>
                           <span style="font-size: x-small;">{{value[1]}}</span>
                         </li>
-                        <div style="width: 100%; height: 2px; background-color: black;" />
-                        <li ng-repeat="value in possibleValues" class="attribute"
-                            ng-click="toggleSelected(value[0], $event)"
-                            ng-if="!isSelectedList(value[0]) && value[1] == 0">
+                        <li ng-repeat="value in possibleValues" class="attribute disabled"
+                            ng-if="!isSelectedList(value[0]) && value[1] == 0"
+                            >
                           <span>{{translationKey + value[0] | loc:lang }}</span>
                           <span style="font-size: x-small;">{{value[1]}}</span>
                         </li>

@@ -30,9 +30,13 @@ korpApp.factory "extendedComponents", () ->
                 corpora.push corpusSettings.id
 
         $scope.loading = true
-        structService.getStructValues(corpora, [attribute], {count: false, returnByCorpora: false}).then((data) ->
+        opts = {count: false, returnByCorpora: false}
+        if $scope.type == "set"
+            opts.split = true
+        structService.getStructValues(corpora, [attribute], opts).then((data) ->
             $scope.loading = false
             localizer = localize($scope)
+
             dataset = _.map data, (item) -> return [item, localizer item]
             $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
             if not autocomplete
