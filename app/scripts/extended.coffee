@@ -36,8 +36,12 @@ korpApp.factory "extendedComponents", () ->
         structService.getStructValues(corpora, [attribute], opts).then((data) ->
             $scope.loading = false
             localizer = localize($scope)
+            console.log("getStructValues data", data)
 
-            dataset = _.map data, (item) -> return [item, localizer item]
+            dataset = _.map (_.uniq data), (item) -> 
+                if item is ""
+                    return [item, util.getLocaleString "empty"]
+                return [item, localizer item]
             $scope.dataset = _.sortBy dataset, (tuple) -> return tuple[1]
             if not autocomplete
                 $scope.input = $scope.input or $scope.dataset[0][0]
