@@ -598,7 +598,7 @@ table {
   position: relative;
   top: 54px;
   margin-left: 10px;
-  font-weight: bold;
+  // font-weight: bold;
   color: #555;
   &:hover {
     color: #333;
@@ -2786,10 +2786,17 @@ li.active a span .num-to-find {
     }
 }
 
+global-filters {
+  display: block;
+}
 .global-filters-container {
     margin-bottom: 10px;
     > div {
         margin-bottom: 10px;
+    }
+    button {
+      margin-right: 5px;
+      vertical-align: baseline;
     }
 }
 

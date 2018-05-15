@@ -36,7 +36,7 @@ korpApp.factory "extendedComponents", () ->
         structService.getStructValues(corpora, [attribute], opts).then((data) ->
             $scope.loading = false
             localizer = localize($scope)
-            console.log("getStructValues data", data)
+            # console.log("getStructValues data", data)
 
             dataset = _.map (_.uniq data), (item) -> 
                 if item is ""

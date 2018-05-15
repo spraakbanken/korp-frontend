@@ -196,14 +196,17 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
             $rootScope.globalFilter = null
 
     $rootScope.$on "corpuschooserchange", () ->
+        console.log("corpuschooserchange struct_services")
         if settings.corpusListing.selected.length is 0
             dataObj.showDirective = false
         else
             [newDefaultFilters, defAttributes] = settings.corpusListing.getDefaultFilters()
             [newOptionalFilters, possAttributes] = settings.corpusListing.getCurrentFilters()
 
+            console.log("newDefaultFilters) and (_.isEmpty newOptionalFilters)", (_.isEmpty newDefaultFilters), (_.isEmpty newOptionalFilters))
             if (_.isEmpty newDefaultFilters) and (_.isEmpty newOptionalFilters)
                 dataObj.showDirective = false
+                $location.search("global_filter", null)            
             else
                 dataObj.showDirective = true
                 if not (_.isEqual newDefaultFilters, dataObj.defaultFilters) and (_.isEqual newOptionalFilters, dataObj.optionalFilters)
