@@ -598,7 +598,7 @@ table {
   position: relative;
   top: 54px;
   margin-left: 10px;
-  font-weight: bold;
+  // font-weight: bold;
   color: #555;
   &:hover {
     color: #333;
@@ -658,6 +658,7 @@ table {
 
   .arg_opts {
     margin-left: 5px;
+    vertical-align: middle;
   }
 
   input.arg_value {
@@ -1636,9 +1637,15 @@ label[for=lemgram_select]:before {
 
   #simple_text {
     position: relative;
-    margin-top : 2px;
     display: inline-block;
     vertical-align: middle;
+    input {
+      padding: 5px 10px 6px 10px;
+      border-radius: 3px;
+      border-style: solid;
+      border-color: lightgrey;
+      border-width: 1px;
+    }
   }
 
   .simple_form {
@@ -2779,10 +2786,17 @@ li.active a span .num-to-find {
     }
 }
 
+global-filters {
+  display: block;
+}
 .global-filters-container {
     margin-bottom: 10px;
     > div {
         margin-bottom: 10px;
+    }
+    button {
+      margin-right: 5px;
+      vertical-align: baseline;
     }
 }
 
@@ -2790,7 +2804,7 @@ li.active a span .num-to-find {
     margin-top: 7px;
     margin-left: 4px;
     padding: 0px;
-    font-weight: bold;
+    // font-weight: bold;
 
     .selected {
         background: #f2f7ff;
@@ -2800,8 +2814,13 @@ li.active a span .num-to-find {
         padding: 5px;
     }
 
-    .attribute:hover {
-        background-color: #e6e6e6;
+    .attribute:not(.disabled):hover {
+        background-color: #428bca;
+        color : white;
+        cursor: pointer;
+    }
+    .attribute.disabled {
+      opacity: 0.5;
     }
     
     ul {

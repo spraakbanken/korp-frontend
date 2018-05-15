@@ -113,7 +113,7 @@ korpApp.directive "mapCtrl", () ->
                     corpus : s.lastSearch.corpora
                     show_struct : _.keys cl.getStructAttrs()
                     expand_prequeries : true
-                    defaultwithin : 'sentence'
+                    default_within : 'sentence'
             }
             $rootScope.kwicTabs.push { queryParams: opts }
 

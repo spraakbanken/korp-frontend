@@ -74,7 +74,11 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
     # and flattens data structure?
     getData = () ->
         corpora = getSupportedCorpora()
-        structService.getStructValues(corpora, dataObj.selectedFilters, {}).then (data) ->
+
+        opts = {}
+        if dataObj.attributes[_.last dataObj.defaultFilters].settings.type == "set"
+            opts.split = true
+        structService.getStructValues(corpora, dataObj.selectedFilters, opts).then (data) ->
             currentData = {}
             for corpus in corpora
                 for k, v of data[corpus.toUpperCase()]
@@ -170,9 +174,12 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
     makeCqp = () ->
         exprs = []
+        console.log("dataObj", dataObj)
         andArray = for attrKey, attrValues of dataObj.filterValues
+            attrType = dataObj.attributes[attrKey].settings.type
+            op = if attrType is "set" then "contains" else "="
             for attrValue in attrValues.value
-                { type: "_." + attrKey, op: "=", val: attrValue }
+                { type: "_." + attrKey, op: op, val: attrValue }
 
         return [{ and_block: andArray }]
 
@@ -189,14 +196,17 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
             $rootScope.globalFilter = null
 
     $rootScope.$on "corpuschooserchange", () ->
+        console.log("corpuschooserchange struct_services")
         if settings.corpusListing.selected.length is 0
             dataObj.showDirective = false
         else
             [newDefaultFilters, defAttributes] = settings.corpusListing.getDefaultFilters()
             [newOptionalFilters, possAttributes] = settings.corpusListing.getCurrentFilters()
 
+            console.log("newDefaultFilters) and (_.isEmpty newOptionalFilters)", (_.isEmpty newDefaultFilters), (_.isEmpty newOptionalFilters))
             if (_.isEmpty newDefaultFilters) and (_.isEmpty newOptionalFilters)
                 dataObj.showDirective = false
+                $location.search("global_filter", null)            
             else
                 dataObj.showDirective = true
                 if not (_.isEqual newDefaultFilters, dataObj.defaultFilters) and (_.isEqual newOptionalFilters, dataObj.optionalFilters)
@@ -237,7 +247,7 @@ korpApp.factory "globalFilterService", ($rootScope, $location, $q, structService
 
 korpApp.factory "structService",  ($http, $q) ->
 
-    getStructValues: (corpora, attributes, { count, returnByCorpora }) ->
+    getStructValues: (corpora, attributes, { count, returnByCorpora, split }) ->
 
         def = $q.defer()
 
@@ -249,6 +259,9 @@ korpApp.factory "structService",  ($http, $q) ->
             corpus: corpora.join ","
             struct: structValue
             count: count
+
+        if split
+            params.split = (_.last attributes)
 
         conf =
             url: settings.korpBackendURL + "/struct_values"

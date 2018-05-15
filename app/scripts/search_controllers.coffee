@@ -130,7 +130,7 @@ window.SearchCtrl = ["$scope", "$location", "$filter", "utils", "searches", ( ($
 
 korpApp.controller "SearchCtrl", window.SearchCtrl
 
-korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout) ->
+korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope, searches, compareSearches, $uibModal, $timeout, lexicons) ->
     s = $scope
 
     $scope.inOrder = not $location.search().in_order?
@@ -147,8 +147,11 @@ korpApp.controller "SimpleCtrl", ($scope, utils, $location, backend, $rootScope,
 
     s.$on "btn_submit", () ->
         c.log "simple search submit"
+        lexicons.lemgramCancel()
         s.updateSearch()
         $location.search "within", null
+
+
 
     # triggers watch on searches.activeSearch
     s.updateSearch = ->

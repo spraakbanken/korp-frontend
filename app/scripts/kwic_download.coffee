@@ -27,9 +27,9 @@ korpApp.factory "kwicDownload", () ->
             if field == "cqp"
                 row = "## CQP query: " + requestInfo.cqp
             if field == "context"
-                row = "## context: " + requestInfo.defaultcontext
+                row = "## context: " + requestInfo.default_context
             if field == "within"
-                row = "## within: " + requestInfo.defaultwithin
+                row = "## within: " + requestInfo.default_within
             if field == "sorting"
                 sorting = requestInfo.sort or "none"
                 row = "## sorting: " + sorting

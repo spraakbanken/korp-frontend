@@ -6,7 +6,7 @@ describe "compare", () ->
             return elm.isDisplayed()
             
     selectLemgram = (word) ->
-        input = element By.css "#simple_text input"
+        input = element.all(By.css "#simple_text input").first()
         input.clear()
         input.sendKeys word
         

@@ -1,6 +1,7 @@
 window.korpApp = angular.module 'korpApp', [
                                             "ui.bootstrap.typeahead"
                                             "uib/template/typeahead/typeahead-popup.html"
+                                            "uib/template/typeahead/typeahead-match.html"
                                             "ui.bootstrap.tooltip"
                                             "uib/template/tooltip/tooltip-popup.html"
                                             "uib/template/tooltip/tooltip-html-popup.html"

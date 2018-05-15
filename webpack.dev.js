@@ -4,7 +4,8 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   devServer: {
-    port: 9000
+    host: process.env.KORP_HOST || "localhost",
+    port: 9111
   },
   devtool: 'inline-source-map',
   mode: 'development'

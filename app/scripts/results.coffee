@@ -70,6 +70,7 @@ class BaseResults
     onentry : () ->
         @s.$root.jsonUrl = null
         @firstResultDef.promise.then () =>
+            console.log("@proxy?.prevUrl", @proxy?.prevUrl)
             @s.$root.jsonUrl = @proxy?.prevUrl
 
     onexit : () ->
@@ -184,6 +185,7 @@ class view.KWICResults extends BaseResults
                     @s.$parent.pageObj.pager = @s.$parent.page + 1
                 return false
             when 70 # f
+                if @current_page is 0 then return
                 safeApply @s, =>
                     @s.$parent.page--
                     @s.$parent.pageObj.pager = @s.$parent.page + 1
@@ -198,8 +200,10 @@ class view.KWICResults extends BaseResults
                 next = @selectPrev()
             when 40 # down
                 next = @selectDown()
-        @scrollToShowWord($(next)) if next
-        return false
+        
+        if next
+            @scrollToShowWord($(next))
+            return false
 
 
     getPageInterval: (page) ->
@@ -341,9 +345,9 @@ class view.KWICResults extends BaseResults
             command : "query"
             corpus : settings.corpusListing.stringifySelected()
             cqp : cqp or @proxy.prevCQP
-            querydata : @proxy.queryData if @proxy.queryData
+            query_data : @proxy.queryData if @proxy.queryData
             context : context
-            defaultcontext : preferredContext
+            default_context : preferredContext
             incremental: true
         }
 
@@ -515,7 +519,7 @@ class view.ExampleResults extends view.KWICResults
             avoidContext = settings.defaultReadingContext
 
         context = settings.corpusListing.getContextQueryString(preferredContext, avoidContext)
-        _.extend opts.ajaxParams, {context: context, defaultcontext : preferredContext }
+        _.extend opts.ajaxParams, {context: context, default_context : preferredContext }
 
         @showPreloader()
 
@@ -1600,6 +1604,8 @@ class view.GraphResults extends BaseResults
                 padding :
                     top : 0.1
                     right : 0.01
+            width = $(".tab-pane").width()
+            graph.setSize({width: width})
             graph.render()
             window._graph = @graph = graph
 
@@ -1609,7 +1615,10 @@ class view.GraphResults extends BaseResults
 
             $(window).on "resize", _.throttle(() =>
                 if @$result.is(":visible")
+                    width = $(".tab-pane").width()
                     graph.setSize()
+                    @preview.configure({width: width})
+                    @preview.render()
                     graph.render()
             , 200)
 

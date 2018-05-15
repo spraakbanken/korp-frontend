@@ -198,7 +198,7 @@ class window.CorpusListing
             if defaultWithin not in withins
                 corpus.id.toUpperCase() + ":" + withins[0]
         within = _(output).compact().join()
-        return { defaultwithin : defaultWithin, within : within }
+        return { default_within : defaultWithin, within : within }
 
     getTimeInterval : ->
         all = _(@selected)
@@ -433,7 +433,7 @@ class window.ParallelCorpusListing extends CorpusListing
     getWithinParameters : ->
         defaultWithin = locationSearch().within or _.keys(settings.defaultWithin)[0]
         within = @getAttributeQuery("within")
-        return {defaultwithin : defaultWithin, within : within}
+        return {default_within : defaultWithin, within : within}
 
 
 

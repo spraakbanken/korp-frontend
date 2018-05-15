@@ -42,6 +42,7 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
             ]
 
         s.setSelected = (index, ignoreCheck) ->
+            console.log("tab setSelected", index)
             if not ignoreCheck and index not of s.fixedTabs
                 index = s.maxTab
 
@@ -59,7 +60,11 @@ korpApp.directive "tabHash", (utils, $location, $timeout) ->
             watchHash()), 0
 
         s.newDynamicTab = () ->
-            $timeout (() -> s.setSelected(s.maxTab + 1, true)), 0
+            console.log("newDynamicTab s.maxTab", s.maxTab)
+            $timeout (() -> 
+                s.setSelected(s.maxTab + 1, true)
+                s.maxTab += 1
+            ), 0
 
 
 
@@ -572,7 +577,7 @@ korpApp.directive "autoc", ($q, $http, $timeout, lexicons) ->
                     typeahead-click-open
                     typeahead-is-open="typeaheadIsOpen"
                     ng-blur="typeaheadClose()"></div>
-                <div style="margin-left:-20px;margin-top:2px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
+                <div style="margin-left:-20px;margin-top:6px;float:left" ng-if="isLoading"><i class="fa fa-spinner fa-pulse"></i></div>
             </div>
             <div ng-show="disableLemgramAutocomplete">
                 <div style="float:left">
